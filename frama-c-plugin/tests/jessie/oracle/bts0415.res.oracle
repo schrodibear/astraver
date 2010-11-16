@@ -78,44 +78,42 @@ behavior default:
   ensures (C_10 : true);
 {  
    {  
-      {  
-         switch (n) {
-           case 8:
+      switch (n) {
+        case 8:
+        {  
            {  
               {  
-                 {  
-                    (assert for default: (C_7 : ((- 2147483648) <= 0)));
-                    ()
-                 };
-                 
-                 (goto switch_0_break)
-              }
+                 (assert for default: (C_7 : ((- 2147483648) <= 0)));
+                 ()
+              };
+              
+              (goto switch_0_break)
            }
-           case 7:
+        }
+        case 7:
+        {  
            {  
               {  
-                 {  
-                    (assert for default: (C_8 : ((- 2147483647) <= 0)));
-                    ()
-                 };
-                 
-                 (goto switch_0_break)
-              }
+                 (assert for default: (C_8 : ((- 2147483647) <= 0)));
+                 ()
+              };
+              
+              (goto switch_0_break)
            }
-           case 6:
+        }
+        case 6:
+        {  
            {  
               {  
-                 {  
-                    (assert for default: (C_9 : ((- 2147483646) <= 0)));
-                    ()
-                 };
-                 
-                 (goto switch_0_break)
-              }
+                 (assert for default: (C_9 : ((- 2147483646) <= 0)));
+                 ()
+              };
+              
+              (goto switch_0_break)
            }
-         };
-         (switch_0_break : ())
+        }
       };
+      (switch_0_break : ());
       
       (return ())
    }
@@ -492,9 +490,9 @@ let ftest_ensures_default =
              (assert { (JC_<somenum>: le_int(neg_int((2147483646)), (0))) }; void);
             void; (raise (Goto_switch_0_break_exc void)) end in void)
           else void)))); (raise (Goto_switch_0_break_exc void)) end in void)
-      with Goto_switch_0_break_exc jessie_<somenum> -> (switch_0_break: void) end;
-    (raise Return); (raise Return) end with Return -> void end)
-  { (JC_<somenum>: true) }
+      with Goto_switch_0_break_exc jessie_<somenum> ->
+      (switch_0_break: begin   void; (raise Return) end) end; (raise Return)
+   end with Return -> void end) { (JC_<somenum>: true) }
 
 let ftest_safety =
  fun (n : int32) ->
@@ -527,8 +525,9 @@ let ftest_safety =
              [ { } unit { (JC_<somenum>: le_int(neg_int((2147483646)), (0))) } ];
             void; (raise (Goto_switch_0_break_exc void)) end in void)
           else void)))); (raise (Goto_switch_0_break_exc void)) end in void)
-      with Goto_switch_0_break_exc jessie_<somenum> -> (switch_0_break: void) end;
-    (raise Return); (raise Return) end with Return -> void end) { true }
+      with Goto_switch_0_break_exc jessie_<somenum> ->
+      (switch_0_break: begin   void; (raise Return) end) end; (raise Return)
+   end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0415.jessie --quiet -f bts0415.makefile project

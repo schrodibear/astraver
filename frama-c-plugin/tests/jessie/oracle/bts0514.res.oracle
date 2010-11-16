@@ -71,72 +71,67 @@ behavior default:
       (C_7 : (min = (C_6 : (C_5 : (array + 0)).int_M)));
       (C_10 : (max = (C_9 : (C_8 : (array + high)).int_M)));
       
+      loop 
+      behavior default:
+        invariant (C_14 : ((C_15 : (0 <= low)) &&
+                            (C_16 : (low < array_length))));
+      behavior default:
+        invariant (C_11 : ((C_12 : (0 <= high)) &&
+                            (C_13 : (high < array_length))));
+      while (true)
       {  
-         loop 
-         behavior default:
-           invariant (C_14 : ((C_15 : (0 <= low)) &&
-                               (C_16 : (low < array_length))));
-         behavior default:
-           invariant (C_11 : ((C_12 : (0 <= high)) &&
-                               (C_13 : (high < array_length))));
-         while (true)
-         {  
-            {  (if (low > high) then 
-               {  (C_19 : (__retres = -1));
-                  
-                  (goto return_label)
-               } else (if (key < min) then 
-                      {  (C_18 : (__retres = -1));
-                         
-                         (goto return_label)
-                      } else (if (key > max) then 
-                             {  (C_17 : (__retres = -1));
-                                
-                                (goto return_label)
-                             } else ())));
-               (if (high == low) then (C_41 : (guess = high)) else 
-               {  (C_22 : (size_0 = (C_21 : ((C_20 : (high - low)) :> int32))));
-                  (C_37 : (offset = (C_36 : ((C_35 : ((C_34 : ((C_33 : 
-                                                               ((C_32 : (
-                                                                (C_31 : 
-                                                                (size_0 -
-                                                                  1)) :> int64)) *
-                                                                 (C_30 : (
-                                                                 (C_29 : 
-                                                                 ((C_28 : (key :> int64)) -
-                                                                   (C_27 : (min :> int64)))) :> int64)))) :> int64)) /
-                                                       (C_26 : ((C_25 : 
-                                                                ((C_24 : (max :> int64)) -
-                                                                  (C_23 : (min :> int64)))) :> int64)))) :> int32))));
-                  (C_40 : (guess = (C_39 : ((C_38 : (low + offset)) :> int32))))
-               });
-               (if ((C_44 : (C_43 : (array + guess)).int_M) == key) then 
-               {  (C_42 : (__retres = guess));
-                  
-                  (goto return_label)
-               } else ());
-               (if (guess == 0) then 
-               {  (C_48 : (__retres = -1));
-                  
-                  (goto return_label)
-               } else (if (guess ==
-                            (C_47 : ((C_46 : (array_length - 1)) :> int32))) then 
-                      {  (C_45 : (__retres = -1));
-                         
-                         (goto return_label)
-                      } else ()));
-               (if ((C_66 : (C_65 : (array + guess)).int_M) > key) then 
-               {  (C_59 : (high = (C_58 : ((C_57 : (guess - 1)) :> int32))));
-                  (C_64 : (max = (C_63 : (C_62 : (array +
-                                                   (C_61 : ((C_60 : (guess -
-                                                                    1)) :> int32)))).int_M)))
-               } else 
-               {  (C_51 : (low = (C_50 : ((C_49 : (guess + 1)) :> int32))));
-                  (C_56 : (min = (C_55 : (C_54 : (array +
-                                                   (C_53 : ((C_52 : (guess +
-                                                                    1)) :> int32)))).int_M)))
-               })
-            }
+         {  (if (low > high) then 
+            {  (C_19 : (__retres = -1));
+               
+               (goto return_label)
+            } else (if (key < min) then 
+                   {  (C_18 : (__retres = -1));
+                      
+                      (goto return_label)
+                   } else (if (key > max) then 
+                          {  (C_17 : (__retres = -1));
+                             
+                             (goto return_label)
+                          } else ())));
+            (if (high == low) then (C_41 : (guess = high)) else 
+            {  (C_22 : (size_0 = (C_21 : ((C_20 : (high - low)) :> int32))));
+               (C_37 : (offset = (C_36 : ((C_35 : ((C_34 : ((C_33 : ((C_32 : (
+                                                                    (C_31 : 
+                                                                    (size_0 -
+                                                                    1)) :> int64)) *
+                                                                    (C_30 : (
+                                                                    (C_29 : 
+                                                                    ((C_28 : (key :> int64)) -
+                                                                    (C_27 : (min :> int64)))) :> int64)))) :> int64)) /
+                                                    (C_26 : ((C_25 : 
+                                                             ((C_24 : (max :> int64)) -
+                                                               (C_23 : (min :> int64)))) :> int64)))) :> int32))));
+               (C_40 : (guess = (C_39 : ((C_38 : (low + offset)) :> int32))))
+            });
+            (if ((C_44 : (C_43 : (array + guess)).int_M) == key) then 
+            {  (C_42 : (__retres = guess));
+               
+               (goto return_label)
+            } else ());
+            (if (guess == 0) then 
+            {  (C_48 : (__retres = -1));
+               
+               (goto return_label)
+            } else (if (guess ==
+                         (C_47 : ((C_46 : (array_length - 1)) :> int32))) then 
+                   {  (C_45 : (__retres = -1));
+                      
+                      (goto return_label)
+                   } else ()));
+            (if ((C_66 : (C_65 : (array + guess)).int_M) > key) then 
+            {  (C_59 : (high = (C_58 : ((C_57 : (guess - 1)) :> int32))));
+               (C_64 : (max = (C_63 : (C_62 : (array +
+                                                (C_61 : ((C_60 : (guess - 1)) :> int32)))).int_M)))
+            } else 
+            {  (C_51 : (low = (C_50 : ((C_49 : (guess + 1)) :> int32))));
+               (C_56 : (min = (C_55 : (C_54 : (array +
+                                                (C_53 : ((C_52 : (guess + 1)) :> int32)))).int_M)))
+            })
          }
       };
       (return_label : 

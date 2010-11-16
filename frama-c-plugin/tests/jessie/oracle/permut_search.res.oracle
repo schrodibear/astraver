@@ -55,26 +55,24 @@ behavior default:
    
    {  (C_1 : (idx = 0));
       
+      loop 
+      behavior default:
+        invariant (C_2 : (\exists int32 n;
+                           ((((\offset_min(arr) <= 0) &&
+                               (\offset_max(arr) >= n)) &&
+                              ((0 <= idx) && (idx <= n))) &&
+                             (\forall int32 i;
+                               (((0 <= i) && (i <= n)) ==>
+                                 ((0 <= (arr + i).int_M) &&
+                                   ((arr + i).int_M <= n)))))));
+      while (true)
       {  
-         loop 
-         behavior default:
-           invariant (C_2 : (\exists int32 n;
-                              ((((\offset_min(arr) <= 0) &&
-                                  (\offset_max(arr) >= n)) &&
-                                 ((0 <= idx) && (idx <= n))) &&
-                                (\forall int32 i;
-                                  (((0 <= i) && (i <= n)) ==>
-                                    ((0 <= (arr + i).int_M) &&
-                                      ((arr + i).int_M <= n)))))));
-         while (true)
-         {  
-            {  (if ((C_5 : (C_4 : (arr + idx)).int_M) == v) then 
-               {  (C_3 : (__retres = idx));
-                  
-                  (goto return_label)
-               } else ());
-               (C_8 : (idx = (C_7 : (C_6 : (arr + idx)).int_M)))
-            }
+         {  (if ((C_5 : (C_4 : (arr + idx)).int_M) == v) then 
+            {  (C_3 : (__retres = idx));
+               
+               (goto return_label)
+            } else ());
+            (C_8 : (idx = (C_7 : (C_6 : (arr + idx)).int_M)))
          }
       };
       (return_label : 

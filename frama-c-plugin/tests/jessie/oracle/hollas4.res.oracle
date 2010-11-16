@@ -1,6 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only hollas4.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD hollas4.c"
-hollas4.c:10:[kernel] warning: found different behaviors with the same name. Merging them
+hollas4.c:12:[kernel] warning: found different behaviors with the same name. Merging them
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir hollas4.jessie
 [jessie] File hollas4.jessie/hollas4.jc written.

@@ -76,42 +76,39 @@ behavior failure:
    {  (C_1 : (l = 0));
       (C_4 : (u = (C_3 : ((C_2 : (n - 1)) :> int32))));
       
+      loop 
+      behavior default:
+        invariant (C_7 : ((C_8 : (0 <= l)) && (C_9 : (u <= (n - 1)))));
+      behavior failure:
+        invariant (C_6 : (\forall integer k;
+                           ((((0 <= k) && (k < n)) && ((t + k).long_M == v)) ==>
+                             ((l <= k) && (k <= u)))));
+      variant (C_5 : (u - l));
+      while (true)
       {  
-         loop 
-         behavior default:
-           invariant (C_7 : ((C_8 : (0 <= l)) && (C_9 : (u <= (n - 1)))));
-         behavior failure:
-           invariant (C_6 : (\forall integer k;
-                              ((((0 <= k) && (k < n)) &&
-                                 ((t + k).long_M == v)) ==>
-                                ((l <= k) && (k <= u)))));
-         variant (C_5 : (u - l));
-         while (true)
-         {  
-            {  (if (l <= u) then () else 
-               (goto while_0_break));
-               
-               {  (C_14 : (m = (C_13 : ((C_12 : ((C_11 : ((C_10 : (l + u)) :> int32)) /
-                                                  2)) :> int32))));
-                  (if ((C_25 : (C_24 : (t + m)).long_M) < v) then (C_23 : (l = 
-                                                                  (C_22 : (
-                                                                  (C_21 : 
-                                                                  (m +
-                                                                    1)) :> int32)))) else 
-                  (if ((C_20 : (C_19 : (t + m)).long_M) > v) then (C_18 : (u = 
-                                                                  (C_17 : (
-                                                                  (C_16 : 
-                                                                  (m -
-                                                                    1)) :> int32)))) else 
-                  {  (C_15 : (__retres = m));
-                     
-                     (goto return_label)
-                  }))
-               }
+         {  (if (l <= u) then () else 
+            (goto while_0_break));
+            
+            {  (C_14 : (m = (C_13 : ((C_12 : ((C_11 : ((C_10 : (l + u)) :> int32)) /
+                                               2)) :> int32))));
+               (if ((C_25 : (C_24 : (t + m)).long_M) < v) then (C_23 : (l = 
+                                                               (C_22 : (
+                                                               (C_21 : 
+                                                               (m +
+                                                                 1)) :> int32)))) else 
+               (if ((C_20 : (C_19 : (t + m)).long_M) > v) then (C_18 : (u = 
+                                                               (C_17 : (
+                                                               (C_16 : 
+                                                               (m -
+                                                                 1)) :> int32)))) else 
+               {  (C_15 : (__retres = m));
+                  
+                  (goto return_label)
+               }))
             }
-         };
-         (while_0_break : ())
+         }
       };
+      (while_0_break : ());
       (C_26 : (__retres = -1));
       (return_label : 
       (return __retres))
@@ -583,19 +580,18 @@ let binary_search_ensures_default =
      (let __retres = ref (any_int32 void) in
      try
       (let jessie_<somenum> =
-      (C_1:
-      (C_4:
-      (C_26:
       begin
-        (let jessie_<somenum> = (l := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<somenum> =
-       (u := (C_3:
-             (safe_int32_of_integer_ (C_2:
-                                     ((sub_int (integer_of_int32 n)) (1)))))) in
-       void);
-       try
-        (let jessie_<somenum> =
-        begin
+        try
+         (let jessie_<somenum> =
+         (C_1:
+         (C_4:
+         begin
+           (let jessie_<somenum> = (l := (safe_int32_of_integer_ (0))) in void);
+          (let jessie_<somenum> =
+          (u := (C_3:
+                (safe_int32_of_integer_ (C_2:
+                                        ((sub_int (integer_of_int32 n)) (1)))))) in
+          void);
           (loop_2:
           while true do
           { invariant
@@ -660,12 +656,15 @@ let binary_search_ensures_default =
                  (raise (Return_label_exc void)) end) in void)));
               (raise (Loop_continue_exc void)) end) in void) with
              Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end in void) with
-        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-       (let jessie_<somenum> =
-       (__retres := (safe_int32_of_integer_ (neg_int (1)))) in void);
-       (raise (Return_label_exc void)) end))) in void) with
-      Return_label_exc jessie_<somenum> ->
+          (raise (Goto_while_0_break_exc void)) end)) in void) with
+         Goto_while_0_break_exc jessie_<somenum> ->
+         (let jessie_<somenum> =
+         (while_0_break:
+         (C_26:
+         begin
+           void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
+          !__retres end)) in void) end; (raise (Return_label_exc void)) end in
+      void) with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -691,19 +690,18 @@ let binary_search_ensures_failure =
      (let __retres = ref (any_int32 void) in
      try
       (let jessie_<somenum> =
-      (C_1:
-      (C_4:
-      (C_26:
       begin
-        (let jessie_<somenum> = (l := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<somenum> =
-       (u := (C_3:
-             (safe_int32_of_integer_ (C_2:
-                                     ((sub_int (integer_of_int32 n)) (1)))))) in
-       void);
-       try
-        (let jessie_<somenum> =
-        begin
+        try
+         (let jessie_<somenum> =
+         (C_1:
+         (C_4:
+         begin
+           (let jessie_<somenum> = (l := (safe_int32_of_integer_ (0))) in void);
+          (let jessie_<somenum> =
+          (u := (C_3:
+                (safe_int32_of_integer_ (C_2:
+                                        ((sub_int (integer_of_int32 n)) (1)))))) in
+          void);
           (loop_4:
           while true do
           { invariant
@@ -777,12 +775,15 @@ let binary_search_ensures_failure =
                  (raise (Return_label_exc void)) end) in void)));
               (raise (Loop_continue_exc void)) end) in void) with
              Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end in void) with
-        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-       (let jessie_<somenum> =
-       (__retres := (safe_int32_of_integer_ (neg_int (1)))) in void);
-       (raise (Return_label_exc void)) end))) in void) with
-      Return_label_exc jessie_<somenum> ->
+          (raise (Goto_while_0_break_exc void)) end)) in void) with
+         Goto_while_0_break_exc jessie_<somenum> ->
+         (let jessie_<somenum> =
+         (while_0_break:
+         (C_26:
+         begin
+           void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
+          !__retres end)) in void) end; (raise (Return_label_exc void)) end in
+      void) with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -810,19 +811,18 @@ let binary_search_ensures_success =
      (let __retres = ref (any_int32 void) in
      try
       (let jessie_<somenum> =
-      (C_1:
-      (C_4:
-      (C_26:
       begin
-        (let jessie_<somenum> = (l := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<somenum> =
-       (u := (C_3:
-             (safe_int32_of_integer_ (C_2:
-                                     ((sub_int (integer_of_int32 n)) (1)))))) in
-       void);
-       try
-        (let jessie_<somenum> =
-        begin
+        try
+         (let jessie_<somenum> =
+         (C_1:
+         (C_4:
+         begin
+           (let jessie_<somenum> = (l := (safe_int32_of_integer_ (0))) in void);
+          (let jessie_<somenum> =
+          (u := (C_3:
+                (safe_int32_of_integer_ (C_2:
+                                        ((sub_int (integer_of_int32 n)) (1)))))) in
+          void);
           (loop_3:
           while true do
           { invariant (JC_<somenum>: true)  }
@@ -887,12 +887,15 @@ let binary_search_ensures_success =
                  (raise (Return_label_exc void)) end) in void)));
               (raise (Loop_continue_exc void)) end) in void) with
              Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end in void) with
-        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-       (let jessie_<somenum> =
-       (__retres := (safe_int32_of_integer_ (neg_int (1)))) in void);
-       (raise (Return_label_exc void)) end))) in void) with
-      Return_label_exc jessie_<somenum> ->
+          (raise (Goto_while_0_break_exc void)) end)) in void) with
+         Goto_while_0_break_exc jessie_<somenum> ->
+         (let jessie_<somenum> =
+         (while_0_break:
+         (C_26:
+         begin
+           void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
+          !__retres end)) in void) end; (raise (Return_label_exc void)) end in
+      void) with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -919,19 +922,19 @@ let binary_search_safety =
      (let __retres = ref (any_int32 void) in
      try
       (let jessie_<somenum> =
-      (C_1:
-      (C_4:
-      (C_26:
       begin
-        (let jessie_<somenum> = (l := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<somenum> =
-       (u := (C_3:
-             (JC_<somenum>:
-             (int32_of_integer_ (C_2: ((sub_int (integer_of_int32 n)) (1))))))) in
-       void);
-       try
-        (let jessie_<somenum> =
-        begin
+        try
+         (let jessie_<somenum> =
+         (C_1:
+         (C_4:
+         begin
+           (let jessie_<somenum> = (l := (safe_int32_of_integer_ (0))) in void);
+          (let jessie_<somenum> =
+          (u := (C_3:
+                (JC_<somenum>:
+                (int32_of_integer_ (C_2:
+                                   ((sub_int (integer_of_int32 n)) (1))))))) in
+          void);
           (loop_1:
           while true do
           { invariant (JC_<somenum>: true)
@@ -1001,12 +1004,15 @@ let binary_search_safety =
                  (raise (Return_label_exc void)) end) in void)));
               (raise (Loop_continue_exc void)) end) in void) with
              Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end in void) with
-        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-       (let jessie_<somenum> =
-       (__retres := (safe_int32_of_integer_ (neg_int (1)))) in void);
-       (raise (Return_label_exc void)) end))) in void) with
-      Return_label_exc jessie_<somenum> ->
+          (raise (Goto_while_0_break_exc void)) end)) in void) with
+         Goto_while_0_break_exc jessie_<somenum> ->
+         (let jessie_<somenum> =
+         (while_0_break:
+         (C_26:
+         begin
+           void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
+          !__retres end)) in void) end; (raise (Return_label_exc void)) end in
+      void) with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end)) { true }
 

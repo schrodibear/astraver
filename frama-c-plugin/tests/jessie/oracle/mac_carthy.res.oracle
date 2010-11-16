@@ -116,29 +116,27 @@ behavior default:
   ensures (C_23 : (\result == iter_f(\at(n_0,Old), \at(x,Old))));
 {  
    {  
+      loop 
+      behavior default:
+        invariant (C_14 : (n_0 >= 0));
+      behavior default:
+        invariant (C_13 : (iter_f(n_0, x) == \at(iter_f(n_0, x),Pre)));
+      while (true)
       {  
-         loop 
-         behavior default:
-           invariant (C_14 : (n_0 >= 0));
-         behavior default:
-           invariant (C_13 : (iter_f(n_0, x) == \at(iter_f(n_0, x),Pre)));
-         while (true)
-         {  
-            {  (if (n_0 > 0) then () else 
-               (goto while_0_break));
-               
-               {  (if (x > 100) then 
-                  {  (C_20 : (x = (C_19 : (x - 10))));
-                     (C_22 : (n_0 = (C_21 : (n_0 - 1))))
-                  } else 
-                  {  (C_16 : (x = (C_15 : (x + 11))));
-                     (C_18 : (n_0 = (C_17 : (n_0 + 1))))
-                  })
-               }
+         {  (if (n_0 > 0) then () else 
+            (goto while_0_break));
+            
+            {  (if (x > 100) then 
+               {  (C_20 : (x = (C_19 : (x - 10))));
+                  (C_22 : (n_0 = (C_21 : (n_0 - 1))))
+               } else 
+               {  (C_16 : (x = (C_15 : (x + 11))));
+                  (C_18 : (n_0 = (C_17 : (n_0 + 1))))
+               })
             }
-         };
-         (while_0_break : ())
+         }
       };
+      (while_0_break : ());
       
       (return x)
    }
@@ -591,9 +589,11 @@ let f91_nonrec_ensures_default =
             (raise (Loop_continue_exc void)) end in void) with
            Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end in void) with
-      Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-    (return := !mutable_x_1); (raise Return); absurd  end with Return ->
-   !return end)))) { (JC_<somenum>: eq_int(result, iter_f(n_0_0@, x_1@))) }
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      begin   void; (return := !mutable_x_1); (raise Return) end) end; 
+    absurd  end with Return -> !return end))))
+  { (JC_<somenum>: eq_int(result, iter_f(n_0_0@, x_1@))) }
 
 let f91_nonrec_safety =
  fun (n_0_0 : int) (x_1 : int) ->
@@ -647,9 +647,10 @@ let f91_nonrec_safety =
             (raise (Loop_continue_exc void)) end in void) with
            Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end in void) with
-      Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-    (return := !mutable_x_1); (raise Return); absurd  end with Return ->
-   !return end)))) { true }
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      begin   void; (return := !mutable_x_1); (raise Return) end) end; 
+    absurd  end with Return -> !return end)))) { true }
 
 let f91_safety =
  fun (n : int) ->
@@ -709,11 +710,11 @@ why --project [...] why/mac_carthy.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/mac_carthy_po7.why">
-      <location file = "why/mac_carthy.why" line = "466" begin = "43" end = "44"/>
+      <location file = "why/mac_carthy.why" line = "468" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/mac_carthy_po8.why">
-      <location file = "why/mac_carthy.why" line = "466" begin = "43" end = "44"/>
+      <location file = "why/mac_carthy.why" line = "468" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -740,19 +741,19 @@ why --project [...] why/mac_carthy.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/mac_carthy_po9.why">
-      <location file = "why/mac_carthy.why" line = "535" begin = "23" end = "119"/>
+      <location file = "why/mac_carthy.why" line = "538" begin = "23" end = "119"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/mac_carthy_po10.why">
-      <location file = "why/mac_carthy.why" line = "535" begin = "23" end = "119"/>
+      <location file = "why/mac_carthy.why" line = "538" begin = "23" end = "119"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/mac_carthy_po11.why">
-      <location file = "why/mac_carthy.why" line = "542" begin = "24" end = "121"/>
+      <location file = "why/mac_carthy.why" line = "545" begin = "24" end = "121"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/mac_carthy_po12.why">
-      <location file = "why/mac_carthy.why" line = "542" begin = "24" end = "121"/>
+      <location file = "why/mac_carthy.why" line = "545" begin = "24" end = "121"/>
       <explain kind = "Check"/>
     </goal>
     </behavior>

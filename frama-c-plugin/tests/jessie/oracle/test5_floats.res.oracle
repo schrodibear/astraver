@@ -46,30 +46,28 @@ behavior default:
    {  (C_1 : (x = (1.0 :> float)));
       (C_2 : (y = (0.0 :> float)));
       
+      loop 
+      behavior default:
+        invariant (C_4 : (((y :> real) < 0x2.0p24) ==>
+                           (((x :> real) - (y :> real)) == 1.0)));
+      behavior default:
+        
+        assigns x;
+      behavior default:
+        
+        assigns y;
+      variant (C_3 : (16777216 - truncate((y :> real))));
+      while (true)
       {  
-         loop 
-         behavior default:
-           invariant (C_4 : (((y :> real) < 0x2.0p24) ==>
-                              (((x :> real) - (y :> real)) == 1.0)));
-         behavior default:
-           
-           assigns x;
-         behavior default:
-           
-           assigns y;
-         variant (C_3 : (16777216 - truncate((y :> real))));
-         while (true)
-         {  
-            {  (if (y != x) then () else 
-               (goto while_0_break));
-               
-               {  (C_5 : (y = x));
-                  (C_7 : (x = (C_6 : (x + (1.0 :> float)))))
-               }
+         {  (if (y != x) then () else 
+            (goto while_0_break));
+            
+            {  (C_5 : (y = x));
+               (C_7 : (x = (C_6 : (x + (1.0 :> float)))))
             }
-         };
-         (while_0_break : ())
+         }
       };
+      (while_0_break : ());
       
       {  
          (assert for default: (C_8 : ((C_9 : ((x :> real) == (y :> real))) &&
@@ -333,46 +331,48 @@ let f_ensures_default =
    begin
      (let x_1 = ref (any_single void) in
      (let y = ref (any_single void) in
-     (C_1:
-     (C_2:
-     begin
-       (let jessie_<somenum> = (x_1 := (single_of_real_exact 1.0)) in void);
-      (let jessie_<somenum> = (y := (single_of_real_exact 0.0)) in void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_2:
-         while true do
-         { invariant
-             (JC_<somenum>:
-             (lt_real(single_value(y), 0x2.0p24) ->
-              eq_real(sub_real(single_value(x_1), single_value(y)), 1.0))) 
-            }
+     try
+      (let jessie_<somenum> =
+      (C_1:
+      (C_2:
+      begin
+        (let jessie_<somenum> = (x_1 := (single_of_real_exact 1.0)) in void);
+       (let jessie_<somenum> = (y := (single_of_real_exact 0.0)) in void);
+       (loop_2:
+       while true do
+       { invariant
+           (JC_<somenum>:
+           (lt_real(single_value(y), 0x2.0p24) ->
+            eq_real(sub_real(single_value(x_1), single_value(y)), 1.0))) 
+          }
+        begin
+          [ { } unit { true } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit { true } ];
-           try
             (let jessie_<somenum> =
+            (C_5:
+            (C_7:
             begin
-              (let jessie_<somenum> =
-              (C_5:
-              (C_7:
-              begin
-                (if ((ne_single !y) !x_1) then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void)); (let jessie_<somenum> = (y := !x_1) in void);
-               (x_1 := (C_6:
-                       (JC_<somenum>:
-                       (((add_single_safe nearest_even) !x_1) (single_of_real_exact 1.0)))));
-               !x_1 end)) in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (assert
-      { (JC_<somenum>:
-        ((JC_<somenum>: eq_real(single_value(x_1), single_value(y)))
-        and (JC_<somenum>: eq_real(single_value(y), 0x2.0p24)))) }; void); void;
-      (raise Return) end)))); (raise Return) end with Return -> void end)
+              (if ((ne_single !y) !x_1) then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void)); (let jessie_<somenum> = (y := !x_1) in void);
+             (x_1 := (C_6:
+                     (JC_<somenum>:
+                     (((add_single_safe nearest_even) !x_1) (single_of_real_exact 1.0)))));
+             !x_1 end)) in void); (raise (Loop_continue_exc void)) end in
+          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      begin
+        void;
+       (assert
+       { (JC_<somenum>:
+         ((JC_<somenum>: eq_real(single_value(x_1), single_value(y)))
+         and (JC_<somenum>: eq_real(single_value(y), 0x2.0p24)))) }; void); void;
+       (raise Return) end) end)); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let f_safety =
@@ -383,46 +383,48 @@ let f_safety =
    begin
      (let x_1 = ref (any_single void) in
      (let y = ref (any_single void) in
-     (C_1:
-     (C_2:
-     begin
-       (let jessie_<somenum> = (x_1 := (single_of_real_exact 1.0)) in void);
-      (let jessie_<somenum> = (y := (single_of_real_exact 0.0)) in void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_1:
-         while true do
-         { invariant (JC_<somenum>: true)
-           variant (JC_<somenum> : sub_int((16777216), truncate(single_value(y)))) }
+     try
+      (let jessie_<somenum> =
+      (C_1:
+      (C_2:
+      begin
+        (let jessie_<somenum> = (x_1 := (single_of_real_exact 1.0)) in void);
+       (let jessie_<somenum> = (y := (single_of_real_exact 0.0)) in void);
+       (loop_1:
+       while true do
+       { invariant (JC_<somenum>: true)
+         variant (JC_<somenum> : sub_int((16777216), truncate(single_value(y)))) }
+        begin
+          [ { } unit reads x_1,y
+            { (JC_<somenum>:
+              (lt_real(single_value(y), 0x2.0p24) ->
+               eq_real(sub_real(single_value(x_1), single_value(y)), 1.0))) } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit reads x_1,y
-              { (JC_<somenum>:
-                (lt_real(single_value(y), 0x2.0p24) ->
-                 eq_real(sub_real(single_value(x_1), single_value(y)), 1.0))) } ];
-           try
             (let jessie_<somenum> =
+            (C_5:
+            (C_7:
             begin
-              (let jessie_<somenum> =
-              (C_5:
-              (C_7:
-              begin
-                (if ((ne_single !y) !x_1) then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void)); (let jessie_<somenum> = (y := !x_1) in void);
-               (x_1 := (C_6:
-                       (JC_<somenum>:
-                       (((add_single nearest_even) !x_1) (single_of_real_exact 1.0)))));
-               !x_1 end)) in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      [ { } unit reads x_1,y
-        { (JC_<somenum>:
-          ((JC_<somenum>: eq_real(single_value(x_1), single_value(y)))
-          and (JC_<somenum>: eq_real(single_value(y), 0x2.0p24)))) } ]; void;
-      (raise Return) end)))); (raise Return) end with Return -> void end)
+              (if ((ne_single !y) !x_1) then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
+             (let jessie_<somenum> = (y := !x_1) in void);
+             (x_1 := (C_6:
+                     (JC_<somenum>:
+                     (((add_single nearest_even) !x_1) (single_of_real_exact 1.0)))));
+             !x_1 end)) in void); (raise (Loop_continue_exc void)) end in
+          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      begin
+        void;
+       [ { } unit reads x_1,y
+         { (JC_<somenum>:
+           ((JC_<somenum>: eq_real(single_value(x_1), single_value(y)))
+           and (JC_<somenum>: eq_real(single_value(y), 0x2.0p24)))) } ]; void;
+       (raise Return) end) end)); (raise Return) end with Return -> void end)
   { true }
 
 

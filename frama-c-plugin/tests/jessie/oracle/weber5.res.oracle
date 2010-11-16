@@ -70,35 +70,33 @@ behavior default:
       (C_2 : (b = result));
       (C_5 : (length = (C_4 : ((C_3 : (last - first)) :> int32))));
       
+      loop 
+      behavior default:
+        invariant (C_11 : ((C_12 : ((a - first) <= 0)) &&
+                            (C_13 : ((first - last) <= 0))));
+      behavior default:
+        invariant (C_10 : ((result - b) == (first - a)));
+      behavior default:
+        invariant (C_7 : ((C_8 : ((b - result) <= 0)) &&
+                           (C_9 : ((result - (b + length)) <= 0))));
+      behavior default:
+        invariant (C_6 : (\forall integer k;
+                           (((0 <= k) && (k < (first - a))) ==>
+                             ((a + k).int_M == (b + k).int_M))));
+      while (true)
       {  
-         loop 
-         behavior default:
-           invariant (C_11 : ((C_12 : ((a - first) <= 0)) &&
-                               (C_13 : ((first - last) <= 0))));
-         behavior default:
-           invariant (C_10 : ((result - b) == (first - a)));
-         behavior default:
-           invariant (C_7 : ((C_8 : ((b - result) <= 0)) &&
-                              (C_9 : ((result - (b + length)) <= 0))));
-         behavior default:
-           invariant (C_6 : (\forall integer k;
-                              (((0 <= k) && (k < (first - a))) ==>
-                                ((a + k).int_M == (b + k).int_M))));
-         while (true)
-         {  
-            {  (if (first != last) then () else 
-               (goto while_0_break));
-               
-               {  (C_14 : (tmp = result));
-                  (C_16 : (result = (C_15 : (result + 1))));
-                  (C_17 : (tmp_0 = first));
-                  (C_19 : (first = (C_18 : (first + 1))));
-                  (C_22 : ((C_21 : tmp.int_M) = (C_20 : tmp_0.int_M)))
-               }
+         {  (if (first != last) then () else 
+            (goto while_0_break));
+            
+            {  (C_14 : (tmp = result));
+               (C_16 : (result = (C_15 : (result + 1))));
+               (C_17 : (tmp_0 = first));
+               (C_19 : (first = (C_18 : (first + 1))));
+               (C_22 : ((C_21 : tmp.int_M) = (C_20 : tmp_0.int_M)))
             }
-         };
-         (while_0_break : ())
+         }
       };
+      (while_0_break : ());
       
       (return result)
    }
@@ -554,80 +552,76 @@ let copy_int_array_ensures_default =
      (let length = ref (any_int32 void) in
      (let tmp = ref (any_pointer void) in
      (let tmp_0 = ref (any_pointer void) in
-     (C_1:
-     (C_2:
-     (C_5:
-     begin
-       (let jessie_<somenum> = (a_0 := !mutable_first) in void);
-      (let jessie_<somenum> = (b_0 := !mutable_result_0) in void);
+     try
       (let jessie_<somenum> =
-      (length := (C_4:
-                 (safe_int32_of_integer_ (C_3:
-                                         ((safe_sub_pointer_ last) !mutable_first))))) in
-      void);
-      try
+      (C_1:
+      (C_2:
+      (C_5:
+      begin
+        (let jessie_<somenum> = (a_0 := !mutable_first) in void);
+       (let jessie_<somenum> = (b_0 := !mutable_result_0) in void);
        (let jessie_<somenum> =
-       begin
-         (loop_2:
-         while true do
-         { invariant
-             ((JC_<somenum>:
-              (forall k:int.
-               ((le_int((0), k)
-                and lt_int(k, sub_pointer(mutable_first, a_0))) ->
-                eq_int(integer_of_int32(select(int_P_int_M_first_3,
-                                        shift(a_0, k))),
-                integer_of_int32(select(int_P_int_M_result_5, shift(b_0, k)))))))
-             and ((JC_<somenum>:
-                  ((JC_<somenum>: le_int(sub_pointer(b_0, mutable_result_0), (0)))
-                  and (JC_<somenum>:
-                      le_int(sub_pointer(mutable_result_0,
-                             shift(b_0, integer_of_int32(length))),
-                      (0)))))
-                 and ((JC_<somenum>:
-                      eq_int(sub_pointer(mutable_result_0, b_0),
-                      sub_pointer(mutable_first, a_0)))
-                     and (JC_<somenum>:
-                         ((JC_<somenum>:
-                          le_int(sub_pointer(a_0, mutable_first), (0)))
-                         and (JC_<somenum>:
-                             le_int(sub_pointer(mutable_first, last), (0))))))))
-            }
+       (length := (C_4:
+                  (safe_int32_of_integer_ (C_3:
+                                          ((safe_sub_pointer_ last) !mutable_first))))) in
+       void);
+       (loop_2:
+       while true do
+       { invariant
+           ((JC_<somenum>:
+            (forall k:int.
+             ((le_int((0), k) and lt_int(k, sub_pointer(mutable_first, a_0))) ->
+              eq_int(integer_of_int32(select(int_P_int_M_first_3,
+                                      shift(a_0, k))),
+              integer_of_int32(select(int_P_int_M_result_5, shift(b_0, k)))))))
+           and ((JC_<somenum>:
+                ((JC_<somenum>: le_int(sub_pointer(b_0, mutable_result_0), (0)))
+                and (JC_<somenum>:
+                    le_int(sub_pointer(mutable_result_0,
+                           shift(b_0, integer_of_int32(length))),
+                    (0)))))
+               and ((JC_<somenum>:
+                    eq_int(sub_pointer(mutable_result_0, b_0),
+                    sub_pointer(mutable_first, a_0)))
+                   and (JC_<somenum>:
+                       ((JC_<somenum>: le_int(sub_pointer(a_0, mutable_first), (0)))
+                       and (JC_<somenum>:
+                           le_int(sub_pointer(mutable_first, last), (0))))))))
+          }
+        begin
+          [ { } unit { true } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit { true } ];
-           try
             (let jessie_<somenum> =
+            (C_14:
+            (C_16:
+            (C_17:
+            (C_19:
             begin
-              (let jessie_<somenum> =
-              (C_14:
-              (C_16:
-              (C_17:
-              (C_19:
-              begin
-                (if ((safe_neq_pointer !mutable_first) last) then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
-               (let jessie_<somenum> = (tmp := !mutable_result_0) in void);
-               (let jessie_<somenum> =
-               (mutable_result_0 := (C_15: ((shift !mutable_result_0) (1)))) in
-               void); (let jessie_<somenum> = (tmp_0 := !mutable_first) in void);
-               (let jessie_<somenum> =
-               (mutable_first := (C_18: ((shift !mutable_first) (1)))) in
-               void);
-               (C_22:
-               (let jessie_<somenum> =
-               (C_20: ((safe_acc_ int_P_int_M_first_3) !tmp_0)) in
-               begin
-                 (let jessie_<somenum> = !tmp in
-                 (((safe_upd_ int_P_int_M_result_5) jessie_<somenum>) jessie_<somenum>));
-                jessie_<somenum> end)) end)))) in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (return := !mutable_result_0); (raise Return) end)))))))); absurd  end
-   with Return -> !return end))))
+              (if ((safe_neq_pointer !mutable_first) last) then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void)); (let jessie_<somenum> = (tmp := !mutable_result_0) in void);
+             (let jessie_<somenum> =
+             (mutable_result_0 := (C_15: ((shift !mutable_result_0) (1)))) in
+             void); (let jessie_<somenum> = (tmp_0 := !mutable_first) in void);
+             (let jessie_<somenum> =
+             (mutable_first := (C_18: ((shift !mutable_first) (1)))) in void);
+             (C_22:
+             (let jessie_<somenum> =
+             (C_20: ((safe_acc_ int_P_int_M_first_3) !tmp_0)) in
+             begin
+               (let jessie_<somenum> = !tmp in
+               (((safe_upd_ int_P_int_M_result_5) jessie_<somenum>) jessie_<somenum>));
+              jessie_<somenum> end)) end)))) in void);
+           (raise (Loop_continue_exc void)) end in void) with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end))) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      begin   void; (return := !mutable_result_0); (raise Return) end) end)))));
+    absurd  end with Return -> !return end))))
   { (JC_<somenum>:
     (forall i_0:int.
      ((le_int((0), i_0) and lt_int(i_0, sub_pointer(last@, first@))) ->
@@ -663,86 +657,82 @@ let copy_int_array_safety =
      (let length = ref (any_int32 void) in
      (let tmp = ref (any_pointer void) in
      (let tmp_0 = ref (any_pointer void) in
-     (C_1:
-     (C_2:
-     (C_5:
-     begin
-       (let jessie_<somenum> = (a_0 := !mutable_first) in void);
-      (let jessie_<somenum> = (b_0 := !mutable_result_0) in void);
+     try
       (let jessie_<somenum> =
-      (length := (C_4:
-                 (JC_<somenum>:
-                 (int32_of_integer_ (C_3:
-                                    ((sub_pointer_ last) !mutable_first)))))) in
-      void);
-      try
+      (C_1:
+      (C_2:
+      (C_5:
+      begin
+        (let jessie_<somenum> = (a_0 := !mutable_first) in void);
+       (let jessie_<somenum> = (b_0 := !mutable_result_0) in void);
        (let jessie_<somenum> =
-       begin
-         (loop_1:
-         while true do
-         { invariant (JC_<somenum>: true) variant (0) }
+       (length := (C_4:
+                  (JC_<somenum>:
+                  (int32_of_integer_ (C_3:
+                                     ((sub_pointer_ last) !mutable_first)))))) in
+       void);
+       (loop_1:
+       while true do
+       { invariant (JC_<somenum>: true) variant (0) }
+        begin
+          [ { } unit
+            reads a_0,b_0,int_P_int_M_result_5,length,mutable_first,mutable_result_0
+            { ((JC_<somenum>:
+               (forall k:int.
+                ((le_int((0), k)
+                 and lt_int(k, sub_pointer(mutable_first, a_0))) ->
+                 eq_int(integer_of_int32(select(int_P_int_M_first_3,
+                                         shift(a_0, k))),
+                 integer_of_int32(select(int_P_int_M_result_5, shift(b_0, k)))))))
+              and ((JC_<somenum>:
+                   ((JC_<somenum>: le_int(sub_pointer(b_0, mutable_result_0), (0)))
+                   and (JC_<somenum>:
+                       le_int(sub_pointer(mutable_result_0,
+                              shift(b_0, integer_of_int32(length))),
+                       (0)))))
+                  and ((JC_<somenum>:
+                       eq_int(sub_pointer(mutable_result_0, b_0),
+                       sub_pointer(mutable_first, a_0)))
+                      and (JC_<somenum>:
+                          ((JC_<somenum>:
+                           le_int(sub_pointer(a_0, mutable_first), (0)))
+                          and (JC_<somenum>:
+                              le_int(sub_pointer(mutable_first, last), (0)))))))) } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit
-              reads a_0,b_0,int_P_int_M_result_5,length,mutable_first,mutable_result_0
-              { ((JC_<somenum>:
-                 (forall k:int.
-                  ((le_int((0), k)
-                   and lt_int(k, sub_pointer(mutable_first, a_0))) ->
-                   eq_int(integer_of_int32(select(int_P_int_M_first_3,
-                                           shift(a_0, k))),
-                   integer_of_int32(select(int_P_int_M_result_5,
-                                    shift(b_0, k)))))))
-                and ((JC_<somenum>:
-                     ((JC_<somenum>:
-                      le_int(sub_pointer(b_0, mutable_result_0), (0)))
-                     and (JC_<somenum>:
-                         le_int(sub_pointer(mutable_result_0,
-                                shift(b_0, integer_of_int32(length))),
-                         (0)))))
-                    and ((JC_<somenum>:
-                         eq_int(sub_pointer(mutable_result_0, b_0),
-                         sub_pointer(mutable_first, a_0)))
-                        and (JC_<somenum>:
-                            ((JC_<somenum>:
-                             le_int(sub_pointer(a_0, mutable_first), (0)))
-                            and (JC_<somenum>:
-                                le_int(sub_pointer(mutable_first, last), (0)))))))) } ];
-           try
             (let jessie_<somenum> =
+            (C_14:
+            (C_16:
+            (C_17:
+            (C_19:
             begin
-              (let jessie_<somenum> =
-              (C_14:
-              (C_16:
-              (C_17:
-              (C_19:
-              begin
-                (if ((neq_pointer !mutable_first) last) then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
-               (let jessie_<somenum> = (tmp := !mutable_result_0) in void);
-               (let jessie_<somenum> =
-               (mutable_result_0 := (C_15: ((shift !mutable_result_0) (1)))) in
-               void); (let jessie_<somenum> = (tmp_0 := !mutable_first) in void);
-               (let jessie_<somenum> =
-               (mutable_first := (C_18: ((shift !mutable_first) (1)))) in
-               void);
-               (C_22:
-               (let jessie_<somenum> =
-               (C_20:
+              (if ((neq_pointer !mutable_first) last) then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void)); (let jessie_<somenum> = (tmp := !mutable_result_0) in void);
+             (let jessie_<somenum> =
+             (mutable_result_0 := (C_15: ((shift !mutable_result_0) (1)))) in
+             void); (let jessie_<somenum> = (tmp_0 := !mutable_first) in void);
+             (let jessie_<somenum> =
+             (mutable_first := (C_18: ((shift !mutable_first) (1)))) in void);
+             (C_22:
+             (let jessie_<somenum> =
+             (C_20:
+             (JC_<somenum>:
+             (((acc_ int_P_first_3_alloc_table) int_P_int_M_first_3) !tmp_0))) in
+             begin
+               (let jessie_<somenum> = !tmp in
                (JC_<somenum>:
-               (((acc_ int_P_first_3_alloc_table) int_P_int_M_first_3) !tmp_0))) in
-               begin
-                 (let jessie_<somenum> = !tmp in
-                 (JC_<somenum>:
-                 ((((upd_ int_P_result_5_alloc_table) int_P_int_M_result_5) jessie_<somenum>) jessie_<somenum>)));
-                jessie_<somenum> end)) end)))) in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (return := !mutable_result_0); (raise Return) end)))))))); absurd  end
-   with Return -> !return end)))) { true }
+               ((((upd_ int_P_result_5_alloc_table) int_P_int_M_result_5) jessie_<somenum>) jessie_<somenum>)));
+              jessie_<somenum> end)) end)))) in void);
+           (raise (Loop_continue_exc void)) end in void) with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end))) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      begin   void; (return := !mutable_result_0); (raise Return) end) end)))));
+    absurd  end with Return -> !return end)))) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C weber5.jessie --quiet -f weber5.makefile project
@@ -752,7 +742,7 @@ why --project [...] why/weber5.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/weber5_po14.why">
-      <location file = "why/weber5.why" line = "570" begin = "37" end = "71"/>
+      <location file = "why/weber5.why" line = "568" begin = "38" end = "72"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -767,7 +757,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/weber5_po17.why">
-      <location file = "why/weber5.why" line = "613" begin = "21" end = "54"/>
+      <location file = "why/weber5.why" line = "606" begin = "19" end = "52"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -782,21 +772,21 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber5_po20.why">
-      <location file = "PPCHOME/tests/jessie/weber5.jessie/weber5.jc" line = "90" begin = "27" end = "68"/>
+      <location file = "PPCHOME/tests/jessie/weber5.jessie/weber5.jc" line = "89" begin = "24" end = "65"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber5_po21.why">
-      <location file = "PPCHOME/tests/jessie/weber5.jessie/weber5.jc" line = "90" begin = "27" end = "68"/>
+      <location file = "PPCHOME/tests/jessie/weber5.jessie/weber5.jc" line = "89" begin = "24" end = "65"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/weber5_po22.why">
-      <location file = "why/weber5.why" line = "577" begin = "44" end = "45"/>
+      <location file = "why/weber5.why" line = "572" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/weber5_po23.why">
-      <location file = "why/weber5.why" line = "577" begin = "44" end = "45"/>
+      <location file = "why/weber5.why" line = "572" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

@@ -128,28 +128,26 @@ behavior in_interval:
       } else ());
       (C_6 : (i = 1));
       
+      loop 
+      behavior default:
+        invariant (C_9 : ((C_10 : (1 <= i)) && (C_11 : (i <= n))));
+      behavior default:
+        invariant (C_8 : (\forall integer j_0;
+                           (((0 <= j_0) && (j_0 < i)) ==>
+                             ((z :> real) > ((x + j_0).double_M :> real)))));
+      variant (C_7 : (n - i));
+      while (true)
       {  
-         loop 
-         behavior default:
-           invariant (C_9 : ((C_10 : (1 <= i)) && (C_11 : (i <= n))));
-         behavior default:
-           invariant (C_8 : (\forall integer j_0;
-                              (((0 <= j_0) && (j_0 < i)) ==>
-                                ((z :> real) > ((x + j_0).double_M :> real)))));
-         variant (C_7 : (n - i));
-         while (true)
-         {  
-            {  (if (i < n) then () else 
-               (goto while_0_break));
-               
-               {  (if (z <= (C_13 : (C_12 : (x + i)).double_M)) then 
-                  (goto while_0_break) else ())
-               };
-               (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))))
-            }
-         };
-         (while_0_break : ())
+         {  (if (i < n) then () else 
+            (goto while_0_break));
+            
+            {  (if (z <= (C_13 : (C_12 : (x + i)).double_M)) then 
+               (goto while_0_break) else ())
+            };
+            (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))))
+         }
       };
+      (while_0_break : ());
       (if (i == n) then 
       {  (C_21 : (__retres = (C_20 : (C_19 : (y +
                                                (C_18 : ((C_17 : (n - 1)) :> int32)))).double_M)));
@@ -840,27 +838,24 @@ let interp_lin_ensures_default =
      (let __retres = ref (any_double void) in
      try
       (let jessie_<somenum> =
-      (C_6:
-      (C_22:
-      (C_27:
-      (C_51:
       begin
-        (if ((le_double z_0) (C_5:
-                             ((safe_acc_ double_P_double_M_x_3) (C_4:
-                                                                ((shift x_0) (0))))))
-        then
+        try
          (let jessie_<somenum> =
-         (C_3:
+         (C_6:
          begin
-           (let jessie_<somenum> =
-           (__retres := (C_2:
-                        ((safe_acc_ double_P_double_M_y_4) (C_1:
-                                                           ((shift y) (0)))))) in
-           void); (raise (Return_label_exc void)) end) in void) else void);
-       (let jessie_<somenum> = (i_2 := (safe_int32_of_integer_ (1))) in void);
-       try
-        (let jessie_<somenum> =
-        begin
+           (if ((le_double z_0) (C_5:
+                                ((safe_acc_ double_P_double_M_x_3) (C_4:
+                                                                   ((shift x_0) (0))))))
+           then
+            (let jessie_<somenum> =
+            (C_3:
+            begin
+              (let jessie_<somenum> =
+              (__retres := (C_2:
+                           ((safe_acc_ double_P_double_M_y_4) (C_1:
+                                                              ((shift y) (0)))))) in
+              void); (raise (Return_label_exc void)) end) in void) else void);
+          (let jessie_<somenum> = (i_2 := (safe_int32_of_integer_ (1))) in void);
           (loop_2:
           while true do
           { invariant
@@ -899,90 +894,96 @@ let interp_lin_ensures_default =
                                                 ((add_int (integer_of_int32 !i_2)) (1))))));
                 !i_2 end) in void); (raise (Loop_continue_exc void)) end in
              void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end in void) with
-        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-       (if ((eq_int_ (integer_of_int32 !i_2)) (integer_of_int32 n_0))
-       then
-        (let jessie_<somenum> =
-        (C_21:
-        begin
+          (raise (Goto_while_0_break_exc void)) end) in void) with
+         Goto_while_0_break_exc jessie_<somenum> ->
+         (let jessie_<somenum> =
+         (while_0_break:
+         (C_22:
+         (C_27:
+         (C_51:
+         begin
+           void;
+          (if ((eq_int_ (integer_of_int32 !i_2)) (integer_of_int32 n_0))
+          then
+           (let jessie_<somenum> =
+           (C_21:
+           begin
+             (let jessie_<somenum> =
+             (__retres := (C_20:
+                          ((safe_acc_ double_P_double_M_y_4) (C_19:
+                                                             ((shift y) 
+                                                              (integer_of_int32 
+                                                               (C_18:
+                                                               (safe_int32_of_integer_ 
+                                                                (C_17:
+                                                                ((sub_int 
+                                                                  (integer_of_int32 n_0)) (1))))))))))) in
+             void); (raise (Return_label_exc void)) end) in void) else void);
+          (let jessie_<somenum> = (i_interp := !i_2) in void);
           (let jessie_<somenum> =
-          (__retres := (C_20:
-                       ((safe_acc_ double_P_double_M_y_4) (C_19:
-                                                          ((shift y) 
-                                                           (integer_of_int32 
-                                                            (C_18:
-                                                            (safe_int32_of_integer_ 
-                                                             (C_17:
-                                                             ((sub_int 
-                                                               (integer_of_int32 n_0)) (1))))))))))) in
-          void); (raise (Return_label_exc void)) end) in void) else void);
-       (let jessie_<somenum> = (i_interp := !i_2) in void);
-       (let jessie_<somenum> =
-       (xim1 := (C_26:
-                ((safe_acc_ double_P_double_M_x_3) (C_25:
-                                                   ((shift x_0) (integer_of_int32 
-                                                                 (C_24:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_23:
-                                                                  ((sub_int 
+          (xim1 := (C_26:
+                   ((safe_acc_ double_P_double_M_x_3) (C_25:
+                                                      ((shift x_0) (integer_of_int32 
+                                                                    (C_24:
+                                                                    (safe_int32_of_integer_ 
+                                                                    (C_23:
+                                                                    ((sub_int 
                                                                     (integer_of_int32 !i_2)) (1))))))))))) in
-       void); (assert { (JC_<somenum>: bounded(xim1, 0x1p340)) }; void); void;
-       (let jessie_<somenum> =
-       (C_31:
-       begin
-         (xi := (C_30:
-                ((safe_acc_ double_P_double_M_x_3) (C_29:
-                                                   ((shift x_0) (integer_of_int32 !i_2))))));
-        !xi end) in void); (assert { (JC_<somenum>: bounded(xi, 0x1p340)) }; void);
-       void;
-       (assert
-       { (JC_<somenum>:
-         ge_real(sub_real(double_value(xi), double_value(xim1)), 0x1p-341)) };
-       void); void;
-       (let jessie_<somenum> =
-       (C_38:
-       begin
-         (yim1 := (C_37:
-                  ((safe_acc_ double_P_double_M_y_4) (C_36:
-                                                     ((shift y) (integer_of_int32 
-                                                                 (C_35:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_34:
-                                                                  ((sub_int 
+          void); (assert { (JC_<somenum>: bounded(xim1, 0x1p340)) }; void); void;
+          (let jessie_<somenum> =
+          (C_31:
+          begin
+            (xi := (C_30:
+                   ((safe_acc_ double_P_double_M_x_3) (C_29:
+                                                      ((shift x_0) (integer_of_int32 !i_2))))));
+           !xi end) in void);
+          (assert { (JC_<somenum>: bounded(xi, 0x1p340)) }; void); void;
+          (assert
+          { (JC_<somenum>:
+            ge_real(sub_real(double_value(xi), double_value(xim1)), 0x1p-341)) };
+          void); void;
+          (let jessie_<somenum> =
+          (C_38:
+          begin
+            (yim1 := (C_37:
+                     ((safe_acc_ double_P_double_M_y_4) (C_36:
+                                                        ((shift y) (integer_of_int32 
+                                                                    (C_35:
+                                                                    (safe_int32_of_integer_ 
+                                                                    (C_34:
+                                                                    ((sub_int 
                                                                     (integer_of_int32 !i_2)) (1)))))))))));
-        !yim1 end) in void);
-       (assert { (JC_<somenum>: bounded(yim1, 0x1p340)) }; void); void;
-       (let jessie_<somenum> =
-       (C_42:
-       begin
-         (yi := (C_41:
-                ((safe_acc_ double_P_double_M_y_4) (C_40:
-                                                   ((shift y) (integer_of_int32 !i_2))))));
-        !yi end) in void); (assert { (JC_<somenum>: bounded(yi, 0x1p340)) }; void);
-       void;
-       (let jessie_<somenum> =
-       (C_47:
-       begin
-         (v_0 := (C_46:
-                 (JC_<somenum>:
-                 (((div_double_safe nearest_even) (C_45:
-                                                  (JC_<somenum>:
-                                                  (((sub_double_safe nearest_even) !yi) !yim1)))) 
-                  (C_44:
-                  (JC_<somenum>: (((sub_double_safe nearest_even) !xi) !xim1)))))));
-        !v_0 end) in void);
-       (let jessie_<somenum> =
-       (__retres := (C_50:
+           !yim1 end) in void);
+          (assert { (JC_<somenum>: bounded(yim1, 0x1p340)) }; void); void;
+          (let jessie_<somenum> =
+          (C_42:
+          begin
+            (yi := (C_41:
+                   ((safe_acc_ double_P_double_M_y_4) (C_40:
+                                                      ((shift y) (integer_of_int32 !i_2))))));
+           !yi end) in void);
+          (assert { (JC_<somenum>: bounded(yi, 0x1p340)) }; void); void;
+          (let jessie_<somenum> =
+          (C_47:
+          begin
+            (v_0 := (C_46:
                     (JC_<somenum>:
-                    (((add_double_safe nearest_even) !yi) (C_49:
-                                                          (JC_<somenum>:
-                                                          (((mul_double_safe nearest_even) !v_0) 
-                                                           (C_48:
-                                                           (JC_<somenum>:
-                                                           (((sub_double_safe nearest_even) z_0) !xim1)))))))))) in
-       void); (raise (Return_label_exc void)) end)))) in void) with
-      Return_label_exc jessie_<somenum> ->
+                    (((div_double_safe nearest_even) (C_45:
+                                                     (JC_<somenum>:
+                                                     (((sub_double_safe nearest_even) !yi) !yim1)))) 
+                     (C_44:
+                     (JC_<somenum>: (((sub_double_safe nearest_even) !xi) !xim1)))))));
+           !v_0 end) in void);
+          (__retres := (C_50:
+                       (JC_<somenum>:
+                       (((add_double_safe nearest_even) !yi) (C_49:
+                                                             (JC_<somenum>:
+                                                             (((mul_double_safe nearest_even) !v_0) 
+                                                              (C_48:
+                                                              (JC_<somenum>:
+                                                              (((sub_double_safe nearest_even) z_0) !xim1))))))))));
+          !__retres end)))) in void) end; (raise (Return_label_exc void)) end in
+      void) with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)))))));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -1028,27 +1029,24 @@ let interp_lin_ensures_in_interval =
      (let __retres = ref (any_double void) in
      try
       (let jessie_<somenum> =
-      (C_6:
-      (C_22:
-      (C_27:
-      (C_51:
       begin
-        (if ((le_double z_0) (C_5:
-                             ((safe_acc_ double_P_double_M_x_3) (C_4:
-                                                                ((shift x_0) (0))))))
-        then
+        try
          (let jessie_<somenum> =
-         (C_3:
+         (C_6:
          begin
-           (let jessie_<somenum> =
-           (__retres := (C_2:
-                        ((safe_acc_ double_P_double_M_y_4) (C_1:
-                                                           ((shift y) (0)))))) in
-           void); (raise (Return_label_exc void)) end) in void) else void);
-       (let jessie_<somenum> = (i_2 := (safe_int32_of_integer_ (1))) in void);
-       try
-        (let jessie_<somenum> =
-        begin
+           (if ((le_double z_0) (C_5:
+                                ((safe_acc_ double_P_double_M_x_3) (C_4:
+                                                                   ((shift x_0) (0))))))
+           then
+            (let jessie_<somenum> =
+            (C_3:
+            begin
+              (let jessie_<somenum> =
+              (__retres := (C_2:
+                           ((safe_acc_ double_P_double_M_y_4) (C_1:
+                                                              ((shift y) (0)))))) in
+              void); (raise (Return_label_exc void)) end) in void) else void);
+          (let jessie_<somenum> = (i_2 := (safe_int32_of_integer_ (1))) in void);
           (loop_5:
           while true do
           { invariant (JC_<somenum>: true)  }
@@ -1087,91 +1085,97 @@ let interp_lin_ensures_in_interval =
                                                 ((add_int (integer_of_int32 !i_2)) (1))))));
                 !i_2 end) in void); (raise (Loop_continue_exc void)) end in
              void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end in void) with
-        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-       (if ((eq_int_ (integer_of_int32 !i_2)) (integer_of_int32 n_0))
-       then
-        (let jessie_<somenum> =
-        (C_21:
-        begin
+          (raise (Goto_while_0_break_exc void)) end) in void) with
+         Goto_while_0_break_exc jessie_<somenum> ->
+         (let jessie_<somenum> =
+         (while_0_break:
+         (C_22:
+         (C_27:
+         (C_51:
+         begin
+           void;
+          (if ((eq_int_ (integer_of_int32 !i_2)) (integer_of_int32 n_0))
+          then
+           (let jessie_<somenum> =
+           (C_21:
+           begin
+             (let jessie_<somenum> =
+             (__retres := (C_20:
+                          ((safe_acc_ double_P_double_M_y_4) (C_19:
+                                                             ((shift y) 
+                                                              (integer_of_int32 
+                                                               (C_18:
+                                                               (safe_int32_of_integer_ 
+                                                                (C_17:
+                                                                ((sub_int 
+                                                                  (integer_of_int32 n_0)) (1))))))))))) in
+             void); (raise (Return_label_exc void)) end) in void) else void);
+          (let jessie_<somenum> = (i_interp := !i_2) in void);
           (let jessie_<somenum> =
-          (__retres := (C_20:
-                       ((safe_acc_ double_P_double_M_y_4) (C_19:
-                                                          ((shift y) 
-                                                           (integer_of_int32 
-                                                            (C_18:
-                                                            (safe_int32_of_integer_ 
-                                                             (C_17:
-                                                             ((sub_int 
-                                                               (integer_of_int32 n_0)) (1))))))))))) in
-          void); (raise (Return_label_exc void)) end) in void) else void);
-       (let jessie_<somenum> = (i_interp := !i_2) in void);
-       (let jessie_<somenum> =
-       (xim1 := (C_26:
-                ((safe_acc_ double_P_double_M_x_3) (C_25:
-                                                   ((shift x_0) (integer_of_int32 
-                                                                 (C_24:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_23:
-                                                                  ((sub_int 
+          (xim1 := (C_26:
+                   ((safe_acc_ double_P_double_M_x_3) (C_25:
+                                                      ((shift x_0) (integer_of_int32 
+                                                                    (C_24:
+                                                                    (safe_int32_of_integer_ 
+                                                                    (C_23:
+                                                                    ((sub_int 
                                                                     (integer_of_int32 !i_2)) (1))))))))))) in
-       void); [ { } unit reads xim1 { (JC_<somenum>: bounded(xim1, 0x1p340)) } ];
-       void;
-       (let jessie_<somenum> =
-       (C_31:
-       begin
-         (xi := (C_30:
-                ((safe_acc_ double_P_double_M_x_3) (C_29:
-                                                   ((shift x_0) (integer_of_int32 !i_2))))));
-        !xi end) in void);
-       [ { } unit reads xi { (JC_<somenum>: bounded(xi, 0x1p340)) } ]; void;
-       [ { } unit reads xi,xim1
-         { (JC_<somenum>:
-           ge_real(sub_real(double_value(xi), double_value(xim1)), 0x1p-341)) } ];
-       void;
-       (let jessie_<somenum> =
-       (C_38:
-       begin
-         (yim1 := (C_37:
-                  ((safe_acc_ double_P_double_M_y_4) (C_36:
-                                                     ((shift y) (integer_of_int32 
-                                                                 (C_35:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_34:
-                                                                  ((sub_int 
+          void);
+          [ { } unit reads xim1 { (JC_<somenum>: bounded(xim1, 0x1p340)) } ]; void;
+          (let jessie_<somenum> =
+          (C_31:
+          begin
+            (xi := (C_30:
+                   ((safe_acc_ double_P_double_M_x_3) (C_29:
+                                                      ((shift x_0) (integer_of_int32 !i_2))))));
+           !xi end) in void);
+          [ { } unit reads xi { (JC_<somenum>: bounded(xi, 0x1p340)) } ]; void;
+          [ { } unit reads xi,xim1
+            { (JC_<somenum>:
+              ge_real(sub_real(double_value(xi), double_value(xim1)),
+              0x1p-341)) } ]; void;
+          (let jessie_<somenum> =
+          (C_38:
+          begin
+            (yim1 := (C_37:
+                     ((safe_acc_ double_P_double_M_y_4) (C_36:
+                                                        ((shift y) (integer_of_int32 
+                                                                    (C_35:
+                                                                    (safe_int32_of_integer_ 
+                                                                    (C_34:
+                                                                    ((sub_int 
                                                                     (integer_of_int32 !i_2)) (1)))))))))));
-        !yim1 end) in void);
-       [ { } unit reads yim1 { (JC_<somenum>: bounded(yim1, 0x1p340)) } ]; void;
-       (let jessie_<somenum> =
-       (C_42:
-       begin
-         (yi := (C_41:
-                ((safe_acc_ double_P_double_M_y_4) (C_40:
-                                                   ((shift y) (integer_of_int32 !i_2))))));
-        !yi end) in void);
-       [ { } unit reads yi { (JC_<somenum>: bounded(yi, 0x1p340)) } ]; void;
-       (let jessie_<somenum> =
-       (C_47:
-       begin
-         (v_0 := (C_46:
-                 (JC_<somenum>:
-                 (((div_double_safe nearest_even) (C_45:
-                                                  (JC_<somenum>:
-                                                  (((sub_double_safe nearest_even) !yi) !yim1)))) 
-                  (C_44:
-                  (JC_<somenum>: (((sub_double_safe nearest_even) !xi) !xim1)))))));
-        !v_0 end) in void);
-       (let jessie_<somenum> =
-       (__retres := (C_50:
+           !yim1 end) in void);
+          [ { } unit reads yim1 { (JC_<somenum>: bounded(yim1, 0x1p340)) } ]; void;
+          (let jessie_<somenum> =
+          (C_42:
+          begin
+            (yi := (C_41:
+                   ((safe_acc_ double_P_double_M_y_4) (C_40:
+                                                      ((shift y) (integer_of_int32 !i_2))))));
+           !yi end) in void);
+          [ { } unit reads yi { (JC_<somenum>: bounded(yi, 0x1p340)) } ]; void;
+          (let jessie_<somenum> =
+          (C_47:
+          begin
+            (v_0 := (C_46:
                     (JC_<somenum>:
-                    (((add_double_safe nearest_even) !yi) (C_49:
-                                                          (JC_<somenum>:
-                                                          (((mul_double_safe nearest_even) !v_0) 
-                                                           (C_48:
-                                                           (JC_<somenum>:
-                                                           (((sub_double_safe nearest_even) z_0) !xim1)))))))))) in
-       void); (raise (Return_label_exc void)) end)))) in void) with
-      Return_label_exc jessie_<somenum> ->
+                    (((div_double_safe nearest_even) (C_45:
+                                                     (JC_<somenum>:
+                                                     (((sub_double_safe nearest_even) !yi) !yim1)))) 
+                     (C_44:
+                     (JC_<somenum>: (((sub_double_safe nearest_even) !xi) !xim1)))))));
+           !v_0 end) in void);
+          (__retres := (C_50:
+                       (JC_<somenum>:
+                       (((add_double_safe nearest_even) !yi) (C_49:
+                                                             (JC_<somenum>:
+                                                             (((mul_double_safe nearest_even) !v_0) 
+                                                              (C_48:
+                                                              (JC_<somenum>:
+                                                              (((sub_double_safe nearest_even) z_0) !xim1))))))))));
+          !__retres end)))) in void) end; (raise (Return_label_exc void)) end in
+      void) with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)))))));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -1258,27 +1262,24 @@ let interp_lin_ensures_too_high =
      (let __retres = ref (any_double void) in
      try
       (let jessie_<somenum> =
-      (C_6:
-      (C_22:
-      (C_27:
-      (C_51:
       begin
-        (if ((le_double z_0) (C_5:
-                             ((safe_acc_ double_P_double_M_x_3) (C_4:
-                                                                ((shift x_0) (0))))))
-        then
+        try
          (let jessie_<somenum> =
-         (C_3:
+         (C_6:
          begin
-           (let jessie_<somenum> =
-           (__retres := (C_2:
-                        ((safe_acc_ double_P_double_M_y_4) (C_1:
-                                                           ((shift y) (0)))))) in
-           void); (raise (Return_label_exc void)) end) in void) else void);
-       (let jessie_<somenum> = (i_2 := (safe_int32_of_integer_ (1))) in void);
-       try
-        (let jessie_<somenum> =
-        begin
+           (if ((le_double z_0) (C_5:
+                                ((safe_acc_ double_P_double_M_x_3) (C_4:
+                                                                   ((shift x_0) (0))))))
+           then
+            (let jessie_<somenum> =
+            (C_3:
+            begin
+              (let jessie_<somenum> =
+              (__retres := (C_2:
+                           ((safe_acc_ double_P_double_M_y_4) (C_1:
+                                                              ((shift y) (0)))))) in
+              void); (raise (Return_label_exc void)) end) in void) else void);
+          (let jessie_<somenum> = (i_2 := (safe_int32_of_integer_ (1))) in void);
           (loop_4:
           while true do
           { invariant (JC_<somenum>: true)  }
@@ -1317,91 +1318,97 @@ let interp_lin_ensures_too_high =
                                                 ((add_int (integer_of_int32 !i_2)) (1))))));
                 !i_2 end) in void); (raise (Loop_continue_exc void)) end in
              void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end in void) with
-        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-       (if ((eq_int_ (integer_of_int32 !i_2)) (integer_of_int32 n_0))
-       then
-        (let jessie_<somenum> =
-        (C_21:
-        begin
+          (raise (Goto_while_0_break_exc void)) end) in void) with
+         Goto_while_0_break_exc jessie_<somenum> ->
+         (let jessie_<somenum> =
+         (while_0_break:
+         (C_22:
+         (C_27:
+         (C_51:
+         begin
+           void;
+          (if ((eq_int_ (integer_of_int32 !i_2)) (integer_of_int32 n_0))
+          then
+           (let jessie_<somenum> =
+           (C_21:
+           begin
+             (let jessie_<somenum> =
+             (__retres := (C_20:
+                          ((safe_acc_ double_P_double_M_y_4) (C_19:
+                                                             ((shift y) 
+                                                              (integer_of_int32 
+                                                               (C_18:
+                                                               (safe_int32_of_integer_ 
+                                                                (C_17:
+                                                                ((sub_int 
+                                                                  (integer_of_int32 n_0)) (1))))))))))) in
+             void); (raise (Return_label_exc void)) end) in void) else void);
+          (let jessie_<somenum> = (i_interp := !i_2) in void);
           (let jessie_<somenum> =
-          (__retres := (C_20:
-                       ((safe_acc_ double_P_double_M_y_4) (C_19:
-                                                          ((shift y) 
-                                                           (integer_of_int32 
-                                                            (C_18:
-                                                            (safe_int32_of_integer_ 
-                                                             (C_17:
-                                                             ((sub_int 
-                                                               (integer_of_int32 n_0)) (1))))))))))) in
-          void); (raise (Return_label_exc void)) end) in void) else void);
-       (let jessie_<somenum> = (i_interp := !i_2) in void);
-       (let jessie_<somenum> =
-       (xim1 := (C_26:
-                ((safe_acc_ double_P_double_M_x_3) (C_25:
-                                                   ((shift x_0) (integer_of_int32 
-                                                                 (C_24:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_23:
-                                                                  ((sub_int 
+          (xim1 := (C_26:
+                   ((safe_acc_ double_P_double_M_x_3) (C_25:
+                                                      ((shift x_0) (integer_of_int32 
+                                                                    (C_24:
+                                                                    (safe_int32_of_integer_ 
+                                                                    (C_23:
+                                                                    ((sub_int 
                                                                     (integer_of_int32 !i_2)) (1))))))))))) in
-       void); [ { } unit reads xim1 { (JC_<somenum>: bounded(xim1, 0x1p340)) } ];
-       void;
-       (let jessie_<somenum> =
-       (C_31:
-       begin
-         (xi := (C_30:
-                ((safe_acc_ double_P_double_M_x_3) (C_29:
-                                                   ((shift x_0) (integer_of_int32 !i_2))))));
-        !xi end) in void);
-       [ { } unit reads xi { (JC_<somenum>: bounded(xi, 0x1p340)) } ]; void;
-       [ { } unit reads xi,xim1
-         { (JC_<somenum>:
-           ge_real(sub_real(double_value(xi), double_value(xim1)), 0x1p-341)) } ];
-       void;
-       (let jessie_<somenum> =
-       (C_38:
-       begin
-         (yim1 := (C_37:
-                  ((safe_acc_ double_P_double_M_y_4) (C_36:
-                                                     ((shift y) (integer_of_int32 
-                                                                 (C_35:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_34:
-                                                                  ((sub_int 
+          void);
+          [ { } unit reads xim1 { (JC_<somenum>: bounded(xim1, 0x1p340)) } ]; void;
+          (let jessie_<somenum> =
+          (C_31:
+          begin
+            (xi := (C_30:
+                   ((safe_acc_ double_P_double_M_x_3) (C_29:
+                                                      ((shift x_0) (integer_of_int32 !i_2))))));
+           !xi end) in void);
+          [ { } unit reads xi { (JC_<somenum>: bounded(xi, 0x1p340)) } ]; void;
+          [ { } unit reads xi,xim1
+            { (JC_<somenum>:
+              ge_real(sub_real(double_value(xi), double_value(xim1)),
+              0x1p-341)) } ]; void;
+          (let jessie_<somenum> =
+          (C_38:
+          begin
+            (yim1 := (C_37:
+                     ((safe_acc_ double_P_double_M_y_4) (C_36:
+                                                        ((shift y) (integer_of_int32 
+                                                                    (C_35:
+                                                                    (safe_int32_of_integer_ 
+                                                                    (C_34:
+                                                                    ((sub_int 
                                                                     (integer_of_int32 !i_2)) (1)))))))))));
-        !yim1 end) in void);
-       [ { } unit reads yim1 { (JC_<somenum>: bounded(yim1, 0x1p340)) } ]; void;
-       (let jessie_<somenum> =
-       (C_42:
-       begin
-         (yi := (C_41:
-                ((safe_acc_ double_P_double_M_y_4) (C_40:
-                                                   ((shift y) (integer_of_int32 !i_2))))));
-        !yi end) in void);
-       [ { } unit reads yi { (JC_<somenum>: bounded(yi, 0x1p340)) } ]; void;
-       (let jessie_<somenum> =
-       (C_47:
-       begin
-         (v_0 := (C_46:
-                 (JC_<somenum>:
-                 (((div_double_safe nearest_even) (C_45:
-                                                  (JC_<somenum>:
-                                                  (((sub_double_safe nearest_even) !yi) !yim1)))) 
-                  (C_44:
-                  (JC_<somenum>: (((sub_double_safe nearest_even) !xi) !xim1)))))));
-        !v_0 end) in void);
-       (let jessie_<somenum> =
-       (__retres := (C_50:
+           !yim1 end) in void);
+          [ { } unit reads yim1 { (JC_<somenum>: bounded(yim1, 0x1p340)) } ]; void;
+          (let jessie_<somenum> =
+          (C_42:
+          begin
+            (yi := (C_41:
+                   ((safe_acc_ double_P_double_M_y_4) (C_40:
+                                                      ((shift y) (integer_of_int32 !i_2))))));
+           !yi end) in void);
+          [ { } unit reads yi { (JC_<somenum>: bounded(yi, 0x1p340)) } ]; void;
+          (let jessie_<somenum> =
+          (C_47:
+          begin
+            (v_0 := (C_46:
                     (JC_<somenum>:
-                    (((add_double_safe nearest_even) !yi) (C_49:
-                                                          (JC_<somenum>:
-                                                          (((mul_double_safe nearest_even) !v_0) 
-                                                           (C_48:
-                                                           (JC_<somenum>:
-                                                           (((sub_double_safe nearest_even) z_0) !xim1)))))))))) in
-       void); (raise (Return_label_exc void)) end)))) in void) with
-      Return_label_exc jessie_<somenum> ->
+                    (((div_double_safe nearest_even) (C_45:
+                                                     (JC_<somenum>:
+                                                     (((sub_double_safe nearest_even) !yi) !yim1)))) 
+                     (C_44:
+                     (JC_<somenum>: (((sub_double_safe nearest_even) !xi) !xim1)))))));
+           !v_0 end) in void);
+          (__retres := (C_50:
+                       (JC_<somenum>:
+                       (((add_double_safe nearest_even) !yi) (C_49:
+                                                             (JC_<somenum>:
+                                                             (((mul_double_safe nearest_even) !v_0) 
+                                                              (C_48:
+                                                              (JC_<somenum>:
+                                                              (((sub_double_safe nearest_even) z_0) !xim1))))))))));
+          !__retres end)))) in void) end; (raise (Return_label_exc void)) end in
+      void) with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)))))));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -1448,27 +1455,24 @@ let interp_lin_ensures_too_low =
      (let __retres = ref (any_double void) in
      try
       (let jessie_<somenum> =
-      (C_6:
-      (C_22:
-      (C_27:
-      (C_51:
       begin
-        (if ((le_double z_0) (C_5:
-                             ((safe_acc_ double_P_double_M_x_3) (C_4:
-                                                                ((shift x_0) (0))))))
-        then
+        try
          (let jessie_<somenum> =
-         (C_3:
+         (C_6:
          begin
-           (let jessie_<somenum> =
-           (__retres := (C_2:
-                        ((safe_acc_ double_P_double_M_y_4) (C_1:
-                                                           ((shift y) (0)))))) in
-           void); (raise (Return_label_exc void)) end) in void) else void);
-       (let jessie_<somenum> = (i_2 := (safe_int32_of_integer_ (1))) in void);
-       try
-        (let jessie_<somenum> =
-        begin
+           (if ((le_double z_0) (C_5:
+                                ((safe_acc_ double_P_double_M_x_3) (C_4:
+                                                                   ((shift x_0) (0))))))
+           then
+            (let jessie_<somenum> =
+            (C_3:
+            begin
+              (let jessie_<somenum> =
+              (__retres := (C_2:
+                           ((safe_acc_ double_P_double_M_y_4) (C_1:
+                                                              ((shift y) (0)))))) in
+              void); (raise (Return_label_exc void)) end) in void) else void);
+          (let jessie_<somenum> = (i_2 := (safe_int32_of_integer_ (1))) in void);
           (loop_3:
           while true do
           { invariant (JC_<somenum>: true)  }
@@ -1507,91 +1511,97 @@ let interp_lin_ensures_too_low =
                                                 ((add_int (integer_of_int32 !i_2)) (1))))));
                 !i_2 end) in void); (raise (Loop_continue_exc void)) end in
              void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end in void) with
-        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-       (if ((eq_int_ (integer_of_int32 !i_2)) (integer_of_int32 n_0))
-       then
-        (let jessie_<somenum> =
-        (C_21:
-        begin
+          (raise (Goto_while_0_break_exc void)) end) in void) with
+         Goto_while_0_break_exc jessie_<somenum> ->
+         (let jessie_<somenum> =
+         (while_0_break:
+         (C_22:
+         (C_27:
+         (C_51:
+         begin
+           void;
+          (if ((eq_int_ (integer_of_int32 !i_2)) (integer_of_int32 n_0))
+          then
+           (let jessie_<somenum> =
+           (C_21:
+           begin
+             (let jessie_<somenum> =
+             (__retres := (C_20:
+                          ((safe_acc_ double_P_double_M_y_4) (C_19:
+                                                             ((shift y) 
+                                                              (integer_of_int32 
+                                                               (C_18:
+                                                               (safe_int32_of_integer_ 
+                                                                (C_17:
+                                                                ((sub_int 
+                                                                  (integer_of_int32 n_0)) (1))))))))))) in
+             void); (raise (Return_label_exc void)) end) in void) else void);
+          (let jessie_<somenum> = (i_interp := !i_2) in void);
           (let jessie_<somenum> =
-          (__retres := (C_20:
-                       ((safe_acc_ double_P_double_M_y_4) (C_19:
-                                                          ((shift y) 
-                                                           (integer_of_int32 
-                                                            (C_18:
-                                                            (safe_int32_of_integer_ 
-                                                             (C_17:
-                                                             ((sub_int 
-                                                               (integer_of_int32 n_0)) (1))))))))))) in
-          void); (raise (Return_label_exc void)) end) in void) else void);
-       (let jessie_<somenum> = (i_interp := !i_2) in void);
-       (let jessie_<somenum> =
-       (xim1 := (C_26:
-                ((safe_acc_ double_P_double_M_x_3) (C_25:
-                                                   ((shift x_0) (integer_of_int32 
-                                                                 (C_24:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_23:
-                                                                  ((sub_int 
+          (xim1 := (C_26:
+                   ((safe_acc_ double_P_double_M_x_3) (C_25:
+                                                      ((shift x_0) (integer_of_int32 
+                                                                    (C_24:
+                                                                    (safe_int32_of_integer_ 
+                                                                    (C_23:
+                                                                    ((sub_int 
                                                                     (integer_of_int32 !i_2)) (1))))))))))) in
-       void); [ { } unit reads xim1 { (JC_<somenum>: bounded(xim1, 0x1p340)) } ];
-       void;
-       (let jessie_<somenum> =
-       (C_31:
-       begin
-         (xi := (C_30:
-                ((safe_acc_ double_P_double_M_x_3) (C_29:
-                                                   ((shift x_0) (integer_of_int32 !i_2))))));
-        !xi end) in void);
-       [ { } unit reads xi { (JC_<somenum>: bounded(xi, 0x1p340)) } ]; void;
-       [ { } unit reads xi,xim1
-         { (JC_<somenum>:
-           ge_real(sub_real(double_value(xi), double_value(xim1)), 0x1p-341)) } ];
-       void;
-       (let jessie_<somenum> =
-       (C_38:
-       begin
-         (yim1 := (C_37:
-                  ((safe_acc_ double_P_double_M_y_4) (C_36:
-                                                     ((shift y) (integer_of_int32 
-                                                                 (C_35:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_34:
-                                                                  ((sub_int 
+          void);
+          [ { } unit reads xim1 { (JC_<somenum>: bounded(xim1, 0x1p340)) } ]; void;
+          (let jessie_<somenum> =
+          (C_31:
+          begin
+            (xi := (C_30:
+                   ((safe_acc_ double_P_double_M_x_3) (C_29:
+                                                      ((shift x_0) (integer_of_int32 !i_2))))));
+           !xi end) in void);
+          [ { } unit reads xi { (JC_<somenum>: bounded(xi, 0x1p340)) } ]; void;
+          [ { } unit reads xi,xim1
+            { (JC_<somenum>:
+              ge_real(sub_real(double_value(xi), double_value(xim1)),
+              0x1p-341)) } ]; void;
+          (let jessie_<somenum> =
+          (C_38:
+          begin
+            (yim1 := (C_37:
+                     ((safe_acc_ double_P_double_M_y_4) (C_36:
+                                                        ((shift y) (integer_of_int32 
+                                                                    (C_35:
+                                                                    (safe_int32_of_integer_ 
+                                                                    (C_34:
+                                                                    ((sub_int 
                                                                     (integer_of_int32 !i_2)) (1)))))))))));
-        !yim1 end) in void);
-       [ { } unit reads yim1 { (JC_<somenum>: bounded(yim1, 0x1p340)) } ]; void;
-       (let jessie_<somenum> =
-       (C_42:
-       begin
-         (yi := (C_41:
-                ((safe_acc_ double_P_double_M_y_4) (C_40:
-                                                   ((shift y) (integer_of_int32 !i_2))))));
-        !yi end) in void);
-       [ { } unit reads yi { (JC_<somenum>: bounded(yi, 0x1p340)) } ]; void;
-       (let jessie_<somenum> =
-       (C_47:
-       begin
-         (v_0 := (C_46:
-                 (JC_<somenum>:
-                 (((div_double_safe nearest_even) (C_45:
-                                                  (JC_<somenum>:
-                                                  (((sub_double_safe nearest_even) !yi) !yim1)))) 
-                  (C_44:
-                  (JC_<somenum>: (((sub_double_safe nearest_even) !xi) !xim1)))))));
-        !v_0 end) in void);
-       (let jessie_<somenum> =
-       (__retres := (C_50:
+           !yim1 end) in void);
+          [ { } unit reads yim1 { (JC_<somenum>: bounded(yim1, 0x1p340)) } ]; void;
+          (let jessie_<somenum> =
+          (C_42:
+          begin
+            (yi := (C_41:
+                   ((safe_acc_ double_P_double_M_y_4) (C_40:
+                                                      ((shift y) (integer_of_int32 !i_2))))));
+           !yi end) in void);
+          [ { } unit reads yi { (JC_<somenum>: bounded(yi, 0x1p340)) } ]; void;
+          (let jessie_<somenum> =
+          (C_47:
+          begin
+            (v_0 := (C_46:
                     (JC_<somenum>:
-                    (((add_double_safe nearest_even) !yi) (C_49:
-                                                          (JC_<somenum>:
-                                                          (((mul_double_safe nearest_even) !v_0) 
-                                                           (C_48:
-                                                           (JC_<somenum>:
-                                                           (((sub_double_safe nearest_even) z_0) !xim1)))))))))) in
-       void); (raise (Return_label_exc void)) end)))) in void) with
-      Return_label_exc jessie_<somenum> ->
+                    (((div_double_safe nearest_even) (C_45:
+                                                     (JC_<somenum>:
+                                                     (((sub_double_safe nearest_even) !yi) !yim1)))) 
+                     (C_44:
+                     (JC_<somenum>: (((sub_double_safe nearest_even) !xi) !xim1)))))));
+           !v_0 end) in void);
+          (__retres := (C_50:
+                       (JC_<somenum>:
+                       (((add_double_safe nearest_even) !yi) (C_49:
+                                                             (JC_<somenum>:
+                                                             (((mul_double_safe nearest_even) !v_0) 
+                                                              (C_48:
+                                                              (JC_<somenum>:
+                                                              (((sub_double_safe nearest_even) z_0) !xim1))))))))));
+          !__retres end)))) in void) end; (raise (Return_label_exc void)) end in
+      void) with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)))))));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -1635,27 +1645,24 @@ let interp_lin_safety =
      (let __retres = ref (any_double void) in
      try
       (let jessie_<somenum> =
-      (C_6:
-      (C_22:
-      (C_27:
-      (C_51:
       begin
-        (if ((le_double z_0) (C_5:
-                             (JC_<somenum>:
-                             (((acc_ double_P_x_3_alloc_table) double_P_double_M_x_3) x_0))))
-        then
+        try
          (let jessie_<somenum> =
-         (C_3:
+         (C_6:
          begin
-           (let jessie_<somenum> =
-           (__retres := (C_2:
-                        (JC_<somenum>:
-                        (((acc_ double_P_y_4_alloc_table) double_P_double_M_y_4) y)))) in
-           void); (raise (Return_label_exc void)) end) in void) else void);
-       (let jessie_<somenum> = (i_2 := (safe_int32_of_integer_ (1))) in void);
-       try
-        (let jessie_<somenum> =
-        begin
+           (if ((le_double z_0) (C_5:
+                                (JC_<somenum>:
+                                (((acc_ double_P_x_3_alloc_table) double_P_double_M_x_3) x_0))))
+           then
+            (let jessie_<somenum> =
+            (C_3:
+            begin
+              (let jessie_<somenum> =
+              (__retres := (C_2:
+                           (JC_<somenum>:
+                           (((acc_ double_P_y_4_alloc_table) double_P_double_M_y_4) y)))) in
+              void); (raise (Return_label_exc void)) end) in void) else void);
+          (let jessie_<somenum> = (i_2 := (safe_int32_of_integer_ (1))) in void);
           (loop_1:
           while true do
           { invariant (JC_<somenum>: true)
@@ -1697,87 +1704,94 @@ let interp_lin_safety =
                                            ((add_int (integer_of_int32 !i_2)) (1)))))));
                 !i_2 end) in void); (raise (Loop_continue_exc void)) end in
              void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end in void) with
-        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-       (if ((eq_int_ (integer_of_int32 !i_2)) (integer_of_int32 n_0))
-       then
-        (let jessie_<somenum> =
-        (C_21:
-        begin
-          (let jessie_<somenum> =
-          (__retres := (C_20:
-                       (JC_<somenum>:
-                       ((((offset_acc_ double_P_y_4_alloc_table) double_P_double_M_y_4) y) 
-                        (integer_of_int32 (C_18:
-                                          (JC_<somenum>:
-                                          (int32_of_integer_ (C_17:
-                                                             ((sub_int 
-                                                               (integer_of_int32 n_0)) (1))))))))))) in
-          void); (raise (Return_label_exc void)) end) in void) else void);
-       (let jessie_<somenum> = (i_interp := !i_2) in void);
-       (let jessie_<somenum> =
-       (xim1 := (C_26:
-                (JC_<somenum>:
-                ((((offset_acc_ double_P_x_3_alloc_table) double_P_double_M_x_3) x_0) 
-                 (integer_of_int32 (C_24:
-                                   (JC_<somenum>:
-                                   (int32_of_integer_ (C_23:
-                                                      ((sub_int (integer_of_int32 !i_2)) (1))))))))))) in
-       void); [ { } unit reads xim1 { (JC_<somenum>: bounded(xim1, 0x1p340)) } ];
-       void;
-       (let jessie_<somenum> =
-       (C_31:
-       begin
-         (xi := (C_30:
-                (JC_<somenum>:
-                ((((offset_acc_ double_P_x_3_alloc_table) double_P_double_M_x_3) x_0) 
-                 (integer_of_int32 !i_2))))); !xi end) in void);
-       [ { } unit reads xi { (JC_<somenum>: bounded(xi, 0x1p340)) } ]; void;
-       [ { } unit reads xi,xim1
-         { (JC_<somenum>:
-           ge_real(sub_real(double_value(xi), double_value(xim1)), 0x1p-341)) } ];
-       void;
-       (let jessie_<somenum> =
-       (C_38:
-       begin
-         (yim1 := (C_37:
-                  (JC_<somenum>:
-                  ((((offset_acc_ double_P_y_4_alloc_table) double_P_double_M_y_4) y) 
-                   (integer_of_int32 (C_35:
-                                     (JC_<somenum>:
-                                     (int32_of_integer_ (C_34:
-                                                        ((sub_int (integer_of_int32 !i_2)) (1)))))))))));
-        !yim1 end) in void);
-       [ { } unit reads yim1 { (JC_<somenum>: bounded(yim1, 0x1p340)) } ]; void;
-       (let jessie_<somenum> =
-       (C_42:
-       begin
-         (yi := (C_41:
-                (JC_<somenum>:
-                ((((offset_acc_ double_P_y_4_alloc_table) double_P_double_M_y_4) y) 
-                 (integer_of_int32 !i_2))))); !yi end) in void);
-       [ { } unit reads yi { (JC_<somenum>: bounded(yi, 0x1p340)) } ]; void;
-       (let jessie_<somenum> =
-       (C_47:
-       begin
-         (v_0 := (C_46:
-                 (JC_<somenum>:
-                 (((div_double nearest_even) (C_45:
+          (raise (Goto_while_0_break_exc void)) end) in void) with
+         Goto_while_0_break_exc jessie_<somenum> ->
+         (let jessie_<somenum> =
+         (while_0_break:
+         (C_22:
+         (C_27:
+         (C_51:
+         begin
+           void;
+          (if ((eq_int_ (integer_of_int32 !i_2)) (integer_of_int32 n_0))
+          then
+           (let jessie_<somenum> =
+           (C_21:
+           begin
+             (let jessie_<somenum> =
+             (__retres := (C_20:
+                          (JC_<somenum>:
+                          ((((offset_acc_ double_P_y_4_alloc_table) double_P_double_M_y_4) y) 
+                           (integer_of_int32 (C_18:
                                              (JC_<somenum>:
-                                             (((sub_double nearest_even) !yi) !yim1)))) 
-                  (C_44: (JC_<somenum>: (((sub_double nearest_even) !xi) !xim1)))))));
-        !v_0 end) in void);
-       (let jessie_<somenum> =
-       (__retres := (C_50:
+                                             (int32_of_integer_ (C_17:
+                                                                ((sub_int 
+                                                                  (integer_of_int32 n_0)) (1))))))))))) in
+             void); (raise (Return_label_exc void)) end) in void) else void);
+          (let jessie_<somenum> = (i_interp := !i_2) in void);
+          (let jessie_<somenum> =
+          (xim1 := (C_26:
+                   (JC_<somenum>:
+                   ((((offset_acc_ double_P_x_3_alloc_table) double_P_double_M_x_3) x_0) 
+                    (integer_of_int32 (C_24:
+                                      (JC_<somenum>:
+                                      (int32_of_integer_ (C_23:
+                                                         ((sub_int (integer_of_int32 !i_2)) (1))))))))))) in
+          void); [ { } unit reads xim1 { (JC_<somenum>: bounded(xim1, 0x1p340)) } ];
+          void;
+          (let jessie_<somenum> =
+          (C_31:
+          begin
+            (xi := (C_30:
+                   (JC_<somenum>:
+                   ((((offset_acc_ double_P_x_3_alloc_table) double_P_double_M_x_3) x_0) 
+                    (integer_of_int32 !i_2))))); !xi end) in void);
+          [ { } unit reads xi { (JC_<somenum>: bounded(xi, 0x1p340)) } ]; void;
+          [ { } unit reads xi,xim1
+            { (JC_<somenum>:
+              ge_real(sub_real(double_value(xi), double_value(xim1)),
+              0x1p-341)) } ]; void;
+          (let jessie_<somenum> =
+          (C_38:
+          begin
+            (yim1 := (C_37:
+                     (JC_<somenum>:
+                     ((((offset_acc_ double_P_y_4_alloc_table) double_P_double_M_y_4) y) 
+                      (integer_of_int32 (C_35:
+                                        (JC_<somenum>:
+                                        (int32_of_integer_ (C_34:
+                                                           ((sub_int 
+                                                             (integer_of_int32 !i_2)) (1)))))))))));
+           !yim1 end) in void);
+          [ { } unit reads yim1 { (JC_<somenum>: bounded(yim1, 0x1p340)) } ]; void;
+          (let jessie_<somenum> =
+          (C_42:
+          begin
+            (yi := (C_41:
+                   (JC_<somenum>:
+                   ((((offset_acc_ double_P_y_4_alloc_table) double_P_double_M_y_4) y) 
+                    (integer_of_int32 !i_2))))); !yi end) in void);
+          [ { } unit reads yi { (JC_<somenum>: bounded(yi, 0x1p340)) } ]; void;
+          (let jessie_<somenum> =
+          (C_47:
+          begin
+            (v_0 := (C_46:
                     (JC_<somenum>:
-                    (((add_double nearest_even) !yi) (C_49:
-                                                     (JC_<somenum>:
-                                                     (((mul_double nearest_even) !v_0) 
-                                                      (C_48:
-                                                      (JC_<somenum>:
-                                                      (((sub_double nearest_even) z_0) !xim1)))))))))) in
-       void); (raise (Return_label_exc void)) end)))) in void) with
-      Return_label_exc jessie_<somenum> ->
+                    (((div_double nearest_even) (C_45:
+                                                (JC_<somenum>:
+                                                (((sub_double nearest_even) !yi) !yim1)))) 
+                     (C_44: (JC_<somenum>: (((sub_double nearest_even) !xi) !xim1)))))));
+           !v_0 end) in void);
+          (__retres := (C_50:
+                       (JC_<somenum>:
+                       (((add_double nearest_even) !yi) (C_49:
+                                                        (JC_<somenum>:
+                                                        (((mul_double nearest_even) !v_0) 
+                                                         (C_48:
+                                                         (JC_<somenum>:
+                                                         (((sub_double nearest_even) z_0) !xim1))))))))));
+          !__retres end)))) in void) end; (raise (Return_label_exc void)) end in
+      void) with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)))))));
     absurd  end with Return -> !return end)) { true }
 

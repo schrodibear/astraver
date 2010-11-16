@@ -116,31 +116,28 @@ behavior inter:
          ()
       };
       
+      loop 
+      behavior default:
+        invariant (C_15 : ((C_16 : (i0 <= i)) && (C_17 : (i <= n))));
+      behavior default:
+        invariant (C_14 : (\forall integer k;
+                            (((i0 <= k) && (k < i)) ==>
+                              (x >= (X + i).double_M))));
+      behavior small:
+        invariant (C_13 : (i == 0));
+      variant (C_12 : (n - i));
+      while (true)
       {  
-         loop 
-         behavior default:
-           invariant (C_15 : ((C_16 : (i0 <= i)) && (C_17 : (i <= n))));
-         behavior default:
-           invariant (C_14 : (\forall integer k;
-                               (((i0 <= k) && (k < i)) ==>
-                                 (x >= (X + i).double_M))));
-         behavior small:
-           invariant (C_13 : (i == 0));
-         variant (C_12 : (n - i));
-         while (true)
-         {  
-            {  (if (i < n) then (if (x >=
-                                      (C_21 : (C_20 : (X +
-                                                        (C_19 : ((C_18 : 
-                                                                 (i +
-                                                                   1)) :> int32)))).double_M)) then () else 
-                                (goto while_0_break)) else 
-               (goto while_0_break));
-               (C_24 : (i = (C_23 : ((C_22 : (i + 1)) :> int32))))
-            }
-         };
-         (while_0_break : ())
+         {  (if (i < n) then (if (x >=
+                                   (C_21 : (C_20 : (X +
+                                                     (C_19 : ((C_18 : 
+                                                              (i + 1)) :> int32)))).double_M)) then () else 
+                             (goto while_0_break)) else 
+            (goto while_0_break));
+            (C_24 : (i = (C_23 : ((C_22 : (i + 1)) :> int32))))
+         }
       };
+      (while_0_break : ());
       (C_25 : (i_f = i));
       
       {  
@@ -896,99 +893,98 @@ let InterPolate_ensures_big =
      (let i0 = ref (any_int32 void) in
      (let m = ref (any_int32 void) in
      (let __retres = ref (any_real void) in
-     (C_1:
-     (C_6:
-     (C_10:
-     (C_25:
-     (C_37:
-     begin
-       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+     try
       (let jessie_<somenum> =
-      (m := (C_5:
-            (safe_int32_of_integer_ (C_4:
-                                    (JC_<somenum>:
-                                    ((computer_div (integer_of_int32 
-                                                    (C_3:
-                                                    (safe_int32_of_integer_ 
-                                                     (C_2:
-                                                     ((add_int (integer_of_int32 n)) (1))))))) (2))))))) in
-      void);
-      (if ((ge_real_ x_0) (C_9:
-                          ((safe_acc_ double_P_double_M_X_1) (C_8:
-                                                             ((shift X) 
-                                                              (integer_of_int32 !m))))))
-      then (let jessie_<somenum> = (C_7: (i := !m)) in void) else void);
-      (let jessie_<somenum> = (i0 := !i) in void); void;
-      try
+      (C_1:
+      (C_6:
+      (C_10:
+      begin
+        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
        (let jessie_<somenum> =
-       begin
-         (loop_4:
-         while true do
-         { invariant (JC_<somenum>: true)  }
+       (m := (C_5:
+             (safe_int32_of_integer_ (C_4:
+                                     (JC_<somenum>:
+                                     ((computer_div (integer_of_int32 
+                                                     (C_3:
+                                                     (safe_int32_of_integer_ 
+                                                      (C_2:
+                                                      ((add_int (integer_of_int32 n)) (1))))))) (2))))))) in
+       void);
+       (if ((ge_real_ x_0) (C_9:
+                           ((safe_acc_ double_P_double_M_X_1) (C_8:
+                                                              ((shift X) 
+                                                               (integer_of_int32 !m))))))
+       then (let jessie_<somenum> = (C_7: (i := !m)) in void) else void);
+       (let jessie_<somenum> = (i0 := !i) in void); void;
+       (loop_4:
+       while true do
+       { invariant (JC_<somenum>: true)  }
+        begin
+          [ { } unit reads i,i0
+            { ((JC_<somenum>:
+               (forall k:int.
+                ((le_int(integer_of_int32(i0), k)
+                 and lt_int(k, integer_of_int32(i))) ->
+                 ge_real(x_0,
+                 select(double_P_double_M_X_1, shift(X, integer_of_int32(i)))))))
+              and (JC_<somenum>:
+                  ((JC_<somenum>: le_int(integer_of_int32(i0), integer_of_int32(i)))
+                  and (JC_<somenum>:
+                      le_int(integer_of_int32(i), integer_of_int32(n)))))) } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit reads i,i0
-              { ((JC_<somenum>:
-                 (forall k:int.
-                  ((le_int(integer_of_int32(i0), k)
-                   and lt_int(k, integer_of_int32(i))) ->
-                   ge_real(x_0,
-                   select(double_P_double_M_X_1,
-                   shift(X, integer_of_int32(i)))))))
-                and (JC_<somenum>:
-                    ((JC_<somenum>:
-                     le_int(integer_of_int32(i0), integer_of_int32(i)))
-                    and (JC_<somenum>:
-                        le_int(integer_of_int32(i), integer_of_int32(n)))))) } ];
-           try
             (let jessie_<somenum> =
+            (C_24:
             begin
-              (let jessie_<somenum> =
-              (C_24:
-              begin
-                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
-                then
-                 (if ((ge_real_ x_0) (C_21:
-                                     ((safe_acc_ double_P_double_M_X_1) 
-                                      (C_20:
-                                      ((shift X) (integer_of_int32 (C_19:
-                                                                   (safe_int32_of_integer_ 
-                                                                    (C_18:
-                                                                    ((add_int 
+              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
+              then
+               (if ((ge_real_ x_0) (C_21:
+                                   ((safe_acc_ double_P_double_M_X_1) 
+                                    (C_20:
+                                    ((shift X) (integer_of_int32 (C_19:
+                                                                 (safe_int32_of_integer_ 
+                                                                  (C_18:
+                                                                  ((add_int 
                                                                     (integer_of_int32 !i)) (1)))))))))))
-                 then void
-                 else
-                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                  void))
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
-               (i := (C_23:
-                     (safe_int32_of_integer_ (C_22:
-                                             ((add_int (integer_of_int32 !i)) (1))))));
-               !i end) in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (let jessie_<somenum> = (i_f := !i) in void); void;
-      (assert { (JC_<somenum>: eq_int(integer_of_int32(i), integer_of_int32(n))) };
-      void); void;
-      (let jessie_<somenum> =
-      (__retres := (C_36:
-                   ((add_real (C_35:
-                              ((safe_acc_ double_P_double_M_Y_2) (C_34:
-                                                                 ((shift Y) 
-                                                                  (integer_of_int32 !i)))))) 
-                    (C_33:
-                    ((mul_real (C_32:
-                               ((sub_real x_0) (C_31:
-                                               ((safe_acc_ double_P_double_M_X_1) 
-                                                (C_30:
-                                                ((shift X) (integer_of_int32 !i)))))))) 
-                     (C_29:
-                     ((safe_acc_ double_P_double_M_V_3) (C_28:
-                                                        ((shift V) (integer_of_int32 !i)))))))))) in
-      void); (return := !__retres); (raise Return) end))))))))); absurd  end
-   with Return -> !return end))
+               then void
+               else
+                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+                void))
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void));
+             (i := (C_23:
+                   (safe_int32_of_integer_ (C_22:
+                                           ((add_int (integer_of_int32 !i)) (1))))));
+             !i end) in void); (raise (Loop_continue_exc void)) end in void)
+          with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end))) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      (C_25:
+      (C_37:
+      begin
+        void; (let jessie_<somenum> = (i_f := !i) in void); void;
+       (assert { (JC_<somenum>: eq_int(integer_of_int32(i), integer_of_int32(n))) };
+       void); void;
+       (let jessie_<somenum> =
+       (__retres := (C_36:
+                    ((add_real (C_35:
+                               ((safe_acc_ double_P_double_M_Y_2) (C_34:
+                                                                  ((shift Y) 
+                                                                   (integer_of_int32 !i)))))) 
+                     (C_33:
+                     ((mul_real (C_32:
+                                ((sub_real x_0) (C_31:
+                                                ((safe_acc_ double_P_double_M_X_1) 
+                                                 (C_30:
+                                                 ((shift X) (integer_of_int32 !i)))))))) 
+                      (C_29:
+                      ((safe_acc_ double_P_double_M_V_3) (C_28:
+                                                         ((shift V) (integer_of_int32 !i)))))))))) in
+       void); (return := !__retres); (raise Return) end))) end)))); absurd 
+   end with Return -> !return end))
   { (JC_<somenum>:
     eq_real(result,
     select(double_P_double_M_Y_2, shift(Y@, integer_of_int32(n@))))) }
@@ -1039,96 +1035,96 @@ let InterPolate_ensures_default =
      (let i0 = ref (any_int32 void) in
      (let m = ref (any_int32 void) in
      (let __retres = ref (any_real void) in
-     (C_1:
-     (C_6:
-     (C_10:
-     (C_25:
-     (C_37:
-     begin
-       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+     try
       (let jessie_<somenum> =
-      (m := (C_5:
-            (safe_int32_of_integer_ (C_4:
-                                    (JC_<somenum>:
-                                    ((computer_div (integer_of_int32 
-                                                    (C_3:
-                                                    (safe_int32_of_integer_ 
-                                                     (C_2:
-                                                     ((add_int (integer_of_int32 n)) (1))))))) (2))))))) in
-      void);
-      (if ((ge_real_ x_0) (C_9:
-                          ((safe_acc_ double_P_double_M_X_1) (C_8:
-                                                             ((shift X) 
-                                                              (integer_of_int32 !m))))))
-      then (let jessie_<somenum> = (C_7: (i := !m)) in void) else void);
-      (let jessie_<somenum> = (i0 := !i) in void); void;
-      try
+      (C_1:
+      (C_6:
+      (C_10:
+      begin
+        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
        (let jessie_<somenum> =
-       begin
-         (loop_2:
-         while true do
-         { invariant
-             ((JC_<somenum>:
-              (forall k:int.
-               ((le_int(integer_of_int32(i0), k)
-                and lt_int(k, integer_of_int32(i))) ->
-                ge_real(x_0,
-                select(double_P_double_M_X_1, shift(X, integer_of_int32(i)))))))
-             and (JC_<somenum>:
-                 ((JC_<somenum>: le_int(integer_of_int32(i0), integer_of_int32(i)))
-                 and (JC_<somenum>:
-                     le_int(integer_of_int32(i), integer_of_int32(n)))))) 
-            }
+       (m := (C_5:
+             (safe_int32_of_integer_ (C_4:
+                                     (JC_<somenum>:
+                                     ((computer_div (integer_of_int32 
+                                                     (C_3:
+                                                     (safe_int32_of_integer_ 
+                                                      (C_2:
+                                                      ((add_int (integer_of_int32 n)) (1))))))) (2))))))) in
+       void);
+       (if ((ge_real_ x_0) (C_9:
+                           ((safe_acc_ double_P_double_M_X_1) (C_8:
+                                                              ((shift X) 
+                                                               (integer_of_int32 !m))))))
+       then (let jessie_<somenum> = (C_7: (i := !m)) in void) else void);
+       (let jessie_<somenum> = (i0 := !i) in void); void;
+       (loop_2:
+       while true do
+       { invariant
+           ((JC_<somenum>:
+            (forall k:int.
+             ((le_int(integer_of_int32(i0), k)
+              and lt_int(k, integer_of_int32(i))) ->
+              ge_real(x_0,
+              select(double_P_double_M_X_1, shift(X, integer_of_int32(i)))))))
+           and (JC_<somenum>:
+               ((JC_<somenum>: le_int(integer_of_int32(i0), integer_of_int32(i)))
+               and (JC_<somenum>: le_int(integer_of_int32(i), integer_of_int32(n))))))
+          }
+        begin
+          [ { } unit { true } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit { true } ];
-           try
             (let jessie_<somenum> =
+            (C_24:
             begin
-              (let jessie_<somenum> =
-              (C_24:
-              begin
-                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
-                then
-                 (if ((ge_real_ x_0) (C_21:
-                                     ((safe_acc_ double_P_double_M_X_1) 
-                                      (C_20:
-                                      ((shift X) (integer_of_int32 (C_19:
-                                                                   (safe_int32_of_integer_ 
-                                                                    (C_18:
-                                                                    ((add_int 
+              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
+              then
+               (if ((ge_real_ x_0) (C_21:
+                                   ((safe_acc_ double_P_double_M_X_1) 
+                                    (C_20:
+                                    ((shift X) (integer_of_int32 (C_19:
+                                                                 (safe_int32_of_integer_ 
+                                                                  (C_18:
+                                                                  ((add_int 
                                                                     (integer_of_int32 !i)) (1)))))))))))
-                 then void
-                 else
-                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                  void))
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
-               (i := (C_23:
-                     (safe_int32_of_integer_ (C_22:
-                                             ((add_int (integer_of_int32 !i)) (1))))));
-               !i end) in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (let jessie_<somenum> = (i_f := !i) in void); void; void;
-      (let jessie_<somenum> =
-      (__retres := (C_36:
-                   ((add_real (C_35:
-                              ((safe_acc_ double_P_double_M_Y_2) (C_34:
-                                                                 ((shift Y) 
-                                                                  (integer_of_int32 !i)))))) 
-                    (C_33:
-                    ((mul_real (C_32:
-                               ((sub_real x_0) (C_31:
-                                               ((safe_acc_ double_P_double_M_X_1) 
-                                                (C_30:
-                                                ((shift X) (integer_of_int32 !i)))))))) 
-                     (C_29:
-                     ((safe_acc_ double_P_double_M_V_3) (C_28:
-                                                        ((shift V) (integer_of_int32 !i)))))))))) in
-      void); (return := !__retres); (raise Return) end))))))))); absurd  end
-   with Return -> !return end)) { (JC_<somenum>: true) }
+               then void
+               else
+                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+                void))
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void));
+             (i := (C_23:
+                   (safe_int32_of_integer_ (C_22:
+                                           ((add_int (integer_of_int32 !i)) (1))))));
+             !i end) in void); (raise (Loop_continue_exc void)) end in void)
+          with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end))) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      (C_25:
+      (C_37:
+      begin
+        void; (let jessie_<somenum> = (i_f := !i) in void); void; void;
+       (let jessie_<somenum> =
+       (__retres := (C_36:
+                    ((add_real (C_35:
+                               ((safe_acc_ double_P_double_M_Y_2) (C_34:
+                                                                  ((shift Y) 
+                                                                   (integer_of_int32 !i)))))) 
+                     (C_33:
+                     ((mul_real (C_32:
+                                ((sub_real x_0) (C_31:
+                                                ((safe_acc_ double_P_double_M_X_1) 
+                                                 (C_30:
+                                                 ((shift X) (integer_of_int32 !i)))))))) 
+                      (C_29:
+                      ((safe_acc_ double_P_double_M_V_3) (C_28:
+                                                         ((shift V) (integer_of_int32 !i)))))))))) in
+       void); (return := !__retres); (raise Return) end))) end)))); absurd 
+   end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let InterPolate_ensures_inter =
  fun (x_0 : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
@@ -1200,97 +1196,96 @@ let InterPolate_ensures_inter =
      (let i0 = ref (any_int32 void) in
      (let m = ref (any_int32 void) in
      (let __retres = ref (any_real void) in
-     (C_1:
-     (C_6:
-     (C_10:
-     (C_25:
-     (C_37:
-     begin
-       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+     try
       (let jessie_<somenum> =
-      (m := (C_5:
-            (safe_int32_of_integer_ (C_4:
-                                    (JC_<somenum>:
-                                    ((computer_div (integer_of_int32 
-                                                    (C_3:
-                                                    (safe_int32_of_integer_ 
-                                                     (C_2:
-                                                     ((add_int (integer_of_int32 n)) (1))))))) (2))))))) in
-      void);
-      (if ((ge_real_ x_0) (C_9:
-                          ((safe_acc_ double_P_double_M_X_1) (C_8:
-                                                             ((shift X) 
-                                                              (integer_of_int32 !m))))))
-      then (let jessie_<somenum> = (C_7: (i := !m)) in void) else void);
-      (let jessie_<somenum> = (i0 := !i) in void); void;
-      try
+      (C_1:
+      (C_6:
+      (C_10:
+      begin
+        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
        (let jessie_<somenum> =
-       begin
-         (loop_5:
-         while true do
-         { invariant (JC_<somenum>: true)  }
+       (m := (C_5:
+             (safe_int32_of_integer_ (C_4:
+                                     (JC_<somenum>:
+                                     ((computer_div (integer_of_int32 
+                                                     (C_3:
+                                                     (safe_int32_of_integer_ 
+                                                      (C_2:
+                                                      ((add_int (integer_of_int32 n)) (1))))))) (2))))))) in
+       void);
+       (if ((ge_real_ x_0) (C_9:
+                           ((safe_acc_ double_P_double_M_X_1) (C_8:
+                                                              ((shift X) 
+                                                               (integer_of_int32 !m))))))
+       then (let jessie_<somenum> = (C_7: (i := !m)) in void) else void);
+       (let jessie_<somenum> = (i0 := !i) in void); void;
+       (loop_5:
+       while true do
+       { invariant (JC_<somenum>: true)  }
+        begin
+          [ { } unit reads i,i0
+            { ((JC_<somenum>:
+               (forall k:int.
+                ((le_int(integer_of_int32(i0), k)
+                 and lt_int(k, integer_of_int32(i))) ->
+                 ge_real(x_0,
+                 select(double_P_double_M_X_1, shift(X, integer_of_int32(i)))))))
+              and (JC_<somenum>:
+                  ((JC_<somenum>: le_int(integer_of_int32(i0), integer_of_int32(i)))
+                  and (JC_<somenum>:
+                      le_int(integer_of_int32(i), integer_of_int32(n)))))) } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit reads i,i0
-              { ((JC_<somenum>:
-                 (forall k:int.
-                  ((le_int(integer_of_int32(i0), k)
-                   and lt_int(k, integer_of_int32(i))) ->
-                   ge_real(x_0,
-                   select(double_P_double_M_X_1,
-                   shift(X, integer_of_int32(i)))))))
-                and (JC_<somenum>:
-                    ((JC_<somenum>:
-                     le_int(integer_of_int32(i0), integer_of_int32(i)))
-                    and (JC_<somenum>:
-                        le_int(integer_of_int32(i), integer_of_int32(n)))))) } ];
-           try
             (let jessie_<somenum> =
+            (C_24:
             begin
-              (let jessie_<somenum> =
-              (C_24:
-              begin
-                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
-                then
-                 (if ((ge_real_ x_0) (C_21:
-                                     ((safe_acc_ double_P_double_M_X_1) 
-                                      (C_20:
-                                      ((shift X) (integer_of_int32 (C_19:
-                                                                   (safe_int32_of_integer_ 
-                                                                    (C_18:
-                                                                    ((add_int 
+              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
+              then
+               (if ((ge_real_ x_0) (C_21:
+                                   ((safe_acc_ double_P_double_M_X_1) 
+                                    (C_20:
+                                    ((shift X) (integer_of_int32 (C_19:
+                                                                 (safe_int32_of_integer_ 
+                                                                  (C_18:
+                                                                  ((add_int 
                                                                     (integer_of_int32 !i)) (1)))))))))))
-                 then void
-                 else
-                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                  void))
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
-               (i := (C_23:
-                     (safe_int32_of_integer_ (C_22:
-                                             ((add_int (integer_of_int32 !i)) (1))))));
-               !i end) in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (let jessie_<somenum> = (i_f := !i) in void); void; void;
-      (let jessie_<somenum> =
-      (__retres := (C_36:
-                   ((add_real (C_35:
-                              ((safe_acc_ double_P_double_M_Y_2) (C_34:
-                                                                 ((shift Y) 
-                                                                  (integer_of_int32 !i)))))) 
-                    (C_33:
-                    ((mul_real (C_32:
-                               ((sub_real x_0) (C_31:
-                                               ((safe_acc_ double_P_double_M_X_1) 
-                                                (C_30:
-                                                ((shift X) (integer_of_int32 !i)))))))) 
-                     (C_29:
-                     ((safe_acc_ double_P_double_M_V_3) (C_28:
-                                                        ((shift V) (integer_of_int32 !i)))))))))) in
-      void); (return := !__retres); (raise Return) end))))))))); absurd  end
-   with Return -> !return end))
+               then void
+               else
+                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+                void))
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void));
+             (i := (C_23:
+                   (safe_int32_of_integer_ (C_22:
+                                           ((add_int (integer_of_int32 !i)) (1))))));
+             !i end) in void); (raise (Loop_continue_exc void)) end in void)
+          with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end))) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      (C_25:
+      (C_37:
+      begin
+        void; (let jessie_<somenum> = (i_f := !i) in void); void; void;
+       (let jessie_<somenum> =
+       (__retres := (C_36:
+                    ((add_real (C_35:
+                               ((safe_acc_ double_P_double_M_Y_2) (C_34:
+                                                                  ((shift Y) 
+                                                                   (integer_of_int32 !i)))))) 
+                     (C_33:
+                     ((mul_real (C_32:
+                                ((sub_real x_0) (C_31:
+                                                ((safe_acc_ double_P_double_M_X_1) 
+                                                 (C_30:
+                                                 ((shift X) (integer_of_int32 !i)))))))) 
+                      (C_29:
+                      ((safe_acc_ double_P_double_M_V_3) (C_28:
+                                                         ((shift V) (integer_of_int32 !i)))))))))) in
+       void); (return := !__retres); (raise Return) end))) end)))); absurd 
+   end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: le_int((1), integer_of_int32(i_f)))
     and ((JC_<somenum>:
@@ -1377,100 +1372,99 @@ let InterPolate_ensures_small =
      (let i0 = ref (any_int32 void) in
      (let m = ref (any_int32 void) in
      (let __retres = ref (any_real void) in
-     (C_1:
-     (C_6:
-     (C_10:
-     (C_25:
-     (C_37:
-     begin
-       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+     try
       (let jessie_<somenum> =
-      (m := (C_5:
-            (safe_int32_of_integer_ (C_4:
-                                    (JC_<somenum>:
-                                    ((computer_div (integer_of_int32 
-                                                    (C_3:
-                                                    (safe_int32_of_integer_ 
-                                                     (C_2:
-                                                     ((add_int (integer_of_int32 n)) (1))))))) (2))))))) in
-      void);
-      (if ((ge_real_ x_0) (C_9:
-                          ((safe_acc_ double_P_double_M_X_1) (C_8:
-                                                             ((shift X) 
-                                                              (integer_of_int32 !m))))))
-      then (let jessie_<somenum> = (C_7: (i := !m)) in void) else void);
-      (let jessie_<somenum> = (i0 := !i) in void);
-      (assert { (JC_<somenum>: eq_int(integer_of_int32(i), (0))) }; void); void;
-      try
+      (C_1:
+      (C_6:
+      (C_10:
+      begin
+        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
        (let jessie_<somenum> =
-       begin
-         (loop_3:
-         while true do
-         { invariant (JC_<somenum>: eq_int(integer_of_int32(i), (0)))  }
+       (m := (C_5:
+             (safe_int32_of_integer_ (C_4:
+                                     (JC_<somenum>:
+                                     ((computer_div (integer_of_int32 
+                                                     (C_3:
+                                                     (safe_int32_of_integer_ 
+                                                      (C_2:
+                                                      ((add_int (integer_of_int32 n)) (1))))))) (2))))))) in
+       void);
+       (if ((ge_real_ x_0) (C_9:
+                           ((safe_acc_ double_P_double_M_X_1) (C_8:
+                                                              ((shift X) 
+                                                               (integer_of_int32 !m))))))
+       then (let jessie_<somenum> = (C_7: (i := !m)) in void) else void);
+       (let jessie_<somenum> = (i0 := !i) in void);
+       (assert { (JC_<somenum>: eq_int(integer_of_int32(i), (0))) }; void); void;
+       (loop_3:
+       while true do
+       { invariant (JC_<somenum>: eq_int(integer_of_int32(i), (0)))  }
+        begin
+          [ { } unit reads i,i0
+            { ((JC_<somenum>:
+               (forall k:int.
+                ((le_int(integer_of_int32(i0), k)
+                 and lt_int(k, integer_of_int32(i))) ->
+                 ge_real(x_0,
+                 select(double_P_double_M_X_1, shift(X, integer_of_int32(i)))))))
+              and (JC_<somenum>:
+                  ((JC_<somenum>: le_int(integer_of_int32(i0), integer_of_int32(i)))
+                  and (JC_<somenum>:
+                      le_int(integer_of_int32(i), integer_of_int32(n)))))) } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit reads i,i0
-              { ((JC_<somenum>:
-                 (forall k:int.
-                  ((le_int(integer_of_int32(i0), k)
-                   and lt_int(k, integer_of_int32(i))) ->
-                   ge_real(x_0,
-                   select(double_P_double_M_X_1,
-                   shift(X, integer_of_int32(i)))))))
-                and (JC_<somenum>:
-                    ((JC_<somenum>:
-                     le_int(integer_of_int32(i0), integer_of_int32(i)))
-                    and (JC_<somenum>:
-                        le_int(integer_of_int32(i), integer_of_int32(n)))))) } ];
-           try
             (let jessie_<somenum> =
+            (C_24:
             begin
-              (let jessie_<somenum> =
-              (C_24:
-              begin
-                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
-                then
-                 (if ((ge_real_ x_0) (C_21:
-                                     ((safe_acc_ double_P_double_M_X_1) 
-                                      (C_20:
-                                      ((shift X) (integer_of_int32 (C_19:
-                                                                   (safe_int32_of_integer_ 
-                                                                    (C_18:
-                                                                    ((add_int 
+              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
+              then
+               (if ((ge_real_ x_0) (C_21:
+                                   ((safe_acc_ double_P_double_M_X_1) 
+                                    (C_20:
+                                    ((shift X) (integer_of_int32 (C_19:
+                                                                 (safe_int32_of_integer_ 
+                                                                  (C_18:
+                                                                  ((add_int 
                                                                     (integer_of_int32 !i)) (1)))))))))))
-                 then void
-                 else
-                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                  void))
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
-               (i := (C_23:
-                     (safe_int32_of_integer_ (C_22:
-                                             ((add_int (integer_of_int32 !i)) (1))))));
-               !i end) in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (let jessie_<somenum> = (i_f := !i) in void);
-      (assert { (JC_<somenum>: eq_int(integer_of_int32(i), (0))) }; void); void;
-      void;
-      (let jessie_<somenum> =
-      (__retres := (C_36:
-                   ((add_real (C_35:
-                              ((safe_acc_ double_P_double_M_Y_2) (C_34:
-                                                                 ((shift Y) 
-                                                                  (integer_of_int32 !i)))))) 
-                    (C_33:
-                    ((mul_real (C_32:
-                               ((sub_real x_0) (C_31:
-                                               ((safe_acc_ double_P_double_M_X_1) 
-                                                (C_30:
-                                                ((shift X) (integer_of_int32 !i)))))))) 
-                     (C_29:
-                     ((safe_acc_ double_P_double_M_V_3) (C_28:
-                                                        ((shift V) (integer_of_int32 !i)))))))))) in
-      void); (return := !__retres); (raise Return) end))))))))); absurd  end
-   with Return -> !return end))
+               then void
+               else
+                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+                void))
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void));
+             (i := (C_23:
+                   (safe_int32_of_integer_ (C_22:
+                                           ((add_int (integer_of_int32 !i)) (1))))));
+             !i end) in void); (raise (Loop_continue_exc void)) end in void)
+          with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end))) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      (C_25:
+      (C_37:
+      begin
+        void; (let jessie_<somenum> = (i_f := !i) in void);
+       (assert { (JC_<somenum>: eq_int(integer_of_int32(i), (0))) }; void); void;
+       void;
+       (let jessie_<somenum> =
+       (__retres := (C_36:
+                    ((add_real (C_35:
+                               ((safe_acc_ double_P_double_M_Y_2) (C_34:
+                                                                  ((shift Y) 
+                                                                   (integer_of_int32 !i)))))) 
+                     (C_33:
+                     ((mul_real (C_32:
+                                ((sub_real x_0) (C_31:
+                                                ((safe_acc_ double_P_double_M_X_1) 
+                                                 (C_30:
+                                                 ((shift X) (integer_of_int32 !i)))))))) 
+                      (C_29:
+                      ((safe_acc_ double_P_double_M_V_3) (C_28:
+                                                         ((shift V) (integer_of_int32 !i)))))))))) in
+       void); (return := !__retres); (raise Return) end))) end)))); absurd 
+   end with Return -> !return end))
   { (JC_<somenum>: eq_real(result, select(double_P_double_M_Y_2, shift(Y@, (0))))) }
 
 let InterPolate_safety =
@@ -1519,102 +1513,102 @@ let InterPolate_safety =
      (let i0 = ref (any_int32 void) in
      (let m = ref (any_int32 void) in
      (let __retres = ref (any_real void) in
-     (C_1:
-     (C_6:
-     (C_10:
-     (C_25:
-     (C_37:
-     begin
-       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+     try
       (let jessie_<somenum> =
-      (m := (C_5:
-            (JC_<somenum>:
-            (int32_of_integer_ (C_4:
-                               (JC_<somenum>:
-                               ((computer_div_ (integer_of_int32 (C_3:
-                                                                 (JC_<somenum>:
-                                                                 (int32_of_integer_ 
-                                                                  (C_2:
-                                                                  ((add_int 
-                                                                    (integer_of_int32 n)) (1)))))))) (2)))))))) in
-      void);
-      (if ((ge_real_ x_0) (C_9:
-                          (JC_<somenum>:
-                          ((((offset_acc_ double_P_X_1_alloc_table) double_P_double_M_X_1) X) 
-                           (integer_of_int32 !m)))))
-      then (let jessie_<somenum> = (C_7: (i := !m)) in void) else void);
-      (let jessie_<somenum> = (i0 := !i) in void); void;
-      try
+      (C_1:
+      (C_6:
+      (C_10:
+      begin
+        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
        (let jessie_<somenum> =
-       begin
-         (loop_1:
-         while true do
-         { invariant (JC_<somenum>: true)
-           variant (JC_<somenum> : sub_int(integer_of_int32(n), integer_of_int32(i))) }
+       (m := (C_5:
+             (JC_<somenum>:
+             (int32_of_integer_ (C_4:
+                                (JC_<somenum>:
+                                ((computer_div_ (integer_of_int32 (C_3:
+                                                                  (JC_<somenum>:
+                                                                  (int32_of_integer_ 
+                                                                   (C_2:
+                                                                   ((add_int 
+                                                                    (integer_of_int32 n)) (1)))))))) (2)))))))) in
+       void);
+       (if ((ge_real_ x_0) (C_9:
+                           (JC_<somenum>:
+                           ((((offset_acc_ double_P_X_1_alloc_table) double_P_double_M_X_1) X) 
+                            (integer_of_int32 !m)))))
+       then (let jessie_<somenum> = (C_7: (i := !m)) in void) else void);
+       (let jessie_<somenum> = (i0 := !i) in void); void;
+       (loop_1:
+       while true do
+       { invariant (JC_<somenum>: true)
+         variant (JC_<somenum> : sub_int(integer_of_int32(n), integer_of_int32(i))) }
+        begin
+          [ { } unit reads i,i0
+            { ((JC_<somenum>:
+               (forall k:int.
+                ((le_int(integer_of_int32(i0), k)
+                 and lt_int(k, integer_of_int32(i))) ->
+                 ge_real(x_0,
+                 select(double_P_double_M_X_1, shift(X, integer_of_int32(i)))))))
+              and (JC_<somenum>:
+                  ((JC_<somenum>: le_int(integer_of_int32(i0), integer_of_int32(i)))
+                  and (JC_<somenum>:
+                      le_int(integer_of_int32(i), integer_of_int32(n)))))) } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit reads i,i0
-              { ((JC_<somenum>:
-                 (forall k:int.
-                  ((le_int(integer_of_int32(i0), k)
-                   and lt_int(k, integer_of_int32(i))) ->
-                   ge_real(x_0,
-                   select(double_P_double_M_X_1,
-                   shift(X, integer_of_int32(i)))))))
-                and (JC_<somenum>:
-                    ((JC_<somenum>:
-                     le_int(integer_of_int32(i0), integer_of_int32(i)))
-                    and (JC_<somenum>:
-                        le_int(integer_of_int32(i), integer_of_int32(n)))))) } ];
-           try
             (let jessie_<somenum> =
+            (C_24:
             begin
-              (let jessie_<somenum> =
-              (C_24:
-              begin
-                (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
-                then
-                 (if ((ge_real_ x_0) (C_21:
-                                     (JC_<somenum>:
-                                     ((((offset_acc_ double_P_X_1_alloc_table) double_P_double_M_X_1) X) 
-                                      (integer_of_int32 (C_19:
-                                                        (JC_<somenum>:
-                                                        (int32_of_integer_ 
-                                                         (C_18:
-                                                         ((add_int (integer_of_int32 !i)) (1)))))))))))
-                 then void
-                 else
-                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                  void))
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
-               (i := (C_23:
-                     (JC_<somenum>:
-                     (int32_of_integer_ (C_22:
-                                        ((add_int (integer_of_int32 !i)) (1)))))));
-               !i end) in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (let jessie_<somenum> = (i_f := !i) in void); void; void;
-      (let jessie_<somenum> =
-      (__retres := (C_36:
-                   ((add_real (C_35:
-                              (JC_<somenum>:
-                              ((((offset_acc_ double_P_Y_2_alloc_table) double_P_double_M_Y_2) Y) 
-                               (integer_of_int32 !i))))) (C_33:
-                                                         ((mul_real (C_32:
-                                                                    ((sub_real x_0) 
-                                                                    (C_31:
-                                                                    (JC_<somenum>:
-                                                                    ((((offset_acc_ double_P_X_1_alloc_table) double_P_double_M_X_1) X) 
-                                                                    (integer_of_int32 !i))))))) 
-                                                          (C_29:
-                                                          (JC_<somenum>:
-                                                          ((((offset_acc_ double_P_V_3_alloc_table) double_P_double_M_V_3) V) 
-                                                           (integer_of_int32 !i))))))))) in
-      void); (return := !__retres); (raise Return) end))))))))); absurd  end
-   with Return -> !return end)) { true }
+              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
+              then
+               (if ((ge_real_ x_0) (C_21:
+                                   (JC_<somenum>:
+                                   ((((offset_acc_ double_P_X_1_alloc_table) double_P_double_M_X_1) X) 
+                                    (integer_of_int32 (C_19:
+                                                      (JC_<somenum>:
+                                                      (int32_of_integer_ 
+                                                       (C_18:
+                                                       ((add_int (integer_of_int32 !i)) (1)))))))))))
+               then void
+               else
+                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+                void))
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void));
+             (i := (C_23:
+                   (JC_<somenum>:
+                   (int32_of_integer_ (C_22:
+                                      ((add_int (integer_of_int32 !i)) (1)))))));
+             !i end) in void); (raise (Loop_continue_exc void)) end in void)
+          with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end))) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      (C_25:
+      (C_37:
+      begin
+        void; (let jessie_<somenum> = (i_f := !i) in void); void; void;
+       (let jessie_<somenum> =
+       (__retres := (C_36:
+                    ((add_real (C_35:
+                               (JC_<somenum>:
+                               ((((offset_acc_ double_P_Y_2_alloc_table) double_P_double_M_Y_2) Y) 
+                                (integer_of_int32 !i))))) (C_33:
+                                                          ((mul_real 
+                                                            (C_32:
+                                                            ((sub_real x_0) 
+                                                             (C_31:
+                                                             (JC_<somenum>:
+                                                             ((((offset_acc_ double_P_X_1_alloc_table) double_P_double_M_X_1) X) 
+                                                              (integer_of_int32 !i))))))) 
+                                                           (C_29:
+                                                           (JC_<somenum>:
+                                                           ((((offset_acc_ double_P_V_3_alloc_table) double_P_double_M_V_3) V) 
+                                                            (integer_of_int32 !i))))))))) in
+       void); (return := !__retres); (raise Return) end))) end)))); absurd 
+   end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C floats_interp_math.jessie --quiet -f floats_interp_math.makefile project

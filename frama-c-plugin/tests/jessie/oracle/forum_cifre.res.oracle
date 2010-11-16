@@ -423,28 +423,26 @@ behavior default:
    {  (C_1 : (curseur = destination_0));
       (if (taille_0 > 0) then 
       {  
+         loop 
+         while (true)
          {  
-            loop 
-            while (true)
             {  
-               {  
-                  {  (C_2 : (tmp = curseur));
-                     (C_4 : (curseur = (C_3 : (curseur + 1))));
-                     (C_5 : (tmp_1 = source));
-                     (C_7 : (source = (C_6 : (source + 1))));
-                     (C_9 : (tmp_0 = (C_8 : tmp_1.char_M)));
-                     (C_11 : ((C_10 : tmp.char_M) = tmp_0))
-                  };
-                  (if (tmp_0 != 0) then 
-                  {  (C_14 : (taille_0 = (C_13 : ((C_12 : (taille_0 - 1)) :> uint32))));
-                     (if (taille_0 > 0) then () else 
-                     (goto while_0_break))
-                  } else 
+               {  (C_2 : (tmp = curseur));
+                  (C_4 : (curseur = (C_3 : (curseur + 1))));
+                  (C_5 : (tmp_1 = source));
+                  (C_7 : (source = (C_6 : (source + 1))));
+                  (C_9 : (tmp_0 = (C_8 : tmp_1.char_M)));
+                  (C_11 : ((C_10 : tmp.char_M) = tmp_0))
+               };
+               (if (tmp_0 != 0) then 
+               {  (C_14 : (taille_0 = (C_13 : ((C_12 : (taille_0 - 1)) :> uint32))));
+                  (if (taille_0 > 0) then () else 
                   (goto while_0_break))
-               }
-            };
-            (while_0_break : ())
+               } else 
+               (goto while_0_break))
+            }
          };
+         (while_0_break : ());
          
          {  (C_16 : (source = (C_15 : (source - 1))));
             ()
@@ -2452,124 +2450,125 @@ let strncpy_ensures_default =
        (let jessie_<somenum> = (curseur := !mutable_destination_0) in void);
       (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
       then
-       (C_16:
-       begin
-         try
-          (let jessie_<somenum> =
-          begin
-            (loop_3:
-            while true do
-            { invariant (JC_<somenum>: true)  }
+       try
+        (let jessie_<somenum> =
+        begin
+          (loop_3:
+          while true do
+          { invariant (JC_<somenum>: true)  }
+           begin
+             [ { } unit { true } ];
+            try
+             (let jessie_<somenum> =
              begin
-               [ { } unit { true } ];
-              try
                (let jessie_<somenum> =
+               (C_2:
+               (C_4:
+               (C_5:
+               (C_7:
+               (C_9:
+               begin
+                 (let jessie_<somenum> = (tmp := !curseur) in void);
+                (let jessie_<somenum> =
+                (curseur := (C_3: ((shift !curseur) (1)))) in void);
+                (let jessie_<somenum> = (tmp_1 := !mutable_source) in void);
+                (let jessie_<somenum> =
+                (mutable_source := (C_6: ((shift !mutable_source) (1)))) in
+                void);
+                (let jessie_<somenum> =
+                (tmp_0 := (C_8: ((safe_acc_ char_P_char_M_source_22) !tmp_1))) in
+                void);
+                (C_11:
+                (let jessie_<somenum> = !tmp_0 in
+                begin
+                  (let jessie_<somenum> = !tmp in
+                  (((safe_upd_ char_P_char_M_destination_0_21) jessie_<somenum>) jessie_<somenum>));
+                 jessie_<somenum> end)) end))))) in void);
+              (if ((neq_int_ (integer_of_int8 !tmp_0)) (0))
+              then
+               (C_14:
                begin
                  (let jessie_<somenum> =
-                 (C_2:
-                 (C_4:
-                 (C_5:
-                 (C_7:
-                 (C_9:
-                 begin
-                   (let jessie_<somenum> = (tmp := !curseur) in void);
+                 (mutable_taille_0 := (C_13:
+                                      (safe_uint32_of_integer_ (C_12:
+                                                               ((sub_int 
+                                                                 (integer_of_uint32 !mutable_taille_0)) (1)))))) in
+                 void);
+                (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
+                then void
+                else
+                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+                 void)) end)
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void)); (raise (Loop_continue_exc void)) end in void) with
+             Loop_continue_exc jessie_<somenum> -> void end end done);
+         (raise (Goto_while_0_break_exc void)) end in void) with
+        Goto_while_0_break_exc jessie_<somenum> ->
+        (while_0_break:
+        (C_16:
+        begin
+          void;
+         (let jessie_<somenum> =
+         (mutable_source := (C_15: ((shift !mutable_source) (neg_int (1))))) in
+         void); void;
+         (if ((eq_int_ (integer_of_int32 (C_29:
+                                         (safe_int32_of_integer_ (integer_of_int8 
+                                                                  (C_28:
+                                                                  ((safe_acc_ char_P_char_M_source_22) !mutable_source))))))) (0))
+         then
+          (C_19:
+          begin
+            (let jessie_<somenum> =
+            (mutable_taille_0 := (C_18:
+                                 (safe_uint32_of_integer_ (C_17:
+                                                          ((sub_int (integer_of_uint32 !mutable_taille_0)) (1)))))) in
+            void);
+           (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
+           then
+            try
+             (let jessie_<somenum> =
+             begin
+               (loop_4:
+               while true do
+               { invariant (JC_<somenum>: true)  }
+                begin
+                  [ { } unit { true } ];
+                 try
                   (let jessie_<somenum> =
-                  (curseur := (C_3: ((shift !curseur) (1)))) in void);
-                  (let jessie_<somenum> = (tmp_1 := !mutable_source) in void);
-                  (let jessie_<somenum> =
-                  (mutable_source := (C_6: ((shift !mutable_source) (1)))) in
-                  void);
-                  (let jessie_<somenum> =
-                  (tmp_0 := (C_8:
-                            ((safe_acc_ char_P_char_M_source_22) !tmp_1))) in
-                  void);
-                  (C_11:
-                  (let jessie_<somenum> = !tmp_0 in
+                  (C_27:
                   begin
-                    (let jessie_<somenum> = !tmp in
-                    (((safe_upd_ char_P_char_M_destination_0_21) jessie_<somenum>) jessie_<somenum>));
-                   jessie_<somenum> end)) end))))) in void);
-                (if ((neq_int_ (integer_of_int8 !tmp_0)) (0))
-                then
-                 (C_14:
-                 begin
+                    (let jessie_<somenum> =
+                    (C_20:
+                    (C_22:
+                    begin
+                      (let jessie_<somenum> = (tmp_2 := !mutable_destination_0) in
+                      void);
+                     (let jessie_<somenum> =
+                     (mutable_destination_0 := (C_21:
+                                               ((shift !mutable_destination_0) (1)))) in
+                     void);
+                     (C_24:
+                     (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
+                     begin
+                       (let jessie_<somenum> = !tmp_2 in
+                       (((safe_upd_ char_P_char_M_destination_0_21) jessie_<somenum>) jessie_<somenum>));
+                      jessie_<somenum> end)) end)) in void);
                    (let jessie_<somenum> =
-                   (mutable_taille_0 := (C_13:
-                                        (safe_uint32_of_integer_ (C_12:
+                   (mutable_taille_0 := (C_26:
+                                        (safe_uint32_of_integer_ (C_25:
                                                                  ((sub_int 
                                                                    (integer_of_uint32 !mutable_taille_0)) (1)))))) in
                    void);
-                  (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
-                  then void
-                  else
-                   (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                   void)) end)
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void)); (raise (Loop_continue_exc void)) end in void) with
-               Loop_continue_exc jessie_<somenum> -> void end end done);
-           (raise (Goto_while_0_break_exc void)) end in void) with
-          Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-        (let jessie_<somenum> =
-        (mutable_source := (C_15: ((shift !mutable_source) (neg_int (1))))) in
-        void); void;
-        (if ((eq_int_ (integer_of_int32 (C_29:
-                                        (safe_int32_of_integer_ (integer_of_int8 
-                                                                 (C_28:
-                                                                 ((safe_acc_ char_P_char_M_source_22) !mutable_source))))))) (0))
-        then
-         (C_19:
-         begin
-           (let jessie_<somenum> =
-           (mutable_taille_0 := (C_18:
-                                (safe_uint32_of_integer_ (C_17:
-                                                         ((sub_int (integer_of_uint32 !mutable_taille_0)) (1)))))) in
-           void);
-          (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
-          then
-           try
-            (let jessie_<somenum> =
-            begin
-              (loop_4:
-              while true do
-              { invariant (JC_<somenum>: true)  }
-               begin
-                 [ { } unit { true } ];
-                try
-                 (let jessie_<somenum> =
-                 (C_27:
-                 begin
-                   (let jessie_<somenum> =
-                   (C_20:
-                   (C_22:
-                   begin
-                     (let jessie_<somenum> = (tmp_2 := !mutable_destination_0) in
-                     void);
-                    (let jessie_<somenum> =
-                    (mutable_destination_0 := (C_21:
-                                              ((shift !mutable_destination_0) (1)))) in
-                    void);
-                    (C_24:
-                    (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
-                    begin
-                      (let jessie_<somenum> = !tmp_2 in
-                      (((safe_upd_ char_P_char_M_destination_0_21) jessie_<somenum>) jessie_<somenum>));
-                     jessie_<somenum> end)) end)) in void);
-                  (let jessie_<somenum> =
-                  (mutable_taille_0 := (C_26:
-                                       (safe_uint32_of_integer_ (C_25:
-                                                                ((sub_int 
-                                                                  (integer_of_uint32 !mutable_taille_0)) (1)))))) in
-                  void);
-                  (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
-                  then void
-                  else
-                   (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
-                   void)); (raise (Loop_continue_exc void)) end) in void)
-                 with Loop_continue_exc jessie_<somenum> -> void end end done);
-             (raise (Goto_while_1_break_exc void)) end in void) with
-            Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end
-          else void) end) else void) end) else void);
+                   (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
+                   then void
+                   else
+                    (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
+                    void)); (raise (Loop_continue_exc void)) end) in void)
+                  with Loop_continue_exc jessie_<somenum> -> void end end done);
+              (raise (Goto_while_1_break_exc void)) end in void) with
+             Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end
+           else void) end) else void) end)) end else void);
       (return := !mutable_destination_0); (raise Return) end)))))); absurd 
    end with Return -> !return end))))) { (JC_<somenum>: true) }
 
@@ -2593,132 +2592,133 @@ let strncpy_safety =
        (let jessie_<somenum> = (curseur := !mutable_destination_0) in void);
       (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
       then
-       (C_16:
-       begin
-         try
-          (let jessie_<somenum> =
-          begin
-            (loop_1:
-            while true do
-            { invariant (JC_<somenum>: true)  }
+       try
+        (let jessie_<somenum> =
+        begin
+          (loop_1:
+          while true do
+          { invariant (JC_<somenum>: true)  }
+           begin
+             [ { } unit { true } ];
+            try
+             (let jessie_<somenum> =
              begin
-               [ { } unit { true } ];
-              try
                (let jessie_<somenum> =
+               (C_2:
+               (C_4:
+               (C_5:
+               (C_7:
+               (C_9:
+               begin
+                 (let jessie_<somenum> = (tmp := !curseur) in void);
+                (let jessie_<somenum> =
+                (curseur := (C_3: ((shift !curseur) (1)))) in void);
+                (let jessie_<somenum> = (tmp_1 := !mutable_source) in void);
+                (let jessie_<somenum> =
+                (mutable_source := (C_6: ((shift !mutable_source) (1)))) in
+                void);
+                (let jessie_<somenum> =
+                (tmp_0 := (C_8:
+                          (JC_<somenum>:
+                          (((acc_ char_P_source_22_alloc_table) char_P_char_M_source_22) !tmp_1)))) in
+                void);
+                (C_11:
+                (let jessie_<somenum> = !tmp_0 in
+                begin
+                  (let jessie_<somenum> = !tmp in
+                  (JC_<somenum>:
+                  ((((upd_ char_P_destination_0_21_alloc_table) char_P_char_M_destination_0_21) jessie_<somenum>) jessie_<somenum>)));
+                 jessie_<somenum> end)) end))))) in void);
+              (if ((neq_int_ (integer_of_int8 !tmp_0)) (0))
+              then
+               (C_14:
                begin
                  (let jessie_<somenum> =
-                 (C_2:
-                 (C_4:
-                 (C_5:
-                 (C_7:
-                 (C_9:
-                 begin
-                   (let jessie_<somenum> = (tmp := !curseur) in void);
+                 (mutable_taille_0 := (C_13:
+                                      (JC_<somenum>:
+                                      (uint32_of_integer_ (C_12:
+                                                          ((sub_int (integer_of_uint32 !mutable_taille_0)) (1))))))) in
+                 void);
+                (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
+                then void
+                else
+                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+                 void)) end)
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void)); (raise (Loop_continue_exc void)) end in void) with
+             Loop_continue_exc jessie_<somenum> -> void end end done);
+         (raise (Goto_while_0_break_exc void)) end in void) with
+        Goto_while_0_break_exc jessie_<somenum> ->
+        (while_0_break:
+        (C_16:
+        begin
+          void;
+         (let jessie_<somenum> =
+         (mutable_source := (C_15: ((shift !mutable_source) (neg_int (1))))) in
+         void); void;
+         (if ((eq_int_ (integer_of_int32 (C_29:
+                                         (JC_<somenum>:
+                                         (int32_of_integer_ (integer_of_int8 
+                                                             (C_28:
+                                                             (JC_<somenum>:
+                                                             (((acc_ char_P_source_22_alloc_table) char_P_char_M_source_22) !mutable_source))))))))) (0))
+         then
+          (C_19:
+          begin
+            (let jessie_<somenum> =
+            (mutable_taille_0 := (C_18:
+                                 (JC_<somenum>:
+                                 (uint32_of_integer_ (C_17:
+                                                     ((sub_int (integer_of_uint32 !mutable_taille_0)) (1))))))) in
+            void);
+           (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
+           then
+            try
+             (let jessie_<somenum> =
+             begin
+               (loop_2:
+               while true do
+               { invariant (JC_<somenum>: true)  }
+                begin
+                  [ { } unit { true } ];
+                 try
                   (let jessie_<somenum> =
-                  (curseur := (C_3: ((shift !curseur) (1)))) in void);
-                  (let jessie_<somenum> = (tmp_1 := !mutable_source) in void);
-                  (let jessie_<somenum> =
-                  (mutable_source := (C_6: ((shift !mutable_source) (1)))) in
-                  void);
-                  (let jessie_<somenum> =
-                  (tmp_0 := (C_8:
-                            (JC_<somenum>:
-                            (((acc_ char_P_source_22_alloc_table) char_P_char_M_source_22) !tmp_1)))) in
-                  void);
-                  (C_11:
-                  (let jessie_<somenum> = !tmp_0 in
+                  (C_27:
                   begin
-                    (let jessie_<somenum> = !tmp in
-                    (JC_<somenum>:
-                    ((((upd_ char_P_destination_0_21_alloc_table) char_P_char_M_destination_0_21) jessie_<somenum>) jessie_<somenum>)));
-                   jessie_<somenum> end)) end))))) in void);
-                (if ((neq_int_ (integer_of_int8 !tmp_0)) (0))
-                then
-                 (C_14:
-                 begin
+                    (let jessie_<somenum> =
+                    (C_20:
+                    (C_22:
+                    begin
+                      (let jessie_<somenum> = (tmp_2 := !mutable_destination_0) in
+                      void);
+                     (let jessie_<somenum> =
+                     (mutable_destination_0 := (C_21:
+                                               ((shift !mutable_destination_0) (1)))) in
+                     void);
+                     (C_24:
+                     (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
+                     begin
+                       (let jessie_<somenum> = !tmp_2 in
+                       (JC_<somenum>:
+                       ((((upd_ char_P_destination_0_21_alloc_table) char_P_char_M_destination_0_21) jessie_<somenum>) jessie_<somenum>)));
+                      jessie_<somenum> end)) end)) in void);
                    (let jessie_<somenum> =
-                   (mutable_taille_0 := (C_13:
+                   (mutable_taille_0 := (C_26:
                                         (JC_<somenum>:
-                                        (uint32_of_integer_ (C_12:
+                                        (uint32_of_integer_ (C_25:
                                                             ((sub_int 
                                                               (integer_of_uint32 !mutable_taille_0)) (1))))))) in
                    void);
-                  (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
-                  then void
-                  else
-                   (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                   void)) end)
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void)); (raise (Loop_continue_exc void)) end in void) with
-               Loop_continue_exc jessie_<somenum> -> void end end done);
-           (raise (Goto_while_0_break_exc void)) end in void) with
-          Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-        (let jessie_<somenum> =
-        (mutable_source := (C_15: ((shift !mutable_source) (neg_int (1))))) in
-        void); void;
-        (if ((eq_int_ (integer_of_int32 (C_29:
-                                        (JC_<somenum>:
-                                        (int32_of_integer_ (integer_of_int8 
-                                                            (C_28:
-                                                            (JC_<somenum>:
-                                                            (((acc_ char_P_source_22_alloc_table) char_P_char_M_source_22) !mutable_source))))))))) (0))
-        then
-         (C_19:
-         begin
-           (let jessie_<somenum> =
-           (mutable_taille_0 := (C_18:
-                                (JC_<somenum>:
-                                (uint32_of_integer_ (C_17:
-                                                    ((sub_int (integer_of_uint32 !mutable_taille_0)) (1))))))) in
-           void);
-          (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
-          then
-           try
-            (let jessie_<somenum> =
-            begin
-              (loop_2:
-              while true do
-              { invariant (JC_<somenum>: true)  }
-               begin
-                 [ { } unit { true } ];
-                try
-                 (let jessie_<somenum> =
-                 (C_27:
-                 begin
-                   (let jessie_<somenum> =
-                   (C_20:
-                   (C_22:
-                   begin
-                     (let jessie_<somenum> = (tmp_2 := !mutable_destination_0) in
-                     void);
-                    (let jessie_<somenum> =
-                    (mutable_destination_0 := (C_21:
-                                              ((shift !mutable_destination_0) (1)))) in
-                    void);
-                    (C_24:
-                    (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
-                    begin
-                      (let jessie_<somenum> = !tmp_2 in
-                      (JC_<somenum>:
-                      ((((upd_ char_P_destination_0_21_alloc_table) char_P_char_M_destination_0_21) jessie_<somenum>) jessie_<somenum>)));
-                     jessie_<somenum> end)) end)) in void);
-                  (let jessie_<somenum> =
-                  (mutable_taille_0 := (C_26:
-                                       (JC_<somenum>:
-                                       (uint32_of_integer_ (C_25:
-                                                           ((sub_int 
-                                                             (integer_of_uint32 !mutable_taille_0)) (1))))))) in
-                  void);
-                  (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
-                  then void
-                  else
-                   (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
-                   void)); (raise (Loop_continue_exc void)) end) in void)
-                 with Loop_continue_exc jessie_<somenum> -> void end end done);
-             (raise (Goto_while_1_break_exc void)) end in void) with
-            Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end
-          else void) end) else void) end) else void);
+                   (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
+                   then void
+                   else
+                    (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
+                    void)); (raise (Loop_continue_exc void)) end) in void)
+                  with Loop_continue_exc jessie_<somenum> -> void end end done);
+              (raise (Goto_while_1_break_exc void)) end in void) with
+             Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end
+           else void) end) else void) end)) end else void);
       (return := !mutable_destination_0); (raise Return) end)))))); absurd 
    end with Return -> !return end))))) { true }
 
@@ -2740,12 +2740,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po12.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "430" begin = "30" end = "57"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "429" begin = "27" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po13.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "430" begin = "30" end = "57"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "429" begin = "27" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2790,12 +2790,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/forum_cifre_po22.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "458" begin = "36" end = "61"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "456" begin = "36" end = "61"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po23.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "458" begin = "36" end = "61"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "456" begin = "36" end = "61"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2835,7 +2835,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po9.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "499" begin = "14" end = "67"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "497" begin = "14" end = "67"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

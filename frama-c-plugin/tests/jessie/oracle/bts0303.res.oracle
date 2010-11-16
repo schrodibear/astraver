@@ -89,35 +89,31 @@ behavior default:
       };
       (C_28 : (i = 0));
       
+      loop 
+      while (true)
       {  
-         loop 
-         while (true)
-         {  
-            {  (if (i < n) then () else 
-               (goto while_0_break));
-               (C_31 : ((C_30 : (C_29 : (a + i)).int_M) = 0));
-               (C_34 : (i = (C_33 : ((C_32 : (i + 1)) :> int32))))
-            }
-         };
-         (while_0_break : ())
+         {  (if (i < n) then () else 
+            (goto while_0_break));
+            (C_31 : ((C_30 : (C_29 : (a + i)).int_M) = 0));
+            (C_34 : (i = (C_33 : ((C_32 : (i + 1)) :> int32))))
+         }
       };
+      (while_0_break : ());
       (C_35 : (i = 1));
       
+      loop 
+      behavior default:
+        
+        assigns (a + [0..(n - 1)]).int_M;
+      while (true)
       {  
-         loop 
-         behavior default:
-           
-           assigns (a + [0..(n - 1)]).int_M;
-         while (true)
-         {  
-            {  (if (i < n) then () else 
-               (goto while_1_break));
-               (C_38 : Swap((C_36 : (a + i)), (C_37 : (a + 0))));
-               (C_41 : (i = (C_40 : ((C_39 : (i + 1)) :> int32))))
-            }
-         };
-         (while_1_break : ())
+         {  (if (i < n) then () else 
+            (goto while_1_break));
+            (C_38 : Swap((C_36 : (a + i)), (C_37 : (a + 0))));
+            (C_41 : (i = (C_40 : ((C_39 : (i + 1)) :> int32))))
+         }
       };
+      (while_1_break : ());
       
       (return ())
    }

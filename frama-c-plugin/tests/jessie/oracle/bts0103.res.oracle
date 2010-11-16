@@ -48,19 +48,17 @@ behavior default:
    
    {  (C_1 : (i = 0));
       
+      loop 
+      while (true)
       {  
-         loop 
-         while (true)
-         {  
-            {  (if true then () else 
-               (goto while_0_break));
-               
-               {  (C_3 : ((C_2 : p.int_M) = 3))
-               }
+         {  (if true then () else 
+            (goto while_0_break));
+            
+            {  (C_3 : ((C_2 : p.int_M) = 3))
             }
-         };
-         (while_0_break : ())
+         }
       };
+      (while_0_break : ());
       
       (return ())
    }
@@ -465,40 +463,39 @@ let g_ensures_default =
   try
    begin
      (let i = ref (any_int32 void) in
-     (C_1:
-     begin
-       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_2:
-         while true do
-         { invariant
-             (JC_<somenum>:
-             not_assigns(int_P_p_1_alloc_table@init, int_P_int_M_p_1@init,
-             int_P_int_M_p_1, pset_singleton(p@init)))  }
+     try
+      (let jessie_<somenum> =
+      (C_1:
+      begin
+        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+       (loop_2:
+       while true do
+       { invariant
+           (JC_<somenum>:
+           not_assigns(int_P_p_1_alloc_table@init, int_P_int_M_p_1@init,
+           int_P_int_M_p_1, pset_singleton(p@init)))  }
+        begin
+          [ { } unit { true } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit { true } ];
-           try
             (let jessie_<somenum> =
             begin
-              (let jessie_<somenum> =
-              begin
-                (if true then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
-               (C_3:
-               (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
-               begin
-                 (let jessie_<somenum> = p in
-                 (((safe_upd_ int_P_int_M_p_1) jessie_<somenum>) jessie_<somenum>));
-                jessie_<somenum> end)) end in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (raise Return) end)); (raise Return) end with Return -> void end)
+              (if true then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void));
+             (C_3:
+             (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+             begin
+               (let jessie_<somenum> = p in
+               (((safe_upd_ int_P_int_M_p_1) jessie_<somenum>) jessie_<somenum>));
+              jessie_<somenum> end)) end in void); (raise (Loop_continue_exc void))
+          end in void) with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break: begin   void; (raise Return) end) end); (raise Return)
+   end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: eq_int(integer_of_int32(select(int_P_int_M_p_1, p@)), (4)))
     and (JC_<somenum>:
@@ -514,38 +511,36 @@ let g_safety =
   try
    begin
      (let i = ref (any_int32 void) in
-     (C_1:
-     begin
-       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_1:
-         while true do
-         { invariant (JC_<somenum>: true) variant (0) }
+     try
+      (let jessie_<somenum> =
+      (C_1:
+      begin
+        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+       (loop_1:
+       while true do
+       { invariant (JC_<somenum>: true) variant (0) }
+        begin
+          [ { } unit { true } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit { true } ];
-           try
             (let jessie_<somenum> =
             begin
-              (let jessie_<somenum> =
-              begin
-                (if true then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
-               (C_3:
-               (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
-               begin
-                 (let jessie_<somenum> = p in
-                 (JC_<somenum>:
-                 ((((upd_ int_P_p_1_alloc_table) int_P_int_M_p_1) jessie_<somenum>) jessie_<somenum>)));
-                jessie_<somenum> end)) end in void); (raise (Loop_continue_exc void))
-            end in void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (raise Return) end)); (raise Return) end with Return -> void end)
-  { true }
+              (if true then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
+             (C_3:
+             (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
+             begin
+               (let jessie_<somenum> = p in
+               (JC_<somenum>:
+               ((((upd_ int_P_p_1_alloc_table) int_P_int_M_p_1) jessie_<somenum>) jessie_<somenum>)));
+              jessie_<somenum> end)) end in void); (raise (Loop_continue_exc void))
+          end in void) with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break: begin   void; (raise Return) end) end); (raise Return)
+   end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0103.jessie --quiet -f bts0103.makefile project
@@ -555,31 +550,31 @@ why --project [...] why/bts0103.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0103_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "52" begin = "26" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "51" begin = "23" end = "42"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0103_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "52" begin = "26" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "51" begin = "23" end = "42"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0103_po7.why">
-      <location file = "why/bts0103.why" line = "457" begin = "44" end = "45"/>
+      <location file = "why/bts0103.why" line = "455" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0103_po8.why">
-      <location file = "why/bts0103.why" line = "457" begin = "44" end = "45"/>
+      <location file = "why/bts0103.why" line = "455" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0103_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "46" begin = "9" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "45" begin = "6" end = "201"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0103_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "46" begin = "9" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/bts0103.jessie/bts0103.jc" line = "45" begin = "6" end = "201"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0103_po3.why">

@@ -748,17 +748,15 @@ behavior default:
       (C_240 : (x_7 = (C_239 : ((C_238 : (x_7 &
                                            (C_237 : ((C_236 : (~ y)) :> int32)))) :> int32))));
       
+      loop 
+      while (true)
       {  
-         loop 
-         while (true)
-         {  
-            {  (if ((C_242 : ((C_241 : (x_7 & 1)) :> int32)) == 0) then () else 
-               (goto while_0_break));
-               (C_245 : (x_7 = (C_244 : ((C_243 : (x_7 / 2)) :> int32))))
-            }
-         };
-         (while_0_break : ())
+         {  (if ((C_242 : ((C_241 : (x_7 & 1)) :> int32)) == 0) then () else 
+            (goto while_0_break));
+            (C_245 : (x_7 = (C_244 : ((C_243 : (x_7 / 2)) :> int32))))
+         }
       };
+      (while_0_break : ());
       (C_248 : (x_7 = (C_247 : ((C_246 : (x_7 / 2)) :> int32))));
       (C_251 : (__retres_7 = (C_250 : ((C_249 : (y | x_7)) :> int32))));
       
@@ -830,27 +828,25 @@ behavior default:
       (C_275 : (v = x_8));
       (C_276 : (w = x_8));
       
+      loop 
+      while (true)
       {  
-         loop 
-         while (true)
          {  
-            {  
-               {  (C_277 : printf());
-                  (C_279 : (y_0 = (C_278 : snoob1(x_8))));
-                  (C_281 : (z = (C_280 : snoob2(x_8))));
-                  (C_283 : (u = (C_282 : snoob3(x_8))));
-                  (C_285 : (v = (C_284 : next_set_of_n_elements(x_8))));
-                  (C_290 : (let __cil_tmp =
-                           (C_287 : snoob4((C_286 : (x_8 :> int32))))
-                           in (C_289 : (w = (C_288 : (__cil_tmp :> uint32))))));
-                  (C_292 : (x_8 = (C_291 : snoob(x_8))))
-               };
-               (if (x_8 <= 255) then () else 
-               (goto while_1_break))
-            }
-         };
-         (while_1_break : ())
+            {  (C_277 : printf());
+               (C_279 : (y_0 = (C_278 : snoob1(x_8))));
+               (C_281 : (z = (C_280 : snoob2(x_8))));
+               (C_283 : (u = (C_282 : snoob3(x_8))));
+               (C_285 : (v = (C_284 : next_set_of_n_elements(x_8))));
+               (C_290 : (let __cil_tmp =
+                        (C_287 : snoob4((C_286 : (x_8 :> int32))))
+                        in (C_289 : (w = (C_288 : (__cil_tmp :> uint32))))));
+               (C_292 : (x_8 = (C_291 : snoob(x_8))))
+            };
+            (if (x_8 <= 255) then () else 
+            (goto while_0_break))
+         }
       };
+      (while_0_break : ());
       (C_293 : (__retres_8 = 0));
       
       (return __retres_8)
@@ -888,8 +884,6 @@ exception Goto__LOR_0_exc of unit
 exception Goto__LOR_exc of unit
 
 exception Goto_while_0_break_exc of unit
-
-exception Goto_while_1_break_exc of unit
 
 exception Loop_continue_exc of unit
 
@@ -3509,69 +3503,69 @@ let main_ensures_default =
       begin
         try
          (let jessie_<somenum> =
-         (C_260:
          begin
-           (if ((neq_int_ (integer_of_int32 argc)) (2))
-           then
-            (C_255:
+           try
+            (let jessie_<somenum> =
+            (C_260:
+            begin
+              (if ((neq_int_ (integer_of_int32 argc)) (2))
+              then
+               (C_255:
+               begin
+                 (let jessie_<somenum> = (JC_<somenum>: (printf void)) in void);
+                (C_256:
+                (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+                (JC_<somenum>: (exit jessie_<somenum>)))) end) else void);
+             (let jessie_<somenum> = (n_1_0 := (C_259: (JC_<somenum>: (strtol void)))) in
+             void);
+             (if ((lt_int_ (integer_of_int32 !n_1_0)) (1))
+             then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+             else
+              (if ((gt_int_ (integer_of_int32 !n_1_0)) (7))
+              then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+              else void));
+             (let jessie_<somenum> = (raise (Goto__LOR_0_exc void)) in void);
+             (raise (Goto__LOR_exc void)) end) in void) with
+            Goto__LOR_exc jessie_<somenum> ->
+            (_LOR:
+            (C_261:
             begin
               (let jessie_<somenum> = (JC_<somenum>: (printf void)) in void);
-             (C_256:
+             (C_262:
              (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-             (JC_<somenum>: (exit jessie_<somenum>)))) end) else void);
-          (let jessie_<somenum> = (n_1_0 := (C_259: (JC_<somenum>: (strtol void)))) in
-          void);
-          (if ((lt_int_ (integer_of_int32 !n_1_0)) (1))
-          then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
-          else
-           (if ((gt_int_ (integer_of_int32 !n_1_0)) (7))
-           then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
-           else void));
-          (let jessie_<somenum> = (raise (Goto__LOR_0_exc void)) in void);
-          (raise (Goto__LOR_exc void)) end) in void) with
-         Goto__LOR_exc jessie_<somenum> ->
-         (_LOR:
-         (C_261:
+             (JC_<somenum>: (exit jessie_<somenum>)))) end)) end;
+          (raise (Goto__LOR_0_exc void)) end in void) with
+         Goto__LOR_0_exc jessie_<somenum> ->
+         (_LOR_0:
+         (C_263:
+         (C_272:
+         (C_273:
+         (C_274:
+         (C_275:
+         (C_276:
          begin
-           (let jessie_<somenum> = (JC_<somenum>: (printf void)) in void);
-          (C_262:
-          (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-          (JC_<somenum>: (exit jessie_<somenum>)))) end)) end;
-       (raise (Goto__LOR_0_exc void)) end in void) with
-      Goto__LOR_0_exc jessie_<somenum> ->
-      (_LOR_0:
-      (C_263:
-      (C_272:
-      (C_273:
-      (C_274:
-      (C_275:
-      (C_276:
-      (C_293:
-      begin
-        void; (let jessie_<somenum> = (JC_<somenum>: (printf void)) in void);
-       (let jessie_<somenum> =
-       (C_271:
-       begin
-         (assert
-         { (JC_<somenum>: le_int((1), asr((2147483647), integer_of_int32(n_1_0)))) };
-         void);
-        (assert { (JC_<somenum>: lt_int(integer_of_int32(n_1_0), (32))) }; void);
-        (assert { (JC_<somenum>: ge_int(integer_of_int32(n_1_0), (0))) }; void);
-        (x_8 := (C_270:
-                (safe_uint32_of_integer_ (C_269:
-                                         ((sub_int (integer_of_int32 
-                                                    (C_268:
-                                                    (safe_int32_of_integer_ 
-                                                     (C_267:
-                                                     ((lsl (1)) (integer_of_int32 !n_1_0))))))) (1))))));
-        !x_8 end) in void); (let jessie_<somenum> = (y_0 := !x_8) in void);
-       (let jessie_<somenum> = (z := !x_8) in void);
-       (let jessie_<somenum> = (u := !x_8) in void);
-       (let jessie_<somenum> = (v := !x_8) in void);
-       (let jessie_<somenum> = (w := !x_8) in void);
-       try
-        (let jessie_<somenum> =
-        begin
+           void; (let jessie_<somenum> = (JC_<somenum>: (printf void)) in void);
+          (let jessie_<somenum> =
+          (C_271:
+          begin
+            (assert
+            { (JC_<somenum>:
+              le_int((1), asr((2147483647), integer_of_int32(n_1_0)))) };
+            void);
+           (assert { (JC_<somenum>: lt_int(integer_of_int32(n_1_0), (32))) }; void);
+           (assert { (JC_<somenum>: ge_int(integer_of_int32(n_1_0), (0))) }; void);
+           (x_8 := (C_270:
+                   (safe_uint32_of_integer_ (C_269:
+                                            ((sub_int (integer_of_int32 
+                                                       (C_268:
+                                                       (safe_int32_of_integer_ 
+                                                        (C_267:
+                                                        ((lsl (1)) (integer_of_int32 !n_1_0))))))) (1))))));
+           !x_8 end) in void); (let jessie_<somenum> = (y_0 := !x_8) in void);
+          (let jessie_<somenum> = (z := !x_8) in void);
+          (let jessie_<somenum> = (u := !x_8) in void);
+          (let jessie_<somenum> = (v := !x_8) in void);
+          (let jessie_<somenum> = (w := !x_8) in void);
           (loop_4:
           while true do
           { invariant (JC_<somenum>: true)  }
@@ -3624,13 +3618,17 @@ let main_ensures_default =
                void);
               (if ((le_int_ (integer_of_uint32 !x_8)) (255)) then void
               else
-               (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                void)); (raise (Loop_continue_exc void)) end in void) with
-             Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_1_break_exc void)) end in void) with
-        Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
+             Loop_continue_exc jessie_<somenum> -> void end end done) end))))))) end;
+       (raise (Goto_while_0_break_exc void)) end in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      (C_293:
+      begin
+        void;
        (let jessie_<somenum> = (__retres_8 := (safe_int32_of_integer_ (0))) in
-       void); (return := !__retres_8); (raise Return) end)))))))) end))))))));
+       void); (return := !__retres_8); (raise Return) end)) end))))))));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
@@ -3673,73 +3671,72 @@ let main_safety =
       begin
         try
          (let jessie_<somenum> =
-         (C_260:
          begin
-           (if ((neq_int_ (integer_of_int32 argc)) (2))
-           then
-            (C_255:
+           try
+            (let jessie_<somenum> =
+            (C_260:
+            begin
+              (if ((neq_int_ (integer_of_int32 argc)) (2))
+              then
+               (C_255:
+               begin
+                 (let jessie_<somenum> = (JC_<somenum>: (printf_requires void)) in void);
+                (C_256:
+                (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
+                (JC_<somenum>: (exit_requires jessie_<somenum>)))) end) else void);
+             (let jessie_<somenum> =
+             (n_1_0 := (C_259: (JC_<somenum>: (strtol_requires void)))) in void);
+             (if ((lt_int_ (integer_of_int32 !n_1_0)) (1))
+             then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+             else
+              (if ((gt_int_ (integer_of_int32 !n_1_0)) (7))
+              then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+              else void));
+             (let jessie_<somenum> = (raise (Goto__LOR_0_exc void)) in void);
+             (raise (Goto__LOR_exc void)) end) in void) with
+            Goto__LOR_exc jessie_<somenum> ->
+            (_LOR:
+            (C_261:
             begin
               (let jessie_<somenum> = (JC_<somenum>: (printf_requires void)) in void);
-             (C_256:
+             (C_262:
              (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-             (JC_<somenum>: (exit_requires jessie_<somenum>)))) end) else void);
-          (let jessie_<somenum> =
-          (n_1_0 := (C_259: (JC_<somenum>: (strtol_requires void)))) in void);
-          (if ((lt_int_ (integer_of_int32 !n_1_0)) (1))
-          then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
-          else
-           (if ((gt_int_ (integer_of_int32 !n_1_0)) (7))
-           then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
-           else void));
-          (let jessie_<somenum> = (raise (Goto__LOR_0_exc void)) in void);
-          (raise (Goto__LOR_exc void)) end) in void) with
-         Goto__LOR_exc jessie_<somenum> ->
-         (_LOR:
-         (C_261:
+             (JC_<somenum>: (exit_requires jessie_<somenum>)))) end)) end;
+          (raise (Goto__LOR_0_exc void)) end in void) with
+         Goto__LOR_0_exc jessie_<somenum> ->
+         (_LOR_0:
+         (C_263:
+         (C_272:
+         (C_273:
+         (C_274:
+         (C_275:
+         (C_276:
          begin
-           (let jessie_<somenum> = (JC_<somenum>: (printf_requires void)) in void);
-          (C_262:
-          (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-          (JC_<somenum>: (exit_requires jessie_<somenum>)))) end)) end;
-       (raise (Goto__LOR_0_exc void)) end in void) with
-      Goto__LOR_0_exc jessie_<somenum> ->
-      (_LOR_0:
-      (C_263:
-      (C_272:
-      (C_273:
-      (C_274:
-      (C_275:
-      (C_276:
-      (C_293:
-      begin
-        void; (let jessie_<somenum> = (JC_<somenum>: (printf_requires void)) in void);
-       (let jessie_<somenum> =
-       (C_271:
-       begin
-         [ { } unit reads n_1_0
-           { (JC_<somenum>:
-             le_int((1), asr((2147483647), integer_of_int32(n_1_0)))) } ];
-        [ { } unit reads n_1_0
-          { (JC_<somenum>: lt_int(integer_of_int32(n_1_0), (32))) } ];
-        [ { } unit reads n_1_0
-          { (JC_<somenum>: ge_int(integer_of_int32(n_1_0), (0))) } ];
-        (x_8 := (C_270:
-                (JC_<somenum>:
-                (uint32_of_integer_ (C_269:
-                                    ((sub_int (integer_of_int32 (C_268:
-                                                                (JC_<somenum>:
-                                                                (int32_of_integer_ 
-                                                                 (C_267:
-                                                                 ((lsl (1)) 
-                                                                  (integer_of_int32 !n_1_0)))))))) (1)))))));
-        !x_8 end) in void); (let jessie_<somenum> = (y_0 := !x_8) in void);
-       (let jessie_<somenum> = (z := !x_8) in void);
-       (let jessie_<somenum> = (u := !x_8) in void);
-       (let jessie_<somenum> = (v := !x_8) in void);
-       (let jessie_<somenum> = (w := !x_8) in void);
-       try
-        (let jessie_<somenum> =
-        begin
+           void; (let jessie_<somenum> = (JC_<somenum>: (printf_requires void)) in void);
+          (let jessie_<somenum> =
+          (C_271:
+          begin
+            [ { } unit reads n_1_0
+              { (JC_<somenum>:
+                le_int((1), asr((2147483647), integer_of_int32(n_1_0)))) } ];
+           [ { } unit reads n_1_0
+             { (JC_<somenum>: lt_int(integer_of_int32(n_1_0), (32))) } ];
+           [ { } unit reads n_1_0
+             { (JC_<somenum>: ge_int(integer_of_int32(n_1_0), (0))) } ];
+           (x_8 := (C_270:
+                   (JC_<somenum>:
+                   (uint32_of_integer_ (C_269:
+                                       ((sub_int (integer_of_int32 (C_268:
+                                                                   (JC_<somenum>:
+                                                                   (int32_of_integer_ 
+                                                                    (C_267:
+                                                                    ((lsl (1)) 
+                                                                    (integer_of_int32 !n_1_0)))))))) (1)))))));
+           !x_8 end) in void); (let jessie_<somenum> = (y_0 := !x_8) in void);
+          (let jessie_<somenum> = (z := !x_8) in void);
+          (let jessie_<somenum> = (u := !x_8) in void);
+          (let jessie_<somenum> = (v := !x_8) in void);
+          (let jessie_<somenum> = (w := !x_8) in void);
           (loop_3:
           while true do
           { invariant (JC_<somenum>: true) variant (0) }
@@ -3794,13 +3791,17 @@ let main_safety =
                void);
               (if ((le_int_ (integer_of_uint32 !x_8)) (255)) then void
               else
-               (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                void)); (raise (Loop_continue_exc void)) end in void) with
-             Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_1_break_exc void)) end in void) with
-        Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
+             Loop_continue_exc jessie_<somenum> -> void end end done) end))))))) end;
+       (raise (Goto_while_0_break_exc void)) end in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      (C_293:
+      begin
+        void;
        (let jessie_<somenum> = (__retres_8 := (safe_int32_of_integer_ (0))) in
-       void); (return := !__retres_8); (raise Return) end)))))))) end))))))));
+       void); (return := !__retres_8); (raise Return) end)) end))))))));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
@@ -5545,80 +5546,82 @@ let snoob4_ensures_default =
    begin
      (let y = ref (any_int32 void) in
      (let __retres_7 = ref (any_int32 void) in
-     (C_235:
-     (C_240:
-     (C_248:
-     (C_251:
-     begin
-       (let jessie_<somenum> =
-       (y := (C_234:
-             (safe_int32_of_integer_ (C_233:
-                                     ((add_int (integer_of_int32 !mutable_x_7_0)) 
-                                      (integer_of_int32 (C_232:
-                                                        (safe_int32_of_integer_ 
-                                                         (C_231:
-                                                         ((bw_and (integer_of_int32 !mutable_x_7_0)) 
-                                                          (integer_of_int32 
-                                                           (C_230:
-                                                           (safe_int32_of_integer_ 
-                                                            (C_229:
-                                                            (neg_int 
-                                                             (integer_of_int32 !mutable_x_7_0)))))))))))))))) in
-       void);
+     try
       (let jessie_<somenum> =
-      (mutable_x_7_0 := (C_239:
-                        (safe_int32_of_integer_ (C_238:
-                                                ((bw_and (integer_of_int32 !mutable_x_7_0)) 
-                                                 (integer_of_int32 (C_237:
-                                                                   (safe_int32_of_integer_ 
+      (C_235:
+      (C_240:
+      begin
+        (let jessie_<somenum> =
+        (y := (C_234:
+              (safe_int32_of_integer_ (C_233:
+                                      ((add_int (integer_of_int32 !mutable_x_7_0)) 
+                                       (integer_of_int32 (C_232:
+                                                         (safe_int32_of_integer_ 
+                                                          (C_231:
+                                                          ((bw_and (integer_of_int32 !mutable_x_7_0)) 
+                                                           (integer_of_int32 
+                                                            (C_230:
+                                                            (safe_int32_of_integer_ 
+                                                             (C_229:
+                                                             (neg_int 
+                                                              (integer_of_int32 !mutable_x_7_0)))))))))))))))) in
+        void);
+       (let jessie_<somenum> =
+       (mutable_x_7_0 := (C_239:
+                         (safe_int32_of_integer_ (C_238:
+                                                 ((bw_and (integer_of_int32 !mutable_x_7_0)) 
+                                                  (integer_of_int32 (C_237:
+                                                                    (safe_int32_of_integer_ 
                                                                     (C_236:
                                                                     (bw_compl 
                                                                     (integer_of_int32 !y))))))))))) in
-      void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_2:
-         while true do
-         { invariant (JC_<somenum>: true)  }
+       void);
+       (loop_2:
+       while true do
+       { invariant (JC_<somenum>: true)  }
+        begin
+          [ { } unit { true } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit { true } ];
-           try
             (let jessie_<somenum> =
+            (C_245:
             begin
-              (let jessie_<somenum> =
-              (C_245:
-              begin
-                (if ((eq_int_ (integer_of_int32 (C_242:
-                                                (safe_int32_of_integer_ 
-                                                 (C_241:
-                                                 ((bw_and (integer_of_int32 !mutable_x_7_0)) (1))))))) (0))
-                then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
-               (mutable_x_7_0 := (C_244:
-                                 (safe_int32_of_integer_ (C_243:
-                                                         (JC_<somenum>:
-                                                         ((computer_div 
-                                                           (integer_of_int32 !mutable_x_7_0)) (2)))))));
-               !mutable_x_7_0 end) in void); (raise (Loop_continue_exc void))
-            end in void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (let jessie_<somenum> =
-      (mutable_x_7_0 := (C_247:
-                        (safe_int32_of_integer_ (C_246:
-                                                (JC_<somenum>:
-                                                ((computer_div (integer_of_int32 !mutable_x_7_0)) (2))))))) in
-      void);
-      (let jessie_<somenum> =
-      (__retres_7 := (C_250:
-                     (safe_int32_of_integer_ (C_249:
-                                             ((bw_or (integer_of_int32 !y)) 
-                                              (integer_of_int32 !mutable_x_7_0)))))) in
-      void); (return := !__retres_7); (raise Return) end)))))); absurd  end
-   with Return -> !return end))) { (JC_<somenum>: true) }
+              (if ((eq_int_ (integer_of_int32 (C_242:
+                                              (safe_int32_of_integer_ 
+                                               (C_241:
+                                               ((bw_and (integer_of_int32 !mutable_x_7_0)) (1))))))) (0))
+              then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void));
+             (mutable_x_7_0 := (C_244:
+                               (safe_int32_of_integer_ (C_243:
+                                                       (JC_<somenum>:
+                                                       ((computer_div 
+                                                         (integer_of_int32 !mutable_x_7_0)) (2)))))));
+             !mutable_x_7_0 end) in void); (raise (Loop_continue_exc void))
+          end in void) with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      (C_248:
+      (C_251:
+      begin
+        void;
+       (let jessie_<somenum> =
+       (mutable_x_7_0 := (C_247:
+                         (safe_int32_of_integer_ (C_246:
+                                                 (JC_<somenum>:
+                                                 ((computer_div (integer_of_int32 !mutable_x_7_0)) (2))))))) in
+       void);
+       (let jessie_<somenum> =
+       (__retres_7 := (C_250:
+                      (safe_int32_of_integer_ (C_249:
+                                              ((bw_or (integer_of_int32 !y)) 
+                                               (integer_of_int32 !mutable_x_7_0)))))) in
+       void); (return := !__retres_7); (raise Return) end))) end)); absurd 
+   end with Return -> !return end))) { (JC_<somenum>: true) }
 
 let snoob4_safety =
  fun (x_7_0 : int32) ->
@@ -5650,87 +5653,89 @@ let snoob4_safety =
    begin
      (let y = ref (any_int32 void) in
      (let __retres_7 = ref (any_int32 void) in
-     (C_235:
-     (C_240:
-     (C_248:
-     (C_251:
-     begin
-       (let jessie_<somenum> =
-       (y := (C_234:
-             (JC_<somenum>:
-             (int32_of_integer_ (C_233:
-                                ((add_int (integer_of_int32 !mutable_x_7_0)) 
-                                 (integer_of_int32 (C_232:
-                                                   (JC_<somenum>:
-                                                   (int32_of_integer_ 
-                                                    (C_231:
-                                                    ((bw_and (integer_of_int32 !mutable_x_7_0)) 
-                                                     (integer_of_int32 
-                                                      (C_230:
-                                                      (JC_<somenum>:
-                                                      (int32_of_integer_ 
-                                                       (C_229:
-                                                       (neg_int (integer_of_int32 !mutable_x_7_0))))))))))))))))))) in
-       void);
+     try
       (let jessie_<somenum> =
-      (mutable_x_7_0 := (C_239:
-                        (JC_<somenum>:
-                        (int32_of_integer_ (C_238:
-                                           ((bw_and (integer_of_int32 !mutable_x_7_0)) 
-                                            (integer_of_int32 (C_237:
-                                                              (JC_<somenum>:
-                                                              (int32_of_integer_ 
-                                                               (C_236:
-                                                               (bw_compl 
-                                                                (integer_of_int32 !y))))))))))))) in
-      void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_1:
-         while true do
-         { invariant (JC_<somenum>: true) variant (0) }
-          begin
-            [ { } unit { true } ];
-           try
-            (let jessie_<somenum> =
-            begin
-              (let jessie_<somenum> =
-              (C_245:
-              begin
-                (if ((eq_int_ (integer_of_int32 (C_242:
-                                                (JC_<somenum>:
-                                                (int32_of_integer_ (C_241:
-                                                                   ((bw_and 
-                                                                    (integer_of_int32 !mutable_x_7_0)) (1)))))))) (0))
-                then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
-               (mutable_x_7_0 := (C_244:
-                                 (JC_<somenum>:
-                                 (int32_of_integer_ (C_243:
+      (C_235:
+      (C_240:
+      begin
+        (let jessie_<somenum> =
+        (y := (C_234:
+              (JC_<somenum>:
+              (int32_of_integer_ (C_233:
+                                 ((add_int (integer_of_int32 !mutable_x_7_0)) 
+                                  (integer_of_int32 (C_232:
                                                     (JC_<somenum>:
-                                                    ((computer_div_ (integer_of_int32 !mutable_x_7_0)) (2))))))));
-               !mutable_x_7_0 end) in void); (raise (Loop_continue_exc void))
-            end in void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (let jessie_<somenum> =
-      (mutable_x_7_0 := (C_247:
-                        (JC_<somenum>:
-                        (int32_of_integer_ (C_246:
-                                           (JC_<somenum>:
-                                           ((computer_div_ (integer_of_int32 !mutable_x_7_0)) (2)))))))) in
-      void);
-      (let jessie_<somenum> =
-      (__retres_7 := (C_250:
-                     (JC_<somenum>:
-                     (int32_of_integer_ (C_249:
-                                        ((bw_or (integer_of_int32 !y)) 
-                                         (integer_of_int32 !mutable_x_7_0))))))) in
-      void); (return := !__retres_7); (raise Return) end)))))); absurd  end
-   with Return -> !return end)))
+                                                    (int32_of_integer_ 
+                                                     (C_231:
+                                                     ((bw_and (integer_of_int32 !mutable_x_7_0)) 
+                                                      (integer_of_int32 
+                                                       (C_230:
+                                                       (JC_<somenum>:
+                                                       (int32_of_integer_ 
+                                                        (C_229:
+                                                        (neg_int (integer_of_int32 !mutable_x_7_0))))))))))))))))))) in
+        void);
+       (let jessie_<somenum> =
+       (mutable_x_7_0 := (C_239:
+                         (JC_<somenum>:
+                         (int32_of_integer_ (C_238:
+                                            ((bw_and (integer_of_int32 !mutable_x_7_0)) 
+                                             (integer_of_int32 (C_237:
+                                                               (JC_<somenum>:
+                                                               (int32_of_integer_ 
+                                                                (C_236:
+                                                                (bw_compl 
+                                                                 (integer_of_int32 !y))))))))))))) in
+       void);
+       (loop_1:
+       while true do
+       { invariant (JC_<somenum>: true) variant (0) }
+        begin
+          [ { } unit { true } ];
+         try
+          (let jessie_<somenum> =
+          begin
+            (let jessie_<somenum> =
+            (C_245:
+            begin
+              (if ((eq_int_ (integer_of_int32 (C_242:
+                                              (JC_<somenum>:
+                                              (int32_of_integer_ (C_241:
+                                                                 ((bw_and 
+                                                                   (integer_of_int32 !mutable_x_7_0)) (1)))))))) (0))
+              then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void));
+             (mutable_x_7_0 := (C_244:
+                               (JC_<somenum>:
+                               (int32_of_integer_ (C_243:
+                                                  (JC_<somenum>:
+                                                  ((computer_div_ (integer_of_int32 !mutable_x_7_0)) (2))))))));
+             !mutable_x_7_0 end) in void); (raise (Loop_continue_exc void))
+          end in void) with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      (C_248:
+      (C_251:
+      begin
+        void;
+       (let jessie_<somenum> =
+       (mutable_x_7_0 := (C_247:
+                         (JC_<somenum>:
+                         (int32_of_integer_ (C_246:
+                                            (JC_<somenum>:
+                                            ((computer_div_ (integer_of_int32 !mutable_x_7_0)) (2)))))))) in
+       void);
+       (let jessie_<somenum> =
+       (__retres_7 := (C_250:
+                      (JC_<somenum>:
+                      (int32_of_integer_ (C_249:
+                                         ((bw_or (integer_of_int32 !y)) 
+                                          (integer_of_int32 !mutable_x_7_0))))))) in
+       void); (return := !__retres_7); (raise Return) end))) end)); absurd 
+   end with Return -> !return end)))
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X_(char_P___string_x__y__z__u__v__w_____2X___2X___2X___2X___2X___2X__1_alloc_table,
@@ -6024,11 +6029,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po352.why">
-      <location file = "why/hd_snoob.why" line = "4833" begin = "45" end = "46"/>
+      <location file = "why/hd_snoob.why" line = "4837" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po353.why">
-      <location file = "why/hd_snoob.why" line = "4833" begin = "45" end = "46"/>
+      <location file = "why/hd_snoob.why" line = "4837" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po354.why">
@@ -7315,72 +7320,72 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/hd_snoob_po4.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "789" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "787" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po5.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "789" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "787" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po6.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "789" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "787" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po7.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "789" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "787" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po8.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "789" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "787" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po9.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "789" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "787" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po10.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "789" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "787" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po11.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "790" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "788" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po12.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "790" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "788" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po13.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "790" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "788" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po14.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "790" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "788" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po15.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "790" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "788" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po16.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "790" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "788" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po17.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "790" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "788" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -7420,107 +7425,107 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po25.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po26.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po27.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po28.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po29.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po30.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po31.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po32.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "798" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po33.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "798" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po34.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "798" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po35.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "798" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po36.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "798" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po37.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "798" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po38.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "798" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po39.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "801" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po40.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "801" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po41.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "801" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po42.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "801" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po43.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "801" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po44.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "801" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po45.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "801" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -7545,37 +7550,37 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po50.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "825" begin = "27" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "822" begin = "24" end = "32"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po51.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "825" begin = "27" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "822" begin = "24" end = "32"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po52.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "825" begin = "27" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "822" begin = "24" end = "32"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po53.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "825" begin = "27" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "822" begin = "24" end = "32"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po54.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "825" begin = "27" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "822" begin = "24" end = "32"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po55.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "825" begin = "27" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "822" begin = "24" end = "32"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po56.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "825" begin = "27" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "822" begin = "24" end = "32"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -7810,11 +7815,11 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po103.why">
-      <location file = "why/hd_snoob.why" line = "2886" begin = "46" end = "47"/>
+      <location file = "why/hd_snoob.why" line = "2887" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po104.why">
-      <location file = "why/hd_snoob.why" line = "2886" begin = "46" end = "47"/>
+      <location file = "why/hd_snoob.why" line = "2887" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po105.why">

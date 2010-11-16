@@ -40,21 +40,19 @@ behavior default:
    {  (C_1 : (pointeur = Chaine1));
       (C_2 : (source = Chaine2));
       
+      loop 
+      while (true)
       {  
-         loop 
-         while (true)
-         {  
-            {  (if ((C_3 : source.char_M) != 0) then () else 
-               (goto while_0_break));
-               
-               {  (C_6 : ((C_5 : pointeur.char_M) = (C_4 : source.char_M)));
-                  (C_8 : (pointeur = (C_7 : (pointeur + 1))));
-                  (C_10 : (source = (C_9 : (source + 1))))
-               }
+         {  (if ((C_3 : source.char_M) != 0) then () else 
+            (goto while_0_break));
+            
+            {  (C_6 : ((C_5 : pointeur.char_M) = (C_4 : source.char_M)));
+               (C_8 : (pointeur = (C_7 : (pointeur + 1))));
+               (C_10 : (source = (C_9 : (source + 1))))
             }
-         };
-         (while_0_break : ())
+         }
       };
+      (while_0_break : ());
       (C_12 : ((C_11 : pointeur.char_M) = 0));
       
       (return ())
@@ -325,49 +323,50 @@ let StrCpy_ensures_default =
    begin
      (let pointeur = ref (any_pointer void) in
      (let source = ref (any_pointer void) in
-     (C_1:
-     (C_2:
-     (C_12:
-     begin
-       (let jessie_<somenum> = (pointeur := Chaine1) in void);
-      (let jessie_<somenum> = (source := Chaine2) in void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_2:
-         while true do
-         { invariant (JC_<somenum>: true)  }
+     try
+      (let jessie_<somenum> =
+      (C_1:
+      (C_2:
+      begin
+        (let jessie_<somenum> = (pointeur := Chaine1) in void);
+       (let jessie_<somenum> = (source := Chaine2) in void);
+       (loop_2:
+       while true do
+       { invariant (JC_<somenum>: true)  }
+        begin
+          [ { } unit { true } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit { true } ];
-           try
             (let jessie_<somenum> =
+            (C_6:
+            (C_8:
+            (C_10:
             begin
-              (let jessie_<somenum> =
-              (C_6:
-              (C_8:
-              (C_10:
-              begin
-                (if ((neq_int_ (integer_of_int8 (C_3:
-                                                ((safe_acc_ char_P_char_M_Chaine2_2) !source)))) (0))
-                then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
-               (let jessie_<somenum> =
-               (C_4: ((safe_acc_ char_P_char_M_Chaine2_2) !source)) in
-               (let jessie_<somenum> = !pointeur in
-               (((safe_upd_ char_P_char_M_Chaine1_1) jessie_<somenum>) jessie_<somenum>)));
-               (let jessie_<somenum> =
-               (pointeur := (C_7: ((shift !pointeur) (1)))) in void);
-               (source := (C_9: ((shift !source) (1)))); !source end))) in
-              void); (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
-      (let jessie_<somenum> = !pointeur in
-      (((safe_upd_ char_P_char_M_Chaine1_1) jessie_<somenum>) jessie_<somenum>)));
-      (raise Return) end))))); (raise Return) end with Return -> void end)
+              (if ((neq_int_ (integer_of_int8 (C_3:
+                                              ((safe_acc_ char_P_char_M_Chaine2_2) !source)))) (0))
+              then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void));
+             (let jessie_<somenum> =
+             (C_4: ((safe_acc_ char_P_char_M_Chaine2_2) !source)) in
+             (let jessie_<somenum> = !pointeur in
+             (((safe_upd_ char_P_char_M_Chaine1_1) jessie_<somenum>) jessie_<somenum>)));
+             (let jessie_<somenum> = (pointeur := (C_7: ((shift !pointeur) (1)))) in
+             void); (source := (C_9: ((shift !source) (1)))); !source end))) in
+            void); (raise (Loop_continue_exc void)) end in void) with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      (C_12:
+      begin
+        void;
+       (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
+       (let jessie_<somenum> = !pointeur in
+       (((safe_upd_ char_P_char_M_Chaine1_1) jessie_<somenum>) jessie_<somenum>)));
+       (raise Return) end)) end)); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let StrCpy_safety =
@@ -378,54 +377,54 @@ let StrCpy_safety =
    begin
      (let pointeur = ref (any_pointer void) in
      (let source = ref (any_pointer void) in
-     (C_1:
-     (C_2:
-     (C_12:
-     begin
-       (let jessie_<somenum> = (pointeur := Chaine1) in void);
-      (let jessie_<somenum> = (source := Chaine2) in void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_1:
-         while true do
-         { invariant (JC_<somenum>: true) variant (0) }
+     try
+      (let jessie_<somenum> =
+      (C_1:
+      (C_2:
+      begin
+        (let jessie_<somenum> = (pointeur := Chaine1) in void);
+       (let jessie_<somenum> = (source := Chaine2) in void);
+       (loop_1:
+       while true do
+       { invariant (JC_<somenum>: true) variant (0) }
+        begin
+          [ { } unit { true } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit { true } ];
-           try
             (let jessie_<somenum> =
+            (C_6:
+            (C_8:
+            (C_10:
             begin
-              (let jessie_<somenum> =
-              (C_6:
-              (C_8:
-              (C_10:
-              begin
-                (if ((neq_int_ (integer_of_int8 (C_3:
-                                                (JC_<somenum>:
-                                                (((acc_ char_P_Chaine2_2_alloc_table) char_P_char_M_Chaine2_2) !source))))) (0))
-                then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
-               (let jessie_<somenum> =
-               (C_4:
-               (JC_<somenum>:
-               (((acc_ char_P_Chaine2_2_alloc_table) char_P_char_M_Chaine2_2) !source))) in
-               (let jessie_<somenum> = !pointeur in
-               (JC_<somenum>:
-               ((((upd_ char_P_Chaine1_1_alloc_table) char_P_char_M_Chaine1_1) jessie_<somenum>) jessie_<somenum>))));
-               (let jessie_<somenum> =
-               (pointeur := (C_7: ((shift !pointeur) (1)))) in void);
-               (source := (C_9: ((shift !source) (1)))); !source end))) in
-              void); (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
-      (let jessie_<somenum> = !pointeur in
-      (JC_<somenum>:
-      ((((upd_ char_P_Chaine1_1_alloc_table) char_P_char_M_Chaine1_1) jessie_<somenum>) jessie_<somenum>))));
-      (raise Return) end))))); (raise Return) end with Return -> void end)
+              (if ((neq_int_ (integer_of_int8 (C_3:
+                                              (JC_<somenum>:
+                                              (((acc_ char_P_Chaine2_2_alloc_table) char_P_char_M_Chaine2_2) !source))))) (0))
+              then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
+             (let jessie_<somenum> =
+             (C_4:
+             (JC_<somenum>:
+             (((acc_ char_P_Chaine2_2_alloc_table) char_P_char_M_Chaine2_2) !source))) in
+             (let jessie_<somenum> = !pointeur in
+             (JC_<somenum>:
+             ((((upd_ char_P_Chaine1_1_alloc_table) char_P_char_M_Chaine1_1) jessie_<somenum>) jessie_<somenum>))));
+             (let jessie_<somenum> = (pointeur := (C_7: ((shift !pointeur) (1)))) in
+             void); (source := (C_9: ((shift !source) (1)))); !source end))) in
+            void); (raise (Loop_continue_exc void)) end in void) with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break:
+      (C_12:
+      begin
+        void;
+       (let jessie_<somenum> = (safe_int8_of_integer_ (0)) in
+       (let jessie_<somenum> = !pointeur in
+       (JC_<somenum>:
+       ((((upd_ char_P_Chaine1_1_alloc_table) char_P_char_M_Chaine1_1) jessie_<somenum>) jessie_<somenum>))));
+       (raise Return) end)) end)); (raise Return) end with Return -> void end)
   { true }
 
 
@@ -456,30 +455,30 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/StrCpy_po5.why">
-      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "44" begin = "26" end = "73"/>
+      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "43" begin = "23" end = "70"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/StrCpy_po6.why">
-      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "44" begin = "26" end = "73"/>
+      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "43" begin = "23" end = "70"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/StrCpy_po7.why">
-      <location file = "why/StrCpy.why" line = "329" begin = "44" end = "45"/>
+      <location file = "why/StrCpy.why" line = "328" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/StrCpy_po8.why">
-      <location file = "why/StrCpy.why" line = "329" begin = "44" end = "45"/>
+      <location file = "why/StrCpy.why" line = "328" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/StrCpy_po9.why">
-      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "52" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "50" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/StrCpy_po10.why">
-      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "52" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/StrCpy.jessie/StrCpy.jc" line = "50" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

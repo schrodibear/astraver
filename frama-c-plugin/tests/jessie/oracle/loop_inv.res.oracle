@@ -41,23 +41,21 @@ behavior default:
   ensures (C_9 : (i == 0));
 {  
    {  
+      loop 
+      behavior default:
+        invariant (C_2 : (i >= 0));
+      variant (C_1 : i);
+      while (true)
       {  
-         loop 
-         behavior default:
-           invariant (C_2 : (i >= 0));
-         variant (C_1 : i);
-         while (true)
-         {  
-            {  (if (i > 0) then () else 
-               (goto while_0_break));
-               
-               {  (if (i >= c) then (C_8 : (i = (C_7 : ((C_6 : (i - c)) :> int32)))) else 
-                  (C_5 : (i = (C_4 : ((C_3 : (i - 1)) :> int32)))))
-               }
+         {  (if (i > 0) then () else 
+            (goto while_0_break));
+            
+            {  (if (i >= c) then (C_8 : (i = (C_7 : ((C_6 : (i - c)) :> int32)))) else 
+               (C_5 : (i = (C_4 : ((C_3 : (i - 1)) :> int32)))))
             }
-         };
-         (while_0_break : ())
+         }
       };
+      (while_0_break : ());
       
       (return ())
    }
@@ -388,9 +386,9 @@ let f_ensures_default =
                 !i end)) end in void); (raise (Loop_continue_exc void)) end in
            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end in void) with
-      Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-    (raise Return); (raise Return) end with Return -> void end)
-  { (JC_<somenum>: eq_int(integer_of_int32(i), (0))) }
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break: begin   void; (raise Return) end) end; (raise Return)
+   end with Return -> void end) { (JC_<somenum>: eq_int(integer_of_int32(i), (0))) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -436,8 +434,9 @@ let f_safety =
                 !i end)) end in void); (raise (Loop_continue_exc void)) end in
            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end in void) with
-      Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-    (raise Return); (raise Return) end with Return -> void end) { true }
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break: begin   void; (raise Return) end) end; (raise Return)
+   end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C loop_inv.jessie --quiet -f loop_inv.makefile project

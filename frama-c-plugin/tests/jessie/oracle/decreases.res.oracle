@@ -99,21 +99,19 @@ behavior default:
       } else ());
       (C_26 : (n_1 = (C_25 : f((C_24 : (x - (2.0 :> double)))))));
       
+      loop 
+      variant (C_27 : x) for R;
+      while (true)
       {  
-         loop 
-         variant (C_27 : x) for R;
-         while (true)
-         {  
-            {  (if (x >= (10.0 :> double)) then () else 
-               (goto while_0_break));
-               
-               {  (C_29 : (n_1 = (C_28 : (n_1 + 1))));
-                  (C_31 : (x = (C_30 : (x - (1.0 :> double)))))
-               }
+         {  (if (x >= (10.0 :> double)) then () else 
+            (goto while_0_break));
+            
+            {  (C_29 : (n_1 = (C_28 : (n_1 + 1))));
+               (C_31 : (x = (C_30 : (x - (1.0 :> double)))))
             }
-         };
-         (while_0_break : ())
+         }
       };
+      (while_0_break : ());
       (C_32 : (__retres_1 = n_1));
       (return_label : 
       (return __retres_1))
@@ -431,30 +429,29 @@ let f_ensures_default =
      (let __retres_1 = ref (any_int void) in
      try
       (let jessie_<somenum> =
-      (C_21:
-      (C_22:
-      (C_26:
-      (C_32:
       begin
-        (let jessie_<somenum> = (n_1 := (0)) in void);
-       (let jessie_<somenum> = (x_1 := y_0) in void);
-       (if ((le_double !x_1) (double_of_real_exact 1.0))
-       then
-        (let jessie_<somenum> =
-        (C_23:
-        begin
-          (let jessie_<somenum> = (__retres_1 := !n_1) in void);
-         (raise (Return_label_exc void)) end) in void) else void);
-       (let jessie_<somenum> =
-       (n_1 := (C_25:
-               (let jessie_<somenum> =
-               (C_24:
-               (JC_<somenum>:
-               (((sub_double_safe nearest_even) !x_1) (double_of_real_exact 2.0)))) in
-               (JC_<somenum>: (f jessie_<somenum>))))) in void);
-       try
-        (let jessie_<somenum> =
-        begin
+        try
+         (let jessie_<somenum> =
+         (C_21:
+         (C_22:
+         (C_26:
+         begin
+           (let jessie_<somenum> = (n_1 := (0)) in void);
+          (let jessie_<somenum> = (x_1 := y_0) in void);
+          (if ((le_double !x_1) (double_of_real_exact 1.0))
+          then
+           (let jessie_<somenum> =
+           (C_23:
+           begin
+             (let jessie_<somenum> = (__retres_1 := !n_1) in void);
+            (raise (Return_label_exc void)) end) in void) else void);
+          (let jessie_<somenum> =
+          (n_1 := (C_25:
+                  (let jessie_<somenum> =
+                  (C_24:
+                  (JC_<somenum>:
+                  (((sub_double_safe nearest_even) !x_1) (double_of_real_exact 2.0)))) in
+                  (JC_<somenum>: (f jessie_<somenum>))))) in void);
           (loop_2:
           while true do
           { invariant (JC_<somenum>: true)  }
@@ -478,10 +475,12 @@ let f_ensures_default =
                         (((sub_double_safe nearest_even) !x_1) (double_of_real_exact 1.0)))));
                 !x_1 end)) in void); (raise (Loop_continue_exc void)) end in
              void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end in void) with
-        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-       (let jessie_<somenum> = (__retres_1 := !n_1) in void);
-       (raise (Return_label_exc void)) end)))) in void) with
+          (raise (Goto_while_0_break_exc void)) end))) in void) with
+         Goto_while_0_break_exc jessie_<somenum> ->
+         (let jessie_<somenum> =
+         (while_0_break:
+         (C_32: begin   void; (__retres_1 := !n_1); !__retres_1 end)) in
+         void) end; (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_1); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
@@ -498,34 +497,33 @@ let f_safety =
      (let __retres_1 = ref (any_int void) in
      try
       (let jessie_<somenum> =
-      (C_21:
-      (C_22:
-      (C_26:
-      (C_32:
       begin
-        (let jessie_<somenum> = (n_1 := (0)) in void);
-       (let jessie_<somenum> = (x_1 := y_0) in void);
-       (if ((le_double !x_1) (double_of_real_exact 1.0))
-       then
-        (let jessie_<somenum> =
-        (C_23:
-        begin
-          (let jessie_<somenum> = (__retres_1 := !n_1) in void);
-         (raise (Return_label_exc void)) end) in void) else void);
-       (let jessie_<somenum> =
-       (n_1 := (C_25:
-               (let jessie_<somenum> =
-               (C_24:
-               (JC_<somenum>:
-               (((sub_double nearest_even) !x_1) (double_of_real_exact 2.0)))) in
-               (JC_<somenum>:
-               (check
-               { R(double_value((JC_<somenum> : jessie_<somenum>)),
-                 double_value((JC_<somenum> : y_0))) };
-               (JC_<somenum>: (f_requires jessie_<somenum>))))))) in void);
-       try
-        (let jessie_<somenum> =
-        begin
+        try
+         (let jessie_<somenum> =
+         (C_21:
+         (C_22:
+         (C_26:
+         begin
+           (let jessie_<somenum> = (n_1 := (0)) in void);
+          (let jessie_<somenum> = (x_1 := y_0) in void);
+          (if ((le_double !x_1) (double_of_real_exact 1.0))
+          then
+           (let jessie_<somenum> =
+           (C_23:
+           begin
+             (let jessie_<somenum> = (__retres_1 := !n_1) in void);
+            (raise (Return_label_exc void)) end) in void) else void);
+          (let jessie_<somenum> =
+          (n_1 := (C_25:
+                  (let jessie_<somenum> =
+                  (C_24:
+                  (JC_<somenum>:
+                  (((sub_double nearest_even) !x_1) (double_of_real_exact 2.0)))) in
+                  (JC_<somenum>:
+                  (check
+                  { R(double_value((JC_<somenum> : jessie_<somenum>)),
+                    double_value((JC_<somenum> : y_0))) };
+                  (JC_<somenum>: (f_requires jessie_<somenum>))))))) in void);
           (loop_1:
           while true do
           { invariant (JC_<somenum>: true) variant (JC_<somenum> : x_1) for R }
@@ -549,10 +547,12 @@ let f_safety =
                         (((sub_double nearest_even) !x_1) (double_of_real_exact 1.0)))));
                 !x_1 end)) in void); (raise (Loop_continue_exc void)) end in
              void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end in void) with
-        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-       (let jessie_<somenum> = (__retres_1 := !n_1) in void);
-       (raise (Return_label_exc void)) end)))) in void) with
+          (raise (Goto_while_0_break_exc void)) end))) in void) with
+         Goto_while_0_break_exc jessie_<somenum> ->
+         (let jessie_<somenum> =
+         (while_0_break:
+         (C_32: begin   void; (__retres_1 := !n_1); !__retres_1 end)) in
+         void) end; (raise (Return_label_exc void)) end in void) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_1); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { true }
@@ -639,11 +639,11 @@ why --project [...] why/decreases.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/decreases_po9.why">
-      <location file = "why/decreases.why" line = "500" begin = "28" end = "72"/>
+      <location file = "why/decreases.why" line = "502" begin = "28" end = "72"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/decreases_po10.why">
-      <location file = "why/decreases.why" line = "500" begin = "28" end = "72"/>
+      <location file = "why/decreases.why" line = "502" begin = "28" end = "72"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/decreases_po11.why">
@@ -662,7 +662,7 @@ text = "UserCall"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/decreases_po5.why">
-      <location file = "why/decreases.why" line = "401" begin = "17" end = "99"/>
+      <location file = "why/decreases.why" line = "404" begin = "20" end = "105"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/decreases_po6.why">

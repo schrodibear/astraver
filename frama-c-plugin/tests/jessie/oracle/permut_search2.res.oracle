@@ -67,20 +67,18 @@ behavior default:
    
    {  (C_1 : (idx = 0));
       
+      loop 
+      behavior default:
+        invariant (C_2 : ((C_3 : (0 <= idx)) &&
+                           (C_4 : (idx <= permut_size{Here}(arr)))));
+      while (true)
       {  
-         loop 
-         behavior default:
-           invariant (C_2 : ((C_3 : (0 <= idx)) &&
-                              (C_4 : (idx <= permut_size{Here}(arr)))));
-         while (true)
-         {  
-            {  (if ((C_7 : (C_6 : (arr + idx)).int_M) == v) then 
-               {  (C_5 : (__retres = idx));
-                  
-                  (goto return_label)
-               } else ());
-               (C_10 : (idx = (C_9 : (C_8 : (arr + idx)).int_M)))
-            }
+         {  (if ((C_7 : (C_6 : (arr + idx)).int_M) == v) then 
+            {  (C_5 : (__retres = idx));
+               
+               (goto return_label)
+            } else ());
+            (C_10 : (idx = (C_9 : (C_8 : (arr + idx)).int_M)))
          }
       };
       (return_label : 

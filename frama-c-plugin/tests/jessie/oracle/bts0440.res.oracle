@@ -41,33 +41,31 @@ behavior default:
    
    {  (C_1 : (r = 1));
       
+      loop 
+      while (true)
       {  
-         loop 
-         while (true)
-         {  
-            {  (if (n > 0) then () else 
-               (goto while_0_break));
+         {  (if (n > 0) then () else 
+            (goto while_0_break));
+            
+            {  
+               {  
+                  (assert for default: (C_2 : (n > 0)));
+                  ()
+               };
+               (before : 
+               {  (C_3 : (tmp = n));
+                  (C_6 : (n = (C_5 : ((C_4 : (n - 1)) :> int32))));
+                  (C_9 : (r = (C_8 : ((C_7 : (r * tmp)) :> int32))))
+               });
                
                {  
-                  {  
-                     (assert for default: (C_2 : (n > 0)));
-                     ()
-                  };
-                  (before : 
-                  {  (C_3 : (tmp = n));
-                     (C_6 : (n = (C_5 : ((C_4 : (n - 1)) :> int32))));
-                     (C_9 : (r = (C_8 : ((C_7 : (r * tmp)) :> int32))))
-                  });
-                  
-                  {  
-                     (assert for default: (C_10 : (r == \at((r * n),before))));
-                     ()
-                  }
+                  (assert for default: (C_10 : (r == \at((r * n),before))));
+                  ()
                }
             }
-         };
-         (while_0_break : ())
+         }
       };
+      (while_0_break : ());
       
       (return r)
    }
@@ -354,54 +352,52 @@ let fact_ensures_default =
    begin
      (let r = ref (any_int32 void) in
      (let tmp = ref (any_int32 void) in
-     (C_1:
-     begin
-       (let jessie_<somenum> = (r := (safe_int32_of_integer_ (1))) in void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_2:
-         while true do
-         { invariant (JC_<somenum>: true)  }
+     try
+      (let jessie_<somenum> =
+      (C_1:
+      begin
+        (let jessie_<somenum> = (r := (safe_int32_of_integer_ (1))) in void);
+       (loop_2:
+       while true do
+       { invariant (JC_<somenum>: true)  }
+        begin
+          [ { } unit { true } ];
+         try
+          (let jessie_<somenum> =
+          (before:
           begin
-            [ { } unit { true } ];
-           try
+            (if ((gt_int_ (integer_of_int32 !mutable_n)) (0)) then void
+            else
+             (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
+           (assert { (JC_<somenum>: gt_int(integer_of_int32(mutable_n), (0))) };
+           void); void;
+           (let jessie_<somenum> =
+           (C_3:
+           (C_6:
+           (C_9:
+           begin
+             (let jessie_<somenum> = (tmp := !mutable_n) in void);
             (let jessie_<somenum> =
-            (before:
-            begin
-              (if ((gt_int_ (integer_of_int32 !mutable_n)) (0)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
-             (assert { (JC_<somenum>: gt_int(integer_of_int32(mutable_n), (0))) };
-             void); void;
-             (let jessie_<somenum> =
-             (C_3:
-             (C_6:
-             (C_9:
-             begin
-               (let jessie_<somenum> = (tmp := !mutable_n) in void);
-              (let jessie_<somenum> =
-              (mutable_n := (C_5:
-                            (safe_int32_of_integer_ (C_4:
-                                                    ((sub_int (integer_of_int32 !mutable_n)) (1)))))) in
-              void);
-              (r := (C_8:
-                    (safe_int32_of_integer_ (C_7:
-                                            ((mul_int (integer_of_int32 !r)) 
-                                             (integer_of_int32 !tmp)))))); !r
-             end))) in void);
-             (assert
-             { (JC_<somenum>:
-               eq_int(integer_of_int32(r),
-               mul_int(integer_of_int32(r@before),
-               integer_of_int32(mutable_n@before)))) }; void); void;
-             (raise (Loop_continue_exc void)) end) in void) with
-            Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (return := !r); (raise Return) end))); absurd  end with Return ->
-   !return end))) { (JC_<somenum>: true) }
+            (mutable_n := (C_5:
+                          (safe_int32_of_integer_ (C_4:
+                                                  ((sub_int (integer_of_int32 !mutable_n)) (1)))))) in
+            void);
+            (r := (C_8:
+                  (safe_int32_of_integer_ (C_7:
+                                          ((mul_int (integer_of_int32 !r)) 
+                                           (integer_of_int32 !tmp)))))); !r
+           end))) in void);
+           (assert
+           { (JC_<somenum>:
+             eq_int(integer_of_int32(r),
+             mul_int(integer_of_int32(r@before),
+             integer_of_int32(mutable_n@before)))) }; void); void;
+           (raise (Loop_continue_exc void)) end) in void) with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break: begin   void; (return := !r); (raise Return) end) end));
+    absurd  end with Return -> !return end))) { (JC_<somenum>: true) }
 
 let fact_safety =
  fun (n : int32) ->
@@ -413,55 +409,54 @@ let fact_safety =
    begin
      (let r = ref (any_int32 void) in
      (let tmp = ref (any_int32 void) in
-     (C_1:
-     begin
-       (let jessie_<somenum> = (r := (safe_int32_of_integer_ (1))) in void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_1:
-         while true do
-         { invariant (JC_<somenum>: true) variant (0) }
+     try
+      (let jessie_<somenum> =
+      (C_1:
+      begin
+        (let jessie_<somenum> = (r := (safe_int32_of_integer_ (1))) in void);
+       (loop_1:
+       while true do
+       { invariant (JC_<somenum>: true) variant (0) }
+        begin
+          [ { } unit { true } ];
+         try
+          (let jessie_<somenum> =
+          (before:
           begin
-            [ { } unit { true } ];
-           try
+            (if ((gt_int_ (integer_of_int32 !mutable_n)) (0)) then void
+            else
+             (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
+           [ { } unit reads mutable_n
+             { (JC_<somenum>: gt_int(integer_of_int32(mutable_n), (0))) } ]; void;
+           (let jessie_<somenum> =
+           (C_3:
+           (C_6:
+           (C_9:
+           begin
+             (let jessie_<somenum> = (tmp := !mutable_n) in void);
             (let jessie_<somenum> =
-            (before:
-            begin
-              (if ((gt_int_ (integer_of_int32 !mutable_n)) (0)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
-             [ { } unit reads mutable_n
-               { (JC_<somenum>: gt_int(integer_of_int32(mutable_n), (0))) } ]; void;
-             (let jessie_<somenum> =
-             (C_3:
-             (C_6:
-             (C_9:
-             begin
-               (let jessie_<somenum> = (tmp := !mutable_n) in void);
-              (let jessie_<somenum> =
-              (mutable_n := (C_5:
-                            (JC_<somenum>:
-                            (int32_of_integer_ (C_4:
-                                               ((sub_int (integer_of_int32 !mutable_n)) (1))))))) in
-              void);
-              (r := (C_8:
-                    (JC_<somenum>:
-                    (int32_of_integer_ (C_7:
-                                       ((mul_int (integer_of_int32 !r)) 
-                                        (integer_of_int32 !tmp))))))); !r end))) in
-             void);
-             [ { } unit reads mutable_n,r
-               { (JC_<somenum>:
-                 eq_int(integer_of_int32(r),
-                 mul_int(integer_of_int32(r@before),
-                 integer_of_int32(mutable_n@before)))) } ]; void;
-             (raise (Loop_continue_exc void)) end) in void) with
-            Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (return := !r); (raise Return) end))); absurd  end with Return ->
-   !return end))) { true }
+            (mutable_n := (C_5:
+                          (JC_<somenum>:
+                          (int32_of_integer_ (C_4:
+                                             ((sub_int (integer_of_int32 !mutable_n)) (1))))))) in
+            void);
+            (r := (C_8:
+                  (JC_<somenum>:
+                  (int32_of_integer_ (C_7:
+                                     ((mul_int (integer_of_int32 !r)) 
+                                      (integer_of_int32 !tmp))))))); !r end))) in
+           void);
+           [ { } unit reads mutable_n,r
+             { (JC_<somenum>:
+               eq_int(integer_of_int32(r),
+               mul_int(integer_of_int32(r@before),
+               integer_of_int32(mutable_n@before)))) } ]; void;
+           (raise (Loop_continue_exc void)) end) in void) with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break: begin   void; (return := !r); (raise Return) end) end));
+    absurd  end with Return -> !return end))) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0440.jessie --quiet -f bts0440.makefile project
@@ -491,11 +486,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0440_po7.why">
-      <location file = "why/bts0440.why" line = "349" begin = "44" end = "45"/>
+      <location file = "why/bts0440.why" line = "346" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0440_po8.why">
-      <location file = "why/bts0440.why" line = "349" begin = "44" end = "45"/>
+      <location file = "why/bts0440.why" line = "346" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

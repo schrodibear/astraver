@@ -343,36 +343,32 @@ behavior default:
          (C_121 : (V34 = G23));
          
          {  
+            loop 
+            while (true)
             {  
-               loop 
-               while (true)
-               {  
-                  {  (if (V34 <= V35) then () else 
-                     (goto while_0_break));
-                     
-                     {  (C_124 : (V24 = (C_123 : ((C_122 : ptr_bas_loc_0.int_M) :> float))));
-                        (C_126 : (ptr_bas_loc_0 = (C_125 : (ptr_bas_loc_0 +
-                                                             1))));
-                        (C_132 : (V27 = (C_131 : ((C_130 : ((C_129 : 
-                                                            (V24 -
-                                                              V26)) +
-                                                             (C_128 : 
-                                                             (V31 *
-                                                               V28)))) +
-                                                   (C_127 : (V32 * V29))))));
-                        (if ((C_137 : (V27 :> double)) >= (0.0 :> double)) then 
-                        (C_136 : (V30 = (C_135 : (V30 + V27)))) else 
-                        (C_134 : (V30 = (C_133 : (V30 - V27)))));
-                        (C_138 : (V26 = V25));
-                        (C_139 : (V25 = V24));
-                        (C_140 : (V29 = V28));
-                        (C_141 : (V28 = V27));
-                        (C_144 : (V34 = (C_143 : ((C_142 : (V34 + 1)) :> int32))))
-                     }
+               {  (if (V34 <= V35) then () else 
+                  (goto while_0_break));
+                  
+                  {  (C_124 : (V24 = (C_123 : ((C_122 : ptr_bas_loc_0.int_M) :> float))));
+                     (C_126 : (ptr_bas_loc_0 = (C_125 : (ptr_bas_loc_0 + 1))));
+                     (C_132 : (V27 = (C_131 : ((C_130 : ((C_129 : (V24 - V26)) +
+                                                          (C_128 : (V31 *
+                                                                    V28)))) +
+                                                (C_127 : (V32 * V29))))));
+                     (if ((C_137 : (V27 :> double)) >= (0.0 :> double)) then 
+                     (C_136 : (V30 = (C_135 : (V30 + V27)))) else (C_134 : (V30 = 
+                                                                  (C_133 : 
+                                                                  (V30 -
+                                                                    V27)))));
+                     (C_138 : (V26 = V25));
+                     (C_139 : (V25 = V24));
+                     (C_140 : (V29 = V28));
+                     (C_141 : (V28 = V27));
+                     (C_144 : (V34 = (C_143 : ((C_142 : (V34 + 1)) :> int32))))
                   }
-               };
-               (while_0_break : ())
-            }
+               }
+            };
+            (while_0_break : ())
          };
          (if (V35 >= (C_205 : ((C_204 : (V33 - 2)) :> int32))) then 
          {  (C_161 : (V24 = (C_160 : ((C_159 : ptr_bas_loc_0.int_M) :> float))));
@@ -434,20 +430,18 @@ behavior default:
       (C_214 : (V38 = 0));
       
       {  
+         loop 
+         while (true)
          {  
-            loop 
-            while (true)
-            {  
-               {  (if (V38 < G4) then () else 
-                  (goto while_1_break));
-                  
-                  {  (C_215 : F7());
-                     (C_218 : (V38 = (C_217 : ((C_216 : (V38 + 1)) :> int32))))
-                  }
+            {  (if (V38 < G4) then () else 
+               (goto while_0_break));
+               
+               {  (C_215 : F7());
+                  (C_218 : (V38 = (C_217 : ((C_216 : (V38 + 1)) :> int32))))
                }
-            };
-            (while_1_break : ())
-         }
+            }
+         };
+         (while_0_break : ())
       };
       
       (return ())
@@ -497,8 +491,6 @@ logic G8:  -> float_P pointer
 logic G9:  -> float_P pointer
 
 exception Goto_while_0_break_exc of unit
-
-exception Goto_while_1_break_exc of unit
 
 exception Loop_continue_exc of unit
 
@@ -2788,15 +2780,15 @@ let main_ensures_default =
                 (if ((lt_int_ (integer_of_int32 !V38)) (integer_of_int32 !G4))
                 then void
                 else
-                 (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
+                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                  void)); (JC_<somenum>: (F7 void));
                (V38 := (C_217:
                        (safe_int32_of_integer_ (C_216:
                                                ((add_int (integer_of_int32 !V38)) (1))))));
                !V38 end)) in void); (raise (Loop_continue_exc void)) end in
             void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_1_break_exc void)) end in void) with
-       Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
+        (raise (Goto_while_0_break_exc void)) end in void) with
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (raise Return) end))))); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
@@ -2856,7 +2848,7 @@ let main_safety =
                 (if ((lt_int_ (integer_of_int32 !V38)) (integer_of_int32 !G4))
                 then void
                 else
-                 (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
+                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                  void)); (JC_<somenum>: (F7_requires void));
                (V38 := (C_217:
                        (JC_<somenum>:
@@ -2864,8 +2856,8 @@ let main_safety =
                                           ((add_int (integer_of_int32 !V38)) (1)))))));
                !V38 end)) in void); (raise (Loop_continue_exc void)) end in
             void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_1_break_exc void)) end in void) with
-       Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
+        (raise (Goto_while_0_break_exc void)) end in void) with
+       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (raise Return) end))))); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
@@ -2933,52 +2925,52 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po179.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "427" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "423" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po180.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "427" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "423" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po181.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "427" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "423" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po182.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "427" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "423" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po183.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "427" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "423" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po184.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "438" begin = "30" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "433" begin = "27" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po185.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "438" begin = "30" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "433" begin = "27" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po186.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "438" begin = "30" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "433" begin = "27" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po187.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "438" begin = "30" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "433" begin = "27" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po188.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "438" begin = "30" end = "34"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "433" begin = "27" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2993,11 +2985,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po191.why">
-      <location file = "why/renamed1.why" line = "2390" begin = "45" end = "46"/>
+      <location file = "why/renamed1.why" line = "2388" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po192.why">
-      <location file = "why/renamed1.why" line = "2390" begin = "45" end = "46"/>
+      <location file = "why/renamed1.why" line = "2388" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po193.why">
@@ -3126,11 +3118,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po128.why">
-      <location file = "why/renamed1.why" line = "2029" begin = "48" end = "49"/>
+      <location file = "why/renamed1.why" line = "2027" begin = "48" end = "49"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po129.why">
-      <location file = "why/renamed1.why" line = "2029" begin = "48" end = "49"/>
+      <location file = "why/renamed1.why" line = "2027" begin = "48" end = "49"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po130.why">

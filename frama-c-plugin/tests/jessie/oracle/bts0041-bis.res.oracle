@@ -435,25 +435,23 @@ behavior default:
    
    {  (C_11 : (i = 0));
       
+      loop 
+      behavior default:
+        
+        assigns (a + [..]).int_M;
+      behavior default:
+        invariant (C_12 : ((C_13 : (0 <= i)) && (C_14 : (i <= 12))));
+      while (true)
       {  
-         loop 
-         behavior default:
-           
-           assigns (a + [..]).int_M;
-         behavior default:
-           invariant (C_12 : ((C_13 : (0 <= i)) && (C_14 : (i <= 12))));
-         while (true)
-         {  
-            {  (if (i < 12) then () else 
-               (goto while_0_break));
-               
-               {  (C_16 : ((C_15 : (a + i).int_M) = 0x45))
-               };
-               (C_18 : (i = (C_17 : (i + 1))))
-            }
-         };
-         (while_0_break : ())
+         {  (if (i < 12) then () else 
+            (goto while_0_break));
+            
+            {  (C_16 : ((C_15 : (a + i).int_M) = 0x45))
+            };
+            (C_18 : (i = (C_17 : (i + 1))))
+         }
       };
+      (while_0_break : ());
       
       (return ())
    }
@@ -468,27 +466,24 @@ behavior default:
    
    {  (C_20 : (i_0 = 0));
       
+      loop 
+      behavior default:
+        
+        assigns (c + [..]).char_xM;
+      behavior default:
+        invariant (C_21 : ((C_22 : (0 <= i_0)) && (C_23 : (i_0 <= 12))));
+      while (true)
       {  
-         loop 
-         behavior default:
-           
-           assigns (c + [..]).char_xM;
-         behavior default:
-           invariant (C_21 : ((C_22 : (0 <= i_0)) && (C_23 : (i_0 <= 12))));
-         while (true)
-         {  
-            {  (if (i_0 < 12) then () else 
-               (goto while_1_break));
-               
-               {  (C_26 : ((C_25 : (c + i_0).char_xM) = (C_24 : strndup(
-                                                        __string_something,
-                                                        12))))
-               };
-               (C_28 : (i_0 = (C_27 : (i_0 + 1))))
-            }
-         };
-         (while_1_break : ())
+         {  (if (i_0 < 12) then () else 
+            (goto while_0_break));
+            
+            {  (C_26 : ((C_25 : (c + i_0).char_xM) = (C_24 : strndup(
+                                                     __string_something, 12))))
+            };
+            (C_28 : (i_0 = (C_27 : (i_0 + 1))))
+         }
       };
+      (while_0_break : ());
       
       (return ())
    }
@@ -518,25 +513,23 @@ behavior default:
    
    {  (C_33 : (j = 0));
       
+      loop 
+      behavior default:
+        invariant (C_34 : (0 <= j));
+      behavior default:
+        
+        assigns (a_0 + [..]).int_M;
+      while (true)
       {  
-         loop 
-         behavior default:
-           invariant (C_34 : (0 <= j));
-         behavior default:
-           
-           assigns (a_0 + [..]).int_M;
-         while (true)
-         {  
-            {  (if (j < aLength) then () else 
-               (goto while_2_break));
-               
-               {  (C_37 : ((C_36 : (C_35 : (a_0 + j)).int_M) = 0))
-               };
-               (C_39 : (j = (C_38 : (j + 1))))
-            }
-         };
-         (while_2_break : ())
+         {  (if (j < aLength) then () else 
+            (goto while_0_break));
+            
+            {  (C_37 : ((C_36 : (C_35 : (a_0 + j)).int_M) = 0))
+            };
+            (C_39 : (j = (C_38 : (j + 1))))
+         }
       };
+      (while_0_break : ());
       
       (return ())
    }
@@ -563,10 +556,6 @@ type unsigned_short_P
 type void_P
 
 exception Goto_while_0_break_exc of unit
-
-exception Goto_while_1_break_exc of unit
-
-exception Goto_while_2_break_exc of unit
 
 exception Loop_continue_exc of unit
 
@@ -2391,58 +2380,57 @@ let assign_char_ensures_default =
   try
    begin
      (let i_0_0 = ref (any_int void) in
-     (C_20:
-     begin
-       (let jessie_<somenum> = (i_0_0 := (0)) in void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_4:
-         while true do
-         { invariant
-             ((JC_<somenum>:
-              ((JC_<somenum>: le_int((0), i_0_0))
-              and (JC_<somenum>: le_int(i_0_0, (12)))))
-             and ((JC_<somenum>:
-                  not_assigns(char_xP_c_3_alloc_table@loop_4,
-                  char_xP_char_xM_c_3@loop_4, char_xP_char_xM_c_3,
-                  pset_all(pset_singleton(c))))
-                 and (JC_<somenum>:
-                     not_assigns(char_xP_c_3_alloc_table@init,
-                     char_xP_char_xM_c_3@init, char_xP_char_xM_c_3,
-                     pset_all(pset_singleton(c@init))))))  }
+     try
+      (let jessie_<somenum> =
+      (C_20:
+      begin
+        (let jessie_<somenum> = (i_0_0 := (0)) in void);
+       (loop_4:
+       while true do
+       { invariant
+           ((JC_<somenum>:
+            ((JC_<somenum>: le_int((0), i_0_0)) and (JC_<somenum>: le_int(i_0_0, (12)))))
+           and ((JC_<somenum>:
+                not_assigns(char_xP_c_3_alloc_table@loop_4,
+                char_xP_char_xM_c_3@loop_4, char_xP_char_xM_c_3,
+                pset_all(pset_singleton(c))))
+               and (JC_<somenum>:
+                   not_assigns(char_xP_c_3_alloc_table@init,
+                   char_xP_char_xM_c_3@init, char_xP_char_xM_c_3,
+                   pset_all(pset_singleton(c@init))))))  }
+        begin
+          [ { } unit { true } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit { true } ];
-           try
             (let jessie_<somenum> =
+            (C_28:
             begin
-              (let jessie_<somenum> =
-              (C_28:
-              begin
-                (if ((lt_int_ !i_0_0) (12)) then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
-                 void));
-               (let jessie_<somenum> =
-               (C_26:
-               (let jessie_<somenum> =
-               (C_24:
-               (let jessie_<somenum> = __string_something in
-               (let jessie_<somenum> = (12) in
-               (JC_<somenum>:
-               ((((((strndup jessie_<somenum>) jessie_<somenum>) !char_P_c_75_alloc_table) !char_P___string_something_1_alloc_table) !char_P_char_M_c_75) !char_P_char_M___string_something_1))))) in
-               (let jessie_<somenum> = c in
-               (let jessie_<somenum> = !i_0_0 in
-               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-               begin
-                 (((safe_upd_ char_xP_char_xM_c_3) jessie_<somenum>) jessie_<somenum>);
-                jessie_<somenum> end))))) in void);
-               (i_0_0 := (C_27: ((add_int !i_0_0) (1)))); !i_0_0 end) in
-              void); (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_1_break_exc void)) end in void) with
-       Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
-      (raise Return) end)); (raise Return) end with Return -> void end)
+              (if ((lt_int_ !i_0_0) (12)) then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void));
+             (let jessie_<somenum> =
+             (C_26:
+             (let jessie_<somenum> =
+             (C_24:
+             (let jessie_<somenum> = __string_something in
+             (let jessie_<somenum> = (12) in
+             (JC_<somenum>:
+             ((((((strndup jessie_<somenum>) jessie_<somenum>) !char_P_c_75_alloc_table) !char_P___string_something_1_alloc_table) !char_P_char_M_c_75) !char_P_char_M___string_something_1))))) in
+             (let jessie_<somenum> = c in
+             (let jessie_<somenum> = !i_0_0 in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             begin
+               (((safe_upd_ char_xP_char_xM_c_3) jessie_<somenum>) jessie_<somenum>);
+              jessie_<somenum> end))))) in void);
+             (i_0_0 := (C_27: ((add_int !i_0_0) (1)))); !i_0_0 end) in void);
+           (raise (Loop_continue_exc void)) end in void) with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break: begin   void; (raise Return) end) end); (raise Return)
+   end with Return -> void end)
   { (JC_<somenum>:
     not_assigns(char_xP_c_3_alloc_table@, char_xP_char_xM_c_3@,
     char_xP_char_xM_c_3, pset_all(pset_singleton(c@)))) }
@@ -2461,51 +2449,51 @@ let assign_char_safety =
   try
    begin
      (let i_0_0 = ref (any_int void) in
-     (C_20:
-     begin
-       (let jessie_<somenum> = (i_0_0 := (0)) in void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_3:
-         while true do
-         { invariant (JC_<somenum>: true) variant (0) }
+     try
+      (let jessie_<somenum> =
+      (C_20:
+      begin
+        (let jessie_<somenum> = (i_0_0 := (0)) in void);
+       (loop_3:
+       while true do
+       { invariant (JC_<somenum>: true) variant (0) }
+        begin
+          [ { } unit reads i_0_0
+            { (JC_<somenum>:
+              ((JC_<somenum>: le_int((0), i_0_0))
+              and (JC_<somenum>: le_int(i_0_0, (12))))) } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit reads i_0_0
-              { (JC_<somenum>:
-                ((JC_<somenum>: le_int((0), i_0_0))
-                and (JC_<somenum>: le_int(i_0_0, (12))))) } ];
-           try
             (let jessie_<somenum> =
+            (C_28:
             begin
-              (let jessie_<somenum> =
-              (C_28:
-              begin
-                (if ((lt_int_ !i_0_0) (12)) then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
-                 void));
-               (let jessie_<somenum> =
-               (C_26:
-               (let jessie_<somenum> =
-               (C_24:
-               (let jessie_<somenum> = __string_something in
-               (let jessie_<somenum> = (12) in
+              (if ((lt_int_ !i_0_0) (12)) then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void));
+             (let jessie_<somenum> =
+             (C_26:
+             (let jessie_<somenum> =
+             (C_24:
+             (let jessie_<somenum> = __string_something in
+             (let jessie_<somenum> = (12) in
+             (JC_<somenum>:
+             ((((((strndup_requires jessie_<somenum>) jessie_<somenum>) !char_P_c_75_alloc_table) !char_P___string_something_1_alloc_table) !char_P_char_M_c_75) !char_P_char_M___string_something_1))))) in
+             (let jessie_<somenum> = c in
+             (let jessie_<somenum> = !i_0_0 in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             begin
                (JC_<somenum>:
-               ((((((strndup_requires jessie_<somenum>) jessie_<somenum>) !char_P_c_75_alloc_table) !char_P___string_something_1_alloc_table) !char_P_char_M_c_75) !char_P_char_M___string_something_1))))) in
-               (let jessie_<somenum> = c in
-               (let jessie_<somenum> = !i_0_0 in
-               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-               begin
-                 (JC_<somenum>:
-                 (((((offset_upd_ !char_xP_c_3_alloc_table) char_xP_char_xM_c_3) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
-                jessie_<somenum> end))))) in void);
-               (i_0_0 := (C_27: ((add_int !i_0_0) (1)))); !i_0_0 end) in
-              void); (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_1_break_exc void)) end in void) with
-       Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
-      (raise Return) end)); (raise Return) end with Return -> void end)
+               (((((offset_upd_ !char_xP_c_3_alloc_table) char_xP_char_xM_c_3) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+              jessie_<somenum> end))))) in void);
+             (i_0_0 := (C_27: ((add_int !i_0_0) (1)))); !i_0_0 end) in void);
+           (raise (Loop_continue_exc void)) end in void) with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break: begin   void; (raise Return) end) end); (raise Return)
+   end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
@@ -2529,52 +2517,51 @@ let assign_int_ensures_default =
   try
    begin
      (let i_27 = ref (any_int void) in
-     (C_11:
-     begin
-       (let jessie_<somenum> = (i_27 := (0)) in void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_2:
-         while true do
-         { invariant
-             ((JC_<somenum>:
-              ((JC_<somenum>: le_int((0), i_27)) and (JC_<somenum>: le_int(i_27, (12)))))
-             and ((JC_<somenum>:
-                  not_assigns(int_P_a_2_alloc_table@loop_2,
-                  int_P_int_M_a_2@loop_2, int_P_int_M_a_2,
-                  pset_all(pset_singleton(a))))
-                 and (JC_<somenum>:
-                     not_assigns(int_P_a_2_alloc_table@init,
-                     int_P_int_M_a_2@init, int_P_int_M_a_2,
-                     pset_all(pset_singleton(a@init))))))  }
+     try
+      (let jessie_<somenum> =
+      (C_11:
+      begin
+        (let jessie_<somenum> = (i_27 := (0)) in void);
+       (loop_2:
+       while true do
+       { invariant
+           ((JC_<somenum>:
+            ((JC_<somenum>: le_int((0), i_27)) and (JC_<somenum>: le_int(i_27, (12)))))
+           and ((JC_<somenum>:
+                not_assigns(int_P_a_2_alloc_table@loop_2,
+                int_P_int_M_a_2@loop_2, int_P_int_M_a_2,
+                pset_all(pset_singleton(a))))
+               and (JC_<somenum>:
+                   not_assigns(int_P_a_2_alloc_table@init,
+                   int_P_int_M_a_2@init, int_P_int_M_a_2,
+                   pset_all(pset_singleton(a@init))))))  }
+        begin
+          [ { } unit { true } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit { true } ];
-           try
             (let jessie_<somenum> =
+            (C_18:
             begin
-              (let jessie_<somenum> =
-              (C_18:
-              begin
-                (if ((lt_int_ !i_27) (12)) then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
-               (let jessie_<somenum> =
-               (C_16:
-               (let jessie_<somenum> = (69) in
-               (let jessie_<somenum> = a in
-               (let jessie_<somenum> = !i_27 in
-               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-               begin
-                 (((safe_upd_ int_P_int_M_a_2) jessie_<somenum>) jessie_<somenum>);
-                jessie_<somenum> end))))) in void);
-               (i_27 := (C_17: ((add_int !i_27) (1)))); !i_27 end) in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (raise Return) end)); (raise Return) end with Return -> void end)
+              (if ((lt_int_ !i_27) (12)) then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void));
+             (let jessie_<somenum> =
+             (C_16:
+             (let jessie_<somenum> = (69) in
+             (let jessie_<somenum> = a in
+             (let jessie_<somenum> = !i_27 in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             begin
+               (((safe_upd_ int_P_int_M_a_2) jessie_<somenum>) jessie_<somenum>); jessie_<somenum>
+             end))))) in void); (i_27 := (C_17: ((add_int !i_27) (1))));
+             !i_27 end) in void); (raise (Loop_continue_exc void)) end in
+          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break: begin   void; (raise Return) end) end); (raise Return)
+   end with Return -> void end)
   { (JC_<somenum>:
     not_assigns(int_P_a_2_alloc_table@, int_P_int_M_a_2@, int_P_int_M_a_2,
     pset_all(pset_singleton(a@)))) }
@@ -2593,45 +2580,45 @@ let assign_int_safety =
   try
    begin
      (let i_27 = ref (any_int void) in
-     (C_11:
-     begin
-       (let jessie_<somenum> = (i_27 := (0)) in void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_1:
-         while true do
-         { invariant (JC_<somenum>: true) variant (0) }
+     try
+      (let jessie_<somenum> =
+      (C_11:
+      begin
+        (let jessie_<somenum> = (i_27 := (0)) in void);
+       (loop_1:
+       while true do
+       { invariant (JC_<somenum>: true) variant (0) }
+        begin
+          [ { } unit reads i_27
+            { (JC_<somenum>:
+              ((JC_<somenum>: le_int((0), i_27)) and (JC_<somenum>: le_int(i_27, (12))))) } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit reads i_27
-              { (JC_<somenum>:
-                ((JC_<somenum>: le_int((0), i_27)) and (JC_<somenum>: le_int(i_27, (12))))) } ];
-           try
             (let jessie_<somenum> =
+            (C_18:
             begin
-              (let jessie_<somenum> =
-              (C_18:
-              begin
-                (if ((lt_int_ !i_27) (12)) then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
-               (let jessie_<somenum> =
-               (C_16:
-               (let jessie_<somenum> = (69) in
-               (let jessie_<somenum> = a in
-               (let jessie_<somenum> = !i_27 in
-               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-               begin
-                 (JC_<somenum>:
-                 (((((offset_upd_ !int_P_a_2_alloc_table) int_P_int_M_a_2) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
-                jessie_<somenum> end))))) in void);
-               (i_27 := (C_17: ((add_int !i_27) (1)))); !i_27 end) in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
-       Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-      (raise Return) end)); (raise Return) end with Return -> void end)
+              (if ((lt_int_ !i_27) (12)) then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void));
+             (let jessie_<somenum> =
+             (C_16:
+             (let jessie_<somenum> = (69) in
+             (let jessie_<somenum> = a in
+             (let jessie_<somenum> = !i_27 in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             begin
+               (JC_<somenum>:
+               (((((offset_upd_ !int_P_a_2_alloc_table) int_P_int_M_a_2) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+              jessie_<somenum> end))))) in void);
+             (i_27 := (C_17: ((add_int !i_27) (1)))); !i_27 end) in void);
+           (raise (Loop_continue_exc void)) end in void) with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break: begin   void; (raise Return) end) end); (raise Return)
+   end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
@@ -2660,51 +2647,51 @@ let foo_ensures_default =
   try
    begin
      (let j_3 = ref (any_int void) in
-     (C_33:
-     begin
-       (let jessie_<somenum> = (j_3 := (0)) in void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_6:
-         while true do
-         { invariant
-             ((JC_<somenum>: le_int((0), j_3))
-             and ((JC_<somenum>:
-                  not_assigns(int_P_a_0_26_alloc_table@loop_6,
-                  int_P_int_M_a_0_26@loop_6, int_P_int_M_a_0_26,
-                  pset_all(pset_singleton(a_0))))
-                 and (JC_<somenum>:
-                     not_assigns(int_P_a_0_26_alloc_table@init,
-                     int_P_int_M_a_0_26@init, int_P_int_M_a_0_26,
-                     pset_all(pset_singleton(a_0@init))))))  }
+     try
+      (let jessie_<somenum> =
+      (C_33:
+      begin
+        (let jessie_<somenum> = (j_3 := (0)) in void);
+       (loop_6:
+       while true do
+       { invariant
+           ((JC_<somenum>: le_int((0), j_3))
+           and ((JC_<somenum>:
+                not_assigns(int_P_a_0_26_alloc_table@loop_6,
+                int_P_int_M_a_0_26@loop_6, int_P_int_M_a_0_26,
+                pset_all(pset_singleton(a_0))))
+               and (JC_<somenum>:
+                   not_assigns(int_P_a_0_26_alloc_table@init,
+                   int_P_int_M_a_0_26@init, int_P_int_M_a_0_26,
+                   pset_all(pset_singleton(a_0@init))))))  }
+        begin
+          [ { } unit { true } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit { true } ];
-           try
             (let jessie_<somenum> =
+            (C_39:
             begin
-              (let jessie_<somenum> =
-              (C_39:
-              begin
-                (if ((lt_int_ !j_3) aLength) then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_2_break_exc void)) in
-                 void));
-               (let jessie_<somenum> =
-               (C_37:
-               (let jessie_<somenum> = (0) in
-               (let jessie_<somenum> = a_0 in
-               (let jessie_<somenum> = !j_3 in
-               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-               begin
-                 (((safe_upd_ int_P_int_M_a_0_26) jessie_<somenum>) jessie_<somenum>);
-                jessie_<somenum> end))))) in void);
-               (j_3 := (C_38: ((add_int !j_3) (1)))); !j_3 end) in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_2_break_exc void)) end in void) with
-       Goto_while_2_break_exc jessie_<somenum> -> (while_2_break: void) end;
-      (raise Return) end)); (raise Return) end with Return -> void end)
+              (if ((lt_int_ !j_3) aLength) then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void));
+             (let jessie_<somenum> =
+             (C_37:
+             (let jessie_<somenum> = (0) in
+             (let jessie_<somenum> = a_0 in
+             (let jessie_<somenum> = !j_3 in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             begin
+               (((safe_upd_ int_P_int_M_a_0_26) jessie_<somenum>) jessie_<somenum>);
+              jessie_<somenum> end))))) in void);
+             (j_3 := (C_38: ((add_int !j_3) (1)))); !j_3 end) in void);
+           (raise (Loop_continue_exc void)) end in void) with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break: begin   void; (raise Return) end) end); (raise Return)
+   end with Return -> void end)
   { (JC_<somenum>:
     not_assigns(int_P_a_0_26_alloc_table@, int_P_int_M_a_0_26@,
     int_P_int_M_a_0_26, pset_all(pset_singleton(a_0@)))) }
@@ -2728,43 +2715,43 @@ let foo_safety =
   try
    begin
      (let j_3 = ref (any_int void) in
-     (C_33:
-     begin
-       (let jessie_<somenum> = (j_3 := (0)) in void);
-      try
-       (let jessie_<somenum> =
-       begin
-         (loop_5:
-         while true do
-         { invariant (JC_<somenum>: true) variant (0) }
+     try
+      (let jessie_<somenum> =
+      (C_33:
+      begin
+        (let jessie_<somenum> = (j_3 := (0)) in void);
+       (loop_5:
+       while true do
+       { invariant (JC_<somenum>: true) variant (0) }
+        begin
+          [ { } unit reads j_3 { (JC_<somenum>: le_int((0), j_3)) } ];
+         try
+          (let jessie_<somenum> =
           begin
-            [ { } unit reads j_3 { (JC_<somenum>: le_int((0), j_3)) } ];
-           try
             (let jessie_<somenum> =
+            (C_39:
             begin
-              (let jessie_<somenum> =
-              (C_39:
-              begin
-                (if ((lt_int_ !j_3) aLength) then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_2_break_exc void)) in
-                 void));
-               (let jessie_<somenum> =
-               (C_37:
-               (let jessie_<somenum> = (0) in
-               (let jessie_<somenum> = a_0 in
-               (let jessie_<somenum> = !j_3 in
-               (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-               begin
-                 (JC_<somenum>:
-                 (((((offset_upd_ int_P_a_0_26_alloc_table) int_P_int_M_a_0_26) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
-                jessie_<somenum> end))))) in void);
-               (j_3 := (C_38: ((add_int !j_3) (1)))); !j_3 end) in void);
-             (raise (Loop_continue_exc void)) end in void) with
-            Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_2_break_exc void)) end in void) with
-       Goto_while_2_break_exc jessie_<somenum> -> (while_2_break: void) end;
-      (raise Return) end)); (raise Return) end with Return -> void end)
+              (if ((lt_int_ !j_3) aLength) then void
+              else
+               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
+               void));
+             (let jessie_<somenum> =
+             (C_37:
+             (let jessie_<somenum> = (0) in
+             (let jessie_<somenum> = a_0 in
+             (let jessie_<somenum> = !j_3 in
+             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+             begin
+               (JC_<somenum>:
+               (((((offset_upd_ int_P_a_0_26_alloc_table) int_P_int_M_a_0_26) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+              jessie_<somenum> end))))) in void);
+             (j_3 := (C_38: ((add_int !j_3) (1)))); !j_3 end) in void);
+           (raise (Loop_continue_exc void)) end in void) with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break: begin   void; (raise Return) end) end); (raise Return)
+   end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_something(char_P___string_something_1_alloc_table,
@@ -2834,32 +2821,32 @@ why --project [...] why/bts0041-bis.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0041-bis_po54.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "497" begin = "14" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "492" begin = "14" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po55.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "497" begin = "14" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "492" begin = "14" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po56.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "497" begin = "14" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "492" begin = "14" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po57.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "498" begin = "14" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "493" begin = "14" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po58.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "498" begin = "14" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "493" begin = "14" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po59.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "498" begin = "14" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "493" begin = "14" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2891,21 +2878,21 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0041-bis_po44.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "527" begin = "27" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "521" begin = "24" end = "61"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041-bis_po45.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "527" begin = "27" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "521" begin = "24" end = "61"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041-bis_po46.why">
-      <location file = "why/bts0041-bis.why" line = "2195" begin = "45" end = "46"/>
+      <location file = "why/bts0041-bis.why" line = "2188" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041-bis_po47.why">
-      <location file = "why/bts0041-bis.why" line = "2195" begin = "45" end = "46"/>
+      <location file = "why/bts0041-bis.why" line = "2188" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041-bis_po48.why">
@@ -2931,11 +2918,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po38.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "516" begin = "9" end = "452"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "510" begin = "6" end = "404"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po39.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "516" begin = "9" end = "452"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "510" begin = "6" end = "404"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po40.why">
@@ -2943,11 +2930,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po41.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "516" begin = "9" end = "452"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "510" begin = "6" end = "404"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po42.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "516" begin = "9" end = "452"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "510" begin = "6" end = "404"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po43.why">
@@ -2960,21 +2947,21 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0041-bis_po30.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "444" begin = "27" end = "56"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "443" begin = "24" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041-bis_po31.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "444" begin = "27" end = "56"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "443" begin = "24" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041-bis_po32.why">
-      <location file = "why/bts0041-bis.why" line = "2060" begin = "44" end = "45"/>
+      <location file = "why/bts0041-bis.why" line = "2053" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041-bis_po33.why">
-      <location file = "why/bts0041-bis.why" line = "2060" begin = "44" end = "45"/>
+      <location file = "why/bts0041-bis.why" line = "2053" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041-bis_po34.why">
@@ -3000,11 +2987,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po23.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "433" begin = "9" end = "470"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "432" begin = "6" end = "422"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po24.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "433" begin = "9" end = "470"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "432" begin = "6" end = "422"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po25.why">
@@ -3016,11 +3003,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po27.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "433" begin = "9" end = "470"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "432" begin = "6" end = "422"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po28.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "433" begin = "9" end = "470"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "432" begin = "6" end = "422"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po29.why">
@@ -3053,21 +3040,21 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po14.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "477" begin = "27" end = "209"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "474" begin = "24" end = "147"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041-bis_po15.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "477" begin = "27" end = "209"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "474" begin = "24" end = "147"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041-bis_po16.why">
-      <location file = "why/bts0041-bis.why" line = "1928" begin = "45" end = "46"/>
+      <location file = "why/bts0041-bis.why" line = "1922" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041-bis_po17.why">
-      <location file = "why/bts0041-bis.why" line = "1928" begin = "45" end = "46"/>
+      <location file = "why/bts0041-bis.why" line = "1922" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041-bis_po18.why">
@@ -3093,11 +3080,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "466" begin = "9" end = "635"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "463" begin = "6" end = "528"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "466" begin = "9" end = "635"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "463" begin = "6" end = "528"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po5.why">
@@ -3109,11 +3096,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po7.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "466" begin = "9" end = "635"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "463" begin = "6" end = "528"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po8.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "466" begin = "9" end = "635"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "463" begin = "6" end = "528"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po9.why">

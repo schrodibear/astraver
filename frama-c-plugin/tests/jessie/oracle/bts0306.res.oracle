@@ -409,32 +409,30 @@ behavior default:
    (var int32 __retres);
    
    {  
+      loop 
+      while (true)
       {  
-         loop 
-         while (true)
          {  
-            {  
-               {  (C_1 : (tmp_0 = s2));
-                  (C_3 : (s2 = (C_2 : (s2 + 1))));
-                  ()
-               };
-               (if ((C_7 : ((C_6 : s1.char_M) :> int32)) ==
-                     (C_5 : ((C_4 : tmp_0.char_M) :> int32))) then () else 
-               (goto while_0_break));
+            {  (C_1 : (tmp_0 = s2));
+               (C_3 : (s2 = (C_2 : (s2 + 1))));
+               ()
+            };
+            (if ((C_7 : ((C_6 : s1.char_M) :> int32)) ==
+                  (C_5 : ((C_4 : tmp_0.char_M) :> int32))) then () else 
+            (goto while_0_break));
+            
+            {  (C_8 : (tmp = s1));
+               (C_10 : (s1 = (C_9 : (s1 + 1))));
+               ()
+            };
+            (if ((C_13 : ((C_12 : tmp.char_M) :> int32)) == 0) then 
+            {  (C_11 : (__retres = 0));
                
-               {  (C_8 : (tmp = s1));
-                  (C_10 : (s1 = (C_9 : (s1 + 1))));
-                  ()
-               };
-               (if ((C_13 : ((C_12 : tmp.char_M) :> int32)) == 0) then 
-               {  (C_11 : (__retres = 0));
-                  
-                  (goto return_label)
-               } else ())
-            }
-         };
-         (while_0_break : ())
+               (goto return_label)
+            } else ())
+         }
       };
+      (while_0_break : ());
       (C_15 : (s2 = (C_14 : (s2 - 1))));
       (C_24 : (__retres = (C_23 : ((C_22 : ((C_21 : ((C_20 : (C_19 : (s1 :> unsigned_char_P[..])).unsigned_char_M) :> int32)) -
                                              (C_18 : ((C_17 : (C_16 : (s2 :> unsigned_char_P[..])).unsigned_char_M) :> int32)))) :> int32))));

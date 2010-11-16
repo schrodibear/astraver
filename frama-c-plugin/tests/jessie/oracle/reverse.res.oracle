@@ -148,31 +148,29 @@ behavior default:
    {  (C_1 : (r = p0));
       (C_2 : (p = null));
       
+      loop 
+      behavior default:
+        invariant (C_3 : (\exists list lp;
+                           (\exists list lr;
+                             (((list_contents{Here}(p, lp) &&
+                                 list_contents{Here}(r, lr)) &&
+                                disjoint(lp, lr)) &&
+                               (\forall list l_14;
+                                 (\at(list_contents{Pre}(p0, l_14),Pre) ==>
+                                   (app(rev(lr), lp) == rev(l_14))))))));
+      while (true)
       {  
-         loop 
-         behavior default:
-           invariant (C_3 : (\exists list lp;
-                              (\exists list lr;
-                                (((list_contents{Here}(p, lp) &&
-                                    list_contents{Here}(r, lr)) &&
-                                   disjoint(lp, lr)) &&
-                                  (\forall list l_14;
-                                    (\at(list_contents{Pre}(p0, l_14),Pre) ==>
-                                      (app(rev(lr), lp) == rev(l_14))))))));
-         while (true)
-         {  
-            {  (if (r != null) then () else 
-               (goto while_0_break));
-               
-               {  (C_4 : (q = r));
-                  (C_6 : (r = (C_5 : r.tl)));
-                  (C_8 : ((C_7 : q.tl) = p));
-                  (C_9 : (p = q))
-               }
+         {  (if (r != null) then () else 
+            (goto while_0_break));
+            
+            {  (C_4 : (q = r));
+               (C_6 : (r = (C_5 : r.tl)));
+               (C_8 : ((C_7 : q.tl) = p));
+               (C_9 : (p = q))
             }
-         };
-         (while_0_break : ())
+         }
       };
+      (while_0_break : ());
       
       (return p)
    }

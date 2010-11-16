@@ -43,24 +43,22 @@ behavior default:
    {  (C_1 : (x = 0));
       (C_2 : (i = 10));
       
+      loop 
+      behavior default:
+        invariant (C_4 : ((C_5 : (x == (10 - i))) &&
+                           ((C_7 : (10 >= i)) && (C_8 : (i > 0)))));
+      variant (C_3 : i);
+      while (true)
       {  
-         loop 
-         behavior default:
-           invariant (C_4 : ((C_5 : (x == (10 - i))) &&
-                              ((C_7 : (10 >= i)) && (C_8 : (i > 0)))));
-         variant (C_3 : i);
-         while (true)
          {  
-            {  
-               {  (C_11 : (x = (C_10 : ((C_9 : (x + 1)) :> int32))));
-                  (C_14 : (i = (C_13 : ((C_12 : (i - 1)) :> int32))))
-               };
-               (if (i > 0) then () else 
-               (goto while_0_break))
-            }
-         };
-         (while_0_break : ())
+            {  (C_11 : (x = (C_10 : ((C_9 : (x + 1)) :> int32))));
+               (C_14 : (i = (C_13 : ((C_12 : (i - 1)) :> int32))))
+            };
+            (if (i > 0) then () else 
+            (goto while_0_break))
+         }
       };
+      (while_0_break : ());
       
       (return ())
    }
@@ -352,14 +350,14 @@ let main_ensures_default =
   { (JC_<somenum>: ge_int(integer_of_int32(x_0), (0))) }
   (init:
   try
-   (C_1:
-   (C_2:
    begin
-     (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (0))) in void);
-    (let jessie_<somenum> = (i := (safe_int32_of_integer_ (10))) in void);
-    try
-     (let jessie_<somenum> =
-     begin
+     try
+      (let jessie_<somenum> =
+      (C_1:
+      (C_2:
+      begin
+        (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (10))) in void);
        (loop_2:
        while true do
        { invariant
@@ -391,9 +389,10 @@ let main_ensures_default =
             (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
            (raise (Loop_continue_exc void)) end in void) with
           Loop_continue_exc jessie_<somenum> -> void end end done);
-      (raise (Goto_while_0_break_exc void)) end in void) with
-     Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-    (raise Return); (raise Return) end)) with Return -> void end)
+       (raise (Goto_while_0_break_exc void)) end)) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break: begin   void; (raise Return) end) end; (raise Return)
+   end with Return -> void end)
   { (JC_<somenum>: eq_int(integer_of_int32(x_0), (10))) }
 
 let main_safety =
@@ -401,14 +400,14 @@ let main_safety =
   { (JC_<somenum>: ge_int(integer_of_int32(x_0), (0))) }
   (init:
   try
-   (C_1:
-   (C_2:
    begin
-     (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (0))) in void);
-    (let jessie_<somenum> = (i := (safe_int32_of_integer_ (10))) in void);
-    try
-     (let jessie_<somenum> =
-     begin
+     try
+      (let jessie_<somenum> =
+      (C_1:
+      (C_2:
+      begin
+        (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (10))) in void);
        (loop_1:
        while true do
        { invariant (JC_<somenum>: true) variant integer_of_int32((JC_<somenum> : i)) }
@@ -443,9 +442,10 @@ let main_safety =
             (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
            (raise (Loop_continue_exc void)) end in void) with
           Loop_continue_exc jessie_<somenum> -> void end end done);
-      (raise (Goto_while_0_break_exc void)) end in void) with
-     Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-    (raise Return); (raise Return) end)) with Return -> void end) { true }
+       (raise (Goto_while_0_break_exc void)) end)) in void) with
+      Goto_while_0_break_exc jessie_<somenum> ->
+      (while_0_break: begin   void; (raise Return) end) end; (raise Return)
+   end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C dowhile.jessie --quiet -f dowhile.makefile project
@@ -475,11 +475,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/dowhile_po12.why">
-      <location file = "why/dowhile.why" line = "346" begin = "41" end = "70"/>
+      <location file = "why/dowhile.why" line = "347" begin = "41" end = "70"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/dowhile_po13.why">
-      <location file = "why/dowhile.why" line = "346" begin = "41" end = "70"/>
+      <location file = "why/dowhile.why" line = "347" begin = "41" end = "70"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

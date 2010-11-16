@@ -451,22 +451,20 @@ behavior default:
    {  (C_11 : (cur = (C_10 : (uarr :> int_P[..]))));
       (C_12 : (i = 0));
       
+      loop 
+      behavior default:
+        invariant (C_13 : (i >= 0));
+      while (true)
       {  
-         loop 
-         behavior default:
-           invariant (C_13 : (i >= 0));
-         while (true)
-         {  
-            {  (if (i < 10) then () else 
-               (goto while_0_break));
-               
-               {  (C_16 : ((C_15 : (C_14 : (cur + i)).int_M) = 0))
-               };
-               (C_19 : (i = (C_18 : ((C_17 : (i + 1)) :> int32))))
-            }
-         };
-         (while_0_break : ())
+         {  (if (i < 10) then () else 
+            (goto while_0_break));
+            
+            {  (C_16 : ((C_15 : (C_14 : (cur + i)).int_M) = 0))
+            };
+            (C_19 : (i = (C_18 : ((C_17 : (i + 1)) :> int32))))
+         }
       };
+      (while_0_break : ());
       
       (return ())
    }
