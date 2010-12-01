@@ -1,5 +1,5 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only qsort-annotated.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD qsort-annotated.c"
-qsort-annotated.c:83:[kernel] user error: syntax error
+qsort-annotated.c:64:[kernel] user error: unexpected token 'contract'
 [kernel] user error: skipping file "qsort-annotated.c" that has errors.
 [kernel] Frama-C aborted because of invalid user input.
