@@ -689,7 +689,7 @@ lib/coq-v7/caduceus_why.v: lib/why/caduceus.why $(BINARY)
 
 lib/coq/jessie_why.v: lib/why/jessie.why $(BINARY)
 	WHYLIB=lib $(BINARY) --dir lib/coq --coq-v8 -coq-preamble \
-        "Require Export Why. Require Export Reals. Open Scope Z_scope." \
+        "Require Export Reals. Require Export Why." \
         --no-coq-use-dp lib/why/jessie.why
 
 lib/pvs/jessie_why.pvs: lib/why/jessie.why $(BINARY)
