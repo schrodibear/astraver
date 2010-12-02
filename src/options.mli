@@ -137,6 +137,7 @@ val prover : (* ?ignore_gui:bool  -> *) unit -> prover
 val valid : bool
 val coq_tactic : string option
 val coq_preamble : string
+val coq_use_dp: bool
 
 val pvs_preamble : string
 

@@ -367,7 +367,9 @@ else
 	8.1*|8.2*|trunk)
 	  JESSIELIBCOQ=lib/coq/jessie_why.vo
 	  cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v
-          # useful ??? COQVER=v8.1
+          # useful ??? [VP] Yes, the hack for making the output compliant with
+          # Dp needs >=v8.1
+          COQVER=v8.1
           ;;
 	*)
 	  JESSIELIBCOQ=

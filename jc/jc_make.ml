@@ -98,8 +98,7 @@ let generic full f targets =
 
        out "coq/%s_why.v: WHYOPT=-coq -dir coq -coq-preamble \"Require Export jessie_why.\" -coq-tactic \"intuition\"@\n" f;
        out "coq/%s_why.v: why/%s.why@\n" f f;
-       out "\t@@echo 'why -coq [...] why/%s.why' && $(WHY) $(JESSIELIBFILES) why/%s.why@\n@\n" f f;
-
+       out "\t@@echo 'why -coq [...] why/%s.why' && $(WHY) $(JESSIELIBFILES) why/%s.why && rm -f coq/jessie_why.v@\n@\n" f f;
 
        out "coq-goals: goals coq/%s_ctx_why.vo@\n" f;
        out "\tfor f in why/*_po*.why; do make -f %s.makefile coq/`basename $$f .why`_why.v ; done@\n@\n" f;
@@ -111,7 +110,8 @@ let generic full f targets =
        out "coq/%%_why.v: WHYOPT=-no-pervasives -coq -dir coq -coq-preamble \"Require Export %s_ctx_why.\" -coq-tactic \"intuition\"@\n" f;
        out "coq/%%_why.v: why/%%.why@\n";
        out "\t@@echo 'why -coq [...] why/$*.why' && $(WHY) why/%s_ctx.why why/$*.why@\n@\n" f;
-       out "coq/%%.vo: coq/%%.v@\n\tcoqc -I coq $<@\n@\n";
+       out "coq/%%.vo: coq/%%.v@\n\tcoqc -I coq $<@\n";
+       out "coq/%%_po_why.vo: coq/%s_ctx_why.vo@\n@\n" f;
 
        out "pvs: %a@\n@\n" (print_files pvs) targets;
 
@@ -214,6 +214,7 @@ let generic full f targets =
        out "-include %s.depend@\n@\n" f;
        out "depend: %a@\n" (print_files coq_v) targets;
        out "\t-$(COQDEP) -I coq coq/%s*_why.v > %s.depend@\n@\n" f f;
+
        out "clean:@\n";
        out "\trm -f coq/*.vo@\n@\n";
     )

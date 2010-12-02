@@ -44,6 +44,7 @@ let wp_only_ = ref false
 let valid_ = ref false
 let coq_tactic_ = ref None
 let coq_preamble_ = ref None
+let coq_use_dp = ref true
 let pvs_preamble_ = ref None
 let mizar_environ_ = ref None
 let isabelle_base_theory_ = ref "Main"
@@ -303,6 +304,11 @@ Coq-specific options:
               gives some Coq preamble to be substituted to \"Require Why\"
   --coq-fp-model <Module>
               sets the Coq model for floating-point arithmetic
+  --coq-use-dp
+  --no-coq-use-dp
+              tells Coq to generate or not Dp_hint annotations to use external
+              provers. Doesn't have any effect for Coq version < 8.1 (no 
+              external provers support). Default is yes.
 
 Monoinst-specific options
   --monoinstworldgen <builtin|complete|goal|premises>
@@ -405,6 +411,9 @@ let files =
     | ("-novalid" | "--no-valid") :: args -> valid_ := false; parse args
     | ("-coqtactic" | "--coqtactic" | "-coq-tactic" | "--coq-tactic")
       :: s :: args -> coq_tactic_ := Some s; parse args
+    | ("-coq-use-dp" | "--coq-use-dp") :: args -> coq_use_dp := true; parse args
+    | ("-no-coq-use-dp" | "--no-coq-use-dp") :: args -> 
+      coq_use_dp := false; parse args
     | ("-coqtactic" | "--coqtactic" | "-coq-tactic" | "--coq-tactic") :: [] ->
 	usage (); exit 1
     | ("-coqpreamble" | "--coqpreamble" | "-coq-preamble" | "--coq-preamble")
@@ -618,6 +627,8 @@ let coq_preamble = match !coq_preamble_ with
   | None when prover () = Coq V7 -> "Require Why."
   | None -> "Require Export Why."
   | Some s -> s
+let coq_use_dp = !coq_use_dp
+
 let pvs_preamble = match !pvs_preamble_ with
   | None -> "IMPORTING why@why"
   | Some s -> s

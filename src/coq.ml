@@ -891,7 +891,8 @@ let reprint_axiom fmt id p =
 let print_axiom fmt id p =
   reprint_axiom fmt id p;
   fprintf fmt "Admitted.@\n";
-  if v81 then fprintf fmt "@[<hov 2>Dp_hint %a.@]@\n" idents id;
+  if v81 && coq_use_dp then 
+    fprintf fmt "@[<hov 2>Dp_hint %a.@]@\n" idents id;
   if not !is_last_file then add_library_hints id
   (* if is_polymorphic p then fprintf fmt "Implicit Arguments %s.@\n" id *)
 
