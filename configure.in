@@ -364,11 +364,11 @@ else
 	WHYLIBCOQ=lib/coq
 	cp -f lib/coq-v7/WhyCoqDev.v lib/coq-v7/WhyCoqCompat.v
 	case $COQVERSION in
-	8.1*|8.2*|trunk)
+	8.1*|8.2*|8.3*|trunk)
 	  JESSIELIBCOQ=lib/coq/jessie_why.vo
 	  cp -f lib/coq/WhyCoqDev.v lib/coq/WhyCoqCompat.v
           # useful ??? [VP] Yes, the hack for making the output compliant with
-          # Dp needs >=v8.1
+          # Dp needs >= v8.1
           COQVER=v8.1
           ;;
 	*)
@@ -377,7 +377,7 @@ else
         esac
 	AC_MSG_CHECKING(Coq floating-point library)
  	case $COQVERSION in
-	   8.2*|trunk)
+	   8.2*|8.3*|trunk)
 	      if test -f "$COQLIB/user-contrib/Flocq/Core/Fcore.vo"; then
 	        AC_MSG_RESULT(yes)
 		WHYFLOATS="lib/coq/WhyFloats.vo lib/coq/WhyFloatsStrict.vo"
