@@ -329,7 +329,7 @@ coq: coq/AllZeros_why.vo
 
 coq/AllZeros_why.v: WHYOPT=-coq -dir coq -coq-preamble "Require Export jessie_why." -coq-tactic "intuition"
 coq/AllZeros_why.v: why/AllZeros.why
-	@echo 'why -coq [...] why/AllZeros.why' && $(WHY) $(JESSIELIBFILES) why/AllZeros.why
+	@echo 'why -coq [...] why/AllZeros.why' && $(WHY) $(JESSIELIBFILES) why/AllZeros.why && rm -f coq/jessie_why.v
 
 coq-goals: goals coq/AllZeros_ctx_why.vo
 	for f in why/*_po*.why; do make -f AllZeros.makefile coq/`basename $$f .why`_why.v ; done
@@ -344,6 +344,7 @@ coq/%_why.v: why/%.why
 
 coq/%.vo: coq/%.v
 	coqc -I coq $<
+coq/%_po_why.vo: coq/AllZeros_ctx_why.vo
 
 pvs: pvs/AllZeros_why.pvs
 
@@ -2318,8 +2319,14 @@ axiom math_mod_bound:
 
 axiom computer_div_mod:
   (forall x:int.
-    (forall y:int.
+    (forall y:int [computer_div(x, y), computer_mod(x, y)].
       ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_div_bound:
+  (forall x:int.
+    (forall y:int.
+      (((x >= 0) and (y > 0)) ->
+       ((0 <= computer_div(x, y)) and (computer_div(x, y) <= x)))))
 
 axiom computer_mod_bound:
   (forall x:int.
@@ -4041,6 +4048,12 @@ why -simplify [...] why/AllZeros.why
  (FORALL (x) (EQ x (+ (* y (computer_div x y)) (computer_mod x y)))))))
 
 (BG_PUSH
+ ;; Why axiom computer_div_bound
+ (FORALL (x y)
+ (IMPLIES (AND (>= x 0) (> y 0))
+ (AND (<= 0 (computer_div x y)) (<= (computer_div x y) x)))))
+
+(BG_PUSH
  ;; Why axiom computer_mod_bound
  (FORALL (x y)
  (IMPLIES (NEQ y 0) (< (abs_int (computer_mod x y)) (abs_int y))))
@@ -5628,8 +5641,14 @@ axiom math_mod_bound:
 
 axiom computer_div_mod:
   (forall x:int.
-    (forall y:int.
+    (forall y:int [computer_div(x, y), computer_mod(x, y)].
       ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_div_bound:
+  (forall x:int.
+    (forall y:int.
+      (((x >= 0) and (y > 0)) ->
+       ((0 <= computer_div(x, y)) and (computer_div(x, y) <= x)))))
 
 axiom computer_mod_bound:
   (forall x:int.

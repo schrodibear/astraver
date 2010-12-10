@@ -1,4 +1,6 @@
-//@ lemma mean: \forall integer x, y; x <= y ==> x <= (x+y)/2 <= y;
+// RUNSIMPLIFY this tells regtests to run Simplify in this example
+
+// lemma mean: \forall integer x, y; x <= y ==> x <= (x+y)/2 <= y;
 
 /*@ predicate sorted{L}(long *t, integer a, integer b) =
   @    \forall integer i,j; a <= i <= j <= b ==> t[i] <= t[j];
@@ -24,6 +26,7 @@ int binary_search(long t[], int n, long v) {
     @*/
   while (l <= u ) {
     int m = (l + u) / 2;
+    //@ assert l <= m <= u;
     if (t[m] < v) l = m + 1;
     else if (t[m] > v) u = m - 1;
     else return m;

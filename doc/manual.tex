@@ -1118,11 +1118,14 @@ Keywords are the following:
 
 \subsubsection{Logic}
 
-Syntax for terms is given Figure~\ref{fig:terms}.
-Arithmetical operations have usual precedences and are left associative.
-The conditional construct \texttt{if $t_1$ then $t_2$ else $t_3$} can
-also be written in prefix notation as \texttt{if\_then\_else($t_1$, $t_2$,
-  $t_3$)}. 
+Syntax for terms is given Figure~\ref{fig:terms}.  Arithmetical
+operations have usual precedences and are left associative.  The
+division operator $/$ only applies on reals, not on integer. Divisions
+and modulo operations on integers come in library
+\texttt{divisions.why} in two flavors: mathematical division division
+rounds down whereas computer division rounds to zero.  The conditional
+construct \texttt{if $t_1$ then $t_2$ else $t_3$} can also be written
+in prefix notation as \texttt{if\_then\_else($t_1$, $t_2$, $t_3$)}.
 
 Syntax for predicates is given Figure~\ref{fig:predicates}.
 Precedences are the following (from strongest to weakest): \te{not}, 
@@ -1160,7 +1163,8 @@ Syntax for logic declarations is given Figure~\ref{fig:ldecl}.
   \\[0.1em]
 
   \nt{arith\_op}\indexnt{arith\_op}
-    & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/} $|$ \te{\%}
+    & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/} 
+% modulo deleted in 2.27 $|$ \te{\%}
 \end{tabular}\\
 \hrulefill
 \caption{Syntax of terms}
@@ -1374,7 +1378,9 @@ Syntax of input files is given Figure~\ref{fig:input}.
   \\[0.1em]
 
   \nt{infix}
-    & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/} $|$ \te{\%} $|$ 
+    & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/} 
+% modulo deleted in 2.27 $|$ \te{\%} 
+    $|$ 
               \te{=} $|$ \te{<>} $|$ 
               \te{<} $|$ \te{<=} $|$ \te{>} $|$ \te{>=} $|$
               \te{||} $|$ \te{\&\&} \\

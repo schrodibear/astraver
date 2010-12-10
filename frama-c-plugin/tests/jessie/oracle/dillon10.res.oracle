@@ -480,10 +480,7 @@ let main_ensures_default =
       begin
         (let jessie_<somenum> = s_0 in (JC_<somenum>: (f1 jessie_<somenum>)));
        (C_6: (let jessie_<somenum> = s_0 in (JC_<somenum>: (f2 jessie_<somenum>)))) end))
-    {{ ((JC_<somenum>: (true = true))
-       and (JC_<somenum>:
-           not_assigns(int_P_s_1_alloc_table@init, int_P_int_M_s_1@init,
-           int_P_int_M_s_1, pset_empty))) }}));
+    {{ (JC_<somenum>: (true = true)) }}));
     (assert
     { (JC_<somenum>: eq_int(integer_of_int32(select(int_P_int_M_s_1, s_0)), (1))) };
     void); void; (raise Return); (raise Return) end) with Return -> void end)
@@ -499,11 +496,13 @@ let main_safety =
      (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
      (let jessie_<somenum> = s_0 in
      (((safe_upd_ int_P_int_M_s_1) jessie_<somenum>) jessie_<somenum>)));
-    [ { } unit
-      { ((JC_<somenum>: (true = true))
-        and (JC_<somenum>:
-            not_assigns(int_P_s_1_alloc_table@init, int_P_int_M_s_1@init,
-            int_P_int_M_s_1, pset_empty))) } ];
+    (let jessie_<somenum> =
+    (assert { true };
+    ((C_5:
+     begin
+       (let jessie_<somenum> = s_0 in (JC_<somenum>: (f1_requires jessie_<somenum>)));
+      (C_6: (let jessie_<somenum> = s_0 in (JC_<somenum>: (f2_requires jessie_<somenum>)))) end))) in
+    begin   [ { } unit { (JC_<somenum>: (true = true)) } ]; jessie_<somenum> end);
     [ { } unit reads int_P_int_M_s_1
       { (JC_<somenum>: eq_int(integer_of_int32(select(int_P_int_M_s_1, s_0)), (1))) } ];
     void; (raise Return); (raise Return) end) with Return -> void end)
@@ -517,10 +516,6 @@ why --project [...] why/dillon10.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Default behavior">
     <goal why_file="why/dillon10_po1.why">
-      <location file = "PPCHOME/tests/jessie/dillon10.jessie/dillon10.jc" line = "58" begin = "8" end = "81"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/dillon10_po2.why">
       <location file = "PPCHOME/tests/jessie/dillon10.c" line = "16" begin = "12" end = "16"/>
       <explain kind = "Assert"/>
     </goal>
@@ -832,8 +827,14 @@ axiom math_mod_bound:
 
 axiom computer_div_mod:
   (forall x:int.
-    (forall y:int.
+    (forall y:int [computer_div(x, y), computer_mod(x, y)].
       ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_div_bound:
+  (forall x:int.
+    (forall y:int.
+      (((x >= 0) and (y > 0)) ->
+       ((0 <= computer_div(x, y)) and (computer_div(x, y) <= x)))))
 
 axiom computer_mod_bound:
   (forall x:int.

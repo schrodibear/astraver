@@ -392,7 +392,11 @@ let f_safety =
      begin
        (let jessie_<somenum> = (y := (safe_int32_of_integer_ (0))) in void);
       (let jessie_<somenum> =
-      [ { } int32 { (JC_<somenum>: eq_int(integer_of_int32(y), (3))) } ] in void);
+      (let jessie_<somenum> =
+      (assert { true }; ((C_2: begin   (y := x_0); !y end))) in
+      begin
+        [ { } unit { (JC_<somenum>: eq_int(integer_of_int32(y), (3))) } ]; jessie_<somenum>
+      end) in void);
       [ { } unit reads y { (JC_<somenum>: gt_int(integer_of_int32(y), (0))) } ];
       void;
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
@@ -430,9 +434,13 @@ let main_safety =
      begin
        (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (0))) in void);
       (let jessie_<somenum> =
-      [ { (JC_<somenum>: gt_int(integer_of_int32(x_0_0), (0)))} int32
-        { (JC_<somenum>: eq_int(integer_of_int32(y_0), integer_of_int32(x_0_0))) } ] in
-      void);
+      (let jessie_<somenum> =
+      (assert { (JC_<somenum>: gt_int(integer_of_int32(x_0_0), (0))) };
+      ((C_8: begin   (y_0 := x_0_0); !y_0 end))) in
+      begin
+        [ { } unit
+          { (JC_<somenum>: eq_int(integer_of_int32(y_0), integer_of_int32(x_0_0))) } ];
+       jessie_<somenum> end) in void);
       [ { } unit reads y_0 { (JC_<somenum>: gt_int(integer_of_int32(y_0), (0))) } ];
       void; (raise Return) end)); (raise Return) end with Return -> void end)
   { true }
@@ -443,6 +451,12 @@ why --project [...] why/bts0399.why
 <project name="bts0399" context="why/bts0399_ctx.why">
   <function name="Function main">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="Safety">
+    <goal why_file="why/bts0399_po5.why">
+      <location file = "PPCHOME/tests/jessie/bts0399.c" line = "20" begin = "13" end = "16"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/bts0399_po3.why">
       <location file = "PPCHOME/tests/jessie/bts0399.c" line = "20" begin = "37" end = "41"/>
@@ -773,8 +787,14 @@ axiom math_mod_bound:
 
 axiom computer_div_mod:
   (forall x:int.
-    (forall y:int.
+    (forall y:int [computer_div(x, y), computer_mod(x, y)].
       ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_div_bound:
+  (forall x:int.
+    (forall y:int.
+      (((x >= 0) and (y > 0)) ->
+       ((0 <= computer_div(x, y)) and (computer_div(x, y) <= x)))))
 
 axiom computer_mod_bound:
   (forall x:int.

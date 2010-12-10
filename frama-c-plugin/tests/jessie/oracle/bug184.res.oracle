@@ -816,8 +816,14 @@ axiom math_mod_bound:
 
 axiom computer_div_mod:
   (forall x:int.
-    (forall y:int.
+    (forall y:int [computer_div(x, y), computer_mod(x, y)].
       ((y <> 0) -> (x = ((y * computer_div(x, y)) + computer_mod(x, y))))))
+
+axiom computer_div_bound:
+  (forall x:int.
+    (forall y:int.
+      (((x >= 0) and (y > 0)) ->
+       ((0 <= computer_div(x, y)) and (computer_div(x, y) <= x)))))
 
 axiom computer_mod_bound:
   (forall x:int.

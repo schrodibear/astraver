@@ -27,61 +27,72 @@
 /*                                                                        */
 /**************************************************************************/
 
-//@+ CheckArithOverflow = yes
+// RUNSIMPLIFY this tells regtests to run Simplify in this example
 
-/*@ lemma mean_property1 : 
-  @   \forall integer x y; x <= y ==> x <= (x+y)/2 <= y; 
+//+ CheckArithOverflow = yes
+
+/* lemma mean_property1 :
+  @   \forall integer x y; x <= y ==> x <= (x+y)/2 <= y;
   @*/
 
-/*@ lemma div2_property : 
+/* lemma mean_property2 :
+  @   \forall integer x y; x <= y ==> x <= x+(y-x)/2 <= y;
+  @*/
+
+/* lemma div2_property :
   @   \forall integer x; 0 <= x ==> 0 <= x/2 <= x;
   @*/
 
 /*@ predicate is_sorted{L}(int[] t) =
-  @   t != null && 
-  @   \forall integer i j; 
+  @   t != null &&
+  @   \forall integer i j;
   @     0 <= i && i <= j && j < t.length ==> t[i] <= t[j] ;
   @*/
 
 
 class BinarySearch {
 
-    /* binary_search(t,v) search for element v in array t 
+    /* binary_search(t,v) search for element v in array t
        between index 0 and t.length-1
        array t is assumed to be sorted in increasing order
-       returns an index i between 0 and t.length-1 where t[i] equals v, 
-       or -1 if no element in t is equal to v  
+       returns an index i between 0 and t.length-1 where t[i] equals v,
+       or -1 if no element in t is equal to v
     */
-    
+
     /*@ requires t != null;
-      @ ensures -1 <= \result < t.length; 
+      @ ensures -1 <= \result < t.length;
       @ behavior success:
       @   ensures \result >= 0 ==> t[\result] == v;
       @ behavior failure:
-      @  assumes 
-      @    \forall integer k1 k2; 
-      @       0 <= k1 <= k2 <= t.length-1 ==> t[k1] <= t[k2];
+      @  assumes is_sorted(t);
+      @  // assumes
+      @  //   \forall integer k1 k2;
+      @  //      0 <= k1 <= k2 <= t.length-1 ==> t[k1] <= t[k2];
       @  ensures \result == -1 ==>
-      @     \forall integer k; 0 <= k < t.length ==> t[k] != v;
+      @    \forall integer k; 0 <= k < t.length ==> t[k] != v;
       @*/
     static int binary_search(int t[], int v) {
 	int l = 0, u = t.length - 1;
-	/*@ loop_invariant 
+	/*@ loop_invariant
 	  @   0 <= l && u <= t.length - 1;
-	  @ for failure: 
-	  @  loop_invariant 
+	  @ for failure:
+	  @  loop_invariant
 	  @    \forall integer k; 0 <= k < t.length ==> t[k] == v ==> l <= k <= u;
-	  @ loop_variant 
+	  @ loop_variant
 	  @   u-l ;
 	  @*/
 	while (l <= u ) {
-	    int m = l + (u - l) / 2;
+	    int m;
+            m = (u + l) / 2;
+            // fix: m = l + (u - l) / 2;
+            // the following assertion helps provers
+            //@ assert l <= m <= u;
 	    if (t[m] < v) l = m + 1;
 	    else if (t[m] > v) u = m - 1;
-	    else return m; 
+	    else return m;
 	}
 	return -1;
     }
 
 }
-    
+

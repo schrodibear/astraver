@@ -317,13 +317,13 @@ You may try this now, and checks that all remaining VCs are proved.
 
 \subsection*{Termination}
 \index{termination}
-\index{decreases clause@\texttt{decreases} clause}
+\index{loopvariant clause@\texttt{loop\_variant} clause}
 
 Since the \texttt{sqrt} method body contains a \texttt{while} loop, it
 is possible that the method execution does not terminate for some of
 the input. This is not check by default, but if you want to check
 termination, you can add another clause to the loop annotation: a
-\texttt{decreases} clause. An integer expression must follow, whic is
+\texttt{loop\_variant} clause. An integer expression must follow, whic is
 supposed to decreases at each loop iteration, and remaining
 nonnegative. On the \texttt{sqrt} example, that \texttt{x-sum} is
 decreasing, so you can add:

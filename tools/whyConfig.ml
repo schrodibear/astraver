@@ -45,45 +45,45 @@ let rec detect_prover p cmds =
         let cmd2 = cmd ^ " " ^ p.version_switch in
 	let c = cmd2 ^ " > " ^ out in
 	let ret = Sys.command c in
-	if ret <> 0 
-          (* was needed for older version of gappa, but is 
-	     wrong under windows: && not (p == gappa && ret = 1) *) 
+	if ret <> 0
+          (* was needed for older version of gappa, but is
+	     wrong under windows: && not (p == gappa && ret = 1) *)
         then
 	  begin
 	    printf "command '%s' failed@." cmd2;
 	    detect_prover p rem
 	  end
 	else
-	  let s = 
-            try 
+	  let s =
+            try
               let ch = open_in out in
               let s = ref (input_line ch) in
               while !s = "" do s := input_line ch done;
               close_in ch;
 	      Sys.remove out;
-              !s              
+              !s
             with Not_found | End_of_file  -> ""
           in
 	  let re = Str.regexp p.version_regexp in
-	  if Str.string_match re s 0 then            
+	  if Str.string_match re s 0 then
 	    let nam = p.name in
 	    let ver = Str.matched_group 1 s in
             begin
-              if List.mem ver p.versions_ok then 
+              if List.mem ver p.versions_ok then
 	        printf "Found prover %s version %s, OK.@." nam ver
               else
                 begin
                   prover_tips_info := true;
-                  if List.mem ver p.versions_old then 
+                  if List.mem ver p.versions_old then
                     printf "Warning: prover %s version %s is quite old, please consider upgrading to a newer version.@." nam ver
                   else
                     printf "Warning: prover %s version %s is not known to be supported, use it at your own risk!@." nam ver
                 end
             end;
 	    p.command <- cmd;
-	    p.version <- ver;            
+	    p.version <- ver;
             incr provers_found
-	  else 
+	  else
 	    begin
               prover_tips_info := true;
 	      printf "Warning: found prover %s but name/version not recognized by regexp `%s'@." p.name p.version_regexp;
@@ -91,13 +91,13 @@ let rec detect_prover p cmds =
 	      p.command <- cmd;
 	      p.version <- "?";
 	    end
-		
-	
+
+
 let main () =
   begin
     try
       load_rc_file ()
-    with Not_found -> 
+    with Not_found ->
       printf "rc file not found, using default values for provers@\n@.";
   end;
   printf "starting autodetection...@.";
@@ -110,20 +110,20 @@ let main () =
                detect_prover p l) prover_list;
   printf "detection done.@.";
   if !provers_found = 0 then
-    begin      
+    begin
       printf "No provers found! you need to install at least one prover.@.";
       prover_tips_info := true
     end
-  else 
+  else
     begin
       printf "writing rc file `%s'...@\n@." (rc_file());
       save_rc_file ();
       printf "    prover      version              info   invocation@.";
       printf "------------------------------------------------------@.";
-      List.iter (fun (_,(p,_)) -> 
+      List.iter (fun (_,(p,_)) ->
                    let nam = p.name in
                    let ver = p.version in
-                   let morever = 
+                   let morever =
                      if p.version = "" then "not found" else
                        if p.version = "?" then "undetected" else
                          if List.mem p.version p.versions_ok then "" else
@@ -143,6 +143,6 @@ let main () =
 
 let () = Printexc.catch main ()
 
-  
-  
+
+
 

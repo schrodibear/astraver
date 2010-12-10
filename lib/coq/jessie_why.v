@@ -383,6 +383,12 @@ Admitted.
     (y <> 0 -> x = (y * (computer_div x y) + (computer_mod x y))))).
 Admitted.
 
+(*Why axiom*) Lemma computer_div_bound :
+  (forall (x:Z),
+   (forall (y:Z),
+    (x >= 0 /\ y > 0 -> 0 <= (computer_div x y) /\ (computer_div x y) <= x))).
+Admitted.
+
 (*Why axiom*) Lemma computer_mod_bound :
   (forall (x:Z),
    (forall (y:Z), (y <> 0 -> (abs_int (computer_mod x y)) < (abs_int y)))).

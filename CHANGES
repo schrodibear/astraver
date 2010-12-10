@@ -1,6 +1,7 @@
+version 2.28, Dec ?, 2010
+==========================
 
-(these changes only concern the trunk branch)
-
+  o [Why] support for Alt-Ergo 0.92.2
   o [Coq output] removed dependencies on Float and Gappa libraries,
     added dependency on Flocq library
   o [Jessie] emit a warning when generating a dummy variant for
@@ -8,12 +9,13 @@
   o [Jessie] preliminary support for \at in region computation
   o [Why] added --smtlib-v1 option (default smtlib format is v2.0)
   o [Why] added support for verit prover
-
-(these changes concern the Boron branch)
+  o [Why] improved support for integer division (better triggers)
 
 version 2.27, Oct 14, 2010
 ==========================
 
+  o [Why] fixed compilation with Ocaml 3.12
+  o [Why] support for Alt-Ergo 0.92.1
   o [Why] fixed compilation with Ocaml 3.12
   o [Why] emacs mode distributed and installed
   o [Why] fixed bug 10851: wrong Coq output for if then else

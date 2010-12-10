@@ -201,8 +201,6 @@ rule token = parse
       { TIMES }
   | "/"
       { SLASH }
-  | "%"
-      { PERCENT }
   | "@"
       { AT }
   | "."

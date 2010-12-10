@@ -168,6 +168,11 @@ let t_abs_real = create "abs_real"
 let t_pow_real = create "pow_real"
 let t_sqrt_real = create "sqrt_real"
 
+let t_cos = create "cos"
+let t_sin = create "sin"
+let t_tan = create "tan"
+let t_atan = create "atan"
+
 let t_int_max = create "int_max"
 let t_int_min = create "int_min"
 let t_real_max = create "real_max"

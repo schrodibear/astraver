@@ -1,6 +1,6 @@
 /*@ loop_invariant 
   @   ...
-  @ decreases x - sum;
+  @ loop_variant x - sum;
   @*/
 while (sum <= x) { 
    ...

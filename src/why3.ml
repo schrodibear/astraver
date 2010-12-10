@@ -138,6 +138,11 @@ let builtins_table =
       t_abs_real , "AbsReal.abs";
       t_abs_int , "AbsInt.abs";
 
+      t_cos, "Trigonometry.cos" ;
+      t_sin, "Trigonometry.sin" ;
+      t_tan, "Trigonometry.tan" ;
+      t_atan, "Trigonometry.atan" ;
+
       Ident.create "nearest_even", "Rounding.NearestTiesToEven" ;
       Ident.create "to_zero", "Rounding.ToZero" ;
       Ident.create "up", "Rounding.Up" ;
@@ -435,6 +440,7 @@ let print_structured_file f fmt =
   fprintf fmt "use int.ComputerDivision@\n";
   fprintf fmt "use real.Real@\n";
   fprintf fmt "use real.Abs as AbsReal@\n";
+  fprintf fmt "use real.Trigonometry@\n";
   fprintf fmt "use bool.Bool@\n";
   fprintf fmt "use floating_point.Rounding@\n";
   fprintf fmt "use floating_point.Single@\n";

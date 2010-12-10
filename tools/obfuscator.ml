@@ -163,8 +163,6 @@ let rec lexpr m fmt p =
       fprintf fmt "(@[%a ->@ %a@])" lexprm a lexprm b
   | PPinfix (a, PPiff, b) -> 
       fprintf fmt "(@[%a <->@ %a@])" lexprm a lexprm b
-  | PPinfix (a, PPmod, b) -> 
-      fprintf fmt "(@[%a %%@ %a@])" lexprm a lexprm b
   | PPinfix (a, PPdiv, b) -> 
       fprintf fmt "(@[%a /@ %a@])" lexprm a lexprm b
   | PPinfix (a, PPmul, b) -> 

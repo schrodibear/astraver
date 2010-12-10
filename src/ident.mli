@@ -149,6 +149,11 @@ val t_sqrt_real : t
 val t_abs_real : t
 val t_pow_real : t
 
+val t_cos : t
+val t_sin : t
+val t_tan : t
+val t_atan : t
+
 val t_int_max : t
 val t_int_min : t
 val t_real_max : t

@@ -43,7 +43,7 @@ type loc = Loc.position
 type pp_infix = 
   PPand | PPor | PPimplies | PPiff |
   PPlt | PPle | PPgt | PPge | PPeq | PPneq |
-  PPadd | PPsub | PPmul | PPdiv | PPmod
+  PPadd | PPsub | PPmul | PPdiv 
 
 type pp_prefix = 
   PPneg | PPnot

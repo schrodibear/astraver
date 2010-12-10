@@ -46,6 +46,9 @@ open Env
 open Error
 open Report
 
+let expected_real loc =
+  raise_located loc (ExpectedType (fun fmt -> fprintf fmt "real"))
+
 let expected_num loc =
   raise_located loc (ExpectedType (fun fmt -> fprintf fmt "int or real"))
 
@@ -120,14 +123,14 @@ let rec unify t1 t2 = match (t1,t2) with
   | _, (PTexternal _) ->
       false
   (* other cases *)
-  | (PTunit | PTreal | PTbool | PTint | PTvar {user=true}), 
-    (PTunit | PTreal | PTbool | PTint | PTvar {user=true}) -> 
+  | (PTunit | PTreal | PTbool | PTint | PTvar {user=true}),
+    (PTunit | PTreal | PTbool | PTint | PTvar {user=true}) ->
       t1 = t2
 
-let make_comparison loc (a,ta) r (b,tb) = 
+let make_comparison loc (a,ta) r (b,tb) =
   if not (unify ta tb) then
-    raise_located loc 
-      (ExpectedType2 
+    raise_located loc
+      (ExpectedType2
 	 ((fun f -> Util.print_pure_type f (normalize_pure_type ta)),
 	  (fun f -> Util.print_pure_type f (normalize_pure_type tb))));
   match normalize_pure_type ta, r, normalize_pure_type tb with
@@ -150,10 +153,6 @@ let int_arith = function
   | PPadd -> t_add_int
   | PPsub -> t_sub_int
   | PPmul -> t_mul_int
-(* disabled (confusion math_div / computer_div)
-  | PPdiv -> t_div_int
-  | PPmod -> t_mod_int
-*)
   | _ -> assert false
 
 let real_arith = function
@@ -164,12 +163,14 @@ let real_arith = function
   | _ -> assert false
 
 let make_arith loc = function
-  | (a,t1), (PPadd|PPsub|PPmul|PPdiv|PPmod as r), (b,t2) 
+  | (a,t1), (PPadd|PPsub|PPmul as r), (b,t2)
     when unify t1 PTint && unify t2 PTint ->
       Tapp (int_arith r, [a; b], []), PTint
-  | (a,t1), (PPadd|PPsub|PPmul|PPdiv as r), (b,t2) 
+  | (a,t1), (PPadd|PPsub|PPmul|PPdiv as r), (b,t2)
     when unify t1 PTreal && unify t2 PTreal ->
       Tapp (real_arith r, [a; b], []), PTreal
+  | _,PPdiv,_ ->
+      expected_real loc
   | (_,_t1),_op,(_,_t2) ->
       expected_num loc
 
@@ -179,17 +180,17 @@ let predicate_expected loc =
 let term_expected loc =
   raise_located loc (AnyMessage "syntax error: term expected")
 
-let instance _x i = 
-  let l = 
-    Vmap.fold 
-      (fun _ v l -> 
-	 (match v.type_val with 
-	    | None -> PTvar v 
-	    | Some pt -> normalize_pure_type pt) :: l) 
+let instance _x i =
+  let l =
+    Vmap.fold
+      (fun _ v l ->
+	 (match v.type_val with
+	    | None -> PTvar v
+	    | Some pt -> normalize_pure_type pt) :: l)
       i []
-  in 
+  in
   (*
-    eprintf "instance %a[@[%a@]]@." 
+    eprintf "instance %a[@[%a@]]@."
     Ident.print x (Pp.print_list Pp.comma print_pure_type) l;
   *)
   l
@@ -273,14 +274,14 @@ and desc_predicate loc lab env = function
       Por (predicate lab env a, predicate lab env b)
   | PPinfix (a, PPimplies, b) ->
       Pimplies (false, predicate lab env a, predicate lab env b)
-  | PPinfix 
-      ({pp_desc = PPinfix (_, (PPlt|PPle|PPgt|PPge|PPeq|PPneq), a)} as p, 
+  | PPinfix
+      ({pp_desc = PPinfix (_, (PPlt|PPle|PPgt|PPge|PPeq|PPneq), a)} as p,
        (PPlt | PPle | PPgt | PPge | PPeq | PPneq as r), b) ->
       let q = { pp_desc = PPinfix (a, r, b); pp_loc = loc } in
       Pand (false, true, predicate lab env p, predicate lab env q)
   | PPinfix (a, (PPlt | PPle | PPgt | PPge | PPeq | PPneq as r), b) ->
       make_comparison a.pp_loc (term lab env a) r (term lab env b)
-  | PPinfix (_, (PPadd | PPsub | PPmul | PPdiv | PPmod), _) -> 
+  | PPinfix (_, (PPadd | PPsub | PPmul | PPdiv), _) ->
       predicate_expected loc
   | PPprefix (PPneg, _) ->
       predicate_expected loc
@@ -289,9 +290,9 @@ and desc_predicate loc lab env = function
   | PPif (a, b, c) ->
       let ta,tya = term lab env a in
       (match normalize_pure_type tya with
-	 | PTbool -> 
+	 | PTbool ->
 	     Pif (ta, predicate lab env b, predicate lab env c)
-	 | _ -> 
+	 | _ ->
 	     raise_located a.pp_loc ShouldBeBoolean)
   | PPforall (id, pt, tl, a) ->
       let v = pure_type env pt in
@@ -318,23 +319,23 @@ and desc_predicate loc lab env = function
       plet x ty t (predicate lab env f)
 
 and type_pvar loc _env x =
-  if is_at x then 
+  if is_at x then
     raise_located loc (AnyMessage "predicates cannot be labelled");
   try match snd (find_global_logic x) with
     | Predicate [] -> Pvar x
     | Function _ -> predicate_expected loc
     | _ -> raise_located loc PartialApp
-  with Not_found -> 
+  with Not_found ->
     raise_located loc (UnboundVariable x)
 
 and type_papp loc _env x tl =
   try match find_global_logic x with
-    | vars, Predicate at -> 
-	check_type_args loc at tl; 
+    | vars, Predicate at ->
+	check_type_args loc at tl;
 	Papp (x, List.map fst tl, instance x vars)
-    | _ -> 
+    | _ ->
 	predicate_expected loc
-  with Not_found -> 
+  with Not_found ->
     raise_located loc (UnboundVariable x)
 
 
@@ -356,7 +357,7 @@ and desc_term loc lab env = function
       tfalse, PTbool
   | PPconst c ->
       Tconst c, type_const c
-  | PPinfix (a, (PPadd|PPsub|PPmul|PPdiv|PPmod as r), b) ->
+  | PPinfix (a, (PPadd|PPsub|PPmul|PPdiv as r), b) ->
 	make_arith loc (term lab env a, r, term lab env b)
   | PPinfix (_, (PPand|PPor|PPiff|PPimplies
 		|PPlt|PPle|PPgt|PPge|PPeq|PPneq), _) ->
@@ -366,7 +367,7 @@ and desc_term loc lab env = function
 	 | ta, ty when unify ty PTint -> Tapp (t_neg_int, [ta], []), PTint
 	 | ta, ty when unify ty PTreal -> Tapp (t_neg_real, [ta], []), PTreal
 	 | _ -> expected_num loc)
-  | PPnamed(n, t) -> 
+  | PPnamed(n, t) ->
       let tt,ty = term lab env t in Tnamed(User n, tt), ty
   | PPlet (x, e1, e2) ->
       let t1, ty1 = term lab env e1 in
@@ -387,27 +388,27 @@ and desc_term loc lab env = function
 (* (* dead code *)
 and type_if lab env a b c =
   match term lab env a, term lab env b, term lab env c with
-    | (ta, PTbool), (tb, tyb), (tc, tyc) -> 
-	if tyb <> tyc then 
-	  raise_located c.pp_loc 
+    | (ta, PTbool), (tb, tyb), (tc, tyc) ->
+	if tyb <> tyc then
+	  raise_located c.pp_loc
 	    (ExpectedType (fun f -> print_pure_type f tyb));
 	Tapp (if_then_else, [ta; tb; tc], []), tyb
     | _ -> raise_located a.pp_loc ShouldBeBoolean
 *)
 
-and type_tvar loc lab env x = 
-  let x,xu = 
+and type_tvar loc lab env x =
+  let x,xu =
     if is_at x then begin
       let xu,l = un_at x in
       if not (Label.mem l lab) then raise_located loc (UnboundLabel l);
-      if not (is_reference env xu) then 
+      if not (is_reference env xu) then
 	xu,xu
-      else 
+      else
 	x,xu
-    end else 
+    end else
       x,x
   in
-  try 
+  try
     let t = find_logic xu env in Tvar x, t
     (*
     let vars,t = find_logic xu env in
@@ -415,24 +416,24 @@ and type_tvar loc lab env x =
     *)
   with Not_found -> try
     match find_global_logic xu with
-      | vars, Function ([], t) -> Tapp (x, [], instance x vars), t 
+      | vars, Function ([], t) -> Tapp (x, [], instance x vars), t
       | _ -> raise_located loc MustBePure
-  with Not_found -> 
+  with Not_found ->
     raise_located loc (UnboundVariable xu)
 
 
 and type_tapp loc _env x tl =
   try match find_global_logic x with
-    | vars, Function (at, t) -> 
+    | vars, Function (at, t) ->
 	check_type_args loc at tl; normalize_pure_type t, instance x vars
-    | _ -> 
+    | _ ->
 	raise_located loc AppNonFunction
-  with Not_found -> 
+  with Not_found ->
     raise_located loc (UnboundVariable x)
 
 and check_type_args loc at tl =
   let rec check_arg = function
-    | [], [] -> 
+    | [], [] ->
 	()
     | a :: al, (tb,b) :: bl ->
 	if unify a b then
@@ -457,35 +458,35 @@ and pattern lab env t =
   match t.pp_desc with
   | PPapp (x, _) ->
       (try match find_global_logic x with
-      | _, Function (_, _) -> 
+      | _, Function (_, _) ->
 	  TPat (fst (term lab env t))
-      | _ -> 
+      | _ ->
 	  PPat (predicate lab env t)
-      with Not_found -> 
+      with Not_found ->
 	raise_located t.pp_loc (UnboundVariable x))
-  | PPvar _ | PPinfix (_, (PPadd|PPsub|PPmul|PPdiv|PPmod), _) ->
+  | PPvar _ | PPinfix (_, (PPadd|PPsub|PPmul|PPdiv), _) ->
       TPat (fst (term lab env t))
-  | _ -> 
+  | _ ->
       Report.raise_located t.pp_loc Error.IllformedPattern
-  
+
 and triggers lab env = List.map (List.map (pattern lab env))
 
 (*s Checking types *)
 
 let add_logic_if_pure x v env =  match v with
   | PureType pt | Ref pt -> Env.add_logic x pt env
-  | Arrow _ -> env 
+  | Arrow _ -> env
 
-let type_assert ?(namer=h_name) lab env a = 
+let type_assert ?(namer=h_name) lab env a =
   { a_value = predicate lab env a.pa_value;
     a_name = namer a.pa_name;
     a_loc = a.pa_loc;
     a_proof = None }
 
-let type_post lab env id v ef (a,al) = 
-  let lab' = Label.add "" lab in 
-  let a' = 
-    let env' = add_logic_if_pure id v env in type_assert lab' env' a 
+let type_post lab env id v ef (a,al) =
+  let lab' = Label.add "" lab in
+  let a' =
+    let env' = add_logic_if_pure id v env in type_assert lab' env' a
   in
   let xs = Effect.get_exns ef in
   let check_exn (x,a) =
@@ -525,9 +526,9 @@ let check_effect loc env e =
 
 (* warns if a ref occuring in a predicate is not mentioned in the effect,
    and adds it as read to the effect *)
-let warn_refs loc env p = 
-  Idset.fold 
-    (fun id ef -> 
+let warn_refs loc env p =
+  Idset.fold
+    (fun id ef ->
        if not (Effect.is_read ef id) then begin
 	 wprintf loc "mutable %a is not declared in effect; added as read\n"
 	   Ident.print id;
@@ -538,20 +539,20 @@ let warn_refs loc env p =
     (predicate_refs env p)
 
 let effect e =
-  let ef = 
-    List.fold_left (fun e x -> Effect.add_write x e) Effect.bottom e.pe_writes 
+  let ef =
+    List.fold_left (fun e x -> Effect.add_write x e) Effect.bottom e.pe_writes
   in
   let ef = List.fold_left (fun e x -> Effect.add_read x e ) ef e.pe_reads in
   List.fold_left (fun e x -> Effect.add_exn x e) ef e.pe_raises
-    
+
 
 let rec type_v loc lab env = function
-  | PVpure pt -> 
+  | PVpure pt ->
       PureType (pure_type env pt)
-  | PVref v -> 
+  | PVref v ->
       Ref (pure_type env v)
-  | PVarrow (bl, c) -> 
-      let bl',env' = binders loc lab env bl in 
+  | PVarrow (bl, c) ->
+      let bl',env' = binders loc lab env bl in
       Arrow (bl', type_c loc lab env' c)
 
 and type_c loc lab env c =
@@ -574,9 +575,9 @@ and binders loc lab env = function
       [], env
   | (id, v) :: bl ->
       let v = type_v loc lab env v in
-      let bl',env' = 
-	binders loc lab 
-	  (Env.add id v (add_logic_if_pure id v env)) bl 
+      let bl',env' =
+	binders loc lab
+	  (Env.add id v (add_logic_if_pure id v env)) bl
       in
       (id, v) :: bl', env'
 
@@ -584,12 +585,12 @@ let type_v loc lab env v = make_binders_type_v (type_v loc lab env v)
 
 let type_c loc lab env c = make_binders_type_c (type_c loc lab env c)
 
-let logic_type lt = 
+let logic_type lt =
   let env = Env.empty_logic () in
   match lt with
-  | PPredicate pl -> 
+  | PPredicate pl ->
       Predicate (List.map (pure_type env) pl)
-  | PFunction (pl, t) -> 
+  | PFunction (pl, t) ->
       Function (List.map (pure_type env) pl, pure_type env t)
 
 let alg_type _id vl td =

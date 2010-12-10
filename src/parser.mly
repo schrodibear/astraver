@@ -149,7 +149,7 @@
 %right prec_if
 %left prec_relation EQUAL NOTEQ LT LE GT GE
 %left PLUS MINUS
-%left TIMES SLASH PERCENT
+%left TIMES SLASH 
 %right uminus
 %left prec_app
 %left prec_ident
@@ -450,8 +450,6 @@ lexpr:
    { infix_pp $1 PPmul $3 }
 | lexpr SLASH lexpr
    { infix_pp $1 PPdiv $3 }
-| lexpr PERCENT lexpr
-   { infix_pp $1 PPmod $3 }
 | MINUS lexpr %prec uminus
    { prefix_pp PPneg $2 }
 | qualid_ident

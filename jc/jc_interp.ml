@@ -2958,6 +2958,7 @@ and expr e =
             | _ -> LTrue
         in
         assert (dec = None);
+        let ef = Jc_effect.expr Jc_pervasives.empty_fun_effect e in
 	begin match behs with
 	  | [_pos,id,b] ->
 	      assert (b.jc_behavior_throws = None);
@@ -2973,10 +2974,20 @@ and expr e =
                     make_and a
 	              (assigns ~type_safe:false
 	                 LabelPre
-                         infunction.jc_fun_info_effects (Some locs)
+                         ef (* infunction.jc_fun_info_effects*) (Some locs)
 	                 e#pos)
               in
-	      if is_current_behavior id then
+              if safety_checking () then
+                begin
+                  let tmp = tmp_var_name () in
+                  mk_expr (Let(tmp,
+                               mk_expr (Triple(true,r,expr e,LTrue,[])),
+                               append
+                                 (mk_expr
+                                    (BlackBox(Annot_type(LTrue,unit_type,[],[],post,[]))))
+                                 (mk_expr (Var tmp))))
+                end
+              else if is_current_behavior id then
                 if r = LTrue
                 then
                   mk_expr (Triple(true,LTrue,expr e,post,[]))
@@ -2985,7 +2996,25 @@ and expr e =
                     (mk_expr (BlackBox(Annot_type(LTrue,unit_type,[],[],r,[]))))
                     (mk_expr (Triple(true,LTrue,expr e,post,[])))
               else
-                (mk_expr (BlackBox(Annot_type(r, tr_var_type vi_result, [], [], post, []))))
+(*
+                let reads = read_effects 
+                  ~callee_reads:ef.jc_reads
+                  ~callee_writes:ef.jc_writes ~params:[] ~region_list:[]
+                in
+                let _writes = write_effects 
+                  ~callee_reads:ef.jc_reads
+                  ~callee_writes:ef.jc_writes ~params:[] ~region_list:[]
+                in
+*)
+                append
+                  (mk_expr (BlackBox(Annot_type(LTrue,unit_type,[],[],r,[]))))
+                  (*
+                  (mk_expr (BlackBox(Annot_type(LTrue, tr_var_type vi_result,reads, writes, post, []))))
+                  *)
+                  (let tmp = tmp_var_name () in
+                   mk_expr (Let(tmp,
+                                (mk_expr (Triple(true,LTrue,expr e,LTrue,[]))),
+                                (mk_expr (BlackBox(Annot_type(LTrue, tr_var_type vi_result,[], [], post, [])))))))
 	  | _ -> assert false
 	end
     | JCEthrow(exc,Some e1) ->
