@@ -1,0 +1,20 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only yoshinori.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD yoshinori.c"
+[jessie] Starting Jessie translation
+yoshinori.c:8:[jessie] failure: Unexpected failure.
+                  Please submit bug report (Ref. "norm.ml:1566:10").
+[kernel] The full backtrace is:
+         Raised at file "src/kernel/log.ml", line 507, characters 30-31
+         Called from file "src/kernel/log.ml", line 501, characters 2-9
+         Re-raised at file "src/kernel/log.ml", line 504, characters 8-9
+         Called from file "src/type/type.ml", line 599, characters 39-44
+         Called from file "queue.ml", line 134, characters 6-20
+         Called from file "src/kernel/boot.ml", line 36, characters 4-20
+         Called from file "src/kernel/cmdline.ml", line 660, characters 2-9
+         Called from file "src/kernel/cmdline.ml", line 173, characters 4-8
+         
+         Plug-in jessie aborted because of internal error.
+         Please report as 'crash' at http://bts.frama-c.com/
+         Note that a backtrace alone often does not have information to
+         understand the bug. Guidelines for reporting bugs are at:
+         http://bts.frama-c.com/dokuwiki/doku.php?id=mantis:frama-c:bug_reporting_guidelines

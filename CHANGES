@@ -1,6 +1,7 @@
 version 2.28, Dec ?, 2010
 ==========================
 
+  o [Why] support for Coq 8.3
   o [Why] support for Alt-Ergo 0.92.2
   o [Coq output] removed dependencies on Float and Gappa libraries,
     added dependency on Flocq library
