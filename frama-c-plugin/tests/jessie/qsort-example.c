@@ -1,9 +1,9 @@
 #include <stdlib.h>
 
 
-//**** rappel : 
-void qsort(void* base, 
-           size_t nmemb, 
+//**** rappel :
+void qsort(void* base,
+           size_t nmemb,
            size_t size,
            int(*compar)(const void *, const void *));
 
@@ -34,9 +34,9 @@ int compare_for_qsort(const void *x, const void *y) {
 #include <stdio.h>
 #include <assert.h>
 
-int main() { 
+int main() {
   struct date b[] = { {1,1,2010} , { 2,2, 2009}, {3,3,2010}};
-  qsort(b,3,sizeof(struct date),compare_for_qsort);
+  qsort(b,3,sizeof(struct date),&compare_for_qsort);
   assert(b[0].year <= b[1].year);
   printf("OK\n");
   return 0;

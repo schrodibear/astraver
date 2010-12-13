@@ -145,21 +145,23 @@ class retypeArrayVariables =
                      (Mem(new_exp ~loc (Lval(Var strawv,NoOffset))),off))
         end else e
     | AddrOf(Var v,off) ->
-        if Cil_datatype.Varinfo.Set.mem v !varset then begin
-          let ty = Cil_datatype.Varinfo.Hashtbl.find var_to_array_type v in
-          let strawv = Cil_datatype.Varinfo.Hashtbl.find var_to_strawvar v in
-          match lift_offset ty off with
-            | Index(ie,NoOffset) ->
-                let ptrty = TPtr(element_type ty,[]) in
-                new_exp ~loc
-                  (BinOp(PlusPI,
-                         new_exp ~loc (Lval(Var strawv,NoOffset)), ie,ptrty))
-            | NoOffset -> assert false
-            | Index _ | Field _ ->
-                (* Field with address taken treated separately *)
-                new_exp ~loc
-                  (AddrOf(Mem(new_exp ~loc (Lval(Var strawv,NoOffset))),off))
-        end else e
+        if Cil_datatype.Varinfo.Set.mem v !varset then 
+          begin
+            let ty = Cil_datatype.Varinfo.Hashtbl.find var_to_array_type v in
+            let strawv = Cil_datatype.Varinfo.Hashtbl.find var_to_strawvar v in
+            match lift_offset ty off with
+              | Index(ie,NoOffset) ->
+                  let ptrty = TPtr(element_type ty,[]) in
+                  new_exp ~loc
+                    (BinOp(PlusPI,
+                           new_exp ~loc (Lval(Var strawv,NoOffset)), ie,ptrty))
+              | NoOffset -> assert false
+              | Index _ | Field _ ->
+                  (* Field with address taken treated separately *)
+                  new_exp ~loc
+                    (AddrOf(Mem(new_exp ~loc (Lval(Var strawv,NoOffset))),off))
+          end 
+        else e
     | BinOp(PlusPI,e1,e2,opty) ->
         begin match (stripInfo e1).enode with
           | StartOf(Var v,off) ->
@@ -1145,7 +1147,8 @@ class retypeAddressTaken =
   in
   let postaction_expr e = match e.enode with
     | AddrOf(Var _v,NoOffset) ->
-        assert false (* Host should have been turned into [Mem] *)
+        unsupported "cannot take address of a function"
+          (* Host should have been turned into [Mem] *)
     | AddrOf(Mem e1,NoOffset) ->
         e1
     | AddrOf(_host,off) ->
@@ -1563,7 +1566,7 @@ object(self)
     match lv with
       | Var _, NoOffset -> lv
       | Var _, _ ->
-          assert false
+          unsupported "cannot handle this lvalue"
       | Mem e, NoOffset ->
           begin match self#wrap_type_if_needed (typeOf e) with
             | Some newtyp ->
