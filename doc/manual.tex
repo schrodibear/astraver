@@ -398,7 +398,7 @@ function is immediate.
 Next we need to give the main function a specification. First, we need
 to express that the array only contains one of the three values
 \texttt{blue}, \texttt{white} and \texttt{red}. Indeed, nothing
-prevents the type \texttt{color} to be inhabitated with other values
+prevents the type \texttt{color} to be inhabited with other values
 (there is no notion of inductive type in \why\ logic, since it is
 intended to be a common fragment of many tools, including many with no
 primitive notion of inductive types). So we define the following predicate
@@ -755,7 +755,7 @@ in the process of calling the various automatic provers on the goals
 (in order to analyze the failures and to determine what is wrong in
 the programs, the specifications, or sometimes the provers).
 \texttt{gwhy} is similar to \why\
-and is passed the same options and files. A screenshort is given
+and is passed the same options and files. A screenshot is given
 Figure~\ref{fig:gwhy}. On the left side appears the list of all goals
 (either from \texttt{goal} commands in the \why\ files or resulting
 from verification conditions generation). In front of each goal, the
@@ -1120,9 +1120,9 @@ Keywords are the following:
 
 Syntax for terms is given Figure~\ref{fig:terms}.  Arithmetical
 operations have usual precedences and are left associative.  The
-division operator $/$ only applies on reals, not on integer. Divisions
+division operator $/$ only applies on reals, not on integer. Division
 and modulo operations on integers come in library
-\texttt{divisions.why} in two flavors: mathematical division division
+\texttt{divisions.why} in two flavors: mathematical division
 rounds down whereas computer division rounds to zero.  The conditional
 construct \texttt{if $t_1$ then $t_2$ else $t_3$} can also be written
 in prefix notation as \texttt{if\_then\_else($t_1$, $t_2$, $t_3$)}.

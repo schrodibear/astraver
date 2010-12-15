@@ -89,7 +89,7 @@ short), using the \Why{}~\cite{why} tool for generating proof
 obligations.
 
 This version \whyversion{} of Krakatoa is a major rewriting of  
-the version 0.x family. Major changes have occured including changes in the syntax of annotations.
+the version 0.x family. Major changes have occurred including changes in the syntax of annotations.
 
 Chapter~\ref{chap:tutorial} is a tutorial to introduce the user step
 by step to the use of Krakatoa. 
@@ -159,12 +159,12 @@ platform, as shown in Figure~\ref{fig:gwhy}
 
 The left sub-window displays a table where each row corresponds to a
 VC for method \texttt{max}. Each column corresponds to a theorem
-prover. Running a given prover on the VCs can be acheived by clicking
+prover. Running a given prover on the VCs can be achieved by clicking
 in its name in the first row. On the figure, the first three provers
 have been run: Alt-Ergo, Simplify and Z3. Their answers are exactly the
 same: all VCs are valid except the fifth. On the figure, the user has
-clickde on the corresponding fifth row, whioch is then highlighted in
-blue. On the upper right part of thw window, the VC is displayed, and
+clicked on the corresponding fifth row, which is then highlighted in
+blue. On the upper right part of the window, the VC is displayed, and
 in the lower right part, the source code is displayed, with a block
 highlighted in orange: this block is where the VC originates. On that
 example, it means that the system is unable to verify that the result
@@ -190,11 +190,11 @@ The new \texttt{requires} introduce a \texttt{precondition}. This is
 formula that is supposed to hold at the beginning of the method call,
 here we ask for the parameter \texttt{x} to be non-negative, otherwise
 computing its square root would not be possible. The precondition is
-not something guaranted by the method itself: it has to be checked by
+not something guaranteed by the method itself: it has to be checked by
 the caller of the method.
 
 The \texttt{ensures} clause given states now that (i) the result is
-non-negative, (i) the square of the result is lessthan or equal to
+non-negative, (ii) the square of the result is less than or equal to
 \texttt{x}, and (iii) the successor of the result has a square which
 is greater than \texttt{x}. This ensures that the result is indeed the
 square root rounded towards zero.
@@ -307,7 +307,7 @@ if the value of $x$ is too large, arithmetic overflow may occur.
 It is possible to find a bound for \texttt{x}, to be added in the
 precondition, together with appropriate bounds for \texttt{sum} and
 \texttt{count} to be added as loop invariants, to prove the absence of
-arithmetic overflow. This is left as an exercice. In some situation,
+arithmetic overflow. This is left as an exercise. In some situation,
 one may want to simply ignore possible arithmetic overflow. This is
 done by added the following \emph{pragma} at the beginning of the
 file:
@@ -323,13 +323,13 @@ Since the \texttt{sqrt} method body contains a \texttt{while} loop, it
 is possible that the method execution does not terminate for some of
 the input. This is not check by default, but if you want to check
 termination, you can add another clause to the loop annotation: a
-\texttt{loop\_variant} clause. An integer expression must follow, whic is
+\texttt{loop\_variant} clause. An integer expression must follow, which is
 supposed to decreases at each loop iteration, and remaining
 nonnegative. On the \texttt{sqrt} example, that \texttt{x-sum} is
 decreasing, so you can add:
 \input{Lesson1_sqrtdecr.pp}
 
-You can check again that this is porved automatically.
+You can check again that this is proved automatically.
 
 \section{Array accesses}
 
@@ -473,7 +473,7 @@ Basic additional constructs are as follows:
 % \item[Syntactic naming] $id \verb|:| e$ is a term or a proposition
 %   equivalent to $e$. It is different from local naming with $\bskw{let}$:
 %   the name cannot be reused in other terms or proposition. It is only
-%   for readibility purposes.
+%   for readability purposes.
 
 \item[Consecutive comparison operators] the construct $t_1~relop_1~t_2~relop_2~t_3 \cdots t_k$ with
   several consecutive comparison operators is a shortcut for
@@ -1150,7 +1150,7 @@ distributions.
 \item Unsupported kind of statements in translation: ...
 
 \item exception NullPointerException and ArrayOutOfBoundsException are
-required NOT to be thrown, and consequently should not be catched.
+required NOT to be thrown, and consequently should not be caught.
 
 %\item Method parameters are not modifiable.
 
@@ -1166,8 +1166,8 @@ correctness is guaranteed.
 
 \section{Contacts}
 
-The web page for Krakatoa is at URL \url{http://krakatoa.lri.fr/} and
-the wbe page for the Why platform in general is at
+The webpage for Krakatoa is at URL \url{http://krakatoa.lri.fr/} and
+the webpage for the Why platform in general is at
 \url{http://why.lri.fr}.
 
 For general questions regarding the use of the tool, please use the
@@ -1927,7 +1927,7 @@ Purse_invariant Purse_balance0 this
 \end{verbatim}
 \end{small}
 that is to prove that the \verb|Purse| class invariant is
-preserved. To perform that, we need to unfold the defintion of this
+preserved. To perform that, we need to unfold the definition of this
 invariant, but we will also need the fact that it was true at the
 beginning of the method, which is hypothesis \verb|H4|. Since we need
 to unfold both occurrences of \verb|Purse_invariant|, the best thing
