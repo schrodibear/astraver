@@ -1241,8 +1241,10 @@ alldepend:
 	make -C examples-v7 depend
 	make -C examples depend
 
+ifneq ($(MAKECMDGOALS),clean)
 include .depend
 include .depend.coq
+endif
 
 #################################################################
 # Building the Why platform with ocamlbuild (OCaml 3.10 needed) #
