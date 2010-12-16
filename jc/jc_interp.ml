@@ -1019,7 +1019,7 @@ let rec term ?(subst=VarMap.empty) ~type_safe ~global_assertion ~relocate lab ol
     | JCTat(t1,lab') ->
 	let lab = if relocate && lab' = LabelHere then lab else lab' in
 	term ~type_safe ~global_assertion ~relocate lab oldlab t1
-    | JCTrange(_t1,_t2) -> assert false (* TODO ? *)
+    | JCTrange(_t1,_t2) -> Jc_typing.typing_error t#pos "Unsupported range in term, sorry" (* TODO ? *)
     | JCTmatch(t, ptl) ->
         let t' = ft t in
         (* TODO: use a temporary variable for t' *)

@@ -2794,7 +2794,7 @@ let rec term_occurrences table t =
     | JCTbitwise_cast (_, _, _) -> assert false (* TODO *)
     | JCTcast (_, _, _) -> assert false (* TODO *)
     | JCTinstanceof (_, _, _) -> assert false (* TODO *)
-    | JCTbase_block _ -> assert false (* TODO *)
+    | JCTbase_block t -> term_occurrences table t
     | JCTaddress (_, _) -> assert false (* TODO *)
     | JCTold _ -> assert false (* TODO *)
 

@@ -1366,7 +1366,8 @@ let rec expr fef e =
 	     | JCalloc_root rt ->
 		 match rt.jc_root_info_kind with
 		   | Rvariant -> all_allocs ~select:fully_allocated pc
-		   | RdiscrUnion -> assert false (* TODO *)
+		   | RdiscrUnion -> 
+                       Jc_typing.typing_error e#pos "Unsupported discriminated union, sorry" (* TODO *)
 		   | RplainUnion -> [ ac ]
 	   in
 	   let all_mems = match ac with

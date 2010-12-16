@@ -1,10 +1,3 @@
-/* Frama-C BTS 0404
-
-
-Status: open
-
-*/
-
 typedef struct abstract_seq_call {int bidon;} SEQ_CALL;
 
 /*@ axiomatic Seq_call {
@@ -19,11 +12,3 @@ typedef struct abstract_seq_call {int bidon;} SEQ_CALL;
   @*/
 
 int main(void) {return 0;}
-
-
-
-/*
-Local Variables:
-compile-command: "make bts0404"
-End:
-*/

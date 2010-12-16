@@ -997,7 +997,7 @@ and terms_lval pos lv =
           List.map (fun e -> mkexpr (JCPEderef(e,fi.fname)) pos) e
 
     | TMem _e, TIndex _ ->
-        assert false (* Should have been rewritten *)
+        unsupported "cannot interpreted this lvalue"
 
 and term t =
   match terms t with [ t ] -> t

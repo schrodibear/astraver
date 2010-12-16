@@ -155,7 +155,8 @@ class retypeArrayVariables =
                   new_exp ~loc
                     (BinOp(PlusPI,
                            new_exp ~loc (Lval(Var strawv,NoOffset)), ie,ptrty))
-              | NoOffset -> assert false
+              | NoOffset -> 
+                  unsupported "this instance of the address operator cannot be handled"
               | Index _ | Field _ ->
                   (* Field with address taken treated separately *)
                   new_exp ~loc

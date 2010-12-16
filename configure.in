@@ -295,10 +295,10 @@ else
       FRAMACVERSION=`$FRAMAC -version | sed -n -e 's|Version: *\(.*\)$|\1|p' `
       AC_MSG_RESULT($FRAMACVERSION)
       case $FRAMACVERSION in
-        Carbon-20101201-beta1) 
+        Carbon-*) 
            FRAMAC=yes
            ;;
-        *) FRAMACMSG="you need Frama-C version Carbon-20101201-beta1"
+        *) FRAMACMSG="you need Frama-C version Carbon"
            FRAMAC=no
            AC_MSG_WARN($FRAMACMSG)
            ;;

@@ -1,10 +1,10 @@
-/*@ predicate Sorted{L}(int *a, integer l, integer h) =
+/*@ predicate Sorted{L}(int a[], integer l, integer h) =
     \forall integer i; l <= i < h ==> a[i] <= a[i+1];
-// \forall integer i,j; 0 <= i < j <= aLength-1 ==> a[i] <= a[j];
  */
+//    requires Sorted(a,0,aLength-1);
 
-/*@ requires Sorted(a,0,aLength-1);
-    requires \valid(a+ (0..aLength-1)) && aLength >= 0;
+/*@ requires \valid(a+ (0..aLength-1)) && aLength >= 0;
+    requires \forall integer i,j; 0 <= i < j <= aLength-1 ==> a[i] <= a[j];
     assigns \nothing;
     behavior success:
       assumes \exists integer res; 0 <= res <= aLength-1 && a[res] == val;
@@ -22,7 +22,7 @@ int binary_search(int val, int a[], int aLength) {
   /*@ loop invariant 0 <= low && high <= aLength-1;
       loop invariant \forall integer i; 0 <= i < low  ==>  a[i] < val;
       loop invariant \forall integer i; aLength-1  >= i > high  ==>  a[i] > val;
-      // loop variant high-low;
+      loop variant high-low;
   */
   while(low <= high) {
     mid = low + (high - low) / 2;
