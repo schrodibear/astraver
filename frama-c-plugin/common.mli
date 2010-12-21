@@ -216,3 +216,5 @@ val visit_and_push_statements :
 
 
 val print_to_stdout : Cil_types.file -> unit
+
+val constant_expr : ?loc:Cil_datatype.Location.t -> int64 -> Cil_types.exp

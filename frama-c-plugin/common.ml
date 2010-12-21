@@ -40,6 +40,9 @@ open Visitor
 (* Utility functions *)
 open Format
 
+let constant_expr ?(loc=Cil_datatype.Location.unknown) e = 
+  Ast_info.constant_expr ~loc e
+
 exception NotImplemented of string
 exception Unsupported of string
 
@@ -1131,7 +1134,7 @@ let free_function () =
 
 let mkalloc v ty loc =
   let callee = new_exp ~loc (Lval(Var(malloc_function ()),NoOffset)) in
-  let arg = sizeOf ty in
+  let arg = sizeOf ~loc ty in
   Call(Some(Var v,NoOffset),callee,[arg],loc)
 
 let mkalloc_statement v ty loc = mkStmt (Instr(mkalloc v ty loc))

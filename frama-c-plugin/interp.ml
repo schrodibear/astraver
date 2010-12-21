@@ -1938,7 +1938,9 @@ let rec instruction = function
         else
           let tmpv = makeTempVar (get_curFundec()) (getReturnType v.vtype) in
           let tmplv = Var tmpv, NoOffset in
-          let cast = new_exp ~loc:pos (CastE(lvty,new_exp(Lval tmplv))) in
+          let cast = 
+            new_exp ~loc:pos (CastE(lvty,new_exp ~loc:pos (Lval tmplv))) 
+          in
           let tmpassign = JCPEassign(lval pos lv,expr cast) in
           JCPElet(None,tmpv.vname,Some call,locate (mkexpr tmpassign pos))
       in

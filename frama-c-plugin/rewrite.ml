@@ -438,7 +438,9 @@ let gather_initialization file =
 	  | None ->
 	      if bitsSizeOf v.vtype lsr 3 < 100 then
 		(* Enforce zero-initialization of global variables *)
-		let ie = makeZeroInit v.vtype in
+		let ie = 
+                  makeZeroInit ~loc:Cil_datatype.Location.unknown v.vtype 
+                in
 		let b = Cabs2cil.blockInit (Var v, NoOffset) ie v.vtype in
 		b.bstmts
 	      else
