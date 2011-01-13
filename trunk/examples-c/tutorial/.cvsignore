@@ -1,0 +1,11 @@
+simplify
+*.depend
+*.makefile
+*.log
+why
+cvcl
+out
+
+pvs
+isabelle
+gwhy.cache semantic.cache

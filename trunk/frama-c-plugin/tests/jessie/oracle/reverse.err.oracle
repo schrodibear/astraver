@@ -1,0 +1,2 @@
+File "reverse.jessie/reverse.jc", line 76, characters 11-23: Unable to complete region analysis, aborting. Consider using #pragma SeparationPolicy(none)
+make: *** [reverse.regtest] Error 1

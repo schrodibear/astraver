@@ -1,0 +1,83 @@
+
+/* Fibonaccian Search (vol. 3, page 418) */
+
+/* searches for K in KEY+1 ... KEY+N */
+	
+{{{ 
+logic KEY,K,N : int 
+
+logic fib : int -> int
+
+axiom fib_0 : fib(0) = 0
+axiom fib_1 : fib(1) = 1
+axiom fib_n : forall n:int. n >= 0 -> fib(n+2) = fib(n+1) + fib(n)
+
+(* derived properties *)
+axiom fib_nonneg : forall n:int. n >= 0 -> fib(n) >= 0
+axiom fib_pos :	forall n:int. n > 0 -> fib(n) > 0
+axiom fib_ge1 :	forall n:int. n >= 0 -> fib(n) >= 1 -> n >= 1
+axiom fib_2_3 :	forall n:int. n >= 0 -> fib(n) >= 2 -> n >= 3
+	
+logic k, fib_k, fib_k_1, fib_k_2 : int
+axiom k       : k >= 2
+axiom fib_k   : fib_k   = fib(k)
+axiom fib_k_1 : fib_k_1 = fib(k-1)
+axiom fib_k_2 : fib_k_2 = fib(k-2)
+
+axiom fib_k_pos   : fib(k) >= 1
+axiom fib_k_1_pos : fib(k-1) >= 1
+	
+predicate Sorted(mem: int array) =
+  forall i1,i2:int. 1 <= i1 <= i2 <= N -> mem[KEY+i1] <= mem[KEY+i2]
+
+predicate Between(mem: int array, l:int, u:int) =
+  forall i:int. 1 <= i <= N -> mem[KEY+i] = mem[K] -> l <= i <= u
+	
+}}}
+	
+start:	{{ 1 <= N and N+1 = fib(k+1) and Sorted(mem) }}
+	lda	K
+	ent1	fib_k
+	ent2	fib_k_1-1
+	ent3	fib_k_2-1
+	jmp	F2A
+F4A:	inc1	1,3
+	dec2	1,3
+	dec3	1,2
+F2A:	{{ 1 <= i1-i2-i3-1 <= i1 <= i1+i2 <= N and a = mem[K] and
+	   Sorted(mem) and Between(mem, i1-i2-i3-1, i1+i2) and
+	   exists n:int. 1 <= n and i2+1=fib(n) and i3+1=fib(n-1) }}
+	cmpa	KEY,1
+	jl	F3A
+	je	success
+	j2nz	F4A
+	jmp	failure
+F3A:	dec1	1,3
+	dec2	1,3
+	j3nn	F2B
+	jmp	failure
+F4B:	inc1	1,2
+	dec3	1,2
+	dec2	1,3
+F2B:	{{ 1 <= i1-i3-i2-1 <= i1 <= i1+i3 <= N and a = mem[K] and
+	   Sorted(mem) and Between(mem, i1-i3-i2-1, i1+i3) and
+	   exists n:int. 1 <= n and i3+1=fib(n) and i2+1=fib(n-1) }}
+	cmpa	KEY,1
+	jl	F3B
+	je	success
+	j3nz	F4B
+	jmp	failure
+F3B:	dec1	1,2
+	dec3	1,2
+	j2nn	F2A
+failure:{ forall i:int. 1 <= i <= N -> mem[K] <> mem[KEY+i] }
+	hlt
+success:{ mem[K] = mem[KEY+i1] }
+		
+/*
+Local Variables: 
+mode: asm
+compile-command: "../../bin/demixify.opt fibonaccian_search.mix -entry start -gwhy"
+End: 
+*/
+

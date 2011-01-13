@@ -1,0 +1,4 @@
+File "why/bts0092.why", line 271, characters 4-23:
+Unbound variable char_P_char_M_foo_6
+make: *** [why/bts0092.wpr] Error 1
+make: *** [bts0092.regtest] Error 2

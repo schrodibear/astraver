@@ -1,0 +1,40 @@
+include "integer.why"
+
+(****************************************************************************)
+(* division and modulo                                                      *)
+(****************************************************************************)
+
+logic computer_div : int, int -> int
+logic computer_mod : int, int -> int
+logic math_div : int, int -> int
+logic math_mod : int, int -> int
+
+parameter computer_div_ : x:int -> y:int ->
+  { y<>0 } int { result = computer_div(x,y) }
+parameter computer_mod_ : x:int -> y:int ->
+  { y<>0 } int { result = computer_mod(x,y) }
+
+axiom math_div_mod:
+  forall x,y:int. y <> 0 -> x = y * math_div(x,y) + math_mod(x,y)
+
+axiom math_mod_bound:
+  forall x,y:int. y <> 0 -> 0 <= math_mod(x,y) < abs_int(y)
+
+axiom computer_div_mod:
+  forall x,y:int [computer_div(x,y), computer_mod(x,y)].
+    y <> 0 -> x = y * computer_div(x,y) + computer_mod(x,y)
+
+axiom computer_div_bound:
+  forall x,y:int. x >= 0 and  y > 0 -> 0 <= computer_div(x,y) <= x
+
+axiom computer_mod_bound:
+  forall x,y:int. y <> 0 -> abs_int(computer_mod(x,y)) < abs_int(y)
+
+axiom computer_mod_sign_pos:
+  forall x,y:int. x >= 0 and y <> 0 -> computer_mod(x,y) >= 0
+
+axiom computer_mod_sign_neg:
+  forall x,y:int. x <= 0 and y <> 0 -> computer_mod(x,y) <= 0
+
+axiom computer_rounds_toward_zero:
+  forall x,y:int. y <> 0 -> abs_int(computer_div(x,y) * y) <= abs_int(x)

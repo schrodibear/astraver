@@ -1,0 +1,12 @@
+float mycos(float x)
+  requires \real_abs((x :> real)) <= 0.03;
+behavior default:
+  ensures (\real_abs(((\result :> real) - \cos((x :> real)))) <= 6.5e-8);
+{
+   var float retres;
+   assert (\real_abs(1.0 - ((x :> real) * (x :> real)) * 0.5 - \cos((x :> real))) <= 3.5e-8);
+   retres = (1.0 :> float) - (x * x) * (0.5 :> float);
+
+   return retres
+}
+

@@ -1,0 +1,8 @@
+*.makefile
+*.loc
+jessie.log
+gwhy.cache
+why
+smtlib
+coq
+simplify

@@ -1,0 +1,4 @@
+File "why/bts0072.why", line 281, characters 6-72:
+warning: mutable mutable_p is not declared in effect; added as read
+File "why/bts0072.why", line 306, characters 6-143:
+warning: mutable mutable_p is not declared in effect; added as read

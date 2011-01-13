@@ -1,0 +1,79 @@
+
+         THE OCTAGON ABSTRACT DOMAIN LIBRARY - READ ME
+
+General Information
+===================
+
+This is the Octagon Abstract Domain Library.
+This library allows to manipulate set of invariants of the form +- x +-y <= c,
+where x and y are variables, and c is a numerical constant.
+
+The official web site is:  http://www.di.ens.fr/~mine/oct/
+
+The technical background of the Octagon Abstract Domain can be found in 
+the paper "The Octagon Abstract Domain" by A. Miné, available at
+http://www.di.ens.fr/~mine/publi/article-mine-ast01.pdf
+
+A prototype analyzer (provided in the library) is available on-line at
+http://dmi.ens.fr/cgi-bin/mine/octanalhtml/octanalweb .
+
+
+
+Installation
+============
+
+The installation should be simple thanks to the configure script:
+ "./configure", then "make", and eventually "make install".
+See the file 'INSTALL' for more informations, and the list of configure
+options.
+(Note: some options to the configure script, such as --with-num=, must be
+specified).
+
+Usage
+=====
+
+This library is provided 'as is' without warranty of any kind.
+It is basically a internal tool, freely distributed in the hope it can
+be useful for students and researcher.
+It is intended for academic use only.
+Contact the author before attempting any commercial use.
+By using, distributing, or modifying the Octagon Abstract Domain Library,
+you indicate that you understand and accept all the terms of the license
+provided in the 'COPYING' file.
+
+
+Documentation
+=============
+
+This package comes with a full documentation.
+This documentation is compiled from a Latex source file doc_oct.tex.
+The documentation is installed in /usr/local/share/oct by default, 
+in DVI format.
+See the file 'INSTALL' on how to obtain a Postscript or PDF file from this
+Latex file.
+
+
+How to report bugs
+==================
+
+Please send all bug-reports directly by e-mail to the author 
+< mine@di.ens.fr >.
+
+In the bug report, please include:
+ * your system specification (processor, OS, gcc version,...);
+ * the version of the Octagon Abstract Domain Library you tried;
+ * GMP, MPFR, New Polka, and OCaml versions, if you use any of them;
+ * how to reproduce the bug.
+
+The mail subject should be something like "liboct bug-report".
+
+
+Patches
+=======
+
+Patches should be also submitted by e-mail to the author < mine@di.ens.fr >.
+
+The mail subject should be something like "liboct patch", and should include
+a full diff of the proposed patch, as well as the version of the library you
+apply the patch on.
+

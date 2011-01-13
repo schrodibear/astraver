@@ -1,0 +1,53 @@
+
+/* Binary Search (vol. 3, page 410) */
+
+/* searches for K in KEY+1 ... KEY+N */
+	
+{{{ 
+logic KEY,K,N,TEMP:int 
+
+axiom separation1: forall i:int. 1 <= i <= N -> TEMP <> KEY+i 
+axiom separation2: TEMP <> K 
+
+predicate Sorted(mem: int array) =
+  forall i1,i2:int. 1 <= i1 <= i2 <= N -> mem[KEY+i1] <= mem[KEY+i2]
+
+predicate Between(mem: int array, l:int, u:int) =
+  forall i:int. 1 <= i <= N -> mem[KEY+i] = mem[K] -> l <= i <= u
+	
+axiom helper1: forall l,u:int [(l+u)/2]. l <= u -> l <= (l+u)/2 <= u 
+axiom helper2: forall l,u:int [(l+u)/2]. l <= (l+u)/2 -> l <= u
+}}}
+	
+start:	/*i 1 <= N and Sorted(mem) i*/
+	ent1    1
+	ent2	N
+	jmp	2F
+5H:	je	success
+	ent1	1,3
+2H:	/*i 1 <= i1 <= N+1 and 0 <= i2 <= N and Sorted(mem) 
+	    and Between(mem,i1,i2) i*/
+	enta	0,1
+	inca	0,2
+	srb	1
+	sta	TEMP
+	cmp1	TEMP
+	jg	failure
+	ld3	TEMP
+3H:	lda	K
+	cmpa	KEY,3
+	jge	5B
+	ent2	-1,3
+	jmp	2B
+failure:/*a forall i:int. 1<=i<=N -> mem[K]<>mem[KEY+i] a*/
+	hlt
+success:/*a mem[K] = mem[KEY+i3] a*/
+
+		
+/*
+Local Variables: 
+mode: asm
+compile-command: "../../bin/demixify.opt binary_search.mix -entry start -gwhy"
+End: 
+*/
+

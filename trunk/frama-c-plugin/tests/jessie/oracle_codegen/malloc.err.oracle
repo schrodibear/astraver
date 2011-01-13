@@ -1,0 +1,4 @@
+[preprocessing] running gcc -C -E -I. malloc.c
+No code for function malloc, default assigns generated
+Warning: exception Loop_exit cannot be thrown
+Warning: exception Loop_exit cannot be thrown

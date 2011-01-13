@@ -1,0 +1,7 @@
+*.vo
+*.wol
+.pvscontext
+
+*_valid.v
+*.pvs
+*_why.* pvsbin .pvscontext gwhy.cache

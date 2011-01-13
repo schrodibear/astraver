@@ -1,0 +1,2 @@
+File "bts0500.jessie/bts0500.jc", line 51, characters 18-37: typing error: Unsupported discriminated union, sorry
+make: *** [bts0500.regtest] Error 1

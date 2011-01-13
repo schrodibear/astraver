@@ -1,0 +1,4 @@
+File "why/ref.why", line 354, characters 20-42:
+Unbound variable int_P_i_2_alloc_table
+make: *** [why/ref.wpr] Error 1
+make: *** [ref.regtest] Error 2

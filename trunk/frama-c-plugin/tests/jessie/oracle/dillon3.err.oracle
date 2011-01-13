@@ -1,0 +1,4 @@
+File "why/dillon3.why", line 334, characters 16-43:
+Unbound variable double_P_tab_2_alloc_table
+make: *** [why/dillon3.wpr] Error 1
+make: *** [dillon3.regtest] Error 2

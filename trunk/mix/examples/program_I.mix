@@ -1,0 +1,42 @@
+
+/* Program I (TAOCP, vol. 1, page 177) */
+
+{{{ logic N,X:	int }}}
+
+/* registers: i1 =  m
+	      i2 = -i
+	      i3 =  j */
+		
+init:	{{ N >= 1 and 
+	   forall k: int. 1 <= k <= N -> 1 <= mem[X+k] <= N }}
+	ent1	N
+	ent3	-1
+2H:	{{ invariant1: 1 <= i1 <= N and -N <= i3 <= -1 and
+           forall k:int. 
+		1 <= k <= N -> (-N <= mem[X+k] <= -1 or 1 <= mem[X+k] <= N) }}
+	{ 1 <= i1 <= N }
+	ld2n	X,1
+	j2p	5F
+3H:	{{ invariant2: 1 <= i1 <= N and 1 <= -i2 <= N and -N <= i3 <= -1 and
+           forall k:int. 
+		1 <= k <= N -> (-N <= mem[X+k] <= -1 or 1 <= mem[X+k] <= N) }}
+	{ 1 <= i1 <= N }
+	st3	X,1
+	enn3	0,1
+	enn1	0,2
+	{ 1 <= i1 <= N }
+	ld2n	X,1
+4H:	j2n	3B
+	enn2	0,3
+5H:	{ 1 <= i1 <= N }
+	st2	X,1
+6H:	dec1	1
+	j1p	2B
+	
+/*
+Local Variables: 
+mode: asm
+compile-command: "../../bin/demixify.opt program_I.mix -entry init -gwhy"
+End: 
+*/
+

@@ -1,0 +1,30 @@
+
+This is to announce a new release 2.10 of the Why platform.
+
+A major novelty of this release is that the former external Krakatoa
+tool for Java program verification is now integrated in the
+platform. It is a major reimplementation of the former version 0.67.
+
+Documentation, source and binary distributions are available at
+http://why.lri.fr/ and https://gforge.inria.fr/docman/?group_id=999.
+Bug report should be sent to the BTS: 
+ https://gforge.inria.fr/tracker/?atid=4012&group_id=999&func=browse
+
+Among the other novelties are: 
+
+- [GWhy] redesign of the tool for VC viewing, with an enhanced
+tracking system to related VCs with the original source code
+
+- [Eclipse plugin] An Eclipse plugin is available
+  (http://www.lri.fr/~oudot/plugin/WhyPluginUpdateSite/)
+
+- [Caduceus] support for arithmetic modulo on machine integers,
+  several bug fixes
+
+- [Provers] support for external prover Z3
+
+See files CHANGES and CHANGES.caduceus of the source distribution for
+details, including bug fixes.
+
+-- 
+The Why development team

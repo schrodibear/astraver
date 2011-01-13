@@ -1,0 +1,3 @@
+#!/bin/sh
+../../bin/simplify2why.opt $1
+gwhy $1.why

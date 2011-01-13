@@ -1,0 +1,40 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0406.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0406.c"
+[jessie] Starting Jessie translation
+[jessie] Producing Jessie files in subdir bts0406.jessie
+[jessie] File bts0406.jessie/bts0406.jc written.
+[jessie] File bts0406.jessie/bts0406.cloc written.
+# IntModel = bounded
+# InvariantPolicy = Arguments
+# SeparationPolicy = Regions
+# AnnotationPolicy = None
+# AbstractDomain = Pol
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+type int8 = -128..127
+
+tag char_P = {
+  int8 char_M: 8;
+}
+
+type char_P = [char_P]
+
+tag void_P = {
+}
+
+type void_P = [void_P]
+
+axiomatic U {
+
+  axiom toto :
+  (\forall double f;
+    ((0x1p-1022 <= \real_abs((f :> real))) ||
+      (\real_abs((f :> real)) < 0x1p-1022)))
+  
+}
+WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs bts0406.jessie/bts0406.cloc bts0406.jessie/bts0406.jc

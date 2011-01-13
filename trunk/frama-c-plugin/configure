@@ -1,0 +1,6 @@
+#!/bin/sh
+# Wrapper for the configure of why distribution, to be used when plugin
+# configuration is driven by Frama-C's kernel
+if test "$WHY_DISTRIB" = ""; then WHY_DISTRIB=..; fi
+if test ! -e $WHY_DISTRIB/configure; then (cd $WHY_DISTRIB && autoconf); fi
+(cd $WHY_DISTRIB && ./configure $*)

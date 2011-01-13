@@ -1,0 +1,36 @@
+<!ELEMENT project (tag*,(lemma|function)*)>
+<!ATTLIST project name CDATA #REQUIRED>
+<!ATTLIST project context CDATA #REQUIRED>
+
+<!ELEMENT tag EMPTY>
+<!ATTLIST tag key CDATA #REQUIRED>
+<!ATTLIST tag value CDATA #REQUIRED>
+
+<!ELEMENT function (tag*, location, behavior*)>
+<!ATTLIST function name CDATA #REQUIRED>
+
+<!ELEMENT location EMPTY>
+<!ATTLIST location file CDATA #REQUIRED>
+<!ATTLIST location line CDATA #REQUIRED>
+<!ATTLIST location begin CDATA #REQUIRED>
+<!ATTLIST location end CDATA #REQUIRED>
+
+<!ELEMENT behavior (tag*, goal*)>
+<!ATTLIST behavior name CDATA #REQUIRED>
+
+<!ELEMENT goal (tag*, location, explain, proof*, goal*)>
+<!ATTLIST goal why_file CDATA #REQUIRED>
+
+<!ELEMENT proof (tag*)>
+<!ATTLIST proof prover CDATA #REQUIRED>
+<!ATTLIST proof status (valid|invalid|unknown|timeout|failure|running) #REQUIRED>
+<!ATTLIST proof timelimit CDATA #IMPLIED>
+<!ATTLIST proof date CDATA #IMPLIED>
+<!ATTLIST proof scriptfile CDATA #IMPLIED>
+
+<!ELEMENT lemma (tag*, location, goal)>
+<!ATTLIST lemma name CDATA #REQUIRED>
+
+<!ELEMENT explain EMPTY>
+<!ATTLIST explain kind CDATA #REQUIRED>
+<!ATTLIST explain text CDATA #IMPLIED>

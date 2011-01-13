@@ -1,0 +1,12 @@
+
+
+
+double diff(double x, double y)
+behavior default:
+	assumes (y:> real)/2.0 <= (x :> real) 
+	         && (x:>real) <= 2.0*(y :> real); 
+        ensures (\result :> real) == (x :> real) - (y :> real);
+{
+  return (((x :> real) - (y :> real)) :> double);
+}
+

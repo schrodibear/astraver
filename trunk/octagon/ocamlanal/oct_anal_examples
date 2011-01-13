@@ -1,0 +1,178 @@
+/* oct_anal_examples
+   A few toy program examples for the example analyzer.
+   
+   This file is part of the Octagon Abstract Domain Library.
+   Please read the COPYING file packaged in the distribution.
+   Main web page is: http://www.di.ens.fr/~mine/oct/
+
+   Copyright (C) Antoine Mine' 2000-2002
+*/
+
+
+/* After compiling, simply try "./octanal <oct_anal_examples"
+   and see the results in the result.* files
+*/
+
+/* Simplified documentation for the language syntax:
+   
+   a statement is:
+     _stat_ :==
+         id = _iexpr_                           variable assignation
+       | assert _bexpr_     
+       | if _bexpr_ then _block_                conditionnal statement
+       | if _bexpr_ then _block_ else _block_   a variant of the preceding
+       | while _bexpr_ do _stats_ done          loop statement
+
+    sequences of statement are separated by semicolon (do not put a semicolon after the last statement):
+     _stats_ :==
+         _stat_
+       | _stat_ ; _stats_
+
+    blocks are either a single statement, or a statement list in begin/end:
+     _block_ :==
+         _stat_
+       | begin _stats_ end
+
+    simple numerical expressions (with standard precedence):
+     _iexpr_ :==
+         id                       variable value
+       | num                      float constant number
+       | random                   random float value
+       | _iexpr_ + _iexpr_        unary and binary arithmetic operators
+       | _iexpr_ - _iexpr_
+       | _iexpr_ * _iexpr_
+       | - _iexpr_
+
+    simple boolean expressions (with standard precedence):
+     _bexpr_ :==
+         true                   always true
+       | false                  always false
+       | brandom                random boolean value
+       | _iexpr_ >  _iexpr_       some tests
+       | _iexpr_ >= _iexpr_
+       | _iexpr_ <  _iexpr_
+       | _iexpr_ <= _iexpr_
+       | _iexpr_ =  _iexpr_
+       | _iexpr_ != _iexpr_
+       | _bexpr_ and _bexpr_    unary and binary boolean operators
+       | _bexpr_ or _bexpr_
+       | not _bexpr_
+
+    WARNING: >, < and != should only be used to compare integers
+    (that is to say, when a>b <=> a>=b+1, etc.)
+    To compare floats, use only =, >= and <= !
+
+    a program is a sequence of statements between
+          program id
+	  beginprogram
+    and   endprogram
+ 
+    variables are global in a program, and do not need to be declared
+
+    special constructs use in the analysis are:
+        assert _bexpr_     know that _bexpr_ is true at that program point
+*/
+
+
+program Easy
+beginprogram
+  x=0; y=100;
+  while x<40 do
+    if z=0 then x=x+1 else x=x+2
+  done
+endprogram
+
+
+program Easy2
+beginprogram
+  x=12;
+  y=0;
+  while z>0 do
+    x=x+1;
+    y=y-1;
+    z=z-1
+  done
+endprogram
+
+
+program HeapSort
+beginprogram
+  i=1;
+  fin=0;
+  error=0;
+  assert size>0;
+
+  while fin=0 and error=0 do
+    l=2*i;
+    r=2*i+1;
+
+    if l<=size then 
+    begin
+      if l<1 or l>size then error=1;
+      if brandom then max=l else max=i
+    end
+    else max=i;
+
+    if r<=size then 
+    begin
+      if r<1 or r>size then error=1;
+      if brandom then max=r
+    end;
+
+    if i!=max then 
+    begin 
+      if i<1 or i>size then error=1;
+      if max<1 or max>size then error=1;
+      i=max
+    end
+    else fin=1
+  done
+endprogram
+
+
+program BubbleSort
+beginprogram
+  assert size>0;
+  error=0;
+  b=size;
+
+  while b>=1 and error=0 do
+    j=1;
+    t=0;
+    while j<=b-1 do
+      if j<1 or j>size then error=1;
+      if j+1<1 or j+1>size then error=1;
+      if brandom then t=j;
+      j=j+1
+    done;
+    b=t
+  done
+endprogram
+
+
+program Random1D
+beginprogram
+  assert max>0;
+  a=0;
+  x=1;
+  while x<=max do
+    if brandom then a=a+1 else a=a-1;
+    x=x+1
+  done
+endprogram
+
+
+program Random2D
+beginprogram
+  N=10;
+  x=0;y=0;
+  i=0;
+  while i<N do
+    i=i+1;
+    r=random; assert r>=0; assert r<=3;
+    if r=0 then x=x+1 else
+    if r=1 then x=x-1 else
+    if r=2 then y=y+1 else
+    if r=3 then y=y-1
+  done
+endprogram

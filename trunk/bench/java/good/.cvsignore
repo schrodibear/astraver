@@ -1,0 +1,11 @@
+*.jc
+*.makefile
+krakatoa.log
+gwhy.cache
+why
+smtlib
+coq
+simplify
+*.loc
+*.jloc
+*.annot

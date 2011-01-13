@@ -1,0 +1,12 @@
+*.output
+*.annot
+jc_lexer.ml
+jc_parser.mli
+jc_parser.ml
+jc_ai.ml
+numconst.ml
+jc.cma 
+jc.cmxa
+*.cmx
+*.cmi
+*.cmo

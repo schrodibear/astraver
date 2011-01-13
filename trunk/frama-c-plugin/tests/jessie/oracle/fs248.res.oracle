@@ -1,0 +1,7 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only fs248.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD fs248.c"
+[jessie] Starting Jessie translation
+fs248.c:15:[jessie] warning: skipping all arguments of implicit prototype Frama_C_dump_each
+fs248.c:222:[jessie] failure: Casting from type unsigned int  to type struct int_P * not allowed
+[jessie] warning: Unsupported feature(s).
+                  Jessie plugin can not be used on your code.

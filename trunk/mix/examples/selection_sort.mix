@@ -1,0 +1,47 @@
+
+/* Program S (TAOCP, vol. 3, page 140) */
+
+{{{ 
+logic N,INPUT:	int
+
+(* main invariant: a[i..N] is sorted and a[1..i-1]<=a[i..N] *)
+predicate Inv(a: int array, i: int) =
+  sorted_array(a, INPUT+i, INPUT+N) and
+  forall k,l:int. 
+    1 <= k <= i-1 -> i <= l <= N -> a[INPUT+k] <= a[INPUT+l] 
+
+logic mem0: int farray 
+predicate Perm(m: int array) = 
+  sub_permut(INPUT+1, INPUT+N, m, mem0)
+}}}
+
+	
+init:	{{ N >= 2 and Perm(mem) }}
+	ent1	N-1
+2H:	{{ 1 <= i1 <= N-1 and Inv(mem, i1+2) and Perm(mem) }}
+	ent2	0,1
+	ent3	1,1
+	lda	INPUT,3
+8H:	{{ 1 <= i1 <= N-1 and Inv(mem, i1+2) and Perm(mem) and
+	   1 <= i2 < i3 <= i1+1 and a = mem[INPUT+i3] and
+	   forall k:int. i2+1 <= k <= i1+1 -> mem[INPUT+k] <= mem[INPUT+i3] }}
+	cmpa	INPUT,2
+	jge	*+3
+	ent3	0,2
+	lda	INPUT,3
+	dec2	1
+	j2p	8B
+	ldx	INPUT+1,1
+	stx	INPUT,3
+	sta	INPUT+1,1
+	dec1	1
+	j1p	2B
+	{ sorted_array(mem, INPUT+1, INPUT+N) and Perm(mem) }
+	
+/*
+Local Variables: 
+mode: asm
+compile-command: "../../bin/demixify.opt selection_sort.mix -entry init -gwhy"
+End: 
+*/
+

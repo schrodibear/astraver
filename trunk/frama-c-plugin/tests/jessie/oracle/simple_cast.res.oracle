@@ -1,0 +1,60 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only simple_cast.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD simple_cast.c"
+[jessie] Starting Jessie translation
+[jessie] Producing Jessie files in subdir simple_cast.jessie
+[jessie] File simple_cast.jessie/simple_cast.jc written.
+[jessie] File simple_cast.jessie/simple_cast.cloc written.
+# IntModel = bounded
+# InvariantPolicy = Arguments
+# SeparationPolicy = Regions
+# AnnotationPolicy = None
+# AbstractDomain = Pol
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+type int32 = -2147483648..2147483647
+
+type int8 = -128..127
+
+tag int_P = {
+  int32 int_M: 32;
+}
+
+type int_P = [int_P]
+
+tag char_P = {
+  int8 char_M: 8;
+}
+
+type char_P = [char_P]
+
+tag void_P = {
+}
+
+type void_P = [void_P]
+
+unit zero(int_P[..] x)
+  requires (C_18 : ((C_19 : (\offset_min(x) <= 0)) &&
+                     (C_20 : (\offset_max(x) >= 0))));
+behavior default:
+  ensures (C_17 : true);
+{  
+   (var char_P[..] c);
+   
+   {  (C_2 : (c = (C_1 : (x :> char_P[..]))));
+      (C_4 : ((C_3 : c.char_M) = 0));
+      (C_6 : (c = (C_5 : (c + 1))));
+      (C_8 : ((C_7 : c.char_M) = 0));
+      (C_10 : (c = (C_9 : (c + 1))));
+      (C_12 : ((C_11 : c.char_M) = 0));
+      (C_14 : (c = (C_13 : (c + 1))));
+      (C_16 : ((C_15 : c.char_M) = 0));
+      
+      (return ())
+   }
+}
+WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs simple_cast.jessie/simple_cast.cloc simple_cast.jessie/simple_cast.jc

@@ -1,0 +1,5 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only qsort-permut.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD qsort-permut.c"
+qsort-permut.c:32:[kernel] user error: unexpected token '<'
+[kernel] user error: skipping file "qsort-permut.c" that has errors.
+[kernel] Frama-C aborted because of invalid user input.

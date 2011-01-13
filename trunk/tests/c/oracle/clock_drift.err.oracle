@@ -1,0 +1,3 @@
+sed: can't read tests/c/clock_drift.jessie/gappa/clock_drift_why.gappa: No such file or directory
+Uncaught exception: Sys_error("gappa/clock_drift_why.gappa: No such file or directory")
+make: *** [gappa] Error 2

@@ -1,0 +1,52 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only test8_floats.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD test8_floats.c"
+[jessie] Starting Jessie translation
+[jessie] Producing Jessie files in subdir test8_floats.jessie
+[jessie] File test8_floats.jessie/test8_floats.jc written.
+[jessie] File test8_floats.jessie/test8_floats.cloc written.
+# IntModel = bounded
+# InvariantPolicy = Arguments
+# SeparationPolicy = Regions
+# AnnotationPolicy = None
+# AbstractDomain = Pol
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+type int8 = -128..127
+
+tag char_P = {
+  int8 char_M: 8;
+}
+
+type char_P = [char_P]
+
+tag void_P = {
+}
+
+type void_P = [void_P]
+
+double my_exp(double x)
+  requires (C_8 : (\real_abs((x :> real)) <= 1.0));
+behavior default:
+  ensures (C_7 : (((\double_exact(\result) ==
+                     \exp(\double_exact(\at(x,Old)))) &&
+                    (\double_relative_error(\at(x,Old)) == 0.0)) ==>
+                   (\double_relative_error(\result) <= 0.04)));
+{  
+   (var double __retres);
+   
+   {  (C_6 : (__retres = (C_5 : ((C_4 : ((1.027030791 :> double) +
+                                          (C_3 : ((1.113889894 :> double) *
+                                                   x)))) +
+                                  (C_2 : ((C_1 : ((0.4693555168 :> double) *
+                                                   x)) *
+                                           x))))));
+      
+      (return __retres)
+   }
+}
+WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs test8_floats.jessie/test8_floats.cloc test8_floats.jessie/test8_floats.jc

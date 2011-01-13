@@ -1,0 +1,312 @@
+
+Note: These are the changes for Caduceus.
+
+version 2.16, October 29th, 2008
+================================
+
+  o bug fix for display of VCs explanations and their localizations
+  o License changed to GNU LGPL 2.1, with a special exception on
+    linking (see enclosed file LICENSE)
+
+version 2.15, September 9th, 2008
+=================================
+ o avoid assertion failures as much as possible in case of: union
+   declarations, string literals, function pointers, pointer casts
+ o bug fix: 'simplify' entry of the generated makefile was ignoring
+   prelude axioms 
+ o float constants in annotations: suffixes f or l
+   are interpreted as rounding to float or longdouble
+
+version 2.14, July 28th, 2008
+=============================
+ o bug fix: typing &e when e is a *non-modifiable* lvalue
+
+version 2.13, May 27th, 2008
+============================
+
+ o bug fix: separation analysis with floats/double
+
+version 2.12, May 23rd, 2008
+============================
+
+ o assigns clauses are now interpreted in the post-state: you can use 
+   \old to recover previous behavior.
+
+version 2.11, March 17th, 2008
+==============================
+
+version 1.10b, January 31st, 2008
+=================================
+ o verification condition localization output in file f.loc; 
+   used in gwhy to color the origin of each VC
+ o fixed typing of arithmetic constants (such as 12u, 34l, etc.) when
+   used with modulo/bounded arithmetic models
+ o gcc warnings in C preprocessing fixed for every LANG configuration
+
+version 1.10a, January 14th, 2008
+=================================
+ o local static variables: fixed bug with global and local declaration
+ o C preprocessing: fixed bug with #include and preprocessing in //@ comments
+
+version 1.10, December 20th, 2007
+=================================
+ o new target 'ergo' in generated makefile
+ o fixed bug with modulo arithmetic model
+ o fixed bug with separation analysis
+ o fixed arithmetic promotions according to ANSI C
+
+version 1.04, August 2nd, 2007
+==============================
+ o change in loop_assigns interpretation: the set of memory locations
+   may refer to variables modified by the loop and is interpreted
+   within the current state of each loop body execution, as for the
+   loop invariant. Therefore it is possible annotations such as
+
+	//@ loop_assigns t[0..i-1]
+	while (i < n) { t[i] = ...; i++; }
+
+   to express that the loop has modified t[0..i-1] so far.
+ o new option -int-model to control the integer arithmetic model
+   See section ``Integer arithmetic'' in the manual.
+   (the default behavior is to assume arbitrary precision integers, as before)
+
+version 1.03, April 20th, 2007
+==============================
+ o fixed PVS output
+
+version 1.02, February 23rd, 2007
+=================================
+ o added axiom stating that null is not valid
+ o fixed bug with circular dependencies in Coq files
+ o new target 'goals' in foo.makefile to generate the VCs in separate
+   Why files (why/foo_ctx.why and why/foo_po{1,2,...}.why)
+ o comments inside annotations now have the form //, not (* ... *)
+ o support for ghost structure and array without size
+
+version 1.01, November 29th, 2006
+=================================
+ o support for operators ~ & | ^ >> << in the logic
+ o bug fix with missing writes clauses in why spec files (see false2.c)
+ o the  bench-c-yices rule of the main Makefile launches the yices prover 
+   thanks to the tool/smtlib_split module 
+   that splits the verification conditions
+ o support for simple gotos (going forward only and not to inner blocks)
+ o fixed bug with enum assignment
+ o support for calloc, under similar conditions as malloc
+ o support for floating-point arithmetic (turned off with --no-fp)
+   See section ``Floating-point arithmetic'' in the manual.
+  
+version 1.00, June 12th, 2006
+=============================
+ o new option -separation to turn on deep memory separation analysis.
+ o better error message when a logical type is undeclared
+ o limited support for malloc: only expressions like (t*)malloc(e*sizeof(t))
+   are supported (see section 2.4 in the manual)
+ o new built-in logic function \offset
+ o new behavior w.r.t termination: loop variants can now be omitted
+ o partial evaluation (of expressions such as 1 == 1)
+ o bug fix for function specifications given later than function body
+ o support for the major changes in Why 1.99
+ o addition of zones into memory model.  
+ o bug fix in location of errors
+ o various bug fixes
+
+version 0.82, September 1st, 2005
+=================================
+
+version 0.81, June 20th, 2005
+=============================
+ o fixed bug with local variables used with & and initializers
+ o repetition of the same warning avoided
+ o labels inserted in Why code to trace the origin of each annotation
+   in the C source
+ o new declaration to define a logic function
+   e.g. /*@ logic int f(int x, int y) { x+y } */
+ o fixed bug with local variables used with & and within annotations
+
+version 0.79, April 22th, 2005
+==============================
+ o improved invariants related to separation
+
+version 0.77, April 1st, 2005
+=============================
+ o fixed bug with separation axioms
+
+version 0.76, March 29th, 2005
+==============================
+ o functions bodies effects are now computed only for functions to be verified
+ o names changes in the model: 
+     assign_loc -> pset
+     unchanged -> not_in_pset
+     assigns -> not_assigns
+ o syntax change: location t[*] now written t[..]
+ o new locations in assigns clause: t[..a] and t[a..]
+ o extended locations in assigns clause: 
+   locations such as t[..]->x or t[1..10].x[..] are now allowed (cf manual)
+
+version 0.75, March 15th, 2005
+=============================
+ o dp: support for harvey 0.5.0 (requires 'timeout' to be installed)
+ o fixed generated makefiles (new location of Why's Coq files)
+
+version 0.73, February 23rd, 2005
+=================================
+ o fixed bug with float to int casts
+ o fixed bug with enum initialization
+ o fixed bug with separation axioms generation
+
+version 0.72, February 17th, 2005
+=================================
+ o fixed bug with parameter names in redeclaration of functions
+ o fixed bug with local initialization structures
+ o fixed bug with global structures arrays
+
+version 0.71, February 3rd, 2005
+================================
+ o axioms valid_S_pointer split into valid_S_x_pointer for each field x
+ o removed axioms about null 
+ o valid, valid_index, valid_range do not require p<>null anymore 
+ o allocation on stack for structures and arrays
+ o support for string literals in initializers (but not yet in
+   function argument) 
+ 
+version 0.70, January 25th, 2005
+================================
+ o fixed bug with & operator used only in assertions
+ o new predicates separation_x_y expressing separation between globals x and y
+ o new predicates valid_S and internal_separation_S are introduced for
+   each structure S, together with an axiom valid_S_pointer stating
+   that \valid(p) -> valid_S(p) && internal_separation_S(p) for any
+   struct S * p   
+ o Ghost variables introduced with 'ghost' declaration and modified by
+   'set'
+  
+version 0.69, January 4th, 2005
+===============================
+ o automatic invariants for expressing the so-called 'separation' of
+   global variables
+ o proof obligations added to show that global variables
+   initializations satisfy all user invariants. Obligation names
+   are of the form "invariants_initially_established_po_..."
+ o automatic addition of invariants for constant values. new option
+   -closed to assume a closed program, i.e where all files 
+   are given, allowing more invariants 
+ o labeled predicates with syntax "id:: predicate" and lowest precedence
+   (labels are not interpreted; they are passed to Why and then to provers)
+
+version 0.68, November 30th, 2004
+=================================
+ o more support for & on non-structure variable, but not complete 
+ o bug fix: removed name clashes in presence of multiple declaration of
+   functions 
+ o added cast in annotations syntax
+ o bug fix in handling 'continue' statements into 'dowhile' loops
+ o bug fix in handling 'continue' statements into 'for' loops
+ o preliminary support for & on non-structure variable. Caution is
+   required, because dangling pointers are not detected.
+
+version 0.67, November 22nd, 2004
+=================================
+ o fixed bug with local variables of pointer type
+ o new options:
+   -s to generate one file for each C function
+   -verify f,g,... to specify the set of functions to verify (implies -s)
+   -assume f,g,... to specify functions not to verify (assumed to be correct)
+ o fixed bug with assigned parameters and assigns clauses
+ o fixed bug with multiple assigned parameters
+
+version 0.66, October 26th, 2004
+================================
+ o bug fix on name clash for memory variables in generated Why files
+ o fix of a bug introduced in last version, with redeclaration of
+   functions 
+ o bug fix: caduceus now allows redeclaration of a local variable
+ o better renaming when name clash between local variables and
+   structure fields 
+ o bug fix: now 0xFFFFFFFF is not anymore a too large constant (only a
+   warning) 
+
+version 0.65, October 18th, 2004
+================================
+ o support for local variables of union types
+ o support for sizeof
+ o fixed bug with identifiers renaming
+
+version 0.64, October 13th, 2004
+================================
+ o new option -coq-tactic (to set a default tactic for Coq proofs)
+ o handling of parameters which are modified in function body
+ o renaming when name clash between local and global variable.
+ o support for enum constants, and strict constant evaluation
+ o support for arbitrary 'switch' statements (with or without 'break' inside
+   cases). The only unsupported case is when a 'case' statement is
+   inside an inner block. 
+ o missing 'assigns' clause is not anymore a fatal error: if no
+   side-effects is detected, 'assigns \nothing' is assumed, otherwise
+   'assigns <everything>', and in this second case, a warning is
+   issued. A warning is also issued when the 'assigns' clause is
+   statically detected to be incompatible with the function body.
+ o fixed bug with casts in array sizes
+ o fixed bug with `too large' integer literals (e.g. 0xFFFF0000)
+
+version 0.63, August 26th, 2004
+===============================
+ o support for PVS output
+ o new predicate alloc_extends (used in local allocations)
+ o added automatic annotations expressing the separation of the
+   various globals (resp. the various locals of a given function)
+ o fixed automatic invariants expressing the validity of local and global vars
+
+version 0.62, June 24th, 2004
+=============================
+ o fixed bug with unused structures fields (not renamed)
+ o fixed bug with any_real not defined in Why
+ o fixed bug with pointers to float
+
+version 0.61, May 27th, 2004
+============================
+ o improved Coq tactics; new Coq tactics eq_pointer and neq_pointer
+ o array size deduced from initializer when any 
+ o added automatic invariants for structures and arrays
+ o fixed bug when several structures fields have the same name
+ o fixed bug with void parameters
+ o added support for cast from float to int (interpreted as Why's int_of_real)
+
+version 0.60, May 18th, 2004
+============================
+ o new option -why-opt to pass options to Why (in generated makefile)
+ o assigns x for x local or global variable
+ o a term is now accepted as a predicate (with usual C interpretation x != 0)
+ o new connective <=> (if and only if)
+
+version 0.55, May 3rd, 2004
+===========================
+ o a function which is called must have an assigns clause
+ o new clause loop_assigns in loop annotation
+
+version 0.54, April 22nd, 2004
+==============================
+ o new feature: invariants
+ o fixed bug with construct t[x].y
+ o support for 'assigns \nothing'
+
+version 0.52, April 7th, 2004
+=============================
+ o Coq automatic proofs of some `assigns' clauses; updated tutorial
+ o fixed bug with `assigns' clause effects
+ o added support for (global) enum
+ o new example examples-c/sorting/selection.c
+
+version 0.51, April 6th, 2004
+=============================
+ o fixed bug with multi-dimensional arrays
+ o fixed bug in effect inference for predicates (alloc was missing)
+
+version 0.50, March 26th, 2004
+==============================
+ o first public release
+
+
+Local Variables: 
+mode: text
+End: 

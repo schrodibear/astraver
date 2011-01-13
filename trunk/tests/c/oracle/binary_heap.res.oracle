@@ -1,0 +1,18 @@
+========== file tests/c/binary_heap.c ==========
+
+
+struct heap;
+
+
+heap create(uint sz);
+
+void insert(heap u, int e);
+
+int extract_min(heap u);
+
+
+========== frama-c -jessie execution ==========
+[kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/binary_heap.c"
+tests/c/binary_heap.c:6:[kernel] user error: syntax error
+[kernel] user error: skipping file "tests/c/binary_heap.c" that has errors.
+[kernel] Frama-C aborted because of invalid user input.

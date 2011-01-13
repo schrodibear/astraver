@@ -1,0 +1,8 @@
+a.out
+*.jessie
+*.annot
+gwhy.cache
+jessie.log
+frama_c_journal.ml
+check_opt.cm*
+test_dynlink.cmxs

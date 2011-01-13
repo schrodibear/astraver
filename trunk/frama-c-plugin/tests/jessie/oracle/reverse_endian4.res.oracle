@@ -1,0 +1,5 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only reverse_endian4.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD reverse_endian4.c"
+reverse_endian4.c:17:[kernel] user error: syntax error
+[kernel] user error: skipping file "reverse_endian4.c" that has errors.
+[kernel] Frama-C aborted because of invalid user input.

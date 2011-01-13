@@ -1,0 +1,19 @@
+
+# AnnotationPolicy = Invariants
+# AbstractDomain = Box
+
+/* 
+   @OPTIONS: -main main 
+ */
+
+
+unit h(integer n) { () }
+
+unit f(integer n) { h(n); }
+
+unit g(integer n) { f(n); }
+
+unit main() {
+    g(1);
+    f(2);
+}

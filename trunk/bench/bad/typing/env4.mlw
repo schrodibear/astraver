@@ -1,0 +1,6 @@
+
+(* a reference cannot be used within a goal *)
+
+parameter x : int ref
+
+goal test : x=0

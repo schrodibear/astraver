@@ -1,0 +1,2 @@
+
+external parameter f : unit -> {} unit reads r {}

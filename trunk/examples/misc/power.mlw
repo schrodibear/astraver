@@ -1,0 +1,38 @@
+
+(* Fast exponentiation, using X^2n = (X^n)^2 and X^(2n+1) = X.(X^n)^2 *)
+
+logic x : int
+
+parameter n,m,y : int ref
+
+predicate even(x : int) = x = 2 * (x/2)
+
+predicate odd(x : int) = x = 2 * (x/2) + 1
+
+parameter is_odd : n:int -> { } bool { if result then odd(n) else even(n) }
+
+logic power : int,int -> int
+
+axiom power_0 :
+  forall x:int. power(x,0) = 1
+axiom power_even : 
+  forall x:int. forall n:int. n >= 0 -> power(x,2*n) = power(x*x,n)
+axiom power_odd : 
+  forall x:int. forall n:int. n >= 0 -> power(x,2*n+1) = x * power(x*x,n)
+
+let power1 () =
+  { n >= 0 }
+  init:
+  begin
+    m := x; 
+    y := 1;
+    while !n > 0 do
+      { invariant power(x,n@init) = y * power(m,n) and n >= 0
+        variant n }
+      if is_odd !n then y := !y * !m;
+      m := !m * !m;
+      n := !n / 2
+    done
+  end
+  { y = power(x,n@) }
+

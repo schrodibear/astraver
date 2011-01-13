@@ -1,0 +1,14 @@
+test.c
+test.i
+a.out
+caduceus.why
+*_valid.v
+*.sx*
+test.why
+test_why.v
+caduceus_why.v
+coq
+why
+test.makefile
+test.depend
+semantic.cache

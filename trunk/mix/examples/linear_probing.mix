@@ -1,0 +1,67 @@
+
+/* Linear probing and insertion (vol. 3, page 527) */
+
+/* insert K in TABLE, TABLE+1 ... TABLE+M-1 */
+	
+{{{ 
+logic TABLE,K,M,VACANCIES: int 
+logic hash: int -> int
+
+axiom hash_domain: forall x:int. 0 <= hash(x) < M
+		
+axiom separation1: forall i:int. 0 <= i < M -> TABLE+i <> VACANCIES
+axiom separation2: K <> VACANCIES
+
+predicate In(x:int, mem:int array) = 
+  exists i:int. 0 <= i < M and mem[TABLE+i] = x
+
+
+predicate InvHash(mem:int array, i:int, x:int) =
+  (-1 <= i <= hash(x) and 
+    (forall j:int. i < j <= hash(x) -> mem[TABLE+j] <> 0)) 
+  or
+  (hash(x) < i < M and
+    (forall j:int. 0 <= j <= hash(x) -> mem[TABLE+j] <> 0) and
+    (forall j:int. i < j < M -> mem[TABLE+j] <> 0))
+
+predicate Inv(mem:int array) =
+  mem[TABLE-1] = 0 and
+  forall i:int. 0 <= i < M -> 
+  forall x:int. x = mem[TABLE+i] -> x <> 0 -> InvHash(mem, i, x)
+	
+logic init: int farray(* auxiliary variable *)
+}}}
+	
+start:	{{ i1 = hash(mem[K]) and mem = init and mem[K] <> 0 and Inv(mem) }}
+	lda	K
+	jmp	2F
+8H:	inc1	M+1
+3H:	dec1	1
+2H:	{{ -1 <= i1 < M and mem = init and a = mem[K] and a <> 0 and 
+	   Inv(mem) and InvHash(mem, i1, mem[K]) }}
+	cmpa	TABLE,1
+	je	success
+	ldx	TABLE,1
+	jxnz	3B
+	j1n	8B
+4H:	ldx	VACANCIES
+	jxz	overflow
+	decx	1
+	stx	VACANCIES
+	sta	TABLE,1
+	{ mem[TABLE+i1] = mem[K] and Inv(mem) and
+	  mem[VACANCIES] = init[VACANCIES]-1 }
+	hlt
+success:
+	{ mem = init and mem[K] = mem[TABLE+i1] and Inv(mem) }
+	hlt
+overflow:
+	{ mem = init and Inv(mem) and mem[VACANCIES] = 0 }
+	
+/*
+Local Variables: 
+mode: asm
+compile-command: "../../bin/demixify.opt linear_probing.mix -entry start -gwhy"
+End: 
+*/
+

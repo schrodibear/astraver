@@ -1,0 +1,89 @@
+
+(* Built-in types: unit, bool, int, real *)
+
+(********)
+(* unit *)
+(********)
+
+logic eq_unit : unit,unit -> prop
+logic neq_unit : unit,unit -> prop
+
+parameter eq_unit_ : x:unit -> y:unit -> {} bool {if result then x=y else x<>y}
+parameter neq_unit_: x:unit -> y:unit -> {} bool {if result then x<>y else x=y}
+
+
+(********)
+(* bool *)
+(********)
+
+logic eq_bool : bool,bool -> prop
+logic neq_bool : bool,bool -> prop
+
+parameter eq_bool_ : x:bool -> y:bool -> {} bool {if result then x=y else x<>y}
+parameter neq_bool_: x:bool -> y:bool -> {} bool {if result then x<>y else x=y}
+
+(* these are needed for WP *)
+
+parameter strict_bool_and_ : 
+  b1:bool -> b2:bool ->  
+  {} bool { if result then b1=true and b2=true 
+                      else (b1=false or b1=true and b2=false) }
+
+parameter strict_bool_or_ : 
+  b1:bool -> b2:bool -> 
+  {} bool { if result then b1=true or b1=false and b2=true 
+                      else (b1=false and b2=false) }
+
+parameter bool_not_ : 
+  b:bool -> {} bool { if result then b=false else b=true }
+
+
+(* non built-in are in bool.why *)
+
+(************)
+(* Integers *)
+(************)
+
+logic lt_int : int,int -> prop  (* <  *)
+logic le_int : int,int -> prop  (* <= *)
+logic gt_int : int,int -> prop  (* >  *)
+logic ge_int : int,int -> prop  (* >= *)
+logic eq_int : int,int -> prop  (* =  *)
+logic neq_int : int,int -> prop (* <> *)
+
+(* < <= > >= = and <> in programs: *)
+parameter lt_int_ : x:int -> y:int -> {} bool { if result then x<y else x>=y }
+parameter le_int_ : x:int -> y:int -> {} bool { if result then x<=y else x>y }
+parameter gt_int_ : x:int -> y:int -> {} bool { if result then x>y else x<=y }
+parameter ge_int_ : x:int -> y:int -> {} bool { if result then x>=y else x<y }
+parameter eq_int_ : x:int -> y:int -> {} bool { if result then x=y else x<>y }
+parameter neq_int_ : x:int -> y:int -> {} bool { if result then x<>y else x=y }
+
+logic add_int : int,int -> int (* + *)
+logic sub_int : int,int -> int (* - *)
+logic mul_int : int,int -> int (* * *)
+(*
+logic div_int : int,int -> int (* / in logic only *)
+logic mod_int : int,int -> int (* % in logic only *)
+*)
+logic neg_int : int -> int     (* prefix - *)
+
+(* / and % in programs: *)
+(*
+parameter div_int_ : x:int -> y:int -> { y<>0 } int { result = x / y }
+parameter mod_int_ : x:int -> y:int -> { y<>0 } int { result = x % y }
+*)
+
+(* Default well-founded ordering over integers *)
+
+predicate zwf_zero(a:int, b:int) = 0 <= b and a < b
+
+(**************)
+(* references *)
+(**************)
+
+(* Built-in type constructor: 'a ref *)
+(* References. := is syntactic sugar for ref_set: *)
+
+parameter ref_set : x:'a ref -> v:'a -> {} unit writes x { x = v }
+

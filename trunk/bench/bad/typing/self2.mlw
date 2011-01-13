@@ -1,0 +1,4 @@
+
+(* self reference *)
+
+predicate p(x:int) = p(x)

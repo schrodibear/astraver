@@ -1,0 +1,940 @@
+include "bool.why"
+include "integer.why"
+include "real.why"
+include "divisions.why"
+
+(*****************************************************************************)
+(* pointers, allocation, validity                                            *)
+(*****************************************************************************)
+
+type 't alloc_table
+type 't pointer
+type 't block
+
+(* memory model *)
+
+logic base_block: 't pointer -> 't block
+logic offset_max: 't alloc_table, 't pointer -> int
+logic offset_min: 't alloc_table, 't pointer -> int
+
+(* shortcuts *)
+
+predicate valid(a:'t alloc_table, p:'t pointer) = 
+  offset_min(a,p) <= 0 and offset_max(a,p) >= 0
+
+predicate same_block(p: 't pointer, q:'t pointer) =
+  base_block(p) = base_block(q)
+
+(* pointer arithmetic *)
+
+logic sub_pointer: 't pointer, 't pointer -> int
+logic shift: 't pointer, int -> 't pointer
+
+parameter sub_pointer_: p:'t pointer -> q:'t pointer -> 
+  { same_block(p,q) } int { result = sub_pointer(p,q) }
+ 
+parameter safe_sub_pointer_: p:'t pointer -> q:'t pointer -> 
+  { } int { result = sub_pointer(p,q) }
+
+(* null pointer*)
+
+logic null: 't pointer
+
+(* address *)
+
+logic pointer_address: 't pointer -> unit pointer
+logic absolute_address: int -> unit pointer
+logic address: 't pointer -> int
+
+axiom address_injective:
+  forall p:'t pointer. forall q:'t pointer.
+    p = q <-> address(p) = address(q)
+
+axiom address_null:
+  address(null) = 0
+
+
+(* INCONSISTENT -> removed 
+axiom address_positive:
+  forall p:'t pointer. 0 <= address(p)
+*)
+
+axiom address_shift_lt:
+  forall p:'t pointer. forall i:int. forall j:int 
+  [address(shift(p,i)), address(shift(p,j))]. 
+    address(shift(p,i)) < address(shift(p,j)) <-> i < j
+
+axiom address_shift_le:
+  forall p:'t pointer. forall i:int. forall j:int 
+  [address(shift(p,i)), address(shift(p,j))]. 
+    address(shift(p,i)) <= address(shift(p,j)) <-> i <= j
+
+
+(* shift *)
+
+axiom shift_zero:
+  forall p:'t pointer [shift(p,0)]. shift(p,0) = p
+
+axiom shift_shift:
+  forall p:'t pointer. forall i:int. forall j:int [shift(shift(p,i),j)].
+    shift(shift(p,i),j) = shift(p,i+j)
+
+axiom offset_max_shift:
+  forall a:'t alloc_table. forall p: 't pointer. forall i:int.
+    offset_max(a,shift(p,i)) = offset_max(a,p)-i
+
+axiom offset_min_shift: 
+  forall a:'t alloc_table. forall p: 't pointer. forall i:int.
+    offset_min(a,shift(p,i)) = offset_min(a,p)-i
+
+axiom neq_shift:
+  forall p:'t pointer. forall i:int. forall j:int [shift(p,i),shift(p,j)].
+    i <> j -> shift(p,i) <> shift(p,j) 
+
+(* null *)
+
+axiom null_not_valid: 
+  forall a:'t alloc_table. not valid(a, null)
+
+axiom null_pointer: 
+  forall a:'t alloc_table.
+    offset_min(a, null) >= 0 and offset_max(a, null) <= -2
+
+(* pointer comparison *)
+
+parameter eq_pointer: 
+  p: 't pointer -> q: 't pointer -> 
+    { same_block(p,q) or p = null or q = null } 
+    bool 
+    { if result then p=q else p<>q }
+
+parameter safe_eq_pointer: 
+  p: 't pointer -> q: 't pointer -> 
+    {} bool { if result then p=q else p<>q }
+
+parameter neq_pointer: 
+  p: 't pointer -> q: 't pointer -> 
+    { same_block(p,q) or p = null or q = null } 
+    bool
+    { if result then p<>q else p=q }
+
+parameter safe_neq_pointer: 
+  p: 't pointer -> q: 't pointer -> 
+    {} bool { if result then p<>q else p=q }
+
+logic eq_pointer_bool: 't pointer, 't pointer -> bool
+logic neq_pointer_bool: 't pointer, 't pointer -> bool
+
+axiom eq_pointer_bool_def:
+  forall p1: 't pointer. forall p2: 't pointer.
+    eq_pointer_bool(p1, p2) = true <-> p1 = p2
+
+axiom neq_pointer_bool_def:
+  forall p1: 't pointer. forall p2: 't pointer.
+    neq_pointer_bool(p1, p2) = true <-> p1 <> p2
+
+(* make Simplify loop on bench/java/Arrays.java !!!
+axiom same_block_shift:
+  forall p: 't pointer. forall i:int.
+    same_block(p,shift(p,i))
+*)
+
+axiom same_block_shift_right:
+  forall p: 't pointer. forall q:'t pointer. forall i:int
+  [same_block(p,shift(q,i))].
+    same_block(p,q) -> same_block(p,shift(q,i))
+
+axiom same_block_shift_left:
+  forall p: 't pointer. forall q:'t pointer. forall i:int
+  [same_block(shift(q,i),p)].
+    same_block(q,p) -> same_block(shift(q,i),p)
+
+
+(* make Simplify loop on Jessie test roux.c 
+axiom sub_pointer_same_block:
+  forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q),same_block(p,q)]. 
+    sub_pointer(p,q) = 0 -> same_block(p,q)
+*)
+
+(* sub_pointer *)
+
+axiom sub_pointer_shift:
+  forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q)]. 
+    same_block(p,q) ->
+      p = shift(q,sub_pointer(p,q))
+
+axiom sub_pointer_self:
+  forall p:'t pointer [sub_pointer(p,p)]. sub_pointer(p,p) = 0
+
+axiom sub_pointer_zero:
+  forall p:'t pointer. forall q:'t pointer [sub_pointer(p,q)]. 
+    same_block(p,q) ->
+      sub_pointer(p,q) = 0 -> p = q
+
+axiom sub_pointer_shift_left:
+  forall p:'t pointer. forall q:'t pointer. 
+    forall i:int [sub_pointer(shift(p,i),q)].
+      sub_pointer(shift(p,i),q) = sub_pointer(p,q) + i
+
+axiom sub_pointer_shift_right:
+  forall p:'t pointer. forall q:'t pointer. 
+    forall i:int [sub_pointer(p,shift(q,i))].
+      sub_pointer(p,shift(q,i)) = sub_pointer(p,q) - i
+
+(*****************************************************************************)
+(* heap memories, select and store                                           *)
+(*****************************************************************************)
+
+type ('t,'v) memory
+
+logic select: ('t,'v) memory, 't pointer -> 'v 
+logic store: ('t,'v) memory, 't pointer, 'v -> ('t,'v) memory
+
+axiom select_store_eq:
+  forall m: ('t,'v) memory. 
+  forall p1: 't pointer. 
+  forall p2: 't pointer. 
+  forall a: 'v [store(m,p1,a),p2].
+    p1=p2 -> select(store(m,p1,a),p2) = a
+
+(* redundant
+axiom select_store:
+  forall m: ('t,'v) memory. 
+  forall p: 't pointer. 
+  forall a: 'v [select(store(m,p,a),p)].
+    select(store(m,p,a),p) = a
+*)
+ 
+axiom select_store_neq: 
+  forall m: ('t,'v) memory. 
+  forall p1: 't pointer. 
+  forall p2: 't pointer. 
+  forall a: 'v [store(m,p1,a),p2] .
+    p1 <> p2 -> select(store(m,p1,a),p2) = select(m,p2)
+
+
+(*****************************************************************************)
+(* access and update side-effect functions                                   *)
+(*****************************************************************************)
+
+(* normal access *)
+parameter acc_: 
+  alloc:'t alloc_table -> m:('t,'v) memory -> p:'t pointer -> 
+  { offset_min(alloc,p) <= 0 and 0 <= offset_max(alloc,p) }
+  'v 
+  { result = select(m,p) }
+
+(* offset access *)
+parameter offset_acc_: 
+  alloc:'t alloc_table -> m:('t,'v) memory -> 
+  p:'t pointer -> off:int ->
+  { offset_min(alloc,p) <= off and off <= offset_max(alloc,p) }
+  'v 
+  { result = select(m,shift(p,off)) }
+
+(* safe access *)
+parameter safe_acc_: 
+  m: ('t,'v) memory -> p:'t pointer ->
+  { }
+  'v 
+  { result = select(m,p) }
+
+(* bounded access *)
+parameter bound_acc_: 
+  m: ('t,'v) memory -> p:'t pointer -> off:int -> lb:int -> rb:int -> 
+  { lb <= off and off <= rb }
+  'v 
+  { result = select(m,shift(p,off)) }
+
+(* bounded access with safe left bound *)
+parameter lsafe_bound_acc_: 
+  m: ('t,'v) memory -> p:'t pointer -> off:int -> rb:int -> 
+  { off <= rb }
+  'v 
+  { result = select(m,shift(p,off)) }
+
+(* bounded access with safe right bound *)
+parameter rsafe_bound_acc_: 
+  m: ('t,'v) memory -> p:'t pointer -> off:int -> lb:int -> 
+  { lb <= off }
+  'v 
+  { result = select(m,shift(p,off)) }
+
+(* left bounded access *)
+parameter lbound_acc_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory -> p:'t pointer -> 
+  off:int -> lb:int -> 
+  { lb <= off and off <= offset_max(alloc,p) }
+  'v 
+  { result = select(m,shift(p,off)) }
+
+(* left bounded access with safe left bound *)
+parameter lsafe_lbound_acc_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory -> p:'t pointer -> 
+  off:int -> 
+  { off <= offset_max(alloc,p) }
+  'v 
+  { result = select(m,shift(p,off)) }
+
+(* right bounded access *)
+parameter rbound_acc_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory -> p:'t pointer -> 
+  off:int -> rb:int -> 
+  { offset_min(alloc,p) <= off and off <= rb }
+  'v 
+  { result = select(m,shift(p,off)) }
+
+(* right bounded access with safe right bound *)
+parameter rsafe_rbound_acc_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory -> p:'t pointer -> 
+  off:int -> 
+  { offset_min(alloc,p) <= off }
+  'v 
+  { result = select(m,shift(p,off)) }
+
+(* normal update *)
+parameter upd_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory ref -> p:'t pointer -> v:'v ->
+  { offset_min(alloc,p) <= 0 and 0 <= offset_max(alloc,p) }
+  (* and select(mutable,p) = true *)
+  unit
+  reads m (* ,mutable *)
+  writes m
+  { m = store(m@,p,v) }
+
+(* offset update *)
+parameter offset_upd_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory ref -> p:'t pointer ->
+   off:int -> v:'v ->
+  { offset_min(alloc,p) <= off and off <= offset_max(alloc,p) }
+  (* and select(mutable,p) = true *)
+  unit
+  reads m (* ,mutable *)
+  writes m
+  { m = store(m@,shift(p,off),v) }
+
+(* safe update *)
+parameter safe_upd_: m: ('t,'v) memory ref -> p:'t pointer -> v:'v ->
+  { (* select(mutable,p) = true *) }
+  unit
+  reads m (* ,mutable *) 
+  writes m
+  { m = store(m@,p,v) }
+
+(* bounded update *)
+parameter bound_upd_: 
+  m: ('t,'v) memory ref -> p:'t pointer -> off:int -> lb:int -> rb:int -> 
+  v:'v ->
+  { lb <= off and off <= rb }
+  unit
+  reads m
+  writes m
+  { m = store(m@,shift(p,off),v) }
+
+(* bounded update with safe left bound *)
+(* unused
+parameter lsafe_bound_upd_: 
+  m: ('t,'v) memory ref -> p:'t pointer -> off:int -> rb:int -> v:'v ->
+  { off <= rb }
+  unit
+  reads m
+  writes m
+  { m = store(m@,shift(p,off),v) }
+*)
+
+(* bounded update with safe right bound *)
+parameter rsafe_bound_upd_: 
+  m: ('t,'v) memory ref -> p:'t pointer -> off:int -> lb:int -> v:'v ->
+  { lb <= off }
+  unit
+  reads m
+  writes m
+  { m = store(m@,shift(p,off),v) }
+
+(* left bounded update *)
+parameter lbound_upd_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory ref -> p:'t pointer -> 
+  off:int -> lb:int -> v:'v ->
+  { lb <= off and off <= offset_max(alloc,p) }
+  unit
+  reads m
+  writes m
+  { m = store(m@,shift(p,off),v) }
+
+(* left bounded update with safe left bound *)
+parameter lsafe_lbound_upd_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory ref -> p:'t pointer -> 
+  off:int -> v:'v ->
+  { off <= offset_max(alloc,p) }
+  unit
+  reads m
+  writes m
+  { m = store(m@,shift(p,off),v) }
+
+(* right bounded update *)
+parameter rbound_upd_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory ref -> p:'t pointer -> 
+  off:int -> rb:int -> v:'v ->
+  { offset_min(alloc,p) <= off and off <= rb }
+  unit
+  reads m
+  writes m
+  { m = store(m@,shift(p,off),v) }
+
+(* right bounded update with safe right bound *)
+parameter rsafe_rbound_upd_: 
+  alloc:'t alloc_table -> m: ('t,'v) memory ref -> p:'t pointer -> 
+  off:int -> v:'v ->
+  { offset_min(alloc,p) <= off }
+  unit
+  reads m
+  writes m
+  { m = store(m@,shift(p,off),v) }
+
+
+(*****************************************************************************)
+(* memory locations, not_assigns predicate, separation                       *)
+(*****************************************************************************)
+
+type 't pset
+
+logic pset_empty: 't pset
+logic pset_singleton: 't pointer -> 't pset
+logic pset_deref: ('t,'v pointer) memory, 't pset -> 'v pset
+logic pset_union: 't pset, 't pset -> 't pset
+logic pset_all: 'z pset -> 'z pset (* l(..) *)
+logic pset_range: 't pset, int, int -> 't pset (* l(a..b) *)
+logic pset_range_left: 'z pset, int -> 'z pset (* l(..b) *)
+logic pset_range_right: 'z pset, int -> 'z pset (* l(a..) *)
+
+logic in_pset: 't pointer, 't pset -> prop
+logic valid_pset: 't alloc_table, 't pset -> prop
+
+predicate pset_disjoint(ps1:'t pset, ps2:'t pset) =
+  forall p:'t pointer.
+    not (in_pset(p,ps1) and in_pset(p,ps2))
+
+predicate pset_included(ps1:'t pset, ps2:'t pset) =
+  forall p:'t pointer.
+    in_pset(p,ps1) -> in_pset(p,ps2)
+
+axiom pset_included_self:
+  forall ps:'t pset. pset_included(ps,ps)
+
+axiom pset_included_range:
+  forall ps:'t pset. forall a:int. forall b:int. forall c:int. forall d:int
+  [pset_included(pset_range(ps,a,b),pset_range(ps,c,d))].
+    c <= a and b <= d -> 
+      pset_included(pset_range(ps,a,b),pset_range(ps,c,d))
+
+axiom pset_included_range_all:
+  forall ps:'t pset. forall a:int. forall b:int. forall c:int. forall d:int
+  [pset_included(pset_range(ps,a,b),pset_range(ps,c,d))].
+    pset_included(pset_range(ps,a,b),pset_all(ps))
+
+axiom in_pset_empty:
+  forall p:'t pointer. not in_pset(p,pset_empty)
+
+axiom in_pset_singleton:
+  forall p:'t pointer. 
+  forall q:'t pointer.
+    in_pset(p,pset_singleton(q)) <-> p=q
+
+axiom in_pset_deref:
+  forall p:'v pointer. 
+  forall m:('t,'v pointer) memory.
+  forall q:'t pset.
+    in_pset(p,pset_deref(m,q)) <-> 
+	exists r:'t pointer. in_pset(r,q) and p = select(m,r)
+
+axiom in_pset_all:
+  forall p:'t pointer. 
+  forall q:'t pset.
+    in_pset(p,pset_all(q)) <-> 
+	exists i:int. exists r:'t pointer.
+          in_pset(r,q) and p=shift(r,i)
+
+axiom in_pset_range:
+  forall p:'t pointer. 
+  forall q:'t pset.
+  forall a:int. forall b:int.
+    in_pset(p,pset_range(q,a,b)) <-> 
+	exists i:int. exists r:'t pointer.
+          a <= i and i <= b and in_pset(r,q) and p=shift(r,i)
+
+axiom in_pset_range_left:
+  forall p:'t pointer. 
+  forall q:'t pset.
+  forall b:int.
+    in_pset(p,pset_range_left(q,b)) <-> 
+	exists i:int. exists r:'t pointer.
+          i <= b and in_pset(r,q) and p=shift(r,i)
+
+axiom in_pset_range_right:
+  forall p:'t pointer. 
+  forall q:'t pset.
+  forall a:int.
+    in_pset(p,pset_range_right(q,a)) <-> 
+	exists i:int. exists r:'t pointer.
+          a <= i and in_pset(r,q) and p=shift(r,i)
+
+axiom in_pset_union:
+  forall p:'t pointer. 
+  forall s1:'t pset.
+  forall s2:'t pset.
+    in_pset(p,pset_union(s1,s2)) <-> in_pset(p,s1) or in_pset(p,s2)
+
+axiom valid_pset_empty:
+  forall a:'t alloc_table. valid_pset(a,pset_empty)
+
+axiom valid_pset_singleton:
+  forall a:'t alloc_table. 
+  forall p:'t pointer. 
+    valid_pset(a,pset_singleton(p)) <-> valid(a,p)
+
+axiom valid_pset_deref:
+  forall a:'v alloc_table. 
+  forall m:('t,'v pointer) memory.
+  forall q:'t pset.
+    valid_pset(a,pset_deref(m,q)) <-> 
+      forall r:'t pointer. forall p:'v pointer. 
+        in_pset(r,q) and p = select(m,r) -> valid(a,p)
+
+axiom valid_pset_range:
+  forall a:'t alloc_table. 
+  forall q:'t pset.
+  forall c:int. forall d:int.
+    valid_pset(a,pset_range(q,c,d)) <-> 
+	forall i:int. forall r:'t pointer. 
+          in_pset(r,q) and c <= i and i <= d -> valid(a,shift(r,i))
+
+axiom valid_pset_union:
+  forall a:'t alloc_table. 
+  forall s1:'t pset.
+  forall s2:'t pset.
+    valid_pset(a,pset_union(s1,s2)) <-> valid_pset(a,s1) and valid_pset(a,s2)
+ 
+predicate not_assigns 
+  (a:'t alloc_table, m1:('t,'v) memory, m2:('t,'v) memory, l:'t pset) =
+    forall p:'t pointer. 
+      valid(a,p) and not in_pset(p,l) -> select(m2,p)=select(m1,p)
+
+axiom not_assigns_refl:
+  forall a: 't alloc_table. 
+  forall m: ('t,'v) memory.
+  forall l:'t pset.
+    not_assigns(a,m,m,l)
+
+axiom not_assigns_trans:
+  forall a: 't alloc_table. 
+  forall m1: ('t,'v) memory.
+  forall m2: ('t,'v) memory.
+  forall m3: ('t,'v) memory.
+  forall l:'t pset [not_assigns(a,m1,m2,l), not_assigns(a,m1,m3,l)] .
+    not_assigns(a,m1,m2,l) ->
+    not_assigns(a,m2,m3,l) ->
+    not_assigns(a,m1,m3,l) 
+
+logic full_separated: 't1 pointer, 't2 pointer -> prop
+
+axiom full_separated_shift1:
+  forall p: 'z pointer. forall q: 'z pointer.
+    forall i: int [full_separated(p,q),shift(q,i)].
+      full_separated(p,q) -> full_separated(p,shift(q,i))
+
+axiom full_separated_shift2:
+  forall p: 'z pointer. forall q: 'z pointer. 
+    forall i: int [full_separated(p,q),shift(q,i)].
+      full_separated(p,q) -> full_separated(shift(q,i),p)
+
+axiom full_separated_shift3:
+  forall p: 'z pointer. forall q: 'z pointer. 
+    forall i: int [full_separated(q,p),shift(q,i)].
+      full_separated(q,p) -> full_separated(shift(q,i),p)
+
+axiom full_separated_shift4:
+  forall p: 'z pointer. forall q: 'z pointer.
+    forall i: int [full_separated(q,p),shift(q,i)].
+      full_separated(q,p) -> full_separated(p,shift(q,i))
+
+
+(*****************************************************************************)
+(* lattice of structures                                                     *)
+(*****************************************************************************)
+
+(*****
+typeof gives the dynamic type of an object.
+
+parenttag is defined by axioms in jc_interp, and defines the hierarchy.
+  parenttag(t1, t2) <-> t2 is the immediate superclass of t1
+
+subtag is axiomatized from parenttag, and is the reflexive, transitive
+  closure of parenttag.
+
+subtag_ is the same as subtag but for booleans.
+
+instanceof is defined from typeof and subtag.
+
+int_of_tag gives a different integer to each tags to differenciate them.
+*****)
+
+type 't tag_table
+
+type 't tag_id
+
+logic int_of_tag: 't tag_id -> int
+
+logic typeof: 't tag_table, 't pointer -> 't tag_id
+
+logic parenttag: 't tag_id, 't tag_id -> prop
+
+logic subtag: 't tag_id, 't tag_id -> prop
+
+logic subtag_bool: 't tag_id, 't tag_id -> bool
+
+axiom subtag_bool_def:
+  forall t1: 't tag_id.
+  forall t2: 't tag_id.
+    subtag_bool(t1, t2) = true <-> subtag(t1, t2)
+
+axiom subtag_refl:
+  forall t: 't tag_id.
+    subtag(t, t)
+
+axiom subtag_parent:
+  forall t1: 't tag_id.
+  forall t2: 't tag_id.
+  forall t3: 't tag_id.
+    subtag(t1, t2) -> parenttag(t2, t3) -> subtag(t1, t3)
+
+predicate instanceof (a: 't tag_table, p: 't pointer, t: 't tag_id) =
+  subtag(typeof(a, p), t)
+
+parameter instanceof_: 
+  a:'t tag_table -> p:'t pointer -> s:'t tag_id ->
+  { } 
+  bool 
+  { if result then instanceof(a,p,s) else not instanceof(a,p,s) }
+
+logic downcast: 't tag_table, 't pointer, 't tag_id -> 't pointer
+
+axiom downcast_instanceof:
+  forall a:'t tag_table.
+  forall p:'t pointer.
+  forall s:'t tag_id.
+   instanceof(a,p,s) -> downcast(a,p,s)=p
+
+parameter downcast_: 
+  a:'t tag_table -> p:'t pointer -> s:'t tag_id ->
+  { instanceof(a,p,s) } 
+  't pointer 
+  { result=p }
+
+parameter safe_downcast_: 
+  a:'t tag_table -> p:'t pointer -> s:'t tag_id ->
+  { } 
+  't pointer 
+  { result=p }
+
+logic bottom_tag: 'a tag_id
+
+axiom bottom_tag_axiom:
+  forall t: 't tag_id.
+    subtag(t, bottom_tag)
+
+predicate root_tag(t: 't tag_id) = parenttag(t, bottom_tag)
+
+axiom root_subtag:
+  forall a: 't tag_id.
+  forall b: 't tag_id.
+  forall c: 't tag_id.
+    root_tag(a) -> root_tag(b) -> a <> b -> subtag(c, a) -> not subtag(c, b)
+
+(*****************************************************************************)
+(* structure invariants                                                      *)
+(*****************************************************************************)
+
+predicate fully_packed(
+  tag_table: 'a tag_table,
+  mutable: ('a, 'a tag_id) memory,
+  this: 'a pointer) =
+    select(mutable, this) = typeof(tag_table, this)
+
+
+(*****************************************************************************)
+(* default values                                                            *)
+(*****************************************************************************)
+
+parameter any_pointer: unit -> {} 'z pointer { true }
+
+parameter any_memory: unit -> {} ('t,'v) memory { true }
+
+parameter any_alloc_table: unit -> {} 't alloc_table { true }
+
+parameter any_tag_table: unit -> {} 't tag_table { true }
+
+
+(*****************************************************************************)
+(* bitwise operations                                                        *)
+(*****************************************************************************)
+(* TODO: use bitvector.why instead *)
+
+logic bw_compl: int -> int
+
+logic bw_and: int,int -> int
+
+(* Yannick: added for CVE-2003-0161-min-ok *)
+axiom bw_and_not_null:
+  forall a:int. forall b:int. bw_and(a,b) <> 0 -> a <> 0 and b <> 0
+
+logic bw_xor: int,int -> int
+
+logic bw_or: int,int -> int
+
+(* logical left shift *)
+
+logic lsl: int,int -> int
+
+axiom lsl_left_positive_returns_positive:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> 0 <= lsl(a,b)
+
+axiom lsl_left_positive_monotone:
+  forall a1:int. forall a2:int. forall b:int. 
+    0 <= a1 and a1 <= a2 and 0 <= b -> lsl(a1,b) <= lsl(a2,b)
+
+(* logical right shift *)
+
+logic lsr: int,int -> int
+
+axiom lsr_left_positive_returns_positive:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> 0 <= lsr(a,b)
+
+axiom lsr_left_positive_decreases:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> lsr(a,b) <= a
+
+(* arithmetic right shift *)
+
+logic asr: int,int -> int
+
+axiom asr_positive_on_positive:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> 0 <= asr(a,b)
+
+axiom asr_decreases_on_positive:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> asr(a,b) <= a
+
+(* combining shifts *)
+
+axiom asr_lsr_same_on_positive:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> asr(a,b) = lsr(a,b)
+
+axiom lsl_of_lsr_decreases_on_positive:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> lsl(lsr(a,b),b) <= a
+
+axiom lsr_of_lsl_identity_on_positive:
+  forall a:int. forall b:int. 0 <= a and 0 <= b -> lsr(lsl(a,b),b) = a
+
+(*****************************************************************************)
+(* dynamic allocation/deallocation                                           *)
+(*****************************************************************************)
+
+logic alloc_extends: 't alloc_table, 't alloc_table -> prop
+
+predicate alloc_fresh(a:'t alloc_table, p:'t pointer, n:int) = 
+  forall i:int. 0 <= i and i < n -> not valid(a,shift(p,i))
+
+axiom alloc_extends_offset_min: 
+  forall a1:'t alloc_table. forall a2:'t alloc_table [alloc_extends(a1,a2)]. 
+    alloc_extends(a1,a2) -> 
+      forall p:'t pointer. 
+        valid(a1,p) -> offset_min(a1,p) = offset_min(a2,p)
+
+axiom alloc_extends_offset_max: 
+  forall a1:'t alloc_table. forall a2:'t alloc_table [alloc_extends(a1,a2)]. 
+    alloc_extends(a1,a2) -> 
+      forall p:'t pointer.
+        valid(a1,p) -> offset_max(a1,p) = offset_max(a2,p)
+
+axiom alloc_extends_not_assigns_empty: 
+  forall a1:'t alloc_table. forall a2:'t alloc_table. 
+  forall m1: ('t,'v) memory. forall m2: ('t,'v) memory. 
+  forall l:'t pset. forall p:'t pointer. forall n:int
+  [alloc_extends(a1,a2),alloc_fresh(a1,p,n),not_assigns(a2,m1,m2,l)].
+    alloc_extends(a1,a2) and alloc_fresh(a1,p,n) and not_assigns(a2,m1,m2,l)
+    and pset_included(l,pset_all(pset_singleton(p))) -> 
+      not_assigns(a1,m1,m2,pset_empty)
+
+(*
+axiom alloc_fresh_def:
+  forall a:'t alloc_table. forall p:'t pointer [alloc_fresh(a,p)]. 
+    alloc_fresh(a,p) -> 
+      forall q:'t pset.
+        valid_pset(a,q) -> not in_pset(p,q)
+*)
+
+logic alloc_extends_except: 't alloc_table, 't alloc_table, 't pset -> prop
+
+axiom alloc_extends_except_offset_min:
+ forall a1:'t alloc_table. forall a2:'t alloc_table. forall l:'t pset
+ [alloc_extends_except(a1,a2,l)].
+   alloc_extends_except(a1,a2,l) ->
+     forall p:'t pointer.
+       valid(a1,p) and not in_pset(p,l) -> offset_min(a1,p) = offset_min(a2,p)
+
+axiom alloc_extends_except_offset_max:
+ forall a1:'t alloc_table. forall a2:'t alloc_table. forall l:'t pset
+ [alloc_extends_except(a1,a2,l)].
+   alloc_extends_except(a1,a2,l) ->
+     forall p:'t pointer.
+       valid(a1,p) and not in_pset(p,l) -> offset_max(a1,p) = offset_max(a2,p)
+
+parameter alloc_parameter_ownership: 
+  a:'t alloc_table ref -> mut:('t,'t tag_id) memory ref ->
+  com:('t,bool) memory ref -> at:'t tag_table ref -> s:'t tag_id -> n:int -> 
+  { n > 0 }
+  't pointer 
+  reads mut, com
+  writes a, at
+  { alloc_extends(a@,a) and alloc_fresh(a@,result,n)
+    and offset_min(a,result) = 0 and offset_max(a,result) = n-1 
+    and instanceof(at,result,s) and select(mut,result) = bottom_tag 
+    and select(com,result) = false }
+
+parameter free_parameter_ownership: 
+  a:'t alloc_table ref -> com:('t,bool) memory ref -> p:'t pointer -> 
+  { (*Cannot express yet offset_min(a,p) = 0 and*) offset_max(a,p) >= 0 
+	and select(com,p) = false }
+  unit
+  reads com
+  writes a
+  { offset_max(a,p) < offset_min(a,p) }
+
+(* With -inv-sem <> ownership *)
+
+parameter alloc_parameter: 
+  a:'t alloc_table ref -> at:'t tag_table ref -> s:'t tag_id -> n:int -> 
+  { n > 0 }
+  't pointer 
+  writes a, at
+  { alloc_extends(a@,a) and alloc_fresh(a@,result,n)
+    and offset_min(a,result) = 0 and offset_max(a,result) = n-1 
+    and instanceof(at,result,s) }
+
+parameter safe_alloc_parameter: 
+  a:'t alloc_table ref -> at:'t tag_table ref -> s:'t tag_id -> n:int -> 
+  { }
+  't pointer 
+  writes a, at
+  { alloc_extends(a@,a) and alloc_fresh(a@,result,n)
+    and offset_min(a,result) = 0 and offset_max(a,result) = n-1 
+    and instanceof(at,result,s) }
+
+parameter free_parameter: 
+  a:'t alloc_table ref -> p:'t pointer -> 
+  { p = null (* allowed, see man 3 free *) or
+  (*Cannot express yet offset_min(a,p) = 0 and*) offset_max(a,p) >= 0 }
+  unit
+  writes a
+  { (p = null -> a = a@) and (p <> null ->
+     alloc_extends_except(a@,a,pset_range(pset_singleton(p),0,offset_max(a@,p)))
+     and offset_max(a,p) < offset_min(a,p)) }
+
+parameter safe_free_parameter: 
+  a:'t alloc_table ref -> p:'t pointer -> 
+  { }
+  unit
+  writes a
+  { alloc_extends_except(a@,a,pset_range(pset_singleton(p),0,offset_max(a@,p)))
+    and offset_max(a,p) < offset_min(a,p) }
+
+
+(*****************************************************************************)
+(* exceptions for control flow handling                                      *)
+(*****************************************************************************)
+
+exception Return
+
+
+(* Frame predicate *)
+(* Logic definitions used for separation pragma *)
+(* For in *)
+type 'a mybag
+
+logic in_mybag : 'a,'a mybag -> prop
+
+logic disj_mybag : 'a mybag, 'a mybag -> prop
+
+axiom disj_sym : forall s1,s2 : 'a mybag[disj_mybag(s1,s2)]. disj_mybag(s1,s2) -> disj_mybag(s2,s1)
+
+logic sub_mybag : 'a mybag, 'a mybag -> prop
+
+axiom sub_refl :
+      forall sa : 'a pointer mybag[sub_mybag(sa,sa)].
+      sub_mybag(sa,sa)
+
+axiom sub_disj : forall s1,s2,s3 : 'a mybag
+      [disj_mybag(s1,s2),sub_mybag(s2,s3)|disj_mybag(s1,s3),sub_mybag(s2,s3)].
+      disj_mybag(s1,s2) -> sub_mybag(s2,s3) -> disj_mybag(s1,s3)
+
+axiom sub_in : forall s1,s2 : 'a mybag. forall p : 'a
+      [in_mybag(p,s1),sub_mybag(s1,s2)|in_mybag(p,s2),sub_mybag(s1,s2)].
+      (not in_mybag(p,s2)) -> sub_mybag(s1,s2) -> (not in_mybag(p,s1))
+
+
+(* for the frame_rule *)
+
+(* footprint, memory after, memory before *)
+logic frame_between : 'a pointer mybag, ('a,'b) memory, ('a,'b) memory -> prop
+
+axiom frame_between_refl :
+      forall sa : 'a pointer mybag.
+      forall m : ('a,'b) memory[frame_between(sa,m,m)].
+      frame_between(sa,m,m)
+
+axiom frame_between_gen :
+      forall sa : 'a pointer mybag.
+      forall m1,m2 : ('a,'b) memory.
+      forall p : 'a pointer.
+      forall v : 'b[frame_between(sa,m1,store(m2,p,v))].
+      frame_between(sa,m1,m2) -> in_mybag(p,sa) -> 
+      frame_between(sa,store(m1,p,v),m2)
+
+axiom frame_between_gen2 :
+      forall sa : 'a pointer mybag.
+      forall m1,m2,m3 : ('a,'b) memory
+      [frame_between(sa,m1,m2),frame_between(sa,m1,m3)|
+       frame_between(sa,m2,m3),frame_between(sa,m1,m3)].
+      frame_between(sa,m1,m2) -> frame_between(sa,m2,m3) ->
+      frame_between(sa,m1,m3)
+
+axiom frame_between_gen_sub1 :
+      forall s12,s23,s13 : 'a pointer mybag.
+      forall m1,m2,m3 : ('a,'b) memory
+      [frame_between(s12,m1,m2),frame_between(s13,m1,m3)].
+      sub_mybag(s12,s13) -> frame_between(s12,m1,m2) ->
+      frame_between(s23,m2,m3) ->
+      frame_between(s13,m1,m3)
+
+axiom frame_between_gen_sub2 :
+      forall s12,s23,s13 : 'a pointer mybag.
+      forall m1,m2,m3 : ('a,'b) memory
+      [frame_between(s23,m2,m3),frame_between(s13,m1,m3)].
+      frame_between(s12,m1,m2) ->
+      sub_mybag(s23,s13) -> frame_between(s23,m2,m3) ->
+      frame_between(s13,m1,m3)
+
+axiom frame_between_pointer :
+      forall sa : 'a pointer mybag.
+      forall m1,m2 : ('a,'b) memory.
+      forall p : 'a pointer.
+      forall v : 'b[frame_between(sa,m1,m2),select(m1,p)|
+                    frame_between(sa,m1,m2),select(m2,p)].
+      frame_between(sa,m1,m2) -> not in_mybag(p,sa) -> 
+      select(m1,p) = select(m2,p)
+
+axiom frame_between_sub :
+      forall sa : 'a pointer mybag.
+      forall sb : 'a pointer mybag.
+      forall m1,m2 : ('a,'b) memory
+      [frame_between(sa,m1,m2),sub_mybag(sa,sb)].
+      frame_between(sa,m1,m2) -> sub_mybag(sa,sb) ->
+      frame_between(sb,m1,m2)

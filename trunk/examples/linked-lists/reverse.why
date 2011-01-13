@@ -1,0 +1,141 @@
+
+(* in-place list reversal revisited with algebraic types *)
+
+
+(* logical polymorphic lists *)
+
+type 'a list = Nil | Cons('a, 'a list)
+
+goal discr_test:
+     forall x:'a. forall l:'a list. not(Nil = Cons(x,l))
+
+(* append function *)
+logic app : 'a list, 'a list -> 'a list
+
+axiom app_def: forall l1,l2:'a list [app(l1,l2)].
+  app(l1,l2) = match l1 with
+    | Nil -> l2
+    | Cons(x,l) -> Cons(x,app(l,l2))
+  end
+
+goal app_test0: 
+     app(Nil,Nil) = Nil
+
+goal app_test1: 
+     app(Cons(1,Nil),Nil) = Cons(1,Nil)
+
+goal app_test2: 
+     app(Nil,Cons(1,Nil)) = Cons(1,Nil)
+
+goal app_test3: 
+     app(Cons(1,Nil),Cons(2,Nil)) = Cons(1,Cons(2,Nil))
+
+(* rev2(l1,l2) produces rev(l1)@l2 *)
+logic rev2 : 'a list, 'a list -> 'a list
+
+axiom rev2_def: forall l1,l2:'a list [rev2(l1,l2)].
+  rev2(l1,l2) = match l1 with 
+     | Nil -> l2
+     | Cons(x,l) -> rev2(l,Cons(x,l2))
+  end
+
+goal rev2_test: 
+     forall l:'a list. rev2(Nil,l) = l
+
+function rev(l:'a list):'a list = rev2(l,Nil)
+
+goal rev_test0: 
+     rev(Nil) = Nil
+
+goal rev_test1: 
+     rev(Cons(1,Nil)) = Cons(1,Nil)
+
+goal rev_test2: 
+     rev(Cons(1,Cons(2,Nil))) = Cons(2,Cons(1,Nil))
+
+goal rev_test3: 
+     rev(Cons(1,Cons(2,(Cons(3,Nil))))) = Cons(3,Cons(2,Cons(1,Nil)))
+
+(* disjoint predicate *)
+logic disjoint : 'a list, 'a list -> prop
+
+axiom disjoint_nil_l: forall l:'a list. disjoint(Nil,l)
+axiom disjoint_l_nil: forall l:'a list. disjoint(l,Nil)
+
+(* modelisation of pointers *)
+
+type pointer
+
+logic null : pointer
+
+parameter eq_pointer : 
+  p1:pointer -> p2:pointer -> {} bool { if result then p1=p2 else p1<>p2 }
+
+parameter ne_pointer : 
+  p1:pointer -> p2:pointer -> {} bool { if result then p1<>p2 else p1=p2 }
+
+parameter is_null : p:pointer -> {} bool { if result then p=null else p<>null }
+
+
+
+(* modelisation of the memory heap *)
+
+type pointer_store
+
+logic pget : pointer_store, pointer -> pointer
+logic pset : pointer_store, pointer, pointer -> pointer_store
+
+logic is_valid_pointer : pointer -> prop
+
+axiom null_not_valid: not is_valid_pointer(null)
+
+parameter Ltl : pointer_store ref
+
+
+(* null-terminated program lists *)
+ 
+(*
+inductive lpath : pointer_store, pointer, pointer list, pointer -> prop =
+| lpath_nil: lpath(tl, p, Nil, p)
+| lpath_cons: is_valid_pointer(tl,p) and lpath(tl, pget(tl,p), l, q) 
+      -> lpath(tl, p, Cons(p,l), q)
+*)
+
+(* llist(tl,p,l) is true whenever p is a null-terminated list of pointers,
+   and l is the list of pointers met on the path from p to null *)
+inductive llist : pointer_store, pointer, pointer list -> prop =
+| llist_nil: forall tl:pointer_store. llist(tl, null, Nil)
+| llist_cons: forall tl:pointer_store. forall p:pointer. 
+  forall l:pointer list. 
+  is_valid_pointer(p) and llist(tl, pget(tl,p), l) 
+      -> llist(tl, p, Cons(p,l))
+
+goal null_model_is_Nil: 
+     forall tl:pointer_store. forall l:pointer list. 
+           llist(tl, null, l) -> l = Nil
+
+(* in-place list reversal *)
+
+let reverse (p0:pointer) (p0_model:pointer list) =
+  { llist(Ltl, p0, p0_model) }
+  init:
+  let p = ref p0 in
+  let r = ref !p in
+  begin
+    p := null;
+    while (ne_pointer !r null) do
+      { invariant exists lp:pointer list. exists lr:pointer list.
+                  llist(Ltl, p, lp) and llist(Ltl, r, lr) 
+		  and disjoint(lp, lr) and 
+	           rev2(lr, lp) = rev(p0_model) }
+      let q = ref !r in
+      begin
+      r := (pget !Ltl !r);
+      Ltl := (pset !Ltl !q !p);
+      p := !q
+      end
+    done;
+    !p
+  end
+  { llist(Ltl, result, rev(p0_model)) }
+

@@ -1,0 +1,5 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0530.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0530.c"
+bts0530.c:226:[kernel] failure: Cannot resolve variable EXIT_SUCCESS
+[kernel] user error: skipping file "bts0530.c" that has errors.
+[kernel] Frama-C aborted because of invalid user input.

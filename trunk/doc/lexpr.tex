@@ -1,0 +1,81 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                        %
+%  The Why platform for program certification                            %
+%                                                                        %
+%  Copyright (C) 2002-2010                                               %
+%                                                                        %
+%    Jean-Christophe FILLIATRE, CNRS                                     %
+%    Claude MARCHE, INRIA & Univ. Paris-sud 11                           %
+%    Yannick MOY, Univ. Paris-sud 11                                     %
+%    Romain BARDOU, Univ. Paris-sud 11                                   %
+%    Thierry HUBERT, Univ. Paris-sud 11                                  %
+%                                                                        %
+%  Secondary contributors:                                               %
+%                                                                        %
+%    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          %
+%    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        %
+%    Sylvie BOLDO, INRIA                 (floating-point support)        %
+%    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  %
+%    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       %
+%                                                                        %
+%  This software is free software; you can redistribute it and/or        %
+%  modify it under the terms of the GNU Lesser General Public            %
+%  License version 2.1, with the special exception on linking            %
+%  described in file LICENSE.                                            %
+%                                                                        %
+%  This software is distributed in the hope that it will be useful,      %
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of        %
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  %
+%                                                                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+%       | "\let" id "=" lexpr ";" lexpr ; local binding
+%       | id ":" lexpr ; syntactic naming
+
+\begin{syntax}
+  rel-op ::= "==" | "!=" | "<=" | ">=" | ">" | "<"
+       \
+  bin-op ::= "+" | "-" | "*" | "/" | "%" ;
+       | "&&" | "||" |   ; boolean operations
+       | "&" | "|" ; bitwise operations
+       | "==>" ; boolean implication
+       | "<==>" ; boolean equivalence
+       \
+  unary-op ::= "+" | "-" ; unary plus and minus
+       | "!" ; boolean negation
+       | "~" ;  bitwise complementation
+       \
+  lexpr ::= "true" | "false" ;
+       | integer ; integer constants
+       | real ; real constants
+       | id ; variables
+       | unary-op lexpr ;
+       | lexpr bin-op lexpr ;
+       | lexpr (rel-op lexpr)+ ; comparisons, see remark below
+       | lexpr "[" lexpr "]" ; array access
+       | lexpr "." id  ; object field access
+       | "(" type-expr ")" lexpr  ; cast
+       | id "(" lexpr ("," lexpr)* ")" ; function application
+       | "(" lexpr ")" ; parentheses
+       | lexpr "?" lexpr ":" lexpr ;
+       | "\forall" binders ";" lexpr ; universal quantification
+       | "\exists" binders ";" lexpr ; existential quantification
+       \
+  binders ::= type-expr variable-ident+ ;
+  ("," variable-ident+)*
+  \
+  type-expr ::= logic-type-expr | Java-type-expr
+  \
+  logic-type-expr ::= built-in-logic-type ;
+  | id ; logic type identifier
+  \
+  built-in-logic-type ::= "integer" | "real" 
+  \
+  variable-ident ::= id 
+  | variable-ident "[]"
+\end{syntax}
+
+%%% Local Variables:
+%%% mode: latex
+%%% TeX-master: "main"
+%%% End:

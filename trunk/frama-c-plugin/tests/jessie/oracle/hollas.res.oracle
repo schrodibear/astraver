@@ -1,0 +1,5 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only hollas.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD hollas.c"
+PPCHOME/share/jessie/stdio.h:40:[kernel] user error: unbound logic variable NULL in annotation.
+[kernel] user error: skipping file "hollas.c" that has errors.
+[kernel] Frama-C aborted because of invalid user input.

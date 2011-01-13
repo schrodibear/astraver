@@ -1,0 +1,1608 @@
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                        %
+%  The Why platform for program certification                            %
+%                                                                        %
+%  Copyright (C) 2002-2010                                               %
+%                                                                        %
+%    Jean-Christophe FILLIATRE, CNRS                                     %
+%    Claude MARCHE, INRIA & Univ. Paris-sud 11                           %
+%    Yannick MOY, Univ. Paris-sud 11                                     %
+%    Romain BARDOU, Univ. Paris-sud 11                                   %
+%    Thierry HUBERT, Univ. Paris-sud 11                                  %
+%                                                                        %
+%  Secondary contributors:                                               %
+%                                                                        %
+%    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          %
+%    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        %
+%    Sylvie BOLDO, INRIA                 (floating-point support)        %
+%    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  %
+%    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       %
+%                                                                        %
+%  This software is free software; you can redistribute it and/or        %
+%  modify it under the terms of the GNU Lesser General Public            %
+%  License version 2.1, with the special exception on linking            %
+%  described in file LICENSE.                                            %
+%                                                                        %
+%  This software is distributed in the hope that it will be useful,      %
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of        %
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  %
+%                                                                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\documentclass[12pt,a4paper,twoside,openright]{report}
+
+\usepackage{fullpage}
+\usepackage{url}
+\usepackage{makeidx}
+\usepackage{alltt}
+\input{./version.tex}
+\input{./macros.tex}
+
+\newcommand{\caml}{\textsf{Caml}}
+\newcommand{\harvey}{\textsf{haRVey}\index{haRVey@\textsf{haRVey}}}
+\newcommand{\simplify}{\textsf{Simplify}\index{Simplify@\textsf{Simplify}}}
+\newcommand{\mizar}{\textsf{Mizar}\index{Mizar@\textsf{Mizar}}}
+\newcommand{\hollight}{\textsf{HOL Light}\index{HOL Light@\textsf{HOL Light}}}
+\newcommand{\jml}{\textsc{JML}\index{JML@\textsf{JML}}}
+\newcommand{\te}[1]{\texttt{#1}}
+\newcommand{\nt}[1]{$\langle$\textsl{#1}$\rangle$}
+\newcommand{\indexnt}[1]{\index{#1@\textsl{#1}, grammar entry}}
+\newcommand{\indextt}[1]{\index{#1@\texttt{#1}}}
+\newcommand{\indexttbs}[1]{\index{#1@\texttt{\bs{}#1}}}
+\newcommand{\etoile}{$^{\star}$}
+\newcommand{\etoilesep}[1]{$^{\star}_#1$}
+\newcommand{\plus}{$^+$}
+\newcommand{\plussep}[1]{$^+_#1$}
+\newcommand{\caveat}{\paragraph{Caveat.}}
+\newcommand{\caveats}{\paragraph{Caveats.}}
+\newenvironment{code}{\begin{small}\begin{alltt}%
+\begin{tabular}{|p{0.97\textwidth}|}\hline%
+}{\\\hline\end{tabular}\end{alltt}\end{small}}
+\def\result{\char'134 result}
+\def\at{\char'134 at}
+\def\forall{\char'134 forall}
+\def\exists{\char'134 exists}
+\def\valid{\char'134 valid}
+\def\block{\char'134 block}
+\def\base{\char'134 base}
+\def\fresh{\char'134 fresh}
+\def\old{\char'134 old}
+\def\bs{\char'134}
+
+\makeindex
+
+\begin{document}
+\sloppy
+
+%%% coverpage
+\whytitlepage{The CADUCEUS verification tool \\~\\ for C programs}{\caduceusversion}{Jean-Christophe Filli\^atre, Thierry Hubert and Claude March\'e}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter*{Foreword}
+\addcontentsline{toc}{chapter}{Foreword}
+
+\caduceus\ is a verification tool for C programs. Programs are
+specified using annotations in special comments. Proof obligations are
+generated using the \why\ tool~\cite{Why} and then can be validated using
+various proof assistants or decision procedures.
+
+\medskip
+
+This manual is organized as follows. Chapter~\ref{tutorial} is a
+tutorial, introducing \caduceus{} features step by step, illustrated
+with examples. Chapter~\ref{refman} is a reference manual, providing
+the complete syntax of annotations, list of features, etc.
+
+\subsection*{License}
+
+The \caduceus\ certification tool is \copyright\ 2003--2006 Laboratoire de
+Recherche en Informatique (\url{www.lri.fr}).
+It is open source and freely available under the terms of the GNU
+GENERAL PUBLIC LICENSE Version 2. See the files \texttt{COPYING} and
+\texttt{GPL} in the distribution.
+
+\subsection*{Authors}
+
+\caduceus\ is developed by Jean-Christophe Filli\^atre, Claude
+March\'e and Thierry Hubert.
+
+\subsection*{Availability}
+
+The \caduceus\ tool is available from
+\url{http://caduceus.lri.fr/}, 
+in source and binary formats, together with this documentation and
+examples.
+
+\subsection*{Contact}
+
+General questions about \caduceus{} should be sent to the Why mailing
+list at URL
+\url{http://lists.gforge.inria.fr/cgi-bin/mailman/listinfo/why-discuss}.
+Note: Only the lists members can send messages to the list.
+
+For bug reports, please use the bug tracking system at
+\url{https://gforge.inria.fr/tracker/?atid=4012&group_id=999&func=browse}. For
+security reasons, you need to register before submitting a new
+bug. Please create an account there, where you can put "ProVal" for
+the required field "INRIA Research Project you work with or work in".
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\chapter{Tutorial}
+\label{tutorial}
+
+% This chapter gives an overview of \caduceus\ using trivial programs.
+
+\section{Basic use of \caduceus}
+
+To introduce how the \caduceus{} tool must be used in practice, let us
+start with a trivial program: a function \texttt{max} computing the
+maximum of two integers. 
+In a file \texttt{max.c}, let us introduce the C function together
+with its specification:
+\begin{code}
+/*@ ensures 
+  @   \result >= x && \result >= y &&
+  @   \forall int z; z >= x && z >= y => z >= \result 
+  @*/
+int max(int x, int y) \{
+  if (x > y) return x; else return y;
+\}
+\end{code}
+The specification of \texttt{max} is given in the source code right
+before the function definition in a comment of the shape \texttt{/*@
+  \dots */}.  Any \caduceus\ annotation is placed in such a comment
+(or in a single-line comment \texttt{//@ \dots}).  Note that the
+character \texttt{@} is considered as a blank inside annotations.
+
+The specification is here a post-condition, introduced by the keyword
+\texttt{ensures}\indextt{ensures}. This is the predicate to be valid
+when the function 
+returns. The keyword \texttt{\result}\indexttbs{result} denotes the
+value returned by 
+the function, thus of type \texttt{int} in this example. The
+post-condition expresses that \texttt{\result} is the smallest integer
+greater than or equal to \texttt{x} and \texttt{y} (there are plenty
+other ways to specify the \texttt{max} function).
+
+The proof obligations are generated in two steps. First, the caduceus
+tool must be run on the source file \texttt{max.c} with
+the command:
+\begin{verbatim}
+> caduceus max.c
+\end{verbatim}
+This generates several files, some of them in sub-directories. Among
+those files, a file named \texttt{max.makefile} is generated, which
+contains several commands to be run using the standard \texttt{make}
+tool. 
+
+The second step is then to generate proof obligations for some
+prover. If the proofs are to be made with the \coq\ proof assistant, 
+the command is:
+\begin{verbatim}
+>  make -f max.makefile coq
+\end{verbatim}
+This command will generate the proof obligations, together with some
+Coq \emph{modeling} of the C program (file \verb|caduceus_why.v|):
+\begin{verbatim}
+why [...] why/max_spec.why
+why [...] why/max.why
+\end{verbatim}
+and then will try to compile the resulting Coq files:
+\begin{verbatim}
+coqdep [...] coq/max*_why.v > max.depend
+coqc -I coq coq/max_spec_why.v
+coqc -I coq coq/max_why.v
+\end{verbatim}
+The last file contains two proof
+obligations (two lemmas whose proofs have to be filled in); see the
+\why\ manual for more details~\cite{Why}. On this example, the
+compilation succeeds, because the default tactic given
+(\texttt{intuition}) solves the obligations. In general, the proofs of
+this file must be filled in manually, using \texttt{coqide} for instance.
+
+As an alternative to \coq\, let us use the \simplify\ decision procedure.
+The \texttt{make} command becomes:
+\begin{verbatim}
+> make -f max.makefile simplify
+\end{verbatim}
+The obligations are also discharged automatically in that case:
+\begin{verbatim}
+Running Simplify on proof obligations
+(. = valid * = invalid # = timeout/failure)
+simplify/max_why.sx.all: .. (2/0/0)
+total           :   2
+valid           :   2 (100%)
+invalid         :   0 (  0%)
+timeout/failure :   0 (  0%)
+\end{verbatim}
+When an obligation fails with \simplify, then no manual proof may be
+attempted, but counter-examples can be obtained by running \simplify\
+manually on the file \texttt{simplify/max\_why.sx.all}.
+It may help discovering missing pre-conditions for instance.
+
+\subsection*{Other targets}
+
+The generated \texttt{makefile} contains many other targets, for other
+provers (\texttt{cvcl}, \texttt{smtlib}, etc.) or tools
+(\texttt{goals}, \texttt{gui}).
+
+\subsubsection*{\textsf{CVC Lite}}
+The use of \textsf{CVC Lite} is very similar to the use of
+\simplify. Simply run
+\begin{verbatim}
+> make -f max.makefile cvcl
+\end{verbatim}
+and \textsf{CVC Lite} will be run on the proof obligations and results
+displayed. (\textsf{CVC Lite} input files are generated withtin the
+\texttt{cvcl/} subdirectory.)
+
+\subsubsection*{\pvs} 
+To use the \pvs\ proof assistant, first run
+\begin{verbatim}
+> make -f max.makefile pvs
+\end{verbatim}
+It generates a bunch of files within the \texttt{pvs/}
+subdirectory. Proof obligations are contained in the
+\url{pvs/max_why.pvs} file. 
+
+\subsubsection*{\why\ GUI}
+
+The \why{} Graphical User Interface, described in the \why{} manual,
+may be used for C program, by running
+\begin{verbatim}
+> make -f max.makefile gui
+\end{verbatim}
+Inside this interface, a C-like pretty-printer for formulas is active.
+
+\subsubsection{Verification Conditions in \why\ syntax}
+
+The verification conditions can be produced in \why\ syntax using the
+\texttt{goals} target:
+\begin{verbatim}
+> make -f max.makefile goals
+\end{verbatim}
+Files are produced in the \texttt{why/} subdirectory. A file
+\texttt{why/max\_ctx.why} contains the context (symbols, axioms, etc.)
+and then each verification condition is containing in a separate file
+\texttt{why/max\_po$i$.why} with $i=1,2,\dots$ 
+This is useful when the generation  of the VCs takes time.
+This way, VCs are generated only once and then \why\ (or its
+graphical interface) can be used to discharge the VCs with various provers.
+
+\section{Pointer access and modification}
+
+Let us consider now a small program involving a pointer, in a file
+\verb|abs.c|: 
+\begin{code}
+//@ ensures *p >= 0
+void abs1(int *p) \{
+  if (*p < 0) *p = -*p;
+\}
+\end{code}
+Running \caduceus{} and then \simplify\ results in:
+\begin{verbatim}
+> caduceus abs.c
+generating Why code for function abs1
+> make -f abs.makefile simplify
+[...]
+why [...] why/abs.why
+[...]
+Running Simplify on proof obligations
+(. = valid * = invalid # = timeout/failure)
+simplify/abs_why.sx.all: *.. (2/1/0)
+total           :   3
+valid           :   2 ( 67%)
+invalid         :   1 ( 33%)
+timeout/failure :   0 (  0%)
+\end{verbatim}
+so it that case, there are three proof obligations and only two of them
+has been proved. To investigate the unproved one, we may run \simplify{}
+manually by:
+\begin{verbatim}
+> Simplify simplify/abs_why.sx.all
+Counterexample:
+  context:
+    (AND
+      (< (offset p) 0)
+    )
+
+1: Invalid.
+
+2: Valid.
+
+3: Valid.
+\end{verbatim}
+The counter example given contains \verb|< (offset p) 0|, meaning that
+this program may not run as expected if pointer \verb|p| is
+outside its valid memory block (see
+Section~\ref{pointer-arith}). Indeed, a segmentation fault would occur
+in that case. If you try to 
+use \coq\ instead of \simplify, you will face the same problem when
+trying to prove the first obligation: you will end up with
+\begin{verbatim}
+1 subgoal
+p : pointer global
+alloc : alloc_table
+______________________________________(1/1)
+valid alloc p
+\end{verbatim}
+which is not provable: there is no hypothesis which ensures the
+validity of \verb|p|.
+
+To fix this problem, one should specify a pre-condition to function
+\verb|abs|, which can be given using the \verb|\valid| predicate of
+\caduceus{} as follows: \indexttbs{valid}\indextt{requires}
+\begin{code}
+/*@ requires \valid(p)
+  @ ensures *p >= 0
+  @*/
+void abs2(int *p) \{
+  if (*p < 0) *p = -*p;
+\}
+\end{code}
+If you run \caduceus{} again on this version, you will first notice
+that the first obligation is now automatically discharged by Why, and
+as before \simplify{} will succeed to prove the others. If you run \coq{}
+instead, then this last obligation will not be proved automatically: you
+will have to make the proof by hand. After 
+executing the \verb|intuition| tactic, the goal to solve has the
+following shape:
+\begin{verbatim}
+p : pointer global
+...
+intM_global : memory Z global
+...
+result0 : Z
+HW_6 : result0 = p # intM_global
+...
+intM_global0 : memory Z global
+HW_8 : intM_global0 = upd intM_global p (- result0)
+______________________________________(1/1)
+p # intM_global0 >= 0
+\end{verbatim}
+\indextt{upd}\indextt{\#}\indextt{memory} This should be read as
+follows: \verb|intM_global| and \verb|intM_global0| are \emph{global
+  memory states} containing integers (integer memory, global). %
+\verb|p # intM_global| denotes the value stored in 
+\verb|intM_global| at ``address'' \verb|p|, i.e it is the logical
+representation of the C expression \verb|*p|. \verb|upd| is the logical
+function representing memory update: $(\verb|upd|~s~p~v)$ is the
+memory state obtained from $s$ by putting value $v$ at ``address''
+$p$. Addresses considered here must not be seen as integers like
+in a real computer, but simply an abstract datatype \verb|pointer|: this
+is why in the following we will refer to them as \emph{pointers} instead
+of addresses.
+
+So, what should be proved is that the value stored at pointer \verb|p|
+in the memory state \verb|intM_global0| is non-negative. Using tactic
+\verb|subst intM_global0|, we have to prove that
+\begin{verbatim}
+HW_3 : result = p # intM_global
+HW_4 : result < 0
+HW_6 : result0 = p # intM_global
+______________________________________(1/1)
+p # (upd intM_global p (- result0)) >= 0
+\end{verbatim}
+but \verb|p # (upd intM_global p (- result0))| is simply \verb|-result0| since
+we access exactly to the value which has just been updated. This shape
+$p~\verb|#|~(\verb|upd|~s~q~v)$ will indeed occur very often when making
+proofs, and it should be rewritten into $v$ when $p=q$ and into
+$p~\verb|#|~s$ otherwise. Since it occurs often, a tactic has been
+made for that, called \verb|caduceus|. So here, the proof is simply
+done using this tactic (all further reasoning is pure linear
+arithmetic that is done automatically).
+
+\section{Arrays}
+
+We now illustrate how arrays are handled by \caduceus{}.
+
+\subsection{Array indexing}
+
+Let us first consider a trivial program which permutes to elements of
+an array of integers: 
+\begin{code}
+void swap(int t[],int i,int j) \{
+  int tmp = t[i];
+  t[i] = t[j]; 
+  t[j] = tmp;
+\}
+\end{code}
+Running \caduceus{} on this program, without any annotation, leads to
+two obligations which are indeed not provable: as before, \verb|t|
+must not be null, but also the indexes \verb|i| and \verb|j| must be
+valid. With \caduceus{}, these conditions may be required using
+predicate
+\verb|valid_index|\index{valid\_index@\texttt{\bs{}valid\_index}},
+i.e. inserting the pre-condition
+\begin{code}
+//@ requires \valid_index(t,i) && \valid_index(t,j) 
+\end{code}
+As this, the obligations are now solved automatically both with
+Simplify and Coq. However, one may want to specify the function in
+more details: for example\index{old@\texttt{\bs{}old}}
+\begin{code}
+/*@ requires \valid_index(t,i) && \valid_index(t,j) 
+  @ ensures t[i] == \old(t[j]) && t[j] == \old(t[i])
+\end{code}
+where in the post-condition, $\verb|\old|(e)$ means the value of expression
+$e$ before execution of the function.
+
+With Simplify, this new specification is still proved
+automatically. With Coq, after \verb|intuition; subst; auto.| we have
+2 subgoals corresponding to the two terms of the conjunction:
+\indextt{shift}
+\begin{verbatim} 
+t : pointer global
+i : Z
+j : Z
+...
+intM_global : memory Z global
+...
+result : pointer global
+HW_2 : result = shift t i
+...
+result0 : Z
+HW_4 : result0 = result # intM_global
+result1 : pointer global
+HW_5 : result1 = shift t i
+result2 : pointer global
+HW_6 : result2 = shift t j
+HW_7 : valid alloc result2
+result3 : Z
+HW_8 : result3 = result2 # intM_global
+...
+intM_global0 : memory Z global
+HW_10 : intM_global0 = upd intM_global result1 result3
+result4 : pointer global
+HW_11 : result4 = shift t j
+...
+intM_global1 : memory Z global
+HW_13 : intM_global1 = upd intM_global0 result4 result0
+______________________________________(1/2)
+shift t i # intM_global1 = shift t j # intM_global
+
+
+______________________________________(2/2)
+shift t j # intM_global1 = shift t i # intM_global
+\end{verbatim}
+We meet here for the first time the function \verb|shift|:
+$(\verb|shift|~p~i)$ denotes in the logic the C expression $p+i$
+(pointer arithmetic), hence $(\verb|shift|~t~i)~\#~s$ denotes
+$t[i]$ in the memory state $s$. Dealing with pointer arithmetic in
+general will be explained in Section~\ref{pointer-arith}. For the
+moment, we only have to deal again with the shape
+$p~\verb|#|~(\verb|upd|~s~q~v)$, by using the \verb|caduceus|
+tactic. However, this does not work immediately, because indeed we do
+not know whether $i$ and $j$ are different. So the Coq proof may be made by
+a case reasoning such as:
+\begin{verbatim}
+assert (i=j \/ i<>j).
+  omega.
+\end{verbatim}
+and then one may conclude with
+\begin{verbatim}
+subst; caduceus.
+\end{verbatim}
+Remaining subgoals are solves analogously. Indeed, one should make the
+proof script shorter by factorizing, like this:
+\begin{verbatim}
+intros.
+assert (i=j \/ i<>j).
+  omega.
+intuition; subst; caduceus.
+\end{verbatim}
+
+
+\subsection{Arrays and loops}
+
+Let us now consider a more complex example: searching an element in an
+array, returning its index if it exists, and the first non-existent
+index otherwise: 
+\index{valid\_range@\texttt{\bs{}valid\_range}}
+\index{forall@\texttt{\bs{}forall}}
+\indextt{invariant}\indextt{variant}
+\begin{code}
+/*@ requires \valid_range(t,0,n-1)
+  @ ensures 
+  @   (0 <= \result < n => t[\result] == v) &&
+  @   (\result == n => \forall int i; 0 <= i < n => t[i] != v) 
+  @*/
+int index(int t[], int n, int v) \{
+  int i = 0;
+  /*@ invariant 0 <= i && \forall int k; 0 <= k < i => t[k] != v
+    @ variant n - i */ 
+  while (i < n) \{
+    if (t[i] == v) break;
+    i++;
+  \}
+  return i;
+\}
+\end{code}
+In the pre-condition, the new predicate $\verb|valid_range|(t,0,n-1)$ is used
+to specify that all memory locations $t[i]$ for $0\leq i \leq n-1$ are
+valid. Notice also the use of universal quantification
+(\verb|\forall|) in the post-condition, together with the symbol
+\verb|=>| to denote logical implication. 
+
+A very important novelty is for the \verb|while| loop: it is annotated
+with an invariant (a property which holds at 
+the loop entrance and is preserved by the loop body) and a variant (a
+quantity which decreases at each loop step for a well-founded
+ordering, thus ensuring termination). The three kinds of C loops can
+be annotated (\texttt{while}, \texttt{for}, and \texttt{do \dots\ while}).
+
+A loop annotation is placed right before the loop; the keyword
+\texttt{invariant} (resp. \texttt{variant}) introduces the invariant
+(resp. the variant). The invariant is optional and must appear before
+the variant when present.
+
+With Simplify, the five proof obligations generated are solved
+automatically. With Coq, the first one (which appears to be the
+validity of the invariant when entering the loop) is solved by
+\verb|intuition|. The second one is the validity of the access
+\verb|t[i]| is solved by \verb|intuition; subst; auto|. The third one
+ is the post-condition, is solved by \verb|intuition; subst; auto|,
+ thanks to the fact the the loop invariant is true at exit of the
+ loop. The fourth one is the preservation of the
+invariant, and needs a little more reasoning:
+\begin{verbatim}
+intuition.
+assert (h : k<i \/ k=i); [ omega | inversion_clear h].
+(* case k < i *)
+apply (H2 k); auto.
+(* case k=i *)
+subst; auto.
+\end{verbatim} 
+The fifth subgoal if the validity of the invariant when entering the
+loop, and solved by 
+\begin{verbatim}
+intuition.
+apply H2 with i0; auto with *.
+\end{verbatim}
+Notice that both the decreasingness of the variant have been
+discharged automatically by Why.
+
+\section{Structures}
+\label{sec:purse}
+Let us now consider a program using structures. We consider a simple
+``electronic purse'' modelized by
+\begin{code}
+typedef struct \{
+  int balance;
+\} purse;
+
+//@ predicate purse_inv(purse *p) \{ \valid(p) && p->balance >= 0 \}
+\end{code}
+The new thing here is this last \verb|predicate|\indextt{predicate}
+declaration: it is simply a definition in the logic of a new predicate
+\verb|purse_inv|, which applies to a (pointer to a) purse, stating
+that it is valid and its balance is non-negative. One may now specify
+two functions for crediting and withdrawing money has follows:
+\begin{code}
+/*@ requires purse_inv(p) && s >= 0
+  @ ensures purse_inv(p) && p->balance == \old(p->balance) + s 
+  @*/
+void credit(purse *p,int s) \{
+  p->balance = p->balance + s;
+\}
+
+/*@ requires purse_inv(p) && 0 <= s <= p->balance
+  @ ensures purse_inv(p) && p->balance == \old(p->balance) - s
+  @*/
+void withdraw(purse *p,int s) \{
+  p->balance = p->balance - s;
+\}
+\end{code}
+Execution of \caduceus{} on this file produces indeed a warning, which
+will be explained in the next section. For the moment, it can be
+safely ignored.
+
+The four obligations are solved automatically by Simplify. With Coq,
+the first thing to do manually is to unfold the definition of
+\verb|purse_inv|, and indeed the first obligation for \verb|credit|,
+to show that access to \verb|p->balance| is valid, is solved by
+\begin{verbatim}
+unfold purse_inv; intuition.
+\end{verbatim}
+After the same tactic, the second obligation for \verb|credit| results
+into two subgoals:
+\begin{verbatim}
+p : pointer global
+s : Z
+alloc : alloc_table
+balance_global : memory Z global
+HW_2 : valid alloc p
+H0 : s >= 0
+H1 : valid alloc p
+H2 : p # balance_global >= 0
+result : Z
+HW_3 : result = p # balance_global
+HW_4 : valid alloc p
+balance_global0 : memory Z global
+HW_5 : balance_global0 = upd balance_global p (result + s)
+______________________________________(1/2)
+p # balance_global0 >= 0
+
+
+______________________________________(2/2)
+p # balance_global0 = p # balance_global + s
+\end{verbatim}
+We meet again the notation $p~\#~s$ where $s$ is now \verb|balance| or
+\verb|balance0|: these are also memory states with integer memory
+cells, they represent the values of the \verb|balance| field for each
+pointer to a purse. In general, there will be memory states whose
+names corresponds to names of each fields of structures, this is a
+representation of memory states already present in an early work on
+general pointer programs by Burstall~\cite{burstall72}, and was emphasized
+by Bornat~\cite{bornat00mpc}.
+
+Indeed, the situation is very similar to arrays, we again meet the
+shape $p~\verb|#|~(\verb|upd|~s~q~v)$, and the proofs are done by
+\begin{verbatim}
+subst; caduceus.
+\end{verbatim}
+for each subgoals. The situation is almost the same for
+\verb|withdraw|.
+
+\section{Calling functions}
+\label{assigns}\indextt{assigns}
+
+The next step in this tutorial is to deal with function call. Let us
+use again our \verb|purse| structure, and consider a simple test:
+\begin{code}
+/*@ requires purse_inv(p1) && purse_inv(p2)
+  @ ensures \result == 0
+  @*/
+int test1(purse *p1, purse *p2) \{
+    p1->balance = 0;
+    credit(p2,100);
+    return p1->balance;
+\}
+\end{code}
+
+This function requires three proof obligations, two of them being
+solved by Simplify. Unfortunately, this time the counter-example
+proposed by Simplify is not easy to interpret. Let's go to Coq proofs:
+the first obligation is to show the validity of use of pointer
+\verb|p1| in \verb|p1->balance = 0|, it is solved by 
+\begin{verbatim}
+unfold purse_inv; intuition.
+\end{verbatim}
+The second obligation is to show that the pre-condition to call to
+\verb|credit(p2,100)| is valid, that is (see specification of
+\verb|credit|) \verb|purse_inv(p2) && 100 >= 0|. After
+\begin{verbatim}
+unfold purse_inv; intuition.
+subst.
+\end{verbatim}
+we have to prove
+\begin{verbatim}
+p1 : pointer global
+p2 : pointer global
+alloc : alloc_table
+balance_global : memory Z global
+H3 : p1 # balance_global >= 0
+H4 : p2 # balance_global >= 0
+______________________________________(1/1)
+p2 # (upd balance_global p1 0) >= 0
+\end{verbatim}
+but the \verb|caduceus| tactic does not solve the goal this time,
+because indeed the tactic needs to find whether \verb|p1| is equal to
+\verb|p2| or not. Although it would be provable by cases, at this
+point one should understand that the case where \verb|p1=p2| is not
+supposed to happen, and indeed the returned value of \verb|test1| would not be
+0 in that case but 100. In other words, the third obligation, which is
+the proof of the post-condition, will not be provable. This is an
+instance of the so-called \emph{pointer aliasing} problem, and in fact
+one should avoid this aliasing in the pre-condition of \verb|test1| by
+requiring also \verb|p1 != p2|.\index{Pointer aliasing}\index{Aliasing} 
+
+With that addition, the second obligation is provable in Coq with
+\begin{verbatim}
+unfold purse_inv; intuition.
+subst; caduceus.
+\end{verbatim}
+
+But the third obligation is not provable, both with Simplify and
+Coq. The problem now is that when proving post-condition of
+\verb|test1|, we do not see anymore the implementation of
+\verb|credit| but only its specification, and in this specification,
+nothing is said about modification of memory locations other than
+\verb|p->balance|. Indeed, this is why \caduceus{} issues a warning
+on function \verb|credit|: the right thing to do is to add an 
+\emph{\texttt{assigns} clause}\indextt{assigns} into the specification
+of \verb|credit|. The program now looks like
+\begin{code}
+/*@ requires purse_inv(p) && s >= 0
+  @ assigns p->balance
+  @ ensures purse_inv(p) && p->balance == \old(p->balance) + s 
+  @*/
+void credit(purse *p,int s) \{
+  p->balance = p->balance + s;
+\}
+
+/*@ requires purse_inv(p1) && purse_inv(p2) && p1 != p2
+  @ ensures \result == 0
+  @*/
+int test1(purse *p1, purse *p2) \{
+    p1->balance = 0;
+    credit(p2,100);
+    return p1->balance;
+\}
+\end{code}
+The \emph{assigns} clause \verb|assigns p->balance| is very similar to
+the one of ESC/Java~\cite{ESCJava2} and JML~\cite{JML}: it specifies that no
+other memory locations than \verb|p->balance| may be modified by the
+function.  Of course, that modification requires to make again the
+verification of function \verb|credit|: the second obligation is a bit
+more complicated, it is nevertheless solved by Simplify automatically,
+and with Coq the additional assertion is solved by intuition so indeed
+the same proof remains correct.
+
+Let's now go back to function \verb|test1|: the three obligations are
+now solved by Simplify, and for the Coq proof of the third obligation,
+after \verb|unfold purse_inv; intuition|, we have to solve
+\begin{verbatim}
+p1 : pointer global
+p2 : pointer global
+alloc : alloc_table
+balance_global : memory Z global
+HW_2 : valid alloc p1
+H0 : p1 = p2 -> False
+H : valid alloc p1
+H3 : p1 # balance_global >= 0
+H1 : valid alloc p2
+H4 : p2 # balance_global >= 0
+balance_global0 : memory Z global
+HW_3 : balance_global0 = upd balance_global p1 0
+H5 : 100 >= 0
+H6 : valid alloc p2
+H7 : p2 # balance_global0 >= 0
+balance_global1 : memory Z global
+HW_6 : valid alloc p1
+H8 : not_assigns alloc balance_global0 balance_global1 (pset_singleton p2)
+H10 : p2 # balance_global1 = p2 # balance_global0 + 100
+H2 : valid alloc p2
+H11 : p2 # balance_global1 >= 0
+result : Z
+HW_7 : result = p1 # balance_global1
+______________________________________(1/1)
+result = 0
+\end{verbatim}
+Now the important hypothesis we have is \verb|H8|: it specifies that
+between memory states \verb|balance0| and \verb|balance1|, the only
+memory location that has been assigned is the one pointed by
+\verb|p2|. So, since we know that \verb|p1| and \verb|p2| are different
+(\verb|H0|), we should have \verb|p1 # balance1 = p1 # balance0|. We proceed
+by tactics
+\begin{verbatim}
+subst result.
+rewrite H8; intuition.
+\end{verbatim}
+resulting in subgoal
+\begin{verbatim}
+...
+______________________________________(1/1)
+p1 # balance_global0 = 0
+\end{verbatim}
+which is proved by \verb|subst; caduceus|.
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+\section{A complete example}
+
+TODO
+
+
+
+
+
+
+
+\section{Other features not already in the tutorial}
+
+\subsection{Other annotations}
+
+Beside loop annotations, there are three other kinds of inner annotations.
+
+\paragraph{Intermediate assertions.}\indextt{assert}
+An assertion can be placed at any statement point. A proof obligation
+is generated to show its validity. Example:
+\begin{code}
+
+  \dots
+  if (a > b) \{ int tmp = a; a = b; b = tmp; \}
+  /*@ assert a <= b */
+  \dots
+\end{code}
+Such an assertion can be seen as a cut in the proof. It is a property
+available below this program point and, conversely, it is collected by
+the upward weakest preconditions computation.
+
+\paragraph{Labels.}\indextt{label}
+Usual C labels can be used in annotations to refer to terms or
+predicates at a particular program point. Example:
+\begin{code}
+  
+  L:
+  /*@ invariant i >= \at(i,L) */
+  while (i++ < N) \dots
+\end{code}
+When there is no available label in the code, it is possible to
+insert a ``logical'' label using the following annotation:
+\begin{code}
+  
+  /*@ label L */
+  /*@ invariant i >= \at(i,L) */
+  while (i++ < N) \dots
+\end{code}
+
+
+\paragraph{Specifying pieces of code.}
+It is possible to give a specification to an inner statement (which
+may be a block or not). The syntax is the same as a function specification:
+\begin{code}
+
+  \dots
+  /*@ ensures a <= b */
+  if (a > b) \{ int tmp = a; a = b; b = tmp; \}
+  \dots
+\end{code}
+Contrary to the \texttt{assert} annotation, the specified
+statement is seen as a black box, as if it would be a
+function call.
+In particular, the weakest precondition computation
+will not enter this statement.
+
+Inner specifications may be used to help automatic decision procedures
+or to reduce the size of proof obligations (there would be more
+numerous but smaller proof obligations).
+
+\subsection{Logical declarations}
+\indextt{logic}\indextt{axiom}
+
+Analogously to the \texttt{predicate} declaration seen in
+Section~\ref{sec:purse}, it possible to introduce logical functions,
+and axioms on them:
+\begin{code}
+/*@ predicate is_min(int t[],int n,int min) \{
+  @     (\forall int i; 0 <= i < n => min <= t[i]) &&
+  @     (\exists int i; 0 <= i < n && min == t[i]) 
+  @ \}
+  @*/
+
+/*@ requires n > 0 && \valid_range(t,0,n)
+  @ ensures is_min(t,n,\result) 
+  @*/
+int min(int t[],int n) \{
+  int i;
+  int tmp = t[0];  
+  /*@ invariant 1 <= i <= n && is_min(t,i,tmp)
+    @ variant n-i
+    @*/
+  for (i=1 ; i < n; i++) \{
+     if (t[i] < tmp) tmp = t[i];
+  \}
+  return tmp;
+\}
+
+/*@ logic int min(int t[],int n) reads t[*] */
+/*@ logic int max(int t[],int n) reads t[*] */
+
+/*@ axiom min_is_min:
+  @    \forall int t[]; \forall int n; n > 0 => is_min(t,n,min(t,n))
+  @*/
+
+/*@ axiom is_min_is_min:
+  @    \forall int t[]; \forall int n; n > 0 => \forall int m;
+  @         is_min(t,n,m) => m == min(t,n)
+  @*/
+
+/*@ requires \valid_range(t,0,n) && n > 0
+  @ ensures 
+  @     min(t,n) <= \result
+  @*/
+int average(int t[],int n) \{
+  int i;
+  int sum = 0;  
+  /*@ invariant 0 <= i <= n && i * min(t,i) <= sum
+    @ variant n-i
+    @*/
+  for (i=0 ; i < n; i++) \{
+     sum += t[i];
+  \}
+  return sum / n;
+\}
+\end{code}
+
+Missing: \texttt{predicate} not defined by using \texttt{reads}.
+
+\subsection{Invariant declarations}
+\indextt{invariant}
+
+Global invariants may be stated: they are assertions that must hold at
+entrance and at exit of functions. Example:
+
+\begin{code}
+struct \{
+  int x;
+  int y;
+\} s;
+/*@ invariant s_intervals: 0 <= s.x && s.x <= s.y && s.y <= 100 */
+
+int c = 12;
+/*@ invariant const_c : c==12 */
+\end{code}
+
+For example, with the following function, invariant
+\texttt{s\_intervals} is both assumed as pre-condition and required as
+post-condition, and \texttt{const\_c} is assumed (but not required
+since \texttt{c} is not modified).
+\begin{code}
+/*@ requires n>=0 @*/
+void f(int n) \{
+  int t = s.x+n;
+  if (t <= s.y - 20) s.x = t + c ;
+\}
+\end{code}
+
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{Reference manual}
+\label{refman}
+
+\caduceus\ is invoked as a batch compiler:
+\begin{center}
+  \texttt{caduceus} [\textit{options}] \textit{file}\texttt{.c}
+\end{center}
+
+\section{Command line options}
+\label{usage}\index{Option, of the command line}
+
+\begin{description}
+  \item[Generic options:] ~\par
+  \item[\texttt{--help}]: ~\par    
+    Give usage and exit. 
+  \item[\texttt{--version}]: ~\par    
+    Give \caduceus\ version number and exit. 
+  \item[\texttt{-v}]: ~\par 
+    Verbose mode. 
+  \item[\texttt{-q}]: ~\par  
+    Quiet mode (default).
+  \item[\texttt{--werror}]: ~\par 
+    Turn warnings as errors. \caduceus\ will stop on the first warning.
+  \item[\texttt{-d}]: ~\par 
+    Debugging mode. In this mode, \caduceus\ details everything it does,
+    printing a lot of material on error output. Not of use for the
+    casual user.
+
+  \item[Overall options:] ~\par
+  \item[\texttt{-parse-only}]: ~\par  
+    Stop after parsing.
+  \item[\texttt{-type-only}]: ~\par  
+    Stop after type-checking.
+
+  \item[Pre-processing options:] ~\par
+  \item[\texttt{-no-cpp}]: ~\par  
+    Turn off the pre-processing.
+  \item[\texttt{-cpp} \textit{command}]: ~\par  
+    Set the pre-processor. It must be an executable taking the file
+    to be pre-processed on its command line and printing its output
+    on the standard output. 
+    The default value is \texttt{gcc -C -E}.
+  \item[\texttt{-E}]: ~\par  
+    Stop after pre-processing and dump the pre-processed file on
+    standard output (mainly useful for debugging).
+
+  \item[Proof obligations generation:] ~\par
+  \item[\texttt{-why-opt} \textit{string}]: ~\par
+    Pass options to \why\ (to be used in the generated \texttt{Makefile}).
+  \item[\texttt{-s}]: ~\par
+    Use a separate file for each C function.
+    
+    The default behaviour is to generate a single \why\ file 
+    for each C file and therefore to get all proof obligations for
+    each C file into the same prover file (e.g. all \coq\ obligations
+    in \texttt{coq/foo\_why.v} for a C file \texttt{foo.c}).
+    With this option \texttt{-s}, a separate \why\ file is generated
+    for each C function and therefore a separate prover file
+    (e.g. the verification of a function \texttt{f} from
+    \texttt{foo.c} will generate proof obligations into the \coq\ file
+    \texttt{coq/foo\_\_f\_why.v}).
+  \item[\texttt{-verify} \textit{f,g,h,\dots}]: ~\par
+    Specify the sets of functions to verify. Implies \texttt{-s}.
+
+  \item[Models selection:] ~\par
+  \item[\texttt{-no-fp}]: ~\par
+    Turn off the floating-point arithmetic model. 
+    See~Section~\ref{arithmetic:float}.
+
+  \item[\texttt{-int-model} \textit{model}]: ~\par
+    Selects the model for integer arithmetic.
+    See~Section~\ref{arithmetic:int}.
+
+  \item[Prover specific options:] ~\par
+  \item[\texttt{-coq-tactic} \textit{tactic}]: ~\par
+    Pass a default Coq tactic to \why\ (in the generated \texttt{Makefile}).
+
+\end{description}
+
+\section{Input Files Syntax}
+\label{syntax}\index{Syntax (of input files)}
+
+C files conform to the usual ANSI C
+syntax and annotations are inserted in the source as comments.
+
+\subsection{Lexical conventions}
+\label{lexical:c}\index{Lexical conventions!C programs}
+
+\subsubsection{Code}
+
+The lexical conventions conform to the ANSI C standard (see
+for instance~\cite{KR88}).
+
+\subsubsection{Annotations}
+\index{Annotations}
+
+Within annotations the lexical conventions are the same as C ones,
+except that:
+\begin{itemize}
+\item the set of keywords is different: \par
+  \begin{center}
+  \begin{tabular}{l@{\qquad}l@{\qquad}l@{\qquad}l@{\qquad}l}
+  \verb!\forall! & \verb!\exists! & \verb!int! & \verb!float! &
+  \verb!decreases! \\
+  \verb!\true! & \verb!\false! & \verb!if! & \verb!then! & \verb!else! \\
+  \verb!invariant! & \verb!variant! & \verb!for! & \verb!label! & 
+  \verb!assert! \\ 
+  \verb!requires! & \verb!ensures! & \verb!assigns! & \verb!logic! & 
+  \verb!axiom! \\
+  \verb!predicate! & \verb!\result! & \verb!\old! & 
+  \verb!\block_length! & \verb!\null! \\
+  \verb!reads! & \verb!\valid! & \verb!\valid_index! &
+  \verb!\valid_range! & \verb!\fresh! \\
+  \verb!\base_addr! & \verb!\nothing!
+  \end{tabular}
+  \end{center}
+\item single-line comments (i.e. using \verb|//|) are allowed in
+  annotations, so that you can put comments inside annotations without
+  messing traditional C compilers. Note that former syntax for
+  comments in annotations using \texttt{(*} and \texttt{*)} is not
+  available anymore.
+\end{itemize}
+
+\subsection{Syntax}
+
+Annotations are inserted into programs as special comments of the shape
+\texttt{/*@ ... */} or one-line comments of the shape \texttt{//@ ...}
+Figure~\ref{fig:cfiles} gives the syntax for the additional C
+constructs containing annotations; some are C declarations
+(non-terminal \nt{declaration}) and some are C statements (non-terminal
+\nt{statement}).
+Figure~\ref{fig:logic} gives the syntax for the
+annotations. 
+
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill\\
+\begin{tabular}{lrl}
+  \nt{c\_file}
+    & $::=$ & \nt{declaration}\etoile\ \\
+  \\[0.1em]
+
+  \nt{declaration}
+    & $::=$ & \nt{spec} \nt{type} \nt{identifier} \te{(} 
+              \nt{parameter}\etoilesep{\te{,}} \te{)} 
+              \te{;} \\
+      & $|$ & \nt{spec} \nt{type} \nt{identifier} \te{(} 
+              \nt{parameter}\etoilesep{\te{,}} \te{)} 
+              \nt{block} \te{;} \\
+      & $|$ & \te{/*@} \te{logic} \nt{logic\_type} \nt{identifier} \te{(} 
+              \nt{logic\_parameter}\etoilesep{\te{,}} \te{)} \\
+              && $[$ \te{\{} \nt{term} \te{\}} $|$ 
+              \te{reads} \nt{location}\plussep{\te{,}} $]$ \te{*/} \\
+              \indextt{logic}
+      & $|$ & \te{/*@} \te{predicate} \nt{identifier} \te{(} 
+              \nt{logic\_parameter}\etoilesep{\te{,}} \te{)} \\
+           && $[$ \te{\{} \nt{predicate} \te{\}} $|$ 
+              \te{reads} \nt{location}\plussep{\te{,}} $]$ \te{*/} \\ 
+              \indextt{predicate}
+      & $|$ & \te{/*@} \te{axiom} \nt{identifier} \te{:} 
+              \nt{predicate} \te{*/} \\ \indextt{axiom}
+      & $|$ & \te{/*@} \te{invariant} \nt{identifier} \te{:} 
+              \nt{predicate} \te{*/} \\ \indextt{invariant}
+      & $|$ & \te{/*@} \te{ghost} \nt{logic\_type} \nt{identifier} $[$ \te{=} 
+              \nt{term} $]$ \te{*/} \\ \indextt{ghost}
+  \\[0.1em]
+
+  \nt{assigned\_locs}
+    & $::=$ & \nt{location}\plussep{\te{,}} $|$ \verb!\nothing! \\
+  \\[0.1em]
+
+  \nt{spec}
+    & $::=$ & \te{/*@} $[$ \te{requires} \nt{predicate} $]$ 
+              $[$ \te{assigns} \nt{assigned\_locs} $]$ \\
+           && $[$ \te{ensures} \nt{predicate} $]$ 
+              $[$ \te{decreases} \nt{variant} $]$ \te{*/} \\
+                  \indextt{requires}\indextt{assigns}
+                  \indextt{ensures}\indextt{decreases}
+  \\[0.1em]
+
+  \nt{statement}
+    & $::=$ & \nt{loop\_annot} \te{while} \te{(} \nt{expr} \te{)}
+              \nt{statement} \\
+    &   $|$ & \nt{loop\_annot} \te{do} \nt{statement} 
+              \te{while} \te{(} \nt{expr} \te{)} \\
+    &   $|$ & \nt{loop\_annot} \te{for} \te{(} \nt{statement} \te{;} \nt{statement} \te{;}
+              $[$ \nt{expr} $]$ \te{)} \\
+           && \nt{statement} \\
+    &   $|$ & \te{/*@} \te{assert} \nt{predicate} \te{*/} \\ \indextt{assert}
+    &   $|$ & \te{/*@} \te{label} \nt{identifier} \te{*/} \\ \indextt{label}
+    &   $|$ & \nt{spec} \nt{statement} \\
+    &   $|$ & \te{/*@} \te{set} \nt{identifier} \te{=} 
+              \nt{term} \te{*/} \\ \indextt{set}
+  \\[0.1em]
+
+  \nt{loop\_annot}
+    & $::=$ & \te{/*@} $[$ \te{invariant} \nt{predicate} $]$
+              $[$ \te{loop\_assigns} \nt{assigned\_locs} $]$ \\
+           && $[$ \te{variant} \nt{variant} $]$ \te{*/}  \\
+              \indextt{invariant}\indextt{variant}
+  \nt{variant} 
+    & $::=$ & \nt{term} $[$ \te{for} \nt{identifier} $]$ \\
+
+  \\[0.1em]
+  
+  \nt{logic\_type}
+    & $::=$ & \te{void} $|$ \nt{sign} \te{char} $|$
+              \nt{sign} \te{short} $|$
+              \nt{sign} \te{int} $|$ 
+              \nt{sign} \te{long} \\
+      & $|$ & \nt{sign} \te{long long} $|$
+              \te{float} $|$ 
+              \te{double} $|$ 
+              \te{long double} \\
+      & $|$ & \nt{logic\_type} \te{*} $|$
+              \nt{identifier} \\
+  \nt{logic\_parameter}
+    & $::=$ & \nt{logic\_type} \nt{identifier} \\
+  \nt{sign}
+    & $::=$ & ( \te{signed} $|$ \te{unsigned} )? \\
+
+  \\[0.1em]
+
+  \nt{location}
+    & $::=$ & \nt{term} \\
+    &   $|$ & \nt{location} \te{.} \nt{identifier} \\
+    &   $|$ & \nt{location} \te{->} \nt{identifier} \\
+    &   $|$ & \te{*} \nt{location} \\
+    &   $|$ & \nt{location} \te{[} \nt{term} \te{]} \\
+    &   $|$ & \nt{location} \te{[} \te{..} \te{]} $|$
+              \nt{location} \te{[} \nt{term} \te{..} \te{]} \\
+    &   $|$ & \nt{location} \te{[} \te{..} \nt{term} \te{]} $|$
+              \nt{location} \te{[} \nt{term} \te{..} \nt{term} \te{]} \\
+  \\[0.1em]
+\end{tabular}\\
+\hrulefill
+\caption{Annotations within C constructs}
+\label{fig:cfiles}
+\end{center}           
+\end{figure}
+
+
+\begin{figure}[htbp]
+\begin{center}
+\hrulefill\\
+\begin{tabular}{lrl}
+  \nt{term}\indexnt{term}
+    & $::=$ & \nt{constant} \\
+      & $|$ & \nt{term} \nt{arith\_op} \nt{term} \\
+      & $|$ & \te{-} \nt{term} $|$ \te{+} \nt{term}  \\
+      & $|$ & \te{*} \nt{term} \\
+      & $|$ & \nt{term} \te{->} \nt{identifier} \\
+      & $|$ & \nt{term} \te{.} \nt{identifier} \\
+      & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
+      & $|$ & \nt{term} \te{[} \nt{term} \te{]} \\
+%      & $|$ & \nt{term} \te{?} \nt{term} \te{:} \nt{term} \\
+      & $|$ & \te{(} \nt{term} \te{)} \\
+      & $|$ & \te{(} \nt{logic\_type} \te{)} \nt{term} \\
+      & $|$ & \verb!\old! \te{(} \nt{term} \te{)} 
+        $|$   \verb!\at! \te{(} \nt{term} \te{,} \nt{identifier} \te{)} \\
+      & $|$ & \verb!\result! 
+        $|$   \verb!\null! \\
+      & $|$ & \nt{symbol} \te{(} \nt{term} \te{)} \\
+  \\[0.1em]
+
+  \nt{symbol}\indexnt{symbol} 
+    & $::=$ & \verb!\block_length! $|$ \verb!\base_addr! \\
+      & $|$ & \verb!\abs! $|$ \verb!\sqrt! 
+        $|$   \verb!\round_error! $|$ \verb!\total_error!
+        $|$   \verb!\exact! $|$ \verb!\model! \\
+    \\[0.1em]
+
+  \nt{constant}\indexnt{constant}
+    & $::=$ & \nt{integer-constant} $|$ \nt{floating-point-constant} \\
+  \\[0.1em]
+
+  \nt{arith\_op}\indexnt{arith\_op}
+    & $::=$ & \te{+} $|$ \te{-} $|$ \te{*} $|$ \te{/} $|$ \te{\%} \\
+  \\[0.1em]
+
+  \nt{predicate}\indexnt{predicate}
+    & $::=$ & \verb!\true! \\
+      & $|$ & \verb!\false! \\
+      & $|$ & \nt{identifier} \\
+      & $|$ & \nt{identifier} \te{(} \nt{term}\plussep{\te{,}} \te{)} \\
+      & $|$ & \nt{term} \nt{relation} \nt{term} 
+              $[$ \nt{relation} \nt{term} $]$ \\
+      & $|$ & \nt{predicate} \te{=>} \nt{predicate} \\
+      & $|$ & \nt{predicate} \te{<=>} \nt{predicate} \\
+      & $|$ & \nt{predicate} \te{||} \nt{predicate} \\
+      & $|$ & \nt{predicate} \te{\&\&} \nt{predicate} \\
+      & $|$ & \te{!} \nt{predicate} \\
+      & $|$ & \te{if} \nt{term} \te{then} \nt{predicate} 
+              \te{else} \nt{predicate} \\
+      & $|$ & \verb!\forall! \nt{logic\_parameter}\plussep{\te{,}} \te{;} 
+              \nt{predicate} \\
+      & $|$ & \verb!\exists! \nt{logic\_parameter}\plussep{\te{,}} \te{;} 
+              \nt{predicate} \\
+      & $|$ & \te{(} \nt{predicate} \te{)} \\
+      & $|$ & \verb!\old! \te{(} \nt{predicate} \te{)} \\
+      & $|$ & \verb!\at! \te{(} \nt{predicate} \te{,} \nt{identifier} \te{)} \\
+      & $|$ & \verb!\valid! \te{(} \nt{term} \te{)}
+              \index{valid@\texttt{\bs{}valid}} \\
+      & $|$ & \verb!\valid_index! \te{(} \nt{term} \te{,} \nt{term} \te{)}
+              \index{valid\_index@\texttt{\bs{}valid\_index}} \\
+      & $|$ & \verb!\valid_range! \te{(} \nt{term} \te{,} \nt{term} 
+              \te{,} \nt{term} \te{)}
+              \index{valid\_range@\texttt{\bs{}valid\_range}} \\
+      & $|$ & \verb!\fresh! \te{(} \nt{term} \te{)}
+              \index{fresh@\texttt{\bs{}fresh}} \\
+      & $|$ & \nt{identifier} \te{::} \nt{predicate} \\
+  \\[0.1em]
+
+  \nt{relation}\indexnt{relation}
+    & $::=$ & \te{==} $|$ \te{!=} $|$ 
+              \te{<} $|$ \te{<=} $|$ \te{>} $|$ \te{>=}
+\end{tabular}\\
+\hrulefill
+\caption{Syntax of annotations}
+\label{fig:logic}
+\end{center}            
+\end{figure}
+
+
+\section{Arithmetic}
+\label{arithmetic}
+
+\subsection{Integer arithmetic}
+\label{arithmetic:int}\index{Arithmetic}\index{int-model@\texttt{-int-model}}
+
+The model used for integer arithmetic is controlled through the
+\texttt{-int-model} option. It takes one of the following values:
+
+\begin{description}
+\item[\texttt{-int-model exact}] ~\par
+  This is the default model.
+  All C integers are mapped to mathematical integers \emph{i.e.}
+  arbitrary precision integers. It is thus a model where 
+  all integer computations are assumed to be \emph{exact}. 
+  As a consequence, a C program proved
+  correct using this model is indeed correct  \emph{only if no
+  integer overflow occurs during the execution}.
+
+  Note that in this model there is no range of values associated to
+  the C integer types. For instance, if $x$ has type
+  \texttt{char}, you are not able to prove that $-128\le x < 127$.
+
+\item[\texttt{-int-model bounded}] ~\par
+  In this model the user \emph{proves} that there is
+  no integer overflow during the program execution. 
+  This means that each operation, including the implicit conversions
+  from one integer type to another, is given a precondition to
+  establish that the result of the computation fits into the target
+  type. As a counterpart, information about the range of each integer
+  variable is provided.
+
+  The sizes of the various integer types can be set using the
+  following command-line options:
+\begin{center}
+  \begin{tabular}{|l|l|l|}
+    \hline
+    type & option & default value \\\hline
+    \texttt{char} & \texttt{-char-size} & 8 \\\hline
+    \texttt{short} & \texttt{-short-size} & 16 \\\hline
+    \texttt{int} & \texttt{-int-size} & 32 \\\hline
+    \texttt{long} & \texttt{-long-size} & 32 \\\hline
+    \texttt{long long} & \texttt{-long-long-size} & 64 \\\hline
+  \end{tabular}
+\end{center}
+
+  \index{min_range@\texttt{\bs{}min\_range}}
+  \index{max_range@\texttt{\bs{}max\_range}}
+  Within specifications, the minimal and maximal value of any C
+  integer type $\tau$ can be referred to using the notation 
+  \texttt{\char'134min\_range($\tau$)} and 
+  \texttt{\char'134max\_range($\tau$)} respectively.
+
+\item[\texttt{-int-model modulo}] ~\par
+  This is the model which is faithful to the program execution
+  \emph{i.e.} modulo arithmetic is performed as soon
+  as an overflow occurs. 
+  
+  Sizes of integer types can be specified on the command-line as for
+  the \texttt{bounded} model above.
+\end{description}
+
+
+\subsection{Enumeration types}
+\label{arithmetic:enum}
+\index{Enumeration}\index{check-enum@\texttt{check-enum}}
+
+The default behavior regarding enumeration types is to map them to
+mathematical integers and to introduce one integer constant for each
+element in the enumeration. For instance, the declaration
+\begin{verbatim}
+  enum E { A = 0, B, C };
+\end{verbatim}
+introduces three integer constant \texttt{A}, \texttt{B}, \texttt{C}
+with values 0, 1 and 2 respectively. But a variable of type
+\texttt{enum E} will not be guaranteed to have one of the enumeration
+values: it is not provided as input and it is not required when
+assigned the variable.
+
+Option \texttt{-check-enum} enforces the invariant that an
+expression of an enumeration type always has one of the enumeration
+values. It implies that a proof obligation is emitted when building a
+value of any enumration type.
+
+\subsection{Floating-point arithmetic}
+\label{arithmetic:float}\index{Floating-point arithmetic}
+
+Floating-point arithmetic is handled by \caduceus. The model of a
+floating-point number is a \emph{triple} consisting of:
+\begin{itemize}
+\item the floating-point number, as computed by the program;
+\item a real number, which would be the value if all computations were
+  performed on real numbers and thus exact;
+\item and another real number, which is the value which should be
+  \emph{ideally} computed.
+\end{itemize}
+We refer to these three components as the \emph{floating-point} part, the
+\emph{exact} part and the \emph{model} part, respectively. The third
+component (the model) can be seen as a ghost variable automatically
+attached to each floating-point number.
+
+Within annotations, all operations and comparisons are performed on
+\emph{real numbers}. A floating-point expression is (implicitly)
+understood as its first component (the floating-point number) seen as
+a real number. The following constructs are provided to write
+annotations: 
+
+\begin{itemize}
+\item \verb!\exact(!$e$\verb!)!: the exact part of the floating-point
+  expression $e$
+\item \verb!\model(!$e$\verb!)!: the model part of the floating-point
+  expression $e$
+\item \verb!\round_error(!$e$\verb!)!: a shortcut for $|e -
+  \verb!\exact!(e)|$, that is the difference between the
+  floating-point part of $e$ and its exact part.
+\item \verb!\total_error(!$e$\verb!)!: a shortcut for $|e -
+  \verb!\model!(e)|$, that is the difference between the
+  floating-point part of $e$ and its model part.
+\item \verb!\abs(!$e$\verb!)!: the absolute value of the real
+  expression $e$. Can be written \texttt{|$e$|}.
+\item \verb!\sqrt(!$e$\verb!)!: the square root of the real
+  expression $e$
+\item $e_1\verb!^^!e_2$: the exponentiation of real numbers
+\end{itemize}
+
+Here is for instance a function approximating the exponential and a
+possible specification:
+\begin{verbatim}
+/*@ requires x == \exact(x) && |x| <= 1
+  @ ensures  \round_error(\result) <= 2 ^^ (-48)
+  @*/
+double my_exp(double x) {
+  return 1 + x + x*x/2;
+}
+\end{verbatim}
+
+\medskip
+
+The \why\ model for floating-point arithmetic can be found in
+\texttt{lib/why/floats.why} (it is passed to \why\ automatically, and
+only when the use of floating-point arithmetic is detected). This
+model is currently realized for the \coq\ prover only, in
+\texttt{lib/coq/WhyFloats.v}. It requires the Coq library on
+floating-point arithmetic available at
+\url{http://lipforge.ens-lyon.fr/www/pff/}.
+
+This model for floating-point numbers can be turned off using the
+command-line \texttt{-no-fp} and then all floating-point numbers are
+mapped to real numbers, as if all computations were exact.
+
+\section{Memory model and pointer arithmetic
+\label{pointer-arith}}
+\index{Pointer arithmetic}
+
+The C language makes almost no distinction between arrays and
+pointers, and \caduceus\ identifies both notions on the model side.
+A pointer \texttt{p} is either the \texttt{null} pointer, or
+designates a particular element of an allocated memory block. In this
+case, \texttt{p} is a pair of a base address, \texttt{base\_addr(p)},
+and an offset inside the block, \texttt{offset(p)}. Pointer arithmetic
+is only a matter of changing offsets inside a given block. If
+\texttt{i} is an integer then the pointer \texttt{p+i} has the same
+base address as \texttt{p} and offset \texttt{offset(p)+i}.
+This situation is illustrated below:
+\newcommand{\carre}[1]{\multicolumn{#1}{|c|}{}}
+\begin{center}
+  \begin{tabular}{rlllllll}
+    &\qquad\qquad\qquad\qquad&&&p&\qquad\qquad\qquad&p&\hspace{-1em}+i=shift(p,i)
+    \\
+    &\multicolumn{3}{c}{\leftarrowfill offset(p)\rightarrowfill}&
+      $\downarrow$&&$\downarrow$
+    \\\cline{2-8}
+    base\_addr(p)&\carre{3}&\carre{1}&\carre{1}&\carre{1}&\carre{1}
+    \\\cline{2-8}\\[-0.5em]
+    &\multicolumn{7}{c}{\leftarrowfill block\_length(a,p)\rightarrowfill}
+  \end{tabular}
+\end{center}
+A memory block is constituted of zero, one or several elements; the
+length of the block \texttt{p} points at is
+\texttt{block\_length(a,p)}, where \texttt{a} is the current
+\emph{allocation map}, of type \verb|alloc|. This map is precisely
+telling if a given base address corresponds to an allocated block and,
+if so, its length. The map \texttt{a} changes whenever memory is
+allocated.
+
+Pointer arithmetic may produce pointers pointing outside blocks; there
+is nothing wrong with this (no proof obligation generated). But
+whenever a pointer is dereferenced a proof obligation is generated
+expressing the validity of this access:
+\begin{displaymath}
+  \mathtt{valid}(a,p) \equiv p\not=\mathtt{null} ~ \land ~ 
+    0 \le \mathtt{offset}(p) < \mathtt{block\_length}(a,p)
+\end{displaymath}
+Additional predicates are introduced to express that access to
+\texttt{p+i} and to the whole range \texttt{p[i\dots j]} is valid:
+\begin{displaymath}
+  \mathtt{valid\_index}(a,p,i) \equiv p\not=\mathtt{null} ~ \land ~ 
+    0 \le \mathtt{offset}(p)+i < \mathtt{block\_length}(a,p)
+\end{displaymath}
+\begin{displaymath}
+  \mathtt{valid\_range}(a,p,i,j) \equiv 
+  \begin{array}[t]{l}
+    p\not=\mathtt{null} ~ \land ~ 
+    0 \le \mathtt{offset}(p)+i ~\land~ i\le j ~\land~ \\
+    \mathtt{offset}(p)+j < \mathtt{block\_length}(a,p)
+  \end{array}
+\end{displaymath}
+Note that two different blocks are truly \emph{separated} i.e. there
+is no way to access and/or modify any element of a block using a
+pointer related to another block. There is no way to
+express that two blocks allocated with two different calls to
+\texttt{malloc} are contiguous in memory. In particular, a C program
+realizing a buffer overflow cannot be proved correct.
+
+\medskip
+
+As specified in the ANSI C standard, pointer subtraction and pointer
+comparison is restricted to pointers with a same base address.
+When it is so, pointer subtraction (resp. comparison) corresponds to
+the subtraction (resp. comparison) of offsets.
+
+\medskip
+
+The following table summarizes the various pointer notions:
+\begin{center}
+  \begin{tabular}{l|l|l}
+    C syntax & annotation syntax & logic \\\hline
+    \texttt{p+i} & \texttt{p+i} & \texttt{shift(p,i)} \\
+    \texttt{p-q} & \texttt{p-q} & \texttt{sub\_pointer(p,q)} \\
+    \texttt{p<q}, \texttt{p<=p}, \texttt{p>q}, \texttt{p>=q} & 
+    \texttt{p<q}, \texttt{p<=p}, \texttt{p>q}, \texttt{p>=q} &
+    \{\texttt{lt},\texttt{le},\texttt{gt},\texttt{ge}\}\texttt{\_pointer(p,q)}
+    \\
+        & \texttt{\valid(p)} & \texttt{valid(a,p)} \\
+        & \texttt{\valid\_index(p,i)} & \texttt{valid\_index(a,p,i)} \\
+        & \texttt{\valid\_range(p,i,j)} & \texttt{valid\_range(a,p,i,j)} \\
+        & \texttt{\block\_length(p)} & \texttt{block\_length(a,p)} \\
+        & \texttt{\base\_addr(p)} & \texttt{base\_addr(p)}
+  \end{tabular}
+\end{center}
+
+%\input{invariants.tex}
+
+\section{Memory allocation}
+
+There is a limited support for the \texttt{malloc} function.
+Currently, only expressions of the shape
+\begin{center}
+  \begin{tabular}{l}
+  \texttt{(}$\tau$\texttt{*)malloc(}$e$\texttt{ * sizeof(}$\tau$\texttt{))} \\
+  \texttt{(}$\tau$\texttt{*)malloc(sizeof(}$\tau$\texttt{) * }$e$\texttt{)} \\
+  \texttt{(}$\tau$\texttt{*)malloc(sizeof(}$\tau$\texttt{))}
+  \end{tabular}
+\end{center}
+are supported, where $e$ is an integer expression and $\tau$ a type
+expression. When a function (resp. a loop) is allocating memory, some
+predicate is added to its postcondition (resp. to its loop invariant)
+to state that some memory was allocated and consequently that any
+valid pointer before the allocation is still valid after the allocation.
+Note that currently there is no way for the user to state this
+property manually in a specification.
+
+Example: see \texttt{bench/c/good/malloc.c} in the source distribution.
+
+There is no support for \texttt{free} currently.
+
+\section{Unsupported features}
+
+If a feature is not supported by \caduceus, it is reported on the
+error output and the corresponding function is skipped:
+\begin{verbatim}
+unsupported feature (goto); skipping function f
+\end{verbatim}
+It means that no \why\ code is produced for function \texttt{f}, and
+thus no proof obligations, but \texttt{f} may still be called in other
+parts of the code and its specification is visible.
+
+\subsection{Features not supported in current version}
+The following features are not yet supported by \caduceus\ but will be
+so in future versions of the tool:
+\begin{itemize}
+%\item \texttt{switch} constructs
+%\item string literals (e.g. \texttt{"hello world"})
+%\item arithmetic overflow (currently all integers types are mapped to
+%  arbitrary precision integers on the prover side)
+%\item \texttt{sizeof}
+\item standard library functions: \texttt{memcpy},
+  \texttt{strcmp}, etc.
+%\item more support for \verb|&| operator.
+%\item no model for \emph{modular arithmetic}.
+\end{itemize}
+
+\subsection{Other unsupported features}
+The following features are not planed to be supported by \caduceus:
+\begin{itemize}
+\item arbitrary \texttt{goto} (some simple \texttt{goto}'s are supported)
+\item function pointer (apart from trivial situations where we know at
+  compile-time which function is pointed at)
+\item pointer cast (e.g. casting an \texttt{int*} to a \texttt{void*},
+  passing it to a function which casts it back to \texttt{int*})
+\item any non-ANSI feature
+\end{itemize}
+
+
+
+\nocite{*}
+\bibliographystyle{plain}
+\bibliography{./biblio}
+
+
+%\cleardoublepage
+\tableofcontents
+
+%\cleardoublepage
+\addcontentsline{toc}{chapter}{Index}
+\printindex
+
+\end{document}

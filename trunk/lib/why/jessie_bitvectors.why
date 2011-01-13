@@ -1,0 +1,190 @@
+
+
+(*****************************************************************************)
+(* bitvectors                                                                *)
+(*****************************************************************************)
+
+include "jessie.why"
+
+type bitvector
+
+logic concat_bitvector: bitvector, bitvector -> bitvector
+
+(* offsets in bytes *)
+
+logic offset_min_bytes: 't alloc_table, 't pointer, int -> int
+logic offset_max_bytes: 't alloc_table, 't pointer, int -> int
+
+axiom offset_min_bytes_def:
+  forall a:'t alloc_table. forall p:'t pointer. forall s:int
+  [offset_min_bytes(a,p,s)].
+    0 < s ->
+      offset_min(a,p) <= s * offset_min_bytes(a,p,s)
+      and s * offset_min_bytes(a,p,s) - s < offset_min(a,p)
+
+axiom offset_max_bytes_def:
+  forall a:'t alloc_table. forall p:'t pointer. forall s:int
+  [offset_max_bytes(a,p,s)].
+    0 < s ->
+      s * offset_max_bytes(a,p,s) + s - 1 <= offset_max(a,p)
+      and offset_max(a,p) < s * offset_max_bytes(a,p,s) + s + s - 1
+
+(* encoding of unions *)
+
+logic extract_bytes: bitvector, int, int -> bitvector
+      (* extract_bytes(v,i,j) returns the subvector of v between i and j *) 
+logic replace_bytes: bitvector, int, int, bitvector -> bitvector
+      (* replace_bytes(v,i,j,w) returns the vector v obtained
+        by putting w between i and j *) 
+
+axiom select_store_eq_union:
+  forall o1:int. forall s1:int. forall o2:int. forall s2:int.
+  forall v1:bitvector. forall v2:bitvector
+  [extract_bytes(replace_bytes(v1,o1,s1,v2),o2,s2)].
+  o1 = o2 and s1 = s2
+    -> extract_bytes(replace_bytes(v1,o1,s1,v2),o2,s2) = v2
+  (* { v1 with o1..s1 = v2 } [o1..s1] == v2 *)
+
+axiom select_store_neq_union:
+  forall o1:int. forall s1:int. forall o2:int. forall s2:int.
+  forall v1:bitvector. forall v2:bitvector
+  [extract_bytes(replace_bytes(v1,o1,s1,v2),o2,s2)].
+  (o2 + s2 <= o1 or o1 + s2 <= o2)
+    -> extract_bytes(replace_bytes(v1,o1,s1,v2),o2,s2)
+       = extract_bytes(v1,o2,s2)
+
+axiom concat_replace_bytes_up:
+  forall o1:int. forall s1:int. forall o2:int. forall s2:int.
+  forall v1:bitvector. forall v2:bitvector. forall v3:bitvector
+  [replace_bytes(replace_bytes(v1,o1,s1,v2),o2,s2,v3)].
+    o1 + s1 = o2
+    -> replace_bytes(replace_bytes(v1,o1,s1,v2),o2,s2,v3)
+       = replace_bytes(v1,o1,s1+s2,concat_bitvector(v2,v3))
+
+axiom concat_replace_bytes_down:
+  forall o1:int. forall s1:int. forall o2:int. forall s2:int.
+  forall v1:bitvector. forall v2:bitvector. forall v3:bitvector
+  [replace_bytes(replace_bytes(v1,o1,s1,v2),o2,s2,v3)].
+    o2 + s2 = o1
+    -> replace_bytes(replace_bytes(v1,o1,s1,v2),o2,s2,v3)
+       = replace_bytes(v1,o2,s1+s2,concat_bitvector(v3,v2))
+
+axiom concat_extract_bytes:
+  forall o1:int. forall s1:int. forall o2:int. forall s2:int.
+  forall v:bitvector
+  [concat_bitvector(extract_bytes(v,o1,s1),extract_bytes(v,o2,s2))].
+    o1 + s1 = o2
+    -> concat_bitvector(extract_bytes(v,o1,s1),extract_bytes(v,o2,s2))
+       = extract_bytes(v,o1,s1+s2)
+
+(* encoding of byte-level accesses *)
+
+logic select_bytes:
+      ('t,bitvector) memory, 't pointer, int, int -> bitvector
+logic store_bytes:
+      ('t,bitvector) memory, 't pointer, int, int, bitvector
+      -> ('t,bitvector) memory
+
+axiom select_store_eq_bytes:
+  forall m:('t,bitvector) memory.
+  forall p1:'t pointer. forall p2:'t pointer.
+  forall o1:int. forall s1:int. forall o2:int. forall s2:int.
+  forall v:bitvector
+  [select_bytes(store_bytes(m,p1,o1,s1,v),p2,o2,s2)].
+    p1 = p2 and o1 = o2 and s1 = s2
+    -> select_bytes(store_bytes(m,p1,o1,s1,v),p2,o2,s2) = v
+
+axiom select_store_neq_bytes:
+  forall m:('t,bitvector) memory.
+  forall p1:'t pointer. forall p2:'t pointer.
+  forall o1:int. forall s1:int. forall o2:int. forall s2:int.
+  forall v:bitvector
+  [select_bytes(store_bytes(m,p1,o1,s1,v),p2,o2,s2)].
+    pset_disjoint(pset_range(pset_singleton(p1),o1,o1+s1),
+                  pset_range(pset_singleton(p2),o2,o2+s2))
+    -> select_bytes(store_bytes(m,p1,o1,s1,v),p2,o2,s2)
+       = select_bytes(m,p2,o2,s2)
+
+axiom shift_store_bytes:
+  forall m:('t,bitvector) memory.
+  forall p:'t pointer.
+  forall i:int. forall o:int. forall s:int.
+  forall v:bitvector
+  [store_bytes(m,shift(p,i),o,s,v)].
+    store_bytes(m,shift(p,i),o,s,v) = store_bytes(m,p,o+i,s,v)
+
+axiom shift_select_bytes:
+  forall m:('t,bitvector) memory.
+  forall p:'t pointer.
+  forall i:int. forall o:int. forall s:int.
+  forall v:bitvector
+  [select_bytes(m,shift(p,i),o,s)].
+    select_bytes(m,shift(p,i),o,s) = select_bytes(m,p,o+i,s)
+
+axiom concat_store_bytes_up:
+  forall m:('t,bitvector) memory.
+  forall p:'t pointer.
+  forall o1:int. forall s1:int. forall o2:int. forall s2:int.
+  forall v1:bitvector. forall v2:bitvector
+  [store_bytes(store_bytes(m,p,o1,s1,v1),p,o2,s2,v2)].
+    o1 + s1 = o2
+    -> store_bytes(store_bytes(m,p,o1,s1,v1),p,o2,s2,v2)
+       = store_bytes(m,p,o1,s1+s2,concat_bitvector(v1,v2))
+
+axiom concat_store_bytes_down:
+  forall m:('t,bitvector) memory.
+  forall p:'t pointer.
+  forall o1:int. forall s1:int. forall o2:int. forall s2:int.
+  forall v1:bitvector. forall v2:bitvector
+  [store_bytes(store_bytes(m,p,o1,s1,v1),p,o2,s2,v2)].
+    o2 + s2 = o1
+    -> store_bytes(store_bytes(m,p,o1,s1,v1),p,o2,s2,v2)
+       = store_bytes(m,p,o2,s1+s2,concat_bitvector(v2,v1))
+
+axiom concat_select_bytes:
+  forall m:('t,bitvector) memory.
+  forall p:'t pointer.
+  forall o1:int. forall s1:int. forall o2:int. forall s2:int
+  [concat_bitvector(select_bytes(m,p,o1,s1),select_bytes(m,p,o2,s2))].
+    o1 + s1 = o2
+    -> concat_bitvector(select_bytes(m,p,o1,s1),select_bytes(m,p,o2,s2))
+       = select_bytes(m,p,o1,s1+s2)
+
+(* access and update side-effect functions *)
+
+parameter acc_bytes_:
+  a:'t alloc_table -> m:('t,bitvector) memory -> p:'t pointer ->
+  o:int -> s:int ->
+  { offset_min(a,p) <= o and o + s - 1 <= offset_max(a,p) }
+  bitvector
+  { result = select_bytes(m,p,o,s) }
+
+parameter safe_acc_bytes_:
+  m:('t,bitvector) memory -> p:'t pointer -> o:int -> s:int ->
+  { }
+  bitvector
+  { result = select_bytes(m,p,o,s) }
+
+parameter upd_bytes_:
+  a:'t alloc_table -> m:('t,bitvector) memory ref -> p:'t pointer ->
+  o:int -> s:int -> v:bitvector ->
+  { offset_min(a,p) <= o and o + s - 1 <= offset_max(a,p) }
+  unit
+  reads m
+  writes m
+  { m = store_bytes(m@,p,o,s,v) }
+
+parameter safe_upd_bytes_:
+  m:('t,bitvector) memory ref -> p:'t pointer ->
+  o:int -> s:int -> v:bitvector ->
+  { }
+  unit
+  reads m
+  writes m
+  { m = store_bytes(m@,p,o,s,v) }
+
+(* conversion functions *)
+
+logic integer_of_bitvector : bitvector -> int
+logic bitvector_of_integer : int -> bitvector
+logic real_of_bitvector : bitvector -> real

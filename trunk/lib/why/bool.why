@@ -1,0 +1,21 @@
+
+
+logic bool_and : bool, bool -> bool
+logic bool_or  : bool, bool -> bool
+logic bool_xor : bool, bool -> bool
+logic bool_not : bool -> bool
+
+axiom bool_and_def: forall a,b:bool. bool_and(a,b) = true <-> a=true and b=true
+axiom bool_or_def: forall a,b:bool. bool_or(a,b) = true <-> a=true or b=true
+axiom bool_xor_def: forall a,b:bool. bool_xor(a,b) = true <-> a <> b
+axiom bool_not_def: forall a:bool. bool_not(a) = true <-> a=false
+
+(* if-then-else function symbol *)
+
+logic ite : bool,'a,'a -> 'a
+
+axiom ite_true : forall x, y : 'a. ite(true, x, y) = x
+axiom ite_false : forall x, y : 'a. ite(false, x, y) = y
+
+
+parameter any_bool : unit -> { } bool { true }

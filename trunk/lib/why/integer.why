@@ -1,0 +1,54 @@
+(* boolean versions of the comparisons and the corresponding axioms *)
+logic lt_int_bool : int,int -> bool
+logic le_int_bool : int,int -> bool
+logic gt_int_bool : int,int -> bool
+logic ge_int_bool : int,int -> bool
+logic eq_int_bool : int,int -> bool
+logic neq_int_bool : int,int -> bool
+
+axiom lt_int_bool_axiom : 
+  forall x:int. forall y:int. lt_int_bool(x,y)=true <-> x<y
+axiom le_int_bool_axiom : 
+  forall x:int. forall y:int. le_int_bool(x,y)=true <-> x<=y
+axiom gt_int_bool_axiom : 
+  forall x:int. forall y:int. gt_int_bool(x,y)=true <-> x>y
+axiom ge_int_bool_axiom : 
+  forall x:int. forall y:int. ge_int_bool(x,y)=true <-> x>=y
+axiom eq_int_bool_axiom : 
+  forall x:int. forall y:int. eq_int_bool(x,y)=true <-> x=y
+axiom neq_int_bool_axiom : 
+  forall x:int. forall y:int. neq_int_bool(x,y)=true <-> x<>y
+
+
+
+logic abs_int : int -> int
+
+
+axiom abs_int_pos: forall x:int. x >= 0 -> abs_int(x) = x
+axiom abs_int_neg: forall x:int. x <= 0 -> abs_int(x) = -x
+
+(* min and max *)
+
+(* TODO: rename to max_int and min_int *)
+
+logic int_max : int, int -> int
+logic int_min : int, int -> int
+
+axiom int_max_is_ge :  
+  forall x:int. forall y:int. 
+  int_max(x,y) >= x and int_max(x,y) >= y
+
+axiom int_max_is_some :  
+  forall x:int. forall y:int. 
+  (int_max(x,y) = x or int_max(x,y) = y) 
+
+axiom int_min_is_le :  
+  forall x:int. forall y:int. 
+  int_min(x,y) <= x and int_min(x,y) <= y
+
+axiom int_min_is_some :  
+  forall x:int. forall y:int. 
+  (int_min(x,y) = x or int_min(x,y) = y) 
+
+
+parameter any_int : unit -> {} int { true }
