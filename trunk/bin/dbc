@@ -1,6 +1,0 @@
-dir ../src
-dir ../c
-dir ../jc
-set arguments ../bench/c/good/test.c
-
-

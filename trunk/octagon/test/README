@@ -1,5 +1,0 @@
-This directory contains a very simple test suite for the C binding of the
-Octagon Abstract Domain Library.
-
-Try `octtest` and discover wonderfull new bugs!
-

@@ -1,3 +1,0 @@
-[preprocessing] running gcc -C -E -I. compound_global.c
-
-Warning: Cannot find main to add global initializer __globinit_whole_program

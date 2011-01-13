@@ -1,4 +1,0 @@
-
-(* polymorphic reference *)
-
-parameter x : 'a ref (* => cannot generalize *)

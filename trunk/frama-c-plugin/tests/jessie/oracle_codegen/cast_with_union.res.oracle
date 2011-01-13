@@ -1,7 +1,0 @@
-rm -f cast_with_union.jc
-../../bin/toplevel.opt -jessie-analysis  -jessie-gen-only cast_with_union.c
-Parsing
-Cleaning unused parts
-Symbolic link
-Starting semantical analysis
-WHYLIB=../../why/lib JESSIELIB=../../why/lib ../../why/bin/jessie.opt  -why-opt -split-user-conj -why-opt -fast-wp -locs cast_with_union.cloc cast_with_union.jc

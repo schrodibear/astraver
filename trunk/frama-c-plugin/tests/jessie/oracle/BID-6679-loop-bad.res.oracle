@@ -1,8 +1,0 @@
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BID-6679-loop-bad_why.why : .......................................?............................. (68/0/1/0/0)
-total   :  69
-valid   :  68 ( 99%)
-invalid :   0 (  0%)
-unknown :   1 (  1%)
-timeout :   0 (  0%)
-failure :   0 (  0%)

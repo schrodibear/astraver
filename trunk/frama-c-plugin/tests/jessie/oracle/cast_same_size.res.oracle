@@ -1,5 +1,0 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only cast_same_size.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD cast_same_size.c"
-cast_same_size.c:26:[kernel] user error: syntax error
-[kernel] user error: skipping file "cast_same_size.c" that has errors.
-[kernel] Frama-C aborted because of invalid user input.

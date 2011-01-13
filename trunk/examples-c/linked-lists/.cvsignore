@@ -1,8 +1,0 @@
-simplify
-*.depend
-*.makefile
-*.log
-why
-cvcl
-out
-gwhy.cache merge.why semantic.cache

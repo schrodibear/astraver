@@ -1,8 +1,0 @@
-hilight.ml
-*.annot
-tagsplit.ml
-whyhilight.ml
-config.ml
-*.cmx
-*.cmi
-*.cmo

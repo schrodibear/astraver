@@ -1,8 +1,0 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only hollas2.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD hollas2.c"
-[jessie] Starting Jessie translation
-hollas2.c:3:[jessie] user error: Jessie plugin does not support lambda abstraction
-hollas2.c:3:[jessie] warning: Dropping definition of function sum
-hollas2.c:3:[jessie] user error: Jessie plugin does not support lambda abstraction
-[jessie] warning: Unsupported feature(s).
-                  Jessie plugin can not be used on your code.

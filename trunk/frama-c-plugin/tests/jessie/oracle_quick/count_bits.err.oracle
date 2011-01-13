@@ -1,6 +1,0 @@
-[preprocessing] running gcc -C -E -I. count_bits.c
-File count_bits.c, line 28, characters 21-44:
-Error during analysis of annotation: invalid operands to binary &
-count_bits.c:28: Warning: ignoring logic global annotation
-
-Warning: Cannot find main to add global initializer __globinit_whole_program

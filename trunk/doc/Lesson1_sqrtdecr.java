@@ -1,6 +1,0 @@
-/*@ loop_invariant 
-  @   ...
-  @ loop_variant x - sum;
-  @*/
-while (sum <= x) { 
-   ...

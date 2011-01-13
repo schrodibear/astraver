@@ -1,9 +1,0 @@
-
-type 'a t
-logic null : 'a t
-logic f : 'a -> 'a t
-
-let p () =
-  let x = ref null in
-  x := f 1;
-  x := f true

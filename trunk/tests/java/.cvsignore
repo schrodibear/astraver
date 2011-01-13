@@ -1,7 +1,0 @@
-*.makefile
-*.jc
-*.jloc
-*.loc
-why
-simplify
-gwhy.cache

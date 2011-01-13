@@ -1,4 +1,0 @@
-
-external parameter r : int ref
-
-let p = r := true

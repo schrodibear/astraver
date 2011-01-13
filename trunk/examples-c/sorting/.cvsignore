@@ -1,7 +1,0 @@
-simplify
-*.depend
-*.makefile
-*.log
-why
-cvcl
-gwhy.cache semantic.cache

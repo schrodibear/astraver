@@ -1,6 +1,0 @@
-
-(* a reference cannot be used within an axiom *)
-
-parameter x : int ref
-
-axiom toto : x = 0

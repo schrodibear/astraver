@@ -1,7 +1,0 @@
-rm -f fs252.jc
-../../bin/toplevel.opt -jessie-analysis  -jessie-gen-only fs252.c
-Parsing
-Cleaning unused parts
-Symbolic link
-Starting semantical analysis
-WHYLIB=../../why/lib JESSIELIB=../../why/lib ../../why/bin/jessie.opt  -why-opt -split-user-conj -why-opt -fast-wp -locs fs252.cloc fs252.jc

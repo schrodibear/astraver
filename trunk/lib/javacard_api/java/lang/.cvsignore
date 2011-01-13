@@ -1,7 +1,0 @@
-*.vo
-*.why
-*_spec_why.v
-*_spec.v
-Krak_model.v
-makefile
-*_valid.v

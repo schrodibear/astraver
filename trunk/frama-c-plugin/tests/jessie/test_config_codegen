@@ -1,4 +1,0 @@
-COMMENT: 	regression test configuration for Jessie plugin
-COMMENT:        special configuration : up to Why code generation
-CMD:		./tests/jessie/run_test.sh
-OPT:		codegen

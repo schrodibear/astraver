@@ -1,7 +1,0 @@
-rm -f cast_to_bytes.jc
-../../bin/toplevel.opt -jessie-analysis  -jessie-gen-only cast_to_bytes.c
-Parsing
-Cleaning unused parts
-Symbolic link
-Starting semantical analysis
-cat cast_to_bytes.jc

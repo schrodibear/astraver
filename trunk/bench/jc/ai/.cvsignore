@@ -1,6 +1,0 @@
-*.loc
-*.makefile
-why
-smtlib
-simplify
-gwhy.cache

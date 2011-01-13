@@ -1,2 +1,0 @@
-coq/g4_spec_why.vo: coq/g4_spec_why.v /usr/lib/coq/user-contrib/Caduceus.vo
-coq/g4_why.vo: coq/g4_why.v coq/g4_spec_why.vo coq/G4.vo coq/G4z.vo

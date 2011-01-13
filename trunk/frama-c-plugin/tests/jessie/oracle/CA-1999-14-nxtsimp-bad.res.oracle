@@ -1,8 +1,0 @@
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/CA-1999-14-nxtsimp-bad_why.why: ......#......................................?........???.. (54/0/4/1/0)
-total   :  59
-valid   :  54 ( 92%)
-invalid :   0 (  0%)
-unknown :   4 (  7%)
-timeout :   1 (  2%)
-failure :   0 (  0%)

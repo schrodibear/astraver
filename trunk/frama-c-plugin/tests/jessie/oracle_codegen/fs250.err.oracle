@@ -1,4 +1,0 @@
-[preprocessing] running gcc -C -E -I. fs250.c
-fs250.c:40: Error: Union type __anonunion_rom_1 not allowed
-Cannot open file fs250.cloc
-make: *** [fs250.codegen] Erreur 1

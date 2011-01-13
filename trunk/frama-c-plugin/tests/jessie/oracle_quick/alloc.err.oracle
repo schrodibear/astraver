@@ -1,4 +1,0 @@
-[preprocessing] running gcc -C -E -I. alloc.c
-No code for function alloc, default assigns generated
-
-Warning: Cannot find main to add global initializer __globinit_whole_program

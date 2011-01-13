@@ -1,5 +1,0 @@
-let p () =
-  let f (x:int) = x+1 {result=x+1} in
-  let r = ref 0 in
-  f !r { result = 1 }
-

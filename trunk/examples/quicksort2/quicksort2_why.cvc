@@ -1,9 +1,0 @@
-
-UNIT: TYPE;
-tt: UNIT;
-sqrt_real: [REAL -> REAL];
-int_of_real: [REAL -> INT];
-mod_int: [[INT, INT] -> INT];
-
-%%%% DO NOT EDIT BELOW THIS LINE
-

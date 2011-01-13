@@ -1,7 +1,0 @@
-
-(* E undeclared in f effects *)
-
-exception E
-
-external parameter f : unit -> { } unit { true | E => false }
-
