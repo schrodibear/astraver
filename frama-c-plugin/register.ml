@@ -36,8 +36,8 @@ open Cil_types
 open Cil
 open Cilutil
 open Extlib
-module FCAst=Ast
-module FCProject=Project
+module FCAst = Ast
+module FCProject = Project
 (* Import from Why *)
 open Jc
 open Jc_ast
@@ -251,7 +251,7 @@ let run () =
 
 
       let atp = Jessie_options.Atp.get () in
-      let jessie_opt = 
+      let jessie_opt =
 	match atp with
 	  | "why3" | "why3ide" -> ""
 	  | _ -> "-why-opt -split-user-conj"
