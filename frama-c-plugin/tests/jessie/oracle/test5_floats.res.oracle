@@ -52,10 +52,8 @@ behavior default:
                            (((x :> real) - (y :> real)) == 1.0)));
       behavior default:
         
-        assigns x;
-      behavior default:
-        
-        assigns y;
+        assigns x,
+        y;
       variant (C_3 : (16777216 - truncate((y :> real))));
       while (true)
       {  

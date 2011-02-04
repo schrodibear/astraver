@@ -82,10 +82,8 @@ behavior default:
                                       cpt{Here}(t, (u :> real), 0, (i - 1)))))));
       behavior default:
         
-        assigns i;
-      behavior default:
-        
-        assigns tmp_1;
+        assigns i,
+        tmp_1;
       variant (C_2 : (5 - i));
       while (true)
       {  

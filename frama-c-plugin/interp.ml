@@ -1234,27 +1234,22 @@ let remove_pred_name p n =
 let conjunct pos pl =
   mkconjunct (List.map (pred $ Logic_const.pred_of_id_pred) pl) pos
 
-let zone = function
-  | Location tset,_from -> terms tset.it_content
-  | Nothing,_from -> []
+let zone (tset,_) = terms tset.it_content
 
 (* Distinguish between:
  * - no assign, which is the empty list in Cil and None in Jessie
  * - assigns nothing, which is [Nothing] in Cil and the Some[] in Jessie
  *)
 let assigns = function
-  | [] -> None
-  | assign_list ->
-      let assign_list =
-        List.filter
-          (function
-               Location out,_ ->
-                 not (Logic_utils.is_result out.it_content)
-             | Nothing, _ -> false)
-          assign_list
-      in
-      let assign_list = List.flatten (List.map zone assign_list) in
-      Some(Loc.dummy_position,assign_list)
+  | WritesAny -> None
+  | Writes assign_list ->
+    let assign_list =
+      List.filter
+        (function out,_ -> not (Logic_utils.is_result out.it_content))
+        assign_list
+    in
+    let assign_list = List.flatten (List.map zone assign_list) in
+    Some(Loc.dummy_position,assign_list)
 
 let spec funspec =
   let is_normal_postcond =
@@ -2081,9 +2076,9 @@ let rec statement s =
 		       assigns)::beh,var)
 *)
 		 | AInvariant(ids,true,inv) ->
-		     ((ids,[locate (pred inv)],[])::beh,var)
+		     ((ids,[locate (pred inv)],WritesAny)::beh,var)
 		 | AAssigns(ids,assign) ->
-		     ((ids,[],[assign])::beh,var)
+		     ((ids,[],assign)::beh,var)
 		 | APragma _ -> (* ignored *) (beh,var)
 		 | _ -> assert false
 		     (* others should not occur in loop annot *))

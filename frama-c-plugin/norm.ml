@@ -756,18 +756,22 @@ object
       | Tblock_length _ | TCoerce _ | TCoerceE _ | TUpdate _
       | Ttypeof _ | Ttype _ | Tlet _ -> assert false
     in
-    let zone = function
-      | Location idts ->
-          List.map (fun ts -> Location { idts with it_content = ts })
-            (term idts.it_content)
-      | Nothing -> [ Nothing ]
+    let zone idts =
+      List.map Logic_const.new_identified_term (term idts.it_content)
     in
     let assign (z,froms) =
       let zl = zone z in
-      let froms = List.flatten (List.map zone froms) in
+      let froms = 
+        match froms with
+            FromAny -> froms
+          | From l -> From (List.flatten (List.map zone l))
+      in
       List.map (fun z -> z, froms) zl
     in
-    b.b_assigns <- List.flatten (List.map assign b.b_assigns);
+    (match b.b_assigns with
+        WritesAny -> ()
+      | Writes l ->
+        b.b_assigns <- Writes (List.flatten (List.map assign l)));
     DoChildren
 
   method vstmt_aux s = match s.skind with

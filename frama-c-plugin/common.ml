@@ -667,7 +667,7 @@ object
   method vassigns = visitor#vassigns
   method vloop_pragma = visitor#vloop_pragma
   method vslice_pragma = visitor#vslice_pragma
-  method vzone = visitor#vzone
+  method vdeps = visitor#vdeps
   method vcode_annot = visitor#vcode_annot
   method vannotation = visitor#vannotation
 
@@ -774,7 +774,7 @@ object
   method vassigns = visitor#vassigns
   method vloop_pragma = visitor#vloop_pragma
   method vslice_pragma = visitor#vslice_pragma
-  method vzone = visitor#vzone
+  method vdeps = visitor#vdeps
   method vcode_annot annot =
     Jessie_options.feedback "%a" !Ast_printer.d_code_annotation annot;
     visitor#vcode_annot annot
@@ -1104,7 +1104,7 @@ let malloc_function () =
       b_assumes = [];
       b_requires = [];
       b_extended = [];
-      b_assigns = [ Nothing,[] ];
+      b_assigns = Writes [];
       b_post_cond = [];
     } in
     let spec = { (empty_funspec ()) with spec_behavior = [behav]; } in
@@ -1126,8 +1126,9 @@ let free_function () =
       b_post_cond = [];
       b_requires = [];
       b_extended = [];
-      b_assigns = [ Nothing,[] ];
-    } in
+      b_assigns = Writes [];
+    } 
+    in
     let spec = { (empty_funspec ()) with spec_behavior = [behav]; } in
     Globals.Functions.replace_by_declaration spec f Cil_datatype.Location.unknown;
     f

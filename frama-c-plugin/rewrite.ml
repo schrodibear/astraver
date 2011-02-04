@@ -61,7 +61,7 @@ class add_default_behavior =
             b_assumes = [];
             b_requires = [];
             b_extended = [];
-            b_assigns = [];
+            b_assigns = WritesAny;
             b_post_cond = [];
           } :: s.spec_behavior
       end;
