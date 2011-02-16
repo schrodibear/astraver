@@ -54,17 +54,20 @@ uint32 __TT1_cpt;
 enum___anonenum_T_RESULTAT_1_P[..] __TT1_v0;
 
 predicate f_cond0{L}(enum___anonenum_T_RESULTAT_1_P[..] testv0, integer cpt) =
-((testv0 + cpt).enum___anonenum_T_RESULTAT_1_M == 1)
+((testv0 + cpt).enum___anonenum_T_RESULTAT_1_M ==
+  (1 :> __anonenum_T_RESULTAT_1))
 
 predicate f_cond1{L}(enum___anonenum_T_RESULTAT_1_P[..] testv0_0,
                      integer cpt_0) =
-((testv0_0 + cpt_0).enum___anonenum_T_RESULTAT_1_M == 0)
+((testv0_0 + cpt_0).enum___anonenum_T_RESULTAT_1_M ==
+  (0 :> __anonenum_T_RESULTAT_1))
 
 predicate f_cond_OK{L}(enum___anonenum_T_RESULTAT_1_P[..] testv0_1,
                        integer cpt_1, integer cpt_panne) =
 (f_cond0{L}(testv0_1, cpt_1) ||
   (f_cond1{L}(testv0_1, cpt_1) &&
-    ((__ConsignerPanne_v0 + cpt_panne).enum___anonenum_T_RESULTAT_1_M == 1)))
+    ((__ConsignerPanne_v0 + cpt_panne).enum___anonenum_T_RESULTAT_1_M ==
+      (1 :> __anonenum_T_RESULTAT_1))))
 
 __anonenum_T_RESULTAT_1 TesterOK(enum___anonenum_T_RESULTAT_1_P[..] status,
                                  __anonenum_T_ID_TEST_2 id_test)
@@ -79,21 +82,27 @@ behavior default:
                    (C_3 : (__ConsignerPanne_cpt <=
                             (\old(__ConsignerPanne_cpt) + 1)))));
 behavior T0:
-  assumes ((id_test == 0) && (status.enum___anonenum_T_RESULTAT_1_M == 1));
+  assumes ((id_test == (0 :> __anonenum_T_ID_TEST_2)) &&
+            (status.enum___anonenum_T_RESULTAT_1_M ==
+              (1 :> __anonenum_T_RESULTAT_1)));
   assigns status.enum___anonenum_T_RESULTAT_1_M,
   __ConsignerPanne_cpt,
   __TT0_cpt;
   ensures (C_4 : (f_cond_OK{Here}(__TT0_v0, \old(__TT0_cpt),
                                   \old(__ConsignerPanne_cpt)) ==>
-                   (\at(status,Old).enum___anonenum_T_RESULTAT_1_M == 1)));
+                   (\at(status,Old).enum___anonenum_T_RESULTAT_1_M ==
+                     (1 :> __anonenum_T_RESULTAT_1))));
 behavior T1:
-  assumes ((id_test == 1) && (status.enum___anonenum_T_RESULTAT_1_M == 1));
+  assumes ((id_test == (1 :> __anonenum_T_ID_TEST_2)) &&
+            (status.enum___anonenum_T_RESULTAT_1_M ==
+              (1 :> __anonenum_T_RESULTAT_1)));
   assigns status.enum___anonenum_T_RESULTAT_1_M,
   __ConsignerPanne_cpt,
   __TT1_cpt;
   ensures (C_5 : (f_cond_OK{Here}(__TT1_v0, \old(__TT1_cpt),
                                   \old(__ConsignerPanne_cpt)) ==>
-                   (\at(status,Old).enum___anonenum_T_RESULTAT_1_M == 1)));
+                   (\at(status,Old).enum___anonenum_T_RESULTAT_1_M ==
+                     (1 :> __anonenum_T_RESULTAT_1))));
 ;
 
 uint32 __ConsignerPanne_cpt_t0;
@@ -114,7 +123,7 @@ behavior default:
                                     __ConsignerPanne_cpt_t0) &&
                      f_cond_OK{Here}(__TT1_v0, \old(__TT1_cpt),
                                      __ConsignerPanne_cpt_t1)) ==>
-                    (\result == 1)));
+                    (\result == (1 :> __anonenum_T_RESULTAT_1))));
 {  
    (var enum___anonenum_T_RESULTAT_1_P[0] Rl_Status);
    
@@ -128,7 +137,7 @@ behavior default:
                                                        \at(__TT0_cpt,Pre),
                                                        __ConsignerPanne_cpt_t0) ==>
                                         (Rl_Status.enum___anonenum_T_RESULTAT_1_M ==
-                                          1))));
+                                          (1 :> __anonenum_T_RESULTAT_1)))));
          ()
       };
       (C_16 : (__ConsignerPanne_cpt_t1 = __ConsignerPanne_cpt));
@@ -267,13 +276,13 @@ predicate f_cond0(testv0:enum___anonenum_T_RESULTAT_1_P pointer, cpt:int,
  enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_testv0_4_at_L:(enum___anonenum_T_RESULTAT_1_P, __anonenum_T_RESULTAT_1) memory) =
  eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_testv0_4_at_L,
                                            shift(testv0, cpt))),
- (1))
+ integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((1))))
 
 predicate f_cond1(testv0_0:enum___anonenum_T_RESULTAT_1_P pointer, cpt_0:int,
  enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_testv0_0_5_at_L:(enum___anonenum_T_RESULTAT_1_P, __anonenum_T_RESULTAT_1) memory) =
  eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_testv0_0_5_at_L,
                                            shift(testv0_0, cpt_0))),
- (0))
+ integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((0))))
 
 predicate f_cond_OK(testv0_1:enum___anonenum_T_RESULTAT_1_P pointer,
  cpt_1:int, cpt_panne:int,
@@ -286,7 +295,7 @@ predicate f_cond_OK(testv0_1:enum___anonenum_T_RESULTAT_1_P pointer,
     and eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1_at_L,
                                                   shift(__ConsignerPanne_v0,
                                                   cpt_panne))),
-        (1))))
+        integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((1))))))
 
 logic int8_of_integer: int -> int8
 
@@ -466,10 +475,11 @@ parameter TesterOK :
      { } __anonenum_T_RESULTAT_1
      reads __ConsignerPanne_cpt,__TT0_cpt,__TT1_cpt,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT0_v0_2,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT1_v0_3,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7
      writes __ConsignerPanne_cpt,__TT0_cpt,__TT1_cpt,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7
-     { (((eq_int(integer_of___anonenum_T_ID_TEST_2(id_test@), (1))
+     { (((eq_int(integer_of___anonenum_T_ID_TEST_2(id_test@),
+          integer_of___anonenum_T_ID_TEST_2(__anonenum_T_ID_TEST_2_of_integer((1))))
          and eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7@,
                                                        status@)),
-             (1))) ->
+             integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((1))))) ->
          (JC_<somenum>:
          ((JC_<somenum>:
           (f_cond_OK(__TT1_v0, integer_of_uint32(__TT1_cpt@),
@@ -478,7 +488,7 @@ parameter TesterOK :
            enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1) ->
            eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7,
                                                      status@)),
-           (1))))
+           integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((1))))))
          and (JC_<somenum>:
              ((__TT0_cpt = __TT0_cpt@)
              and (JC_<somenum>:
@@ -486,10 +496,11 @@ parameter TesterOK :
                  enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7@,
                  enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7,
                  pset_singleton(status@))))))))
-       and (((eq_int(integer_of___anonenum_T_ID_TEST_2(id_test@), (0))
+       and (((eq_int(integer_of___anonenum_T_ID_TEST_2(id_test@),
+              integer_of___anonenum_T_ID_TEST_2(__anonenum_T_ID_TEST_2_of_integer((0))))
              and eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7@,
                                                            status@)),
-                 (1))) ->
+                 integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((1))))) ->
              (JC_<somenum>:
              ((JC_<somenum>:
               (f_cond_OK(__TT0_v0, integer_of_uint32(__TT0_cpt@),
@@ -498,7 +509,7 @@ parameter TesterOK :
                enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1) ->
                eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7,
                                                          status@)),
-               (1))))
+               integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((1))))))
              and (JC_<somenum>:
                  ((__TT1_cpt = __TT1_cpt@)
                  and (JC_<somenum>:
@@ -537,10 +548,11 @@ parameter TesterOK_requires :
      __anonenum_T_RESULTAT_1
      reads __ConsignerPanne_cpt,__TT0_cpt,__TT1_cpt,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT0_v0_2,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT1_v0_3,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7
      writes __ConsignerPanne_cpt,__TT0_cpt,__TT1_cpt,enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7
-     { (((eq_int(integer_of___anonenum_T_ID_TEST_2(id_test@), (1))
+     { (((eq_int(integer_of___anonenum_T_ID_TEST_2(id_test@),
+          integer_of___anonenum_T_ID_TEST_2(__anonenum_T_ID_TEST_2_of_integer((1))))
          and eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7@,
                                                        status@)),
-             (1))) ->
+             integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((1))))) ->
          (JC_<somenum>:
          ((JC_<somenum>:
           (f_cond_OK(__TT1_v0, integer_of_uint32(__TT1_cpt@),
@@ -549,7 +561,7 @@ parameter TesterOK_requires :
            enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1) ->
            eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7,
                                                      status@)),
-           (1))))
+           integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((1))))))
          and (JC_<somenum>:
              ((__TT0_cpt = __TT0_cpt@)
              and (JC_<somenum>:
@@ -557,10 +569,11 @@ parameter TesterOK_requires :
                  enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7@,
                  enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7,
                  pset_singleton(status@))))))))
-       and (((eq_int(integer_of___anonenum_T_ID_TEST_2(id_test@), (0))
+       and (((eq_int(integer_of___anonenum_T_ID_TEST_2(id_test@),
+              integer_of___anonenum_T_ID_TEST_2(__anonenum_T_ID_TEST_2_of_integer((0))))
              and eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7@,
                                                            status@)),
-                 (1))) ->
+                 integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((1))))) ->
              (JC_<somenum>:
              ((JC_<somenum>:
               (f_cond_OK(__TT0_v0, integer_of_uint32(__TT0_cpt@),
@@ -569,7 +582,7 @@ parameter TesterOK_requires :
                enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1) ->
                eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_status_7,
                                                          status@)),
-               (1))))
+               integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((1))))))
              and (JC_<somenum>:
                  ((__TT1_cpt = __TT1_cpt@)
                  and (JC_<somenum>:
@@ -787,7 +800,8 @@ parameter phase1 :
          integer_of_uint32(__ConsignerPanne_cpt_t1),
          enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT1_v0_3,
          enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)) ->
-     eq_int(integer_of___anonenum_T_RESULTAT_1(result), (1)))) }
+     eq_int(integer_of___anonenum_T_RESULTAT_1(result),
+     integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((1)))))) }
 
 parameter phase1_requires :
  tt:unit ->
@@ -828,7 +842,8 @@ parameter phase1_requires :
          integer_of_uint32(__ConsignerPanne_cpt_t1),
          enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT1_v0_3,
          enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)) ->
-     eq_int(integer_of___anonenum_T_RESULTAT_1(result), (1)))) }
+     eq_int(integer_of___anonenum_T_RESULTAT_1(result),
+     integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((1)))))) }
 
 parameter safe___anonenum_T_ID_TEST_2_of_integer_ :
  x:int ->
@@ -921,7 +936,8 @@ let phase1_ensures_default =
          enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1) ->
          eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_Rl_Status_8,
                                                    Rl_Status)),
-         (1)))) }; void); void;
+         integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((1)))))) };
+      void); void;
       (let jessie_<somenum> = (__ConsignerPanne_cpt_t1 := !__ConsignerPanne_cpt) in
       void);
       (let jessie_<somenum> =
@@ -943,7 +959,8 @@ let phase1_ensures_default =
          integer_of_uint32(__ConsignerPanne_cpt_t1),
          enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___TT1_v0_3,
          enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1)) ->
-     eq_int(integer_of___anonenum_T_RESULTAT_1(result), (1)))) }
+     eq_int(integer_of___anonenum_T_RESULTAT_1(result),
+     integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((1)))))) }
 
 let phase1_safety =
  fun (tt : unit) ->
@@ -1021,7 +1038,8 @@ let phase1_safety =
            enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1) ->
            eq_int(integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_Rl_Status_8,
                                                      Rl_Status)),
-           (1)))) } ]; void;
+           integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer((1)))))) } ];
+      void;
       (let jessie_<somenum> = (__ConsignerPanne_cpt_t1 := !__ConsignerPanne_cpt) in
       void);
       (let jessie_<somenum> =
@@ -1049,31 +1067,31 @@ why --project [...] why/phase12.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/phase12_po4.why">
-      <location file = "why/phase12.why" line = "858" begin = "23" end = "165"/>
+      <location file = "why/phase12.why" line = "866" begin = "23" end = "165"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/phase12_po5.why">
-      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "118" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "127" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase12_po6.why">
-      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "118" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "127" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase12_po7.why">
-      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "129" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "138" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase12_po8.why">
-      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "129" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "138" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase12_po9.why">
-      <location file = "why/phase12.why" line = "890" begin = "7" end = "89"/>
+      <location file = "why/phase12.why" line = "899" begin = "7" end = "89"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2134,14 +2152,16 @@ predicate f_cond0(testv0: enum___anonenum_T_RESULTAT_1_P pointer, cpt: int,
   enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_testv0_4_at_L: (enum___anonenum_T_RESULTAT_1_P,
   __anonenum_T_RESULTAT_1) memory) =
   (integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_testv0_4_at_L,
-  shift(testv0, cpt))) = 1)
+  shift(testv0,
+  cpt))) = integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer(1)))
 
 predicate f_cond1(testv0_0: enum___anonenum_T_RESULTAT_1_P pointer,
   cpt_0: int,
   enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_testv0_0_5_at_L: (enum___anonenum_T_RESULTAT_1_P,
   __anonenum_T_RESULTAT_1) memory) =
   (integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_testv0_0_5_at_L,
-  shift(testv0_0, cpt_0))) = 0)
+  shift(testv0_0,
+  cpt_0))) = integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer(0)))
 
 predicate f_cond_OK(testv0_1: enum___anonenum_T_RESULTAT_1_P pointer,
   cpt_1: int, cpt_panne: int,
@@ -2154,7 +2174,8 @@ predicate f_cond_OK(testv0_1: enum___anonenum_T_RESULTAT_1_P pointer,
    (f_cond1(testv0_1, cpt_1,
     enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M_testv0_1_6_at_L) and
     (integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1_P_enum___anonenum_T_RESULTAT_1_M___ConsignerPanne_v0_1_at_L,
-    shift(__ConsignerPanne_v0, cpt_panne))) = 1)))
+    shift(__ConsignerPanne_v0,
+    cpt_panne))) = integer_of___anonenum_T_RESULTAT_1(__anonenum_T_RESULTAT_1_of_integer(1)))))
 
 logic int8_of_integer : int -> int8
 

@@ -40,7 +40,7 @@ type void_P = [void_P]
 type __anonenum_RESULTAT_1 = 0..1
 
 predicate result{L}(__anonenum_RESULTAT_1 status, int32 n) =
-((status == 0) && (n > 0))
+((status == (0 :> __anonenum_RESULTAT_1)) && (n > 0))
 
 axiomatic statusInitial {
 
@@ -48,7 +48,7 @@ axiomatic statusInitial {
    
   axiom status_initial_ok{L} :
   (\forall integer i_0;
-    (status_initial{L}(i_0) == 0))
+    (status_initial{L}(i_0) == (0 :> __anonenum_RESULTAT_1)))
    
   predicate function2_res{L}(int32 n_0) =
   result{L}(status_initial{L}(1), n_0)
@@ -62,7 +62,8 @@ behavior default:
   assigns last.enum___anonenum_RESULTAT_1_M;
   ensures (C_7 : (result{Here}(\old(last.enum___anonenum_RESULTAT_1_M),
                                \at(n_0,Old)) ==>
-                   (\at(last,Old).enum___anonenum_RESULTAT_1_M == 0)));
+                   (\at(last,Old).enum___anonenum_RESULTAT_1_M ==
+                     (0 :> __anonenum_RESULTAT_1))));
 {  
    {  (if ((C_6 : ((C_5 : last.enum___anonenum_RESULTAT_1_M) :> int32)) == 0) then 
       (if (n_0 > 0) then (C_4 : ((C_3 : last.enum___anonenum_RESULTAT_1_M) = 0)) else 
@@ -74,7 +75,8 @@ behavior default:
 
 __anonenum_RESULTAT_1 f2(int32 n)
 behavior default:
-  ensures (C_16 : (function2_res{Here}(\at(n,Old)) ==> (\result == 0)));
+  ensures (C_16 : (function2_res{Here}(\at(n,Old)) ==>
+                    (\result == (0 :> __anonenum_RESULTAT_1))));
 {  
    (var enum___anonenum_RESULTAT_1_P[..] initial);
    
@@ -177,7 +179,8 @@ predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
 predicate result_0(status:__anonenum_RESULTAT_1, n:int32) =
- (eq_int(integer_of___anonenum_RESULTAT_1(status), (0))
+ (eq_int(integer_of___anonenum_RESULTAT_1(status),
+  integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0))))
  and gt_int(integer_of_int32(n), (0)))
 
 logic status_initial: int -> __anonenum_RESULTAT_1
@@ -247,7 +250,8 @@ predicate right_valid_struct_void_P(p:void_P pointer, b:int,
 
 axiom status_initial_ok :
  (forall i_0:int.
-  eq_int(integer_of___anonenum_RESULTAT_1(status_initial(i_0)), (0)))
+  eq_int(integer_of___anonenum_RESULTAT_1(status_initial(i_0)),
+  integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0)))))
 
 predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -504,14 +508,16 @@ parameter f2 :
   { } __anonenum_RESULTAT_1
   { (JC_<somenum>:
     (function2_res(n_1@) ->
-     eq_int(integer_of___anonenum_RESULTAT_1(result), (0)))) }
+     eq_int(integer_of___anonenum_RESULTAT_1(result),
+     integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0)))))) }
 
 parameter f2_requires :
  n_1:int32 ->
   { } __anonenum_RESULTAT_1
   { (JC_<somenum>:
     (function2_res(n_1@) ->
-     eq_int(integer_of___anonenum_RESULTAT_1(result), (0)))) }
+     eq_int(integer_of___anonenum_RESULTAT_1(result),
+     integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0)))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -538,7 +544,7 @@ parameter p1 :
          n_0_0@) ->
          eq_int(integer_of___anonenum_RESULTAT_1(select(enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1,
                                                  last@)),
-         (0))))
+         integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0))))))
        and (JC_<somenum>:
            not_assigns(enum___anonenum_RESULTAT_1_P_last_1_alloc_table@,
            enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1@,
@@ -569,7 +575,7 @@ parameter p1_requires :
          n_0_0@) ->
          eq_int(integer_of___anonenum_RESULTAT_1(select(enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1,
                                                  last@)),
-         (0))))
+         integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0))))))
        and (JC_<somenum>:
            not_assigns(enum___anonenum_RESULTAT_1_P_last_1_alloc_table@,
            enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1@,
@@ -618,7 +624,8 @@ let f2_ensures_default =
    with Return -> !return end))
   { (JC_<somenum>:
     (function2_res(n_1@) ->
-     eq_int(integer_of___anonenum_RESULTAT_1(result), (0)))) }
+     eq_int(integer_of___anonenum_RESULTAT_1(result),
+     integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0)))))) }
 
 let f2_safety =
  fun (n_1 : int32) ->
@@ -694,7 +701,7 @@ let p1_ensures_default =
       n_0_0@) ->
       eq_int(integer_of___anonenum_RESULTAT_1(select(enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1,
                                               last@)),
-      (0))))
+      integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0))))))
     and (JC_<somenum>:
         not_assigns(enum___anonenum_RESULTAT_1_P_last_1_alloc_table@,
         enum___anonenum_RESULTAT_1_P_enum___anonenum_RESULTAT_1_M_last_1@,
@@ -804,22 +811,22 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/geanta3_po2.why">
-      <location file = "PPCHOME/tests/jessie/geanta3.jessie/geanta3.jc" line = "77" begin = "15" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/geanta3.jessie/geanta3.jc" line = "79" begin = "15" end = "64"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/geanta3_po3.why">
-      <location file = "PPCHOME/tests/jessie/geanta3.jessie/geanta3.jc" line = "77" begin = "15" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/geanta3.jessie/geanta3.jc" line = "79" begin = "15" end = "64"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/geanta3_po4.why">
-      <location file = "PPCHOME/tests/jessie/geanta3.jessie/geanta3.jc" line = "78" begin = "14" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/geanta3.jessie/geanta3.jc" line = "80" begin = "14" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/geanta3_po5.why">
-      <location file = "PPCHOME/tests/jessie/geanta3.jessie/geanta3.jc" line = "78" begin = "14" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/geanta3.jessie/geanta3.jc" line = "80" begin = "14" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1851,7 +1858,7 @@ predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
 
 predicate result_0(status: __anonenum_RESULTAT_1, n: int32) =
-  ((integer_of___anonenum_RESULTAT_1(status) = 0) and
+  ((integer_of___anonenum_RESULTAT_1(status) = integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer(0))) and
    (integer_of_int32(n) > 0))
 
 logic status_initial : int -> __anonenum_RESULTAT_1
@@ -1923,7 +1930,7 @@ predicate right_valid_struct_void_P(p: void_P pointer, b: int,
 
 axiom status_initial_ok:
   (forall i_0:int.
-    (integer_of___anonenum_RESULTAT_1(status_initial(i_0)) = 0))
+    (integer_of___anonenum_RESULTAT_1(status_initial(i_0)) = integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer(0))))
 
 predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =

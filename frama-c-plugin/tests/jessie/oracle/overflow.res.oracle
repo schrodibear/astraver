@@ -54,7 +54,7 @@ E1 e1;
 E2 e2;
 
 unit f()
-  requires (C_4 : (e2 != 2));
+  requires (C_4 : (e2 != (2 :> E2)));
 behavior default:
   ensures (C_3 : true);
 {  
@@ -479,7 +479,8 @@ parameter f : tt:unit -> { } unit writes e1 { true }
 
 parameter f_requires :
  tt:unit ->
-  { (JC_<somenum>: neq_int(integer_of_E2(e2), (2)))} unit writes e1 { true }
+  { (JC_<somenum>: neq_int(integer_of_E2(e2), integer_of_E2(E2_of_integer((2)))))}
+  unit writes e1 { true }
 
 parameter s_0 : int16 ref
 
@@ -559,7 +560,7 @@ parameter uint8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_<somenum>: neq_int(integer_of_E2(e2), (2))) }
+  { (JC_<somenum>: neq_int(integer_of_E2(e2), integer_of_E2(E2_of_integer((2))))) }
   (init:
   try
    (C_2:
@@ -571,7 +572,7 @@ let f_ensures_default =
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_<somenum>: neq_int(integer_of_E2(e2), (2))) }
+  { (JC_<somenum>: neq_int(integer_of_E2(e2), integer_of_E2(E2_of_integer((2))))) }
   (init:
   try
    (C_2:
