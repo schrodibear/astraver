@@ -55,8 +55,34 @@ let iter = Encoding.iter
   String.capitalize s
 *)
 
+let why3_keywords = 
+  [ "clone";
+    "epsilon";
+    "export";
+    "import";
+    "lemma";
+    "meta";
+    "namespace";
+    "theory";
+    "use";
+    "abstract";
+    "any";
+    "assume";
+    "downto";
+    "label";
+    "model";
+    "module";
+    "mutable";
+    "to";
+  ]
+
+let is_why3_keyword s = List.mem s why3_keywords
+
 let ident fmt s = 
   let s = Ident.string s in
+  let s = 
+    if is_why3_keyword s then s ^ "_why3" else s
+  in
   let s = 
     if 'A' <= s.[0] && s.[0] <= 'Z' then "_" ^ s  else s
   in
