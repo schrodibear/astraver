@@ -1307,7 +1307,6 @@ object(self)
 	Annotations.add_alarm
 	  cur_stmt
 	  [ Jessie_options.Analysis.self ]
-	  ~before:true
 	  Alarms.Other_alarm
 	  app
     end;
@@ -1329,7 +1328,6 @@ object(self)
 		  Annotations.add_alarm
 		    supst
 		    [ Jessie_options.Analysis.self ]
-		    ~before:true
 		    Alarms.Other_alarm
 		    rel1;
 		  let rel2 = reach_upper_bound ~loose:false v off in
@@ -1337,7 +1335,6 @@ object(self)
 		  Annotations.add_alarm
 		    eqst
 		    [ Jessie_options.Analysis.self ]
-		    ~before:true
 		    Alarms.Other_alarm
 		    rel2;
 
@@ -1374,7 +1371,6 @@ object(self)
 		  Annotations.add_alarm
 		    s
 		    [ Jessie_options.Analysis.self ]
-		    ~before:false
 		    Alarms.Other_alarm
 		    prel;
 		  (* Further help ATP by asserting that index should be
@@ -1394,7 +1390,6 @@ object(self)
 		  Annotations.add_alarm
 		    s
 		    [ Jessie_options.Analysis.self ]
-		    ~before:false
 		    Alarms.Other_alarm
 		    rel
 	  else ();
@@ -1459,7 +1454,6 @@ object(self)
 		Annotations.add_alarm
 		  cur_stmt
 		  [ Jessie_options.Analysis.self ]
-		  ~before:true
 		  Alarms.Shift_alarm
 		  check
 	  end
@@ -1478,7 +1472,6 @@ object(self)
 	      Annotations.add_alarm
 		cur_stmt
 		[ Jessie_options.Analysis.self ]
-		~before:true
 		Alarms.Shift_alarm
 		check
 	end;
@@ -1496,7 +1489,6 @@ object(self)
 		Annotations.add_alarm
 		  cur_stmt
 		  [ Jessie_options.Analysis.self ]
-		  ~before:true
 		  Alarms.Shift_alarm
 		  check
 	  end
@@ -1525,7 +1517,6 @@ object(self)
 		Annotations.add_alarm
 		  cur_stmt
 		  [ Jessie_options.Analysis.self ]
-		  ~before:true
 		  Alarms.Shift_alarm
 		  check
 	    | _ ->
@@ -1542,7 +1533,6 @@ object(self)
 		Annotations.add_alarm
 		  cur_stmt
 		  [ Jessie_options.Analysis.self ]
-		  ~before:true
 		  Alarms.Shift_alarm
 		  check
 	  end

@@ -1409,17 +1409,8 @@ let built_behavior_ids = function
               else i))
         l
 
-let code_annot pos ((acc_assert_before,acc_assert_after,contract) as acc) a =
-  let a, is_after =
-    match a with
-      | Before ca -> ca,false
-      | After ca -> ca,true
-  in
-  let push s =
-    if is_after
-    then (acc_assert_before,s::acc_assert_after,contract)
-    else (s::acc_assert_before,acc_assert_after,contract)
-  in
+let code_annot pos ((acc_assert_before,contract) as acc) a =
+  let push s = s::acc_assert_before,contract in
   match a with
      | User annot ->
          begin
@@ -1446,7 +1437,7 @@ let code_annot pos ((acc_assert_before,acc_assert_after,contract) as acc) a =
             | AStmtSpec s ->
                 begin
                   match contract with
-                    | None -> (acc_assert_before,acc_assert_after,Some s)
+                    | None -> (acc_assert_before,Some s)
                     | Some _ -> assert false
                 end
         end
@@ -1968,9 +1959,9 @@ let rec statement s =
   in
 *)
 
-  let assert_before, assert_after, contract =
+  let assert_before, contract =
     List.fold_left (code_annot pos)
-      ([],[],None)
+      ([],None)
       (Annotations.get_filter (fun _ -> true) s)
   in
   let snode = match s.skind with
@@ -2144,7 +2135,7 @@ let rec statement s =
             (JCPEcontract(requires, decreases, behaviors, s))
             pos
   in
-  let s = match assert_before @ s :: assert_after with
+  let s = match assert_before @ [s] with
     | [s] -> s
     | slist -> mkexpr (JCPEblock slist) pos
   in
