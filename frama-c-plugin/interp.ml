@@ -2362,7 +2362,9 @@ let rec annotation is_axiomatic annot =
   | Dtype _ ->
       (* TODO *)
       Extlib.not_yet_implemented "Interp.annotation Dtype"
-
+  | Dvolatile _ ->
+    (* TODO *)
+    Extlib.not_yet_implemented "Interp.annotation Dvolatile"
   | Daxiomatic(id,l,pos) ->
       CurrentLoc.set pos;
       (*

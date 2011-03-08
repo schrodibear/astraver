@@ -155,7 +155,8 @@ let rename_entities file =
     (fun annot gen ->
        let rec replace_annot annot = match annot with
 	 | Dfun_or_pred _ -> annot
-	 | Daxiomatic(id, l, loc) ->
+	 | Dvolatile _ -> annot
+         | Daxiomatic(id, l, loc) ->
              Daxiomatic(id, List.map replace_annot l,loc)
 	 | Dtype(infos,loc) ->
 	     Dtype({ infos with

@@ -415,28 +415,6 @@ object
         | Ctype _ | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ -> ty
     in
     let rec annot = function
-(*
-      | Dpredicate_reads(_name,_poly,params,_)
-      | Dpredicate_def(_name,_poly,params,_)
-      | Dinductive_def(_name,_poly,params,_) ->
-          List.iter var params;
-          DoChildren
-      | Dlogic_reads(info,poly,params,rt,tlocs) ->
-          List.iter var params;
-          let rt = return_type rt in
-          ChangeDoChildrenPost
-            (Dlogic_reads(info,poly,params,rt,tlocs), fun x -> x)
-      | Dlogic_def(name,poly,params,rt,t) ->
-          List.iter var params;
-          let rt = return_type rt in
-          ChangeDoChildrenPost
-            (Dlogic_def(name,poly,params,rt,t), fun x -> x)
-      | Dlogic_axiomatic(name,poly,params,rt,axioms) ->
-          List.iter var params;
-          let rt = return_type rt in
-          ChangeDoChildrenPost
-            (Dlogic_axiomatic(name,poly,params,rt,axioms), fun x -> x)
-*)
       | Dfun_or_pred (li,loc) ->
           List.iter var li.l_profile;
           begin
@@ -461,9 +439,8 @@ object
             | Ctype _ | Ltype _ | Lvar _ | Linteger | Lreal | Larrow _ ->
                 DoChildren
           end
-      | Dtype _ | Dlemma _ | Dinvariant _ -> DoChildren
+      | Dtype _ | Dlemma _ | Dinvariant _ | Dvolatile _  -> DoChildren
       | Daxiomatic _ -> DoChildren (* FIXME: correct ? *)
-
     in annot
 
   method vterm_lval tlv =
