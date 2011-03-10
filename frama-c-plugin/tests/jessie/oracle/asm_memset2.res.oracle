@@ -105,7 +105,7 @@ behavior default:
   ensures (C_35 : (\forall integer k_2;
                     (((\at(i_min_0,Old) <= k_2) && (k_2 <= \at(i_max_0,Old))) ==>
                       ((\at(Adresse_1,Old) + k_2).unsigned_long_M ==
-                        \at(ValMot,Old)))));
+                        (\at(ValMot,Old) :> uint32)))));
 {  
    (var uint32 i_0);
    
@@ -119,7 +119,8 @@ behavior default:
       behavior default:
         invariant (C_22 : (\forall integer k_1;
                             (((i_min_0 <= k_1) && (k_1 < i_0)) ==>
-                              ((Adresse_1 + k_1).unsigned_long_M == ValMot))));
+                              ((Adresse_1 + k_1).unsigned_long_M ==
+                                (ValMot :> uint32)))));
       while (true)
       {  
          {  (if (i_0 <= i_max_0) then () else 
