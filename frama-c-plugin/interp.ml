@@ -1434,12 +1434,14 @@ let code_annot pos ((acc_assert_before,contract) as acc) a =
             | APragma _ -> acc (* just ignored *)
             | AAssigns (_, _) -> acc (* should be handled elsewhere *)
             | AVariant _ -> acc (* should be handled elsewhere *)
-            | AStmtSpec s ->
+            | AStmtSpec ([],s) -> (* TODO: handle case of for *)
                 begin
                   match contract with
                     | None -> (acc_assert_before,Some s)
                     | Some _ -> assert false
                 end
+            | AStmtSpec _ -> 
+              unsupported "statement contract for a specific behavior"
         end
     | AI(alarm,annot) ->
         begin match annot.annot_content with
