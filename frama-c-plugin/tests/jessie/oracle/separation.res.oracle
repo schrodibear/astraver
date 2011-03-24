@@ -44,7 +44,7 @@ unit f(int_P[..] x, int_P[..] y)
                       (C_12 : (\offset_max(y) >= 0)))));
 behavior default:
   ensures (C_3 : ((C_4 : (\at(x,Old).int_M == 0)) &&
-                   (C_5 : (\at(y,Old).int_M == \old(y.int_M)))));
+                   (C_5 : (\at(y,Old).int_M == \at(y.int_M,Old)))));
 {  
    {  (C_2 : ((C_1 : x.int_M) = 0));
       

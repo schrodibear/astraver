@@ -54,7 +54,7 @@ unit gs(S[..] s_0, int32 i_0)
   requires (C_5 : ((C_6 : (\offset_min(s_0) <= 0)) &&
                     (C_7 : (\offset_max(s_0) >= 0))));
 behavior default:
-  ensures (C_4 : (\at(s_0,Old).p.int_M == \old(i_0)));
+  ensures (C_4 : (\at(s_0,Old).p.int_M == \at(i_0,Old)));
 {  
    {  (C_3 : ((C_2 : (C_1 : s_0.p).int_M) = i_0));
       
@@ -89,7 +89,7 @@ unit gps(struct_S_xP[..] s, int32 i)
                      ((C_34 : (\offset_min(s.struct_S_xM) <= 0)) &&
                        (C_35 : (\offset_max(s.struct_S_xM) >= 0)))));
 behavior default:
-  ensures (C_28 : (\at(s,Old).struct_S_xM.p.int_M == \old(i)));
+  ensures (C_28 : (\at(s,Old).struct_S_xM.p.int_M == \at(i,Old)));
 {  
    {  (C_27 : ((C_26 : (C_25 : (C_24 : s.struct_S_xM).p).int_M) = i));
       

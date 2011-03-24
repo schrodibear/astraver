@@ -58,7 +58,7 @@ int32 f(T[..] t2)
 behavior default:
   assigns t2.x;
   ensures (C_13 : (((C_15 : (\result == 1)) && (C_16 : (\at(t2,Old).x == 2))) &&
-                    (C_17 : (\at(t2,Old).y == \old(t2.y)))));
+                    (C_17 : (\at(t2,Old).y == \at(t2.y,Old)))));
 {  
    (var int32 tmp);
    

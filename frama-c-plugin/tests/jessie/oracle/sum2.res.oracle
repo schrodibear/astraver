@@ -102,7 +102,7 @@ unit test2(int_P[..] t_0, integer n_0)
 behavior default:
   assigns (t_0 + [..]).int_M;
   ensures (C_36 : (sum{Here}(\at(t_0,Old), 0, \at(n_0,Old)) ==
-                    (\old(sum{Old}(t_0, 0, n_0)) + \at(n_0,Old))));
+                    (\at(sum{Old}(t_0, 0, n_0),Old) + \at(n_0,Old))));
 {  
    (var integer i_0);
    

@@ -287,7 +287,7 @@ behavior default:
                                     (\exists integer d;
                                       (((\at(X_0,Old) +
                                           ((i_3 * \at(LDX_0,Old)) + j_3)).double_M :> real) ==
-                                        ((\old((X_0 + ((i_3 * LDX_0) + j_3)).double_M) :> real) +
+                                        ((\at((X_0 + ((i_3 * LDX_0) + j_3)).double_M,Old) :> real) +
                                           (d * \at(p_0,Old)))))))))));
 {  
    (var int32 i_0);

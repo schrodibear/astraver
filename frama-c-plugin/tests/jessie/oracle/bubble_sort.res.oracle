@@ -104,7 +104,7 @@ behavior default:
                                  (k_0 != \at(i,Old))) &&
                                 (k_0 != \at(j,Old))) ==>
                                ((\at(t,Old) + k_0).int_M ==
-                                 \old((t + k_0).int_M))))) &&
+                                 \at((t + k_0).int_M,Old))))) &&
                     (C_14 : swapped{Old,
                     Here}(\at(t,Old), \at(i,Old), \at(j,Old)))));
 {  

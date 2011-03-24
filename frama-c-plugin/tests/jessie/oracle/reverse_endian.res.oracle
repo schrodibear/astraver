@@ -42,8 +42,8 @@ unit reverse_endian(short_P[..] s)
                      (C_15 : (\offset_max(s) >= 0))));
 behavior default:
   ensures (C_12 : (\at(s,Old).short_M ==
-                    ((256 * (\old(s.short_M) % 256)) +
-                      (\old(s.short_M) / 256))));
+                    ((256 * (\at(s.short_M,Old) % 256)) +
+                      (\at(s.short_M,Old) / 256))));
 {  
    (var char_P[..] c);
    

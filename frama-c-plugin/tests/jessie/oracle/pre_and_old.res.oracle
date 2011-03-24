@@ -33,7 +33,7 @@ logic integer f{L}(integer n) =
 
 integer g(integer x)
 behavior default:
-  ensures (C_5 : ((C_6 : (\result == \old(f{Old}(x)))) &&
+  ensures (C_5 : ((C_6 : (\result == \at(f{Old}(x),Old))) &&
                    ((C_8 : (\result == f{Old}(\at(x,Old)))) &&
                      (C_9 : (\result == \at(f{Old}(x),Old))))));
 {  

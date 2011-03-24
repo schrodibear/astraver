@@ -112,7 +112,7 @@ behavior default:
   ensures (C_26 : ((C_27 : (\forall integer k_3;
                              ((! ((0 <= k_3) && (k_3 < \result))) ==>
                                ((\at(b,Old) + k_3).int_M ==
-                                 \old((b + k_3).int_M))))) &&
+                                 \at((b + k_3).int_M,Old))))) &&
                     (((C_30 : (0 <= \result)) &&
                        (C_31 : (\result <= \at(length,Old)))) &&
                       ((C_33 : (\forall integer k_4;

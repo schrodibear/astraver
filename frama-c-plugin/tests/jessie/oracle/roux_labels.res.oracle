@@ -56,7 +56,7 @@ unit g(int_P[..] a_0)
   requires (C_11 : ((C_12 : (\offset_min(a_0) <= 0)) &&
                      (C_13 : (\offset_max(a_0) >= 0))));
 behavior default:
-  ensures (C_10 : ((\old(a_0.int_M) == 0) ==> (\at(a_0,Old).int_M == 0)));
+  ensures (C_10 : ((\at(a_0.int_M,Old) == 0) ==> (\at(a_0,Old).int_M == 0)));
 {  
    {  (C_9 : f(a_0));
       

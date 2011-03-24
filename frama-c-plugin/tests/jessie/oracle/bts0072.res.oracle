@@ -40,7 +40,7 @@ behavior default:
       ( requires (C_4 : (p == 1));
         
         behavior default:
-          ensures (C_3 : (\old(p) == (p - 1)));
+          ensures (C_3 : (\at(p,Old) == (p - 1)));
         { (C_2 : (p = 2))
         });
       
@@ -333,7 +333,7 @@ let myfun_ensures_default =
      (((C_2:
        begin   (mutable_p := (safe_int32_of_integer_ (2))); !mutable_p end))
      {{ (JC_<somenum>:
-        eq_int(integer_of_int32(mutable_p@init),
+        eq_int(integer_of_int32(mutable_p@),
         sub_int(integer_of_int32(mutable_p), (1)))) }})) end in void);
     (raise Return); (raise Return) end) with Return -> void end))
   { (JC_<somenum>: true) }
@@ -355,7 +355,7 @@ let myfun_safety =
     begin
       [ { } unit
         { (JC_<somenum>:
-          eq_int(integer_of_int32(mutable_p@init),
+          eq_int(integer_of_int32(mutable_p@),
           sub_int(integer_of_int32(mutable_p), (1)))) } ]; jessie_<somenum> end) in
     void); (raise Return); (raise Return) end) with Return -> void end))
   { true }

@@ -102,8 +102,8 @@ int32 stack_push(stack_t[..] stack_1, int32 item_0)
                      (C_51 : (\offset_max(stack_1) >= 0))));
   requires (C_48 : stack_initialized{Here}(stack_1));
 behavior default:
-  ensures (C_47 : ((! stack_full{Here}(\old(stack_1))) ==>
-                    (\old(stack_1.used) < \at(stack_1,Old).used)));
+  ensures (C_47 : ((! stack_full{Here}(\at(stack_1,Old))) ==>
+                    (\at(stack_1.used,Old) < \at(stack_1,Old).used)));
 {  
    (var int32 __retres);
    

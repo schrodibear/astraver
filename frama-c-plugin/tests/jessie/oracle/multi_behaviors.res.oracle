@@ -35,7 +35,7 @@ int32 x;
 
 unit f(int32 z)
 behavior default:
-  ensures (C_7 : (((1 <= \old(x)) && (\old(x) <= 2)) ==> (x == 2)));
+  ensures (C_7 : (((1 <= \at(x,Old)) && (\at(x,Old) <= 2)) ==> (x == 2)));
 behavior one:
   assumes (x == 1);
   ensures (C_8 : true);

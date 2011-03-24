@@ -35,7 +35,7 @@ int32 x;
 
 int32 f(int32 y)
 behavior default:
-  ensures (C_12 : (x == ((2 + \old(x)) + \at(y,Old))));
+  ensures (C_12 : (x == ((2 + \at(x,Old)) + \at(y,Old))));
 {  
    {  (C_3 : (x = (C_2 : ((C_1 : (x + y)) :> int32))));
       (L1 : (C_6 : (x = (C_5 : ((C_4 : (x + 1)) :> int32)))));

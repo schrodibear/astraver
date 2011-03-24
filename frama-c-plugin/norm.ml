@@ -724,7 +724,6 @@ object
       | Tunion _
       | Tinter _
       | Tcomprehension _
-      | Told _
       | Tif _
       | Tnull -> [ t ]
         (* those cases can not appear as assigns *)

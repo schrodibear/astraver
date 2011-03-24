@@ -136,7 +136,7 @@ struct_list[..] list_reverse(struct_list[..] p0)
   requires (C_11 : null_term_list{Here}(p0));
 behavior default:
   ensures (C_10 : (\forall list l0;
-                    (\old(list_contents{Old}(p0, l0)) ==>
+                    (\at(list_contents{Old}(p0, l0),Old) ==>
                       list_contents{Here}(\result, rev(l0)))));
 {  
    (var struct_list[..] r);

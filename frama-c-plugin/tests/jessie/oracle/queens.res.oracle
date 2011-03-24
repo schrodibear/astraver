@@ -326,8 +326,8 @@ unit store_solution()
 behavior default:
   assigns s,
   ((sol + s).int_xM + [0..(N - 1)]).int_M;
-  ensures (C_29 : ((C_30 : (s == (\old(s) + 1))) &&
-                    (C_31 : eq_sol{Here}((sol + \old(s)).int_xM, col))));
+  ensures (C_29 : ((C_30 : (s == (\at(s,Old) + 1))) &&
+                    (C_31 : eq_sol{Here}((sol + \at(s,Old)).int_xM, col))));
 ;
 
 integer t3(integer a_0, integer b_0, integer c_0)
@@ -361,15 +361,15 @@ behavior default:
   s,
   k,
   ((sol + [s..]).int_xM + [..]).int_M;
-  ensures (C_78 : (((((C_82 : (\result == (s - \old(s)))) &&
+  ensures (C_78 : (((((C_82 : (\result == (s - \at(s,Old)))) &&
                        (C_83 : (\result >= 0))) &&
-                      (C_84 : (k == \old(k)))) &&
-                     (C_85 : sorted{Here}(sol, \old(s), s))) &&
+                      (C_84 : (k == \at(k,Old)))) &&
+                     (C_85 : sorted{Here}(sol, \at(s,Old), s))) &&
                     (C_86 : (\forall int_P[..] t_3;
                               ((solution{Here}(t_3) &&
                                  eq_prefix{Here}(col, t_3, k)) <==>
                                 (\exists integer i_23;
-                                  (((\old(s) <= i_23) && (i_23 < s)) &&
+                                  (((\at(s,Old) <= i_23) && (i_23 < s)) &&
                                     eq_sol{Here}(t_3, (sol + i_23).int_xM))))))));
 {  
    (var integer d_0);

@@ -55,8 +55,8 @@ unit Swap(int_P[..] p, int_P[..] q)
 behavior default:
   assigns p.int_M,
   q.int_M;
-  ensures (C_9 : ((C_10 : (\at(p,Old).int_M == \old(q.int_M))) &&
-                   (C_11 : (\at(q,Old).int_M == \old(p.int_M)))));
+  ensures (C_9 : ((C_10 : (\at(p,Old).int_M == \at(q.int_M,Old))) &&
+                   (C_11 : (\at(q,Old).int_M == \at(p.int_M,Old)))));
 {  
    (var int32 temp);
    

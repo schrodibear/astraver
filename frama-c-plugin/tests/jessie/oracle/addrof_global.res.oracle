@@ -51,7 +51,7 @@ unit gi(int_P[..] p_0, int32 i_0)
   requires (C_4 : ((C_5 : (\offset_min(p_0) <= 0)) &&
                     (C_6 : (\offset_max(p_0) >= 0))));
 behavior default:
-  ensures (C_3 : (\at(p_0,Old).int_M == \old(i_0)));
+  ensures (C_3 : (\at(p_0,Old).int_M == \at(i_0,Old)));
 {  
    {  (C_2 : ((C_1 : p_0.int_M) = i_0));
       
@@ -77,8 +77,9 @@ unit gp(int_xP[..] p_0_0, int_P[..] i_0_0)
                      ((C_29 : (\offset_min(i_0_0) <= 0)) &&
                        (C_30 : (\offset_max(i_0_0) >= 0)))));
 behavior default:
-  ensures (C_17 : ((C_18 : (\at(p_0_0,Old).int_xM.int_M == \old(i_0_0.int_M))) &&
-                    (C_19 : (\at(p_0_0,Old).int_xM == \old(i_0_0)))));
+  ensures (C_17 : ((C_18 : (\at(p_0_0,Old).int_xM.int_M ==
+                             \at(i_0_0.int_M,Old))) &&
+                    (C_19 : (\at(p_0_0,Old).int_xM == \at(i_0_0,Old)))));
 {  
    {  (C_14 : ((C_13 : (C_12 : p_0_0.int_xM).int_M) = (C_11 : i_0_0.int_M)));
       (C_16 : ((C_15 : p_0_0.int_xM) = i_0_0));
@@ -900,22 +901,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po23.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "77" begin = "15" end = "74"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "78" begin = "15" end = "74"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po24.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "77" begin = "15" end = "74"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "78" begin = "15" end = "74"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po25.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "78" begin = "15" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "79" begin = "15" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po26.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "78" begin = "15" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "79" begin = "15" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -956,42 +957,42 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/addrof_global_po6.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "88" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "89" begin = "14" end = "38"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po7.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "88" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "89" begin = "14" end = "38"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po8.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "88" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "89" begin = "14" end = "38"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po9.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "88" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "89" begin = "14" end = "38"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po10.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "88" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "89" begin = "14" end = "38"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po11.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "88" begin = "14" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "89" begin = "14" end = "38"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_global_po12.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "94" begin = "15" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "95" begin = "15" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/addrof_global_po13.why">
-      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "94" begin = "15" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/addrof_global.jessie/addrof_global.jc" line = "95" begin = "15" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

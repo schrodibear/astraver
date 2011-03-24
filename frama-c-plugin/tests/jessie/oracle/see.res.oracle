@@ -40,7 +40,7 @@ int32 b2;
 int32 f()
 behavior default:
   assigns b;
-  ensures (C_4 : ((C_5 : (\result == b)) && (C_6 : (b == (1 - \old(b))))));
+  ensures (C_4 : ((C_5 : (\result == b)) && (C_6 : (b == (1 - \at(b,Old))))));
 {  
    {  (C_3 : (b = (C_2 : ((C_1 : (1 - b)) :> int32))));
       

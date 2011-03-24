@@ -399,7 +399,7 @@ unit fun(int_P[..] p)
   requires (C_7 : ((C_8 : (\offset_min(p) <= 0)) &&
                     (C_9 : (\offset_max(p) >= 0))));
 behavior default:
-  ensures (C_6 : (\old(p.int_M) < \at(p,Old).int_M));
+  ensures (C_6 : (\at(p.int_M,Old) < \at(p,Old).int_M));
 {  
    {  (C_5 : ((C_4 : p.int_M) = (C_3 : ((C_2 : ((C_1 : p.int_M) + 1)) :> int32))));
       

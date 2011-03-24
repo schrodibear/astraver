@@ -47,7 +47,7 @@ unit gi(int_P[..] p_0, int32 i_1)
   requires (C_4 : ((C_5 : (\offset_min(p_0) <= 0)) &&
                     (C_6 : (\offset_max(p_0) >= 0))));
 behavior default:
-  ensures (C_3 : (\at(p_0,Old).int_M == \old(i_1)));
+  ensures (C_3 : (\at(p_0,Old).int_M == \at(i_1,Old)));
 {  
    {  (C_2 : ((C_1 : p_0.int_M) = i_1));
       
@@ -83,8 +83,8 @@ unit gp(int_xP[..] p_1, int_P[..] i_2)
                      ((C_35 : (\offset_min(i_2) <= 0)) &&
                        (C_36 : (\offset_max(i_2) >= 0)))));
 behavior default:
-  ensures (C_23 : ((C_24 : (\at(p_1,Old).int_xM.int_M == \old(i_2.int_M))) &&
-                    (C_25 : (\at(p_1,Old).int_xM == \old(i_2)))));
+  ensures (C_23 : ((C_24 : (\at(p_1,Old).int_xM.int_M == \at(i_2.int_M,Old))) &&
+                    (C_25 : (\at(p_1,Old).int_xM == \at(i_2,Old)))));
 {  
    {  (C_20 : ((C_19 : (C_18 : p_1.int_xM).int_M) = (C_17 : i_2.int_M)));
       (C_22 : ((C_21 : p_1.int_xM) = i_2));

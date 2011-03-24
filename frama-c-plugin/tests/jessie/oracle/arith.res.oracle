@@ -58,8 +58,9 @@ int32 j;
 
 unit test(int32 k)
 behavior default:
-  ensures (C_20 : ((C_21 : (i == (\old(j) + \at(k,Old)))) &&
-                    (C_22 : (j == (((3 * \old(j)) + (11 * \at(k,Old))) + 12)))));
+  ensures (C_20 : ((C_21 : (i == (\at(j,Old) + \at(k,Old)))) &&
+                    (C_22 : (j ==
+                              (((3 * \at(j,Old)) + (11 * \at(k,Old))) + 12)))));
 {  
    (var int32 l);
    

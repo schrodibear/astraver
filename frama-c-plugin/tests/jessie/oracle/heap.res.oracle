@@ -187,7 +187,8 @@ unit push(int32 x)
 behavior default:
   assigns (heap + [..]).int_M,
   size;
-  ensures (C_27 : (model{Here}() == add_bag(\at(x,Old), \old(model{Old}()))));
+  ensures (C_27 : (model{Here}() ==
+                    add_bag(\at(x,Old), \at(model{Old}(),Old))));
 {  
    (var int32 i);
    
@@ -258,9 +259,9 @@ int32 pop()
 behavior default:
   assigns (heap + [..]).int_M,
   size;
-  ensures (C_66 : (((C_68 : (size == (\old(size) - 1))) &&
-                     (C_69 : is_max_bag(\old(model{Old}()), \result))) &&
-                    (C_70 : (\old(model{Old}()) ==
+  ensures (C_66 : (((C_68 : (size == (\at(size,Old) - 1))) &&
+                     (C_69 : is_max_bag(\at(model{Old}(),Old), \result))) &&
+                    (C_70 : (\at(model{Old}(),Old) ==
                               add_bag(\result, model{Here}())))));
 {  
    (var int32 res);
@@ -1648,12 +1649,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po76.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "223" begin = "24" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "224" begin = "24" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po77.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "223" begin = "24" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "224" begin = "24" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1666,12 +1667,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po80.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "229" begin = "15" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "230" begin = "15" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po81.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "229" begin = "15" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "230" begin = "15" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1720,11 +1721,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po57.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "6" end = "1619"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1619"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po58.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "6" end = "1619"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1619"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po59.why">
@@ -1752,11 +1753,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po65.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "6" end = "1619"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1619"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po66.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "194" begin = "6" end = "1619"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1619"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po67.why">
@@ -1883,12 +1884,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po43.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "294" begin = "27" end = "82"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "295" begin = "27" end = "82"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po44.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "294" begin = "27" end = "82"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "295" begin = "27" end = "82"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1901,12 +1902,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po47.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "300" begin = "18" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "301" begin = "18" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po48.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "300" begin = "18" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "301" begin = "18" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1933,11 +1934,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po11.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "274" begin = "9" end = "1113"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1113"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po12.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "274" begin = "9" end = "1113"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1113"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po13.why">
@@ -1949,11 +1950,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po15.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "274" begin = "9" end = "1113"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1113"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po16.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "274" begin = "9" end = "1113"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1113"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po17.why">

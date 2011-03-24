@@ -70,7 +70,7 @@ behavior default:
   ensures (C_24 : ((C_25 : (\forall integer k_1;
                              (((\result <= k_1) && (k_1 < \at(n,Old))) ==>
                                ((\at(b,Old) + k_1).int_M ==
-                                 \old((b + k_1).int_M))))) &&
+                                 \at((b + k_1).int_M,Old))))) &&
                     ((C_27 : (\forall integer k_2;
                                (((0 <= k_2) && (k_2 < \result)) ==>
                                  ((\at(b,Old) + k_2).int_M != \at(val,Old))))) &&

@@ -877,8 +877,6 @@ and terms t =
         product (fun f x -> f x)
           (product (fun x y z -> JCPEif(x,y,z)) t1 t2) t3
 
-    | Told t -> List.map (fun x -> JCPEold x) (terms t)
-
     | Tat(t,lab) -> List.map (fun x -> JCPEat(x,logic_label lab)) (terms t)
 
     | Tbase_addr t -> List.map (fun x -> JCPEbase_block x) (terms t)
@@ -1130,8 +1128,6 @@ and pred p =
         let newp = { p with content = Pexists(q,subp) } in
         JCPEquantifier(Exists,ltype v.lv_type,
                        [new identifier v.lv_name], [],pred newp)
-
-    | Pold p ->        JCPEold(pred p)
 
     | Pat(p,lab) -> JCPEat(pred p,logic_label lab)
 

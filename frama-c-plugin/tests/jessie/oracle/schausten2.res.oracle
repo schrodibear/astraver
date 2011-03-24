@@ -45,7 +45,7 @@ integer sizetype_normalize(s1[..] e)
   requires (C_13 : ((C_14 : (10 < e.exponent)) && (C_15 : (e.exponent < 20))));
 behavior default:
   ensures (C_12 : ((\at(e,Old).mantissa * (1 << \at(e,Old).exponent)) ==
-                    \old((e.mantissa * (1 << e.exponent)))));
+                    \at((e.mantissa * (1 << e.exponent)),Old)));
 {  
    (var integer min_mantissa);
    

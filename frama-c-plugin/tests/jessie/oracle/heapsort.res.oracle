@@ -199,7 +199,7 @@ unit sift_down(int_P[..] a_0, uint32 low, uint32 high, int32 v)
 behavior default:
   assigns (a_0 + [low..high]).int_M;
   ensures (C_42 : ((C_43 : Permut(contents{Here}(\at(a_0,Old)),
-                                  \old(update(contents{Old}(a_0), low, v)),
+                                  \at(update(contents{Old}(a_0), low, v),Old),
                                   \at(low,Old), \at(high,Old))) &&
                     (C_44 : H{Here}(\at(a_0,Old), \at(low,Old), \at(high,Old)))));
 {  
@@ -271,7 +271,7 @@ unit heapsort(int_P[..] a, uint32 n)
                         (C_113 : (\offset_max(a) >= (n - 1))))));
 behavior default:
   ensures (C_106 : ((C_107 : Permut(contents{Here}(\at(a,Old)),
-                                    \old(contents{Old}(a)), 0,
+                                    \at(contents{Old}(a),Old), 0,
                                     (\at(n,Old) - 1))) &&
                      (C_108 : Sorted{Here}(\at(a,Old), 0, (\at(n,Old) - 1)))));
 {  

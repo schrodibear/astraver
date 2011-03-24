@@ -40,7 +40,8 @@ behavior default:
   assigns (t + [0..(n - 1)]).int_M;
   ensures (C_16 : (\forall integer k_0;
                     (((0 <= k_0) && (k_0 < \at(n,Old))) ==>
-                      ((\at(t,Old) + k_0).int_M == (- \old((t + k_0).int_M))))));
+                      ((\at(t,Old) + k_0).int_M ==
+                        (- \at((t + k_0).int_M,Old))))));
 {  
    (var integer i);
    
@@ -578,12 +579,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/negate_po15.why">
-      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "59" begin = "24" end = "369"/>
+      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "60" begin = "24" end = "369"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/negate_po16.why">
-      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "59" begin = "24" end = "369"/>
+      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "60" begin = "24" end = "369"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -610,11 +611,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/negate_po4.why">
-      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "43" begin = "6" end = "1024"/>
+      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "44" begin = "6" end = "1024"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/negate_po5.why">
-      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "43" begin = "6" end = "1024"/>
+      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "44" begin = "6" end = "1024"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/negate_po6.why">
@@ -630,11 +631,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/negate_po9.why">
-      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "43" begin = "6" end = "1024"/>
+      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "44" begin = "6" end = "1024"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/negate_po10.why">
-      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "43" begin = "6" end = "1024"/>
+      <location file = "PPCHOME/tests/jessie/negate.jessie/negate.jc" line = "44" begin = "6" end = "1024"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/negate_po11.why">

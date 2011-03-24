@@ -71,7 +71,7 @@ behavior default:
   q.last,
   (q.contents + q.last).char_M;
   ensures (C_23 : ((C_24 : (q.empty == 0)) &&
-                    (C_25 : ((q.contents + \old(q.last)).char_M ==
+                    (C_25 : ((q.contents + \at(q.last,Old)).char_M ==
                               \at(c,Old)))));
 {  
    (var int32 tmp);
@@ -97,7 +97,8 @@ behavior default:
   q.full,
   q.first;
   ensures (C_49 : ((C_50 : (q.full == 0)) &&
-                    (C_51 : (\result == (q.contents + \old(q.first)).char_M))));
+                    (C_51 : (\result ==
+                              (q.contents + \at(q.first,Old)).char_M))));
 {  
    (var int8 r);
    
@@ -123,7 +124,7 @@ int32 test(queue[..] q1)
                       (C_62 : (\offset_max(q1) >= 0))) &&
                      (C_63 : (q.empty == 0))));
 behavior default:
-  ensures (C_58 : (\result == \old(q1.empty)));
+  ensures (C_58 : (\result == \at(q1.empty,Old)));
 {  
    (var int8 c_0);
    
