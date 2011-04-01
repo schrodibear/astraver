@@ -169,34 +169,6 @@ axiom char_P_tags :
 
 logic cnt: int_P pointer, int, int, (int_P, int) memory -> int
 
-axiom cnt_empty :
- (forall int_P_int_M_a_1_at_L:(int_P, int) memory.
-  (forall a_0_0:int_P pointer.
-   (forall n_0_0:int.
-    (forall val_0_0:int.
-     (le_int(n_0_0, (0)) ->
-      eq_int(cnt(a_0_0, n_0_0, val_0_0, int_P_int_M_a_1_at_L), (0)))))))
-
-axiom cnt_hit :
- (forall int_P_int_M_a_1_at_L:(int_P, int) memory.
-  (forall a_1:int_P pointer.
-   (forall n_1:int.
-    (forall val_1:int.
-     ((ge_int(n_1, (0))
-      and eq_int(select(int_P_int_M_a_1_at_L, shift(a_1, n_1)), val_1)) ->
-      eq_int(cnt(a_1, add_int(n_1, (1)), val_1, int_P_int_M_a_1_at_L),
-      add_int(cnt(a_1, n_1, val_1, int_P_int_M_a_1_at_L), (1))))))))
-
-axiom cnt_miss :
- (forall int_P_int_M_a_1_at_L:(int_P, int) memory.
-  (forall a_2:int_P pointer.
-   (forall n_2:int.
-    (forall val_2:int.
-     ((ge_int(n_2, (0))
-      and neq_int(select(int_P_int_M_a_1_at_L, shift(a_2, n_2)), val_2)) ->
-      eq_int(cnt(a_2, add_int(n_2, (1)), val_2, int_P_int_M_a_1_at_L),
-      cnt(a_2, n_2, val_2, int_P_int_M_a_1_at_L)))))))
-
 logic int_P_tag:  -> int_P tag_id
 
 axiom int_P_int : (int_of_tag(int_P_tag) = (1))
@@ -363,6 +335,34 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom cnt_empty :
+ (forall int_P_int_M_a_1_at_L:(int_P, int) memory.
+  (forall a_0_0:int_P pointer.
+   (forall n_0_0:int.
+    (forall val_0_0:int.
+     (le_int(n_0_0, (0)) ->
+      eq_int(cnt(a_0_0, n_0_0, val_0_0, int_P_int_M_a_1_at_L), (0)))))))
+
+axiom cnt_hit :
+ (forall int_P_int_M_a_1_at_L:(int_P, int) memory.
+  (forall a_1:int_P pointer.
+   (forall n_1:int.
+    (forall val_1:int.
+     ((ge_int(n_1, (0))
+      and eq_int(select(int_P_int_M_a_1_at_L, shift(a_1, n_1)), val_1)) ->
+      eq_int(cnt(a_1, add_int(n_1, (1)), val_1, int_P_int_M_a_1_at_L),
+      add_int(cnt(a_1, n_1, val_1, int_P_int_M_a_1_at_L), (1))))))))
+
+axiom cnt_miss :
+ (forall int_P_int_M_a_1_at_L:(int_P, int) memory.
+  (forall a_2:int_P pointer.
+   (forall n_2:int.
+    (forall val_2:int.
+     ((ge_int(n_2, (0))
+      and neq_int(select(int_P_int_M_a_1_at_L, shift(a_2, n_2)), val_2)) ->
+      eq_int(cnt(a_2, add_int(n_2, (1)), val_2, int_P_int_M_a_1_at_L),
+      cnt(a_2, n_2, val_2, int_P_int_M_a_1_at_L)))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1895,34 +1895,6 @@ axiom char_P_tags:
 
 logic cnt : int_P pointer, int, int, (int_P, int) memory -> int
 
-axiom cnt_empty:
-  (forall int_P_int_M_a_1_at_L:(int_P, int) memory.
-    (forall a_0_0:int_P pointer.
-      (forall n_0_0:int.
-        (forall val_0_0:int.
-          ((n_0_0 <= 0) -> (cnt(a_0_0, n_0_0, val_0_0,
-           int_P_int_M_a_1_at_L) = 0))))))
-
-axiom cnt_hit:
-  (forall int_P_int_M_a_1_at_L:(int_P, int) memory.
-    (forall a_1:int_P pointer.
-      (forall n_1:int.
-        (forall val_1:int.
-          (((n_1 >= 0) and (select(int_P_int_M_a_1_at_L, shift(a_1,
-            n_1)) = val_1)) ->
-           (cnt(a_1, (n_1 + 1), val_1, int_P_int_M_a_1_at_L) = (cnt(a_1, n_1,
-           val_1, int_P_int_M_a_1_at_L) + 1)))))))
-
-axiom cnt_miss:
-  (forall int_P_int_M_a_1_at_L:(int_P, int) memory.
-    (forall a_2:int_P pointer.
-      (forall n_2:int.
-        (forall val_2:int.
-          (((n_2 >= 0) and (select(int_P_int_M_a_1_at_L, shift(a_2,
-            n_2)) <> val_2)) ->
-           (cnt(a_2, (n_2 + 1), val_2, int_P_int_M_a_1_at_L) = cnt(a_2, n_2,
-           val_2, int_P_int_M_a_1_at_L)))))))
-
 logic int_P_tag : int_P tag_id
 
 axiom int_P_int: (int_of_tag(int_P_tag) = 1)
@@ -2091,4 +2063,32 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom cnt_empty:
+  (forall int_P_int_M_a_1_at_L:(int_P, int) memory.
+    (forall a_0_0:int_P pointer.
+      (forall n_0_0:int.
+        (forall val_0_0:int.
+          ((n_0_0 <= 0) -> (cnt(a_0_0, n_0_0, val_0_0,
+           int_P_int_M_a_1_at_L) = 0))))))
+
+axiom cnt_hit:
+  (forall int_P_int_M_a_1_at_L:(int_P, int) memory.
+    (forall a_1:int_P pointer.
+      (forall n_1:int.
+        (forall val_1:int.
+          (((n_1 >= 0) and (select(int_P_int_M_a_1_at_L, shift(a_1,
+            n_1)) = val_1)) ->
+           (cnt(a_1, (n_1 + 1), val_1, int_P_int_M_a_1_at_L) = (cnt(a_1, n_1,
+           val_1, int_P_int_M_a_1_at_L) + 1)))))))
+
+axiom cnt_miss:
+  (forall int_P_int_M_a_1_at_L:(int_P, int) memory.
+    (forall a_2:int_P pointer.
+      (forall n_2:int.
+        (forall val_2:int.
+          (((n_2 >= 0) and (select(int_P_int_M_a_1_at_L, shift(a_2,
+            n_2)) <> val_2)) ->
+           (cnt(a_2, (n_2 + 1), val_2, int_P_int_M_a_1_at_L) = cnt(a_2, n_2,
+           val_2, int_P_int_M_a_1_at_L)))))))
 

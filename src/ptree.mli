@@ -153,6 +153,8 @@ type plogic_type =
   | PPredicate of ppure_type list
   | PFunction of ppure_type list * ppure_type
 
+type goal_kind = KLemma | KAxiom | KGoal
+
 type decl = 
   | Include of loc * string
   | Program of loc * Ident.t * parsed_program
@@ -163,8 +165,7 @@ type decl =
   | Inductive_def of loc * Ident.t * plogic_type * (loc * Ident.t * lexpr) list
   | Function_def 
       of loc * Ident.t * (loc * Ident.t * ppure_type) list * ppure_type * lexpr
-  | Axiom of loc * Ident.t * lexpr
-  | Goal of loc * Ident.t * lexpr
+  | Goal of loc * goal_kind * Ident.t * lexpr
   | TypeDecl of loc * external_ * Ident.t list * Ident.t
   | AlgType of (loc * Ident.t list * Ident.t
       * (loc * Ident.t * ppure_type list) list) list

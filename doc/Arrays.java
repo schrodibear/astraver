@@ -1,9 +1,9 @@
 
 //@+ CheckArithOverflow = no
 
-/*@ predicate is_max(int[] t,integer i,integer l) {
+/*@ predicate is_max{L}(int[] t,integer i,integer l) =
   @   0 <= i && i < l &&
-  @      \forall integer j; 0 <= j && j < l ==> t[j] <= t[i] }
+  @      \forall integer j; 0 <= j && j < l ==> t[j] <= t[i] ;
   @*/
 
 public class Arrays {
@@ -20,7 +20,7 @@ public class Arrays {
 	/*@ loop_invariant 
 	  @   1 <= i && i <= t.length && 0 <= r && r < t.length &&
 	  @   m == t[r] && \forall integer j; 0<=j && j<i ==> t[j] <= t[r];
-	  @ decreases t.length-i;
+	  @ loop_variant t.length-i;
 	  @*/
 	for (int i=1; i < t.length; i++) {
 	    if (t[i] > m) {
@@ -40,7 +40,7 @@ public class Arrays {
         int r = 0;
         /*@ loop_invariant 
           @   1 <= i && i <= t.length && m == t[r] && is_max(t,r,i) ;
-          @ decreases t.length-i;
+          @ loop_variant t.length-i;
           @*/
         for (int i=1; i < t.length; i++) {
             if (t[i] > m) {
@@ -62,7 +62,7 @@ public class Arrays {
 	  @   (\forall integer i; 0 <= i <= j ==> t[i] == \at(t[i],Pre)) &&
 	  @   (\forall integer i; 
 	  @         j < i < t.length ==> t[i] == \at(t[i-1],Pre));
-	  @ decreases j;
+	  @ loop_variant j;
 	  @*/
 	for (int j=t.length-1 ; j > 0 ; j--) {
 	    t[j] = t[j-1];

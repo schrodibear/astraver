@@ -259,7 +259,7 @@ let select_obligs (model:GTree.tree_store) (tv:GText.view)
        let row = model#get_iter p in
        let s = model#get ~row ~column:Model.fullname in
        try
-	 let (loc,xpl,_,_) as o = Model.find_oblig s in
+	 let (loc,_,xpl,_,_) as o = Model.find_oblig s in
 	 let buf = update_buffer tv in
 	 buf#set_text "";
 	 Pprinter.text_of_obligation tv o;
@@ -390,7 +390,7 @@ let run_prover_child p (_view:GTree.view) (model:GTree.tree_store)
                      o bench alone = 
   let column_p = p.Model.pr_icon in
   let column_i = p.Model.pr_image in
-  let (_, _, oblig, seq) = o in
+  let (_, _, _, oblig, seq) = o in
   if bench or (try_proof seq) then
     try 
       let row = 
@@ -1176,7 +1176,7 @@ let main () =
     load_cache ();
     if not (Cache.is_empty ()) then 
       Hashtbl.iter 
-	(fun _s (_,_,o,seq) -> 
+	(fun _s (_,_,_,o,seq) -> 
 	   let cleaned = Cache.clean seq in
 	   if in_cache cleaned then begin 
 	     let row = Hashtbl.find Model.orows o in

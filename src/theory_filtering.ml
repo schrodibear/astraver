@@ -276,7 +276,8 @@ let display (q,s) n =
 	let id = Ident.string id in
 	Printf.printf  "def_func %s (%d): " id 
     | Daxiom (_, id, _p)          -> Printf.printf  "axiom %s (%d): "  id 
-    | Dgoal (_, _expl, id, _s)   -> Printf.printf  "goal %s (%d):"  id 
+    | Dgoal (_, is_lemma,_expl, id, _s)   -> 
+	Printf.printf  "%s %s (%d):" (if is_lemma then "lemma" else "goal") id 
   in 
   if debug then begin 
     (di q) n;
@@ -371,7 +372,8 @@ let launcher decl = match decl with
       declare_function id ax d.scheme_type 
   | Daxiom (_, id, p) as ax         -> (*Printf.printf  "Daxiom %s \n"  id ; *)
       declare_axiom  id ax p.scheme_type 
-  | Dgoal (_, _expl, id, s)  as ax -> (*Printf.printf  "Dgoal %s \n"  id ; *)
+  | Dgoal (_, _is_lemma, _expl, id, s)  as ax -> 
+      (*Printf.printf  "Dgoal %s \n"  id ; *)
       managesGoal id ax s.Env.scheme_type 
 
 

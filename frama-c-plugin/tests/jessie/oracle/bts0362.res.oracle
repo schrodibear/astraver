@@ -198,21 +198,6 @@ predicate right_valid_struct_void_P(p:void_P pointer, b:int,
 
 logic s_0: int_P pointer, int, (int_P, int32) memory -> int
 
-axiom s_base :
- (forall int_P_int_M_a_1_at_L:(int_P, int32) memory.
-  (forall a_0:int_P pointer.
-   (forall i_0:int.
-    (lt_int(i_0, (0)) -> eq_int(s_0(a_0, i_0, int_P_int_M_a_1_at_L), (0))))))
-
-axiom s_step :
- (forall int_P_int_M_a_1_at_L:(int_P, int32) memory.
-  (forall a_1:int_P pointer.
-   (forall i_1:int.
-    (ge_int(i_1, (0)) ->
-     eq_int(s_0(a_1, i_1, int_P_int_M_a_1_at_L),
-     add_int(s_0(a_1, sub_int(i_1, (1)), int_P_int_M_a_1_at_L),
-     integer_of_int32(select(int_P_int_M_a_1_at_L, shift(a_1, i_1)))))))))
-
 predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
@@ -302,6 +287,21 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom s_base :
+ (forall int_P_int_M_a_1_at_L:(int_P, int32) memory.
+  (forall a_0:int_P pointer.
+   (forall i_0:int.
+    (lt_int(i_0, (0)) -> eq_int(s_0(a_0, i_0, int_P_int_M_a_1_at_L), (0))))))
+
+axiom s_step :
+ (forall int_P_int_M_a_1_at_L:(int_P, int32) memory.
+  (forall a_1:int_P pointer.
+   (forall i_1:int.
+    (ge_int(i_1, (0)) ->
+     eq_int(s_0(a_1, i_1, int_P_int_M_a_1_at_L),
+     add_int(s_0(a_1, sub_int(i_1, (1)), int_P_int_M_a_1_at_L),
+     integer_of_int32(select(int_P_int_M_a_1_at_L, shift(a_1, i_1)))))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1599,21 +1599,6 @@ predicate right_valid_struct_void_P(p: void_P pointer, b: int,
 
 logic s_0 : int_P pointer, int, (int_P, int32) memory -> int
 
-axiom s_base:
-  (forall int_P_int_M_a_1_at_L:(int_P, int32) memory.
-    (forall a_0:int_P pointer.
-      (forall i_0:int.
-        ((i_0 < 0) -> (s_0(a_0, i_0, int_P_int_M_a_1_at_L) = 0)))))
-
-axiom s_step:
-  (forall int_P_int_M_a_1_at_L:(int_P, int32) memory.
-    (forall a_1:int_P pointer.
-      (forall i_1:int.
-        ((i_1 >= 0) -> (s_0(a_1, i_1, int_P_int_M_a_1_at_L) = (s_0(a_1,
-         (i_1 - 1),
-         int_P_int_M_a_1_at_L) + integer_of_int32(select(int_P_int_M_a_1_at_L,
-         shift(a_1, i_1)))))))))
-
 predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =
   ((offset_min(char_P_alloc_table, p) = a) and
@@ -1703,4 +1688,19 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom s_base:
+  (forall int_P_int_M_a_1_at_L:(int_P, int32) memory.
+    (forall a_0:int_P pointer.
+      (forall i_0:int.
+        ((i_0 < 0) -> (s_0(a_0, i_0, int_P_int_M_a_1_at_L) = 0)))))
+
+axiom s_step:
+  (forall int_P_int_M_a_1_at_L:(int_P, int32) memory.
+    (forall a_1:int_P pointer.
+      (forall i_1:int.
+        ((i_1 >= 0) -> (s_0(a_1, i_1, int_P_int_M_a_1_at_L) = (s_0(a_1,
+         (i_1 - 1),
+         int_P_int_M_a_1_at_L) + integer_of_int32(select(int_P_int_M_a_1_at_L,
+         shift(a_1, i_1)))))))))
 

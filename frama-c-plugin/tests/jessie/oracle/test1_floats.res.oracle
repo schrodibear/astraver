@@ -182,20 +182,6 @@ exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
-goal abs_triangle :
- (forall x_3:real.
-  (forall y:real.
-   (forall z:real.
-    le_real(abs_real(sub_real(x_3, y)),
-    add_real(abs_real(sub_real(x_3, z)), abs_real(sub_real(z, y)))))))
-
-axiom abs_triangle_as_axiom :
- (forall x_3:real.
-  (forall y:real.
-   (forall z:real.
-    le_real(abs_real(sub_real(x_3, y)),
-    add_real(abs_real(sub_real(x_3, z)), abs_real(sub_real(z, y)))))))
-
 logic char_P_tag:  -> char_P tag_id
 
 axiom char_P_int : (int_of_tag(char_P_tag) = (1))
@@ -212,18 +198,6 @@ axiom char_P_tags :
  (forall x:char_P pointer.
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
-
-goal cos_lipschitz :
- (forall x_0_1:real.
-  (forall y_0:real.
-   le_real(abs_real(sub_real(cos(x_0_1), cos(y_0))),
-   abs_real(sub_real(x_0_1, y_0)))))
-
-axiom cos_lipschitz_as_axiom :
- (forall x_0_1:real.
-  (forall y_0:real.
-   le_real(abs_real(sub_real(cos(x_0_1), cos(y_0))),
-   abs_real(sub_real(x_0_1, y_0)))))
 
 logic integer_of_int8: int8 -> int
 
@@ -329,6 +303,19 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma abs_triangle :
+ (forall x_3:real.
+  (forall y:real.
+   (forall z:real.
+    le_real(abs_real(sub_real(x_3, y)),
+    add_real(abs_real(sub_real(x_3, z)), abs_real(sub_real(z, y)))))))
+
+lemma cos_lipschitz :
+ (forall x_0_1:real.
+  (forall y_0:real.
+   le_real(abs_real(sub_real(cos(x_0_1), cos(y_0))),
+   abs_real(sub_real(x_0_1, y_0)))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1926,6 +1913,10 @@ axiom exact_round_double_for_integers:
       ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
        (round_double(m, real_of_int(i)) = real_of_int(i)))))
 
+axiom exact_round_double_for_doubles:
+  (forall x:double.
+    (forall m:mode. (round_double(m, double_value(x)) = double_value(x))))
+
 axiom round_double_idempotent:
   (forall m1:mode.
     (forall m2:mode.
@@ -1981,6 +1972,10 @@ axiom exact_round_single_for_integers:
     (forall m:mode.
       ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
        real_of_int(i)) = real_of_int(i)))))
+
+axiom exact_round_single_for_singles:
+  (forall x:single.
+    (forall m:mode. (round_single(m, single_value(x)) = single_value(x))))
 
 axiom round_single_idempotent:
   (forall m1:mode.
@@ -2104,12 +2099,6 @@ type padding
 
 type void_P
 
-axiom abs_triangle_as_axiom:
-  (forall x_3:real.
-    (forall y:real.
-      (forall z:real.
-        (abs_real((x_3 - y)) <= (abs_real((x_3 - z)) + abs_real((z - y)))))))
-
 logic char_P_tag : char_P tag_id
 
 axiom char_P_int: (int_of_tag(char_P_tag) = 1)
@@ -2126,11 +2115,6 @@ axiom char_P_tags:
   (forall x:char_P pointer.
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
-
-axiom cos_lipschitz_as_axiom:
-  (forall x_0_1:real.
-    (forall y_0:real.
-      (abs_real((cos(x_0_1) - cos(y_0))) <= abs_real((x_0_1 - y_0)))))
 
 logic integer_of_int8 : int8 -> int
 

@@ -283,40 +283,6 @@ predicate left_valid_struct_void_P(p:void_P pointer, a:int,
 
 logic list_length: Proc pointer, (Proc, Proc pointer) memory -> int32
 
-axiom list_length_pos :
- (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
-  (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
-   (forall p_1:Proc pointer.
-    (gt_int(integer_of_int32(list_length(p_1, Proc_next_p_4_at_State)), (0)) ->
-     (le_int(offset_min(Proc_p_4_alloc_table_at_State, p_1), (0))
-     and (ge_int(offset_max(Proc_p_4_alloc_table_at_State, p_1), (0))
-         and eq_int(integer_of_int32(list_length(select(Proc_next_p_4_at_State,
-                                                 p_1),
-                                     Proc_next_p_4_at_State)),
-             sub_int(integer_of_int32(list_length(p_1,
-                                      Proc_next_p_4_at_State)),
-             (1)))))))))
-
-axiom list_length_remove :
- (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
-  (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
-   (forall p_2:Proc pointer.
-    (gt_int(integer_of_int32(list_length(p_2, Proc_next_p_4_at_State)), (0)) ->
-     (le_int(offset_min(Proc_p_4_alloc_table_at_State, p_2), (0))
-     and (ge_int(offset_max(Proc_p_4_alloc_table_at_State, p_2), (0))
-         and eq_int(integer_of_int32(list_length(select(Proc_next_p_4_at_State,
-                                                 p_2),
-                                     Proc_next_p_4_at_State)),
-             sub_int(integer_of_int32(list_length(p_2,
-                                      Proc_next_p_4_at_State)),
-             (1)))))))))
-
-axiom list_length_zero :
- (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
-  (forall p_0:Proc pointer.
-   (eq_int(integer_of_int32(list_length(p_0, Proc_next_p_4_at_State)), (0))
-   <-> (p_0 = null))))
-
 axiom no_assign_list_length_0 :
  (forall tmp:Proc pset.
   (forall tmpmem:(Proc, Proc pointer) memory.
@@ -376,15 +342,6 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
-
-axiom reachable_def :
- (forall Proc_next_p_3_5_at_State:(Proc, Proc pointer) memory.
-  (forall p_4:Proc pointer.
-   (forall q_0:Proc pointer.
-    (reachable(p_4, q_0, Proc_next_p_3_5_at_State) ->
-     ((p_4 = q_0)
-     or reachable(select(Proc_next_p_3_5_at_State, p_4), q_0,
-        Proc_next_p_3_5_at_State))))))
 
 predicate right_valid_struct_Proc(p:Proc pointer, b:int,
  Proc_alloc_table:Proc alloc_table) = (offset_max(Proc_alloc_table, p) >= b)
@@ -498,6 +455,49 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom list_length_zero :
+ (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
+  (forall p_0:Proc pointer.
+   (eq_int(integer_of_int32(list_length(p_0, Proc_next_p_4_at_State)), (0))
+   <-> (p_0 = null))))
+
+axiom list_length_pos :
+ (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
+  (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
+   (forall p_1:Proc pointer.
+    (gt_int(integer_of_int32(list_length(p_1, Proc_next_p_4_at_State)), (0)) ->
+     (le_int(offset_min(Proc_p_4_alloc_table_at_State, p_1), (0))
+     and (ge_int(offset_max(Proc_p_4_alloc_table_at_State, p_1), (0))
+         and eq_int(integer_of_int32(list_length(select(Proc_next_p_4_at_State,
+                                                 p_1),
+                                     Proc_next_p_4_at_State)),
+             sub_int(integer_of_int32(list_length(p_1,
+                                      Proc_next_p_4_at_State)),
+             (1)))))))))
+
+axiom list_length_remove :
+ (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
+  (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
+   (forall p_2:Proc pointer.
+    (gt_int(integer_of_int32(list_length(p_2, Proc_next_p_4_at_State)), (0)) ->
+     (le_int(offset_min(Proc_p_4_alloc_table_at_State, p_2), (0))
+     and (ge_int(offset_max(Proc_p_4_alloc_table_at_State, p_2), (0))
+         and eq_int(integer_of_int32(list_length(select(Proc_next_p_4_at_State,
+                                                 p_2),
+                                     Proc_next_p_4_at_State)),
+             sub_int(integer_of_int32(list_length(p_2,
+                                      Proc_next_p_4_at_State)),
+             (1)))))))))
+
+axiom reachable_def :
+ (forall Proc_next_p_3_5_at_State:(Proc, Proc pointer) memory.
+  (forall p_4:Proc pointer.
+   (forall q_0:Proc pointer.
+    (reachable(p_4, q_0, Proc_next_p_3_5_at_State) ->
+     ((p_4 = q_0)
+     or reachable(select(Proc_next_p_3_5_at_State, p_4), q_0,
+        Proc_next_p_3_5_at_State))))))
 
 parameter Proc_alloc_table : Proc alloc_table ref
 
@@ -2315,34 +2315,6 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
 
 logic list_length : Proc pointer, (Proc, Proc pointer) memory -> int32
 
-axiom list_length_pos:
-  (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
-    (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
-      (forall p_1:Proc pointer.
-        ((integer_of_int32(list_length(p_1, Proc_next_p_4_at_State)) > 0) ->
-         ((offset_min(Proc_p_4_alloc_table_at_State, p_1) <= 0) and
-          ((offset_max(Proc_p_4_alloc_table_at_State, p_1) >= 0) and
-           (integer_of_int32(list_length(select(Proc_next_p_4_at_State, p_1),
-           Proc_next_p_4_at_State)) = (integer_of_int32(list_length(p_1,
-           Proc_next_p_4_at_State)) - 1))))))))
-
-axiom list_length_remove:
-  (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
-    (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
-      (forall p_2:Proc pointer.
-        ((integer_of_int32(list_length(p_2, Proc_next_p_4_at_State)) > 0) ->
-         ((offset_min(Proc_p_4_alloc_table_at_State, p_2) <= 0) and
-          ((offset_max(Proc_p_4_alloc_table_at_State, p_2) >= 0) and
-           (integer_of_int32(list_length(select(Proc_next_p_4_at_State, p_2),
-           Proc_next_p_4_at_State)) = (integer_of_int32(list_length(p_2,
-           Proc_next_p_4_at_State)) - 1))))))))
-
-axiom list_length_zero:
-  (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
-    (forall p_0:Proc pointer.
-      ((integer_of_int32(list_length(p_0, Proc_next_p_4_at_State)) = 0) <->
-       (p_0 = null))))
-
 axiom no_assign_list_length_0:
   (forall tmp:Proc pset.
     (forall tmpmem:(Proc, Proc pointer) memory.
@@ -2403,14 +2375,6 @@ logic void_P_of_pointer_address : unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(void_P_of_pointer_address(p))))
-
-axiom reachable_def:
-  (forall Proc_next_p_3_5_at_State:(Proc, Proc pointer) memory.
-    (forall p_4:Proc pointer.
-      (forall q_0:Proc pointer.
-        (reachable(p_4, q_0, Proc_next_p_3_5_at_State) ->
-         ((p_4 = q_0) or reachable(select(Proc_next_p_3_5_at_State, p_4),
-          q_0, Proc_next_p_3_5_at_State))))))
 
 predicate right_valid_struct_Proc(p: Proc pointer, b: int,
   Proc_alloc_table: Proc alloc_table) = (offset_max(Proc_alloc_table,
@@ -2524,4 +2488,40 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom list_length_zero:
+  (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
+    (forall p_0:Proc pointer.
+      ((integer_of_int32(list_length(p_0, Proc_next_p_4_at_State)) = 0) <->
+       (p_0 = null))))
+
+axiom list_length_pos:
+  (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
+    (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
+      (forall p_1:Proc pointer.
+        ((integer_of_int32(list_length(p_1, Proc_next_p_4_at_State)) > 0) ->
+         ((offset_min(Proc_p_4_alloc_table_at_State, p_1) <= 0) and
+          ((offset_max(Proc_p_4_alloc_table_at_State, p_1) >= 0) and
+           (integer_of_int32(list_length(select(Proc_next_p_4_at_State, p_1),
+           Proc_next_p_4_at_State)) = (integer_of_int32(list_length(p_1,
+           Proc_next_p_4_at_State)) - 1))))))))
+
+axiom list_length_remove:
+  (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
+    (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
+      (forall p_2:Proc pointer.
+        ((integer_of_int32(list_length(p_2, Proc_next_p_4_at_State)) > 0) ->
+         ((offset_min(Proc_p_4_alloc_table_at_State, p_2) <= 0) and
+          ((offset_max(Proc_p_4_alloc_table_at_State, p_2) >= 0) and
+           (integer_of_int32(list_length(select(Proc_next_p_4_at_State, p_2),
+           Proc_next_p_4_at_State)) = (integer_of_int32(list_length(p_2,
+           Proc_next_p_4_at_State)) - 1))))))))
+
+axiom reachable_def:
+  (forall Proc_next_p_3_5_at_State:(Proc, Proc pointer) memory.
+    (forall p_4:Proc pointer.
+      (forall q_0:Proc pointer.
+        (reachable(p_4, q_0, Proc_next_p_3_5_at_State) ->
+         ((p_4 = q_0) or reachable(select(Proc_next_p_3_5_at_State, p_4),
+          q_0, Proc_next_p_3_5_at_State))))))
 

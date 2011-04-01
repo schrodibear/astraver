@@ -4,7 +4,7 @@
       /*@ loop_invariant 
 	@   1 <= i && i <= t.length && 0 <= r && r < t.length &&
 	@   m == t[r] && \forall integer j; 0<=j && j<i ==> t[j]<=t[r];
-	@ decreases t.length-i;
+	@ loop_variant t.length-i;
 	@*/
       for (int i=1; i < t.length; i++) {
 	  if (t[i] > m) {

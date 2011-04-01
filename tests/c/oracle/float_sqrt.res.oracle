@@ -2954,6 +2954,10 @@ axiom exact_round_double_for_integers:
       ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
        (round_double(m, real_of_int(i)) = real_of_int(i)))))
 
+axiom exact_round_double_for_doubles:
+  (forall x:double.
+    (forall m:mode. (round_double(m, double_value(x)) = double_value(x))))
+
 axiom round_double_idempotent:
   (forall m1:mode.
     (forall m2:mode.
@@ -3009,6 +3013,10 @@ axiom exact_round_single_for_integers:
     (forall m:mode.
       ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
        real_of_int(i)) = real_of_int(i)))))
+
+axiom exact_round_single_for_singles:
+  (forall x:single.
+    (forall m:mode. (round_single(m, single_value(x)) = single_value(x))))
 
 axiom round_single_idempotent:
   (forall m1:mode.
@@ -3295,8 +3303,7 @@ goal sqrt_ensures_default_po_1:
   forall u:double.
   (u = result6) ->
   ("JC_60":
-  ("JC_60":
-  (abs_real((double_value(u) - ((0.5 * double_value(t)) * (3.0 - ((double_value(t) * double_value(t)) * double_value(x_1)))))) <= 1.0)))
+  (abs_real((double_value(u) - ((0.5 * double_value(t)) * (3.0 - ((double_value(t) * double_value(t)) * double_value(x_1)))))) <= 1.0))
 
 goal sqrt_ensures_default_po_2:
   forall x_1:double.
@@ -3339,7 +3346,6 @@ goal sqrt_ensures_default_po_2:
   ("JC_60":
   (abs_real((double_value(u) - ((0.5 * double_value(t)) * (3.0 - ((double_value(t) * double_value(t)) * double_value(x_1)))))) <= 1.0)) ->
   ("JC_61":
-  ("JC_61":
   (div_real((((0.5 * double_value(t)) * (3.0 - ((double_value(t) * double_value(t)) * double_value(x_1)))) - div_real(1.0,
   sqrt_real(double_value(x_1)))), div_real(1.0,
   sqrt_real(double_value(x_1)))) = ((-(1.5 + (0.5 * div_real((double_value(t) - div_real(1.0,
@@ -3348,7 +3354,7 @@ goal sqrt_ensures_default_po_2:
   sqrt_real(double_value(x_1)))), div_real(1.0,
   sqrt_real(double_value(x_1)))) * div_real((double_value(t) - div_real(1.0,
   sqrt_real(double_value(x_1)))), div_real(1.0,
-  sqrt_real(double_value(x_1)))))))))
+  sqrt_real(double_value(x_1))))))))
 
 goal sqrt_ensures_default_po_3:
   forall x_1:double.
@@ -3400,10 +3406,9 @@ goal sqrt_ensures_default_po_3:
   sqrt_real(double_value(x_1)))) * div_real((double_value(t) - div_real(1.0,
   sqrt_real(double_value(x_1)))), div_real(1.0,
   sqrt_real(double_value(x_1)))))))) ->
-  ("JC_62":
   ("JC_62": (abs_real((double_value(u) - div_real(1.0,
   sqrt_real(double_value(x_1))))) <= (0x1.p-10 * abs_real(div_real(1.0,
-  sqrt_real(double_value(x_1))))))))
+  sqrt_real(double_value(x_1)))))))
 
 goal sqrt_ensures_default_po_4:
   forall x_1:double.
@@ -3489,8 +3494,7 @@ goal sqrt_ensures_default_po_4:
   forall u0:double.
   (u0 = result13) ->
   ("JC_68":
-  ("JC_68":
-  (abs_real((double_value(u0) - ((0.5 * double_value(t0)) * (3.0 - ((double_value(t0) * double_value(t0)) * double_value(x_1)))))) <= 1.0)))
+  (abs_real((double_value(u0) - ((0.5 * double_value(t0)) * (3.0 - ((double_value(t0) * double_value(t0)) * double_value(x_1)))))) <= 1.0))
 
 goal sqrt_ensures_default_po_5:
   forall x_1:double.
@@ -3578,7 +3582,6 @@ goal sqrt_ensures_default_po_5:
   ("JC_68":
   (abs_real((double_value(u0) - ((0.5 * double_value(t0)) * (3.0 - ((double_value(t0) * double_value(t0)) * double_value(x_1)))))) <= 1.0)) ->
   ("JC_69":
-  ("JC_69":
   (div_real((((0.5 * double_value(t0)) * (3.0 - ((double_value(t0) * double_value(t0)) * double_value(x_1)))) - div_real(1.0,
   sqrt_real(double_value(x_1)))), div_real(1.0,
   sqrt_real(double_value(x_1)))) = ((-(1.5 + (0.5 * div_real((double_value(t0) - div_real(1.0,
@@ -3587,7 +3590,7 @@ goal sqrt_ensures_default_po_5:
   sqrt_real(double_value(x_1)))), div_real(1.0,
   sqrt_real(double_value(x_1)))) * div_real((double_value(t0) - div_real(1.0,
   sqrt_real(double_value(x_1)))), div_real(1.0,
-  sqrt_real(double_value(x_1)))))))))
+  sqrt_real(double_value(x_1))))))))
 
 goal sqrt_ensures_default_po_6:
   forall x_1:double.
@@ -3684,10 +3687,9 @@ goal sqrt_ensures_default_po_6:
   sqrt_real(double_value(x_1)))) * div_real((double_value(t0) - div_real(1.0,
   sqrt_real(double_value(x_1)))), div_real(1.0,
   sqrt_real(double_value(x_1)))))))) ->
-  ("JC_70":
   ("JC_70": (abs_real((double_value(u0) - div_real(1.0,
   sqrt_real(double_value(x_1))))) <= (0x1.p-10 * abs_real(div_real(1.0,
-  sqrt_real(double_value(x_1))))))))
+  sqrt_real(double_value(x_1)))))))
 
 goal sqrt_ensures_default_po_7:
   forall x_1:double.
@@ -3818,8 +3820,7 @@ goal sqrt_ensures_default_po_7:
   forall u1:double.
   (u1 = result20) ->
   ("JC_76":
-  ("JC_76":
-  (abs_real((double_value(u1) - ((0.5 * double_value(t1)) * (3.0 - ((double_value(t1) * double_value(t1)) * double_value(x_1)))))) <= 1.0)))
+  (abs_real((double_value(u1) - ((0.5 * double_value(t1)) * (3.0 - ((double_value(t1) * double_value(t1)) * double_value(x_1)))))) <= 1.0))
 
 goal sqrt_ensures_default_po_8:
   forall x_1:double.
@@ -3952,7 +3953,6 @@ goal sqrt_ensures_default_po_8:
   ("JC_76":
   (abs_real((double_value(u1) - ((0.5 * double_value(t1)) * (3.0 - ((double_value(t1) * double_value(t1)) * double_value(x_1)))))) <= 1.0)) ->
   ("JC_77":
-  ("JC_77":
   (div_real((((0.5 * double_value(t1)) * (3.0 - ((double_value(t1) * double_value(t1)) * double_value(x_1)))) - div_real(1.0,
   sqrt_real(double_value(x_1)))), div_real(1.0,
   sqrt_real(double_value(x_1)))) = ((-(1.5 + (0.5 * div_real((double_value(t1) - div_real(1.0,
@@ -3961,7 +3961,7 @@ goal sqrt_ensures_default_po_8:
   sqrt_real(double_value(x_1)))), div_real(1.0,
   sqrt_real(double_value(x_1)))) * div_real((double_value(t1) - div_real(1.0,
   sqrt_real(double_value(x_1)))), div_real(1.0,
-  sqrt_real(double_value(x_1)))))))))
+  sqrt_real(double_value(x_1))))))))
 
 goal sqrt_ensures_default_po_9:
   forall x_1:double.
@@ -4103,10 +4103,9 @@ goal sqrt_ensures_default_po_9:
   sqrt_real(double_value(x_1)))) * div_real((double_value(t1) - div_real(1.0,
   sqrt_real(double_value(x_1)))), div_real(1.0,
   sqrt_real(double_value(x_1)))))))) ->
-  ("JC_78":
   ("JC_78": (abs_real((double_value(u1) - div_real(1.0,
   sqrt_real(double_value(x_1))))) <= (0x1.p-10 * abs_real(div_real(1.0,
-  sqrt_real(double_value(x_1))))))))
+  sqrt_real(double_value(x_1)))))))
 
 goal sqrt_ensures_default_po_10:
   forall x_1:double.
@@ -4253,9 +4252,8 @@ goal sqrt_ensures_default_po_10:
   sqrt_real(double_value(x_1))))))) ->
   forall t2:double.
   (t2 = u1) ->
-  ("JC_79":
   ("JC_79": ((double_value(x_1) * div_real(1.0,
-  sqrt_real(double_value(x_1)))) = sqrt_real(double_value(x_1)))))
+  sqrt_real(double_value(x_1)))) = sqrt_real(double_value(x_1))))
 
 goal sqrt_ensures_default_po_11:
   forall x_1:double.

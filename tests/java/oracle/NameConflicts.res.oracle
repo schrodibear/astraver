@@ -50,6 +50,9 @@ type char = 0..65535
 predicate Non_null_Object{Here}(Object[0..] x) =
 (\offset_max(x) == 0)
 
+String[0..] any_string()
+;
+
 tag Object = {
 }
 
@@ -362,11 +365,29 @@ line = 0
 begin = -1
 end = -1
 
+[JC_45]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_46]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_1]
 file = "HOME/tests/java/NameConflicts.jc"
-line = 44
-begin = 8
-end = 23
+line = 20
+begin = 12
+end = 22
+
+[JC_47]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_2]
 file = "HOME/"
@@ -374,11 +395,23 @@ line = 0
 begin = -1
 end = -1
 
+[JC_48]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_3]
 file = "HOME/tests/java/NameConflicts.jc"
-line = 44
-begin = 8
-end = 23
+line = 20
+begin = 12
+end = 22
+
+[JC_49]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_4]
 file = "HOME/"
@@ -420,21 +453,39 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/NameConflicts.jc"
-line = 46
-begin = 11
-end = 65
+line = 47
+begin = 8
+end = 23
+
+[JC_50]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_51]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_52]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_10]
-file = "HOME/tests/java/NameConflicts.jc"
-line = 46
-begin = 11
-end = 65
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_11]
-file = "HOME/tests/java/NameConflicts.java"
-line = 6
-begin = 9
-end = 13
+file = "HOME/tests/java/NameConflicts.jc"
+line = 47
+begin = 8
+end = 23
 
 [JC_12]
 file = "HOME/"
@@ -443,10 +494,10 @@ begin = -1
 end = -1
 
 [JC_13]
-file = "HOME/tests/java/NameConflicts.java"
-line = 6
-begin = 9
-end = 13
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_14]
 file = "HOME/"
@@ -483,22 +534,22 @@ begin = -1
 end = -1
 
 [JC_17]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/NameConflicts.jc"
+line = 49
+begin = 11
+end = 65
 
 [JC_18]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/NameConflicts.jc"
+line = 49
+begin = 11
+end = 65
 
 [JC_19]
 file = "HOME/tests/java/NameConflicts.java"
-line = 13
-begin = 8
-end = 9
+line = 6
+begin = 9
+end = 13
 
 [JC_20]
 file = "HOME/"
@@ -508,9 +559,9 @@ end = -1
 
 [JC_21]
 file = "HOME/tests/java/NameConflicts.java"
-line = 13
-begin = 8
-end = 9
+line = 6
+begin = 9
+end = 13
 
 [JC_22]
 file = "HOME/"
@@ -544,21 +595,21 @@ end = -1
 
 [JC_27]
 file = "HOME/tests/java/NameConflicts.java"
-line = 11
-begin = 18
-end = 30
+line = 13
+begin = 8
+end = 9
 
 [JC_28]
-file = "HOME/tests/java/NameConflicts.java"
-line = 11
-begin = 18
-end = 30
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_29]
 file = "HOME/tests/java/NameConflicts.java"
-line = 20
+line = 13
 begin = 8
-end = 13
+end = 9
 
 [NameConflicts_m_ensures_default]
 name = "Method m"
@@ -590,12 +641,6 @@ line = 0
 begin = -1
 end = -1
 
-[JC_31]
-file = "HOME/tests/java/NameConflicts.java"
-line = 20
-begin = 8
-end = 13
-
 [NameConflicts_m_safety]
 name = "Method m"
 behavior = "Safety"
@@ -603,6 +648,12 @@ file = "HOME/tests/java/NameConflicts.java"
 line = 13
 begin = 8
 end = 9
+
+[JC_31]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_32]
 file = "HOME/"
@@ -623,22 +674,22 @@ begin = -1
 end = -1
 
 [JC_35]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/NameConflicts.java"
+line = 11
+begin = 18
+end = 30
 
 [JC_36]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/NameConflicts.java"
+line = 11
+begin = 18
+end = 30
 
 [JC_37]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/NameConflicts.java"
+line = 20
+begin = 8
+end = 13
 
 [JC_38]
 file = "HOME/"
@@ -647,10 +698,10 @@ begin = -1
 end = -1
 
 [JC_39]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/NameConflicts.java"
+line = 20
+begin = 8
+end = 13
 
 [NameConflicts_m_ensures_normal]
 name = "Method m"
@@ -1001,12 +1052,12 @@ parameter NameConflicts_i : (Object, int32) memory ref
 parameter NameConflicts_m :
  this_1:Object pointer ->
   { } int32 reads Object_alloc_table
-  { (JC_28: eq_int(integer_of_int32(result), (0))) }
+  { (JC_36: eq_int(integer_of_int32(result), (0))) }
 
 parameter NameConflicts_m_requires :
  this_1:Object pointer ->
   { } int32 reads Object_alloc_table
-  { (JC_28: eq_int(integer_of_int32(result), (0))) }
+  { (JC_36: eq_int(integer_of_int32(result), (0))) }
 
 parameter NameConflicts_setI :
  this_2:Object pointer ->
@@ -1280,6 +1331,10 @@ parameter any_long : unit -> { } long { true }
 
 parameter any_short : unit -> { } short { true }
 
+parameter any_string_0 : tt:unit -> { } Object pointer { true }
+
+parameter any_string_0_requires : tt:unit -> { } Object pointer { true }
+
 parameter byte_of_integer_ :
  x:int ->
   { (le_int((-128), x) and le_int(x, (127)))} byte
@@ -1313,14 +1368,14 @@ parameter long_of_integer_ :
 parameter non_null_Object :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_10:
+  { (JC_18:
     (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
      else (x_1 = null))) }
 
 parameter non_null_Object_requires :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_10:
+  { (JC_18:
     (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
      else (x_1 = null))) }
 
@@ -1353,7 +1408,7 @@ let NameConflicts_field_ensures_default =
    begin
      (return := (K_4: ((safe_acc_ !NameConflicts_field) this_0)));
     (raise Return); absurd  end with Return -> !return end))
-  { (JC_33: true) }
+  { (JC_41: true) }
 
 let NameConflicts_field_safety =
  fun (this_0 : Object pointer) ->
@@ -1374,7 +1429,7 @@ let NameConflicts_m_ensures_default =
    begin
      (let result_0 = (safe_int32_of_integer_ (K_3: (0))) in
      begin   (return := (safe_int32_of_integer_ (0))); (raise Return) end);
-    absurd  end with Return -> !return end)) { (JC_23: true) }
+    absurd  end with Return -> !return end)) { (JC_31: true) }
 
 let NameConflicts_m_ensures_normal =
  fun (this_1 : Object pointer) ->
@@ -1386,7 +1441,7 @@ let NameConflicts_m_ensures_normal =
      (let result_0 = (safe_int32_of_integer_ (K_3: (0))) in
      begin   (return := (safe_int32_of_integer_ (0))); (raise Return) end);
     absurd  end with Return -> !return end))
-  { (JC_27: eq_int(integer_of_int32(result), (0))) }
+  { (JC_35: eq_int(integer_of_int32(result), (0))) }
 
 let NameConflicts_m_safety =
  fun (this_1 : Object pointer) ->
@@ -1411,7 +1466,7 @@ let NameConflicts_setI_ensures_default =
      begin
        (let jessie_<num> = this_2 in
        (((safe_upd_ NameConflicts_i) jessie_<num>) jessie_<num>)); jessie_<num> end)) in
-     void); (raise Return) end with Return -> void end) { (JC_15: true) }
+     void); (raise Return) end with Return -> void end) { (JC_23: true) }
 
 let NameConflicts_setI_safety =
  fun (this_2 : Object pointer) (i : int32) ->
@@ -1443,7 +1498,7 @@ let cons_NameConflicts_ensures_default =
         (let jessie_<num> = this_3 in
         (((safe_upd_ NameConflicts_field) jessie_<num>) jessie_<num>)); jessie_<num>
       end) end in void); (raise Return) end with Return -> void end)
-  { (JC_41: true) }
+  { (JC_49: true) }
 
 let cons_NameConflicts_safety =
  fun (this_3 : Object pointer) ->
@@ -2732,7 +2787,7 @@ goal NameConflicts_m_ensures_normal_po_1:
   (integer_of_int32(result0) = 0) ->
   forall return:int32.
   (return = result0) ->
-  ("JC_27": (integer_of_int32(return) = 0))
+  ("JC_35": (integer_of_int32(return) = 0))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/NameConflicts.why
@@ -5060,7 +5115,7 @@ goal NameConflicts_m_ensures_normal_po_1:
   (integer_of_int32(result0) = 0) ->
   forall return:int32.
   (return = result0) ->
-  ("JC_27": (integer_of_int32(return) = 0))
+  ("JC_35": (integer_of_int32(return) = 0))
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations

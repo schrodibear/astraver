@@ -286,9 +286,18 @@ let decl fmt d =
   | Daxiom (_, id, p) ->
       let p = specialize p in
       fprintf fmt "@[<hov 2>axiom %s:@ %a@]" id predicate p
-  | Dgoal (_, _expl, id, sq) ->
+  | Dgoal (_, is_lemma, _, id, sq) ->
       let sq = specialize sq in
-      fprintf fmt "@[<hov 2>goal %s:@\n%a@]" id sequent sq
+      if !ergo then
+	begin
+	  fprintf fmt "@[<hov 2>goal %s:@\n%a@]" id sequent sq;
+	  if is_lemma then
+	    fprintf fmt "@\n@\n@[<hov 2>axiom %s_as_axiom:@\n%a@]" id sequent sq
+	end
+      else
+	fprintf fmt "@[<hov 2>%s %s:@\n%a@]" 
+	  (if is_lemma then "lemma" else "goal")
+	  id sequent sq
 
 let decl fmt d = fprintf fmt "@[%a@]@\n@\n" decl d
 
@@ -305,7 +314,7 @@ let print_trace fmt id expl =
 let print_traces fmt =
   iter
     (function
-       | Dgoal (_loc, expl, id, _) -> print_trace fmt id ((*loc,*)expl)
+       | Dgoal (_loc, _, expl, id, _) -> print_trace fmt id ((*loc,*)expl)
        | _ -> ())
 
 let output_file ~ergo f =
@@ -322,7 +331,7 @@ let output_files f =
     (fun ctxfmt ->
        iter 
 	 (function 
-	    | Dgoal (_loc,expl,id,_) as d -> 
+	    | Dgoal (_loc,_,expl,id,_) as d -> 
 		incr po;		
 		let fpo = f ^ "_po" ^ string_of_int !po ^ ".why" in
 		print_in_file (fun fmt -> decl fmt d) fpo;
@@ -338,7 +347,7 @@ let push_or_output_decl =
   let po = ref 0 in 
   function d ->
     match d with
-      | Dgoal (_loc,expl,id,_) as d -> 
+      | Dgoal (_loc,_is_lemma,expl,id,_) as d -> 
 	  incr po;
 	  let fpo = Options.out_file (id ^ ".why") in
 	  print_in_file (fun fmt -> decl fmt d) fpo;
@@ -357,7 +366,7 @@ let output_project f =
     (fun ctxfmt ->
        iter 
 	 (function 
-	    | Dgoal (_,e,_id,_) as d -> 
+	    | Dgoal (_,_is_lemma,e,_id,_) as d -> 
 		incr po;
 		let fpo = f ^ "_po" ^ string_of_int !po ^ ".why" in
 		print_in_file (fun fmt -> decl fmt d) fpo;

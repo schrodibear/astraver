@@ -43,4 +43,4 @@ val move_to_source : Tags.loc option -> unit
 val move_to_loc : Tags.loc -> unit
 
 val text_of_obligation :
-  GText.view -> 'a * Logic_decl.vc_expl * string * (Cc.context_element list * Logic.predicate) Env.scheme -> unit
+  GText.view -> 'a * bool * Logic_decl.vc_expl * string * (Cc.context_element list * Logic.predicate) Env.scheme -> unit

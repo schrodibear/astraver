@@ -283,67 +283,6 @@ axiom no_update_num_of_pos_0 :
                                                 store(int_P_int_M_t_1, tmp,
                                                 tmpval))))))))))
 
-axiom num_of_pos_empty :
- (forall int_P_int_M_t_1:(int_P, int32) memory.
-  (forall i_0:int.
-   (forall j_0:int.
-    (forall t_0_0:int_P pointer.
-     (gt_int(i_0, j_0) ->
-      eq_int(num_of_pos(i_0, j_0, t_0_0, int_P_int_M_t_1), (0)))))))
-
-axiom num_of_pos_false_case :
- (forall int_P_int_M_t_1:(int_P, int32) memory.
-  (forall i_2:int.
-   (forall j_2:int.
-    (forall t_2:int_P pointer.
-     ((le_int(i_2, j_2)
-      and (not gt_int(integer_of_int32(select(int_P_int_M_t_1,
-                                       shift(t_2, j_2))),
-               (0)))) ->
-      eq_int(num_of_pos(i_2, j_2, t_2, int_P_int_M_t_1),
-      num_of_pos(i_2, sub_int(j_2, (1)), t_2, int_P_int_M_t_1)))))))
-
-goal num_of_pos_strictly_increasing :
- (forall int_P_int_M_t_3_6:(int_P, int32) memory.
-  (forall i_3:int.
-   (forall j_3:int.
-    (forall k:int.
-     (forall l:int.
-      (forall t_3:int_P pointer.
-       ((lt_int(j_3, k)
-        and (le_int(k, l)
-            and gt_int(integer_of_int32(select(int_P_int_M_t_3_6,
-                                        shift(t_3, k))),
-                (0)))) ->
-        lt_int(num_of_pos(i_3, j_3, t_3, int_P_int_M_t_3_6),
-        num_of_pos(i_3, l, t_3, int_P_int_M_t_3_6)))))))))
-
-axiom num_of_pos_strictly_increasing_as_axiom :
- (forall int_P_int_M_t_3_6:(int_P, int32) memory.
-  (forall i_3:int.
-   (forall j_3:int.
-    (forall k:int.
-     (forall l:int.
-      (forall t_3:int_P pointer.
-       ((lt_int(j_3, k)
-        and (le_int(k, l)
-            and gt_int(integer_of_int32(select(int_P_int_M_t_3_6,
-                                        shift(t_3, k))),
-                (0)))) ->
-        lt_int(num_of_pos(i_3, j_3, t_3, int_P_int_M_t_3_6),
-        num_of_pos(i_3, l, t_3, int_P_int_M_t_3_6)))))))))
-
-axiom num_of_pos_true_case :
- (forall int_P_int_M_t_1:(int_P, int32) memory.
-  (forall i_1:int.
-   (forall j_1:int.
-    (forall t_1:int_P pointer.
-     ((le_int(i_1, j_1)
-      and gt_int(integer_of_int32(select(int_P_int_M_t_1, shift(t_1, j_1))),
-          (0))) ->
-      eq_int(num_of_pos(i_1, j_1, t_1, int_P_int_M_t_1),
-      add_int(num_of_pos(i_1, sub_int(j_1, (1)), t_1, int_P_int_M_t_1), (1))))))))
-
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -456,6 +395,52 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom num_of_pos_empty :
+ (forall int_P_int_M_t_1:(int_P, int32) memory.
+  (forall i_0:int.
+   (forall j_0:int.
+    (forall t_0_0:int_P pointer.
+     (gt_int(i_0, j_0) ->
+      eq_int(num_of_pos(i_0, j_0, t_0_0, int_P_int_M_t_1), (0)))))))
+
+axiom num_of_pos_true_case :
+ (forall int_P_int_M_t_1:(int_P, int32) memory.
+  (forall i_1:int.
+   (forall j_1:int.
+    (forall t_1:int_P pointer.
+     ((le_int(i_1, j_1)
+      and gt_int(integer_of_int32(select(int_P_int_M_t_1, shift(t_1, j_1))),
+          (0))) ->
+      eq_int(num_of_pos(i_1, j_1, t_1, int_P_int_M_t_1),
+      add_int(num_of_pos(i_1, sub_int(j_1, (1)), t_1, int_P_int_M_t_1), (1))))))))
+
+axiom num_of_pos_false_case :
+ (forall int_P_int_M_t_1:(int_P, int32) memory.
+  (forall i_2:int.
+   (forall j_2:int.
+    (forall t_2:int_P pointer.
+     ((le_int(i_2, j_2)
+      and (not gt_int(integer_of_int32(select(int_P_int_M_t_1,
+                                       shift(t_2, j_2))),
+               (0)))) ->
+      eq_int(num_of_pos(i_2, j_2, t_2, int_P_int_M_t_1),
+      num_of_pos(i_2, sub_int(j_2, (1)), t_2, int_P_int_M_t_1)))))))
+
+lemma num_of_pos_strictly_increasing :
+ (forall int_P_int_M_t_3_6:(int_P, int32) memory.
+  (forall i_3:int.
+   (forall j_3:int.
+    (forall k:int.
+     (forall l:int.
+      (forall t_3:int_P pointer.
+       ((lt_int(j_3, k)
+        and (le_int(k, l)
+            and gt_int(integer_of_int32(select(int_P_int_M_t_3_6,
+                                        shift(t_3, k))),
+                (0)))) ->
+        lt_int(num_of_pos(i_3, j_3, t_3, int_P_int_M_t_3_6),
+        num_of_pos(i_3, l, t_3, int_P_int_M_t_3_6)))))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -2199,47 +2184,6 @@ axiom no_update_num_of_pos_0:
                (num_of_pos(i, j, t, int_P_int_M_t_1) = num_of_pos(i, j, t,
                store(int_P_int_M_t_1, tmp, tmpval))))))))))
 
-axiom num_of_pos_empty:
-  (forall int_P_int_M_t_1:(int_P, int32) memory.
-    (forall i_0:int.
-      (forall j_0:int.
-        (forall t_0_0:int_P pointer.
-          ((i_0 > j_0) -> (num_of_pos(i_0, j_0, t_0_0, int_P_int_M_t_1) = 0))))))
-
-axiom num_of_pos_false_case:
-  (forall int_P_int_M_t_1:(int_P, int32) memory.
-    (forall i_2:int.
-      (forall j_2:int.
-        (forall t_2:int_P pointer.
-          (((i_2 <= j_2) and (not (integer_of_int32(select(int_P_int_M_t_1,
-            shift(t_2, j_2))) > 0))) ->
-           (num_of_pos(i_2, j_2, t_2, int_P_int_M_t_1) = num_of_pos(i_2,
-           (j_2 - 1), t_2, int_P_int_M_t_1)))))))
-
-axiom num_of_pos_strictly_increasing_as_axiom:
-  (forall int_P_int_M_t_3_6:(int_P, int32) memory.
-    (forall i_3:int.
-      (forall j_3:int.
-        (forall k:int.
-          (forall l:int.
-            (forall t_3:int_P pointer.
-              (((j_3 < k) and
-                ((k <= l) and (integer_of_int32(select(int_P_int_M_t_3_6,
-                 shift(t_3, k))) > 0))) ->
-               (num_of_pos(i_3, j_3, t_3,
-               int_P_int_M_t_3_6) < num_of_pos(i_3, l, t_3,
-               int_P_int_M_t_3_6)))))))))
-
-axiom num_of_pos_true_case:
-  (forall int_P_int_M_t_1:(int_P, int32) memory.
-    (forall i_1:int.
-      (forall j_1:int.
-        (forall t_1:int_P pointer.
-          (((i_1 <= j_1) and (integer_of_int32(select(int_P_int_M_t_1,
-            shift(t_1, j_1))) > 0)) ->
-           (num_of_pos(i_1, j_1, t_1, int_P_int_M_t_1) = (num_of_pos(i_1,
-           (j_1 - 1), t_1, int_P_int_M_t_1) + 1)))))))
-
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(char_P_of_pointer_address(p))))
@@ -2354,4 +2298,31 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom num_of_pos_empty:
+  (forall int_P_int_M_t_1:(int_P, int32) memory.
+    (forall i_0:int.
+      (forall j_0:int.
+        (forall t_0_0:int_P pointer.
+          ((i_0 > j_0) -> (num_of_pos(i_0, j_0, t_0_0, int_P_int_M_t_1) = 0))))))
+
+axiom num_of_pos_true_case:
+  (forall int_P_int_M_t_1:(int_P, int32) memory.
+    (forall i_1:int.
+      (forall j_1:int.
+        (forall t_1:int_P pointer.
+          (((i_1 <= j_1) and (integer_of_int32(select(int_P_int_M_t_1,
+            shift(t_1, j_1))) > 0)) ->
+           (num_of_pos(i_1, j_1, t_1, int_P_int_M_t_1) = (num_of_pos(i_1,
+           (j_1 - 1), t_1, int_P_int_M_t_1) + 1)))))))
+
+axiom num_of_pos_false_case:
+  (forall int_P_int_M_t_1:(int_P, int32) memory.
+    (forall i_2:int.
+      (forall j_2:int.
+        (forall t_2:int_P pointer.
+          (((i_2 <= j_2) and (not (integer_of_int32(select(int_P_int_M_t_1,
+            shift(t_2, j_2))) > 0))) ->
+           (num_of_pos(i_2, j_2, t_2, int_P_int_M_t_1) = num_of_pos(i_2,
+           (j_2 - 1), t_2, int_P_int_M_t_1)))))))
 

@@ -277,10 +277,10 @@ begin = 8
 end = 66
 
 [C_22]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/binary_search.c"
+line = 31
+begin = 13
+end = 14
 
 [C_7]
 file = "HOME/tests/c/binary_search.c"
@@ -325,10 +325,10 @@ begin = 22
 end = 27
 
 [C_27]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/binary_search.c"
+line = 30
+begin = 8
+end = 9
 
 [C_28]
 file = "HOME/tests/c/binary_search.c"
@@ -3109,7 +3109,7 @@ goal binary_search_ensures_default_po_1:
   (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
   forall u:int32.
   (u = result0) ->
-  ("JC_43": ("JC_41": ("JC_41": (0 <= integer_of_int32(l)))))
+  ("JC_43": ("JC_41": (0 <= integer_of_int32(l))))
 
 goal binary_search_ensures_default_po_2:
   forall t_0:long_P pointer.
@@ -3128,8 +3128,7 @@ goal binary_search_ensures_default_po_2:
   (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
   forall u:int32.
   (u = result0) ->
-  ("JC_43":
-  ("JC_42": ("JC_42": (integer_of_int32(u) <= (integer_of_int32(n) - 1)))))
+  ("JC_43": ("JC_42": (integer_of_int32(u) <= (integer_of_int32(n) - 1))))
 
 goal binary_search_ensures_default_po_3:
   forall t_0:long_P pointer.
@@ -3160,8 +3159,7 @@ goal binary_search_ensures_default_po_3:
   (integer_of_int32(result2) = computer_div(integer_of_int32(result1), 2)) ->
   forall m:int32.
   (m = result2) ->
-  ("JC_50":
-  ("JC_48": ("JC_48": (integer_of_int32(l0) <= integer_of_int32(m)))))
+  ("JC_50": ("JC_48": (integer_of_int32(l0) <= integer_of_int32(m))))
 
 goal binary_search_ensures_default_po_4:
   forall t_0:long_P pointer.
@@ -3192,8 +3190,7 @@ goal binary_search_ensures_default_po_4:
   (integer_of_int32(result2) = computer_div(integer_of_int32(result1), 2)) ->
   forall m:int32.
   (m = result2) ->
-  ("JC_50":
-  ("JC_49": ("JC_49": (integer_of_int32(m) <= integer_of_int32(u0)))))
+  ("JC_50": ("JC_49": (integer_of_int32(m) <= integer_of_int32(u0))))
 
 goal binary_search_ensures_default_po_5:
   forall t_0:long_P pointer.
@@ -3237,7 +3234,7 @@ goal binary_search_ensures_default_po_5:
   (integer_of_int32(result4) = (integer_of_int32(m) + 1)) ->
   forall l1:int32.
   (l1 = result4) ->
-  ("JC_43": ("JC_41": ("JC_41": (0 <= integer_of_int32(l1)))))
+  ("JC_43": ("JC_41": (0 <= integer_of_int32(l1))))
 
 goal binary_search_ensures_default_po_6:
   forall t_0:long_P pointer.
@@ -3284,8 +3281,7 @@ goal binary_search_ensures_default_po_6:
   (integer_of_int32(result5) = (integer_of_int32(m) - 1)) ->
   forall u1:int32.
   (u1 = result5) ->
-  ("JC_43":
-  ("JC_42": ("JC_42": (integer_of_int32(u1) <= (integer_of_int32(n) - 1)))))
+  ("JC_43": ("JC_42": (integer_of_int32(u1) <= (integer_of_int32(n) - 1))))
 
 goal binary_search_ensures_default_po_7:
   forall t_0:long_P pointer.
@@ -3332,7 +3328,7 @@ goal binary_search_ensures_default_po_7:
   (__retres = m) ->
   forall return:int32.
   (return = __retres) ->
-  ("JC_13": ("JC_11": ("JC_11": ((-1) <= integer_of_int32(return)))))
+  ("JC_13": ("JC_11": ((-1) <= integer_of_int32(return))))
 
 goal binary_search_ensures_default_po_8:
   forall t_0:long_P pointer.
@@ -3379,8 +3375,7 @@ goal binary_search_ensures_default_po_8:
   (__retres = m) ->
   forall return:int32.
   (return = __retres) ->
-  ("JC_13":
-  ("JC_12": ("JC_12": (integer_of_int32(return) < integer_of_int32(n)))))
+  ("JC_13": ("JC_12": (integer_of_int32(return) < integer_of_int32(n))))
 
 goal binary_search_ensures_default_po_9:
   forall t_0:long_P pointer.
@@ -3411,7 +3406,7 @@ goal binary_search_ensures_default_po_9:
   (__retres = result1) ->
   forall return:int32.
   (return = __retres) ->
-  ("JC_13": ("JC_11": ("JC_11": ((-1) <= integer_of_int32(return)))))
+  ("JC_13": ("JC_11": ((-1) <= integer_of_int32(return))))
 
 goal binary_search_ensures_default_po_10:
   forall t_0:long_P pointer.
@@ -3442,8 +3437,7 @@ goal binary_search_ensures_default_po_10:
   (__retres = result1) ->
   forall return:int32.
   (return = __retres) ->
-  ("JC_13":
-  ("JC_12": ("JC_12": (integer_of_int32(return) < integer_of_int32(n)))))
+  ("JC_13": ("JC_12": (integer_of_int32(return) < integer_of_int32(n))))
 
 goal binary_search_ensures_failure_po_1:
   forall t_0:long_P pointer.

@@ -59,8 +59,8 @@ let push_decl = function
   | Dpredicate_def (_, id, p) -> Queue.add (Predicate (Ident.string id, p)) elem_q
   | Dinductive_def(_loc, _ident, _inddef) ->
       failwith "HOL light output: inductive def not yet supported"
-  | Dgoal (loc,expl,id,s) -> 
-      Queue.add (Obligation (loc,expl,id,s.Env.scheme_type)) elem_q
+  | Dgoal (loc,is_lemma,expl,id,s) -> 
+      Queue.add (Obligation (loc,is_lemma,expl,id,s.Env.scheme_type)) elem_q
   | Dfunction_def _ -> () (*TODO*)
   | Dtype _ -> () (*TODO*)
   | Dalgtype _ -> () (*TODO*)
@@ -258,14 +258,14 @@ let print_predicate fmt id p =
   fprintf fmt "@[<hov 2>let %s = new_definition@ `%s %a = %a`;;@\n@\n@]" 
     id id (print_list space Ident.print) (List.map fst bl) print_predicate p
 
-let print_obligation fmt _loc id sq =
+let print_obligation fmt _loc _is_lemma id sq =
 (*
   fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
 *)
   fprintf fmt "@[<hov 2>let %s =@ `%a`;;@\n@\n@]" id print_sequent sq
 
 let print_elem fmt = function
-  | Obligation (loc, _expl, s, sq) -> print_obligation fmt loc s sq
+  | Obligation (loc, is_lemma, _expl, s, sq) -> print_obligation fmt loc is_lemma s sq
   | Logic (id, t) -> print_logic fmt id t
   | Axiom (id, p) -> print_axiom fmt id p
   | Predicate (id, p) -> print_predicate fmt id p
@@ -273,7 +273,7 @@ let print_elem fmt = function
 let print_obl_list fmt = 
   let comma = ref false in
   let print = function
-    | Obligation (_,_,id,_) -> 
+    | Obligation (_,_,_,id,_) -> 
 	if !comma then fprintf fmt "; "; fprintf fmt "%s" id; comma := true
     | Axiom _ | Logic _ | Predicate _ -> 
 	()

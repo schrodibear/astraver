@@ -214,10 +214,10 @@ begin = 26
 end = 34
 
 [C_11]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/heap_sort.c"
+line = 16
+begin = 37
+end = 40
 
 [C_12]
 file = "HOME/tests/c/heap_sort.c"
@@ -335,10 +335,10 @@ begin = 19
 end = 26
 
 [C_23]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/heap_sort.c"
+line = 20
+begin = 28
+end = 31
 
 [C_8]
 file = "HOME/tests/c/heap_sort.c"
@@ -3528,7 +3528,7 @@ goal heap_sort_ensures_default_po_1:
   (integer_of_uint32(result1) = 0) ->
   forall i_0:uint32.
   (i_0 = result1) ->
-  ("JC_69": ("JC_67": ("JC_67": (0 <= integer_of_uint32(i_0)))))
+  ("JC_69": ("JC_67": (0 <= integer_of_uint32(i_0))))
 
 goal heap_sort_ensures_default_po_2:
   forall arr:int_P pointer.
@@ -3546,8 +3546,7 @@ goal heap_sort_ensures_default_po_2:
   (integer_of_uint32(result1) = 0) ->
   forall i_0:uint32.
   (i_0 = result1) ->
-  ("JC_69":
-  ("JC_68": ("JC_68": (integer_of_uint32(i_0) <= integer_of_uint32(len)))))
+  ("JC_69": ("JC_68": (integer_of_uint32(i_0) <= integer_of_uint32(len))))
 
 goal heap_sort_ensures_default_po_3:
   forall arr:int_P pointer.
@@ -3585,7 +3584,7 @@ goal heap_sort_ensures_default_po_3:
   (integer_of_uint32(result3) = (integer_of_uint32(i_0_0) + 1)) ->
   forall i_0_1:uint32.
   (i_0_1 = result3) ->
-  ("JC_69": ("JC_67": ("JC_67": (0 <= integer_of_uint32(i_0_1)))))
+  ("JC_69": ("JC_67": (0 <= integer_of_uint32(i_0_1))))
 
 goal heap_sort_ensures_default_po_4:
   forall arr:int_P pointer.
@@ -3623,8 +3622,7 @@ goal heap_sort_ensures_default_po_4:
   (integer_of_uint32(result3) = (integer_of_uint32(i_0_0) + 1)) ->
   forall i_0_1:uint32.
   (i_0_1 = result3) ->
-  ("JC_69":
-  ("JC_68": ("JC_68": (integer_of_uint32(i_0_1) <= integer_of_uint32(len)))))
+  ("JC_69": ("JC_68": (integer_of_uint32(i_0_1) <= integer_of_uint32(len))))
 
 goal heap_sort_ensures_default_po_5:
   forall arr:int_P pointer.
@@ -3651,7 +3649,7 @@ goal heap_sort_ensures_default_po_5:
   (integer_of_uint32(result2) = 0) ->
   forall i_0_1:uint32.
   (i_0_1 = result2) ->
-  ("JC_76": ("JC_74": ("JC_74": (0 <= integer_of_uint32(i_0_1)))))
+  ("JC_76": ("JC_74": (0 <= integer_of_uint32(i_0_1))))
 
 goal heap_sort_ensures_default_po_6:
   forall arr:int_P pointer.
@@ -3678,8 +3676,7 @@ goal heap_sort_ensures_default_po_6:
   (integer_of_uint32(result2) = 0) ->
   forall i_0_1:uint32.
   (i_0_1 = result2) ->
-  ("JC_76":
-  ("JC_75": ("JC_75": (integer_of_uint32(i_0_1) <= integer_of_uint32(len)))))
+  ("JC_76": ("JC_75": (integer_of_uint32(i_0_1) <= integer_of_uint32(len))))
 
 goal heap_sort_ensures_default_po_7:
   forall arr:int_P pointer.
@@ -3722,7 +3719,7 @@ goal heap_sort_ensures_default_po_7:
   (integer_of_uint32(result4) = (integer_of_uint32(i_0_2) + 1)) ->
   forall i_0_3:uint32.
   (i_0_3 = result4) ->
-  ("JC_76": ("JC_74": ("JC_74": (0 <= integer_of_uint32(i_0_3)))))
+  ("JC_76": ("JC_74": (0 <= integer_of_uint32(i_0_3))))
 
 goal heap_sort_ensures_default_po_8:
   forall arr:int_P pointer.
@@ -3765,8 +3762,7 @@ goal heap_sort_ensures_default_po_8:
   (integer_of_uint32(result4) = (integer_of_uint32(i_0_2) + 1)) ->
   forall i_0_3:uint32.
   (i_0_3 = result4) ->
-  ("JC_76":
-  ("JC_75": ("JC_75": (integer_of_uint32(i_0_3) <= integer_of_uint32(len)))))
+  ("JC_76": ("JC_75": (integer_of_uint32(i_0_3) <= integer_of_uint32(len))))
 
 goal heap_sort_ensures_default_po_9:
   forall arr:int_P pointer.
@@ -4308,9 +4304,8 @@ goal main_ensures_default_po_1:
        i))) <= integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0,
        j)))))))) ->
   ("JC_103":
-  ("JC_101":
   ("JC_101": (integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0,
-  0))) <= integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0, 1)))))))
+  0))) <= integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0, 1))))))
 
 goal main_ensures_default_po_2:
   ("JC_84": true) ->
@@ -4352,9 +4347,8 @@ goal main_ensures_default_po_2:
        i))) <= integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0,
        j)))))))) ->
   ("JC_103":
-  ("JC_102":
   ("JC_102": (integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0,
-  1))) <= integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0, 2)))))))
+  1))) <= integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0, 2))))))
 
 goal main_ensures_default_po_3:
   ("JC_84": true) ->
@@ -4401,9 +4395,8 @@ goal main_ensures_default_po_3:
    ("JC_102": (integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0,
    1))) <= integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0, 2))))))) ->
   ("JC_107":
-  ("JC_104":
   ("JC_104": (integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0,
-  0))) = 13))))
+  0))) = 13)))
 
 goal main_ensures_default_po_4:
   ("JC_84": true) ->
@@ -4450,9 +4443,8 @@ goal main_ensures_default_po_4:
    ("JC_102": (integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0,
    1))) <= integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0, 2))))))) ->
   ("JC_107":
-  ("JC_105":
   ("JC_105": (integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0,
-  1))) = 42))))
+  1))) = 42)))
 
 goal main_ensures_default_po_5:
   ("JC_84": true) ->
@@ -4499,9 +4491,8 @@ goal main_ensures_default_po_5:
    ("JC_102": (integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0,
    1))) <= integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0, 2))))))) ->
   ("JC_107":
-  ("JC_106":
   ("JC_106": (integer_of_int32(select(int_P_int_M_arr_0_8_0, shift(arr_0,
-  2))) = 42))))
+  2))) = 42)))
 
 goal main_safety_po_1:
   ("JC_84": true) ->
@@ -4553,7 +4544,7 @@ goal main_safety_po_3:
      (select(int_P_int_M_arr_0_8, shift(arr_0, 2)) = result4)))) ->
   forall result5:uint32.
   (integer_of_uint32(result5) = 3) ->
-  ("JC_34": ("JC_31": ("JC_31": (integer_of_uint32(result5) >= 0))))
+  ("JC_34": ("JC_31": (integer_of_uint32(result5) >= 0)))
 
 goal main_safety_po_4:
   ("JC_84": true) ->
@@ -4587,8 +4578,7 @@ goal main_safety_po_4:
      (select(int_P_int_M_arr_0_8, shift(arr_0, 2)) = result4)))) ->
   forall result5:uint32.
   (integer_of_uint32(result5) = 3) ->
-  ("JC_34":
-  ("JC_32": ("JC_32": (offset_min(int_P_arr_0_8_alloc_table, arr_0) <= 0))))
+  ("JC_34": ("JC_32": (offset_min(int_P_arr_0_8_alloc_table, arr_0) <= 0)))
 
 goal main_safety_po_5:
   ("JC_84": true) ->
@@ -4623,9 +4613,8 @@ goal main_safety_po_5:
   forall result5:uint32.
   (integer_of_uint32(result5) = 3) ->
   ("JC_34":
-  ("JC_33":
   ("JC_33": (offset_max(int_P_arr_0_8_alloc_table,
-  arr_0) >= (integer_of_uint32(result5) - 1)))))
+  arr_0) >= (integer_of_uint32(result5) - 1))))
 
 goal main_safety_po_6:
   ("JC_84": true) ->

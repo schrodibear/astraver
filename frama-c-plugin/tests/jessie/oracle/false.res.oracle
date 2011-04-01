@@ -1053,7 +1053,7 @@ text = "IndexBounds"/>
     </behavior>
     <behavior name="Default behavior">
     <goal why_file="why/false_po1.why">
-      <location file = "PPCHOME/tests/jessie/" line = "0" begin = "-1" end = "-1"/>
+      <location file = "PPCHOME/tests/jessie/false.c" line = "39" begin = "12" end = "18"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>

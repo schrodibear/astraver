@@ -69,18 +69,10 @@ axiom char_P_tags :
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
 
-goal cos_pi : eq_real(cos(pi), neg_real(1.0))
-
-axiom cos_pi_as_axiom : eq_real(cos(pi), neg_real(1.0))
-
 logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
-
-goal exp_log_2 : eq_real(exp(log(2.0)), 2.0)
-
-axiom exp_log_2_as_axiom : eq_real(exp(log(2.0)), 2.0)
 
 logic int8_of_integer: int -> int8
 
@@ -116,10 +108,6 @@ predicate right_valid_struct_char_P(p:char_P pointer, b:int,
 predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
-
-goal sqrt_4 : eq_real(sqrt_real(4.0), 2.0)
-
-axiom sqrt_4_as_axiom : eq_real(sqrt_real(4.0), 2.0)
 
 predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -185,6 +173,12 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma sqrt_4 : eq_real(sqrt_real(4.0), 2.0)
+
+lemma exp_log_2 : eq_real(exp(log(2.0)), 2.0)
+
+lemma cos_pi : eq_real(cos(pi), neg_real(1.0))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -290,10 +284,10 @@ parameter safe_int8_of_integer_ :
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C builtins.jessie --quiet -f builtins.makefile project
 why --project [...] why/builtins.why
 <project name="builtins" context="why/builtins_ctx.why">
-  <lemma name="cos_pi">
+  <lemma name="sqrt_4">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/builtins_po1.why">
-      <location file = "PPCHOME/tests/jessie/builtins.jessie/builtins.jc" line = "32" begin = "0" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/builtins.jessie/builtins.jc" line = "26" begin = "0" end = "39"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -304,10 +298,10 @@ why --project [...] why/builtins.why
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <lemma name="sqrt_4">
+  <lemma name="cos_pi">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/builtins_po3.why">
-      <location file = "PPCHOME/tests/jessie/builtins.jessie/builtins.jc" line = "26" begin = "0" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/builtins.jessie/builtins.jc" line = "32" begin = "0" end = "37"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -1275,14 +1269,10 @@ axiom char_P_tags:
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
 
-axiom cos_pi_as_axiom: (cos(pi) = (-1.0))
-
 logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
-
-axiom exp_log_2_as_axiom: (exp(log(2.0)) = 2.0)
 
 logic int8_of_integer : int -> int8
 
@@ -1320,8 +1310,6 @@ predicate right_valid_struct_char_P(p: char_P pointer, b: int,
 predicate right_valid_struct_void_P(p: void_P pointer, b: int,
   void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
   p) >= b)
-
-axiom sqrt_4_as_axiom: (sqrt_real(4.0) = 2.0)
 
 predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =

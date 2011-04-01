@@ -117,6 +117,9 @@ let rnd_up = Ident.create "up"
 let rnd_dn = Ident.create "down"
 let rnd_na = Ident.create "nearest_away"
 
+let single_type = Ident.create "single"
+let double_type = Ident.create "double"
+
 let max_single = Ident.create "max_single"
 let max_double = Ident.create "max_double"
 let round_single = Ident.create "round_single"
@@ -342,6 +345,18 @@ let termo t = try Some (term (subst_var t)) with NotGappa -> None
 
 (* recognition of a Gappa predicate *)
 
+let rec is_float_type = function
+  | PTexternal ([], id) when id == single_type || id == double_type 
+      -> true
+  | PTvar {type_val=Some t} -> is_float_type t
+  | PTexternal _ 
+  | PTvar _
+  | PTunit
+  | PTreal
+  | PTbool
+  | PTint -> false
+
+
 let rec gpred def = function
   | Papp (id, [t1; t2], _) when id == t_le_real || id == t_le_int ->
       begin match termo t1, termo t2 with
@@ -389,13 +404,35 @@ let rec gpred def = function
       try Some (Gin (term t1, eval_constant f1, eval_constant f2))
       with NotGappa -> None
     end
-  | Papp (id, [t1; t2], _) when is_eq id ->
+  | Papp (id, [t1; t2], _) when (* is_eq id *) id == t_eq_int || id == t_eq_real  ->
       begin match termo t1, termo t2 with
         | Some (Gcst c1), Some t2 -> Some (Gin (t2, c1, c1))
         | Some t1, Some (Gcst c2) -> Some (Gin (t1, c2, c2))
         | Some t1, Some t2 -> Some (Gin (Gsub (t1, t2), "0", "0"))
         | _ -> None
       end
+  | Papp (id, [t1; t2], [ty]) when id == t_eq && is_float_type ty ->
+      begin
+(*        try*)
+          let v1 = create_var t1 in
+          let v2 = create_var t2 in
+          Some (Gin (Gsub (Gfld(Rounded,v1), (Gfld(Rounded,v2))), "0", "0"))
+(*
+          List.iter
+            (fun f -> 
+               if not (Hashtbl.mem def_table (f, vx)) then
+                 begin
+                   Hashtbl.add def_table (f, vx) ();
+                   def_list := (f, vx, Gfld(f,v)) :: !def_list
+                 end
+               else raise Exit)
+            [Rounded; Exact; Model];
+          None
+        with Exit -> 
+          gpred true p
+*)
+      end
+
   | Papp (id, [t1; t2], _) when is_neq id ->
       begin match termo t1, termo t2 with
         | Some (Gcst c1), Some t2 -> Some (Gnot (Gin (t2, c1, c1)))
@@ -454,31 +491,14 @@ let gpred def p =
 (* extraction of a list of equalities and possibly a Gappa predicate *)
 
 let rec ghyp = function
-  | Papp (id, [Tvar x; t], _) when is_eq id ->
+  | Papp (id, [Tvar x; t], _) when id == t_eq_int || id == t_eq_real ->
     begin
       Hashtbl.replace var_table x (subst_var t);
       None
     end
-  | Papp (id, [t; Tapp (id', [Tvar x], _)], _) as p
-      when is_eq id &&
-       (id' == single_exact || id' == double_exact ||
-        id' == single_model || id' == double_model) ->
-    begin
-      match termo t with
-      | Some t ->
-          let f = field_of_id id' in
-          let vx = Ident.string x in
-          if not (Hashtbl.mem def_table (f, vx)) then
-           (Hashtbl.add def_table (f, vx) ();
-            def_list := (f, vx, t) :: !def_list;
-            None)
-          else
-            gpred true p
-      | None ->
-          gpred true p
-    end
+  | Papp (id, [t; Tapp (id', [Tvar x], _)], _) 
   | Papp (id, [Tapp (id', [Tvar x], _); t], _) as p
-      when is_eq id &&
+      when id == t_eq_real &&
        (id' == single_value || id' == double_value || id' == single_exact ||
         id' == double_exact || id' == single_model || id' == double_model) ->
     begin
@@ -495,6 +515,33 @@ let rec ghyp = function
       | None ->
           gpred true p
     end
+  | Papp (id, [Tvar x; t], [ty]) | Papp (id, [t; Tvar x], [ty]) as p 
+        when id == t_eq && is_float_type ty ->
+      begin
+        try
+          let v = create_var t in
+          let vx = Ident.string x in
+          List.iter
+            (fun f -> 
+               if not (Hashtbl.mem def_table (f, vx)) then
+                 begin
+                   Hashtbl.add def_table (f, vx) ();
+                   def_list := (f, vx, Gfld(f,v)) :: !def_list
+                 end
+               else raise Exit)
+            [Rounded; Exact; Model];
+          None
+        with Exit -> 
+          gpred true p
+      end
+(*
+  | Papp (id, [t1; t2], [ty]) when id == t_eq->
+      eprintf "t1 = %a@." Util.print_term t1;
+      eprintf "t2 = %a@." Util.print_term t2;
+      eprintf "ty = %a@." Util.print_pure_type ty;
+      eprintf "is_float_type(ty) = %b@." (is_float_type ty);
+      assert false
+*)
   | p ->
       gpred true p
 
@@ -562,7 +609,7 @@ let process_obligation (ctx, concl) =
 let push_decl d =
   let decl = PredDefExpansor.push ~recursive_expand:true d in
   match decl with
-  | Logic_decl.Dgoal (_,_,_,s) -> process_obligation s.Env.scheme_type
+  | Logic_decl.Dgoal (_,_,_,_,s) -> process_obligation s.Env.scheme_type
   | _ -> ()
 
 let get_format = function

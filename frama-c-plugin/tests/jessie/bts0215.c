@@ -1,9 +1,3 @@
-/* Frama-C BTS 0215
-
-Status: open
-
-  
-*/
 
 int i = 0;
 

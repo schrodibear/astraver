@@ -160,8 +160,10 @@ val t_real_max : t
 val t_real_min : t
 
 val t_div_real_ : t
+(* disabled (confusion math_div / computer_div)
 val t_div_int_ : t
 val t_mod_int_ : t
+*)
 val t_sqrt_real_ : t
 
 val t_real_of_int : t

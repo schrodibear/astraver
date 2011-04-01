@@ -31,10 +31,27 @@ tag void_P = {
 
 type void_P = [void_P]
 
+logic integer parent(integer i) =
+((i - 1) / 2)
+
+logic integer left(integer i_0) =
+((2 * i_0) + 1)
+
+logic integer right(integer i_1) =
+((2 * i_1) + 2)
+
+lemma Parent_left :
+(\forall integer i_2;
+  ((i_2 >= 0) ==> (parent(left(i_2)) == i_2)))
+
+lemma Parent_right :
+(\forall integer i_3;
+  ((i_3 >= 0) ==> (parent(right(i_3)) == i_3)))
+
 lemma mult_div :
-(\forall integer i;
+(\forall integer i_4;
   (\forall integer j;
-    ((i != 0) ==> (((i * j) / i) == j))))
+    (((i_4 > 0) && (j >= 0)) ==> (((i_4 * j) / i_4) == j))))
 
 int32 f(int32 x)
   requires (C_5 : (x > 0));
@@ -115,6 +132,8 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
+function left(i_0:int) : int = add_int(mul_int((2), i_0), (1))
+
 predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
@@ -123,15 +142,7 @@ predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
-goal mult_div :
- (forall i:int.
-  (forall j:int.
-   (neq_int(i, (0)) -> eq_int(computer_div(mul_int(i, j), i), j))))
-
-axiom mult_div_as_axiom :
- (forall i:int.
-  (forall j:int.
-   (neq_int(i, (0)) -> eq_int(computer_div(mul_int(i, j), i), j))))
+function parent(i:int) : int = computer_div(sub_int(i, (1)), (2))
 
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
@@ -140,6 +151,8 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
+
+function right(i_1:int) : int = add_int(mul_int((2), i_1), (2))
 
 predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -213,6 +226,18 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma Parent_left :
+ (forall i_2:int. (ge_int(i_2, (0)) -> eq_int(parent(left(i_2)), i_2)))
+
+lemma Parent_right :
+ (forall i_3:int. (ge_int(i_3, (0)) -> eq_int(parent(right(i_3)), i_3)))
+
+lemma mult_div :
+ (forall i_4:int.
+  (forall j:int.
+   ((gt_int(i_4, (0)) and ge_int(j, (0))) ->
+    eq_int(computer_div(mul_int(i_4, j), i_4), j))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -379,38 +404,58 @@ let f_safety =
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C div.jessie --quiet -f div.makefile project
 why --project [...] why/div.why
 <project name="div" context="why/div_ctx.why">
-  <lemma name="mult_div">
+  <lemma name="Parent_left">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/div_po1.why">
-      <location file = "PPCHOME/tests/jessie/div.jessie/div.jc" line = "28" begin = "0" end = "100"/>
+      <location file = "PPCHOME/tests/jessie/div.jessie/div.jc" line = "37" begin = "0" end = "88"/>
+      <explain kind = "Lemma"/>
+    </goal>
+  </lemma>
+  <lemma name="Parent_right">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <goal why_file="why/div_po2.why">
+      <location file = "PPCHOME/tests/jessie/div.jessie/div.jc" line = "41" begin = "0" end = "90"/>
+      <explain kind = "Lemma"/>
+    </goal>
+  </lemma>
+  <lemma name="mult_div">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <goal why_file="why/div_po3.why">
+      <location file = "PPCHOME/tests/jessie/div.jessie/div.jc" line = "45" begin = "0" end = "121"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <function name="mult_div">
-    <location file = "PPCHOME/tests/jessie/div.jessie/div.jc" line = "28" begin = "0" end = "100"/>
+    <location file = "PPCHOME/tests/jessie/div.jessie/div.jc" line = "45" begin = "0" end = "121"/>
+  </function>
+  <function name="Parent_right">
+    <location file = "PPCHOME/tests/jessie/div.jessie/div.jc" line = "41" begin = "0" end = "90"/>
+  </function>
+  <function name="Parent_left">
+    <location file = "PPCHOME/tests/jessie/div.jessie/div.jc" line = "37" begin = "0" end = "88"/>
   </function>
   <function name="Function f">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/div_po3.why">
-      <location file = "PPCHOME/tests/jessie/div.c" line = "9" begin = "9" end = "13"/>
+    <goal why_file="why/div_po5.why">
+      <location file = "PPCHOME/tests/jessie/div.c" line = "23" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "DivByZero"/>
     </goal>
-    <goal why_file="why/div_po4.why">
-      <location file = "PPCHOME/tests/jessie/div.c" line = "9" begin = "9" end = "13"/>
+    <goal why_file="why/div_po6.why">
+      <location file = "PPCHOME/tests/jessie/div.c" line = "23" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/div_po5.why">
-      <location file = "PPCHOME/tests/jessie/div.c" line = "9" begin = "9" end = "13"/>
+    <goal why_file="why/div_po7.why">
+      <location file = "PPCHOME/tests/jessie/div.c" line = "23" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
     <behavior name="Default behavior">
-    <goal why_file="why/div_po2.why">
-      <location file = "PPCHOME/tests/jessie/div.c" line = "6" begin = "12" end = "26"/>
+    <goal why_file="why/div_po4.why">
+      <location file = "PPCHOME/tests/jessie/div.c" line = "20" begin = "12" end = "26"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -1405,6 +1450,8 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
+function left(i_0: int) : int = ((2 * i_0) + 1)
+
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
   p) <= a)
@@ -1413,9 +1460,7 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
   p) <= a)
 
-axiom mult_div_as_axiom:
-  (forall i:int.
-    (forall j:int. ((i <> 0) -> (computer_div((i * j), i) = j))))
+function parent(i: int) : int = computer_div((i - 1), 2)
 
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
@@ -1426,6 +1471,8 @@ logic void_P_of_pointer_address : unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(void_P_of_pointer_address(p))))
+
+function right(i_1: int) : int = ((2 * i_1) + 2)
 
 predicate right_valid_struct_char_P(p: char_P pointer, b: int,
   char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,

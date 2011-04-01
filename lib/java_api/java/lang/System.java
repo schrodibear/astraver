@@ -862,8 +862,8 @@ public final class System {
      * inline access to them, since they are later set to more sensible values
      * by initializeSystemClass().
      */
-    /*KML
-    private static InputStream nullInputStream() throws NullPointerException {
+    private static InputStream nullInputStream() throws NullPointerException;
+    /*KML {
 	if (currentTimeMillis() > 0)
 	    return null;
 	throw new NullPointerException();

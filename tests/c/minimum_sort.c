@@ -13,7 +13,7 @@ void swap(int t[], int i, int j) {
   t[i] = t[j];
   t[j] = tmp;
 }
-    
+
 /*@ requires \valid_range(t,0,n-1);
   @ behavior sorted:
   @   ensures Sorted(t,0,n-1);
@@ -25,10 +25,10 @@ void min_sort(int t[], int n) {
   int mi,mv;
   if (n <= 0) return;
   /*@ loop invariant 0 <= i < n;
-    @ for sorted: 
-    @  loop invariant 
-    @   Sorted(t,0,i) && 
-    @   (\forall integer k1, k2 ; 
+    @ for sorted:
+    @  loop invariant
+    @   Sorted(t,0,i) &&
+    @   (\forall integer k1, k2 ;
     @      0 <= k1 < i <= k2 < n ==> t[k1] <= t[k2]) ;
     @ for permutation:
     @  loop invariant Permut{Pre,Here}(t,0,n-1);
@@ -48,8 +48,8 @@ void min_sort(int t[], int n) {
       @ loop variant n-j;
       @*/
     for (j=i+1; j < n; j++) {
-      if (t[j] < mv) { 
-	mi = j ; mv = t[j]; 
+      if (t[j] < mv) {
+	mi = j ; mv = t[j];
       }
     }
     swap(t,i,mi);
@@ -57,7 +57,7 @@ void min_sort(int t[], int n) {
 }
 
 
-/* 
+/*
 Local Variables:
 compile-command: "frama-c -jessie minimum_sort.c"
 End:

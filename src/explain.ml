@@ -75,59 +75,50 @@ let print_formula fmt s =
   if String.length s > 0 then
     fprintf fmt "formula = \"%s\"@\n" s
 
-let print_kind ?(quote=false) fmt (loc,k) =
+let string_of_kind k =
+  match k with
+    | EKOther _ -> "Other"
+    | EKAbsurd -> "Absurd"
+    | EKAssert -> "Assert"
+    | EKCheck -> "Check"
+    | EKPre _ -> "Pre" 
+    | EKPost -> "Post"
+    | EKWfRel -> "WfRel"
+    | EKVarDecr -> "VarDecr" 
+    | EKLoopInvInit _ -> "LoopInvInit"
+    | EKLoopInvPreserv _ -> "LoopInvPreserv"
+    | EKLemma -> "Lemma"
+	
+let print_kind ?(quote=false) fmt (loc,k,lab) =
   (* 
      Option_misc.iter (fun lab ->  fprintf fmt "label = %s@\n" lab) labopt; 
   *)
-  if quote then
-    begin
-      match k with
-	| EKOther s -> fprintf fmt "kind = \"Other\"@\ntext = \"%s\"" s
-	| EKAbsurd -> fprintf fmt "kind = \"Absurd\""
-	| EKAssert -> fprintf fmt "kind = \"Assert\""
-        | EKCheck -> fprintf fmt "kind = \"Check\""
-	| EKPre s -> fprintf fmt "kind = \"Pre\"@\ntext = \"%s\"" s
-	| EKPost -> fprintf fmt "kind = \"Post\""
-	| EKWfRel -> fprintf fmt "kind = \"WfRel\""
-	| EKVarDecr -> fprintf fmt "kind = \"VarDecr\"" 
-	| EKLoopInvInit s -> 
-	    fprintf fmt "kind = \"LoopInvInit\"";
-	    print_formula fmt s
-	| EKLoopInvPreserv s -> 
-	    fprintf fmt "kind = \"LoopInvPreserv\"";
-	    print_formula fmt s
-	| EKLemma -> fprintf fmt "kind = \"Lemma\""
-    end
-  else
+  if not quote then
     begin
       raw_loc fmt loc;
-      match k with
-	| EKOther s -> fprintf fmt "kind = Other@\ntext = \"%s\"@\n" s
-	| EKAbsurd -> fprintf fmt "kind = Absurd@\n"
-	| EKAssert -> fprintf fmt "kind = Assert@\n"
-	| EKCheck -> fprintf fmt "kind = Check@\n"
-	| EKPre s -> fprintf fmt "kind = Pre@\ntext = \"%s\"@\n" s
-	| EKPost -> fprintf fmt "kind = Post@\n"
-	| EKWfRel -> fprintf fmt "kind = WfRel@\n"
-	| EKVarDecr -> fprintf fmt "kind = VarDecr@\n" 
-	| EKLoopInvInit s -> 
-	    fprintf fmt "kind = LoopInvInit@\n";
-	    print_formula fmt s
-	| EKLoopInvPreserv s -> 
-	    fprintf fmt "kind = LoopInvPreserv@\n";
-	    print_formula fmt s
-	| EKLemma -> fprintf fmt "kind = Lemma@\n"
-    end
-
-
-let print ?(quote=false) fmt  ((*loc,*)e) = 
-  print_kind ~quote fmt (e.vc_loc,e.vc_kind)
+      match lab with
+	| None -> ()
+	| Some s ->
+            fprintf fmt "source_label = \"%s\"@\n" s
+    end;
+  match k with
+    | EKOther s | EKPre s -> 
+	fprintf fmt "kind = \"%s\"@\ntext = \"%s\"" (string_of_kind k) s
+    | EKAbsurd | EKAssert | EKCheck | EKPost | EKWfRel | EKVarDecr 
+    | EKLemma -> 
+	fprintf fmt "kind = \"%s\"" (string_of_kind k)
+    | EKLoopInvInit s | EKLoopInvPreserv s -> 
+	fprintf fmt "kind = \"%s\"" (string_of_kind k);
+	print_formula fmt s
+ 
+let print ?(quote=false) fmt  e = 
+  print_kind ~quote fmt (e.vc_loc,e.vc_kind,e.vc_label)
 
 let msg_of_loopinv = function
   | "" -> "loop invariant"
   | s -> "generated loop inv. '" ^ s ^"'"
 
-let msg_of_kind = 
+let msg_of_kind ?name = 
   function
     | EKPre "PointerDeref" -> "pointer dereferencing"
     | EKPre "IndexBounds" -> "check index bounds"
@@ -147,4 +138,4 @@ let msg_of_kind =
     | EKVarDecr -> "variant decreases" 
     | EKLoopInvInit s -> msg_of_loopinv s ^ " initially holds"
     | EKLoopInvPreserv s -> msg_of_loopinv s ^ " preserved"
-    | EKLemma -> "lemma"
+    | EKLemma -> "lemma" ^ (match name with None -> "" | Some s -> " " ^ s)

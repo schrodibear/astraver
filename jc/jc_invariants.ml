@@ -542,12 +542,12 @@ let mutable_declaration st acc =
     (* mutable_T: T tag_id *)
     Param(
       false,
-      mutable_name st,
+      id_no_loc (mutable_name st),
       Ref_type(Base_type (mutable_memory_type st)))
     (* committed_T: bool *)
     ::Param(
       false,
-      committed_name st,
+      id_no_loc (committed_name st),
       Ref_type(Base_type (committed_memory_type st)))
     ::acc
   else
@@ -924,7 +924,8 @@ let make_hierarchy_global_invariant acc root =
   (* return the predicate *)
   match params with
     | [] -> acc (* Not supposed to happen though *)
-    | _ -> Predicate(false, hierarchy_invariant_name root, params, body)::acc
+    | _ -> Predicate(false, id_no_loc (hierarchy_invariant_name root),
+		     params, body)::acc
 
 let make_global_invariants acc =
   let h = hierarchies () in
@@ -1225,7 +1226,7 @@ let pack_declaration st acc =
   if st.jc_struct_info_parent = None then
     Param(
       false,
-      pack_name st,
+      id_no_loc (pack_name st),
       Prod_type(
 	this,
 	Base_type this_type,
@@ -1290,7 +1291,7 @@ let unpack_declaration st acc =
   if st.jc_struct_info_parent = None then
     Param(
       false,
-      "unpack_"^(root_name st),
+      id_no_loc ("unpack_"^(root_name st)),
       Prod_type(
 	this,
 	Base_type this_type,

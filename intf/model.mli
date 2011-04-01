@@ -111,8 +111,8 @@ val add_failure : string -> prover -> string -> unit
 
 
 val find_oblig :
-  string -> Loc.floc * Logic_decl.vc_expl * string * Cc.sequent Env.scheme
+  string -> Loc.floc * bool * Logic_decl.vc_expl * string * Cc.sequent Env.scheme
 val find_fobligs : string -> Gtk.tree_iter Queue.t
 val obligs :
-  (string, Loc.floc * Logic_decl.vc_expl * string * Cc.sequent Env.scheme)
+  (string, Loc.floc * bool * Logic_decl.vc_expl * string * Cc.sequent Env.scheme)
   Hashtbl.t

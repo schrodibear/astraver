@@ -314,7 +314,7 @@ let opt_variant m fmt = function
   | Some var -> fprintf fmt "{ variant %a }" (variant m) var
 
 let is_binop id = 
-  id == t_add || id == t_sub || id == t_mul || id == t_div
+  id == t_add || id == t_sub || id == t_mul || id == t_div_real
   (* || id == t_mod_int *) || id == t_eq || id == t_neq
   || id == t_lt || id == t_le || id == t_gt || id == t_ge
 
@@ -322,7 +322,7 @@ let binop id =
   if id == t_add then "+"
   else if id == t_sub then "-"
   else if id == t_mul then "*"
-  else if id == t_div then "/"
+  else if id == t_div_real then "/"
 (*
   else if id == t_mod_int then "%"
 *)
@@ -435,6 +435,11 @@ let logic_type fmt = function
   | PFunction (ptl, pt) -> 
       fprintf fmt "%a -> %a" (print_list comma ppure_type) ptl ppure_type pt
 
+let str_of_goal_kind = function
+  | KAxiom -> "axiom"
+  | KLemma -> "lemma"
+  | KGoal -> "goal"
+
 let decl fmt = function
   | Include (_,s) ->
       fprintf fmt "@[<hov 2>include@ \"%S\"@]" s
@@ -453,12 +458,10 @@ let decl fmt = function
       List.iter rename_global ids;
       fprintf fmt "%alogic %a : %a" print_external e 
 	(print_list comma gident) ids logic_type lt
-  | Axiom (_, id, p) ->
+  | Goal (_, k, id, p) ->
       rename_global id;
-      fprintf fmt "axiom %a : %a" gident id (lexpr M.empty) p
-  | Goal (_, id, p) ->
-      rename_global id;
-      fprintf fmt "goal %a : %a" gident id (lexpr M.empty) p
+      fprintf fmt "%s %a : %a" (str_of_goal_kind k) 
+        gident id (lexpr M.empty) p
   | Predicate_def (_, id, bl, p) ->
       rename_global id;
       let m = List.fold_left rename M.empty (List.map (fun (_,x,_) -> x) bl) in

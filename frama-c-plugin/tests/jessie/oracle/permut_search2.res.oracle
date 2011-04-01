@@ -204,26 +204,6 @@ axiom no_update_permut_size_0 :
                                              store(int_P_int_M_arr_1, tmp,
                                              tmpval))))))))
 
-axiom permut_bound :
- (forall int_P_int_M_arr_1:(int_P, int32) memory.
-  (forall i:int.
-   (forall arr_1:int_P pointer.
-    ((le_int((0), i)
-     and le_int(i, integer_of_int32(permut_size(arr_1, int_P_int_M_arr_1)))) ->
-     (le_int((0),
-      integer_of_int32(select(int_P_int_M_arr_1, shift(arr_1, i))))
-     and le_int(integer_of_int32(select(int_P_int_M_arr_1, shift(arr_1, i))),
-         integer_of_int32(permut_size(arr_1, int_P_int_M_arr_1))))))))
-
-axiom permut_valid :
- (forall int_P_arr_1_alloc_table:int_P alloc_table.
-  (forall int_P_int_M_arr_1:(int_P, int32) memory.
-   (forall arr_0_0:int_P pointer.
-    (le_int((0), integer_of_int32(permut_size(arr_0_0, int_P_int_M_arr_1))) ->
-     (le_int(offset_min(int_P_arr_1_alloc_table, arr_0_0), (0))
-     and ge_int(offset_max(int_P_arr_1_alloc_table, arr_0_0),
-         integer_of_int32(permut_size(arr_0_0, int_P_int_M_arr_1))))))))
-
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -336,6 +316,26 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom permut_valid :
+ (forall int_P_arr_1_alloc_table:int_P alloc_table.
+  (forall int_P_int_M_arr_1:(int_P, int32) memory.
+   (forall arr_0_0:int_P pointer.
+    (le_int((0), integer_of_int32(permut_size(arr_0_0, int_P_int_M_arr_1))) ->
+     (le_int(offset_min(int_P_arr_1_alloc_table, arr_0_0), (0))
+     and ge_int(offset_max(int_P_arr_1_alloc_table, arr_0_0),
+         integer_of_int32(permut_size(arr_0_0, int_P_int_M_arr_1))))))))
+
+axiom permut_bound :
+ (forall int_P_int_M_arr_1:(int_P, int32) memory.
+  (forall i:int.
+   (forall arr_1:int_P pointer.
+    ((le_int((0), i)
+     and le_int(i, integer_of_int32(permut_size(arr_1, int_P_int_M_arr_1)))) ->
+     (le_int((0),
+      integer_of_int32(select(int_P_int_M_arr_1, shift(arr_1, i))))
+     and le_int(integer_of_int32(select(int_P_int_M_arr_1, shift(arr_1, i))),
+         integer_of_int32(permut_size(arr_1, int_P_int_M_arr_1))))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1709,26 +1709,6 @@ axiom no_update_permut_size_0:
            (permut_size(arr, int_P_int_M_arr_1) = permut_size(arr,
            store(int_P_int_M_arr_1, tmp, tmpval))))))))
 
-axiom permut_bound:
-  (forall int_P_int_M_arr_1:(int_P, int32) memory.
-    (forall i:int.
-      (forall arr_1:int_P pointer.
-        (((0 <= i) and (i <= integer_of_int32(permut_size(arr_1,
-          int_P_int_M_arr_1)))) ->
-         ((0 <= integer_of_int32(select(int_P_int_M_arr_1, shift(arr_1,
-          i)))) and (integer_of_int32(select(int_P_int_M_arr_1, shift(arr_1,
-          i))) <= integer_of_int32(permut_size(arr_1, int_P_int_M_arr_1))))))))
-
-axiom permut_valid:
-  (forall int_P_arr_1_alloc_table:int_P alloc_table.
-    (forall int_P_int_M_arr_1:(int_P, int32) memory.
-      (forall arr_0_0:int_P pointer.
-        ((0 <= integer_of_int32(permut_size(arr_0_0, int_P_int_M_arr_1))) ->
-         ((offset_min(int_P_arr_1_alloc_table, arr_0_0) <= 0) and
-          (offset_max(int_P_arr_1_alloc_table,
-          arr_0_0) >= integer_of_int32(permut_size(arr_0_0,
-          int_P_int_M_arr_1))))))))
-
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(char_P_of_pointer_address(p))))
@@ -1843,4 +1823,24 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom permut_valid:
+  (forall int_P_arr_1_alloc_table:int_P alloc_table.
+    (forall int_P_int_M_arr_1:(int_P, int32) memory.
+      (forall arr_0_0:int_P pointer.
+        ((0 <= integer_of_int32(permut_size(arr_0_0, int_P_int_M_arr_1))) ->
+         ((offset_min(int_P_arr_1_alloc_table, arr_0_0) <= 0) and
+          (offset_max(int_P_arr_1_alloc_table,
+          arr_0_0) >= integer_of_int32(permut_size(arr_0_0,
+          int_P_int_M_arr_1))))))))
+
+axiom permut_bound:
+  (forall int_P_int_M_arr_1:(int_P, int32) memory.
+    (forall i:int.
+      (forall arr_1:int_P pointer.
+        (((0 <= i) and (i <= integer_of_int32(permut_size(arr_1,
+          int_P_int_M_arr_1)))) ->
+         ((0 <= integer_of_int32(select(int_P_int_M_arr_1, shift(arr_1,
+          i)))) and (integer_of_int32(select(int_P_int_M_arr_1, shift(arr_1,
+          i))) <= integer_of_int32(permut_size(arr_1, int_P_int_M_arr_1))))))))
 

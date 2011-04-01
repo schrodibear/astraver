@@ -76,6 +76,8 @@ val instance : Ident.t -> var_subst -> pure_type list
 
 (* errors *)
 
+val expected_real : Loc.position -> 'a
+
 val expected_num : Loc.position -> 'a
 
 val expected_type : Loc.position -> type_v -> 'a

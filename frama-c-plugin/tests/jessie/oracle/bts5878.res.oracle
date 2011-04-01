@@ -75,20 +75,12 @@ axiom char_P_tags :
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
 
-logic foo: int -> prop
-
-goal e0 : (foo((0)) and foo((1)))
-
-axiom e0_as_axiom : (foo((0)) and foo((1)))
-
 logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
-axiom f0 : foo((0))
-
-axiom f1 : foo((1))
+logic foo: int -> prop
 
 logic int8_of_integer: int -> int8
 
@@ -189,6 +181,12 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom f0 : foo((0))
+
+axiom f1 : foo((1))
+
+lemma e0 : (foo((0)) and foo((1)))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1259,18 +1257,12 @@ axiom char_P_tags:
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
 
-logic foo : int -> prop
-
-axiom e0_as_axiom: (foo(0) and foo(1))
-
 logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
 
-axiom f0: foo(0)
-
-axiom f1: foo(1)
+logic foo : int -> prop
 
 logic int8_of_integer : int -> int8
 
@@ -1373,4 +1365,8 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom f0: foo(0)
+
+axiom f1: foo(1)
 

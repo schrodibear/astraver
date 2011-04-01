@@ -95,10 +95,6 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-goal rec_0 : (true = true)
-
-axiom rec_0_as_axiom : (true = true)
-
 predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
@@ -171,6 +167,8 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma rec_0 : (true = true)
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1274,8 +1272,6 @@ logic void_P_of_pointer_address : unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(void_P_of_pointer_address(p))))
-
-axiom rec_0_as_axiom: (true = true)
 
 predicate right_valid_struct_char_P(p: char_P pointer, b: int,
   char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,

@@ -288,83 +288,6 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-logic spec_remove_copy: int_P pointer, int, int_P pointer, int, int32,
- (int_P, int32) memory, (int_P, int32) memory -> int
-
-axiom remove_copy_empty :
- (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
-  (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-   (forall a_1_0:int_P pointer.
-    (forall b_1_0:int_P pointer.
-     (forall value_0_0:int32.
-      (forall i_1:int.
-       (forall j_0:int.
-        ((gt_int((0), i_1) or gt_int((0), j_0)) ->
-         eq_int(spec_remove_copy(a_1_0, i_1, b_1_0, j_0, value_0_0,
-                int_P_int_M_b_0_4_at_Lb, int_P_int_M_a_0_3_at_La),
-         (0))))))))))
-
-axiom remove_copy_equal_value :
- (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
-  (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-   (forall a_2:int_P pointer.
-    (forall b_2:int_P pointer.
-     (forall value_1:int32.
-      (forall i_2:int.
-       (forall j_1:int.
-        ((le_int((0), i_2)
-         and eq_int(integer_of_int32(select(int_P_int_M_a_0_3_at_La,
-                                     shift(a_2, i_2))),
-             integer_of_int32(value_1))) ->
-         eq_int(spec_remove_copy(a_2, i_2, b_2, j_1, value_1,
-                int_P_int_M_b_0_4_at_Lb, int_P_int_M_a_0_3_at_La),
-         spec_remove_copy(a_2, sub_int(i_2, (1)), b_2, j_1, value_1,
-         int_P_int_M_b_0_4_at_Lb, int_P_int_M_a_0_3_at_La))))))))))
-
-axiom remove_copy_label :
- (forall int_P_int_M_b_0_4_at_Lb2:(int_P, int32) memory.
-  (forall int_P_int_M_b_0_4_at_Lb1:(int_P, int32) memory.
-   (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-    (forall a_4:int_P pointer.
-     (forall b_4:int_P pointer.
-      (forall value_3:int32.
-       (forall i_4:int.
-        (forall j_3:int.
-         ((forall k_0:int.
-           ((le_int((0), k_0) and le_int(k_0, j_3)) ->
-            eq_int(integer_of_int32(select(int_P_int_M_b_0_4_at_Lb1,
-                                    shift(b_4, k_0))),
-            integer_of_int32(select(int_P_int_M_b_0_4_at_Lb2,
-                             shift(b_4, k_0)))))) ->
-          eq_int(spec_remove_copy(a_4, i_4, b_4, j_3, value_3,
-                 int_P_int_M_b_0_4_at_Lb1, int_P_int_M_a_0_3_at_La),
-          spec_remove_copy(a_4, i_4, b_4, j_3, value_3,
-          int_P_int_M_b_0_4_at_Lb2, int_P_int_M_a_0_3_at_La)))))))))))
-
-axiom remove_copy_not_equal_value :
- (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
-  (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-   (forall a_3:int_P pointer.
-    (forall b_3:int_P pointer.
-     (forall value_2:int32.
-      (forall i_3:int.
-       (forall j_2:int.
-        ((le_int((0), i_3)
-         and (le_int((0), j_2)
-             and (neq_int(integer_of_int32(select(int_P_int_M_a_0_3_at_La,
-                                           shift(a_3, i_3))),
-                  integer_of_int32(value_2))
-                 <-> eq_int(integer_of_int32(select(int_P_int_M_a_0_3_at_La,
-                                             shift(a_3, i_3))),
-                     integer_of_int32(select(int_P_int_M_b_0_4_at_Lb,
-                                      shift(b_3, j_2))))))) ->
-         eq_int(spec_remove_copy(a_3, i_3, b_3, j_2, value_2,
-                int_P_int_M_b_0_4_at_Lb, int_P_int_M_a_0_3_at_La),
-         add_int(spec_remove_copy(a_3, sub_int(i_3, (1)), b_3,
-                 sub_int(j_2, (1)), value_2, int_P_int_M_b_0_4_at_Lb,
-                 int_P_int_M_a_0_3_at_La),
-         (1)))))))))))
-
 predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
@@ -376,6 +299,9 @@ predicate right_valid_struct_int_P(p:int_P pointer, b:int,
 predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
+
+logic spec_remove_copy: int_P pointer, int, int_P pointer, int, int32,
+ (int_P, int32) memory, (int_P, int32) memory -> int
 
 predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -466,6 +392,80 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom remove_copy_empty :
+ (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
+  (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
+   (forall a_1_0:int_P pointer.
+    (forall b_1_0:int_P pointer.
+     (forall value_0_0:int32.
+      (forall i_1:int.
+       (forall j_0:int.
+        ((gt_int((0), i_1) or gt_int((0), j_0)) ->
+         eq_int(spec_remove_copy(a_1_0, i_1, b_1_0, j_0, value_0_0,
+                int_P_int_M_b_0_4_at_Lb, int_P_int_M_a_0_3_at_La),
+         (0))))))))))
+
+axiom remove_copy_equal_value :
+ (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
+  (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
+   (forall a_2:int_P pointer.
+    (forall b_2:int_P pointer.
+     (forall value_1:int32.
+      (forall i_2:int.
+       (forall j_1:int.
+        ((le_int((0), i_2)
+         and eq_int(integer_of_int32(select(int_P_int_M_a_0_3_at_La,
+                                     shift(a_2, i_2))),
+             integer_of_int32(value_1))) ->
+         eq_int(spec_remove_copy(a_2, i_2, b_2, j_1, value_1,
+                int_P_int_M_b_0_4_at_Lb, int_P_int_M_a_0_3_at_La),
+         spec_remove_copy(a_2, sub_int(i_2, (1)), b_2, j_1, value_1,
+         int_P_int_M_b_0_4_at_Lb, int_P_int_M_a_0_3_at_La))))))))))
+
+axiom remove_copy_not_equal_value :
+ (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
+  (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
+   (forall a_3:int_P pointer.
+    (forall b_3:int_P pointer.
+     (forall value_2:int32.
+      (forall i_3:int.
+       (forall j_2:int.
+        ((le_int((0), i_3)
+         and (le_int((0), j_2)
+             and (neq_int(integer_of_int32(select(int_P_int_M_a_0_3_at_La,
+                                           shift(a_3, i_3))),
+                  integer_of_int32(value_2))
+                 <-> eq_int(integer_of_int32(select(int_P_int_M_a_0_3_at_La,
+                                             shift(a_3, i_3))),
+                     integer_of_int32(select(int_P_int_M_b_0_4_at_Lb,
+                                      shift(b_3, j_2))))))) ->
+         eq_int(spec_remove_copy(a_3, i_3, b_3, j_2, value_2,
+                int_P_int_M_b_0_4_at_Lb, int_P_int_M_a_0_3_at_La),
+         add_int(spec_remove_copy(a_3, sub_int(i_3, (1)), b_3,
+                 sub_int(j_2, (1)), value_2, int_P_int_M_b_0_4_at_Lb,
+                 int_P_int_M_a_0_3_at_La),
+         (1)))))))))))
+
+axiom remove_copy_label :
+ (forall int_P_int_M_b_0_4_at_Lb2:(int_P, int32) memory.
+  (forall int_P_int_M_b_0_4_at_Lb1:(int_P, int32) memory.
+   (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
+    (forall a_4:int_P pointer.
+     (forall b_4:int_P pointer.
+      (forall value_3:int32.
+       (forall i_4:int.
+        (forall j_3:int.
+         ((forall k_0:int.
+           ((le_int((0), k_0) and le_int(k_0, j_3)) ->
+            eq_int(integer_of_int32(select(int_P_int_M_b_0_4_at_Lb1,
+                                    shift(b_4, k_0))),
+            integer_of_int32(select(int_P_int_M_b_0_4_at_Lb2,
+                             shift(b_4, k_0)))))) ->
+          eq_int(spec_remove_copy(a_4, i_4, b_4, j_3, value_3,
+                 int_P_int_M_b_0_4_at_Lb1, int_P_int_M_a_0_3_at_La),
+          spec_remove_copy(a_4, i_4, b_4, j_3, value_3,
+          int_P_int_M_b_0_4_at_Lb2, int_P_int_M_a_0_3_at_La)))))))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -2182,81 +2182,6 @@ axiom pointer_addr_of_void_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(void_P_of_pointer_address(p))))
 
-logic spec_remove_copy : int_P pointer, int, int_P pointer, int, int32,
-(int_P, int32) memory, (int_P, int32) memory -> int
-
-axiom remove_copy_empty:
-  (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
-    (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-      (forall a_1_0:int_P pointer.
-        (forall b_1_0:int_P pointer.
-          (forall value_0_0:int32.
-            (forall i_1:int.
-              (forall j_0:int.
-                (((0 > i_1) or (0 > j_0)) -> (spec_remove_copy(a_1_0, i_1,
-                 b_1_0, j_0, value_0_0, int_P_int_M_b_0_4_at_Lb,
-                 int_P_int_M_a_0_3_at_La) = 0)))))))))
-
-axiom remove_copy_equal_value:
-  (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
-    (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-      (forall a_2:int_P pointer.
-        (forall b_2:int_P pointer.
-          (forall value_1:int32.
-            (forall i_2:int.
-              (forall j_1:int.
-                (((0 <= i_2) and
-                  (integer_of_int32(select(int_P_int_M_a_0_3_at_La,
-                  shift(a_2, i_2))) = integer_of_int32(value_1))) ->
-                 (spec_remove_copy(a_2, i_2, b_2, j_1, value_1,
-                 int_P_int_M_b_0_4_at_Lb,
-                 int_P_int_M_a_0_3_at_La) = spec_remove_copy(a_2, (i_2 - 1),
-                 b_2, j_1, value_1, int_P_int_M_b_0_4_at_Lb,
-                 int_P_int_M_a_0_3_at_La))))))))))
-
-axiom remove_copy_label:
-  (forall int_P_int_M_b_0_4_at_Lb2:(int_P, int32) memory.
-    (forall int_P_int_M_b_0_4_at_Lb1:(int_P, int32) memory.
-      (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-        (forall a_4:int_P pointer.
-          (forall b_4:int_P pointer.
-            (forall value_3:int32.
-              (forall i_4:int.
-                (forall j_3:int.
-                  ((forall k_0:int.
-                     (((0 <= k_0) and (k_0 <= j_3)) ->
-                      (integer_of_int32(select(int_P_int_M_b_0_4_at_Lb1,
-                      shift(b_4,
-                      k_0))) = integer_of_int32(select(int_P_int_M_b_0_4_at_Lb2,
-                      shift(b_4, k_0)))))) ->
-                   (spec_remove_copy(a_4, i_4, b_4, j_3, value_3,
-                   int_P_int_M_b_0_4_at_Lb1,
-                   int_P_int_M_a_0_3_at_La) = spec_remove_copy(a_4, i_4, b_4,
-                   j_3, value_3, int_P_int_M_b_0_4_at_Lb2,
-                   int_P_int_M_a_0_3_at_La)))))))))))
-
-axiom remove_copy_not_equal_value:
-  (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
-    (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
-      (forall a_3:int_P pointer.
-        (forall b_3:int_P pointer.
-          (forall value_2:int32.
-            (forall i_3:int.
-              (forall j_2:int.
-                (((0 <= i_3) and
-                  ((0 <= j_2) and
-                   ((integer_of_int32(select(int_P_int_M_a_0_3_at_La,
-                    shift(a_3, i_3))) <> integer_of_int32(value_2)) <->
-                    (integer_of_int32(select(int_P_int_M_a_0_3_at_La,
-                    shift(a_3,
-                    i_3))) = integer_of_int32(select(int_P_int_M_b_0_4_at_Lb,
-                    shift(b_3, j_2))))))) ->
-                 (spec_remove_copy(a_3, i_3, b_3, j_2, value_2,
-                 int_P_int_M_b_0_4_at_Lb,
-                 int_P_int_M_a_0_3_at_La) = (spec_remove_copy(a_3, (i_3 - 1),
-                 b_3, (j_2 - 1), value_2, int_P_int_M_b_0_4_at_Lb,
-                 int_P_int_M_a_0_3_at_La) + 1))))))))))
-
 predicate right_valid_struct_char_P(p: char_P pointer, b: int,
   char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
   p) >= b)
@@ -2268,6 +2193,9 @@ predicate right_valid_struct_int_P(p: int_P pointer, b: int,
 predicate right_valid_struct_void_P(p: void_P pointer, b: int,
   void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
   p) >= b)
+
+logic spec_remove_copy : int_P pointer, int, int_P pointer, int, int32,
+(int_P, int32) memory, (int_P, int32) memory -> int
 
 predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =
@@ -2358,4 +2286,76 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom remove_copy_empty:
+  (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
+    (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
+      (forall a_1_0:int_P pointer.
+        (forall b_1_0:int_P pointer.
+          (forall value_0_0:int32.
+            (forall i_1:int.
+              (forall j_0:int.
+                (((0 > i_1) or (0 > j_0)) -> (spec_remove_copy(a_1_0, i_1,
+                 b_1_0, j_0, value_0_0, int_P_int_M_b_0_4_at_Lb,
+                 int_P_int_M_a_0_3_at_La) = 0)))))))))
+
+axiom remove_copy_equal_value:
+  (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
+    (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
+      (forall a_2:int_P pointer.
+        (forall b_2:int_P pointer.
+          (forall value_1:int32.
+            (forall i_2:int.
+              (forall j_1:int.
+                (((0 <= i_2) and
+                  (integer_of_int32(select(int_P_int_M_a_0_3_at_La,
+                  shift(a_2, i_2))) = integer_of_int32(value_1))) ->
+                 (spec_remove_copy(a_2, i_2, b_2, j_1, value_1,
+                 int_P_int_M_b_0_4_at_Lb,
+                 int_P_int_M_a_0_3_at_La) = spec_remove_copy(a_2, (i_2 - 1),
+                 b_2, j_1, value_1, int_P_int_M_b_0_4_at_Lb,
+                 int_P_int_M_a_0_3_at_La))))))))))
+
+axiom remove_copy_not_equal_value:
+  (forall int_P_int_M_b_0_4_at_Lb:(int_P, int32) memory.
+    (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
+      (forall a_3:int_P pointer.
+        (forall b_3:int_P pointer.
+          (forall value_2:int32.
+            (forall i_3:int.
+              (forall j_2:int.
+                (((0 <= i_3) and
+                  ((0 <= j_2) and
+                   ((integer_of_int32(select(int_P_int_M_a_0_3_at_La,
+                    shift(a_3, i_3))) <> integer_of_int32(value_2)) <->
+                    (integer_of_int32(select(int_P_int_M_a_0_3_at_La,
+                    shift(a_3,
+                    i_3))) = integer_of_int32(select(int_P_int_M_b_0_4_at_Lb,
+                    shift(b_3, j_2))))))) ->
+                 (spec_remove_copy(a_3, i_3, b_3, j_2, value_2,
+                 int_P_int_M_b_0_4_at_Lb,
+                 int_P_int_M_a_0_3_at_La) = (spec_remove_copy(a_3, (i_3 - 1),
+                 b_3, (j_2 - 1), value_2, int_P_int_M_b_0_4_at_Lb,
+                 int_P_int_M_a_0_3_at_La) + 1))))))))))
+
+axiom remove_copy_label:
+  (forall int_P_int_M_b_0_4_at_Lb2:(int_P, int32) memory.
+    (forall int_P_int_M_b_0_4_at_Lb1:(int_P, int32) memory.
+      (forall int_P_int_M_a_0_3_at_La:(int_P, int32) memory.
+        (forall a_4:int_P pointer.
+          (forall b_4:int_P pointer.
+            (forall value_3:int32.
+              (forall i_4:int.
+                (forall j_3:int.
+                  ((forall k_0:int.
+                     (((0 <= k_0) and (k_0 <= j_3)) ->
+                      (integer_of_int32(select(int_P_int_M_b_0_4_at_Lb1,
+                      shift(b_4,
+                      k_0))) = integer_of_int32(select(int_P_int_M_b_0_4_at_Lb2,
+                      shift(b_4, k_0)))))) ->
+                   (spec_remove_copy(a_4, i_4, b_4, j_3, value_3,
+                   int_P_int_M_b_0_4_at_Lb1,
+                   int_P_int_M_a_0_3_at_La) = spec_remove_copy(a_4, i_4, b_4,
+                   j_3, value_3, int_P_int_M_b_0_4_at_Lb2,
+                   int_P_int_M_a_0_3_at_La)))))))))))
 

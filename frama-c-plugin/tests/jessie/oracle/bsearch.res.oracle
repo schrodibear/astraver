@@ -214,20 +214,6 @@ axiom long_P_tags :
   (forall long_P_tag_table:long_P tag_table.
    instanceof(long_P_tag_table, x, long_P_tag)))
 
-goal mean :
- (forall x_0:int.
-  (forall y:int.
-   (le_int(x_0, y) ->
-    (le_int(x_0, computer_div(add_int(x_0, y), (2)))
-    and le_int(computer_div(add_int(x_0, y), (2)), y)))))
-
-axiom mean_as_axiom :
- (forall x_0:int.
-  (forall y:int.
-   (le_int(x_0, y) ->
-    (le_int(x_0, computer_div(add_int(x_0, y), (2)))
-    and le_int(computer_div(add_int(x_0, y), (2)), y)))))
-
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -348,6 +334,13 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma mean :
+ (forall x_0:int.
+  (forall y:int.
+   (le_int(x_0, y) ->
+    (le_int(x_0, computer_div(add_int(x_0, y), (2)))
+    and le_int(computer_div(add_int(x_0, y), (2)), y)))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -2192,13 +2185,6 @@ axiom long_P_tags:
   (forall x:long_P pointer.
     (forall long_P_tag_table:long_P tag_table. instanceof(long_P_tag_table,
       x, long_P_tag)))
-
-axiom mean_as_axiom:
-  (forall x_0:int.
-    (forall y:int.
-      ((x_0 <= y) ->
-       ((x_0 <= computer_div((x_0 + y), 2)) and (computer_div((x_0 + y),
-        2) <= y)))))
 
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.

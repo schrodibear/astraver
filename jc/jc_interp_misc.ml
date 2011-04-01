@@ -1072,7 +1072,8 @@ let make_valid_pred ~equal ?(left=true) ?(right=true) ac pc =
     let validity = if left then omin :: validity else validity in
       make_and_list validity
   in
-  Predicate(false, valid_pred_name ~equal ~left ~right ac pc, params, validity)
+  Predicate(false, id_no_loc (valid_pred_name ~equal ~left ~right ac pc), 
+	    params, validity)
 
 (* Allocation *)
 
@@ -1197,7 +1198,7 @@ let make_alloc_param ~check_size ac pc =
       params alloc_type
   in
   let name = alloc_param_name ~check_size ac pc in
-  Param(false,name,alloc_type)
+  Param(false,id_no_loc name,alloc_type)
 
 (* Conversion to and from bitvector *)
 
@@ -1224,7 +1225,7 @@ let make_param ~name ~writes ~reads ~pre ~post ~return_type =
     List.fold_right (fun (n,ty') acc -> Prod_type(n, ty', acc))
       params annot_type
   in
-  Param(false,name,annot_type)
+  Param(false,id_no_loc name,annot_type)
 
 let conv_bw_alloc_parameters ~deref r _pc =
   let ac = JCalloc_bitvector in

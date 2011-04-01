@@ -82,14 +82,6 @@ logic integer_of_int8: int8 -> int
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
-logic nth_of_pi: int -> int
-
-axiom infinite :
- (forall k:int.
-  (forall i:int.
-   ((le_int((0), i) and le_int(i, (9))) ->
-    (exists n_1:int. (le_int(k, n_1) and eq_int(nth_of_pi(n_1), i))))))
-
 logic int8_of_integer: int -> int8
 
 axiom int8_coerce :
@@ -109,6 +101,8 @@ predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
+logic nth_of_pi: int -> int
+
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -116,10 +110,6 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
-
-axiom range :
- (forall n_0:int.
-  (le_int((0), nth_of_pi(n_0)) and le_int(nth_of_pi(n_0), (9))))
 
 predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -193,6 +183,16 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom range :
+ (forall n_0:int.
+  (le_int((0), nth_of_pi(n_0)) and le_int(nth_of_pi(n_0), (9))))
+
+axiom infinite :
+ (forall k:int.
+  (forall i:int.
+   ((le_int((0), i) and le_int(i, (9))) ->
+    (exists n_1:int. (le_int(k, n_1) and eq_int(nth_of_pi(n_1), i))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1258,14 +1258,6 @@ logic integer_of_int8 : int8 -> int
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
 
-logic nth_of_pi : int -> int
-
-axiom infinite:
-  (forall k:int.
-    (forall i:int.
-      (((0 <= i) and (i <= 9)) ->
-       (exists n_1:int. ((k <= n_1) and (nth_of_pi(n_1) = i))))))
-
 logic int8_of_integer : int -> int8
 
 axiom int8_coerce:
@@ -1285,6 +1277,8 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
   p) <= a)
 
+logic nth_of_pi : int -> int
+
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(char_P_of_pointer_address(p))))
@@ -1294,9 +1288,6 @@ logic void_P_of_pointer_address : unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(void_P_of_pointer_address(p))))
-
-axiom range:
-  (forall n_0:int. ((0 <= nth_of_pi(n_0)) and (nth_of_pi(n_0) <= 9)))
 
 predicate right_valid_struct_char_P(p: char_P pointer, b: int,
   char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
@@ -1370,4 +1361,13 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom range:
+  (forall n_0:int. ((0 <= nth_of_pi(n_0)) and (nth_of_pi(n_0) <= 9)))
+
+axiom infinite:
+  (forall k:int.
+    (forall i:int.
+      (((0 <= i) and (i <= 9)) ->
+       (exists n_1:int. ((k <= n_1) and (nth_of_pi(n_1) = i))))))
 

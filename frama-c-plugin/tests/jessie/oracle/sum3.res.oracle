@@ -1,0 +1,146 @@
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only sum3.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD sum3.c"
+[jessie] Starting Jessie translation
+[jessie] Producing Jessie files in subdir sum3.jessie
+[jessie] File sum3.jessie/sum3.jc written.
+[jessie] File sum3.jessie/sum3.cloc written.
+# IntModel = bounded
+# InvariantPolicy = Arguments
+# SeparationPolicy = Regions
+# AnnotationPolicy = None
+# AbstractDomain = Pol
+
+axiomatic Padding {
+
+  logic type padding
+  
+}
+
+type uint8 = 0..255
+
+type int8 = -128..127
+
+type int32 = -2147483648..2147483647
+
+tag unsigned_char_P = {
+  uint8 unsigned_char_M: 8;
+}
+
+type unsigned_char_P = [unsigned_char_P]
+
+tag char_P = {
+  int8 char_M: 8;
+}
+
+type char_P = [char_P]
+
+tag void_P = {
+}
+
+type void_P = [void_P]
+
+tag __anonstruct_S_1 = {
+  unsigned_char_P[0..2] a: 24; 
+  unsigned_char_P[0..2] Sum: 24; 
+  unsigned_char_P[0..2] b: 24;
+}
+
+type __anonstruct_S_1 = [__anonstruct_S_1]
+
+__anonstruct_S_1[0] vect;
+
+invariant valid_vect :
+((\offset_min(vect) <= 0) && (\offset_max(vect) >= 0))
+
+unit f()
+  requires (C_47 : ((((C_50 : (\offset_min(vect.a) <= 0)) &&
+                       (C_51 : (\offset_max(vect.a) >= 2))) &&
+                      ((C_53 : (\offset_min(vect.Sum) <= 0)) &&
+                        (C_54 : (\offset_max(vect.Sum) >= 2)))) &&
+                     ((C_56 : (\offset_min(vect.b) <= 0)) &&
+                       (C_57 : (\offset_max(vect.b) >= 2)))));
+  requires (C_46 : (\forall integer i;
+                     (\forall integer j;
+                       ((((0 <= i) && (i <= 2)) && ((0 <= j) && (j <= 2))) ==>
+                         ((((vect.a + i) != (vect.b + j)) &&
+                            ((vect.a + i) != (vect.Sum + j))) &&
+                           ((vect.b + i) != (vect.Sum + j)))))));
+behavior default:
+  assigns (vect.a + [0..2]).unsigned_char_M,
+  (vect.Sum + [0..2]).unsigned_char_M,
+  (vect.b + [0..2]).unsigned_char_M;
+  ensures (C_45 : (\forall integer m_3;
+                    (((0 <= m_3) && (m_3 < 3)) ==>
+                      ((vect.Sum + m_3).unsigned_char_M ==
+                        ((vect.a + m_3).unsigned_char_M +
+                          (vect.b + m_3).unsigned_char_M)))));
+{  
+   (var uint8 i);
+   
+   {  
+      ( 
+        behavior default:
+          assigns (vect.a + [0..2]).unsigned_char_M,
+          (vect.b + [0..2]).unsigned_char_M;
+          ensures (C_19 : true);
+        { 
+        {  (C_3 : ((C_2 : ((C_1 : vect.a) + 0).unsigned_char_M) = 1));
+           (C_6 : ((C_5 : ((C_4 : vect.a) + 1).unsigned_char_M) = 2));
+           (C_9 : ((C_8 : ((C_7 : vect.a) + 2).unsigned_char_M) = 3));
+           (C_12 : ((C_11 : ((C_10 : vect.b) + 0).unsigned_char_M) = 4));
+           (C_15 : ((C_14 : ((C_13 : vect.b) + 1).unsigned_char_M) = 5));
+           (C_18 : ((C_17 : ((C_16 : vect.b) + 2).unsigned_char_M) = 6))
+        }
+        });
+      
+      {  
+         (assert for default: (C_20 : (\forall integer m;
+                                        (((0 <= m) && (m < 3)) ==>
+                                          ((vect.Sum + m).unsigned_char_M ==
+                                            \at((vect.Sum + m).unsigned_char_M,Pre))))));
+         ()
+      };
+      
+      {  (C_21 : (i = 0));
+         
+         loop 
+         behavior default:
+           invariant (C_26 : ((C_27 : (0 <= i)) && (C_28 : (i <= 3))));
+         behavior default:
+           invariant (C_25 : (\forall integer m_0;
+                               (((0 <= m_0) && (m_0 < 3)) ==>
+                                 (((vect.a + m_0).unsigned_char_M ==
+                                    \at((vect.a + m_0).unsigned_char_M,Here)) &&
+                                   ((vect.b + m_0).unsigned_char_M ==
+                                     \at((vect.b + m_0).unsigned_char_M,Here))))));
+         behavior default:
+           invariant (C_24 : (\forall integer m_1;
+                               (((i <= m_1) && (m_1 < 3)) ==>
+                                 ((vect.Sum + m_1).unsigned_char_M ==
+                                   \at((vect.Sum + m_1).unsigned_char_M,Pre)))));
+         behavior default:
+           invariant (C_23 : (\forall integer m_2;
+                               (((0 <= m_2) && (m_2 < i)) ==>
+                                 ((vect.Sum + m_2).unsigned_char_M ==
+                                   ((vect.a + m_2).unsigned_char_M +
+                                     (vect.b + m_2).unsigned_char_M)))));
+         variant (C_22 : (3 - i));
+         while (true)
+         {  
+            {  (if ((C_29 : (i :> int32)) < 3) then () else 
+               (goto while_0_break));
+               
+               {  (C_40 : ((C_39 : ((C_38 : vect.Sum) + i).unsigned_char_M) = 
+                  (C_37 : ((C_36 : ((C_35 : ((C_34 : ((C_33 : vect.a) + i).unsigned_char_M) :> int32)) +
+                                     (C_32 : ((C_31 : ((C_30 : vect.b) + i).unsigned_char_M) :> int32)))) :> uint8))))
+               };
+               (C_44 : (i = (C_43 : ((C_42 : ((C_41 : (i :> int32)) + 1)) :> uint8))))
+            }
+         };
+         (while_0_break : ())
+      };
+      
+      (return ())
+   }
+}
+WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs sum3.jessie/sum3.cloc sum3.jessie/sum3.jc

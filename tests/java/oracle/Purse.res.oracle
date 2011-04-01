@@ -38,7 +38,7 @@ class NoCreditException extends Exception {
 }
 
 public class Purse {
-    
+
     private int balance;
     //@ invariant balance_non_negative: balance >= 0;
 
@@ -120,6 +120,9 @@ logic integer Throwable_serialVersionUID =
 
 logic integer Exception_serialVersionUID =
 -3387516993124229948
+
+String[0..] any_string()
+;
 
 tag Object = {
 }
@@ -771,9 +774,9 @@ end = -1
 
 [JC_107]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 645
-begin = 23
-end = 41
+line = 562
+begin = 41
+end = 57
 
 [JC_41]
 file = "HOME/"
@@ -794,28 +797,29 @@ begin = -1
 end = -1
 
 [JC_220]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/java/Purse.jc"
+line = 166
+begin = 27
+end = 55
 
 [JC_109]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 645
-begin = 23
-end = 41
+line = 562
+begin = 41
+end = 57
 
 [JC_43]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 251
-begin = 18
-end = 28
+line = 239
+begin = 11
+end = 20
 
 [JC_221]
-file = "HOME/tests/java/Purse.java"
-line = 74
-begin = 16
-end = 34
+file = "HOME/tests/java/Purse.jc"
+line = 172
+begin = 17
+end = 55
 
 [JC_44]
 file = "HOME/"
@@ -824,22 +828,24 @@ begin = -1
 end = -1
 
 [JC_222]
-file = "HOME/tests/java/Purse.java"
-line = 74
-begin = 16
-end = 34
+kind = AllocSize
+file = "HOME/tests/java/Purse.jc"
+line = 163
+begin = 43
+end = 67
 
 [JC_45]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 251
-begin = 18
-end = 28
+line = 239
+begin = 11
+end = 20
 
 [JC_223]
-file = "HOME/tests/java/Purse.java"
-line = 75
-begin = 15
-end = 25
+kind = UserCall
+file = "HOME/tests/java/Purse.jc"
+line = 166
+begin = 27
+end = 55
 
 [JC_46]
 file = "HOME/"
@@ -848,10 +854,10 @@ begin = -1
 end = -1
 
 [JC_224]
-file = "HOME/tests/java/Purse.java"
-line = 75
-begin = 15
-end = 25
+file = "HOME/tests/java/Purse.jc"
+line = 172
+begin = 17
+end = 55
 
 [cons_Exception_Throwable_ensures_default]
 name = "Constructor of class Exception"
@@ -867,7 +873,19 @@ line = 0
 begin = -1
 end = -1
 
+[JC_225]
+file = "HOME/tests/java/Purse.java"
+line = 75
+begin = 15
+end = 25
+
 [JC_48]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_226]
 file = "HOME/"
 line = 0
 begin = -1
@@ -878,6 +896,24 @@ file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_227]
+file = "HOME/tests/java/Purse.java"
+line = 75
+begin = 15
+end = 25
+
+[JC_228]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_229]
+file = "HOME/tests/java/Purse.java"
+line = 74
+begin = 16
+end = 34
 
 [JC_110]
 file = "HOME/"
@@ -918,10 +954,10 @@ begin = 11
 end = 20
 
 [JC_115]
-file = "HOME/lib/java_api/java/lang/Exception.java"
-line = 28
-begin = 11
-end = 20
+file = "HOME/lib/java_api/java/lang/Throwable.java"
+line = 645
+begin = 23
+end = 41
 
 [JC_116]
 file = "HOME/"
@@ -936,16 +972,16 @@ begin = -1
 end = -1
 
 [JC_117]
-file = "HOME/lib/java_api/java/lang/Exception.java"
-line = 28
-begin = 11
-end = 20
+file = "HOME/lib/java_api/java/lang/Throwable.java"
+line = 645
+begin = 23
+end = 41
 
 [JC_51]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 265
+line = 251
 begin = 18
-end = 37
+end = 28
 
 [JC_118]
 file = "HOME/"
@@ -959,6 +995,12 @@ line = 0
 begin = -1
 end = -1
 
+[JC_230]
+file = "HOME/tests/java/Purse.java"
+line = 74
+begin = 16
+end = 34
+
 [JC_119]
 file = "HOME/"
 line = 0
@@ -967,15 +1009,27 @@ end = -1
 
 [JC_53]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 265
+line = 251
 begin = 18
-end = 37
+end = 28
+
+[JC_231]
+file = "HOME/tests/java/Purse.java"
+line = 75
+begin = 15
+end = 25
 
 [JC_54]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_232]
+file = "HOME/tests/java/Purse.java"
+line = 75
+begin = 15
+end = 25
 
 [JC_55]
 file = "HOME/"
@@ -1019,9 +1073,9 @@ end = -1
 
 [JC_59]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 289
-begin = 21
-end = 29
+line = 265
+begin = 18
+end = 37
 
 [cons_Throwable_Throwable_safety]
 name = "Constructor of class Throwable"
@@ -1051,7 +1105,7 @@ end = -1
 
 [JC_123]
 file = "HOME/lib/java_api/java/lang/Exception.java"
-line = 40
+line = 28
 begin = 11
 end = 20
 
@@ -1063,7 +1117,7 @@ end = -1
 
 [JC_125]
 file = "HOME/lib/java_api/java/lang/Exception.java"
-line = 40
+line = 28
 begin = 11
 end = 20
 
@@ -1087,9 +1141,9 @@ end = -1
 
 [JC_61]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 289
-begin = 21
-end = 29
+line = 265
+begin = 18
+end = 37
 
 [JC_128]
 file = "HOME/"
@@ -1143,9 +1197,9 @@ end = -1
 
 [JC_67]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 317
-begin = 34
-end = 43
+line = 289
+begin = 21
+end = 29
 
 [JC_68]
 file = "HOME/"
@@ -1155,9 +1209,9 @@ end = -1
 
 [JC_69]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 317
-begin = 34
-end = 43
+line = 289
+begin = 21
+end = 29
 
 [JC_130]
 file = "HOME/"
@@ -1167,7 +1221,7 @@ end = -1
 
 [JC_131]
 file = "HOME/lib/java_api/java/lang/Exception.java"
-line = 58
+line = 40
 begin = 11
 end = 20
 
@@ -1187,7 +1241,7 @@ end = -1
 
 [JC_133]
 file = "HOME/lib/java_api/java/lang/Exception.java"
-line = 58
+line = 40
 begin = 11
 end = 20
 
@@ -1241,7 +1295,7 @@ end = -1
 
 [JC_139]
 file = "HOME/lib/java_api/java/lang/Exception.java"
-line = 76
+line = 58
 begin = 11
 end = 20
 
@@ -1259,9 +1313,9 @@ end = -1
 
 [JC_75]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 341
-begin = 18
-end = 26
+line = 317
+begin = 34
+end = 43
 
 [JC_76]
 file = "HOME/"
@@ -1271,9 +1325,9 @@ end = -1
 
 [JC_77]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 341
-begin = 18
-end = 26
+line = 317
+begin = 34
+end = 43
 
 [JC_78]
 file = "HOME/"
@@ -1295,7 +1349,7 @@ end = -1
 
 [JC_141]
 file = "HOME/lib/java_api/java/lang/Exception.java"
-line = 76
+line = 58
 begin = 11
 end = 20
 
@@ -1336,10 +1390,10 @@ begin = -1
 end = -1
 
 [JC_147]
-file = "HOME/tests/java/Purse.java"
-line = 35
+file = "HOME/lib/java_api/java/lang/Exception.java"
+line = 76
 begin = 11
-end = 28
+end = 20
 
 [JC_81]
 file = "HOME/"
@@ -1360,16 +1414,16 @@ begin = -1
 end = -1
 
 [JC_149]
-file = "HOME/tests/java/Purse.java"
-line = 35
+file = "HOME/lib/java_api/java/lang/Exception.java"
+line = 76
 begin = 11
-end = 28
+end = 20
 
 [JC_83]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 450
-begin = 16
-end = 31
+line = 341
+begin = 18
+end = 26
 
 [JC_84]
 file = "HOME/"
@@ -1379,9 +1433,9 @@ end = -1
 
 [JC_85]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 450
-begin = 16
-end = 31
+line = 341
+begin = 18
+end = 26
 
 [cons_Throwable_String_ensures_default]
 name = "Constructor of class Throwable"
@@ -1419,9 +1473,9 @@ end = -1
 
 [JC_1]
 file = "HOME/tests/java/Purse.jc"
-line = 49
-begin = 8
-end = 23
+line = 16
+begin = 12
+end = 22
 
 [JC_89]
 file = "HOME/"
@@ -1445,9 +1499,9 @@ end = 20
 
 [JC_3]
 file = "HOME/tests/java/Purse.jc"
-line = 49
-begin = 8
-end = 23
+line = 16
+begin = 12
+end = 22
 
 [JC_4]
 file = "HOME/"
@@ -1507,9 +1561,9 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/Purse.jc"
-line = 51
-begin = 11
-end = 65
+line = 52
+begin = 8
+end = 23
 
 [JC_153]
 file = "HOME/"
@@ -1541,9 +1595,9 @@ end = 28
 
 [JC_155]
 file = "HOME/tests/java/Purse.java"
-line = 48
+line = 35
 begin = 11
-end = 16
+end = 28
 
 [JC_156]
 file = "HOME/"
@@ -1559,13 +1613,13 @@ end = -1
 
 [JC_157]
 file = "HOME/tests/java/Purse.java"
-line = 48
+line = 35
 begin = 11
-end = 16
+end = 28
 
 [JC_91]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 459
+line = 450
 begin = 16
 end = 31
 
@@ -1582,14 +1636,14 @@ begin = -1
 end = -1
 
 [JC_159]
-file = "HOME/tests/java/Purse.java"
-line = 46
-begin = 16
-end = 28
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_93]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 459
+line = 450
 begin = 16
 end = 31
 
@@ -1625,9 +1679,9 @@ end = -1
 
 [JC_99]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 562
-begin = 41
-end = 57
+line = 459
+begin = 16
+end = 31
 
 [cons_Purse_ensures_default]
 name = "Constructor of class Purse"
@@ -1646,22 +1700,22 @@ begin = 16
 end = 24
 
 [JC_160]
-file = "HOME/tests/java/Purse.java"
-line = 48
-begin = 11
-end = 16
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_161]
-file = "HOME/tests/java/Purse.jc"
-line = 129
-begin = 9
-end = 16
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_162]
-file = "HOME/tests/java/Purse.java"
-line = 46
-begin = 16
-end = 28
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_163]
 file = "HOME/tests/java/Purse.java"
@@ -1670,10 +1724,10 @@ begin = 11
 end = 16
 
 [JC_164]
-file = "HOME/tests/java/Purse.jc"
-line = 129
-begin = 9
-end = 16
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_165]
 file = "HOME/tests/java/Purse.java"
@@ -1682,10 +1736,10 @@ begin = 11
 end = 16
 
 [JC_166]
-file = "HOME/tests/java/Purse.java"
-line = 48
-begin = 11
-end = 16
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [cons_Throwable_String_Throwable_safety]
 name = "Constructor of class Throwable"
@@ -1705,21 +1759,21 @@ end = 20
 
 [JC_167]
 file = "HOME/tests/java/Purse.java"
-line = 52
-begin = 17
-end = 23
+line = 46
+begin = 16
+end = 28
 
 [JC_168]
 file = "HOME/tests/java/Purse.java"
-line = 56
-begin = 16
-end = 22
+line = 48
+begin = 11
+end = 16
 
 [JC_169]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Purse.jc"
+line = 132
+begin = 9
+end = 16
 
 [cons_NoCreditException_ensures_default]
 name = "Constructor of class NoCreditException"
@@ -1739,51 +1793,51 @@ end = 20
 
 [JC_170]
 file = "HOME/tests/java/Purse.java"
+line = 46
+begin = 16
+end = 28
+
+[JC_171]
+file = "HOME/tests/java/Purse.java"
+line = 48
+begin = 11
+end = 16
+
+[JC_172]
+file = "HOME/tests/java/Purse.jc"
+line = 132
+begin = 9
+end = 16
+
+[JC_173]
+file = "HOME/tests/java/Purse.java"
+line = 48
+begin = 11
+end = 16
+
+[JC_174]
+file = "HOME/tests/java/Purse.java"
+line = 48
+begin = 11
+end = 16
+
+[JC_175]
+file = "HOME/tests/java/Purse.java"
 line = 52
 begin = 17
 end = 23
 
-[JC_171]
+[JC_176]
 file = "HOME/tests/java/Purse.java"
 line = 56
 begin = 16
 end = 22
 
-[JC_172]
+[JC_177]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_173]
-file = "HOME/tests/java/Purse.java"
-line = 54
-begin = 16
-end = 44
-
-[JC_174]
-file = "HOME/tests/java/Purse.java"
-line = 56
-begin = 16
-end = 22
-
-[JC_175]
-file = "HOME/tests/java/Purse.jc"
-line = 138
-begin = 9
-end = 16
-
-[JC_176]
-file = "HOME/tests/java/Purse.java"
-line = 54
-begin = 16
-end = 44
-
-[JC_177]
-file = "HOME/tests/java/Purse.java"
-line = 56
-begin = 16
-end = 22
 
 [cons_Exception_String_safety]
 name = "Constructor of class Exception"
@@ -1794,10 +1848,10 @@ begin = 11
 end = 20
 
 [JC_178]
-file = "HOME/tests/java/Purse.jc"
-line = 138
-begin = 9
-end = 16
+file = "HOME/tests/java/Purse.java"
+line = 52
+begin = 17
+end = 23
 
 [JC_179]
 file = "HOME/tests/java/Purse.java"
@@ -1806,16 +1860,16 @@ begin = 16
 end = 22
 
 [JC_10]
-file = "HOME/tests/java/Purse.jc"
-line = 51
-begin = 11
-end = 65
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_11]
-file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 179
-begin = 11
-end = 20
+file = "HOME/tests/java/Purse.jc"
+line = 52
+begin = 8
+end = 23
 
 [JC_12]
 file = "HOME/"
@@ -1824,10 +1878,10 @@ begin = -1
 end = -1
 
 [JC_13]
-file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 179
-begin = 11
-end = 20
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_14]
 file = "HOME/"
@@ -1848,10 +1902,10 @@ begin = -1
 end = -1
 
 [JC_17]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Purse.jc"
+line = 54
+begin = 11
+end = 65
 
 [Purse_credit_safety]
 name = "Method credit"
@@ -1862,34 +1916,34 @@ begin = 16
 end = 22
 
 [JC_180]
-file = "HOME/tests/java/Purse.java"
-line = 56
-begin = 16
-end = 22
-
-[JC_18]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
+[JC_18]
+file = "HOME/tests/java/Purse.jc"
+line = 54
+begin = 11
+end = 65
+
 [JC_181]
 file = "HOME/tests/java/Purse.java"
-line = 60
-begin = 17
-end = 23
+line = 54
+begin = 16
+end = 44
 
 [JC_19]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 194
+line = 179
 begin = 11
 end = 20
 
 [JC_182]
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 56
 begin = 16
-end = 24
+end = 22
 
 [cons_Exception_String_Throwable_safety]
 name = "Constructor of class Exception"
@@ -1900,40 +1954,40 @@ begin = 11
 end = 20
 
 [JC_183]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Purse.jc"
+line = 141
+begin = 9
+end = 16
 
 [JC_184]
 file = "HOME/tests/java/Purse.java"
-line = 60
-begin = 17
-end = 23
+line = 54
+begin = 16
+end = 44
 
 [JC_185]
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 56
 begin = 16
-end = 24
+end = 22
 
 [JC_186]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Purse.jc"
+line = 141
+begin = 9
+end = 16
 
 [JC_187]
 file = "HOME/tests/java/Purse.java"
-line = 62
+line = 56
 begin = 16
-end = 34
+end = 22
 
 [JC_188]
 file = "HOME/tests/java/Purse.java"
-line = 62
-begin = 38
-end = 66
+line = 56
+begin = 16
+end = 22
 
 [Purse_getBalance_safety]
 name = "Method getBalance"
@@ -1945,9 +1999,9 @@ end = 25
 
 [JC_189]
 file = "HOME/tests/java/Purse.java"
-line = 62
-begin = 16
-end = 66
+line = 60
+begin = 17
+end = 23
 
 [cons_Throwable_ensures_default]
 name = "Constructor of class Throwable"
@@ -1965,7 +2019,7 @@ end = -1
 
 [JC_21]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 194
+line = 179
 begin = 11
 end = 20
 
@@ -1977,9 +2031,9 @@ end = -1
 
 [JC_200]
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 62
 begin = 16
-end = 24
+end = 34
 
 [JC_23]
 file = "HOME/"
@@ -1989,9 +2043,9 @@ end = -1
 
 [JC_201]
 file = "HOME/tests/java/Purse.java"
-line = 67
-begin = 16
-end = 24
+line = 62
+begin = 38
+end = 66
 
 [JC_24]
 file = "HOME/"
@@ -2000,10 +2054,10 @@ begin = -1
 end = -1
 
 [JC_202]
-file = "HOME/tests/java/Purse.jc"
-line = 150
-begin = 9
-end = 25
+file = "HOME/tests/java/Purse.java"
+line = 62
+begin = 16
+end = 66
 
 [JC_25]
 file = "HOME/"
@@ -2013,9 +2067,9 @@ end = -1
 
 [JC_203]
 file = "HOME/tests/java/Purse.java"
-line = 65
-begin = 38
-end = 55
+line = 67
+begin = 16
+end = 24
 
 [JC_26]
 file = "HOME/"
@@ -2024,14 +2078,14 @@ begin = -1
 end = -1
 
 [JC_204]
-file = "HOME/tests/java/Purse.java"
-line = 67
-begin = 16
-end = 24
+file = "HOME/tests/java/Purse.jc"
+line = 149
+begin = 9
+end = 16
 
 [JC_27]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 216
+line = 194
 begin = 11
 end = 20
 
@@ -2062,79 +2116,76 @@ begin = -1
 end = -1
 
 [JC_206]
-file = "HOME/tests/java/Purse.jc"
-line = 150
-begin = 9
-end = 25
+file = "HOME/tests/java/Purse.java"
+line = 67
+begin = 16
+end = 24
 
 [JC_191]
-file = "HOME/tests/java/Purse.jc"
-line = 146
-begin = 9
-end = 16
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_29]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 216
+line = 194
 begin = 11
 end = 20
 
 [JC_207]
-kind = AllocSize
-file = "HOME/tests/java/Purse.jc"
-line = 160
-begin = 43
-end = 67
+file = "HOME/tests/java/Purse.java"
+line = 65
+begin = 38
+end = 55
 
 [JC_192]
+file = "HOME/tests/java/Purse.java"
+line = 60
+begin = 17
+end = 23
+
+[JC_208]
+file = "HOME/tests/java/Purse.java"
+line = 67
+begin = 16
+end = 24
+
+[JC_193]
+file = "HOME/tests/java/Purse.java"
+line = 67
+begin = 16
+end = 24
+
+[JC_209]
+file = "HOME/tests/java/Purse.java"
+line = 67
+begin = 16
+end = 24
+
+[JC_194]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_195]
 file = "HOME/tests/java/Purse.java"
 line = 62
 begin = 16
 end = 34
 
-[JC_208]
-kind = IndexBounds
-file = "HOME/tests/java/Purse.jc"
-line = 160
-begin = 10
-end = 68
-
-[JC_193]
+[JC_196]
 file = "HOME/tests/java/Purse.java"
 line = 62
 begin = 38
 end = 66
 
-[JC_209]
-kind = UserCall
-file = "HOME/tests/java/Purse.jc"
-line = 163
-begin = 27
-end = 55
-
-[JC_194]
+[JC_197]
 file = "HOME/tests/java/Purse.java"
 line = 62
 begin = 16
 end = 66
-
-[JC_195]
-file = "HOME/tests/java/Purse.java"
-line = 67
-begin = 16
-end = 24
-
-[JC_196]
-file = "HOME/tests/java/Purse.jc"
-line = 146
-begin = 9
-end = 16
-
-[JC_197]
-file = "HOME/tests/java/Purse.java"
-line = 67
-begin = 16
-end = 24
 
 [JC_198]
 file = "HOME/tests/java/Purse.java"
@@ -2143,10 +2194,10 @@ begin = 16
 end = 24
 
 [JC_199]
-file = "HOME/tests/java/Purse.java"
-line = 65
-begin = 38
-end = 55
+file = "HOME/tests/java/Purse.jc"
+line = 149
+begin = 9
+end = 16
 
 [JC_30]
 file = "HOME/"
@@ -2168,9 +2219,9 @@ end = -1
 
 [JC_210]
 file = "HOME/tests/java/Purse.jc"
-line = 169
-begin = 17
-end = 55
+line = 153
+begin = 9
+end = 25
 
 [JC_33]
 file = "HOME/"
@@ -2179,11 +2230,10 @@ begin = -1
 end = -1
 
 [JC_211]
-kind = AllocSize
-file = "HOME/tests/java/Purse.jc"
-line = 160
-begin = 43
-end = 67
+file = "HOME/tests/java/Purse.java"
+line = 65
+begin = 38
+end = 55
 
 [JC_34]
 file = "HOME/"
@@ -2192,23 +2242,22 @@ begin = -1
 end = -1
 
 [JC_212]
-kind = UserCall
-file = "HOME/tests/java/Purse.jc"
-line = 163
-begin = 27
-end = 55
+file = "HOME/tests/java/Purse.java"
+line = 67
+begin = 16
+end = 24
 
 [JC_35]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 239
+line = 216
 begin = 11
 end = 20
 
 [JC_213]
-file = "HOME/tests/java/Purse.jc"
-line = 169
-begin = 17
-end = 55
+file = "HOME/tests/java/Purse.java"
+line = 67
+begin = 16
+end = 24
 
 [JC_36]
 file = "HOME/"
@@ -2217,15 +2266,14 @@ begin = -1
 end = -1
 
 [JC_214]
-kind = AllocSize
 file = "HOME/tests/java/Purse.jc"
-line = 160
-begin = 43
-end = 67
+line = 153
+begin = 9
+end = 25
 
 [JC_37]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 239
+line = 216
 begin = 11
 end = 20
 
@@ -2238,11 +2286,11 @@ begin = 11
 end = 20
 
 [JC_215]
-kind = UserCall
+kind = AllocSize
 file = "HOME/tests/java/Purse.jc"
 line = 163
-begin = 27
-end = 55
+begin = 43
+end = 67
 
 [JC_38]
 file = "HOME/"
@@ -2251,10 +2299,11 @@ begin = -1
 end = -1
 
 [JC_216]
+kind = IndexBounds
 file = "HOME/tests/java/Purse.jc"
-line = 169
-begin = 17
-end = 55
+line = 163
+begin = 10
+end = 68
 
 [JC_39]
 file = "HOME/"
@@ -2263,22 +2312,24 @@ begin = -1
 end = -1
 
 [JC_217]
-file = "HOME/tests/java/Purse.java"
-line = 75
-begin = 15
-end = 25
+kind = UserCall
+file = "HOME/tests/java/Purse.jc"
+line = 166
+begin = 27
+end = 55
 
 [JC_218]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Purse.jc"
+line = 172
+begin = 17
+end = 55
 
 [JC_219]
-file = "HOME/tests/java/Purse.java"
-line = 75
-begin = 15
-end = 25
+kind = AllocSize
+file = "HOME/tests/java/Purse.jc"
+line = 163
+begin = 43
+end = 67
 
 [JC_100]
 file = "HOME/"
@@ -2288,9 +2339,9 @@ end = -1
 
 [JC_101]
 file = "HOME/lib/java_api/java/lang/Throwable.java"
-line = 562
-begin = 41
-end = 57
+line = 459
+begin = 16
+end = 31
 
 [JC_102]
 file = "HOME/"
@@ -2589,43 +2640,43 @@ parameter Purse_credit :
  this_6:Object pointer ->
   s_0_0:int ->
    { } unit reads Object_alloc_table,Purse_balance writes Purse_balance
-   { ((JC_180: balance_non_negative(this_6, Purse_balance))
-     and (JC_178:
-         ((JC_176:
+   { ((JC_188: balance_non_negative(this_6, Purse_balance))
+     and (JC_186:
+         ((JC_184:
           eq_int(select(Purse_balance, this_6),
           add_int(select(Purse_balance@, this_6@), s_0_0)))
-         and (JC_177:
+         and (JC_185:
              not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
              pset_singleton(this_6@)))))) }
 
 parameter Purse_credit_requires :
  this_6:Object pointer ->
   s_0_0:int ->
-   { (JC_168:
-     ((JC_167: ge_int(s_0_0, (0)))
+   { (JC_176:
+     ((JC_175: ge_int(s_0_0, (0)))
      and balance_non_negative(this_6, Purse_balance)))}
    unit reads Object_alloc_table,Purse_balance writes Purse_balance
-   { ((JC_180: balance_non_negative(this_6, Purse_balance))
-     and (JC_178:
-         ((JC_176:
+   { ((JC_188: balance_non_negative(this_6, Purse_balance))
+     and (JC_186:
+         ((JC_184:
           eq_int(select(Purse_balance, this_6),
           add_int(select(Purse_balance@, this_6@), s_0_0)))
-         and (JC_177:
+         and (JC_185:
              not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
              pset_singleton(this_6@)))))) }
 
 parameter Purse_getBalance :
  this_4:Object pointer ->
   { } int reads Object_alloc_table,Purse_balance
-  { ((JC_224: balance_non_negative(this_4, Purse_balance))
-    and (JC_222: eq_int(result, select(Purse_balance, this_4)))) }
+  { ((JC_232: balance_non_negative(this_4, Purse_balance))
+    and (JC_230: eq_int(result, select(Purse_balance, this_4)))) }
 
 parameter Purse_getBalance_requires :
  this_4:Object pointer ->
-  { (JC_217: balance_non_negative(this_4, Purse_balance))} int
+  { (JC_225: balance_non_negative(this_4, Purse_balance))} int
   reads Object_alloc_table,Purse_balance
-  { ((JC_224: balance_non_negative(this_4, Purse_balance))
-    and (JC_222: eq_int(result, select(Purse_balance, this_4)))) }
+  { ((JC_232: balance_non_negative(this_4, Purse_balance))
+    and (JC_230: eq_int(result, select(Purse_balance, this_4)))) }
 
 parameter Purse_withdraw :
  this_5:Object pointer ->
@@ -2633,50 +2684,50 @@ parameter Purse_withdraw :
    { } unit reads Object_alloc_table,Purse_balance
    writes Object_alloc_table,Object_tag_table,Purse_balance
    raises NoCreditException_exc
-   { ((JC_198: balance_non_negative(this_5, Purse_balance))
-     and (JC_196:
-         ((JC_194:
-          ((JC_192: le_int(s_1, select(Purse_balance@, this_5@)))
-          and (JC_193:
+   { ((JC_206: balance_non_negative(this_5, Purse_balance))
+     and (JC_204:
+         ((JC_202:
+          ((JC_200: le_int(s_1, select(Purse_balance@, this_5@)))
+          and (JC_201:
               eq_int(select(Purse_balance, this_5),
               sub_int(select(Purse_balance@, this_5@), s_1)))))
-         and (JC_195:
+         and (JC_203:
              not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
              pset_singleton(this_5@))))))
      | NoCreditException_exc =>
-         (JC_206:
-         ((JC_204:
-          ((JC_203: gt_int(s_1, select(Purse_balance@, this_5@)))
+         (JC_214:
+         ((JC_212:
+          ((JC_211: gt_int(s_1, select(Purse_balance@, this_5@)))
           and balance_non_negative(this_5, Purse_balance)))
-         and (JC_205:
+         and (JC_213:
              not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
              pset_empty)))) }
 
 parameter Purse_withdraw_requires :
  this_5:Object pointer ->
   s_1:int ->
-   { (JC_182:
-     ((JC_181: ge_int(s_1, (0)))
+   { (JC_190:
+     ((JC_189: ge_int(s_1, (0)))
      and balance_non_negative(this_5, Purse_balance)))}
    unit reads Object_alloc_table,Purse_balance
    writes Object_alloc_table,Object_tag_table,Purse_balance
    raises NoCreditException_exc
-   { ((JC_198: balance_non_negative(this_5, Purse_balance))
-     and (JC_196:
-         ((JC_194:
-          ((JC_192: le_int(s_1, select(Purse_balance@, this_5@)))
-          and (JC_193:
+   { ((JC_206: balance_non_negative(this_5, Purse_balance))
+     and (JC_204:
+         ((JC_202:
+          ((JC_200: le_int(s_1, select(Purse_balance@, this_5@)))
+          and (JC_201:
               eq_int(select(Purse_balance, this_5),
               sub_int(select(Purse_balance@, this_5@), s_1)))))
-         and (JC_195:
+         and (JC_203:
              not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
              pset_singleton(this_5@))))))
      | NoCreditException_exc =>
-         (JC_206:
-         ((JC_204:
-          ((JC_203: gt_int(s_1, select(Purse_balance@, this_5@)))
+         (JC_214:
+         ((JC_212:
+          ((JC_211: gt_int(s_1, select(Purse_balance@, this_5@)))
           and balance_non_negative(this_5, Purse_balance)))
-         and (JC_205:
+         and (JC_213:
              not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
              pset_empty)))) }
 
@@ -3088,6 +3139,10 @@ parameter alloc_struct_interface_requires :
           and (alloc_fresh(interface_alloc_table@, result, n)
               and instanceof(interface_tag_table, result, interface_tag)))) }
 
+parameter any_string_0 : tt:unit -> { } Object pointer { true }
+
+parameter any_string_0_requires : tt:unit -> { } Object pointer { true }
+
 parameter cons_Exception :
  this_21:Object pointer -> { } unit reads Object_alloc_table { true }
 
@@ -3129,20 +3184,20 @@ parameter cons_NoCreditException_requires :
 parameter cons_Purse :
  this_7:Object pointer ->
   { } unit reads Object_alloc_table,Purse_balance writes Purse_balance
-  { ((JC_166: balance_non_negative(this_7, Purse_balance))
-    and (JC_164:
-        ((JC_162: eq_int(select(Purse_balance, this_7), (0)))
-        and (JC_163:
+  { ((JC_174: balance_non_negative(this_7, Purse_balance))
+    and (JC_172:
+        ((JC_170: eq_int(select(Purse_balance, this_7), (0)))
+        and (JC_171:
             not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
             pset_singleton(this_7@)))))) }
 
 parameter cons_Purse_requires :
  this_7:Object pointer ->
   { } unit reads Object_alloc_table,Purse_balance writes Purse_balance
-  { ((JC_166: balance_non_negative(this_7, Purse_balance))
-    and (JC_164:
-        ((JC_162: eq_int(select(Purse_balance, this_7), (0)))
-        and (JC_163:
+  { ((JC_174: balance_non_negative(this_7, Purse_balance))
+    and (JC_172:
+        ((JC_170: eq_int(select(Purse_balance, this_7), (0)))
+        and (JC_171:
             not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
             pset_singleton(this_7@)))))) }
 
@@ -3205,22 +3260,22 @@ parameter cons_Throwable_requires :
 parameter non_null_Object :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_10:
+  { (JC_18:
     (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
      else (x_1 = null))) }
 
 parameter non_null_Object_requires :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_10:
+  { (JC_18:
     (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
      else (x_1 = null))) }
 
 let Purse_credit_ensures_default =
  fun (this_6 : Object pointer) (s_0_0 : int) ->
   { (valid_struct_Purse(this_6, (0), (0), Object_alloc_table)
-    and (JC_171:
-        ((JC_170: ge_int(s_0_0, (0)))
+    and (JC_179:
+        ((JC_178: ge_int(s_0_0, (0)))
         and balance_non_negative(this_6, Purse_balance)))) }
   (init:
   try
@@ -3233,19 +3288,19 @@ let Purse_credit_ensures_default =
        (let jessie_<num> = this_6 in
        (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)); jessie_<num> end)) in
      void); (raise Return) end with Return -> void end)
-  { (JC_175:
-    ((JC_173:
+  { (JC_183:
+    ((JC_181:
      eq_int(select(Purse_balance, this_6),
      add_int(select(Purse_balance@, this_6@), s_0_0)))
-    and (JC_174:
+    and (JC_182:
         not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
         pset_singleton(this_6@))))) }
 
 let Purse_credit_safety =
  fun (this_6 : Object pointer) (s_0_0 : int) ->
   { (valid_struct_Purse(this_6, (0), (0), Object_alloc_table)
-    and (JC_171:
-        ((JC_170: ge_int(s_0_0, (0)))
+    and (JC_179:
+        ((JC_178: ge_int(s_0_0, (0)))
         and balance_non_negative(this_6, Purse_balance)))) }
   (init:
   try
@@ -3258,37 +3313,37 @@ let Purse_credit_safety =
        (let jessie_<num> = this_6 in
        (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)); jessie_<num> end)) in
      void); (raise Return) end with Return -> void end)
-  { (JC_179: balance_non_negative(this_6, Purse_balance)) }
+  { (JC_187: balance_non_negative(this_6, Purse_balance)) }
 
 let Purse_getBalance_ensures_default =
  fun (this_4 : Object pointer) ->
   { (valid_struct_Purse(this_4, (0), (0), Object_alloc_table)
-    and (JC_219: balance_non_negative(this_4, Purse_balance))) }
+    and (JC_227: balance_non_negative(this_4, Purse_balance))) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
      (return := (K_18: ((safe_acc_ !Purse_balance) this_4))); (raise Return);
     absurd  end with Return -> !return end))
-  { (JC_221: eq_int(result, select(Purse_balance, this_4))) }
+  { (JC_229: eq_int(result, select(Purse_balance, this_4))) }
 
 let Purse_getBalance_safety =
  fun (this_4 : Object pointer) ->
   { (valid_struct_Purse(this_4, (0), (0), Object_alloc_table)
-    and (JC_219: balance_non_negative(this_4, Purse_balance))) }
+    and (JC_227: balance_non_negative(this_4, Purse_balance))) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
      (return := (K_18: ((safe_acc_ !Purse_balance) this_4))); (raise Return);
     absurd  end with Return -> !return end))
-  { (JC_223: balance_non_negative(this_4, Purse_balance)) }
+  { (JC_231: balance_non_negative(this_4, Purse_balance)) }
 
 let Purse_withdraw_ensures_default =
  fun (this_5 : Object pointer) (s_1 : int) ->
   { (valid_struct_Purse(this_5, (0), (0), Object_alloc_table)
-    and (JC_185:
-        ((JC_184: ge_int(s_1, (0)))
+    and (JC_193:
+        ((JC_192: ge_int(s_1, (0)))
         and balance_non_negative(this_5, Purse_balance)))) }
   (init:
   try
@@ -3303,32 +3358,32 @@ let Purse_withdraw_ensures_default =
       (let jessie_<num> =
       (let java_thrown_exception =
       (let this =
-      (JC_211:
+      (JC_219:
       (((alloc_struct_NoCreditException (1)) Object_alloc_table) Object_tag_table)) in
       (let tt =
       (let jessie_<num> = this in
-      (JC_212: (cons_NoCreditException jessie_<num>))) in this)) in
+      (JC_220: (cons_NoCreditException jessie_<num>))) in this)) in
       begin
         (assert
-        { (JC_213:
+        { (JC_221:
           Non_null_Object(java_thrown_exception, Object_alloc_table)) };
         void); (raise (NoCreditException_exc java_thrown_exception)) end) in
       void)); (raise Return) end with Return -> void end)
-  { (JC_191:
-    ((JC_189:
-     ((JC_187: le_int(s_1, select(Purse_balance@, this_5@)))
-     and (JC_188:
+  { (JC_199:
+    ((JC_197:
+     ((JC_195: le_int(s_1, select(Purse_balance@, this_5@)))
+     and (JC_196:
          eq_int(select(Purse_balance, this_5),
          sub_int(select(Purse_balance@, this_5@), s_1)))))
-    and (JC_190:
+    and (JC_198:
         not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
         pset_singleton(this_5@))))) | NoCreditException_exc => true }
 
 let Purse_withdraw_exsures_amount_too_large =
  fun (this_5 : Object pointer) (s_1 : int) ->
   { (valid_struct_Purse(this_5, (0), (0), Object_alloc_table)
-    and (JC_185:
-        ((JC_184: ge_int(s_1, (0)))
+    and (JC_193:
+        ((JC_192: ge_int(s_1, (0)))
         and balance_non_negative(this_5, Purse_balance)))) }
   (init:
   try
@@ -3343,32 +3398,32 @@ let Purse_withdraw_exsures_amount_too_large =
       (let jessie_<num> =
       (let java_thrown_exception =
       (let this =
-      (JC_214:
+      (JC_222:
       (((alloc_struct_NoCreditException (1)) Object_alloc_table) Object_tag_table)) in
       (let tt =
       (let jessie_<num> = this in
-      (JC_215: (cons_NoCreditException jessie_<num>))) in this)) in
+      (JC_223: (cons_NoCreditException jessie_<num>))) in this)) in
       begin
         [ { } unit reads Object_alloc_table
-          { (JC_216:
+          { (JC_224:
             Non_null_Object(java_thrown_exception, Object_alloc_table)) } ];
        (raise (NoCreditException_exc java_thrown_exception)) end) in void));
     (raise Return) end with Return -> void end)
   { true
     | NoCreditException_exc =>
-        (JC_202:
-        ((JC_200:
-         ((JC_199: gt_int(s_1, select(Purse_balance@, this_5@)))
+        (JC_210:
+        ((JC_208:
+         ((JC_207: gt_int(s_1, select(Purse_balance@, this_5@)))
          and balance_non_negative(this_5, Purse_balance)))
-        and (JC_201:
+        and (JC_209:
             not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
             pset_empty)))) }
 
 let Purse_withdraw_safety =
  fun (this_5 : Object pointer) (s_1 : int) ->
   { (valid_struct_Purse(this_5, (0), (0), Object_alloc_table)
-    and (JC_185:
-        ((JC_184: ge_int(s_1, (0)))
+    and (JC_193:
+        ((JC_192: ge_int(s_1, (0)))
         and balance_non_negative(this_5, Purse_balance)))) }
   (init:
   try
@@ -3384,21 +3439,21 @@ let Purse_withdraw_safety =
       (let java_thrown_exception =
       (let this =
       (let jessie_<num> =
-      (JC_207:
+      (JC_215:
       (((alloc_struct_NoCreditException_requires (1)) Object_alloc_table) Object_tag_table)) in
-      (JC_208:
+      (JC_216:
       (assert { ge_int(offset_max(Object_alloc_table, jessie_<num>), (0)) };
       jessie_<num>))) in
       (let tt =
       (let jessie_<num> = this in
-      (JC_209: (cons_NoCreditException_requires jessie_<num>))) in this)) in
+      (JC_217: (cons_NoCreditException_requires jessie_<num>))) in this)) in
       begin
         [ { } unit reads Object_alloc_table
-          { (JC_210:
+          { (JC_218:
             Non_null_Object(java_thrown_exception, Object_alloc_table)) } ];
        (raise (NoCreditException_exc java_thrown_exception)) end) in void));
     (raise Return) end with Return -> void end)
-  { (JC_197: balance_non_negative(this_5, Purse_balance))
+  { (JC_205: balance_non_negative(this_5, Purse_balance))
     | NoCreditException_exc => true }
 
 let cons_Exception_String_Throwable_ensures_default =
@@ -3407,7 +3462,7 @@ let cons_Exception_String_Throwable_ensures_default =
     and (left_valid_struct_String(message_2, (0), Object_alloc_table)
         and valid_struct_Exception(this_23, (0), (0), Object_alloc_table))) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_135: true) }
+  { (JC_143: true) }
 
 let cons_Exception_String_Throwable_safety =
  fun (this_23 : Object pointer) (message_2 : Object pointer) (cause_2 : Object pointer) ->
@@ -3422,7 +3477,7 @@ let cons_Exception_String_ensures_default =
   { (left_valid_struct_String(message_1, (0), Object_alloc_table)
     and valid_struct_Exception(this_22, (0), (0), Object_alloc_table)) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_127: true) }
+  { (JC_135: true) }
 
 let cons_Exception_String_safety =
  fun (this_22 : Object pointer) (message_1 : Object pointer) ->
@@ -3436,7 +3491,7 @@ let cons_Exception_Throwable_ensures_default =
   { (left_valid_struct_Throwable(cause_3, (0), Object_alloc_table)
     and valid_struct_Exception(this_24, (0), (0), Object_alloc_table)) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_143: true) }
+  { (JC_151: true) }
 
 let cons_Exception_Throwable_safety =
  fun (this_24 : Object pointer) (cause_3 : Object pointer) ->
@@ -3449,7 +3504,7 @@ let cons_Exception_ensures_default =
  fun (this_21 : Object pointer) ->
   { valid_struct_Exception(this_21, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_119: true) }
+  { (JC_127: true) }
 
 let cons_Exception_safety =
  fun (this_21 : Object pointer) ->
@@ -3461,7 +3516,7 @@ let cons_NoCreditException_ensures_default =
  fun (this_2 : Object pointer) ->
   { valid_struct_NoCreditException(this_2, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_151: true) }
+  { (JC_159: true) }
 
 let cons_NoCreditException_safety =
  fun (this_2 : Object pointer) ->
@@ -3486,9 +3541,9 @@ let cons_Purse_ensures_default =
         (let jessie_<num> = this_7 in
         (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)); jessie_<num> end))
      end in void); (raise Return) end with Return -> void end)
-  { (JC_161:
-    ((JC_159: eq_int(select(Purse_balance, this_7), (0)))
-    and (JC_160:
+  { (JC_169:
+    ((JC_167: eq_int(select(Purse_balance, this_7), (0)))
+    and (JC_168:
         not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
         pset_singleton(this_7@))))) }
 
@@ -3509,7 +3564,7 @@ let cons_Purse_safety =
         (let jessie_<num> = this_7 in
         (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)); jessie_<num> end))
      end in void); (raise Return) end with Return -> void end)
-  { (JC_165: balance_non_negative(this_7, Purse_balance)) }
+  { (JC_173: balance_non_negative(this_7, Purse_balance)) }
 
 let cons_Throwable_String_Throwable_ensures_default =
  fun (this_19 : Object pointer) (message_0 : Object pointer) (cause : Object pointer) ->
@@ -3532,7 +3587,7 @@ let cons_Throwable_String_Throwable_ensures_default =
         (let jessie_<num> = this_19 in
         (((safe_upd_ Throwable_cause) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
-  { (JC_31: true) }
+  { (JC_39: true) }
 
 let cons_Throwable_String_Throwable_safety =
  fun (this_19 : Object pointer) (message_0 : Object pointer) (cause : Object pointer) ->
@@ -3576,7 +3631,7 @@ let cons_Throwable_String_ensures_default =
         (let jessie_<num> = this_18 in
         (((safe_upd_ Throwable_cause) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
-  { (JC_23: true) }
+  { (JC_31: true) }
 
 let cons_Throwable_String_safety =
  fun (this_18 : Object pointer) (message : Object pointer) ->
@@ -3619,7 +3674,7 @@ let cons_Throwable_Throwable_ensures_default =
         (let jessie_<num> = this_20 in
         (((safe_upd_ Throwable_cause) jessie_<num>) jessie_<num>)); jessie_<num>
       end) end in void); (raise Return) end with Return -> void end)
-  { (JC_39: true) }
+  { (JC_47: true) }
 
 let cons_Throwable_Throwable_safety =
  fun (this_20 : Object pointer) (cause_0 : Object pointer) ->
@@ -3662,7 +3717,7 @@ let cons_Throwable_ensures_default =
         (let jessie_<num> = this_17 in
         (((safe_upd_ Throwable_cause) jessie_<num>) jessie_<num>)); jessie_<num> end)
      end in void); (raise Return) end with Return -> void end)
-  { (JC_15: true) }
+  { (JC_23: true) }
 
 let cons_Throwable_safety =
  fun (this_17 : Object pointer) ->
@@ -3697,12 +3752,12 @@ why --project [...] why/Purse.why
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po13.why">
-      <location file = "HOME/tests/java/Purse.jc" line = "160" begin = "43" end = "67"/>
+      <location file = "HOME/tests/java/Purse.jc" line = "163" begin = "43" end = "67"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Purse_po14.why">
-      <location file = "why/Purse.why" line = "1089" begin = "16" end = "71"/>
+      <location file = "why/Purse.why" line = "1093" begin = "16" end = "71"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -3734,7 +3789,7 @@ text = "AllocSize"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po8.why">
-      <location file = "HOME/tests/java/Purse.jc" line = "169" begin = "17" end = "55"/>
+      <location file = "HOME/tests/java/Purse.jc" line = "172" begin = "17" end = "55"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -5002,8 +5057,8 @@ goal Purse_withdraw_exsures_amount_too_large_po_2:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result < s_1) ->
@@ -5015,8 +5070,8 @@ goal Purse_withdraw_exsures_amount_too_large_po_2:
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result0, 1) and
      instanceof(Object_tag_table, result0, NoCreditException_tag)))) ->
-  ("JC_216": Non_null_Object(result0, Object_alloc_table0)) ->
-  ("JC_202": ("JC_200": balance_non_negative(this_5, Purse_balance)))
+  ("JC_224": Non_null_Object(result0, Object_alloc_table0)) ->
+  ("JC_210": ("JC_208": balance_non_negative(this_5, Purse_balance)))
 
 ========== file tests/java/why/Purse_po11.why ==========
 goal Purse_withdraw_exsures_amount_too_large_po_3:
@@ -5026,8 +5081,8 @@ goal Purse_withdraw_exsures_amount_too_large_po_3:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result < s_1) ->
@@ -5039,11 +5094,10 @@ goal Purse_withdraw_exsures_amount_too_large_po_3:
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result0, 1) and
      instanceof(Object_tag_table, result0, NoCreditException_tag)))) ->
-  ("JC_216": Non_null_Object(result0, Object_alloc_table0)) ->
-  ("JC_202":
-  ("JC_201":
-  ("JC_201": not_assigns(Object_alloc_table, Purse_balance, Purse_balance,
-  pset_empty))))
+  ("JC_224": Non_null_Object(result0, Object_alloc_table0)) ->
+  ("JC_210":
+  ("JC_209": not_assigns(Object_alloc_table, Purse_balance, Purse_balance,
+  pset_empty)))
 
 ========== file tests/java/why/Purse_po12.why ==========
 goal Purse_withdraw_safety_po_1:
@@ -5053,8 +5107,8 @@ goal Purse_withdraw_safety_po_1:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result >= s_1) ->
@@ -5063,7 +5117,7 @@ goal Purse_withdraw_safety_po_1:
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_5, (result0 - s_1))) ->
-  ("JC_197": balance_non_negative(this_5, Purse_balance0))
+  ("JC_205": balance_non_negative(this_5, Purse_balance0))
 
 ========== file tests/java/why/Purse_po13.why ==========
 goal Purse_withdraw_safety_po_2:
@@ -5073,8 +5127,8 @@ goal Purse_withdraw_safety_po_2:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result < s_1) ->
@@ -5088,8 +5142,8 @@ goal Purse_withdraw_safety_po_3:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result < s_1) ->
@@ -5117,7 +5171,7 @@ goal cons_Purse_ensures_default_po_1:
   forall Purse_balance1:(Object,
   int) memory.
   (Purse_balance1 = store(Purse_balance0, this_7, 0)) ->
-  ("JC_161": ("JC_159": ("JC_159": (select(Purse_balance1, this_7) = 0))))
+  ("JC_169": ("JC_167": (select(Purse_balance1, this_7) = 0)))
 
 ========== file tests/java/why/Purse_po16.why ==========
 goal cons_Purse_ensures_default_po_2:
@@ -5132,10 +5186,9 @@ goal cons_Purse_ensures_default_po_2:
   forall Purse_balance1:(Object,
   int) memory.
   (Purse_balance1 = store(Purse_balance0, this_7, 0)) ->
-  ("JC_161":
-  ("JC_160":
-  ("JC_160": not_assigns(Object_alloc_table, Purse_balance, Purse_balance1,
-  pset_singleton(this_7)))))
+  ("JC_169":
+  ("JC_168": not_assigns(Object_alloc_table, Purse_balance, Purse_balance1,
+  pset_singleton(this_7))))
 
 ========== file tests/java/why/Purse_po17.why ==========
 goal cons_Purse_safety_po_1:
@@ -5150,7 +5203,7 @@ goal cons_Purse_safety_po_1:
   forall Purse_balance1:(Object,
   int) memory.
   (Purse_balance1 = store(Purse_balance0, this_7, 0)) ->
-  ("JC_165": balance_non_negative(this_7, Purse_balance1))
+  ("JC_173": balance_non_negative(this_7, Purse_balance1))
 
 ========== file tests/java/why/Purse_po1.why ==========
 goal Purse_credit_ensures_default_po_1:
@@ -5160,17 +5213,16 @@ goal Purse_credit_ensures_default_po_1:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_6, 0, 0, Object_alloc_table) and
-   ("JC_171":
-   (("JC_170": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
+   ("JC_179":
+   (("JC_178": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_6)) ->
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_6, (result + s_0_0))) ->
-  ("JC_175":
-  ("JC_173":
-  ("JC_173": (select(Purse_balance0, this_6) = (select(Purse_balance,
-  this_6) + s_0_0)))))
+  ("JC_183":
+  ("JC_181": (select(Purse_balance0, this_6) = (select(Purse_balance,
+  this_6) + s_0_0))))
 
 ========== file tests/java/why/Purse_po2.why ==========
 goal Purse_credit_ensures_default_po_2:
@@ -5180,17 +5232,16 @@ goal Purse_credit_ensures_default_po_2:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_6, 0, 0, Object_alloc_table) and
-   ("JC_171":
-   (("JC_170": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
+   ("JC_179":
+   (("JC_178": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_6)) ->
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_6, (result + s_0_0))) ->
-  ("JC_175":
-  ("JC_174":
-  ("JC_174": not_assigns(Object_alloc_table, Purse_balance, Purse_balance0,
-  pset_singleton(this_6)))))
+  ("JC_183":
+  ("JC_182": not_assigns(Object_alloc_table, Purse_balance, Purse_balance0,
+  pset_singleton(this_6))))
 
 ========== file tests/java/why/Purse_po3.why ==========
 goal Purse_credit_safety_po_1:
@@ -5200,14 +5251,14 @@ goal Purse_credit_safety_po_1:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_6, 0, 0, Object_alloc_table) and
-   ("JC_171":
-   (("JC_170": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
+   ("JC_179":
+   (("JC_178": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_6)) ->
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_6, (result + s_0_0))) ->
-  ("JC_179": balance_non_negative(this_6, Purse_balance0))
+  ("JC_187": balance_non_negative(this_6, Purse_balance0))
 
 ========== file tests/java/why/Purse_po4.why ==========
 goal Purse_getBalance_ensures_default_po_1:
@@ -5216,12 +5267,12 @@ goal Purse_getBalance_ensures_default_po_1:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_4, 0, 0, Object_alloc_table) and
-   ("JC_219": balance_non_negative(this_4, Purse_balance))) ->
+   ("JC_227": balance_non_negative(this_4, Purse_balance))) ->
   forall result:int.
   (result = select(Purse_balance, this_4)) ->
   forall return:int.
   (return = result) ->
-  ("JC_221": (return = select(Purse_balance, this_4)))
+  ("JC_229": (return = select(Purse_balance, this_4)))
 
 ========== file tests/java/why/Purse_po5.why ==========
 goal Purse_withdraw_ensures_default_po_1:
@@ -5231,8 +5282,8 @@ goal Purse_withdraw_ensures_default_po_1:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result >= s_1) ->
@@ -5241,8 +5292,7 @@ goal Purse_withdraw_ensures_default_po_1:
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_5, (result0 - s_1))) ->
-  ("JC_191":
-  ("JC_189": ("JC_187": ("JC_187": (s_1 <= select(Purse_balance, this_5))))))
+  ("JC_199": ("JC_197": ("JC_195": (s_1 <= select(Purse_balance, this_5)))))
 
 ========== file tests/java/why/Purse_po6.why ==========
 goal Purse_withdraw_ensures_default_po_2:
@@ -5252,8 +5302,8 @@ goal Purse_withdraw_ensures_default_po_2:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result >= s_1) ->
@@ -5262,11 +5312,10 @@ goal Purse_withdraw_ensures_default_po_2:
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_5, (result0 - s_1))) ->
-  ("JC_191":
-  ("JC_189":
-  ("JC_188":
-  ("JC_188": (select(Purse_balance0, this_5) = (select(Purse_balance,
-  this_5) - s_1))))))
+  ("JC_199":
+  ("JC_197":
+  ("JC_196": (select(Purse_balance0, this_5) = (select(Purse_balance,
+  this_5) - s_1)))))
 
 ========== file tests/java/why/Purse_po7.why ==========
 goal Purse_withdraw_ensures_default_po_3:
@@ -5276,8 +5325,8 @@ goal Purse_withdraw_ensures_default_po_3:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result >= s_1) ->
@@ -5286,10 +5335,9 @@ goal Purse_withdraw_ensures_default_po_3:
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_5, (result0 - s_1))) ->
-  ("JC_191":
-  ("JC_190":
-  ("JC_190": not_assigns(Object_alloc_table, Purse_balance, Purse_balance0,
-  pset_singleton(this_5)))))
+  ("JC_199":
+  ("JC_198": not_assigns(Object_alloc_table, Purse_balance, Purse_balance0,
+  pset_singleton(this_5))))
 
 ========== file tests/java/why/Purse_po8.why ==========
 goal Purse_withdraw_ensures_default_po_4:
@@ -5299,8 +5347,8 @@ goal Purse_withdraw_ensures_default_po_4:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result < s_1) ->
@@ -5312,7 +5360,7 @@ goal Purse_withdraw_ensures_default_po_4:
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result0, 1) and
      instanceof(Object_tag_table, result0, NoCreditException_tag)))) ->
-  ("JC_213": ("JC_213": Non_null_Object(result0, Object_alloc_table0)))
+  ("JC_221": Non_null_Object(result0, Object_alloc_table0))
 
 ========== file tests/java/why/Purse_po9.why ==========
 goal Purse_withdraw_exsures_amount_too_large_po_1:
@@ -5322,8 +5370,8 @@ goal Purse_withdraw_exsures_amount_too_large_po_1:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result < s_1) ->
@@ -5335,9 +5383,8 @@ goal Purse_withdraw_exsures_amount_too_large_po_1:
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result0, 1) and
      instanceof(Object_tag_table, result0, NoCreditException_tag)))) ->
-  ("JC_216": Non_null_Object(result0, Object_alloc_table0)) ->
-  ("JC_202":
-  ("JC_200": ("JC_199": ("JC_199": (s_1 > select(Purse_balance, this_5))))))
+  ("JC_224": Non_null_Object(result0, Object_alloc_table0)) ->
+  ("JC_210": ("JC_208": ("JC_207": (s_1 > select(Purse_balance, this_5)))))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/Purse.why
@@ -6483,7 +6530,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_6))))))))))
 (not_assigns
 Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))))))
 
-;; Purse_withdraw_ensures_default_po_4, File "HOME/tests/java/Purse.jc", line 169, characters 17-55
+;; Purse_withdraw_ensures_default_po_4, File "HOME/tests/java/Purse.jc", line 172, characters 17-55
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6591,7 +6638,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
          (|why__store| Purse_balance this_5 (- result0 s_1)))
 (balance_non_negative this_5 Purse_balance0)))))))))))))
 
-;; Purse_withdraw_safety_po_2, File "HOME/tests/java/Purse.jc", line 160, characters 43-67
+;; Purse_withdraw_safety_po_2, File "HOME/tests/java/Purse.jc", line 163, characters 43-67
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6602,7 +6649,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
 (IMPLIES (EQ result (select Purse_balance this_5))
 (IMPLIES (< result s_1) (>= 1 0)))))))))
 
-;; Purse_withdraw_safety_po_3, File "why/Purse.why", line 1089, characters 16-71
+;; Purse_withdraw_safety_po_3, File "why/Purse.why", line 1093, characters 16-71
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -7876,17 +7923,16 @@ goal Purse_credit_ensures_default_po_1:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_6, 0, 0, Object_alloc_table) and
-   ("JC_171":
-   (("JC_170": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
+   ("JC_179":
+   (("JC_178": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_6)) ->
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_6, (result + s_0_0))) ->
-  ("JC_175":
-  ("JC_173":
-  ("JC_173": (select(Purse_balance0, this_6) = (select(Purse_balance,
-  this_6) + s_0_0)))))
+  ("JC_183":
+  ("JC_181": (select(Purse_balance0, this_6) = (select(Purse_balance,
+  this_6) + s_0_0))))
 
 goal Purse_credit_ensures_default_po_2:
   forall this_6:Object pointer.
@@ -7895,17 +7941,16 @@ goal Purse_credit_ensures_default_po_2:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_6, 0, 0, Object_alloc_table) and
-   ("JC_171":
-   (("JC_170": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
+   ("JC_179":
+   (("JC_178": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_6)) ->
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_6, (result + s_0_0))) ->
-  ("JC_175":
-  ("JC_174":
-  ("JC_174": not_assigns(Object_alloc_table, Purse_balance, Purse_balance0,
-  pset_singleton(this_6)))))
+  ("JC_183":
+  ("JC_182": not_assigns(Object_alloc_table, Purse_balance, Purse_balance0,
+  pset_singleton(this_6))))
 
 goal Purse_credit_safety_po_1:
   forall this_6:Object pointer.
@@ -7914,14 +7959,14 @@ goal Purse_credit_safety_po_1:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_6, 0, 0, Object_alloc_table) and
-   ("JC_171":
-   (("JC_170": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
+   ("JC_179":
+   (("JC_178": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_6)) ->
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_6, (result + s_0_0))) ->
-  ("JC_179": balance_non_negative(this_6, Purse_balance0))
+  ("JC_187": balance_non_negative(this_6, Purse_balance0))
 
 goal Purse_getBalance_ensures_default_po_1:
   forall this_4:Object pointer.
@@ -7929,12 +7974,12 @@ goal Purse_getBalance_ensures_default_po_1:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_4, 0, 0, Object_alloc_table) and
-   ("JC_219": balance_non_negative(this_4, Purse_balance))) ->
+   ("JC_227": balance_non_negative(this_4, Purse_balance))) ->
   forall result:int.
   (result = select(Purse_balance, this_4)) ->
   forall return:int.
   (return = result) ->
-  ("JC_221": (return = select(Purse_balance, this_4)))
+  ("JC_229": (return = select(Purse_balance, this_4)))
 
 goal Purse_withdraw_ensures_default_po_1:
   forall this_5:Object pointer.
@@ -7943,8 +7988,8 @@ goal Purse_withdraw_ensures_default_po_1:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result >= s_1) ->
@@ -7953,8 +7998,7 @@ goal Purse_withdraw_ensures_default_po_1:
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_5, (result0 - s_1))) ->
-  ("JC_191":
-  ("JC_189": ("JC_187": ("JC_187": (s_1 <= select(Purse_balance, this_5))))))
+  ("JC_199": ("JC_197": ("JC_195": (s_1 <= select(Purse_balance, this_5)))))
 
 goal Purse_withdraw_ensures_default_po_2:
   forall this_5:Object pointer.
@@ -7963,8 +8007,8 @@ goal Purse_withdraw_ensures_default_po_2:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result >= s_1) ->
@@ -7973,11 +8017,10 @@ goal Purse_withdraw_ensures_default_po_2:
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_5, (result0 - s_1))) ->
-  ("JC_191":
-  ("JC_189":
-  ("JC_188":
-  ("JC_188": (select(Purse_balance0, this_5) = (select(Purse_balance,
-  this_5) - s_1))))))
+  ("JC_199":
+  ("JC_197":
+  ("JC_196": (select(Purse_balance0, this_5) = (select(Purse_balance,
+  this_5) - s_1)))))
 
 goal Purse_withdraw_ensures_default_po_3:
   forall this_5:Object pointer.
@@ -7986,8 +8029,8 @@ goal Purse_withdraw_ensures_default_po_3:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result >= s_1) ->
@@ -7996,10 +8039,9 @@ goal Purse_withdraw_ensures_default_po_3:
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_5, (result0 - s_1))) ->
-  ("JC_191":
-  ("JC_190":
-  ("JC_190": not_assigns(Object_alloc_table, Purse_balance, Purse_balance0,
-  pset_singleton(this_5)))))
+  ("JC_199":
+  ("JC_198": not_assigns(Object_alloc_table, Purse_balance, Purse_balance0,
+  pset_singleton(this_5))))
 
 goal Purse_withdraw_ensures_default_po_4:
   forall this_5:Object pointer.
@@ -8008,8 +8050,8 @@ goal Purse_withdraw_ensures_default_po_4:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result < s_1) ->
@@ -8021,7 +8063,7 @@ goal Purse_withdraw_ensures_default_po_4:
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result0, 1) and
      instanceof(Object_tag_table, result0, NoCreditException_tag)))) ->
-  ("JC_213": ("JC_213": Non_null_Object(result0, Object_alloc_table0)))
+  ("JC_221": Non_null_Object(result0, Object_alloc_table0))
 
 goal Purse_withdraw_exsures_amount_too_large_po_1:
   forall this_5:Object pointer.
@@ -8030,8 +8072,8 @@ goal Purse_withdraw_exsures_amount_too_large_po_1:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result < s_1) ->
@@ -8043,9 +8085,8 @@ goal Purse_withdraw_exsures_amount_too_large_po_1:
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result0, 1) and
      instanceof(Object_tag_table, result0, NoCreditException_tag)))) ->
-  ("JC_216": Non_null_Object(result0, Object_alloc_table0)) ->
-  ("JC_202":
-  ("JC_200": ("JC_199": ("JC_199": (s_1 > select(Purse_balance, this_5))))))
+  ("JC_224": Non_null_Object(result0, Object_alloc_table0)) ->
+  ("JC_210": ("JC_208": ("JC_207": (s_1 > select(Purse_balance, this_5)))))
 
 goal Purse_withdraw_exsures_amount_too_large_po_2:
   forall this_5:Object pointer.
@@ -8054,8 +8095,8 @@ goal Purse_withdraw_exsures_amount_too_large_po_2:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result < s_1) ->
@@ -8067,8 +8108,8 @@ goal Purse_withdraw_exsures_amount_too_large_po_2:
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result0, 1) and
      instanceof(Object_tag_table, result0, NoCreditException_tag)))) ->
-  ("JC_216": Non_null_Object(result0, Object_alloc_table0)) ->
-  ("JC_202": ("JC_200": balance_non_negative(this_5, Purse_balance)))
+  ("JC_224": Non_null_Object(result0, Object_alloc_table0)) ->
+  ("JC_210": ("JC_208": balance_non_negative(this_5, Purse_balance)))
 
 goal Purse_withdraw_exsures_amount_too_large_po_3:
   forall this_5:Object pointer.
@@ -8077,8 +8118,8 @@ goal Purse_withdraw_exsures_amount_too_large_po_3:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result < s_1) ->
@@ -8090,11 +8131,10 @@ goal Purse_withdraw_exsures_amount_too_large_po_3:
    (alloc_extends(Object_alloc_table, Object_alloc_table0) and
     (alloc_fresh(Object_alloc_table, result0, 1) and
      instanceof(Object_tag_table, result0, NoCreditException_tag)))) ->
-  ("JC_216": Non_null_Object(result0, Object_alloc_table0)) ->
-  ("JC_202":
-  ("JC_201":
-  ("JC_201": not_assigns(Object_alloc_table, Purse_balance, Purse_balance,
-  pset_empty))))
+  ("JC_224": Non_null_Object(result0, Object_alloc_table0)) ->
+  ("JC_210":
+  ("JC_209": not_assigns(Object_alloc_table, Purse_balance, Purse_balance,
+  pset_empty)))
 
 goal Purse_withdraw_safety_po_1:
   forall this_5:Object pointer.
@@ -8103,8 +8143,8 @@ goal Purse_withdraw_safety_po_1:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result >= s_1) ->
@@ -8113,7 +8153,7 @@ goal Purse_withdraw_safety_po_1:
   forall Purse_balance0:(Object,
   int) memory.
   (Purse_balance0 = store(Purse_balance, this_5, (result0 - s_1))) ->
-  ("JC_197": balance_non_negative(this_5, Purse_balance0))
+  ("JC_205": balance_non_negative(this_5, Purse_balance0))
 
 goal Purse_withdraw_safety_po_2:
   forall this_5:Object pointer.
@@ -8122,8 +8162,8 @@ goal Purse_withdraw_safety_po_2:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result < s_1) ->
@@ -8136,8 +8176,8 @@ goal Purse_withdraw_safety_po_3:
   forall Purse_balance:(Object,
   int) memory.
   (valid_struct_Purse(this_5, 0, 0, Object_alloc_table) and
-   ("JC_185":
-   (("JC_184": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
+   ("JC_193":
+   (("JC_192": (s_1 >= 0)) and balance_non_negative(this_5, Purse_balance)))) ->
   forall result:int.
   (result = select(Purse_balance, this_5)) ->
   (result < s_1) ->
@@ -8164,7 +8204,7 @@ goal cons_Purse_ensures_default_po_1:
   forall Purse_balance1:(Object,
   int) memory.
   (Purse_balance1 = store(Purse_balance0, this_7, 0)) ->
-  ("JC_161": ("JC_159": ("JC_159": (select(Purse_balance1, this_7) = 0))))
+  ("JC_169": ("JC_167": (select(Purse_balance1, this_7) = 0)))
 
 goal cons_Purse_ensures_default_po_2:
   forall this_7:Object pointer.
@@ -8178,10 +8218,9 @@ goal cons_Purse_ensures_default_po_2:
   forall Purse_balance1:(Object,
   int) memory.
   (Purse_balance1 = store(Purse_balance0, this_7, 0)) ->
-  ("JC_161":
-  ("JC_160":
-  ("JC_160": not_assigns(Object_alloc_table, Purse_balance, Purse_balance1,
-  pset_singleton(this_7)))))
+  ("JC_169":
+  ("JC_168": not_assigns(Object_alloc_table, Purse_balance, Purse_balance1,
+  pset_singleton(this_7))))
 
 goal cons_Purse_safety_po_1:
   forall this_7:Object pointer.
@@ -8195,7 +8234,7 @@ goal cons_Purse_safety_po_1:
   forall Purse_balance1:(Object,
   int) memory.
   (Purse_balance1 = store(Purse_balance0, this_7, 0)) ->
-  ("JC_165": balance_non_negative(this_7, Purse_balance1))
+  ("JC_173": balance_non_negative(this_7, Purse_balance1))
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations

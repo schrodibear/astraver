@@ -732,27 +732,15 @@ let rec split lvl ctx = function
       let ctx',concl',pr_intros = intros ctx concl in
       let ol,prl = split (succ lvl) ctx' concl' in
       ol, (fun pl -> pr_intros (prl pl))
-  | Pnamed (n, p1) as concl ->
-(*
-      begin
-	match n with
-	  | Internal i -> Format.eprintf "splitting on internal name %d@." i
-	  | User n -> Format.eprintf "splitting on user name %s@." n
-      end;
-*)
+  | Pnamed (n, p1) as _concl ->
       begin match split lvl ctx p1 with
-	| [_],_ -> [ctx,Pnamed(n,concl)], (function [pr] -> pr | _ -> assert false)
+(*
+	| [_],_ -> 
+            [ctx,Pnamed(n,concl)], 
+            (function [pr] -> pr | _ -> assert false)
+*)
 	| gl,v -> 
-(*
-	    begin
-	      match n with
-		| Internal _ -> gl,v
-		| _ -> 
-*)
 	List.map (fun (ctx,c) -> ctx, Pnamed(n,c)) gl, v
-(*
-	    end
-*)
       end
   | concl -> 
       [ctx,concl], (function [pr] -> pr | _ -> assert false)
@@ -894,12 +882,18 @@ let vcg_from_wp _loc ids name beh w =
   let cpt = ref 0 in
   let push_one (ctx, concl) = 
     let formula_userlab, raw_explain = explain_for_pred None None concl in	
-    let kind,loc =  Util.cook_explanation formula_userlab raw_explain in
+    let kind,loc, lab =  Util.cook_explanation formula_userlab raw_explain in
+(*
+    if formula_userlab = None then
+       Format.printf "formula_userlab unset: %s@." name;
+*)
     let explain = (*Logic_decl.ExplVC*)
       { Logic_decl.lemma_or_fun_name = name ;
 	Logic_decl.behavior = beh;
 	Logic_decl.vc_loc = loc ;
-	Logic_decl.vc_kind = kind }
+        Logic_decl.vc_kind = kind ;
+        Logic_decl.vc_label = lab;
+      }
     in
     try
       discharge loc ctx concl
@@ -910,7 +904,7 @@ let vcg_from_wp _loc ids name beh w =
       let sq = (ctx', concl) in
       log loc sq (Some id);
       (*Format.eprintf "Vcg.push_one: %a@." Loc.report_position loc;*)
-      po := (loc, explain, id, sq) :: !po;
+      po := (loc, false, explain, id, sq) :: !po;
       Lemma (id, hyps_names ctx')
     end
   in

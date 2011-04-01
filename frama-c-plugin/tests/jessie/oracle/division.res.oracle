@@ -112,34 +112,6 @@ axiom char_P_tags :
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
 
-goal distr_left :
- (forall x_0_0:int.
-  (forall y_0_0:int.
-   (forall z_0:int.
-    eq_int(mul_int(add_int(x_0_0, y_0_0), z_0),
-    add_int(mul_int(x_0_0, z_0), mul_int(y_0_0, z_0))))))
-
-axiom distr_left_as_axiom :
- (forall x_0_0:int.
-  (forall y_0_0:int.
-   (forall z_0:int.
-    eq_int(mul_int(add_int(x_0_0, y_0_0), z_0),
-    add_int(mul_int(x_0_0, z_0), mul_int(y_0_0, z_0))))))
-
-goal distr_right :
- (forall x_1:int.
-  (forall y_0:int.
-   (forall z:int.
-    eq_int(mul_int(x_1, add_int(y_0, z)),
-    add_int(mul_int(x_1, y_0), mul_int(x_1, z))))))
-
-axiom distr_right_as_axiom :
- (forall x_1:int.
-  (forall y_0:int.
-   (forall z:int.
-    eq_int(mul_int(x_1, add_int(y_0, z)),
-    add_int(mul_int(x_1, y_0), mul_int(x_1, z))))))
-
 logic integer_of_int32: int32 -> int
 
 predicate eq_int32(x:int32, y:int32) =
@@ -261,6 +233,20 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma distr_right :
+ (forall x_1:int.
+  (forall y_0:int.
+   (forall z:int.
+    eq_int(mul_int(x_1, add_int(y_0, z)),
+    add_int(mul_int(x_1, y_0), mul_int(x_1, z))))))
+
+lemma distr_left :
+ (forall x_0_0:int.
+  (forall y_0_0:int.
+   (forall z_0:int.
+    eq_int(mul_int(add_int(x_0_0, y_0_0), z_0),
+    add_int(mul_int(x_0_0, z_0), mul_int(y_0_0, z_0))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -519,17 +505,17 @@ let division_safety =
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C division.jessie --quiet -f division.makefile project
 why --project [...] why/division.why
 <project name="division" context="why/division_ctx.why">
-  <lemma name="distr_left">
+  <lemma name="distr_right">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/division_po1.why">
-      <location file = "PPCHOME/tests/jessie/division.jessie/division.jc" line = "34" begin = "0" end = "152"/>
+      <location file = "PPCHOME/tests/jessie/division.jessie/division.jc" line = "28" begin = "0" end = "133"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <lemma name="distr_right">
+  <lemma name="distr_left">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/division_po2.why">
-      <location file = "PPCHOME/tests/jessie/division.jessie/division.jc" line = "28" begin = "0" end = "133"/>
+      <location file = "PPCHOME/tests/jessie/division.jessie/division.jc" line = "34" begin = "0" end = "152"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -563,11 +549,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/division_po12.why">
-      <location file = "why/division.why" line = "401" begin = "41" end = "70"/>
+      <location file = "why/division.why" line = "387" begin = "41" end = "70"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/division_po13.why">
-      <location file = "why/division.why" line = "401" begin = "41" end = "70"/>
+      <location file = "why/division.why" line = "387" begin = "41" end = "70"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1550,17 +1536,6 @@ axiom char_P_tags:
   (forall x:char_P pointer.
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
-
-axiom distr_left_as_axiom:
-  (forall x_0_0:int.
-    (forall y_0_0:int.
-      (forall z_0:int.
-        (((x_0_0 + y_0_0) * z_0) = ((x_0_0 * z_0) + (y_0_0 * z_0))))))
-
-axiom distr_right_as_axiom:
-  (forall x_1:int.
-    (forall y_0:int.
-      (forall z:int. ((x_1 * (y_0 + z)) = ((x_1 * y_0) + (x_1 * z))))))
 
 logic integer_of_int32 : int32 -> int
 

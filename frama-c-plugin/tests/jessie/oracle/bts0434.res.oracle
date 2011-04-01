@@ -81,20 +81,6 @@ axiom _cell_tags :
   (forall _cell_tag_table:_cell tag_table.
    instanceof(_cell_tag_table, x, _cell_tag)))
 
-logic isList: _cell pointer, _cell pointer,
- (_cell, _cell pointer) memory -> bool
-
-axiom a2 :
- (forall _cell_nxt_f_2_at_L:(_cell, _cell pointer) memory.
-  (forall b_0:_cell pointer.
-   (forall f_0:_cell pointer.
-    (eq_bool(isList(b_0, f_0, _cell_nxt_f_2_at_L), true)
-    <-> ((f_0 = null)
-        or (same_block(f_0, b_0)
-           and eq_bool(isList(b_0, select(_cell_nxt_f_2_at_L, f_0),
-                       _cell_nxt_f_2_at_L),
-               true)))))))
-
 logic char_P_tag:  -> char_P tag_id
 
 axiom char_P_int : (int_of_tag(char_P_tag) = (1))
@@ -127,6 +113,9 @@ axiom int8_coerce :
 axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
+
+logic isList: _cell pointer, _cell pointer,
+ (_cell, _cell pointer) memory -> bool
 
 predicate left_valid_struct__cell(p:_cell pointer, a:int,
  _cell_alloc_table:_cell alloc_table) =
@@ -252,6 +241,17 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom a2 :
+ (forall _cell_nxt_f_2_at_L:(_cell, _cell pointer) memory.
+  (forall b_0:_cell pointer.
+   (forall f_0:_cell pointer.
+    (eq_bool(isList(b_0, f_0, _cell_nxt_f_2_at_L), true)
+    <-> ((f_0 = null)
+        or (same_block(f_0, b_0)
+           and eq_bool(isList(b_0, select(_cell_nxt_f_2_at_L, f_0),
+                       _cell_nxt_f_2_at_L),
+               true)))))))
 
 parameter _cell_alloc_table : _cell alloc_table ref
 
@@ -1358,18 +1358,6 @@ axiom _cell_tags:
     (forall _cell_tag_table:_cell tag_table. instanceof(_cell_tag_table, x,
       _cell_tag)))
 
-logic isList : _cell pointer, _cell pointer, (_cell,
-_cell pointer) memory -> bool
-
-axiom a2:
-  (forall _cell_nxt_f_2_at_L:(_cell, _cell pointer) memory.
-    (forall b_0:_cell pointer.
-      (forall f_0:_cell pointer.
-        ((isList(b_0, f_0, _cell_nxt_f_2_at_L) = true) <->
-         ((f_0 = null) or
-          (same_block(f_0, b_0) and (isList(b_0, select(_cell_nxt_f_2_at_L,
-           f_0), _cell_nxt_f_2_at_L) = true)))))))
-
 logic char_P_tag : char_P tag_id
 
 axiom char_P_int: (int_of_tag(char_P_tag) = 1)
@@ -1402,6 +1390,9 @@ axiom int8_coerce:
 axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
+
+logic isList : _cell pointer, _cell pointer, (_cell,
+_cell pointer) memory -> bool
 
 predicate left_valid_struct__cell(p: _cell pointer, a: int,
   _cell_alloc_table: _cell alloc_table) = (offset_min(_cell_alloc_table,
@@ -1529,4 +1520,13 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom a2:
+  (forall _cell_nxt_f_2_at_L:(_cell, _cell pointer) memory.
+    (forall b_0:_cell pointer.
+      (forall f_0:_cell pointer.
+        ((isList(b_0, f_0, _cell_nxt_f_2_at_L) = true) <->
+         ((f_0 = null) or
+          (same_block(f_0, b_0) and (isList(b_0, select(_cell_nxt_f_2_at_L,
+           f_0), _cell_nxt_f_2_at_L) = true)))))))
 

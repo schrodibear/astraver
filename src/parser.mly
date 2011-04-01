@@ -115,7 +115,7 @@
 %token BIGARROW BOOL CHECK COLON COLONEQUAL COMMA DO DONE DOT ELSE END EOF EQUAL
 %token EXCEPTION EXISTS EXTERNAL FALSE FOR FORALL FPI FUN FUNCTION GE GOAL GT
 %token IF IN INCLUDE INDUCTIVE INT INVARIANT
-%token LE LEFTB LEFTBLEFTB LEFTPAR LEFTSQ LET LOGIC LRARROW LT MATCH MINUS
+%token LE LEMMA LEFTB LEFTBLEFTB LEFTPAR LEFTSQ LET LOGIC LRARROW LT MATCH MINUS
 %token NOT NOTEQ OF OR PARAMETER PERCENT PLUS PREDICATE PROP 
 %token QUOTE RAISE RAISES READS REAL REC REF RETURNS RIGHTB RIGHTBRIGHTB
 %token RIGHTPAR RIGHTSQ 
@@ -194,8 +194,6 @@ decl:
    { Parameter (loc_i 3, $1, $3, $5) }
 | external_ LOGIC list1_ident_sep_comma COLON logic_type
    { Logic (loc_i 3, $1, $3, $5) }
-| AXIOM ident COLON lexpr
-   { Axiom (loc (), $2, $4) }
 | PREDICATE ident LEFTPAR list0_logic_binder_sep_comma RIGHTPAR EQUAL lexpr
    { Predicate_def (loc (), $2, $4, $7) }
 | INDUCTIVE ident COLON logic_type inddefn
@@ -204,7 +202,11 @@ decl:
   primitive_type EQUAL lexpr
    { Function_def (loc (), $2, $4, $7, $9) }
 | GOAL ident COLON lexpr
-   { Goal (loc (), $2, $4) }
+   { Goal (loc (), KGoal, $2, $4) }
+| AXIOM ident COLON lexpr
+   { Goal (loc (), KAxiom, $2, $4) }
+| LEMMA ident COLON lexpr
+   { Goal (loc (), KLemma, $2, $4) }
 | EXTERNAL TYPE typedecl
    { let loc, vl, id = $3 in TypeDecl (loc, true, vl, id) }
 | TYPE typedecl typedefn

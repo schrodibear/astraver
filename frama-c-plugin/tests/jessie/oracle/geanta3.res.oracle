@@ -248,11 +248,6 @@ predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-axiom status_initial_ok :
- (forall i_0:int.
-  eq_int(integer_of___anonenum_RESULTAT_1(status_initial(i_0)),
-  integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0)))))
-
 predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
@@ -346,6 +341,11 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom status_initial_ok :
+ (forall i_0:int.
+  eq_int(integer_of___anonenum_RESULTAT_1(status_initial(i_0)),
+  integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0)))))
 
 parameter __anonenum_RESULTAT_1_of_integer_ :
  x:int ->
@@ -1928,10 +1928,6 @@ predicate right_valid_struct_void_P(p: void_P pointer, b: int,
   void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
   p) >= b)
 
-axiom status_initial_ok:
-  (forall i_0:int.
-    (integer_of___anonenum_RESULTAT_1(status_initial(i_0)) = integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer(0))))
-
 predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =
   ((offset_min(char_P_alloc_table, p) = a) and
@@ -2025,4 +2021,8 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom status_initial_ok:
+  (forall i_0:int.
+    (integer_of___anonenum_RESULTAT_1(status_initial(i_0)) = integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer(0))))
 

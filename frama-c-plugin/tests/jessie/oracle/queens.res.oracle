@@ -504,32 +504,13 @@ exception Loop_exit_exc of unit
 
 logic N:  -> int
 
-axiom N_positive : gt_int(N, (0))
-
 exception Return_label_exc of unit
 
 logic add: int, int_set -> int_set
 
-logic in_: int, int_set -> prop
-
-axiom add_def :
- (forall s_3:int_set.
-  (forall x_1_0:int.
-   (forall i_2:int.
-    (in_(i_2, add(x_1_0, s_3)) <-> (eq_int(i_2, x_1_0) or in_(i_2, s_3))))))
-
 logic below: int -> int_set
 
 logic card: int_set -> int
-
-axiom below_card : (forall n_1:int. eq_int(card(below(n_1)), n_1))
-
-axiom below_def :
- (forall n_0_0:int.
-  (forall i_11:int.
-   (in_(i_11, below(n_0_0)) <-> (le_int((0), i_11) and lt_int(i_11, n_0_0)))))
-
-axiom card_nonneg : (forall s_1_0:int_set. ge_int(card(s_1_0), (0)))
 
 logic char_P_tag:  -> char_P tag_id
 
@@ -552,69 +533,7 @@ logic col:  -> int_P pointer
 
 logic diff: int_set, int_set -> int_set
 
-axiom diff_def :
- (forall a_1_0:int_set.
-  (forall b_1_0:int_set.
-   (forall i_1:int.
-    (in_(i_1, diff(a_1_0, b_1_0))
-    <-> (in_(i_1, a_1_0) and (not in_(i_1, b_1_0)))))))
-
-logic sol:  -> int_xP pointer
-
-goal dont_bother_me_I_am_a_ghost_1 :
- (forall int_xP_alloc_table_at_L:int_xP alloc_table.
-  (forall i_13:int.
-   (le_int(offset_min(int_xP_alloc_table_at_L, sol), i_13)
-   and ge_int(offset_max(int_xP_alloc_table_at_L, sol), i_13))))
-
-axiom dont_bother_me_I_am_a_ghost_1_as_axiom :
- (forall int_xP_alloc_table_at_L:int_xP alloc_table.
-  (forall i_13:int.
-   (le_int(offset_min(int_xP_alloc_table_at_L, sol), i_13)
-   and ge_int(offset_max(int_xP_alloc_table_at_L, sol), i_13))))
-
-goal dont_bother_me_I_am_a_ghost_2 :
- (forall int_P_alloc_table_at_L:int_P alloc_table.
-  (forall int_xP_int_xM_at_L:(int_xP, int_P pointer) memory.
-   (forall i_14:int.
-    (forall j_0:int.
-     (le_int(offset_min(int_P_alloc_table_at_L,
-             select(int_xP_int_xM_at_L, shift(sol, i_14))),
-      j_0)
-     and ge_int(offset_max(int_P_alloc_table_at_L,
-                select(int_xP_int_xM_at_L, shift(sol, i_14))),
-         j_0))))))
-
-axiom dont_bother_me_I_am_a_ghost_2_as_axiom :
- (forall int_P_alloc_table_at_L:int_P alloc_table.
-  (forall int_xP_int_xM_at_L:(int_xP, int_P pointer) memory.
-   (forall i_14:int.
-    (forall j_0:int.
-     (le_int(offset_min(int_P_alloc_table_at_L,
-             select(int_xP_int_xM_at_L, shift(sol, i_14))),
-      j_0)
-     and ge_int(offset_max(int_P_alloc_table_at_L,
-                select(int_xP_int_xM_at_L, shift(sol, i_14))),
-         j_0))))))
-
-goal dont_bother_me_I_am_a_ghost_3 :
- (forall int_P_alloc_table_at_L:int_P alloc_table.
-  (forall i_15:int.
-   (le_int(offset_min(int_P_alloc_table_at_L, col), i_15)
-   and ge_int(offset_max(int_P_alloc_table_at_L, col), i_15))))
-
-axiom dont_bother_me_I_am_a_ghost_3_as_axiom :
- (forall int_P_alloc_table_at_L:int_P alloc_table.
-  (forall i_15:int.
-   (le_int(offset_min(int_P_alloc_table_at_L, col), i_15)
-   and ge_int(offset_max(int_P_alloc_table_at_L, col), i_15))))
-
 logic empty:  -> int_set
-
-axiom empty_card :
- (forall s_2:int_set. (eq_int(card(s_2), (0)) <-> (s_2 = empty)))
-
-axiom empty_def : (forall i_0:int. (not in_(i_0, empty)))
 
 predicate eq_prefix(t:int_P pointer, u:int_P pointer, i_12:int,
  int_P_int_M_at_L:(int_P, int) memory) =
@@ -626,6 +545,8 @@ predicate eq_prefix(t:int_P pointer, u:int_P pointer, i_12:int,
 predicate eq_sol(t_0:int_P pointer, u_0:int_P pointer,
  int_P_int_M_at_L:(int_P, int) memory) =
  eq_prefix(t_0, u_0, N, int_P_int_M_at_L)
+
+logic in_: int, int_set -> prop
 
 predicate included(a:int_set, b:int_set) =
  (forall i:int. (in_(i, a) -> in_(i, b)))
@@ -665,52 +586,6 @@ axiom int_xP_tags :
 
 logic iset: int -> int_set
 
-logic singleton: int -> int_set
-
-axiom iset_c_add :
- (forall x_9:int.
-  (forall a_5:int.
-   (forall b_4:int.
-    ((iset(b_4) = singleton(x_9)) ->
-     ((not in_(x_9, iset(a_5))) ->
-      (iset(add_int(a_5, b_4)) = add(x_9, iset(a_5))))))))
-
-axiom iset_c_below :
- (forall n_2:int. (iset(bw_compl(lsl(bw_compl((0)), n_2))) = below(n_2)))
-
-axiom iset_c_diff :
- (forall a_4:int.
-  (forall b_3:int.
-   (iset(bw_and(a_4, bw_compl(b_3))) = diff(iset(a_4), iset(b_3)))))
-
-logic min_elt: int_set -> int
-
-axiom iset_c_min_elt :
- (forall x_8:int.
-  (neq_int(x_8, (0)) ->
-   (iset(bw_and(x_8, neg_int(x_8))) = singleton(min_elt(iset(x_8))))))
-
-goal iset_c_min_elt_help :
- (forall x_10:int.
-  (neq_int(x_10, (0)) <-> neq_int(bw_and(x_10, neg_int(x_10)), (0))))
-
-axiom iset_c_min_elt_help_as_axiom :
- (forall x_10:int.
-  (neq_int(x_10, (0)) <-> neq_int(bw_and(x_10, neg_int(x_10)), (0))))
-
-logic remove: int, int_set -> int_set
-
-axiom iset_c_remove :
- (forall x_7:int.
-  (forall a_3:int.
-   (forall b_2:int.
-    ((iset(b_2) = singleton(x_7)) ->
-     (in_(x_7, iset(a_3)) ->
-      (iset(sub_int(a_3, b_2)) = remove(x_7, iset(a_3))))))))
-
-axiom iset_c_zero :
- (forall x_6:int. ((iset(x_6) = empty) <-> eq_int(x_6, (0))))
-
 predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
@@ -736,11 +611,7 @@ predicate lt_sol(s1_1:int_P pointer, s2_1:int_P pointer,
           and lt_int(select(int_P_int_M_at_L, shift(s1_1, i_17)),
               select(int_P_int_M_at_L, shift(s2_1, i_17)))))))
 
-axiom min_elt_def :
- (forall s_8:int_set.
-  (gt_int(card(s_8), (0)) ->
-   (in_(min_elt(s_8), s_8)
-   and (forall i_5:int. (in_(i_5, s_8) -> le_int(min_elt(s_8), i_5))))))
+logic min_elt: int_set -> int
 
 predicate partial_solution(k_0:int, s_15:int_P pointer,
  int_P_int_M_at_L:(int_P, int) memory) =
@@ -760,24 +631,6 @@ predicate partial_solution(k_0:int, s_15:int_P pointer,
                              select(int_P_int_M_at_L, shift(s_15, j_1))),
                      sub_int(j_1, i_16))))))))))
 
-goal partial_solution_eq_prefix :
- (forall int_P_int_M_at_L:(int_P, int) memory.
-  (forall t_1:int_P pointer.
-   (forall u_1:int_P pointer.
-    (forall k_1_0:int.
-     (partial_solution(k_1_0, t_1, int_P_int_M_at_L) ->
-      (eq_prefix(t_1, u_1, k_1_0, int_P_int_M_at_L) ->
-       partial_solution(k_1_0, u_1, int_P_int_M_at_L)))))))
-
-axiom partial_solution_eq_prefix_as_axiom :
- (forall int_P_int_M_at_L:(int_P, int) memory.
-  (forall t_1:int_P pointer.
-   (forall u_1:int_P pointer.
-    (forall k_1_0:int.
-     (partial_solution(k_1_0, t_1, int_P_int_M_at_L) ->
-      (eq_prefix(t_1, u_1, k_1_0, int_P_int_M_at_L) ->
-       partial_solution(k_1_0, u_1, int_P_int_M_at_L)))))))
-
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -794,26 +647,7 @@ axiom pointer_addr_of_void_P_of_pointer_address :
 
 logic pred: int_set -> int_set
 
-axiom pred_def_1 :
- (forall s_13:int_set.
-  (forall i_9:int.
-   (ge_int(i_9, (1)) ->
-    (in_(i_9, s_13) -> in_(sub_int(i_9, (1)), pred(s_13))))))
-
-axiom pred_def_2 :
- (forall s_14:int_set.
-  (forall i_10:int. (in_(i_10, pred(s_14)) -> in_(add_int(i_10, (1)), s_14))))
-
-axiom remove_card :
- (forall s_6:int_set.
-  (forall i_4:int.
-   (in_(i_4, s_6) -> eq_int(card(remove(i_4, s_6)), sub_int(card(s_6), (1))))))
-
-axiom remove_def :
- (forall s_5:int_set.
-  (forall x_3:int.
-   (forall i_3:int.
-    (in_(i_3, remove(x_3, s_5)) <-> (in_(i_3, s_5) and neq_int(i_3, x_3))))))
+logic remove: int, int_set -> int_set
 
 predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -831,9 +665,9 @@ predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
 
-axiom singleton_def :
- (forall i_6:int.
-  (forall j:int. (in_(j, singleton(i_6)) <-> eq_int(j, i_6))))
+logic singleton: int -> int_set
+
+logic sol:  -> int_xP pointer
 
 predicate solution(s_16:int_P pointer,
  int_P_int_M_at_L:(int_P, int) memory) =
@@ -889,16 +723,6 @@ predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  and (offset_max(void_P_alloc_table, p) = b))
 
 logic succ: int_set -> int_set
-
-axiom succ_def_1 :
- (forall s_10:int_set.
-  (forall i_7:int. (in_(i_7, s_10) -> in_(add_int(i_7, (1)), succ(s_10)))))
-
-axiom succ_def_2 :
- (forall s_11:int_set.
-  (forall i_8:int.
-   (in_(i_8, succ(s_11)) ->
-    (ge_int(i_8, (1)) and in_(sub_int(i_8, (1)), s_11)))))
 
 predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
@@ -974,6 +798,145 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom card_nonneg : (forall s_1_0:int_set. ge_int(card(s_1_0), (0)))
+
+axiom empty_def : (forall i_0:int. (not in_(i_0, empty)))
+
+axiom empty_card :
+ (forall s_2:int_set. (eq_int(card(s_2), (0)) <-> (s_2 = empty)))
+
+axiom diff_def :
+ (forall a_1_0:int_set.
+  (forall b_1_0:int_set.
+   (forall i_1:int.
+    (in_(i_1, diff(a_1_0, b_1_0))
+    <-> (in_(i_1, a_1_0) and (not in_(i_1, b_1_0)))))))
+
+axiom add_def :
+ (forall s_3:int_set.
+  (forall x_1_0:int.
+   (forall i_2:int.
+    (in_(i_2, add(x_1_0, s_3)) <-> (eq_int(i_2, x_1_0) or in_(i_2, s_3))))))
+
+axiom remove_def :
+ (forall s_5:int_set.
+  (forall x_3:int.
+   (forall i_3:int.
+    (in_(i_3, remove(x_3, s_5)) <-> (in_(i_3, s_5) and neq_int(i_3, x_3))))))
+
+axiom remove_card :
+ (forall s_6:int_set.
+  (forall i_4:int.
+   (in_(i_4, s_6) -> eq_int(card(remove(i_4, s_6)), sub_int(card(s_6), (1))))))
+
+axiom min_elt_def :
+ (forall s_8:int_set.
+  (gt_int(card(s_8), (0)) ->
+   (in_(min_elt(s_8), s_8)
+   and (forall i_5:int. (in_(i_5, s_8) -> le_int(min_elt(s_8), i_5))))))
+
+axiom singleton_def :
+ (forall i_6:int.
+  (forall j:int. (in_(j, singleton(i_6)) <-> eq_int(j, i_6))))
+
+axiom succ_def_1 :
+ (forall s_10:int_set.
+  (forall i_7:int. (in_(i_7, s_10) -> in_(add_int(i_7, (1)), succ(s_10)))))
+
+axiom succ_def_2 :
+ (forall s_11:int_set.
+  (forall i_8:int.
+   (in_(i_8, succ(s_11)) ->
+    (ge_int(i_8, (1)) and in_(sub_int(i_8, (1)), s_11)))))
+
+axiom pred_def_1 :
+ (forall s_13:int_set.
+  (forall i_9:int.
+   (ge_int(i_9, (1)) ->
+    (in_(i_9, s_13) -> in_(sub_int(i_9, (1)), pred(s_13))))))
+
+axiom pred_def_2 :
+ (forall s_14:int_set.
+  (forall i_10:int. (in_(i_10, pred(s_14)) -> in_(add_int(i_10, (1)), s_14))))
+
+axiom below_def :
+ (forall n_0_0:int.
+  (forall i_11:int.
+   (in_(i_11, below(n_0_0)) <-> (le_int((0), i_11) and lt_int(i_11, n_0_0)))))
+
+axiom below_card : (forall n_1:int. eq_int(card(below(n_1)), n_1))
+
+axiom iset_c_zero :
+ (forall x_6:int. ((iset(x_6) = empty) <-> eq_int(x_6, (0))))
+
+axiom iset_c_remove :
+ (forall x_7:int.
+  (forall a_3:int.
+   (forall b_2:int.
+    ((iset(b_2) = singleton(x_7)) ->
+     (in_(x_7, iset(a_3)) ->
+      (iset(sub_int(a_3, b_2)) = remove(x_7, iset(a_3))))))))
+
+axiom iset_c_min_elt :
+ (forall x_8:int.
+  (neq_int(x_8, (0)) ->
+   (iset(bw_and(x_8, neg_int(x_8))) = singleton(min_elt(iset(x_8))))))
+
+axiom iset_c_diff :
+ (forall a_4:int.
+  (forall b_3:int.
+   (iset(bw_and(a_4, bw_compl(b_3))) = diff(iset(a_4), iset(b_3)))))
+
+axiom iset_c_add :
+ (forall x_9:int.
+  (forall a_5:int.
+   (forall b_4:int.
+    ((iset(b_4) = singleton(x_9)) ->
+     ((not in_(x_9, iset(a_5))) ->
+      (iset(add_int(a_5, b_4)) = add(x_9, iset(a_5))))))))
+
+axiom iset_c_below :
+ (forall n_2:int. (iset(bw_compl(lsl(bw_compl((0)), n_2))) = below(n_2)))
+
+lemma iset_c_min_elt_help :
+ (forall x_10:int.
+  (neq_int(x_10, (0)) <-> neq_int(bw_and(x_10, neg_int(x_10)), (0))))
+
+axiom N_positive : gt_int(N, (0))
+
+lemma dont_bother_me_I_am_a_ghost_1 :
+ (forall int_xP_alloc_table_at_L:int_xP alloc_table.
+  (forall i_13:int.
+   (le_int(offset_min(int_xP_alloc_table_at_L, sol), i_13)
+   and ge_int(offset_max(int_xP_alloc_table_at_L, sol), i_13))))
+
+lemma dont_bother_me_I_am_a_ghost_2 :
+ (forall int_P_alloc_table_at_L:int_P alloc_table.
+  (forall int_xP_int_xM_at_L:(int_xP, int_P pointer) memory.
+   (forall i_14:int.
+    (forall j_0:int.
+     (le_int(offset_min(int_P_alloc_table_at_L,
+             select(int_xP_int_xM_at_L, shift(sol, i_14))),
+      j_0)
+     and ge_int(offset_max(int_P_alloc_table_at_L,
+                select(int_xP_int_xM_at_L, shift(sol, i_14))),
+         j_0))))))
+
+lemma dont_bother_me_I_am_a_ghost_3 :
+ (forall int_P_alloc_table_at_L:int_P alloc_table.
+  (forall i_15:int.
+   (le_int(offset_min(int_P_alloc_table_at_L, col), i_15)
+   and ge_int(offset_max(int_P_alloc_table_at_L, col), i_15))))
+
+lemma partial_solution_eq_prefix :
+ (forall int_P_int_M_at_L:(int_P, int) memory.
+  (forall t_1:int_P pointer.
+   (forall u_1:int_P pointer.
+    (forall k_1_0:int.
+     (partial_solution(k_1_0, t_1, int_P_int_M_at_L) ->
+      (eq_prefix(t_1, u_1, k_1_0, int_P_int_M_at_L) ->
+       partial_solution(k_1_0, u_1, int_P_int_M_at_L)))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1909,31 +1872,31 @@ let t3_safety =
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C queens.jessie --quiet -f queens.makefile project
 why --project [...] why/queens.why
 <project name="queens" context="why/queens_ctx.why">
-  <lemma name="dont_bother_me_I_am_a_ghost_1">
+  <lemma name="iset_c_min_elt_help">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/queens_po1.why">
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "182" begin = "0" end = "97"/>
+      <explain kind = "Lemma"/>
+    </goal>
+  </lemma>
+  <lemma name="dont_bother_me_I_am_a_ghost_1">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <goal why_file="why/queens_po2.why">
       <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "264" begin = "0" end = "125"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="dont_bother_me_I_am_a_ghost_2">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/queens_po2.why">
+    <goal why_file="why/queens_po3.why">
       <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "268" begin = "0" end = "188"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="dont_bother_me_I_am_a_ghost_3">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/queens_po3.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "274" begin = "0" end = "125"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <lemma name="iset_c_min_elt_help">
-    <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/queens_po4.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "182" begin = "0" end = "97"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "274" begin = "0" end = "125"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -1983,11 +1946,11 @@ text = "PointerDeref"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po68.why">
-      <location file = "why/queens.why" line = "1407" begin = "30" end = "132"/>
+      <location file = "why/queens.why" line = "1370" begin = "30" end = "132"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po69.why">
-      <location file = "why/queens.why" line = "1407" begin = "30" end = "132"/>
+      <location file = "why/queens.why" line = "1370" begin = "30" end = "132"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po70.why">
@@ -2196,11 +2159,11 @@ text = "UserCall"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po30.why">
-      <location file = "why/queens.why" line = "1059" begin = "26" end = "120"/>
+      <location file = "why/queens.why" line = "1022" begin = "26" end = "120"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po31.why">
-      <location file = "why/queens.why" line = "1059" begin = "26" end = "120"/>
+      <location file = "why/queens.why" line = "1022" begin = "26" end = "120"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po32.why">
@@ -3270,30 +3233,11 @@ type void_P
 
 logic N : int
 
-axiom N_positive: (N > 0)
-
 logic add : int, int_set -> int_set
-
-logic in_ : int, int_set -> prop
-
-axiom add_def:
-  (forall s_3:int_set.
-    (forall x_1_0:int.
-      (forall i_2:int.
-        (in_(i_2, add(x_1_0, s_3)) <-> ((i_2 = x_1_0) or in_(i_2, s_3))))))
 
 logic below : int -> int_set
 
 logic card : int_set -> int
-
-axiom below_card: (forall n_1:int. (card(below(n_1)) = n_1))
-
-axiom below_def:
-  (forall n_0_0:int.
-    (forall i_11:int.
-      (in_(i_11, below(n_0_0)) <-> ((0 <= i_11) and (i_11 < n_0_0)))))
-
-axiom card_nonneg: (forall s_1_0:int_set. (card(s_1_0) >= 0))
 
 logic char_P_tag : char_P tag_id
 
@@ -3316,41 +3260,7 @@ logic col : int_P pointer
 
 logic diff : int_set, int_set -> int_set
 
-axiom diff_def:
-  (forall a_1_0:int_set.
-    (forall b_1_0:int_set.
-      (forall i_1:int.
-        (in_(i_1, diff(a_1_0, b_1_0)) <->
-         (in_(i_1, a_1_0) and (not in_(i_1, b_1_0)))))))
-
-logic sol : int_xP pointer
-
-axiom dont_bother_me_I_am_a_ghost_1_as_axiom:
-  (forall int_xP_alloc_table_at_L:int_xP alloc_table.
-    (forall i_13:int.
-      ((offset_min(int_xP_alloc_table_at_L, sol) <= i_13) and
-       (offset_max(int_xP_alloc_table_at_L, sol) >= i_13))))
-
-axiom dont_bother_me_I_am_a_ghost_2_as_axiom:
-  (forall int_P_alloc_table_at_L:int_P alloc_table.
-    (forall int_xP_int_xM_at_L:(int_xP, int_P pointer) memory.
-      (forall i_14:int.
-        (forall j_0:int.
-          ((offset_min(int_P_alloc_table_at_L, select(int_xP_int_xM_at_L,
-           shift(sol, i_14))) <= j_0) and (offset_max(int_P_alloc_table_at_L,
-           select(int_xP_int_xM_at_L, shift(sol, i_14))) >= j_0))))))
-
-axiom dont_bother_me_I_am_a_ghost_3_as_axiom:
-  (forall int_P_alloc_table_at_L:int_P alloc_table.
-    (forall i_15:int.
-      ((offset_min(int_P_alloc_table_at_L, col) <= i_15) and
-       (offset_max(int_P_alloc_table_at_L, col) >= i_15))))
-
 logic empty : int_set
-
-axiom empty_card: (forall s_2:int_set. ((card(s_2) = 0) <-> (s_2 = empty)))
-
-axiom empty_def: (forall i_0:int. (not in_(i_0, empty)))
 
 predicate eq_prefix(t: int_P pointer, u: int_P pointer, i_12: int,
   int_P_int_M_at_L: (int_P, int) memory) =
@@ -3361,6 +3271,8 @@ predicate eq_prefix(t: int_P pointer, u: int_P pointer, i_12: int,
 predicate eq_sol(t_0: int_P pointer, u_0: int_P pointer,
   int_P_int_M_at_L: (int_P, int) memory) = eq_prefix(t_0, u_0, N,
   int_P_int_M_at_L)
+
+logic in_ : int, int_set -> prop
 
 predicate included(a: int_set, b: int_set) =
   (forall i:int. (in_(i, a) -> in_(i, b)))
@@ -3401,45 +3313,6 @@ axiom int_xP_tags:
 
 logic iset : int -> int_set
 
-logic singleton : int -> int_set
-
-axiom iset_c_add:
-  (forall x_9:int.
-    (forall a_5:int.
-      (forall b_4:int.
-        ((iset(b_4) = singleton(x_9)) ->
-         ((not in_(x_9, iset(a_5))) -> (iset((a_5 + b_4)) = add(x_9,
-          iset(a_5))))))))
-
-axiom iset_c_below:
-  (forall n_2:int. (iset(bw_compl(lsl(bw_compl(0), n_2))) = below(n_2)))
-
-axiom iset_c_diff:
-  (forall a_4:int.
-    (forall b_3:int. (iset(bw_and(a_4, bw_compl(b_3))) = diff(iset(a_4),
-      iset(b_3)))))
-
-logic min_elt : int_set -> int
-
-axiom iset_c_min_elt:
-  (forall x_8:int.
-    ((x_8 <> 0) -> (iset(bw_and(x_8,
-     (-x_8))) = singleton(min_elt(iset(x_8))))))
-
-axiom iset_c_min_elt_help_as_axiom:
-  (forall x_10:int. ((x_10 <> 0) <-> (bw_and(x_10, (-x_10)) <> 0)))
-
-logic remove : int, int_set -> int_set
-
-axiom iset_c_remove:
-  (forall x_7:int.
-    (forall a_3:int.
-      (forall b_2:int.
-        ((iset(b_2) = singleton(x_7)) ->
-         (in_(x_7, iset(a_3)) -> (iset((a_3 - b_2)) = remove(x_7, iset(a_3))))))))
-
-axiom iset_c_zero: (forall x_6:int. ((iset(x_6) = empty) <-> (x_6 = 0)))
-
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
   p) <= a)
@@ -3465,11 +3338,7 @@ predicate lt_sol(s1_1: int_P pointer, s2_1: int_P pointer,
        (select(int_P_int_M_at_L, shift(s1_1,
        i_17)) < select(int_P_int_M_at_L, shift(s2_1, i_17)))))))
 
-axiom min_elt_def:
-  (forall s_8:int_set.
-    ((card(s_8) > 0) ->
-     (in_(min_elt(s_8), s_8) and
-      (forall i_5:int. (in_(i_5, s_8) -> (min_elt(s_8) <= i_5))))))
+logic min_elt : int_set -> int
 
 predicate partial_solution(k_0: int, s_15: int_P pointer,
   int_P_int_M_at_L: (int_P, int) memory) =
@@ -3486,15 +3355,6 @@ predicate partial_solution(k_0: int, s_15: int_P pointer,
             j_1))) <> (i_16 - j_1)) and ((select(int_P_int_M_at_L,
             shift(s_15, i_16)) - select(int_P_int_M_at_L, shift(s_15,
             j_1))) <> (j_1 - i_16))))))))))
-
-axiom partial_solution_eq_prefix_as_axiom:
-  (forall int_P_int_M_at_L:(int_P, int) memory.
-    (forall t_1:int_P pointer.
-      (forall u_1:int_P pointer.
-        (forall k_1_0:int.
-          (partial_solution(k_1_0, t_1, int_P_int_M_at_L) ->
-           (eq_prefix(t_1, u_1, k_1_0, int_P_int_M_at_L) ->
-            partial_solution(k_1_0, u_1, int_P_int_M_at_L)))))))
 
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
@@ -3515,25 +3375,7 @@ axiom pointer_addr_of_void_P_of_pointer_address:
 
 logic pred : int_set -> int_set
 
-axiom pred_def_1:
-  (forall s_13:int_set.
-    (forall i_9:int.
-      ((i_9 >= 1) -> (in_(i_9, s_13) -> in_((i_9 - 1), pred(s_13))))))
-
-axiom pred_def_2:
-  (forall s_14:int_set.
-    (forall i_10:int. (in_(i_10, pred(s_14)) -> in_((i_10 + 1), s_14))))
-
-axiom remove_card:
-  (forall s_6:int_set.
-    (forall i_4:int.
-      (in_(i_4, s_6) -> (card(remove(i_4, s_6)) = (card(s_6) - 1)))))
-
-axiom remove_def:
-  (forall s_5:int_set.
-    (forall x_3:int.
-      (forall i_3:int.
-        (in_(i_3, remove(x_3, s_5)) <-> (in_(i_3, s_5) and (i_3 <> x_3))))))
+logic remove : int, int_set -> int_set
 
 predicate right_valid_struct_char_P(p: char_P pointer, b: int,
   char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
@@ -3551,8 +3393,9 @@ predicate right_valid_struct_void_P(p: void_P pointer, b: int,
   void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
   p) >= b)
 
-axiom singleton_def:
-  (forall i_6:int. (forall j:int. (in_(j, singleton(i_6)) <-> (j = i_6))))
+logic singleton : int -> int_set
+
+logic sol : int_xP pointer
 
 predicate solution(s_16: int_P pointer, int_P_int_M_at_L: (int_P,
   int) memory) = partial_solution(N, s_16, int_P_int_M_at_L)
@@ -3607,15 +3450,6 @@ predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
    (offset_max(void_P_alloc_table, p) = b))
 
 logic succ : int_set -> int_set
-
-axiom succ_def_1:
-  (forall s_10:int_set.
-    (forall i_7:int. (in_(i_7, s_10) -> in_((i_7 + 1), succ(s_10)))))
-
-axiom succ_def_2:
-  (forall s_11:int_set.
-    (forall i_8:int.
-      (in_(i_8, succ(s_11)) -> ((i_8 >= 1) and in_((i_8 - 1), s_11)))))
 
 predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
@@ -3691,4 +3525,100 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom card_nonneg: (forall s_1_0:int_set. (card(s_1_0) >= 0))
+
+axiom empty_def: (forall i_0:int. (not in_(i_0, empty)))
+
+axiom empty_card: (forall s_2:int_set. ((card(s_2) = 0) <-> (s_2 = empty)))
+
+axiom diff_def:
+  (forall a_1_0:int_set.
+    (forall b_1_0:int_set.
+      (forall i_1:int.
+        (in_(i_1, diff(a_1_0, b_1_0)) <->
+         (in_(i_1, a_1_0) and (not in_(i_1, b_1_0)))))))
+
+axiom add_def:
+  (forall s_3:int_set.
+    (forall x_1_0:int.
+      (forall i_2:int.
+        (in_(i_2, add(x_1_0, s_3)) <-> ((i_2 = x_1_0) or in_(i_2, s_3))))))
+
+axiom remove_def:
+  (forall s_5:int_set.
+    (forall x_3:int.
+      (forall i_3:int.
+        (in_(i_3, remove(x_3, s_5)) <-> (in_(i_3, s_5) and (i_3 <> x_3))))))
+
+axiom remove_card:
+  (forall s_6:int_set.
+    (forall i_4:int.
+      (in_(i_4, s_6) -> (card(remove(i_4, s_6)) = (card(s_6) - 1)))))
+
+axiom min_elt_def:
+  (forall s_8:int_set.
+    ((card(s_8) > 0) ->
+     (in_(min_elt(s_8), s_8) and
+      (forall i_5:int. (in_(i_5, s_8) -> (min_elt(s_8) <= i_5))))))
+
+axiom singleton_def:
+  (forall i_6:int. (forall j:int. (in_(j, singleton(i_6)) <-> (j = i_6))))
+
+axiom succ_def_1:
+  (forall s_10:int_set.
+    (forall i_7:int. (in_(i_7, s_10) -> in_((i_7 + 1), succ(s_10)))))
+
+axiom succ_def_2:
+  (forall s_11:int_set.
+    (forall i_8:int.
+      (in_(i_8, succ(s_11)) -> ((i_8 >= 1) and in_((i_8 - 1), s_11)))))
+
+axiom pred_def_1:
+  (forall s_13:int_set.
+    (forall i_9:int.
+      ((i_9 >= 1) -> (in_(i_9, s_13) -> in_((i_9 - 1), pred(s_13))))))
+
+axiom pred_def_2:
+  (forall s_14:int_set.
+    (forall i_10:int. (in_(i_10, pred(s_14)) -> in_((i_10 + 1), s_14))))
+
+axiom below_def:
+  (forall n_0_0:int.
+    (forall i_11:int.
+      (in_(i_11, below(n_0_0)) <-> ((0 <= i_11) and (i_11 < n_0_0)))))
+
+axiom below_card: (forall n_1:int. (card(below(n_1)) = n_1))
+
+axiom iset_c_zero: (forall x_6:int. ((iset(x_6) = empty) <-> (x_6 = 0)))
+
+axiom iset_c_remove:
+  (forall x_7:int.
+    (forall a_3:int.
+      (forall b_2:int.
+        ((iset(b_2) = singleton(x_7)) ->
+         (in_(x_7, iset(a_3)) -> (iset((a_3 - b_2)) = remove(x_7, iset(a_3))))))))
+
+axiom iset_c_min_elt:
+  (forall x_8:int.
+    ((x_8 <> 0) -> (iset(bw_and(x_8,
+     (-x_8))) = singleton(min_elt(iset(x_8))))))
+
+axiom iset_c_diff:
+  (forall a_4:int.
+    (forall b_3:int. (iset(bw_and(a_4, bw_compl(b_3))) = diff(iset(a_4),
+      iset(b_3)))))
+
+axiom iset_c_add:
+  (forall x_9:int.
+    (forall a_5:int.
+      (forall b_4:int.
+        ((iset(b_4) = singleton(x_9)) ->
+         ((not in_(x_9, iset(a_5))) -> (iset((a_5 + b_4)) = add(x_9,
+          iset(a_5))))))))
+
+axiom iset_c_below:
+  (forall n_2:int. (iset(bw_compl(lsl(bw_compl(0), n_2))) = below(n_2)))
+
+axiom N_positive: (N > 0)
 

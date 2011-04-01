@@ -138,10 +138,6 @@ predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-goal test : (forall x_2:int. bar(x_2))
-
-axiom test_as_axiom : (forall x_2:int. bar(x_2))
-
 predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
@@ -186,6 +182,8 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma test : (forall x_2:int. bar(x_2))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1324,8 +1322,6 @@ predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
   void_P_alloc_table: void_P alloc_table) =
   ((offset_min(void_P_alloc_table, p) = a) and
    (offset_max(void_P_alloc_table, p) = b))
-
-axiom test_as_axiom: (forall x_2:int. bar(x_2))
 
 predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =

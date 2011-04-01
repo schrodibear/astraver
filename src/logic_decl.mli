@@ -58,10 +58,12 @@ type vc_expl =
     { lemma_or_fun_name : string;
       behavior : string;
       vc_loc : Loc.floc;
-      vc_kind : expl_kind }
+      vc_kind : expl_kind;
+      vc_label : string option
+    }
 
-type obligation = Loc.floc * vc_expl * string * sequent
-    (* loc, explanation, id, sequent *) 
+type obligation = Loc.floc * bool * vc_expl * string * sequent
+    (* loc, is_lemma, explanation, id, sequent *) 
 
 type t =
   | Dtype          of loc * Ident.t * string list
@@ -71,5 +73,6 @@ type t =
   | Dinductive_def of loc * Ident.t * inductive_def scheme
   | Dfunction_def  of loc * Ident.t * function_def scheme
   | Daxiom         of loc * string * predicate scheme
-  | Dgoal          of loc * vc_expl * string * sequent scheme
-
+  | Dgoal          of loc * bool * vc_expl * string * sequent scheme
+      (* bool is true when goal is a lemma, that is it must be present
+      in the context of the next goals *)

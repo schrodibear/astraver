@@ -80,7 +80,7 @@ val field_initializer_table :
 val final_field_values_table :
   (int, Num.num list) Hashtbl.t
 
-val lemmas_table : (string,(Java_env.logic_label list * Java_tast.assertion)) Hashtbl.t
+val lemmas_table : (string,(Loc.position * Java_env.logic_label list * Java_tast.assertion)) Hashtbl.t
 
 
 type logic_def_body =

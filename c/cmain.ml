@@ -132,7 +132,7 @@ let main () =
 	   (fun name z ->
 	      match z.Info.repr with 
 		| None ->
-		    let d = Type (name,[]) in
+		    let d = Type (id_no_loc name,[]) in
 		    fprintf fmt "@[%a@]" fprintf_why_decls [d]
 		| Some _ -> ())
 	   Cenv.zone_table;
@@ -151,7 +151,7 @@ let main () =
        Hashtbl.iter 
 	 (fun v bt -> 
 	    let d = Param 
-	      (false, v, 
+	      (false, id_no_loc v, 
 	       Ref_type (Base_type (Info.output_why_type ~quote_var:false 
 				      bt.Info.var_why_type))) in
 	    fprintf fmt "@[%a@]" fprintf_why_decls [d])

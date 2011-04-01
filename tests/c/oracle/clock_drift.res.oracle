@@ -789,20 +789,6 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-goal real_of_int_inf_NMAX :
- (forall i:int. (le_int(i, (1000000)) -> le_real(real_of_int(i), 1000000.0)))
-
-axiom real_of_int_inf_NMAX_as_axiom :
- (forall i:int. (le_int(i, (1000000)) -> le_real(real_of_int(i), 1000000.0)))
-
-goal real_of_int_succ :
- (forall n_0:int.
-  eq_real(real_of_int(add_int(n_0, (1))), add_real(real_of_int(n_0), 1.0)))
-
-axiom real_of_int_succ_as_axiom :
- (forall n_0:int.
-  eq_real(real_of_int(add_int(n_0, (1))), add_real(real_of_int(n_0), 1.0)))
-
 predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
@@ -875,6 +861,13 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma real_of_int_inf_NMAX :
+ (forall i:int. (le_int(i, (1000000)) -> le_real(real_of_int(i), 1000000.0)))
+
+lemma real_of_int_succ :
+ (forall n_0:int.
+  eq_real(real_of_int(add_int(n_0, (1))), add_real(real_of_int(n_0), 1.0)))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1066,12 +1059,12 @@ let f_single_ensures_default =
                void); void;
               (t := (C_11:
                     (JC_37:
-                    (((add_single_safe nearest_even) !t) (single_of_real_exact 0x0.199999Ap0)))));
+                    (((add_single_safe nearest_even) !t) (single_of_real_exact 0x1.99999ap-4)))));
               !t end) in void);
              (assert
              { (JC_38:
                le_real(abs_real(sub_real(single_value(t),
-                                add_real(single_value(t@L), 0x0.199999Ap0))),
+                                add_real(single_value(t@L), 0x1.99999ap-4))),
                0x1p-8)) }; void); void;
              (i_0 := (C_15:
                      (safe_int32_of_integer_ (C_14:
@@ -1146,12 +1139,12 @@ let f_single_safety =
               void;
               (t := (C_11:
                     (JC_23:
-                    (((add_single nearest_even) !t) (single_of_real_exact 0x0.199999Ap0)))));
+                    (((add_single nearest_even) !t) (single_of_real_exact 0x1.99999ap-4)))));
               !t end) in void);
              [ { } unit reads t
                { (JC_24:
                  le_real(abs_real(sub_real(single_value(t),
-                                  add_real(single_value(t@L), 0x0.199999Ap0))),
+                                  add_real(single_value(t@L), 0x1.99999ap-4))),
                  0x1p-8)) } ]; void;
              (i_0 := (C_15:
                      (JC_25:
@@ -2214,6 +2207,10 @@ axiom exact_round_double_for_integers:
       ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
        (round_double(m, real_of_int(i)) = real_of_int(i)))))
 
+axiom exact_round_double_for_doubles:
+  (forall x:double.
+    (forall m:mode. (round_double(m, double_value(x)) = double_value(x))))
+
 axiom round_double_idempotent:
   (forall m1:mode.
     (forall m2:mode.
@@ -2269,6 +2266,10 @@ axiom exact_round_single_for_integers:
     (forall m:mode.
       ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
        real_of_int(i)) = real_of_int(i)))))
+
+axiom exact_round_single_for_singles:
+  (forall x:single.
+    (forall m:mode. (round_single(m, single_value(x)) = single_value(x))))
 
 axiom round_single_idempotent:
   (forall m1:mode.
@@ -2462,18 +2463,6 @@ axiom pointer_addr_of_void_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(void_P_of_pointer_address(p))))
 
-goal real_of_int_inf_NMAX:
-  (forall i:int. ((i <= 1000000) -> (real_of_int(i) <= 1000000.0)))
-
-axiom real_of_int_inf_NMAX_as_axiom:
-  (forall i:int. ((i <= 1000000) -> (real_of_int(i) <= 1000000.0)))
-
-goal real_of_int_succ:
-  (forall n_0:int. (real_of_int((n_0 + 1)) = (real_of_int(n_0) + 1.0)))
-
-axiom real_of_int_succ_as_axiom:
-  (forall n_0:int. (real_of_int((n_0 + 1)) = (real_of_int(n_0) + 1.0)))
-
 predicate right_valid_struct_char_P(p: char_P pointer, b: int,
   char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
   p) >= b)
@@ -2547,6 +2536,18 @@ axiom void_P_tags:
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
 
+goal real_of_int_inf_NMAX:
+  (forall i:int. ((i <= 1000000) -> (real_of_int(i) <= 1000000.0)))
+
+axiom real_of_int_inf_NMAX_as_axiom:
+  (forall i:int. ((i <= 1000000) -> (real_of_int(i) <= 1000000.0)))
+
+goal real_of_int_succ:
+  (forall n_0:int. (real_of_int((n_0 + 1)) = (real_of_int(n_0) + 1.0)))
+
+axiom real_of_int_succ_as_axiom:
+  (forall n_0:int. (real_of_int((n_0 + 1)) = (real_of_int(n_0) + 1.0)))
+
 goal f_single_ensures_default_po_1:
   forall n:int32.
   ("JC_7":
@@ -2562,8 +2563,7 @@ goal f_single_ensures_default_po_1:
   forall i_0:int32.
   (i_0 = result0) ->
   ("JC_27":
-  ("JC_27":
-  (abs_real((single_value(t) - (real_of_int(integer_of_int32(i_0)) * 0.1))) <= (real_of_int(integer_of_int32(i_0)) * (0x1.p-8 + 1.49012e-09)))))
+  (abs_real((single_value(t) - (real_of_int(integer_of_int32(i_0)) * 0.1))) <= (real_of_int(integer_of_int32(i_0)) * (0x1.p-8 + 1.49012e-09))))
 
 goal f_single_ensures_default_po_2:
   forall n:int32.
@@ -2579,7 +2579,7 @@ goal f_single_ensures_default_po_2:
   (integer_of_int32(result0) = 0) ->
   forall i_0:int32.
   (i_0 = result0) ->
-  ("JC_30": ("JC_28": ("JC_28": (0 <= integer_of_int32(i_0)))))
+  ("JC_30": ("JC_28": (0 <= integer_of_int32(i_0))))
 
 goal f_single_ensures_default_po_3:
   forall n:int32.
@@ -2595,8 +2595,7 @@ goal f_single_ensures_default_po_3:
   (integer_of_int32(result0) = 0) ->
   forall i_0:int32.
   (i_0 = result0) ->
-  ("JC_30":
-  ("JC_29": ("JC_29": (integer_of_int32(i_0) <= integer_of_int32(n)))))
+  ("JC_30": ("JC_29": (integer_of_int32(i_0) <= integer_of_int32(n))))
 
 goal f_single_ensures_default_po_4:
   forall n:int32.
@@ -2620,7 +2619,7 @@ goal f_single_ensures_default_po_4:
    (("JC_28": (0 <= integer_of_int32(i_0_0))) and
     ("JC_29": (integer_of_int32(i_0_0) <= integer_of_int32(n)))))) ->
   (integer_of_int32(i_0_0) < integer_of_int32(n)) ->
-  ("JC_36": ("JC_34": ("JC_34": (0.0 <= single_value(t0)))))
+  ("JC_36": ("JC_34": (0.0 <= single_value(t0))))
 
 goal f_single_ensures_default_po_5:
   forall n:int32.
@@ -2646,8 +2645,7 @@ goal f_single_ensures_default_po_5:
   (integer_of_int32(i_0_0) < integer_of_int32(n)) ->
   ("JC_36":
   ("JC_35":
-  ("JC_35":
-  (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09)))))))
+  (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))
 
 goal f_single_ensures_default_po_6:
   forall n:int32.
@@ -2676,9 +2674,9 @@ goal f_single_ensures_default_po_6:
    ("JC_35":
    (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
   forall result1:single.
-  ((single_value(result1) = 0x0.199999Ap0) and
-   ((single_exact(result1) = 0x0.199999Ap0) and
-    (single_model(result1) = 0x0.199999Ap0))) ->
+  ((single_value(result1) = 0x1.99999ap-4) and
+   ((single_exact(result1) = 0x1.99999ap-4) and
+    (single_model(result1) = 0x1.99999ap-4))) ->
   forall result2:single.
   (no_overflow_single(nearest_even,
    (single_value(t0) + single_value(result1))) and
@@ -2686,8 +2684,7 @@ goal f_single_ensures_default_po_6:
   forall t1:single.
   (t1 = result2) ->
   ("JC_38":
-  ("JC_38":
-  (abs_real((single_value(t1) - (single_value(t0) + 0x0.199999Ap0))) <= 0x1.p-8)))
+  (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8))
 
 goal f_single_ensures_default_po_7:
   forall n:int32.
@@ -2716,9 +2713,9 @@ goal f_single_ensures_default_po_7:
    ("JC_35":
    (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
   forall result1:single.
-  ((single_value(result1) = 0x0.199999Ap0) and
-   ((single_exact(result1) = 0x0.199999Ap0) and
-    (single_model(result1) = 0x0.199999Ap0))) ->
+  ((single_value(result1) = 0x1.99999ap-4) and
+   ((single_exact(result1) = 0x1.99999ap-4) and
+    (single_model(result1) = 0x1.99999ap-4))) ->
   forall result2:single.
   (no_overflow_single(nearest_even,
    (single_value(t0) + single_value(result1))) and
@@ -2726,14 +2723,13 @@ goal f_single_ensures_default_po_7:
   forall t1:single.
   (t1 = result2) ->
   ("JC_38":
-  (abs_real((single_value(t1) - (single_value(t0) + 0x0.199999Ap0))) <= 0x1.p-8)) ->
+  (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   forall result3:int32.
   (integer_of_int32(result3) = (integer_of_int32(i_0_0) + 1)) ->
   forall i_0_1:int32.
   (i_0_1 = result3) ->
   ("JC_27":
-  ("JC_27":
-  (abs_real((single_value(t1) - (real_of_int(integer_of_int32(i_0_1)) * 0.1))) <= (real_of_int(integer_of_int32(i_0_1)) * (0x1.p-8 + 1.49012e-09)))))
+  (abs_real((single_value(t1) - (real_of_int(integer_of_int32(i_0_1)) * 0.1))) <= (real_of_int(integer_of_int32(i_0_1)) * (0x1.p-8 + 1.49012e-09))))
 
 goal f_single_ensures_default_po_8:
   forall n:int32.
@@ -2762,9 +2758,9 @@ goal f_single_ensures_default_po_8:
    ("JC_35":
    (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
   forall result1:single.
-  ((single_value(result1) = 0x0.199999Ap0) and
-   ((single_exact(result1) = 0x0.199999Ap0) and
-    (single_model(result1) = 0x0.199999Ap0))) ->
+  ((single_value(result1) = 0x1.99999ap-4) and
+   ((single_exact(result1) = 0x1.99999ap-4) and
+    (single_model(result1) = 0x1.99999ap-4))) ->
   forall result2:single.
   (no_overflow_single(nearest_even,
    (single_value(t0) + single_value(result1))) and
@@ -2772,12 +2768,12 @@ goal f_single_ensures_default_po_8:
   forall t1:single.
   (t1 = result2) ->
   ("JC_38":
-  (abs_real((single_value(t1) - (single_value(t0) + 0x0.199999Ap0))) <= 0x1.p-8)) ->
+  (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   forall result3:int32.
   (integer_of_int32(result3) = (integer_of_int32(i_0_0) + 1)) ->
   forall i_0_1:int32.
   (i_0_1 = result3) ->
-  ("JC_30": ("JC_28": ("JC_28": (0 <= integer_of_int32(i_0_1)))))
+  ("JC_30": ("JC_28": (0 <= integer_of_int32(i_0_1))))
 
 goal f_single_ensures_default_po_9:
   forall n:int32.
@@ -2806,9 +2802,9 @@ goal f_single_ensures_default_po_9:
    ("JC_35":
    (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
   forall result1:single.
-  ((single_value(result1) = 0x0.199999Ap0) and
-   ((single_exact(result1) = 0x0.199999Ap0) and
-    (single_model(result1) = 0x0.199999Ap0))) ->
+  ((single_value(result1) = 0x1.99999ap-4) and
+   ((single_exact(result1) = 0x1.99999ap-4) and
+    (single_model(result1) = 0x1.99999ap-4))) ->
   forall result2:single.
   (no_overflow_single(nearest_even,
    (single_value(t0) + single_value(result1))) and
@@ -2816,13 +2812,12 @@ goal f_single_ensures_default_po_9:
   forall t1:single.
   (t1 = result2) ->
   ("JC_38":
-  (abs_real((single_value(t1) - (single_value(t0) + 0x0.199999Ap0))) <= 0x1.p-8)) ->
+  (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   forall result3:int32.
   (integer_of_int32(result3) = (integer_of_int32(i_0_0) + 1)) ->
   forall i_0_1:int32.
   (i_0_1 = result3) ->
-  ("JC_30":
-  ("JC_29": ("JC_29": (integer_of_int32(i_0_1) <= integer_of_int32(n)))))
+  ("JC_30": ("JC_29": (integer_of_int32(i_0_1) <= integer_of_int32(n))))
 
 goal f_single_ensures_default_po_10:
   forall n:int32.
@@ -2879,9 +2874,9 @@ goal f_single_safety_po_1:
    ("JC_21":
    (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
   forall result1:single.
-  ((single_value(result1) = 0x0.199999Ap0) and
-   ((single_exact(result1) = 0x0.199999Ap0) and
-    (single_model(result1) = 0x0.199999Ap0))) ->
+  ((single_value(result1) = 0x1.99999ap-4) and
+   ((single_exact(result1) = 0x1.99999ap-4) and
+    (single_model(result1) = 0x1.99999ap-4))) ->
   no_overflow_single(nearest_even,
   (single_value(t0) + single_value(result1)))
 
@@ -2913,9 +2908,9 @@ goal f_single_safety_po_2:
    ("JC_21":
    (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
   forall result1:single.
-  ((single_value(result1) = 0x0.199999Ap0) and
-   ((single_exact(result1) = 0x0.199999Ap0) and
-    (single_model(result1) = 0x0.199999Ap0))) ->
+  ((single_value(result1) = 0x1.99999ap-4) and
+   ((single_exact(result1) = 0x1.99999ap-4) and
+    (single_model(result1) = 0x1.99999ap-4))) ->
   no_overflow_single(nearest_even,
   (single_value(t0) + single_value(result1))) ->
   forall result2:single.
@@ -2923,7 +2918,7 @@ goal f_single_safety_po_2:
   forall t1:single.
   (t1 = result2) ->
   ("JC_24":
-  (abs_real((single_value(t1) - (single_value(t0) + 0x0.199999Ap0))) <= 0x1.p-8)) ->
+  (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   ((-2147483648) <= (integer_of_int32(i_0_0) + 1))
 
 goal f_single_safety_po_3:
@@ -2954,9 +2949,9 @@ goal f_single_safety_po_3:
    ("JC_21":
    (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
   forall result1:single.
-  ((single_value(result1) = 0x0.199999Ap0) and
-   ((single_exact(result1) = 0x0.199999Ap0) and
-    (single_model(result1) = 0x0.199999Ap0))) ->
+  ((single_value(result1) = 0x1.99999ap-4) and
+   ((single_exact(result1) = 0x1.99999ap-4) and
+    (single_model(result1) = 0x1.99999ap-4))) ->
   no_overflow_single(nearest_even,
   (single_value(t0) + single_value(result1))) ->
   forall result2:single.
@@ -2964,7 +2959,7 @@ goal f_single_safety_po_3:
   forall t1:single.
   (t1 = result2) ->
   ("JC_24":
-  (abs_real((single_value(t1) - (single_value(t0) + 0x0.199999Ap0))) <= 0x1.p-8)) ->
+  (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   ((integer_of_int32(i_0_0) + 1) <= 2147483647)
 
 goal f_single_safety_po_4:
@@ -2995,9 +2990,9 @@ goal f_single_safety_po_4:
    ("JC_21":
    (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
   forall result1:single.
-  ((single_value(result1) = 0x0.199999Ap0) and
-   ((single_exact(result1) = 0x0.199999Ap0) and
-    (single_model(result1) = 0x0.199999Ap0))) ->
+  ((single_value(result1) = 0x1.99999ap-4) and
+   ((single_exact(result1) = 0x1.99999ap-4) and
+    (single_model(result1) = 0x1.99999ap-4))) ->
   no_overflow_single(nearest_even,
   (single_value(t0) + single_value(result1))) ->
   forall result2:single.
@@ -3005,7 +3000,7 @@ goal f_single_safety_po_4:
   forall t1:single.
   (t1 = result2) ->
   ("JC_24":
-  (abs_real((single_value(t1) - (single_value(t0) + 0x0.199999Ap0))) <= 0x1.p-8)) ->
+  (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   (((-2147483648) <= (integer_of_int32(i_0_0) + 1)) and
    ((integer_of_int32(i_0_0) + 1) <= 2147483647)) ->
   forall result3:int32.
@@ -3042,9 +3037,9 @@ goal f_single_safety_po_5:
    ("JC_21":
    (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))) ->
   forall result1:single.
-  ((single_value(result1) = 0x0.199999Ap0) and
-   ((single_exact(result1) = 0x0.199999Ap0) and
-    (single_model(result1) = 0x0.199999Ap0))) ->
+  ((single_value(result1) = 0x1.99999ap-4) and
+   ((single_exact(result1) = 0x1.99999ap-4) and
+    (single_model(result1) = 0x1.99999ap-4))) ->
   no_overflow_single(nearest_even,
   (single_value(t0) + single_value(result1))) ->
   forall result2:single.
@@ -3052,7 +3047,7 @@ goal f_single_safety_po_5:
   forall t1:single.
   (t1 = result2) ->
   ("JC_24":
-  (abs_real((single_value(t1) - (single_value(t0) + 0x0.199999Ap0))) <= 0x1.p-8)) ->
+  (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   (((-2147483648) <= (integer_of_int32(i_0_0) + 1)) and
    ((integer_of_int32(i_0_0) + 1) <= 2147483647)) ->
   forall result3:int32.

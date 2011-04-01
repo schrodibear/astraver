@@ -1074,6 +1074,11 @@ and print_phandler fmt = function
 
 let print_external fmt b = if b then fprintf fmt "external "
 
+let str_of_goal_kind = function
+  | KAxiom -> "axiom"
+  | KLemma -> "lemma"
+  | KGoal -> "goal"
+
 let print_decl fmt = function
   | Include (_,s) -> fprintf fmt "include \"%S\"" s 
   | Program (_,id, p) -> fprintf fmt "let %a = %a" Ident.print id print_ptree p
@@ -1083,10 +1088,8 @@ let print_decl fmt = function
   | Logic (_, e, ids, _lt) -> 
       fprintf fmt "%alogic %a : <...>" print_external e 
 	(print_list comma Ident.print) ids
-  | Axiom (_, id, _p) ->
-      fprintf fmt "axiom %a : <...>" Ident.print id
-  | Goal (_, id, _p) ->
-      fprintf fmt "assert %a : <...>" Ident.print id
+  | Goal (_, k, id, _p) ->
+      fprintf fmt "%s %a : <...>" (str_of_goal_kind k) Ident.print id
   | Predicate_def (_, id, _, _) ->
       fprintf fmt "predicate %a <...>" Ident.print id
   | Inductive_def (_, id, _, _) ->
@@ -1185,14 +1188,14 @@ let cook_loop_invariant _internal_lab (userlab : string option) p =
    refined explanation.
 *)
 let cook_explanation (userlab : string option) e =
-  let e,l =
+  let e,l, maylab =
     match e with
-      | VCEexternal s -> EKOther s, dummy_reloc 
-      | VCEabsurd -> EKAbsurd, dummy_reloc
+      | VCEexternal s -> EKOther s, dummy_reloc, None
+      | VCEabsurd -> EKAbsurd, dummy_reloc, None
       | VCEassert (k,p) -> 
           (match k with 
             | `ASSERT -> EKAssert
-            | `CHECK -> EKCheck), (reloc_xpl (List.hd p))      
+            | `CHECK -> EKCheck), (reloc_xpl (List.hd p)), None
       | VCEpre(lab,loc,_p) -> 
 	  begin
 	    if debug then eprintf "Util.cook_explanation: label,loc for pre = %s,%a@." lab
@@ -1206,37 +1209,39 @@ let cook_explanation (userlab : string option) e =
 		    | _ -> raise Not_found		  
 		in
 		if debug then eprintf "Util: kind for '%s' is '%s'@." lab k;
-		EKPre k, (f,l,b,e)
+		EKPre k, (f,l,b,e), Some lab
 	      with Not_found ->
 		if debug then eprintf "Util: cannot find a kind for '%s'@." lab;
-		EKPre "", (f,l,b,e)
+		EKPre "", (f,l,b,e), Some lab
 	    with Not_found -> 
 	      if debug then eprintf "Util: cannot find a loc for '%s'@." lab;
-	      EKPre "", Loc.extract loc
+	      EKPre "", Loc.extract loc, Some lab
 	  end
 
-      | VCEpost p -> EKPost, (reloc_xpl p)
-      | VCEwfrel -> EKWfRel, dummy_reloc 
-      | VCEvardecr p -> EKVarDecr, (reloc_xpl_term p)
+      | VCEpost p -> EKPost, (reloc_xpl p), None
+      | VCEwfrel -> EKWfRel, dummy_reloc, None
+      | VCEvardecr p -> EKVarDecr, (reloc_xpl_term p), None
       | VCEinvinit(internal_lab,p) -> 
 	  let s,loc  = cook_loop_invariant internal_lab userlab p in
-	  EKLoopInvInit s, loc 
+	  EKLoopInvInit s, loc, None
       | VCEinvpreserv(internal_lab,p) -> 
 	  let s,loc  = cook_loop_invariant internal_lab userlab p in
-	  EKLoopInvPreserv s, loc
-  in 
+	  EKLoopInvPreserv s, loc, None
+  in
+  let new_lab = if userlab = None then maylab else userlab in
   match e with
     | EKPre _ -> 
 	(* for pre-conditions, we want to focus on the call, not an the formula to prove *)
-	e,l
+	e,l, new_lab
     | _ -> e, 
-	match userlab with
+	(match new_lab with
 	  | None -> l
 	  | Some lab -> 
-	      (try loc_of_label lab with Not_found -> 
+	      try loc_of_label lab with Not_found -> 
 		if debug then
 		  eprintf "Warning: no loc found for user label %s@." lab;
-		l)
+		l),
+         new_lab
 
     
 let explanation_table = Hashtbl.create 97
@@ -1267,7 +1272,6 @@ let print_loc_predicate fmt (loc,p) =
 	  Loc.gen_report_position loc print_predicate p
 *)
   
-
 let print_decl fmt = function
   | Dtype (_, s, _) ->
       fprintf fmt "type %s" (Ident.string s)
@@ -1291,9 +1295,10 @@ let print_decl fmt = function
   | Daxiom (_, s, pred_sch) ->
       fprintf fmt "axiom %s : %a" s 
 	print_predicate pred_sch.Env.scheme_type
-  | Dgoal (_loc, expl, s, seq_sch) -> 
+  | Dgoal (_loc, is_lemma, expl, s, seq_sch) -> 
       let (cel, pred) = seq_sch.Env.scheme_type in
-      fprintf fmt "goal %s (%a) : %a" s
+      fprintf fmt "%s %s (%a) : %a" 
+	(if is_lemma then "lemma" else "goal") s
 	(print_list comma 
 	   (fun fmt t -> match t with 
 	     Cc.Svar (id, pt) -> 

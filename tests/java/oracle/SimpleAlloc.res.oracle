@@ -47,6 +47,9 @@ predicate Non_null_NodeM{Here}(NodeM[0..] x) =
 predicate Non_null_Object{Here}(Object[0..] x) =
 (\offset_max(x) == 0)
 
+String[0..] any_string()
+;
+
 tag Object = {
 }
 
@@ -370,27 +373,27 @@ end = -1
 
 [JC_41]
 file = "HOME/tests/java/SimpleAlloc.java"
-line = 11
-begin = 17
-end = 24
+line = 5
+begin = 4
+end = 8
 
 [JC_42]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 11
-begin = 28
-end = 40
-
-[JC_43]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 11
-begin = 17
-end = 40
-
-[JC_44]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_43]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_44]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 5
+begin = 4
+end = 8
 
 [test_test_safety]
 name = "Method test"
@@ -401,28 +404,22 @@ begin = 9
 end = 13
 
 [JC_45]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 11
-begin = 17
-end = 24
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_46]
 file = "HOME/tests/java/SimpleAlloc.java"
-line = 11
-begin = 28
-end = 40
+line = 5
+begin = 4
+end = 8
 
 [JC_1]
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 54
-begin = 8
+line = 23
+begin = 12
 end = 22
-
-[JC_47]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 11
-begin = 17
-end = 40
 
 [cons_Node_safety]
 name = "Constructor of class Node"
@@ -431,6 +428,12 @@ file = "HOME/tests/java/SimpleAlloc.java"
 line = 5
 begin = 4
 end = 8
+
+[JC_47]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_2]
 file = "HOME/"
@@ -446,15 +449,15 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 54
-begin = 8
+line = 23
+begin = 12
 end = 22
 
 [JC_49]
 file = "HOME/tests/java/SimpleAlloc.java"
-line = 13
-begin = 16
-end = 23
+line = 11
+begin = 17
+end = 24
 
 [JC_4]
 file = "HOME/"
@@ -463,28 +466,28 @@ begin = -1
 end = -1
 
 [JC_5]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 57
-begin = 11
-end = 66
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_6]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 56
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_7]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 57
-begin = 11
-end = 66
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_8]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 56
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [cons_test_ensures_default]
 name = "Constructor of class test"
@@ -495,10 +498,10 @@ begin = -1
 end = -1
 
 [JC_9]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 57
+begin = 8
+end = 22
 
 [test_test_ensures_default]
 name = "Method test"
@@ -510,83 +513,81 @@ end = 13
 
 [JC_50]
 file = "HOME/tests/java/SimpleAlloc.java"
-line = 15
-begin = 9
-end = 13
+line = 11
+begin = 28
+end = 40
 
 [JC_51]
 file = "HOME/tests/java/SimpleAlloc.java"
-line = 15
-begin = 9
-end = 13
+line = 11
+begin = 17
+end = 40
 
 [JC_52]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 87
-begin = 10
-end = 35
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_53]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 86
-begin = 9
-end = 16
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 11
+begin = 17
+end = 24
 
 [JC_54]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 11
+begin = 28
+end = 40
+
+[JC_55]
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 11
+begin = 17
+end = 40
+
+[JC_56]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_57]
 file = "HOME/tests/java/SimpleAlloc.java"
 line = 13
 begin = 16
 end = 23
 
-[JC_55]
+[JC_58]
 file = "HOME/tests/java/SimpleAlloc.java"
 line = 15
 begin = 9
 end = 13
 
-[JC_56]
+[JC_59]
 file = "HOME/tests/java/SimpleAlloc.java"
 line = 15
 begin = 9
 end = 13
 
-[JC_57]
+[JC_60]
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 87
+line = 90
 begin = 10
 end = 35
 
-[JC_58]
+[JC_61]
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 86
+line = 89
 begin = 9
 end = 16
 
-[JC_59]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_60]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_61]
-kind = AllocSize
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 91
-begin = 27
-end = 38
-
 [JC_62]
-kind = IndexBounds
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 91
-begin = 7
-end = 39
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 13
+begin = 16
+end = 23
 
 [JC_10]
 file = "HOME/"
@@ -595,24 +596,22 @@ begin = -1
 end = -1
 
 [JC_63]
-kind = UserCall
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 94
-begin = 24
-end = 39
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 15
+begin = 9
+end = 13
 
 [JC_11]
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 60
+line = 57
 begin = 8
-end = 31
+end = 22
 
 [JC_64]
-kind = IndexBounds
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 89
-begin = 11
-end = 177
+file = "HOME/tests/java/SimpleAlloc.java"
+line = 15
+begin = 9
+end = 13
 
 [JC_12]
 file = "HOME/"
@@ -621,30 +620,28 @@ begin = -1
 end = -1
 
 [JC_65]
-kind = AllocSize
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 91
-begin = 27
-end = 38
+line = 90
+begin = 10
+end = 35
 
 [JC_13]
 file = "HOME/tests/java/SimpleAlloc.jc"
 line = 60
-begin = 8
-end = 31
+begin = 11
+end = 66
 
 [JC_66]
-kind = UserCall
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 94
-begin = 24
-end = 39
+line = 89
+begin = 9
+end = 16
 
 [JC_14]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 59
+begin = 10
+end = 18
 
 [JC_67]
 file = "HOME/"
@@ -654,9 +651,9 @@ end = -1
 
 [JC_15]
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 63
+line = 60
 begin = 11
-end = 103
+end = 66
 
 [JC_68]
 file = "HOME/"
@@ -666,51 +663,55 @@ end = -1
 
 [JC_16]
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 62
+line = 59
 begin = 10
 end = 18
 
 [JC_69]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = AllocSize
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 94
+begin = 27
+end = 38
 
 [JC_17]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 63
-begin = 11
-end = 103
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_18]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 62
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_19]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 63
+begin = 8
+end = 31
 
 [JC_70]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = IndexBounds
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 94
+begin = 7
+end = 39
 
 [JC_71]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 97
+begin = 24
+end = 39
 
 [JC_72]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = IndexBounds
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 92
+begin = 11
+end = 177
 
 [JC_20]
 file = "HOME/"
@@ -719,22 +720,24 @@ begin = -1
 end = -1
 
 [JC_73]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = AllocSize
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 94
+begin = 27
+end = 38
 
 [JC_21]
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 67
+line = 63
 begin = 8
-end = 23
+end = 31
 
 [JC_74]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 97
+begin = 24
+end = 39
 
 [JC_22]
 file = "HOME/"
@@ -750,13 +753,31 @@ line = 0
 begin = -1
 end = -1
 
+[JC_75]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_23]
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 67
-begin = 8
-end = 23
+line = 66
+begin = 11
+end = 103
+
+[JC_76]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_24]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 65
+begin = 10
+end = 18
+
+[JC_77]
 file = "HOME/"
 line = 0
 begin = -1
@@ -771,12 +792,24 @@ begin = 4
 end = 8
 
 [JC_25]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 66
+begin = 11
+end = 103
+
+[JC_78]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
 [JC_26]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 65
+begin = 10
+end = 18
+
+[JC_79]
 file = "HOME/"
 line = 0
 begin = -1
@@ -796,21 +829,39 @@ end = -1
 
 [JC_29]
 file = "HOME/tests/java/SimpleAlloc.jc"
-line = 69
-begin = 11
-end = 65
+line = 70
+begin = 8
+end = 23
+
+[JC_80]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_81]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_82]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_30]
-file = "HOME/tests/java/SimpleAlloc.jc"
-line = 69
-begin = 11
-end = 65
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_31]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 5
-begin = 4
-end = 8
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 70
+begin = 8
+end = 23
 
 [JC_32]
 file = "HOME/"
@@ -819,10 +870,10 @@ begin = -1
 end = -1
 
 [JC_33]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 5
-begin = 4
-end = 8
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_34]
 file = "HOME/"
@@ -837,28 +888,28 @@ begin = -1
 end = -1
 
 [JC_36]
-file = "HOME/tests/java/SimpleAlloc.java"
-line = 5
-begin = 4
-end = 8
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_37]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 72
+begin = 11
+end = 65
 
 [JC_38]
+file = "HOME/tests/java/SimpleAlloc.jc"
+line = 72
+begin = 11
+end = 65
+
+[JC_39]
 file = "HOME/tests/java/SimpleAlloc.java"
 line = 5
 begin = 4
 end = 8
-
-[JC_39]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
 
 ========== file tests/java/why/SimpleAlloc.why ==========
 type Object
@@ -1577,6 +1628,10 @@ parameter any_long : unit -> { } long { true }
 
 parameter any_short : unit -> { } short { true }
 
+parameter any_string_0 : tt:unit -> { } Object pointer { true }
+
+parameter any_string_0_requires : tt:unit -> { } Object pointer { true }
+
 parameter byte_of_integer_ :
  x:int ->
   { (le_int((-128), x) and le_int(x, (127)))} byte
@@ -1590,14 +1645,14 @@ parameter char_of_integer_ :
 parameter cons_Node :
  this_0:Object pointer ->
   { } unit reads Object_alloc_table writes Node_val
-  { (JC_38:
+  { (JC_46:
     not_assigns(Object_alloc_table@, Node_val@, Node_val,
     pset_singleton(this_0@))) }
 
 parameter cons_Node_requires :
  this_0:Object pointer ->
   { } unit reads Object_alloc_table writes Node_val
-  { (JC_38:
+  { (JC_46:
     not_assigns(Object_alloc_table@, Node_val@, Node_val,
     pset_singleton(this_0@))) }
 
@@ -1619,7 +1674,7 @@ parameter int32_of_integer_ :
 parameter java_array_length_NodeM :
  x_3:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_17:
+  { (JC_25:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
         and eq_int(result, add_int(offset_max(Object_alloc_table, x_3), (1)))))) }
@@ -1627,7 +1682,7 @@ parameter java_array_length_NodeM :
 parameter java_array_length_NodeM_requires :
  x_3:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_17:
+  { (JC_25:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
         and eq_int(result, add_int(offset_max(Object_alloc_table, x_3), (1)))))) }
@@ -1640,28 +1695,28 @@ parameter long_of_integer_ :
 parameter non_null_NodeM :
  x_2:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_7:
+  { (JC_15:
     (if result then ge_int(offset_max(Object_alloc_table, x_2), neg_int((1)))
      else (x_2 = null))) }
 
 parameter non_null_NodeM_requires :
  x_2:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_7:
+  { (JC_15:
     (if result then ge_int(offset_max(Object_alloc_table, x_2), neg_int((1)))
      else (x_2 = null))) }
 
 parameter non_null_Object :
  x_4:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_30:
+  { (JC_38:
     (if result then eq_int(offset_max(Object_alloc_table, x_4), (0))
      else (x_4 = null))) }
 
 parameter non_null_Object_requires :
  x_4:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_30:
+  { (JC_38:
     (if result then eq_int(offset_max(Object_alloc_table, x_4), (0))
      else (x_4 = null))) }
 
@@ -1689,32 +1744,32 @@ parameter test_test :
  this_2:Object pointer ->
   { } unit reads Object_alloc_table,test_x
   writes NodeM_NodeP,Node_val,Object_alloc_table,Object_tag_table
-  { (JC_58:
-    ((JC_54: Non_null_NodeM(select(test_x, this_2), Object_alloc_table))
-    and (JC_57:
-        ((JC_55:
+  { (JC_66:
+    ((JC_62: Non_null_NodeM(select(test_x, this_2), Object_alloc_table))
+    and (JC_65:
+        ((JC_63:
          not_assigns(Object_alloc_table@, Node_val@, Node_val, pset_empty))
-        and (JC_56:
+        and (JC_64:
             not_assigns(Object_alloc_table@, NodeM_NodeP@, NodeM_NodeP,
             pset_range(pset_deref(test_x@, pset_singleton(this_2@)), (0),
             (0)))))))) }
 
 parameter test_test_requires :
  this_2:Object pointer ->
-  { (JC_43:
-    ((JC_41: Non_null_NodeM(select(test_x, this_2), Object_alloc_table))
-    and (JC_42:
+  { (JC_51:
+    ((JC_49: Non_null_NodeM(select(test_x, this_2), Object_alloc_table))
+    and (JC_50:
         eq_int(add_int(offset_max(Object_alloc_table, select(test_x, this_2)),
                (1)),
         (10)))))}
   unit reads Object_alloc_table,test_x
   writes NodeM_NodeP,Node_val,Object_alloc_table,Object_tag_table
-  { (JC_58:
-    ((JC_54: Non_null_NodeM(select(test_x, this_2), Object_alloc_table))
-    and (JC_57:
-        ((JC_55:
+  { (JC_66:
+    ((JC_62: Non_null_NodeM(select(test_x, this_2), Object_alloc_table))
+    and (JC_65:
+        ((JC_63:
          not_assigns(Object_alloc_table@, Node_val@, Node_val, pset_empty))
-        and (JC_56:
+        and (JC_64:
             not_assigns(Object_alloc_table@, NodeM_NodeP@, NodeM_NodeP,
             pset_range(pset_deref(test_x@, pset_singleton(this_2@)), (0),
             (0)))))))) }
@@ -1730,7 +1785,7 @@ let cons_Node_ensures_default =
      begin
        (let jessie_<num> = this_0 in (((safe_upd_ Node_val) jessie_<num>) jessie_<num>));
       jessie_<num> end) in void); (raise Return) end with Return -> void end)
-  { (JC_36:
+  { (JC_44:
     not_assigns(Object_alloc_table@, Node_val@, Node_val,
     pset_singleton(this_0@))) }
 
@@ -1758,7 +1813,7 @@ let cons_test_ensures_default =
      begin
        (let jessie_<num> = this_3 in (((safe_upd_ test_x) jessie_<num>) jessie_<num>));
       jessie_<num> end) in void); (raise Return) end with Return -> void end)
-  { (JC_71: true) }
+  { (JC_79: true) }
 
 let cons_test_safety =
  fun (this_3 : Object pointer) ->
@@ -1776,9 +1831,9 @@ let cons_test_safety =
 let test_test_ensures_default =
  fun (this_2 : Object pointer) ->
   { (valid_struct_test(this_2, (0), (0), Object_alloc_table)
-    and (JC_47:
-        ((JC_45: Non_null_NodeM(select(test_x, this_2), Object_alloc_table))
-        and (JC_46:
+    and (JC_55:
+        ((JC_53: Non_null_NodeM(select(test_x, this_2), Object_alloc_table))
+        and (JC_54:
             eq_int(add_int(offset_max(Object_alloc_table,
                            select(test_x, this_2)),
                    (1)),
@@ -1790,19 +1845,19 @@ let test_test_ensures_default =
      (K_7:
      (let jessie_<num> =
      (let this =
-     (JC_65: (((alloc_struct_Node (1)) Object_alloc_table) Object_tag_table)) in
-     (let tt = (let jessie_<num> = this in (JC_66: (cons_Node jessie_<num>))) in
+     (JC_73: (((alloc_struct_Node (1)) Object_alloc_table) Object_tag_table)) in
+     (let tt = (let jessie_<num> = this in (JC_74: (cons_Node jessie_<num>))) in
      this)) in
      begin
        (let jessie_<num> = (K_6: ((safe_acc_ !test_x) this_2)) in
        (((safe_upd_ NodeM_NodeP) jessie_<num>) jessie_<num>)); jessie_<num> end)) in
      void); (raise Return) end with Return -> void end)
-  { (JC_53:
-    ((JC_49: Non_null_NodeM(select(test_x, this_2), Object_alloc_table))
-    and (JC_52:
-        ((JC_50:
+  { (JC_61:
+    ((JC_57: Non_null_NodeM(select(test_x, this_2), Object_alloc_table))
+    and (JC_60:
+        ((JC_58:
          not_assigns(Object_alloc_table@, Node_val@, Node_val, pset_empty))
-        and (JC_51:
+        and (JC_59:
             not_assigns(Object_alloc_table@, NodeM_NodeP@, NodeM_NodeP,
             pset_range(pset_deref(test_x@, pset_singleton(this_2@)), (0),
             (0)))))))) }
@@ -1810,9 +1865,9 @@ let test_test_ensures_default =
 let test_test_safety =
  fun (this_2 : Object pointer) ->
   { (valid_struct_test(this_2, (0), (0), Object_alloc_table)
-    and (JC_47:
-        ((JC_45: Non_null_NodeM(select(test_x, this_2), Object_alloc_table))
-        and (JC_46:
+    and (JC_55:
+        ((JC_53: Non_null_NodeM(select(test_x, this_2), Object_alloc_table))
+        and (JC_54:
             eq_int(add_int(offset_max(Object_alloc_table,
                            select(test_x, this_2)),
                    (1)),
@@ -1825,17 +1880,17 @@ let test_test_safety =
      (let jessie_<num> =
      (let this =
      (let jessie_<num> =
-     (JC_61:
+     (JC_69:
      (((alloc_struct_Node_requires (1)) Object_alloc_table) Object_tag_table)) in
-     (JC_62:
+     (JC_70:
      (assert { ge_int(offset_max(Object_alloc_table, jessie_<num>), (0)) };
      jessie_<num>))) in
      (let tt =
-     (let jessie_<num> = this in (JC_63: (cons_Node_requires jessie_<num>))) in
+     (let jessie_<num> = this in (JC_71: (cons_Node_requires jessie_<num>))) in
      this)) in
      begin
        (let jessie_<num> = (K_6: ((safe_acc_ !test_x) this_2)) in
-       (JC_64:
+       (JC_72:
        (((((lsafe_lbound_upd_ !Object_alloc_table) NodeM_NodeP) jessie_<num>) (0)) jessie_<num>)));
       jessie_<num> end)) in void); (raise Return) end with Return -> void end)
   { true }
@@ -1849,16 +1904,16 @@ why --project [...] why/SimpleAlloc.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/SimpleAlloc_po5.why">
-      <location file = "HOME/tests/java/SimpleAlloc.jc" line = "91" begin = "27" end = "38"/>
+      <location file = "HOME/tests/java/SimpleAlloc.jc" line = "94" begin = "27" end = "38"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/SimpleAlloc_po6.why">
-      <location file = "why/SimpleAlloc.why" line = "968" begin = "15" end = "69"/>
+      <location file = "why/SimpleAlloc.why" line = "972" begin = "15" end = "69"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SimpleAlloc_po7.why">
-      <location file = "HOME/tests/java/SimpleAlloc.jc" line = "89" begin = "11" end = "177"/>
+      <location file = "HOME/tests/java/SimpleAlloc.jc" line = "92" begin = "11" end = "177"/>
       <explain kind = "Pre"
 text = "IndexBounds"/>
     </goal>
@@ -3188,7 +3243,7 @@ goal cons_Node_ensures_default_po_1:
   forall Node_val0:(Object,
   int32) memory.
   (Node_val0 = store(Node_val, this_0, result)) ->
-  ("JC_36": not_assigns(Object_alloc_table, Node_val, Node_val0,
+  ("JC_44": not_assigns(Object_alloc_table, Node_val, Node_val0,
   pset_singleton(this_0)))
 
 ========== file tests/java/why/SimpleAlloc_po2.why ==========
@@ -3201,9 +3256,9 @@ goal test_test_ensures_default_po_1:
   forall test_x:(Object,
   Object pointer) memory.
   (valid_struct_test(this_2, 0, 0, Object_alloc_table) and
-   ("JC_47":
-   (("JC_45": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
-    ("JC_46": ((offset_max(Object_alloc_table, select(test_x,
+   ("JC_55":
+   (("JC_53": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
+    ("JC_54": ((offset_max(Object_alloc_table, select(test_x,
     this_2)) + 1) = 10))))) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
@@ -3214,16 +3269,15 @@ goal test_test_ensures_default_po_1:
      instanceof(Object_tag_table, result, Node_tag)))) ->
   forall Node_val0:(Object,
   int32) memory.
-  ("JC_38": not_assigns(Object_alloc_table0, Node_val, Node_val0,
+  ("JC_46": not_assigns(Object_alloc_table0, Node_val, Node_val0,
   pset_singleton(result))) ->
   forall result0:Object pointer.
   (result0 = select(test_x, this_2)) ->
   forall NodeM_NodeP0:(Object,
   Object pointer) memory.
   (NodeM_NodeP0 = store(NodeM_NodeP, result0, result)) ->
-  ("JC_53":
-  ("JC_49":
-  ("JC_49": Non_null_NodeM(select(test_x, this_2), Object_alloc_table0))))
+  ("JC_61":
+  ("JC_57": Non_null_NodeM(select(test_x, this_2), Object_alloc_table0)))
 
 ========== file tests/java/why/SimpleAlloc_po3.why ==========
 goal test_test_ensures_default_po_2:
@@ -3235,9 +3289,9 @@ goal test_test_ensures_default_po_2:
   forall test_x:(Object,
   Object pointer) memory.
   (valid_struct_test(this_2, 0, 0, Object_alloc_table) and
-   ("JC_47":
-   (("JC_45": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
-    ("JC_46": ((offset_max(Object_alloc_table, select(test_x,
+   ("JC_55":
+   (("JC_53": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
+    ("JC_54": ((offset_max(Object_alloc_table, select(test_x,
     this_2)) + 1) = 10))))) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
@@ -3248,17 +3302,16 @@ goal test_test_ensures_default_po_2:
      instanceof(Object_tag_table, result, Node_tag)))) ->
   forall Node_val0:(Object,
   int32) memory.
-  ("JC_38": not_assigns(Object_alloc_table0, Node_val, Node_val0,
+  ("JC_46": not_assigns(Object_alloc_table0, Node_val, Node_val0,
   pset_singleton(result))) ->
   forall result0:Object pointer.
   (result0 = select(test_x, this_2)) ->
   forall NodeM_NodeP0:(Object,
   Object pointer) memory.
   (NodeM_NodeP0 = store(NodeM_NodeP, result0, result)) ->
-  ("JC_53":
-  ("JC_52":
-  ("JC_50":
-  ("JC_50": not_assigns(Object_alloc_table, Node_val, Node_val0, pset_empty)))))
+  ("JC_61":
+  ("JC_60":
+  ("JC_58": not_assigns(Object_alloc_table, Node_val, Node_val0, pset_empty))))
 
 ========== file tests/java/why/SimpleAlloc_po4.why ==========
 goal test_test_ensures_default_po_3:
@@ -3270,9 +3323,9 @@ goal test_test_ensures_default_po_3:
   forall test_x:(Object,
   Object pointer) memory.
   (valid_struct_test(this_2, 0, 0, Object_alloc_table) and
-   ("JC_47":
-   (("JC_45": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
-    ("JC_46": ((offset_max(Object_alloc_table, select(test_x,
+   ("JC_55":
+   (("JC_53": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
+    ("JC_54": ((offset_max(Object_alloc_table, select(test_x,
     this_2)) + 1) = 10))))) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
@@ -3283,18 +3336,17 @@ goal test_test_ensures_default_po_3:
      instanceof(Object_tag_table, result, Node_tag)))) ->
   forall Node_val0:(Object,
   int32) memory.
-  ("JC_38": not_assigns(Object_alloc_table0, Node_val, Node_val0,
+  ("JC_46": not_assigns(Object_alloc_table0, Node_val, Node_val0,
   pset_singleton(result))) ->
   forall result0:Object pointer.
   (result0 = select(test_x, this_2)) ->
   forall NodeM_NodeP0:(Object,
   Object pointer) memory.
   (NodeM_NodeP0 = store(NodeM_NodeP, result0, result)) ->
-  ("JC_53":
-  ("JC_52":
-  ("JC_51":
-  ("JC_51": not_assigns(Object_alloc_table, NodeM_NodeP, NodeM_NodeP0,
-  pset_range(pset_deref(test_x, pset_singleton(this_2)), 0, 0))))))
+  ("JC_61":
+  ("JC_60":
+  ("JC_59": not_assigns(Object_alloc_table, NodeM_NodeP, NodeM_NodeP0,
+  pset_range(pset_deref(test_x, pset_singleton(this_2)), 0, 0)))))
 
 ========== file tests/java/why/SimpleAlloc_po5.why ==========
 goal test_test_safety_po_1:
@@ -3303,9 +3355,9 @@ goal test_test_safety_po_1:
   forall test_x:(Object,
   Object pointer) memory.
   (valid_struct_test(this_2, 0, 0, Object_alloc_table) and
-   ("JC_47":
-   (("JC_45": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
-    ("JC_46": ((offset_max(Object_alloc_table, select(test_x,
+   ("JC_55":
+   (("JC_53": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
+    ("JC_54": ((offset_max(Object_alloc_table, select(test_x,
     this_2)) + 1) = 10))))) ->
   (1 >= 0)
 
@@ -3316,9 +3368,9 @@ goal test_test_safety_po_2:
   forall test_x:(Object,
   Object pointer) memory.
   (valid_struct_test(this_2, 0, 0, Object_alloc_table) and
-   ("JC_47":
-   (("JC_45": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
-    ("JC_46": ((offset_max(Object_alloc_table, select(test_x,
+   ("JC_55":
+   (("JC_53": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
+    ("JC_54": ((offset_max(Object_alloc_table, select(test_x,
     this_2)) + 1) = 10))))) ->
   (1 >= 0) ->
   forall result:Object pointer.
@@ -3339,9 +3391,9 @@ goal test_test_safety_po_3:
   forall test_x:(Object,
   Object pointer) memory.
   (valid_struct_test(this_2, 0, 0, Object_alloc_table) and
-   ("JC_47":
-   (("JC_45": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
-    ("JC_46": ((offset_max(Object_alloc_table, select(test_x,
+   ("JC_55":
+   (("JC_53": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
+    ("JC_54": ((offset_max(Object_alloc_table, select(test_x,
     this_2)) + 1) = 10))))) ->
   (1 >= 0) ->
   forall result:Object pointer.
@@ -3354,7 +3406,7 @@ goal test_test_safety_po_3:
   (offset_max(Object_alloc_table0, result) >= 0) ->
   forall Node_val0:(Object,
   int32) memory.
-  ("JC_38": not_assigns(Object_alloc_table0, Node_val, Node_val0,
+  ("JC_46": not_assigns(Object_alloc_table0, Node_val, Node_val0,
   pset_singleton(result))) ->
   forall result0:Object pointer.
   (result0 = select(test_x, this_2)) ->
@@ -4552,7 +4604,7 @@ Object_alloc_table NodeM_NodeP NodeM_NodeP0 (pset_range
                                             (pset_deref
                                             test_x (pset_singleton this_2)) 0 0))))))))))))))))))
 
-;; test_test_safety_po_1, File "HOME/tests/java/SimpleAlloc.jc", line 91, characters 27-38
+;; test_test_safety_po_1, File "HOME/tests/java/SimpleAlloc.jc", line 94, characters 27-38
 (FORALL (this_2)
 (FORALL (Object_alloc_table)
 (FORALL (test_x)
@@ -4561,7 +4613,7 @@ Object_alloc_table NodeM_NodeP NodeM_NodeP0 (pset_range
          (EQ (+ (offset_max Object_alloc_table (select test_x this_2)) 1) 10)))
 (>= 1 0)))))
 
-;; test_test_safety_po_2, File "why/SimpleAlloc.why", line 968, characters 15-69
+;; test_test_safety_po_2, File "why/SimpleAlloc.why", line 972, characters 15-69
 (FORALL (this_2)
 (FORALL (Object_alloc_table)
 (FORALL (test_x)
@@ -4579,7 +4631,7 @@ Object_alloc_table NodeM_NodeP NodeM_NodeP0 (pset_range
          (instanceof Object_tag_table result Node_tag))))
 (>= (offset_max Object_alloc_table0 result) 0))))))))))
 
-;; test_test_safety_po_3, File "HOME/tests/java/SimpleAlloc.jc", line 89, characters 11-177
+;; test_test_safety_po_3, File "HOME/tests/java/SimpleAlloc.jc", line 92, characters 11-177
 (FORALL (this_2)
 (FORALL (Node_val)
 (FORALL (Object_alloc_table)
@@ -5912,7 +5964,7 @@ goal cons_Node_ensures_default_po_1:
   forall Node_val0:(Object,
   int32) memory.
   (Node_val0 = store(Node_val, this_0, result)) ->
-  ("JC_36": not_assigns(Object_alloc_table, Node_val, Node_val0,
+  ("JC_44": not_assigns(Object_alloc_table, Node_val, Node_val0,
   pset_singleton(this_0)))
 
 goal test_test_ensures_default_po_1:
@@ -5924,9 +5976,9 @@ goal test_test_ensures_default_po_1:
   forall test_x:(Object,
   Object pointer) memory.
   (valid_struct_test(this_2, 0, 0, Object_alloc_table) and
-   ("JC_47":
-   (("JC_45": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
-    ("JC_46": ((offset_max(Object_alloc_table, select(test_x,
+   ("JC_55":
+   (("JC_53": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
+    ("JC_54": ((offset_max(Object_alloc_table, select(test_x,
     this_2)) + 1) = 10))))) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
@@ -5937,16 +5989,15 @@ goal test_test_ensures_default_po_1:
      instanceof(Object_tag_table, result, Node_tag)))) ->
   forall Node_val0:(Object,
   int32) memory.
-  ("JC_38": not_assigns(Object_alloc_table0, Node_val, Node_val0,
+  ("JC_46": not_assigns(Object_alloc_table0, Node_val, Node_val0,
   pset_singleton(result))) ->
   forall result0:Object pointer.
   (result0 = select(test_x, this_2)) ->
   forall NodeM_NodeP0:(Object,
   Object pointer) memory.
   (NodeM_NodeP0 = store(NodeM_NodeP, result0, result)) ->
-  ("JC_53":
-  ("JC_49":
-  ("JC_49": Non_null_NodeM(select(test_x, this_2), Object_alloc_table0))))
+  ("JC_61":
+  ("JC_57": Non_null_NodeM(select(test_x, this_2), Object_alloc_table0)))
 
 goal test_test_ensures_default_po_2:
   forall this_2:Object pointer.
@@ -5957,9 +6008,9 @@ goal test_test_ensures_default_po_2:
   forall test_x:(Object,
   Object pointer) memory.
   (valid_struct_test(this_2, 0, 0, Object_alloc_table) and
-   ("JC_47":
-   (("JC_45": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
-    ("JC_46": ((offset_max(Object_alloc_table, select(test_x,
+   ("JC_55":
+   (("JC_53": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
+    ("JC_54": ((offset_max(Object_alloc_table, select(test_x,
     this_2)) + 1) = 10))))) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
@@ -5970,17 +6021,16 @@ goal test_test_ensures_default_po_2:
      instanceof(Object_tag_table, result, Node_tag)))) ->
   forall Node_val0:(Object,
   int32) memory.
-  ("JC_38": not_assigns(Object_alloc_table0, Node_val, Node_val0,
+  ("JC_46": not_assigns(Object_alloc_table0, Node_val, Node_val0,
   pset_singleton(result))) ->
   forall result0:Object pointer.
   (result0 = select(test_x, this_2)) ->
   forall NodeM_NodeP0:(Object,
   Object pointer) memory.
   (NodeM_NodeP0 = store(NodeM_NodeP, result0, result)) ->
-  ("JC_53":
-  ("JC_52":
-  ("JC_50":
-  ("JC_50": not_assigns(Object_alloc_table, Node_val, Node_val0, pset_empty)))))
+  ("JC_61":
+  ("JC_60":
+  ("JC_58": not_assigns(Object_alloc_table, Node_val, Node_val0, pset_empty))))
 
 goal test_test_ensures_default_po_3:
   forall this_2:Object pointer.
@@ -5991,9 +6041,9 @@ goal test_test_ensures_default_po_3:
   forall test_x:(Object,
   Object pointer) memory.
   (valid_struct_test(this_2, 0, 0, Object_alloc_table) and
-   ("JC_47":
-   (("JC_45": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
-    ("JC_46": ((offset_max(Object_alloc_table, select(test_x,
+   ("JC_55":
+   (("JC_53": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
+    ("JC_54": ((offset_max(Object_alloc_table, select(test_x,
     this_2)) + 1) = 10))))) ->
   forall result:Object pointer.
   forall Object_alloc_table0:Object alloc_table.
@@ -6004,18 +6054,17 @@ goal test_test_ensures_default_po_3:
      instanceof(Object_tag_table, result, Node_tag)))) ->
   forall Node_val0:(Object,
   int32) memory.
-  ("JC_38": not_assigns(Object_alloc_table0, Node_val, Node_val0,
+  ("JC_46": not_assigns(Object_alloc_table0, Node_val, Node_val0,
   pset_singleton(result))) ->
   forall result0:Object pointer.
   (result0 = select(test_x, this_2)) ->
   forall NodeM_NodeP0:(Object,
   Object pointer) memory.
   (NodeM_NodeP0 = store(NodeM_NodeP, result0, result)) ->
-  ("JC_53":
-  ("JC_52":
-  ("JC_51":
-  ("JC_51": not_assigns(Object_alloc_table, NodeM_NodeP, NodeM_NodeP0,
-  pset_range(pset_deref(test_x, pset_singleton(this_2)), 0, 0))))))
+  ("JC_61":
+  ("JC_60":
+  ("JC_59": not_assigns(Object_alloc_table, NodeM_NodeP, NodeM_NodeP0,
+  pset_range(pset_deref(test_x, pset_singleton(this_2)), 0, 0)))))
 
 goal test_test_safety_po_1:
   forall this_2:Object pointer.
@@ -6023,9 +6072,9 @@ goal test_test_safety_po_1:
   forall test_x:(Object,
   Object pointer) memory.
   (valid_struct_test(this_2, 0, 0, Object_alloc_table) and
-   ("JC_47":
-   (("JC_45": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
-    ("JC_46": ((offset_max(Object_alloc_table, select(test_x,
+   ("JC_55":
+   (("JC_53": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
+    ("JC_54": ((offset_max(Object_alloc_table, select(test_x,
     this_2)) + 1) = 10))))) ->
   (1 >= 0)
 
@@ -6035,9 +6084,9 @@ goal test_test_safety_po_2:
   forall test_x:(Object,
   Object pointer) memory.
   (valid_struct_test(this_2, 0, 0, Object_alloc_table) and
-   ("JC_47":
-   (("JC_45": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
-    ("JC_46": ((offset_max(Object_alloc_table, select(test_x,
+   ("JC_55":
+   (("JC_53": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
+    ("JC_54": ((offset_max(Object_alloc_table, select(test_x,
     this_2)) + 1) = 10))))) ->
   (1 >= 0) ->
   forall result:Object pointer.
@@ -6057,9 +6106,9 @@ goal test_test_safety_po_3:
   forall test_x:(Object,
   Object pointer) memory.
   (valid_struct_test(this_2, 0, 0, Object_alloc_table) and
-   ("JC_47":
-   (("JC_45": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
-    ("JC_46": ((offset_max(Object_alloc_table, select(test_x,
+   ("JC_55":
+   (("JC_53": Non_null_NodeM(select(test_x, this_2), Object_alloc_table)) and
+    ("JC_54": ((offset_max(Object_alloc_table, select(test_x,
     this_2)) + 1) = 10))))) ->
   (1 >= 0) ->
   forall result:Object pointer.
@@ -6072,7 +6121,7 @@ goal test_test_safety_po_3:
   (offset_max(Object_alloc_table0, result) >= 0) ->
   forall Node_val0:(Object,
   int32) memory.
-  ("JC_38": not_assigns(Object_alloc_table0, Node_val, Node_val0,
+  ("JC_46": not_assigns(Object_alloc_table0, Node_val, Node_val0,
   pset_singleton(result))) ->
   forall result0:Object pointer.
   (result0 = select(test_x, this_2)) ->

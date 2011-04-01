@@ -430,7 +430,7 @@ let tr_struct st acc =
              let mem = memory_type (JCmem_field fi) in
              Param(
                false,
-               field_memory_name fi,
+               id_no_loc (field_memory_name fi),
                Ref_type(Base_type mem))::acc)
           acc st.jc_struct_info_fields
   in
@@ -443,11 +443,11 @@ let tr_struct st acc =
         List.fold_left
           (fun acc fi ->
 	     if has_equality_op fi.jc_field_info_type then
-               Logic(false,logic_field_of_union fi,
+               Logic(false,id_no_loc (logic_field_of_union fi),
                      [("",uty)],tr_base_type fi.jc_field_info_type)
-               :: Logic(false,logic_union_of_field fi,
+               :: Logic(false,id_no_loc (logic_union_of_field fi),
 			[("",tr_base_type fi.jc_field_info_type)],uty)
-               :: Axiom((logic_field_of_union fi)^"_of_"^(logic_union_of_field fi),
+               :: Goal(KAxiom,id_no_loc ((logic_field_of_union fi)^"_of_"^(logic_union_of_field fi)),
 			LForall("x",tr_base_type fi.jc_field_info_type, [],
 				LPred(equality_op_for_type fi.jc_field_info_type,
                                       [LApp(logic_field_of_union fi,
@@ -460,7 +460,7 @@ let tr_struct st acc =
   in
   (* declaration of the tag_id *)
   let acc =
-    Logic(false,tag_name st,[],tagid_type)::acc
+    Logic(false,id_no_loc (tag_name st),[],tagid_type)::acc
   in
 
   let acc =
@@ -488,7 +488,7 @@ let tr_struct st acc =
         (* axiom for parenttag *)
         let name = st.jc_struct_info_name ^ "_parenttag_bottom" in
         let p = LPred("parenttag", [ LVar (tag_name st); LVar "bottom_tag" ]) in
-        Axiom(name, p)::acc
+        Goal(KAxiom,id_no_loc name, p)::acc
     | Some(p, _) ->
         (* axiom for parenttag *)
         let name =
@@ -497,7 +497,7 @@ let tr_struct st acc =
         let p =
           LPred("parenttag", [ LVar (tag_name st); LVar (tag_name p) ])
         in
-        Axiom(name, p)::acc
+        Goal(KAxiom,id_no_loc name, p)::acc
 
 
 (******************************************************************************)
@@ -527,7 +527,8 @@ let float_of_real f x =
   else
     match f,x with
       | _ , "0.5" -> x
-      | `Float, "0.1" -> "0x0.199999Ap0"
+      | `Float, "0.1" -> "0x1.99999ap-4"
+      | `Double, "0.1" -> "0x1.999999999999ap-4"
       | _ -> raise Not_found
 
 let rec term_coerce ~type_safe ~global_assertion lab ?(cast=false) pos
@@ -3248,7 +3249,6 @@ let rec finalize e =
                 else LTrue
               in
               let post =
-                (* TODO ! generer le not_assigns !!!! *)
                 make_and_list
                   (make_not_assigns talloc mem tmpe l ::
                      List.map
@@ -3297,11 +3297,11 @@ let tr_axiom loc id ~is_axiom labels a acc =
     ~name:id
     ~beh:(if is_axiom then "axiom" else "lemma")
     loc;
-  let a' = List.fold_right (fun (n,_v,ty') a' -> LForall(n,ty',[],a')) params a' in
-  if is_axiom then
-    Axiom(new_id,a') :: acc
-  else
-    Goal(new_id,a') :: Axiom(new_id ^ "_as_axiom",a') :: acc
+  let a' = 
+    List.fold_right (fun (n,_v,ty') a' -> LForall(n,ty',[],a')) params a' 
+  in
+  Goal((if is_axiom then KAxiom else KLemma),
+       {Output.name = new_id; loc = Loc.extract loc},a') :: acc
 
 
 
@@ -3724,7 +3724,7 @@ let tr_fun f funpos spec body acc =
     in
     let newid = f.jc_fun_info_final_name ^ "_requires" in
     Hashtbl.add function_prototypes newid fun_type;
-    Param(false, newid, fun_type) :: acc
+    Param(false, id_no_loc newid, fun_type) :: acc
   in
   let acc = (* function declaration without precondition *)
     let annot_type =
@@ -3738,7 +3738,7 @@ let tr_fun f funpos spec body acc =
     in
     let newid = f.jc_fun_info_final_name in
     Hashtbl.add function_prototypes newid fun_type;
-    Param(false, newid, fun_type) :: acc
+    Param(false, id_no_loc newid, fun_type) :: acc
   in
 
   (* Function body *)
@@ -3825,7 +3825,7 @@ let tr_fun f funpos spec body acc =
               if is_purely_exceptional_fun spec then acc else
 		if Jc_options.verify_invariants_only then acc else
                   Def(
-                    newid,
+                    id_no_loc newid,
                     mk_expr (Fun(
                       params,
                       internal_requires,
@@ -3854,7 +3854,7 @@ let tr_fun f funpos spec body acc =
                      ~beh
                      funpos;
                    Def(
-                     newid,
+                     id_no_loc newid,
                      mk_expr (Fun(
 		       params,
 		       assume_in_precondition b internal_requires,
@@ -3881,7 +3881,7 @@ let tr_fun f funpos spec body acc =
                           ~name:("function " ^ f.jc_fun_info_name)
                           ~beh:("Exceptional behavior `" ^ id ^ "'")
                           funpos;
-                        Def(newid,
+                        Def(id_no_loc newid,
                             mk_expr (Fun(
 			      params,
 			      assume_in_precondition b internal_requires,
@@ -3968,14 +3968,14 @@ let tr_specialized_fun n fname param_name_assoc acc =
 
   let fun_type = Hashtbl.find function_prototypes fname in
   let new_fun_type = modif_why_type fun_type in
-  Param(false, n, new_fun_type) :: acc
+  Param(false, id_no_loc n, new_fun_type) :: acc
 
 
 (******************************************************************************)
 (*                               Logic entities                               *)
 (******************************************************************************)
 
-let tr_logic_type (id,l) acc = Type(id,List.map Jc_type_var.name l) :: acc
+let tr_logic_type (id,l) acc = Type(id_no_loc id,List.map Jc_type_var.name l) :: acc
 
 
 let tr_exception ei acc =
@@ -3984,7 +3984,7 @@ let tr_exception ei acc =
     | Some tei -> Some (tr_base_type tei)
     | None -> None
   in
-  Exception(exception_name ei, typ) :: acc
+  Exception(id_no_loc (exception_name ei), typ) :: acc
 
 (* let tr_native_type nty acc = *)
 (*   let lt = tr_base_type (JCTnative nty) in *)
@@ -4050,16 +4050,20 @@ let tr_enum_type ri (* to_int of_int *) acc =
   in
   let bv_conv =
     if !Region.some_bitwise_region then
-      [Logic(false,logic_bitvector_of_enum ri,["",lt],bitvector_type) ;
-       Logic(false,logic_enum_of_bitvector ri,["",bitvector_type],lt) ;
-       Axiom((logic_enum_of_bitvector ri)^"_of_"^(logic_bitvector_of_enum ri),
-	   LForall("x",lt, [],
-		   LPred(equality_op_for_type (JCTenum ri),
+      [Logic(false,id_no_loc (logic_bitvector_of_enum ri),
+	     ["",lt],bitvector_type) ;
+       Logic(false,id_no_loc (logic_enum_of_bitvector ri),
+	     ["",bitvector_type],lt) ;
+       Goal(KAxiom,id_no_loc ((logic_enum_of_bitvector ri)^"_of_"^
+				(logic_bitvector_of_enum ri)),
+	    LForall("x",lt, [],
+		    LPred(equality_op_for_type (JCTenum ri),
                          [LApp(logic_enum_of_bitvector ri,
                                [LApp(logic_bitvector_of_enum ri,
                                      [LVar "x"])]);
                           LVar "x"])));
-       Axiom((logic_bitvector_of_enum ri)^"_of_"^(logic_enum_of_bitvector ri),
+       Goal(KAxiom,id_no_loc ((logic_bitvector_of_enum ri)^"_of_"^
+				(logic_enum_of_bitvector ri)),
 	   LForall("x",bitvector_type, [],
 		   LPred("eq", (* TODO: equality for bitvectors ? *)
                          [LApp(logic_bitvector_of_enum ri,
@@ -4068,40 +4072,40 @@ let tr_enum_type ri (* to_int of_int *) acc =
                           LVar "x"]))) ]
     else []
   in
-  Type(name,[])
-  :: Logic(false,logic_int_of_enum ri,
+  Type(id_no_loc name,[])
+  :: Logic(false,id_no_loc (logic_int_of_enum ri),
            [("",lt)],why_integer_type)
-  :: Logic(false,logic_enum_of_int ri,
+  :: Logic(false,id_no_loc (logic_enum_of_int ri),
            [("",why_integer_type)],lt)
-  :: Predicate(false,eq_of_enum ri,[("x",lt);("y",lt)],
+  :: Predicate(false,id_no_loc (eq_of_enum ri),[("x",lt);("y",lt)],
                LPred("eq_int",[LApp(logic_int_of_enum ri,[LVar "x"]);
                                LApp(logic_int_of_enum ri,[LVar "y"])]))
   :: (if !Jc_options.int_model = IMmodulo then
         let width = LConst (Prim_int width) in
         let fmod t = LApp (mod_of_enum ri, [t]) in
-        [Logic (false, mod_of_enum ri,
+        [Logic (false, id_no_loc (mod_of_enum ri),
                 ["x", simple_logic_type "int"], simple_logic_type "int");
-         Axiom (name ^ "_mod_def",
+         Goal(KAxiom,id_no_loc (name ^ "_mod_def"),
                 LForall ("x", simple_logic_type "int", [],
                          LPred ("eq_int", [LApp (mod_of_enum ri, [LVar "x"]);
                                            LApp (logic_int_of_enum ri,
                                                  [LApp (logic_enum_of_int ri,
                                                         [LVar "x"])])])));
-         Axiom (name ^ "_mod_lb",
+         Goal(KAxiom,id_no_loc (name ^ "_mod_lb"),
                 LForall ("x", simple_logic_type "int", [],
                          LPred ("ge_int", [LApp (mod_of_enum ri, [LVar "x"]);
                                            LConst (Prim_int min)])));
-         Axiom (name ^ "_mod_gb",
+         Goal(KAxiom,id_no_loc (name ^ "_mod_gb"),
                 LForall ("x", simple_logic_type "int", [],
                          LPred ("le_int", [LApp (mod_of_enum ri, [LVar "x"]);
                                            LConst (Prim_int max)])));
-         Axiom (name ^ "_mod_id",
+         Goal(KAxiom,id_no_loc (name ^ "_mod_id"),
                 LForall ("x", simple_logic_type "int", [],
                          LImpl (in_bounds (LVar "x"),
                                 LPred ("eq_int", [LApp (mod_of_enum ri,
                                                         [LVar "x"]);
                                                   LVar "x"]))));
-         Axiom (name ^ "_mod_lt",
+         Goal(KAxiom,id_no_loc (name ^ "_mod_lt"),
                 LForall ("x", simple_logic_type "int", [],
                          LImpl (LPred ("lt_int", [LVar "x";
                                                   LConst (Prim_int min)]),
@@ -4109,7 +4113,7 @@ let tr_enum_type ri (* to_int of_int *) acc =
                                                   fmod (LApp ("add_int",
                                                               [LVar "x";
                                                                width]))]))));
-         Axiom (name ^ "_mod_gt",
+         Goal(KAxiom,id_no_loc (name ^ "_mod_gt"),
                 LForall ("x", simple_logic_type "int", [],
                          LImpl (LPred ("gt_int", [LVar "x";
                                                   LConst (Prim_int max)]),
@@ -4119,13 +4123,13 @@ let tr_enum_type ri (* to_int of_int *) acc =
                                                                width]))]))));
         ]
       else [])
-  @ Param(false,fun_enum_of_int ri,of_int_type)
-  :: Param(false,safe_fun_enum_of_int ri,safe_of_int_type)
-  :: Param(false,fun_any_enum ri,any_type)
-  :: Axiom(name^"_range",
+  @ Param(false,id_no_loc (fun_enum_of_int ri),of_int_type)
+  :: Param(false,id_no_loc (safe_fun_enum_of_int ri),safe_of_int_type)
+  :: Param(false,id_no_loc (fun_any_enum ri),any_type)
+  :: Goal(KAxiom,id_no_loc (name^"_range"),
            LForall("x",lt, [],in_bounds
                      (LApp(logic_int_of_enum ri,[LVar "x"]))))
-  :: Axiom(name^"_coerce",
+  :: Goal(KAxiom,id_no_loc (name^"_coerce"),
            LForall("x",why_integer_type, [],
                    LImpl(in_bounds (LVar "x"),
                          LPred("eq_int",
@@ -4165,7 +4169,7 @@ let tr_enum_type_pair ri1 ri2 acc =
          *)
         let modsmall = LApp(mod_of_enum smallri,[LVar "x"]) in
         let modbig = LApp(mod_of_enum bigri,[LVar "x"]) in
-        Axiom(smallname ^ "_" ^ bigname ^ "_mod_coincide",
+        Goal(KAxiom,id_no_loc (smallname ^ "_" ^ bigname ^ "_mod_coincide"),
               LForall("x",why_integer_type, [],
                       LImpl(in_bounds modbig,
                             LPred("eq_int",[modsmall;modbig]))))
@@ -4181,27 +4185,27 @@ let tr_enum_type_pair ri1 ri2 acc =
 let tr_variable vi _e acc =
   if vi.jc_var_info_assigned then
     let t = Ref_type(tr_var_type vi) in
-      Param(false,vi.jc_var_info_final_name,t)::acc
+      Param(false,id_no_loc vi.jc_var_info_final_name,t)::acc
   else
     let t = tr_base_type vi.jc_var_info_type in
-      Logic(false,vi.jc_var_info_final_name,[],t)::acc
+      Logic(false,id_no_loc vi.jc_var_info_final_name,[],t)::acc
 
 let tr_region r acc =
-  Type(r.jc_reg_final_name,[]) :: acc
+  Type(id_no_loc r.jc_reg_final_name,[]) :: acc
 
 let tr_memory (mc,r) acc =
   Param(
-    false,memory_name(mc,r),
+    false,id_no_loc (memory_name(mc,r)),
     Ref_type(Base_type(memory_type mc))) :: acc
 
 let tr_alloc_table (pc,r) acc =
   Param(
-    false,alloc_table_name(pc,r),
+    false,id_no_loc (alloc_table_name(pc,r)),
     Ref_type(Base_type(alloc_table_type pc))) :: acc
 
 let tr_tag_table (rt,r) acc =
   Param(
-    false,tag_table_name(rt,r),
+    false,id_no_loc (tag_table_name(rt,r)),
     Ref_type(Base_type(tag_table_type rt))) :: acc
 
 
@@ -4220,7 +4224,8 @@ let tr_root rt acc =
         then acc
         else
             let mem = bitvector_type in
-            Param(false,union_memory_name rt,Ref_type(Base_type mem)) :: acc
+            Param(false,id_no_loc (union_memory_name rt),
+		  Ref_type(Base_type mem)) :: acc
       in
 	(* Validity parameters *)
 	make_valid_pred ~equal:true ac pc
@@ -4238,12 +4243,12 @@ let tr_root rt acc =
       make_valid_pred ~equal:true ac pc :: make_valid_pred ~equal:false ac pc :: acc
   in
   let of_ptr_addr =
-    Logic(false, of_pointer_address_name rt,
+    Logic(false, id_no_loc (of_pointer_address_name rt),
 	  [ ("",raw_pointer_type why_unit_type) ], pointer_type ac pc)
   in
   let addr_axiom =
     let p = "p" in
-    Axiom("pointer_addr_of_" ^ (of_pointer_address_name rt),
+    Goal(KAxiom,id_no_loc ("pointer_addr_of_" ^ (of_pointer_address_name rt)),
 	  LForall(p, raw_pointer_type why_unit_type, [],
 		  make_eq_pred (JCTpointer(pc,None,None))
 		    (LVar p)
@@ -4253,7 +4258,7 @@ let tr_root rt acc =
   in
   let rev_addr_axiom =
     let p = "p" in
-    Axiom((of_pointer_address_name rt) ^ "_of_pointer_addr",
+    Goal(KAxiom,id_no_loc ((of_pointer_address_name rt) ^ "_of_pointer_addr"),
 	  LForall(p, pointer_type ac pc, [],
 		  make_eq_pred (JCTpointer(pc,None,None))
 		    (LVar p)
@@ -4264,16 +4269,20 @@ let tr_root rt acc =
   let lt = tr_base_type (JCTpointer(pc,None,None)) in
   let conv =
     if !Region.some_bitwise_region then
-    [Logic(false,logic_bitvector_of_variant rt,["",lt],bitvector_type);
-     Logic(false,logic_variant_of_bitvector rt,["",bitvector_type],lt);
-     Axiom((logic_variant_of_bitvector rt)^"_of_"^(logic_bitvector_of_variant rt),
+    [Logic(false,id_no_loc (logic_bitvector_of_variant rt),
+	   ["",lt],bitvector_type);
+     Logic(false,id_no_loc (logic_variant_of_bitvector rt),
+	   ["",bitvector_type],lt);
+     Goal(KAxiom,id_no_loc ((logic_variant_of_bitvector rt)^"_of_"^
+			      (logic_bitvector_of_variant rt)),
 	   LForall("x",lt, [],
 		   LPred(equality_op_for_type (JCTpointer (pc,None,None)),
                          [LApp(logic_variant_of_bitvector rt,
 			       [LApp(logic_bitvector_of_variant rt,
                                      [LVar "x"])]);
                           LVar "x"])));
-     Axiom((logic_bitvector_of_variant rt)^"_of_"^(logic_variant_of_bitvector rt),
+     Goal(KAxiom,id_no_loc ((logic_bitvector_of_variant rt)^"_of_"^
+			      (logic_variant_of_bitvector rt)),
 	   LForall("x",bitvector_type, [],
 		   LPred("eq", (* TODO: equality for bitvectors ? *)
                          [LApp(logic_bitvector_of_variant rt,
@@ -4287,7 +4296,7 @@ let tr_root rt acc =
   let tag_table =
     Param(
       false,
-      variant_tag_table_name rt,
+      id_no_loc (variant_tag_table_name rt),
       Ref_type(
         Base_type {
           logic_type_name = tag_table_type_name;
@@ -4297,20 +4306,20 @@ let tr_root rt acc =
   let alloc_table =
     Param(
       false,
-      variant_alloc_table_name rt,
+      id_no_loc (variant_alloc_table_name rt),
       Ref_type(
         Base_type {
           logic_type_name = alloc_table_type_name;
           logic_type_args = [root_model_type rt];
         }))
   in
-  let type_def = Type(root_type_name rt, []) in
+  let type_def = Type(id_no_loc (root_type_name rt), []) in
   (* Axiom: the variant can only have the given tags *)
   let axiom_variant_has_tag =
     let v = "x" in
     let tag_table = generic_tag_table_name rt in
-    Axiom(
-      variant_axiom_on_tags_name rt,
+    Goal(KAxiom,
+      id_no_loc (variant_axiom_on_tags_name rt),
       LForall(
         v,
         pointer_type ac pc, [],
@@ -4327,8 +4336,8 @@ let tr_root rt acc =
   let (acc, _) = List.fold_left
     (fun (acc, index) st ->
        let axiom =
-         Axiom(
-           axiom_int_of_tag_name st,
+         Goal(KAxiom,
+           id_no_loc (axiom_int_of_tag_name st),
            make_eq
              (make_int_of_tag st)
              (LConst(Prim_int(string_of_int index)))

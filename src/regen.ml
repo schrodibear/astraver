@@ -57,7 +57,7 @@ type element_id = element_kind * string
 type element = 
   | Parameter of string * cc_type
   | Program of string * cc_type * cc_functional_program
-  | Obligation of Loc.floc * Logic_decl.vc_expl * string * sequent Env.scheme
+  | Obligation of Loc.floc * bool * Logic_decl.vc_expl * string * sequent Env.scheme
   | Logic of string * logic_type Env.scheme
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme

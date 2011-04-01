@@ -85,8 +85,6 @@ exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
-axiom buch_Trans_Start0 : eq_int(buch_Trans_Start((0)), (0))
-
 logic char_P_tag:  -> char_P tag_id
 
 axiom char_P_int : (int_of_tag(char_P_tag) = (1))
@@ -225,6 +223,8 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom buch_Trans_Start0 : eq_int(buch_Trans_Start((0)), (0))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1330,8 +1330,6 @@ predicate I_3() =
        ((0 <= _buch_tr) and
         ((_buch_tr < 7) and (buch_Trans_Start(_buch_tr) = _buch_st))))))
 
-axiom buch_Trans_Start0: (buch_Trans_Start(0) = 0)
-
 logic char_P_tag : char_P tag_id
 
 axiom char_P_int: (int_of_tag(char_P_tag) = 1)
@@ -1472,4 +1470,6 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom buch_Trans_Start0: (buch_Trans_Start(0) = 0)
 

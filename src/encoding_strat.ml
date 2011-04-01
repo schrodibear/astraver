@@ -384,7 +384,7 @@ let rec push d =
 	Env.empty_scheme (lifted fv (translate_pred fv [] pred_sch.Env.scheme_type) []) in
       Queue.add (Daxiom (loc, name, new_axiom)) queue
 (* A goal is a sequent : a context and a predicate and both have to be translated *)
-  | Dgoal (loc, expl, name, s_sch) ->
+  | Dgoal (loc, is_lemma, expl, name, s_sch) ->
       begin try
 	let cpt = ref 0 in
 	let fv = Env.Vset.fold
@@ -402,10 +402,10 @@ let rec push d =
 	  Env.empty_scheme
 	    (lifted_ctxt fv (List.rev new_cel),
 	     translate_eq (translate_pred fv context (snd (s_sch.Env.scheme_type)))) in
-	Queue.add (Dgoal (loc, expl, name, new_sequent)) queue
+	Queue.add (Dgoal (loc, is_lemma, expl, name, new_sequent)) queue
       with Not_found -> 
 	Format.eprintf "Exception Not_found caught in : %a\n" Util.print_decl d;
-	Queue.add (Dgoal (loc, expl, name, Env.empty_scheme([],Pfalse))) queue
+	Queue.add (Dgoal (loc, is_lemma, expl, name, Env.empty_scheme([],Pfalse))) queue
       end)
   with
     Not_found -> 

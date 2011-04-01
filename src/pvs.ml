@@ -393,7 +393,7 @@ let print_function_def fmt id (bl,t,e) =
     ident id (print_list comma print_logic_binder) bl 
     print_pure_type t print_term e
     
-let print_obligation fmt (loc,_expl,id,s) =
+let print_obligation fmt (loc,_is_lemma,_expl,id,s) =
   fprintf fmt "  @[%% %a @]@\n" (Loc.report_obligation_position ~onlybasename:true) loc;
   fprintf fmt "  @[<hov 2>%a: LEMMA@\n" idents id;
   print_sequent fmt s;
@@ -414,7 +414,7 @@ let print_scheme l =
 
 let tvar_so_far = ref 0
 
-let print_goal fmt (loc, expl, id, s) =
+let print_goal fmt (loc, is_lemma, expl, id, s) =
   let n = Vset.cardinal s.scheme_vars in
   if n > !tvar_so_far then begin
     fprintf fmt "  ";
@@ -426,7 +426,7 @@ let print_goal fmt (loc, expl, id, s) =
   end;
   let l,s = Env.specialize_sequent s in
   print_scheme l;
-  print_obligation fmt (loc,expl,id,s)
+  print_obligation fmt (loc,is_lemma,expl,id,s)
 
 let print_logic_scheme fmt id s =
   let l,t = Env.specialize_logic_type s in
@@ -476,7 +476,7 @@ let output_elem fmt = function
   | Dinductive_def(_loc, ident, inddef) -> print_inductive_def fmt ident inddef
   | Dfunction_def (_loc, id, d) -> print_function_def fmt id d.scheme_type
   | Daxiom (_loc, id, p) -> print_axiom fmt id p.scheme_type
-  | Dgoal (loc, expl, id, s) -> print_goal fmt (loc, expl, id, s)
+  | Dgoal (loc, is_lemma, expl, id, s) -> print_goal fmt (loc, is_lemma, expl, id, s)
 
 module ArMap = struct
 
@@ -522,7 +522,7 @@ type pvs_theories = {
   decls : (string * logic_type scheme) ArMap.t;
   defs : (string * def) Queue.t;
   axioms : (string * predicate scheme) ArMap.t;
-  goals : (loc * Logic_decl.vc_expl * string * sequent scheme) Queue.t;
+  goals : (loc * bool * Logic_decl.vc_expl * string * sequent scheme) Queue.t;
   mutable poly : bool;
 }
 
@@ -555,8 +555,8 @@ let sort_theory () =
 	poly s; Queue.add (Ident.string id, DefFunction s) th.defs
     | Daxiom (_, id, s) -> 
 	poly s; ArMap.add_scheme s (id,s) th.axioms
-    | Dgoal (loc, expl, id, s) -> 
-	Queue.add (loc,expl,id,s) th.goals
+    | Dgoal (loc, is_lemma, expl, id, s) -> 
+	Queue.add (loc,is_lemma,expl,id,s) th.goals
   in
   Queue.iter sort queue;
   th

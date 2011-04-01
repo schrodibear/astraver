@@ -165,7 +165,8 @@ let rec compute_literal_number  pr =
 
 
 let decl = function
-  | Goal (_, _, p) ->
+  | Goal(_,KAxiom,_,_) -> ()
+  | Goal (_, _,_, p) ->
       let rec intros avoid p = match p.pp_desc with
 	| PPinfix (_, PPimplies, p) -> intros avoid p
 	| PPforall (id, _, _, p) -> intros (S.add id avoid) p
@@ -179,7 +180,6 @@ let decl = function
   | Parameter _
   | Exception _
   | Logic _
-  | Axiom _
   | Predicate_def _
   | Inductive_def _
   | Function_def _

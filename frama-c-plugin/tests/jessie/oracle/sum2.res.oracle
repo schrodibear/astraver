@@ -275,31 +275,6 @@ predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-axiom sum1 :
- (forall int_P_int_M_t_1_at_L:(int_P, int) memory.
-  (forall t_0_1:int_P pointer.
-   (forall i_0:int. eq_int(sum(t_0_1, i_0, i_0, int_P_int_M_t_1_at_L), (0)))))
-
-axiom sum2 :
- (forall int_P_int_M_t_1_at_L:(int_P, int) memory.
-  (forall t_1:int_P pointer.
-   (forall i_1:int.
-    (forall j_0:int.
-     eq_int(sum(t_1, i_1, add_int(j_0, (1)), int_P_int_M_t_1_at_L),
-     add_int(sum(t_1, i_1, j_0, int_P_int_M_t_1_at_L),
-     select(int_P_int_M_t_1_at_L, shift(t_1, j_0))))))))
-
-axiom sum3 :
- (forall int_P_int_M_t_1_at_L:(int_P, int) memory.
-  (forall t_2:int_P pointer.
-   (forall i_2:int.
-    (forall j_1:int.
-     (forall k:int.
-      ((le_int(i_2, j_1) and le_int(j_1, k)) ->
-       eq_int(sum(t_2, i_2, k, int_P_int_M_t_1_at_L),
-       add_int(sum(t_2, i_2, j_1, int_P_int_M_t_1_at_L),
-       sum(t_2, j_1, k, int_P_int_M_t_1_at_L)))))))))
-
 predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
@@ -359,6 +334,31 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom sum1 :
+ (forall int_P_int_M_t_1_at_L:(int_P, int) memory.
+  (forall t_0_1:int_P pointer.
+   (forall i_0:int. eq_int(sum(t_0_1, i_0, i_0, int_P_int_M_t_1_at_L), (0)))))
+
+axiom sum2 :
+ (forall int_P_int_M_t_1_at_L:(int_P, int) memory.
+  (forall t_1:int_P pointer.
+   (forall i_1:int.
+    (forall j_0:int.
+     eq_int(sum(t_1, i_1, add_int(j_0, (1)), int_P_int_M_t_1_at_L),
+     add_int(sum(t_1, i_1, j_0, int_P_int_M_t_1_at_L),
+     select(int_P_int_M_t_1_at_L, shift(t_1, j_0))))))))
+
+axiom sum3 :
+ (forall int_P_int_M_t_1_at_L:(int_P, int) memory.
+  (forall t_2:int_P pointer.
+   (forall i_2:int.
+    (forall j_1:int.
+     (forall k:int.
+      ((le_int(i_2, j_1) and le_int(j_1, k)) ->
+       eq_int(sum(t_2, i_2, k, int_P_int_M_t_1_at_L),
+       add_int(sum(t_2, i_2, j_1, int_P_int_M_t_1_at_L),
+       sum(t_2, j_1, k, int_P_int_M_t_1_at_L)))))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1989,30 +1989,6 @@ predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
   ((offset_min(void_P_alloc_table, p) = a) and
    (offset_max(void_P_alloc_table, p) = b))
 
-axiom sum1:
-  (forall int_P_int_M_t_1_at_L:(int_P, int) memory.
-    (forall t_0_1:int_P pointer.
-      (forall i_0:int. (sum(t_0_1, i_0, i_0, int_P_int_M_t_1_at_L) = 0))))
-
-axiom sum2:
-  (forall int_P_int_M_t_1_at_L:(int_P, int) memory.
-    (forall t_1:int_P pointer.
-      (forall i_1:int.
-        (forall j_0:int. (sum(t_1, i_1, (j_0 + 1),
-          int_P_int_M_t_1_at_L) = (sum(t_1, i_1, j_0,
-          int_P_int_M_t_1_at_L) + select(int_P_int_M_t_1_at_L, shift(t_1,
-          j_0))))))))
-
-axiom sum3:
-  (forall int_P_int_M_t_1_at_L:(int_P, int) memory.
-    (forall t_2:int_P pointer.
-      (forall i_2:int.
-        (forall j_1:int.
-          (forall k:int.
-            (((i_2 <= j_1) and (j_1 <= k)) -> (sum(t_2, i_2, k,
-             int_P_int_M_t_1_at_L) = (sum(t_2, i_2, j_1,
-             int_P_int_M_t_1_at_L) + sum(t_2, j_1, k, int_P_int_M_t_1_at_L)))))))))
-
 predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
@@ -2072,4 +2048,28 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom sum1:
+  (forall int_P_int_M_t_1_at_L:(int_P, int) memory.
+    (forall t_0_1:int_P pointer.
+      (forall i_0:int. (sum(t_0_1, i_0, i_0, int_P_int_M_t_1_at_L) = 0))))
+
+axiom sum2:
+  (forall int_P_int_M_t_1_at_L:(int_P, int) memory.
+    (forall t_1:int_P pointer.
+      (forall i_1:int.
+        (forall j_0:int. (sum(t_1, i_1, (j_0 + 1),
+          int_P_int_M_t_1_at_L) = (sum(t_1, i_1, j_0,
+          int_P_int_M_t_1_at_L) + select(int_P_int_M_t_1_at_L, shift(t_1,
+          j_0))))))))
+
+axiom sum3:
+  (forall int_P_int_M_t_1_at_L:(int_P, int) memory.
+    (forall t_2:int_P pointer.
+      (forall i_2:int.
+        (forall j_1:int.
+          (forall k:int.
+            (((i_2 <= j_1) and (j_1 <= k)) -> (sum(t_2, i_2, k,
+             int_P_int_M_t_1_at_L) = (sum(t_2, i_2, j_1,
+             int_P_int_M_t_1_at_L) + sum(t_2, j_1, k, int_P_int_M_t_1_at_L)))))))))
 

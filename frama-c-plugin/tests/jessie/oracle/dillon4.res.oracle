@@ -121,40 +121,6 @@ exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
-logic cpt: double_P pointer, real, int, int, (double_P, double) memory -> int
-
-axiom c1 :
- (forall double_P_double_M_t_1_at_L:(double_P, double) memory.
-  (forall t_0_0:double_P pointer.
-   (forall u_0_0:real.
-    (forall i:int.
-     ((ge_int(i, (0))
-      and ge_real(u_0_0,
-          double_value(select(double_P_double_M_t_1_at_L, shift(t_0_0, i))))) ->
-      eq_int(cpt(t_0_0, u_0_0, (0), i, double_P_double_M_t_1_at_L),
-      add_int(cpt(t_0_0, u_0_0, (0), sub_int(i, (1)),
-              double_P_double_M_t_1_at_L),
-      (1))))))))
-
-axiom c2 :
- (forall double_P_double_M_t_1_at_L:(double_P, double) memory.
-  (forall t_1:double_P pointer.
-   (forall u_1:real.
-    (forall i_0:int.
-     ((ge_int(i_0, (0))
-      and lt_real(u_1,
-          double_value(select(double_P_double_M_t_1_at_L, shift(t_1, i_0))))) ->
-      eq_int(cpt(t_1, u_1, (0), i_0, double_P_double_M_t_1_at_L),
-      cpt(t_1, u_1, (0), sub_int(i_0, (1)), double_P_double_M_t_1_at_L)))))))
-
-axiom c3 :
- (forall double_P_double_M_t_1_at_L:(double_P, double) memory.
-  (forall t_2:double_P pointer.
-   (forall u_2:real.
-    (forall i_1:int.
-     (lt_int(i_1, (0)) ->
-      eq_int(cpt(t_2, u_2, (0), i_1, double_P_double_M_t_1_at_L), (0)))))))
-
 logic char_P_tag:  -> char_P tag_id
 
 axiom char_P_int : (int_of_tag(char_P_tag) = (1))
@@ -171,6 +137,8 @@ axiom char_P_tags :
  (forall x:char_P pointer.
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
+
+logic cpt: double_P pointer, real, int, int, (double_P, double) memory -> int
 
 logic double_P_tag:  -> double_P tag_id
 
@@ -374,6 +342,38 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom c1 :
+ (forall double_P_double_M_t_1_at_L:(double_P, double) memory.
+  (forall t_0_0:double_P pointer.
+   (forall u_0_0:real.
+    (forall i:int.
+     ((ge_int(i, (0))
+      and ge_real(u_0_0,
+          double_value(select(double_P_double_M_t_1_at_L, shift(t_0_0, i))))) ->
+      eq_int(cpt(t_0_0, u_0_0, (0), i, double_P_double_M_t_1_at_L),
+      add_int(cpt(t_0_0, u_0_0, (0), sub_int(i, (1)),
+              double_P_double_M_t_1_at_L),
+      (1))))))))
+
+axiom c2 :
+ (forall double_P_double_M_t_1_at_L:(double_P, double) memory.
+  (forall t_1:double_P pointer.
+   (forall u_1:real.
+    (forall i_0:int.
+     ((ge_int(i_0, (0))
+      and lt_real(u_1,
+          double_value(select(double_P_double_M_t_1_at_L, shift(t_1, i_0))))) ->
+      eq_int(cpt(t_1, u_1, (0), i_0, double_P_double_M_t_1_at_L),
+      cpt(t_1, u_1, (0), sub_int(i_0, (1)), double_P_double_M_t_1_at_L)))))))
+
+axiom c3 :
+ (forall double_P_double_M_t_1_at_L:(double_P, double) memory.
+  (forall t_2:double_P pointer.
+   (forall u_2:real.
+    (forall i_1:int.
+     (lt_int(i_1, (0)) ->
+      eq_int(cpt(t_2, u_2, (0), i_1, double_P_double_M_t_1_at_L), (0)))))))
 
 parameter NNN :
  u_0:single ->
@@ -1677,6 +1677,10 @@ axiom exact_round_double_for_integers:
       ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
        (round_double(m, real_of_int(i)) = real_of_int(i)))))
 
+axiom exact_round_double_for_doubles:
+  (forall x:double.
+    (forall m:mode. (round_double(m, double_value(x)) = double_value(x))))
+
 axiom round_double_idempotent:
   (forall m1:mode.
     (forall m2:mode.
@@ -1732,6 +1736,10 @@ axiom exact_round_single_for_integers:
     (forall m:mode.
       ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
        real_of_int(i)) = real_of_int(i)))))
+
+axiom exact_round_single_for_singles:
+  (forall x:single.
+    (forall m:mode. (round_single(m, single_value(x)) = single_value(x))))
 
 axiom round_single_idempotent:
   (forall m1:mode.
@@ -1859,39 +1867,6 @@ type padding
 
 type void_P
 
-logic cpt : double_P pointer, real, int, int, (double_P,
-double) memory -> int
-
-axiom c1:
-  (forall double_P_double_M_t_1_at_L:(double_P, double) memory.
-    (forall t_0_0:double_P pointer.
-      (forall u_0_0:real.
-        (forall i:int.
-          (((i >= 0) and
-            (u_0_0 >= double_value(select(double_P_double_M_t_1_at_L,
-            shift(t_0_0, i))))) ->
-           (cpt(t_0_0, u_0_0, 0, i, double_P_double_M_t_1_at_L) = (cpt(t_0_0,
-           u_0_0, 0, (i - 1), double_P_double_M_t_1_at_L) + 1)))))))
-
-axiom c2:
-  (forall double_P_double_M_t_1_at_L:(double_P, double) memory.
-    (forall t_1:double_P pointer.
-      (forall u_1:real.
-        (forall i_0:int.
-          (((i_0 >= 0) and
-            (u_1 < double_value(select(double_P_double_M_t_1_at_L, shift(t_1,
-            i_0))))) ->
-           (cpt(t_1, u_1, 0, i_0, double_P_double_M_t_1_at_L) = cpt(t_1, u_1,
-           0, (i_0 - 1), double_P_double_M_t_1_at_L)))))))
-
-axiom c3:
-  (forall double_P_double_M_t_1_at_L:(double_P, double) memory.
-    (forall t_2:double_P pointer.
-      (forall u_2:real.
-        (forall i_1:int.
-          ((i_1 < 0) -> (cpt(t_2, u_2, 0, i_1,
-           double_P_double_M_t_1_at_L) = 0))))))
-
 logic char_P_tag : char_P tag_id
 
 axiom char_P_int: (int_of_tag(char_P_tag) = 1)
@@ -1908,6 +1883,9 @@ axiom char_P_tags:
   (forall x:char_P pointer.
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
+
+logic cpt : double_P pointer, real, int, int, (double_P,
+double) memory -> int
 
 logic double_P_tag : double_P tag_id
 
@@ -2113,4 +2091,34 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom c1:
+  (forall double_P_double_M_t_1_at_L:(double_P, double) memory.
+    (forall t_0_0:double_P pointer.
+      (forall u_0_0:real.
+        (forall i:int.
+          (((i >= 0) and
+            (u_0_0 >= double_value(select(double_P_double_M_t_1_at_L,
+            shift(t_0_0, i))))) ->
+           (cpt(t_0_0, u_0_0, 0, i, double_P_double_M_t_1_at_L) = (cpt(t_0_0,
+           u_0_0, 0, (i - 1), double_P_double_M_t_1_at_L) + 1)))))))
+
+axiom c2:
+  (forall double_P_double_M_t_1_at_L:(double_P, double) memory.
+    (forall t_1:double_P pointer.
+      (forall u_1:real.
+        (forall i_0:int.
+          (((i_0 >= 0) and
+            (u_1 < double_value(select(double_P_double_M_t_1_at_L, shift(t_1,
+            i_0))))) ->
+           (cpt(t_1, u_1, 0, i_0, double_P_double_M_t_1_at_L) = cpt(t_1, u_1,
+           0, (i_0 - 1), double_P_double_M_t_1_at_L)))))))
+
+axiom c3:
+  (forall double_P_double_M_t_1_at_L:(double_P, double) memory.
+    (forall t_2:double_P pointer.
+      (forall u_2:real.
+        (forall i_1:int.
+          ((i_1 < 0) -> (cpt(t_2, u_2, 0, i_1,
+           double_P_double_M_t_1_at_L) = 0))))))
 

@@ -655,23 +655,6 @@ predicate delay(n:int, p:int) =
                  pow_i(sub_int(p, (2)), sub_int(n, (1))))),
          real_of_int(max_int))))
 
-axiom delay_2 : delay((55), (2))
-
-axiom delay_decreases :
- (forall n1:int.
-  (forall n2:int.
-   (forall p1:int.
-    (forall p2:int.
-     ((lt_int((0), n1) and le_int(n1, n2)) ->
-      ((le_int((2), p1) and le_int(p1, p2)) ->
-       (delay(n2, p2) -> delay(n1, p1))))))))
-
-logic l_pmax: int -> int
-
-axiom delay_pmax :
- (forall n_2:int.
-  (forall p_0_1:int. (delay(n_2, p_0_1) -> le_int(p_0_1, l_pmax(n_2)))))
-
 logic double_P_tag:  -> double_P tag_id
 
 axiom double_P_int : (int_of_tag(double_P_tag) = (1))
@@ -791,9 +774,7 @@ predicate is_exact_int_mat_bounded_by(X_0:double_P pointer, LDX_0:int,
                                                              LDX_0), j_0)))),
                                         real_of_int(max))))))))))))))
 
-axiom l_pmax_def :
- (forall n_1:int.
-  (delay(n_1, l_pmax(n_1)) and (not delay(n_1, add_int(l_pmax(n_1), (1))))))
+logic l_pmax: int -> int
 
 predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -806,8 +787,6 @@ predicate left_valid_struct_double_P(p:double_P pointer, a:int,
 predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
-
-axiom max_int_eq : eq_real(real_of_int(max_int), 0x1p53)
 
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
@@ -965,6 +944,27 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom max_int_eq : eq_real(real_of_int(max_int), 0x1p53)
+
+axiom delay_decreases :
+ (forall n1:int.
+  (forall n2:int.
+   (forall p1:int.
+    (forall p2:int.
+     ((lt_int((0), n1) and le_int(n1, n2)) ->
+      ((le_int((2), p1) and le_int(p1, p2)) ->
+       (delay(n2, p2) -> delay(n1, p1))))))))
+
+axiom delay_2 : delay((55), (2))
+
+axiom l_pmax_def :
+ (forall n_1:int.
+  (delay(n_1, l_pmax(n_1)) and (not delay(n_1, add_int(l_pmax(n_1), (1))))))
+
+axiom delay_pmax :
+ (forall n_2:int.
+  (forall p_0_1:int. (delay(n_2, p_0_1) -> le_int(p_0_1, l_pmax(n_2)))))
 
 parameter DGEMM_NEG :
  N_2:int32 ->
@@ -5779,6 +5779,10 @@ axiom exact_round_double_for_integers:
       ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
        (round_double(m, real_of_int(i)) = real_of_int(i)))))
 
+axiom exact_round_double_for_doubles:
+  (forall x:double.
+    (forall m:mode. (round_double(m, double_value(x)) = double_value(x))))
+
 axiom round_double_idempotent:
   (forall m1:mode.
     (forall m2:mode.
@@ -5834,6 +5838,10 @@ axiom exact_round_single_for_integers:
     (forall m:mode.
       ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
        real_of_int(i)) = real_of_int(i)))))
+
+axiom exact_round_single_for_singles:
+  (forall x:single.
+    (forall m:mode. (round_single(m, single_value(x)) = single_value(x))))
 
 axiom round_single_idempotent:
   (forall m1:mode.
@@ -5987,22 +5995,6 @@ predicate delay(n: int, p: int) =
    ((2 <= p) and ((div_real(real_of_int((p - 1)), 2.) * (pow_i(p,
     (n - 1)) + pow_i((p - 2), (n - 1)))) <= real_of_int(max_int))))
 
-axiom delay_2: delay(55, 2)
-
-axiom delay_decreases:
-  (forall n1:int.
-    (forall n2:int.
-      (forall p1:int.
-        (forall p2:int.
-          (((0 < n1) and (n1 <= n2)) ->
-           (((2 <= p1) and (p1 <= p2)) -> (delay(n2, p2) -> delay(n1, p1))))))))
-
-logic l_pmax : int -> int
-
-axiom delay_pmax:
-  (forall n_2:int.
-    (forall p_0_1:int. (delay(n_2, p_0_1) -> (p_0_1 <= l_pmax(n_2)))))
-
 logic double_P_tag : double_P tag_id
 
 axiom double_P_int: (int_of_tag(double_P_tag) = 1)
@@ -6094,9 +6086,7 @@ predicate is_exact_int_mat_bounded_by(X_0: double_P pointer, LDX_0: int,
                 (double_value(select(double_P_double_M_X_0_2_at_L, shift(X_0,
                 ((i_0 * LDX_0) + j_0)))) <= real_of_int(max))))))))))))))
 
-axiom l_pmax_def:
-  (forall n_1:int.
-    (delay(n_1, l_pmax(n_1)) and (not delay(n_1, (l_pmax(n_1) + 1)))))
+logic l_pmax : int -> int
 
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
@@ -6109,8 +6099,6 @@ predicate left_valid_struct_double_P(p: double_P pointer, a: int,
 predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
   p) <= a)
-
-axiom max_int_eq: (real_of_int(max_int) = 0x1.p53)
 
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
@@ -6252,4 +6240,24 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom max_int_eq: (real_of_int(max_int) = 0x1.p53)
+
+axiom delay_decreases:
+  (forall n1:int.
+    (forall n2:int.
+      (forall p1:int.
+        (forall p2:int.
+          (((0 < n1) and (n1 <= n2)) ->
+           (((2 <= p1) and (p1 <= p2)) -> (delay(n2, p2) -> delay(n1, p1))))))))
+
+axiom delay_2: delay(55, 2)
+
+axiom l_pmax_def:
+  (forall n_1:int.
+    (delay(n_1, l_pmax(n_1)) and (not delay(n_1, (l_pmax(n_1) + 1)))))
+
+axiom delay_pmax:
+  (forall n_2:int.
+    (forall p_0_1:int. (delay(n_2, p_0_1) -> (p_0_1 <= l_pmax(n_2)))))
 

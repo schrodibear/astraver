@@ -349,18 +349,6 @@ function add_bag(x_1:int, b:bag) : bag = union_bag(b, singleton_bag(x_1))
 
 logic bag_of_tree: tree -> bag
 
-logic empty_bag:  -> bag
-
-axiom bag_of_tree_def_1 : (bag_of_tree(Empty) = empty_bag)
-
-axiom bag_of_tree_def_2 :
- (forall l_0:tree.
-  (forall x_5_0:int.
-   (forall r_0:tree.
-    (bag_of_tree(Node(l_0, x_5_0, r_0)) = add_bag(x_5_0,
-                                          union_bag(bag_of_tree(l_0),
-                                          bag_of_tree(r_0)))))))
-
 logic char_P_tag:  -> char_P tag_id
 
 axiom char_P_int : (int_of_tag(char_P_tag) = (1))
@@ -378,21 +366,9 @@ axiom char_P_tags :
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
 
+logic empty_bag:  -> bag
+
 logic integer_of_int32: int32 -> int
-
-goal div2_1 :
- (forall x_5:int32.
-  (le_int((0), integer_of_int32(x_5)) ->
-   (le_int((0), computer_div(integer_of_int32(x_5), (2)))
-   and le_int(computer_div(integer_of_int32(x_5), (2)),
-       integer_of_int32(x_5)))))
-
-axiom div2_1_as_axiom :
- (forall x_5:int32.
-  (le_int((0), integer_of_int32(x_5)) ->
-   (le_int((0), computer_div(integer_of_int32(x_5), (2)))
-   and le_int(computer_div(integer_of_int32(x_5), (2)),
-       integer_of_int32(x_5)))))
 
 predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
@@ -444,42 +420,6 @@ axiom int_P_tags :
    instanceof(int_P_tag_table, x, int_P_tag)))
 
 logic is_heap: tree -> prop
-
-axiom is_heap_def_1 : is_heap(Empty)
-
-axiom is_heap_def_2 : (forall x_6:int. is_heap(Node(Empty, x_6, Empty)))
-
-axiom is_heap_def_3 :
- (forall ll:tree.
-  (forall lr:tree.
-   (forall lx:int.
-    (forall x_7:int.
-     (ge_int(x_7, lx) ->
-      (is_heap(Node(ll, lx, lr)) ->
-       is_heap(Node(Node(ll, lx, lr), x_7, Empty))))))))
-
-axiom is_heap_def_4 :
- (forall rl:tree.
-  (forall rr:tree.
-   (forall rx:int.
-    (forall x_8:int.
-     (ge_int(x_8, rx) ->
-      (is_heap(Node(rl, rx, rr)) ->
-       is_heap(Node(Empty, x_8, Node(rl, rx, rr)))))))))
-
-axiom is_heap_def_5 :
- (forall ll_0:tree.
-  (forall lr_0:tree.
-   (forall rl_0:tree.
-    (forall rr_0:tree.
-     (forall lx_0:int.
-      (forall x_9:int.
-       (forall rx_0:int.
-        (ge_int(x_9, lx_0) ->
-         (is_heap(Node(ll_0, lx_0, lr_0)) ->
-          (ge_int(x_9, rx_0) ->
-           (is_heap(Node(rl_0, rx_0, rr_0)) ->
-            is_heap(Node(Node(ll_0, lx_0, lr_0), x_9, Node(rl_0, rx_0, rr_0))))))))))))))
 
 logic tree_of_array: int_P pointer, int, int, (int_P, int32) memory -> tree
 
@@ -598,27 +538,6 @@ predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
  ((offset_min(void_P_alloc_table, p) = a)
  and (offset_max(void_P_alloc_table, p) = b))
 
-axiom tree_of_array_def_1 :
- (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
-  (forall t_2:int_P pointer.
-   (forall root_0:int.
-    (forall bound_0:int.
-     (ge_int(root_0, bound_0) ->
-      (tree_of_array(t_2, root_0, bound_0, int_P_int_M_t_1_2_at_L) = Empty))))))
-
-axiom tree_of_array_def_2 :
- (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
-  (forall t_3:int_P pointer.
-   (forall root_1:int.
-    (forall bound_1:int.
-     ((le_int((0), root_1) and lt_int(root_1, bound_1)) ->
-      (tree_of_array(t_3, root_1, bound_1, int_P_int_M_t_1_2_at_L) = 
-      Node(tree_of_array(t_3, add_int(mul_int((2), root_1), (1)), bound_1,
-           int_P_int_M_t_1_2_at_L),
-      integer_of_int32(select(int_P_int_M_t_1_2_at_L, shift(t_3, root_1))),
-      tree_of_array(t_3, add_int(mul_int((2), root_1), (2)), bound_1,
-      int_P_int_M_t_1_2_at_L))))))))
-
 predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
@@ -682,6 +601,80 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma div2_1 :
+ (forall x_5:int32.
+  (le_int((0), integer_of_int32(x_5)) ->
+   (le_int((0), computer_div(integer_of_int32(x_5), (2)))
+   and le_int(computer_div(integer_of_int32(x_5), (2)),
+       integer_of_int32(x_5)))))
+
+axiom bag_of_tree_def_1 : (bag_of_tree(Empty) = empty_bag)
+
+axiom bag_of_tree_def_2 :
+ (forall l_0:tree.
+  (forall x_5_0:int.
+   (forall r_0:tree.
+    (bag_of_tree(Node(l_0, x_5_0, r_0)) = add_bag(x_5_0,
+                                          union_bag(bag_of_tree(l_0),
+                                          bag_of_tree(r_0)))))))
+
+axiom is_heap_def_1 : is_heap(Empty)
+
+axiom is_heap_def_2 : (forall x_6:int. is_heap(Node(Empty, x_6, Empty)))
+
+axiom is_heap_def_3 :
+ (forall ll:tree.
+  (forall lr:tree.
+   (forall lx:int.
+    (forall x_7:int.
+     (ge_int(x_7, lx) ->
+      (is_heap(Node(ll, lx, lr)) ->
+       is_heap(Node(Node(ll, lx, lr), x_7, Empty))))))))
+
+axiom is_heap_def_4 :
+ (forall rl:tree.
+  (forall rr:tree.
+   (forall rx:int.
+    (forall x_8:int.
+     (ge_int(x_8, rx) ->
+      (is_heap(Node(rl, rx, rr)) ->
+       is_heap(Node(Empty, x_8, Node(rl, rx, rr)))))))))
+
+axiom is_heap_def_5 :
+ (forall ll_0:tree.
+  (forall lr_0:tree.
+   (forall rl_0:tree.
+    (forall rr_0:tree.
+     (forall lx_0:int.
+      (forall x_9:int.
+       (forall rx_0:int.
+        (ge_int(x_9, lx_0) ->
+         (is_heap(Node(ll_0, lx_0, lr_0)) ->
+          (ge_int(x_9, rx_0) ->
+           (is_heap(Node(rl_0, rx_0, rr_0)) ->
+            is_heap(Node(Node(ll_0, lx_0, lr_0), x_9, Node(rl_0, rx_0, rr_0))))))))))))))
+
+axiom tree_of_array_def_1 :
+ (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
+  (forall t_2:int_P pointer.
+   (forall root_0:int.
+    (forall bound_0:int.
+     (ge_int(root_0, bound_0) ->
+      (tree_of_array(t_2, root_0, bound_0, int_P_int_M_t_1_2_at_L) = Empty))))))
+
+axiom tree_of_array_def_2 :
+ (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
+  (forall t_3:int_P pointer.
+   (forall root_1:int.
+    (forall bound_1:int.
+     ((le_int((0), root_1) and lt_int(root_1, bound_1)) ->
+      (tree_of_array(t_3, root_1, bound_1, int_P_int_M_t_1_2_at_L) = 
+      Node(tree_of_array(t_3, add_int(mul_int((2), root_1), (1)), bound_1,
+           int_P_int_M_t_1_2_at_L),
+      integer_of_int32(select(int_P_int_M_t_1_2_at_L, shift(t_3, root_1))),
+      tree_of_array(t_3, add_int(mul_int((2), root_1), (2)), bound_1,
+      int_P_int_M_t_1_2_at_L))))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1659,11 +1652,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po78.why">
-      <location file = "why/heap.why" line = "1187" begin = "41" end = "70"/>
+      <location file = "why/heap.why" line = "1180" begin = "41" end = "70"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po79.why">
-      <location file = "why/heap.why" line = "1187" begin = "41" end = "70"/>
+      <location file = "why/heap.why" line = "1180" begin = "41" end = "70"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po80.why">
@@ -2977,16 +2970,6 @@ function add_bag(x_1: int, b: bag) : bag = union_bag(b, singleton_bag(x_1))
 
 logic bag_of_tree : tree -> bag
 
-logic empty_bag : bag
-
-axiom bag_of_tree_def_1: (bag_of_tree(Empty) = empty_bag)
-
-axiom bag_of_tree_def_2:
-  (forall l_0:tree.
-    (forall x_5_0:int.
-      (forall r_0:tree. (bag_of_tree(Node(l_0, x_5_0, r_0)) = add_bag(x_5_0,
-        union_bag(bag_of_tree(l_0), bag_of_tree(r_0)))))))
-
 logic char_P_tag : char_P tag_id
 
 axiom char_P_int: (int_of_tag(char_P_tag) = 1)
@@ -3004,13 +2987,9 @@ axiom char_P_tags:
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
 
-logic integer_of_int32 : int32 -> int
+logic empty_bag : bag
 
-axiom div2_1_as_axiom:
-  (forall x_5:int32.
-    ((0 <= integer_of_int32(x_5)) ->
-     ((0 <= computer_div(integer_of_int32(x_5), 2)) and
-      (computer_div(integer_of_int32(x_5), 2) <= integer_of_int32(x_5)))))
+logic integer_of_int32 : int32 -> int
 
 predicate eq_int32(x: int32, y: int32) =
   (integer_of_int32(x) = integer_of_int32(y))
@@ -3063,43 +3042,6 @@ axiom int_P_tags:
       int_P_tag)))
 
 logic is_heap : tree -> prop
-
-axiom is_heap_def_1: is_heap(Empty)
-
-axiom is_heap_def_2: (forall x_6:int. is_heap(Node(Empty, x_6, Empty)))
-
-axiom is_heap_def_3:
-  (forall ll:tree.
-    (forall lr:tree.
-      (forall lx:int.
-        (forall x_7:int.
-          ((x_7 >= lx) ->
-           (is_heap(Node(ll, lx, lr)) -> is_heap(Node(Node(ll, lx, lr), x_7,
-            Empty))))))))
-
-axiom is_heap_def_4:
-  (forall rl:tree.
-    (forall rr:tree.
-      (forall rx:int.
-        (forall x_8:int.
-          ((x_8 >= rx) ->
-           (is_heap(Node(rl, rx, rr)) -> is_heap(Node(Empty, x_8, Node(rl,
-            rx, rr)))))))))
-
-axiom is_heap_def_5:
-  (forall ll_0:tree.
-    (forall lr_0:tree.
-      (forall rl_0:tree.
-        (forall rr_0:tree.
-          (forall lx_0:int.
-            (forall x_9:int.
-              (forall rx_0:int.
-                ((x_9 >= lx_0) ->
-                 (is_heap(Node(ll_0, lx_0, lr_0)) ->
-                  ((x_9 >= rx_0) ->
-                   (is_heap(Node(rl_0, rx_0, rr_0)) ->
-                    is_heap(Node(Node(ll_0, lx_0, lr_0), x_9, Node(rl_0,
-                    rx_0, rr_0))))))))))))))
 
 logic tree_of_array : int_P pointer, int, int, (int_P, int32) memory -> tree
 
@@ -3213,26 +3155,6 @@ predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
   ((offset_min(void_P_alloc_table, p) = a) and
    (offset_max(void_P_alloc_table, p) = b))
 
-axiom tree_of_array_def_1:
-  (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
-    (forall t_2:int_P pointer.
-      (forall root_0:int.
-        (forall bound_0:int.
-          ((root_0 >= bound_0) -> (tree_of_array(t_2, root_0, bound_0,
-           int_P_int_M_t_1_2_at_L) = Empty))))))
-
-axiom tree_of_array_def_2:
-  (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
-    (forall t_3:int_P pointer.
-      (forall root_1:int.
-        (forall bound_1:int.
-          (((0 <= root_1) and (root_1 < bound_1)) -> (tree_of_array(t_3,
-           root_1, bound_1, int_P_int_M_t_1_2_at_L) = Node(tree_of_array(t_3,
-           ((2 * root_1) + 1), bound_1, int_P_int_M_t_1_2_at_L),
-           integer_of_int32(select(int_P_int_M_t_1_2_at_L, shift(t_3,
-           root_1))), tree_of_array(t_3, ((2 * root_1) + 2), bound_1,
-           int_P_int_M_t_1_2_at_L))))))))
-
 predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
@@ -3296,4 +3218,69 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom bag_of_tree_def_1: (bag_of_tree(Empty) = empty_bag)
+
+axiom bag_of_tree_def_2:
+  (forall l_0:tree.
+    (forall x_5_0:int.
+      (forall r_0:tree. (bag_of_tree(Node(l_0, x_5_0, r_0)) = add_bag(x_5_0,
+        union_bag(bag_of_tree(l_0), bag_of_tree(r_0)))))))
+
+axiom is_heap_def_1: is_heap(Empty)
+
+axiom is_heap_def_2: (forall x_6:int. is_heap(Node(Empty, x_6, Empty)))
+
+axiom is_heap_def_3:
+  (forall ll:tree.
+    (forall lr:tree.
+      (forall lx:int.
+        (forall x_7:int.
+          ((x_7 >= lx) ->
+           (is_heap(Node(ll, lx, lr)) -> is_heap(Node(Node(ll, lx, lr), x_7,
+            Empty))))))))
+
+axiom is_heap_def_4:
+  (forall rl:tree.
+    (forall rr:tree.
+      (forall rx:int.
+        (forall x_8:int.
+          ((x_8 >= rx) ->
+           (is_heap(Node(rl, rx, rr)) -> is_heap(Node(Empty, x_8, Node(rl,
+            rx, rr)))))))))
+
+axiom is_heap_def_5:
+  (forall ll_0:tree.
+    (forall lr_0:tree.
+      (forall rl_0:tree.
+        (forall rr_0:tree.
+          (forall lx_0:int.
+            (forall x_9:int.
+              (forall rx_0:int.
+                ((x_9 >= lx_0) ->
+                 (is_heap(Node(ll_0, lx_0, lr_0)) ->
+                  ((x_9 >= rx_0) ->
+                   (is_heap(Node(rl_0, rx_0, rr_0)) ->
+                    is_heap(Node(Node(ll_0, lx_0, lr_0), x_9, Node(rl_0,
+                    rx_0, rr_0))))))))))))))
+
+axiom tree_of_array_def_1:
+  (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
+    (forall t_2:int_P pointer.
+      (forall root_0:int.
+        (forall bound_0:int.
+          ((root_0 >= bound_0) -> (tree_of_array(t_2, root_0, bound_0,
+           int_P_int_M_t_1_2_at_L) = Empty))))))
+
+axiom tree_of_array_def_2:
+  (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
+    (forall t_3:int_P pointer.
+      (forall root_1:int.
+        (forall bound_1:int.
+          (((0 <= root_1) and (root_1 < bound_1)) -> (tree_of_array(t_3,
+           root_1, bound_1, int_P_int_M_t_1_2_at_L) = Node(tree_of_array(t_3,
+           ((2 * root_1) + 1), bound_1, int_P_int_M_t_1_2_at_L),
+           integer_of_int32(select(int_P_int_M_t_1_2_at_L, shift(t_3,
+           root_1))), tree_of_array(t_3, ((2 * root_1) + 2), bound_1,
+           int_P_int_M_t_1_2_at_L))))))))
 

@@ -1,13 +1,12 @@
 
-/*@ predicate divides(integer x, integer y) {
-  @   \exists integer q; y == q*x
-  @ }
+/*@ predicate divides(integer x, integer y) =
+  @   \exists integer q; y == q*x ;
   @*/
 
-/*@ predicate isGcd(integer a, integer b, integer d) {
+/*@ predicate isGcd(integer a, integer b, integer d) =
   @   divides(d,a) && divides(d,b) && 
   @     \forall integer z;
-  @     divides(z,a) && divides(z,b) ==> divides(z,d) }
+  @     divides(z,a) && divides(z,b) ==> divides(z,d) ;
   @*/
 
 class Gcd {

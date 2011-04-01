@@ -242,55 +242,6 @@ predicate left_valid_struct_void_P(p:void_P pointer, a:int,
 logic nb_occ: int_P pointer, int, int, int32, int_P alloc_table,
  (int_P, int32) memory -> int
 
-axiom nb_occ_head :
- (forall int_P_a_0_3_alloc_table_at_L:int_P alloc_table.
-  (forall int_P_int_M_a_0_3_at_L:(int_P, int32) memory.
-   (forall a_2:int_P pointer.
-    (forall fst_1:int.
-     (forall last_1:int.
-      (forall value_1:int32.
-       ((lt_int(fst_1, last_1)
-        and (le_int(offset_min(int_P_a_0_3_alloc_table_at_L, a_2), fst_1)
-            and (ge_int(offset_max(int_P_a_0_3_alloc_table_at_L, a_2), fst_1)
-                and eq_int(integer_of_int32(select(int_P_int_M_a_0_3_at_L,
-                                            shift(a_2, fst_1))),
-                    integer_of_int32(value_1))))) ->
-        eq_int(nb_occ(a_2, fst_1, last_1, value_1,
-               int_P_a_0_3_alloc_table_at_L, int_P_int_M_a_0_3_at_L),
-        add_int(nb_occ(a_2, add_int(fst_1, (1)), last_1, value_1,
-                int_P_a_0_3_alloc_table_at_L, int_P_int_M_a_0_3_at_L),
-        (1))))))))))
-
-axiom nb_occ_nil :
- (forall int_P_a_0_3_alloc_table_at_L:int_P alloc_table.
-  (forall int_P_int_M_a_0_3_at_L:(int_P, int32) memory.
-   (forall a_1_0:int_P pointer.
-    (forall fst_0:int.
-     (forall last_0:int.
-      (forall value_0_0:int32.
-       (ge_int(last_0, fst_0) ->
-        eq_int(nb_occ(a_1_0, fst_0, last_0, value_0_0,
-               int_P_a_0_3_alloc_table_at_L, int_P_int_M_a_0_3_at_L),
-        (0)))))))))
-
-axiom nb_occ_tail :
- (forall int_P_a_0_3_alloc_table_at_L:int_P alloc_table.
-  (forall int_P_int_M_a_0_3_at_L:(int_P, int32) memory.
-   (forall a_3:int_P pointer.
-    (forall fst_2:int.
-     (forall last_2:int.
-      (forall value_2:int32.
-       ((lt_int(fst_2, last_2)
-        and (le_int(offset_min(int_P_a_0_3_alloc_table_at_L, a_3), fst_2)
-            and (ge_int(offset_max(int_P_a_0_3_alloc_table_at_L, a_3), fst_2)
-                and neq_int(integer_of_int32(select(int_P_int_M_a_0_3_at_L,
-                                             shift(a_3, fst_2))),
-                    integer_of_int32(value_2))))) ->
-        eq_int(nb_occ(a_3, fst_2, last_2, value_2,
-               int_P_a_0_3_alloc_table_at_L, int_P_int_M_a_0_3_at_L),
-        nb_occ(a_3, fst_2, last_2, value_2, int_P_a_0_3_alloc_table_at_L,
-        int_P_int_M_a_0_3_at_L)))))))))
-
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -403,6 +354,55 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom nb_occ_nil :
+ (forall int_P_a_0_3_alloc_table_at_L:int_P alloc_table.
+  (forall int_P_int_M_a_0_3_at_L:(int_P, int32) memory.
+   (forall a_1_0:int_P pointer.
+    (forall fst_0:int.
+     (forall last_0:int.
+      (forall value_0_0:int32.
+       (ge_int(last_0, fst_0) ->
+        eq_int(nb_occ(a_1_0, fst_0, last_0, value_0_0,
+               int_P_a_0_3_alloc_table_at_L, int_P_int_M_a_0_3_at_L),
+        (0)))))))))
+
+axiom nb_occ_head :
+ (forall int_P_a_0_3_alloc_table_at_L:int_P alloc_table.
+  (forall int_P_int_M_a_0_3_at_L:(int_P, int32) memory.
+   (forall a_2:int_P pointer.
+    (forall fst_1:int.
+     (forall last_1:int.
+      (forall value_1:int32.
+       ((lt_int(fst_1, last_1)
+        and (le_int(offset_min(int_P_a_0_3_alloc_table_at_L, a_2), fst_1)
+            and (ge_int(offset_max(int_P_a_0_3_alloc_table_at_L, a_2), fst_1)
+                and eq_int(integer_of_int32(select(int_P_int_M_a_0_3_at_L,
+                                            shift(a_2, fst_1))),
+                    integer_of_int32(value_1))))) ->
+        eq_int(nb_occ(a_2, fst_1, last_1, value_1,
+               int_P_a_0_3_alloc_table_at_L, int_P_int_M_a_0_3_at_L),
+        add_int(nb_occ(a_2, add_int(fst_1, (1)), last_1, value_1,
+                int_P_a_0_3_alloc_table_at_L, int_P_int_M_a_0_3_at_L),
+        (1))))))))))
+
+axiom nb_occ_tail :
+ (forall int_P_a_0_3_alloc_table_at_L:int_P alloc_table.
+  (forall int_P_int_M_a_0_3_at_L:(int_P, int32) memory.
+   (forall a_3:int_P pointer.
+    (forall fst_2:int.
+     (forall last_2:int.
+      (forall value_2:int32.
+       ((lt_int(fst_2, last_2)
+        and (le_int(offset_min(int_P_a_0_3_alloc_table_at_L, a_3), fst_2)
+            and (ge_int(offset_max(int_P_a_0_3_alloc_table_at_L, a_3), fst_2)
+                and neq_int(integer_of_int32(select(int_P_int_M_a_0_3_at_L,
+                                             shift(a_3, fst_2))),
+                    integer_of_int32(value_2))))) ->
+        eq_int(nb_occ(a_3, fst_2, last_2, value_2,
+               int_P_a_0_3_alloc_table_at_L, int_P_int_M_a_0_3_at_L),
+        nb_occ(a_3, fst_2, last_2, value_2, int_P_a_0_3_alloc_table_at_L,
+        int_P_int_M_a_0_3_at_L)))))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -2004,53 +2004,6 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
 logic nb_occ : int_P pointer, int, int, int32, int_P alloc_table, (int_P,
 int32) memory -> int
 
-axiom nb_occ_head:
-  (forall int_P_a_0_3_alloc_table_at_L:int_P alloc_table.
-    (forall int_P_int_M_a_0_3_at_L:(int_P, int32) memory.
-      (forall a_2:int_P pointer.
-        (forall fst_1:int.
-          (forall last_1:int.
-            (forall value_1:int32.
-              (((fst_1 < last_1) and
-                ((offset_min(int_P_a_0_3_alloc_table_at_L, a_2) <= fst_1) and
-                 ((offset_max(int_P_a_0_3_alloc_table_at_L,
-                  a_2) >= fst_1) and
-                  (integer_of_int32(select(int_P_int_M_a_0_3_at_L, shift(a_2,
-                  fst_1))) = integer_of_int32(value_1))))) ->
-               (nb_occ(a_2, fst_1, last_1, value_1,
-               int_P_a_0_3_alloc_table_at_L,
-               int_P_int_M_a_0_3_at_L) = (nb_occ(a_2, (fst_1 + 1), last_1,
-               value_1, int_P_a_0_3_alloc_table_at_L,
-               int_P_int_M_a_0_3_at_L) + 1)))))))))
-
-axiom nb_occ_nil:
-  (forall int_P_a_0_3_alloc_table_at_L:int_P alloc_table.
-    (forall int_P_int_M_a_0_3_at_L:(int_P, int32) memory.
-      (forall a_1_0:int_P pointer.
-        (forall fst_0:int.
-          (forall last_0:int.
-            (forall value_0_0:int32.
-              ((last_0 >= fst_0) -> (nb_occ(a_1_0, fst_0, last_0, value_0_0,
-               int_P_a_0_3_alloc_table_at_L, int_P_int_M_a_0_3_at_L) = 0))))))))
-
-axiom nb_occ_tail:
-  (forall int_P_a_0_3_alloc_table_at_L:int_P alloc_table.
-    (forall int_P_int_M_a_0_3_at_L:(int_P, int32) memory.
-      (forall a_3:int_P pointer.
-        (forall fst_2:int.
-          (forall last_2:int.
-            (forall value_2:int32.
-              (((fst_2 < last_2) and
-                ((offset_min(int_P_a_0_3_alloc_table_at_L, a_3) <= fst_2) and
-                 ((offset_max(int_P_a_0_3_alloc_table_at_L,
-                  a_3) >= fst_2) and
-                  (integer_of_int32(select(int_P_int_M_a_0_3_at_L, shift(a_3,
-                  fst_2))) <> integer_of_int32(value_2))))) ->
-               (nb_occ(a_3, fst_2, last_2, value_2,
-               int_P_a_0_3_alloc_table_at_L,
-               int_P_int_M_a_0_3_at_L) = nb_occ(a_3, fst_2, last_2, value_2,
-               int_P_a_0_3_alloc_table_at_L, int_P_int_M_a_0_3_at_L)))))))))
-
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(char_P_of_pointer_address(p))))
@@ -2165,4 +2118,51 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom nb_occ_nil:
+  (forall int_P_a_0_3_alloc_table_at_L:int_P alloc_table.
+    (forall int_P_int_M_a_0_3_at_L:(int_P, int32) memory.
+      (forall a_1_0:int_P pointer.
+        (forall fst_0:int.
+          (forall last_0:int.
+            (forall value_0_0:int32.
+              ((last_0 >= fst_0) -> (nb_occ(a_1_0, fst_0, last_0, value_0_0,
+               int_P_a_0_3_alloc_table_at_L, int_P_int_M_a_0_3_at_L) = 0))))))))
+
+axiom nb_occ_head:
+  (forall int_P_a_0_3_alloc_table_at_L:int_P alloc_table.
+    (forall int_P_int_M_a_0_3_at_L:(int_P, int32) memory.
+      (forall a_2:int_P pointer.
+        (forall fst_1:int.
+          (forall last_1:int.
+            (forall value_1:int32.
+              (((fst_1 < last_1) and
+                ((offset_min(int_P_a_0_3_alloc_table_at_L, a_2) <= fst_1) and
+                 ((offset_max(int_P_a_0_3_alloc_table_at_L,
+                  a_2) >= fst_1) and
+                  (integer_of_int32(select(int_P_int_M_a_0_3_at_L, shift(a_2,
+                  fst_1))) = integer_of_int32(value_1))))) ->
+               (nb_occ(a_2, fst_1, last_1, value_1,
+               int_P_a_0_3_alloc_table_at_L,
+               int_P_int_M_a_0_3_at_L) = (nb_occ(a_2, (fst_1 + 1), last_1,
+               value_1, int_P_a_0_3_alloc_table_at_L,
+               int_P_int_M_a_0_3_at_L) + 1)))))))))
+
+axiom nb_occ_tail:
+  (forall int_P_a_0_3_alloc_table_at_L:int_P alloc_table.
+    (forall int_P_int_M_a_0_3_at_L:(int_P, int32) memory.
+      (forall a_3:int_P pointer.
+        (forall fst_2:int.
+          (forall last_2:int.
+            (forall value_2:int32.
+              (((fst_2 < last_2) and
+                ((offset_min(int_P_a_0_3_alloc_table_at_L, a_3) <= fst_2) and
+                 ((offset_max(int_P_a_0_3_alloc_table_at_L,
+                  a_3) >= fst_2) and
+                  (integer_of_int32(select(int_P_int_M_a_0_3_at_L, shift(a_3,
+                  fst_2))) <> integer_of_int32(value_2))))) ->
+               (nb_occ(a_3, fst_2, last_2, value_2,
+               int_P_a_0_3_alloc_table_at_L,
+               int_P_int_M_a_0_3_at_L) = nb_occ(a_3, fst_2, last_2, value_2,
+               int_P_a_0_3_alloc_table_at_L, int_P_int_M_a_0_3_at_L)))))))))
 

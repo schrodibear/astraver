@@ -2,9 +2,6 @@
 
 /* McCarthy's ``91'' function. */
 
-//@+ CheckArithOverflow = no
-
-
 public class MacCarthy {
 
     /*@ decreases 101-n ;
@@ -24,3 +21,4 @@ public class MacCarthy {
     }
 
 }
+

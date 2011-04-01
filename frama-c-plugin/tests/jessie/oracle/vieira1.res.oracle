@@ -313,63 +313,6 @@ predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
 logic sumone: int, int_P pointer, int_P pointer, int, int_P pointer,
  int_P pointer, int, (int_P, int32) memory, (int_P, int32) memory -> prop
 
-axiom sumone_end :
- (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
-  (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
-   (forall a1_1:int_P pointer.
-    (forall b1_1:int_P pointer.
-     (forall a2_1:int_P pointer.
-      (forall b2_1:int_P pointer.
-       (forall k2_2:int.
-        (forall n_2:int.
-         ((sumone(integer_of_int32(int32_of_integer((0))), a1_1, b1_1, k2_2,
-           a2_1, b2_1, n_2, int_P_int_M_a1_1_at_L2, int_P_int_M_a1_1_at_L1)
-          and eq_int(k2_2, n_2)) ->
-          ((forall l:int.
-            ((le_int((0), l) and lt_int(l, n_2)) ->
-             eq_int(integer_of_int32(select(int_P_int_M_a1_1_at_L2,
-                                     shift(b2_1, l))),
-             add_int(integer_of_int32(select(int_P_int_M_a1_1_at_L2,
-                                      shift(a2_1, l))),
-             (1)))))
-          and (forall l_0:int.
-               ((le_int((0), l_0) and lt_int(l_0, n_2)) ->
-                eq_int(integer_of_int32(select(int_P_int_M_a1_1_at_L2,
-                                        shift(a2_1, l_0))),
-                integer_of_int32(select(int_P_int_M_a1_1_at_L1,
-                                 shift(a1_1, l_0))))))))))))))))
-
-axiom sumone_inv :
- (forall int_P_int_M_a1_1_at_L3:(int_P, int32) memory.
-  (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
-   (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
-    (forall k1_1:int.
-     (forall k2_1:int.
-      (forall k3:int.
-       (forall n_1:int.
-        (forall a1_0:int_P pointer.
-         (forall b1_0:int_P pointer.
-          (forall a2_0:int_P pointer.
-           (forall b2_0:int_P pointer.
-            (forall a3:int_P pointer.
-             (forall b3:int_P pointer.
-              (sumone(k1_1, a1_0, b1_0, k2_1, a2_0, b2_0, n_1,
-               int_P_int_M_a1_1_at_L2, int_P_int_M_a1_1_at_L1) ->
-               sumone(k1_1, a1_0, b1_0, k3, b3, b3, n_1,
-               int_P_int_M_a1_1_at_L3, int_P_int_M_a1_1_at_L1)))))))))))))))
-
-axiom sumone_start :
- (forall int_P_int_M_a1_1_at_L:(int_P, int32) memory.
-  (forall k1_0:int.
-   (forall k2_0:int.
-    (forall a_0:int_P pointer.
-     (forall b_0:int_P pointer.
-      (forall n_0_0:int.
-       (forall i_0:int.
-        (eq_int(k1_0, k2_0) ->
-         sumone(k1_0, a_0, b_0, k2_0, a_0, b_0, n_0_0, int_P_int_M_a1_1_at_L,
-         int_P_int_M_a1_1_at_L)))))))))
-
 predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
@@ -429,6 +372,63 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom sumone_start :
+ (forall int_P_int_M_a1_1_at_L:(int_P, int32) memory.
+  (forall k1_0:int.
+   (forall k2_0:int.
+    (forall a_0:int_P pointer.
+     (forall b_0:int_P pointer.
+      (forall n_0_0:int.
+       (forall i_0:int.
+        (eq_int(k1_0, k2_0) ->
+         sumone(k1_0, a_0, b_0, k2_0, a_0, b_0, n_0_0, int_P_int_M_a1_1_at_L,
+         int_P_int_M_a1_1_at_L)))))))))
+
+axiom sumone_inv :
+ (forall int_P_int_M_a1_1_at_L3:(int_P, int32) memory.
+  (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
+   (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
+    (forall k1_1:int.
+     (forall k2_1:int.
+      (forall k3:int.
+       (forall n_1:int.
+        (forall a1_0:int_P pointer.
+         (forall b1_0:int_P pointer.
+          (forall a2_0:int_P pointer.
+           (forall b2_0:int_P pointer.
+            (forall a3:int_P pointer.
+             (forall b3:int_P pointer.
+              (sumone(k1_1, a1_0, b1_0, k2_1, a2_0, b2_0, n_1,
+               int_P_int_M_a1_1_at_L2, int_P_int_M_a1_1_at_L1) ->
+               sumone(k1_1, a1_0, b1_0, k3, b3, b3, n_1,
+               int_P_int_M_a1_1_at_L3, int_P_int_M_a1_1_at_L1)))))))))))))))
+
+axiom sumone_end :
+ (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
+  (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
+   (forall a1_1:int_P pointer.
+    (forall b1_1:int_P pointer.
+     (forall a2_1:int_P pointer.
+      (forall b2_1:int_P pointer.
+       (forall k2_2:int.
+        (forall n_2:int.
+         ((sumone(integer_of_int32(int32_of_integer((0))), a1_1, b1_1, k2_2,
+           a2_1, b2_1, n_2, int_P_int_M_a1_1_at_L2, int_P_int_M_a1_1_at_L1)
+          and eq_int(k2_2, n_2)) ->
+          ((forall l:int.
+            ((le_int((0), l) and lt_int(l, n_2)) ->
+             eq_int(integer_of_int32(select(int_P_int_M_a1_1_at_L2,
+                                     shift(b2_1, l))),
+             add_int(integer_of_int32(select(int_P_int_M_a1_1_at_L2,
+                                      shift(a2_1, l))),
+             (1)))))
+          and (forall l_0:int.
+               ((le_int((0), l_0) and lt_int(l_0, n_2)) ->
+                eq_int(integer_of_int32(select(int_P_int_M_a1_1_at_L2,
+                                        shift(a2_1, l_0))),
+                integer_of_int32(select(int_P_int_M_a1_1_at_L1,
+                                 shift(a1_1, l_0))))))))))))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -2141,62 +2141,6 @@ predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
 logic sumone : int, int_P pointer, int_P pointer, int, int_P pointer,
 int_P pointer, int, (int_P, int32) memory, (int_P, int32) memory -> prop
 
-axiom sumone_end:
-  (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
-    (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
-      (forall a1_1:int_P pointer.
-        (forall b1_1:int_P pointer.
-          (forall a2_1:int_P pointer.
-            (forall b2_1:int_P pointer.
-              (forall k2_2:int.
-                (forall n_2:int.
-                  ((sumone(integer_of_int32(int32_of_integer(0)), a1_1, b1_1,
-                    k2_2, a2_1, b2_1, n_2, int_P_int_M_a1_1_at_L2,
-                    int_P_int_M_a1_1_at_L1) and (k2_2 = n_2)) ->
-                   ((forall l:int.
-                      (((0 <= l) and (l < n_2)) ->
-                       (integer_of_int32(select(int_P_int_M_a1_1_at_L2,
-                       shift(b2_1,
-                       l))) = (integer_of_int32(select(int_P_int_M_a1_1_at_L2,
-                       shift(a2_1, l))) + 1)))) and
-                    (forall l_0:int.
-                      (((0 <= l_0) and (l_0 < n_2)) ->
-                       (integer_of_int32(select(int_P_int_M_a1_1_at_L2,
-                       shift(a2_1,
-                       l_0))) = integer_of_int32(select(int_P_int_M_a1_1_at_L1,
-                       shift(a1_1, l_0))))))))))))))))
-
-axiom sumone_inv:
-  (forall int_P_int_M_a1_1_at_L3:(int_P, int32) memory.
-    (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
-      (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
-        (forall k1_1:int.
-          (forall k2_1:int.
-            (forall k3:int.
-              (forall n_1:int.
-                (forall a1_0:int_P pointer.
-                  (forall b1_0:int_P pointer.
-                    (forall a2_0:int_P pointer.
-                      (forall b2_0:int_P pointer.
-                        (forall a3:int_P pointer.
-                          (forall b3:int_P pointer.
-                            (sumone(k1_1, a1_0, b1_0, k2_1, a2_0, b2_0, n_1,
-                             int_P_int_M_a1_1_at_L2,
-                             int_P_int_M_a1_1_at_L1) -> sumone(k1_1, a1_0,
-                             b1_0, k3, b3, b3, n_1, int_P_int_M_a1_1_at_L3,
-                             int_P_int_M_a1_1_at_L1)))))))))))))))
-
-axiom sumone_start:
-  (forall int_P_int_M_a1_1_at_L:(int_P, int32) memory.
-    (forall k1_0:int.
-      (forall k2_0:int.
-        (forall a_0:int_P pointer.
-          (forall b_0:int_P pointer.
-            (forall n_0_0:int.
-              (forall i_0:int.
-                ((k1_0 = k2_0) -> sumone(k1_0, a_0, b_0, k2_0, a_0, b_0,
-                 n_0_0, int_P_int_M_a1_1_at_L, int_P_int_M_a1_1_at_L)))))))))
-
 predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
@@ -2256,4 +2200,60 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom sumone_start:
+  (forall int_P_int_M_a1_1_at_L:(int_P, int32) memory.
+    (forall k1_0:int.
+      (forall k2_0:int.
+        (forall a_0:int_P pointer.
+          (forall b_0:int_P pointer.
+            (forall n_0_0:int.
+              (forall i_0:int.
+                ((k1_0 = k2_0) -> sumone(k1_0, a_0, b_0, k2_0, a_0, b_0,
+                 n_0_0, int_P_int_M_a1_1_at_L, int_P_int_M_a1_1_at_L)))))))))
+
+axiom sumone_inv:
+  (forall int_P_int_M_a1_1_at_L3:(int_P, int32) memory.
+    (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
+      (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
+        (forall k1_1:int.
+          (forall k2_1:int.
+            (forall k3:int.
+              (forall n_1:int.
+                (forall a1_0:int_P pointer.
+                  (forall b1_0:int_P pointer.
+                    (forall a2_0:int_P pointer.
+                      (forall b2_0:int_P pointer.
+                        (forall a3:int_P pointer.
+                          (forall b3:int_P pointer.
+                            (sumone(k1_1, a1_0, b1_0, k2_1, a2_0, b2_0, n_1,
+                             int_P_int_M_a1_1_at_L2,
+                             int_P_int_M_a1_1_at_L1) -> sumone(k1_1, a1_0,
+                             b1_0, k3, b3, b3, n_1, int_P_int_M_a1_1_at_L3,
+                             int_P_int_M_a1_1_at_L1)))))))))))))))
+
+axiom sumone_end:
+  (forall int_P_int_M_a1_1_at_L2:(int_P, int32) memory.
+    (forall int_P_int_M_a1_1_at_L1:(int_P, int32) memory.
+      (forall a1_1:int_P pointer.
+        (forall b1_1:int_P pointer.
+          (forall a2_1:int_P pointer.
+            (forall b2_1:int_P pointer.
+              (forall k2_2:int.
+                (forall n_2:int.
+                  ((sumone(integer_of_int32(int32_of_integer(0)), a1_1, b1_1,
+                    k2_2, a2_1, b2_1, n_2, int_P_int_M_a1_1_at_L2,
+                    int_P_int_M_a1_1_at_L1) and (k2_2 = n_2)) ->
+                   ((forall l:int.
+                      (((0 <= l) and (l < n_2)) ->
+                       (integer_of_int32(select(int_P_int_M_a1_1_at_L2,
+                       shift(b2_1,
+                       l))) = (integer_of_int32(select(int_P_int_M_a1_1_at_L2,
+                       shift(a2_1, l))) + 1)))) and
+                    (forall l_0:int.
+                      (((0 <= l_0) and (l_0 < n_2)) ->
+                       (integer_of_int32(select(int_P_int_M_a1_1_at_L2,
+                       shift(a2_1,
+                       l_0))) = integer_of_int32(select(int_P_int_M_a1_1_at_L1,
+                       shift(a1_1, l_0))))))))))))))))
 

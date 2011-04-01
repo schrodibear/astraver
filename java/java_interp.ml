@@ -461,15 +461,19 @@ let any_string =
     ()
 
 
-(*
+(**)
 let any_string_decl =
   mkfun_def
-    ~result_type: (new ptype (JCPTpointer("String",[],0,0)))
-    ~name: "any_string"
+    ~result_type: (new ptype (JCPTpointer("String",[],Some num_zero,None)))
+    ~name: (new identifier "any_string")
     ~params: []
     ~clauses: []
     ()
-*)
+(**)
+
+let decl_any_string = 
+  if !Java_options.javacard then [] else
+    [ any_string_decl ]
 
 let lit l =
   match l with

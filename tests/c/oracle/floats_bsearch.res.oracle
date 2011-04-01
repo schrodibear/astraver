@@ -349,10 +349,10 @@ begin = 27
 end = 32
 
 [C_26]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/floats_bsearch.c"
+line = 35
+begin = 13
+end = 14
 
 [C_27]
 file = "HOME/tests/c/floats_bsearch.c"
@@ -379,10 +379,10 @@ begin = 22
 end = 27
 
 [C_31]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/floats_bsearch.c"
+line = 34
+begin = 8
+end = 9
 
 [C_32]
 file = "HOME/tests/c/floats_bsearch.c"
@@ -3206,6 +3206,10 @@ axiom exact_round_double_for_integers:
       ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
        (round_double(m, real_of_int(i)) = real_of_int(i)))))
 
+axiom exact_round_double_for_doubles:
+  (forall x:double.
+    (forall m:mode. (round_double(m, double_value(x)) = double_value(x))))
+
 axiom round_double_idempotent:
   (forall m1:mode.
     (forall m2:mode.
@@ -3261,6 +3265,10 @@ axiom exact_round_single_for_integers:
     (forall m:mode.
       ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
        real_of_int(i)) = real_of_int(i)))))
+
+axiom exact_round_single_for_singles:
+  (forall x:single.
+    (forall m:mode. (round_single(m, single_value(x)) = single_value(x))))
 
 axiom round_single_idempotent:
   (forall m1:mode.
@@ -4101,7 +4109,7 @@ goal binary_search_ensures_default_po_1:
   (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
   forall u:int32.
   (u = result0) ->
-  ("JC_50": ("JC_48": ("JC_48": (0 <= integer_of_int32(l)))))
+  ("JC_50": ("JC_48": (0 <= integer_of_int32(l))))
 
 goal binary_search_ensures_default_po_2:
   forall t_0:double_P pointer.
@@ -4128,8 +4136,7 @@ goal binary_search_ensures_default_po_2:
   (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
   forall u:int32.
   (u = result0) ->
-  ("JC_50":
-  ("JC_49": ("JC_49": (integer_of_int32(u) <= (integer_of_int32(n) - 1)))))
+  ("JC_50": ("JC_49": (integer_of_int32(u) <= (integer_of_int32(n) - 1))))
 
 goal binary_search_ensures_default_po_3:
   forall t_0:double_P pointer.
@@ -4170,8 +4177,7 @@ goal binary_search_ensures_default_po_3:
   (integer_of_int32(result3) = (integer_of_int32(l0) + integer_of_int32(result2))) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_57":
-  ("JC_55": ("JC_55": (integer_of_int32(l0) <= integer_of_int32(m)))))
+  ("JC_57": ("JC_55": (integer_of_int32(l0) <= integer_of_int32(m))))
 
 goal binary_search_ensures_default_po_4:
   forall t_0:double_P pointer.
@@ -4212,8 +4218,7 @@ goal binary_search_ensures_default_po_4:
   (integer_of_int32(result3) = (integer_of_int32(l0) + integer_of_int32(result2))) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_57":
-  ("JC_56": ("JC_56": (integer_of_int32(m) <= integer_of_int32(u0)))))
+  ("JC_57": ("JC_56": (integer_of_int32(m) <= integer_of_int32(u0))))
 
 goal binary_search_ensures_default_po_5:
   forall t_0:double_P pointer.
@@ -4265,7 +4270,7 @@ goal binary_search_ensures_default_po_5:
   (integer_of_int32(result5) = (integer_of_int32(m) + 1)) ->
   forall l1:int32.
   (l1 = result5) ->
-  ("JC_50": ("JC_48": ("JC_48": (0 <= integer_of_int32(l1)))))
+  ("JC_50": ("JC_48": (0 <= integer_of_int32(l1))))
 
 goal binary_search_ensures_default_po_6:
   forall t_0:double_P pointer.
@@ -4321,8 +4326,7 @@ goal binary_search_ensures_default_po_6:
   (integer_of_int32(result6) = (integer_of_int32(m) - 1)) ->
   forall u1:int32.
   (u1 = result6) ->
-  ("JC_50":
-  ("JC_49": ("JC_49": (integer_of_int32(u1) <= (integer_of_int32(n) - 1)))))
+  ("JC_50": ("JC_49": (integer_of_int32(u1) <= (integer_of_int32(n) - 1))))
 
 goal binary_search_ensures_default_po_7:
   forall t_0:double_P pointer.
@@ -4374,7 +4378,7 @@ goal binary_search_ensures_default_po_7:
   (result5 = select(double_P_double_M_t_2, shift(t_0,
   integer_of_int32(m)))) ->
   (not gt_double(result5, v)) ->
-  ("JC_58": ("JC_58": (0 <> 0)))
+  ("JC_58": (0 <> 0))
 
 goal binary_search_ensures_default_po_8:
   forall t_0:double_P pointer.
@@ -4431,7 +4435,7 @@ goal binary_search_ensures_default_po_8:
   (__retres = m) ->
   forall return:int32.
   (return = __retres) ->
-  ("JC_17": ("JC_15": ("JC_15": ((-1) <= integer_of_int32(return)))))
+  ("JC_17": ("JC_15": ((-1) <= integer_of_int32(return))))
 
 goal binary_search_ensures_default_po_9:
   forall t_0:double_P pointer.
@@ -4488,8 +4492,7 @@ goal binary_search_ensures_default_po_9:
   (__retres = m) ->
   forall return:int32.
   (return = __retres) ->
-  ("JC_17":
-  ("JC_16": ("JC_16": (integer_of_int32(return) < integer_of_int32(n)))))
+  ("JC_17": ("JC_16": (integer_of_int32(return) < integer_of_int32(n))))
 
 goal binary_search_ensures_default_po_10:
   forall t_0:double_P pointer.
@@ -4522,7 +4525,7 @@ goal binary_search_ensures_default_po_10:
   (("JC_48": (0 <= integer_of_int32(l0))) and
    ("JC_49": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) > integer_of_int32(u0)) ->
-  ("JC_59": ("JC_59": (0 <> 0)))
+  ("JC_59": (0 <> 0))
 
 goal binary_search_ensures_default_po_11:
   forall t_0:double_P pointer.
@@ -4562,7 +4565,7 @@ goal binary_search_ensures_default_po_11:
   (__retres = result1) ->
   forall return:int32.
   (return = __retres) ->
-  ("JC_17": ("JC_15": ("JC_15": ((-1) <= integer_of_int32(return)))))
+  ("JC_17": ("JC_15": ((-1) <= integer_of_int32(return))))
 
 goal binary_search_ensures_default_po_12:
   forall t_0:double_P pointer.
@@ -4602,8 +4605,7 @@ goal binary_search_ensures_default_po_12:
   (__retres = result1) ->
   forall return:int32.
   (return = __retres) ->
-  ("JC_17":
-  ("JC_16": ("JC_16": (integer_of_int32(return) < integer_of_int32(n)))))
+  ("JC_17": ("JC_16": (integer_of_int32(return) < integer_of_int32(n))))
 
 goal binary_search_ensures_failure_po_1:
   forall t_0:double_P pointer.
@@ -4631,11 +4633,9 @@ goal binary_search_ensures_failure_po_1:
   (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
   forall u:int32.
   (u = result0) ->
-  ("JC_72":
-  ("JC_72":
-  (forall k_0:int.
-    (((integer_of_int32(u) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-     lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0)))))))
+  forall k_0:int.
+  ((integer_of_int32(u) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
+  ("JC_72": lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0))))
 
 goal binary_search_ensures_failure_po_2:
   forall t_0:double_P pointer.
@@ -4663,11 +4663,9 @@ goal binary_search_ensures_failure_po_2:
   (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
   forall u:int32.
   (u = result0) ->
-  ("JC_73":
-  ("JC_73":
-  (forall k:int.
-    (((0 <= k) and (k < integer_of_int32(l))) ->
-     lt_double(select(double_P_double_M_t_2, shift(t_0, k)), v)))))
+  forall k:int.
+  ((0 <= k) and (k < integer_of_int32(l))) ->
+  ("JC_73": lt_double(select(double_P_double_M_t_2, shift(t_0, k)), v))
 
 goal binary_search_ensures_failure_po_3:
   forall t_0:double_P pointer.
@@ -4728,11 +4726,9 @@ goal binary_search_ensures_failure_po_3:
   (integer_of_int32(result5) = (integer_of_int32(m) + 1)) ->
   forall l1:int32.
   (l1 = result5) ->
-  ("JC_72":
-  ("JC_72":
-  (forall k_0:int.
-    (((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-     lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0)))))))
+  forall k_0:int.
+  ((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
+  ("JC_72": lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0))))
 
 goal binary_search_ensures_failure_po_4:
   forall t_0:double_P pointer.
@@ -4793,11 +4789,9 @@ goal binary_search_ensures_failure_po_4:
   (integer_of_int32(result5) = (integer_of_int32(m) + 1)) ->
   forall l1:int32.
   (l1 = result5) ->
-  ("JC_73":
-  ("JC_73":
-  (forall k:int.
-    (((0 <= k) and (k < integer_of_int32(l1))) ->
-     lt_double(select(double_P_double_M_t_2, shift(t_0, k)), v)))))
+  forall k:int.
+  ((0 <= k) and (k < integer_of_int32(l1))) ->
+  ("JC_73": lt_double(select(double_P_double_M_t_2, shift(t_0, k)), v))
 
 goal binary_search_ensures_failure_po_5:
   forall t_0:double_P pointer.
@@ -4862,11 +4856,9 @@ goal binary_search_ensures_failure_po_5:
   (integer_of_int32(result6) = (integer_of_int32(m) - 1)) ->
   forall u1:int32.
   (u1 = result6) ->
-  ("JC_72":
-  ("JC_72":
-  (forall k_0:int.
-    (((integer_of_int32(u1) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-     lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0)))))))
+  forall k_0:int.
+  ((integer_of_int32(u1) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
+  ("JC_72": lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0))))
 
 goal binary_search_ensures_failure_po_6:
   forall t_0:double_P pointer.
@@ -4931,11 +4923,9 @@ goal binary_search_ensures_failure_po_6:
   (integer_of_int32(result6) = (integer_of_int32(m) - 1)) ->
   forall u1:int32.
   (u1 = result6) ->
-  ("JC_73":
-  ("JC_73":
-  (forall k:int.
-    (((0 <= k) and (k < integer_of_int32(l0))) ->
-     lt_double(select(double_P_double_M_t_2, shift(t_0, k)), v)))))
+  forall k:int.
+  ((0 <= k) and (k < integer_of_int32(l0))) ->
+  ("JC_73": lt_double(select(double_P_double_M_t_2, shift(t_0, k)), v))
 
 goal binary_search_ensures_failure_po_7:
   forall t_0:double_P pointer.
@@ -6148,10 +6138,10 @@ goal binary_search_safety_po_19:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/floats_bsearch_why.why    : ......#..?.....##........................ (37/0/1/3/0)
+why/floats_bsearch_why.why    : ......#..?......#........................ (38/0/1/2/0)
 total   :  41
-valid   :  37 ( 90%)
+valid   :  38 ( 93%)
 invalid :   0 (  0%)
 unknown :   1 (  2%)
-timeout :   3 (  7%)
+timeout :   2 (  5%)
 failure :   0 (  0%)

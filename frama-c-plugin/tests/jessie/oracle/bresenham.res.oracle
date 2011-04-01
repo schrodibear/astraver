@@ -166,11 +166,6 @@ exception Return_label_exc of unit
 
 logic abs: int -> int
 
-axiom abs_def :
- (forall x_0_0:int.
-  ((ge_int(x_0_0, (0)) and eq_int(abs(x_0_0), x_0_0))
-  or (le_int(x_0_0, (0)) and eq_int(abs(x_0_0), neg_int(x_0_0)))))
-
 predicate best(x_1:int, y:int) =
  (forall yp:int.
   le_int(abs(sub_int(mul_int(integer_of_int32(x2), y),
@@ -229,16 +224,6 @@ axiom int8_coerce :
 axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
-
-goal invariant_is_ok :
- (forall x_3:int.
-  (forall y_1:int.
-   (forall e_0:int. (Invariant(x_3, y_1, e_0) -> best(x_3, y_1)))))
-
-axiom invariant_is_ok_as_axiom :
- (forall x_3:int.
-  (forall y_1:int.
-   (forall e_0:int. (Invariant(x_3, y_1, e_0) -> best(x_3, y_1)))))
 
 predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -329,26 +314,23 @@ axiom void_P_tags :
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
 
-goal z_ring_0 :
+axiom abs_def :
+ (forall x_0_0:int.
+  ((ge_int(x_0_0, (0)) and eq_int(abs(x_0_0), x_0_0))
+  or (le_int(x_0_0, (0)) and eq_int(abs(x_0_0), neg_int(x_0_0)))))
+
+lemma invariant_is_ok :
+ (forall x_3:int.
+  (forall y_1:int.
+   (forall e_0:int. (Invariant(x_3, y_1, e_0) -> best(x_3, y_1)))))
+
+lemma z_ring_0 :
  (forall a:int.
   (forall b:int.
    (forall c:int.
     eq_int(mul_int(a, add_int(b, c)), add_int(mul_int(a, b), mul_int(a, c))))))
 
-axiom z_ring_0_as_axiom :
- (forall a:int.
-  (forall b:int.
-   (forall c:int.
-    eq_int(mul_int(a, add_int(b, c)), add_int(mul_int(a, b), mul_int(a, c))))))
-
-goal z_ring_1 :
- (forall a_0:int.
-  (forall b_0:int.
-   (forall c_0:int.
-    eq_int(mul_int(add_int(b_0, c_0), a_0),
-    add_int(mul_int(b_0, a_0), mul_int(c_0, a_0))))))
-
-axiom z_ring_1_as_axiom :
+lemma z_ring_1 :
  (forall a_0:int.
   (forall b_0:int.
    (forall c_0:int.
@@ -1810,11 +1792,6 @@ predicate Invariant(x_2: int, y_0: int, e: int) =
 
 logic abs : int -> int
 
-axiom abs_def:
-  (forall x_0_0:int.
-    (((x_0_0 >= 0) and (abs(x_0_0) = x_0_0)) or
-     ((x_0_0 <= 0) and (abs(x_0_0) = (-x_0_0)))))
-
 predicate best(x_1: int, y: int) =
   (forall yp:int.
     (abs(((integer_of_int32(x2) * y) - (x_1 * integer_of_int32(y2)))) <= abs(((integer_of_int32(x2) * yp) - (x_1 * integer_of_int32(y2))))))
@@ -1870,11 +1847,6 @@ axiom int8_coerce:
 axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
-
-axiom invariant_is_ok_as_axiom:
-  (forall x_3:int.
-    (forall y_1:int.
-      (forall e_0:int. (Invariant(x_3, y_1, e_0) -> best(x_3, y_1)))))
 
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
@@ -1967,12 +1939,8 @@ axiom void_P_tags:
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
 
-axiom z_ring_0_as_axiom:
-  (forall a:int.
-    (forall b:int. (forall c:int. ((a * (b + c)) = ((a * b) + (a * c))))))
-
-axiom z_ring_1_as_axiom:
-  (forall a_0:int.
-    (forall b_0:int.
-      (forall c_0:int. (((b_0 + c_0) * a_0) = ((b_0 * a_0) + (c_0 * a_0))))))
+axiom abs_def:
+  (forall x_0_0:int.
+    (((x_0_0 >= 0) and (abs(x_0_0) = x_0_0)) or
+     ((x_0_0 <= 0) and (abs(x_0_0) = (-x_0_0)))))
 

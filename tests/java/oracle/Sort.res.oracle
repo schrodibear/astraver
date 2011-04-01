@@ -114,6 +114,9 @@ predicate Non_null_intM{Here}(intM[0..] x) =
 predicate Non_null_Object{Here}(Object[0..] x) =
 (\offset_max(x) == 0)
 
+String[0..] any_string()
+;
+
 tag Object = {
 }
 
@@ -892,76 +895,77 @@ clean:
 ========== file tests/java/Sort.loc ==========
 [JC_103]
 file = "HOME/tests/java/Sort.java"
-line = 59
-begin = 8
-end = 90
+line = 67
+begin = 38
+end = 51
 
 [JC_104]
 file = "HOME/tests/java/Sort.java"
-line = 58
-begin = 21
-end = 130
+line = 67
+begin = 24
+end = 51
 
 [JC_105]
-file = "HOME/tests/java/Sort.java"
-line = 56
-begin = 20
-end = 26
-
-[JC_106]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
+[JC_106]
+file = "HOME/tests/java/Sort.jc"
+line = 178
+begin = 21
+end = 1621
+
 [JC_40]
+file = "HOME/tests/java/Sort.java"
+line = 37
+begin = 11
+end = 17
+
+[JC_107]
+file = "HOME/tests/java/Sort.jc"
+line = 178
+begin = 21
+end = 1621
+
+[JC_41]
 file = "HOME/tests/java/Sort.java"
 line = 37
 begin = 16
 end = 28
 
-[JC_107]
-file = "HOME/tests/java/Sort.jc"
-line = 150
-begin = 15
-end = 3072
+[JC_108]
+kind = UserCall
+file = "HOME/tests/java/Sort.java"
+line = 74
+begin = 21
+end = 29
 
-[JC_41]
+[JC_42]
 file = "HOME/tests/java/Sort.java"
 line = 37
 begin = 32
 end = 38
 
-[JC_108]
-file = "HOME/tests/java/Sort.jc"
-line = 150
-begin = 15
-end = 3072
-
-[JC_42]
-file = "HOME/tests/java/Sort.java"
-line = 37
-begin = 37
-end = 49
-
 [JC_220]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
+line = 386
 begin = 22
 end = 26
 
 [JC_109]
 kind = UserCall
-file = "HOME/tests/java/Sort.java"
-line = 64
-begin = 13
-end = 21
+file = "HOME/tests/java/Sort.jc"
+line = 205
+begin = 29
+end = 60
 
 [JC_43]
 file = "HOME/tests/java/Sort.java"
-line = 36
-begin = 17
-end = 80
+line = 37
+begin = 37
+end = 49
 
 [JC_221]
 file = "HOME/"
@@ -978,10 +982,10 @@ begin = 9
 end = 13
 
 [JC_44]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Sort.java"
+line = 36
+begin = 17
+end = 80
 
 [JC_222]
 file = "HOME/"
@@ -990,10 +994,10 @@ begin = -1
 end = -1
 
 [JC_45]
-file = "HOME/tests/java/Sort.java"
-line = 39
-begin = 16
-end = 37
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_223]
 file = "HOME/"
@@ -1003,9 +1007,9 @@ end = -1
 
 [JC_46]
 file = "HOME/tests/java/Sort.java"
-line = 41
-begin = 9
-end = 13
+line = 36
+begin = 17
+end = 26
 
 [JC_224]
 file = "HOME/"
@@ -1014,10 +1018,10 @@ begin = -1
 end = -1
 
 [JC_47]
-file = "HOME/tests/java/Sort.jc"
-line = 117
-begin = 9
-end = 16
+file = "HOME/tests/java/Sort.java"
+line = 37
+begin = 11
+end = 17
 
 [JC_225]
 file = "HOME/"
@@ -1027,21 +1031,21 @@ end = -1
 
 [JC_48]
 file = "HOME/tests/java/Sort.java"
-line = 39
+line = 37
 begin = 16
-end = 37
+end = 28
 
 [JC_226]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
+line = 430
+begin = 22
+end = 26
 
 [JC_49]
 file = "HOME/tests/java/Sort.java"
-line = 41
-begin = 9
-end = 13
+line = 37
+begin = 32
+end = 38
 
 [JC_227]
 file = "HOME/"
@@ -1051,9 +1055,9 @@ end = -1
 
 [JC_228]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 481
-begin = 19
-end = 27
+line = 430
+begin = 22
+end = 26
 
 [JC_229]
 file = "HOME/"
@@ -1063,69 +1067,70 @@ end = -1
 
 [JC_110]
 file = "HOME/tests/java/Sort.java"
-line = 69
-begin = 25
-end = 36
+line = 58
+begin = 21
+end = 34
 
 [JC_111]
 file = "HOME/tests/java/Sort.java"
-line = 70
-begin = 12
-end = 56
+line = 59
+begin = 8
+end = 90
 
 [JC_112]
 file = "HOME/tests/java/Sort.java"
-line = 69
-begin = 25
-end = 97
+line = 58
+begin = 21
+end = 130
 
 [JC_113]
 file = "HOME/tests/java/Sort.java"
-line = 67
-begin = 24
-end = 29
+line = 56
+begin = 20
+end = 26
 
 [JC_114]
-file = "HOME/tests/java/Sort.java"
-line = 67
-begin = 33
-end = 40
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_115]
-file = "HOME/tests/java/Sort.java"
-line = 67
-begin = 38
-end = 51
+file = "HOME/tests/java/Sort.jc"
+line = 153
+begin = 15
+end = 3072
 
 [JC_116]
-file = "HOME/tests/java/Sort.java"
-line = 67
-begin = 24
-end = 51
+file = "HOME/tests/java/Sort.jc"
+line = 153
+begin = 15
+end = 3072
 
 [JC_50]
-file = "HOME/tests/java/Sort.jc"
-line = 117
-begin = 9
-end = 16
+file = "HOME/tests/java/Sort.java"
+line = 37
+begin = 37
+end = 49
 
 [JC_117]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/java/Sort.java"
+line = 64
+begin = 13
+end = 21
 
 [JC_51]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Sort.java"
+line = 36
+begin = 17
+end = 80
 
 [JC_118]
-file = "HOME/tests/java/Sort.jc"
-line = 175
-begin = 21
-end = 1621
+file = "HOME/tests/java/Sort.java"
+line = 69
+begin = 25
+end = 36
 
 [JC_52]
 file = "HOME/"
@@ -1140,17 +1145,16 @@ begin = -1
 end = -1
 
 [JC_119]
-file = "HOME/tests/java/Sort.jc"
-line = 175
-begin = 21
-end = 1621
+file = "HOME/tests/java/Sort.java"
+line = 70
+begin = 12
+end = 56
 
 [JC_53]
-kind = PointerDeref
 file = "HOME/tests/java/Sort.java"
-line = 42
-begin = 11
-end = 15
+line = 39
+begin = 16
+end = 37
 
 [JC_231]
 file = "HOME/"
@@ -1159,11 +1163,10 @@ begin = -1
 end = -1
 
 [JC_54]
-kind = PointerDeref
 file = "HOME/tests/java/Sort.java"
-line = 43
-begin = 8
-end = 12
+line = 41
+begin = 9
+end = 13
 
 [JC_232]
 file = "HOME/"
@@ -1172,11 +1175,10 @@ begin = -1
 end = -1
 
 [JC_55]
-kind = PointerDeref
 file = "HOME/tests/java/Sort.jc"
-line = 125
-begin = 18
-end = 58
+line = 120
+begin = 9
+end = 16
 
 [JC_233]
 file = "HOME/"
@@ -1185,23 +1187,22 @@ begin = -1
 end = -1
 
 [JC_56]
-kind = PointerDeref
-file = "HOME/tests/java/Sort.jc"
-line = 126
-begin = 18
-end = 38
+file = "HOME/tests/java/Sort.java"
+line = 39
+begin = 16
+end = 37
 
 [JC_234]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
 
 [JC_57]
 file = "HOME/tests/java/Sort.java"
-line = 47
-begin = 17
-end = 26
+line = 41
+begin = 9
+end = 13
 
 [JC_235]
 file = "HOME/"
@@ -1210,22 +1211,22 @@ begin = -1
 end = -1
 
 [JC_58]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Sort.jc"
+line = 120
+begin = 9
+end = 16
 
 [JC_236]
+file = "HOME/lib/java_api/java/lang/Object.java"
+line = 481
+begin = 19
+end = 27
+
+[JC_59]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
-
-[JC_59]
-file = "HOME/tests/java/Sort.java"
-line = 47
-begin = 17
-end = 26
 
 [JC_237]
 file = "HOME/"
@@ -1246,56 +1247,54 @@ begin = -1
 end = -1
 
 [JC_120]
-kind = UserCall
 file = "HOME/tests/java/Sort.java"
-line = 74
-begin = 21
-end = 29
+line = 69
+begin = 25
+end = 97
 
 [JC_121]
-kind = UserCall
-file = "HOME/tests/java/Sort.jc"
-line = 202
-begin = 29
-end = 60
+file = "HOME/tests/java/Sort.java"
+line = 67
+begin = 24
+end = 29
 
 [JC_122]
 file = "HOME/tests/java/Sort.java"
-line = 62
-begin = 22
-end = 54
+line = 67
+begin = 33
+end = 40
 
 [JC_123]
 file = "HOME/tests/java/Sort.java"
-line = 56
-begin = 20
-end = 26
+line = 67
+begin = 38
+end = 51
 
 [JC_124]
+file = "HOME/tests/java/Sort.java"
+line = 67
+begin = 24
+end = 51
+
+[JC_125]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_125]
-file = "HOME/tests/java/Sort.jc"
-line = 150
-begin = 15
-end = 3072
-
 [Permut_trans]
 name = "Permut_trans"
 behavior = "axiom"
 file = "HOME/tests/java/Sort.jc"
-line = 85
+line = 88
 begin = 2
 end = 246
 
 [JC_126]
 file = "HOME/tests/java/Sort.jc"
-line = 150
-begin = 15
-end = 3072
+line = 178
+begin = 21
+end = 1621
 
 [JC_60]
 file = "HOME/"
@@ -1304,29 +1303,31 @@ begin = -1
 end = -1
 
 [JC_127]
-kind = UserCall
-file = "HOME/tests/java/Sort.java"
-line = 64
-begin = 13
-end = 21
+file = "HOME/tests/java/Sort.jc"
+line = 178
+begin = 21
+end = 1621
 
 [JC_61]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = PointerDeref
+file = "HOME/tests/java/Sort.java"
+line = 42
+begin = 11
+end = 15
 
 [JC_128]
+kind = UserCall
 file = "HOME/tests/java/Sort.java"
-line = 72
-begin = 25
-end = 57
+line = 74
+begin = 21
+end = 29
 
 [JC_62]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = PointerDeref
+file = "HOME/tests/java/Sort.java"
+line = 43
+begin = 8
+end = 12
 
 [JC_240]
 file = "HOME/"
@@ -1335,16 +1336,18 @@ begin = -1
 end = -1
 
 [JC_129]
-file = "HOME/tests/java/Sort.java"
-line = 67
-begin = 24
-end = 29
+kind = UserCall
+file = "HOME/tests/java/Sort.jc"
+line = 205
+begin = 29
+end = 60
 
 [JC_63]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = PointerDeref
+file = "HOME/tests/java/Sort.jc"
+line = 128
+begin = 18
+end = 58
 
 [JC_241]
 file = "HOME/"
@@ -1353,6 +1356,13 @@ begin = -1
 end = -1
 
 [JC_64]
+kind = PointerDeref
+file = "HOME/tests/java/Sort.jc"
+line = 129
+begin = 18
+end = 38
+
+[JC_242]
 file = "HOME/"
 line = 0
 begin = -1
@@ -1360,33 +1370,75 @@ end = -1
 
 [JC_65]
 file = "HOME/tests/java/Sort.java"
-line = 49
-begin = 18
-end = 40
+line = 47
+begin = 17
+end = 26
+
+[JC_243]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_66]
-file = "HOME/tests/java/Sort.java"
-line = 49
-begin = 18
-end = 40
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_244]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_67]
 file = "HOME/tests/java/Sort.java"
-line = 51
-begin = 18
-end = 50
+line = 47
+begin = 17
+end = 26
+
+[JC_245]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_68]
-file = "HOME/tests/java/Sort.java"
-line = 51
-begin = 18
-end = 50
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_246]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_69]
-file = "HOME/tests/java/Sort.java"
-line = 56
-begin = 20
-end = 26
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_247]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_248]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_249]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [Sort_min_sort_ensures_permutation]
 name = "Method min_sort"
@@ -1398,21 +1450,21 @@ end = 17
 
 [JC_130]
 file = "HOME/tests/java/Sort.java"
-line = 67
-begin = 33
-end = 40
+line = 62
+begin = 22
+end = 54
 
 [JC_131]
 file = "HOME/tests/java/Sort.java"
-line = 67
-begin = 38
-end = 51
+line = 56
+begin = 20
+end = 26
 
 [JC_132]
-file = "HOME/tests/java/Sort.java"
-line = 67
-begin = 24
-end = 51
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [Sort_min_sort_safety]
 name = "Method min_sort"
@@ -1423,29 +1475,29 @@ begin = 9
 end = 17
 
 [JC_133]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Sort.jc"
+line = 153
+begin = 15
+end = 3072
 
 [JC_134]
 file = "HOME/tests/java/Sort.jc"
-line = 175
-begin = 21
-end = 1621
+line = 153
+begin = 15
+end = 3072
 
 [JC_135]
-file = "HOME/tests/java/Sort.jc"
-line = 175
-begin = 21
-end = 1621
-
-[JC_136]
 kind = UserCall
 file = "HOME/tests/java/Sort.java"
-line = 74
-begin = 21
-end = 29
+line = 64
+begin = 13
+end = 21
+
+[JC_136]
+file = "HOME/tests/java/Sort.java"
+line = 72
+begin = 25
+end = 57
 
 [JC_70]
 file = "HOME/"
@@ -1454,86 +1506,82 @@ begin = -1
 end = -1
 
 [JC_137]
-kind = UserCall
-file = "HOME/tests/java/Sort.jc"
-line = 202
-begin = 29
-end = 60
-
-[JC_71]
-file = "HOME/tests/java/Sort.jc"
-line = 150
-begin = 15
-end = 3072
-
-[JC_138]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_72]
-file = "HOME/tests/java/Sort.jc"
-line = 150
-begin = 15
-end = 3072
-
-[JC_139]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_73]
-kind = UserCall
-file = "HOME/tests/java/Sort.java"
-line = 64
-begin = 13
-end = 21
-
-[JC_74]
-kind = IndexBounds
-file = "HOME/tests/java/Sort.java"
-line = 64
-begin = 13
-end = 21
-
-[JC_75]
-kind = PointerDeref
-file = "HOME/tests/java/Sort.java"
-line = 66
-begin = 10
-end = 14
-
-[JC_76]
 file = "HOME/tests/java/Sort.java"
 line = 67
 begin = 24
 end = 29
 
-[JC_77]
+[JC_71]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_138]
 file = "HOME/tests/java/Sort.java"
 line = 67
 begin = 33
 end = 40
 
-[JC_78]
+[JC_72]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_139]
 file = "HOME/tests/java/Sort.java"
 line = 67
 begin = 38
 end = 51
 
-[JC_79]
+[JC_73]
 file = "HOME/tests/java/Sort.java"
-line = 67
-begin = 24
-end = 51
+line = 49
+begin = 18
+end = 40
 
-[JC_140]
+[JC_74]
+file = "HOME/tests/java/Sort.java"
+line = 49
+begin = 18
+end = 40
+
+[JC_75]
+file = "HOME/tests/java/Sort.java"
+line = 51
+begin = 18
+end = 50
+
+[JC_76]
+file = "HOME/tests/java/Sort.java"
+line = 51
+begin = 18
+end = 50
+
+[JC_77]
+file = "HOME/tests/java/Sort.java"
+line = 56
+begin = 20
+end = 26
+
+[JC_78]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_79]
+file = "HOME/tests/java/Sort.jc"
+line = 153
+begin = 15
+end = 3072
+
+[JC_140]
+file = "HOME/tests/java/Sort.java"
+line = 67
+begin = 24
+end = 51
 
 [JC_141]
 file = "HOME/"
@@ -1542,28 +1590,30 @@ begin = -1
 end = -1
 
 [JC_142]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Sort.jc"
+line = 178
+begin = 21
+end = 1621
 
 [JC_143]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Sort.jc"
+line = 178
+begin = 21
+end = 1621
 
 [JC_144]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/java/Sort.java"
+line = 74
+begin = 21
+end = 29
 
 [JC_145]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/java/Sort.jc"
+line = 205
+begin = 29
+end = 60
 
 [cons_Object_safety]
 name = "Constructor of class Object"
@@ -1574,16 +1624,16 @@ begin = -1
 end = -1
 
 [JC_146]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
-
-[JC_80]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_80]
+file = "HOME/tests/java/Sort.jc"
+line = 153
+begin = 15
+end = 3072
 
 [JC_147]
 file = "HOME/"
@@ -1592,22 +1642,24 @@ begin = -1
 end = -1
 
 [JC_81]
-file = "HOME/tests/java/Sort.jc"
-line = 175
-begin = 21
-end = 1621
+kind = UserCall
+file = "HOME/tests/java/Sort.java"
+line = 64
+begin = 13
+end = 21
 
 [JC_148]
-file = "HOME/lib/java_api/java/lang/Object.java"
-line = 22
-begin = 31
-end = 46
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_82]
-file = "HOME/tests/java/Sort.jc"
-line = 175
-begin = 21
-end = 1621
+kind = IndexBounds
+file = "HOME/tests/java/Sort.java"
+line = 64
+begin = 13
+end = 21
 
 [JC_149]
 file = "HOME/"
@@ -1616,57 +1668,53 @@ begin = -1
 end = -1
 
 [JC_83]
-kind = UserCall
+kind = PointerDeref
 file = "HOME/tests/java/Sort.java"
-line = 74
-begin = 21
-end = 29
+line = 66
+begin = 10
+end = 14
 
 [JC_84]
-kind = IndexBounds
 file = "HOME/tests/java/Sort.java"
-line = 74
-begin = 21
+line = 67
+begin = 24
 end = 29
 
 [JC_85]
-kind = PointerDeref
 file = "HOME/tests/java/Sort.java"
-line = 75
-begin = 6
-end = 10
+line = 67
+begin = 33
+end = 40
 
 [JC_86]
-kind = PointerDeref
 file = "HOME/tests/java/Sort.java"
-line = 76
-begin = 20
-end = 24
+line = 67
+begin = 38
+end = 51
 
 [JC_87]
-kind = UserCall
-file = "HOME/tests/java/Sort.jc"
-line = 202
-begin = 29
-end = 60
+file = "HOME/tests/java/Sort.java"
+line = 67
+begin = 24
+end = 51
 
 [JC_88]
-file = "HOME/tests/java/Sort.java"
-line = 56
-begin = 20
-end = 26
-
-[JC_1]
-file = "HOME/tests/java/Sort.jc"
-line = 39
-begin = 8
-end = 21
-
-[JC_89]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_1]
+file = "HOME/tests/java/Sort.jc"
+line = 13
+begin = 12
+end = 22
+
+[JC_89]
+file = "HOME/tests/java/Sort.jc"
+line = 178
+begin = 21
+end = 1621
 
 [JC_2]
 file = "HOME/"
@@ -1676,9 +1724,9 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/java/Sort.jc"
-line = 39
-begin = 8
-end = 21
+line = 13
+begin = 12
+end = 22
 
 [JC_4]
 file = "HOME/"
@@ -1687,16 +1735,16 @@ begin = -1
 end = -1
 
 [JC_5]
-file = "HOME/tests/java/Sort.jc"
-line = 42
-begin = 11
-end = 66
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_6]
-file = "HOME/tests/java/Sort.jc"
-line = 41
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_150]
 file = "HOME/"
@@ -1705,10 +1753,10 @@ begin = -1
 end = -1
 
 [JC_7]
-file = "HOME/tests/java/Sort.jc"
-line = 42
-begin = 11
-end = 66
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_151]
 file = "HOME/"
@@ -1717,10 +1765,10 @@ begin = -1
 end = -1
 
 [JC_8]
-file = "HOME/tests/java/Sort.jc"
-line = 41
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_152]
 file = "HOME/"
@@ -1729,10 +1777,10 @@ begin = -1
 end = -1
 
 [JC_9]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Sort.jc"
+line = 42
+begin = 8
+end = 21
 
 [JC_153]
 file = "HOME/"
@@ -1742,15 +1790,15 @@ end = -1
 
 [JC_154]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
+line = 22
+begin = 31
+end = 46
 
 [Permut_sym]
 name = "Permut_sym"
 behavior = "axiom"
 file = "HOME/tests/java/Sort.jc"
-line = 93
+line = 96
 begin = 2
 end = 185
 
@@ -1762,15 +1810,15 @@ end = -1
 
 [JC_156]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 74
-begin = 22
-end = 30
+line = 22
+begin = 31
+end = 46
 
 [JC_90]
 file = "HOME/tests/java/Sort.jc"
-line = 150
-begin = 15
-end = 3072
+line = 178
+begin = 21
+end = 1621
 
 [JC_157]
 file = "HOME/"
@@ -1779,16 +1827,17 @@ begin = -1
 end = -1
 
 [JC_91]
-file = "HOME/tests/java/Sort.jc"
-line = 150
-begin = 15
-end = 3072
+kind = UserCall
+file = "HOME/tests/java/Sort.java"
+line = 74
+begin = 21
+end = 29
 
 [Permut_refl]
 name = "Permut_refl"
 behavior = "axiom"
 file = "HOME/tests/java/Sort.jc"
-line = 99
+line = 102
 begin = 2
 end = 143
 
@@ -1799,11 +1848,11 @@ begin = -1
 end = -1
 
 [JC_92]
-kind = UserCall
+kind = IndexBounds
 file = "HOME/tests/java/Sort.java"
-line = 64
-begin = 13
-end = 21
+line = 74
+begin = 21
+end = 29
 
 [JC_159]
 file = "HOME/"
@@ -1812,28 +1861,31 @@ begin = -1
 end = -1
 
 [JC_93]
+kind = PointerDeref
 file = "HOME/tests/java/Sort.java"
-line = 67
-begin = 24
-end = 29
+line = 75
+begin = 6
+end = 10
 
 [JC_94]
+kind = PointerDeref
 file = "HOME/tests/java/Sort.java"
-line = 67
-begin = 33
-end = 40
+line = 76
+begin = 20
+end = 24
 
 [JC_95]
-file = "HOME/tests/java/Sort.java"
-line = 67
-begin = 38
-end = 51
+kind = UserCall
+file = "HOME/tests/java/Sort.jc"
+line = 205
+begin = 29
+end = 60
 
 [JC_96]
 file = "HOME/tests/java/Sort.java"
-line = 67
-begin = 24
-end = 51
+line = 56
+begin = 20
+end = 26
 
 [JC_97]
 file = "HOME/"
@@ -1845,21 +1897,21 @@ end = -1
 name = "Permut_swap"
 behavior = "axiom"
 file = "HOME/tests/java/Sort.jc"
-line = 72
+line = 75
 begin = 2
 end = 398
 
 [JC_98]
 file = "HOME/tests/java/Sort.jc"
-line = 175
-begin = 21
-end = 1621
+line = 153
+begin = 15
+end = 3072
 
 [JC_99]
 file = "HOME/tests/java/Sort.jc"
-line = 175
-begin = 21
-end = 1621
+line = 153
+begin = 15
+end = 3072
 
 [JC_160]
 file = "HOME/"
@@ -1883,9 +1935,9 @@ end = -1
 
 [JC_162]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
+line = 74
+begin = 22
+end = 30
 
 [JC_163]
 file = "HOME/"
@@ -1895,9 +1947,9 @@ end = -1
 
 [JC_164]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 122
-begin = 19
-end = 25
+line = 74
+begin = 22
+end = 30
 
 [JC_165]
 file = "HOME/"
@@ -1939,9 +1991,9 @@ end = 13
 
 [JC_170]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
+line = 122
+begin = 19
+end = 25
 
 [JC_171]
 file = "HOME/"
@@ -1951,9 +2003,9 @@ end = -1
 
 [JC_172]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 184
-begin = 28
-end = 33
+line = 122
+begin = 19
+end = 25
 
 [Sort_min_sort_ensures_sorted]
 name = "Method min_sort"
@@ -1995,9 +2047,9 @@ end = -1
 
 [JC_178]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
+line = 184
+begin = 28
+end = 33
 
 [JC_179]
 file = "HOME/"
@@ -2013,9 +2065,9 @@ end = -1
 
 [JC_11]
 file = "HOME/tests/java/Sort.jc"
-line = 45
+line = 42
 begin = 8
-end = 30
+end = 21
 
 [JC_12]
 file = "HOME/"
@@ -2026,44 +2078,44 @@ end = -1
 [JC_13]
 file = "HOME/tests/java/Sort.jc"
 line = 45
-begin = 8
-end = 30
+begin = 11
+end = 66
 
 [JC_14]
+file = "HOME/tests/java/Sort.jc"
+line = 44
+begin = 10
+end = 18
+
+[JC_15]
+file = "HOME/tests/java/Sort.jc"
+line = 45
+begin = 11
+end = 66
+
+[JC_16]
+file = "HOME/tests/java/Sort.jc"
+line = 44
+begin = 10
+end = 18
+
+[JC_17]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_15]
-file = "HOME/tests/java/Sort.jc"
-line = 48
-begin = 11
-end = 103
-
-[JC_16]
-file = "HOME/tests/java/Sort.jc"
-line = 47
-begin = 10
-end = 18
-
-[JC_17]
-file = "HOME/tests/java/Sort.jc"
-line = 48
-begin = 11
-end = 103
-
 [JC_180]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 207
-begin = 18
-end = 26
+line = 184
+begin = 28
+end = 33
 
 [JC_18]
-file = "HOME/tests/java/Sort.jc"
-line = 47
-begin = 10
-end = 18
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_181]
 file = "HOME/"
@@ -2072,10 +2124,10 @@ begin = -1
 end = -1
 
 [JC_19]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Sort.jc"
+line = 48
+begin = 8
+end = 30
 
 [JC_182]
 file = "HOME/"
@@ -2103,9 +2155,9 @@ end = -1
 
 [JC_186]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
+line = 207
+begin = 18
+end = 26
 
 [JC_187]
 file = "HOME/"
@@ -2115,9 +2167,9 @@ end = -1
 
 [JC_188]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 243
-begin = 29
-end = 35
+line = 207
+begin = 18
+end = 26
 
 [JC_189]
 file = "HOME/"
@@ -2133,9 +2185,9 @@ end = -1
 
 [JC_21]
 file = "HOME/tests/java/Sort.jc"
-line = 52
+line = 48
 begin = 8
-end = 23
+end = 30
 
 [JC_22]
 file = "HOME/"
@@ -2159,9 +2211,9 @@ end = -1
 
 [JC_23]
 file = "HOME/tests/java/Sort.jc"
-line = 52
-begin = 8
-end = 23
+line = 51
+begin = 11
+end = 103
 
 [JC_201]
 file = "HOME/"
@@ -2170,22 +2222,22 @@ begin = -1
 end = -1
 
 [JC_24]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Sort.jc"
+line = 50
+begin = 10
+end = 18
 
 [JC_202]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
+line = 267
 begin = 29
-end = 33
+end = 38
 
 [JC_25]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Sort.jc"
+line = 51
+begin = 11
+end = 103
 
 [JC_203]
 file = "HOME/"
@@ -2194,10 +2246,10 @@ begin = -1
 end = -1
 
 [JC_26]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Sort.jc"
+line = 50
+begin = 10
+end = 18
 
 [Sort_min_sort_ensures_default]
 name = "Method min_sort"
@@ -2209,9 +2261,9 @@ end = 17
 
 [JC_204]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 333
+line = 267
 begin = 29
-end = 33
+end = 38
 
 [JC_27]
 file = "HOME/"
@@ -2251,9 +2303,9 @@ end = -1
 
 [JC_29]
 file = "HOME/tests/java/Sort.jc"
-line = 54
-begin = 11
-end = 65
+line = 55
+begin = 8
+end = 23
 
 [JC_207]
 file = "HOME/"
@@ -2287,9 +2339,9 @@ end = -1
 
 [JC_194]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
+line = 243
 begin = 29
-end = 38
+end = 35
 
 [JC_195]
 file = "HOME/"
@@ -2299,9 +2351,9 @@ end = -1
 
 [JC_196]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 267
+line = 243
 begin = 29
-end = 38
+end = 35
 
 [JC_197]
 file = "HOME/"
@@ -2322,34 +2374,34 @@ begin = -1
 end = -1
 
 [JC_30]
-file = "HOME/tests/java/Sort.jc"
-line = 54
-begin = 11
-end = 65
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_31]
-file = "HOME/tests/java/Sort.java"
-line = 36
-begin = 17
-end = 26
+file = "HOME/tests/java/Sort.jc"
+line = 55
+begin = 8
+end = 23
 
 [JC_32]
-file = "HOME/tests/java/Sort.java"
-line = 37
-begin = 11
-end = 17
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_210]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
+line = 333
+begin = 29
+end = 33
 
 [JC_33]
-file = "HOME/tests/java/Sort.java"
-line = 37
-begin = 16
-end = 28
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_211]
 file = "HOME/"
@@ -2358,22 +2410,22 @@ begin = -1
 end = -1
 
 [JC_34]
-file = "HOME/tests/java/Sort.java"
-line = 37
-begin = 32
-end = 38
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_212]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 386
-begin = 22
-end = 26
+line = 333
+begin = 29
+end = 33
 
 [JC_35]
-file = "HOME/tests/java/Sort.java"
-line = 37
-begin = 37
-end = 49
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_213]
 file = "HOME/"
@@ -2382,10 +2434,10 @@ begin = -1
 end = -1
 
 [JC_36]
-file = "HOME/tests/java/Sort.java"
-line = 36
-begin = 17
-end = 80
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_214]
 file = "HOME/"
@@ -2394,10 +2446,10 @@ begin = -1
 end = -1
 
 [JC_37]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Sort.jc"
+line = 57
+begin = 11
+end = 65
 
 [JC_215]
 file = "HOME/"
@@ -2406,10 +2458,10 @@ begin = -1
 end = -1
 
 [JC_38]
-file = "HOME/tests/java/Sort.java"
-line = 36
-begin = 17
-end = 26
+file = "HOME/tests/java/Sort.jc"
+line = 57
+begin = 11
+end = 65
 
 [JC_216]
 file = "HOME/"
@@ -2419,9 +2471,9 @@ end = -1
 
 [JC_39]
 file = "HOME/tests/java/Sort.java"
-line = 37
-begin = 11
-end = 17
+line = 36
+begin = 17
+end = 26
 
 [JC_217]
 file = "HOME/"
@@ -2431,7 +2483,7 @@ end = -1
 
 [JC_218]
 file = "HOME/lib/java_api/java/lang/Object.java"
-line = 430
+line = 386
 begin = 22
 end = 26
 
@@ -2452,22 +2504,21 @@ end = -1
 [JC_100]
 kind = UserCall
 file = "HOME/tests/java/Sort.java"
-line = 74
-begin = 21
-end = 29
+line = 64
+begin = 13
+end = 21
 
 [JC_101]
-kind = UserCall
-file = "HOME/tests/java/Sort.jc"
-line = 202
-begin = 29
-end = 60
+file = "HOME/tests/java/Sort.java"
+line = 67
+begin = 24
+end = 29
 
 [JC_102]
 file = "HOME/tests/java/Sort.java"
-line = 58
-begin = 21
-end = 34
+line = 67
+begin = 33
+end = 40
 
 ========== file tests/java/why/Sort.why ==========
 type Object
@@ -2512,60 +2563,6 @@ axiom Object_tags :
 logic Permut: Object pointer, int, int, (Object, int) memory,
  (Object, int) memory -> prop
 
-axiom Permut_refl :
- (forall intM_intP_at_L:(Object, int) memory.
-  (forall a_2:Object pointer.
-   (forall l_1:int.
-    (forall h_1:int. Permut(a_2, l_1, h_1, intM_intP_at_L, intM_intP_at_L)))))
-
-predicate Swap(a_0:Object pointer, i_0:int, j:int,
- intM_intP_at_L2:(Object, int) memory,
- intM_intP_at_L1:(Object, int) memory) =
- (eq_int(select(intM_intP_at_L1, shift(a_0, i_0)),
-  select(intM_intP_at_L2, shift(a_0, j)))
- and (eq_int(select(intM_intP_at_L1, shift(a_0, j)),
-      select(intM_intP_at_L2, shift(a_0, i_0)))
-     and (forall k:int.
-          ((neq_int(k, i_0) and neq_int(k, j)) ->
-           eq_int(select(intM_intP_at_L1, shift(a_0, k)),
-           select(intM_intP_at_L2, shift(a_0, k)))))))
-
-axiom Permut_swap :
- (forall intM_intP_at_L2:(Object, int) memory.
-  (forall intM_intP_at_L1:(Object, int) memory.
-   (forall a_5:Object pointer.
-    (forall l_4:int.
-     (forall h_4:int.
-      (forall i_1:int.
-       (forall j_0:int.
-        ((le_int(l_4, i_1)
-         and (le_int(i_1, h_4)
-             and (le_int(l_4, j_0)
-                 and (le_int(j_0, h_4)
-                     and Swap(a_5, i_1, j_0, intM_intP_at_L2,
-                         intM_intP_at_L1))))) ->
-         Permut(a_5, l_4, h_4, intM_intP_at_L2, intM_intP_at_L1)))))))))
-
-axiom Permut_sym :
- (forall intM_intP_at_L2:(Object, int) memory.
-  (forall intM_intP_at_L1:(Object, int) memory.
-   (forall a_3:Object pointer.
-    (forall l_2:int.
-     (forall h_2:int.
-      (Permut(a_3, l_2, h_2, intM_intP_at_L2, intM_intP_at_L1) ->
-       Permut(a_3, l_2, h_2, intM_intP_at_L1, intM_intP_at_L2)))))))
-
-axiom Permut_trans :
- (forall intM_intP_at_L3:(Object, int) memory.
-  (forall intM_intP_at_L2:(Object, int) memory.
-   (forall intM_intP_at_L1:(Object, int) memory.
-    (forall a_4:Object pointer.
-     (forall l_3:int.
-      (forall h_3:int.
-       ((Permut(a_4, l_3, h_3, intM_intP_at_L2, intM_intP_at_L1)
-        and Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L2)) ->
-        Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L1))))))))
-
 exception Return_label_exc of unit
 
 logic Sort_tag:  -> Object tag_id
@@ -2582,6 +2579,18 @@ predicate Sorted(a:Object pointer, l:int, h:int,
 logic String_tag:  -> Object tag_id
 
 axiom String_parenttag_Object : parenttag(String_tag, Object_tag)
+
+predicate Swap(a_0:Object pointer, i_0:int, j:int,
+ intM_intP_at_L2:(Object, int) memory,
+ intM_intP_at_L1:(Object, int) memory) =
+ (eq_int(select(intM_intP_at_L1, shift(a_0, i_0)),
+  select(intM_intP_at_L2, shift(a_0, j)))
+ and (eq_int(select(intM_intP_at_L1, shift(a_0, j)),
+      select(intM_intP_at_L2, shift(a_0, i_0)))
+     and (forall k:int.
+          ((neq_int(k, i_0) and neq_int(k, j)) ->
+           eq_int(select(intM_intP_at_L1, shift(a_0, k)),
+           select(intM_intP_at_L2, shift(a_0, k)))))))
 
 exception Throwable_exc of Object pointer
 
@@ -2783,6 +2792,48 @@ predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
+axiom Permut_swap :
+ (forall intM_intP_at_L2:(Object, int) memory.
+  (forall intM_intP_at_L1:(Object, int) memory.
+   (forall a_5:Object pointer.
+    (forall l_4:int.
+     (forall h_4:int.
+      (forall i_1:int.
+       (forall j_0:int.
+        ((le_int(l_4, i_1)
+         and (le_int(i_1, h_4)
+             and (le_int(l_4, j_0)
+                 and (le_int(j_0, h_4)
+                     and Swap(a_5, i_1, j_0, intM_intP_at_L2,
+                         intM_intP_at_L1))))) ->
+         Permut(a_5, l_4, h_4, intM_intP_at_L2, intM_intP_at_L1)))))))))
+
+axiom Permut_trans :
+ (forall intM_intP_at_L3:(Object, int) memory.
+  (forall intM_intP_at_L2:(Object, int) memory.
+   (forall intM_intP_at_L1:(Object, int) memory.
+    (forall a_4:Object pointer.
+     (forall l_3:int.
+      (forall h_3:int.
+       ((Permut(a_4, l_3, h_3, intM_intP_at_L2, intM_intP_at_L1)
+        and Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L2)) ->
+        Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L1))))))))
+
+axiom Permut_sym :
+ (forall intM_intP_at_L2:(Object, int) memory.
+  (forall intM_intP_at_L1:(Object, int) memory.
+   (forall a_3:Object pointer.
+    (forall l_2:int.
+     (forall h_2:int.
+      (Permut(a_3, l_2, h_2, intM_intP_at_L2, intM_intP_at_L1) ->
+       Permut(a_3, l_2, h_2, intM_intP_at_L1, intM_intP_at_L2)))))))
+
+axiom Permut_refl :
+ (forall intM_intP_at_L:(Object, int) memory.
+  (forall a_2:Object pointer.
+   (forall l_1:int.
+    (forall h_1:int. Permut(a_2, l_1, h_1, intM_intP_at_L, intM_intP_at_L)))))
+
 parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_clone :
@@ -2867,11 +2918,11 @@ parameter Sort_min_sort :
  this_0:Object pointer ->
   t_0:Object pointer ->
    { } unit reads Object_alloc_table,intM_intP writes intM_intP
-   { ((JC_68:
+   { ((JC_76:
       Permut(t_0, (0),
       sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)), (1)),
       intM_intP, intM_intP@))
-     and (JC_66:
+     and (JC_74:
          Sorted(t_0, (0),
          sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)), (1)),
          intM_intP))) }
@@ -2879,13 +2930,13 @@ parameter Sort_min_sort :
 parameter Sort_min_sort_requires :
  this_0:Object pointer ->
   t_0:Object pointer ->
-   { (JC_57: Non_null_intM(t_0, Object_alloc_table))} unit
+   { (JC_65: Non_null_intM(t_0, Object_alloc_table))} unit
    reads Object_alloc_table,intM_intP writes intM_intP
-   { ((JC_68:
+   { ((JC_76:
       Permut(t_0, (0),
       sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)), (1)),
       intM_intP, intM_intP@))
-     and (JC_66:
+     and (JC_74:
          Sorted(t_0, (0),
          sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)), (1)),
          intM_intP))) }
@@ -2896,9 +2947,9 @@ parameter Sort_swap :
    i_2:int ->
     j_1:int ->
      { } unit reads Object_alloc_table,intM_intP writes intM_intP
-     { (JC_50:
-       ((JC_48: Swap(t, i_2, j_1, intM_intP, intM_intP@))
-       and (JC_49:
+     { (JC_58:
+       ((JC_56: Swap(t, i_2, j_1, intM_intP, intM_intP@))
+       and (JC_57:
            not_assigns(Object_alloc_table@, intM_intP@, intM_intP,
            pset_union(pset_range(pset_singleton(t@), j_1@, j_1@),
            pset_range(pset_singleton(t@), i_2@, i_2@)))))) }
@@ -2908,19 +2959,19 @@ parameter Sort_swap_requires :
   t:Object pointer ->
    i_2:int ->
     j_1:int ->
-     { (JC_36:
-       ((JC_31: Non_null_intM(t, Object_alloc_table))
-       and ((JC_32: le_int((0), i_2))
-           and ((JC_33:
+     { (JC_44:
+       ((JC_39: Non_null_intM(t, Object_alloc_table))
+       and ((JC_40: le_int((0), i_2))
+           and ((JC_41:
                 lt_int(i_2, add_int(offset_max(Object_alloc_table, t), (1))))
-               and ((JC_34: le_int((0), j_1))
-                   and (JC_35:
+               and ((JC_42: le_int((0), j_1))
+                   and (JC_43:
                        lt_int(j_1,
                        add_int(offset_max(Object_alloc_table, t), (1)))))))))}
      unit reads Object_alloc_table,intM_intP writes intM_intP
-     { (JC_50:
-       ((JC_48: Swap(t, i_2, j_1, intM_intP, intM_intP@))
-       and (JC_49:
+     { (JC_58:
+       ((JC_56: Swap(t, i_2, j_1, intM_intP, intM_intP@))
+       and (JC_57:
            not_assigns(Object_alloc_table@, intM_intP@, intM_intP,
            pset_union(pset_range(pset_singleton(t@), j_1@, j_1@),
            pset_range(pset_singleton(t@), i_2@, i_2@)))))) }
@@ -3216,6 +3267,10 @@ parameter alloc_struct_interface_requires :
           and (alloc_fresh(interface_alloc_table@, result, n)
               and instanceof(interface_tag_table, result, interface_tag)))) }
 
+parameter any_string_0 : tt:unit -> { } Object pointer { true }
+
+parameter any_string_0_requires : tt:unit -> { } Object pointer { true }
+
 parameter cons_Object :
  this_14:Object pointer -> { } unit reads Object_alloc_table { true }
 
@@ -3231,7 +3286,7 @@ parameter cons_Sort_requires :
 parameter java_array_length_intM :
  x_3:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_17:
+  { (JC_25:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
         and eq_int(result, add_int(offset_max(Object_alloc_table, x_3), (1)))))) }
@@ -3239,7 +3294,7 @@ parameter java_array_length_intM :
 parameter java_array_length_intM_requires :
  x_3:Object pointer ->
   { } int reads Object_alloc_table
-  { (JC_17:
+  { (JC_25:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
         and eq_int(result, add_int(offset_max(Object_alloc_table, x_3), (1)))))) }
@@ -3247,28 +3302,28 @@ parameter java_array_length_intM_requires :
 parameter non_null_Object :
  x_4:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_30:
+  { (JC_38:
     (if result then eq_int(offset_max(Object_alloc_table, x_4), (0))
      else (x_4 = null))) }
 
 parameter non_null_Object_requires :
  x_4:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_30:
+  { (JC_38:
     (if result then eq_int(offset_max(Object_alloc_table, x_4), (0))
      else (x_4 = null))) }
 
 parameter non_null_intM :
  x_2:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_7:
+  { (JC_15:
     (if result then ge_int(offset_max(Object_alloc_table, x_2), neg_int((1)))
      else (x_2 = null))) }
 
 parameter non_null_intM_requires :
  x_2:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_7:
+  { (JC_15:
     (if result then ge_int(offset_max(Object_alloc_table, x_2), neg_int((1)))
      else (x_2 = null))) }
 
@@ -3276,7 +3331,7 @@ let Sort_min_sort_ensures_default =
  fun (this_0 : Object pointer) (t_0 : Object pointer) ->
   { (left_valid_struct_intM(t_0, (0), Object_alloc_table)
     and (valid_struct_Sort(this_0, (0), (0), Object_alloc_table)
-        and (JC_59: Non_null_intM(t_0, Object_alloc_table)))) }
+        and (JC_67: Non_null_intM(t_0, Object_alloc_table)))) }
   (init:
   try
    begin
@@ -3289,7 +3344,7 @@ let Sort_min_sort_ensures_default =
       try
        (loop_3:
        while true do
-       { invariant (JC_88: le_int((0), i_3))  }
+       { invariant (JC_96: le_int((0), i_3))  }
         begin
           [ { } unit { true } ];
          try
@@ -3299,7 +3354,7 @@ let Sort_min_sort_ensures_default =
                 ((lt_int_ !i_3) (K_43:
                                 ((sub_int (K_42:
                                           (let jessie_<num> = t_0 in
-                                          (JC_92:
+                                          (JC_100:
                                           (java_array_length_intM jessie_<num>))))) (1)))))
             then
              begin
@@ -3311,10 +3366,10 @@ let Sort_min_sort_ensures_default =
                (loop_4:
                while true do
                { invariant
-                   (JC_96:
-                   ((JC_93: lt_int(i_3, j_2))
-                   and ((JC_94: le_int(i_3, mi))
-                       and (JC_95:
+                   (JC_104:
+                   ((JC_101: lt_int(i_3, j_2))
+                   and ((JC_102: le_int(i_3, mi))
+                       and (JC_103:
                            lt_int(mi,
                            add_int(offset_max(Object_alloc_table, t_0), (1)))))))
                   }
@@ -3326,7 +3381,7 @@ let Sort_min_sort_ensures_default =
                     (if (K_38:
                         ((lt_int_ !j_2) (K_37:
                                         (let jessie_<num> = t_0 in
-                                        (JC_100:
+                                        (JC_108:
                                         (java_array_length_intM jessie_<num>))))))
                     then
                      (if (K_35:
@@ -3355,7 +3410,7 @@ let Sort_min_sort_ensures_default =
               (let jessie_<num> = t_0 in
               (let jessie_<num> = !i_3 in
               (let jessie_<num> = !mi in
-              (JC_101:
+              (JC_109:
               ((((Sort_swap jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>)))))))
              end else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
            (raise (Loop_continue_exc void)) end in void) with
@@ -3367,13 +3422,13 @@ let Sort_min_sort_ensures_default =
             (let jessie_<num> = (i_3 := ((add_int jessie_<num>) (1))) in void);
            jessie_<num> end)) in void) end end done) with
        Loop_exit_exc jessie_<num> -> void end end)))); (raise Return) end with
-   Return -> void end) { (JC_61: true) }
+   Return -> void end) { (JC_69: true) }
 
 let Sort_min_sort_ensures_permutation =
  fun (this_0 : Object pointer) (t_0 : Object pointer) ->
   { (left_valid_struct_intM(t_0, (0), Object_alloc_table)
     and (valid_struct_Sort(this_0, (0), (0), Object_alloc_table)
-        and (JC_59: Non_null_intM(t_0, Object_alloc_table)))) }
+        and (JC_67: Non_null_intM(t_0, Object_alloc_table)))) }
   (init:
   try
    begin
@@ -3387,12 +3442,12 @@ let Sort_min_sort_ensures_permutation =
        (loop_7:
        while true do
        { invariant
-           (JC_122:
+           (JC_130:
            Permut(t_0, (0),
            sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)), (1)),
            intM_intP, intM_intP@init))  }
         begin
-          [ { } unit reads i_3 { (JC_123: le_int((0), i_3)) } ];
+          [ { } unit reads i_3 { (JC_131: le_int((0), i_3)) } ];
          try
           (let jessie_<num> =
           begin
@@ -3400,7 +3455,7 @@ let Sort_min_sort_ensures_permutation =
                 ((lt_int_ !i_3) (K_43:
                                 ((sub_int (K_42:
                                           (let jessie_<num> = t_0 in
-                                          (JC_127:
+                                          (JC_135:
                                           (java_array_length_intM jessie_<num>))))) (1)))))
             then
              begin
@@ -3413,16 +3468,16 @@ let Sort_min_sort_ensures_permutation =
                (loop_8:
                while true do
                { invariant
-                   (JC_128:
+                   (JC_136:
                    Permut(t_0, (0),
                    sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)),
                    (1)), intM_intP, intM_intP@init))  }
                 begin
                   [ { } unit reads Object_alloc_table,i_3,j_2,mi
-                    { (JC_132:
-                      ((JC_129: lt_int(i_3, j_2))
-                      and ((JC_130: le_int(i_3, mi))
-                          and (JC_131:
+                    { (JC_140:
+                      ((JC_137: lt_int(i_3, j_2))
+                      and ((JC_138: le_int(i_3, mi))
+                          and (JC_139:
                               lt_int(mi,
                               add_int(offset_max(Object_alloc_table, t_0),
                               (1))))))) } ];
@@ -3432,7 +3487,7 @@ let Sort_min_sort_ensures_permutation =
                     (if (K_38:
                         ((lt_int_ !j_2) (K_37:
                                         (let jessie_<num> = t_0 in
-                                        (JC_136:
+                                        (JC_144:
                                         (java_array_length_intM jessie_<num>))))))
                     then
                      (if (K_35:
@@ -3461,7 +3516,7 @@ let Sort_min_sort_ensures_permutation =
               (let jessie_<num> = t_0 in
               (let jessie_<num> = !i_3 in
               (let jessie_<num> = !mi in
-              (JC_137:
+              (JC_145:
               ((((Sort_swap jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>)))))))
              end
             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
@@ -3475,7 +3530,7 @@ let Sort_min_sort_ensures_permutation =
            jessie_<num> end)) in void) end end done) with
        Loop_exit_exc jessie_<num> -> void end end)))); (raise Return) end with
    Return -> void end)
-  { (JC_67:
+  { (JC_75:
     Permut(t_0, (0),
     sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)), (1)),
     intM_intP, intM_intP@)) }
@@ -3484,7 +3539,7 @@ let Sort_min_sort_ensures_sorted =
  fun (this_0 : Object pointer) (t_0 : Object pointer) ->
   { (left_valid_struct_intM(t_0, (0), Object_alloc_table)
     and (valid_struct_Sort(this_0, (0), (0), Object_alloc_table)
-        and (JC_59: Non_null_intM(t_0, Object_alloc_table)))) }
+        and (JC_67: Non_null_intM(t_0, Object_alloc_table)))) }
   (init:
   try
    begin
@@ -3498,9 +3553,9 @@ let Sort_min_sort_ensures_sorted =
        (loop_5:
        while true do
        { invariant
-           (JC_104:
-           ((JC_102: Sorted(t_0, (0), i_3, intM_intP))
-           and (JC_103:
+           (JC_112:
+           ((JC_110: Sorted(t_0, (0), i_3, intM_intP))
+           and (JC_111:
                (forall k1:int.
                 (forall k2:int.
                  ((le_int((0), k1)
@@ -3512,7 +3567,7 @@ let Sort_min_sort_ensures_sorted =
                   le_int(select(intM_intP, shift(t_0, k1)),
                   select(intM_intP, shift(t_0, k2)))))))))  }
         begin
-          [ { } unit reads i_3 { (JC_105: le_int((0), i_3)) } ];
+          [ { } unit reads i_3 { (JC_113: le_int((0), i_3)) } ];
          try
           (let jessie_<num> =
           begin
@@ -3520,7 +3575,7 @@ let Sort_min_sort_ensures_sorted =
                 ((lt_int_ !i_3) (K_43:
                                 ((sub_int (K_42:
                                           (let jessie_<num> = t_0 in
-                                          (JC_109:
+                                          (JC_117:
                                           (java_array_length_intM jessie_<num>))))) (1)))))
             then
              begin
@@ -3533,19 +3588,19 @@ let Sort_min_sort_ensures_sorted =
                (loop_6:
                while true do
                { invariant
-                   (JC_112:
-                   ((JC_110: eq_int(mv, select(intM_intP, shift(t_0, mi))))
-                   and (JC_111:
+                   (JC_120:
+                   ((JC_118: eq_int(mv, select(intM_intP, shift(t_0, mi))))
+                   and (JC_119:
                        (forall k_0:int.
                         ((le_int(i_3, k_0) and lt_int(k_0, j_2)) ->
                          ge_int(select(intM_intP, shift(t_0, k_0)), mv))))))
                   }
                 begin
                   [ { } unit reads Object_alloc_table,i_3,j_2,mi
-                    { (JC_116:
-                      ((JC_113: lt_int(i_3, j_2))
-                      and ((JC_114: le_int(i_3, mi))
-                          and (JC_115:
+                    { (JC_124:
+                      ((JC_121: lt_int(i_3, j_2))
+                      and ((JC_122: le_int(i_3, mi))
+                          and (JC_123:
                               lt_int(mi,
                               add_int(offset_max(Object_alloc_table, t_0),
                               (1))))))) } ];
@@ -3555,7 +3610,7 @@ let Sort_min_sort_ensures_sorted =
                     (if (K_38:
                         ((lt_int_ !j_2) (K_37:
                                         (let jessie_<num> = t_0 in
-                                        (JC_120:
+                                        (JC_128:
                                         (java_array_length_intM jessie_<num>))))))
                     then
                      (if (K_35:
@@ -3584,7 +3639,7 @@ let Sort_min_sort_ensures_sorted =
               (let jessie_<num> = t_0 in
               (let jessie_<num> = !i_3 in
               (let jessie_<num> = !mi in
-              (JC_121:
+              (JC_129:
               ((((Sort_swap jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>)))))))
              end
             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
@@ -3598,7 +3653,7 @@ let Sort_min_sort_ensures_sorted =
            jessie_<num> end)) in void) end end done) with
        Loop_exit_exc jessie_<num> -> void end end)))); (raise Return) end with
    Return -> void end)
-  { (JC_65:
+  { (JC_73:
     Sorted(t_0, (0),
     sub_int(add_int(offset_max(Object_alloc_table, t_0), (1)), (1)),
     intM_intP)) }
@@ -3607,7 +3662,7 @@ let Sort_min_sort_safety =
  fun (this_0 : Object pointer) (t_0 : Object pointer) ->
   { (left_valid_struct_intM(t_0, (0), Object_alloc_table)
     and (valid_struct_Sort(this_0, (0), (0), Object_alloc_table)
-        and (JC_59: Non_null_intM(t_0, Object_alloc_table)))) }
+        and (JC_67: Non_null_intM(t_0, Object_alloc_table)))) }
   (init:
   try
    begin
@@ -3620,9 +3675,9 @@ let Sort_min_sort_safety =
       try
        (loop_1:
        while true do
-       { invariant (JC_71: true)  }
+       { invariant (JC_79: true)  }
         begin
-          [ { } unit reads i_3 { (JC_69: le_int((0), i_3)) } ];
+          [ { } unit reads i_3 { (JC_77: le_int((0), i_3)) } ];
          try
           (let jessie_<num> =
           begin
@@ -3630,31 +3685,31 @@ let Sort_min_sort_safety =
                 ((lt_int_ !i_3) (K_43:
                                 ((sub_int (K_42:
                                           (let jessie_<num> = t_0 in
-                                          (JC_74:
+                                          (JC_82:
                                           (assert
                                           { ge_int(offset_max(Object_alloc_table,
                                                    jessie_<num>),
                                             (-1)) };
-                                          (JC_73:
+                                          (JC_81:
                                           (java_array_length_intM_requires jessie_<num>))))))) (1)))))
             then
              begin
                (let jessie_<num> =
                (mv := (K_23:
-                      (JC_75:
+                      (JC_83:
                       ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !i_3)))) in
                void); (let jessie_<num> = (mi := !i_3) in void);
               (let jessie_<num> = (j_2 := (K_39: ((add_int !i_3) (1)))) in void);
               try
                (loop_2:
                while true do
-               { invariant (JC_81: true)  }
+               { invariant (JC_89: true)  }
                 begin
                   [ { } unit reads Object_alloc_table,i_3,j_2,mi
-                    { (JC_79:
-                      ((JC_76: lt_int(i_3, j_2))
-                      and ((JC_77: le_int(i_3, mi))
-                          and (JC_78:
+                    { (JC_87:
+                      ((JC_84: lt_int(i_3, j_2))
+                      and ((JC_85: le_int(i_3, mi))
+                          and (JC_86:
                               lt_int(mi,
                               add_int(offset_max(Object_alloc_table, t_0),
                               (1))))))) } ];
@@ -3664,24 +3719,24 @@ let Sort_min_sort_safety =
                     (if (K_38:
                         ((lt_int_ !j_2) (K_37:
                                         (let jessie_<num> = t_0 in
-                                        (JC_84:
+                                        (JC_92:
                                         (assert
                                         { ge_int(offset_max(Object_alloc_table,
                                                  jessie_<num>),
                                           (-1)) };
-                                        (JC_83:
+                                        (JC_91:
                                         (java_array_length_intM_requires jessie_<num>))))))))
                     then
                      (if (K_35:
                          ((lt_int_ (K_34:
-                                   (JC_85:
+                                   (JC_93:
                                    ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !j_2)))) !mv))
                      then
                       (let jessie_<num> =
                       begin
                         (let jessie_<num> = (mi := !j_2) in void);
                        (mv := (K_33:
-                              (JC_86:
+                              (JC_94:
                               ((((offset_acc_ !Object_alloc_table) !intM_intP) t_0) !j_2))));
                        !mv end in void) else void)
                     else
@@ -3700,7 +3755,7 @@ let Sort_min_sort_safety =
               (let jessie_<num> = t_0 in
               (let jessie_<num> = !i_3 in
               (let jessie_<num> = !mi in
-              (JC_87:
+              (JC_95:
               ((((Sort_swap_requires jessie_<num>) jessie_<num>) jessie_<num>) jessie_<num>)))))))
              end else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
            (raise (Loop_continue_exc void)) end in void) with
@@ -3718,14 +3773,14 @@ let Sort_swap_ensures_default =
  fun (this_2 : Object pointer) (t : Object pointer) (i_2 : int) (j_1 : int) ->
   { (left_valid_struct_intM(t, (0), Object_alloc_table)
     and (valid_struct_Sort(this_2, (0), (0), Object_alloc_table)
-        and (JC_43:
-            ((JC_38: Non_null_intM(t, Object_alloc_table))
-            and ((JC_39: le_int((0), i_2))
-                and ((JC_40:
+        and (JC_51:
+            ((JC_46: Non_null_intM(t, Object_alloc_table))
+            and ((JC_47: le_int((0), i_2))
+                and ((JC_48:
                      lt_int(i_2,
                      add_int(offset_max(Object_alloc_table, t), (1))))
-                    and ((JC_41: le_int((0), j_1))
-                        and (JC_42:
+                    and ((JC_49: le_int((0), j_1))
+                        and (JC_50:
                             lt_int(j_1,
                             add_int(offset_max(Object_alloc_table, t), (1))))))))))) }
   (init:
@@ -3748,9 +3803,9 @@ let Sort_swap_ensures_default =
       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
       begin   (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>); jessie_<num> end)))))
      end)) in void); (raise Return) end with Return -> void end)
-  { (JC_47:
-    ((JC_45: Swap(t, i_2, j_1, intM_intP, intM_intP@))
-    and (JC_46:
+  { (JC_55:
+    ((JC_53: Swap(t, i_2, j_1, intM_intP, intM_intP@))
+    and (JC_54:
         not_assigns(Object_alloc_table@, intM_intP@, intM_intP,
         pset_union(pset_range(pset_singleton(t@), j_1@, j_1@),
         pset_range(pset_singleton(t@), i_2@, i_2@)))))) }
@@ -3759,14 +3814,14 @@ let Sort_swap_safety =
  fun (this_2 : Object pointer) (t : Object pointer) (i_2 : int) (j_1 : int) ->
   { (left_valid_struct_intM(t, (0), Object_alloc_table)
     and (valid_struct_Sort(this_2, (0), (0), Object_alloc_table)
-        and (JC_43:
-            ((JC_38: Non_null_intM(t, Object_alloc_table))
-            and ((JC_39: le_int((0), i_2))
-                and ((JC_40:
+        and (JC_51:
+            ((JC_46: Non_null_intM(t, Object_alloc_table))
+            and ((JC_47: le_int((0), i_2))
+                and ((JC_48:
                      lt_int(i_2,
                      add_int(offset_max(Object_alloc_table, t), (1))))
-                    and ((JC_41: le_int((0), j_1))
-                        and (JC_42:
+                    and ((JC_49: le_int((0), j_1))
+                        and (JC_50:
                             lt_int(j_1,
                             add_int(offset_max(Object_alloc_table, t), (1))))))))))) }
   (init:
@@ -3775,17 +3830,17 @@ let Sort_swap_safety =
      (let jessie_<num> =
      (let tmp =
      (K_14:
-     (JC_53: ((((offset_acc_ !Object_alloc_table) !intM_intP) t) i_2))) in
+     (JC_61: ((((offset_acc_ !Object_alloc_table) !intM_intP) t) i_2))) in
      (K_12:
      begin
        (let jessie_<num> =
        (let jessie_<num> =
        (K_11:
-       (JC_54: ((((offset_acc_ !Object_alloc_table) !intM_intP) t) j_1))) in
+       (JC_62: ((((offset_acc_ !Object_alloc_table) !intM_intP) t) j_1))) in
        (let jessie_<num> = t in
        (let jessie_<num> = i_2 in
        (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-       (JC_55:
+       (JC_63:
        (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
        void);
       (K_13:
@@ -3794,7 +3849,7 @@ let Sort_swap_safety =
       (let jessie_<num> = j_1 in
       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
       begin
-        (JC_56:
+        (JC_64:
         (((((offset_upd_ !Object_alloc_table) intM_intP) jessie_<num>) jessie_<num>) jessie_<num>));
        jessie_<num> end))))) end)) in void); (raise Return) end with Return ->
    void end) { true }
@@ -3803,7 +3858,7 @@ let cons_Object_ensures_default =
  fun (this_14 : Object pointer) ->
   { valid_struct_Object(this_14, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_238: true) }
+  { (JC_246: true) }
 
 let cons_Object_safety =
  fun (this_14 : Object pointer) ->
@@ -3815,7 +3870,7 @@ let cons_Sort_ensures_default =
  fun (this_3 : Object pointer) ->
   { valid_struct_Sort(this_3, (0), (0), Object_alloc_table) }
   (init: try begin   void; (raise Return) end with Return -> void end)
-  { (JC_142: true) }
+  { (JC_150: true) }
 
 let cons_Sort_safety =
  fun (this_3 : Object pointer) ->
@@ -3867,7 +3922,7 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Sort_po24.why">
-      <location file = "why/Sort.why" line = "1163" begin = "44" end = "194"/>
+      <location file = "why/Sort.why" line = "1167" begin = "44" end = "194"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Sort_po25.why">
@@ -3891,22 +3946,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/Sort_po29.why">
-      <location file = "HOME/tests/java/Sort.jc" line = "202" begin = "29" end = "60"/>
+      <location file = "HOME/tests/java/Sort.jc" line = "205" begin = "29" end = "60"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/Sort_po30.why">
-      <location file = "HOME/tests/java/Sort.jc" line = "202" begin = "29" end = "60"/>
+      <location file = "HOME/tests/java/Sort.jc" line = "205" begin = "29" end = "60"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/Sort_po31.why">
-      <location file = "HOME/tests/java/Sort.jc" line = "202" begin = "29" end = "60"/>
+      <location file = "HOME/tests/java/Sort.jc" line = "205" begin = "29" end = "60"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/Sort_po32.why">
-      <location file = "HOME/tests/java/Sort.jc" line = "202" begin = "29" end = "60"/>
+      <location file = "HOME/tests/java/Sort.jc" line = "205" begin = "29" end = "60"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -4983,59 +5038,6 @@ axiom Object_tags:
 logic Permut : Object pointer, int, int, (Object, int) memory, (Object,
 int) memory -> prop
 
-axiom Permut_refl:
-  (forall intM_intP_at_L:(Object, int) memory.
-    (forall a_2:Object pointer.
-      (forall l_1:int.
-        (forall h_1:int. Permut(a_2, l_1, h_1, intM_intP_at_L,
-          intM_intP_at_L)))))
-
-predicate Swap(a_0: Object pointer, i_0: int, j: int,
-  intM_intP_at_L2: (Object, int) memory, intM_intP_at_L1: (Object,
-  int) memory) =
-  ((select(intM_intP_at_L1, shift(a_0, i_0)) = select(intM_intP_at_L2,
-   shift(a_0, j))) and
-   ((select(intM_intP_at_L1, shift(a_0, j)) = select(intM_intP_at_L2,
-    shift(a_0, i_0))) and
-    (forall k:int.
-      (((k <> i_0) and (k <> j)) -> (select(intM_intP_at_L1, shift(a_0,
-       k)) = select(intM_intP_at_L2, shift(a_0, k)))))))
-
-axiom Permut_swap:
-  (forall intM_intP_at_L2:(Object, int) memory.
-    (forall intM_intP_at_L1:(Object, int) memory.
-      (forall a_5:Object pointer.
-        (forall l_4:int.
-          (forall h_4:int.
-            (forall i_1:int.
-              (forall j_0:int.
-                (((l_4 <= i_1) and
-                  ((i_1 <= h_4) and
-                   ((l_4 <= j_0) and
-                    ((j_0 <= h_4) and Swap(a_5, i_1, j_0, intM_intP_at_L2,
-                     intM_intP_at_L1))))) ->
-                 Permut(a_5, l_4, h_4, intM_intP_at_L2, intM_intP_at_L1)))))))))
-
-axiom Permut_sym:
-  (forall intM_intP_at_L2:(Object, int) memory.
-    (forall intM_intP_at_L1:(Object, int) memory.
-      (forall a_3:Object pointer.
-        (forall l_2:int.
-          (forall h_2:int.
-            (Permut(a_3, l_2, h_2, intM_intP_at_L2, intM_intP_at_L1) ->
-             Permut(a_3, l_2, h_2, intM_intP_at_L1, intM_intP_at_L2)))))))
-
-axiom Permut_trans:
-  (forall intM_intP_at_L3:(Object, int) memory.
-    (forall intM_intP_at_L2:(Object, int) memory.
-      (forall intM_intP_at_L1:(Object, int) memory.
-        (forall a_4:Object pointer.
-          (forall l_3:int.
-            (forall h_3:int.
-              ((Permut(a_4, l_3, h_3, intM_intP_at_L2, intM_intP_at_L1) and
-                Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L2)) ->
-               Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L1))))))))
-
 logic Sort_tag : Object tag_id
 
 axiom Sort_parenttag_Object: parenttag(Sort_tag, Object_tag)
@@ -5049,6 +5051,17 @@ predicate Sorted(a: Object pointer, l: int, h: int, intM_intP_at_L: (Object,
 logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
+
+predicate Swap(a_0: Object pointer, i_0: int, j: int,
+  intM_intP_at_L2: (Object, int) memory, intM_intP_at_L1: (Object,
+  int) memory) =
+  ((select(intM_intP_at_L1, shift(a_0, i_0)) = select(intM_intP_at_L2,
+   shift(a_0, j))) and
+   ((select(intM_intP_at_L1, shift(a_0, j)) = select(intM_intP_at_L2,
+    shift(a_0, i_0))) and
+    (forall k:int.
+      (((k <> i_0) and (k <> j)) -> (select(intM_intP_at_L1, shift(a_0,
+       k)) = select(intM_intP_at_L2, shift(a_0, k)))))))
 
 logic Throwable_tag : Object tag_id
 
@@ -5249,6 +5262,48 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) <= a) and
    (offset_max(interface_alloc_table, p) >= b))
 
+axiom Permut_swap:
+  (forall intM_intP_at_L2:(Object, int) memory.
+    (forall intM_intP_at_L1:(Object, int) memory.
+      (forall a_5:Object pointer.
+        (forall l_4:int.
+          (forall h_4:int.
+            (forall i_1:int.
+              (forall j_0:int.
+                (((l_4 <= i_1) and
+                  ((i_1 <= h_4) and
+                   ((l_4 <= j_0) and
+                    ((j_0 <= h_4) and Swap(a_5, i_1, j_0, intM_intP_at_L2,
+                     intM_intP_at_L1))))) ->
+                 Permut(a_5, l_4, h_4, intM_intP_at_L2, intM_intP_at_L1)))))))))
+
+axiom Permut_trans:
+  (forall intM_intP_at_L3:(Object, int) memory.
+    (forall intM_intP_at_L2:(Object, int) memory.
+      (forall intM_intP_at_L1:(Object, int) memory.
+        (forall a_4:Object pointer.
+          (forall l_3:int.
+            (forall h_3:int.
+              ((Permut(a_4, l_3, h_3, intM_intP_at_L2, intM_intP_at_L1) and
+                Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L2)) ->
+               Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L1))))))))
+
+axiom Permut_sym:
+  (forall intM_intP_at_L2:(Object, int) memory.
+    (forall intM_intP_at_L1:(Object, int) memory.
+      (forall a_3:Object pointer.
+        (forall l_2:int.
+          (forall h_2:int.
+            (Permut(a_3, l_2, h_2, intM_intP_at_L2, intM_intP_at_L1) ->
+             Permut(a_3, l_2, h_2, intM_intP_at_L1, intM_intP_at_L2)))))))
+
+axiom Permut_refl:
+  (forall intM_intP_at_L:(Object, int) memory.
+    (forall a_2:Object pointer.
+      (forall l_1:int.
+        (forall h_1:int. Permut(a_2, l_1, h_1, intM_intP_at_L,
+          intM_intP_at_L)))))
+
 ========== file tests/java/why/Sort_po10.why ==========
 goal Sort_min_sort_ensures_default_po_10:
   forall this_0:Object pointer.
@@ -5256,15 +5311,15 @@ goal Sort_min_sort_ensures_default_po_10:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -5279,12 +5334,12 @@ goal Sort_min_sort_ensures_default_po_10:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_96":
-  (("JC_93": (i_3_0 < j_2_0)) and
-   (("JC_94": (i_3_0 <= mi0)) and
-    ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_104":
+  (("JC_101": (i_3_0 < j_2_0)) and
+   (("JC_102": (i_3_0 <= mi0)) and
+    ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -5293,8 +5348,7 @@ goal Sort_min_sort_ensures_default_po_10:
   (result2 >= mv0) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_96":
-  ("JC_95": ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))
+  ("JC_104": ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1))))
 
 ========== file tests/java/why/Sort_po11.why ==========
 goal Sort_min_sort_ensures_default_po_11:
@@ -5303,15 +5357,15 @@ goal Sort_min_sort_ensures_default_po_11:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -5325,25 +5379,25 @@ goal Sort_min_sort_ensures_default_po_11:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_96":
-  (("JC_93": (i_3_0 < j_2_0)) and
-   (("JC_94": (i_3_0 <= mi0)) and
-    ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_104":
+  (("JC_101": (i_3_0 < j_2_0)) and
+   (("JC_102": (i_3_0 <= mi0)) and
+    ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_50":
-  (("JC_48": Swap(t_0, i_3_0, mi0, intM_intP0, intM_intP)) and
-   ("JC_49": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
+  ("JC_58":
+  (("JC_56": Swap(t_0, i_3_0, mi0, intM_intP0, intM_intP)) and
+   ("JC_57": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
   forall i_3_1:int.
   (i_3_1 = (i_3_0 + 1)) ->
-  ("JC_88": (0 <= i_3_1))
+  ("JC_96": (0 <= i_3_1))
 
 ========== file tests/java/why/Sort_po12.why ==========
 goal Sort_min_sort_ensures_permutation_po_1:
@@ -5354,10 +5408,10 @@ goal Sort_min_sort_ensures_permutation_po_1:
   int) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
-  ("JC_122": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
+  ("JC_130": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
   intM_intP, intM_intP))
 
 ========== file tests/java/why/Sort_po13.why ==========
@@ -5369,17 +5423,17 @@ goal Sort_min_sort_ensures_permutation_po_2:
   int) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_122": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
+  ("JC_130": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
   intM_intP0, intM_intP)) ->
-  ("JC_123": (0 <= i_3_0)) ->
+  ("JC_131": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -5393,27 +5447,27 @@ goal Sort_min_sort_ensures_permutation_po_2:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_128": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
+  ("JC_136": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
   intM_intP0, intM_intP)) ->
-  ("JC_132":
-  (("JC_129": (i_3_0 < j_2_0)) and
-   (("JC_130": (i_3_0 <= mi0)) and
-    ("JC_131": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_140":
+  (("JC_137": (i_3_0 < j_2_0)) and
+   (("JC_138": (i_3_0 <= mi0)) and
+    ("JC_139": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
   forall intM_intP1:(Object,
   int) memory.
-  ("JC_50":
-  (("JC_48": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
-   ("JC_49": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
+  ("JC_58":
+  (("JC_56": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
+   ("JC_57": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
   forall i_3_1:int.
   (i_3_1 = (i_3_0 + 1)) ->
-  ("JC_122": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
+  ("JC_130": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
   intM_intP1, intM_intP))
 
 ========== file tests/java/why/Sort_po14.why ==========
@@ -5425,10 +5479,10 @@ goal Sort_min_sort_ensures_sorted_po_1:
   int) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
-  ("JC_104": ("JC_102": ("JC_102": Sorted(t_0, 0, i_3, intM_intP))))
+  ("JC_112": ("JC_110": Sorted(t_0, 0, i_3, intM_intP)))
 
 ========== file tests/java/why/Sort_po15.why ==========
 goal Sort_min_sort_ensures_sorted_po_2:
@@ -5439,19 +5493,17 @@ goal Sort_min_sort_ensures_sorted_po_2:
   int) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
-  ("JC_104":
-  ("JC_103":
-  ("JC_103":
-  (forall k1:int.
-    (forall k2:int.
-      (((0 <= k1) and
-        ((k1 < i_3) and
-         ((i_3 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
-       (select(intM_intP, shift(t_0, k1)) <= select(intM_intP, shift(t_0,
-       k2)))))))))
+  forall k1:int.
+  forall k2:int.
+  ((0 <= k1) and
+   ((k1 < i_3) and
+    ((i_3 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
+  ("JC_112":
+  ("JC_111": (select(intM_intP, shift(t_0, k1)) <= select(intM_intP,
+  shift(t_0, k2)))))
 
 ========== file tests/java/why/Sort_po16.why ==========
 goal Sort_min_sort_ensures_sorted_po_3:
@@ -5460,15 +5512,15 @@ goal Sort_min_sort_ensures_sorted_po_3:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -5476,9 +5528,9 @@ goal Sort_min_sort_ensures_sorted_po_3:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -5490,8 +5542,7 @@ goal Sort_min_sort_ensures_sorted_po_3:
   (mi = i_3_0) ->
   forall j_2:int.
   (j_2 = (i_3_0 + 1)) ->
-  ("JC_112":
-  ("JC_110": ("JC_110": (mv = select(intM_intP0, shift(t_0, mi))))))
+  ("JC_120": ("JC_118": (mv = select(intM_intP0, shift(t_0, mi)))))
 
 ========== file tests/java/why/Sort_po17.why ==========
 goal Sort_min_sort_ensures_sorted_po_4:
@@ -5500,15 +5551,15 @@ goal Sort_min_sort_ensures_sorted_po_4:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -5516,9 +5567,9 @@ goal Sort_min_sort_ensures_sorted_po_4:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -5530,12 +5581,9 @@ goal Sort_min_sort_ensures_sorted_po_4:
   (mi = i_3_0) ->
   forall j_2:int.
   (j_2 = (i_3_0 + 1)) ->
-  ("JC_112":
-  ("JC_111":
-  ("JC_111":
-  (forall k_0:int.
-    (((i_3_0 <= k_0) and (k_0 < j_2)) -> (select(intM_intP0, shift(t_0,
-     k_0)) >= mv))))))
+  forall k_0:int.
+  ((i_3_0 <= k_0) and (k_0 < j_2)) ->
+  ("JC_120": ("JC_119": (select(intM_intP0, shift(t_0, k_0)) >= mv)))
 
 ========== file tests/java/why/Sort_po18.why ==========
 goal Sort_min_sort_ensures_sorted_po_5:
@@ -5544,15 +5592,15 @@ goal Sort_min_sort_ensures_sorted_po_5:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -5560,9 +5608,9 @@ goal Sort_min_sort_ensures_sorted_po_5:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -5577,18 +5625,18 @@ goal Sort_min_sort_ensures_sorted_po_5:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_112":
-  (("JC_110": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
-   ("JC_111":
+  ("JC_120":
+  (("JC_118": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
+   ("JC_119":
    (forall k_0:int.
      (((i_3_0 <= k_0) and (k_0 < j_2_0)) -> (select(intM_intP0, shift(t_0,
       k_0)) >= mv0)))))) ->
-  ("JC_116":
-  (("JC_113": (i_3_0 < j_2_0)) and
-   (("JC_114": (i_3_0 <= mi0)) and
-    ("JC_115": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_124":
+  (("JC_121": (i_3_0 < j_2_0)) and
+   (("JC_122": (i_3_0 <= mi0)) and
+    ("JC_123": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -5603,8 +5651,7 @@ goal Sort_min_sort_ensures_sorted_po_5:
   (mv1 = result3) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_112":
-  ("JC_110": ("JC_110": (mv1 = select(intM_intP0, shift(t_0, mi1))))))
+  ("JC_120": ("JC_118": (mv1 = select(intM_intP0, shift(t_0, mi1)))))
 
 ========== file tests/java/why/Sort_po19.why ==========
 goal Sort_min_sort_ensures_sorted_po_6:
@@ -5613,15 +5660,15 @@ goal Sort_min_sort_ensures_sorted_po_6:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -5629,9 +5676,9 @@ goal Sort_min_sort_ensures_sorted_po_6:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -5646,18 +5693,18 @@ goal Sort_min_sort_ensures_sorted_po_6:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_112":
-  (("JC_110": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
-   ("JC_111":
+  ("JC_120":
+  (("JC_118": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
+   ("JC_119":
    (forall k_0:int.
      (((i_3_0 <= k_0) and (k_0 < j_2_0)) -> (select(intM_intP0, shift(t_0,
       k_0)) >= mv0)))))) ->
-  ("JC_116":
-  (("JC_113": (i_3_0 < j_2_0)) and
-   (("JC_114": (i_3_0 <= mi0)) and
-    ("JC_115": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_124":
+  (("JC_121": (i_3_0 < j_2_0)) and
+   (("JC_122": (i_3_0 <= mi0)) and
+    ("JC_123": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -5672,12 +5719,9 @@ goal Sort_min_sort_ensures_sorted_po_6:
   (mv1 = result3) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_112":
-  ("JC_111":
-  ("JC_111":
-  (forall k_0:int.
-    (((i_3_0 <= k_0) and (k_0 < j_2_1)) -> (select(intM_intP0, shift(t_0,
-     k_0)) >= mv1))))))
+  forall k_0:int.
+  ((i_3_0 <= k_0) and (k_0 < j_2_1)) ->
+  ("JC_120": ("JC_119": (select(intM_intP0, shift(t_0, k_0)) >= mv1)))
 
 ========== file tests/java/why/Sort_po1.why ==========
 goal Sort_min_sort_ensures_default_po_1:
@@ -5686,10 +5730,10 @@ goal Sort_min_sort_ensures_default_po_1:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
-  ("JC_88": (0 <= i_3))
+  ("JC_96": (0 <= i_3))
 
 ========== file tests/java/why/Sort_po20.why ==========
 goal Sort_min_sort_ensures_sorted_po_7:
@@ -5698,15 +5742,15 @@ goal Sort_min_sort_ensures_sorted_po_7:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -5714,9 +5758,9 @@ goal Sort_min_sort_ensures_sorted_po_7:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -5731,18 +5775,18 @@ goal Sort_min_sort_ensures_sorted_po_7:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_112":
-  (("JC_110": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
-   ("JC_111":
+  ("JC_120":
+  (("JC_118": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
+   ("JC_119":
    (forall k_0:int.
      (((i_3_0 <= k_0) and (k_0 < j_2_0)) -> (select(intM_intP0, shift(t_0,
       k_0)) >= mv0)))))) ->
-  ("JC_116":
-  (("JC_113": (i_3_0 < j_2_0)) and
-   (("JC_114": (i_3_0 <= mi0)) and
-    ("JC_115": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_124":
+  (("JC_121": (i_3_0 < j_2_0)) and
+   (("JC_122": (i_3_0 <= mi0)) and
+    ("JC_123": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -5751,12 +5795,9 @@ goal Sort_min_sort_ensures_sorted_po_7:
   (result2 >= mv0) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_112":
-  ("JC_111":
-  ("JC_111":
-  (forall k_0:int.
-    (((i_3_0 <= k_0) and (k_0 < j_2_1)) -> (select(intM_intP0, shift(t_0,
-     k_0)) >= mv0))))))
+  forall k_0:int.
+  ((i_3_0 <= k_0) and (k_0 < j_2_1)) ->
+  ("JC_120": ("JC_119": (select(intM_intP0, shift(t_0, k_0)) >= mv0)))
 
 ========== file tests/java/why/Sort_po21.why ==========
 goal Sort_min_sort_ensures_sorted_po_8:
@@ -5765,15 +5806,15 @@ goal Sort_min_sort_ensures_sorted_po_8:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -5781,9 +5822,9 @@ goal Sort_min_sort_ensures_sorted_po_8:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -5798,31 +5839,31 @@ goal Sort_min_sort_ensures_sorted_po_8:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_112":
-  (("JC_110": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
-   ("JC_111":
+  ("JC_120":
+  (("JC_118": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
+   ("JC_119":
    (forall k_0:int.
      (((i_3_0 <= k_0) and (k_0 < j_2_0)) -> (select(intM_intP0, shift(t_0,
       k_0)) >= mv0)))))) ->
-  ("JC_116":
-  (("JC_113": (i_3_0 < j_2_0)) and
-   (("JC_114": (i_3_0 <= mi0)) and
-    ("JC_115": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_124":
+  (("JC_121": (i_3_0 < j_2_0)) and
+   (("JC_122": (i_3_0 <= mi0)) and
+    ("JC_123": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
   forall intM_intP1:(Object,
   int) memory.
-  ("JC_50":
-  (("JC_48": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
-   ("JC_49": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
+  ("JC_58":
+  (("JC_56": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
+   ("JC_57": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
   forall i_3_1:int.
   (i_3_1 = (i_3_0 + 1)) ->
-  ("JC_104": ("JC_102": ("JC_102": Sorted(t_0, 0, i_3_1, intM_intP1))))
+  ("JC_112": ("JC_110": Sorted(t_0, 0, i_3_1, intM_intP1)))
 
 ========== file tests/java/why/Sort_po22.why ==========
 goal Sort_min_sort_ensures_sorted_po_9:
@@ -5831,15 +5872,15 @@ goal Sort_min_sort_ensures_sorted_po_9:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -5847,9 +5888,9 @@ goal Sort_min_sort_ensures_sorted_po_9:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -5864,40 +5905,38 @@ goal Sort_min_sort_ensures_sorted_po_9:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_112":
-  (("JC_110": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
-   ("JC_111":
+  ("JC_120":
+  (("JC_118": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
+   ("JC_119":
    (forall k_0:int.
      (((i_3_0 <= k_0) and (k_0 < j_2_0)) -> (select(intM_intP0, shift(t_0,
       k_0)) >= mv0)))))) ->
-  ("JC_116":
-  (("JC_113": (i_3_0 < j_2_0)) and
-   (("JC_114": (i_3_0 <= mi0)) and
-    ("JC_115": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_124":
+  (("JC_121": (i_3_0 < j_2_0)) and
+   (("JC_122": (i_3_0 <= mi0)) and
+    ("JC_123": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
   forall intM_intP1:(Object,
   int) memory.
-  ("JC_50":
-  (("JC_48": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
-   ("JC_49": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
+  ("JC_58":
+  (("JC_56": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
+   ("JC_57": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
   forall i_3_1:int.
   (i_3_1 = (i_3_0 + 1)) ->
-  ("JC_104":
-  ("JC_103":
-  ("JC_103":
-  (forall k1:int.
-    (forall k2:int.
-      (((0 <= k1) and
-        ((k1 < i_3_1) and
-         ((i_3_1 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
-       (select(intM_intP1, shift(t_0, k1)) <= select(intM_intP1, shift(t_0,
-       k2)))))))))
+  forall k1:int.
+  forall k2:int.
+  ((0 <= k1) and
+   ((k1 < i_3_1) and
+    ((i_3_1 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
+  ("JC_112":
+  ("JC_111": (select(intM_intP1, shift(t_0, k1)) <= select(intM_intP1,
+  shift(t_0, k2)))))
 
 ========== file tests/java/why/Sort_po23.why ==========
 goal Sort_min_sort_ensures_sorted_po_10:
@@ -5906,15 +5945,15 @@ goal Sort_min_sort_ensures_sorted_po_10:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -5922,13 +5961,13 @@ goal Sort_min_sort_ensures_sorted_po_10:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 >= (result - 1)) ->
-  ("JC_65": Sorted(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
+  ("JC_73": Sorted(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
   intM_intP0))
 
 ========== file tests/java/why/Sort_po24.why ==========
@@ -5938,12 +5977,12 @@ goal Sort_min_sort_safety_po_1:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1))
 
 ========== file tests/java/why/Sort_po25.why ==========
@@ -5953,15 +5992,15 @@ goal Sort_min_sort_safety_po_2:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -5974,15 +6013,15 @@ goal Sort_min_sort_safety_po_3:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -5995,17 +6034,17 @@ goal Sort_min_sort_safety_po_4:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -6021,14 +6060,14 @@ goal Sort_min_sort_safety_po_4:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_81": true) ->
-  ("JC_79":
-  (("JC_76": (i_3_0 < j_2_0)) and
-   (("JC_77": (i_3_0 <= mi0)) and
-    ("JC_78": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_89": true) ->
+  ("JC_87":
+  (("JC_84": (i_3_0 < j_2_0)) and
+   (("JC_85": (i_3_0 <= mi0)) and
+    ("JC_86": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -6041,17 +6080,17 @@ goal Sort_min_sort_safety_po_5:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -6067,14 +6106,14 @@ goal Sort_min_sort_safety_po_5:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_81": true) ->
-  ("JC_79":
-  (("JC_76": (i_3_0 < j_2_0)) and
-   (("JC_77": (i_3_0 <= mi0)) and
-    ("JC_78": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_89": true) ->
+  ("JC_87":
+  (("JC_84": (i_3_0 < j_2_0)) and
+   (("JC_85": (i_3_0 <= mi0)) and
+    ("JC_86": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -6087,17 +6126,17 @@ goal Sort_min_sort_safety_po_6:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -6113,18 +6152,18 @@ goal Sort_min_sort_safety_po_6:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_81": true) ->
-  ("JC_79":
-  (("JC_76": (i_3_0 < j_2_0)) and
-   (("JC_77": (i_3_0 <= mi0)) and
-    ("JC_78": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_89": true) ->
+  ("JC_87":
+  (("JC_84": (i_3_0 < j_2_0)) and
+   (("JC_85": (i_3_0 <= mi0)) and
+    ("JC_86": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
-  ("JC_36": ("JC_31": ("JC_31": Non_null_intM(t_0, Object_alloc_table))))
+  ("JC_44": ("JC_39": Non_null_intM(t_0, Object_alloc_table)))
 
 ========== file tests/java/why/Sort_po2.why ==========
 goal Sort_min_sort_ensures_default_po_2:
@@ -6133,15 +6172,15 @@ goal Sort_min_sort_ensures_default_po_2:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -6153,7 +6192,7 @@ goal Sort_min_sort_ensures_default_po_2:
   (mi = i_3_0) ->
   forall j_2:int.
   (j_2 = (i_3_0 + 1)) ->
-  ("JC_96": ("JC_93": ("JC_93": (i_3_0 < j_2))))
+  ("JC_104": ("JC_101": (i_3_0 < j_2)))
 
 ========== file tests/java/why/Sort_po30.why ==========
 goal Sort_min_sort_safety_po_7:
@@ -6162,17 +6201,17 @@ goal Sort_min_sort_safety_po_7:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -6188,19 +6227,18 @@ goal Sort_min_sort_safety_po_7:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_81": true) ->
-  ("JC_79":
-  (("JC_76": (i_3_0 < j_2_0)) and
-   (("JC_77": (i_3_0 <= mi0)) and
-    ("JC_78": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_89": true) ->
+  ("JC_87":
+  (("JC_84": (i_3_0 < j_2_0)) and
+   (("JC_85": (i_3_0 <= mi0)) and
+    ("JC_86": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
-  ("JC_36":
-  ("JC_33": ("JC_33": (i_3_0 < (offset_max(Object_alloc_table, t_0) + 1)))))
+  ("JC_44": ("JC_41": (i_3_0 < (offset_max(Object_alloc_table, t_0) + 1))))
 
 ========== file tests/java/why/Sort_po31.why ==========
 goal Sort_min_sort_safety_po_8:
@@ -6209,17 +6247,17 @@ goal Sort_min_sort_safety_po_8:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -6235,18 +6273,18 @@ goal Sort_min_sort_safety_po_8:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_81": true) ->
-  ("JC_79":
-  (("JC_76": (i_3_0 < j_2_0)) and
-   (("JC_77": (i_3_0 <= mi0)) and
-    ("JC_78": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_89": true) ->
+  ("JC_87":
+  (("JC_84": (i_3_0 < j_2_0)) and
+   (("JC_85": (i_3_0 <= mi0)) and
+    ("JC_86": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
-  ("JC_36": ("JC_34": ("JC_34": (0 <= mi0))))
+  ("JC_44": ("JC_42": (0 <= mi0)))
 
 ========== file tests/java/why/Sort_po32.why ==========
 goal Sort_min_sort_safety_po_9:
@@ -6255,17 +6293,17 @@ goal Sort_min_sort_safety_po_9:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -6281,19 +6319,18 @@ goal Sort_min_sort_safety_po_9:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_81": true) ->
-  ("JC_79":
-  (("JC_76": (i_3_0 < j_2_0)) and
-   (("JC_77": (i_3_0 <= mi0)) and
-    ("JC_78": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_89": true) ->
+  ("JC_87":
+  (("JC_84": (i_3_0 < j_2_0)) and
+   (("JC_85": (i_3_0 <= mi0)) and
+    ("JC_86": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
-  ("JC_36":
-  ("JC_35": ("JC_35": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))
+  ("JC_44": ("JC_43": (mi0 < (offset_max(Object_alloc_table, t_0) + 1))))
 
 ========== file tests/java/why/Sort_po33.why ==========
 goal Sort_swap_ensures_default_po_1:
@@ -6306,12 +6343,12 @@ goal Sort_swap_ensures_default_po_1:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_Sort(this_2, 0, 0, Object_alloc_table) and
-    ("JC_43":
-    (("JC_38": Non_null_intM(t, Object_alloc_table)) and
-     (("JC_39": (0 <= i_2)) and
-      (("JC_40": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
-       (("JC_41": (0 <= j_1)) and
-        ("JC_42": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
+    ("JC_51":
+    (("JC_46": Non_null_intM(t, Object_alloc_table)) and
+     (("JC_47": (0 <= i_2)) and
+      (("JC_48": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
+       (("JC_49": (0 <= j_1)) and
+        ("JC_50": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
   forall result:int.
   (result = select(intM_intP, shift(t, i_2))) ->
   forall result0:int.
@@ -6322,7 +6359,7 @@ goal Sort_swap_ensures_default_po_1:
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, j_1), result)) ->
-  ("JC_47": ("JC_45": ("JC_45": Swap(t, i_2, j_1, intM_intP1, intM_intP))))
+  ("JC_55": ("JC_53": Swap(t, i_2, j_1, intM_intP1, intM_intP)))
 
 ========== file tests/java/why/Sort_po34.why ==========
 goal Sort_swap_ensures_default_po_2:
@@ -6335,12 +6372,12 @@ goal Sort_swap_ensures_default_po_2:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_Sort(this_2, 0, 0, Object_alloc_table) and
-    ("JC_43":
-    (("JC_38": Non_null_intM(t, Object_alloc_table)) and
-     (("JC_39": (0 <= i_2)) and
-      (("JC_40": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
-       (("JC_41": (0 <= j_1)) and
-        ("JC_42": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
+    ("JC_51":
+    (("JC_46": Non_null_intM(t, Object_alloc_table)) and
+     (("JC_47": (0 <= i_2)) and
+      (("JC_48": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
+       (("JC_49": (0 <= j_1)) and
+        ("JC_50": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
   forall result:int.
   (result = select(intM_intP, shift(t, i_2))) ->
   forall result0:int.
@@ -6351,11 +6388,10 @@ goal Sort_swap_ensures_default_po_2:
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, j_1), result)) ->
-  ("JC_47":
-  ("JC_46":
-  ("JC_46": not_assigns(Object_alloc_table, intM_intP, intM_intP1,
+  ("JC_55":
+  ("JC_54": not_assigns(Object_alloc_table, intM_intP, intM_intP1,
   pset_union(pset_range(pset_singleton(t), j_1, j_1),
-  pset_range(pset_singleton(t), i_2, i_2))))))
+  pset_range(pset_singleton(t), i_2, i_2)))))
 
 ========== file tests/java/why/Sort_po35.why ==========
 goal Sort_swap_safety_po_1:
@@ -6366,12 +6402,12 @@ goal Sort_swap_safety_po_1:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_Sort(this_2, 0, 0, Object_alloc_table) and
-    ("JC_43":
-    (("JC_38": Non_null_intM(t, Object_alloc_table)) and
-     (("JC_39": (0 <= i_2)) and
-      (("JC_40": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
-       (("JC_41": (0 <= j_1)) and
-        ("JC_42": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
+    ("JC_51":
+    (("JC_46": Non_null_intM(t, Object_alloc_table)) and
+     (("JC_47": (0 <= i_2)) and
+      (("JC_48": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
+       (("JC_49": (0 <= j_1)) and
+        ("JC_50": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
   (offset_min(Object_alloc_table, t) <= i_2)
 
 ========== file tests/java/why/Sort_po36.why ==========
@@ -6383,12 +6419,12 @@ goal Sort_swap_safety_po_2:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_Sort(this_2, 0, 0, Object_alloc_table) and
-    ("JC_43":
-    (("JC_38": Non_null_intM(t, Object_alloc_table)) and
-     (("JC_39": (0 <= i_2)) and
-      (("JC_40": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
-       (("JC_41": (0 <= j_1)) and
-        ("JC_42": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
+    ("JC_51":
+    (("JC_46": Non_null_intM(t, Object_alloc_table)) and
+     (("JC_47": (0 <= i_2)) and
+      (("JC_48": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
+       (("JC_49": (0 <= j_1)) and
+        ("JC_50": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
   (i_2 <= offset_max(Object_alloc_table, t))
 
 ========== file tests/java/why/Sort_po37.why ==========
@@ -6402,12 +6438,12 @@ goal Sort_swap_safety_po_3:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_Sort(this_2, 0, 0, Object_alloc_table) and
-    ("JC_43":
-    (("JC_38": Non_null_intM(t, Object_alloc_table)) and
-     (("JC_39": (0 <= i_2)) and
-      (("JC_40": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
-       (("JC_41": (0 <= j_1)) and
-        ("JC_42": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
+    ("JC_51":
+    (("JC_46": Non_null_intM(t, Object_alloc_table)) and
+     (("JC_47": (0 <= i_2)) and
+      (("JC_48": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
+       (("JC_49": (0 <= j_1)) and
+        ("JC_50": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
   ((offset_min(Object_alloc_table, t) <= i_2) and
    (i_2 <= offset_max(Object_alloc_table, t))) ->
   forall result:int.
@@ -6425,12 +6461,12 @@ goal Sort_swap_safety_po_4:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_Sort(this_2, 0, 0, Object_alloc_table) and
-    ("JC_43":
-    (("JC_38": Non_null_intM(t, Object_alloc_table)) and
-     (("JC_39": (0 <= i_2)) and
-      (("JC_40": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
-       (("JC_41": (0 <= j_1)) and
-        ("JC_42": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
+    ("JC_51":
+    (("JC_46": Non_null_intM(t, Object_alloc_table)) and
+     (("JC_47": (0 <= i_2)) and
+      (("JC_48": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
+       (("JC_49": (0 <= j_1)) and
+        ("JC_50": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
   ((offset_min(Object_alloc_table, t) <= i_2) and
    (i_2 <= offset_max(Object_alloc_table, t))) ->
   forall result:int.
@@ -6444,15 +6480,15 @@ goal Sort_min_sort_ensures_default_po_3:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -6464,7 +6500,7 @@ goal Sort_min_sort_ensures_default_po_3:
   (mi = i_3_0) ->
   forall j_2:int.
   (j_2 = (i_3_0 + 1)) ->
-  ("JC_96": ("JC_94": ("JC_94": (i_3_0 <= mi))))
+  ("JC_104": ("JC_102": (i_3_0 <= mi)))
 
 ========== file tests/java/why/Sort_po4.why ==========
 goal Sort_min_sort_ensures_default_po_4:
@@ -6473,15 +6509,15 @@ goal Sort_min_sort_ensures_default_po_4:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -6493,8 +6529,7 @@ goal Sort_min_sort_ensures_default_po_4:
   (mi = i_3_0) ->
   forall j_2:int.
   (j_2 = (i_3_0 + 1)) ->
-  ("JC_96":
-  ("JC_95": ("JC_95": (mi < (offset_max(Object_alloc_table, t_0) + 1)))))
+  ("JC_104": ("JC_103": (mi < (offset_max(Object_alloc_table, t_0) + 1))))
 
 ========== file tests/java/why/Sort_po5.why ==========
 goal Sort_min_sort_ensures_default_po_5:
@@ -6503,15 +6538,15 @@ goal Sort_min_sort_ensures_default_po_5:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -6526,12 +6561,12 @@ goal Sort_min_sort_ensures_default_po_5:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_96":
-  (("JC_93": (i_3_0 < j_2_0)) and
-   (("JC_94": (i_3_0 <= mi0)) and
-    ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_104":
+  (("JC_101": (i_3_0 < j_2_0)) and
+   (("JC_102": (i_3_0 <= mi0)) and
+    ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -6546,7 +6581,7 @@ goal Sort_min_sort_ensures_default_po_5:
   (mv1 = result3) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_96": ("JC_93": ("JC_93": (i_3_0 < j_2_1))))
+  ("JC_104": ("JC_101": (i_3_0 < j_2_1)))
 
 ========== file tests/java/why/Sort_po6.why ==========
 goal Sort_min_sort_ensures_default_po_6:
@@ -6555,15 +6590,15 @@ goal Sort_min_sort_ensures_default_po_6:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -6578,12 +6613,12 @@ goal Sort_min_sort_ensures_default_po_6:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_96":
-  (("JC_93": (i_3_0 < j_2_0)) and
-   (("JC_94": (i_3_0 <= mi0)) and
-    ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_104":
+  (("JC_101": (i_3_0 < j_2_0)) and
+   (("JC_102": (i_3_0 <= mi0)) and
+    ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -6598,7 +6633,7 @@ goal Sort_min_sort_ensures_default_po_6:
   (mv1 = result3) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_96": ("JC_94": ("JC_94": (i_3_0 <= mi1))))
+  ("JC_104": ("JC_102": (i_3_0 <= mi1)))
 
 ========== file tests/java/why/Sort_po7.why ==========
 goal Sort_min_sort_ensures_default_po_7:
@@ -6607,15 +6642,15 @@ goal Sort_min_sort_ensures_default_po_7:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -6630,12 +6665,12 @@ goal Sort_min_sort_ensures_default_po_7:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_96":
-  (("JC_93": (i_3_0 < j_2_0)) and
-   (("JC_94": (i_3_0 <= mi0)) and
-    ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_104":
+  (("JC_101": (i_3_0 < j_2_0)) and
+   (("JC_102": (i_3_0 <= mi0)) and
+    ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -6650,8 +6685,7 @@ goal Sort_min_sort_ensures_default_po_7:
   (mv1 = result3) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_96":
-  ("JC_95": ("JC_95": (mi1 < (offset_max(Object_alloc_table, t_0) + 1)))))
+  ("JC_104": ("JC_103": (mi1 < (offset_max(Object_alloc_table, t_0) + 1))))
 
 ========== file tests/java/why/Sort_po8.why ==========
 goal Sort_min_sort_ensures_default_po_8:
@@ -6660,15 +6694,15 @@ goal Sort_min_sort_ensures_default_po_8:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -6683,12 +6717,12 @@ goal Sort_min_sort_ensures_default_po_8:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_96":
-  (("JC_93": (i_3_0 < j_2_0)) and
-   (("JC_94": (i_3_0 <= mi0)) and
-    ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_104":
+  (("JC_101": (i_3_0 < j_2_0)) and
+   (("JC_102": (i_3_0 <= mi0)) and
+    ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -6697,7 +6731,7 @@ goal Sort_min_sort_ensures_default_po_8:
   (result2 >= mv0) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_96": ("JC_93": ("JC_93": (i_3_0 < j_2_1))))
+  ("JC_104": ("JC_101": (i_3_0 < j_2_1)))
 
 ========== file tests/java/why/Sort_po9.why ==========
 goal Sort_min_sort_ensures_default_po_9:
@@ -6706,15 +6740,15 @@ goal Sort_min_sort_ensures_default_po_9:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -6729,12 +6763,12 @@ goal Sort_min_sort_ensures_default_po_9:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_96":
-  (("JC_93": (i_3_0 < j_2_0)) and
-   (("JC_94": (i_3_0 <= mi0)) and
-    ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_104":
+  (("JC_101": (i_3_0 < j_2_0)) and
+   (("JC_102": (i_3_0 <= mi0)) and
+    ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -6743,7 +6777,7 @@ goal Sort_min_sort_ensures_default_po_9:
   (result2 >= mv0) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_96": ("JC_94": ("JC_94": (i_3_0 <= mi0))))
+  ("JC_104": ("JC_102": (i_3_0 <= mi0)))
 
 ========== generation of Simplify VC output ==========
 why -simplify [...] why/Sort.why
@@ -7589,47 +7623,6 @@ why -simplify [...] why/Sort.why
  (FORALL (x Object_tag_table) (instanceof Object_tag_table x Object_tag)))
 
 (BG_PUSH
- ;; Why axiom Permut_refl
- (FORALL (intM_intP_at_L a_2 l_1 h_1)
- (EQ (Permut a_2 l_1 h_1 intM_intP_at_L intM_intP_at_L) |@true|)))
-
-(DEFPRED (Swap a_0 i_0 j intM_intP_at_L2 intM_intP_at_L1)
-  (AND
-  (EQ (select intM_intP_at_L1 (shift a_0 i_0))
-  (select intM_intP_at_L2 (shift a_0 j)))
-  (AND
-  (EQ (select intM_intP_at_L1 (shift a_0 j))
-  (select intM_intP_at_L2 (shift a_0 i_0)))
-  (FORALL (k)
-  (IMPLIES (AND (NEQ k i_0) (NEQ k j))
-  (EQ (select intM_intP_at_L1 (shift a_0 k))
-  (select intM_intP_at_L2 (shift a_0 k))))))))
-
-(BG_PUSH
- ;; Why axiom Permut_swap
- (FORALL (intM_intP_at_L2 intM_intP_at_L1 a_5 l_4 h_4 i_1 j_0)
- (IMPLIES
- (AND (<= l_4 i_1)
- (AND (<= i_1 h_4)
- (AND (<= l_4 j_0)
- (AND (<= j_0 h_4) (Swap a_5 i_1 j_0 intM_intP_at_L2 intM_intP_at_L1)))))
- (EQ (Permut a_5 l_4 h_4 intM_intP_at_L2 intM_intP_at_L1) |@true|))))
-
-(BG_PUSH
- ;; Why axiom Permut_sym
- (FORALL (intM_intP_at_L2 intM_intP_at_L1 a_3 l_2 h_2)
- (IMPLIES (EQ (Permut a_3 l_2 h_2 intM_intP_at_L2 intM_intP_at_L1) |@true|)
- (EQ (Permut a_3 l_2 h_2 intM_intP_at_L1 intM_intP_at_L2) |@true|))))
-
-(BG_PUSH
- ;; Why axiom Permut_trans
- (FORALL (intM_intP_at_L3 intM_intP_at_L2 intM_intP_at_L1 a_4 l_3 h_3)
- (IMPLIES
- (AND (EQ (Permut a_4 l_3 h_3 intM_intP_at_L2 intM_intP_at_L1) |@true|)
- (EQ (Permut a_4 l_3 h_3 intM_intP_at_L3 intM_intP_at_L2) |@true|))
- (EQ (Permut a_4 l_3 h_3 intM_intP_at_L3 intM_intP_at_L1) |@true|))))
-
-(BG_PUSH
  ;; Why axiom Sort_parenttag_Object
  (EQ (parenttag Sort_tag Object_tag) |@true|))
 
@@ -7642,6 +7635,18 @@ why -simplify [...] why/Sort.why
 (BG_PUSH
  ;; Why axiom String_parenttag_Object
  (EQ (parenttag String_tag Object_tag) |@true|))
+
+(DEFPRED (Swap a_0 i_0 j intM_intP_at_L2 intM_intP_at_L1)
+  (AND
+  (EQ (select intM_intP_at_L1 (shift a_0 i_0))
+  (select intM_intP_at_L2 (shift a_0 j)))
+  (AND
+  (EQ (select intM_intP_at_L1 (shift a_0 j))
+  (select intM_intP_at_L2 (shift a_0 i_0)))
+  (FORALL (k)
+  (IMPLIES (AND (NEQ k i_0) (NEQ k j))
+  (EQ (select intM_intP_at_L1 (shift a_0 k))
+  (select intM_intP_at_L2 (shift a_0 k))))))))
 
 (BG_PUSH
  ;; Why axiom Throwable_parenttag_Object
@@ -7802,6 +7807,35 @@ why -simplify [...] why/Sort.why
 (DEFPRED (valid_struct_interface p a b interface_alloc_table)
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
+
+(BG_PUSH
+ ;; Why axiom Permut_swap
+ (FORALL (intM_intP_at_L2 intM_intP_at_L1 a_5 l_4 h_4 i_1 j_0)
+ (IMPLIES
+ (AND (<= l_4 i_1)
+ (AND (<= i_1 h_4)
+ (AND (<= l_4 j_0)
+ (AND (<= j_0 h_4) (Swap a_5 i_1 j_0 intM_intP_at_L2 intM_intP_at_L1)))))
+ (EQ (Permut a_5 l_4 h_4 intM_intP_at_L2 intM_intP_at_L1) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom Permut_trans
+ (FORALL (intM_intP_at_L3 intM_intP_at_L2 intM_intP_at_L1 a_4 l_3 h_3)
+ (IMPLIES
+ (AND (EQ (Permut a_4 l_3 h_3 intM_intP_at_L2 intM_intP_at_L1) |@true|)
+ (EQ (Permut a_4 l_3 h_3 intM_intP_at_L3 intM_intP_at_L2) |@true|))
+ (EQ (Permut a_4 l_3 h_3 intM_intP_at_L3 intM_intP_at_L1) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom Permut_sym
+ (FORALL (intM_intP_at_L2 intM_intP_at_L1 a_3 l_2 h_2)
+ (IMPLIES (EQ (Permut a_3 l_2 h_2 intM_intP_at_L2 intM_intP_at_L1) |@true|)
+ (EQ (Permut a_3 l_2 h_2 intM_intP_at_L1 intM_intP_at_L2) |@true|))))
+
+(BG_PUSH
+ ;; Why axiom Permut_refl
+ (FORALL (intM_intP_at_L a_2 l_1 h_1)
+ (EQ (Permut a_2 l_1 h_1 intM_intP_at_L intM_intP_at_L) |@true|)))
 
 ;; Sort_min_sort_ensures_default_po_1, File "HOME/tests/java/Sort.java", line 56, characters 20-26
 (FORALL (this_0)
@@ -8288,12 +8322,12 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP) |@tr
          (Non_null_intM t_0 Object_alloc_table)))
 (FORALL (i_3)
 (IMPLIES (EQ i_3 0)
-(FORALL (k1 k2)
-(IMPLIES
-(AND (<= 0 k1)
-(AND (< k1 i_3)
-(AND (<= i_3 k2) (< k2 (+ (offset_max Object_alloc_table t_0) 1)))))
-(<= (select intM_intP (shift t_0 k1)) (select intM_intP (shift t_0 k2))))))))))))
+(FORALL (k1)
+(FORALL (k2)
+(IMPLIES (AND (<= 0 k1)
+         (AND (< k1 i_3)
+         (AND (<= i_3 k2) (< k2 (+ (offset_max Object_alloc_table t_0) 1)))))
+(<= (select intM_intP (shift t_0 k1)) (select intM_intP (shift t_0 k2)))))))))))))
 
 ;; Sort_min_sort_ensures_sorted_po_3, File "HOME/tests/java/Sort.java", line 69, characters 25-36
 (FORALL (this_0)
@@ -8663,12 +8697,12 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP) |@tr
                                                   (pset_singleton t_0) i_3_0 i_3_0))))
 (FORALL (i_3_1)
 (IMPLIES (EQ i_3_1 (+ i_3_0 1))
-(FORALL (k1 k2)
-(IMPLIES
-(AND (<= 0 k1)
-(AND (< k1 i_3_1)
-(AND (<= i_3_1 k2) (< k2 (+ (offset_max Object_alloc_table t_0) 1)))))
-(<= (select intM_intP1 (shift t_0 k1)) (select intM_intP1 (shift t_0 k2))))))))))))))))))))))))))))))))))))))
+(FORALL (k1)
+(FORALL (k2)
+(IMPLIES (AND (<= 0 k1)
+         (AND (< k1 i_3_1)
+         (AND (<= i_3_1 k2) (< k2 (+ (offset_max Object_alloc_table t_0) 1)))))
+(<= (select intM_intP1 (shift t_0 k1)) (select intM_intP1 (shift t_0 k2)))))))))))))))))))))))))))))))))))))))
 
 ;; Sort_min_sort_ensures_sorted_po_10, File "HOME/tests/java/Sort.java", line 49, characters 18-40
 (FORALL (this_0)
@@ -8697,7 +8731,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP) |@tr
 (IMPLIES (>= i_3_0 (- result 1))
 (Sorted t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP0))))))))))))))
 
-;; Sort_min_sort_safety_po_1, File "why/Sort.why", line 1163, characters 44-194
+;; Sort_min_sort_safety_po_1, File "why/Sort.why", line 1167, characters 44-194
 (FORALL (this_0)
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
@@ -8834,7 +8868,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP) |@tr
          (EQ result1 (+ (offset_max Object_alloc_table t_0) 1))))
 (IMPLIES (< j_2_0 result1) (<= j_2_0 (offset_max Object_alloc_table t_0)))))))))))))))))))))))))))))))))
 
-;; Sort_min_sort_safety_po_6, File "HOME/tests/java/Sort.jc", line 202, characters 29-60
+;; Sort_min_sort_safety_po_6, File "HOME/tests/java/Sort.jc", line 205, characters 29-60
 (FORALL (this_0)
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
@@ -8876,7 +8910,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP) |@tr
          (EQ result1 (+ (offset_max Object_alloc_table t_0) 1))))
 (IMPLIES (>= j_2_0 result1) (Non_null_intM t_0 Object_alloc_table))))))))))))))))))))))))))))))))
 
-;; Sort_min_sort_safety_po_7, File "HOME/tests/java/Sort.jc", line 202, characters 29-60
+;; Sort_min_sort_safety_po_7, File "HOME/tests/java/Sort.jc", line 205, characters 29-60
 (FORALL (this_0)
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
@@ -8919,7 +8953,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP) |@tr
 (IMPLIES (>= j_2_0 result1)
 (< i_3_0 (+ (offset_max Object_alloc_table t_0) 1)))))))))))))))))))))))))))))))))
 
-;; Sort_min_sort_safety_po_8, File "HOME/tests/java/Sort.jc", line 202, characters 29-60
+;; Sort_min_sort_safety_po_8, File "HOME/tests/java/Sort.jc", line 205, characters 29-60
 (FORALL (this_0)
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
@@ -8961,7 +8995,7 @@ t_0 0 (- (+ (offset_max Object_alloc_table t_0) 1) 1) intM_intP1 intM_intP) |@tr
          (EQ result1 (+ (offset_max Object_alloc_table t_0) 1))))
 (IMPLIES (>= j_2_0 result1) (<= 0 mi0))))))))))))))))))))))))))))))))
 
-;; Sort_min_sort_safety_po_9, File "HOME/tests/java/Sort.jc", line 202, characters 29-60
+;; Sort_min_sort_safety_po_9, File "HOME/tests/java/Sort.jc", line 205, characters 29-60
 (FORALL (this_0)
 (FORALL (t_0)
 (FORALL (Object_alloc_table)
@@ -10099,59 +10133,6 @@ axiom Object_tags:
 logic Permut : Object pointer, int, int, (Object, int) memory, (Object,
 int) memory -> prop
 
-axiom Permut_refl:
-  (forall intM_intP_at_L:(Object, int) memory.
-    (forall a_2:Object pointer.
-      (forall l_1:int.
-        (forall h_1:int. Permut(a_2, l_1, h_1, intM_intP_at_L,
-          intM_intP_at_L)))))
-
-predicate Swap(a_0: Object pointer, i_0: int, j: int,
-  intM_intP_at_L2: (Object, int) memory, intM_intP_at_L1: (Object,
-  int) memory) =
-  ((select(intM_intP_at_L1, shift(a_0, i_0)) = select(intM_intP_at_L2,
-   shift(a_0, j))) and
-   ((select(intM_intP_at_L1, shift(a_0, j)) = select(intM_intP_at_L2,
-    shift(a_0, i_0))) and
-    (forall k:int.
-      (((k <> i_0) and (k <> j)) -> (select(intM_intP_at_L1, shift(a_0,
-       k)) = select(intM_intP_at_L2, shift(a_0, k)))))))
-
-axiom Permut_swap:
-  (forall intM_intP_at_L2:(Object, int) memory.
-    (forall intM_intP_at_L1:(Object, int) memory.
-      (forall a_5:Object pointer.
-        (forall l_4:int.
-          (forall h_4:int.
-            (forall i_1:int.
-              (forall j_0:int.
-                (((l_4 <= i_1) and
-                  ((i_1 <= h_4) and
-                   ((l_4 <= j_0) and
-                    ((j_0 <= h_4) and Swap(a_5, i_1, j_0, intM_intP_at_L2,
-                     intM_intP_at_L1))))) ->
-                 Permut(a_5, l_4, h_4, intM_intP_at_L2, intM_intP_at_L1)))))))))
-
-axiom Permut_sym:
-  (forall intM_intP_at_L2:(Object, int) memory.
-    (forall intM_intP_at_L1:(Object, int) memory.
-      (forall a_3:Object pointer.
-        (forall l_2:int.
-          (forall h_2:int.
-            (Permut(a_3, l_2, h_2, intM_intP_at_L2, intM_intP_at_L1) ->
-             Permut(a_3, l_2, h_2, intM_intP_at_L1, intM_intP_at_L2)))))))
-
-axiom Permut_trans:
-  (forall intM_intP_at_L3:(Object, int) memory.
-    (forall intM_intP_at_L2:(Object, int) memory.
-      (forall intM_intP_at_L1:(Object, int) memory.
-        (forall a_4:Object pointer.
-          (forall l_3:int.
-            (forall h_3:int.
-              ((Permut(a_4, l_3, h_3, intM_intP_at_L2, intM_intP_at_L1) and
-                Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L2)) ->
-               Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L1))))))))
-
 logic Sort_tag : Object tag_id
 
 axiom Sort_parenttag_Object: parenttag(Sort_tag, Object_tag)
@@ -10165,6 +10146,17 @@ predicate Sorted(a: Object pointer, l: int, h: int, intM_intP_at_L: (Object,
 logic String_tag : Object tag_id
 
 axiom String_parenttag_Object: parenttag(String_tag, Object_tag)
+
+predicate Swap(a_0: Object pointer, i_0: int, j: int,
+  intM_intP_at_L2: (Object, int) memory, intM_intP_at_L1: (Object,
+  int) memory) =
+  ((select(intM_intP_at_L1, shift(a_0, i_0)) = select(intM_intP_at_L2,
+   shift(a_0, j))) and
+   ((select(intM_intP_at_L1, shift(a_0, j)) = select(intM_intP_at_L2,
+    shift(a_0, i_0))) and
+    (forall k:int.
+      (((k <> i_0) and (k <> j)) -> (select(intM_intP_at_L1, shift(a_0,
+       k)) = select(intM_intP_at_L2, shift(a_0, k)))))))
 
 logic Throwable_tag : Object tag_id
 
@@ -10365,16 +10357,58 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) <= a) and
    (offset_max(interface_alloc_table, p) >= b))
 
+axiom Permut_swap:
+  (forall intM_intP_at_L2:(Object, int) memory.
+    (forall intM_intP_at_L1:(Object, int) memory.
+      (forall a_5:Object pointer.
+        (forall l_4:int.
+          (forall h_4:int.
+            (forall i_1:int.
+              (forall j_0:int.
+                (((l_4 <= i_1) and
+                  ((i_1 <= h_4) and
+                   ((l_4 <= j_0) and
+                    ((j_0 <= h_4) and Swap(a_5, i_1, j_0, intM_intP_at_L2,
+                     intM_intP_at_L1))))) ->
+                 Permut(a_5, l_4, h_4, intM_intP_at_L2, intM_intP_at_L1)))))))))
+
+axiom Permut_trans:
+  (forall intM_intP_at_L3:(Object, int) memory.
+    (forall intM_intP_at_L2:(Object, int) memory.
+      (forall intM_intP_at_L1:(Object, int) memory.
+        (forall a_4:Object pointer.
+          (forall l_3:int.
+            (forall h_3:int.
+              ((Permut(a_4, l_3, h_3, intM_intP_at_L2, intM_intP_at_L1) and
+                Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L2)) ->
+               Permut(a_4, l_3, h_3, intM_intP_at_L3, intM_intP_at_L1))))))))
+
+axiom Permut_sym:
+  (forall intM_intP_at_L2:(Object, int) memory.
+    (forall intM_intP_at_L1:(Object, int) memory.
+      (forall a_3:Object pointer.
+        (forall l_2:int.
+          (forall h_2:int.
+            (Permut(a_3, l_2, h_2, intM_intP_at_L2, intM_intP_at_L1) ->
+             Permut(a_3, l_2, h_2, intM_intP_at_L1, intM_intP_at_L2)))))))
+
+axiom Permut_refl:
+  (forall intM_intP_at_L:(Object, int) memory.
+    (forall a_2:Object pointer.
+      (forall l_1:int.
+        (forall h_1:int. Permut(a_2, l_1, h_1, intM_intP_at_L,
+          intM_intP_at_L)))))
+
 goal Sort_min_sort_ensures_default_po_1:
   forall this_0:Object pointer.
   forall t_0:Object pointer.
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
-  ("JC_88": (0 <= i_3))
+  ("JC_96": (0 <= i_3))
 
 goal Sort_min_sort_ensures_default_po_2:
   forall this_0:Object pointer.
@@ -10382,15 +10416,15 @@ goal Sort_min_sort_ensures_default_po_2:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -10402,7 +10436,7 @@ goal Sort_min_sort_ensures_default_po_2:
   (mi = i_3_0) ->
   forall j_2:int.
   (j_2 = (i_3_0 + 1)) ->
-  ("JC_96": ("JC_93": ("JC_93": (i_3_0 < j_2))))
+  ("JC_104": ("JC_101": (i_3_0 < j_2)))
 
 goal Sort_min_sort_ensures_default_po_3:
   forall this_0:Object pointer.
@@ -10410,15 +10444,15 @@ goal Sort_min_sort_ensures_default_po_3:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -10430,7 +10464,7 @@ goal Sort_min_sort_ensures_default_po_3:
   (mi = i_3_0) ->
   forall j_2:int.
   (j_2 = (i_3_0 + 1)) ->
-  ("JC_96": ("JC_94": ("JC_94": (i_3_0 <= mi))))
+  ("JC_104": ("JC_102": (i_3_0 <= mi)))
 
 goal Sort_min_sort_ensures_default_po_4:
   forall this_0:Object pointer.
@@ -10438,15 +10472,15 @@ goal Sort_min_sort_ensures_default_po_4:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -10458,8 +10492,7 @@ goal Sort_min_sort_ensures_default_po_4:
   (mi = i_3_0) ->
   forall j_2:int.
   (j_2 = (i_3_0 + 1)) ->
-  ("JC_96":
-  ("JC_95": ("JC_95": (mi < (offset_max(Object_alloc_table, t_0) + 1)))))
+  ("JC_104": ("JC_103": (mi < (offset_max(Object_alloc_table, t_0) + 1))))
 
 goal Sort_min_sort_ensures_default_po_5:
   forall this_0:Object pointer.
@@ -10467,15 +10500,15 @@ goal Sort_min_sort_ensures_default_po_5:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -10490,12 +10523,12 @@ goal Sort_min_sort_ensures_default_po_5:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_96":
-  (("JC_93": (i_3_0 < j_2_0)) and
-   (("JC_94": (i_3_0 <= mi0)) and
-    ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_104":
+  (("JC_101": (i_3_0 < j_2_0)) and
+   (("JC_102": (i_3_0 <= mi0)) and
+    ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -10510,7 +10543,7 @@ goal Sort_min_sort_ensures_default_po_5:
   (mv1 = result3) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_96": ("JC_93": ("JC_93": (i_3_0 < j_2_1))))
+  ("JC_104": ("JC_101": (i_3_0 < j_2_1)))
 
 goal Sort_min_sort_ensures_default_po_6:
   forall this_0:Object pointer.
@@ -10518,15 +10551,15 @@ goal Sort_min_sort_ensures_default_po_6:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -10541,12 +10574,12 @@ goal Sort_min_sort_ensures_default_po_6:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_96":
-  (("JC_93": (i_3_0 < j_2_0)) and
-   (("JC_94": (i_3_0 <= mi0)) and
-    ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_104":
+  (("JC_101": (i_3_0 < j_2_0)) and
+   (("JC_102": (i_3_0 <= mi0)) and
+    ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -10561,7 +10594,7 @@ goal Sort_min_sort_ensures_default_po_6:
   (mv1 = result3) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_96": ("JC_94": ("JC_94": (i_3_0 <= mi1))))
+  ("JC_104": ("JC_102": (i_3_0 <= mi1)))
 
 goal Sort_min_sort_ensures_default_po_7:
   forall this_0:Object pointer.
@@ -10569,15 +10602,15 @@ goal Sort_min_sort_ensures_default_po_7:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -10592,12 +10625,12 @@ goal Sort_min_sort_ensures_default_po_7:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_96":
-  (("JC_93": (i_3_0 < j_2_0)) and
-   (("JC_94": (i_3_0 <= mi0)) and
-    ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_104":
+  (("JC_101": (i_3_0 < j_2_0)) and
+   (("JC_102": (i_3_0 <= mi0)) and
+    ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -10612,8 +10645,7 @@ goal Sort_min_sort_ensures_default_po_7:
   (mv1 = result3) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_96":
-  ("JC_95": ("JC_95": (mi1 < (offset_max(Object_alloc_table, t_0) + 1)))))
+  ("JC_104": ("JC_103": (mi1 < (offset_max(Object_alloc_table, t_0) + 1))))
 
 goal Sort_min_sort_ensures_default_po_8:
   forall this_0:Object pointer.
@@ -10621,15 +10653,15 @@ goal Sort_min_sort_ensures_default_po_8:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -10644,12 +10676,12 @@ goal Sort_min_sort_ensures_default_po_8:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_96":
-  (("JC_93": (i_3_0 < j_2_0)) and
-   (("JC_94": (i_3_0 <= mi0)) and
-    ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_104":
+  (("JC_101": (i_3_0 < j_2_0)) and
+   (("JC_102": (i_3_0 <= mi0)) and
+    ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -10658,7 +10690,7 @@ goal Sort_min_sort_ensures_default_po_8:
   (result2 >= mv0) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_96": ("JC_93": ("JC_93": (i_3_0 < j_2_1))))
+  ("JC_104": ("JC_101": (i_3_0 < j_2_1)))
 
 goal Sort_min_sort_ensures_default_po_9:
   forall this_0:Object pointer.
@@ -10666,15 +10698,15 @@ goal Sort_min_sort_ensures_default_po_9:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -10689,12 +10721,12 @@ goal Sort_min_sort_ensures_default_po_9:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_96":
-  (("JC_93": (i_3_0 < j_2_0)) and
-   (("JC_94": (i_3_0 <= mi0)) and
-    ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_104":
+  (("JC_101": (i_3_0 < j_2_0)) and
+   (("JC_102": (i_3_0 <= mi0)) and
+    ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -10703,7 +10735,7 @@ goal Sort_min_sort_ensures_default_po_9:
   (result2 >= mv0) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_96": ("JC_94": ("JC_94": (i_3_0 <= mi0))))
+  ("JC_104": ("JC_102": (i_3_0 <= mi0)))
 
 goal Sort_min_sort_ensures_default_po_10:
   forall this_0:Object pointer.
@@ -10711,15 +10743,15 @@ goal Sort_min_sort_ensures_default_po_10:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -10734,12 +10766,12 @@ goal Sort_min_sort_ensures_default_po_10:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_96":
-  (("JC_93": (i_3_0 < j_2_0)) and
-   (("JC_94": (i_3_0 <= mi0)) and
-    ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_104":
+  (("JC_101": (i_3_0 < j_2_0)) and
+   (("JC_102": (i_3_0 <= mi0)) and
+    ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -10748,8 +10780,7 @@ goal Sort_min_sort_ensures_default_po_10:
   (result2 >= mv0) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_96":
-  ("JC_95": ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))
+  ("JC_104": ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1))))
 
 goal Sort_min_sort_ensures_default_po_11:
   forall this_0:Object pointer.
@@ -10757,15 +10788,15 @@ goal Sort_min_sort_ensures_default_po_11:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_88": (0 <= i_3_0)) ->
+  ("JC_96": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -10779,25 +10810,25 @@ goal Sort_min_sort_ensures_default_po_11:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_96":
-  (("JC_93": (i_3_0 < j_2_0)) and
-   (("JC_94": (i_3_0 <= mi0)) and
-    ("JC_95": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_104":
+  (("JC_101": (i_3_0 < j_2_0)) and
+   (("JC_102": (i_3_0 <= mi0)) and
+    ("JC_103": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_50":
-  (("JC_48": Swap(t_0, i_3_0, mi0, intM_intP0, intM_intP)) and
-   ("JC_49": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
+  ("JC_58":
+  (("JC_56": Swap(t_0, i_3_0, mi0, intM_intP0, intM_intP)) and
+   ("JC_57": not_assigns(Object_alloc_table, intM_intP, intM_intP0,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
   forall i_3_1:int.
   (i_3_1 = (i_3_0 + 1)) ->
-  ("JC_88": (0 <= i_3_1))
+  ("JC_96": (0 <= i_3_1))
 
 goal Sort_min_sort_ensures_permutation_po_1:
   forall this_0:Object pointer.
@@ -10807,10 +10838,10 @@ goal Sort_min_sort_ensures_permutation_po_1:
   int) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
-  ("JC_122": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
+  ("JC_130": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
   intM_intP, intM_intP))
 
 goal Sort_min_sort_ensures_permutation_po_2:
@@ -10821,17 +10852,17 @@ goal Sort_min_sort_ensures_permutation_po_2:
   int) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_122": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
+  ("JC_130": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
   intM_intP0, intM_intP)) ->
-  ("JC_123": (0 <= i_3_0)) ->
+  ("JC_131": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -10845,27 +10876,27 @@ goal Sort_min_sort_ensures_permutation_po_2:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_128": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
+  ("JC_136": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
   intM_intP0, intM_intP)) ->
-  ("JC_132":
-  (("JC_129": (i_3_0 < j_2_0)) and
-   (("JC_130": (i_3_0 <= mi0)) and
-    ("JC_131": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_140":
+  (("JC_137": (i_3_0 < j_2_0)) and
+   (("JC_138": (i_3_0 <= mi0)) and
+    ("JC_139": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
   forall intM_intP1:(Object,
   int) memory.
-  ("JC_50":
-  (("JC_48": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
-   ("JC_49": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
+  ("JC_58":
+  (("JC_56": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
+   ("JC_57": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
   forall i_3_1:int.
   (i_3_1 = (i_3_0 + 1)) ->
-  ("JC_122": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
+  ("JC_130": Permut(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
   intM_intP1, intM_intP))
 
 goal Sort_min_sort_ensures_sorted_po_1:
@@ -10876,10 +10907,10 @@ goal Sort_min_sort_ensures_sorted_po_1:
   int) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
-  ("JC_104": ("JC_102": ("JC_102": Sorted(t_0, 0, i_3, intM_intP))))
+  ("JC_112": ("JC_110": Sorted(t_0, 0, i_3, intM_intP)))
 
 goal Sort_min_sort_ensures_sorted_po_2:
   forall this_0:Object pointer.
@@ -10889,19 +10920,17 @@ goal Sort_min_sort_ensures_sorted_po_2:
   int) memory.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
-  ("JC_104":
-  ("JC_103":
-  ("JC_103":
-  (forall k1:int.
-    (forall k2:int.
-      (((0 <= k1) and
-        ((k1 < i_3) and
-         ((i_3 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
-       (select(intM_intP, shift(t_0, k1)) <= select(intM_intP, shift(t_0,
-       k2)))))))))
+  forall k1:int.
+  forall k2:int.
+  ((0 <= k1) and
+   ((k1 < i_3) and
+    ((i_3 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
+  ("JC_112":
+  ("JC_111": (select(intM_intP, shift(t_0, k1)) <= select(intM_intP,
+  shift(t_0, k2)))))
 
 goal Sort_min_sort_ensures_sorted_po_3:
   forall this_0:Object pointer.
@@ -10909,15 +10938,15 @@ goal Sort_min_sort_ensures_sorted_po_3:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10925,9 +10954,9 @@ goal Sort_min_sort_ensures_sorted_po_3:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -10939,8 +10968,7 @@ goal Sort_min_sort_ensures_sorted_po_3:
   (mi = i_3_0) ->
   forall j_2:int.
   (j_2 = (i_3_0 + 1)) ->
-  ("JC_112":
-  ("JC_110": ("JC_110": (mv = select(intM_intP0, shift(t_0, mi))))))
+  ("JC_120": ("JC_118": (mv = select(intM_intP0, shift(t_0, mi)))))
 
 goal Sort_min_sort_ensures_sorted_po_4:
   forall this_0:Object pointer.
@@ -10948,15 +10976,15 @@ goal Sort_min_sort_ensures_sorted_po_4:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -10964,9 +10992,9 @@ goal Sort_min_sort_ensures_sorted_po_4:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -10978,12 +11006,9 @@ goal Sort_min_sort_ensures_sorted_po_4:
   (mi = i_3_0) ->
   forall j_2:int.
   (j_2 = (i_3_0 + 1)) ->
-  ("JC_112":
-  ("JC_111":
-  ("JC_111":
-  (forall k_0:int.
-    (((i_3_0 <= k_0) and (k_0 < j_2)) -> (select(intM_intP0, shift(t_0,
-     k_0)) >= mv))))))
+  forall k_0:int.
+  ((i_3_0 <= k_0) and (k_0 < j_2)) ->
+  ("JC_120": ("JC_119": (select(intM_intP0, shift(t_0, k_0)) >= mv)))
 
 goal Sort_min_sort_ensures_sorted_po_5:
   forall this_0:Object pointer.
@@ -10991,15 +11016,15 @@ goal Sort_min_sort_ensures_sorted_po_5:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11007,9 +11032,9 @@ goal Sort_min_sort_ensures_sorted_po_5:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -11024,18 +11049,18 @@ goal Sort_min_sort_ensures_sorted_po_5:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_112":
-  (("JC_110": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
-   ("JC_111":
+  ("JC_120":
+  (("JC_118": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
+   ("JC_119":
    (forall k_0:int.
      (((i_3_0 <= k_0) and (k_0 < j_2_0)) -> (select(intM_intP0, shift(t_0,
       k_0)) >= mv0)))))) ->
-  ("JC_116":
-  (("JC_113": (i_3_0 < j_2_0)) and
-   (("JC_114": (i_3_0 <= mi0)) and
-    ("JC_115": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_124":
+  (("JC_121": (i_3_0 < j_2_0)) and
+   (("JC_122": (i_3_0 <= mi0)) and
+    ("JC_123": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -11050,8 +11075,7 @@ goal Sort_min_sort_ensures_sorted_po_5:
   (mv1 = result3) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_112":
-  ("JC_110": ("JC_110": (mv1 = select(intM_intP0, shift(t_0, mi1))))))
+  ("JC_120": ("JC_118": (mv1 = select(intM_intP0, shift(t_0, mi1)))))
 
 goal Sort_min_sort_ensures_sorted_po_6:
   forall this_0:Object pointer.
@@ -11059,15 +11083,15 @@ goal Sort_min_sort_ensures_sorted_po_6:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11075,9 +11099,9 @@ goal Sort_min_sort_ensures_sorted_po_6:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -11092,18 +11116,18 @@ goal Sort_min_sort_ensures_sorted_po_6:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_112":
-  (("JC_110": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
-   ("JC_111":
+  ("JC_120":
+  (("JC_118": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
+   ("JC_119":
    (forall k_0:int.
      (((i_3_0 <= k_0) and (k_0 < j_2_0)) -> (select(intM_intP0, shift(t_0,
       k_0)) >= mv0)))))) ->
-  ("JC_116":
-  (("JC_113": (i_3_0 < j_2_0)) and
-   (("JC_114": (i_3_0 <= mi0)) and
-    ("JC_115": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_124":
+  (("JC_121": (i_3_0 < j_2_0)) and
+   (("JC_122": (i_3_0 <= mi0)) and
+    ("JC_123": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -11118,12 +11142,9 @@ goal Sort_min_sort_ensures_sorted_po_6:
   (mv1 = result3) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_112":
-  ("JC_111":
-  ("JC_111":
-  (forall k_0:int.
-    (((i_3_0 <= k_0) and (k_0 < j_2_1)) -> (select(intM_intP0, shift(t_0,
-     k_0)) >= mv1))))))
+  forall k_0:int.
+  ((i_3_0 <= k_0) and (k_0 < j_2_1)) ->
+  ("JC_120": ("JC_119": (select(intM_intP0, shift(t_0, k_0)) >= mv1)))
 
 goal Sort_min_sort_ensures_sorted_po_7:
   forall this_0:Object pointer.
@@ -11131,15 +11152,15 @@ goal Sort_min_sort_ensures_sorted_po_7:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11147,9 +11168,9 @@ goal Sort_min_sort_ensures_sorted_po_7:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -11164,18 +11185,18 @@ goal Sort_min_sort_ensures_sorted_po_7:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_112":
-  (("JC_110": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
-   ("JC_111":
+  ("JC_120":
+  (("JC_118": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
+   ("JC_119":
    (forall k_0:int.
      (((i_3_0 <= k_0) and (k_0 < j_2_0)) -> (select(intM_intP0, shift(t_0,
       k_0)) >= mv0)))))) ->
-  ("JC_116":
-  (("JC_113": (i_3_0 < j_2_0)) and
-   (("JC_114": (i_3_0 <= mi0)) and
-    ("JC_115": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_124":
+  (("JC_121": (i_3_0 < j_2_0)) and
+   (("JC_122": (i_3_0 <= mi0)) and
+    ("JC_123": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -11184,12 +11205,9 @@ goal Sort_min_sort_ensures_sorted_po_7:
   (result2 >= mv0) ->
   forall j_2_1:int.
   (j_2_1 = (j_2_0 + 1)) ->
-  ("JC_112":
-  ("JC_111":
-  ("JC_111":
-  (forall k_0:int.
-    (((i_3_0 <= k_0) and (k_0 < j_2_1)) -> (select(intM_intP0, shift(t_0,
-     k_0)) >= mv0))))))
+  forall k_0:int.
+  ((i_3_0 <= k_0) and (k_0 < j_2_1)) ->
+  ("JC_120": ("JC_119": (select(intM_intP0, shift(t_0, k_0)) >= mv0)))
 
 goal Sort_min_sort_ensures_sorted_po_8:
   forall this_0:Object pointer.
@@ -11197,15 +11215,15 @@ goal Sort_min_sort_ensures_sorted_po_8:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11213,9 +11231,9 @@ goal Sort_min_sort_ensures_sorted_po_8:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -11230,31 +11248,31 @@ goal Sort_min_sort_ensures_sorted_po_8:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_112":
-  (("JC_110": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
-   ("JC_111":
+  ("JC_120":
+  (("JC_118": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
+   ("JC_119":
    (forall k_0:int.
      (((i_3_0 <= k_0) and (k_0 < j_2_0)) -> (select(intM_intP0, shift(t_0,
       k_0)) >= mv0)))))) ->
-  ("JC_116":
-  (("JC_113": (i_3_0 < j_2_0)) and
-   (("JC_114": (i_3_0 <= mi0)) and
-    ("JC_115": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_124":
+  (("JC_121": (i_3_0 < j_2_0)) and
+   (("JC_122": (i_3_0 <= mi0)) and
+    ("JC_123": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
   forall intM_intP1:(Object,
   int) memory.
-  ("JC_50":
-  (("JC_48": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
-   ("JC_49": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
+  ("JC_58":
+  (("JC_56": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
+   ("JC_57": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
   forall i_3_1:int.
   (i_3_1 = (i_3_0 + 1)) ->
-  ("JC_104": ("JC_102": ("JC_102": Sorted(t_0, 0, i_3_1, intM_intP1))))
+  ("JC_112": ("JC_110": Sorted(t_0, 0, i_3_1, intM_intP1)))
 
 goal Sort_min_sort_ensures_sorted_po_9:
   forall this_0:Object pointer.
@@ -11262,15 +11280,15 @@ goal Sort_min_sort_ensures_sorted_po_9:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11278,9 +11296,9 @@ goal Sort_min_sort_ensures_sorted_po_9:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -11295,40 +11313,38 @@ goal Sort_min_sort_ensures_sorted_po_9:
   forall j_2_0:int.
   forall mi0:int.
   forall mv0:int.
-  ("JC_112":
-  (("JC_110": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
-   ("JC_111":
+  ("JC_120":
+  (("JC_118": (mv0 = select(intM_intP0, shift(t_0, mi0)))) and
+   ("JC_119":
    (forall k_0:int.
      (((i_3_0 <= k_0) and (k_0 < j_2_0)) -> (select(intM_intP0, shift(t_0,
       k_0)) >= mv0)))))) ->
-  ("JC_116":
-  (("JC_113": (i_3_0 < j_2_0)) and
-   (("JC_114": (i_3_0 <= mi0)) and
-    ("JC_115": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_124":
+  (("JC_121": (i_3_0 < j_2_0)) and
+   (("JC_122": (i_3_0 <= mi0)) and
+    ("JC_123": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
   forall intM_intP1:(Object,
   int) memory.
-  ("JC_50":
-  (("JC_48": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
-   ("JC_49": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
+  ("JC_58":
+  (("JC_56": Swap(t_0, i_3_0, mi0, intM_intP1, intM_intP0)) and
+   ("JC_57": not_assigns(Object_alloc_table, intM_intP0, intM_intP1,
    pset_union(pset_range(pset_singleton(t_0), mi0, mi0),
    pset_range(pset_singleton(t_0), i_3_0, i_3_0)))))) ->
   forall i_3_1:int.
   (i_3_1 = (i_3_0 + 1)) ->
-  ("JC_104":
-  ("JC_103":
-  ("JC_103":
-  (forall k1:int.
-    (forall k2:int.
-      (((0 <= k1) and
-        ((k1 < i_3_1) and
-         ((i_3_1 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
-       (select(intM_intP1, shift(t_0, k1)) <= select(intM_intP1, shift(t_0,
-       k2)))))))))
+  forall k1:int.
+  forall k2:int.
+  ((0 <= k1) and
+   ((k1 < i_3_1) and
+    ((i_3_1 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
+  ("JC_112":
+  ("JC_111": (select(intM_intP1, shift(t_0, k1)) <= select(intM_intP1,
+  shift(t_0, k2)))))
 
 goal Sort_min_sort_ensures_sorted_po_10:
   forall this_0:Object pointer.
@@ -11336,15 +11352,15 @@ goal Sort_min_sort_ensures_sorted_po_10:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP0:(Object,
   int) memory.
-  ("JC_104":
-  (("JC_102": Sorted(t_0, 0, i_3_0, intM_intP0)) and
-   ("JC_103":
+  ("JC_112":
+  (("JC_110": Sorted(t_0, 0, i_3_0, intM_intP0)) and
+   ("JC_111":
    (forall k1:int.
      (forall k2:int.
        (((0 <= k1) and
@@ -11352,13 +11368,13 @@ goal Sort_min_sort_ensures_sorted_po_10:
           ((i_3_0 <= k2) and (k2 < (offset_max(Object_alloc_table, t_0) + 1))))) ->
         (select(intM_intP0, shift(t_0, k1)) <= select(intM_intP0, shift(t_0,
         k2))))))))) ->
-  ("JC_105": (0 <= i_3_0)) ->
+  ("JC_113": (0 <= i_3_0)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 >= (result - 1)) ->
-  ("JC_65": Sorted(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
+  ("JC_73": Sorted(t_0, 0, ((offset_max(Object_alloc_table, t_0) + 1) - 1),
   intM_intP0))
 
 goal Sort_min_sort_safety_po_1:
@@ -11367,12 +11383,12 @@ goal Sort_min_sort_safety_po_1:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1))
 
 goal Sort_min_sort_safety_po_2:
@@ -11381,15 +11397,15 @@ goal Sort_min_sort_safety_po_2:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -11401,15 +11417,15 @@ goal Sort_min_sort_safety_po_3:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -11421,17 +11437,17 @@ goal Sort_min_sort_safety_po_4:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -11447,14 +11463,14 @@ goal Sort_min_sort_safety_po_4:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_81": true) ->
-  ("JC_79":
-  (("JC_76": (i_3_0 < j_2_0)) and
-   (("JC_77": (i_3_0 <= mi0)) and
-    ("JC_78": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_89": true) ->
+  ("JC_87":
+  (("JC_84": (i_3_0 < j_2_0)) and
+   (("JC_85": (i_3_0 <= mi0)) and
+    ("JC_86": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -11466,17 +11482,17 @@ goal Sort_min_sort_safety_po_5:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -11492,14 +11508,14 @@ goal Sort_min_sort_safety_po_5:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_81": true) ->
-  ("JC_79":
-  (("JC_76": (i_3_0 < j_2_0)) and
-   (("JC_77": (i_3_0 <= mi0)) and
-    ("JC_78": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_89": true) ->
+  ("JC_87":
+  (("JC_84": (i_3_0 < j_2_0)) and
+   (("JC_85": (i_3_0 <= mi0)) and
+    ("JC_86": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 < result1) ->
@@ -11511,17 +11527,17 @@ goal Sort_min_sort_safety_po_6:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -11537,18 +11553,18 @@ goal Sort_min_sort_safety_po_6:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_81": true) ->
-  ("JC_79":
-  (("JC_76": (i_3_0 < j_2_0)) and
-   (("JC_77": (i_3_0 <= mi0)) and
-    ("JC_78": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_89": true) ->
+  ("JC_87":
+  (("JC_84": (i_3_0 < j_2_0)) and
+   (("JC_85": (i_3_0 <= mi0)) and
+    ("JC_86": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
-  ("JC_36": ("JC_31": ("JC_31": Non_null_intM(t_0, Object_alloc_table))))
+  ("JC_44": ("JC_39": Non_null_intM(t_0, Object_alloc_table)))
 
 goal Sort_min_sort_safety_po_7:
   forall this_0:Object pointer.
@@ -11556,17 +11572,17 @@ goal Sort_min_sort_safety_po_7:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -11582,19 +11598,18 @@ goal Sort_min_sort_safety_po_7:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_81": true) ->
-  ("JC_79":
-  (("JC_76": (i_3_0 < j_2_0)) and
-   (("JC_77": (i_3_0 <= mi0)) and
-    ("JC_78": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_89": true) ->
+  ("JC_87":
+  (("JC_84": (i_3_0 < j_2_0)) and
+   (("JC_85": (i_3_0 <= mi0)) and
+    ("JC_86": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
-  ("JC_36":
-  ("JC_33": ("JC_33": (i_3_0 < (offset_max(Object_alloc_table, t_0) + 1)))))
+  ("JC_44": ("JC_41": (i_3_0 < (offset_max(Object_alloc_table, t_0) + 1))))
 
 goal Sort_min_sort_safety_po_8:
   forall this_0:Object pointer.
@@ -11602,17 +11617,17 @@ goal Sort_min_sort_safety_po_8:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -11628,18 +11643,18 @@ goal Sort_min_sort_safety_po_8:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_81": true) ->
-  ("JC_79":
-  (("JC_76": (i_3_0 < j_2_0)) and
-   (("JC_77": (i_3_0 <= mi0)) and
-    ("JC_78": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_89": true) ->
+  ("JC_87":
+  (("JC_84": (i_3_0 < j_2_0)) and
+   (("JC_85": (i_3_0 <= mi0)) and
+    ("JC_86": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
-  ("JC_36": ("JC_34": ("JC_34": (0 <= mi0))))
+  ("JC_44": ("JC_42": (0 <= mi0)))
 
 goal Sort_min_sort_safety_po_9:
   forall this_0:Object pointer.
@@ -11647,17 +11662,17 @@ goal Sort_min_sort_safety_po_9:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_0, 0, Object_alloc_table) and
    (valid_struct_Sort(this_0, 0, 0, Object_alloc_table) and
-    ("JC_59": Non_null_intM(t_0, Object_alloc_table)))) ->
+    ("JC_67": Non_null_intM(t_0, Object_alloc_table)))) ->
   forall i_3:int.
   (i_3 = 0) ->
   forall i_3_0:int.
   forall intM_intP:(Object,
   int) memory.
-  ("JC_71": true) ->
-  ("JC_69": (0 <= i_3_0)) ->
+  ("JC_79": true) ->
+  ("JC_77": (0 <= i_3_0)) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result:int.
-  ("JC_17":
+  ("JC_25":
   ((result <= 2147483647) and
    ((result >= 0) and (result = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (i_3_0 < (result - 1)) ->
@@ -11673,19 +11688,18 @@ goal Sort_min_sort_safety_po_9:
   (j_2 = (i_3_0 + 1)) ->
   forall j_2_0:int.
   forall mi0:int.
-  ("JC_81": true) ->
-  ("JC_79":
-  (("JC_76": (i_3_0 < j_2_0)) and
-   (("JC_77": (i_3_0 <= mi0)) and
-    ("JC_78": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
+  ("JC_89": true) ->
+  ("JC_87":
+  (("JC_84": (i_3_0 < j_2_0)) and
+   (("JC_85": (i_3_0 <= mi0)) and
+    ("JC_86": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))) ->
   (offset_max(Object_alloc_table, t_0) >= (-1)) ->
   forall result1:int.
-  ("JC_17":
+  ("JC_25":
   ((result1 <= 2147483647) and
    ((result1 >= 0) and (result1 = (offset_max(Object_alloc_table, t_0) + 1))))) ->
   (j_2_0 >= result1) ->
-  ("JC_36":
-  ("JC_35": ("JC_35": (mi0 < (offset_max(Object_alloc_table, t_0) + 1)))))
+  ("JC_44": ("JC_43": (mi0 < (offset_max(Object_alloc_table, t_0) + 1))))
 
 goal Sort_swap_ensures_default_po_1:
   forall this_2:Object pointer.
@@ -11697,12 +11711,12 @@ goal Sort_swap_ensures_default_po_1:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_Sort(this_2, 0, 0, Object_alloc_table) and
-    ("JC_43":
-    (("JC_38": Non_null_intM(t, Object_alloc_table)) and
-     (("JC_39": (0 <= i_2)) and
-      (("JC_40": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
-       (("JC_41": (0 <= j_1)) and
-        ("JC_42": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
+    ("JC_51":
+    (("JC_46": Non_null_intM(t, Object_alloc_table)) and
+     (("JC_47": (0 <= i_2)) and
+      (("JC_48": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
+       (("JC_49": (0 <= j_1)) and
+        ("JC_50": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
   forall result:int.
   (result = select(intM_intP, shift(t, i_2))) ->
   forall result0:int.
@@ -11713,7 +11727,7 @@ goal Sort_swap_ensures_default_po_1:
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, j_1), result)) ->
-  ("JC_47": ("JC_45": ("JC_45": Swap(t, i_2, j_1, intM_intP1, intM_intP))))
+  ("JC_55": ("JC_53": Swap(t, i_2, j_1, intM_intP1, intM_intP)))
 
 goal Sort_swap_ensures_default_po_2:
   forall this_2:Object pointer.
@@ -11725,12 +11739,12 @@ goal Sort_swap_ensures_default_po_2:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_Sort(this_2, 0, 0, Object_alloc_table) and
-    ("JC_43":
-    (("JC_38": Non_null_intM(t, Object_alloc_table)) and
-     (("JC_39": (0 <= i_2)) and
-      (("JC_40": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
-       (("JC_41": (0 <= j_1)) and
-        ("JC_42": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
+    ("JC_51":
+    (("JC_46": Non_null_intM(t, Object_alloc_table)) and
+     (("JC_47": (0 <= i_2)) and
+      (("JC_48": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
+       (("JC_49": (0 <= j_1)) and
+        ("JC_50": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
   forall result:int.
   (result = select(intM_intP, shift(t, i_2))) ->
   forall result0:int.
@@ -11741,11 +11755,10 @@ goal Sort_swap_ensures_default_po_2:
   forall intM_intP1:(Object,
   int) memory.
   (intM_intP1 = store(intM_intP0, shift(t, j_1), result)) ->
-  ("JC_47":
-  ("JC_46":
-  ("JC_46": not_assigns(Object_alloc_table, intM_intP, intM_intP1,
+  ("JC_55":
+  ("JC_54": not_assigns(Object_alloc_table, intM_intP, intM_intP1,
   pset_union(pset_range(pset_singleton(t), j_1, j_1),
-  pset_range(pset_singleton(t), i_2, i_2))))))
+  pset_range(pset_singleton(t), i_2, i_2)))))
 
 goal Sort_swap_safety_po_1:
   forall this_2:Object pointer.
@@ -11755,12 +11768,12 @@ goal Sort_swap_safety_po_1:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_Sort(this_2, 0, 0, Object_alloc_table) and
-    ("JC_43":
-    (("JC_38": Non_null_intM(t, Object_alloc_table)) and
-     (("JC_39": (0 <= i_2)) and
-      (("JC_40": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
-       (("JC_41": (0 <= j_1)) and
-        ("JC_42": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
+    ("JC_51":
+    (("JC_46": Non_null_intM(t, Object_alloc_table)) and
+     (("JC_47": (0 <= i_2)) and
+      (("JC_48": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
+       (("JC_49": (0 <= j_1)) and
+        ("JC_50": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
   (offset_min(Object_alloc_table, t) <= i_2)
 
 goal Sort_swap_safety_po_2:
@@ -11771,12 +11784,12 @@ goal Sort_swap_safety_po_2:
   forall Object_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_Sort(this_2, 0, 0, Object_alloc_table) and
-    ("JC_43":
-    (("JC_38": Non_null_intM(t, Object_alloc_table)) and
-     (("JC_39": (0 <= i_2)) and
-      (("JC_40": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
-       (("JC_41": (0 <= j_1)) and
-        ("JC_42": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
+    ("JC_51":
+    (("JC_46": Non_null_intM(t, Object_alloc_table)) and
+     (("JC_47": (0 <= i_2)) and
+      (("JC_48": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
+       (("JC_49": (0 <= j_1)) and
+        ("JC_50": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
   (i_2 <= offset_max(Object_alloc_table, t))
 
 goal Sort_swap_safety_po_3:
@@ -11789,12 +11802,12 @@ goal Sort_swap_safety_po_3:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_Sort(this_2, 0, 0, Object_alloc_table) and
-    ("JC_43":
-    (("JC_38": Non_null_intM(t, Object_alloc_table)) and
-     (("JC_39": (0 <= i_2)) and
-      (("JC_40": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
-       (("JC_41": (0 <= j_1)) and
-        ("JC_42": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
+    ("JC_51":
+    (("JC_46": Non_null_intM(t, Object_alloc_table)) and
+     (("JC_47": (0 <= i_2)) and
+      (("JC_48": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
+       (("JC_49": (0 <= j_1)) and
+        ("JC_50": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
   ((offset_min(Object_alloc_table, t) <= i_2) and
    (i_2 <= offset_max(Object_alloc_table, t))) ->
   forall result:int.
@@ -11811,12 +11824,12 @@ goal Sort_swap_safety_po_4:
   int) memory.
   (left_valid_struct_intM(t, 0, Object_alloc_table) and
    (valid_struct_Sort(this_2, 0, 0, Object_alloc_table) and
-    ("JC_43":
-    (("JC_38": Non_null_intM(t, Object_alloc_table)) and
-     (("JC_39": (0 <= i_2)) and
-      (("JC_40": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
-       (("JC_41": (0 <= j_1)) and
-        ("JC_42": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
+    ("JC_51":
+    (("JC_46": Non_null_intM(t, Object_alloc_table)) and
+     (("JC_47": (0 <= i_2)) and
+      (("JC_48": (i_2 < (offset_max(Object_alloc_table, t) + 1))) and
+       (("JC_49": (0 <= j_1)) and
+        ("JC_50": (j_1 < (offset_max(Object_alloc_table, t) + 1)))))))))) ->
   ((offset_min(Object_alloc_table, t) <= i_2) and
    (i_2 <= offset_max(Object_alloc_table, t))) ->
   forall result:int.

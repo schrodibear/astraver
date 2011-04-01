@@ -113,27 +113,6 @@ predicate is_pos_0(x_2:real) = gt_real(x_2, 0.0)
 
 predicate is_pos_integer(x_1:int) = gt_int(x_1, (0))
 
-goal l : (eq_real(abs_real(1.5), 1.5) and eq_int(abs_int(neg_int((2))), (2)))
-
-function square_0(x_0_0:real) : real = mul_real(x_0_0, x_0_0)
-
-function square_integer(x_0:int) : int = mul_int(x_0, x_0)
-
-goal l2 :
- (eq_real(square_0(1.5), 2.25)
- and eq_int(square_integer(neg_int((5))), (25)))
-
-axiom l2_as_axiom :
- (eq_real(square_0(1.5), 2.25)
- and eq_int(square_integer(neg_int((5))), (25)))
-
-goal l3 : (is_pos_0(1.5) and (not is_pos_integer(neg_int((5)))))
-
-axiom l3_as_axiom : (is_pos_0(1.5) and (not is_pos_integer(neg_int((5)))))
-
-axiom l_as_axiom :
- (eq_real(abs_real(1.5), 1.5) and eq_int(abs_int(neg_int((2))), (2)))
-
 predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
@@ -157,6 +136,10 @@ predicate right_valid_struct_char_P(p:char_P pointer, b:int,
 predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
+
+function square_0(x_0_0:real) : real = mul_real(x_0_0, x_0_0)
+
+function square_integer(x_0:int) : int = mul_int(x_0, x_0)
 
 predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -222,6 +205,15 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma l :
+ (eq_real(abs_real(1.5), 1.5) and eq_int(abs_int(neg_int((2))), (2)))
+
+lemma l2 :
+ (eq_real(square_0(1.5), 2.25)
+ and eq_int(square_integer(neg_int((5))), (25)))
+
+lemma l3 : (is_pos_0(1.5) and (not is_pos_integer(neg_int((5)))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1359,6 +1351,10 @@ axiom exact_round_double_for_integers:
       ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
        (round_double(m, real_of_int(i)) = real_of_int(i)))))
 
+axiom exact_round_double_for_doubles:
+  (forall x:double.
+    (forall m:mode. (round_double(m, double_value(x)) = double_value(x))))
+
 axiom round_double_idempotent:
   (forall m1:mode.
     (forall m2:mode.
@@ -1414,6 +1410,10 @@ axiom exact_round_single_for_integers:
     (forall m:mode.
       ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
        real_of_int(i)) = real_of_int(i)))))
+
+axiom exact_round_single_for_singles:
+  (forall x:single.
+    (forall m:mode. (round_single(m, single_value(x)) = single_value(x))))
 
 axiom round_single_idempotent:
   (forall m1:mode.
@@ -1992,16 +1992,6 @@ predicate is_pos_0(x_2: real) = (x_2 > 0.0)
 
 predicate is_pos_integer(x_1: int) = (x_1 > 0)
 
-function square_0(x_0_0: real) : real = (x_0_0 * x_0_0)
-
-function square_integer(x_0: int) : int = (x_0 * x_0)
-
-axiom l2_as_axiom: ((square_0(1.5) = 2.25) and (square_integer((-5)) = 25))
-
-axiom l3_as_axiom: (is_pos_0(1.5) and (not is_pos_integer((-5))))
-
-axiom l_as_axiom: ((abs_real(1.5) = 1.5) and (abs_int((-2)) = 2))
-
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
   p) <= a)
@@ -2027,6 +2017,10 @@ predicate right_valid_struct_char_P(p: char_P pointer, b: int,
 predicate right_valid_struct_void_P(p: void_P pointer, b: int,
   void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
   p) >= b)
+
+function square_0(x_0_0: real) : real = (x_0_0 * x_0_0)
+
+function square_integer(x_0: int) : int = (x_0 * x_0)
 
 predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =

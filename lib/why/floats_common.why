@@ -55,6 +55,10 @@ axiom exact_round_double_for_integers:
      -9007199254740992 <= i <= 9007199254740992 (* 2^53 *) ->
      round_double(m,real_of_int(i)) = real_of_int(i)
 
+axiom exact_round_double_for_doubles:
+  forall x:double. forall m:mode.
+     round_double(m,double_value(x)) = double_value(x)
+
 axiom round_double_idempotent:
       forall m1:mode. forall m2:mode. forall x:real. 
       round_double(m1,round_double(m2,x)) = round_double(m2,x)
@@ -115,6 +119,10 @@ axiom exact_round_single_for_integers:
   forall i:int. forall m:mode.
      -16777216 <= i <= 16777216 (* 2^24 *) ->
      round_single(m,real_of_int(i)) = real_of_int(i)
+
+axiom exact_round_single_for_singles:
+  forall x:single. forall m:mode.
+     round_single(m,single_value(x)) = single_value(x)
 
 axiom round_single_idempotent:
       forall m1:mode. forall m2:mode. forall x:real. 

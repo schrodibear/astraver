@@ -143,59 +143,6 @@ axiom __anonstruct_ts_1_tags :
   (forall __anonstruct_ts_1_tag_table:__anonstruct_ts_1 tag_table.
    instanceof(__anonstruct_ts_1_tag_table, x, __anonstruct_ts_1_tag)))
 
-logic simulated_cast: __anonstruct_ts_1 pointer, float_P pointer,
- float_P alloc_table, __anonstruct_ts_1 alloc_table,
- (__anonstruct_ts_1, single) memory, (__anonstruct_ts_1, single) memory,
- (__anonstruct_ts_1, single) memory, (float_P, single) memory -> prop
-
-axiom a :
- (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
-  (forall __anonstruct_ts_1_p_1_alloc_table_at_L:
-   __anonstruct_ts_1 alloc_table.
-   (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1, single) memory.
-    (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1, single) memory.
-     (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1, single) memory
-      .
-      (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
-       (forall p_0:__anonstruct_ts_1 pointer.
-        (forall t_0:float_P pointer.
-         (simulated_cast(p_0, t_0, float_P_t_2_alloc_table_at_L,
-          __anonstruct_ts_1_p_1_alloc_table_at_L,
-          __anonstruct_ts_1_f2_p_1_at_L, __anonstruct_ts_1_f1_p_1_at_L,
-          __anonstruct_ts_1_f0_p_1_at_L, float_P_float_M_t_2_at_L) ->
-          (eq_real(single_value(select(__anonstruct_ts_1_f0_p_1_at_L, p_0)),
-           single_value(select(float_P_float_M_t_2_at_L, shift(t_0, (0)))))
-          and (eq_real(single_value(select(__anonstruct_ts_1_f1_p_1_at_L,
-                                    p_0)),
-               single_value(select(float_P_float_M_t_2_at_L, shift(t_0, (1)))))
-              and eq_real(single_value(select(__anonstruct_ts_1_f2_p_1_at_L,
-                                       p_0)),
-                  single_value(select(float_P_float_M_t_2_at_L,
-                               shift(t_0, (2))))))))))))))))
-
-axiom b :
- (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
-  (forall __anonstruct_ts_1_p_1_alloc_table_at_L:
-   __anonstruct_ts_1 alloc_table.
-   (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1, single) memory.
-    (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1, single) memory.
-     (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1, single) memory
-      .
-      (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
-       (forall p_1:__anonstruct_ts_1 pointer.
-        (forall t_1:float_P pointer.
-         ((simulated_cast(p_1, t_1, float_P_t_2_alloc_table_at_L,
-           __anonstruct_ts_1_p_1_alloc_table_at_L,
-           __anonstruct_ts_1_f2_p_1_at_L, __anonstruct_ts_1_f1_p_1_at_L,
-           __anonstruct_ts_1_f0_p_1_at_L, float_P_float_M_t_2_at_L)
-          and (le_int(offset_min(__anonstruct_ts_1_p_1_alloc_table_at_L, p_1),
-               (0))
-              and ge_int(offset_max(__anonstruct_ts_1_p_1_alloc_table_at_L,
-                         p_1),
-                  (0)))) ->
-          (le_int(offset_min(float_P_t_2_alloc_table_at_L, t_1), (0))
-          and ge_int(offset_max(float_P_t_2_alloc_table_at_L, t_1), (2))))))))))))
-
 logic char_P_tag:  -> char_P tag_id
 
 axiom char_P_int : (int_of_tag(char_P_tag) = (1))
@@ -246,6 +193,36 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
+logic simulated_cast: __anonstruct_ts_1 pointer, float_P pointer,
+ float_P alloc_table, __anonstruct_ts_1 alloc_table,
+ (__anonstruct_ts_1, single) memory, (__anonstruct_ts_1, single) memory,
+ (__anonstruct_ts_1, single) memory, (float_P, single) memory -> prop
+
+axiom a :
+ (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
+  (forall __anonstruct_ts_1_p_1_alloc_table_at_L:
+   __anonstruct_ts_1 alloc_table.
+   (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1, single) memory.
+    (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1, single) memory.
+     (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1, single) memory
+      .
+      (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
+       (forall p_0:__anonstruct_ts_1 pointer.
+        (forall t_0:float_P pointer.
+         (simulated_cast(p_0, t_0, float_P_t_2_alloc_table_at_L,
+          __anonstruct_ts_1_p_1_alloc_table_at_L,
+          __anonstruct_ts_1_f2_p_1_at_L, __anonstruct_ts_1_f1_p_1_at_L,
+          __anonstruct_ts_1_f0_p_1_at_L, float_P_float_M_t_2_at_L) ->
+          (eq_real(single_value(select(__anonstruct_ts_1_f0_p_1_at_L, p_0)),
+           single_value(select(float_P_float_M_t_2_at_L, shift(t_0, (0)))))
+          and (eq_real(single_value(select(__anonstruct_ts_1_f1_p_1_at_L,
+                                    p_0)),
+               single_value(select(float_P_float_M_t_2_at_L, shift(t_0, (1)))))
+              and eq_real(single_value(select(__anonstruct_ts_1_f2_p_1_at_L,
+                                       p_0)),
+                  single_value(select(float_P_float_M_t_2_at_L,
+                               shift(t_0, (2))))))))))))))))
+
 predicate left_valid_struct___anonstruct_ts_1(p:__anonstruct_ts_1 pointer,
  a:int, __anonstruct_ts_1_alloc_table:__anonstruct_ts_1 alloc_table) =
  (offset_min(__anonstruct_ts_1_alloc_table, p) <= a)
@@ -277,6 +254,29 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
+
+axiom b :
+ (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
+  (forall __anonstruct_ts_1_p_1_alloc_table_at_L:
+   __anonstruct_ts_1 alloc_table.
+   (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1, single) memory.
+    (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1, single) memory.
+     (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1, single) memory
+      .
+      (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
+       (forall p_1:__anonstruct_ts_1 pointer.
+        (forall t_1:float_P pointer.
+         ((simulated_cast(p_1, t_1, float_P_t_2_alloc_table_at_L,
+           __anonstruct_ts_1_p_1_alloc_table_at_L,
+           __anonstruct_ts_1_f2_p_1_at_L, __anonstruct_ts_1_f1_p_1_at_L,
+           __anonstruct_ts_1_f0_p_1_at_L, float_P_float_M_t_2_at_L)
+          and (le_int(offset_min(__anonstruct_ts_1_p_1_alloc_table_at_L, p_1),
+               (0))
+              and ge_int(offset_max(__anonstruct_ts_1_p_1_alloc_table_at_L,
+                         p_1),
+                  (0)))) ->
+          (le_int(offset_min(float_P_t_2_alloc_table_at_L, t_1), (0))
+          and ge_int(offset_max(float_P_t_2_alloc_table_at_L, t_1), (2))))))))))))
 
 predicate right_valid_struct___anonstruct_ts_1(p:__anonstruct_ts_1 pointer,
  b:int, __anonstruct_ts_1_alloc_table:__anonstruct_ts_1 alloc_table) =
@@ -1828,6 +1828,10 @@ axiom exact_round_double_for_integers:
       ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
        (round_double(m, real_of_int(i)) = real_of_int(i)))))
 
+axiom exact_round_double_for_doubles:
+  (forall x:double.
+    (forall m:mode. (round_double(m, double_value(x)) = double_value(x))))
+
 axiom round_double_idempotent:
   (forall m1:mode.
     (forall m2:mode.
@@ -1883,6 +1887,10 @@ axiom exact_round_single_for_integers:
     (forall m:mode.
       ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
        real_of_int(i)) = real_of_int(i)))))
+
+axiom exact_round_single_for_singles:
+  (forall x:single.
+    (forall m:mode. (round_single(m, single_value(x)) = single_value(x))))
 
 axiom round_single_idempotent:
   (forall m1:mode.
@@ -2028,64 +2036,6 @@ axiom __anonstruct_ts_1_tags:
     (forall __anonstruct_ts_1_tag_table:__anonstruct_ts_1 tag_table.
       instanceof(__anonstruct_ts_1_tag_table, x, __anonstruct_ts_1_tag)))
 
-logic simulated_cast : __anonstruct_ts_1 pointer, float_P pointer,
-float_P alloc_table, __anonstruct_ts_1 alloc_table, (__anonstruct_ts_1,
-single) memory, (__anonstruct_ts_1, single) memory, (__anonstruct_ts_1,
-single) memory, (float_P, single) memory -> prop
-
-axiom a:
-  (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
-    (forall __anonstruct_ts_1_p_1_alloc_table_at_L:__anonstruct_ts_1 alloc_table.
-      (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1,
-        single) memory.
-        (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1,
-          single) memory.
-          (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1,
-            single) memory.
-            (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
-              (forall p_0:__anonstruct_ts_1 pointer.
-                (forall t_0:float_P pointer.
-                  (simulated_cast(p_0, t_0, float_P_t_2_alloc_table_at_L,
-                   __anonstruct_ts_1_p_1_alloc_table_at_L,
-                   __anonstruct_ts_1_f2_p_1_at_L,
-                   __anonstruct_ts_1_f1_p_1_at_L,
-                   __anonstruct_ts_1_f0_p_1_at_L,
-                   float_P_float_M_t_2_at_L) ->
-                   ((single_value(select(__anonstruct_ts_1_f0_p_1_at_L,
-                    p_0)) = single_value(select(float_P_float_M_t_2_at_L,
-                    shift(t_0, 0)))) and
-                    ((single_value(select(__anonstruct_ts_1_f1_p_1_at_L,
-                     p_0)) = single_value(select(float_P_float_M_t_2_at_L,
-                     shift(t_0, 1)))) and
-                     (single_value(select(__anonstruct_ts_1_f2_p_1_at_L,
-                     p_0)) = single_value(select(float_P_float_M_t_2_at_L,
-                     shift(t_0, 2)))))))))))))))
-
-axiom b:
-  (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
-    (forall __anonstruct_ts_1_p_1_alloc_table_at_L:__anonstruct_ts_1 alloc_table.
-      (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1,
-        single) memory.
-        (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1,
-          single) memory.
-          (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1,
-            single) memory.
-            (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
-              (forall p_1:__anonstruct_ts_1 pointer.
-                (forall t_1:float_P pointer.
-                  ((simulated_cast(p_1, t_1, float_P_t_2_alloc_table_at_L,
-                    __anonstruct_ts_1_p_1_alloc_table_at_L,
-                    __anonstruct_ts_1_f2_p_1_at_L,
-                    __anonstruct_ts_1_f1_p_1_at_L,
-                    __anonstruct_ts_1_f0_p_1_at_L,
-                    float_P_float_M_t_2_at_L) and
-                    ((offset_min(__anonstruct_ts_1_p_1_alloc_table_at_L,
-                     p_1) <= 0) and
-                     (offset_max(__anonstruct_ts_1_p_1_alloc_table_at_L,
-                     p_1) >= 0))) ->
-                   ((offset_min(float_P_t_2_alloc_table_at_L, t_1) <= 0) and
-                    (offset_max(float_P_t_2_alloc_table_at_L, t_1) >= 2)))))))))))
-
 logic char_P_tag : char_P tag_id
 
 axiom char_P_int: (int_of_tag(char_P_tag) = 1)
@@ -2136,6 +2086,39 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
+logic simulated_cast : __anonstruct_ts_1 pointer, float_P pointer,
+float_P alloc_table, __anonstruct_ts_1 alloc_table, (__anonstruct_ts_1,
+single) memory, (__anonstruct_ts_1, single) memory, (__anonstruct_ts_1,
+single) memory, (float_P, single) memory -> prop
+
+axiom a:
+  (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
+    (forall __anonstruct_ts_1_p_1_alloc_table_at_L:__anonstruct_ts_1 alloc_table.
+      (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1,
+        single) memory.
+        (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1,
+          single) memory.
+          (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1,
+            single) memory.
+            (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
+              (forall p_0:__anonstruct_ts_1 pointer.
+                (forall t_0:float_P pointer.
+                  (simulated_cast(p_0, t_0, float_P_t_2_alloc_table_at_L,
+                   __anonstruct_ts_1_p_1_alloc_table_at_L,
+                   __anonstruct_ts_1_f2_p_1_at_L,
+                   __anonstruct_ts_1_f1_p_1_at_L,
+                   __anonstruct_ts_1_f0_p_1_at_L,
+                   float_P_float_M_t_2_at_L) ->
+                   ((single_value(select(__anonstruct_ts_1_f0_p_1_at_L,
+                    p_0)) = single_value(select(float_P_float_M_t_2_at_L,
+                    shift(t_0, 0)))) and
+                    ((single_value(select(__anonstruct_ts_1_f1_p_1_at_L,
+                     p_0)) = single_value(select(float_P_float_M_t_2_at_L,
+                     shift(t_0, 1)))) and
+                     (single_value(select(__anonstruct_ts_1_f2_p_1_at_L,
+                     p_0)) = single_value(select(float_P_float_M_t_2_at_L,
+                     shift(t_0, 2)))))))))))))))
+
 predicate left_valid_struct___anonstruct_ts_1(p: __anonstruct_ts_1 pointer,
   a: int, __anonstruct_ts_1_alloc_table: __anonstruct_ts_1 alloc_table) =
   (offset_min(__anonstruct_ts_1_alloc_table, p) <= a)
@@ -2169,6 +2152,31 @@ logic void_P_of_pointer_address : unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(void_P_of_pointer_address(p))))
+
+axiom b:
+  (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
+    (forall __anonstruct_ts_1_p_1_alloc_table_at_L:__anonstruct_ts_1 alloc_table.
+      (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1,
+        single) memory.
+        (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1,
+          single) memory.
+          (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1,
+            single) memory.
+            (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
+              (forall p_1:__anonstruct_ts_1 pointer.
+                (forall t_1:float_P pointer.
+                  ((simulated_cast(p_1, t_1, float_P_t_2_alloc_table_at_L,
+                    __anonstruct_ts_1_p_1_alloc_table_at_L,
+                    __anonstruct_ts_1_f2_p_1_at_L,
+                    __anonstruct_ts_1_f1_p_1_at_L,
+                    __anonstruct_ts_1_f0_p_1_at_L,
+                    float_P_float_M_t_2_at_L) and
+                    ((offset_min(__anonstruct_ts_1_p_1_alloc_table_at_L,
+                     p_1) <= 0) and
+                     (offset_max(__anonstruct_ts_1_p_1_alloc_table_at_L,
+                     p_1) >= 0))) ->
+                   ((offset_min(float_P_t_2_alloc_table_at_L, t_1) <= 0) and
+                    (offset_max(float_P_t_2_alloc_table_at_L, t_1) >= 2)))))))))))
 
 predicate right_valid_struct___anonstruct_ts_1(p: __anonstruct_ts_1 pointer,
   b: int, __anonstruct_ts_1_alloc_table: __anonstruct_ts_1 alloc_table) =

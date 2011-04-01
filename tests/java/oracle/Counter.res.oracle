@@ -47,6 +47,9 @@ type char = 0..65535
 predicate Non_null_Object{Here}(Object[0..] x) =
 (\offset_max(x) == 0)
 
+String[0..] any_string()
+;
+
 tag Object = {
 }
 
@@ -324,6 +327,30 @@ line = 11
 begin = 16
 end = 25
 
+[JC_40]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_41]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_42]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_43]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [Counter_decrement_ensures_default]
 name = "Method decrement"
 behavior = "Default behavior"
@@ -332,11 +359,17 @@ line = 16
 begin = 16
 end = 25
 
+[JC_44]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
 [JC_1]
 file = "HOME/tests/java/Counter.jc"
-line = 44
-begin = 8
-end = 23
+line = 20
+begin = 12
+end = 22
 
 [JC_2]
 file = "HOME/"
@@ -346,9 +379,9 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/java/Counter.jc"
-line = 44
-begin = 8
-end = 23
+line = 20
+begin = 12
+end = 22
 
 [JC_4]
 file = "HOME/"
@@ -390,21 +423,21 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/java/Counter.jc"
-line = 46
-begin = 11
-end = 65
+line = 47
+begin = 8
+end = 23
 
 [JC_10]
-file = "HOME/tests/java/Counter.jc"
-line = 46
-begin = 11
-end = 65
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_11]
-file = "HOME/tests/java/Counter.java"
-line = 11
-begin = 16
-end = 25
+file = "HOME/tests/java/Counter.jc"
+line = 47
+begin = 8
+end = 23
 
 [JC_12]
 file = "HOME/"
@@ -413,10 +446,10 @@ begin = -1
 end = -1
 
 [JC_13]
-file = "HOME/tests/java/Counter.java"
-line = 11
-begin = 16
-end = 25
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_14]
 file = "HOME/"
@@ -425,35 +458,34 @@ begin = -1
 end = -1
 
 [JC_15]
-file = "HOME/tests/java/Counter.java"
-line = 10
-begin = 16
-end = 57
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_16]
-file = "HOME/tests/java/Counter.java"
-line = 10
-begin = 16
-end = 57
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_17]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Counter.jc"
+line = 49
+begin = 11
+end = 65
 
 [JC_18]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Counter.jc"
+line = 49
+begin = 11
+end = 65
 
 [JC_19]
-kind = ArithOverflow
-file = "HOME/tests/java/Counter.jc"
-line = 59
-begin = 11
-end = 31
+file = "HOME/tests/java/Counter.java"
+line = 11
+begin = 16
+end = 25
 
 [cons_Counter_safety]
 name = "Constructor of class Counter"
@@ -464,40 +496,40 @@ begin = -1
 end = -1
 
 [JC_20]
-file = "HOME/tests/java/Counter.java"
-line = 16
-begin = 16
-end = 25
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_21]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_22]
 file = "HOME/tests/java/Counter.java"
-line = 16
+line = 11
 begin = 16
 end = 25
 
-[JC_23]
+[JC_22]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_23]
+file = "HOME/tests/java/Counter.java"
+line = 10
+begin = 16
+end = 57
 
 [JC_24]
 file = "HOME/tests/java/Counter.java"
-line = 15
+line = 10
 begin = 16
 end = 57
 
 [JC_25]
-file = "HOME/tests/java/Counter.java"
-line = 15
-begin = 16
-end = 57
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_26]
 file = "HOME/"
@@ -506,17 +538,17 @@ begin = -1
 end = -1
 
 [JC_27]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_28]
 kind = ArithOverflow
 file = "HOME/tests/java/Counter.jc"
-line = 65
+line = 62
 begin = 11
 end = 31
+
+[JC_28]
+file = "HOME/tests/java/Counter.java"
+line = 16
+begin = 16
+end = 25
 
 [JC_29]
 file = "HOME/"
@@ -525,10 +557,10 @@ begin = -1
 end = -1
 
 [JC_30]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Counter.java"
+line = 16
+begin = 16
+end = 25
 
 [JC_31]
 file = "HOME/"
@@ -537,16 +569,16 @@ begin = -1
 end = -1
 
 [JC_32]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Counter.java"
+line = 15
+begin = 16
+end = 57
 
 [JC_33]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/java/Counter.java"
+line = 15
+begin = 16
+end = 57
 
 [JC_34]
 file = "HOME/"
@@ -561,6 +593,25 @@ begin = -1
 end = -1
 
 [JC_36]
+kind = ArithOverflow
+file = "HOME/tests/java/Counter.jc"
+line = 68
+begin = 11
+end = 31
+
+[JC_37]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_38]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_39]
 file = "HOME/"
 line = 0
 begin = -1
@@ -913,7 +964,7 @@ parameter Counter_decrement :
  this_0:Object pointer ->
   { } unit reads Counter_decrements,Counter_increments,Object_alloc_table
   writes Counter_decrements
-  { (JC_25:
+  { (JC_33:
     eq_int(value(this_0, Counter_decrements, Counter_increments),
     sub_int(value(this_0, Counter_decrements@, Counter_increments@), (1)))) }
 
@@ -921,7 +972,7 @@ parameter Counter_decrement_requires :
  this_0:Object pointer ->
   { } unit reads Counter_decrements,Counter_increments,Object_alloc_table
   writes Counter_decrements
-  { (JC_25:
+  { (JC_33:
     eq_int(value(this_0, Counter_decrements, Counter_increments),
     sub_int(value(this_0, Counter_decrements@, Counter_increments@), (1)))) }
 
@@ -929,7 +980,7 @@ parameter Counter_increment :
  this_1:Object pointer ->
   { } unit reads Counter_decrements,Counter_increments,Object_alloc_table
   writes Counter_increments
-  { (JC_16:
+  { (JC_24:
     eq_int(value(this_1, Counter_decrements, Counter_increments),
     add_int(value(this_1, Counter_decrements@, Counter_increments@), (1)))) }
 
@@ -937,7 +988,7 @@ parameter Counter_increment_requires :
  this_1:Object pointer ->
   { } unit reads Counter_decrements,Counter_increments,Object_alloc_table
   writes Counter_increments
-  { (JC_16:
+  { (JC_24:
     eq_int(value(this_1, Counter_decrements, Counter_increments),
     add_int(value(this_1, Counter_decrements@, Counter_increments@), (1)))) }
 
@@ -1203,6 +1254,10 @@ parameter any_long : unit -> { } long { true }
 
 parameter any_short : unit -> { } short { true }
 
+parameter any_string_0 : tt:unit -> { } Object pointer { true }
+
+parameter any_string_0_requires : tt:unit -> { } Object pointer { true }
+
 parameter byte_of_integer_ :
  x:int ->
   { (le_int((-128), x) and le_int(x, (127)))} byte
@@ -1236,14 +1291,14 @@ parameter long_of_integer_ :
 parameter non_null_Object :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_10:
+  { (JC_18:
     (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
      else (x_1 = null))) }
 
 parameter non_null_Object_requires :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
-  { (JC_10:
+  { (JC_18:
     (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
      else (x_1 = null))) }
 
@@ -1282,7 +1337,7 @@ let Counter_decrement_ensures_default =
        (let jessie_<num> = this_0 in
        (((safe_upd_ Counter_decrements) jessie_<num>) jessie_<num>))); jessie_<num> end)) in
      void); (raise Return) end with Return -> void end)
-  { (JC_24:
+  { (JC_32:
     eq_int(value(this_0, Counter_decrements, Counter_increments),
     sub_int(value(this_0, Counter_decrements@, Counter_increments@), (1)))) }
 
@@ -1297,7 +1352,7 @@ let Counter_decrement_safety =
      (let jessie_<num> = ((safe_acc_ !Counter_decrements) this_0) in
      begin
        (let jessie_<num> =
-       (JC_28:
+       (JC_36:
        (int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1)))) in
        (let jessie_<num> = this_0 in
        (((safe_upd_ Counter_decrements) jessie_<num>) jessie_<num>))); jessie_<num> end)) in
@@ -1318,7 +1373,7 @@ let Counter_increment_ensures_default =
        (let jessie_<num> = this_1 in
        (((safe_upd_ Counter_increments) jessie_<num>) jessie_<num>))); jessie_<num> end)) in
      void); (raise Return) end with Return -> void end)
-  { (JC_15:
+  { (JC_23:
     eq_int(value(this_1, Counter_decrements, Counter_increments),
     add_int(value(this_1, Counter_decrements@, Counter_increments@), (1)))) }
 
@@ -1333,7 +1388,7 @@ let Counter_increment_safety =
      (let jessie_<num> = ((safe_acc_ !Counter_increments) this_1) in
      begin
        (let jessie_<num> =
-       (JC_19:
+       (JC_27:
        (int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1)))) in
        (let jessie_<num> = this_1 in
        (((safe_upd_ Counter_increments) jessie_<num>) jessie_<num>))); jessie_<num> end)) in
@@ -1355,7 +1410,7 @@ let cons_Counter_ensures_default =
         (let jessie_<num> = this_2 in
         (((safe_upd_ Counter_decrements) jessie_<num>) jessie_<num>)); jessie_<num>
       end) end in void); (raise Return) end with Return -> void end)
-  { (JC_33: true) }
+  { (JC_41: true) }
 
 let cons_Counter_safety =
  fun (this_2 : Object pointer) ->
@@ -1384,12 +1439,12 @@ why --project [...] why/Counter.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Counter_po5.why">
-      <location file = "HOME/tests/java/Counter.jc" line = "59" begin = "11" end = "31"/>
+      <location file = "HOME/tests/java/Counter.jc" line = "62" begin = "11" end = "31"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/Counter_po6.why">
-      <location file = "HOME/tests/java/Counter.jc" line = "59" begin = "11" end = "31"/>
+      <location file = "HOME/tests/java/Counter.jc" line = "62" begin = "11" end = "31"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -1405,12 +1460,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Counter_po2.why">
-      <location file = "HOME/tests/java/Counter.jc" line = "65" begin = "11" end = "31"/>
+      <location file = "HOME/tests/java/Counter.jc" line = "68" begin = "11" end = "31"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/Counter_po3.why">
-      <location file = "HOME/tests/java/Counter.jc" line = "65" begin = "11" end = "31"/>
+      <location file = "HOME/tests/java/Counter.jc" line = "68" begin = "11" end = "31"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
@@ -2680,7 +2735,7 @@ goal Counter_decrement_ensures_default_po_1:
   forall Counter_decrements0:(Object,
   int32) memory.
   (Counter_decrements0 = store(Counter_decrements, this_0, result0)) ->
-  ("JC_24": (value(this_0, Counter_decrements0,
+  ("JC_32": (value(this_0, Counter_decrements0,
   Counter_increments) = (value(this_0, Counter_decrements,
   Counter_increments) - 1)))
 
@@ -2722,7 +2777,7 @@ goal Counter_increment_ensures_default_po_1:
   forall Counter_increments0:(Object,
   int32) memory.
   (Counter_increments0 = store(Counter_increments, this_1, result0)) ->
-  ("JC_15": (value(this_1, Counter_decrements,
+  ("JC_23": (value(this_1, Counter_decrements,
   Counter_increments0) = (value(this_1, Counter_decrements,
   Counter_increments) + 1)))
 
@@ -3831,7 +3886,7 @@ why -simplify [...] why/Counter.why
 (EQ (value this_0 Counter_decrements0 Counter_increments)
 (- (value this_0 Counter_decrements Counter_increments) 1)))))))))))))
 
-;; Counter_decrement_safety_po_1, File "HOME/tests/java/Counter.jc", line 65, characters 11-31
+;; Counter_decrement_safety_po_1, File "HOME/tests/java/Counter.jc", line 68, characters 11-31
 (FORALL (this_0)
 (FORALL (Counter_decrements)
 (FORALL (Object_alloc_table)
@@ -3840,7 +3895,7 @@ why -simplify [...] why/Counter.why
 (IMPLIES (EQ result (select Counter_decrements this_0))
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 result) 1))))))))
 
-;; Counter_decrement_safety_po_2, File "HOME/tests/java/Counter.jc", line 65, characters 11-31
+;; Counter_decrement_safety_po_2, File "HOME/tests/java/Counter.jc", line 68, characters 11-31
 (FORALL (this_0)
 (FORALL (Counter_decrements)
 (FORALL (Object_alloc_table)
@@ -3865,7 +3920,7 @@ why -simplify [...] why/Counter.why
 (EQ (value this_1 Counter_decrements Counter_increments0)
 (+ (value this_1 Counter_decrements Counter_increments) 1)))))))))))))
 
-;; Counter_increment_safety_po_1, File "HOME/tests/java/Counter.jc", line 59, characters 11-31
+;; Counter_increment_safety_po_1, File "HOME/tests/java/Counter.jc", line 62, characters 11-31
 (FORALL (this_1)
 (FORALL (Counter_increments)
 (FORALL (Object_alloc_table)
@@ -3874,7 +3929,7 @@ why -simplify [...] why/Counter.why
 (IMPLIES (EQ result (select Counter_increments this_1))
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 result) 1))))))))
 
-;; Counter_increment_safety_po_2, File "HOME/tests/java/Counter.jc", line 59, characters 11-31
+;; Counter_increment_safety_po_2, File "HOME/tests/java/Counter.jc", line 62, characters 11-31
 (FORALL (this_1)
 (FORALL (Counter_increments)
 (FORALL (Object_alloc_table)
@@ -5148,7 +5203,7 @@ goal Counter_decrement_ensures_default_po_1:
   forall Counter_decrements0:(Object,
   int32) memory.
   (Counter_decrements0 = store(Counter_decrements, this_0, result0)) ->
-  ("JC_24": (value(this_0, Counter_decrements0,
+  ("JC_32": (value(this_0, Counter_decrements0,
   Counter_increments) = (value(this_0, Counter_decrements,
   Counter_increments) - 1)))
 
@@ -5187,7 +5242,7 @@ goal Counter_increment_ensures_default_po_1:
   forall Counter_increments0:(Object,
   int32) memory.
   (Counter_increments0 = store(Counter_increments, this_1, result0)) ->
-  ("JC_15": (value(this_1, Counter_decrements,
+  ("JC_23": (value(this_1, Counter_decrements,
   Counter_increments0) = (value(this_1, Counter_decrements,
   Counter_increments) + 1)))
 

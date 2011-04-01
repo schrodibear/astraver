@@ -5,7 +5,7 @@ public void flag() {
       @  0 <= b && b <= i && i <= r && r <= t.length &&
       @  isMonochrome(0,b,BLUE) && isMonochrome(b,i,WHITE) &&
       @  isMonochrome(r,t.length,RED);
-      @ decreases r - i; 
+      @ loop_variant r - i; 
       @*/
     while (i < r) { 
 	switch (t[i]) {

@@ -1,15 +1,13 @@
 
-//@ predicate is_color(int c) { Flag.BLUE <= c && c <= Flag.RED }
+//@ predicate is_color(int c) = Flag.BLUE <= c && c <= Flag.RED ;
 
-/*@ predicate is_color_array{L}(int t[]) { 
+/*@ predicate is_color_array{L}(int t[]) =
   @   t != null && 
-  @   \forall int i; 0 <= i && i < t.length ==> is_color(t[i])
-  @ }
+  @   \forall integer i; 0 <= i && i < t.length ==> is_color(t[i]) ;
   @*/
 
-/*@ predicate is_monochrome{L}(int t[],integer i, integer j, int c) {
-  @   \forall int k; i <= k && k < j ==> t[k] == c
-  @ }
+/*@ predicate is_monochrome{L}(int t[],integer i, integer j, int c) =
+  @   \forall integer k; i <= k && k < j ==> t[k] == c ;
   @*/
 
 
@@ -28,8 +26,8 @@ class Flag {
       @*/
     public boolean isMonochrome(int i, int j, int c) {
     	/*@ loop_invariant i <= k && 
-	  @   (\forall int l; i <= l && l < k ==> t[l]==c);
-    	  @ decreases j - k;
+	  @   (\forall integer l; i <= l && l < k ==> t[l]==c);
+    	  @ loop_variant j - k;
 	  @*/
 	for (int k = i; k < j; k++) if (t[k] != c) return false;
 	return true;
@@ -49,9 +47,9 @@ class Flag {
     /*@ behavior sorts:
       @   assigns t[..];
       @   ensures 
-      @     (\exists int b,r; is_monochrome(t,0,b,BLUE) &&
-      @                       is_monochrome(t,b,r,WHITE) &&
-      @                       is_monochrome(t,r,t.length,RED));
+      @     (\exists integer b,r; is_monochrome(t,0,b,BLUE) &&
+      @                           is_monochrome(t,b,r,WHITE) &&
+      @                           is_monochrome(t,r,t.length,RED));
       @*/
     public void flag() {
 	int b = 0;
@@ -63,7 +61,7 @@ class Flag {
 	  @   is_monochrome(t,0,b,BLUE) &&
 	  @   is_monochrome(t,b,i,WHITE) &&
           @   is_monochrome(t,r,t.length,RED);
-	  @ decreases r - i; 
+	  @ loop_variant r - i; 
 	  @*/
 	while (i < r) {
 	    switch (t[i]) {

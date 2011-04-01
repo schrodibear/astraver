@@ -4002,7 +4002,7 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 	  begin
 	    if is_axiom then
 	      typing_error loc "axioms not allowed outside axiomatics"; 
-	    Hashtbl.add lemmas_table id (tlabels,te);
+	    Hashtbl.add lemmas_table id (loc,tlabels,te);
 	    acc
 	  end
     | JPTlogic_type_decl (loc,id) -> 

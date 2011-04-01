@@ -317,7 +317,7 @@ let print_axiom fmt id p =
   fprintf fmt "@[;; Why axiom %s@]@\n" id;
   fprintf fmt "@[<hov 2>$hyp \"%s\" %a@]@\n@\n" id print_predicate p
 
-let print_obligation fmt loc _expl o s = 
+let print_obligation fmt loc _is_lemma _expl o s = 
   fprintf fmt "@[;; %s, %a@]@\n" o Loc.gen_report_line loc;
   fprintf fmt "@[<hov 2>$goal %a@]@\n\n" print_sequent s
 
@@ -354,8 +354,8 @@ let output_elem fmt = function
       print_function_def fmt id d.scheme_type
 *)
   | Daxiom (_loc, id, p) -> print_axiom fmt id p.scheme_type
-  | Dgoal (loc, expl, id, s) -> 
-      print_obligation fmt loc expl id s.Env.scheme_type
+  | Dgoal (loc, is_lemma, expl, id, s) -> 
+      print_obligation fmt loc is_lemma expl id s.Env.scheme_type
 
 let prelude_done = ref false
 let prelude fmt = 

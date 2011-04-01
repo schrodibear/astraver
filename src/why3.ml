@@ -41,11 +41,35 @@ open Logic_decl
 
 let reset = Encoding.reset
 
-let push_decl d = 
+let push_decl d =
   Encoding.push ~encode_preds:false ~encode_funs:false
     ~encode_inductive:false ~encode_algtype:false d
 
 let iter = Encoding.iter
+
+let is_why3_keyword =
+  let ht = Hashtbl.create 43 in
+  List.iter (fun kw -> Hashtbl.add ht kw ())
+    ["clone";
+     "epsilon";
+     "export";
+     "import";
+     "lemma";
+     "meta";
+     "namespace";
+     "theory";
+     "use";
+     "abstract";
+     "any";
+     "assume";
+     "downto";
+     "label";
+     "model";
+     "module";
+     "mutable";
+     "to";
+    ];
+  Hashtbl.mem ht
 
 
 (*
@@ -55,49 +79,29 @@ let iter = Encoding.iter
   String.capitalize s
 *)
 
-let why3_keywords = 
-  [ "clone";
-    "epsilon";
-    "export";
-    "import";
-    "lemma";
-    "meta";
-    "namespace";
-    "theory";
-    "use";
-    "abstract";
-    "any";
-    "assume";
-    "downto";
-    "label";
-    "model";
-    "module";
-    "mutable";
-    "to";
-  ]
-
-let is_why3_keyword s = List.mem s why3_keywords
-
-let ident fmt s = 
+let ident fmt s =
   let s = Ident.string s in
-  let s = 
+  let s =
     if is_why3_keyword s then s ^ "_why3" else s
   in
   let s = 
     if 'A' <= s.[0] && s.[0] <= 'Z' then "_" ^ s  else s
   in
-  pp_print_string fmt s
+  if is_why3_keyword s then
+    fprintf fmt "why3__%s" s
+  else
+    pp_print_string fmt s
 
 let string_capitalize fmt s =
-  let s = 
-    if s.[0] = '_' then "U"^s else 
-    if 'a' <= s.[0] && s.[0] <= 'z' 
+  let s =
+    if s.[0] = '_' then "U"^s else
+    if 'a' <= s.[0] && s.[0] <= 'z'
     then String.capitalize s
     else s
   in
   pp_print_string fmt s
 
-let ident_capitalize fmt s = 
+let ident_capitalize fmt s =
   string_capitalize fmt (Ident.string s)
 
 let type_vars = Hashtbl.create 17
@@ -105,13 +109,13 @@ let type_vars = Hashtbl.create 17
 let type_var fmt n =
   try
     fprintf fmt "'a%d" (Hashtbl.find type_vars n)
-  with Not_found -> 
+  with Not_found ->
     assert false
 
 let specialize s =
   Hashtbl.clear type_vars;
   let n = ref 0 in
-  Env.Vset.iter 
+  Env.Vset.iter
     (fun tv -> incr n; Hashtbl.add type_vars tv.tag !n) s.Env.scheme_vars;
   s.Env.scheme_type
 
@@ -141,7 +145,7 @@ let rec pure_type fmt = function
 let t_computer_div = Ident.create "computer_div"
 let t_computer_mod = Ident.create "computer_mod"
 
-let builtins_table =  
+let builtins_table =
     [
       t_add_int , "Int.(+)";
       t_sub_int , "Int.(-)";
@@ -161,8 +165,11 @@ let builtins_table =
       t_lt_real , "Real.(<)" ;
       t_le_real , "Real.(<=)";
       t_gt_real , "Real.(>)";
-      t_abs_real , "AbsReal.abs";
+
       t_abs_int , "AbsInt.abs";
+      t_abs_real , "AbsReal.abs";
+
+      t_sqrt_real, "SquareReal.sqrt";
 
       t_cos, "Trigonometry.cos" ;
       t_sin, "Trigonometry.sin" ;
@@ -183,29 +190,29 @@ let builtins_table =
 
 let constructor_table = Hashtbl.create 17
 
-let print_builtin fmt id = 
+let print_builtin fmt id =
   try
     let s = List.assq id builtins_table in
     Pp.string fmt s
-  with Not_found -> 
+  with Not_found ->
     if Hashtbl.mem constructor_table id
     then
       ident_capitalize fmt id
     else ident fmt id
 
 let rec term fmt = function
-  | Tconst (ConstInt n) -> 
+  | Tconst (ConstInt n) ->
       fprintf fmt "%s" n
-  | Tconst (ConstBool b) -> 
-      if b 
+  | Tconst (ConstBool b) ->
+      if b
       then fprintf fmt "Bool.True"
       else fprintf fmt "Bool.False"
-  | Tconst ConstUnit -> 
+  | Tconst ConstUnit ->
       fprintf fmt "()"
   | Tconst (ConstFloat c) ->
       Print_real.print fmt c
   | Tvar id | Tderef id -> ident fmt id
-  | Tapp (id, tl, instance) -> 
+  | Tapp (id, tl, instance) ->
       let ret_type =
         let var_subst,logic = Env.find_global_logic id in
         Env.instantiate_specialized var_subst instance;
@@ -220,13 +227,13 @@ let rec term fmt = function
             fprintf fmt "(%a %a : %a)"
               print_builtin id (print_list space term) tl
               pure_type ret_type
-      end      
+      end
   | Tnamed (User n, t) ->
       fprintf fmt "@[(%S@ %a)@]" n term t
   | Tnamed (_, t) -> term fmt t
 
 let rec predicate fmt = function
-  | Pvar id | Papp (id, [], _) -> 
+  | Pvar id | Papp (id, [], _) ->
       ident fmt id
   | Papp (id, [t1; t2], _) when is_eq id ->
       fprintf fmt "(%a = %a)" term t1 term t2
@@ -236,19 +243,19 @@ let rec predicate fmt = function
       fprintf fmt "@[((Int.(<=) 0 %a) and@ (Int.(<) %a %a))@]"
         term b term a term b
   | Papp (id, [_t], _) when id == well_founded ->
-      fprintf fmt "@[false (* was well_founded(...) *)@]" 
+      fprintf fmt "@[false (* was well_founded(...) *)@]"
   | Papp (id, l, _) ->
       fprintf fmt "(%a %a)" print_builtin id (print_list space term) l
   | Ptrue ->
       fprintf fmt "true"
   | Pfalse ->
       fprintf fmt "false"
-  | Pimplies (_, a, b) -> 
+  | Pimplies (_, a, b) ->
       fprintf fmt "(@[%a ->@ %a@])" predicate a predicate b
-  | Piff (a, b) -> 
+  | Piff (a, b) ->
       fprintf fmt "(@[%a <->@ %a@])" predicate a predicate b
-  | Pif (a, b, c) -> 
-      fprintf fmt "(@[if %a = Bool.True then@ %a else@ %a@])" 
+  | Pif (a, b, c) ->
+      fprintf fmt "(@[if %a = Bool.True then@ %a else@ %a@])"
 	term a predicate b predicate c
   | Pand (_, _, a, b) ->
       fprintf fmt "(@[%a and@ %a@])" predicate a predicate b
@@ -269,15 +276,15 @@ let rec predicate fmt = function
   | Exists (id,n,v,p) ->
       let id = next_away id (predicate_vars p) in
       let p = subst_in_predicate (subst_onev n id) p in
-      fprintf fmt "@[<hov 2>(exists %a:%a.@ %a)@]" 
+      fprintf fmt "@[<hov 2>(exists %a:%a.@ %a)@]"
 	ident id pure_type v predicate p
   | Plet (id, n, _, t, p) ->
       if false then  (* TODO: alt-ergo has no let support yet. *)
         let id = next_away id (predicate_vars p) in
         let p = subst_in_predicate (subst_onev n id) p in
-        fprintf fmt "@[<hov 2>(let %a = %a in@ %a)@]" 
+        fprintf fmt "@[<hov 2>(let %a = %a in@ %a)@]"
 	  ident id term t predicate p
-      else 
+      else
         let p = tsubst_in_predicate (subst_one n t) p in
         fprintf fmt "@[%a@]" predicate p
   | Pnamed (User n, p) ->
@@ -289,9 +296,9 @@ and print_pattern fmt = function
   | PPat p -> predicate fmt p
 
 and print_triggers fmt = function
-  | [] -> 
+  | [] ->
       ()
-  | tl -> 
+  | tl ->
       fprintf fmt " [%a]" (print_list alt (print_list comma print_pattern)) tl
 
 let sequent fmt (ctx, p) =
@@ -312,10 +319,10 @@ let logic_type fmt = function
   | Predicate [] -> ()
   | Function ([], pt) -> fprintf fmt " : %a" pure_type pt
   | Predicate ptl -> fprintf fmt "%a" (print_list space pure_type) ptl
-  | Function (ptl, pt) -> 
+  | Function (ptl, pt) ->
       fprintf fmt "%a : %a" (print_list space pure_type) ptl pure_type pt
 
-let type_parameters fmt l = 
+let type_parameters fmt l =
   let type_var fmt id = fprintf fmt "'%s" id in
   match l with
   | [] -> ()
@@ -338,10 +345,17 @@ let alg_type_single fmt (_, id, d) =
     ident id alg_type_parameters vs
     (print_list newline alg_type_constructor) cs
 
-let decl fmt d = 
+let explanation fmt e =
+  fprintf fmt "\"fun:%s\"@ " e.lemma_or_fun_name;
+  fprintf fmt "\"beh:%s\"@ " e.behavior;
+  fprintf fmt "\"expl:%s\"@ " (Explain.msg_of_kind ~name:e.lemma_or_fun_name e.vc_kind);
+  let (f,l,b,e) = e.vc_loc in
+  fprintf fmt "#\"%s\" %d %d %d#" f l (max b 0) (max e 0)
+
+let decl fmt d =
   match d with
   | Dtype (_, id, pl) ->
-      fprintf fmt "@[type %a%a@]" ident id type_parameters pl 
+      fprintf fmt "@[type %a%a@]" ident id type_parameters pl
   | Dalgtype ls ->
       let andsep fmt () = fprintf fmt "@\n" in
       fprintf fmt "@[type %a@]" (print_list andsep alg_type_single) ls
@@ -350,22 +364,22 @@ let decl fmt d =
       fprintf fmt "@[logic %a %a@]" ident id logic_type lt
   | Dpredicate_def (_, id, def) ->
       let bl,p = specialize def in
-      fprintf fmt "@[<hov 2>logic %a %a =@ %a@]" ident id 
+      fprintf fmt "@[<hov 2>logic %a %a =@ %a@]" ident id
 	(print_list space logic_binder) bl predicate p
   | Dinductive_def (_, id, indcases) ->
       let bl,l = specialize indcases in
       begin match l with
-        | [] ->       fprintf fmt 
-	    "@[<hov 0>inductive %a %a@]" 
-	      ident id 
-	      (print_list space pure_type) bl 
+        | [] ->       fprintf fmt
+	    "@[<hov 0>inductive %a %a@]"
+	      ident id
+	      (print_list space pure_type) bl
         | _ ->
-            fprintf fmt 
-	      "@[<hov 0>inductive %a %a@] =@\n  @[<v 0>%a@]@\n@\n@]" 
-	      ident id 
-	      (print_list space pure_type) bl 
-	      (print_list newline 
-	         (fun fmt (id,p) -> fprintf fmt "@[| %a: %a@]" 
+            fprintf fmt
+	      "@[<hov 0>inductive %a %a@] =@\n  @[<v 0>%a@]@\n@\n@]"
+	      ident id
+	      (print_list space pure_type) bl
+	      (print_list newline
+	         (fun fmt (id,p) -> fprintf fmt "@[| %a: %a@]"
                     ident_capitalize id predicate p)) l
       end
   | Dfunction_def (_, id, def) ->
@@ -374,17 +388,20 @@ let decl fmt d =
 	(print_list space logic_binder) bl pure_type pt term t
   | Daxiom (_, id, p) ->
       let p = specialize p in
-      fprintf fmt "@[<hov 2>axiom %a:@ %a@]" 
+      fprintf fmt "@[<hov 2>axiom %a:@ %a@]"
         string_capitalize id predicate p
-  | Dgoal (_, _expl, id, sq) ->
+  | Dgoal (_, is_lemma, expl, id, sq) ->
       let sq = specialize sq in
-      fprintf fmt "@[<hov 2>goal %s:@\n%a@]" 
-        (String.capitalize id) sequent sq
+      fprintf fmt "@[<hov 2>%s %s %a:@\n%a@]"
+	(if is_lemma then "lemma" else "goal")
+        (String.capitalize id) 
+	explanation expl
+	sequent sq
 
 let decl fmt d = fprintf fmt "@[%a@]@\n@\n" decl d
 
 (*
-let print_file fmt = 
+let print_file fmt =
   fprintf fmt "@[<hov 2>theory Why2@\n";
   fprintf fmt "use Tuple0@\n";
   fprintf fmt "use int.Int@\n";
@@ -418,26 +435,26 @@ let output_files f =
   let po = ref 0 in
   print_in_file
     (fun ctxfmt ->
-       iter 
-	 (function 
-	    | Dgoal (_loc,expl,id,_) as d -> 
-		incr po;		
+       iter
+	 (function
+	    | Dgoal (_loc,expl,id,_) as d ->
+		incr po;
 		let fpo = f ^ "_po" ^ string_of_int !po ^ ".why" in
 		print_in_file (fun fmt -> decl fmt d) fpo;
 		if explain_vc then
 		  let ftr = f ^ "_po" ^ string_of_int !po ^ ".xpl" in
-		  print_in_file (fun fmt -> print_trace fmt id ((*loc,*)expl)) 
+		  print_in_file (fun fmt -> print_trace fmt id ((*loc,*)expl))
                     ftr
-	    | d -> 
+	    | d ->
 		decl ctxfmt d))
     (f ^ "_ctx.why");
   eprintf "Multi-Why output done@."
-  
-let push_or_output_decl = 
-  let po = ref 0 in 
+
+let push_or_output_decl =
+  let po = ref 0 in
   function d ->
     match d with
-      | Dgoal (_loc,expl,id,_) as d -> 
+      | Dgoal (_loc,expl,id,_) as d ->
 	  incr po;
 	  let fpo = Options.out_file (id ^ ".why") in
 	  print_in_file (fun fmt -> decl fmt d) fpo;
@@ -466,6 +483,7 @@ let print_structured_file f fmt =
   fprintf fmt "use int.ComputerDivision@\n";
   fprintf fmt "use real.Real@\n";
   fprintf fmt "use real.Abs as AbsReal@\n";
+  fprintf fmt "use real.Square as SquareReal@\n";
   fprintf fmt "use real.Trigonometry@\n";
   fprintf fmt "use bool.Bool@\n";
   fprintf fmt "use floating_point.Rounding@\n";
@@ -473,37 +491,36 @@ let print_structured_file f fmt =
   fprintf fmt "use floating_point.Double@\n";
   let lemmas = ref [] in
   let functions = ref SMap.empty in
-  iter 
-    (function 
-       | Dgoal (_,e,_id,_) as d -> 
+  iter
+    (function
+       | Dgoal (_,is_lemma, e,_id,_) as d ->
 	   begin
-	     match e.vc_kind with
-	       | EKLemma -> 
-		   lemmas := d :: !lemmas;
-	       | _ ->
-		   let fn = e.lemma_or_fun_name in
-		   let behs =
-		     try SMap.find fn !functions
-		     with Not_found -> SMap.empty
+	     if is_lemma then
+	       lemmas := d :: !lemmas
+	     else
+	       let fn = e.lemma_or_fun_name in
+	       let behs =
+		 try SMap.find fn !functions
+		 with Not_found -> SMap.empty
+	       in
+	       let vcs =
+		 try SMap.find e.behavior behs
+		 with Not_found -> []
+	       in
+	       let behs =
+		 SMap.add e.behavior (d::vcs) behs
 		   in
-		   let vcs =
-		     try SMap.find e.behavior behs 
-		     with Not_found -> []
-		   in
-		   let behs =
-		     SMap.add e.behavior (d::vcs) behs
-		   in
-		   functions := SMap.add fn behs !functions;
+	       functions := SMap.add fn behs !functions;
 	   end
-       | d -> 
+       | d ->
 	   decl fmt d);
   (* add any function which have no VC *)
-  Hashtbl.iter 
-    (fun _key (fn,_beh,_loc) -> 
+  Hashtbl.iter
+    (fun _key (fn,_beh,_loc) ->
        try
 	 let _ = SMap.find fn !functions in ()
        with Not_found ->
-	 functions := SMap.add fn SMap.empty !functions)  
+	 functions := SMap.add fn SMap.empty !functions)
     Util.program_locs ;
   (* outputs the lemmas and close the ctx theory*)
   List.iter (decl fmt) (List.rev !lemmas);
@@ -513,7 +530,7 @@ let print_structured_file f fmt =
     (fun fname behs ->
 (*
        let floc =
-	 try 
+	 try
 	   let (_,_,floc) = Hashtbl.find Util.program_locs fname in
 	   floc
 	 with Not_found -> Loc.dummy_floc
@@ -521,7 +538,7 @@ let print_structured_file f fmt =
 *)
        SMap.iter
 	 (fun beh vcs ->
-	    fprintf fmt "@[<hov 2>theory %s_%s@\n" (escape fname) (escape beh);
+	    fprintf fmt "@[<hov 2>theory %a_%s@\n" string_capitalize (escape fname) (escape beh);
 	    fprintf fmt "use import %s_ctx@\n" f;
 	    List.iter (decl fmt) (List.rev vcs);
 	    fprintf fmt "@]@\nend@\n@.")
@@ -529,8 +546,8 @@ let print_structured_file f fmt =
     !functions
 
 let output_structured_file f =
-  print_in_file 
-    (print_structured_file (String.capitalize (Filename.basename f))) 
+  print_in_file
+    (print_structured_file (String.capitalize (Filename.basename f)))
     (Options.out_file (f ^ "_why3.why"))
 
 let output_file = output_structured_file

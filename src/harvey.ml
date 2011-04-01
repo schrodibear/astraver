@@ -272,12 +272,12 @@ let output_sequent fmt (ctx, concl) =
   in
   print_seq fmt ctx
 
-let output_obligation fmt (loc, _expl, _o, s) = 
+let output_obligation fmt (loc, _is_lemma, _expl, _o, s) = 
   fprintf fmt "@\n@[;; %a@]@\n" Loc.gen_report_line loc;
   fprintf fmt "@[%a@]@\n" output_sequent s
 
 let decl_to_elem = function
-  | Dgoal (loc,expl,id,s) -> Queue.add (loc,expl,id,s.Env.scheme_type) oblig
+  | Dgoal (loc,is_lemma,expl,id,s) -> Queue.add (loc,is_lemma,expl,id,s.Env.scheme_type) oblig
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) theory
   | Dpredicate_def (_, id, p) -> 
       Queue.add (Predicate (Ident.string id, p)) theory

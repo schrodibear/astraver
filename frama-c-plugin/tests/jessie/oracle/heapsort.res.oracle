@@ -381,79 +381,21 @@ predicate H(a_8:int_P pointer, l_6:int, h_7:int,
   ((le_int(l_6, i_8) and le_int(i_8, h_7)) ->
    Hnode(a_8, i_8, h_7, int_P_int_M_a_8_4_at_L)))
 
-goal H_init :
- (forall int_P_int_M_a_9_8_at_L:(int_P, int32) memory.
-  (forall a_9:int_P pointer.
-   (forall l_7:int.
-    (forall h_8:int.
-     ((le_int(l_7, h_8) and lt_int(h_8, add_int(mul_int((2), l_7), (1)))) ->
-      H(a_9, l_7, h_8, int_P_int_M_a_9_8_at_L))))))
-
-axiom H_init_as_axiom :
- (forall int_P_int_M_a_9_8_at_L:(int_P, int32) memory.
-  (forall a_9:int_P pointer.
-   (forall l_7:int.
-    (forall h_8:int.
-     ((le_int(l_7, h_8) and lt_int(h_8, add_int(mul_int((2), l_7), (1)))) ->
-      H(a_9, l_7, h_8, int_P_int_M_a_9_8_at_L))))))
-
-goal H_max :
- (forall int_P_int_M_a_11_10_at_L:(int_P, int32) memory.
-  (forall a_11:int_P pointer.
-   (forall h_10:int.
-    (H(a_11, (0), h_10, int_P_int_M_a_11_10_at_L) ->
-     (forall i_9:int.
-      ((le_int((0), i_9) and le_int(i_9, h_10)) ->
-       ge_int(integer_of_int32(select(int_P_int_M_a_11_10_at_L,
-                               shift(a_11, (0)))),
-       integer_of_int32(select(int_P_int_M_a_11_10_at_L, shift(a_11, i_9))))))))))
-
-axiom H_max_as_axiom :
- (forall int_P_int_M_a_11_10_at_L:(int_P, int32) memory.
-  (forall a_11:int_P pointer.
-   (forall h_10:int.
-    (H(a_11, (0), h_10, int_P_int_M_a_11_10_at_L) ->
-     (forall i_9:int.
-      ((le_int((0), i_9) and le_int(i_9, h_10)) ->
-       ge_int(integer_of_int32(select(int_P_int_M_a_11_10_at_L,
-                               shift(a_11, (0)))),
-       integer_of_int32(select(int_P_int_M_a_11_10_at_L, shift(a_11, i_9))))))))))
-
-goal H_reduce :
- (forall int_P_int_M_a_10_9_at_L:(int_P, int32) memory.
-  (forall a_10:int_P pointer.
-   (forall h_9:int.
-    (lt_int((0), h_9) ->
-     (H(a_10, (0), h_9, int_P_int_M_a_10_9_at_L) ->
-      H(a_10, (1), sub_int(h_9, (1)), int_P_int_M_a_10_9_at_L))))))
-
-axiom H_reduce_as_axiom :
- (forall int_P_int_M_a_10_9_at_L:(int_P, int32) memory.
-  (forall a_10:int_P pointer.
-   (forall h_9:int.
-    (lt_int((0), h_9) ->
-     (H(a_10, (0), h_9, int_P_int_M_a_10_9_at_L) ->
-      H(a_10, (1), sub_int(h_9, (1)), int_P_int_M_a_10_9_at_L))))))
-
 exception Loop_continue_exc of unit
 
 exception Loop_exit_exc of unit
 
 logic Permut: int_array, int_array, int, int -> prop
 
-axiom Permut_extend :
- (forall a1_4:int_array.
-  (forall a2_4:int_array.
-   (forall l_4:int.
-    (forall h_4:int.
-     (forall ll:int.
-      (forall hh:int.
-       (Permut(a1_4, a2_4, l_4, h_4) ->
-        (le_int(ll, l_4) -> (le_int(h_4, hh) -> Permut(a1_4, a2_4, ll, hh))))))))))
+exception Return_label_exc of unit
 
-axiom Permut_refl :
- (forall a_3:int_array.
-  (forall l_0:int. (forall h_0:int. Permut(a_3, a_3, l_0, h_0))))
+predicate Sorted(a_6:int_P pointer, l_5:int, h_5:int,
+ int_P_int_M_a_6_2_at_L:(int_P, int32) memory) =
+ (forall i_6:int.
+  ((le_int(l_5, i_6) and lt_int(i_6, h_5)) ->
+   le_int(integer_of_int32(select(int_P_int_M_a_6_2_at_L, shift(a_6, i_6))),
+   integer_of_int32(select(int_P_int_M_a_6_2_at_L,
+                    shift(a_6, add_int(i_6, (1))))))))
 
 logic access: int_array, int -> int32
 
@@ -467,71 +409,6 @@ predicate Swap(a1:int_array, a2:int_array, i_3:int, j_0:int) =
            (neq_int(k, j_0) ->
             eq_int(integer_of_int32(access(a1, k)),
             integer_of_int32(access(a2, k))))))))
-
-axiom Permut_swap :
- (forall a1_3:int_array.
-  (forall a2_3:int_array.
-   (forall l_3:int.
-    (forall h_3:int.
-     (forall i_4:int.
-      (forall j_1:int.
-       ((le_int(l_3, i_4) and le_int(i_4, h_3)) ->
-        ((le_int(l_3, j_1) and le_int(j_1, h_3)) ->
-         (Swap(a1_3, a2_3, i_4, j_1) -> Permut(a1_3, a2_3, l_3, h_3))))))))))
-
-axiom Permut_sym :
- (forall a1_1:int_array.
-  (forall a2_1:int_array.
-   (forall l_1:int.
-    (forall h_1:int.
-     (Permut(a1_1, a2_1, l_1, h_1) -> Permut(a2_1, a1_1, l_1, h_1))))))
-
-axiom Permut_trans :
- (forall a1_2:int_array.
-  (forall a2_2:int_array.
-   (forall a3:int_array.
-    (forall l_2:int.
-     (forall h_2:int.
-      (Permut(a1_2, a2_2, l_2, h_2) ->
-       (Permut(a2_2, a3, l_2, h_2) -> Permut(a1_2, a3, l_2, h_2))))))))
-
-exception Return_label_exc of unit
-
-predicate Sorted(a_6:int_P pointer, l_5:int, h_5:int,
- int_P_int_M_a_6_2_at_L:(int_P, int32) memory) =
- (forall i_6:int.
-  ((le_int(l_5, i_6) and lt_int(i_6, h_5)) ->
-   le_int(integer_of_int32(select(int_P_int_M_a_6_2_at_L, shift(a_6, i_6))),
-   integer_of_int32(select(int_P_int_M_a_6_2_at_L,
-                    shift(a_6, add_int(i_6, (1))))))))
-
-logic contents: int_P pointer, (int_P, int32) memory -> int_array
-
-axiom access_contents :
- (forall int_P_int_M_a_4_1_at_L:(int_P, int32) memory.
-  (forall a_5:int_P pointer.
-   (forall i_5:int.
-    eq_int(integer_of_int32(access(contents(a_5, int_P_int_M_a_4_1_at_L),
-                            i_5)),
-    integer_of_int32(select(int_P_int_M_a_4_1_at_L, shift(a_5, i_5)))))))
-
-logic update: int_array, int, int32 -> int_array
-
-axiom access_update_eq :
- (forall a_1_0:int_array.
-  (forall i_1:int.
-   (forall v_0_0:int32.
-    eq_int(integer_of_int32(access(update(a_1_0, i_1, v_0_0), i_1)),
-    integer_of_int32(v_0_0)))))
-
-axiom access_update_neq :
- (forall a_2:int_array.
-  (forall i_2:int.
-   (forall j:int.
-    (forall v_1:int32.
-     (neq_int(i_2, j) ->
-      eq_int(integer_of_int32(access(update(a_2, i_2, v_1), j)),
-      integer_of_int32(access(a_2, j))))))))
 
 logic char_P_tag:  -> char_P tag_id
 
@@ -550,85 +427,7 @@ axiom char_P_tags :
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
 
-goal div2_1 :
- (forall i_10:int32.
-  (le_int((0), integer_of_int32(i_10)) ->
-   (le_int((0), computer_div(integer_of_int32(i_10), (2)))
-   and le_int(computer_div(integer_of_int32(i_10), (2)),
-       integer_of_int32(i_10)))))
-
-axiom div2_1_as_axiom :
- (forall i_10:int32.
-  (le_int((0), integer_of_int32(i_10)) ->
-   (le_int((0), computer_div(integer_of_int32(i_10), (2)))
-   and le_int(computer_div(integer_of_int32(i_10), (2)),
-       integer_of_int32(i_10)))))
-
-goal div2_2 :
- (forall i_11:int32.
-  (lt_int((0), integer_of_int32(i_11)) ->
-   (le_int((0), computer_div(integer_of_int32(i_11), (2)))
-   and lt_int(computer_div(integer_of_int32(i_11), (2)),
-       integer_of_int32(i_11)))))
-
-axiom div2_2_as_axiom :
- (forall i_11:int32.
-  (lt_int((0), integer_of_int32(i_11)) ->
-   (le_int((0), computer_div(integer_of_int32(i_11), (2)))
-   and lt_int(computer_div(integer_of_int32(i_11), (2)),
-       integer_of_int32(i_11)))))
-
-goal div2_3 :
- (forall i_12:int32.
-  (le_int((0), integer_of_int32(i_12)) ->
-   lt_int(sub_int(integer_of_int32(i_12), (1)),
-   add_int(mul_int((2), computer_div(integer_of_int32(i_12), (2))), (1)))))
-
-axiom div2_3_as_axiom :
- (forall i_12:int32.
-  (le_int((0), integer_of_int32(i_12)) ->
-   lt_int(sub_int(integer_of_int32(i_12), (1)),
-   add_int(mul_int((2), computer_div(integer_of_int32(i_12), (2))), (1)))))
-
-goal div2_4 :
- (forall i_13:int32.
-  (forall k_0:int32.
-   (le_int((0), integer_of_int32(i_13)) ->
-    (le_int((0), integer_of_int32(k_0)) ->
-     (neq_int(integer_of_int32(k_0),
-      computer_div(sub_int(integer_of_int32(i_13), (1)), (2))) ->
-      neq_int(add_int(mul_int((2), integer_of_int32(k_0)), (1)),
-      integer_of_int32(i_13)))))))
-
-axiom div2_4_as_axiom :
- (forall i_13:int32.
-  (forall k_0:int32.
-   (le_int((0), integer_of_int32(i_13)) ->
-    (le_int((0), integer_of_int32(k_0)) ->
-     (neq_int(integer_of_int32(k_0),
-      computer_div(sub_int(integer_of_int32(i_13), (1)), (2))) ->
-      neq_int(add_int(mul_int((2), integer_of_int32(k_0)), (1)),
-      integer_of_int32(i_13)))))))
-
-goal div2_5 :
- (forall i_14:int32.
-  (forall k_1:int32.
-   (le_int((0), integer_of_int32(i_14)) ->
-    (le_int((0), integer_of_int32(k_1)) ->
-     (neq_int(integer_of_int32(k_1),
-      computer_div(sub_int(integer_of_int32(i_14), (1)), (2))) ->
-      neq_int(add_int(mul_int((2), integer_of_int32(k_1)), (2)),
-      integer_of_int32(i_14)))))))
-
-axiom div2_5_as_axiom :
- (forall i_14:int32.
-  (forall k_1:int32.
-   (le_int((0), integer_of_int32(i_14)) ->
-    (le_int((0), integer_of_int32(k_1)) ->
-     (neq_int(integer_of_int32(k_1),
-      computer_div(sub_int(integer_of_int32(i_14), (1)), (2))) ->
-      neq_int(add_int(mul_int((2), integer_of_int32(k_1)), (2)),
-      integer_of_int32(i_14)))))))
+logic contents: int_P pointer, (int_P, int32) memory -> int_array
 
 predicate eq_int32(x:int32, y:int32) =
  eq_int(integer_of_int32(x), integer_of_int32(y))
@@ -779,6 +578,8 @@ axiom uint32_range :
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
 
+logic update: int_array, int, int32 -> int_array
+
 predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
@@ -838,6 +639,138 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom access_update_eq :
+ (forall a_1_0:int_array.
+  (forall i_1:int.
+   (forall v_0_0:int32.
+    eq_int(integer_of_int32(access(update(a_1_0, i_1, v_0_0), i_1)),
+    integer_of_int32(v_0_0)))))
+
+axiom access_update_neq :
+ (forall a_2:int_array.
+  (forall i_2:int.
+   (forall j:int.
+    (forall v_1:int32.
+     (neq_int(i_2, j) ->
+      eq_int(integer_of_int32(access(update(a_2, i_2, v_1), j)),
+      integer_of_int32(access(a_2, j))))))))
+
+axiom Permut_refl :
+ (forall a_3:int_array.
+  (forall l_0:int. (forall h_0:int. Permut(a_3, a_3, l_0, h_0))))
+
+axiom Permut_sym :
+ (forall a1_1:int_array.
+  (forall a2_1:int_array.
+   (forall l_1:int.
+    (forall h_1:int.
+     (Permut(a1_1, a2_1, l_1, h_1) -> Permut(a2_1, a1_1, l_1, h_1))))))
+
+axiom Permut_trans :
+ (forall a1_2:int_array.
+  (forall a2_2:int_array.
+   (forall a3:int_array.
+    (forall l_2:int.
+     (forall h_2:int.
+      (Permut(a1_2, a2_2, l_2, h_2) ->
+       (Permut(a2_2, a3, l_2, h_2) -> Permut(a1_2, a3, l_2, h_2))))))))
+
+axiom Permut_swap :
+ (forall a1_3:int_array.
+  (forall a2_3:int_array.
+   (forall l_3:int.
+    (forall h_3:int.
+     (forall i_4:int.
+      (forall j_1:int.
+       ((le_int(l_3, i_4) and le_int(i_4, h_3)) ->
+        ((le_int(l_3, j_1) and le_int(j_1, h_3)) ->
+         (Swap(a1_3, a2_3, i_4, j_1) -> Permut(a1_3, a2_3, l_3, h_3))))))))))
+
+axiom Permut_extend :
+ (forall a1_4:int_array.
+  (forall a2_4:int_array.
+   (forall l_4:int.
+    (forall h_4:int.
+     (forall ll:int.
+      (forall hh:int.
+       (Permut(a1_4, a2_4, l_4, h_4) ->
+        (le_int(ll, l_4) -> (le_int(h_4, hh) -> Permut(a1_4, a2_4, ll, hh))))))))))
+
+axiom access_contents :
+ (forall int_P_int_M_a_4_1_at_L:(int_P, int32) memory.
+  (forall a_5:int_P pointer.
+   (forall i_5:int.
+    eq_int(integer_of_int32(access(contents(a_5, int_P_int_M_a_4_1_at_L),
+                            i_5)),
+    integer_of_int32(select(int_P_int_M_a_4_1_at_L, shift(a_5, i_5)))))))
+
+lemma H_init :
+ (forall int_P_int_M_a_9_8_at_L:(int_P, int32) memory.
+  (forall a_9:int_P pointer.
+   (forall l_7:int.
+    (forall h_8:int.
+     ((le_int(l_7, h_8) and lt_int(h_8, add_int(mul_int((2), l_7), (1)))) ->
+      H(a_9, l_7, h_8, int_P_int_M_a_9_8_at_L))))))
+
+lemma H_reduce :
+ (forall int_P_int_M_a_10_9_at_L:(int_P, int32) memory.
+  (forall a_10:int_P pointer.
+   (forall h_9:int.
+    (lt_int((0), h_9) ->
+     (H(a_10, (0), h_9, int_P_int_M_a_10_9_at_L) ->
+      H(a_10, (1), sub_int(h_9, (1)), int_P_int_M_a_10_9_at_L))))))
+
+lemma H_max :
+ (forall int_P_int_M_a_11_10_at_L:(int_P, int32) memory.
+  (forall a_11:int_P pointer.
+   (forall h_10:int.
+    (H(a_11, (0), h_10, int_P_int_M_a_11_10_at_L) ->
+     (forall i_9:int.
+      ((le_int((0), i_9) and le_int(i_9, h_10)) ->
+       ge_int(integer_of_int32(select(int_P_int_M_a_11_10_at_L,
+                               shift(a_11, (0)))),
+       integer_of_int32(select(int_P_int_M_a_11_10_at_L, shift(a_11, i_9))))))))))
+
+lemma div2_1 :
+ (forall i_10:int32.
+  (le_int((0), integer_of_int32(i_10)) ->
+   (le_int((0), computer_div(integer_of_int32(i_10), (2)))
+   and le_int(computer_div(integer_of_int32(i_10), (2)),
+       integer_of_int32(i_10)))))
+
+lemma div2_2 :
+ (forall i_11:int32.
+  (lt_int((0), integer_of_int32(i_11)) ->
+   (le_int((0), computer_div(integer_of_int32(i_11), (2)))
+   and lt_int(computer_div(integer_of_int32(i_11), (2)),
+       integer_of_int32(i_11)))))
+
+lemma div2_3 :
+ (forall i_12:int32.
+  (le_int((0), integer_of_int32(i_12)) ->
+   lt_int(sub_int(integer_of_int32(i_12), (1)),
+   add_int(mul_int((2), computer_div(integer_of_int32(i_12), (2))), (1)))))
+
+lemma div2_4 :
+ (forall i_13:int32.
+  (forall k_0:int32.
+   (le_int((0), integer_of_int32(i_13)) ->
+    (le_int((0), integer_of_int32(k_0)) ->
+     (neq_int(integer_of_int32(k_0),
+      computer_div(sub_int(integer_of_int32(i_13), (1)), (2))) ->
+      neq_int(add_int(mul_int((2), integer_of_int32(k_0)), (1)),
+      integer_of_int32(i_13)))))))
+
+lemma div2_5 :
+ (forall i_14:int32.
+  (forall k_1:int32.
+   (le_int((0), integer_of_int32(i_14)) ->
+    (le_int((0), integer_of_int32(k_1)) ->
+     (neq_int(integer_of_int32(k_1),
+      computer_div(sub_int(integer_of_int32(i_14), (1)), (2))) ->
+      neq_int(add_int(mul_int((2), integer_of_int32(k_1)), (2)),
+      integer_of_int32(i_14)))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1826,17 +1759,17 @@ why --project [...] why/heapsort.why
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <lemma name="H_max">
+  <lemma name="H_reduce">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/heapsort_po2.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "154" begin = "0" end = "222"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "149" begin = "0" end = "140"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <lemma name="H_reduce">
+  <lemma name="H_max">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/heapsort_po3.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "149" begin = "0" end = "140"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "154" begin = "0" end = "222"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -2198,11 +2131,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po49.why">
-      <location file = "why/heapsort.why" line = "985" begin = "23" end = "57"/>
+      <location file = "why/heapsort.why" line = "918" begin = "23" end = "57"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po50.why">
-      <location file = "why/heapsort.why" line = "985" begin = "23" end = "57"/>
+      <location file = "why/heapsort.why" line = "918" begin = "23" end = "57"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po51.why">
@@ -2291,11 +2224,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po68.why">
-      <location file = "why/heapsort.why" line = "1055" begin = "23" end = "58"/>
+      <location file = "why/heapsort.why" line = "988" begin = "23" end = "58"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po69.why">
-      <location file = "why/heapsort.why" line = "1055" begin = "23" end = "58"/>
+      <location file = "why/heapsort.why" line = "988" begin = "23" end = "58"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -3355,48 +3288,15 @@ predicate H(a_8: int_P pointer, l_6: int, h_7: int,
     (((l_6 <= i_8) and (i_8 <= h_7)) -> Hnode(a_8, i_8, h_7,
      int_P_int_M_a_8_4_at_L)))
 
-axiom H_init_as_axiom:
-  (forall int_P_int_M_a_9_8_at_L:(int_P, int32) memory.
-    (forall a_9:int_P pointer.
-      (forall l_7:int.
-        (forall h_8:int.
-          (((l_7 <= h_8) and (h_8 < ((2 * l_7) + 1))) -> H(a_9, l_7, h_8,
-           int_P_int_M_a_9_8_at_L))))))
-
-axiom H_max_as_axiom:
-  (forall int_P_int_M_a_11_10_at_L:(int_P, int32) memory.
-    (forall a_11:int_P pointer.
-      (forall h_10:int.
-        (H(a_11, 0, h_10, int_P_int_M_a_11_10_at_L) ->
-         (forall i_9:int.
-           (((0 <= i_9) and (i_9 <= h_10)) ->
-            (integer_of_int32(select(int_P_int_M_a_11_10_at_L, shift(a_11,
-            0))) >= integer_of_int32(select(int_P_int_M_a_11_10_at_L,
-            shift(a_11, i_9))))))))))
-
-axiom H_reduce_as_axiom:
-  (forall int_P_int_M_a_10_9_at_L:(int_P, int32) memory.
-    (forall a_10:int_P pointer.
-      (forall h_9:int.
-        ((0 < h_9) ->
-         (H(a_10, 0, h_9, int_P_int_M_a_10_9_at_L) -> H(a_10, 1, (h_9 - 1),
-          int_P_int_M_a_10_9_at_L))))))
-
 logic Permut : int_array, int_array, int, int -> prop
 
-axiom Permut_extend:
-  (forall a1_4:int_array.
-    (forall a2_4:int_array.
-      (forall l_4:int.
-        (forall h_4:int.
-          (forall ll:int.
-            (forall hh:int.
-              (Permut(a1_4, a2_4, l_4, h_4) ->
-               ((ll <= l_4) -> ((h_4 <= hh) -> Permut(a1_4, a2_4, ll, hh))))))))))
-
-axiom Permut_refl:
-  (forall a_3:int_array.
-    (forall l_0:int. (forall h_0:int. Permut(a_3, a_3, l_0, h_0))))
+predicate Sorted(a_6: int_P pointer, l_5: int, h_5: int,
+  int_P_int_M_a_6_2_at_L: (int_P, int32) memory) =
+  (forall i_6:int.
+    (((l_5 <= i_6) and (i_6 < h_5)) ->
+     (integer_of_int32(select(int_P_int_M_a_6_2_at_L, shift(a_6,
+     i_6))) <= integer_of_int32(select(int_P_int_M_a_6_2_at_L, shift(a_6,
+     (i_6 + 1)))))))
 
 logic access : int_array, int -> int32
 
@@ -3409,67 +3309,6 @@ predicate Swap(a1: int_array, a2: int_array, i_3: int, j_0: int) =
       ((k <> i_3) ->
        ((k <> j_0) -> (integer_of_int32(access(a1,
         k)) = integer_of_int32(access(a2, k))))))))
-
-axiom Permut_swap:
-  (forall a1_3:int_array.
-    (forall a2_3:int_array.
-      (forall l_3:int.
-        (forall h_3:int.
-          (forall i_4:int.
-            (forall j_1:int.
-              (((l_3 <= i_4) and (i_4 <= h_3)) ->
-               (((l_3 <= j_1) and (j_1 <= h_3)) ->
-                (Swap(a1_3, a2_3, i_4, j_1) -> Permut(a1_3, a2_3, l_3, h_3))))))))))
-
-axiom Permut_sym:
-  (forall a1_1:int_array.
-    (forall a2_1:int_array.
-      (forall l_1:int.
-        (forall h_1:int.
-          (Permut(a1_1, a2_1, l_1, h_1) -> Permut(a2_1, a1_1, l_1, h_1))))))
-
-axiom Permut_trans:
-  (forall a1_2:int_array.
-    (forall a2_2:int_array.
-      (forall a3:int_array.
-        (forall l_2:int.
-          (forall h_2:int.
-            (Permut(a1_2, a2_2, l_2, h_2) ->
-             (Permut(a2_2, a3, l_2, h_2) -> Permut(a1_2, a3, l_2, h_2))))))))
-
-predicate Sorted(a_6: int_P pointer, l_5: int, h_5: int,
-  int_P_int_M_a_6_2_at_L: (int_P, int32) memory) =
-  (forall i_6:int.
-    (((l_5 <= i_6) and (i_6 < h_5)) ->
-     (integer_of_int32(select(int_P_int_M_a_6_2_at_L, shift(a_6,
-     i_6))) <= integer_of_int32(select(int_P_int_M_a_6_2_at_L, shift(a_6,
-     (i_6 + 1)))))))
-
-logic contents : int_P pointer, (int_P, int32) memory -> int_array
-
-axiom access_contents:
-  (forall int_P_int_M_a_4_1_at_L:(int_P, int32) memory.
-    (forall a_5:int_P pointer.
-      (forall i_5:int. (integer_of_int32(access(contents(a_5,
-        int_P_int_M_a_4_1_at_L),
-        i_5)) = integer_of_int32(select(int_P_int_M_a_4_1_at_L, shift(a_5,
-        i_5)))))))
-
-logic update : int_array, int, int32 -> int_array
-
-axiom access_update_eq:
-  (forall a_1_0:int_array.
-    (forall i_1:int.
-      (forall v_0_0:int32. (integer_of_int32(access(update(a_1_0, i_1,
-        v_0_0), i_1)) = integer_of_int32(v_0_0)))))
-
-axiom access_update_neq:
-  (forall a_2:int_array.
-    (forall i_2:int.
-      (forall j:int.
-        (forall v_1:int32.
-          ((i_2 <> j) -> (integer_of_int32(access(update(a_2, i_2, v_1),
-           j)) = integer_of_int32(access(a_2, j))))))))
 
 logic char_P_tag : char_P tag_id
 
@@ -3488,39 +3327,7 @@ axiom char_P_tags:
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
 
-axiom div2_1_as_axiom:
-  (forall i_10:int32.
-    ((0 <= integer_of_int32(i_10)) ->
-     ((0 <= computer_div(integer_of_int32(i_10), 2)) and
-      (computer_div(integer_of_int32(i_10), 2) <= integer_of_int32(i_10)))))
-
-axiom div2_2_as_axiom:
-  (forall i_11:int32.
-    ((0 < integer_of_int32(i_11)) ->
-     ((0 <= computer_div(integer_of_int32(i_11), 2)) and
-      (computer_div(integer_of_int32(i_11), 2) < integer_of_int32(i_11)))))
-
-axiom div2_3_as_axiom:
-  (forall i_12:int32.
-    ((0 <= integer_of_int32(i_12)) ->
-     ((integer_of_int32(i_12) - 1) < ((2 * computer_div(integer_of_int32(i_12),
-     2)) + 1))))
-
-axiom div2_4_as_axiom:
-  (forall i_13:int32.
-    (forall k_0:int32.
-      ((0 <= integer_of_int32(i_13)) ->
-       ((0 <= integer_of_int32(k_0)) ->
-        ((integer_of_int32(k_0) <> computer_div((integer_of_int32(i_13) - 1),
-         2)) -> (((2 * integer_of_int32(k_0)) + 1) <> integer_of_int32(i_13)))))))
-
-axiom div2_5_as_axiom:
-  (forall i_14:int32.
-    (forall k_1:int32.
-      ((0 <= integer_of_int32(i_14)) ->
-       ((0 <= integer_of_int32(k_1)) ->
-        ((integer_of_int32(k_1) <> computer_div((integer_of_int32(i_14) - 1),
-         2)) -> (((2 * integer_of_int32(k_1)) + 2) <> integer_of_int32(i_14)))))))
+logic contents : int_P pointer, (int_P, int32) memory -> int_array
 
 predicate eq_int32(x: int32, y: int32) =
   (integer_of_int32(x) = integer_of_int32(y))
@@ -3672,6 +3479,8 @@ axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
 
+logic update : int_array, int, int32 -> int_array
+
 predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
@@ -3731,4 +3540,67 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom access_update_eq:
+  (forall a_1_0:int_array.
+    (forall i_1:int.
+      (forall v_0_0:int32. (integer_of_int32(access(update(a_1_0, i_1,
+        v_0_0), i_1)) = integer_of_int32(v_0_0)))))
+
+axiom access_update_neq:
+  (forall a_2:int_array.
+    (forall i_2:int.
+      (forall j:int.
+        (forall v_1:int32.
+          ((i_2 <> j) -> (integer_of_int32(access(update(a_2, i_2, v_1),
+           j)) = integer_of_int32(access(a_2, j))))))))
+
+axiom Permut_refl:
+  (forall a_3:int_array.
+    (forall l_0:int. (forall h_0:int. Permut(a_3, a_3, l_0, h_0))))
+
+axiom Permut_sym:
+  (forall a1_1:int_array.
+    (forall a2_1:int_array.
+      (forall l_1:int.
+        (forall h_1:int.
+          (Permut(a1_1, a2_1, l_1, h_1) -> Permut(a2_1, a1_1, l_1, h_1))))))
+
+axiom Permut_trans:
+  (forall a1_2:int_array.
+    (forall a2_2:int_array.
+      (forall a3:int_array.
+        (forall l_2:int.
+          (forall h_2:int.
+            (Permut(a1_2, a2_2, l_2, h_2) ->
+             (Permut(a2_2, a3, l_2, h_2) -> Permut(a1_2, a3, l_2, h_2))))))))
+
+axiom Permut_swap:
+  (forall a1_3:int_array.
+    (forall a2_3:int_array.
+      (forall l_3:int.
+        (forall h_3:int.
+          (forall i_4:int.
+            (forall j_1:int.
+              (((l_3 <= i_4) and (i_4 <= h_3)) ->
+               (((l_3 <= j_1) and (j_1 <= h_3)) ->
+                (Swap(a1_3, a2_3, i_4, j_1) -> Permut(a1_3, a2_3, l_3, h_3))))))))))
+
+axiom Permut_extend:
+  (forall a1_4:int_array.
+    (forall a2_4:int_array.
+      (forall l_4:int.
+        (forall h_4:int.
+          (forall ll:int.
+            (forall hh:int.
+              (Permut(a1_4, a2_4, l_4, h_4) ->
+               ((ll <= l_4) -> ((h_4 <= hh) -> Permut(a1_4, a2_4, ll, hh))))))))))
+
+axiom access_contents:
+  (forall int_P_int_M_a_4_1_at_L:(int_P, int32) memory.
+    (forall a_5:int_P pointer.
+      (forall i_5:int. (integer_of_int32(access(contents(a_5,
+        int_P_int_M_a_4_1_at_L),
+        i_5)) = integer_of_int32(select(int_P_int_M_a_4_1_at_L, shift(a_5,
+        i_5)))))))
 

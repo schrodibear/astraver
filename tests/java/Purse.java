@@ -37,7 +37,7 @@ class NoCreditException extends Exception {
 }
 
 public class Purse {
-    
+
     private int balance;
     //@ invariant balance_non_negative: balance >= 0;
 

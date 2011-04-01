@@ -215,20 +215,6 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
 
-goal real_of_int_inf_NMAX :
- (forall i:int. (le_int(i, (1000000)) -> le_real(real_of_int(i), 1000000.0)))
-
-axiom real_of_int_inf_NMAX_as_axiom :
- (forall i:int. (le_int(i, (1000000)) -> le_real(real_of_int(i), 1000000.0)))
-
-goal real_of_int_succ :
- (forall n_0:int.
-  eq_real(real_of_int(add_int(n_0, (1))), add_real(real_of_int(n_0), 1.0)))
-
-axiom real_of_int_succ_as_axiom :
- (forall n_0:int.
-  eq_real(real_of_int(add_int(n_0, (1))), add_real(real_of_int(n_0), 1.0)))
-
 predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_max(char_P_alloc_table, p) >= b)
@@ -309,6 +295,13 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma real_of_int_inf_NMAX :
+ (forall i:int. (le_int(i, (1000000)) -> le_real(real_of_int(i), 1000000.0)))
+
+lemma real_of_int_succ :
+ (forall n_0:int.
+  eq_real(real_of_int(add_int(n_0, (1))), add_real(real_of_int(n_0), 1.0)))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -541,12 +534,12 @@ let f_single_ensures_default =
                void); void;
               (t := (C_11:
                     (JC_<somenum>:
-                    (((add_single_safe nearest_even) !t) (single_of_real_exact 0x0.199999Ap0)))));
+                    (((add_single_safe nearest_even) !t) (single_of_real_exact 0x1.99999ap-4)))));
               !t end) in void);
              (assert
              { (JC_<somenum>:
                le_real(abs_real(sub_real(single_value(t),
-                                add_real(single_value(t@L), 0x0.199999Ap0))),
+                                add_real(single_value(t@L), 0x1.99999ap-4))),
                0x1p-8)) }; void); void;
              (i_0 := (C_15:
                      (safe_int32_of_integer_ (C_14:
@@ -624,12 +617,12 @@ let f_single_safety =
               void;
               (t := (C_11:
                     (JC_<somenum>:
-                    (((add_single nearest_even) !t) (single_of_real_exact 0x0.199999Ap0)))));
+                    (((add_single nearest_even) !t) (single_of_real_exact 0x1.99999ap-4)))));
               !t end) in void);
              [ { } unit reads t
                { (JC_<somenum>:
                  le_real(abs_real(sub_real(single_value(t),
-                                  add_real(single_value(t@L), 0x0.199999Ap0))),
+                                  add_real(single_value(t@L), 0x1.99999ap-4))),
                  0x1p-8)) } ]; void;
              (i_0 := (C_15:
                      (JC_<somenum>:
@@ -1780,6 +1773,10 @@ axiom exact_round_double_for_integers:
       ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
        (round_double(m, real_of_int(i)) = real_of_int(i)))))
 
+axiom exact_round_double_for_doubles:
+  (forall x:double.
+    (forall m:mode. (round_double(m, double_value(x)) = double_value(x))))
+
 axiom round_double_idempotent:
   (forall m1:mode.
     (forall m2:mode.
@@ -1835,6 +1832,10 @@ axiom exact_round_single_for_integers:
     (forall m:mode.
       ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
        real_of_int(i)) = real_of_int(i)))))
+
+axiom exact_round_single_for_singles:
+  (forall x:single.
+    (forall m:mode. (round_single(m, single_value(x)) = single_value(x))))
 
 axiom round_single_idempotent:
   (forall m1:mode.
@@ -2031,12 +2032,6 @@ logic void_P_of_pointer_address : unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(void_P_of_pointer_address(p))))
-
-axiom real_of_int_inf_NMAX_as_axiom:
-  (forall i:int. ((i <= 1000000) -> (real_of_int(i) <= 1000000.0)))
-
-axiom real_of_int_succ_as_axiom:
-  (forall n_0:int. (real_of_int((n_0 + 1)) = (real_of_int(n_0) + 1.0)))
 
 predicate right_valid_struct_char_P(p: char_P pointer, b: int,
   char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,

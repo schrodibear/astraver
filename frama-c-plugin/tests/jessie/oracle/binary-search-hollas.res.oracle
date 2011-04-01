@@ -1336,7 +1336,7 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/binary-search-hollas_po9.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "33" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "33" begin = "20" end = "26"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/binary-search-hollas_po10.why">
@@ -1356,7 +1356,7 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/binary-search-hollas_po14.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "36" begin = "6" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "36" begin = "13" end = "19"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>

@@ -34,7 +34,7 @@ class NoCreditException extends Exception {
 }
 
 public class Purse {
-    
+
     public int balance;
 
     //@ invariant balance_non_negative: balance >= 0;
@@ -61,7 +61,7 @@ public class Purse {
     public void withdraw(int s) {
 	balance -= s;
     }
-    
+
     /*@ requires s >= 0;
       @ assigns balance;
       @ ensures s <= \old(balance) && balance == \old(balance) - s;
@@ -121,29 +121,29 @@ public class Purse {
 	    p.withdraw2(1000);
 	    return true;
 	}
-	catch (NoCreditException e) { 
-	    return false; 
+	catch (NoCreditException e) {
+	    return false;
 	}
     }
 
-    
+
     /* @ behavior not_ok:
       @   ensures false
       @*/
     /*
     public static void main(String argv[]) {
 	Purse p = new Purse();
-	// erroneous 
-	p.withdraw(10); 
+	// erroneous
+	p.withdraw(10);
 	p.credit(10);
     }
-*/    
+*/
 
 }
 
 
 /*
-Local Variables: 
+Local Variables:
 compile-command: "make Purse.io"
-End: 
+End:
 */

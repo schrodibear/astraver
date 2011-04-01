@@ -45,14 +45,24 @@ let add_elem e = stack := e :: !stack
 let oblig = Queue.create ()
 let oblig_h = Hashtbl.create 97
 
-let add_oblig ((_,_,id,_) as o) =
+let add_oblig ((_,_,_,id,_) as o) =
   let so = (List.rev !stack, o) in
   Queue.add so oblig ;
   Hashtbl.add oblig_h id so
 
+let rec f_of_seq ctx g = 
+  match ctx with
+    | [] -> g
+    | Cc.Svar (id, v) :: hyps -> Forall(false,id,id,v,[],f_of_seq hyps g)
+    | Cc.Spred (_id, p) :: hyps -> Pimplies(false,p,f_of_seq hyps g)
+
 let push_decl d =
   match d with
-  | Dgoal (loc, expl, id, s) -> add_oblig (loc, expl, id, s)
+  | Dgoal (loc, is_lemma, expl, id, s) -> 
+      add_oblig (loc, is_lemma, expl, id, s);
+      if is_lemma then 
+        let (_l,(ctx,g)) = Env.specialize_sequent s in
+        add_elem (Daxiom(loc,id,Env.generalize_predicate (f_of_seq ctx g)))
   | d -> add_elem d
 
 let iter f = Queue.iter (fun (_,o) -> f o) oblig
@@ -76,8 +86,8 @@ let push_elem p e =
   | PVS -> Pvs.push_decl e
   | Gappa -> Gappa.push_decl e
 
-let push_obligation p (loc, expl, id, s) =
-  let g = Dgoal (loc, expl, id, s) in
+let push_obligation p (loc, is_lemma, expl, id, s) =
+  let g = Dgoal (loc, is_lemma, expl, id, s) in
   match p with
   | Simplify -> Simplify.push_decl g
   | Harvey -> Harvey.push_decl g
@@ -125,8 +135,8 @@ let output_file ?encoding p (elems,o) =
 	 all the elements of the elems list and th obligation**)
       let declQ = Queue.create () in
       List.iter (fun p -> Queue.add p declQ) elems ;
-      let (loc, expl, id, s) = o in
-      let g = Dgoal (loc, expl, id, s) in
+      let (loc, is_lemma, expl, id, s) = o in
+      let g = Dgoal (loc, is_lemma, expl, id, s) in
       Queue.add g declQ;
       if debug then
 	Format.printf "Before the pruning dedicated to the PO: %d @."
@@ -178,7 +188,7 @@ let output_file ?encoding p (elems,o) =
 	let f = Filename.temp_file "gwhy" "_why.gappa" in
 	Gappa.output_one_file ~allowedit:false f; f
     | Coq ->
-	let (_, _, f, _) = o in
+	let (_, _, _, f, _) = o in
 	let _p = get_project () in
 	(* if necessary, Pretty.output_project "name ?"; *)
 	(* file should already be generated ?? *)

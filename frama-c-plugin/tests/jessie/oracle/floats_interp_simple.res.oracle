@@ -248,18 +248,6 @@ axiom char_P_tags :
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
 
-goal div_bounds :
- (forall a:real.
-  (forall b:real.
-   ((lt_real(0.0, b) and (le_real(0.0, a) and le_real(a, b))) ->
-    (le_real(0.0, div_real(a, b)) and le_real(div_real(a, b), 1.0)))))
-
-axiom div_bounds_as_axiom :
- (forall a:real.
-  (forall b:real.
-   ((lt_real(0.0, b) and (le_real(0.0, a) and le_real(a, b))) ->
-    (le_real(0.0, div_real(a, b)) and le_real(div_real(a, b), 1.0)))))
-
 logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
@@ -299,28 +287,6 @@ predicate right_valid_struct_char_P(p:char_P pointer, b:int,
 predicate right_valid_struct_void_P(p:void_P pointer, b:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_max(void_P_alloc_table, p) >= b)
-
-goal round_0 : eq_real(round_double(nearest_even, 0.0), 0.0)
-
-axiom round_0_as_axiom : eq_real(round_double(nearest_even, 0.0), 0.0)
-
-goal round_1 : eq_real(round_double(nearest_even, 1.0), 1.0)
-
-axiom round_1_as_axiom : eq_real(round_double(nearest_even, 1.0), 1.0)
-
-goal round_div :
- (forall a_0:real.
-  (forall b_0:real.
-   ((lt_real(0.0, b_0) and (le_real(0.0, a_0) and le_real(a_0, b_0))) ->
-    (le_real(0.0, round_double(nearest_even, div_real(a_0, b_0)))
-    and le_real(round_double(nearest_even, div_real(a_0, b_0)), 1.0)))))
-
-axiom round_div_as_axiom :
- (forall a_0:real.
-  (forall b_0:real.
-   ((lt_real(0.0, b_0) and (le_real(0.0, a_0) and le_real(a_0, b_0))) ->
-    (le_real(0.0, round_double(nearest_even, div_real(a_0, b_0)))
-    and le_real(round_double(nearest_even, div_real(a_0, b_0)), 1.0)))))
 
 predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -386,6 +352,23 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma div_bounds :
+ (forall a:real.
+  (forall b:real.
+   ((lt_real(0.0, b) and (le_real(0.0, a) and le_real(a, b))) ->
+    (le_real(0.0, div_real(a, b)) and le_real(div_real(a, b), 1.0)))))
+
+lemma round_0 : eq_real(round_double(nearest_even, 0.0), 0.0)
+
+lemma round_1 : eq_real(round_double(nearest_even, 1.0), 1.0)
+
+lemma round_div :
+ (forall a_0:real.
+  (forall b_0:real.
+   ((lt_real(0.0, b_0) and (le_real(0.0, a_0) and le_real(a_0, b_0))) ->
+    (le_real(0.0, round_double(nearest_even, div_real(a_0, b_0)))
+    and le_real(round_double(nearest_even, div_real(a_0, b_0)), 1.0)))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -2151,6 +2134,10 @@ axiom exact_round_double_for_integers:
       ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
        (round_double(m, real_of_int(i)) = real_of_int(i)))))
 
+axiom exact_round_double_for_doubles:
+  (forall x:double.
+    (forall m:mode. (round_double(m, double_value(x)) = double_value(x))))
+
 axiom round_double_idempotent:
   (forall m1:mode.
     (forall m2:mode.
@@ -2206,6 +2193,10 @@ axiom exact_round_single_for_integers:
     (forall m:mode.
       ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
        real_of_int(i)) = real_of_int(i)))))
+
+axiom exact_round_single_for_singles:
+  (forall x:single.
+    (forall m:mode. (round_single(m, single_value(x)) = single_value(x))))
 
 axiom round_single_idempotent:
   (forall m1:mode.
@@ -2349,12 +2340,6 @@ axiom char_P_tags:
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
 
-axiom div_bounds_as_axiom:
-  (forall a:real.
-    (forall b:real.
-      (((0.0 < b) and ((0.0 <= a) and (a <= b))) ->
-       ((0.0 <= div_real(a, b)) and (div_real(a, b) <= 1.0)))))
-
 logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
@@ -2396,17 +2381,6 @@ predicate right_valid_struct_char_P(p: char_P pointer, b: int,
 predicate right_valid_struct_void_P(p: void_P pointer, b: int,
   void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
   p) >= b)
-
-axiom round_0_as_axiom: (round_double(nearest_even, 0.0) = 0.0)
-
-axiom round_1_as_axiom: (round_double(nearest_even, 1.0) = 1.0)
-
-axiom round_div_as_axiom:
-  (forall a_0:real.
-    (forall b_0:real.
-      (((0.0 < b_0) and ((0.0 <= a_0) and (a_0 <= b_0))) ->
-       ((0.0 <= round_double(nearest_even, div_real(a_0, b_0))) and
-        (round_double(nearest_even, div_real(a_0, b_0)) <= 1.0)))))
 
 predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =

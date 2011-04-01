@@ -141,20 +141,6 @@ axiom s1_tags :
  (forall x:s1 pointer.
   (forall s1_tag_table:s1 tag_table. instanceof(s1_tag_table, x, s1_tag)))
 
-goal shift_prop :
- (forall x_0:int.
-  (forall y:int.
-   (ge_int(y, (8)) ->
-    eq_int(mul_int(mul_int(x_0, (256)), lsl((1), sub_int(y, (8)))),
-    mul_int(x_0, lsl((1), y))))))
-
-axiom shift_prop_as_axiom :
- (forall x_0:int.
-  (forall y:int.
-   (ge_int(y, (8)) ->
-    eq_int(mul_int(mul_int(x_0, (256)), lsl((1), sub_int(y, (8)))),
-    mul_int(x_0, lsl((1), y))))))
-
 predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
  char_P_alloc_table:char_P alloc_table) =
  ((offset_min(char_P_alloc_table, p) = a)
@@ -244,6 +230,13 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma shift_prop :
+ (forall x_0:int.
+  (forall y:int.
+   (ge_int(y, (8)) ->
+    eq_int(mul_int(mul_int(x_0, (256)), lsl((1), sub_int(y, (8)))),
+    mul_int(x_0, lsl((1), y))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1578,11 +1571,6 @@ axiom s1_parenttag_bottom: parenttag(s1_tag, bottom_tag)
 axiom s1_tags:
   (forall x:s1 pointer.
     (forall s1_tag_table:s1 tag_table. instanceof(s1_tag_table, x, s1_tag)))
-
-axiom shift_prop_as_axiom:
-  (forall x_0:int.
-    (forall y:int.
-      ((y >= 8) -> (((x_0 * 256) * lsl(1, (y - 8))) = (x_0 * lsl(1, y))))))
 
 predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
   char_P_alloc_table: char_P alloc_table) =

@@ -4876,7 +4876,7 @@ goal main_ensures_default_po_1:
   forall result6:int32.
   forall y:int32.
   (y = result6) ->
-  ("JC_99": ("JC_97": ("JC_97": (integer_of_int32(x_0) = 0))))
+  ("JC_99": ("JC_97": (integer_of_int32(x_0) = 0)))
 
 goal main_ensures_default_po_2:
   ("JC_69": true) ->
@@ -4900,7 +4900,7 @@ goal main_ensures_default_po_2:
   forall result6:int32.
   forall y:int32.
   (y = result6) ->
-  ("JC_99": ("JC_98": ("JC_98": (integer_of_int32(y) = 0))))
+  ("JC_99": ("JC_98": (integer_of_int32(y) = 0)))
 
 goal main_ensures_default_po_3:
   ("JC_69": true) ->
@@ -4945,7 +4945,7 @@ goal main_ensures_default_po_3:
   forall result14:int32.
   forall y0:int32.
   (y0 = result14) ->
-  ("JC_106": ("JC_104": ("JC_104": (integer_of_int32(x_0_0) = 1))))
+  ("JC_106": ("JC_104": (integer_of_int32(x_0_0) = 1)))
 
 goal main_ensures_default_po_4:
   ("JC_69": true) ->
@@ -4990,7 +4990,7 @@ goal main_ensures_default_po_4:
   forall result14:int32.
   forall y0:int32.
   (y0 = result14) ->
-  ("JC_106": ("JC_105": ("JC_105": (integer_of_int32(y0) = 2))))
+  ("JC_106": ("JC_105": (integer_of_int32(y0) = 2)))
 
 goal main_ensures_default_po_5:
   ("JC_69": true) ->
@@ -5048,7 +5048,7 @@ goal main_ensures_default_po_5:
   forall result18:int32.
   forall y1:int32.
   (y1 = result18) ->
-  ("JC_111": ("JC_109": ("JC_109": (integer_of_int32(x_0_1) = 0))))
+  ("JC_111": ("JC_109": (integer_of_int32(x_0_1) = 0)))
 
 goal main_ensures_default_po_6:
   ("JC_69": true) ->
@@ -5106,13 +5106,13 @@ goal main_ensures_default_po_6:
   forall result18:int32.
   forall y1:int32.
   (y1 = result18) ->
-  ("JC_111": ("JC_110": ("JC_110": (integer_of_int32(y1) = 0))))
+  ("JC_111": ("JC_110": (integer_of_int32(y1) = 0)))
 
 goal main_safety_po_1:
   ("JC_69": true) ->
   forall result:uint32.
   (integer_of_uint32(result) = 10) ->
-  ("JC_1": ("JC_1": (integer_of_uint32(result) <= 1000)))
+  ("JC_1": (integer_of_uint32(result) <= 1000))
 
 goal main_safety_po_2:
   ("JC_69": true) ->
@@ -5124,7 +5124,7 @@ goal main_safety_po_2:
   (a_2 = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 20) ->
-  ("JC_1": ("JC_1": (integer_of_uint32(result1) <= 1000)))
+  ("JC_1": (integer_of_uint32(result1) <= 1000))
 
 goal main_safety_po_3:
   ("JC_69": true) ->
@@ -5143,8 +5143,7 @@ goal main_safety_po_3:
   (b = result2) ->
   forall result3:uint32.
   (integer_of_uint32(result3) = 5) ->
-  ("JC_15":
-  ("JC_13": ("JC_13": (offset_min(SparseArray_a_2_7_alloc_table, a_2) <= 0))))
+  ("JC_15": ("JC_13": (offset_min(SparseArray_a_2_7_alloc_table, a_2) <= 0)))
 
 goal main_safety_po_4:
   ("JC_69": true) ->
@@ -5163,8 +5162,7 @@ goal main_safety_po_4:
   (b = result2) ->
   forall result3:uint32.
   (integer_of_uint32(result3) = 5) ->
-  ("JC_15":
-  ("JC_14": ("JC_14": (offset_max(SparseArray_a_2_7_alloc_table, a_2) >= 0))))
+  ("JC_15": ("JC_14": (offset_max(SparseArray_a_2_7_alloc_table, a_2) >= 0)))
 
 goal main_safety_po_5:
   ("JC_69": true) ->
@@ -5192,8 +5190,7 @@ goal main_safety_po_5:
   (x_0 = result4) ->
   forall result5:uint32.
   (integer_of_uint32(result5) = 7) ->
-  ("JC_15":
-  ("JC_13": ("JC_13": (offset_min(SparseArray_b_8_alloc_table, b) <= 0))))
+  ("JC_15": ("JC_13": (offset_min(SparseArray_b_8_alloc_table, b) <= 0)))
 
 goal main_safety_po_6:
   ("JC_69": true) ->
@@ -5221,8 +5218,7 @@ goal main_safety_po_6:
   (x_0 = result4) ->
   forall result5:uint32.
   (integer_of_uint32(result5) = 7) ->
-  ("JC_15":
-  ("JC_14": ("JC_14": (offset_max(SparseArray_b_8_alloc_table, b) >= 0))))
+  ("JC_15": ("JC_14": (offset_max(SparseArray_b_8_alloc_table, b) >= 0)))
 
 goal set_ensures_default_po_1:
   forall a_0:SparseArray pointer.
@@ -5269,8 +5265,7 @@ goal set_ensures_default_po_1:
   (result6 = select(unsigned_int_P_unsigned_int_M_a_0_4, shift(result3,
   integer_of_uint32(result5)))) ->
   (integer_of_uint32(result6) <> integer_of_uint32(i_0)) ->
-  ("JC_65":
-  ("JC_65": (integer_of_uint32(select(SparseArray_n_a_0_4, a_0)) < 1000)))
+  ("JC_65": (integer_of_uint32(select(SparseArray_n_a_0_4, a_0)) < 1000))
 
 goal set_ensures_default_po_2:
   forall a_0:SparseArray pointer.
@@ -5304,8 +5299,7 @@ goal set_ensures_default_po_2:
   forall result2:uint32.
   (result2 = select(SparseArray_n_a_0_4, a_0)) ->
   (integer_of_uint32(result1) >= integer_of_uint32(result2)) ->
-  ("JC_65":
-  ("JC_65": (integer_of_uint32(select(SparseArray_n_a_0_4, a_0)) < 1000)))
+  ("JC_65": (integer_of_uint32(select(SparseArray_n_a_0_4, a_0)) < 1000))
 
 goal set_safety_po_1:
   forall a_0:SparseArray pointer.

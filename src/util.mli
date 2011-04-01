@@ -172,7 +172,8 @@ val create_post : predicate -> (assertion * 'b list) option
 val loc_of_label: string -> Loc.floc
 
 val cook_explanation : 
-    string option -> raw_vc_explain -> Logic_decl.expl_kind * Loc.floc 
+    string option -> raw_vc_explain ->
+       Logic_decl.expl_kind * Loc.floc * string option
 
 val program_locs : (string,(string * string * Loc.floc)) Hashtbl.t
 
@@ -220,3 +221,4 @@ val print_ptree : formatter -> Ptree.parsed_program -> unit
 val print_pfile : formatter -> Ptree.decl list -> unit
 
 val print_decl : formatter -> Logic_decl.t -> unit
+

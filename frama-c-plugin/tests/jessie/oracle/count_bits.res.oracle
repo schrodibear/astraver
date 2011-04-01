@@ -180,28 +180,7 @@ predicate left_valid_struct_void_P(p:void_P pointer, a:int,
 
 logic lowest_bit: int -> int
 
-axiom lowest_bit_def :
- (forall x_3:int.
-  (neq_int(x_3, (0)) ->
-   (exists i_0:int.
-    (ge_int(i_0, (0))
-    and (eq_int(lowest_bit(x_3), bit(x_3, i_0))
-        and (neq_int(bit(x_3, i_0), (0))
-            and (forall j:int.
-                 ((le_int((0), j) and lt_int(j, i_0)) ->
-                  eq_int(bit(x_3, j), (0))))))))))
-
-axiom lowest_bit_trick :
- (forall x_5:int. eq_int(bw_and(x_5, neg_int(x_5)), lowest_bit(x_5)))
-
-axiom lowest_bit_zero :
- (forall x_4:int. (eq_int(lowest_bit(x_4), (0)) <-> eq_int(x_4, (0))))
-
 logic nbits: int -> int
-
-axiom nbits_nonneg : (forall x_1_0:int. ge_int(nbits(x_1_0), (0)))
-
-axiom nbits_zero : eq_int(nbits((0)), (0))
 
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
@@ -210,14 +189,6 @@ logic void_P_of_pointer_address: unit pointer -> void_P pointer
 
 axiom pointer_addr_of_void_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
-
-axiom remove_one_bit :
- (forall x_6:int.
-  (forall i_1:int.
-   (neq_int(bit(x_6, i_1), (0)) ->
-    eq_int(nbits(integer_of_int32(int32_of_integer(sub_int(x_6,
-                                                   bit(x_6, i_1))))),
-    sub_int(nbits(x_6), (1))))))
 
 predicate right_valid_struct_char_P(p:char_P pointer, b:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -291,6 +262,35 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom nbits_nonneg : (forall x_1_0:int. ge_int(nbits(x_1_0), (0)))
+
+axiom nbits_zero : eq_int(nbits((0)), (0))
+
+axiom lowest_bit_def :
+ (forall x_3:int.
+  (neq_int(x_3, (0)) ->
+   (exists i_0:int.
+    (ge_int(i_0, (0))
+    and (eq_int(lowest_bit(x_3), bit(x_3, i_0))
+        and (neq_int(bit(x_3, i_0), (0))
+            and (forall j:int.
+                 ((le_int((0), j) and lt_int(j, i_0)) ->
+                  eq_int(bit(x_3, j), (0))))))))))
+
+axiom lowest_bit_zero :
+ (forall x_4:int. (eq_int(lowest_bit(x_4), (0)) <-> eq_int(x_4, (0))))
+
+axiom lowest_bit_trick :
+ (forall x_5:int. eq_int(bw_and(x_5, neg_int(x_5)), lowest_bit(x_5)))
+
+axiom remove_one_bit :
+ (forall x_6:int.
+  (forall i_1:int.
+   (neq_int(bit(x_6, i_1), (0)) ->
+    eq_int(nbits(integer_of_int32(int32_of_integer(sub_int(x_6,
+                                                   bit(x_6, i_1))))),
+    sub_int(nbits(x_6), (1))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1612,26 +1612,7 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
 
 logic lowest_bit : int -> int
 
-axiom lowest_bit_def:
-  (forall x_3:int.
-    ((x_3 <> 0) ->
-     (exists i_0:int.
-       ((i_0 >= 0) and
-        ((lowest_bit(x_3) = bit(x_3, i_0)) and
-         ((bit(x_3, i_0) <> 0) and
-          (forall j:int. (((0 <= j) and (j < i_0)) -> (bit(x_3, j) = 0)))))))))
-
-axiom lowest_bit_trick:
-  (forall x_5:int. (bw_and(x_5, (-x_5)) = lowest_bit(x_5)))
-
-axiom lowest_bit_zero:
-  (forall x_4:int. ((lowest_bit(x_4) = 0) <-> (x_4 = 0)))
-
 logic nbits : int -> int
-
-axiom nbits_nonneg: (forall x_1_0:int. (nbits(x_1_0) >= 0))
-
-axiom nbits_zero: (nbits(0) = 0)
 
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
@@ -1642,13 +1623,6 @@ logic void_P_of_pointer_address : unit pointer -> void_P pointer
 axiom pointer_addr_of_void_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(void_P_of_pointer_address(p))))
-
-axiom remove_one_bit:
-  (forall x_6:int.
-    (forall i_1:int.
-      ((bit(x_6, i_1) <> 0) ->
-       (nbits(integer_of_int32(int32_of_integer((x_6 - bit(x_6,
-       i_1))))) = (nbits(x_6) - 1)))))
 
 predicate right_valid_struct_char_P(p: char_P pointer, b: int,
   char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
@@ -1722,4 +1696,30 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom nbits_nonneg: (forall x_1_0:int. (nbits(x_1_0) >= 0))
+
+axiom nbits_zero: (nbits(0) = 0)
+
+axiom lowest_bit_def:
+  (forall x_3:int.
+    ((x_3 <> 0) ->
+     (exists i_0:int.
+       ((i_0 >= 0) and
+        ((lowest_bit(x_3) = bit(x_3, i_0)) and
+         ((bit(x_3, i_0) <> 0) and
+          (forall j:int. (((0 <= j) and (j < i_0)) -> (bit(x_3, j) = 0)))))))))
+
+axiom lowest_bit_zero:
+  (forall x_4:int. ((lowest_bit(x_4) = 0) <-> (x_4 = 0)))
+
+axiom lowest_bit_trick:
+  (forall x_5:int. (bw_and(x_5, (-x_5)) = lowest_bit(x_5)))
+
+axiom remove_one_bit:
+  (forall x_6:int.
+    (forall i_1:int.
+      ((bit(x_6, i_1) <> 0) ->
+       (nbits(integer_of_int32(int32_of_integer((x_6 - bit(x_6,
+       i_1))))) = (nbits(x_6) - 1)))))
 

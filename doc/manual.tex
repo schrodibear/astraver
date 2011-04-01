@@ -159,7 +159,7 @@ following:
 
 \item 
   The \why\ tool allows the declaration of logical \emph{models}
-  (types, functions, predicates and axioms) that can be used in
+  (types, functions, predicates, axioms and lemmas) that can be used in
   programs and annotations. Thus it is a highly generic VCG.  If one
   wants to model some kind of bounded precision arithmetic, for
   instance, it is as simple as declaring a new type and the
@@ -1086,6 +1086,7 @@ Keywords are the following:
 	int &
 	invariant \\
 %	label &
+        lemma &
 	let &
 	logic &
 	not &
@@ -1247,6 +1248,8 @@ Syntax for logic declarations is given Figure~\ref{fig:ldecl}.
               \te{\}} \\ \indextt{predicate}
       & $|$ & \te{axiom} \nt{identifier} \te{:} 
               \nt{predicate} \\\indextt{axiom}
+      & $|$ & \te{lemma} \nt{identifier} \te{:} 
+              \nt{predicate} \\\indextt{lemma}
       & $|$ & \te{goal} \nt{identifier} \te{:} 
               \nt{predicate} \\\indextt{goal}
    \\[0.1em]
@@ -1470,6 +1473,7 @@ A theory $\Sigma$ is a finite list of declarations $\delta$ where
          &    |~~ &   
       \mathtt{logic}~p:\forall\vec{\alpha}.\,\tau,\dots,\tau\rightarrow\mathtt{prop} ~|~ 
       \texttt{axiom}~\forall\vec{\alpha}.\,P ~|~
+      \texttt{lemma}~\forall\vec{\alpha}.\,P ~|~
       \texttt{goal}~\forall\vec{\alpha}.\,P \\
   \end{array} 
 \end{displaymath}

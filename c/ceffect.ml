@@ -73,13 +73,13 @@ let print_effects fmt l =
 let print_effects2 fmt l =
   fprintf fmt "@[%a@]"
     (print_list space (fun fmt (z,s,_) ->let z = repr z in
-		       fprintf fmt " %s_%s_%d " s z.name z.number)) 
+		       fprintf fmt " %s_%s_%d " s z.Info.name z.number)) 
     (ZoneSet.elements l)
 
 let print_effects3 fmt l =
   fprintf fmt "@[%a@]"
     (print_list space (fun fmt (z,s,_) -> let z = repr z in
-		       fprintf fmt " %s_%s:%b " s z.name z.zone_is_var)) 
+		       fprintf fmt " %s_%s:%b " s z.Info.name z.zone_is_var)) 
     (ZoneSet.elements l)
 
 let alloc = 
@@ -158,7 +158,7 @@ let add_field_var v ty s =
 	      try
 		Hashtbl.find type_why_table z 
 	      with Not_found -> 
-		Format.eprintf "no why type table for zone %s@\n" z.name;
+		Format.eprintf "no why type table for zone %s@\n" z.Info.name;
 		assert false
 	    in
 	    Hashtbl.find  table v 

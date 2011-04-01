@@ -1763,6 +1763,10 @@ axiom exact_round_double_for_integers:
       ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
        (round_double(m, real_of_int(i)) = real_of_int(i)))))
 
+axiom exact_round_double_for_doubles:
+  (forall x:double.
+    (forall m:mode. (round_double(m, double_value(x)) = double_value(x))))
+
 axiom round_double_idempotent:
   (forall m1:mode.
     (forall m2:mode.
@@ -1818,6 +1822,10 @@ axiom exact_round_single_for_integers:
     (forall m:mode.
       ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
        real_of_int(i)) = real_of_int(i)))))
+
+axiom exact_round_single_for_singles:
+  (forall x:single.
+    (forall m:mode. (round_single(m, single_value(x)) = single_value(x))))
 
 axiom round_single_idempotent:
   (forall m1:mode.
@@ -2071,7 +2079,7 @@ goal Sterbenz_ensures_default_po_1:
   ("JC_7":
   (("JC_5": (div_real(single_value(y), 2.0) <= single_value(x_0))) and
    ("JC_6": (single_value(x_0) <= (2.0 * single_value(y)))))) ->
-  ("JC_16": ("JC_16": (0.0 <= single_value(y))))
+  ("JC_16": (0.0 <= single_value(y)))
 
 goal Sterbenz_ensures_default_po_2:
   forall x_0:single.
@@ -2080,7 +2088,7 @@ goal Sterbenz_ensures_default_po_2:
   (("JC_5": (div_real(single_value(y), 2.0) <= single_value(x_0))) and
    ("JC_6": (single_value(x_0) <= (2.0 * single_value(y)))))) ->
   ("JC_16": (0.0 <= single_value(y))) ->
-  ("JC_17": ("JC_17": (0.0 <= single_value(x_0))))
+  ("JC_17": (0.0 <= single_value(x_0)))
 
 goal Sterbenz_ensures_default_po_3:
   forall x_0:single.
@@ -2281,7 +2289,7 @@ Admitted.
                  (Rle (Rdiv (single_value y) (2)%R) (single_value x_0)) /\
                 (* JC_6 *)
                 (Rle (single_value x_0) (Rmult (2)%R (single_value y))))),
-  (* JC_16 *) (* JC_16 *) (Rle (0)%R (single_value y)).
+  (* JC_16 *) (Rle (0)%R (single_value y)).
 Proof.
 intros x y (h1,h2).
 apply Rmult_le_reg_l with 3%R.
@@ -2303,7 +2311,7 @@ Qed.
                 (* JC_6 *)
                 (Rle (single_value x_0) (Rmult (2)%R (single_value y))))),
   forall (HW_4: (* JC_16 *) (Rle (0)%R (single_value y))),
-  (* JC_17 *) (* JC_17 *) (Rle (0)%R (single_value x_0)).
+  (* JC_17 *) (Rle (0)%R (single_value x_0)).
 Proof.
 intros x y (h1,h2) y_pos.
 apply Rle_trans with (single_value y / 2)%R; [idtac|apply h1].

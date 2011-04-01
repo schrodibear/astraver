@@ -37,7 +37,11 @@
 \usepackage[T1]{fontenc}
 \usepackage{times}
 \usepackage{amssymb}
+%BEGIN LATEX
 \usepackage{graphicx}
+%END LATEX
+%HEVEA \newcommand{\includegraphics}[2][2]{\imgsrc{#2}}
+
 \usepackage{color}
 %\usepackage{mathptm}
 %\usepackage{xspace}
@@ -96,7 +100,8 @@ by step to the use of Krakatoa.
 
 Chapter~\ref{chap:reference} is a reference manual where all options
 of the tool are described, and also the modeling of Java objects and
-Java memory heap, that you may encounter if you discharge proofs interactively, e.g. using Coq.
+Java memory heap, that you may encounter if you discharge proofs
+interactively, e.g. using Coq.
 
 In the appendix you will find various additional informations,
 including the requirements, a summary of known limitations, and how to
@@ -396,7 +401,7 @@ follows:
 
 \index{behavior}
 \index{behavior declaration@\texttt{behavior} declaration}
-\index{throws clause@\texttt{throws} clause}
+\index{signals clause@\texttt{signals} clause}
 
 \input{Purse_withdraw2.pp}
 
@@ -416,6 +421,12 @@ variables.
 
 \chapter{Specification Language: Reference}
 \label{chap:reference} 
+
+This chapter is the reference for the specification language. It is
+unfortunately largely incomplete, but for missing parts and
+explanations we refer to the ACSL Reference
+Manual~\cite{baudin09acsl}, which is very close.
+
 
 \section{Logic expressions}
 \label{sec:expressions}
@@ -834,12 +845,12 @@ potentially modifies everything.
 A simple contract can be augmented with \emph{behaviors}.
 
 
-A behavior without throws clause as the form
+A normal behavior clause as the form
 \begin{flushleft}\ttfamily\upshape\parindent 0pt
 \begin{slshape}\color{blue}\textbf{behavior}~\textsl{id}~:~\\
 ~~\textbf{assumes}~\textsl{A}~;~\\
-~~\textbf{assigns}~~\textsl{L}~;~\\
-~~\textbf{ensures}~~\textsl{E}~;~\end{slshape}
+~~\textbf{assigns}~\textsl{L}~;~\\
+~~\textbf{ensures}~\textsl{E}~;~\end{slshape}
 \end{flushleft}
 The semantics of such a behavior is as follows. The callee guarantees
 that if it returns normally, then in the post-state:
@@ -850,13 +861,12 @@ that if it returns normally, then in the post-state:
   the post-state
 \end{itemize}
 
-A behavior with a throws clause as the form
+An exceptional behavior clause as the form
 \begin{flushleft}\ttfamily\upshape\parindent 0pt
 \begin{slshape}\color{blue}\textbf{behavior}~\textsl{id}~:~\\
 ~~\textbf{assumes}~\textsl{A}~;~\\
-~~\textbf{throws}~\textsl{Exc}~;~\\
-~~\textbf{assigns}~~\textsl{L}~;~\\
-~~\textbf{ensures}~~\textsl{E}~;~\end{slshape}
+~~\textbf{assigns}~\textsl{L}~;~\\
+~~\textbf{signals}~(\textsl{Exc})~\textsl{E}~;~\end{slshape}
 \end{flushleft}
 The semantics of such a behavior is as follows. The callee guarantees
 that if it exits with exception Exc, then in the post-state:
@@ -1040,7 +1050,8 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
 
   \begin{itemize}
   \item A loop can be annotated with a \emph{variant}: an integer
-    expression that decreases at each iteration
+    expression that decreases at each iteration, using the clause
+    \verb|loop_variant|.
 %  \item Example:
 %    input{bsearchvariant.c.pp}
   \end{itemize}
@@ -1112,11 +1123,9 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
 Compiling from sources requires Objective Caml
 compiler, version 3.09 or higher. 
 
-External theorem provers must be installed. Alt-Ergo is available from
-\url{http://alt-ergo.lri.fr}, simplify is available from \url{} (see why
-web page), Z3 ia available from ..., Yices from ..., CVS3 from ...
+External theorem provers must be installed. See the page~\url{http://why.lri.fr/provers.html}
 
-For using the Coq intereactive prover, you need \Coq{} version 8.0 or
+For using the Coq interactive prover, you need \Coq{} version 8.0 or
 higher.
 
 \section{Installation procedure}
@@ -1154,8 +1163,8 @@ required NOT to be thrown, and consequently should not be caught.
 
 %\item Method parameters are not modifiable.
 
-\item For recursive or mutually recursive methods, only partial
-correctness is guaranteed.
+% \item For recursive or mutually recursive methods, only partial
+% correctness is guaranteed.
 
 %\item some valid Java identifiers should not be used in your programs,
 %  unless some name clashes may occur: identifiers starting by

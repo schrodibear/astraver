@@ -334,12 +334,16 @@ let output_sequent fmt (hyps,concl) =
   in
   print_seq fmt hyps
 
-let print_obligation fmt loc _o s = 
+let print_obligation fmt loc is_lemma o s = 
   fprintf fmt "@[:formula@\n"; 
   fprintf fmt "  @[;; %a@]@\n" Loc.gen_report_line loc;
   fprintf fmt "  @[(not@ %a)@]" output_sequent s;
-  fprintf fmt "@]@\n@\n" 
-
+  fprintf fmt "@]@\n@\n" ;
+  if is_lemma then begin
+    fprintf fmt "@[;; %s as axiom@]@\n" o;
+    fprintf fmt " @[<hov 2>:assumption@ %a@]" output_sequent s;
+    fprintf fmt "@]@\n@\n" 
+  end
 (* Inductive predicates are handled in Encoding *)
 (*
 let rec push_decl d = 
@@ -412,7 +416,8 @@ let output_elem fmt = function
       print_function_def fmt (Ident.string id) d.scheme_type
 *)
   | Daxiom (_loc, id, p) -> print_axiom fmt id p.scheme_type 
-  | Dgoal (loc, _expl, id, s) -> print_obligation fmt loc id s.Env.scheme_type
+  | Dgoal (loc, is_lemma, _expl, id, s) -> 
+      print_obligation fmt loc is_lemma id s.Env.scheme_type
 
 
    

@@ -177,22 +177,7 @@ axiom char_P_tags :
 
 logic f: int -> int
 
-axiom f_def1 :
- (forall x_0_0:int.
-  (ge_int(x_0_0, (101)) -> eq_int(f(x_0_0), sub_int(x_0_0, (10)))))
-
-axiom f_def2 :
- (forall x_1_0:int. (le_int(x_1_0, (101)) -> eq_int(f(x_1_0), (91))))
-
 logic iter_f: int, int -> int
-
-axiom iter_f_def1 : (forall x_3:int. eq_int(iter_f((0), x_3), x_3))
-
-axiom iter_f_def2 :
- (forall n_0_1:int.
-  (forall x_4:int.
-   (gt_int(n_0_1, (0)) ->
-    eq_int(iter_f(n_0_1, x_4), iter_f(sub_int(n_0_1, (1)), f(x_4))))))
 
 predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
@@ -297,6 +282,21 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom f_def1 :
+ (forall x_0_0:int.
+  (ge_int(x_0_0, (101)) -> eq_int(f(x_0_0), sub_int(x_0_0, (10)))))
+
+axiom f_def2 :
+ (forall x_1_0:int. (le_int(x_1_0, (101)) -> eq_int(f(x_1_0), (91))))
+
+axiom iter_f_def1 : (forall x_3:int. eq_int(iter_f((0), x_3), x_3))
+
+axiom iter_f_def2 :
+ (forall n_0_1:int.
+  (forall x_4:int.
+   (gt_int(n_0_1, (0)) ->
+    eq_int(iter_f(n_0_1, x_4), iter_f(sub_int(n_0_1, (1)), f(x_4))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1727,19 +1727,7 @@ axiom char_P_tags:
 
 logic f : int -> int
 
-axiom f_def1:
-  (forall x_0_0:int. ((x_0_0 >= 101) -> (f(x_0_0) = (x_0_0 - 10))))
-
-axiom f_def2: (forall x_1_0:int. ((x_1_0 <= 101) -> (f(x_1_0) = 91)))
-
 logic iter_f : int, int -> int
-
-axiom iter_f_def1: (forall x_3:int. (iter_f(0, x_3) = x_3))
-
-axiom iter_f_def2:
-  (forall n_0_1:int.
-    (forall x_4:int.
-      ((n_0_1 > 0) -> (iter_f(n_0_1, x_4) = iter_f((n_0_1 - 1), f(x_4))))))
 
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
@@ -1848,4 +1836,16 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom f_def1:
+  (forall x_0_0:int. ((x_0_0 >= 101) -> (f(x_0_0) = (x_0_0 - 10))))
+
+axiom f_def2: (forall x_1_0:int. ((x_1_0 <= 101) -> (f(x_1_0) = 91)))
+
+axiom iter_f_def1: (forall x_3:int. (iter_f(0, x_3) = x_3))
+
+axiom iter_f_def2:
+  (forall n_0_1:int.
+    (forall x_4:int.
+      ((n_0_1 > 0) -> (iter_f(n_0_1, x_4) = iter_f((n_0_1 - 1), f(x_4))))))
 

@@ -155,7 +155,7 @@ Admitted.
                  (Rle (Rdiv (single_value y) (2)%R) (single_value x_0)) /\
                 (* JC_6 *)
                 (Rle (single_value x_0) (Rmult (2)%R (single_value y))))),
-  (* JC_16 *) (* JC_16 *) (Rle (0)%R (single_value y)).
+  (* JC_16 *) (Rle (0)%R (single_value y)).
 Proof.
 intros x y (h1,h2).
 apply Rmult_le_reg_l with 3%R.
@@ -177,7 +177,7 @@ Qed.
                 (* JC_6 *)
                 (Rle (single_value x_0) (Rmult (2)%R (single_value y))))),
   forall (HW_4: (* JC_16 *) (Rle (0)%R (single_value y))),
-  (* JC_17 *) (* JC_17 *) (Rle (0)%R (single_value x_0)).
+  (* JC_17 *) (Rle (0)%R (single_value x_0)).
 Proof.
 intros x y (h1,h2) y_pos.
 apply Rle_trans with (single_value y / 2)%R; [idtac|apply h1].

@@ -10,7 +10,7 @@ public class Arrays {
 	  @   (\forall integer i; 0 <= i <= j ==> t[i] == \at(t[i],Pre)) &&
 	  @   (\forall integer i; 
 	  @         j < i < t.length ==> t[i] == \at(t[i-1],Pre));
-	  @ decreases j;
+	  @ loop_variant j;
 	  @*/
 	for (int j=t.length-1 ; j > 0 ; j--) {
 	    t[j] = t[j-1];

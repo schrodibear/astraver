@@ -44,7 +44,7 @@ open Format
 open Pp
 
 type elem = 
-  | Oblig of Loc.floc * Logic_decl.vc_expl * string * sequent Env.scheme
+  | Oblig of Loc.floc * bool * Logic_decl.vc_expl * string * sequent Env.scheme
   | Axiom of string * predicate Env.scheme
   | Predicate of string * predicate_def Env.scheme
 (*
@@ -58,8 +58,10 @@ let reset () =
   Encoding.reset ()
 
 let rec decl_to_elem = function
-  | Dgoal (loc, expl, id, s) -> Queue.add (Oblig (loc, expl,id, s)) queue
-  | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) queue
+  | Dgoal (loc, is_lemma, expl, id, s) -> 
+      Queue.add (Oblig (loc, is_lemma, expl,id, s)) queue
+  | Daxiom (_, id, p) -> 
+      Queue.add (Axiom (id, p)) queue
   | Dpredicate_def (_, id, p) -> 
       Queue.add (Predicate (Ident.string id, p)) queue
   | Dfunction_def (_, _id, _p) -> 
@@ -359,9 +361,13 @@ let print_sequent fmt (hyps,concl) =
   in
   print_seq fmt hyps
 
-let print_obligation fmt loc o s = 
+let print_obligation fmt loc is_lemma _expl o s = 
   fprintf fmt "@[;; %s, %a@]@\n" o Loc.gen_report_line loc;
-  fprintf fmt "@[<hov 2>%a@]@\n@\n" print_sequent s.Env.scheme_type
+  fprintf fmt "@[<hov 2>%a@]@\n@\n" print_sequent s.Env.scheme_type;
+  if is_lemma then begin
+    fprintf fmt "@[(BG_PUSH@\n ;; lemma %s as axiom@\n" o;
+    fprintf fmt "@[<hov 2>%a@])@]@\n@\n" print_sequent s.Env.scheme_type;
+  end
 
 let push_foralls p =
   let change = ref false in
@@ -387,7 +393,8 @@ let push_foralls p =
   in
   push [] p, !change
 
-let print_axiom fmt id p =
+
+ let print_axiom fmt id p =
   fprintf fmt "@[(BG_PUSH@\n ;; Why axiom %s@\n" id;
   let p = p.Env.scheme_type in
   fprintf fmt " @[<hov 2>%a@]" (print_predicate true) p;
@@ -429,7 +436,8 @@ let print_function fmt id p =
 	print_term e
 
 let print_elem fmt = function
-  | Oblig (loc, _expl, id, s) -> print_obligation fmt loc id s
+  | Oblig (loc, is_lemma, expl, id, s) -> 
+      print_obligation fmt loc is_lemma expl id s
   | Axiom (id, p) -> print_axiom fmt id p
   | Predicate (id, p) -> print_predicate fmt id p
 (*

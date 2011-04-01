@@ -212,43 +212,6 @@ axiom long_P_tags :
 
 logic nb_occ: long_P pointer, int, int, int32, (long_P, int32) memory -> int
 
-axiom nb_occ_empty :
- (forall long_P_long_M_t_1_at_L:(long_P, int32) memory.
-  (forall t_0:long_P pointer.
-   (forall e_0:int32.
-    (forall i_0:int.
-     (forall j_0:int.
-      (gt_int(i_0, j_0) ->
-       eq_int(nb_occ(t_0, i_0, j_0, e_0, long_P_long_M_t_1_at_L), (0))))))))
-
-axiom nb_occ_false :
- (forall long_P_long_M_t_1_at_L:(long_P, int32) memory.
-  (forall t_2:long_P pointer.
-   (forall e_2:int32.
-    (forall i_2:int.
-     (forall j_2:int.
-      ((le_int(i_2, j_2)
-       and neq_int(integer_of_int32(select(long_P_long_M_t_1_at_L,
-                                    shift(t_2, j_2))),
-           integer_of_int32(e_2))) ->
-       eq_int(nb_occ(t_2, i_2, j_2, e_2, long_P_long_M_t_1_at_L),
-       nb_occ(t_2, i_2, sub_int(j_2, (1)), e_2, long_P_long_M_t_1_at_L))))))))
-
-axiom nb_occ_true :
- (forall long_P_long_M_t_1_at_L:(long_P, int32) memory.
-  (forall t_1:long_P pointer.
-   (forall e_1:int32.
-    (forall i_1:int.
-     (forall j_1:int.
-      ((le_int(i_1, j_1)
-       and eq_int(integer_of_int32(select(long_P_long_M_t_1_at_L,
-                                   shift(t_1, j_1))),
-           integer_of_int32(e_1))) ->
-       eq_int(nb_occ(t_1, i_1, j_1, e_1, long_P_long_M_t_1_at_L),
-       add_int(nb_occ(t_1, i_1, sub_int(j_1, (1)), e_1,
-               long_P_long_M_t_1_at_L),
-       (1)))))))))
-
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -361,6 +324,43 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom nb_occ_empty :
+ (forall long_P_long_M_t_1_at_L:(long_P, int32) memory.
+  (forall t_0:long_P pointer.
+   (forall e_0:int32.
+    (forall i_0:int.
+     (forall j_0:int.
+      (gt_int(i_0, j_0) ->
+       eq_int(nb_occ(t_0, i_0, j_0, e_0, long_P_long_M_t_1_at_L), (0))))))))
+
+axiom nb_occ_true :
+ (forall long_P_long_M_t_1_at_L:(long_P, int32) memory.
+  (forall t_1:long_P pointer.
+   (forall e_1:int32.
+    (forall i_1:int.
+     (forall j_1:int.
+      ((le_int(i_1, j_1)
+       and eq_int(integer_of_int32(select(long_P_long_M_t_1_at_L,
+                                   shift(t_1, j_1))),
+           integer_of_int32(e_1))) ->
+       eq_int(nb_occ(t_1, i_1, j_1, e_1, long_P_long_M_t_1_at_L),
+       add_int(nb_occ(t_1, i_1, sub_int(j_1, (1)), e_1,
+               long_P_long_M_t_1_at_L),
+       (1)))))))))
+
+axiom nb_occ_false :
+ (forall long_P_long_M_t_1_at_L:(long_P, int32) memory.
+  (forall t_2:long_P pointer.
+   (forall e_2:int32.
+    (forall i_2:int.
+     (forall j_2:int.
+      ((le_int(i_2, j_2)
+       and neq_int(integer_of_int32(select(long_P_long_M_t_1_at_L,
+                                    shift(t_2, j_2))),
+           integer_of_int32(e_2))) ->
+       eq_int(nb_occ(t_2, i_2, j_2, e_2, long_P_long_M_t_1_at_L),
+       nb_occ(t_2, i_2, sub_int(j_2, (1)), e_2, long_P_long_M_t_1_at_L))))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1803,41 +1803,6 @@ axiom long_P_tags:
 
 logic nb_occ : long_P pointer, int, int, int32, (long_P, int32) memory -> int
 
-axiom nb_occ_empty:
-  (forall long_P_long_M_t_1_at_L:(long_P, int32) memory.
-    (forall t_0:long_P pointer.
-      (forall e_0:int32.
-        (forall i_0:int.
-          (forall j_0:int.
-            ((i_0 > j_0) -> (nb_occ(t_0, i_0, j_0, e_0,
-             long_P_long_M_t_1_at_L) = 0)))))))
-
-axiom nb_occ_false:
-  (forall long_P_long_M_t_1_at_L:(long_P, int32) memory.
-    (forall t_2:long_P pointer.
-      (forall e_2:int32.
-        (forall i_2:int.
-          (forall j_2:int.
-            (((i_2 <= j_2) and
-              (integer_of_int32(select(long_P_long_M_t_1_at_L, shift(t_2,
-              j_2))) <> integer_of_int32(e_2))) ->
-             (nb_occ(t_2, i_2, j_2, e_2,
-             long_P_long_M_t_1_at_L) = nb_occ(t_2, i_2, (j_2 - 1), e_2,
-             long_P_long_M_t_1_at_L))))))))
-
-axiom nb_occ_true:
-  (forall long_P_long_M_t_1_at_L:(long_P, int32) memory.
-    (forall t_1:long_P pointer.
-      (forall e_1:int32.
-        (forall i_1:int.
-          (forall j_1:int.
-            (((i_1 <= j_1) and
-              (integer_of_int32(select(long_P_long_M_t_1_at_L, shift(t_1,
-              j_1))) = integer_of_int32(e_1))) ->
-             (nb_occ(t_1, i_1, j_1, e_1,
-             long_P_long_M_t_1_at_L) = (nb_occ(t_1, i_1, (j_1 - 1), e_1,
-             long_P_long_M_t_1_at_L) + 1))))))))
-
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(char_P_of_pointer_address(p))))
@@ -1953,4 +1918,39 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom nb_occ_empty:
+  (forall long_P_long_M_t_1_at_L:(long_P, int32) memory.
+    (forall t_0:long_P pointer.
+      (forall e_0:int32.
+        (forall i_0:int.
+          (forall j_0:int.
+            ((i_0 > j_0) -> (nb_occ(t_0, i_0, j_0, e_0,
+             long_P_long_M_t_1_at_L) = 0)))))))
+
+axiom nb_occ_true:
+  (forall long_P_long_M_t_1_at_L:(long_P, int32) memory.
+    (forall t_1:long_P pointer.
+      (forall e_1:int32.
+        (forall i_1:int.
+          (forall j_1:int.
+            (((i_1 <= j_1) and
+              (integer_of_int32(select(long_P_long_M_t_1_at_L, shift(t_1,
+              j_1))) = integer_of_int32(e_1))) ->
+             (nb_occ(t_1, i_1, j_1, e_1,
+             long_P_long_M_t_1_at_L) = (nb_occ(t_1, i_1, (j_1 - 1), e_1,
+             long_P_long_M_t_1_at_L) + 1))))))))
+
+axiom nb_occ_false:
+  (forall long_P_long_M_t_1_at_L:(long_P, int32) memory.
+    (forall t_2:long_P pointer.
+      (forall e_2:int32.
+        (forall i_2:int.
+          (forall j_2:int.
+            (((i_2 <= j_2) and
+              (integer_of_int32(select(long_P_long_M_t_1_at_L, shift(t_2,
+              j_2))) <> integer_of_int32(e_2))) ->
+             (nb_occ(t_2, i_2, j_2, e_2,
+             long_P_long_M_t_1_at_L) = nb_occ(t_2, i_2, (j_2 - 1), e_2,
+             long_P_long_M_t_1_at_L))))))))
 

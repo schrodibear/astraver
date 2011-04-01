@@ -811,18 +811,23 @@ let append e1 e2 =
     | _ -> make_block [] (append_list e1 [e2])
 
 
+type goal_kind = KAxiom | KLemma | KGoal
+
+type why_id = { name : string ; loc : Loc.floc }
+
+let id_no_loc s = { name = s; loc = Loc.dummy_floc }
+
 type why_decl =
-  | Param of bool * string * why_type         (*r parameter in why *)
-  | Def of string * expr               (*r global let in why *)
-  | Logic of bool * string * (string * logic_type) list * logic_type    (*r logic decl in why *)
-  | Predicate of bool * string * (string * logic_type) list * assertion  
-  | Inductive of bool * string * (string * logic_type) list *  
+  | Param of bool * why_id * why_type         (*r parameter in why *)
+  | Def of why_id * expr               (*r global let in why *)
+  | Logic of bool * why_id * (string * logic_type) list * logic_type    (*r logic decl in why *)
+  | Predicate of bool * why_id * (string * logic_type) list * assertion  
+  | Inductive of bool * why_id * (string * logic_type) list *  
       (string * assertion) list (*r inductive definition *)
-  | Axiom of string * assertion         (*r Axiom *)
-  | Goal of string * assertion         (*r Goal *)
-  | Function of bool * string * (string * logic_type) list * logic_type * term
-  | Type of string * string list
-  | Exception of string * logic_type option
+  | Goal of goal_kind * why_id * assertion         (*r Goal *)
+  | Function of bool * why_id * (string * logic_type) list * logic_type * term
+  | Type of why_id * string list
+  | Exception of why_id * logic_type option
 
 
 
@@ -831,8 +836,7 @@ let get_why_id d =
     | Param(_,id,_) 
     | Logic(_,id,_,_)
     | Def(id,_) 
-    | Axiom(id,_) 
-    | Goal(id,_) 
+    | Goal(_,id,_) 
     | Predicate(_,id,_,_) 
     | Function(_,id,_,_,_) 
     | Inductive(_,id,_,_)
@@ -852,7 +856,7 @@ let iter_why_decl f d =
     | Predicate(_,_id,args,p) -> 
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	iter_assertion f p
-    | Goal(_id,t) | Axiom(_id,t) -> iter_assertion f t
+    | Goal(_,_id,t) -> iter_assertion f t
     | Function(_,_id,args,t,p) -> 
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	iter_logic_type f t;
@@ -891,77 +895,94 @@ let rec do_topo decl_map iter_fun output_fun id d =
 	d.state <- `DONE
 ;;
 
+let compare_ids 
+    { name = id1; loc = (_,l1,_,_)} 
+    { name = id2; loc = (_,l2,_,_)} =
+  let c = Pervasives.compare l1 l2 in
+  if c = 0 then Pervasives.compare id1 id2 else c
 
 let build_map get_id decl_list =
-  List.fold_left
-    (fun acc decl ->
-       let id = get_id decl in
-       StringMap.add id { state = `TODO ; decl = decl } acc)
-    StringMap.empty
-    decl_list
+  let m =
+    List.fold_left
+      (fun acc decl ->
+	 let id = get_id decl in
+	 let d = { state = `TODO ; decl = decl } in
+	 StringMap.add id.name (id,d) acc)
+      StringMap.empty
+      decl_list
+  in
+  let m,l = StringMap.fold
+    (fun name (id,d) (m,l) ->
+       (StringMap.add name d m, (id,d)::l))
+    m (StringMap.empty,[])
+  in
+  m, List.sort (fun (id1,_) (id2,_) ->
+		  compare_ids id1 id2) l
 ;;
 
 let fprint_logic_arg form (id,t) =
   fprintf form "%s:%a" id fprintf_logic_type t
 
+let str_of_goal_kind = function
+  | KAxiom -> "axiom"
+  | KLemma -> "lemma"
+  | KGoal -> "goal"
+
 let fprintf_why_decl form d =
   match d with
     | Param(b,id,t) ->
 	fprintf form "@[<hov 1>%sparameter %s :@ %a@]@.@." 
-	(if b then "external " else "") id 
+	(if b then "external " else "") id.name 
 	  (fprintf_type false) t
     | Logic(b,id,args,t) ->
 	fprintf form "@[<hov 1>%slogic %s: %a -> %a@.@."
-	  (if b then "external " else "") id 
+	  (if b then "external " else "") id.name 
 	  (print_list comma (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
 	  fprintf_logic_type t 
     | Inductive(b,id,args,cases) ->
 	fprintf form "@[<hov 1>%sinductive %s: @[%a -> prop@] =@\n@[<v 0>%a@]@\n@."
-	  (if b then "external " else "") id 
+	  (if b then "external " else "") id.name 
 	  (print_list comma (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
 	  (print_list newline 
 	     (fun _fmt (id,a) ->
 		fprintf form "| %s: @[%a@]" id fprintf_assertion a))
 	  cases
-    | Axiom(id,p) ->
-	fprintf form "@[<hov 1>axiom %s :@ %a@]@.@." id 
-	  fprintf_assertion p
-    | Goal(id,p) ->
-	fprintf form "@[<hov 1>goal %s :@ %a@]@.@." id 
+    | Goal(k,id,p) ->
+	fprintf form "@[<hov 1>%s %s :@ %a@]@.@." (str_of_goal_kind k) id.name 
 	  fprintf_assertion p
     | Def(id,e) ->
-	fprintf form "@[<hov 1>let %s =@ %a@]@.@." id fprintf_expr e
+	fprintf form "@[<hov 1>let %s =@ %a@]@.@." id.name fprintf_expr e
     | Predicate (b, id, args, p) ->
 	fprintf form "@[<hov 1>%spredicate %s(%a) =@ %a@]@.@."
-	  (if b then "external " else "") id 
+	  (if b then "external " else "") id.name 
 	  (print_list comma fprint_logic_arg) args
 	  fprintf_assertion p
     | Function(b,id,args,t,e) ->
 	fprintf form "@[<hov 1>%sfunction %s(%a) : %a =@ %a@]@.@."
-	  (if b then "external " else "") id 
+	  (if b then "external " else "") id.name 
 	  (print_list comma fprint_logic_arg) args
 	  fprintf_logic_type t 
 	  fprintf_term e
     | Type (id, []) ->
-	fprintf form "@[type %s@]@.@." id
+	fprintf form "@[type %s@]@.@." id.name
     | Type (id, [t]) ->
-	fprintf form "@[type '%s %s@]@.@." t id
+	fprintf form "@[type '%s %s@]@.@." t id.name
     | Type (id, t::l) ->
 	fprintf form "@[type ('%s" t;
 	List.iter (fun t -> fprintf form ", '%s" t) l;
-	fprintf form ") %s@]@.@." id
+	fprintf form ") %s@]@.@." id.name
     | Exception(id, None) ->
-	fprintf form "@[exception %s@]@.@." id
+	fprintf form "@[exception %s@]@.@." id.name
     | Exception(id, Some t) ->
-	fprintf form "@[exception %s of %a@]@.@." id fprintf_logic_type t 
+	fprintf form "@[exception %s of %a@]@.@." id.name fprintf_logic_type t 
 	
 
 let output_decls get_id iter_decl output_decl decls =
-  let map = build_map get_id decls in
-  StringMap.iter
-    (fun id decl ->
-       do_topo map iter_decl output_decl id decl)
-    map
+  let map, l = build_map get_id decls in
+  List.iter
+    (fun (id,decl) ->
+       do_topo map iter_decl output_decl id.name decl)
+    l
 ;;
 
 let fprintf_why_decls form decls =
@@ -1015,10 +1036,10 @@ let fprintf_why_decls form decls =
 	   | _ -> (t, p, d, decl::o))
       ([], [], [], []) decls
   in
-    output_decls get_why_id iter_why_decl (fprintf_why_decl form) types;
-    output_decls get_why_id iter_why_decl (fprintf_why_decl form) others;
-    output_decls get_why_id iter_why_decl (fprintf_why_decl form) params;
-    output_decls get_why_id iter_why_decl (fprintf_why_decl form) defs
+  output_decls get_why_id iter_why_decl (fprintf_why_decl form) types;
+  output_decls get_why_id iter_why_decl (fprintf_why_decl form) others;
+  output_decls get_why_id iter_why_decl (fprintf_why_decl form) params;
+  output_decls get_why_id iter_why_decl (fprintf_why_decl form) defs
 
 
 (*s locs table *)

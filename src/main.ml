@@ -141,14 +141,14 @@ let push_decl _vloc d =
 	
 let push_obligations vloc = 
   List.iter 
-    (fun (loc,expl,id,s) -> 
+    (fun (loc,_is_lemma,expl,id,s) -> 
       let (loc,expl,id,s) = 
 	if pruning_hyp_v != -1 then 
 	  Hypotheses_filtering.reduce (loc, expl, id, s) declarationQueue
 	else
 	  (loc, expl, id, s)
       in
-      push_decl vloc (Dgoal(loc, expl, id, generalize_sequent s))
+      push_decl vloc (Dgoal(loc, false, expl, id, generalize_sequent s))
     ) 
 
 
@@ -559,14 +559,14 @@ let rec interp_decl ?(_prelude=false) d =
 	let f = generalize_function_def (pl,ty,e) in
 	push_decl ("","",Loc.dummy_floc) 
 	  (Dfunction_def (Loc.extract loc, id, f))
-    | Axiom (loc, id, p) ->
+    | Goal(loc, KAxiom, id, p) ->
 	let env = Env.empty_logic () in
 	let p = Ltyping.predicate lab env p in
 	let p = generalize_predicate p in
 	push_decl ("","",Loc.dummy_floc) 
           (Daxiom (Loc.extract loc, Ident.string id, p))
 
-    | Goal (loc, id, p) ->
+    | Goal(loc, kind, id, p) ->
 	let env = Env.empty_logic () in
 	let p = Ltyping.predicate lab env p in
 	let s = ([], p) in
@@ -579,7 +579,8 @@ let rec interp_decl ?(_prelude=false) d =
 	  { lemma_or_fun_name = Ident.string id;
 	    behavior = "";
 	    vc_loc = l;
-	    vc_kind = EKLemma;
+	    vc_kind = if kind = KLemma then EKLemma else EKCheck;
+            vc_label = None;
 	  }
 	in
 	let (l,xpl,id,s) = 
@@ -591,7 +592,7 @@ let rec interp_decl ?(_prelude=false) d =
 	in
 	let s= generalize_sequent s in 
 	let dg = 
-	  Dgoal (l, xpl, id, s) 
+	    Dgoal (l, kind = KLemma, xpl, id, s) 
 	in
 	let ids = id in
 	let vloc =

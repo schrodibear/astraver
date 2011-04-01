@@ -538,7 +538,7 @@ let instantiate_axioms loc =
     
 let new_type = let r = ref 0 in fun () -> incr r; "type_" ^ string_of_int !r
 
-let push_obligation loc expl o s = 
+let push_obligation loc is_lemma expl o s = 
   let vs, s = specialize_sequent s in
   Vmap.iter
     (fun _ tv -> 
@@ -548,7 +548,7 @@ let push_obligation loc expl o s =
       vs;
   IterIT.sequent (declare_logic loc) (declare_type loc) s;
   instantiate_axioms loc;
-  push (Dgoal (loc, expl, o, empty_scheme s))
+  push (Dgoal (loc, is_lemma, expl, o, empty_scheme s))
 
 let push_decl = function
   | Dtype (loc, id, []) -> declare_type loc (PTexternal ([], id))
@@ -561,7 +561,7 @@ let push_decl = function
       failwith "monomorph: inductive def not supported"
   | Dfunction_def (loc, x, d) -> push_function_def loc x d
   | Daxiom (loc, x, p) -> push_axiom loc x p
-  | Dgoal (loc, expl, x, s) -> push_obligation loc expl x s
+  | Dgoal (loc, is_lemma, expl, x, s) -> push_obligation loc is_lemma expl x s
 
 let reset () =
   Queue.clear queue;

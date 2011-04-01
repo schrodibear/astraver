@@ -284,7 +284,7 @@ behavior default:
                       (C_80 : (\forall integer j;
                                 ((j != \at(i_0,Old)) ==>
                                   (model{Here}(\at(a_0,Old), j) ==
-                                    \old(model{Old}(a_0, j)))))))));
+                                    \at(model{Old}(a_0, j),Old))))))));
 {  
    {  (C_49 : ((C_48 : (C_47 : ((C_46 : a_0.val) + i_0)).int_M) = v));
       (if ((C_59 : (C_58 : ((C_57 : a_0.idx) + i_0)).unsigned_int_M) <
@@ -369,10 +369,10 @@ begin = 37
 end = 43
 
 [C_51]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/sparse_array2.c"
+line = 81
+begin = 37
+end = 43
 
 [C_52]
 file = "HOME/tests/c/sparse_array2.c"
@@ -387,10 +387,10 @@ begin = 28
 end = 36
 
 [C_54]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/sparse_array2.c"
+line = 81
+begin = 28
+end = 36
 
 [C_55]
 file = "HOME/tests/c/sparse_array2.c"
@@ -411,10 +411,10 @@ begin = 8
 end = 14
 
 [C_58]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/sparse_array2.c"
+line = 81
+begin = 8
+end = 14
 
 [C_59]
 file = "HOME/tests/c/sparse_array2.c"
@@ -461,10 +461,10 @@ begin = 19
 end = 42
 
 [C_63]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/sparse_array2.c"
+line = 83
+begin = 4
+end = 10
 
 [C_11]
 file = "HOME/tests/c/sparse_array2.c"
@@ -527,10 +527,10 @@ begin = 6
 end = 14
 
 [C_68]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/sparse_array2.c"
+line = 83
+begin = 22
+end = 29
 
 [C_16]
 file = "HOME/tests/c/sparse_array2.c"
@@ -785,10 +785,10 @@ begin = 12
 end = 27
 
 [C_27]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/sparse_array2.c"
+line = 66
+begin = 38
+end = 44
 
 [C_112]
 file = "HOME/tests/c/sparse_array2.c"
@@ -851,10 +851,10 @@ begin = 13
 end = 22
 
 [C_31]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/sparse_array2.c"
+line = 66
+begin = 14
+end = 20
 
 [C_84]
 file = "HOME/tests/c/sparse_array2.c"
@@ -887,10 +887,10 @@ begin = 19
 end = 29
 
 [C_34]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/sparse_array2.c"
+line = 66
+begin = 6
+end = 13
 
 [C_87]
 file = "HOME/tests/c/sparse_array2.c"
@@ -929,10 +929,10 @@ begin = 6
 end = 12
 
 [C_38]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/sparse_array2.c"
+line = 65
+begin = 6
+end = 12
 
 [C_39]
 file = "HOME/tests/c/sparse_array2.c"
@@ -1057,10 +1057,10 @@ begin = 5
 end = 8
 
 [C_47]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/sparse_array2.c"
+line = 80
+begin = 2
+end = 8
 
 [C_48]
 file = "HOME/tests/c/sparse_array2.c"
@@ -2694,58 +2694,6 @@ logic model: SparseArray pointer, int, (SparseArray, uint32) memory,
  (SparseArray, int_P pointer) memory, (int_P, int32) memory,
  (unsigned_int_P, uint32) memory, (unsigned_int_P, uint32) memory -> int
 
-axiom model_in :
- (forall SparseArray_n_a_0_2_at_L:(SparseArray, uint32) memory.
-  (forall SparseArray_back_a_0_2_at_L:
-   (SparseArray, unsigned_int_P pointer) memory.
-   (forall SparseArray_idx_a_0_2_at_L:
-    (SparseArray, unsigned_int_P pointer) memory.
-    (forall SparseArray_val_a_0_2_at_L:(SparseArray, int_P pointer) memory.
-     (forall int_P_int_M_val_11_at_L:(int_P, int32) memory.
-      (forall unsigned_int_P_unsigned_int_M_idx_35_at_L:
-       (unsigned_int_P, uint32) memory.
-       (forall unsigned_int_P_unsigned_int_M_back_34_at_L:
-        (unsigned_int_P, uint32) memory.
-        (forall a_1_0:SparseArray pointer.
-         (forall i_1_0:int.
-          (is_elt(a_1_0, i_1_0, SparseArray_n_a_0_2_at_L,
-           SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
-           unsigned_int_P_unsigned_int_M_back_34_at_L,
-           unsigned_int_P_unsigned_int_M_idx_35_at_L) ->
-           eq_int(model(a_1_0, i_1_0, SparseArray_n_a_0_2_at_L,
-                  SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
-                  SparseArray_val_a_0_2_at_L, int_P_int_M_val_11_at_L,
-                  unsigned_int_P_unsigned_int_M_idx_35_at_L,
-                  unsigned_int_P_unsigned_int_M_back_34_at_L),
-           integer_of_int32(select(int_P_int_M_val_11_at_L,
-                            shift(select(SparseArray_val_a_0_2_at_L, a_1_0),
-                            i_1_0))))))))))))))
-
-axiom model_out :
- (forall SparseArray_n_a_0_2_at_L:(SparseArray, uint32) memory.
-  (forall SparseArray_back_a_0_2_at_L:
-   (SparseArray, unsigned_int_P pointer) memory.
-   (forall SparseArray_idx_a_0_2_at_L:
-    (SparseArray, unsigned_int_P pointer) memory.
-    (forall SparseArray_val_a_0_2_at_L:(SparseArray, int_P pointer) memory.
-     (forall int_P_int_M_val_11_at_L:(int_P, int32) memory.
-      (forall unsigned_int_P_unsigned_int_M_idx_35_at_L:
-       (unsigned_int_P, uint32) memory.
-       (forall unsigned_int_P_unsigned_int_M_back_34_at_L:
-        (unsigned_int_P, uint32) memory.
-        (forall a_2:SparseArray pointer.
-         (forall i_2:int.
-          ((not is_elt(a_2, i_2, SparseArray_n_a_0_2_at_L,
-                SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
-                unsigned_int_P_unsigned_int_M_back_34_at_L,
-                unsigned_int_P_unsigned_int_M_idx_35_at_L)) ->
-           eq_int(model(a_2, i_2, SparseArray_n_a_0_2_at_L,
-                  SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
-                  SparseArray_val_a_0_2_at_L, int_P_int_M_val_11_at_L,
-                  unsigned_int_P_unsigned_int_M_idx_35_at_L,
-                  unsigned_int_P_unsigned_int_M_back_34_at_L),
-           (0))))))))))))
-
 axiom pointer_addr_of_SparseArray_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(SparseArray_of_pointer_address(p))))
@@ -2954,6 +2902,58 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom model_in :
+ (forall SparseArray_n_a_0_2_at_L:(SparseArray, uint32) memory.
+  (forall SparseArray_back_a_0_2_at_L:
+   (SparseArray, unsigned_int_P pointer) memory.
+   (forall SparseArray_idx_a_0_2_at_L:
+    (SparseArray, unsigned_int_P pointer) memory.
+    (forall SparseArray_val_a_0_2_at_L:(SparseArray, int_P pointer) memory.
+     (forall int_P_int_M_val_11_at_L:(int_P, int32) memory.
+      (forall unsigned_int_P_unsigned_int_M_idx_35_at_L:
+       (unsigned_int_P, uint32) memory.
+       (forall unsigned_int_P_unsigned_int_M_back_34_at_L:
+        (unsigned_int_P, uint32) memory.
+        (forall a_1_0:SparseArray pointer.
+         (forall i_1_0:int.
+          (is_elt(a_1_0, i_1_0, SparseArray_n_a_0_2_at_L,
+           SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
+           unsigned_int_P_unsigned_int_M_back_34_at_L,
+           unsigned_int_P_unsigned_int_M_idx_35_at_L) ->
+           eq_int(model(a_1_0, i_1_0, SparseArray_n_a_0_2_at_L,
+                  SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
+                  SparseArray_val_a_0_2_at_L, int_P_int_M_val_11_at_L,
+                  unsigned_int_P_unsigned_int_M_idx_35_at_L,
+                  unsigned_int_P_unsigned_int_M_back_34_at_L),
+           integer_of_int32(select(int_P_int_M_val_11_at_L,
+                            shift(select(SparseArray_val_a_0_2_at_L, a_1_0),
+                            i_1_0))))))))))))))
+
+axiom model_out :
+ (forall SparseArray_n_a_0_2_at_L:(SparseArray, uint32) memory.
+  (forall SparseArray_back_a_0_2_at_L:
+   (SparseArray, unsigned_int_P pointer) memory.
+   (forall SparseArray_idx_a_0_2_at_L:
+    (SparseArray, unsigned_int_P pointer) memory.
+    (forall SparseArray_val_a_0_2_at_L:(SparseArray, int_P pointer) memory.
+     (forall int_P_int_M_val_11_at_L:(int_P, int32) memory.
+      (forall unsigned_int_P_unsigned_int_M_idx_35_at_L:
+       (unsigned_int_P, uint32) memory.
+       (forall unsigned_int_P_unsigned_int_M_back_34_at_L:
+        (unsigned_int_P, uint32) memory.
+        (forall a_2:SparseArray pointer.
+         (forall i_2:int.
+          ((not is_elt(a_2, i_2, SparseArray_n_a_0_2_at_L,
+                SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
+                unsigned_int_P_unsigned_int_M_back_34_at_L,
+                unsigned_int_P_unsigned_int_M_idx_35_at_L)) ->
+           eq_int(model(a_2, i_2, SparseArray_n_a_0_2_at_L,
+                  SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
+                  SparseArray_val_a_0_2_at_L, int_P_int_M_val_11_at_L,
+                  unsigned_int_P_unsigned_int_M_idx_35_at_L,
+                  unsigned_int_P_unsigned_int_M_back_34_at_L),
+           (0))))))))))))
 
 parameter SparseArray_alloc_table : SparseArray alloc_table ref
 
@@ -5614,58 +5614,6 @@ unsigned_int_P pointer) memory, (SparseArray, int_P pointer) memory, (int_P,
 int32) memory, (unsigned_int_P, uint32) memory, (unsigned_int_P,
 uint32) memory -> int
 
-axiom model_in:
-  (forall SparseArray_n_a_0_2_at_L:(SparseArray, uint32) memory.
-    (forall SparseArray_back_a_0_2_at_L:(SparseArray,
-      unsigned_int_P pointer) memory.
-      (forall SparseArray_idx_a_0_2_at_L:(SparseArray,
-        unsigned_int_P pointer) memory.
-        (forall SparseArray_val_a_0_2_at_L:(SparseArray,
-          int_P pointer) memory.
-          (forall int_P_int_M_val_11_at_L:(int_P, int32) memory.
-            (forall unsigned_int_P_unsigned_int_M_idx_35_at_L:(unsigned_int_P,
-              uint32) memory.
-              (forall unsigned_int_P_unsigned_int_M_back_34_at_L:(unsigned_int_P,
-                uint32) memory.
-                (forall a_1_0:SparseArray pointer.
-                  (forall i_1_0:int.
-                    (is_elt(a_1_0, i_1_0, SparseArray_n_a_0_2_at_L,
-                     SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
-                     unsigned_int_P_unsigned_int_M_back_34_at_L,
-                     unsigned_int_P_unsigned_int_M_idx_35_at_L) ->
-                     (model(a_1_0, i_1_0, SparseArray_n_a_0_2_at_L,
-                     SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
-                     SparseArray_val_a_0_2_at_L, int_P_int_M_val_11_at_L,
-                     unsigned_int_P_unsigned_int_M_idx_35_at_L,
-                     unsigned_int_P_unsigned_int_M_back_34_at_L) = integer_of_int32(select(int_P_int_M_val_11_at_L,
-                     shift(select(SparseArray_val_a_0_2_at_L, a_1_0),
-                     i_1_0))))))))))))))
-
-axiom model_out:
-  (forall SparseArray_n_a_0_2_at_L:(SparseArray, uint32) memory.
-    (forall SparseArray_back_a_0_2_at_L:(SparseArray,
-      unsigned_int_P pointer) memory.
-      (forall SparseArray_idx_a_0_2_at_L:(SparseArray,
-        unsigned_int_P pointer) memory.
-        (forall SparseArray_val_a_0_2_at_L:(SparseArray,
-          int_P pointer) memory.
-          (forall int_P_int_M_val_11_at_L:(int_P, int32) memory.
-            (forall unsigned_int_P_unsigned_int_M_idx_35_at_L:(unsigned_int_P,
-              uint32) memory.
-              (forall unsigned_int_P_unsigned_int_M_back_34_at_L:(unsigned_int_P,
-                uint32) memory.
-                (forall a_2:SparseArray pointer.
-                  (forall i_2:int.
-                    ((not is_elt(a_2, i_2, SparseArray_n_a_0_2_at_L,
-                     SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
-                     unsigned_int_P_unsigned_int_M_back_34_at_L,
-                     unsigned_int_P_unsigned_int_M_idx_35_at_L)) ->
-                     (model(a_2, i_2, SparseArray_n_a_0_2_at_L,
-                     SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
-                     SparseArray_val_a_0_2_at_L, int_P_int_M_val_11_at_L,
-                     unsigned_int_P_unsigned_int_M_idx_35_at_L,
-                     unsigned_int_P_unsigned_int_M_back_34_at_L) = 0)))))))))))
-
 axiom pointer_addr_of_SparseArray_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(SparseArray_of_pointer_address(p))))
@@ -5876,6 +5824,58 @@ axiom void_P_tags:
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
 
+axiom model_in:
+  (forall SparseArray_n_a_0_2_at_L:(SparseArray, uint32) memory.
+    (forall SparseArray_back_a_0_2_at_L:(SparseArray,
+      unsigned_int_P pointer) memory.
+      (forall SparseArray_idx_a_0_2_at_L:(SparseArray,
+        unsigned_int_P pointer) memory.
+        (forall SparseArray_val_a_0_2_at_L:(SparseArray,
+          int_P pointer) memory.
+          (forall int_P_int_M_val_11_at_L:(int_P, int32) memory.
+            (forall unsigned_int_P_unsigned_int_M_idx_35_at_L:(unsigned_int_P,
+              uint32) memory.
+              (forall unsigned_int_P_unsigned_int_M_back_34_at_L:(unsigned_int_P,
+                uint32) memory.
+                (forall a_1_0:SparseArray pointer.
+                  (forall i_1_0:int.
+                    (is_elt(a_1_0, i_1_0, SparseArray_n_a_0_2_at_L,
+                     SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
+                     unsigned_int_P_unsigned_int_M_back_34_at_L,
+                     unsigned_int_P_unsigned_int_M_idx_35_at_L) ->
+                     (model(a_1_0, i_1_0, SparseArray_n_a_0_2_at_L,
+                     SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
+                     SparseArray_val_a_0_2_at_L, int_P_int_M_val_11_at_L,
+                     unsigned_int_P_unsigned_int_M_idx_35_at_L,
+                     unsigned_int_P_unsigned_int_M_back_34_at_L) = integer_of_int32(select(int_P_int_M_val_11_at_L,
+                     shift(select(SparseArray_val_a_0_2_at_L, a_1_0),
+                     i_1_0))))))))))))))
+
+axiom model_out:
+  (forall SparseArray_n_a_0_2_at_L:(SparseArray, uint32) memory.
+    (forall SparseArray_back_a_0_2_at_L:(SparseArray,
+      unsigned_int_P pointer) memory.
+      (forall SparseArray_idx_a_0_2_at_L:(SparseArray,
+        unsigned_int_P pointer) memory.
+        (forall SparseArray_val_a_0_2_at_L:(SparseArray,
+          int_P pointer) memory.
+          (forall int_P_int_M_val_11_at_L:(int_P, int32) memory.
+            (forall unsigned_int_P_unsigned_int_M_idx_35_at_L:(unsigned_int_P,
+              uint32) memory.
+              (forall unsigned_int_P_unsigned_int_M_back_34_at_L:(unsigned_int_P,
+                uint32) memory.
+                (forall a_2:SparseArray pointer.
+                  (forall i_2:int.
+                    ((not is_elt(a_2, i_2, SparseArray_n_a_0_2_at_L,
+                     SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
+                     unsigned_int_P_unsigned_int_M_back_34_at_L,
+                     unsigned_int_P_unsigned_int_M_idx_35_at_L)) ->
+                     (model(a_2, i_2, SparseArray_n_a_0_2_at_L,
+                     SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
+                     SparseArray_val_a_0_2_at_L, int_P_int_M_val_11_at_L,
+                     unsigned_int_P_unsigned_int_M_idx_35_at_L,
+                     unsigned_int_P_unsigned_int_M_back_34_at_L) = 0)))))))))))
+
 goal create_ensures_default_po_1:
   forall sz:uint32.
   forall unsigned_int_P_unsigned_int_M_idx_20:(unsigned_int_P,
@@ -5963,14 +5963,13 @@ goal create_ensures_default_po_1:
   (return = a_1_1) ->
   ("JC_25":
   ("JC_18":
-  ("JC_15":
   ("JC_15": inv(return, unsigned_int_P_back_22_alloc_table0,
   unsigned_int_P_idx_20_alloc_table0, int_P_val_18_alloc_table0,
   SparseArray_result_4_alloc_table0, SparseArray_sz_0_result_4_0,
   SparseArray_n_result_4_0, SparseArray_back_result_4_0,
   SparseArray_idx_result_4_0, SparseArray_val_result_4_0,
   unsigned_int_P_unsigned_int_M_back_22,
-  unsigned_int_P_unsigned_int_M_idx_20)))))
+  unsigned_int_P_unsigned_int_M_idx_20))))
 
 goal create_ensures_default_po_2:
   forall sz:uint32.
@@ -6055,9 +6054,8 @@ goal create_ensures_default_po_2:
   (return = a_1_1) ->
   ("JC_25":
   ("JC_18":
-  ("JC_16":
   ("JC_16": (integer_of_uint32(select(SparseArray_sz_0_result_4_0,
-  return)) = integer_of_uint32(sz))))))
+  return)) = integer_of_uint32(sz)))))
 
 goal create_ensures_default_po_3:
   forall sz:uint32.
@@ -6146,15 +6144,14 @@ goal create_ensures_default_po_3:
   sz)) ->
   forall return:SparseArray pointer.
   (return = a_1_1) ->
+  forall i_4:int.
   ("JC_25":
   ("JC_18":
-  ("JC_17":
-  ("JC_17":
-  (forall i_4:int. (model(return, i_4, SparseArray_n_result_4_0,
-    SparseArray_back_result_4_0, SparseArray_idx_result_4_0,
-    SparseArray_val_result_4_0, int_P_int_M_val_18,
-    unsigned_int_P_unsigned_int_M_idx_20,
-    unsigned_int_P_unsigned_int_M_back_22) = 0))))))
+  ("JC_17": (model(return, i_4, SparseArray_n_result_4_0,
+  SparseArray_back_result_4_0, SparseArray_idx_result_4_0,
+  SparseArray_val_result_4_0, int_P_int_M_val_18,
+  unsigned_int_P_unsigned_int_M_idx_20,
+  unsigned_int_P_unsigned_int_M_back_22) = 0))))
 
 goal create_ensures_default_po_4:
   forall sz:uint32.
@@ -6239,9 +6236,8 @@ goal create_ensures_default_po_4:
   (return = a_1_1) ->
   ("JC_25":
   ("JC_24":
-  ("JC_19":
   ("JC_19": not_assigns(SparseArray_result_4_alloc_table,
-  SparseArray_val_result_4, SparseArray_val_result_4_0, pset_empty)))))
+  SparseArray_val_result_4, SparseArray_val_result_4_0, pset_empty))))
 
 goal create_ensures_default_po_5:
   forall sz:uint32.
@@ -6326,9 +6322,8 @@ goal create_ensures_default_po_5:
   (return = a_1_1) ->
   ("JC_25":
   ("JC_24":
-  ("JC_20":
   ("JC_20": not_assigns(SparseArray_result_4_alloc_table,
-  SparseArray_idx_result_4, SparseArray_idx_result_4_0, pset_empty)))))
+  SparseArray_idx_result_4, SparseArray_idx_result_4_0, pset_empty))))
 
 goal create_ensures_default_po_6:
   forall sz:uint32.
@@ -6413,9 +6408,8 @@ goal create_ensures_default_po_6:
   (return = a_1_1) ->
   ("JC_25":
   ("JC_24":
-  ("JC_21":
   ("JC_21": not_assigns(SparseArray_result_4_alloc_table,
-  SparseArray_back_result_4, SparseArray_back_result_4_0, pset_empty)))))
+  SparseArray_back_result_4, SparseArray_back_result_4_0, pset_empty))))
 
 goal create_ensures_default_po_7:
   forall sz:uint32.
@@ -6500,9 +6494,8 @@ goal create_ensures_default_po_7:
   (return = a_1_1) ->
   ("JC_25":
   ("JC_24":
-  ("JC_22":
   ("JC_22": not_assigns(SparseArray_result_4_alloc_table,
-  SparseArray_n_result_4, SparseArray_n_result_4_0, pset_empty)))))
+  SparseArray_n_result_4, SparseArray_n_result_4_0, pset_empty))))
 
 goal create_ensures_default_po_8:
   forall sz:uint32.
@@ -6587,9 +6580,8 @@ goal create_ensures_default_po_8:
   (return = a_1_1) ->
   ("JC_25":
   ("JC_24":
-  ("JC_23":
   ("JC_23": not_assigns(SparseArray_result_4_alloc_table,
-  SparseArray_sz_0_result_4, SparseArray_sz_0_result_4_0, pset_empty)))))
+  SparseArray_sz_0_result_4, SparseArray_sz_0_result_4_0, pset_empty))))
 
 goal create_safety_po_1:
   forall sz:uint32.
@@ -6688,9 +6680,8 @@ goal get_ensures_default_po_1:
      (integer_of_uint32(i_1) <= (integer_of_uint32(select(SparseArray_sz_0_a_6,
      a_1)) - 1))))))) ->
   ("JC_80":
-  ("JC_80":
   (0 <= integer_of_uint32(select(unsigned_int_P_unsigned_int_M_idx_24,
-  shift(select(SparseArray_idx_a_6, a_1), integer_of_uint32(i_1)))))))
+  shift(select(SparseArray_idx_a_6, a_1), integer_of_uint32(i_1))))))
 
 goal get_ensures_default_po_2:
   forall a_1:SparseArray pointer.
@@ -7575,7 +7566,7 @@ goal main_ensures_default_po_1:
   SparseArray_idx_b_31, SparseArray_val_b_31, result9, result12, result11))) ->
   forall y:int32.
   (y = result24) ->
-  ("JC_168": ("JC_166": ("JC_166": (integer_of_int32(x_0) = 0))))
+  ("JC_168": ("JC_166": (integer_of_int32(x_0) = 0)))
 
 goal main_ensures_default_po_2:
   ("JC_138": true) ->
@@ -7709,7 +7700,7 @@ goal main_ensures_default_po_2:
   SparseArray_idx_b_31, SparseArray_val_b_31, result9, result12, result11))) ->
   forall y:int32.
   (y = result24) ->
-  ("JC_168": ("JC_167": ("JC_167": (integer_of_int32(y) = 0))))
+  ("JC_168": ("JC_167": (integer_of_int32(y) = 0)))
 
 goal main_ensures_default_po_3:
   ("JC_138": true) ->
@@ -7960,7 +7951,7 @@ goal main_ensures_default_po_3:
   unsigned_int_P_unsigned_int_M_back_146))) ->
   forall y0:int32.
   (y0 = result32) ->
-  ("JC_175": ("JC_173": ("JC_173": (integer_of_int32(x_0_0) = 1))))
+  ("JC_175": ("JC_173": (integer_of_int32(x_0_0) = 1)))
 
 goal main_ensures_default_po_4:
   ("JC_138": true) ->
@@ -8211,7 +8202,7 @@ goal main_ensures_default_po_4:
   unsigned_int_P_unsigned_int_M_back_146))) ->
   forall y0:int32.
   (y0 = result32) ->
-  ("JC_175": ("JC_174": ("JC_174": (integer_of_int32(y0) = 2))))
+  ("JC_175": ("JC_174": (integer_of_int32(y0) = 2)))
 
 goal main_ensures_default_po_5:
   ("JC_138": true) ->
@@ -8485,7 +8476,7 @@ goal main_ensures_default_po_5:
   unsigned_int_P_unsigned_int_M_back_146))) ->
   forall y1:int32.
   (y1 = result36) ->
-  ("JC_180": ("JC_178": ("JC_178": (integer_of_int32(x_0_1) = 0))))
+  ("JC_180": ("JC_178": (integer_of_int32(x_0_1) = 0)))
 
 goal main_ensures_default_po_6:
   ("JC_138": true) ->
@@ -8759,13 +8750,13 @@ goal main_ensures_default_po_6:
   unsigned_int_P_unsigned_int_M_back_146))) ->
   forall y1:int32.
   (y1 = result36) ->
-  ("JC_180": ("JC_179": ("JC_179": (integer_of_int32(y1) = 0))))
+  ("JC_180": ("JC_179": (integer_of_int32(y1) = 0)))
 
 goal main_safety_po_1:
   ("JC_138": true) ->
   forall result17:uint32.
   (integer_of_uint32(result17) = 10) ->
-  ("JC_11": ("JC_11": (integer_of_uint32(result17) >= 0)))
+  ("JC_11": (integer_of_uint32(result17) >= 0))
 
 goal main_safety_po_2:
   ("JC_138": true) ->
@@ -8828,7 +8819,7 @@ goal main_safety_po_2:
   (a_2_0 = result18) ->
   forall result19:uint32.
   (integer_of_uint32(result19) = 20) ->
-  ("JC_11": ("JC_11": (integer_of_uint32(result19) >= 0)))
+  ("JC_11": (integer_of_uint32(result19) >= 0))
 
 goal main_safety_po_3:
   ("JC_138": true) ->
@@ -8950,8 +8941,7 @@ goal main_safety_po_3:
   forall result21:uint32.
   (integer_of_uint32(result21) = 5) ->
   ("JC_56":
-  ("JC_52":
-  ("JC_52": (offset_min(SparseArray_a_2_30_alloc_table, a_2_0) <= 0))))
+  ("JC_52": (offset_min(SparseArray_a_2_30_alloc_table, a_2_0) <= 0)))
 
 goal main_safety_po_4:
   ("JC_138": true) ->
@@ -9073,8 +9063,7 @@ goal main_safety_po_4:
   forall result21:uint32.
   (integer_of_uint32(result21) = 5) ->
   ("JC_56":
-  ("JC_53":
-  ("JC_53": (offset_max(SparseArray_a_2_30_alloc_table, a_2_0) >= 0))))
+  ("JC_53": (offset_max(SparseArray_a_2_30_alloc_table, a_2_0) >= 0)))
 
 goal main_safety_po_5:
   ("JC_138": true) ->
@@ -9196,12 +9185,11 @@ goal main_safety_po_5:
   forall result21:uint32.
   (integer_of_uint32(result21) = 5) ->
   ("JC_56":
-  ("JC_54":
   ("JC_54": inv(a_2_0, unsigned_int_P_back_142_alloc_table,
   unsigned_int_P_idx_140_alloc_table, int_P_val_141_alloc_table,
   SparseArray_a_2_30_alloc_table, SparseArray_sz_0_a_2_30,
   SparseArray_n_a_2_30, SparseArray_back_a_2_30, SparseArray_idx_a_2_30,
-  SparseArray_val_a_2_30, result13, result14))))
+  SparseArray_val_a_2_30, result13, result14)))
 
 goal main_safety_po_6:
   ("JC_138": true) ->
@@ -9324,9 +9312,8 @@ goal main_safety_po_6:
   (integer_of_uint32(result21) = 5) ->
   ("JC_56":
   ("JC_55":
-  ("JC_55":
   (integer_of_uint32(result21) <= (integer_of_uint32(select(SparseArray_sz_0_a_2_30,
-  a_2_0)) - 1)))))
+  a_2_0)) - 1))))
 
 goal main_safety_po_7:
   ("JC_138": true) ->
@@ -9467,8 +9454,7 @@ goal main_safety_po_7:
   (x_0 = result22) ->
   forall result23:uint32.
   (integer_of_uint32(result23) = 7) ->
-  ("JC_56":
-  ("JC_52": ("JC_52": (offset_min(SparseArray_b_31_alloc_table, b) <= 0))))
+  ("JC_56": ("JC_52": (offset_min(SparseArray_b_31_alloc_table, b) <= 0)))
 
 goal main_safety_po_8:
   ("JC_138": true) ->
@@ -9609,8 +9595,7 @@ goal main_safety_po_8:
   (x_0 = result22) ->
   forall result23:uint32.
   (integer_of_uint32(result23) = 7) ->
-  ("JC_56":
-  ("JC_53": ("JC_53": (offset_max(SparseArray_b_31_alloc_table, b) >= 0))))
+  ("JC_56": ("JC_53": (offset_max(SparseArray_b_31_alloc_table, b) >= 0)))
 
 goal main_safety_po_9:
   ("JC_138": true) ->
@@ -9752,12 +9737,11 @@ goal main_safety_po_9:
   forall result23:uint32.
   (integer_of_uint32(result23) = 7) ->
   ("JC_56":
-  ("JC_54":
   ("JC_54": inv(b, unsigned_int_P_back_146_alloc_table,
   unsigned_int_P_idx_144_alloc_table, int_P_val_145_alloc_table,
   SparseArray_b_31_alloc_table, SparseArray_sz_0_b_31, SparseArray_n_b_31,
   SparseArray_back_b_31, SparseArray_idx_b_31, SparseArray_val_b_31,
-  result11, result12))))
+  result11, result12)))
 
 goal main_safety_po_10:
   ("JC_138": true) ->
@@ -9900,9 +9884,8 @@ goal main_safety_po_10:
   (integer_of_uint32(result23) = 7) ->
   ("JC_56":
   ("JC_55":
-  ("JC_55":
   (integer_of_uint32(result23) <= (integer_of_uint32(select(SparseArray_sz_0_b_31,
-  b)) - 1)))))
+  b)) - 1))))
 
 goal main_safety_po_11:
   ("JC_138": true) ->
@@ -10068,8 +10051,7 @@ goal main_safety_po_11:
   forall result26:int32.
   (integer_of_int32(result26) = 1) ->
   ("JC_85":
-  ("JC_82":
-  ("JC_82": (offset_max(SparseArray_a_2_30_alloc_table, a_2_0) >= 0))))
+  ("JC_82": (offset_max(SparseArray_a_2_30_alloc_table, a_2_0) >= 0)))
 
 goal main_safety_po_12:
   ("JC_138": true) ->
@@ -10235,12 +10217,11 @@ goal main_safety_po_12:
   forall result26:int32.
   (integer_of_int32(result26) = 1) ->
   ("JC_85":
-  ("JC_83":
   ("JC_83": inv(a_2_0, unsigned_int_P_back_142_alloc_table,
   unsigned_int_P_idx_140_alloc_table, int_P_val_141_alloc_table,
   SparseArray_a_2_30_alloc_table, SparseArray_sz_0_a_2_30,
   SparseArray_n_a_2_30, SparseArray_back_a_2_30, SparseArray_idx_a_2_30,
-  SparseArray_val_a_2_30, result13, result14))))
+  SparseArray_val_a_2_30, result13, result14)))
 
 goal main_safety_po_13:
   ("JC_138": true) ->
@@ -10407,9 +10388,8 @@ goal main_safety_po_13:
   (integer_of_int32(result26) = 1) ->
   ("JC_85":
   ("JC_84":
-  ("JC_84":
   (integer_of_uint32(result25) <= (integer_of_uint32(select(SparseArray_sz_0_a_2_30,
-  a_2_0)) - 1)))))
+  a_2_0)) - 1))))
 
 goal main_safety_po_14:
   ("JC_138": true) ->
@@ -10633,8 +10613,7 @@ goal main_safety_po_14:
   (integer_of_uint32(result27) = 7) ->
   forall result28:int32.
   (integer_of_int32(result28) = 2) ->
-  ("JC_85":
-  ("JC_82": ("JC_82": (offset_max(SparseArray_b_31_alloc_table, b) >= 0))))
+  ("JC_85": ("JC_82": (offset_max(SparseArray_b_31_alloc_table, b) >= 0)))
 
 goal main_safety_po_15:
   ("JC_138": true) ->
@@ -10859,12 +10838,11 @@ goal main_safety_po_15:
   forall result28:int32.
   (integer_of_int32(result28) = 2) ->
   ("JC_85":
-  ("JC_83":
   ("JC_83": inv(b, unsigned_int_P_back_146_alloc_table,
   unsigned_int_P_idx_144_alloc_table, int_P_val_145_alloc_table,
   SparseArray_b_31_alloc_table, SparseArray_sz_0_b_31, SparseArray_n_b_31,
   SparseArray_back_b_31, SparseArray_idx_b_31, SparseArray_val_b_31,
-  result11, result12))))
+  result11, result12)))
 
 goal main_safety_po_16:
   ("JC_138": true) ->
@@ -11090,9 +11068,8 @@ goal main_safety_po_16:
   (integer_of_int32(result28) = 2) ->
   ("JC_85":
   ("JC_84":
-  ("JC_84":
   (integer_of_uint32(result27) <= (integer_of_uint32(select(SparseArray_sz_0_b_31,
-  b)) - 1)))))
+  b)) - 1))))
 
 goal main_safety_po_17:
   ("JC_138": true) ->
@@ -11372,8 +11349,7 @@ goal main_safety_po_17:
   forall result29:uint32.
   (integer_of_uint32(result29) = 5) ->
   ("JC_56":
-  ("JC_53":
-  ("JC_53": (offset_max(SparseArray_a_2_30_alloc_table, a_2_0) >= 0))))
+  ("JC_53": (offset_max(SparseArray_a_2_30_alloc_table, a_2_0) >= 0)))
 
 goal main_safety_po_18:
   ("JC_138": true) ->
@@ -11653,13 +11629,12 @@ goal main_safety_po_18:
   forall result29:uint32.
   (integer_of_uint32(result29) = 5) ->
   ("JC_56":
-  ("JC_54":
   ("JC_54": inv(a_2_0, unsigned_int_P_back_142_alloc_table,
   unsigned_int_P_idx_140_alloc_table, int_P_val_141_alloc_table,
   SparseArray_a_2_30_alloc_table, SparseArray_sz_0_a_2_30,
   SparseArray_n_a_2_30_0, SparseArray_back_a_2_30, SparseArray_idx_a_2_30,
   SparseArray_val_a_2_30, unsigned_int_P_unsigned_int_M_back_142,
-  unsigned_int_P_unsigned_int_M_idx_140))))
+  unsigned_int_P_unsigned_int_M_idx_140)))
 
 goal main_safety_po_19:
   ("JC_138": true) ->
@@ -11940,9 +11915,8 @@ goal main_safety_po_19:
   (integer_of_uint32(result29) = 5) ->
   ("JC_56":
   ("JC_55":
-  ("JC_55":
   (integer_of_uint32(result29) <= (integer_of_uint32(select(SparseArray_sz_0_a_2_30,
-  a_2_0)) - 1)))))
+  a_2_0)) - 1))))
 
 goal main_safety_po_20:
   ("JC_138": true) ->
@@ -12243,8 +12217,7 @@ goal main_safety_po_20:
   (x_0_0 = result30) ->
   forall result31:uint32.
   (integer_of_uint32(result31) = 7) ->
-  ("JC_56":
-  ("JC_53": ("JC_53": (offset_max(SparseArray_b_31_alloc_table, b) >= 0))))
+  ("JC_56": ("JC_53": (offset_max(SparseArray_b_31_alloc_table, b) >= 0)))
 
 goal main_safety_po_21:
   ("JC_138": true) ->
@@ -12546,13 +12519,12 @@ goal main_safety_po_21:
   forall result31:uint32.
   (integer_of_uint32(result31) = 7) ->
   ("JC_56":
-  ("JC_54":
   ("JC_54": inv(b, unsigned_int_P_back_146_alloc_table,
   unsigned_int_P_idx_144_alloc_table, int_P_val_145_alloc_table,
   SparseArray_b_31_alloc_table, SparseArray_sz_0_b_31, SparseArray_n_b_31_0,
   SparseArray_back_b_31, SparseArray_idx_b_31, SparseArray_val_b_31,
   unsigned_int_P_unsigned_int_M_back_146,
-  unsigned_int_P_unsigned_int_M_idx_144))))
+  unsigned_int_P_unsigned_int_M_idx_144)))
 
 goal main_safety_po_22:
   ("JC_138": true) ->
@@ -12855,9 +12827,8 @@ goal main_safety_po_22:
   (integer_of_uint32(result31) = 7) ->
   ("JC_56":
   ("JC_55":
-  ("JC_55":
   (integer_of_uint32(result31) <= (integer_of_uint32(select(SparseArray_sz_0_b_31,
-  b)) - 1)))))
+  b)) - 1))))
 
 goal main_safety_po_23:
   ("JC_138": true) ->
@@ -13184,8 +13155,7 @@ goal main_safety_po_23:
   forall result33:uint32.
   (integer_of_uint32(result33) = 0) ->
   ("JC_56":
-  ("JC_53":
-  ("JC_53": (offset_max(SparseArray_a_2_30_alloc_table, a_2_0) >= 0))))
+  ("JC_53": (offset_max(SparseArray_a_2_30_alloc_table, a_2_0) >= 0)))
 
 goal main_safety_po_24:
   ("JC_138": true) ->
@@ -13512,13 +13482,12 @@ goal main_safety_po_24:
   forall result33:uint32.
   (integer_of_uint32(result33) = 0) ->
   ("JC_56":
-  ("JC_54":
   ("JC_54": inv(a_2_0, unsigned_int_P_back_142_alloc_table,
   unsigned_int_P_idx_140_alloc_table, int_P_val_141_alloc_table,
   SparseArray_a_2_30_alloc_table, SparseArray_sz_0_a_2_30,
   SparseArray_n_a_2_30_0, SparseArray_back_a_2_30, SparseArray_idx_a_2_30,
   SparseArray_val_a_2_30, unsigned_int_P_unsigned_int_M_back_142,
-  unsigned_int_P_unsigned_int_M_idx_140))))
+  unsigned_int_P_unsigned_int_M_idx_140)))
 
 goal main_safety_po_25:
   ("JC_138": true) ->
@@ -13846,9 +13815,8 @@ goal main_safety_po_25:
   (integer_of_uint32(result33) = 0) ->
   ("JC_56":
   ("JC_55":
-  ("JC_55":
   (integer_of_uint32(result33) <= (integer_of_uint32(select(SparseArray_sz_0_a_2_30,
-  a_2_0)) - 1)))))
+  a_2_0)) - 1))))
 
 goal main_safety_po_26:
   ("JC_138": true) ->
@@ -14196,8 +14164,7 @@ goal main_safety_po_26:
   (x_0_1 = result34) ->
   forall result35:uint32.
   (integer_of_uint32(result35) = 0) ->
-  ("JC_56":
-  ("JC_53": ("JC_53": (offset_max(SparseArray_b_31_alloc_table, b) >= 0))))
+  ("JC_56": ("JC_53": (offset_max(SparseArray_b_31_alloc_table, b) >= 0)))
 
 goal main_safety_po_27:
   ("JC_138": true) ->
@@ -14546,13 +14513,12 @@ goal main_safety_po_27:
   forall result35:uint32.
   (integer_of_uint32(result35) = 0) ->
   ("JC_56":
-  ("JC_54":
   ("JC_54": inv(b, unsigned_int_P_back_146_alloc_table,
   unsigned_int_P_idx_144_alloc_table, int_P_val_145_alloc_table,
   SparseArray_b_31_alloc_table, SparseArray_sz_0_b_31, SparseArray_n_b_31_0,
   SparseArray_back_b_31, SparseArray_idx_b_31, SparseArray_val_b_31,
   unsigned_int_P_unsigned_int_M_back_146,
-  unsigned_int_P_unsigned_int_M_idx_144))))
+  unsigned_int_P_unsigned_int_M_idx_144)))
 
 goal main_safety_po_28:
   ("JC_138": true) ->
@@ -14902,9 +14868,8 @@ goal main_safety_po_28:
   (integer_of_uint32(result35) = 0) ->
   ("JC_56":
   ("JC_55":
-  ("JC_55":
   (integer_of_uint32(result35) <= (integer_of_uint32(select(SparseArray_sz_0_b_31,
-  b)) - 1)))))
+  b)) - 1))))
 
 goal set_ensures_default_po_1:
   forall a_0_0:SparseArray pointer.
@@ -14969,13 +14934,12 @@ goal set_ensures_default_po_1:
   (integer_of_uint32(result6) = integer_of_uint32(i_0_0)) ->
   ("JC_102":
   ("JC_96":
-  ("JC_93":
   ("JC_93": inv(a_0_0, unsigned_int_P_back_29_alloc_table,
   unsigned_int_P_idx_28_alloc_table, int_P_val_27_alloc_table,
   SparseArray_a_0_7_alloc_table, SparseArray_sz_0_a_0_7, SparseArray_n_a_0_7,
   SparseArray_back_a_0_7, SparseArray_idx_a_0_7, SparseArray_val_a_0_7,
   unsigned_int_P_unsigned_int_M_back_29,
-  unsigned_int_P_unsigned_int_M_idx_28)))))
+  unsigned_int_P_unsigned_int_M_idx_28))))
 
 goal set_ensures_default_po_2:
   forall a_0_0:SparseArray pointer.
@@ -15040,11 +15004,10 @@ goal set_ensures_default_po_2:
   (integer_of_uint32(result6) = integer_of_uint32(i_0_0)) ->
   ("JC_102":
   ("JC_96":
-  ("JC_94":
   ("JC_94": (model(a_0_0, integer_of_uint32(i_0_0), SparseArray_n_a_0_7,
   SparseArray_back_a_0_7, SparseArray_idx_a_0_7, SparseArray_val_a_0_7,
   int_P_int_M_val_27_0, unsigned_int_P_unsigned_int_M_idx_28,
-  unsigned_int_P_unsigned_int_M_back_29) = integer_of_int32(v))))))
+  unsigned_int_P_unsigned_int_M_back_29) = integer_of_int32(v)))))
 
 goal set_ensures_default_po_3:
   forall a_0_0:SparseArray pointer.
@@ -15107,19 +15070,18 @@ goal set_ensures_default_po_3:
   (result6 = select(unsigned_int_P_unsigned_int_M_back_29, shift(result3,
   integer_of_uint32(result5)))) ->
   (integer_of_uint32(result6) = integer_of_uint32(i_0_0)) ->
+  forall j:int.
+  (j <> integer_of_uint32(i_0_0)) ->
   ("JC_102":
   ("JC_96":
-  ("JC_95":
-  ("JC_95":
-  (forall j:int.
-    ((j <> integer_of_uint32(i_0_0)) -> (model(a_0_0, j, SparseArray_n_a_0_7,
-     SparseArray_back_a_0_7, SparseArray_idx_a_0_7, SparseArray_val_a_0_7,
-     int_P_int_M_val_27_0, unsigned_int_P_unsigned_int_M_idx_28,
-     unsigned_int_P_unsigned_int_M_back_29) = model(a_0_0, j,
-     SparseArray_n_a_0_7, SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
-     SparseArray_val_a_0_7, int_P_int_M_val_27,
-     unsigned_int_P_unsigned_int_M_idx_28,
-     unsigned_int_P_unsigned_int_M_back_29))))))))
+  ("JC_95": (model(a_0_0, j, SparseArray_n_a_0_7, SparseArray_back_a_0_7,
+  SparseArray_idx_a_0_7, SparseArray_val_a_0_7, int_P_int_M_val_27_0,
+  unsigned_int_P_unsigned_int_M_idx_28,
+  unsigned_int_P_unsigned_int_M_back_29) = model(a_0_0, j,
+  SparseArray_n_a_0_7, SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
+  SparseArray_val_a_0_7, int_P_int_M_val_27,
+  unsigned_int_P_unsigned_int_M_idx_28,
+  unsigned_int_P_unsigned_int_M_back_29)))))
 
 goal set_ensures_default_po_4:
   forall a_0_0:SparseArray pointer.
@@ -15184,10 +15146,9 @@ goal set_ensures_default_po_4:
   (integer_of_uint32(result6) = integer_of_uint32(i_0_0)) ->
   ("JC_102":
   ("JC_101":
-  ("JC_97":
   ("JC_97": not_assigns(unsigned_int_P_idx_28_alloc_table,
   unsigned_int_P_unsigned_int_M_idx_28, unsigned_int_P_unsigned_int_M_idx_28,
-  pset_all(pset_deref(SparseArray_idx_a_0_7, pset_singleton(a_0_0))))))))
+  pset_all(pset_deref(SparseArray_idx_a_0_7, pset_singleton(a_0_0)))))))
 
 goal set_ensures_default_po_5:
   forall a_0_0:SparseArray pointer.
@@ -15252,11 +15213,10 @@ goal set_ensures_default_po_5:
   (integer_of_uint32(result6) = integer_of_uint32(i_0_0)) ->
   ("JC_102":
   ("JC_101":
-  ("JC_98":
   ("JC_98": not_assigns(unsigned_int_P_back_29_alloc_table,
   unsigned_int_P_unsigned_int_M_back_29,
   unsigned_int_P_unsigned_int_M_back_29,
-  pset_all(pset_deref(SparseArray_back_a_0_7, pset_singleton(a_0_0))))))))
+  pset_all(pset_deref(SparseArray_back_a_0_7, pset_singleton(a_0_0)))))))
 
 goal set_ensures_default_po_6:
   forall a_0_0:SparseArray pointer.
@@ -15321,11 +15281,10 @@ goal set_ensures_default_po_6:
   (integer_of_uint32(result6) = integer_of_uint32(i_0_0)) ->
   ("JC_102":
   ("JC_101":
-  ("JC_99":
   ("JC_99": not_assigns(int_P_val_27_alloc_table, int_P_int_M_val_27,
   int_P_int_M_val_27_0, pset_range(pset_deref(SparseArray_val_a_0_7,
   pset_singleton(a_0_0)), integer_of_uint32(i_0_0),
-  integer_of_uint32(i_0_0)))))))
+  integer_of_uint32(i_0_0))))))
 
 goal set_ensures_default_po_7:
   forall a_0_0:SparseArray pointer.
@@ -15390,9 +15349,8 @@ goal set_ensures_default_po_7:
   (integer_of_uint32(result6) = integer_of_uint32(i_0_0)) ->
   ("JC_102":
   ("JC_101":
-  ("JC_100":
   ("JC_100": not_assigns(SparseArray_a_0_7_alloc_table, SparseArray_n_a_0_7,
-  SparseArray_n_a_0_7, pset_singleton(a_0_0))))))
+  SparseArray_n_a_0_7, pset_singleton(a_0_0)))))
 
 goal set_ensures_default_po_8:
   forall a_0_0:SparseArray pointer.
@@ -15455,9 +15413,8 @@ goal set_ensures_default_po_8:
   (result6 = select(unsigned_int_P_unsigned_int_M_back_29, shift(result3,
   integer_of_uint32(result5)))) ->
   (integer_of_uint32(result6) <> integer_of_uint32(i_0_0)) ->
-  ("JC_134":
   ("JC_134": (integer_of_uint32(select(SparseArray_n_a_0_7,
-  a_0_0)) < integer_of_uint32(select(SparseArray_sz_0_a_0_7, a_0_0)))))
+  a_0_0)) < integer_of_uint32(select(SparseArray_sz_0_a_0_7, a_0_0))))
 
 goal set_ensures_default_po_9:
   forall a_0_0:SparseArray pointer.
@@ -15547,13 +15504,12 @@ goal set_ensures_default_po_9:
   (SparseArray_n_a_0_7_0 = store(SparseArray_n_a_0_7, a_0_0, result12)) ->
   ("JC_102":
   ("JC_96":
-  ("JC_93":
   ("JC_93": inv(a_0_0, unsigned_int_P_back_29_alloc_table,
   unsigned_int_P_idx_28_alloc_table, int_P_val_27_alloc_table,
   SparseArray_a_0_7_alloc_table, SparseArray_sz_0_a_0_7,
   SparseArray_n_a_0_7_0, SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
   SparseArray_val_a_0_7, unsigned_int_P_unsigned_int_M_back_29_0,
-  unsigned_int_P_unsigned_int_M_idx_28_0)))))
+  unsigned_int_P_unsigned_int_M_idx_28_0))))
 
 goal set_ensures_default_po_10:
   forall a_0_0:SparseArray pointer.
@@ -15643,11 +15599,10 @@ goal set_ensures_default_po_10:
   (SparseArray_n_a_0_7_0 = store(SparseArray_n_a_0_7, a_0_0, result12)) ->
   ("JC_102":
   ("JC_96":
-  ("JC_94":
   ("JC_94": (model(a_0_0, integer_of_uint32(i_0_0), SparseArray_n_a_0_7_0,
   SparseArray_back_a_0_7, SparseArray_idx_a_0_7, SparseArray_val_a_0_7,
   int_P_int_M_val_27_0, unsigned_int_P_unsigned_int_M_idx_28_0,
-  unsigned_int_P_unsigned_int_M_back_29_0) = integer_of_int32(v))))))
+  unsigned_int_P_unsigned_int_M_back_29_0) = integer_of_int32(v)))))
 
 goal set_ensures_default_po_11:
   forall a_0_0:SparseArray pointer.
@@ -15735,20 +15690,18 @@ goal set_ensures_default_po_11:
   forall SparseArray_n_a_0_7_0:(SparseArray,
   uint32) memory.
   (SparseArray_n_a_0_7_0 = store(SparseArray_n_a_0_7, a_0_0, result12)) ->
+  forall j:int.
+  (j <> integer_of_uint32(i_0_0)) ->
   ("JC_102":
   ("JC_96":
-  ("JC_95":
-  ("JC_95":
-  (forall j:int.
-    ((j <> integer_of_uint32(i_0_0)) -> (model(a_0_0, j,
-     SparseArray_n_a_0_7_0, SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
-     SparseArray_val_a_0_7, int_P_int_M_val_27_0,
-     unsigned_int_P_unsigned_int_M_idx_28_0,
-     unsigned_int_P_unsigned_int_M_back_29_0) = model(a_0_0, j,
-     SparseArray_n_a_0_7, SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
-     SparseArray_val_a_0_7, int_P_int_M_val_27,
-     unsigned_int_P_unsigned_int_M_idx_28,
-     unsigned_int_P_unsigned_int_M_back_29))))))))
+  ("JC_95": (model(a_0_0, j, SparseArray_n_a_0_7_0, SparseArray_back_a_0_7,
+  SparseArray_idx_a_0_7, SparseArray_val_a_0_7, int_P_int_M_val_27_0,
+  unsigned_int_P_unsigned_int_M_idx_28_0,
+  unsigned_int_P_unsigned_int_M_back_29_0) = model(a_0_0, j,
+  SparseArray_n_a_0_7, SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
+  SparseArray_val_a_0_7, int_P_int_M_val_27,
+  unsigned_int_P_unsigned_int_M_idx_28,
+  unsigned_int_P_unsigned_int_M_back_29)))))
 
 goal set_ensures_default_po_12:
   forall a_0_0:SparseArray pointer.
@@ -15838,11 +15791,10 @@ goal set_ensures_default_po_12:
   (SparseArray_n_a_0_7_0 = store(SparseArray_n_a_0_7, a_0_0, result12)) ->
   ("JC_102":
   ("JC_101":
-  ("JC_97":
   ("JC_97": not_assigns(unsigned_int_P_idx_28_alloc_table,
   unsigned_int_P_unsigned_int_M_idx_28,
   unsigned_int_P_unsigned_int_M_idx_28_0,
-  pset_all(pset_deref(SparseArray_idx_a_0_7, pset_singleton(a_0_0))))))))
+  pset_all(pset_deref(SparseArray_idx_a_0_7, pset_singleton(a_0_0)))))))
 
 goal set_ensures_default_po_13:
   forall a_0_0:SparseArray pointer.
@@ -15932,11 +15884,10 @@ goal set_ensures_default_po_13:
   (SparseArray_n_a_0_7_0 = store(SparseArray_n_a_0_7, a_0_0, result12)) ->
   ("JC_102":
   ("JC_101":
-  ("JC_98":
   ("JC_98": not_assigns(unsigned_int_P_back_29_alloc_table,
   unsigned_int_P_unsigned_int_M_back_29,
   unsigned_int_P_unsigned_int_M_back_29_0,
-  pset_all(pset_deref(SparseArray_back_a_0_7, pset_singleton(a_0_0))))))))
+  pset_all(pset_deref(SparseArray_back_a_0_7, pset_singleton(a_0_0)))))))
 
 goal set_ensures_default_po_14:
   forall a_0_0:SparseArray pointer.
@@ -16026,11 +15977,10 @@ goal set_ensures_default_po_14:
   (SparseArray_n_a_0_7_0 = store(SparseArray_n_a_0_7, a_0_0, result12)) ->
   ("JC_102":
   ("JC_101":
-  ("JC_99":
   ("JC_99": not_assigns(int_P_val_27_alloc_table, int_P_int_M_val_27,
   int_P_int_M_val_27_0, pset_range(pset_deref(SparseArray_val_a_0_7,
   pset_singleton(a_0_0)), integer_of_uint32(i_0_0),
-  integer_of_uint32(i_0_0)))))))
+  integer_of_uint32(i_0_0))))))
 
 goal set_ensures_default_po_15:
   forall a_0_0:SparseArray pointer.
@@ -16120,9 +16070,8 @@ goal set_ensures_default_po_15:
   (SparseArray_n_a_0_7_0 = store(SparseArray_n_a_0_7, a_0_0, result12)) ->
   ("JC_102":
   ("JC_101":
-  ("JC_100":
   ("JC_100": not_assigns(SparseArray_a_0_7_alloc_table, SparseArray_n_a_0_7,
-  SparseArray_n_a_0_7_0, pset_singleton(a_0_0))))))
+  SparseArray_n_a_0_7_0, pset_singleton(a_0_0)))))
 
 goal set_ensures_default_po_16:
   forall a_0_0:SparseArray pointer.
@@ -16174,9 +16123,8 @@ goal set_ensures_default_po_16:
   forall result2:uint32.
   (result2 = select(SparseArray_n_a_0_7, a_0_0)) ->
   (integer_of_uint32(result1) >= integer_of_uint32(result2)) ->
-  ("JC_134":
   ("JC_134": (integer_of_uint32(select(SparseArray_n_a_0_7,
-  a_0_0)) < integer_of_uint32(select(SparseArray_sz_0_a_0_7, a_0_0)))))
+  a_0_0)) < integer_of_uint32(select(SparseArray_sz_0_a_0_7, a_0_0))))
 
 goal set_ensures_default_po_17:
   forall a_0_0:SparseArray pointer.
@@ -16255,13 +16203,12 @@ goal set_ensures_default_po_17:
   (SparseArray_n_a_0_7_0 = store(SparseArray_n_a_0_7, a_0_0, result8)) ->
   ("JC_102":
   ("JC_96":
-  ("JC_93":
   ("JC_93": inv(a_0_0, unsigned_int_P_back_29_alloc_table,
   unsigned_int_P_idx_28_alloc_table, int_P_val_27_alloc_table,
   SparseArray_a_0_7_alloc_table, SparseArray_sz_0_a_0_7,
   SparseArray_n_a_0_7_0, SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
   SparseArray_val_a_0_7, unsigned_int_P_unsigned_int_M_back_29_0,
-  unsigned_int_P_unsigned_int_M_idx_28_0)))))
+  unsigned_int_P_unsigned_int_M_idx_28_0))))
 
 goal set_ensures_default_po_18:
   forall a_0_0:SparseArray pointer.
@@ -16340,11 +16287,10 @@ goal set_ensures_default_po_18:
   (SparseArray_n_a_0_7_0 = store(SparseArray_n_a_0_7, a_0_0, result8)) ->
   ("JC_102":
   ("JC_96":
-  ("JC_94":
   ("JC_94": (model(a_0_0, integer_of_uint32(i_0_0), SparseArray_n_a_0_7_0,
   SparseArray_back_a_0_7, SparseArray_idx_a_0_7, SparseArray_val_a_0_7,
   int_P_int_M_val_27_0, unsigned_int_P_unsigned_int_M_idx_28_0,
-  unsigned_int_P_unsigned_int_M_back_29_0) = integer_of_int32(v))))))
+  unsigned_int_P_unsigned_int_M_back_29_0) = integer_of_int32(v)))))
 
 goal set_ensures_default_po_19:
   forall a_0_0:SparseArray pointer.
@@ -16421,20 +16367,18 @@ goal set_ensures_default_po_19:
   forall SparseArray_n_a_0_7_0:(SparseArray,
   uint32) memory.
   (SparseArray_n_a_0_7_0 = store(SparseArray_n_a_0_7, a_0_0, result8)) ->
+  forall j:int.
+  (j <> integer_of_uint32(i_0_0)) ->
   ("JC_102":
   ("JC_96":
-  ("JC_95":
-  ("JC_95":
-  (forall j:int.
-    ((j <> integer_of_uint32(i_0_0)) -> (model(a_0_0, j,
-     SparseArray_n_a_0_7_0, SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
-     SparseArray_val_a_0_7, int_P_int_M_val_27_0,
-     unsigned_int_P_unsigned_int_M_idx_28_0,
-     unsigned_int_P_unsigned_int_M_back_29_0) = model(a_0_0, j,
-     SparseArray_n_a_0_7, SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
-     SparseArray_val_a_0_7, int_P_int_M_val_27,
-     unsigned_int_P_unsigned_int_M_idx_28,
-     unsigned_int_P_unsigned_int_M_back_29))))))))
+  ("JC_95": (model(a_0_0, j, SparseArray_n_a_0_7_0, SparseArray_back_a_0_7,
+  SparseArray_idx_a_0_7, SparseArray_val_a_0_7, int_P_int_M_val_27_0,
+  unsigned_int_P_unsigned_int_M_idx_28_0,
+  unsigned_int_P_unsigned_int_M_back_29_0) = model(a_0_0, j,
+  SparseArray_n_a_0_7, SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
+  SparseArray_val_a_0_7, int_P_int_M_val_27,
+  unsigned_int_P_unsigned_int_M_idx_28,
+  unsigned_int_P_unsigned_int_M_back_29)))))
 
 goal set_ensures_default_po_20:
   forall a_0_0:SparseArray pointer.
@@ -16513,11 +16457,10 @@ goal set_ensures_default_po_20:
   (SparseArray_n_a_0_7_0 = store(SparseArray_n_a_0_7, a_0_0, result8)) ->
   ("JC_102":
   ("JC_101":
-  ("JC_97":
   ("JC_97": not_assigns(unsigned_int_P_idx_28_alloc_table,
   unsigned_int_P_unsigned_int_M_idx_28,
   unsigned_int_P_unsigned_int_M_idx_28_0,
-  pset_all(pset_deref(SparseArray_idx_a_0_7, pset_singleton(a_0_0))))))))
+  pset_all(pset_deref(SparseArray_idx_a_0_7, pset_singleton(a_0_0)))))))
 
 goal set_ensures_default_po_21:
   forall a_0_0:SparseArray pointer.
@@ -16596,11 +16539,10 @@ goal set_ensures_default_po_21:
   (SparseArray_n_a_0_7_0 = store(SparseArray_n_a_0_7, a_0_0, result8)) ->
   ("JC_102":
   ("JC_101":
-  ("JC_98":
   ("JC_98": not_assigns(unsigned_int_P_back_29_alloc_table,
   unsigned_int_P_unsigned_int_M_back_29,
   unsigned_int_P_unsigned_int_M_back_29_0,
-  pset_all(pset_deref(SparseArray_back_a_0_7, pset_singleton(a_0_0))))))))
+  pset_all(pset_deref(SparseArray_back_a_0_7, pset_singleton(a_0_0)))))))
 
 goal set_ensures_default_po_22:
   forall a_0_0:SparseArray pointer.
@@ -16679,11 +16621,10 @@ goal set_ensures_default_po_22:
   (SparseArray_n_a_0_7_0 = store(SparseArray_n_a_0_7, a_0_0, result8)) ->
   ("JC_102":
   ("JC_101":
-  ("JC_99":
   ("JC_99": not_assigns(int_P_val_27_alloc_table, int_P_int_M_val_27,
   int_P_int_M_val_27_0, pset_range(pset_deref(SparseArray_val_a_0_7,
   pset_singleton(a_0_0)), integer_of_uint32(i_0_0),
-  integer_of_uint32(i_0_0)))))))
+  integer_of_uint32(i_0_0))))))
 
 goal set_ensures_default_po_23:
   forall a_0_0:SparseArray pointer.
@@ -16762,9 +16703,8 @@ goal set_ensures_default_po_23:
   (SparseArray_n_a_0_7_0 = store(SparseArray_n_a_0_7, a_0_0, result8)) ->
   ("JC_102":
   ("JC_101":
-  ("JC_100":
   ("JC_100": not_assigns(SparseArray_a_0_7_alloc_table, SparseArray_n_a_0_7,
-  SparseArray_n_a_0_7_0, pset_singleton(a_0_0))))))
+  SparseArray_n_a_0_7_0, pset_singleton(a_0_0)))))
 
 goal set_safety_po_1:
   forall a_0_0:SparseArray pointer.

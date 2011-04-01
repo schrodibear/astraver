@@ -698,18 +698,6 @@ axiom buch_ListOper_range :
   (le_int((0), integer_of_buch_ListOper(x))
   and le_int(integer_of_buch_ListOper(x), (2))))
 
-axiom buch_Trans_Start0 : eq_int(buch_Trans_Start((0)), (0))
-
-axiom buch_Trans_Start1 : eq_int(buch_Trans_Start((1)), (0))
-
-axiom buch_Trans_Start2 : eq_int(buch_Trans_Start((2)), (1))
-
-axiom buch_Trans_Stop0 : eq_int(buch_Trans_Stop((0)), (0))
-
-axiom buch_Trans_Stop1 : eq_int(buch_Trans_Stop((1)), (1))
-
-axiom buch_Trans_Stop2 : eq_int(buch_Trans_Stop((2)), (1))
-
 logic char_P_tag:  -> char_P tag_id
 
 axiom char_P_int : (int_of_tag(char_P_tag) = (1))
@@ -939,6 +927,18 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom buch_Trans_Start0 : eq_int(buch_Trans_Start((0)), (0))
+
+axiom buch_Trans_Start1 : eq_int(buch_Trans_Start((1)), (0))
+
+axiom buch_Trans_Start2 : eq_int(buch_Trans_Start((2)), (1))
+
+axiom buch_Trans_Stop0 : eq_int(buch_Trans_Stop((0)), (0))
+
+axiom buch_Trans_Stop1 : eq_int(buch_Trans_Stop((1)), (1))
+
+axiom buch_Trans_Stop2 : eq_int(buch_Trans_Stop((2)), (1))
 
 parameter Buch_OpStatusList_of_integer_ :
  x:int ->
@@ -7407,18 +7407,6 @@ axiom buch_ListOper_range:
     ((0 <= integer_of_buch_ListOper(x)) and
      (integer_of_buch_ListOper(x) <= 2)))
 
-axiom buch_Trans_Start0: (buch_Trans_Start(0) = 0)
-
-axiom buch_Trans_Start1: (buch_Trans_Start(1) = 0)
-
-axiom buch_Trans_Start2: (buch_Trans_Start(2) = 1)
-
-axiom buch_Trans_Stop0: (buch_Trans_Stop(0) = 0)
-
-axiom buch_Trans_Stop1: (buch_Trans_Stop(1) = 1)
-
-axiom buch_Trans_Stop2: (buch_Trans_Stop(2) = 1)
-
 logic char_P_tag : char_P tag_id
 
 axiom char_P_int: (int_of_tag(char_P_tag) = 1)
@@ -7645,4 +7633,16 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom buch_Trans_Start0: (buch_Trans_Start(0) = 0)
+
+axiom buch_Trans_Start1: (buch_Trans_Start(1) = 0)
+
+axiom buch_Trans_Start2: (buch_Trans_Start(2) = 1)
+
+axiom buch_Trans_Stop0: (buch_Trans_Stop(0) = 0)
+
+axiom buch_Trans_Stop1: (buch_Trans_Stop(1) = 1)
+
+axiom buch_Trans_Stop2: (buch_Trans_Stop(2) = 1)
 

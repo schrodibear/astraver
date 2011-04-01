@@ -313,15 +313,15 @@ let reprint_axiom fmt id p =
 let print_axiom fmt id p = 
   reprint_axiom fmt id p
 
-let reprint_obligation fmt loc _expl id s =
+let reprint_obligation fmt loc _is_lemma _expl id s =
   fprintf fmt "@[(* %a *)@]@\n" (Loc.report_obligation_position ~onlybasename:true) loc;
   fprintf fmt "@[<hov 4>(*Why goal*) lemma %a:@\n%a;@]@\n" idents id print_sequent s
 (*;
   fprintf fmt "@[(* %a *)@]@\n" Util.print_explanation expl
 *)
 
-let print_obligation fmt loc expl id s = 
-  reprint_obligation fmt loc expl id s;
+let print_obligation fmt loc is_lemma expl id s = 
+  reprint_obligation fmt loc is_lemma expl id s;
   fprintf fmt "(* FILL PROOF HERE *)@\n@\n"
 
 let reprint_predicate fmt id p =
@@ -409,8 +409,8 @@ struct
     begin match e with
       | Parameter _-> assert false
       | Program _ -> assert false
-      | Obligation (loc, expl, id, s) -> 
-	  print_obligation fmt loc expl id s.Env.scheme_type
+      | Obligation (loc, is_lemma, expl, id, s) -> 
+	  print_obligation fmt loc is_lemma expl id s.Env.scheme_type
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate (id, p) -> print_predicate fmt id p
@@ -424,8 +424,8 @@ struct
   let reprint_element fmt = function
     | Parameter _ -> assert false
     | Program _ -> assert false
-    | Obligation (loc, expl, id, s) -> 
-	reprint_obligation fmt loc expl id s.Env.scheme_type
+    | Obligation (loc, is_lemma, expl, id, s) -> 
+	reprint_obligation fmt loc is_lemma expl id s.Env.scheme_type
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate (id, p) -> reprint_predicate fmt id p
@@ -453,8 +453,8 @@ end)
 let reset = Gen.reset
 
 let push_decl = function
-  | Dgoal (loc,expl,l,s) ->
-      Gen.add_elem (Oblig, l) (Obligation (loc,expl,l,s))
+  | Dgoal (loc,is_lemma,expl,l,s) ->
+      Gen.add_elem (Oblig, l) (Obligation (loc,is_lemma,expl,l,s))
   | Dlogic (_, id, t) ->
       let id = Ident.string id in
       Gen.add_elem (Lg, rename id) (Logic (id, t))

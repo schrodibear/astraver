@@ -1,11 +1,11 @@
 // @+ CheckArithOverflow = no
 
 /*@ lemma distr_right: 
-  @   \forall integer x,y,z; x*(y+z) == (x*y)+(x*z);
+  @   \forall integer x y z; x*(y+z) == (x*y)+(x*z);
   @*/
 
 /*@ lemma distr_left: 
-  @   \forall integer x,y,z; (x+y)*z == (x*z)+(y*z);
+  @   \forall integer x y z; (x+y)*z == (x*z)+(y*z);
   @*/
 
 
@@ -28,7 +28,7 @@ public class Lesson1 {
 	/*@ loop_invariant 
 	  @   count >= 0 && x >= count*count &&
 	  @   sum == (count+1)*(count+1);
-	  @ decreases x - sum;
+	  @ loop_variant x - sum;
 	  @*/
 	while (sum <= x) { 
 	    count++;

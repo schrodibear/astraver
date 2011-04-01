@@ -192,76 +192,6 @@ axiom char_P_tags :
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
 
-goal distr_left :
- (forall x_0_0:int.
-  (forall y_0_0:int.
-   (forall z_0:int.
-    eq_int(mul_int(add_int(x_0_0, y_0_0), z_0),
-    add_int(mul_int(x_0_0, z_0), mul_int(y_0_0, z_0))))))
-
-axiom distr_left_as_axiom :
- (forall x_0_0:int.
-  (forall y_0_0:int.
-   (forall z_0:int.
-    eq_int(mul_int(add_int(x_0_0, y_0_0), z_0),
-    add_int(mul_int(x_0_0, z_0), mul_int(y_0_0, z_0))))))
-
-goal distr_left_minus :
- (forall x_2:int.
-  (forall y_2:int.
-   (forall z_2:int.
-    eq_int(mul_int(sub_int(x_2, y_2), z_2),
-    sub_int(mul_int(x_2, z_2), mul_int(y_2, z_2))))))
-
-axiom distr_left_minus_as_axiom :
- (forall x_2:int.
-  (forall y_2:int.
-   (forall z_2:int.
-    eq_int(mul_int(sub_int(x_2, y_2), z_2),
-    sub_int(mul_int(x_2, z_2), mul_int(y_2, z_2))))))
-
-goal distr_right :
- (forall x_1:int.
-  (forall y_0:int.
-   (forall z:int.
-    eq_int(mul_int(x_1, add_int(y_0, z)),
-    add_int(mul_int(x_1, y_0), mul_int(x_1, z))))))
-
-axiom distr_right_as_axiom :
- (forall x_1:int.
-  (forall y_0:int.
-   (forall z:int.
-    eq_int(mul_int(x_1, add_int(y_0, z)),
-    add_int(mul_int(x_1, y_0), mul_int(x_1, z))))))
-
-goal distr_right_minus :
- (forall x_1_0:int.
-  (forall y_1:int.
-   (forall z_1:int.
-    eq_int(mul_int(x_1_0, sub_int(y_1, z_1)),
-    sub_int(mul_int(x_1_0, y_1), mul_int(x_1_0, z_1))))))
-
-axiom distr_right_minus_as_axiom :
- (forall x_1_0:int.
-  (forall y_1:int.
-   (forall z_1:int.
-    eq_int(mul_int(x_1_0, sub_int(y_1, z_1)),
-    sub_int(mul_int(x_1_0, y_1), mul_int(x_1_0, z_1))))))
-
-goal div_mod_property :
- (forall x_6:int.
-  (forall y_6:int.
-   ((ge_int(x_6, (0)) and gt_int(y_6, (0))) ->
-    eq_int(computer_mod(x_6, y_6),
-    sub_int(x_6, mul_int(y_6, computer_div(x_6, y_6)))))))
-
-axiom div_mod_property_as_axiom :
- (forall x_6:int.
-  (forall y_6:int.
-   ((ge_int(x_6, (0)) and gt_int(y_6, (0))) ->
-    eq_int(computer_mod(x_6, y_6),
-    sub_int(x_6, mul_int(y_6, computer_div(x_6, y_6)))))))
-
 predicate divides(x_5:int, y_5:int) =
  (exists q:int. eq_int(y_5, mul_int(q, x_5)))
 
@@ -271,26 +201,6 @@ predicate isGcd(a:int, b:int, d:int) =
      and (forall z_4:int.
           ((divides(z_4, a) and divides(z_4, b)) -> divides(z_4, d)))))
 
-goal gcd_property :
- (forall a_1:int.
-  (forall b_0:int.
-   (forall d_0:int.
-    (forall q_0:int.
-     ((gt_int(b_0, (0)) and isGcd(b_0, computer_mod(a_1, b_0), d_0)) ->
-      isGcd(a_1, b_0, d_0))))))
-
-axiom gcd_property_as_axiom :
- (forall a_1:int.
-  (forall b_0:int.
-   (forall d_0:int.
-    (forall q_0:int.
-     ((gt_int(b_0, (0)) and isGcd(b_0, computer_mod(a_1, b_0), d_0)) ->
-      isGcd(a_1, b_0, d_0))))))
-
-goal gcd_zero : (forall a_0:int. isGcd(a_0, (0), a_0))
-
-axiom gcd_zero_as_axiom : (forall a_0:int. isGcd(a_0, (0), a_0))
-
 predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
@@ -298,40 +208,6 @@ predicate left_valid_struct_char_P(p:char_P pointer, a:int,
 predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
-
-goal mod_property :
- (forall x_7:int.
-  (forall y_7:int.
-   ((ge_int(x_7, (0)) and gt_int(y_7, (0))) ->
-    (le_int((0), computer_mod(x_7, y_7))
-    and lt_int(computer_mod(x_7, y_7), y_7)))))
-
-axiom mod_property_as_axiom :
- (forall x_7:int.
-  (forall y_7:int.
-   ((ge_int(x_7, (0)) and gt_int(y_7, (0))) ->
-    (le_int((0), computer_mod(x_7, y_7))
-    and lt_int(computer_mod(x_7, y_7), y_7)))))
-
-goal mul_assoc :
- (forall x_4:int.
-  (forall y_4:int.
-   (forall z_3:int.
-    eq_int(mul_int(x_4, mul_int(y_4, z_3)), mul_int(mul_int(x_4, y_4), z_3)))))
-
-axiom mul_assoc_as_axiom :
- (forall x_4:int.
-  (forall y_4:int.
-   (forall z_3:int.
-    eq_int(mul_int(x_4, mul_int(y_4, z_3)), mul_int(mul_int(x_4, y_4), z_3)))))
-
-goal mul_comm :
- (forall x_3:int.
-  (forall y_3:int. eq_int(mul_int(x_3, y_3), mul_int(y_3, x_3))))
-
-axiom mul_comm_as_axiom :
- (forall x_3:int.
-  (forall y_3:int. eq_int(mul_int(x_3, y_3), mul_int(y_3, x_3))))
 
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
@@ -413,6 +289,68 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma distr_right :
+ (forall x_1:int.
+  (forall y_0:int.
+   (forall z:int.
+    eq_int(mul_int(x_1, add_int(y_0, z)),
+    add_int(mul_int(x_1, y_0), mul_int(x_1, z))))))
+
+lemma distr_left :
+ (forall x_0_0:int.
+  (forall y_0_0:int.
+   (forall z_0:int.
+    eq_int(mul_int(add_int(x_0_0, y_0_0), z_0),
+    add_int(mul_int(x_0_0, z_0), mul_int(y_0_0, z_0))))))
+
+lemma distr_right_minus :
+ (forall x_1_0:int.
+  (forall y_1:int.
+   (forall z_1:int.
+    eq_int(mul_int(x_1_0, sub_int(y_1, z_1)),
+    sub_int(mul_int(x_1_0, y_1), mul_int(x_1_0, z_1))))))
+
+lemma distr_left_minus :
+ (forall x_2:int.
+  (forall y_2:int.
+   (forall z_2:int.
+    eq_int(mul_int(sub_int(x_2, y_2), z_2),
+    sub_int(mul_int(x_2, z_2), mul_int(y_2, z_2))))))
+
+lemma mul_comm :
+ (forall x_3:int.
+  (forall y_3:int. eq_int(mul_int(x_3, y_3), mul_int(y_3, x_3))))
+
+lemma mul_assoc :
+ (forall x_4:int.
+  (forall y_4:int.
+   (forall z_3:int.
+    eq_int(mul_int(x_4, mul_int(y_4, z_3)), mul_int(mul_int(x_4, y_4), z_3)))))
+
+lemma div_mod_property :
+ (forall x_6:int.
+  (forall y_6:int.
+   ((ge_int(x_6, (0)) and gt_int(y_6, (0))) ->
+    eq_int(computer_mod(x_6, y_6),
+    sub_int(x_6, mul_int(y_6, computer_div(x_6, y_6)))))))
+
+lemma mod_property :
+ (forall x_7:int.
+  (forall y_7:int.
+   ((ge_int(x_7, (0)) and gt_int(y_7, (0))) ->
+    (le_int((0), computer_mod(x_7, y_7))
+    and lt_int(computer_mod(x_7, y_7), y_7)))))
+
+lemma gcd_zero : (forall a_0:int. isGcd(a_0, (0), a_0))
+
+lemma gcd_property :
+ (forall a_1:int.
+  (forall b_0:int.
+   (forall d_0:int.
+    (forall q_0:int.
+     ((gt_int(b_0, (0)) and isGcd(b_0, computer_mod(a_1, b_0), d_0)) ->
+      isGcd(a_1, b_0, d_0))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -862,52 +800,52 @@ let gcd_safety =
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C gcd.jessie --quiet -f gcd.makefile project
 why --project [...] why/gcd.why
 <project name="gcd" context="why/gcd_ctx.why">
-  <lemma name="distr_left">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/gcd_po1.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "29" begin = "0" end = "152"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <lemma name="distr_left_minus">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/gcd_po2.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "41" begin = "0" end = "158"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
   <lemma name="distr_right">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/gcd_po3.why">
+    <goal why_file="why/gcd_po1.why">
       <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "23" begin = "0" end = "133"/>
+      <explain kind = "Lemma"/>
+    </goal>
+  </lemma>
+  <lemma name="distr_left">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <goal why_file="why/gcd_po2.why">
+      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "29" begin = "0" end = "152"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="distr_right_minus">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/gcd_po4.why">
+    <goal why_file="why/gcd_po3.why">
       <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "35" begin = "0" end = "159"/>
+      <explain kind = "Lemma"/>
+    </goal>
+  </lemma>
+  <lemma name="distr_left_minus">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <goal why_file="why/gcd_po4.why">
+      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "41" begin = "0" end = "158"/>
+      <explain kind = "Lemma"/>
+    </goal>
+  </lemma>
+  <lemma name="mul_comm">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <goal why_file="why/gcd_po5.why">
+      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "47" begin = "0" end = "97"/>
+      <explain kind = "Lemma"/>
+    </goal>
+  </lemma>
+  <lemma name="mul_assoc">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <goal why_file="why/gcd_po6.why">
+      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "52" begin = "0" end = "143"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="div_mod_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/gcd_po5.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "62" begin = "0" end = "159"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <lemma name="gcd_property">
-    <location file = "" line = "0" begin = "0" end = "0"/>
-    <goal why_file="why/gcd_po6.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "83" begin = "0" end = "213"/>
-      <explain kind = "Lemma"/>
-    </goal>
-  </lemma>
-  <lemma name="gcd_zero">
-    <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/gcd_po7.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "79" begin = "0" end = "60"/>
+      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "62" begin = "0" end = "159"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -918,17 +856,17 @@ why --project [...] why/gcd.why
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <lemma name="mul_assoc">
+  <lemma name="gcd_zero">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/gcd_po9.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "52" begin = "0" end = "143"/>
+      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "79" begin = "0" end = "60"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <lemma name="mul_comm">
+  <lemma name="gcd_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/gcd_po10.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "47" begin = "0" end = "97"/>
+      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "83" begin = "0" end = "213"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -1988,34 +1926,6 @@ axiom char_P_tags:
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
 
-axiom distr_left_as_axiom:
-  (forall x_0_0:int.
-    (forall y_0_0:int.
-      (forall z_0:int.
-        (((x_0_0 + y_0_0) * z_0) = ((x_0_0 * z_0) + (y_0_0 * z_0))))))
-
-axiom distr_left_minus_as_axiom:
-  (forall x_2:int.
-    (forall y_2:int.
-      (forall z_2:int. (((x_2 - y_2) * z_2) = ((x_2 * z_2) - (y_2 * z_2))))))
-
-axiom distr_right_as_axiom:
-  (forall x_1:int.
-    (forall y_0:int.
-      (forall z:int. ((x_1 * (y_0 + z)) = ((x_1 * y_0) + (x_1 * z))))))
-
-axiom distr_right_minus_as_axiom:
-  (forall x_1_0:int.
-    (forall y_1:int.
-      (forall z_1:int.
-        ((x_1_0 * (y_1 - z_1)) = ((x_1_0 * y_1) - (x_1_0 * z_1))))))
-
-axiom div_mod_property_as_axiom:
-  (forall x_6:int.
-    (forall y_6:int.
-      (((x_6 >= 0) and (y_6 > 0)) -> (computer_mod(x_6,
-       y_6) = (x_6 - (y_6 * computer_div(x_6, y_6)))))))
-
 predicate divides(x_5: int, y_5: int) = (exists q:int. (y_5 = (q * x_5)))
 
 predicate isGcd(a: int, b: int, d: int) =
@@ -2024,16 +1934,6 @@ predicate isGcd(a: int, b: int, d: int) =
     (forall z_4:int.
       ((divides(z_4, a) and divides(z_4, b)) -> divides(z_4, d)))))
 
-axiom gcd_property_as_axiom:
-  (forall a_1:int.
-    (forall b_0:int.
-      (forall d_0:int.
-        (forall q_0:int.
-          (((b_0 > 0) and isGcd(b_0, computer_mod(a_1, b_0), d_0)) ->
-           isGcd(a_1, b_0, d_0))))))
-
-axiom gcd_zero_as_axiom: (forall a_0:int. isGcd(a_0, 0, a_0))
-
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
   p) <= a)
@@ -2041,20 +1941,6 @@ predicate left_valid_struct_char_P(p: char_P pointer, a: int,
 predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
   p) <= a)
-
-axiom mod_property_as_axiom:
-  (forall x_7:int.
-    (forall y_7:int.
-      (((x_7 >= 0) and (y_7 > 0)) ->
-       ((0 <= computer_mod(x_7, y_7)) and (computer_mod(x_7, y_7) < y_7)))))
-
-axiom mul_assoc_as_axiom:
-  (forall x_4:int.
-    (forall y_4:int.
-      (forall z_3:int. ((x_4 * (y_4 * z_3)) = ((x_4 * y_4) * z_3)))))
-
-axiom mul_comm_as_axiom:
-  (forall x_3:int. (forall y_3:int. ((x_3 * y_3) = (y_3 * x_3))))
 
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.

@@ -754,7 +754,7 @@ let rec translate_assertion env iter_fun d =
                    iter_fun (Daxiom (loc, ident, new_axiom))) insts;
       env
 (* A goal is a sequent : a context and a predicate and both have to be translated *)
-  | Dgoal (loc, expl, ident, s_sch) ->
+  | Dgoal (loc, is_lemma, expl, ident, s_sch) ->
       begin try
 	let new_cel =
 	  List.map
@@ -770,10 +770,10 @@ let rec translate_assertion env iter_fun d =
 	  Env.empty_scheme
 	    (new_cel,
 	     translate_pred env Env.Vmap.empty (snd (s_sch.Env.scheme_type))) in
-	iter_fun (Dgoal (loc, expl, ident, new_sequent))
+	iter_fun (Dgoal (loc, is_lemma, expl, ident, new_sequent))
       with Not_found -> 
 	Format.eprintf "Exception caught in : %a\n" Util.print_decl d;
-	iter_fun (Dgoal (loc, expl, ident, Env.empty_scheme([],Pfalse)));
+	iter_fun (Dgoal (loc, is_lemma, expl, ident, Env.empty_scheme([],Pfalse)));
       end;env)
   with Not_found -> 
     Format.eprintf "Exception caught in : %a\n" Util.print_decl d;
@@ -863,7 +863,7 @@ let make_world_sorted ~monotype ~monosig ~monodef world  = function
       else world
   | Daxiom(_,_,sch) when Env.Vset.is_empty sch.Env.scheme_vars ->
       make_world_predicate world sch.Env.scheme_type
-  | Dgoal (_,_,_,{Env.scheme_vars =v;scheme_type=(con,p)}) 
+  | Dgoal (_,_,_,_,{Env.scheme_vars =v;scheme_type=(con,p)}) 
       when Env.Vset.is_empty v ->
       let world = make_world_predicate world p in
       List.fold_left make_world_context_element world con
@@ -871,7 +871,7 @@ let make_world_sorted ~monotype ~monosig ~monodef world  = function
   | _ -> world (* Polymorph case *)
 
 let make_world_just_goal world  = function
-  | Dgoal (_,_,_,{Env.scheme_vars =v;scheme_type=(con,p)}) 
+  | Dgoal (_,_,_,_,{Env.scheme_vars =v;scheme_type=(con,p)}) 
       when Env.Vset.is_empty v ->
       let world = make_world_predicate world p in
       List.fold_left make_world_context_element world con
@@ -887,7 +887,7 @@ let make_world = match Options.monoinstworldgen with
   | Options.MonoinstPremises -> make_world_sorted ~monotype:false  ~monodef:true ~monosig:false
 
 let monomorph_goal acc = function
-  | Dgoal (loc,vc,id,sch) ->
+  | Dgoal (loc,is_lemma,vc,id,sch) ->
       let cpt = ref 0 in
       let fv = Env.Vset.fold
 	(fun _ acc -> 
@@ -899,7 +899,7 @@ let monomorph_goal acc = function
                              PTexternal ([],x)) fv in
       let p = Env.instantiate_sequent sch inst in
       let acc = List.fold_left (fun acc x -> Dtype (loc,x,[])::acc) acc fv in
-      Dgoal (loc,vc,id,Env.empty_scheme p)::acc
+      Dgoal (loc,is_lemma,vc,id,Env.empty_scheme p)::acc
   | x -> x::acc
 
 let push_decl a = Queue.add a queue

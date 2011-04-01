@@ -55,8 +55,8 @@ let elem_q = Queue.create ()
 let reset () = Queue.clear elem_q
 
 let push_decl = function
-  | Dgoal (loc, expl, id, s) -> 
-      Queue.add (Obligation (loc, expl, id, s.Env.scheme_type)) elem_q
+  | Dgoal (loc, is_lemma, expl, id, s) -> 
+      Queue.add (Obligation (loc, is_lemma, expl, id, s.Env.scheme_type)) elem_q
   | Dlogic (_, id, t) -> Queue.add (Logic (Ident.string id, t)) elem_q
   | Daxiom (_, id, p) -> Queue.add (Axiom (id, p)) elem_q
   | Dpredicate_def (_, id, p) -> 
@@ -296,7 +296,7 @@ let rec print_thesis fmt = function
   | Pand (_, _, t1, t2) -> fprintf fmt "%a@ %a" print_thesis t1 print_thesis t2
   | t -> fprintf fmt "@[thus %a@];" print_predicate t
 
-let reprint_obligation fmt loc _expl id s =
+let reprint_obligation fmt loc _is_lemma _expl id s =
   let s = s.Env.scheme_type in
   fprintf fmt "@[ :: %a @]@\n" (Loc.report_obligation_position ~onlybasename:true) loc;
   fprintf fmt "@[ (*Why goal*) theorem %s:@\n @[%a@]@]@\n" id print_sequent s
@@ -304,8 +304,8 @@ let reprint_obligation fmt loc _expl id s =
   fprintf fmt "@[ :: %a @]@\n@\n" Util.print_explanation expl
   *)
 
-let print_obligation fmt loc expl id s =
-  reprint_obligation fmt loc expl id s;
+let print_obligation fmt loc is_lemma expl id s =
+  reprint_obligation fmt loc is_lemma expl id s;
   let t = snd s.Env.scheme_type in
   fprintf fmt "@[  :: FILL PROOF HERE@\n  @[%a@]@]@\n end;@\n" print_thesis t
 
@@ -333,7 +333,8 @@ struct
     begin match e with
       | Parameter _ -> assert false
       | Program _ -> assert false
-      | Obligation (loc, expl, id, s) -> print_obligation fmt loc expl id s
+      | Obligation (loc, is_lemma, expl, id, s) -> 
+	  print_obligation fmt loc is_lemma expl id s
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate _ -> assert false (*TODO*)
@@ -347,7 +348,8 @@ struct
   let reprint_element fmt = function
     | Parameter _ -> assert false
     | Program _ -> assert false
-    | Obligation (loc, expl, id, s) -> reprint_obligation fmt loc expl id s
+    | Obligation (loc, is_lemma, expl, id, s) -> 
+	reprint_obligation fmt loc is_lemma expl id s
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate _ -> assert false (*TODO*)
@@ -388,7 +390,8 @@ end)
 let reset = Gen.reset
 
 let push_obligations = 
-  List.iter (fun (loc,expl,l,s) -> Gen.add_elem (Oblig, l) (Obligation (loc,expl,l,s)))
+  List.iter (fun (loc,expl,l,s) -> Gen.add_elem (Oblig, l) 
+	       (Obligation (loc,false,expl,l,s)))
 
 let push_parameter id v =
   Gen.add_elem (Param, id) (Parameter (id,v))

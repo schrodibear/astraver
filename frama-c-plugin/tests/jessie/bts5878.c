@@ -1,3 +1,8 @@
+/*
+now bts0024
+
+*/
+
 /*@ axiomatic Foo {
   @  predicate foo(integer x);
   @  axiom f0: foo(0); 

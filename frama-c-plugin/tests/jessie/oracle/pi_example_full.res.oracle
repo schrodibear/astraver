@@ -135,24 +135,6 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-goal le_mul :
- (forall x_0:real.
-  (forall y:real.
-   (forall z:real.
-    (forall t:real.
-     ((le_real(0.0, x_0)
-      and (le_real(x_0, y) and (le_real(0.0, z) and le_real(z, t)))) ->
-      le_real(mul_real(x_0, z), mul_real(y, t)))))))
-
-axiom le_mul_as_axiom :
- (forall x_0:real.
-  (forall y:real.
-   (forall z:real.
-    (forall t:real.
-     ((le_real(0.0, x_0)
-      and (le_real(x_0, y) and (le_real(0.0, z) and le_real(z, t)))) ->
-      le_real(mul_real(x_0, z), mul_real(y, t)))))))
-
 predicate left_valid_struct_char_P(p:char_P pointer, a:int,
  char_P_alloc_table:char_P alloc_table) =
  (offset_min(char_P_alloc_table, p) <= a)
@@ -241,6 +223,15 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma le_mul :
+ (forall x_0:real.
+  (forall y:real.
+   (forall z:real.
+    (forall t:real.
+     ((le_real(0.0, x_0)
+      and (le_real(x_0, y) and (le_real(0.0, z) and le_real(z, t)))) ->
+      le_real(mul_real(x_0, z), mul_real(y, t)))))))
 
 parameter Perimeter :
  radius:single ->
@@ -1476,6 +1467,10 @@ axiom exact_round_double_for_integers:
       ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
        (round_double(m, real_of_int(i)) = real_of_int(i)))))
 
+axiom exact_round_double_for_doubles:
+  (forall x:double.
+    (forall m:mode. (round_double(m, double_value(x)) = double_value(x))))
+
 axiom round_double_idempotent:
   (forall m1:mode.
     (forall m2:mode.
@@ -1531,6 +1526,10 @@ axiom exact_round_single_for_integers:
     (forall m:mode.
       ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
        real_of_int(i)) = real_of_int(i)))))
+
+axiom exact_round_single_for_singles:
+  (forall x:single.
+    (forall m:mode. (round_single(m, single_value(x)) = single_value(x))))
 
 axiom round_single_idempotent:
   (forall m1:mode.
@@ -2104,14 +2103,6 @@ axiom int8_coerce:
 axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
-
-axiom le_mul_as_axiom:
-  (forall x_0:real.
-    (forall y:real.
-      (forall z:real.
-        (forall t:real.
-          (((0.0 <= x_0) and ((x_0 <= y) and ((0.0 <= z) and (z <= t)))) ->
-           ((x_0 * z) <= (y * t)))))))
 
 predicate left_valid_struct_char_P(p: char_P pointer, a: int,
   char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,

@@ -122,30 +122,13 @@ exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
-predicate e(a:int_P pointer, b:int_P pointer,
- int_P_int_M_b_2_at_L:(int_P, int) memory,
- int_P_int_M_a_1_at_L:(int_P, int) memory) =
- eq_int(select(int_P_int_M_a_1_at_L, shift(a, (0))),
- select(int_P_int_M_b_2_at_L, shift(b, (0))))
-
-logic p: int_P pointer, (int_P, int) memory, (int_P, int) memory -> prop
-
-axiom ax2 :
- (forall int_P_int_M_a_0_3_at_L2:(int_P, int) memory.
-  (forall int_P_int_M_a_0_3_at_L1:(int_P, int) memory.
-   (forall a_1_0:int_P pointer.
-    (forall b_0_0:int_P pointer.
-     ((e(a_1_0, b_0_0, int_P_int_M_a_0_3_at_L1, int_P_int_M_a_0_3_at_L1)
-      and (p(a_1_0, int_P_int_M_a_0_3_at_L2, int_P_int_M_a_0_3_at_L1)
-          and e(a_1_0, b_0_0, int_P_int_M_a_0_3_at_L2,
-              int_P_int_M_a_0_3_at_L2))) ->
-      p(b_0_0, int_P_int_M_a_0_3_at_L2, int_P_int_M_a_0_3_at_L1))))))
-
 logic char_P_tag:  -> char_P tag_id
 
 axiom char_P_int : (int_of_tag(char_P_tag) = (1))
 
 logic char_P_of_pointer_address: unit pointer -> char_P pointer
+
+logic p: int_P pointer, (int_P, int) memory, (int_P, int) memory -> prop
 
 axiom char_P_of_pointer_address_of_pointer_addr :
  (forall p:char_P pointer.
@@ -157,6 +140,12 @@ axiom char_P_tags :
  (forall x:char_P pointer.
   (forall char_P_tag_table:char_P tag_table.
    instanceof(char_P_tag_table, x, char_P_tag)))
+
+predicate e(a:int_P pointer, b:int_P pointer,
+ int_P_int_M_b_2_at_L:(int_P, int) memory,
+ int_P_int_M_a_1_at_L:(int_P, int) memory) =
+ eq_int(select(int_P_int_M_a_1_at_L, shift(a, (0))),
+ select(int_P_int_M_b_2_at_L, shift(b, (0))))
 
 logic int_P_tag:  -> int_P tag_id
 
@@ -298,6 +287,17 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom ax2 :
+ (forall int_P_int_M_a_0_3_at_L2:(int_P, int) memory.
+  (forall int_P_int_M_a_0_3_at_L1:(int_P, int) memory.
+   (forall a_1_0:int_P pointer.
+    (forall b_0_0:int_P pointer.
+     ((e(a_1_0, b_0_0, int_P_int_M_a_0_3_at_L1, int_P_int_M_a_0_3_at_L1)
+      and (p(a_1_0, int_P_int_M_a_0_3_at_L2, int_P_int_M_a_0_3_at_L1)
+          and e(a_1_0, b_0_0, int_P_int_M_a_0_3_at_L2,
+              int_P_int_M_a_0_3_at_L2))) ->
+      p(b_0_0, int_P_int_M_a_0_3_at_L2, int_P_int_M_a_0_3_at_L1))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1648,30 +1648,13 @@ type padding
 
 type void_P
 
-predicate e(a: int_P pointer, b: int_P pointer, int_P_int_M_b_2_at_L: (int_P,
-  int) memory, int_P_int_M_a_1_at_L: (int_P, int) memory) =
-  (select(int_P_int_M_a_1_at_L, shift(a, 0)) = select(int_P_int_M_b_2_at_L,
-  shift(b, 0)))
-
-logic p : int_P pointer, (int_P, int) memory, (int_P, int) memory -> prop
-
-axiom ax2:
-  (forall int_P_int_M_a_0_3_at_L2:(int_P, int) memory.
-    (forall int_P_int_M_a_0_3_at_L1:(int_P, int) memory.
-      (forall a_1_0:int_P pointer.
-        (forall b_0_0:int_P pointer.
-          ((e(a_1_0, b_0_0, int_P_int_M_a_0_3_at_L1,
-            int_P_int_M_a_0_3_at_L1) and
-            (p(a_1_0, int_P_int_M_a_0_3_at_L2, int_P_int_M_a_0_3_at_L1) and
-             e(a_1_0, b_0_0, int_P_int_M_a_0_3_at_L2,
-             int_P_int_M_a_0_3_at_L2))) ->
-           p(b_0_0, int_P_int_M_a_0_3_at_L2, int_P_int_M_a_0_3_at_L1))))))
-
 logic char_P_tag : char_P tag_id
 
 axiom char_P_int: (int_of_tag(char_P_tag) = 1)
 
 logic char_P_of_pointer_address : unit pointer -> char_P pointer
+
+logic p : int_P pointer, (int_P, int) memory, (int_P, int) memory -> prop
 
 axiom char_P_of_pointer_address_of_pointer_addr:
   (forall p:char_P pointer.
@@ -1683,6 +1666,11 @@ axiom char_P_tags:
   (forall x:char_P pointer.
     (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
       x, char_P_tag)))
+
+predicate e(a: int_P pointer, b: int_P pointer, int_P_int_M_b_2_at_L: (int_P,
+  int) memory, int_P_int_M_a_1_at_L: (int_P, int) memory) =
+  (select(int_P_int_M_a_1_at_L, shift(a, 0)) = select(int_P_int_M_b_2_at_L,
+  shift(b, 0)))
 
 logic int_P_tag : int_P tag_id
 
@@ -1827,4 +1815,16 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom ax2:
+  (forall int_P_int_M_a_0_3_at_L2:(int_P, int) memory.
+    (forall int_P_int_M_a_0_3_at_L1:(int_P, int) memory.
+      (forall a_1_0:int_P pointer.
+        (forall b_0_0:int_P pointer.
+          ((e(a_1_0, b_0_0, int_P_int_M_a_0_3_at_L1,
+            int_P_int_M_a_0_3_at_L1) and
+            (p(a_1_0, int_P_int_M_a_0_3_at_L2, int_P_int_M_a_0_3_at_L1) and
+             e(a_1_0, b_0_0, int_P_int_M_a_0_3_at_L2,
+             int_P_int_M_a_0_3_at_L2))) ->
+           p(b_0_0, int_P_int_M_a_0_3_at_L2, int_P_int_M_a_0_3_at_L1))))))
 

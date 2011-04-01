@@ -1,4 +1,21 @@
 
+  o [Krakatoa] fixed support for constant strings
+  o [Jessie] order of lemmas now keeps the same is in the input. Fixes 
+    Frama-C BTS 0024
+  o [Why3 output] better explanations
+  o [Why lib] completed axiomatization of floats
+
+version 2.29, Mar 1, 2011
+=========================
+
+  o [Krakatoa] Documentation: many errors fixed
+  o [Jessie] plugin synchronized with Frama-C Carbon stable
+  o [Why] fixed typing for division in programs
+  o [Why] accepts "lemma" has keyword in input. outputs them accordingly
+    for provers
+  o [Why] Why3 output: avoids Why3 keywords
+  o [Why] improved Gappa output
+
 version 2.28, Dec 17, 2010
 ==========================
 

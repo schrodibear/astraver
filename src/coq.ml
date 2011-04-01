@@ -814,18 +814,21 @@ let print_sequent fmt s =
 
 (*let _ = Vcg.log_print_function := print_sequent*)
 
-let reprint_obligation fmt loc _expl id s =
+let reprint_obligation fmt loc _is_lemma _expl id s =
   fprintf fmt "@[(* %a *)@]@\n" (Loc.report_obligation_position  ~onlybasename:true) loc;
   fprintf fmt "@[<hov 2>(*Why goal*) Lemma %s : @\n%a.@]@\n" id print_sequent s
   (*;
   fprintf fmt "@[<hov 2>(* %a *)@]@\n" Util.print_explanation expl
   *)
+ 
 
-let print_obligation fmt loc expl id s =
-  reprint_obligation fmt loc expl id s;
+let print_obligation fmt loc is_lemma expl id s =
+  reprint_obligation fmt loc is_lemma expl id s;
   fprintf fmt "Proof.@\n";
   option_iter (fun t -> fprintf fmt "%s.@\n" t) coq_tactic;
-  fprintf fmt "(* FILL PROOF HERE *)@\nSave.@\n"
+  fprintf fmt "(* FILL PROOF HERE *)@\nSave.@\n";
+  if is_lemma && v81 && coq_use_dp then 
+    fprintf fmt "@[<hov 2>Dp_hint %s.@]@\n" id
 
 let reprint_parameter fmt id c =
   let (l,c) = Env.specialize_cc_type c in
@@ -1057,7 +1060,8 @@ struct
     begin match e with
       | Parameter (id, c) -> print_parameter fmt id c
       | Program (id, tt, v) -> print_cc_functional_program fmt (id, tt, v)
-      | Obligation (loc, expl, id, s) -> print_obligation fmt loc expl id s
+      | Obligation (loc, is_lemma, expl, id, s) -> 
+	  print_obligation fmt loc is_lemma expl id s
       | Logic (id, t) -> print_logic fmt id t
       | Axiom (id, p) -> print_axiom fmt id p
       | Predicate (id, p) -> print_predicate_def fmt id p
@@ -1071,7 +1075,8 @@ struct
   let reprint_element fmt = function
     | Parameter (id, c) -> reprint_parameter fmt id c
     | Program (id, tt, v) -> print_cc_functional_program fmt (id, tt, v)
-    | Obligation (loc, expl, id, s) -> reprint_obligation fmt loc expl id s
+    | Obligation (loc, is_lemma, expl, id, s) -> 
+	reprint_obligation fmt loc is_lemma expl id s
     | Logic (id, t) -> reprint_logic fmt id t
     | Axiom (id, p) -> reprint_axiom fmt id p
     | Predicate (id, p) -> reprint_predicate_def fmt id p
@@ -1102,8 +1107,8 @@ end)
 let reset = Gen.reset
 
 let push_decl = function
-  | Dgoal (loc,expl,l,s) ->
-      Gen.add_elem (Oblig, l) (Obligation (loc,expl,l,s))
+  | Dgoal (loc,is_lemma,expl,l,s) ->
+      Gen.add_elem (Oblig, l) (Obligation (loc,is_lemma,expl,l,s))
   | Dlogic (_, id, t) ->
       let id = Ident.string id in
       Gen.add_elem (Lg, rename id) (Logic (id, t))

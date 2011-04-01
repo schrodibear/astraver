@@ -141,7 +141,10 @@ let type_neq = type_prim t_neq_int_ t_neq_real_ t_neq_bool_ t_neq_unit_
 
 let type_num idint idreal loc = function
   | PureType pt -> begin match normalize_pure_type pt with
-      | PTint -> idint
+      | PTint -> 
+          if idint == t_div_real_ then
+            expected_real loc
+          else idint
       | PTreal -> idreal
       | _ -> expected_num loc
     end
@@ -154,7 +157,7 @@ let type_ge = type_num t_ge_int_ t_ge_real_
 let type_add = type_num t_add_int t_add_real
 let type_sub = type_num t_sub_int t_sub_real
 let type_mul = type_num t_mul_int t_mul_real
-let type_div = type_num t_div_int_ t_div_real_
+let type_div = type_num t_div_real_ t_div_real_
 let type_neg = type_num t_neg_int t_neg_real
 
 let type_poly id =
@@ -538,11 +541,11 @@ let rec typef ?(userlabel="") lab env expr =
 		  let t_a = typef lab env a in
 		  let eq = type_poly x a.ploc (result_type t_a) in
 		  { f with pdesc = Svar eq }
-	      | [] -> 
-		  assert false 
+	      | [] ->
+		  assert false
 		  (* the parser ensures the presence of an argument *)
 	    end
-	| _ -> 
+	| _ ->
 	    f
       in
       (* 2. typing the function f *)

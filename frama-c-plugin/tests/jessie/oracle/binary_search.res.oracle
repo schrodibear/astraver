@@ -219,20 +219,6 @@ predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
-goal mean_1 :
- (forall x_0:int.
-  (forall y:int.
-   (le_int(x_0, y) ->
-    (le_int(x_0, computer_div(add_int(x_0, y), (2)))
-    and le_int(computer_div(add_int(x_0, y), (2)), y)))))
-
-axiom mean_1_as_axiom :
- (forall x_0:int.
-  (forall y:int.
-   (le_int(x_0, y) ->
-    (le_int(x_0, computer_div(add_int(x_0, y), (2)))
-    and le_int(computer_div(add_int(x_0, y), (2)), y)))))
-
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -345,6 +331,13 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma mean_1 :
+ (forall x_0:int.
+  (forall y:int.
+   (le_int(x_0, y) ->
+    (le_int(x_0, computer_div(add_int(x_0, y), (2)))
+    and le_int(computer_div(add_int(x_0, y), (2)), y)))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -2040,13 +2033,6 @@ predicate left_valid_struct_int_P(p: int_P pointer, a: int,
 predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
   p) <= a)
-
-axiom mean_1_as_axiom:
-  (forall x_0:int.
-    (forall y:int.
-      ((x_0 <= y) ->
-       ((x_0 <= computer_div((x_0 + y), 2)) and (computer_div((x_0 + y),
-        2) <= y)))))
 
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.

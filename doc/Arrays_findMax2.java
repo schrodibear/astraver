@@ -1,7 +1,7 @@
 
-/*@ predicate is_max{L}(int[] t,integer i,integer l) {
+/*@ predicate is_max{L}(int[] t,integer i,integer l) =
   @   0 <= i < l &&
-  @      \forall integer j; 0 <= j < l ==> t[j] <= t[i] }
+  @      \forall integer j; 0 <= j < l ==> t[j] <= t[i] ;
   @*/
 
 public class Arrays {
@@ -14,7 +14,7 @@ public class Arrays {
         int r = 0;
         /*@ loop_invariant 
           @   1 <= i <= t.length && m == t[r] && is_max(t,r,i) ;
-          @ decreases t.length-i;
+          @ loop_variant t.length-i;
           @*/
         for (int i=1; i < t.length; i++) {
             if (t[i] > m) {

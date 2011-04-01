@@ -390,7 +390,7 @@ let show_definition (tv:GText.view) (_tv_s:GText.view) =
     with Not_found -> ()
   end
     
-let text_of_obligation (tv:GText.view) (_o,_expl,s,p) = 
+let text_of_obligation (tv:GText.view) (_o,_,_expl,s,p) = 
   let p = p.Env.scheme_type in
   last_fct := s;
   if (unchanged s (is_active ())) then 

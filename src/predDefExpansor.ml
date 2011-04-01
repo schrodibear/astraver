@@ -129,8 +129,8 @@ let push ~recursive_expand decl =
 		       (expand_inductive_def def.scheme_type))		       
   | Daxiom (loc, ident, ps) when recursive_expand -> 
       Daxiom (loc, ident, Env.generalize_predicate(expand ps.scheme_type)) 
-  | Dgoal (loc, expl, ident, ps) ->
-      Dgoal (loc, expl, ident, 
+  | Dgoal (loc, is_lemma, expl, ident, ps) ->
+      Dgoal (loc, is_lemma, expl, ident, 
 	     Env.generalize_sequent (expand_sequent ~recursive_expand ps.scheme_type)) 
   | Dfunction_def _ 
   | Dinductive_def _ 

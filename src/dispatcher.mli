@@ -36,7 +36,7 @@ open Cc
 val push_decl : Logic_decl.t -> unit
 
 val iter : 
-    (Loc.floc * Logic_decl.vc_expl * string * sequent Env.scheme -> unit) 
+    (Loc.floc * bool * Logic_decl.vc_expl * string * sequent Env.scheme -> unit) 
     -> unit
 
 

@@ -284,12 +284,16 @@ let print_axiom fmt id p =
   fprintf fmt "@[%%%% Why axiom %s@]@\n" id;
   fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_predicate p
 
-let print_obligation fmt loc _expl o s = 
+let print_obligation fmt loc is_lemma _expl o s = 
   fprintf fmt "@[%%%% %s, %a@]@\n" o Loc.gen_report_line loc;
-  fprintf fmt "PUSH;@\n@[<hov 2>QUERY %a;@]@\nPOP;@\n@\n" print_sequent s
+  fprintf fmt "PUSH;@\n@[<hov 2>QUERY %a;@]@\nPOP;@\n@\n" print_sequent s;
 (*;
-  fprintf fmt "@[%%%% %a@]@\n" Util.print_explanation expl
+  fprintf fmt "@[%%%% %a@]@\n" Util.print_explanation expl;
 *)
+  if is_lemma then begin
+    fprintf fmt "@[%%%%  %s as axiom@]@\n" o;
+    fprintf fmt "@[<hov 2>ASSERT %a;@]@\n@\n" print_sequent s;
+  end
 
 let push_decl d = Encoding.push ~encode_preds:false ~encode_funs:false d
 
@@ -320,8 +324,8 @@ let output_elem fmt = function
       print_function_def fmt id d.scheme_type
   | Daxiom (_loc, id, p) ->
       print_axiom fmt id p.scheme_type
-  | Dgoal (loc, expl, id, s) ->
-      print_obligation fmt loc expl id s.Env.scheme_type
+  | Dgoal (loc, is_lemma, expl, id, s) ->
+      print_obligation fmt loc is_lemma expl id s.Env.scheme_type
 
 let prelude_done = ref false
 let prelude fmt = 

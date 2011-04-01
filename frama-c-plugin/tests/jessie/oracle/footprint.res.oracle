@@ -202,14 +202,6 @@ axiom no_update_p_0 :
       (p(x_0, int_P_int_M_x_1_at_L)
       <-> p(x_0, store(int_P_int_M_x_1_at_L, tmp, tmpval))))))))
 
-axiom p_footprint :
- (forall int_P_int_M_x_1_at_L:(int_P, int32) memory.
-  (forall x_0_1:int_P pointer.
-   ((p(x_0_1, int_P_int_M_x_1_at_L)
-    and neq_int(integer_of_int32(select(int_P_int_M_x_1_at_L, x_0_1)), (0))) ->
-    (p(x_0_1, int_P_int_M_x_1_at_L)
-    and neq_int(integer_of_int32(select(int_P_int_M_x_1_at_L, x_0_1)), (0))))))
-
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -322,6 +314,14 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+axiom p_footprint :
+ (forall int_P_int_M_x_1_at_L:(int_P, int32) memory.
+  (forall x_0_1:int_P pointer.
+   ((p(x_0_1, int_P_int_M_x_1_at_L)
+    and neq_int(integer_of_int32(select(int_P_int_M_x_1_at_L, x_0_1)), (0))) ->
+    (p(x_0_1, int_P_int_M_x_1_at_L)
+    and neq_int(integer_of_int32(select(int_P_int_M_x_1_at_L, x_0_1)), (0))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -1700,14 +1700,6 @@ axiom no_update_p_0:
            (p(x_0, int_P_int_M_x_1_at_L) <-> p(x_0,
             store(int_P_int_M_x_1_at_L, tmp, tmpval))))))))
 
-axiom p_footprint:
-  (forall int_P_int_M_x_1_at_L:(int_P, int32) memory.
-    (forall x_0_1:int_P pointer.
-      ((p(x_0_1, int_P_int_M_x_1_at_L) and
-        (integer_of_int32(select(int_P_int_M_x_1_at_L, x_0_1)) <> 0)) ->
-       (p(x_0_1, int_P_int_M_x_1_at_L) and
-        (integer_of_int32(select(int_P_int_M_x_1_at_L, x_0_1)) <> 0)))))
-
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(char_P_of_pointer_address(p))))
@@ -1822,4 +1814,12 @@ axiom void_P_tags:
   (forall x:void_P pointer.
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
+
+axiom p_footprint:
+  (forall int_P_int_M_x_1_at_L:(int_P, int32) memory.
+    (forall x_0_1:int_P pointer.
+      ((p(x_0_1, int_P_int_M_x_1_at_L) and
+        (integer_of_int32(select(int_P_int_M_x_1_at_L, x_0_1)) <> 0)) ->
+       (p(x_0_1, int_P_int_M_x_1_at_L) and
+        (integer_of_int32(select(int_P_int_M_x_1_at_L, x_0_1)) <> 0)))))
 

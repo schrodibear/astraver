@@ -321,36 +321,6 @@ predicate min_step(t:double_P pointer, a:int, b:int, bound:real,
                         shift(t, sub_int(i, (1)))))),
    bound)))
 
-goal min_step_increasing :
- (forall double_P_double_M_t_0_5_at_L:(double_P, double) memory.
-  (forall t_0:double_P pointer.
-   (forall a_0:int.
-    (forall b_0:int.
-     (forall bound_0:real.
-      ((ge_real(bound_0, 0.0)
-       and min_step(t_0, a_0, b_0, bound_0, double_P_double_M_t_0_5_at_L)) ->
-       (forall i_0:int.
-        (forall j:int.
-         ((le_int(a_0, i_0) and (le_int(i_0, j) and le_int(j, b_0))) ->
-          le_real(double_value(select(double_P_double_M_t_0_5_at_L,
-                               shift(t_0, i_0))),
-          double_value(select(double_P_double_M_t_0_5_at_L, shift(t_0, j)))))))))))))
-
-axiom min_step_increasing_as_axiom :
- (forall double_P_double_M_t_0_5_at_L:(double_P, double) memory.
-  (forall t_0:double_P pointer.
-   (forall a_0:int.
-    (forall b_0:int.
-     (forall bound_0:real.
-      ((ge_real(bound_0, 0.0)
-       and min_step(t_0, a_0, b_0, bound_0, double_P_double_M_t_0_5_at_L)) ->
-       (forall i_0:int.
-        (forall j:int.
-         ((le_int(a_0, i_0) and (le_int(i_0, j) and le_int(j, b_0))) ->
-          le_real(double_value(select(double_P_double_M_t_0_5_at_L,
-                               shift(t_0, i_0))),
-          double_value(select(double_P_double_M_t_0_5_at_L, shift(t_0, j)))))))))))))
-
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -464,6 +434,21 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma min_step_increasing :
+ (forall double_P_double_M_t_0_5_at_L:(double_P, double) memory.
+  (forall t_0:double_P pointer.
+   (forall a_0:int.
+    (forall b_0:int.
+     (forall bound_0:real.
+      ((ge_real(bound_0, 0.0)
+       and min_step(t_0, a_0, b_0, bound_0, double_P_double_M_t_0_5_at_L)) ->
+       (forall i_0:int.
+        (forall j:int.
+         ((le_int(a_0, i_0) and (le_int(i_0, j) and le_int(j, b_0))) ->
+          le_real(double_value(select(double_P_double_M_t_0_5_at_L,
+                               shift(t_0, i_0))),
+          double_value(select(double_P_double_M_t_0_5_at_L, shift(t_0, j)))))))))))))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -3034,6 +3019,10 @@ axiom exact_round_double_for_integers:
       ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
        (round_double(m, real_of_int(i)) = real_of_int(i)))))
 
+axiom exact_round_double_for_doubles:
+  (forall x:double.
+    (forall m:mode. (round_double(m, double_value(x)) = double_value(x))))
+
 axiom round_double_idempotent:
   (forall m1:mode.
     (forall m2:mode.
@@ -3089,6 +3078,10 @@ axiom exact_round_single_for_integers:
     (forall m:mode.
       ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
        real_of_int(i)) = real_of_int(i)))))
+
+axiom exact_round_single_for_singles:
+  (forall x:single.
+    (forall m:mode. (round_single(m, single_value(x)) = single_value(x))))
 
 axiom round_single_idempotent:
   (forall m1:mode.
@@ -3311,22 +3304,6 @@ predicate min_step(t: double_P pointer, a: int, b: int, bound: real,
      ((double_value(select(double_P_double_M_t_1_at_L, shift(t,
      i))) - double_value(select(double_P_double_M_t_1_at_L, shift(t,
      (i - 1))))) >= bound)))
-
-axiom min_step_increasing_as_axiom:
-  (forall double_P_double_M_t_0_5_at_L:(double_P, double) memory.
-    (forall t_0:double_P pointer.
-      (forall a_0:int.
-        (forall b_0:int.
-          (forall bound_0:real.
-            (((bound_0 >= 0.0) and min_step(t_0, a_0, b_0, bound_0,
-              double_P_double_M_t_0_5_at_L)) ->
-             (forall i_0:int.
-               (forall j:int.
-                 (((a_0 <= i_0) and ((i_0 <= j) and (j <= b_0))) ->
-                  (double_value(select(double_P_double_M_t_0_5_at_L,
-                  shift(t_0,
-                  i_0))) <= double_value(select(double_P_double_M_t_0_5_at_L,
-                  shift(t_0, j)))))))))))))
 
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.

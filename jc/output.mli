@@ -224,18 +224,23 @@ val make_pre : assertion -> expr -> expr;;
 
 val append : expr -> expr -> expr
 
+type why_id = { name : string ; loc : Loc.floc }
+
+val id_no_loc : string -> why_id
+
+type goal_kind = KAxiom | KLemma | KGoal
+
 type why_decl =
-  | Param of bool * string * why_type         (*r parameter in why *)
-  | Def of string * expr               (*r global let in why *)
-  | Logic of bool * string * (string * logic_type) list * logic_type    (*r logic decl in why *)
-  | Predicate of bool * string * (string * logic_type) list * assertion  
-  | Inductive of bool * string * (string * logic_type) list *  
+  | Param of bool * why_id * why_type         (*r parameter in why *)
+  | Def of why_id * expr               (*r global let in why *)
+  | Logic of bool * why_id * (string * logic_type) list * logic_type    (*r logic decl in why *)
+  | Predicate of bool * why_id * (string * logic_type) list * assertion  
+  | Inductive of bool * why_id * (string * logic_type) list *  
       (string * assertion) list (*r inductive definition *)
-  | Axiom of string * assertion         (*r Axiom *)
-  | Goal of string * assertion         (*r Goal *)
-  | Function of bool * string * (string * logic_type) list * logic_type * term
-  | Type of string * string list
-  | Exception of string * logic_type option
+  | Goal of goal_kind * why_id * assertion         (*r Goal *)
+  | Function of bool * why_id * (string * logic_type) list * logic_type * term
+  | Type of why_id * string list
+  | Exception of why_id * logic_type option
 
 val fprintf_why_decl : Format.formatter -> why_decl -> unit;;
 

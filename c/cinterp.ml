@@ -872,31 +872,31 @@ let make_int_types_decls () =
       LAnd (LPred ("le_int", [LConst (Prim_int min); t]),
  	    LPred ("le_int", [t; LConst (Prim_int max)]))
     in
-    (Type (name, [])) 
+    (Type (id_no_loc name, [])) 
     ::
-    (Logic (false, of_name, ["x", lt], simple_logic_type "int")) 
+    (Logic (false, id_no_loc of_name, ["x", lt], simple_logic_type "int")) 
     ::
-    (Axiom (name ^ "_domain", 
+    (Goal(KAxiom,id_no_loc (name ^ "_domain"), 
 	     LForall ("x", lt,  [],in_bounds (LApp (of_name, [LVar "x"]))))) 
     ::
     (if int_model = IMmodulo then
        let width = LConst (Prim_int (Invariant.string_two_power_n size)) in
        let fmod t = LApp (mod_name, [t]) in
-       [Logic (false, mod_name, 
+       [Logic (false, id_no_loc mod_name, 
 	       ["x", simple_logic_type "int"], simple_logic_type "int");
-	Axiom (mod_name ^ "_id",
+	Goal(KAxiom,id_no_loc (mod_name ^ "_id"),
 	       LForall ("x", simple_logic_type "int", [],
 		       LImpl (in_bounds (LVar "x"), 
 		             LPred ("eq", [LApp (mod_name, [LVar "x"]);
 					   LVar "x"]))));
-	Axiom (mod_name ^ "_lt",
+	Goal(KAxiom,id_no_loc (mod_name ^ "_lt"),
 	       LForall ("x", simple_logic_type "int", [],
 		       LImpl (LPred ("lt_int", [LVar "x"; 
 						LConst (Prim_int min)]), 
 		             LPred ("eq", [fmod (LVar "x");
 					   fmod (LApp ("add_int", 
 						      [LVar "x"; width]))]))));
-	Axiom (mod_name ^ "_gt",
+	Goal(KAxiom,id_no_loc (mod_name ^ "_gt"),
 	       LForall ("x", simple_logic_type "int", [],
 		       LImpl (LPred ("gt_int", [LVar "x"; 
 						LConst (Prim_int max)]), 
@@ -914,15 +914,15 @@ let make_int_types_decls () =
 		    if int_model = IMbounded then LVar "x" 
 		    else LApp (mod_name, [LVar "x"])]) 
     in
-    Param (false, name ^ "_of_int",
+    Param (false, id_no_loc (name ^ "_of_int"),
 	  Prod_type ("x", int, 
 		    Annot_type (pre, Base_type lt, [], [], post, []))))
     ::
-    (Param (false, "any_" ^ name,
+    (Param (false, id_no_loc ("any_" ^ name),
             Prod_type ("x", unit_type,
 	               Annot_type (LTrue, Base_type lt, [], [], LTrue, []))))
     ::
-    (Exception ("Return_" ^ name, Some lt))
+    (Exception (id_no_loc ("Return_" ^ name), Some lt))
     ::
     acc
   in
@@ -936,11 +936,11 @@ let make_enum_types_decls () =
     let of_name = "of_" ^ name in
     let is_enum = "is_" ^ name in
     let lt = simple_logic_type name in
-    (Type (name, [])) 
+    (Type (id_no_loc name, [])) 
     ::
-    (Logic (false, of_name, ["x", lt], simple_logic_type "int")) 
+    (Logic (false, id_no_loc of_name, ["x", lt], simple_logic_type "int")) 
     ::
-    (Predicate (false, is_enum, ["x", simple_logic_type "int"], 
+    (Predicate (false, id_no_loc is_enum, ["x", simple_logic_type "int"], 
 	        List.fold_left 
 		  (fun p (_,v) -> 
 		    let v = Int64.to_string v in
@@ -948,10 +948,10 @@ let make_enum_types_decls () =
 		    make_or p p1)
 		  LFalse vl))
     ::
-    (Axiom (name ^ "_domain", 
+    (Goal(KAxiom,id_no_loc (name ^ "_domain"), 
 	    LForall ("x", lt, [],LPred (is_enum, [LApp (of_name, [LVar "x"])])))) 
     ::
-    (Param (false, name ^ "_of_int",
+    (Param (false, id_no_loc (name ^ "_of_int"),
 	    Prod_type ("x", int, 
 		       let pre = LPred (is_enum, [LVar "x"]) in
 		       let post = 
@@ -960,11 +960,11 @@ let make_enum_types_decls () =
 		       in
 		       Annot_type (pre, Base_type lt, [], [], post, []))))
     ::
-    (Param (false, "any_" ^ name,
+    (Param (false, id_no_loc ("any_" ^ name),
             Prod_type ("x", unit_type,
 		       Annot_type (LTrue, Base_type lt, [], [], LTrue, []))))
     ::
-    (Exception ("Return_" ^ name, Some lt))
+    (Exception (id_no_loc ("Return_" ^ name), Some lt))
     ::
     (List.fold_left
       (fun acc (info,v) -> 
@@ -972,8 +972,8 @@ let make_enum_types_decls () =
 	 let v = Int64.to_string v in
 	 let a = LPred ("eq_int", [LApp (of_name, [LVar x]); 
 				   LConst (Prim_int v)]) in
-	 (Logic (false, x, [], lt)) ::
-         (Axiom ("enum_" ^ s ^ "_" ^ x, a)) :: acc)
+	 (Logic (false, id_no_loc x, [], lt)) ::
+         (Goal(KAxiom,id_no_loc ("enum_" ^ s ^ "_" ^ x), a)) :: acc)
       acc vl)
   (******
     let ty = noattr tyn in
@@ -1014,8 +1014,8 @@ let make_enum_types_decls () =
 	let x = info.var_unique_name in
 	let v = Int64.to_string v in
 	let a = LPred ("eq_int", [LVar x; LConst (Prim_int v)]) in
-	(Logic (false, x, [], simple_logic_type "int")) ::
-	(Axiom ("enum_" ^ n ^ "_" ^ x, a)) :: acc)
+	(Logic (false, id_no_loc x, [], simple_logic_type "int")) ::
+	(Goal(KAxiom,id_no_loc ("enum_" ^ n ^ "_" ^ x), a)) :: acc)
       acc vl
   in
   Cenv.fold_all_enum 
@@ -1842,7 +1842,7 @@ let interp_strong_invariants () =
 	      (*else acc*))
 	   e.Ceffect.reads args in
        if args = [] then acc else
-       (Predicate(false,id,args,interp_predicate None "" p))::acc)
+       (Predicate(false,id_no_loc id,args,interp_predicate None "" p))::acc)
     Ceffect.strong_invariants_2 []
     
 
@@ -2435,11 +2435,11 @@ let cinterp_logic_symbol id ls =
 	    (Base_type ([],"prop"))
 	in
 *)
-	Logic(false, id.logic_name, args, simple_logic_type "prop")
+	Logic(false, id_no_loc id.logic_name, args, simple_logic_type "prop")
     | NPredicate_def(args,p) -> 
 	let a = interp_predicate None "" p in
 	let args = interp_predicate_args id args in
-	Predicate(false,id.logic_name, args,a)
+	Predicate(false,id_no_loc id.logic_name, args,a)
     | NFunction(args,ret,_) ->
 	let ret_type =
 	  Info.output_why_type (Cenv.type_type_why ret false) 
@@ -2478,7 +2478,7 @@ let cinterp_logic_symbol id ls =
             (fun (z,_,ty) t ->
                ("",Info.output_why_type (Info.Memory(ty,z)))::t)
             id.logic_heap_zone args in
-	Logic(false,id.logic_name,args,(*simple_logic_type*) ret_type)
+	Logic(false,id_no_loc id.logic_name,args,(*simple_logic_type*) ret_type)
     | NFunction_def(args,ret,e) ->
 	let e = interp_term None "" e in
 	let ret_type = 
@@ -2499,7 +2499,7 @@ let cinterp_logic_symbol id ls =
 	    | _ -> assert false
 *)	in
 	let args = interp_predicate_args id args in
-	Output.Function(false,id.logic_name,args,(* simple_logic_type *) ret_type,e)
+	Output.Function(false,id_no_loc id.logic_name,args,(* simple_logic_type *) ret_type,e)
 	  
 let interp_axiom p =
   let a = interp_predicate None "" p
@@ -2615,7 +2615,7 @@ let interp_function_spec id sp _ty pl =
       tpl 
       annot_type
   in
-  tpl,pre_with,post, Param (false, id.fun_unique_name ^ "_parameter", ty)
+  tpl,pre_with,post, Param (false, id_no_loc (id.fun_unique_name ^ "_parameter"), ty)
 
 (**** CODE TRANSFERRED TO make_enum_types_decls 
 let interp_type loc ctype = match ctype.Ctypes.ctype_node with
@@ -2629,7 +2629,7 @@ let interp_type loc ctype = match ctype.Ctypes.ctype_node with
 		    let v = Int64.to_string v in
 		    let a = LPred ("eq_int", [LVar x; LConst (Prim_int v)]) in
 		    [Logic (false, x, [], simple_logic_type "int");
-		     Axiom ("enum_" ^ n ^ "_" ^ x, a)])
+		     Goal(KAxiom,"enum_" ^ n ^ "_" ^ x, a)])
 		 el)
 	| _ -> assert false
       end
@@ -2645,7 +2645,7 @@ let interp_located_tdecl why_spec decl =
   | Naxiom(id,p) -> 
       lprintf "translating axiom declaration %s@." id;      
       let a = interp_axiom p in
-      Axiom(id,a)::why_spec
+      Goal(KAxiom,id_no_loc id,a)::why_spec
   | Ninvariant(id,_p) -> 
       lprintf "translating invariant declaration %s@." id;      
       why_spec
@@ -2709,7 +2709,7 @@ let interp_c_fun _fun_name (spec, ctype, id, block, loc) (why_code,why_spec) =
                  list_of_refs tblock
              in
 	     printf "generating Why code for function %s@." f;
-	     ((f, Def(why_name, 
+	     ((f, Def(id_no_loc why_name, 
 		      mk_expr (Fun(tparams,pre,tblock,post,[]))))::why_code,
 	      tspec :: why_spec)
 	   with Error (_, Cerror.Unsupported s) ->
@@ -2734,7 +2734,7 @@ let interp_functions why =
   let code = 
     Hashtbl.fold
       (fun lab () acc ->
-	 (lab,Exception("Goto_"^lab,None))::acc) labels_table code
+	 (lab,Exception(id_no_loc ("Goto_"^lab),None))::acc) labels_table code
   in
   (code,spec)
 

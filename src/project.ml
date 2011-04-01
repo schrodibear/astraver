@@ -321,6 +321,7 @@ let rec get_goal lf beh e =
 	    Logic_decl.behavior = beh;
 	    Logic_decl.vc_loc = loc;
 	    Logic_decl.vc_kind = k;
+            Logic_decl.vc_label = None;
 	  }
 	in
 	let (proofs,elements) = get_proof (List.tl elements) in

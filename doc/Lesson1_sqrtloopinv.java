@@ -3,7 +3,7 @@ public static int sqrt(int x) {
     /*@ loop_invariant 
       @   count >= 0 && x >= count*count &&
       @   sum == (count+1)*(count+1);
-      @ decreases x - sum;
+      @ loop_variant x - sum;
       @*/
     while (sum <= x) { 
 	count++;

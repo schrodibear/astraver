@@ -1198,20 +1198,6 @@ predicate left_valid_struct_void_P(p:void_P pointer, a:int,
  void_P_alloc_table:void_P alloc_table) =
  (offset_min(void_P_alloc_table, p) <= a)
 
-goal method_error :
- (forall x_3:real.
-  (le_real(abs_real(x_3), 0x1p-5) ->
-   le_real(abs_real(sub_real(sub_real(1.0, mul_real(mul_real(x_3, x_3), 0.5)),
-                    cos(x_3))),
-   0x1p-24)))
-
-axiom method_error_as_axiom :
- (forall x_3:real.
-  (le_real(abs_real(x_3), 0x1p-5) ->
-   le_real(abs_real(sub_real(sub_real(1.0, mul_real(mul_real(x_3, x_3), 0.5)),
-                    cos(x_3))),
-   0x1p-24)))
-
 axiom pointer_addr_of_char_P_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
 
@@ -1292,6 +1278,13 @@ axiom void_P_tags :
  (forall x:void_P pointer.
   (forall void_P_tag_table:void_P tag_table.
    instanceof(void_P_tag_table, x, void_P_tag)))
+
+lemma method_error :
+ (forall x_3:real.
+  (le_real(abs_real(x_3), 0x1p-5) ->
+   le_real(abs_real(sub_real(sub_real(1.0, mul_real(mul_real(x_3, x_3), 0.5)),
+                    cos(x_3))),
+   0x1p-24)))
 
 parameter alloc_bitvector_struct_char_P :
  n:int ->
@@ -2770,6 +2763,10 @@ axiom exact_round_double_for_integers:
       ((((-9007199254740992) <= i) and (i <= 9007199254740992)) ->
        (round_double(m, real_of_int(i)) = real_of_int(i)))))
 
+axiom exact_round_double_for_doubles:
+  (forall x:double.
+    (forall m:mode. (round_double(m, double_value(x)) = double_value(x))))
+
 axiom round_double_idempotent:
   (forall m1:mode.
     (forall m2:mode.
@@ -2825,6 +2822,10 @@ axiom exact_round_single_for_integers:
     (forall m:mode.
       ((((-16777216) <= i) and (i <= 16777216)) -> (round_single(m,
        real_of_int(i)) = real_of_int(i)))))
+
+axiom exact_round_single_for_singles:
+  (forall x:single.
+    (forall m:mode. (round_single(m, single_value(x)) = single_value(x))))
 
 axiom round_single_idempotent:
   (forall m1:mode.
@@ -2989,16 +2990,6 @@ predicate left_valid_struct_void_P(p: void_P pointer, a: int,
   void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
   p) <= a)
 
-goal method_error:
-  (forall x_3:real.
-    ((abs_real(x_3) <= 0x1.p-5) ->
-     (abs_real(((1.0 - ((x_3 * x_3) * 0.5)) - cos(x_3))) <= 0x1.p-24)))
-
-axiom method_error_as_axiom:
-  (forall x_3:real.
-    ((abs_real(x_3) <= 0x1.p-5) ->
-     (abs_real(((1.0 - ((x_3 * x_3) * 0.5)) - cos(x_3))) <= 0x1.p-24)))
-
 axiom pointer_addr_of_char_P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(char_P_of_pointer_address(p))))
@@ -3082,12 +3073,21 @@ axiom void_P_tags:
     (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
       x, void_P_tag)))
 
+goal method_error:
+  (forall x_3:real.
+    ((abs_real(x_3) <= 0x1.p-5) ->
+     (abs_real(((1.0 - ((x_3 * x_3) * 0.5)) - cos(x_3))) <= 0x1.p-24)))
+
+axiom method_error_as_axiom:
+  (forall x_3:real.
+    ((abs_real(x_3) <= 0x1.p-5) ->
+     (abs_real(((1.0 - ((x_3 * x_3) * 0.5)) - cos(x_3))) <= 0x1.p-24)))
+
 goal my_cos1_ensures_default_po_1:
   forall x_0:single.
   ("JC_3": (abs_real(single_value(x_0)) <= 0x1.p-5)) ->
   ("JC_13":
-  ("JC_13":
-  (abs_real(((1.0 - ((single_value(x_0) * single_value(x_0)) * 0.5)) - cos(single_value(x_0)))) <= 0x1.p-24)))
+  (abs_real(((1.0 - ((single_value(x_0) * single_value(x_0)) * 0.5)) - cos(single_value(x_0)))) <= 0x1.p-24))
 
 goal my_cos1_ensures_default_po_2:
   forall x_0:single.
@@ -3195,8 +3195,7 @@ goal my_cos2_ensures_default_po_1:
   forall r:single.
   (r = result3) ->
   ("JC_36":
-  ("JC_36":
-  (abs_real((single_exact(r) - cos(single_value(x_0_0)))) <= 0x1.p-24)))
+  (abs_real((single_exact(r) - cos(single_value(x_0_0)))) <= 0x1.p-24))
 
 goal my_cos2_ensures_default_po_2:
   forall x_0_0:single.
@@ -3307,8 +3306,7 @@ goal my_cos3_ensures_default_po_1:
   forall r_0:single.
   (r_0 = result3) ->
   ("JC_60":
-  ("JC_60":
-  (abs_real((single_exact(r_0) - cos(single_exact(x_1)))) <= 0x1.p-24)))
+  (abs_real((single_exact(r_0) - cos(single_exact(x_1)))) <= 0x1.p-24))
 
 goal my_cos3_ensures_default_po_2:
   forall x_1:single.
@@ -3341,8 +3339,7 @@ goal my_cos3_ensures_default_po_2:
   (return = r_0) ->
   ("JC_47":
   ("JC_45":
-  ("JC_45":
-  (abs_real((single_exact(return) - cos(single_exact(x_1)))) <= 0x1.p-24))))
+  (abs_real((single_exact(return) - cos(single_exact(x_1)))) <= 0x1.p-24)))
 
 goal my_cos3_ensures_default_po_3:
   forall x_1:single.
@@ -3375,8 +3372,7 @@ goal my_cos3_ensures_default_po_3:
   (return = r_0) ->
   ("JC_47":
   ("JC_46":
-  ("JC_46":
-  (single_round_error(return) <= (single_round_error(x_1) + 0x3.p-24)))))
+  (single_round_error(return) <= (single_round_error(x_1) + 0x3.p-24))))
 
 goal my_cos3_safety_po_1:
   forall x_1:single.
@@ -3432,8 +3428,7 @@ goal my_cos4_ensures_default_po_1:
   forall x_2:single.
   ("JC_63": (abs_real(single_value(x_2)) <= 0.07)) ->
   ("JC_73":
-  ("JC_73":
-  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20)))
+  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20))
 
 goal my_cos4_ensures_default_po_2:
   forall x_2:single.
@@ -3598,33 +3593,11 @@ Admitted.
 (*Why predicate*) Definition left_valid_struct_void_P  (p:(pointer void_P)) (a:Z) (void_P_alloc_table:(alloc_table void_P))
   := (offset_min void_P_alloc_table p) <= a.
 
-(* Why obligation from file "my_cosine.jc", line 26, characters 0-135: *)
-(*Why goal*) Lemma method_error : 
-  (forall (x_3:R),
-   ((Rle (Rabs x_3) (1 / 32)%R) ->
-    (Rle
-     (Rabs
-      (Rminus (Rminus (1)%R (Rmult (Rmult x_3 x_3) (05 / 10)%R)) (cos x_3)))
-     (1 / 16777216)%R))).
-Proof.
-intros x H.
-interval with (i_bisect_diff x,i_nocheck).
-Save.
-
-(*Why axiom*) Lemma method_error_as_axiom :
-  (forall (x_3:R),
-   ((Rle (Rabs x_3) (1 / 32)%R) ->
-    (Rle
-     (Rabs
-      (Rminus (Rminus (1)%R (Rmult (Rmult x_3 x_3) (05 / 10)%R)) (cos x_3)))
-     (1 / 16777216)%R))).
-Admitted.
-Dp_hint method_error_as_axiom.
-
 (*Why axiom*) Lemma pointer_addr_of_char_P_of_pointer_address :
   (forall (p:(pointer unit)),
    p = (pointer_address (char_P_of_pointer_address p))).
 Admitted.
+Dp_hint pointer_addr_of_char_P_of_pointer_address.
 
 (*Why logic*) Definition void_P_of_pointer_address :
   (pointer unit) -> (pointer void_P).
@@ -3634,6 +3607,7 @@ Admitted.
   (forall (p:(pointer unit)),
    p = (pointer_address (void_P_of_pointer_address p))).
 Admitted.
+Dp_hint pointer_addr_of_void_P_of_pointer_address.
 
 (*Why predicate*) Definition right_valid_struct_char_P  (p:(pointer char_P)) (b:Z) (char_P_alloc_table:(alloc_table char_P))
   := (offset_max char_P_alloc_table p) >= b.
@@ -3686,29 +3660,45 @@ Admitted.
 
 (*Why axiom*) Lemma void_P_int : (int_of_tag void_P_tag) = 1.
 Admitted.
+Dp_hint void_P_int.
 
 (*Why axiom*) Lemma void_P_of_pointer_address_of_pointer_addr :
   (forall (p:(pointer void_P)),
    p = (void_P_of_pointer_address (pointer_address p))).
 Admitted.
+Dp_hint void_P_of_pointer_address_of_pointer_addr.
 
 (*Why axiom*) Lemma void_P_parenttag_bottom :
   (parenttag void_P_tag (@bottom_tag void_P)).
 Admitted.
+Dp_hint void_P_parenttag_bottom.
 
 (*Why axiom*) Lemma void_P_tags :
   (forall (x:(pointer void_P)),
    (forall (void_P_tag_table:(tag_table void_P)),
     (instanceof void_P_tag_table x void_P_tag))).
 Admitted.
+Dp_hint void_P_tags.
 
+(* Why obligation from file "my_cosine.jc", line 26, characters 0-135: *)
+(*Why goal*) Lemma method_error : 
+  (forall (x_3:R),
+   ((Rle (Rabs x_3) (1 / 32)%R) ->
+    (Rle
+     (Rabs
+      (Rminus (Rminus (1)%R (Rmult (Rmult x_3 x_3) (05 / 10)%R)) (cos x_3)))
+     (1 / 16777216)%R))).
+Proof.
+intros x H.
+interval with (i_bisect_diff x,i_nocheck).
+Save.
 
+Dp_hint method_error.
 
 (* Why obligation from file "my_cosine.c", line 13, characters 13-53: *)
 (*Why goal*) Lemma my_cos1_ensures_default_po_1 : 
   forall (x_0: single),
   forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x_0)) (1 / 32)%R)),
-  (* JC_13 *)
   (* JC_13 *)
   (Rle
    (Rabs
@@ -3892,7 +3882,6 @@ Save.
   forall (r: single),
   forall (HW_9: r = result3),
   (* JC_36 *)
-  (* JC_36 *)
   (Rle (Rabs (Rminus (single_exact r) (cos (single_value x_0_0))))
    (1 / 16777216)%R).
 Proof.
@@ -4066,7 +4055,6 @@ Save.
   forall (r_0: single),
   forall (HW_9: r_0 = result3),
   (* JC_60 *)
-  (* JC_60 *)
   (Rle (Rabs (Rminus (single_exact r_0) (cos (single_exact x_1))))
    (1 / 16777216)%R).
 Proof.
@@ -4112,7 +4100,6 @@ Save.
   forall (HW_11: why__return = r_0),
   (* JC_47 *)
   (* JC_45 *)
-  (* JC_45 *)
   (Rle (Rabs (Rminus (single_exact why__return) (cos (single_exact x_1))))
    (1 / 16777216)%R).
 Proof.
@@ -4157,7 +4144,6 @@ Save.
   forall (why__return: single),
   forall (HW_11: why__return = r_0),
   (* JC_47 *)
-  (* JC_46 *)
   (* JC_46 *)
   (Rle (single_round_error why__return)
    (Rplus (single_round_error x_1) (3 / 16777216)%R)).
@@ -4242,7 +4228,6 @@ Save.
 (*Why goal*) Lemma my_cos4_ensures_default_po_1 : 
   forall (x_2: single),
   forall (HW_1: (* JC_63 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
-  (* JC_73 *)
   (* JC_73 *)
   (Rle
    (Rabs

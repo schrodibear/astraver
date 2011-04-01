@@ -60,8 +60,8 @@ let push_decl = function
   | Dinductive_def(_loc, _ident, _inddef) ->
       failwith "HOL4 output: inductive def not yet supported"
   | Dfunction_def _ -> assert false (*TODO*)
-  | Dgoal (loc,expl,id,s) -> 
-      Queue.add (Obligation (loc,expl,id,s.Env.scheme_type)) elem_q
+  | Dgoal (loc,is_lemma, expl,id,s) -> 
+      Queue.add (Obligation (loc,is_lemma,expl,id,s.Env.scheme_type)) elem_q
   | Dtype _ -> () (* assert false *)
   | Dalgtype _ -> () (* assert false *)
 
@@ -257,14 +257,15 @@ let print_logic fmt id t =
 let print_axiom fmt id _v =
   fprintf fmt "(* axiom %s *);;" id
 
-let print_obligation fmt _loc id sq =
+let print_obligation fmt _loc _is_lemma id sq =
 (*
   fprintf fmt "@[(* %a *)@]@\n" Loc.report_obligation_position loc;
 *)
   fprintf fmt "val %s = Parse.Term `%a`;;@\n@\n" id print_sequent sq
 
 let print_elem fmt = function
-  | Obligation (loc, _expl, s, sq) -> print_obligation fmt loc s sq
+  | Obligation (loc, is_lemma, _expl, s, sq) -> 
+      print_obligation fmt loc is_lemma s sq
   | Logic (id, t) -> print_logic fmt id t
   | Axiom (id, p) -> print_axiom fmt id p
   | Predicate _ -> assert false (*TODO*)
@@ -272,7 +273,7 @@ let print_elem fmt = function
 let print_obl_list fmt = 
   let comma = ref false in
   let print = function
-    | Obligation (_,_,id,_) -> 
+    | Obligation (_,_,_,id,_) -> 
 	if !comma then fprintf fmt "; "; fprintf fmt "%s" id; comma := true
     | Axiom _ | Logic _ | Predicate _ -> 
 	()

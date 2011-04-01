@@ -625,7 +625,8 @@ bin/rv_merge.opt: tools/rv_merge.ml
 	$(OCAMLOPT) $(OFLAGS) -o $@ $^
 
 OBFCMO=src/pp.cmo src/loc.cmo src/ident.cmo  \
-       src/parser.cmo src/lexer.cmo src/print_real.cmo tools/obfuscator.cmo
+       src/parser.cmo src/lexer.cmo src/print_real.cmo \
+	tools/obfuscator.cmo
 OBFCMX=$(OBFCMO:.cmo=.cmx)
 
 bin/why-obfuscator.byte: $(OBFCMO)
@@ -1134,13 +1135,15 @@ export-examples-c:
 	cp bench/c/good/*.c $(WWW)/caduceus/examples/bench
 	rm -f $(WWW)/caduceus/examples/bench/test.c
 
-export-doc: $(DOC)
+export-doc: $(DOC) export-krakatoa-doc
 	cp doc/manual.ps doc/manual.html $(WWW)/manual
 	cp doc/logic_syntax.bnf $(WWW)/manual
 	(cd $(WWW)/manual; hacha manual.html)
 	cp doc/caduceus.ps doc/caduceus.html $(WWW)/caduceus/manual
 	(cd $(WWW)/caduceus/manual; hacha caduceus.html)
-	cp doc/krakatoa.pdf doc/krakatoa.html $(WWWKRAKATOA)/manual
+
+export-krakatoa-doc:
+	cp doc/krakatoa.pdf doc/krakatoa.html doc/*.png $(WWWKRAKATOA)/manual
 	(cd $(WWWKRAKATOA)/manual; hacha krakatoa.html)
 
 OSTYPE  ?= linux

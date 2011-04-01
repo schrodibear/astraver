@@ -182,8 +182,10 @@ let t_real_of_int = create "real_of_int"
 let t_int_of_real = create "int_of_real"
 
 let t_div_real_ = create "div_real_"
+(*
 let t_div_int_ = create "div_int_"
 let t_mod_int_ = create "mod_int_"
+*)
 let t_sqrt_real_ = create "sqrt_real_"
 
 let t_distinct = create "distinct"
