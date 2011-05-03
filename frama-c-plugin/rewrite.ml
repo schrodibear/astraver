@@ -38,7 +38,6 @@ open Cil_datatype
 open Ast_info
 open Extlib
 
-open Db_types
 open Visitor
 
 (* Utility functions *)
@@ -1308,7 +1307,7 @@ object(self)
 	Annotations.add_alarm
 	  cur_stmt
 	  [ Jessie_options.Analysis.self ]
-	  Alarms.Other_alarm
+	  Other_alarm
 	  app
     end;
     DoChildren
@@ -1329,14 +1328,14 @@ object(self)
 		  Annotations.add_alarm
 		    supst
 		    [ Jessie_options.Analysis.self ]
-		    Alarms.Other_alarm
+		    Other_alarm
 		    rel1;
 		  let rel2 = reach_upper_bound ~loose:false v off in
 		  let eqst = mkStmt(Instr(Skip(CurrentLoc.get()))) in
 		  Annotations.add_alarm
 		    eqst
 		    [ Jessie_options.Analysis.self ]
-		    Alarms.Other_alarm
+		    Other_alarm
 		    rel2;
 
 		  (* Rather add skip statement as blocks may be empty *)
@@ -1372,7 +1371,7 @@ object(self)
 		  Annotations.add_alarm
 		    s
 		    [ Jessie_options.Analysis.self ]
-		    Alarms.Other_alarm
+		    Other_alarm
 		    prel;
 		  (* Further help ATP by asserting that index should be
 		     positive *)
@@ -1384,14 +1383,14 @@ object(self)
 (* 		    { rel with ip_name = [ name_of_hint_assertion ] } *)
 (* 		  in *)
 (* 		  Annotations.add_alarm *)
-(* 		    s ~before:false Alarms.Other_alarm prel; *)
+(* 		    s ~before:false Other_alarm prel; *)
 		  (* If setting a character to zero in a buffer, this should
 		     be the new length of a string *)
 		  let rel = reach_upper_bound ~loose:true v off in
 		  Annotations.add_alarm
 		    s
 		    [ Jessie_options.Analysis.self ]
-		    Alarms.Other_alarm
+		    Other_alarm
 		    rel
 	  else ();
 	  s
@@ -1455,7 +1454,7 @@ object(self)
 		Annotations.add_alarm
 		  cur_stmt
 		  [ Jessie_options.Analysis.self ]
-		  Alarms.Shift_alarm
+		  Shift_alarm
 		  check
 	  end
 	else ();
@@ -1473,7 +1472,7 @@ object(self)
 	      Annotations.add_alarm
 		cur_stmt
 		[ Jessie_options.Analysis.self ]
-		Alarms.Shift_alarm
+		Shift_alarm
 		check
 	end;
 	(* Check that signed left shift has a positive left operand *)
@@ -1490,7 +1489,7 @@ object(self)
 		Annotations.add_alarm
 		  cur_stmt
 		  [ Jessie_options.Analysis.self ]
-		  Alarms.Shift_alarm
+		  Shift_alarm
 		  check
 	  end
 	else ();
@@ -1518,7 +1517,7 @@ object(self)
 		Annotations.add_alarm
 		  cur_stmt
 		  [ Jessie_options.Analysis.self ]
-		  Alarms.Shift_alarm
+		  Shift_alarm
 		  check
 	    | _ ->
 		let max_int = constant_expr max_int in
@@ -1534,7 +1533,7 @@ object(self)
 		Annotations.add_alarm
 		  cur_stmt
 		  [ Jessie_options.Analysis.self ]
-		  Alarms.Shift_alarm
+		  Shift_alarm
 		  check
 	  end
 	else ();

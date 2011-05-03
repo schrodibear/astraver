@@ -38,7 +38,6 @@ open Cilutil
 open Cil_datatype
 open Ast_info
 open Extlib
-open Db_types
 
 (* Import from Why *)
 open Jc
@@ -116,18 +115,18 @@ let locate ?alarm ?pos e =
     let lab = match alarm with
       | None ->
           reg_pos pos
-      | Some Alarms.Division_alarm ->
+      | Some Division_alarm ->
           reg_pos ~kind:Output.DivByZero pos
-      | Some Alarms.Memory_alarm | Some Alarms.Index_alarm ->
+      | Some Memory_alarm | Some Index_alarm ->
           reg_pos ~kind:Output.PointerDeref pos
-      | Some (Alarms.Shift_alarm|Alarms.Signed_overflow_alarm) ->
+      | Some (Shift_alarm|Signed_overflow_alarm) ->
           reg_pos ~kind:Output.ArithOverflow pos
-      | Some Alarms.Pointer_compare_alarm
-      | Some Alarms.Using_nan_or_infinite_alarm
-      | Some Alarms.Result_is_nan_or_infinite_alarm ->
+      | Some Pointer_compare_alarm
+      | Some Using_nan_or_infinite_alarm
+      | Some Result_is_nan_or_infinite_alarm ->
           reg_pos pos
-      | Some Alarms.Separation_alarm -> reg_pos pos
-      | Some Alarms.Other_alarm -> reg_pos pos
+      | Some Separation_alarm -> reg_pos pos
+      | Some Other_alarm -> reg_pos pos
     in
     let e = match e#node with
       | JCPEbinary(e1,`Bland,e2) ->
