@@ -20,39 +20,39 @@ type int32 = -2147483648..2147483647
 
 type int8 = -128..127
 
-tag int_P = {
-  int32 int_M: 32;
+tag intP = {
+  int32 intM: 32;
 }
 
-type int_P = [int_P]
+type intP = [intP]
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
-unit zero(int_P[..] x)
+unit zero(intP[..] x)
   requires (C_18 : ((C_19 : (\offset_min(x) <= 0)) &&
                      (C_20 : (\offset_max(x) >= 0))));
 behavior default:
   ensures (C_17 : true);
 {  
-   (var char_P[..] c);
+   (var charP[..] c);
    
-   {  (C_2 : (c = (C_1 : (x :> char_P[..]))));
-      (C_4 : ((C_3 : c.char_M) = 0));
+   {  (C_2 : (c = (C_1 : (x :> charP[..]))));
+      (C_4 : ((C_3 : c.charM) = 0));
       (C_6 : (c = (C_5 : (c + 1))));
-      (C_8 : ((C_7 : c.char_M) = 0));
+      (C_8 : ((C_7 : c.charM) = 0));
       (C_10 : (c = (C_9 : (c + 1))));
-      (C_12 : ((C_11 : c.char_M) = 0));
+      (C_12 : ((C_11 : c.charM) = 0));
       (C_14 : (c = (C_13 : (c + 1))));
-      (C_16 : ((C_15 : c.char_M) = 0));
+      (C_16 : ((C_15 : c.charM) = 0));
       
       (return ())
    }

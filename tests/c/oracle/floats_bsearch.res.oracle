@@ -71,49 +71,49 @@ type int8 = -128..127
 
 type int32 = -2147483648..2147483647
 
-tag double_P = {
-  double double_M: 64;
+tag doubleP = {
+  double doubleM: 64;
 }
 
-type double_P = [double_P]
+type doubleP = [doubleP]
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
-predicate sorted{L}(double_P[..] t, integer a, integer b) =
+predicate sorted{L}(doubleP[..] t, integer a, integer b) =
 (\forall integer i;
   (\forall integer j;
     (((a <= i) && ((i <= j) && (j <= b))) ==>
-      \le_double((t + i).double_M, (t + j).double_M))))
+      \le_double((t + i).doubleM, (t + j).doubleM))))
 
-int32 binary_search(double_P[..] t, int32 n, double v)
+int32 binary_search(doubleP[..] t, int32 n, double v)
   requires (C_42 : ((C_43 : (n >= 0)) &&
                      ((C_45 : (\offset_min(t) <= 0)) &&
                        (C_46 : (\offset_max(t) >= (n - 1))))));
   requires (C_41 : (! \double_is_NaN(v)));
   requires (C_40 : (\forall integer i_0;
                      (((0 <= i_0) && (i_0 <= (n - 1))) ==>
-                       (! \double_is_NaN((t + i_0).double_M)))));
+                       (! \double_is_NaN((t + i_0).doubleM)))));
 behavior default:
   ensures (C_35 : ((C_36 : ((- 1) <= \result)) &&
                     (C_37 : (\result < \at(n,Old)))));
 behavior success:
   ensures (C_38 : ((\result >= 0) ==>
-                    \eq_double((\at(t,Old) + \result).double_M, \at(v,Old))));
+                    \eq_double((\at(t,Old) + \result).doubleM, \at(v,Old))));
 behavior failure:
   assumes sorted{Here}(t, 0, (n - 1));
   ensures (C_39 : ((\result == (- 1)) ==>
                     (\forall integer k_1;
                       (((0 <= k_1) && (k_1 < \at(n,Old))) ==>
-                        \ne_double((\at(t,Old) + k_1).double_M, \at(v,Old))))));
+                        \ne_double((\at(t,Old) + k_1).doubleM, \at(v,Old))))));
 {  
    (var int32 l);
    
@@ -132,11 +132,11 @@ behavior failure:
       behavior failure:
         invariant (C_7 : (\forall integer k;
                            (((0 <= k) && (k < l)) ==>
-                             \lt_double((t + k).double_M, v))));
+                             \lt_double((t + k).doubleM, v))));
       behavior failure:
         invariant (C_6 : (\forall integer k_0;
                            (((u < k_0) && (k_0 <= (n - 1))) ==>
-                             \lt_double(v, (t + k_0).double_M))));
+                             \lt_double(v, (t + k_0).doubleM))));
       variant (C_5 : (u - l));
       while (true)
       {  
@@ -156,15 +156,15 @@ behavior failure:
                   ()
                };
                
-               {  (if ((C_32 : (C_31 : (t + m)).double_M) < v) then (C_30 : (l = 
-                                                                    (C_29 : (
-                                                                    (C_28 : 
-                                                                    (m +
+               {  (if ((C_32 : (C_31 : (t + m)).doubleM) < v) then (C_30 : (l = 
+                                                                   (C_29 : (
+                                                                   (C_28 : 
+                                                                   (m +
                                                                     1)) :> int32)))) else 
-                  (if ((C_27 : (C_26 : (t + m)).double_M) > v) then (C_25 : (u = 
-                                                                    (C_24 : (
-                                                                    (C_23 : 
-                                                                    (m -
+                  (if ((C_27 : (C_26 : (t + m)).doubleM) > v) then (C_25 : (u = 
+                                                                   (C_24 : (
+                                                                   (C_23 : 
+                                                                   (m -
                                                                     1)) :> int32)))) else 
                   {  
                      {  
@@ -786,13 +786,13 @@ end = -1
 file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
 line = 73
 begin = 6
-end = 2471
+end = 2461
 
 [JC_53]
 file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
 line = 73
 begin = 6
-end = 2471
+end = 2461
 
 [JC_54]
 kind = DivByZero
@@ -871,7 +871,7 @@ end = 25
 file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
 line = 73
 begin = 6
-end = 2471
+end = 2461
 
 [JC_12]
 file = "HOME/tests/c/floats_bsearch.c"
@@ -883,7 +883,7 @@ end = 65
 file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
 line = 73
 begin = 6
-end = 2471
+end = 2461
 
 [JC_13]
 file = "HOME/"
@@ -1048,7 +1048,7 @@ end = 91
 file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
 line = 73
 begin = 6
-end = 2471
+end = 2461
 
 [JC_26]
 file = "HOME/tests/c/floats_bsearch.c"
@@ -1060,7 +1060,7 @@ end = 91
 file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
 line = 73
 begin = 6
-end = 2471
+end = 2461
 
 [JC_27]
 kind = ArithOverflow
@@ -1136,7 +1136,7 @@ end = 17
 file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
 line = 73
 begin = 6
-end = 2471
+end = 2461
 
 [JC_85]
 file = "HOME/tests/c/floats_bsearch.c"
@@ -1148,7 +1148,7 @@ end = 14
 file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
 line = 73
 begin = 6
-end = 2471
+end = 2461
 
 [JC_34]
 kind = ArithOverflow
@@ -1191,9 +1191,9 @@ begin = 20
 end = 26
 
 ========== file tests/c/floats_bsearch.jessie/why/floats_bsearch.why ==========
-type char_P
+type charP
 
-type double_P
+type doubleP
 
 type int32
 
@@ -1201,7 +1201,7 @@ type int8
 
 type padding
 
-type void_P
+type voidP
 
 exception Goto_while_0_break_exc of unit
 
@@ -1211,39 +1211,38 @@ exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
-logic char_P_tag:  -> char_P tag_id
+logic charP_tag:  -> charP tag_id
 
-axiom char_P_int : (int_of_tag(char_P_tag) = (1))
+axiom charP_int : (int_of_tag(charP_tag) = (1))
 
-logic char_P_of_pointer_address: unit pointer -> char_P pointer
+logic charP_of_pointer_address: unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr :
- (forall p:char_P pointer.
-  (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr :
+ (forall p:charP pointer. (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom : parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom : parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags :
- (forall x:char_P pointer.
-  (forall char_P_tag_table:char_P tag_table.
-   instanceof(char_P_tag_table, x, char_P_tag)))
+axiom charP_tags :
+ (forall x:charP pointer.
+  (forall charP_tag_table:charP tag_table.
+   instanceof(charP_tag_table, x, charP_tag)))
 
-logic double_P_tag:  -> double_P tag_id
+logic doubleP_tag:  -> doubleP tag_id
 
-axiom double_P_int : (int_of_tag(double_P_tag) = (1))
+axiom doubleP_int : (int_of_tag(doubleP_tag) = (1))
 
-logic double_P_of_pointer_address: unit pointer -> double_P pointer
+logic doubleP_of_pointer_address: unit pointer -> doubleP pointer
 
-axiom double_P_of_pointer_address_of_pointer_addr :
- (forall p:double_P pointer.
-  (p = double_P_of_pointer_address(pointer_address(p))))
+axiom doubleP_of_pointer_address_of_pointer_addr :
+ (forall p:doubleP pointer.
+  (p = doubleP_of_pointer_address(pointer_address(p))))
 
-axiom double_P_parenttag_bottom : parenttag(double_P_tag, bottom_tag)
+axiom doubleP_parenttag_bottom : parenttag(doubleP_tag, bottom_tag)
 
-axiom double_P_tags :
- (forall x:double_P pointer.
-  (forall double_P_tag_table:double_P tag_table.
-   instanceof(double_P_tag_table, x, double_P_tag)))
+axiom doubleP_tags :
+ (forall x:doubleP pointer.
+  (forall doubleP_tag_table:doubleP tag_table.
+   instanceof(doubleP_tag_table, x, doubleP_tag)))
 
 logic integer_of_int32: int32 -> int
 
@@ -1278,296 +1277,293 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer, a:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_min(char_P_alloc_table, p) <= a)
+predicate left_valid_struct_charP(p:charP pointer, a:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_min(charP_alloc_table, p) <= a)
 
-predicate left_valid_struct_double_P(p:double_P pointer, a:int,
- double_P_alloc_table:double_P alloc_table) =
- (offset_min(double_P_alloc_table, p) <= a)
+predicate left_valid_struct_doubleP(p:doubleP pointer, a:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ (offset_min(doubleP_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer, a:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_min(void_P_alloc_table, p) <= a)
+predicate left_valid_struct_voidP(p:voidP pointer, a:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_min(voidP_alloc_table, p) <= a)
 
-axiom pointer_addr_of_char_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
+axiom pointer_addr_of_charP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
-axiom pointer_addr_of_double_P_of_pointer_address :
+axiom pointer_addr_of_doubleP_of_pointer_address :
  (forall p:unit pointer.
-  (p = pointer_address(double_P_of_pointer_address(p))))
+  (p = pointer_address(doubleP_of_pointer_address(p))))
 
-logic void_P_of_pointer_address: unit pointer -> void_P pointer
+logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
-axiom pointer_addr_of_void_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
+axiom pointer_addr_of_voidP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer, b:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_max(char_P_alloc_table, p) >= b)
+predicate right_valid_struct_charP(p:charP pointer, b:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_max(charP_alloc_table, p) >= b)
 
-predicate right_valid_struct_double_P(p:double_P pointer, b:int,
- double_P_alloc_table:double_P alloc_table) =
- (offset_max(double_P_alloc_table, p) >= b)
+predicate right_valid_struct_doubleP(p:doubleP pointer, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ (offset_max(doubleP_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer, b:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_max(void_P_alloc_table, p) >= b)
+predicate right_valid_struct_voidP(p:voidP pointer, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_max(voidP_alloc_table, p) >= b)
 
-predicate sorted(t:double_P pointer, a:int, b:int,
- double_P_double_M_t_1_at_L:(double_P, double) memory) =
+predicate sorted(t:doubleP pointer, a:int, b:int,
+ doubleP_doubleM_t_1_at_L:(doubleP, double) memory) =
  (forall i:int.
   (forall j:int.
    ((le_int(a, i) and (le_int(i, j) and le_int(j, b))) ->
-    le_double(select(double_P_double_M_t_1_at_L, shift(t, i)),
-    select(double_P_double_M_t_1_at_L, shift(t, j))))))
+    le_double(select(doubleP_doubleM_t_1_at_L, shift(t, i)),
+    select(doubleP_doubleM_t_1_at_L, shift(t, j))))))
 
-predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_root_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) = a)
- and (offset_max(double_P_alloc_table, p) = b))
+predicate strict_valid_root_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) = a)
+ and (offset_max(doubleP_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_struct_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) = a)
- and (offset_max(double_P_alloc_table, p) = b))
+predicate strict_valid_struct_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) = a)
+ and (offset_max(doubleP_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_double_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_doubleP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_root_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) <= a)
- and (offset_max(double_P_alloc_table, p) >= b))
+predicate valid_root_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) <= a)
+ and (offset_max(doubleP_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_struct_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) <= a)
- and (offset_max(double_P_alloc_table, p) >= b))
+predicate valid_struct_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) <= a)
+ and (offset_max(doubleP_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-logic void_P_tag:  -> void_P tag_id
+logic voidP_tag:  -> voidP tag_id
 
-axiom void_P_int : (int_of_tag(void_P_tag) = (1))
+axiom voidP_int : (int_of_tag(voidP_tag) = (1))
 
-axiom void_P_of_pointer_address_of_pointer_addr :
- (forall p:void_P pointer.
-  (p = void_P_of_pointer_address(pointer_address(p))))
+axiom voidP_of_pointer_address_of_pointer_addr :
+ (forall p:voidP pointer. (p = voidP_of_pointer_address(pointer_address(p))))
 
-axiom void_P_parenttag_bottom : parenttag(void_P_tag, bottom_tag)
+axiom voidP_parenttag_bottom : parenttag(voidP_tag, bottom_tag)
 
-axiom void_P_tags :
- (forall x:void_P pointer.
-  (forall void_P_tag_table:void_P tag_table.
-   instanceof(void_P_tag_table, x, void_P_tag)))
+axiom voidP_tags :
+ (forall x:voidP pointer.
+  (forall voidP_tag_table:voidP tag_table.
+   instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_char_P :
+parameter alloc_bitvector_struct_charP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_char_P_requires :
+parameter alloc_bitvector_struct_charP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_double_P :
+parameter alloc_bitvector_struct_doubleP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_double_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_double_P_requires :
+parameter alloc_bitvector_struct_doubleP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_double_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P :
+parameter alloc_bitvector_struct_voidP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P_requires :
+parameter alloc_bitvector_struct_voidP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter char_P_alloc_table : char_P alloc_table ref
+parameter charP_alloc_table : charP alloc_table ref
 
-parameter char_P_tag_table : char_P tag_table ref
+parameter charP_tag_table : charP tag_table ref
 
-parameter alloc_struct_char_P :
+parameter alloc_struct_charP :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { } char_P pointer writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { } charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter alloc_struct_char_P_requires :
+parameter alloc_struct_charP_requires :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { ge_int(n, (0))} char_P pointer
-    writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { ge_int(n, (0))} charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter double_P_alloc_table : double_P alloc_table ref
+parameter doubleP_alloc_table : doubleP alloc_table ref
 
-parameter double_P_tag_table : double_P tag_table ref
+parameter doubleP_tag_table : doubleP tag_table ref
 
-parameter alloc_struct_double_P :
+parameter alloc_struct_doubleP :
  n:int ->
-  double_P_alloc_table:double_P alloc_table ref ->
-   double_P_tag_table:double_P tag_table ref ->
-    { } double_P pointer writes double_P_alloc_table,double_P_tag_table
-    { (strict_valid_struct_double_P(result, (0), sub_int(n, (1)),
-       double_P_alloc_table)
-      and (alloc_extends(double_P_alloc_table@, double_P_alloc_table)
-          and (alloc_fresh(double_P_alloc_table@, result, n)
-              and instanceof(double_P_tag_table, result, double_P_tag)))) }
+  doubleP_alloc_table:doubleP alloc_table ref ->
+   doubleP_tag_table:doubleP tag_table ref ->
+    { } doubleP pointer writes doubleP_alloc_table,doubleP_tag_table
+    { (strict_valid_struct_doubleP(result, (0), sub_int(n, (1)),
+       doubleP_alloc_table)
+      and (alloc_extends(doubleP_alloc_table@, doubleP_alloc_table)
+          and (alloc_fresh(doubleP_alloc_table@, result, n)
+              and instanceof(doubleP_tag_table, result, doubleP_tag)))) }
 
-parameter alloc_struct_double_P_requires :
+parameter alloc_struct_doubleP_requires :
  n:int ->
-  double_P_alloc_table:double_P alloc_table ref ->
-   double_P_tag_table:double_P tag_table ref ->
-    { ge_int(n, (0))} double_P pointer
-    writes double_P_alloc_table,double_P_tag_table
-    { (strict_valid_struct_double_P(result, (0), sub_int(n, (1)),
-       double_P_alloc_table)
-      and (alloc_extends(double_P_alloc_table@, double_P_alloc_table)
-          and (alloc_fresh(double_P_alloc_table@, result, n)
-              and instanceof(double_P_tag_table, result, double_P_tag)))) }
+  doubleP_alloc_table:doubleP alloc_table ref ->
+   doubleP_tag_table:doubleP tag_table ref ->
+    { ge_int(n, (0))} doubleP pointer
+    writes doubleP_alloc_table,doubleP_tag_table
+    { (strict_valid_struct_doubleP(result, (0), sub_int(n, (1)),
+       doubleP_alloc_table)
+      and (alloc_extends(doubleP_alloc_table@, doubleP_alloc_table)
+          and (alloc_fresh(doubleP_alloc_table@, result, n)
+              and instanceof(doubleP_tag_table, result, doubleP_tag)))) }
 
-parameter void_P_alloc_table : void_P alloc_table ref
+parameter voidP_alloc_table : voidP alloc_table ref
 
-parameter void_P_tag_table : void_P tag_table ref
+parameter voidP_tag_table : voidP tag_table ref
 
-parameter alloc_struct_void_P :
+parameter alloc_struct_voidP :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { } void_P pointer writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { } voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
-parameter alloc_struct_void_P_requires :
+parameter alloc_struct_voidP_requires :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { ge_int(n, (0))} void_P pointer
-    writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { ge_int(n, (0))} voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
 parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter binary_search :
- t_0:double_P pointer ->
+ t_0:doubleP pointer ->
   n:int32 ->
    v:double ->
-    double_P_t_2_alloc_table:double_P alloc_table ->
-     double_P_double_M_t_2:(double_P, double) memory ->
+    doubleP_t_2_alloc_table:doubleP alloc_table ->
+     doubleP_doubleM_t_2:(doubleP, double) memory ->
       { } int32
       { ((sorted(t_0@, (0), sub_int(integer_of_int32(n@), (1)),
-          double_P_double_M_t_2@) ->
+          doubleP_doubleM_t_2@) ->
           (JC_26:
           (eq_int(integer_of_int32(result), neg_int((1))) ->
            (forall k_1:int.
             ((le_int((0), k_1) and lt_int(k_1, integer_of_int32(n@))) ->
-             ne_double(select(double_P_double_M_t_2, shift(t_0@, k_1)), v@))))))
+             ne_double(select(doubleP_doubleM_t_2, shift(t_0@, k_1)), v@))))))
         and ((JC_24:
              (ge_int(integer_of_int32(result), (0)) ->
-              eq_double(select(double_P_double_M_t_2,
+              eq_double(select(doubleP_doubleM_t_2,
                         shift(t_0@, integer_of_int32(result))),
               v@)))
             and (JC_20:
@@ -1576,35 +1572,35 @@ parameter binary_search :
                     lt_int(integer_of_int32(result), integer_of_int32(n@))))))) }
 
 parameter binary_search_requires :
- t_0:double_P pointer ->
+ t_0:doubleP pointer ->
   n:int32 ->
    v:double ->
-    double_P_t_2_alloc_table:double_P alloc_table ->
-     double_P_double_M_t_2:(double_P, double) memory ->
+    doubleP_t_2_alloc_table:doubleP alloc_table ->
+     doubleP_doubleM_t_2:(doubleP, double) memory ->
       { (JC_6:
         ((JC_1: ge_int(integer_of_int32(n), (0)))
-        and ((JC_2: le_int(offset_min(double_P_t_2_alloc_table, t_0), (0)))
+        and ((JC_2: le_int(offset_min(doubleP_t_2_alloc_table, t_0), (0)))
             and ((JC_3:
-                 ge_int(offset_max(double_P_t_2_alloc_table, t_0),
+                 ge_int(offset_max(doubleP_t_2_alloc_table, t_0),
                  sub_int(integer_of_int32(n), (1))))
                 and ((JC_4: (not double_is_NaN(v)))
                     and (JC_5:
                         (forall i_0:int.
                          ((le_int((0), i_0)
                           and le_int(i_0, sub_int(integer_of_int32(n), (1)))) ->
-                          (not double_is_NaN(select(double_P_double_M_t_2,
+                          (not double_is_NaN(select(doubleP_doubleM_t_2,
                                              shift(t_0, i_0))))))))))))}
       int32
       { ((sorted(t_0@, (0), sub_int(integer_of_int32(n@), (1)),
-          double_P_double_M_t_2@) ->
+          doubleP_doubleM_t_2@) ->
           (JC_26:
           (eq_int(integer_of_int32(result), neg_int((1))) ->
            (forall k_1:int.
             ((le_int((0), k_1) and lt_int(k_1, integer_of_int32(n@))) ->
-             ne_double(select(double_P_double_M_t_2, shift(t_0@, k_1)), v@))))))
+             ne_double(select(doubleP_doubleM_t_2, shift(t_0@, k_1)), v@))))))
         and ((JC_24:
              (ge_int(integer_of_int32(result), (0)) ->
-              eq_double(select(double_P_double_M_t_2,
+              eq_double(select(doubleP_doubleM_t_2,
                         shift(t_0@, integer_of_int32(result))),
               v@)))
             and (JC_20:
@@ -1629,19 +1625,19 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let binary_search_ensures_default =
- fun (t_0 : double_P pointer) (n : int32) (v : double) (double_P_t_2_alloc_table : double_P alloc_table) (double_P_double_M_t_2 : (double_P, double) memory) ->
+ fun (t_0 : doubleP pointer) (n : int32) (v : double) (doubleP_t_2_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_2 : (doubleP, double) memory) ->
   { (JC_13:
     ((JC_8: ge_int(integer_of_int32(n), (0)))
-    and ((JC_9: le_int(offset_min(double_P_t_2_alloc_table, t_0), (0)))
+    and ((JC_9: le_int(offset_min(doubleP_t_2_alloc_table, t_0), (0)))
         and ((JC_10:
-             ge_int(offset_max(double_P_t_2_alloc_table, t_0),
+             ge_int(offset_max(doubleP_t_2_alloc_table, t_0),
              sub_int(integer_of_int32(n), (1))))
             and ((JC_11: (not double_is_NaN(v)))
                 and (JC_12:
                     (forall i_0:int.
                      ((le_int((0), i_0)
                       and le_int(i_0, sub_int(integer_of_int32(n), (1)))) ->
-                      (not double_is_NaN(select(double_P_double_M_t_2,
+                      (not double_is_NaN(select(doubleP_doubleM_t_2,
                                          shift(t_0, i_0)))))))))))) }
   (init:
   (let return = ref (any_int32 void) in
@@ -1707,9 +1703,9 @@ let binary_search_ensures_default =
                 and (JC_56: le_int(integer_of_int32(m), integer_of_int32(u))))) };
               void); void;
               (if ((lt_double (C_32:
-                              ((safe_acc_ double_P_double_M_t_2) (C_31:
-                                                                 ((shift t_0) 
-                                                                  (integer_of_int32 !m)))))) v)
+                              ((safe_acc_ doubleP_doubleM_t_2) (C_31:
+                                                               ((shift t_0) 
+                                                                (integer_of_int32 !m)))))) v)
               then
                (let jessie_<num> =
                (C_30:
@@ -1719,9 +1715,9 @@ let binary_search_ensures_default =
                void)
               else
                (if ((gt_double (C_27:
-                               ((safe_acc_ double_P_double_M_t_2) (C_26:
-                                                                  ((shift t_0) 
-                                                                   (integer_of_int32 !m)))))) v)
+                               ((safe_acc_ doubleP_doubleM_t_2) (C_26:
+                                                                ((shift t_0) 
+                                                                 (integer_of_int32 !m)))))) v)
                then
                 (let jessie_<num> =
                 (C_25:
@@ -1755,21 +1751,20 @@ let binary_search_ensures_default =
     and (JC_16: lt_int(integer_of_int32(result), integer_of_int32(n@))))) }
 
 let binary_search_ensures_failure =
- fun (t_0 : double_P pointer) (n : int32) (v : double) (double_P_t_2_alloc_table : double_P alloc_table) (double_P_double_M_t_2 : (double_P, double) memory) ->
-  { (sorted(t_0, (0), sub_int(integer_of_int32(n), (1)),
-     double_P_double_M_t_2)
+ fun (t_0 : doubleP pointer) (n : int32) (v : double) (doubleP_t_2_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_2 : (doubleP, double) memory) ->
+  { (sorted(t_0, (0), sub_int(integer_of_int32(n), (1)), doubleP_doubleM_t_2)
     and (JC_13:
         ((JC_8: ge_int(integer_of_int32(n), (0)))
-        and ((JC_9: le_int(offset_min(double_P_t_2_alloc_table, t_0), (0)))
+        and ((JC_9: le_int(offset_min(doubleP_t_2_alloc_table, t_0), (0)))
             and ((JC_10:
-                 ge_int(offset_max(double_P_t_2_alloc_table, t_0),
+                 ge_int(offset_max(doubleP_t_2_alloc_table, t_0),
                  sub_int(integer_of_int32(n), (1))))
                 and ((JC_11: (not double_is_NaN(v)))
                     and (JC_12:
                         (forall i_0:int.
                          ((le_int((0), i_0)
                           and le_int(i_0, sub_int(integer_of_int32(n), (1)))) ->
-                          (not double_is_NaN(select(double_P_double_M_t_2,
+                          (not double_is_NaN(select(doubleP_doubleM_t_2,
                                              shift(t_0, i_0))))))))))))) }
   (init:
   (let return = ref (any_int32 void) in
@@ -1800,12 +1795,12 @@ let binary_search_ensures_failure =
                (forall k_0:int.
                 ((lt_int(integer_of_int32(u), k_0)
                  and le_int(k_0, sub_int(integer_of_int32(n), (1)))) ->
-                 lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0))))))
+                 lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0))))))
               and (JC_73:
                   (forall k:int.
                    ((le_int((0), k) and lt_int(k, integer_of_int32(l))) ->
-                    lt_double(select(double_P_double_M_t_2, shift(t_0, k)),
-                    v)))))  }
+                    lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v)))))
+             }
            begin
              [ { } unit reads l,u
                { (JC_76:
@@ -1846,9 +1841,9 @@ let binary_search_ensures_failure =
                       le_int(integer_of_int32(m), integer_of_int32(u))))) } ];
               void;
               (if ((lt_double (C_32:
-                              ((safe_acc_ double_P_double_M_t_2) (C_31:
-                                                                 ((shift t_0) 
-                                                                  (integer_of_int32 !m)))))) v)
+                              ((safe_acc_ doubleP_doubleM_t_2) (C_31:
+                                                               ((shift t_0) 
+                                                                (integer_of_int32 !m)))))) v)
               then
                (let jessie_<num> =
                (C_30:
@@ -1858,9 +1853,9 @@ let binary_search_ensures_failure =
                void)
               else
                (if ((gt_double (C_27:
-                               ((safe_acc_ double_P_double_M_t_2) (C_26:
-                                                                  ((shift t_0) 
-                                                                   (integer_of_int32 !m)))))) v)
+                               ((safe_acc_ doubleP_doubleM_t_2) (C_26:
+                                                                ((shift t_0) 
+                                                                 (integer_of_int32 !m)))))) v)
                then
                 (let jessie_<num> =
                 (C_25:
@@ -1893,22 +1888,22 @@ let binary_search_ensures_failure =
     (eq_int(integer_of_int32(result), neg_int((1))) ->
      (forall k_1:int.
       ((le_int((0), k_1) and lt_int(k_1, integer_of_int32(n@))) ->
-       ne_double(select(double_P_double_M_t_2, shift(t_0@, k_1)), v@))))) }
+       ne_double(select(doubleP_doubleM_t_2, shift(t_0@, k_1)), v@))))) }
 
 let binary_search_ensures_success =
- fun (t_0 : double_P pointer) (n : int32) (v : double) (double_P_t_2_alloc_table : double_P alloc_table) (double_P_double_M_t_2 : (double_P, double) memory) ->
+ fun (t_0 : doubleP pointer) (n : int32) (v : double) (doubleP_t_2_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_2 : (doubleP, double) memory) ->
   { (JC_13:
     ((JC_8: ge_int(integer_of_int32(n), (0)))
-    and ((JC_9: le_int(offset_min(double_P_t_2_alloc_table, t_0), (0)))
+    and ((JC_9: le_int(offset_min(doubleP_t_2_alloc_table, t_0), (0)))
         and ((JC_10:
-             ge_int(offset_max(double_P_t_2_alloc_table, t_0),
+             ge_int(offset_max(doubleP_t_2_alloc_table, t_0),
              sub_int(integer_of_int32(n), (1))))
             and ((JC_11: (not double_is_NaN(v)))
                 and (JC_12:
                     (forall i_0:int.
                      ((le_int((0), i_0)
                       and le_int(i_0, sub_int(integer_of_int32(n), (1)))) ->
-                      (not double_is_NaN(select(double_P_double_M_t_2,
+                      (not double_is_NaN(select(doubleP_doubleM_t_2,
                                          shift(t_0, i_0)))))))))))) }
   (init:
   (let return = ref (any_int32 void) in
@@ -1975,9 +1970,9 @@ let binary_search_ensures_success =
                       le_int(integer_of_int32(m), integer_of_int32(u))))) } ];
               void;
               (if ((lt_double (C_32:
-                              ((safe_acc_ double_P_double_M_t_2) (C_31:
-                                                                 ((shift t_0) 
-                                                                  (integer_of_int32 !m)))))) v)
+                              ((safe_acc_ doubleP_doubleM_t_2) (C_31:
+                                                               ((shift t_0) 
+                                                                (integer_of_int32 !m)))))) v)
               then
                (let jessie_<num> =
                (C_30:
@@ -1987,9 +1982,9 @@ let binary_search_ensures_success =
                void)
               else
                (if ((gt_double (C_27:
-                               ((safe_acc_ double_P_double_M_t_2) (C_26:
-                                                                  ((shift t_0) 
-                                                                   (integer_of_int32 !m)))))) v)
+                               ((safe_acc_ doubleP_doubleM_t_2) (C_26:
+                                                                ((shift t_0) 
+                                                                 (integer_of_int32 !m)))))) v)
                then
                 (let jessie_<num> =
                 (C_25:
@@ -2020,24 +2015,24 @@ let binary_search_ensures_success =
     absurd  end with Return -> !return end))
   { (JC_23:
     (ge_int(integer_of_int32(result), (0)) ->
-     eq_double(select(double_P_double_M_t_2,
+     eq_double(select(doubleP_doubleM_t_2,
                shift(t_0@, integer_of_int32(result))),
      v@))) }
 
 let binary_search_safety =
- fun (t_0 : double_P pointer) (n : int32) (v : double) (double_P_t_2_alloc_table : double_P alloc_table) (double_P_double_M_t_2 : (double_P, double) memory) ->
+ fun (t_0 : doubleP pointer) (n : int32) (v : double) (doubleP_t_2_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_2 : (doubleP, double) memory) ->
   { (JC_13:
     ((JC_8: ge_int(integer_of_int32(n), (0)))
-    and ((JC_9: le_int(offset_min(double_P_t_2_alloc_table, t_0), (0)))
+    and ((JC_9: le_int(offset_min(doubleP_t_2_alloc_table, t_0), (0)))
         and ((JC_10:
-             ge_int(offset_max(double_P_t_2_alloc_table, t_0),
+             ge_int(offset_max(doubleP_t_2_alloc_table, t_0),
              sub_int(integer_of_int32(n), (1))))
             and ((JC_11: (not double_is_NaN(v)))
                 and (JC_12:
                     (forall i_0:int.
                      ((le_int((0), i_0)
                       and le_int(i_0, sub_int(integer_of_int32(n), (1)))) ->
-                      (not double_is_NaN(select(double_P_double_M_t_2,
+                      (not double_is_NaN(select(doubleP_doubleM_t_2,
                                          shift(t_0, i_0)))))))))))) }
   (init:
   (let return = ref (any_int32 void) in
@@ -2111,7 +2106,7 @@ let binary_search_safety =
               void;
               (if ((lt_double (C_32:
                               (JC_41:
-                              ((((offset_acc_ double_P_t_2_alloc_table) double_P_double_M_t_2) t_0) 
+                              ((((offset_acc_ doubleP_t_2_alloc_table) doubleP_doubleM_t_2) t_0) 
                                (integer_of_int32 !m))))) v)
               then
                (let jessie_<num> =
@@ -2124,7 +2119,7 @@ let binary_search_safety =
               else
                (if ((gt_double (C_27:
                                (JC_43:
-                               ((((offset_acc_ double_P_t_2_alloc_table) double_P_double_M_t_2) t_0) 
+                               ((((offset_acc_ doubleP_t_2_alloc_table) doubleP_doubleM_t_2) t_0) 
                                 (integer_of_int32 !m))))) v)
                then
                 (let jessie_<num> =
@@ -3869,9 +3864,9 @@ axiom double_is_gen_zero_comp2:
         ((not double_is_gen_zero(x)) and (double_value(x) = double_value(y)))) ->
        (not double_is_gen_zero(y)))))
 
-type char_P
+type charP
 
-type double_P
+type doubleP
 
 type int32
 
@@ -3879,41 +3874,41 @@ type int8
 
 type padding
 
-type void_P
+type voidP
 
-logic char_P_tag : char_P tag_id
+logic charP_tag : charP tag_id
 
-axiom char_P_int: (int_of_tag(char_P_tag) = 1)
+axiom charP_int: (int_of_tag(charP_tag) = 1)
 
-logic char_P_of_pointer_address : unit pointer -> char_P pointer
+logic charP_of_pointer_address : unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr:
-  (forall p:char_P pointer.
-    (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr:
+  (forall p:charP pointer.
+    (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom: parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom: parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags:
-  (forall x:char_P pointer.
-    (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
-      x, char_P_tag)))
+axiom charP_tags:
+  (forall x:charP pointer.
+    (forall charP_tag_table:charP tag_table. instanceof(charP_tag_table, x,
+      charP_tag)))
 
-logic double_P_tag : double_P tag_id
+logic doubleP_tag : doubleP tag_id
 
-axiom double_P_int: (int_of_tag(double_P_tag) = 1)
+axiom doubleP_int: (int_of_tag(doubleP_tag) = 1)
 
-logic double_P_of_pointer_address : unit pointer -> double_P pointer
+logic doubleP_of_pointer_address : unit pointer -> doubleP pointer
 
-axiom double_P_of_pointer_address_of_pointer_addr:
-  (forall p:double_P pointer.
-    (p = double_P_of_pointer_address(pointer_address(p))))
+axiom doubleP_of_pointer_address_of_pointer_addr:
+  (forall p:doubleP pointer.
+    (p = doubleP_of_pointer_address(pointer_address(p))))
 
-axiom double_P_parenttag_bottom: parenttag(double_P_tag, bottom_tag)
+axiom doubleP_parenttag_bottom: parenttag(doubleP_tag, bottom_tag)
 
-axiom double_P_tags:
-  (forall x:double_P pointer.
-    (forall double_P_tag_table:double_P tag_table.
-      instanceof(double_P_tag_table, x, double_P_tag)))
+axiom doubleP_tags:
+  (forall x:doubleP pointer.
+    (forall doubleP_tag_table:doubleP tag_table.
+      instanceof(doubleP_tag_table, x, doubleP_tag)))
 
 logic integer_of_int32 : int32 -> int
 
@@ -3948,159 +3943,157 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
-predicate left_valid_struct_char_P(p: char_P pointer, a: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
+predicate left_valid_struct_charP(p: charP pointer, a: int,
+  charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
   p) <= a)
 
-predicate left_valid_struct_double_P(p: double_P pointer, a: int,
-  double_P_alloc_table: double_P alloc_table) =
-  (offset_min(double_P_alloc_table, p) <= a)
+predicate left_valid_struct_doubleP(p: doubleP pointer, a: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  (offset_min(doubleP_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p: void_P pointer, a: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
+predicate left_valid_struct_voidP(p: voidP pointer, a: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
 
-axiom pointer_addr_of_char_P_of_pointer_address:
+axiom pointer_addr_of_charP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
+
+axiom pointer_addr_of_doubleP_of_pointer_address:
   (forall p:unit pointer.
-    (p = pointer_address(char_P_of_pointer_address(p))))
+    (p = pointer_address(doubleP_of_pointer_address(p))))
 
-axiom pointer_addr_of_double_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(double_P_of_pointer_address(p))))
+logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
-logic void_P_of_pointer_address : unit pointer -> void_P pointer
+axiom pointer_addr_of_voidP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
-axiom pointer_addr_of_void_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(void_P_of_pointer_address(p))))
-
-predicate right_valid_struct_char_P(p: char_P pointer, b: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
+predicate right_valid_struct_charP(p: charP pointer, b: int,
+  charP_alloc_table: charP alloc_table) = (offset_max(charP_alloc_table,
   p) >= b)
 
-predicate right_valid_struct_double_P(p: double_P pointer, b: int,
-  double_P_alloc_table: double_P alloc_table) =
-  (offset_max(double_P_alloc_table, p) >= b)
+predicate right_valid_struct_doubleP(p: doubleP pointer, b: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  (offset_max(doubleP_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p: void_P pointer, b: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
+predicate right_valid_struct_voidP(p: voidP pointer, b: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
 
-predicate sorted(t: double_P pointer, a: int, b: int,
-  double_P_double_M_t_1_at_L: (double_P, double) memory) =
+predicate sorted(t: doubleP pointer, a: int, b: int,
+  doubleP_doubleM_t_1_at_L: (doubleP, double) memory) =
   (forall i:int.
     (forall j:int.
       (((a <= i) and ((i <= j) and (j <= b))) ->
-       le_double(select(double_P_double_M_t_1_at_L, shift(t, i)),
-       select(double_P_double_M_t_1_at_L, shift(t, j))))))
+       le_double(select(doubleP_doubleM_t_1_at_L, shift(t, i)),
+       select(doubleP_doubleM_t_1_at_L, shift(t, j))))))
 
-predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
 
-predicate strict_valid_root_double_P(p: double_P pointer, a: int, b: int,
-  double_P_alloc_table: double_P alloc_table) =
-  ((offset_min(double_P_alloc_table, p) = a) and
-   (offset_max(double_P_alloc_table, p) = b))
+predicate strict_valid_root_doubleP(p: doubleP pointer, a: int, b: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  ((offset_min(doubleP_alloc_table, p) = a) and
+   (offset_max(doubleP_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
 
-predicate strict_valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
 
-predicate strict_valid_struct_double_P(p: double_P pointer, a: int, b: int,
-  double_P_alloc_table: double_P alloc_table) =
-  ((offset_min(double_P_alloc_table, p) = a) and
-   (offset_max(double_P_alloc_table, p) = b))
+predicate strict_valid_struct_doubleP(p: doubleP pointer, a: int, b: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  ((offset_min(doubleP_alloc_table, p) = a) and
+   (offset_max(doubleP_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
 
-predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_double_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_doubleP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
 
-predicate valid_root_double_P(p: double_P pointer, a: int, b: int,
-  double_P_alloc_table: double_P alloc_table) =
-  ((offset_min(double_P_alloc_table, p) <= a) and
-   (offset_max(double_P_alloc_table, p) >= b))
+predicate valid_root_doubleP(p: doubleP pointer, a: int, b: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  ((offset_min(doubleP_alloc_table, p) <= a) and
+   (offset_max(doubleP_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
-predicate valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
 
-predicate valid_struct_double_P(p: double_P pointer, a: int, b: int,
-  double_P_alloc_table: double_P alloc_table) =
-  ((offset_min(double_P_alloc_table, p) <= a) and
-   (offset_max(double_P_alloc_table, p) >= b))
+predicate valid_struct_doubleP(p: doubleP pointer, a: int, b: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  ((offset_min(doubleP_alloc_table, p) <= a) and
+   (offset_max(doubleP_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
-logic void_P_tag : void_P tag_id
+logic voidP_tag : voidP tag_id
 
-axiom void_P_int: (int_of_tag(void_P_tag) = 1)
+axiom voidP_int: (int_of_tag(voidP_tag) = 1)
 
-axiom void_P_of_pointer_address_of_pointer_addr:
-  (forall p:void_P pointer.
-    (p = void_P_of_pointer_address(pointer_address(p))))
+axiom voidP_of_pointer_address_of_pointer_addr:
+  (forall p:voidP pointer.
+    (p = voidP_of_pointer_address(pointer_address(p))))
 
-axiom void_P_parenttag_bottom: parenttag(void_P_tag, bottom_tag)
+axiom voidP_parenttag_bottom: parenttag(voidP_tag, bottom_tag)
 
-axiom void_P_tags:
-  (forall x:void_P pointer.
-    (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
-      x, void_P_tag)))
+axiom voidP_tags:
+  (forall x:voidP pointer.
+    (forall voidP_tag_table:voidP tag_table. instanceof(voidP_tag_table, x,
+      voidP_tag)))
 
 goal binary_search_ensures_default_po_1:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4112,22 +4105,22 @@ goal binary_search_ensures_default_po_1:
   ("JC_50": ("JC_48": (0 <= integer_of_int32(l))))
 
 goal binary_search_ensures_default_po_2:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4139,22 +4132,22 @@ goal binary_search_ensures_default_po_2:
   ("JC_50": ("JC_49": (integer_of_int32(u) <= (integer_of_int32(n) - 1))))
 
 goal binary_search_ensures_default_po_3:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4180,22 +4173,22 @@ goal binary_search_ensures_default_po_3:
   ("JC_57": ("JC_55": (integer_of_int32(l0) <= integer_of_int32(m))))
 
 goal binary_search_ensures_default_po_4:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4221,22 +4214,22 @@ goal binary_search_ensures_default_po_4:
   ("JC_57": ("JC_56": (integer_of_int32(m) <= integer_of_int32(u0))))
 
 goal binary_search_ensures_default_po_5:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4263,8 +4256,7 @@ goal binary_search_ensures_default_po_5:
   (("JC_55": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_56": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
-  (result4 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   lt_double(result4, v) ->
   forall result5:int32.
   (integer_of_int32(result5) = (integer_of_int32(m) + 1)) ->
@@ -4273,22 +4265,22 @@ goal binary_search_ensures_default_po_5:
   ("JC_50": ("JC_48": (0 <= integer_of_int32(l1))))
 
 goal binary_search_ensures_default_po_6:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4315,12 +4307,10 @@ goal binary_search_ensures_default_po_6:
   (("JC_55": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_56": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
-  (result4 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not lt_double(result4, v)) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   gt_double(result5, v) ->
   forall result6:int32.
   (integer_of_int32(result6) = (integer_of_int32(m) - 1)) ->
@@ -4329,22 +4319,22 @@ goal binary_search_ensures_default_po_6:
   ("JC_50": ("JC_49": (integer_of_int32(u1) <= (integer_of_int32(n) - 1))))
 
 goal binary_search_ensures_default_po_7:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4371,32 +4361,30 @@ goal binary_search_ensures_default_po_7:
   (("JC_55": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_56": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
-  (result4 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not lt_double(result4, v)) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not gt_double(result5, v)) ->
   ("JC_58": (0 <> 0))
 
 goal binary_search_ensures_default_po_8:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4423,12 +4411,10 @@ goal binary_search_ensures_default_po_8:
   (("JC_55": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_56": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
-  (result4 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not lt_double(result4, v)) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not gt_double(result5, v)) ->
   ("JC_58": (0 <> 0)) ->
   forall __retres:int32.
@@ -4438,22 +4424,22 @@ goal binary_search_ensures_default_po_8:
   ("JC_17": ("JC_15": ((-1) <= integer_of_int32(return))))
 
 goal binary_search_ensures_default_po_9:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4480,12 +4466,10 @@ goal binary_search_ensures_default_po_9:
   (("JC_55": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_56": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
-  (result4 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not lt_double(result4, v)) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not gt_double(result5, v)) ->
   ("JC_58": (0 <> 0)) ->
   forall __retres:int32.
@@ -4495,22 +4479,22 @@ goal binary_search_ensures_default_po_9:
   ("JC_17": ("JC_16": (integer_of_int32(return) < integer_of_int32(n))))
 
 goal binary_search_ensures_default_po_10:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4528,22 +4512,22 @@ goal binary_search_ensures_default_po_10:
   ("JC_59": (0 <> 0))
 
 goal binary_search_ensures_default_po_11:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4568,22 +4552,22 @@ goal binary_search_ensures_default_po_11:
   ("JC_17": ("JC_15": ((-1) <= integer_of_int32(return))))
 
 goal binary_search_ensures_default_po_12:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4608,23 +4592,23 @@ goal binary_search_ensures_default_po_12:
   ("JC_17": ("JC_16": (integer_of_int32(return) < integer_of_int32(n))))
 
 goal binary_search_ensures_failure_po_1:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), double_P_double_M_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n) - 1), doubleP_doubleM_t_2) and
    ("JC_13":
    (("JC_8": (integer_of_int32(n) >= 0)) and
-    (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-     (("JC_10": (offset_max(double_P_t_2_alloc_table,
+    (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+     (("JC_10": (offset_max(doubleP_t_2_alloc_table,
       t_0) >= (integer_of_int32(n) - 1))) and
       (("JC_11": (not double_is_NaN(v))) and
        ("JC_12":
        (forall i_0:int.
          (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-          (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0))))))))))))) ->
+          (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0))))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4635,26 +4619,26 @@ goal binary_search_ensures_failure_po_1:
   (u = result0) ->
   forall k_0:int.
   ((integer_of_int32(u) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-  ("JC_72": lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0))))
+  ("JC_72": lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0))))
 
 goal binary_search_ensures_failure_po_2:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), double_P_double_M_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n) - 1), doubleP_doubleM_t_2) and
    ("JC_13":
    (("JC_8": (integer_of_int32(n) >= 0)) and
-    (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-     (("JC_10": (offset_max(double_P_t_2_alloc_table,
+    (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+     (("JC_10": (offset_max(doubleP_t_2_alloc_table,
       t_0) >= (integer_of_int32(n) - 1))) and
       (("JC_11": (not double_is_NaN(v))) and
        ("JC_12":
        (forall i_0:int.
          (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-          (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0))))))))))))) ->
+          (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0))))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4665,26 +4649,26 @@ goal binary_search_ensures_failure_po_2:
   (u = result0) ->
   forall k:int.
   ((0 <= k) and (k < integer_of_int32(l))) ->
-  ("JC_73": lt_double(select(double_P_double_M_t_2, shift(t_0, k)), v))
+  ("JC_73": lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))
 
 goal binary_search_ensures_failure_po_3:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), double_P_double_M_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n) - 1), doubleP_doubleM_t_2) and
    ("JC_13":
    (("JC_8": (integer_of_int32(n) >= 0)) and
-    (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-     (("JC_10": (offset_max(double_P_t_2_alloc_table,
+    (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+     (("JC_10": (offset_max(doubleP_t_2_alloc_table,
       t_0) >= (integer_of_int32(n) - 1))) and
       (("JC_11": (not double_is_NaN(v))) and
        ("JC_12":
        (forall i_0:int.
          (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-          (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0))))))))))))) ->
+          (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0))))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4698,11 +4682,11 @@ goal binary_search_ensures_failure_po_3:
   (("JC_72":
    (forall k_0:int.
      (((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-      lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0)))))) and
+      lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
    ("JC_73":
    (forall k:int.
      (((0 <= k) and (k < integer_of_int32(l0))) ->
-      lt_double(select(double_P_double_M_t_2, shift(t_0, k)), v))))) ->
+      lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
   ("JC_76":
   (("JC_74": (0 <= integer_of_int32(l0))) and
    ("JC_75": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
@@ -4719,8 +4703,7 @@ goal binary_search_ensures_failure_po_3:
   (("JC_81": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_82": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
-  (result4 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   lt_double(result4, v) ->
   forall result5:int32.
   (integer_of_int32(result5) = (integer_of_int32(m) + 1)) ->
@@ -4728,26 +4711,26 @@ goal binary_search_ensures_failure_po_3:
   (l1 = result5) ->
   forall k_0:int.
   ((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-  ("JC_72": lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0))))
+  ("JC_72": lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0))))
 
 goal binary_search_ensures_failure_po_4:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), double_P_double_M_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n) - 1), doubleP_doubleM_t_2) and
    ("JC_13":
    (("JC_8": (integer_of_int32(n) >= 0)) and
-    (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-     (("JC_10": (offset_max(double_P_t_2_alloc_table,
+    (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+     (("JC_10": (offset_max(doubleP_t_2_alloc_table,
       t_0) >= (integer_of_int32(n) - 1))) and
       (("JC_11": (not double_is_NaN(v))) and
        ("JC_12":
        (forall i_0:int.
          (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-          (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0))))))))))))) ->
+          (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0))))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4761,11 +4744,11 @@ goal binary_search_ensures_failure_po_4:
   (("JC_72":
    (forall k_0:int.
      (((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-      lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0)))))) and
+      lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
    ("JC_73":
    (forall k:int.
      (((0 <= k) and (k < integer_of_int32(l0))) ->
-      lt_double(select(double_P_double_M_t_2, shift(t_0, k)), v))))) ->
+      lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
   ("JC_76":
   (("JC_74": (0 <= integer_of_int32(l0))) and
    ("JC_75": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
@@ -4782,8 +4765,7 @@ goal binary_search_ensures_failure_po_4:
   (("JC_81": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_82": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
-  (result4 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   lt_double(result4, v) ->
   forall result5:int32.
   (integer_of_int32(result5) = (integer_of_int32(m) + 1)) ->
@@ -4791,26 +4773,26 @@ goal binary_search_ensures_failure_po_4:
   (l1 = result5) ->
   forall k:int.
   ((0 <= k) and (k < integer_of_int32(l1))) ->
-  ("JC_73": lt_double(select(double_P_double_M_t_2, shift(t_0, k)), v))
+  ("JC_73": lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))
 
 goal binary_search_ensures_failure_po_5:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), double_P_double_M_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n) - 1), doubleP_doubleM_t_2) and
    ("JC_13":
    (("JC_8": (integer_of_int32(n) >= 0)) and
-    (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-     (("JC_10": (offset_max(double_P_t_2_alloc_table,
+    (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+     (("JC_10": (offset_max(doubleP_t_2_alloc_table,
       t_0) >= (integer_of_int32(n) - 1))) and
       (("JC_11": (not double_is_NaN(v))) and
        ("JC_12":
        (forall i_0:int.
          (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-          (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0))))))))))))) ->
+          (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0))))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4824,11 +4806,11 @@ goal binary_search_ensures_failure_po_5:
   (("JC_72":
    (forall k_0:int.
      (((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-      lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0)))))) and
+      lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
    ("JC_73":
    (forall k:int.
      (((0 <= k) and (k < integer_of_int32(l0))) ->
-      lt_double(select(double_P_double_M_t_2, shift(t_0, k)), v))))) ->
+      lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
   ("JC_76":
   (("JC_74": (0 <= integer_of_int32(l0))) and
    ("JC_75": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
@@ -4845,12 +4827,10 @@ goal binary_search_ensures_failure_po_5:
   (("JC_81": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_82": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
-  (result4 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not lt_double(result4, v)) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   gt_double(result5, v) ->
   forall result6:int32.
   (integer_of_int32(result6) = (integer_of_int32(m) - 1)) ->
@@ -4858,26 +4838,26 @@ goal binary_search_ensures_failure_po_5:
   (u1 = result6) ->
   forall k_0:int.
   ((integer_of_int32(u1) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-  ("JC_72": lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0))))
+  ("JC_72": lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0))))
 
 goal binary_search_ensures_failure_po_6:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), double_P_double_M_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n) - 1), doubleP_doubleM_t_2) and
    ("JC_13":
    (("JC_8": (integer_of_int32(n) >= 0)) and
-    (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-     (("JC_10": (offset_max(double_P_t_2_alloc_table,
+    (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+     (("JC_10": (offset_max(doubleP_t_2_alloc_table,
       t_0) >= (integer_of_int32(n) - 1))) and
       (("JC_11": (not double_is_NaN(v))) and
        ("JC_12":
        (forall i_0:int.
          (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-          (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0))))))))))))) ->
+          (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0))))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4891,11 +4871,11 @@ goal binary_search_ensures_failure_po_6:
   (("JC_72":
    (forall k_0:int.
      (((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-      lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0)))))) and
+      lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
    ("JC_73":
    (forall k:int.
      (((0 <= k) and (k < integer_of_int32(l0))) ->
-      lt_double(select(double_P_double_M_t_2, shift(t_0, k)), v))))) ->
+      lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
   ("JC_76":
   (("JC_74": (0 <= integer_of_int32(l0))) and
    ("JC_75": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
@@ -4912,12 +4892,10 @@ goal binary_search_ensures_failure_po_6:
   (("JC_81": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_82": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
-  (result4 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not lt_double(result4, v)) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   gt_double(result5, v) ->
   forall result6:int32.
   (integer_of_int32(result6) = (integer_of_int32(m) - 1)) ->
@@ -4925,26 +4903,26 @@ goal binary_search_ensures_failure_po_6:
   (u1 = result6) ->
   forall k:int.
   ((0 <= k) and (k < integer_of_int32(l0))) ->
-  ("JC_73": lt_double(select(double_P_double_M_t_2, shift(t_0, k)), v))
+  ("JC_73": lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))
 
 goal binary_search_ensures_failure_po_7:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), double_P_double_M_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n) - 1), doubleP_doubleM_t_2) and
    ("JC_13":
    (("JC_8": (integer_of_int32(n) >= 0)) and
-    (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-     (("JC_10": (offset_max(double_P_t_2_alloc_table,
+    (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+     (("JC_10": (offset_max(doubleP_t_2_alloc_table,
       t_0) >= (integer_of_int32(n) - 1))) and
       (("JC_11": (not double_is_NaN(v))) and
        ("JC_12":
        (forall i_0:int.
          (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-          (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0))))))))))))) ->
+          (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0))))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -4958,11 +4936,11 @@ goal binary_search_ensures_failure_po_7:
   (("JC_72":
    (forall k_0:int.
      (((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-      lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0)))))) and
+      lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
    ("JC_73":
    (forall k:int.
      (((0 <= k) and (k < integer_of_int32(l0))) ->
-      lt_double(select(double_P_double_M_t_2, shift(t_0, k)), v))))) ->
+      lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
   ("JC_76":
   (("JC_74": (0 <= integer_of_int32(l0))) and
    ("JC_75": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
@@ -4979,12 +4957,10 @@ goal binary_search_ensures_failure_po_7:
   (("JC_81": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_82": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
-  (result4 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not lt_double(result4, v)) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not gt_double(result5, v)) ->
   ("JC_84": (0 <> 0)) ->
   forall __retres:int32.
@@ -4994,26 +4970,26 @@ goal binary_search_ensures_failure_po_7:
   (integer_of_int32(return) = (-1)) ->
   forall k_1:int.
   ((0 <= k_1) and (k_1 < integer_of_int32(n))) ->
-  ("JC_25": ne_double(select(double_P_double_M_t_2, shift(t_0, k_1)), v))
+  ("JC_25": ne_double(select(doubleP_doubleM_t_2, shift(t_0, k_1)), v))
 
 goal binary_search_ensures_failure_po_8:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
-  (sorted(t_0, 0, (integer_of_int32(n) - 1), double_P_double_M_t_2) and
+  (sorted(t_0, 0, (integer_of_int32(n) - 1), doubleP_doubleM_t_2) and
    ("JC_13":
    (("JC_8": (integer_of_int32(n) >= 0)) and
-    (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-     (("JC_10": (offset_max(double_P_t_2_alloc_table,
+    (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+     (("JC_10": (offset_max(doubleP_t_2_alloc_table,
       t_0) >= (integer_of_int32(n) - 1))) and
       (("JC_11": (not double_is_NaN(v))) and
        ("JC_12":
        (forall i_0:int.
          (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-          (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0))))))))))))) ->
+          (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0))))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5027,11 +5003,11 @@ goal binary_search_ensures_failure_po_8:
   (("JC_72":
    (forall k_0:int.
      (((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-      lt_double(v, select(double_P_double_M_t_2, shift(t_0, k_0)))))) and
+      lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
    ("JC_73":
    (forall k:int.
      (((0 <= k) and (k < integer_of_int32(l0))) ->
-      lt_double(select(double_P_double_M_t_2, shift(t_0, k)), v))))) ->
+      lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
   ("JC_76":
   (("JC_74": (0 <= integer_of_int32(l0))) and
    ("JC_75": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
@@ -5046,25 +5022,25 @@ goal binary_search_ensures_failure_po_8:
   (integer_of_int32(return) = (-1)) ->
   forall k_1:int.
   ((0 <= k_1) and (k_1 < integer_of_int32(n))) ->
-  ("JC_25": ne_double(select(double_P_double_M_t_2, shift(t_0, k_1)), v))
+  ("JC_25": ne_double(select(doubleP_doubleM_t_2, shift(t_0, k_1)), v))
 
 goal binary_search_ensures_success_po_1:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5092,12 +5068,10 @@ goal binary_search_ensures_success_po_1:
   (("JC_67": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_68": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
-  (result4 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not lt_double(result4, v)) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not gt_double(result5, v)) ->
   ("JC_70": (0 <> 0)) ->
   forall __retres:int32.
@@ -5105,26 +5079,26 @@ goal binary_search_ensures_success_po_1:
   forall return:int32.
   (return = __retres) ->
   (integer_of_int32(return) >= 0) ->
-  ("JC_23": eq_double(select(double_P_double_M_t_2, shift(t_0,
+  ("JC_23": eq_double(select(doubleP_doubleM_t_2, shift(t_0,
   integer_of_int32(return))), v))
 
 goal binary_search_ensures_success_po_2:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5148,26 +5122,26 @@ goal binary_search_ensures_success_po_2:
   forall return:int32.
   (return = __retres) ->
   (integer_of_int32(return) >= 0) ->
-  ("JC_23": eq_double(select(double_P_double_M_t_2, shift(t_0,
+  ("JC_23": eq_double(select(doubleP_doubleM_t_2, shift(t_0,
   integer_of_int32(return))), v))
 
 goal binary_search_safety_po_1:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5175,22 +5149,22 @@ goal binary_search_safety_po_1:
   ((-2147483648) <= (integer_of_int32(n) - 1))
 
 goal binary_search_safety_po_2:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5198,22 +5172,22 @@ goal binary_search_safety_po_2:
   ((integer_of_int32(n) - 1) <= 2147483647)
 
 goal binary_search_safety_po_3:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5234,22 +5208,22 @@ goal binary_search_safety_po_3:
   ((-2147483648) <= (integer_of_int32(u0) - integer_of_int32(l0)))
 
 goal binary_search_safety_po_4:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5270,22 +5244,22 @@ goal binary_search_safety_po_4:
   ((integer_of_int32(u0) - integer_of_int32(l0)) <= 2147483647)
 
 goal binary_search_safety_po_5:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5310,22 +5284,22 @@ goal binary_search_safety_po_5:
   (2 <> 0)
 
 goal binary_search_safety_po_6:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5353,22 +5327,22 @@ goal binary_search_safety_po_6:
   ((-2147483648) <= result2)
 
 goal binary_search_safety_po_7:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5396,22 +5370,22 @@ goal binary_search_safety_po_7:
   (result2 <= 2147483647)
 
 goal binary_search_safety_po_8:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5442,22 +5416,22 @@ goal binary_search_safety_po_8:
   ((-2147483648) <= (integer_of_int32(l0) + integer_of_int32(result3)))
 
 goal binary_search_safety_po_9:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5488,22 +5462,22 @@ goal binary_search_safety_po_9:
   ((integer_of_int32(l0) + integer_of_int32(result3)) <= 2147483647)
 
 goal binary_search_safety_po_10:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5540,25 +5514,25 @@ goal binary_search_safety_po_10:
   ("JC_40":
   (("JC_38": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_39": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
-  (offset_min(double_P_t_2_alloc_table, t_0) <= integer_of_int32(m))
+  (offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m))
 
 goal binary_search_safety_po_11:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5595,25 +5569,25 @@ goal binary_search_safety_po_11:
   ("JC_40":
   (("JC_38": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_39": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
-  (integer_of_int32(m) <= offset_max(double_P_t_2_alloc_table, t_0))
+  (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))
 
 goal binary_search_safety_po_12:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5650,31 +5624,30 @@ goal binary_search_safety_po_12:
   ("JC_40":
   (("JC_38": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_39": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
-  ((offset_min(double_P_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
-   (integer_of_int32(m) <= offset_max(double_P_t_2_alloc_table, t_0))) ->
+  ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
+   (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   lt_double(result5, v) ->
   ((-2147483648) <= (integer_of_int32(m) + 1))
 
 goal binary_search_safety_po_13:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5711,31 +5684,30 @@ goal binary_search_safety_po_13:
   ("JC_40":
   (("JC_38": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_39": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
-  ((offset_min(double_P_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
-   (integer_of_int32(m) <= offset_max(double_P_t_2_alloc_table, t_0))) ->
+  ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
+   (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   lt_double(result5, v) ->
   ((integer_of_int32(m) + 1) <= 2147483647)
 
 goal binary_search_safety_po_14:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5772,11 +5744,10 @@ goal binary_search_safety_po_14:
   ("JC_40":
   (("JC_38": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_39": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
-  ((offset_min(double_P_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
-   (integer_of_int32(m) <= offset_max(double_P_t_2_alloc_table, t_0))) ->
+  ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
+   (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   lt_double(result5, v) ->
   (((-2147483648) <= (integer_of_int32(m) + 1)) and
    ((integer_of_int32(m) + 1) <= 2147483647)) ->
@@ -5787,22 +5758,22 @@ goal binary_search_safety_po_14:
   (0 <= ("JC_46": (integer_of_int32(u0) - integer_of_int32(l0))))
 
 goal binary_search_safety_po_15:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5839,11 +5810,10 @@ goal binary_search_safety_po_15:
   ("JC_40":
   (("JC_38": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_39": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
-  ((offset_min(double_P_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
-   (integer_of_int32(m) <= offset_max(double_P_t_2_alloc_table, t_0))) ->
+  ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
+   (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   lt_double(result5, v) ->
   (((-2147483648) <= (integer_of_int32(m) + 1)) and
    ((integer_of_int32(m) + 1) <= 2147483647)) ->
@@ -5855,22 +5825,22 @@ goal binary_search_safety_po_15:
                                                               (integer_of_int32(u0) - integer_of_int32(l0))))
 
 goal binary_search_safety_po_16:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5907,37 +5877,35 @@ goal binary_search_safety_po_16:
   ("JC_40":
   (("JC_38": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_39": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
-  ((offset_min(double_P_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
-   (integer_of_int32(m) <= offset_max(double_P_t_2_alloc_table, t_0))) ->
+  ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
+   (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not lt_double(result5, v)) ->
-  ((offset_min(double_P_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
-   (integer_of_int32(m) <= offset_max(double_P_t_2_alloc_table, t_0))) ->
+  ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
+   (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result6:double.
-  (result6 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result6 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   gt_double(result6, v) ->
   ((-2147483648) <= (integer_of_int32(m) - 1))
 
 goal binary_search_safety_po_17:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -5974,37 +5942,35 @@ goal binary_search_safety_po_17:
   ("JC_40":
   (("JC_38": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_39": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
-  ((offset_min(double_P_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
-   (integer_of_int32(m) <= offset_max(double_P_t_2_alloc_table, t_0))) ->
+  ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
+   (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not lt_double(result5, v)) ->
-  ((offset_min(double_P_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
-   (integer_of_int32(m) <= offset_max(double_P_t_2_alloc_table, t_0))) ->
+  ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
+   (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result6:double.
-  (result6 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result6 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   gt_double(result6, v) ->
   ((integer_of_int32(m) - 1) <= 2147483647)
 
 goal binary_search_safety_po_18:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -6041,17 +6007,15 @@ goal binary_search_safety_po_18:
   ("JC_40":
   (("JC_38": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_39": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
-  ((offset_min(double_P_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
-   (integer_of_int32(m) <= offset_max(double_P_t_2_alloc_table, t_0))) ->
+  ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
+   (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not lt_double(result5, v)) ->
-  ((offset_min(double_P_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
-   (integer_of_int32(m) <= offset_max(double_P_t_2_alloc_table, t_0))) ->
+  ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
+   (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result6:double.
-  (result6 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result6 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   gt_double(result6, v) ->
   (((-2147483648) <= (integer_of_int32(m) - 1)) and
    ((integer_of_int32(m) - 1) <= 2147483647)) ->
@@ -6062,22 +6026,22 @@ goal binary_search_safety_po_18:
   (0 <= ("JC_46": (integer_of_int32(u0) - integer_of_int32(l0))))
 
 goal binary_search_safety_po_19:
-  forall t_0:double_P pointer.
+  forall t_0:doubleP pointer.
   forall n:int32.
   forall v:double.
-  forall double_P_t_2_alloc_table:double_P alloc_table.
-  forall double_P_double_M_t_2:(double_P,
+  forall doubleP_t_2_alloc_table:doubleP alloc_table.
+  forall doubleP_doubleM_t_2:(doubleP,
   double) memory.
   ("JC_13":
   (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(double_P_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(double_P_t_2_alloc_table,
+   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
+    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
      t_0) >= (integer_of_int32(n) - 1))) and
      (("JC_11": (not double_is_NaN(v))) and
       ("JC_12":
       (forall i_0:int.
         (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(double_P_double_M_t_2, shift(t_0, i_0)))))))))))) ->
+         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
   forall l:int32.
@@ -6114,17 +6078,15 @@ goal binary_search_safety_po_19:
   ("JC_40":
   (("JC_38": (integer_of_int32(l0) <= integer_of_int32(m))) and
    ("JC_39": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
-  ((offset_min(double_P_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
-   (integer_of_int32(m) <= offset_max(double_P_t_2_alloc_table, t_0))) ->
+  ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
+   (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
-  (result5 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   (not lt_double(result5, v)) ->
-  ((offset_min(double_P_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
-   (integer_of_int32(m) <= offset_max(double_P_t_2_alloc_table, t_0))) ->
+  ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
+   (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result6:double.
-  (result6 = select(double_P_double_M_t_2, shift(t_0,
-  integer_of_int32(m)))) ->
+  (result6 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
   gt_double(result6, v) ->
   (((-2147483648) <= (integer_of_int32(m) - 1)) and
    ((integer_of_int32(m) - 1) <= 2147483647)) ->

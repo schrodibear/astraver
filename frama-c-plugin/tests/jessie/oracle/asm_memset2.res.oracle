@@ -22,28 +22,28 @@ type uint8 = 0..255
 
 type int8 = -128..127
 
-tag unsigned_long_P = {
-  uint32 unsigned_long_M: 32;
+tag unsigned_longP = {
+  uint32 unsigned_longM: 32;
 }
 
-type unsigned_long_P = [unsigned_long_P]
+type unsigned_longP = [unsigned_longP]
 
-tag unsigned_char_P = {
-  uint8 unsigned_char_M: 8;
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
 }
 
-type unsigned_char_P = [unsigned_char_P]
+type unsigned_charP = [unsigned_charP]
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
 lemma div4 :
 (\forall integer x;
@@ -53,17 +53,17 @@ lemma div4_not_mod4 :
 (\forall integer x_0;
   (((x_0 > 0) && ((x_0 % 4) != 0)) ==> ((4 * (x_0 / 4)) < x_0)))
 
-unit memset_uchar(unsigned_char_P[..] Adresse_0, uint8 ValOct_0,
-                  uint32 i_min, uint32 i_max)
+unit memset_uchar(unsigned_charP[..] Adresse_0, uint8 ValOct_0, uint32 i_min,
+                  uint32 i_max)
   requires (C_18 : ((C_19 : (i_min <= i_max)) &&
                      (C_20 : (i_max <= 4294967294))));
   requires (C_15 : ((C_16 : (\offset_min(Adresse_0) <= i_min)) &&
                      (C_17 : (\offset_max(Adresse_0) >= i_max))));
 behavior default:
-  assigns (Adresse_0 + [i_min..i_max]).unsigned_char_M;
+  assigns (Adresse_0 + [i_min..i_max]).unsigned_charM;
   ensures (C_14 : (\forall integer k_0;
                     (((\at(i_min,Old) <= k_0) && (k_0 <= \at(i_max,Old))) ==>
-                      ((\at(Adresse_0,Old) + k_0).unsigned_char_M ==
+                      ((\at(Adresse_0,Old) + k_0).unsigned_charM ==
                         \at(ValOct_0,Old)))));
 {  
    (var uint32 i);
@@ -78,13 +78,13 @@ behavior default:
       behavior default:
         invariant (C_2 : (\forall integer k;
                            (((i_min <= k) && (k < i)) ==>
-                             ((Adresse_0 + k).unsigned_char_M == ValOct_0))));
+                             ((Adresse_0 + k).unsigned_charM == ValOct_0))));
       while (true)
       {  
          {  (if (i <= i_max) then () else 
             (goto while_0_break));
             
-            {  (C_10 : ((C_9 : (C_8 : (Adresse_0 + i)).unsigned_char_M) = ValOct_0))
+            {  (C_10 : ((C_9 : (C_8 : (Adresse_0 + i)).unsigned_charM) = ValOct_0))
             };
             (C_13 : (i = (C_12 : ((C_11 : (i + 1)) :> uint32))))
          }
@@ -95,8 +95,8 @@ behavior default:
    }
 }
 
-unit memset_uint(unsigned_long_P[..] Adresse_1, uint32 ValMot,
-                 uint32 i_min_0, uint32 i_max_0)
+unit memset_uint(unsigned_longP[..] Adresse_1, uint32 ValMot, uint32 i_min_0,
+                 uint32 i_max_0)
   requires (C_39 : ((C_40 : (i_min_0 <= i_max_0)) &&
                      (C_41 : (i_max_0 <= 4294967294))));
   requires (C_36 : ((C_37 : (\offset_min(Adresse_1) <= i_min_0)) &&
@@ -104,7 +104,7 @@ unit memset_uint(unsigned_long_P[..] Adresse_1, uint32 ValMot,
 behavior default:
   ensures (C_35 : (\forall integer k_2;
                     (((\at(i_min_0,Old) <= k_2) && (k_2 <= \at(i_max_0,Old))) ==>
-                      ((\at(Adresse_1,Old) + k_2).unsigned_long_M ==
+                      ((\at(Adresse_1,Old) + k_2).unsigned_longM ==
                         (\at(ValMot,Old) :> uint32)))));
 {  
    (var uint32 i_0);
@@ -119,14 +119,14 @@ behavior default:
       behavior default:
         invariant (C_22 : (\forall integer k_1;
                             (((i_min_0 <= k_1) && (k_1 < i_0)) ==>
-                              ((Adresse_1 + k_1).unsigned_long_M ==
+                              ((Adresse_1 + k_1).unsigned_longM ==
                                 (ValMot :> uint32)))));
       while (true)
       {  
          {  (if (i_0 <= i_max_0) then () else 
             (goto while_0_break));
             
-            {  (C_31 : ((C_30 : (C_29 : (Adresse_1 + i_0)).unsigned_long_M) = 
+            {  (C_31 : ((C_30 : (C_29 : (Adresse_1 + i_0)).unsigned_longM) = 
                (C_28 : (ValMot :> uint32))))
             };
             (C_34 : (i_0 = (C_33 : ((C_32 : (i_0 + 1)) :> uint32))))
@@ -140,7 +140,7 @@ behavior default:
 
 uint32 addr_mod4;
 
-unit memset_burst4(char_P[..] Adresse, uint8 ValOct, uint32 NbOct)
+unit memset_burst4(charP[..] Adresse, uint8 ValOct, uint32 NbOct)
   requires (C_78 : ((C_79 : (0 <= addr_mod4)) && (C_80 : (addr_mod4 <= 3))));
   requires (C_77 : (1 <= NbOct));
   requires (C_74 : ((C_75 : (\offset_min(Adresse) <= 0)) &&
@@ -151,12 +151,12 @@ behavior small_data:
   assumes (NbOct < 4);
   ensures (C_69 : (\forall integer k_4;
                     (((0 <= k_4) && (k_4 <= (\at(NbOct,Old) - 1))) ==>
-                      ((\at(Adresse,Old) + k_4).char_M == \at(ValOct,Old)))));
+                      ((\at(Adresse,Old) + k_4).charM == \at(ValOct,Old)))));
 behavior misaligned_data:
   assumes ((NbOct >= 4) && (addr_mod4 != 0));
   ensures (C_70 : ((C_71 : (\forall integer k_5;
                              (((0 <= k_5) && (k_5 <= (3 - addr_mod4))) ==>
-                               ((\at(Adresse,Old) + k_5).char_M ==
+                               ((\at(Adresse,Old) + k_5).charM ==
                                  \at(ValOct,Old))))) &&
                     (C_72 : (\forall integer k_6;
                               (((((4 - addr_mod4) +
@@ -164,16 +164,16 @@ behavior misaligned_data:
                                      ((\at(NbOct,Old) - (4 - addr_mod4)) / 4))) <=
                                   k_6) &&
                                  (k_6 <= (\at(NbOct,Old) - 1))) ==>
-                                ((\at(Adresse,Old) + k_6).char_M ==
+                                ((\at(Adresse,Old) + k_6).charM ==
                                   \at(ValOct,Old)))))));
 behavior aligned_data:
   assumes ((NbOct >= 4) && (addr_mod4 == 0));
   ensures (C_73 : (\forall integer k_7;
                     ((((4 * (\at(NbOct,Old) / 4)) <= k_7) &&
                        (k_7 <= (\at(NbOct,Old) - 1))) ==>
-                      ((\at(Adresse,Old) + k_7).char_M == \at(ValOct,Old)))));
+                      ((\at(Adresse,Old) + k_7).charM == \at(ValOct,Old)))));
 {  
-   (var unsigned_char_P[..] s);
+   (var unsigned_charP[..] s);
    
    (var uint32 index_oct);
    
@@ -181,7 +181,7 @@ behavior aligned_data:
    
    (var uint32 nb_mots_alignes);
    
-   {  (C_43 : (s = (C_42 : (Adresse :> unsigned_char_P[..]))));
+   {  (C_43 : (s = (C_42 : (Adresse :> unsigned_charP[..]))));
       (C_44 : (index_oct = 0));
       (if (NbOct >= 4) then 
       {  (C_47 : (align = (C_46 : ((C_45 : (4 - addr_mod4)) :> uint32))));
@@ -194,7 +194,7 @@ behavior aligned_data:
                                                       (((0 <= k_3) &&
                                                          (k_3 <=
                                                            (3 - addr_mod4))) ==>
-                                                        ((s + k_3).unsigned_char_M ==
+                                                        ((s + k_3).unsigned_charM ==
                                                           ValOct)))));
                ()
             };

@@ -799,7 +799,7 @@ let make_block labels l =
 
 let append e1 e2 =
   match e1.expr_node,e2.expr_node with
-    | Void,_ -> assert (e1.expr_labels = []); e2
+    | Void,_ -> (* assert (e1.expr_labels = []);*) e2
     | _,Void -> assert (e2.expr_labels = []); e1
     | Block(l1),Block(l2) -> 
         make_block (e1.expr_labels@e2.expr_labels) 

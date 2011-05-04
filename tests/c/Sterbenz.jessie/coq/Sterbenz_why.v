@@ -3,7 +3,7 @@
 Require Export jessie_why.
 Require Export floats_strict.
 
-(*Why type*) Definition char_P: Set.
+(*Why type*) Definition charP: Set.
 Admitted.
 
 (*Why type*) Definition int8: Set.
@@ -12,33 +12,37 @@ Admitted.
 (*Why type*) Definition padding: Set.
 Admitted.
 
-(*Why type*) Definition void_P: Set.
+(*Why type*) Definition voidP: Set.
 Admitted.
 
-(*Why logic*) Definition char_P_tag : (tag_id char_P).
+(*Why logic*) Definition charP_tag : (tag_id charP).
 Admitted.
 
-(*Why axiom*) Lemma char_P_int : (int_of_tag char_P_tag) = 1.
+(*Why axiom*) Lemma charP_int : (int_of_tag charP_tag) = 1.
+Admitted.
+Dp_hint charP_int.
+
+(*Why logic*) Definition charP_of_pointer_address :
+  (pointer unit) -> (pointer charP).
 Admitted.
 
-(*Why logic*) Definition char_P_of_pointer_address :
-  (pointer unit) -> (pointer char_P).
+(*Why axiom*) Lemma charP_of_pointer_address_of_pointer_addr :
+  (forall (p:(pointer charP)),
+   p = (charP_of_pointer_address (pointer_address p))).
 Admitted.
+Dp_hint charP_of_pointer_address_of_pointer_addr.
 
-(*Why axiom*) Lemma char_P_of_pointer_address_of_pointer_addr :
-  (forall (p:(pointer char_P)),
-   p = (char_P_of_pointer_address (pointer_address p))).
+(*Why axiom*) Lemma charP_parenttag_bottom :
+  (parenttag charP_tag (@bottom_tag charP)).
 Admitted.
+Dp_hint charP_parenttag_bottom.
 
-(*Why axiom*) Lemma char_P_parenttag_bottom :
-  (parenttag char_P_tag (@bottom_tag char_P)).
+(*Why axiom*) Lemma charP_tags :
+  (forall (x:(pointer charP)),
+   (forall (charP_tag_table:(tag_table charP)),
+    (instanceof charP_tag_table x charP_tag))).
 Admitted.
-
-(*Why axiom*) Lemma char_P_tags :
-  (forall (x:(pointer char_P)),
-   (forall (char_P_tag_table:(tag_table char_P)),
-    (instanceof char_P_tag_table x char_P_tag))).
-Admitted.
+Dp_hint charP_tags.
 
 (*Why logic*) Definition integer_of_int8 : int8 -> Z.
 Admitted.
@@ -59,92 +63,100 @@ Admitted.
    127).
 Admitted.
 
-(*Why predicate*) Definition left_valid_struct_char_P  (p:(pointer char_P)) (a:Z) (char_P_alloc_table:(alloc_table char_P))
-  := (offset_min char_P_alloc_table p) <= a.
 
-(*Why predicate*) Definition left_valid_struct_void_P  (p:(pointer void_P)) (a:Z) (void_P_alloc_table:(alloc_table void_P))
-  := (offset_min void_P_alloc_table p) <= a.
 
-(*Why axiom*) Lemma pointer_addr_of_char_P_of_pointer_address :
+(*Why predicate*) Definition left_valid_struct_charP  (p:(pointer charP)) (a:Z) (charP_alloc_table:(alloc_table charP))
+  := (offset_min charP_alloc_table p) <= a.
+
+(*Why predicate*) Definition left_valid_struct_voidP  (p:(pointer voidP)) (a:Z) (voidP_alloc_table:(alloc_table voidP))
+  := (offset_min voidP_alloc_table p) <= a.
+
+(*Why axiom*) Lemma pointer_addr_of_charP_of_pointer_address :
   (forall (p:(pointer unit)),
-   p = (pointer_address (char_P_of_pointer_address p))).
+   p = (pointer_address (charP_of_pointer_address p))).
+Admitted.
+Dp_hint pointer_addr_of_charP_of_pointer_address.
+
+(*Why logic*) Definition voidP_of_pointer_address :
+  (pointer unit) -> (pointer voidP).
 Admitted.
 
-(*Why logic*) Definition void_P_of_pointer_address :
-  (pointer unit) -> (pointer void_P).
-Admitted.
-
-(*Why axiom*) Lemma pointer_addr_of_void_P_of_pointer_address :
+(*Why axiom*) Lemma pointer_addr_of_voidP_of_pointer_address :
   (forall (p:(pointer unit)),
-   p = (pointer_address (void_P_of_pointer_address p))).
+   p = (pointer_address (voidP_of_pointer_address p))).
 Admitted.
+Dp_hint pointer_addr_of_voidP_of_pointer_address.
 
-(*Why predicate*) Definition right_valid_struct_char_P  (p:(pointer char_P)) (b:Z) (char_P_alloc_table:(alloc_table char_P))
-  := (offset_max char_P_alloc_table p) >= b.
+(*Why predicate*) Definition right_valid_struct_charP  (p:(pointer charP)) (b:Z) (charP_alloc_table:(alloc_table charP))
+  := (offset_max charP_alloc_table p) >= b.
 
-(*Why predicate*) Definition right_valid_struct_void_P  (p:(pointer void_P)) (b:Z) (void_P_alloc_table:(alloc_table void_P))
-  := (offset_max void_P_alloc_table p) >= b.
+(*Why predicate*) Definition right_valid_struct_voidP  (p:(pointer voidP)) (b:Z) (voidP_alloc_table:(alloc_table voidP))
+  := (offset_max voidP_alloc_table p) >= b.
 
-(*Why predicate*) Definition strict_valid_root_char_P  (p:(pointer char_P)) (a:Z) (b:Z) (char_P_alloc_table:(alloc_table char_P))
-  := (offset_min char_P_alloc_table p) = a /\
-     (offset_max char_P_alloc_table p) = b.
+(*Why predicate*) Definition strict_valid_root_charP  (p:(pointer charP)) (a:Z) (b:Z) (charP_alloc_table:(alloc_table charP))
+  := (offset_min charP_alloc_table p) = a /\
+     (offset_max charP_alloc_table p) = b.
 
-(*Why predicate*) Definition strict_valid_root_void_P  (p:(pointer void_P)) (a:Z) (b:Z) (void_P_alloc_table:(alloc_table void_P))
-  := (offset_min void_P_alloc_table p) = a /\
-     (offset_max void_P_alloc_table p) = b.
+(*Why predicate*) Definition strict_valid_root_voidP  (p:(pointer voidP)) (a:Z) (b:Z) (voidP_alloc_table:(alloc_table voidP))
+  := (offset_min voidP_alloc_table p) = a /\
+     (offset_max voidP_alloc_table p) = b.
 
-(*Why predicate*) Definition strict_valid_struct_char_P  (p:(pointer char_P)) (a:Z) (b:Z) (char_P_alloc_table:(alloc_table char_P))
-  := (offset_min char_P_alloc_table p) = a /\
-     (offset_max char_P_alloc_table p) = b.
+(*Why predicate*) Definition strict_valid_struct_charP  (p:(pointer charP)) (a:Z) (b:Z) (charP_alloc_table:(alloc_table charP))
+  := (offset_min charP_alloc_table p) = a /\
+     (offset_max charP_alloc_table p) = b.
 
-(*Why predicate*) Definition strict_valid_struct_void_P  (p:(pointer void_P)) (a:Z) (b:Z) (void_P_alloc_table:(alloc_table void_P))
-  := (offset_min void_P_alloc_table p) = a /\
-     (offset_max void_P_alloc_table p) = b.
+(*Why predicate*) Definition strict_valid_struct_voidP  (p:(pointer voidP)) (a:Z) (b:Z) (voidP_alloc_table:(alloc_table voidP))
+  := (offset_min voidP_alloc_table p) = a /\
+     (offset_max voidP_alloc_table p) = b.
 
-(*Why predicate*) Definition valid_bitvector_struct_char_P  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
+(*Why predicate*) Definition valid_bitvector_struct_charP  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
   := (offset_min bitvector_alloc_table p) = a /\
      (offset_max bitvector_alloc_table p) = b.
 
-(*Why predicate*) Definition valid_bitvector_struct_void_P  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
+(*Why predicate*) Definition valid_bitvector_struct_voidP  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
   := (offset_min bitvector_alloc_table p) = a /\
      (offset_max bitvector_alloc_table p) = b.
 
-(*Why predicate*) Definition valid_root_char_P  (p:(pointer char_P)) (a:Z) (b:Z) (char_P_alloc_table:(alloc_table char_P))
-  := (offset_min char_P_alloc_table p) <= a /\
-     (offset_max char_P_alloc_table p) >= b.
+(*Why predicate*) Definition valid_root_charP  (p:(pointer charP)) (a:Z) (b:Z) (charP_alloc_table:(alloc_table charP))
+  := (offset_min charP_alloc_table p) <= a /\
+     (offset_max charP_alloc_table p) >= b.
 
-(*Why predicate*) Definition valid_root_void_P  (p:(pointer void_P)) (a:Z) (b:Z) (void_P_alloc_table:(alloc_table void_P))
-  := (offset_min void_P_alloc_table p) <= a /\
-     (offset_max void_P_alloc_table p) >= b.
+(*Why predicate*) Definition valid_root_voidP  (p:(pointer voidP)) (a:Z) (b:Z) (voidP_alloc_table:(alloc_table voidP))
+  := (offset_min voidP_alloc_table p) <= a /\
+     (offset_max voidP_alloc_table p) >= b.
 
-(*Why predicate*) Definition valid_struct_char_P  (p:(pointer char_P)) (a:Z) (b:Z) (char_P_alloc_table:(alloc_table char_P))
-  := (offset_min char_P_alloc_table p) <= a /\
-     (offset_max char_P_alloc_table p) >= b.
+(*Why predicate*) Definition valid_struct_charP  (p:(pointer charP)) (a:Z) (b:Z) (charP_alloc_table:(alloc_table charP))
+  := (offset_min charP_alloc_table p) <= a /\
+     (offset_max charP_alloc_table p) >= b.
 
-(*Why predicate*) Definition valid_struct_void_P  (p:(pointer void_P)) (a:Z) (b:Z) (void_P_alloc_table:(alloc_table void_P))
-  := (offset_min void_P_alloc_table p) <= a /\
-     (offset_max void_P_alloc_table p) >= b.
+(*Why predicate*) Definition valid_struct_voidP  (p:(pointer voidP)) (a:Z) (b:Z) (voidP_alloc_table:(alloc_table voidP))
+  := (offset_min voidP_alloc_table p) <= a /\
+     (offset_max voidP_alloc_table p) >= b.
 
-(*Why logic*) Definition void_P_tag : (tag_id void_P).
+(*Why logic*) Definition voidP_tag : (tag_id voidP).
 Admitted.
 
-(*Why axiom*) Lemma void_P_int : (int_of_tag void_P_tag) = 1.
+(*Why axiom*) Lemma voidP_int : (int_of_tag voidP_tag) = 1.
 Admitted.
+Dp_hint voidP_int.
 
-(*Why axiom*) Lemma void_P_of_pointer_address_of_pointer_addr :
-  (forall (p:(pointer void_P)),
-   p = (void_P_of_pointer_address (pointer_address p))).
+(*Why axiom*) Lemma voidP_of_pointer_address_of_pointer_addr :
+  (forall (p:(pointer voidP)),
+   p = (voidP_of_pointer_address (pointer_address p))).
 Admitted.
+Dp_hint voidP_of_pointer_address_of_pointer_addr.
 
-(*Why axiom*) Lemma void_P_parenttag_bottom :
-  (parenttag void_P_tag (@bottom_tag void_P)).
+(*Why axiom*) Lemma voidP_parenttag_bottom :
+  (parenttag voidP_tag (@bottom_tag voidP)).
 Admitted.
+Dp_hint voidP_parenttag_bottom.
 
-(*Why axiom*) Lemma void_P_tags :
-  (forall (x:(pointer void_P)),
-   (forall (void_P_tag_table:(tag_table void_P)),
-    (instanceof void_P_tag_table x void_P_tag))).
+(*Why axiom*) Lemma voidP_tags :
+  (forall (x:(pointer voidP)),
+   (forall (voidP_tag_table:(tag_table voidP)),
+    (instanceof voidP_tag_table x voidP_tag))).
 Admitted.
+Dp_hint voidP_tags.
 
 (* Why obligation from file "Sterbenz.c", line 7, characters 13-21: *)
 (*Why goal*) Lemma Sterbenz_ensures_default_po_1 : 

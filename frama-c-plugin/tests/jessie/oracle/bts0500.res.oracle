@@ -20,16 +20,16 @@ type int8 = -128..127
 
 type int32 = -2147483648..2147483647
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
 type _u = [_u ^ s_0P ^ aP]
 
@@ -38,14 +38,14 @@ tag _u = {
 }
 
 tag s_0P = {
-  char_P[..] s_0M: 32;
+  charP[..] s_0M: 32;
 }
 
 tag aP = {
   int32 aM: 32;
 }
 
-int32 conv(char_P[..] s)
+int32 conv(charP[..] s)
   requires (C_11 : (s != null));
 behavior default:
   ensures (C_10 : (\result != 0));

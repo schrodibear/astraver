@@ -18,133 +18,133 @@ axiomatic Padding {
 
 type int8 = -128..127
 
-tag double_P = {
-  double double_M: 64;
+tag doubleP = {
+  double doubleM: 64;
 }
 
-type double_P = [double_P]
+type doubleP = [doubleP]
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
 unit f()
 behavior default:
   ensures (C_205 : true);
 {  
-   (var double_P[0..99] t);
+   (var doubleP[0..99] t);
    
-   {  (C_2 : (t = (C_1 : (new double_P[100]))));
-      (C_4 : ((C_3 : (t + 0).double_M) = (0. :> double)));
-      (C_6 : ((C_5 : (t + 1).double_M) = (1. :> double)));
-      (C_8 : ((C_7 : (t + 2).double_M) = (2. :> double)));
-      (C_10 : ((C_9 : (t + 3).double_M) = (3. :> double)));
-      (C_12 : ((C_11 : (t + 4).double_M) = (4. :> double)));
-      (C_14 : ((C_13 : (t + 5).double_M) = (5. :> double)));
-      (C_16 : ((C_15 : (t + 6).double_M) = (6. :> double)));
-      (C_18 : ((C_17 : (t + 7).double_M) = (7. :> double)));
-      (C_20 : ((C_19 : (t + 8).double_M) = (8. :> double)));
-      (C_22 : ((C_21 : (t + 9).double_M) = (9. :> double)));
-      (C_24 : ((C_23 : (t + 10).double_M) = (0. :> double)));
-      (C_26 : ((C_25 : (t + 11).double_M) = (1. :> double)));
-      (C_28 : ((C_27 : (t + 12).double_M) = (2. :> double)));
-      (C_30 : ((C_29 : (t + 13).double_M) = (3. :> double)));
-      (C_32 : ((C_31 : (t + 14).double_M) = (4. :> double)));
-      (C_34 : ((C_33 : (t + 15).double_M) = (5. :> double)));
-      (C_36 : ((C_35 : (t + 16).double_M) = (6. :> double)));
-      (C_38 : ((C_37 : (t + 17).double_M) = (7. :> double)));
-      (C_40 : ((C_39 : (t + 18).double_M) = (8. :> double)));
-      (C_42 : ((C_41 : (t + 19).double_M) = (9. :> double)));
-      (C_44 : ((C_43 : (t + 20).double_M) = (0. :> double)));
-      (C_46 : ((C_45 : (t + 21).double_M) = (1. :> double)));
-      (C_48 : ((C_47 : (t + 22).double_M) = (2. :> double)));
-      (C_50 : ((C_49 : (t + 23).double_M) = (3. :> double)));
-      (C_52 : ((C_51 : (t + 24).double_M) = (4. :> double)));
-      (C_54 : ((C_53 : (t + 25).double_M) = (5. :> double)));
-      (C_56 : ((C_55 : (t + 26).double_M) = (6. :> double)));
-      (C_58 : ((C_57 : (t + 27).double_M) = (7. :> double)));
-      (C_60 : ((C_59 : (t + 28).double_M) = (8. :> double)));
-      (C_62 : ((C_61 : (t + 29).double_M) = (9. :> double)));
-      (C_64 : ((C_63 : (t + 30).double_M) = (0. :> double)));
-      (C_66 : ((C_65 : (t + 31).double_M) = (1. :> double)));
-      (C_68 : ((C_67 : (t + 32).double_M) = (2. :> double)));
-      (C_70 : ((C_69 : (t + 33).double_M) = (3. :> double)));
-      (C_72 : ((C_71 : (t + 34).double_M) = (4. :> double)));
-      (C_74 : ((C_73 : (t + 35).double_M) = (5. :> double)));
-      (C_76 : ((C_75 : (t + 36).double_M) = (6. :> double)));
-      (C_78 : ((C_77 : (t + 37).double_M) = (7. :> double)));
-      (C_80 : ((C_79 : (t + 38).double_M) = (8. :> double)));
-      (C_82 : ((C_81 : (t + 39).double_M) = (9. :> double)));
-      (C_84 : ((C_83 : (t + 40).double_M) = (0. :> double)));
-      (C_86 : ((C_85 : (t + 41).double_M) = (1. :> double)));
-      (C_88 : ((C_87 : (t + 42).double_M) = (2. :> double)));
-      (C_90 : ((C_89 : (t + 43).double_M) = (3. :> double)));
-      (C_92 : ((C_91 : (t + 44).double_M) = (4. :> double)));
-      (C_94 : ((C_93 : (t + 45).double_M) = (5. :> double)));
-      (C_96 : ((C_95 : (t + 46).double_M) = (6. :> double)));
-      (C_98 : ((C_97 : (t + 47).double_M) = (7. :> double)));
-      (C_100 : ((C_99 : (t + 48).double_M) = (8. :> double)));
-      (C_102 : ((C_101 : (t + 49).double_M) = (9. :> double)));
-      (C_104 : ((C_103 : (t + 50).double_M) = (0. :> double)));
-      (C_106 : ((C_105 : (t + 51).double_M) = (1. :> double)));
-      (C_108 : ((C_107 : (t + 52).double_M) = (2. :> double)));
-      (C_110 : ((C_109 : (t + 53).double_M) = (3. :> double)));
-      (C_112 : ((C_111 : (t + 54).double_M) = (4. :> double)));
-      (C_114 : ((C_113 : (t + 55).double_M) = (5. :> double)));
-      (C_116 : ((C_115 : (t + 56).double_M) = (6. :> double)));
-      (C_118 : ((C_117 : (t + 57).double_M) = (7. :> double)));
-      (C_120 : ((C_119 : (t + 58).double_M) = (8. :> double)));
-      (C_122 : ((C_121 : (t + 59).double_M) = (9. :> double)));
-      (C_124 : ((C_123 : (t + 60).double_M) = (0. :> double)));
-      (C_126 : ((C_125 : (t + 61).double_M) = (1. :> double)));
-      (C_128 : ((C_127 : (t + 62).double_M) = (2. :> double)));
-      (C_130 : ((C_129 : (t + 63).double_M) = (3. :> double)));
-      (C_132 : ((C_131 : (t + 64).double_M) = (4. :> double)));
-      (C_134 : ((C_133 : (t + 65).double_M) = (5. :> double)));
-      (C_136 : ((C_135 : (t + 66).double_M) = (6. :> double)));
-      (C_138 : ((C_137 : (t + 67).double_M) = (7. :> double)));
-      (C_140 : ((C_139 : (t + 68).double_M) = (8. :> double)));
-      (C_142 : ((C_141 : (t + 69).double_M) = (9. :> double)));
-      (C_144 : ((C_143 : (t + 70).double_M) = (0. :> double)));
-      (C_146 : ((C_145 : (t + 71).double_M) = (1. :> double)));
-      (C_148 : ((C_147 : (t + 72).double_M) = (2. :> double)));
-      (C_150 : ((C_149 : (t + 73).double_M) = (3. :> double)));
-      (C_152 : ((C_151 : (t + 74).double_M) = (4. :> double)));
-      (C_154 : ((C_153 : (t + 75).double_M) = (5. :> double)));
-      (C_156 : ((C_155 : (t + 76).double_M) = (6. :> double)));
-      (C_158 : ((C_157 : (t + 77).double_M) = (7. :> double)));
-      (C_160 : ((C_159 : (t + 78).double_M) = (8. :> double)));
-      (C_162 : ((C_161 : (t + 79).double_M) = (9. :> double)));
-      (C_164 : ((C_163 : (t + 80).double_M) = (0. :> double)));
-      (C_166 : ((C_165 : (t + 81).double_M) = (1. :> double)));
-      (C_168 : ((C_167 : (t + 82).double_M) = (2. :> double)));
-      (C_170 : ((C_169 : (t + 83).double_M) = (3. :> double)));
-      (C_172 : ((C_171 : (t + 84).double_M) = (4. :> double)));
-      (C_174 : ((C_173 : (t + 85).double_M) = (5. :> double)));
-      (C_176 : ((C_175 : (t + 86).double_M) = (6. :> double)));
-      (C_178 : ((C_177 : (t + 87).double_M) = (7. :> double)));
-      (C_180 : ((C_179 : (t + 88).double_M) = (8. :> double)));
-      (C_182 : ((C_181 : (t + 89).double_M) = (9. :> double)));
-      (C_184 : ((C_183 : (t + 90).double_M) = (0. :> double)));
-      (C_186 : ((C_185 : (t + 91).double_M) = (1. :> double)));
-      (C_188 : ((C_187 : (t + 92).double_M) = (2. :> double)));
-      (C_190 : ((C_189 : (t + 93).double_M) = (3. :> double)));
-      (C_192 : ((C_191 : (t + 94).double_M) = (4. :> double)));
-      (C_194 : ((C_193 : (t + 95).double_M) = (5. :> double)));
-      (C_196 : ((C_195 : (t + 96).double_M) = (6. :> double)));
-      (C_198 : ((C_197 : (t + 97).double_M) = (7. :> double)));
-      (C_200 : ((C_199 : (t + 98).double_M) = (8. :> double)));
-      (C_202 : ((C_201 : (t + 99).double_M) = (9. :> double)));
+   {  (C_2 : (t = (C_1 : (new doubleP[100]))));
+      (C_4 : ((C_3 : (t + 0).doubleM) = (0. :> double)));
+      (C_6 : ((C_5 : (t + 1).doubleM) = (1. :> double)));
+      (C_8 : ((C_7 : (t + 2).doubleM) = (2. :> double)));
+      (C_10 : ((C_9 : (t + 3).doubleM) = (3. :> double)));
+      (C_12 : ((C_11 : (t + 4).doubleM) = (4. :> double)));
+      (C_14 : ((C_13 : (t + 5).doubleM) = (5. :> double)));
+      (C_16 : ((C_15 : (t + 6).doubleM) = (6. :> double)));
+      (C_18 : ((C_17 : (t + 7).doubleM) = (7. :> double)));
+      (C_20 : ((C_19 : (t + 8).doubleM) = (8. :> double)));
+      (C_22 : ((C_21 : (t + 9).doubleM) = (9. :> double)));
+      (C_24 : ((C_23 : (t + 10).doubleM) = (0. :> double)));
+      (C_26 : ((C_25 : (t + 11).doubleM) = (1. :> double)));
+      (C_28 : ((C_27 : (t + 12).doubleM) = (2. :> double)));
+      (C_30 : ((C_29 : (t + 13).doubleM) = (3. :> double)));
+      (C_32 : ((C_31 : (t + 14).doubleM) = (4. :> double)));
+      (C_34 : ((C_33 : (t + 15).doubleM) = (5. :> double)));
+      (C_36 : ((C_35 : (t + 16).doubleM) = (6. :> double)));
+      (C_38 : ((C_37 : (t + 17).doubleM) = (7. :> double)));
+      (C_40 : ((C_39 : (t + 18).doubleM) = (8. :> double)));
+      (C_42 : ((C_41 : (t + 19).doubleM) = (9. :> double)));
+      (C_44 : ((C_43 : (t + 20).doubleM) = (0. :> double)));
+      (C_46 : ((C_45 : (t + 21).doubleM) = (1. :> double)));
+      (C_48 : ((C_47 : (t + 22).doubleM) = (2. :> double)));
+      (C_50 : ((C_49 : (t + 23).doubleM) = (3. :> double)));
+      (C_52 : ((C_51 : (t + 24).doubleM) = (4. :> double)));
+      (C_54 : ((C_53 : (t + 25).doubleM) = (5. :> double)));
+      (C_56 : ((C_55 : (t + 26).doubleM) = (6. :> double)));
+      (C_58 : ((C_57 : (t + 27).doubleM) = (7. :> double)));
+      (C_60 : ((C_59 : (t + 28).doubleM) = (8. :> double)));
+      (C_62 : ((C_61 : (t + 29).doubleM) = (9. :> double)));
+      (C_64 : ((C_63 : (t + 30).doubleM) = (0. :> double)));
+      (C_66 : ((C_65 : (t + 31).doubleM) = (1. :> double)));
+      (C_68 : ((C_67 : (t + 32).doubleM) = (2. :> double)));
+      (C_70 : ((C_69 : (t + 33).doubleM) = (3. :> double)));
+      (C_72 : ((C_71 : (t + 34).doubleM) = (4. :> double)));
+      (C_74 : ((C_73 : (t + 35).doubleM) = (5. :> double)));
+      (C_76 : ((C_75 : (t + 36).doubleM) = (6. :> double)));
+      (C_78 : ((C_77 : (t + 37).doubleM) = (7. :> double)));
+      (C_80 : ((C_79 : (t + 38).doubleM) = (8. :> double)));
+      (C_82 : ((C_81 : (t + 39).doubleM) = (9. :> double)));
+      (C_84 : ((C_83 : (t + 40).doubleM) = (0. :> double)));
+      (C_86 : ((C_85 : (t + 41).doubleM) = (1. :> double)));
+      (C_88 : ((C_87 : (t + 42).doubleM) = (2. :> double)));
+      (C_90 : ((C_89 : (t + 43).doubleM) = (3. :> double)));
+      (C_92 : ((C_91 : (t + 44).doubleM) = (4. :> double)));
+      (C_94 : ((C_93 : (t + 45).doubleM) = (5. :> double)));
+      (C_96 : ((C_95 : (t + 46).doubleM) = (6. :> double)));
+      (C_98 : ((C_97 : (t + 47).doubleM) = (7. :> double)));
+      (C_100 : ((C_99 : (t + 48).doubleM) = (8. :> double)));
+      (C_102 : ((C_101 : (t + 49).doubleM) = (9. :> double)));
+      (C_104 : ((C_103 : (t + 50).doubleM) = (0. :> double)));
+      (C_106 : ((C_105 : (t + 51).doubleM) = (1. :> double)));
+      (C_108 : ((C_107 : (t + 52).doubleM) = (2. :> double)));
+      (C_110 : ((C_109 : (t + 53).doubleM) = (3. :> double)));
+      (C_112 : ((C_111 : (t + 54).doubleM) = (4. :> double)));
+      (C_114 : ((C_113 : (t + 55).doubleM) = (5. :> double)));
+      (C_116 : ((C_115 : (t + 56).doubleM) = (6. :> double)));
+      (C_118 : ((C_117 : (t + 57).doubleM) = (7. :> double)));
+      (C_120 : ((C_119 : (t + 58).doubleM) = (8. :> double)));
+      (C_122 : ((C_121 : (t + 59).doubleM) = (9. :> double)));
+      (C_124 : ((C_123 : (t + 60).doubleM) = (0. :> double)));
+      (C_126 : ((C_125 : (t + 61).doubleM) = (1. :> double)));
+      (C_128 : ((C_127 : (t + 62).doubleM) = (2. :> double)));
+      (C_130 : ((C_129 : (t + 63).doubleM) = (3. :> double)));
+      (C_132 : ((C_131 : (t + 64).doubleM) = (4. :> double)));
+      (C_134 : ((C_133 : (t + 65).doubleM) = (5. :> double)));
+      (C_136 : ((C_135 : (t + 66).doubleM) = (6. :> double)));
+      (C_138 : ((C_137 : (t + 67).doubleM) = (7. :> double)));
+      (C_140 : ((C_139 : (t + 68).doubleM) = (8. :> double)));
+      (C_142 : ((C_141 : (t + 69).doubleM) = (9. :> double)));
+      (C_144 : ((C_143 : (t + 70).doubleM) = (0. :> double)));
+      (C_146 : ((C_145 : (t + 71).doubleM) = (1. :> double)));
+      (C_148 : ((C_147 : (t + 72).doubleM) = (2. :> double)));
+      (C_150 : ((C_149 : (t + 73).doubleM) = (3. :> double)));
+      (C_152 : ((C_151 : (t + 74).doubleM) = (4. :> double)));
+      (C_154 : ((C_153 : (t + 75).doubleM) = (5. :> double)));
+      (C_156 : ((C_155 : (t + 76).doubleM) = (6. :> double)));
+      (C_158 : ((C_157 : (t + 77).doubleM) = (7. :> double)));
+      (C_160 : ((C_159 : (t + 78).doubleM) = (8. :> double)));
+      (C_162 : ((C_161 : (t + 79).doubleM) = (9. :> double)));
+      (C_164 : ((C_163 : (t + 80).doubleM) = (0. :> double)));
+      (C_166 : ((C_165 : (t + 81).doubleM) = (1. :> double)));
+      (C_168 : ((C_167 : (t + 82).doubleM) = (2. :> double)));
+      (C_170 : ((C_169 : (t + 83).doubleM) = (3. :> double)));
+      (C_172 : ((C_171 : (t + 84).doubleM) = (4. :> double)));
+      (C_174 : ((C_173 : (t + 85).doubleM) = (5. :> double)));
+      (C_176 : ((C_175 : (t + 86).doubleM) = (6. :> double)));
+      (C_178 : ((C_177 : (t + 87).doubleM) = (7. :> double)));
+      (C_180 : ((C_179 : (t + 88).doubleM) = (8. :> double)));
+      (C_182 : ((C_181 : (t + 89).doubleM) = (9. :> double)));
+      (C_184 : ((C_183 : (t + 90).doubleM) = (0. :> double)));
+      (C_186 : ((C_185 : (t + 91).doubleM) = (1. :> double)));
+      (C_188 : ((C_187 : (t + 92).doubleM) = (2. :> double)));
+      (C_190 : ((C_189 : (t + 93).doubleM) = (3. :> double)));
+      (C_192 : ((C_191 : (t + 94).doubleM) = (4. :> double)));
+      (C_194 : ((C_193 : (t + 95).doubleM) = (5. :> double)));
+      (C_196 : ((C_195 : (t + 96).doubleM) = (6. :> double)));
+      (C_198 : ((C_197 : (t + 97).doubleM) = (7. :> double)));
+      (C_200 : ((C_199 : (t + 98).doubleM) = (8. :> double)));
+      (C_202 : ((C_201 : (t + 99).doubleM) = (9. :> double)));
       
       {  
-         (assert for default: (C_203 : (((t + 0).double_M :> real) == 0.)));
+         (assert for default: (C_203 : (((t + 0).doubleM :> real) == 0.)));
          ()
       };
       
@@ -155,15 +155,15 @@ behavior default:
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs bts0377.jessie/bts0377.cloc bts0377.jessie/bts0377.jc
-type char_P
+type charP
 
-type double_P
+type doubleP
 
 type int8
 
 type padding
 
-type void_P
+type voidP
 
 exception Loop_continue_exc of unit
 
@@ -171,39 +171,38 @@ exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
-logic char_P_tag:  -> char_P tag_id
+logic charP_tag:  -> charP tag_id
 
-axiom char_P_int : (int_of_tag(char_P_tag) = (1))
+axiom charP_int : (int_of_tag(charP_tag) = (1))
 
-logic char_P_of_pointer_address: unit pointer -> char_P pointer
+logic charP_of_pointer_address: unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr :
- (forall p:char_P pointer.
-  (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr :
+ (forall p:charP pointer. (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom : parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom : parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags :
- (forall x:char_P pointer.
-  (forall char_P_tag_table:char_P tag_table.
-   instanceof(char_P_tag_table, x, char_P_tag)))
+axiom charP_tags :
+ (forall x:charP pointer.
+  (forall charP_tag_table:charP tag_table.
+   instanceof(charP_tag_table, x, charP_tag)))
 
-logic double_P_tag:  -> double_P tag_id
+logic doubleP_tag:  -> doubleP tag_id
 
-axiom double_P_int : (int_of_tag(double_P_tag) = (1))
+axiom doubleP_int : (int_of_tag(doubleP_tag) = (1))
 
-logic double_P_of_pointer_address: unit pointer -> double_P pointer
+logic doubleP_of_pointer_address: unit pointer -> doubleP pointer
 
-axiom double_P_of_pointer_address_of_pointer_addr :
- (forall p:double_P pointer.
-  (p = double_P_of_pointer_address(pointer_address(p))))
+axiom doubleP_of_pointer_address_of_pointer_addr :
+ (forall p:doubleP pointer.
+  (p = doubleP_of_pointer_address(pointer_address(p))))
 
-axiom double_P_parenttag_bottom : parenttag(double_P_tag, bottom_tag)
+axiom doubleP_parenttag_bottom : parenttag(doubleP_tag, bottom_tag)
 
-axiom double_P_tags :
- (forall x:double_P pointer.
-  (forall double_P_tag_table:double_P tag_table.
-   instanceof(double_P_tag_table, x, double_P_tag)))
+axiom doubleP_tags :
+ (forall x:doubleP pointer.
+  (forall doubleP_tag_table:doubleP tag_table.
+   instanceof(doubleP_tag_table, x, doubleP_tag)))
 
 logic integer_of_int8: int8 -> int
 
@@ -221,266 +220,263 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer, a:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_min(char_P_alloc_table, p) <= a)
+predicate left_valid_struct_charP(p:charP pointer, a:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_min(charP_alloc_table, p) <= a)
 
-predicate left_valid_struct_double_P(p:double_P pointer, a:int,
- double_P_alloc_table:double_P alloc_table) =
- (offset_min(double_P_alloc_table, p) <= a)
+predicate left_valid_struct_doubleP(p:doubleP pointer, a:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ (offset_min(doubleP_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer, a:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_min(void_P_alloc_table, p) <= a)
+predicate left_valid_struct_voidP(p:voidP pointer, a:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_min(voidP_alloc_table, p) <= a)
 
-axiom pointer_addr_of_char_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
+axiom pointer_addr_of_charP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
-axiom pointer_addr_of_double_P_of_pointer_address :
+axiom pointer_addr_of_doubleP_of_pointer_address :
  (forall p:unit pointer.
-  (p = pointer_address(double_P_of_pointer_address(p))))
+  (p = pointer_address(doubleP_of_pointer_address(p))))
 
-logic void_P_of_pointer_address: unit pointer -> void_P pointer
+logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
-axiom pointer_addr_of_void_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
+axiom pointer_addr_of_voidP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer, b:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_max(char_P_alloc_table, p) >= b)
+predicate right_valid_struct_charP(p:charP pointer, b:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_max(charP_alloc_table, p) >= b)
 
-predicate right_valid_struct_double_P(p:double_P pointer, b:int,
- double_P_alloc_table:double_P alloc_table) =
- (offset_max(double_P_alloc_table, p) >= b)
+predicate right_valid_struct_doubleP(p:doubleP pointer, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ (offset_max(doubleP_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer, b:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_max(void_P_alloc_table, p) >= b)
+predicate right_valid_struct_voidP(p:voidP pointer, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_max(voidP_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_root_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) = a)
- and (offset_max(double_P_alloc_table, p) = b))
+predicate strict_valid_root_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) = a)
+ and (offset_max(doubleP_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_struct_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) = a)
- and (offset_max(double_P_alloc_table, p) = b))
+predicate strict_valid_struct_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) = a)
+ and (offset_max(doubleP_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_double_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_doubleP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_root_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) <= a)
- and (offset_max(double_P_alloc_table, p) >= b))
+predicate valid_root_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) <= a)
+ and (offset_max(doubleP_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_struct_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) <= a)
- and (offset_max(double_P_alloc_table, p) >= b))
+predicate valid_struct_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) <= a)
+ and (offset_max(doubleP_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-logic void_P_tag:  -> void_P tag_id
+logic voidP_tag:  -> voidP tag_id
 
-axiom void_P_int : (int_of_tag(void_P_tag) = (1))
+axiom voidP_int : (int_of_tag(voidP_tag) = (1))
 
-axiom void_P_of_pointer_address_of_pointer_addr :
- (forall p:void_P pointer.
-  (p = void_P_of_pointer_address(pointer_address(p))))
+axiom voidP_of_pointer_address_of_pointer_addr :
+ (forall p:voidP pointer. (p = voidP_of_pointer_address(pointer_address(p))))
 
-axiom void_P_parenttag_bottom : parenttag(void_P_tag, bottom_tag)
+axiom voidP_parenttag_bottom : parenttag(voidP_tag, bottom_tag)
 
-axiom void_P_tags :
- (forall x:void_P pointer.
-  (forall void_P_tag_table:void_P tag_table.
-   instanceof(void_P_tag_table, x, void_P_tag)))
+axiom voidP_tags :
+ (forall x:voidP pointer.
+  (forall voidP_tag_table:voidP tag_table.
+   instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_char_P :
+parameter alloc_bitvector_struct_charP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_char_P_requires :
+parameter alloc_bitvector_struct_charP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_double_P :
+parameter alloc_bitvector_struct_doubleP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_double_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_double_P_requires :
+parameter alloc_bitvector_struct_doubleP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_double_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P :
+parameter alloc_bitvector_struct_voidP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P_requires :
+parameter alloc_bitvector_struct_voidP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter char_P_alloc_table : char_P alloc_table ref
+parameter charP_alloc_table : charP alloc_table ref
 
-parameter char_P_tag_table : char_P tag_table ref
+parameter charP_tag_table : charP tag_table ref
 
-parameter alloc_struct_char_P :
+parameter alloc_struct_charP :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { } char_P pointer writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { } charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter alloc_struct_char_P_requires :
+parameter alloc_struct_charP_requires :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { ge_int(n, (0))} char_P pointer
-    writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { ge_int(n, (0))} charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter double_P_alloc_table : double_P alloc_table ref
+parameter doubleP_alloc_table : doubleP alloc_table ref
 
-parameter double_P_tag_table : double_P tag_table ref
+parameter doubleP_tag_table : doubleP tag_table ref
 
-parameter alloc_struct_double_P :
+parameter alloc_struct_doubleP :
  n:int ->
-  double_P_alloc_table:double_P alloc_table ref ->
-   double_P_tag_table:double_P tag_table ref ->
-    { } double_P pointer writes double_P_alloc_table,double_P_tag_table
-    { (strict_valid_struct_double_P(result, (0), sub_int(n, (1)),
-       double_P_alloc_table)
-      and (alloc_extends(double_P_alloc_table@, double_P_alloc_table)
-          and (alloc_fresh(double_P_alloc_table@, result, n)
-              and instanceof(double_P_tag_table, result, double_P_tag)))) }
+  doubleP_alloc_table:doubleP alloc_table ref ->
+   doubleP_tag_table:doubleP tag_table ref ->
+    { } doubleP pointer writes doubleP_alloc_table,doubleP_tag_table
+    { (strict_valid_struct_doubleP(result, (0), sub_int(n, (1)),
+       doubleP_alloc_table)
+      and (alloc_extends(doubleP_alloc_table@, doubleP_alloc_table)
+          and (alloc_fresh(doubleP_alloc_table@, result, n)
+              and instanceof(doubleP_tag_table, result, doubleP_tag)))) }
 
-parameter alloc_struct_double_P_requires :
+parameter alloc_struct_doubleP_requires :
  n:int ->
-  double_P_alloc_table:double_P alloc_table ref ->
-   double_P_tag_table:double_P tag_table ref ->
-    { ge_int(n, (0))} double_P pointer
-    writes double_P_alloc_table,double_P_tag_table
-    { (strict_valid_struct_double_P(result, (0), sub_int(n, (1)),
-       double_P_alloc_table)
-      and (alloc_extends(double_P_alloc_table@, double_P_alloc_table)
-          and (alloc_fresh(double_P_alloc_table@, result, n)
-              and instanceof(double_P_tag_table, result, double_P_tag)))) }
+  doubleP_alloc_table:doubleP alloc_table ref ->
+   doubleP_tag_table:doubleP tag_table ref ->
+    { ge_int(n, (0))} doubleP pointer
+    writes doubleP_alloc_table,doubleP_tag_table
+    { (strict_valid_struct_doubleP(result, (0), sub_int(n, (1)),
+       doubleP_alloc_table)
+      and (alloc_extends(doubleP_alloc_table@, doubleP_alloc_table)
+          and (alloc_fresh(doubleP_alloc_table@, result, n)
+              and instanceof(doubleP_tag_table, result, doubleP_tag)))) }
 
-parameter void_P_alloc_table : void_P alloc_table ref
+parameter voidP_alloc_table : voidP alloc_table ref
 
-parameter void_P_tag_table : void_P tag_table ref
+parameter voidP_tag_table : voidP tag_table ref
 
-parameter alloc_struct_void_P :
+parameter alloc_struct_voidP :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { } void_P pointer writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { } voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
-parameter alloc_struct_void_P_requires :
+parameter alloc_struct_voidP_requires :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { ge_int(n, (0))} void_P pointer
-    writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { ge_int(n, (0))} voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
 parameter any_int8 : unit -> { } int8 { true }
 
@@ -502,9 +498,9 @@ let f_ensures_default =
   (init:
   try
    begin
-     (let double_P_double_M_t_1 = ref (any_memory void) in
-     (let double_P_t_1_tag_table = ref (any_tag_table void) in
-     (let double_P_t_1_alloc_table = ref (any_alloc_table void) in
+     (let doubleP_doubleM_t_1 = ref (any_memory void) in
+     (let doubleP_t_1_tag_table = ref (any_tag_table void) in
+     (let doubleP_t_1_alloc_table = ref (any_alloc_table void) in
      (let t = ref (any_pointer void) in
      (C_2:
      (C_4:
@@ -612,7 +608,7 @@ let f_ensures_default =
        (let jessie_<somenum> =
        (t := (C_1:
              (JC_<somenum>:
-             (((alloc_struct_double_P (100)) double_P_t_1_alloc_table) double_P_t_1_tag_table)))) in
+             (((alloc_struct_doubleP (100)) doubleP_t_1_alloc_table) doubleP_t_1_tag_table)))) in
        void);
       (let jessie_<somenum> = (double_of_real_exact 0.) in
       (let jessie_<somenum> = !t in
@@ -1012,389 +1008,389 @@ let f_ensures_default =
       (let jessie_<somenum> = !t in
       (let jessie_<somenum> = (99) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit reads double_P_double_M_t_1,double_P_t_1_alloc_table
-        writes double_P_double_M_t_1
-        { (not_assigns(double_P_t_1_alloc_table, double_P_double_M_t_1@,
-           double_P_double_M_t_1,
+      [ { } unit reads doubleP_doubleM_t_1,doubleP_t_1_alloc_table
+        writes doubleP_doubleM_t_1
+        { (not_assigns(doubleP_t_1_alloc_table, doubleP_doubleM_t_1@,
+           doubleP_doubleM_t_1,
            pset_range(pset_singleton(jessie_<somenum>), (0), (99)))
-          and ((select(double_P_double_M_t_1, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(double_P_double_M_t_1, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and ((select(double_P_double_M_t_1, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
-                      and ((select(double_P_double_M_t_1,
+          and ((select(doubleP_doubleM_t_1, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
+              and ((select(doubleP_doubleM_t_1, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
+                  and ((select(doubleP_doubleM_t_1, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
+                      and ((select(doubleP_doubleM_t_1,
                             shift(jessie_<somenum>, (3))) = jessie_<somenum>)
-                          and ((select(double_P_double_M_t_1,
+                          and ((select(doubleP_doubleM_t_1,
                                 shift(jessie_<somenum>, (4))) = jessie_<somenum>)
-                              and ((select(double_P_double_M_t_1,
+                              and ((select(doubleP_doubleM_t_1,
                                     shift(jessie_<somenum>, (5))) = jessie_<somenum>)
-                                  and ((select(double_P_double_M_t_1,
+                                  and ((select(doubleP_doubleM_t_1,
                                         shift(jessie_<somenum>, (6))) = jessie_<somenum>)
-                                      and ((select(double_P_double_M_t_1,
+                                      and ((select(doubleP_doubleM_t_1,
                                             shift(jessie_<somenum>, (7))) = jessie_<somenum>)
-                                          and ((select(double_P_double_M_t_1,
+                                          and ((select(doubleP_doubleM_t_1,
                                                 shift(jessie_<somenum>, (8))) = jessie_<somenum>)
-                                              and ((select(double_P_double_M_t_1,
+                                              and ((select(doubleP_doubleM_t_1,
                                                     shift(jessie_<somenum>, (9))) = jessie_<somenum>)
-                                                  and ((select(double_P_double_M_t_1,
+                                                  and ((select(doubleP_doubleM_t_1,
                                                         shift(jessie_<somenum>,
                                                         (10))) = jessie_<somenum>)
-                                                      and ((select(double_P_double_M_t_1,
+                                                      and ((select(doubleP_doubleM_t_1,
                                                             shift(jessie_<somenum>,
                                                             (11))) = jessie_<somenum>)
-                                                          and ((select(double_P_double_M_t_1,
+                                                          and ((select(doubleP_doubleM_t_1,
                                                                 shift(jessie_<somenum>,
                                                                 (12))) = jessie_<somenum>)
-                                                              and ((select(double_P_double_M_t_1,
+                                                              and ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (13))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (14))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (15))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (16))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (17))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (18))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (19))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (20))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (21))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (22))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (23))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (24))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (25))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (26))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (27))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (28))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (29))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (30))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (31))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (32))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (33))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (34))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (35))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (36))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (37))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (38))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (39))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (40))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (41))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (42))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (43))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (44))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (45))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (46))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (47))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (48))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (49))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (50))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (51))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (52))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (53))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (54))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (55))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (56))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (57))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (58))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (59))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (60))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (61))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (62))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (63))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (64))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (65))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (66))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (67))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (68))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (69))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (70))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (71))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (72))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (73))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (74))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (75))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (76))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (77))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (78))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (79))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (80))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (81))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (82))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (83))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (84))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (85))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (86))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (87))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (88))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (89))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (90))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (91))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (92))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (93))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (94))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (95))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (96))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (97))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (98))) = jessie_<somenum>)
                                                                   and 
-                                                                  (select(double_P_double_M_t_1,
+                                                                  (select(doubleP_doubleM_t_1,
                                                                    shift(jessie_<somenum>,
                                                                    (99))) = jessie_<somenum>))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) } ]))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))));
       (assert
       { (JC_<somenum>:
-        eq_real(double_value(select(double_P_double_M_t_1, shift(t, (0)))),
-        0.)) }; void); void;
-      ((safe_free_parameter double_P_t_1_alloc_table) !t); (raise Return) end))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))));
+        eq_real(double_value(select(doubleP_doubleM_t_1, shift(t, (0)))), 0.)) };
+      void); void; ((safe_free_parameter doubleP_t_1_alloc_table) !t);
+      (raise Return) end))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))));
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
 let f_safety =
@@ -1403,9 +1399,9 @@ let f_safety =
   (init:
   try
    begin
-     (let double_P_double_M_t_1 = ref (any_memory void) in
-     (let double_P_t_1_tag_table = ref (any_tag_table void) in
-     (let double_P_t_1_alloc_table = ref (any_alloc_table void) in
+     (let doubleP_doubleM_t_1 = ref (any_memory void) in
+     (let doubleP_t_1_tag_table = ref (any_tag_table void) in
+     (let doubleP_t_1_alloc_table = ref (any_alloc_table void) in
      (let t = ref (any_pointer void) in
      (C_2:
      (C_4:
@@ -1514,10 +1510,10 @@ let f_safety =
        (t := (let jessie_<somenum> =
              (C_1:
              (JC_<somenum>:
-             (((alloc_struct_double_P_requires (100)) double_P_t_1_alloc_table) double_P_t_1_tag_table))) in
+             (((alloc_struct_doubleP_requires (100)) doubleP_t_1_alloc_table) doubleP_t_1_tag_table))) in
              (JC_<somenum>:
              (assert
-             { ge_int(offset_max(double_P_t_1_alloc_table, jessie_<somenum>), (99)) };
+             { ge_int(offset_max(doubleP_t_1_alloc_table, jessie_<somenum>), (99)) };
              jessie_<somenum>)))) in void);
       (let jessie_<somenum> = (double_of_real_exact 0.) in
       (let jessie_<somenum> = !t in
@@ -1917,387 +1913,386 @@ let f_safety =
       (let jessie_<somenum> = !t in
       (let jessie_<somenum> = (99) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit reads double_P_double_M_t_1,double_P_t_1_alloc_table
-        writes double_P_double_M_t_1
-        { (not_assigns(double_P_t_1_alloc_table, double_P_double_M_t_1@,
-           double_P_double_M_t_1,
+      [ { } unit reads doubleP_doubleM_t_1,doubleP_t_1_alloc_table
+        writes doubleP_doubleM_t_1
+        { (not_assigns(doubleP_t_1_alloc_table, doubleP_doubleM_t_1@,
+           doubleP_doubleM_t_1,
            pset_range(pset_singleton(jessie_<somenum>), (0), (99)))
-          and ((select(double_P_double_M_t_1, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(double_P_double_M_t_1, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and ((select(double_P_double_M_t_1, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
-                      and ((select(double_P_double_M_t_1,
-                            shift(jessie_<somenum>, (3))) = jessie_<somenum>)
-                          and ((select(double_P_double_M_t_1,
+          and ((select(doubleP_doubleM_t_1, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
+              and ((select(doubleP_doubleM_t_1, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
+                  and ((select(doubleP_doubleM_t_1, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
+                      and ((select(doubleP_doubleM_t_1, shift(jessie_<somenum>, (3))) = jessie_<somenum>)
+                          and ((select(doubleP_doubleM_t_1,
                                 shift(jessie_<somenum>, (4))) = jessie_<somenum>)
-                              and ((select(double_P_double_M_t_1,
+                              and ((select(doubleP_doubleM_t_1,
                                     shift(jessie_<somenum>, (5))) = jessie_<somenum>)
-                                  and ((select(double_P_double_M_t_1,
+                                  and ((select(doubleP_doubleM_t_1,
                                         shift(jessie_<somenum>, (6))) = jessie_<somenum>)
-                                      and ((select(double_P_double_M_t_1,
+                                      and ((select(doubleP_doubleM_t_1,
                                             shift(jessie_<somenum>, (7))) = jessie_<somenum>)
-                                          and ((select(double_P_double_M_t_1,
+                                          and ((select(doubleP_doubleM_t_1,
                                                 shift(jessie_<somenum>, (8))) = jessie_<somenum>)
-                                              and ((select(double_P_double_M_t_1,
+                                              and ((select(doubleP_doubleM_t_1,
                                                     shift(jessie_<somenum>, (9))) = jessie_<somenum>)
-                                                  and ((select(double_P_double_M_t_1,
+                                                  and ((select(doubleP_doubleM_t_1,
                                                         shift(jessie_<somenum>, (10))) = jessie_<somenum>)
-                                                      and ((select(double_P_double_M_t_1,
+                                                      and ((select(doubleP_doubleM_t_1,
                                                             shift(jessie_<somenum>,
                                                             (11))) = jessie_<somenum>)
-                                                          and ((select(double_P_double_M_t_1,
+                                                          and ((select(doubleP_doubleM_t_1,
                                                                 shift(jessie_<somenum>,
                                                                 (12))) = jessie_<somenum>)
-                                                              and ((select(double_P_double_M_t_1,
+                                                              and ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (13))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (14))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (15))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (16))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (17))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (18))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (19))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (20))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (21))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (22))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (23))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (24))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (25))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (26))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (27))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (28))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (29))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (30))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (31))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (32))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (33))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (34))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (35))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (36))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (37))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (38))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (39))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (40))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (41))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (42))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (43))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (44))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (45))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (46))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (47))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (48))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (49))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (50))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (51))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (52))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (53))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (54))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (55))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (56))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (57))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (58))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (59))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (60))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (61))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (62))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (63))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (64))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (65))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (66))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (67))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (68))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (69))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (70))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (71))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (72))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (73))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (74))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (75))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (76))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (77))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (78))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (79))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (80))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (81))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (82))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (83))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (84))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (85))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (86))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (87))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (88))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (89))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (90))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (91))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (92))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (93))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (94))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (95))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (96))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (97))) = jessie_<somenum>)
                                                                   and 
-                                                                  ((select(double_P_double_M_t_1,
+                                                                  ((select(doubleP_doubleM_t_1,
                                                                     shift(jessie_<somenum>,
                                                                     (98))) = jessie_<somenum>)
                                                                   and 
-                                                                  (select(double_P_double_M_t_1,
+                                                                  (select(doubleP_doubleM_t_1,
                                                                    shift(jessie_<somenum>,
                                                                    (99))) = jessie_<somenum>))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) } ]))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))));
-      [ { } unit reads double_P_double_M_t_1,t
+      [ { } unit reads doubleP_doubleM_t_1,t
         { (JC_<somenum>:
-          eq_real(double_value(select(double_P_double_M_t_1, shift(t, (0)))),
-          0.)) } ]; void; ((free_parameter double_P_t_1_alloc_table) !t);
+          eq_real(double_value(select(doubleP_doubleM_t_1, shift(t, (0)))),
+          0.)) } ]; void; ((free_parameter doubleP_t_1_alloc_table) !t);
       (raise Return) end))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))));
     (raise Return) end with Return -> void end) { true }
 
@@ -2314,11 +2309,11 @@ why --project [...] why/bts0377.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0377_po3.why">
-      <location file = "why/bts0377.why" line = "1363" begin = "15" end = "75"/>
+      <location file = "why/bts0377.why" line = "1359" begin = "15" end = "74"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0377_po4.why">
-      <location file = "why/bts0377.why" line = "2143" begin = "27" end = "71"/>
+      <location file = "why/bts0377.why" line = "2138" begin = "27" end = "70"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -3485,49 +3480,49 @@ predicate abs_double_post(x: double, res: double) =
    ((double_exact(res) = abs_real(double_exact(x))) and
     (double_model(res) = abs_real(double_model(x)))))
 
-type char_P
+type charP
 
-type double_P
+type doubleP
 
 type int8
 
 type padding
 
-type void_P
+type voidP
 
-logic char_P_tag : char_P tag_id
+logic charP_tag : charP tag_id
 
-axiom char_P_int: (int_of_tag(char_P_tag) = 1)
+axiom charP_int: (int_of_tag(charP_tag) = 1)
 
-logic char_P_of_pointer_address : unit pointer -> char_P pointer
+logic charP_of_pointer_address : unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr:
-  (forall p:char_P pointer.
-    (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr:
+  (forall p:charP pointer.
+    (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom: parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom: parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags:
-  (forall x:char_P pointer.
-    (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
-      x, char_P_tag)))
+axiom charP_tags:
+  (forall x:charP pointer.
+    (forall charP_tag_table:charP tag_table. instanceof(charP_tag_table, x,
+      charP_tag)))
 
-logic double_P_tag : double_P tag_id
+logic doubleP_tag : doubleP tag_id
 
-axiom double_P_int: (int_of_tag(double_P_tag) = 1)
+axiom doubleP_int: (int_of_tag(doubleP_tag) = 1)
 
-logic double_P_of_pointer_address : unit pointer -> double_P pointer
+logic doubleP_of_pointer_address : unit pointer -> doubleP pointer
 
-axiom double_P_of_pointer_address_of_pointer_addr:
-  (forall p:double_P pointer.
-    (p = double_P_of_pointer_address(pointer_address(p))))
+axiom doubleP_of_pointer_address_of_pointer_addr:
+  (forall p:doubleP pointer.
+    (p = doubleP_of_pointer_address(pointer_address(p))))
 
-axiom double_P_parenttag_bottom: parenttag(double_P_tag, bottom_tag)
+axiom doubleP_parenttag_bottom: parenttag(doubleP_tag, bottom_tag)
 
-axiom double_P_tags:
-  (forall x:double_P pointer.
-    (forall double_P_tag_table:double_P tag_table.
-      instanceof(double_P_tag_table, x, double_P_tag)))
+axiom doubleP_tags:
+  (forall x:doubleP pointer.
+    (forall doubleP_tag_table:doubleP tag_table.
+      instanceof(doubleP_tag_table, x, doubleP_tag)))
 
 logic integer_of_int8 : int8 -> int
 
@@ -3545,131 +3540,129 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
-predicate left_valid_struct_char_P(p: char_P pointer, a: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
+predicate left_valid_struct_charP(p: charP pointer, a: int,
+  charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
   p) <= a)
 
-predicate left_valid_struct_double_P(p: double_P pointer, a: int,
-  double_P_alloc_table: double_P alloc_table) =
-  (offset_min(double_P_alloc_table, p) <= a)
+predicate left_valid_struct_doubleP(p: doubleP pointer, a: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  (offset_min(doubleP_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p: void_P pointer, a: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
+predicate left_valid_struct_voidP(p: voidP pointer, a: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
 
-axiom pointer_addr_of_char_P_of_pointer_address:
+axiom pointer_addr_of_charP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
+
+axiom pointer_addr_of_doubleP_of_pointer_address:
   (forall p:unit pointer.
-    (p = pointer_address(char_P_of_pointer_address(p))))
+    (p = pointer_address(doubleP_of_pointer_address(p))))
 
-axiom pointer_addr_of_double_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(double_P_of_pointer_address(p))))
+logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
-logic void_P_of_pointer_address : unit pointer -> void_P pointer
+axiom pointer_addr_of_voidP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
-axiom pointer_addr_of_void_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(void_P_of_pointer_address(p))))
-
-predicate right_valid_struct_char_P(p: char_P pointer, b: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
+predicate right_valid_struct_charP(p: charP pointer, b: int,
+  charP_alloc_table: charP alloc_table) = (offset_max(charP_alloc_table,
   p) >= b)
 
-predicate right_valid_struct_double_P(p: double_P pointer, b: int,
-  double_P_alloc_table: double_P alloc_table) =
-  (offset_max(double_P_alloc_table, p) >= b)
+predicate right_valid_struct_doubleP(p: doubleP pointer, b: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  (offset_max(doubleP_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p: void_P pointer, b: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
+predicate right_valid_struct_voidP(p: voidP pointer, b: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
 
-predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
 
-predicate strict_valid_root_double_P(p: double_P pointer, a: int, b: int,
-  double_P_alloc_table: double_P alloc_table) =
-  ((offset_min(double_P_alloc_table, p) = a) and
-   (offset_max(double_P_alloc_table, p) = b))
+predicate strict_valid_root_doubleP(p: doubleP pointer, a: int, b: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  ((offset_min(doubleP_alloc_table, p) = a) and
+   (offset_max(doubleP_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
 
-predicate strict_valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
 
-predicate strict_valid_struct_double_P(p: double_P pointer, a: int, b: int,
-  double_P_alloc_table: double_P alloc_table) =
-  ((offset_min(double_P_alloc_table, p) = a) and
-   (offset_max(double_P_alloc_table, p) = b))
+predicate strict_valid_struct_doubleP(p: doubleP pointer, a: int, b: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  ((offset_min(doubleP_alloc_table, p) = a) and
+   (offset_max(doubleP_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
 
-predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_double_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_doubleP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
 
-predicate valid_root_double_P(p: double_P pointer, a: int, b: int,
-  double_P_alloc_table: double_P alloc_table) =
-  ((offset_min(double_P_alloc_table, p) <= a) and
-   (offset_max(double_P_alloc_table, p) >= b))
+predicate valid_root_doubleP(p: doubleP pointer, a: int, b: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  ((offset_min(doubleP_alloc_table, p) <= a) and
+   (offset_max(doubleP_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
-predicate valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
 
-predicate valid_struct_double_P(p: double_P pointer, a: int, b: int,
-  double_P_alloc_table: double_P alloc_table) =
-  ((offset_min(double_P_alloc_table, p) <= a) and
-   (offset_max(double_P_alloc_table, p) >= b))
+predicate valid_struct_doubleP(p: doubleP pointer, a: int, b: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  ((offset_min(doubleP_alloc_table, p) <= a) and
+   (offset_max(doubleP_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
-logic void_P_tag : void_P tag_id
+logic voidP_tag : voidP tag_id
 
-axiom void_P_int: (int_of_tag(void_P_tag) = 1)
+axiom voidP_int: (int_of_tag(voidP_tag) = 1)
 
-axiom void_P_of_pointer_address_of_pointer_addr:
-  (forall p:void_P pointer.
-    (p = void_P_of_pointer_address(pointer_address(p))))
+axiom voidP_of_pointer_address_of_pointer_addr:
+  (forall p:voidP pointer.
+    (p = voidP_of_pointer_address(pointer_address(p))))
 
-axiom void_P_parenttag_bottom: parenttag(void_P_tag, bottom_tag)
+axiom voidP_parenttag_bottom: parenttag(voidP_tag, bottom_tag)
 
-axiom void_P_tags:
-  (forall x:void_P pointer.
-    (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
-      x, void_P_tag)))
+axiom voidP_tags:
+  (forall x:voidP pointer.
+    (forall voidP_tag_table:voidP tag_table. instanceof(voidP_tag_table, x,
+      voidP_tag)))
 

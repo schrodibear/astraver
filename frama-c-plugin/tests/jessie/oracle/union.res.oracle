@@ -1,7 +1,7 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only union.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD union.c"
 [jessie] Starting Jessie translation
-[kernel] No code for function malloc, default assigns generated
+[kernel] warning: No code for function malloc, default assigns generated
 [jessie] Producing Jessie files in subdir union.jessie
 [jessie] File union.jessie/union.jc written.
 [jessie] File union.jessie/union.cloc written.
@@ -23,16 +23,16 @@ type int8 = -128..127
 
 type int32 = -2147483648..2147483647
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
 tag _Decomp2 = {
   int8 c1: 8; 

@@ -20,28 +20,28 @@ type int32 = -2147483648..2147483647
 
 type int8 = -128..127
 
-tag float_P = {
-  float float_M: 32;
+tag floatP = {
+  float floatM: 32;
 }
 
-type float_P = [float_P]
+type floatP = [floatP]
 
-tag int_P = {
-  int32 int_M: 32;
+tag intP = {
+  int32 intM: 32;
 }
 
-type int_P = [int_P]
+type intP = [intP]
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
 int32 Frama_C_entropy_source;
 
@@ -97,7 +97,7 @@ int32 G1;
 
 int32 G2;
 
-int_P[0..63] G3;
+intP[0..63] G3;
 
 invariant valid_G3 :
 ((\offset_min(G3) <= 0) && (\offset_max(G3) >= 63))
@@ -130,34 +130,34 @@ behavior default:
 
 int32 G7;
 
-float_P[0..63] G8;
+floatP[0..63] G8;
 
 invariant valid_G8 :
 ((\offset_min(G8) <= 0) && (\offset_max(G8) >= 63))
 
-float_P[0..63] G9;
+floatP[0..63] G9;
 
 invariant valid_G9 :
 ((\offset_min(G9) <= 0) && (\offset_max(G9) >= 63))
 
-float_P[0..63] G10;
+floatP[0..63] G10;
 
 invariant valid_G10 :
 ((\offset_min(G10) <= 0) && (\offset_max(G10) >= 63))
 
-float_P[0..31] G11;
+floatP[0..31] G11;
 
 invariant valid_G11 :
 ((\offset_min(G11) <= 0) && (\offset_max(G11) >= 31))
 
 int32 G12;
 
-int_P[0..1999] G13;
+intP[0..1999] G13;
 
 invariant valid_G13 :
 ((\offset_min(G13) <= 0) && (\offset_max(G13) >= 1999))
 
-int_P[..] ptr_bas_loc_ram;
+intP[..] ptr_bas_loc_ram;
 
 int32 G15;
 
@@ -195,9 +195,9 @@ float G31;
 
 float G32;
 
-int_P[..] G33;
+intP[..] G33;
 
-int_P[..] G34;
+intP[..] G34;
 
 unit F6()
 behavior default:
@@ -223,7 +223,7 @@ behavior default:
    
    (var int32 V18);
    
-   (var int_P[..] ptr_bas_loc);
+   (var intP[..] ptr_bas_loc);
    
    (var int32 V20);
    
@@ -252,14 +252,14 @@ behavior default:
          (C_50 : (V14 = (C_49 : ((0.0 :> double) :> float))));
          (C_52 : (V15 = (C_51 : ((0.0 :> double) :> float))));
          (C_54 : (V20 = (C_53 : F2(G15))));
-         (C_56 : (G18 = (C_55 : (G8 + V20).float_M)));
+         (C_56 : (G18 = (C_55 : (G8 + V20).floatM)));
          (C_58 : (V21 = (C_57 : F3(G15))));
-         (C_62 : (G16 = (C_61 : ((C_60 : (G9 + V21).float_M) /
+         (C_62 : (G16 = (C_61 : ((C_60 : (G9 + V21).floatM) /
                                   (C_59 : (G1 :> float))))));
          (C_64 : (V22 = (C_63 : F3(G15))));
-         (C_66 : (G17 = (C_65 : (G10 + V22).float_M)));
+         (C_66 : (G17 = (C_65 : (G10 + V22).floatM)));
          (C_68 : (V23 = (C_67 : F4(G15))));
-         (C_70 : (G19 = (C_69 : (G11 + V23).float_M)));
+         (C_70 : (G19 = (C_69 : (G11 + V23).floatM)));
          (C_75 : (G21 = (C_74 : ((C_73 : ((1.0 :> double) /
                                            (C_72 : ((C_71 : (G16 :> double)) +
                                                      (1.0 :> double))))) :> float))));
@@ -281,7 +281,7 @@ behavior default:
          (C_97 : (G12 = V18));
          (C_98 : (ptr_bas_loc_ram = ptr_bas_loc))
       } else 
-      {  (C_26 : ((C_25 : (G3 + G15).int_M) = 0));
+      {  (C_26 : ((C_25 : (G3 + G15).intM) = 0));
          (C_27 : (G4 = 0))
       });
       
@@ -317,7 +317,7 @@ behavior default:
    
    (var int32 V35);
    
-   (var int_P[..] ptr_bas_loc_0);
+   (var intP[..] ptr_bas_loc_0);
    
    (var int32 V37);
    
@@ -349,7 +349,7 @@ behavior default:
                {  (if (V34 <= V35) then () else 
                   (goto while_0_break));
                   
-                  {  (C_124 : (V24 = (C_123 : ((C_122 : ptr_bas_loc_0.int_M) :> float))));
+                  {  (C_124 : (V24 = (C_123 : ((C_122 : ptr_bas_loc_0.intM) :> float))));
                      (C_126 : (ptr_bas_loc_0 = (C_125 : (ptr_bas_loc_0 + 1))));
                      (C_132 : (V27 = (C_131 : ((C_130 : ((C_129 : (V24 - V26)) +
                                                           (C_128 : (V31 *
@@ -371,7 +371,7 @@ behavior default:
             (while_0_break : ())
          };
          (if (V35 >= (C_205 : ((C_204 : (V33 - 2)) :> int32))) then 
-         {  (C_161 : (V24 = (C_160 : ((C_159 : ptr_bas_loc_0.int_M) :> float))));
+         {  (C_161 : (V24 = (C_160 : ((C_159 : ptr_bas_loc_0.intM) :> float))));
             (C_167 : (V27 = (C_166 : ((C_165 : ((C_164 : (V24 - V26)) +
                                                  (C_163 : (V31 * V28)))) +
                                        (C_162 : (V32 * V29))))));
@@ -390,9 +390,9 @@ behavior default:
             (C_188 : (V30 = (C_187 : ((C_186 : ((C_185 : (V30 :> double)) *
                                                  (64.0 :> double))) :> float))));
             (if ((C_195 : (V30 :> double)) <= (65535.0 :> double)) then 
-            (C_194 : ((C_193 : (G3 + G15).int_M) = (C_192 : \truncate_real_to_int(
-                                                   (C_191 : (V30 :> real)))))) else 
-            (C_190 : ((C_189 : (G3 + G15).int_M) = 65535)));
+            (C_194 : ((C_193 : (G3 + G15).intM) = (C_192 : \truncate_real_to_int(
+                                                  (C_191 : (V30 :> real)))))) else 
+            (C_190 : ((C_189 : (G3 + G15).intM) = 65535)));
             (C_197 : (V37 = (C_196 : F5(G15))));
             (C_200 : (G6 = (C_199 : ((C_198 : (G6 | V37)) :> int32))));
             (if (G6 != 0) then (C_202 : (G7 = 1)) else (C_201 : (G7 = 0)));
@@ -460,35 +460,35 @@ type G8_2
 
 type G9_3
 
-type char_P
+type charP
 
-type float_P
+type floatP
 
 type int32
 
 type int8
 
-type int_P
+type intP
 
 type padding
 
-type void_P
+type voidP
 
 logic G1:  -> int32
 
-logic G10:  -> float_P pointer
+logic G10:  -> floatP pointer
 
-logic G11:  -> float_P pointer
+logic G11:  -> floatP pointer
 
-logic G13:  -> int_P pointer
+logic G13:  -> intP pointer
 
 logic G2:  -> int32
 
-logic G3:  -> int_P pointer
+logic G3:  -> intP pointer
 
-logic G8:  -> float_P pointer
+logic G8:  -> floatP pointer
 
-logic G9:  -> float_P pointer
+logic G9:  -> floatP pointer
 
 exception Goto_while_0_break_exc of unit
 
@@ -498,22 +498,21 @@ exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
-logic char_P_tag:  -> char_P tag_id
+logic charP_tag:  -> charP tag_id
 
-axiom char_P_int : (int_of_tag(char_P_tag) = (1))
+axiom charP_int : (int_of_tag(charP_tag) = (1))
 
-logic char_P_of_pointer_address: unit pointer -> char_P pointer
+logic charP_of_pointer_address: unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr :
- (forall p:char_P pointer.
-  (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr :
+ (forall p:charP pointer. (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom : parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom : parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags :
- (forall x:char_P pointer.
-  (forall char_P_tag_table:char_P tag_table.
-   instanceof(char_P_tag_table, x, char_P_tag)))
+axiom charP_tags :
+ (forall x:charP pointer.
+  (forall charP_tag_table:charP tag_table.
+   instanceof(charP_tag_table, x, charP_tag)))
 
 logic integer_of_int32: int32 -> int
 
@@ -525,22 +524,22 @@ logic integer_of_int8: int8 -> int
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
-logic float_P_tag:  -> float_P tag_id
+logic floatP_tag:  -> floatP tag_id
 
-axiom float_P_int : (int_of_tag(float_P_tag) = (1))
+axiom floatP_int : (int_of_tag(floatP_tag) = (1))
 
-logic float_P_of_pointer_address: unit pointer -> float_P pointer
+logic floatP_of_pointer_address: unit pointer -> floatP pointer
 
-axiom float_P_of_pointer_address_of_pointer_addr :
- (forall p:float_P pointer.
-  (p = float_P_of_pointer_address(pointer_address(p))))
+axiom floatP_of_pointer_address_of_pointer_addr :
+ (forall p:floatP pointer.
+  (p = floatP_of_pointer_address(pointer_address(p))))
 
-axiom float_P_parenttag_bottom : parenttag(float_P_tag, bottom_tag)
+axiom floatP_parenttag_bottom : parenttag(floatP_tag, bottom_tag)
 
-axiom float_P_tags :
- (forall x:float_P pointer.
-  (forall float_P_tag_table:float_P tag_table.
-   instanceof(float_P_tag_table, x, float_P_tag)))
+axiom floatP_tags :
+ (forall x:floatP pointer.
+  (forall floatP_tag_table:floatP tag_table.
+   instanceof(floatP_tag_table, x, floatP_tag)))
 
 logic int32_of_integer: int -> int32
 
@@ -565,359 +564,355 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-logic int_P_tag:  -> int_P tag_id
+logic intP_tag:  -> intP tag_id
 
-axiom int_P_int : (int_of_tag(int_P_tag) = (1))
+axiom intP_int : (int_of_tag(intP_tag) = (1))
 
-logic int_P_of_pointer_address: unit pointer -> int_P pointer
+logic intP_of_pointer_address: unit pointer -> intP pointer
 
-axiom int_P_of_pointer_address_of_pointer_addr :
- (forall p:int_P pointer. (p = int_P_of_pointer_address(pointer_address(p))))
+axiom intP_of_pointer_address_of_pointer_addr :
+ (forall p:intP pointer. (p = intP_of_pointer_address(pointer_address(p))))
 
-axiom int_P_parenttag_bottom : parenttag(int_P_tag, bottom_tag)
+axiom intP_parenttag_bottom : parenttag(intP_tag, bottom_tag)
 
-axiom int_P_tags :
- (forall x:int_P pointer.
-  (forall int_P_tag_table:int_P tag_table.
-   instanceof(int_P_tag_table, x, int_P_tag)))
+axiom intP_tags :
+ (forall x:intP pointer.
+  (forall intP_tag_table:intP tag_table.
+   instanceof(intP_tag_table, x, intP_tag)))
 
-predicate left_valid_struct_char_P(p:char_P pointer, a:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_min(char_P_alloc_table, p) <= a)
+predicate left_valid_struct_charP(p:charP pointer, a:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_min(charP_alloc_table, p) <= a)
 
-predicate left_valid_struct_float_P(p:float_P pointer, a:int,
- float_P_alloc_table:float_P alloc_table) =
- (offset_min(float_P_alloc_table, p) <= a)
+predicate left_valid_struct_floatP(p:floatP pointer, a:int,
+ floatP_alloc_table:floatP alloc_table) =
+ (offset_min(floatP_alloc_table, p) <= a)
 
-predicate left_valid_struct_int_P(p:int_P pointer, a:int,
- int_P_alloc_table:int_P alloc_table) =
- (offset_min(int_P_alloc_table, p) <= a)
+predicate left_valid_struct_intP(p:intP pointer, a:int,
+ intP_alloc_table:intP alloc_table) = (offset_min(intP_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer, a:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_min(void_P_alloc_table, p) <= a)
+predicate left_valid_struct_voidP(p:voidP pointer, a:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_min(voidP_alloc_table, p) <= a)
 
-axiom pointer_addr_of_char_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
+axiom pointer_addr_of_charP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
-axiom pointer_addr_of_float_P_of_pointer_address :
- (forall p:unit pointer.
-  (p = pointer_address(float_P_of_pointer_address(p))))
+axiom pointer_addr_of_floatP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(floatP_of_pointer_address(p))))
 
-axiom pointer_addr_of_int_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(int_P_of_pointer_address(p))))
+axiom pointer_addr_of_intP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
 
-logic void_P_of_pointer_address: unit pointer -> void_P pointer
+logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
-axiom pointer_addr_of_void_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
+axiom pointer_addr_of_voidP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer, b:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_max(char_P_alloc_table, p) >= b)
+predicate right_valid_struct_charP(p:charP pointer, b:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_max(charP_alloc_table, p) >= b)
 
-predicate right_valid_struct_float_P(p:float_P pointer, b:int,
- float_P_alloc_table:float_P alloc_table) =
- (offset_max(float_P_alloc_table, p) >= b)
+predicate right_valid_struct_floatP(p:floatP pointer, b:int,
+ floatP_alloc_table:floatP alloc_table) =
+ (offset_max(floatP_alloc_table, p) >= b)
 
-predicate right_valid_struct_int_P(p:int_P pointer, b:int,
- int_P_alloc_table:int_P alloc_table) =
- (offset_max(int_P_alloc_table, p) >= b)
+predicate right_valid_struct_intP(p:intP pointer, b:int,
+ intP_alloc_table:intP alloc_table) = (offset_max(intP_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer, b:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_max(void_P_alloc_table, p) >= b)
+predicate right_valid_struct_voidP(p:voidP pointer, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_max(voidP_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_root_float_P(p:float_P pointer, a:int, b:int,
- float_P_alloc_table:float_P alloc_table) =
- ((offset_min(float_P_alloc_table, p) = a)
- and (offset_max(float_P_alloc_table, p) = b))
+predicate strict_valid_root_floatP(p:floatP pointer, a:int, b:int,
+ floatP_alloc_table:floatP alloc_table) =
+ ((offset_min(floatP_alloc_table, p) = a)
+ and (offset_max(floatP_alloc_table, p) = b))
 
-predicate strict_valid_root_int_P(p:int_P pointer, a:int, b:int,
- int_P_alloc_table:int_P alloc_table) =
- ((offset_min(int_P_alloc_table, p) = a)
- and (offset_max(int_P_alloc_table, p) = b))
+predicate strict_valid_root_intP(p:intP pointer, a:int, b:int,
+ intP_alloc_table:intP alloc_table) =
+ ((offset_min(intP_alloc_table, p) = a)
+ and (offset_max(intP_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_struct_float_P(p:float_P pointer, a:int, b:int,
- float_P_alloc_table:float_P alloc_table) =
- ((offset_min(float_P_alloc_table, p) = a)
- and (offset_max(float_P_alloc_table, p) = b))
+predicate strict_valid_struct_floatP(p:floatP pointer, a:int, b:int,
+ floatP_alloc_table:floatP alloc_table) =
+ ((offset_min(floatP_alloc_table, p) = a)
+ and (offset_max(floatP_alloc_table, p) = b))
 
-predicate strict_valid_struct_int_P(p:int_P pointer, a:int, b:int,
- int_P_alloc_table:int_P alloc_table) =
- ((offset_min(int_P_alloc_table, p) = a)
- and (offset_max(int_P_alloc_table, p) = b))
+predicate strict_valid_struct_intP(p:intP pointer, a:int, b:int,
+ intP_alloc_table:intP alloc_table) =
+ ((offset_min(intP_alloc_table, p) = a)
+ and (offset_max(intP_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_G10(float_P_G10_4_alloc_table:float_P alloc_table) =
- (le_int(offset_min(float_P_G10_4_alloc_table, G10), (0))
- and ge_int(offset_max(float_P_G10_4_alloc_table, G10), (63)))
+predicate valid_G10(floatP_G10_4_alloc_table:floatP alloc_table) =
+ (le_int(offset_min(floatP_G10_4_alloc_table, G10), (0))
+ and ge_int(offset_max(floatP_G10_4_alloc_table, G10), (63)))
 
-predicate valid_G11(float_P_G11_5_alloc_table:float_P alloc_table) =
- (le_int(offset_min(float_P_G11_5_alloc_table, G11), (0))
- and ge_int(offset_max(float_P_G11_5_alloc_table, G11), (31)))
+predicate valid_G11(floatP_G11_5_alloc_table:floatP alloc_table) =
+ (le_int(offset_min(floatP_G11_5_alloc_table, G11), (0))
+ and ge_int(offset_max(floatP_G11_5_alloc_table, G11), (31)))
 
-predicate valid_G13(int_P_G13_6_alloc_table:int_P alloc_table) =
- (le_int(offset_min(int_P_G13_6_alloc_table, G13), (0))
- and ge_int(offset_max(int_P_G13_6_alloc_table, G13), (1999)))
+predicate valid_G13(intP_G13_6_alloc_table:intP alloc_table) =
+ (le_int(offset_min(intP_G13_6_alloc_table, G13), (0))
+ and ge_int(offset_max(intP_G13_6_alloc_table, G13), (1999)))
 
-predicate valid_G3(int_P_G3_1_alloc_table:int_P alloc_table) =
- (le_int(offset_min(int_P_G3_1_alloc_table, G3), (0))
- and ge_int(offset_max(int_P_G3_1_alloc_table, G3), (63)))
+predicate valid_G3(intP_G3_1_alloc_table:intP alloc_table) =
+ (le_int(offset_min(intP_G3_1_alloc_table, G3), (0))
+ and ge_int(offset_max(intP_G3_1_alloc_table, G3), (63)))
 
-predicate valid_G8(float_P_G8_2_alloc_table:float_P alloc_table) =
- (le_int(offset_min(float_P_G8_2_alloc_table, G8), (0))
- and ge_int(offset_max(float_P_G8_2_alloc_table, G8), (63)))
+predicate valid_G8(floatP_G8_2_alloc_table:floatP alloc_table) =
+ (le_int(offset_min(floatP_G8_2_alloc_table, G8), (0))
+ and ge_int(offset_max(floatP_G8_2_alloc_table, G8), (63)))
 
-predicate valid_G9(float_P_G9_3_alloc_table:float_P alloc_table) =
- (le_int(offset_min(float_P_G9_3_alloc_table, G9), (0))
- and ge_int(offset_max(float_P_G9_3_alloc_table, G9), (63)))
+predicate valid_G9(floatP_G9_3_alloc_table:floatP alloc_table) =
+ (le_int(offset_min(floatP_G9_3_alloc_table, G9), (0))
+ and ge_int(offset_max(floatP_G9_3_alloc_table, G9), (63)))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_float_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_floatP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_int_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_root_float_P(p:float_P pointer, a:int, b:int,
- float_P_alloc_table:float_P alloc_table) =
- ((offset_min(float_P_alloc_table, p) <= a)
- and (offset_max(float_P_alloc_table, p) >= b))
+predicate valid_root_floatP(p:floatP pointer, a:int, b:int,
+ floatP_alloc_table:floatP alloc_table) =
+ ((offset_min(floatP_alloc_table, p) <= a)
+ and (offset_max(floatP_alloc_table, p) >= b))
 
-predicate valid_root_int_P(p:int_P pointer, a:int, b:int,
- int_P_alloc_table:int_P alloc_table) =
- ((offset_min(int_P_alloc_table, p) <= a)
- and (offset_max(int_P_alloc_table, p) >= b))
+predicate valid_root_intP(p:intP pointer, a:int, b:int,
+ intP_alloc_table:intP alloc_table) =
+ ((offset_min(intP_alloc_table, p) <= a)
+ and (offset_max(intP_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_struct_float_P(p:float_P pointer, a:int, b:int,
- float_P_alloc_table:float_P alloc_table) =
- ((offset_min(float_P_alloc_table, p) <= a)
- and (offset_max(float_P_alloc_table, p) >= b))
+predicate valid_struct_floatP(p:floatP pointer, a:int, b:int,
+ floatP_alloc_table:floatP alloc_table) =
+ ((offset_min(floatP_alloc_table, p) <= a)
+ and (offset_max(floatP_alloc_table, p) >= b))
 
-predicate valid_struct_int_P(p:int_P pointer, a:int, b:int,
- int_P_alloc_table:int_P alloc_table) =
- ((offset_min(int_P_alloc_table, p) <= a)
- and (offset_max(int_P_alloc_table, p) >= b))
+predicate valid_struct_intP(p:intP pointer, a:int, b:int,
+ intP_alloc_table:intP alloc_table) =
+ ((offset_min(intP_alloc_table, p) <= a)
+ and (offset_max(intP_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-logic void_P_tag:  -> void_P tag_id
+logic voidP_tag:  -> voidP tag_id
 
-axiom void_P_int : (int_of_tag(void_P_tag) = (1))
+axiom voidP_int : (int_of_tag(voidP_tag) = (1))
 
-axiom void_P_of_pointer_address_of_pointer_addr :
- (forall p:void_P pointer.
-  (p = void_P_of_pointer_address(pointer_address(p))))
+axiom voidP_of_pointer_address_of_pointer_addr :
+ (forall p:voidP pointer. (p = voidP_of_pointer_address(pointer_address(p))))
 
-axiom void_P_parenttag_bottom : parenttag(void_P_tag, bottom_tag)
+axiom voidP_parenttag_bottom : parenttag(voidP_tag, bottom_tag)
 
-axiom void_P_tags :
- (forall x:void_P pointer.
-  (forall void_P_tag_table:void_P tag_table.
-   instanceof(void_P_tag_table, x, void_P_tag)))
+axiom voidP_tags :
+ (forall x:voidP pointer.
+  (forall voidP_tag_table:voidP tag_table.
+   instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter int_P_G13_6_alloc_table : int_P alloc_table ref
+parameter intP_G13_6_alloc_table : intP alloc_table ref
 
-parameter int_P_G3_1_alloc_table : int_P alloc_table ref
+parameter intP_G3_1_alloc_table : intP alloc_table ref
 
-parameter float_P_G11_5_alloc_table : float_P alloc_table ref
+parameter floatP_G11_5_alloc_table : floatP alloc_table ref
 
-parameter float_P_G10_4_alloc_table : float_P alloc_table ref
+parameter floatP_G10_4_alloc_table : floatP alloc_table ref
 
-parameter float_P_G9_3_alloc_table : float_P alloc_table ref
+parameter floatP_G9_3_alloc_table : floatP alloc_table ref
 
-parameter float_P_G8_2_alloc_table : float_P alloc_table ref
+parameter floatP_G8_2_alloc_table : floatP alloc_table ref
 
 parameter Frama_C_entropy_source : int32 ref
 
 parameter F2 :
  V2:int32 ->
   { } int32
-  reads float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table
+  reads floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,intP_G13_6_alloc_table,intP_G3_1_alloc_table
   writes Frama_C_entropy_source
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 parameter F2_requires :
  V2:int32 ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table))))))))}
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table))))))))}
   int32
-  reads float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table
+  reads floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,intP_G13_6_alloc_table,intP_G3_1_alloc_table
   writes Frama_C_entropy_source
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 parameter F3 :
  V4:int32 ->
   { } int32
-  reads float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table
+  reads floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,intP_G13_6_alloc_table,intP_G3_1_alloc_table
   writes Frama_C_entropy_source
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 parameter F3_requires :
  V4:int32 ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table))))))))}
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table))))))))}
   int32
-  reads float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table
+  reads floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,intP_G13_6_alloc_table,intP_G3_1_alloc_table
   writes Frama_C_entropy_source
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 parameter F4 :
  V6:int32 ->
   { } int32
-  reads float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table
+  reads floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,intP_G13_6_alloc_table,intP_G3_1_alloc_table
   writes Frama_C_entropy_source
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 parameter F4_requires :
  V6:int32 ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table))))))))}
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table))))))))}
   int32
-  reads float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table
+  reads floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,intP_G13_6_alloc_table,intP_G3_1_alloc_table
   writes Frama_C_entropy_source
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 parameter F5 :
  V8:int32 ->
   { } int32
-  reads float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table
+  reads floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,intP_G13_6_alloc_table,intP_G3_1_alloc_table
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 parameter F5_requires :
  V8:int32 ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table))))))))}
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table))))))))}
   int32
-  reads float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table
+  reads floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,intP_G13_6_alloc_table,intP_G3_1_alloc_table
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
-parameter float_P_float_M_G11_5 : (float_P, single) memory ref
+parameter floatP_floatM_G11_5 : (floatP, single) memory ref
 
-parameter float_P_float_M_G10_4 : (float_P, single) memory ref
+parameter floatP_floatM_G10_4 : (floatP, single) memory ref
 
-parameter float_P_float_M_G9_3 : (float_P, single) memory ref
+parameter floatP_floatM_G9_3 : (floatP, single) memory ref
 
-parameter float_P_float_M_G8_2 : (float_P, single) memory ref
+parameter floatP_floatM_G8_2 : (floatP, single) memory ref
 
 parameter G21 : single ref
 
@@ -933,9 +928,9 @@ parameter G15 : int32 ref
 
 parameter G5 : int32 ref
 
-parameter int_P_int_M_G3_1 : (int_P, int32) memory ref
+parameter intP_intM_G3_1 : (intP, int32) memory ref
 
-parameter G33 : int_P pointer ref
+parameter G33 : intP pointer ref
 
 parameter G32 : single ref
 
@@ -961,7 +956,7 @@ parameter G22 : single ref
 
 parameter G19 : single ref
 
-parameter ptr_bas_loc_ram : int_P pointer ref
+parameter ptr_bas_loc_ram : intP pointer ref
 
 parameter G12 : int32 ref
 
@@ -970,325 +965,323 @@ parameter G4 : int32 ref
 parameter F6 :
  tt:unit ->
   { } unit
-  reads G15,G16,G17,G18,G20,G21,G5,float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,float_P_float_M_G10_4,float_P_float_M_G11_5,float_P_float_M_G8_2,float_P_float_M_G9_3,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table
-  writes Frama_C_entropy_source,G12,G15,G16,G17,G18,G19,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G33,G4,int_P_int_M_G3_1,ptr_bas_loc_ram
+  reads G15,G16,G17,G18,G20,G21,G5,floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,floatP_floatM_G10_4,floatP_floatM_G11_5,floatP_floatM_G8_2,floatP_floatM_G9_3,intP_G13_6_alloc_table,intP_G3_1_alloc_table
+  writes Frama_C_entropy_source,G12,G15,G16,G17,G18,G19,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G33,G4,intP_intM_G3_1,ptr_bas_loc_ram
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 parameter F6_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table))))))))}
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table))))))))}
   unit
-  reads G15,G16,G17,G18,G20,G21,G5,float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,float_P_float_M_G10_4,float_P_float_M_G11_5,float_P_float_M_G8_2,float_P_float_M_G9_3,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table
-  writes Frama_C_entropy_source,G12,G15,G16,G17,G18,G19,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G33,G4,int_P_int_M_G3_1,ptr_bas_loc_ram
+  reads G15,G16,G17,G18,G20,G21,G5,floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,floatP_floatM_G10_4,floatP_floatM_G11_5,floatP_floatM_G8_2,floatP_floatM_G9_3,intP_G13_6_alloc_table,intP_G3_1_alloc_table
+  writes Frama_C_entropy_source,G12,G15,G16,G17,G18,G19,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G33,G4,intP_intM_G3_1,ptr_bas_loc_ram
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
-parameter int_P_int_M_G13_6 : (int_P, int32) memory ref
+parameter intP_intM_G13_6 : (intP, int32) memory ref
 
 parameter G6 : int32 ref
 
-parameter G34 : int_P pointer ref
+parameter G34 : intP pointer ref
 
 parameter G7 : int32 ref
 
 parameter F7 :
  tt:unit ->
   { } unit
-  reads G12,G15,G19,G20,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G5,G6,float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table,int_P_int_M_G13_6,ptr_bas_loc_ram
-  writes G12,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G34,G6,G7,int_P_int_M_G3_1,ptr_bas_loc_ram
+  reads G12,G15,G19,G20,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G5,G6,floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,intP_G13_6_alloc_table,intP_G3_1_alloc_table,intP_intM_G13_6,ptr_bas_loc_ram
+  writes G12,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G34,G6,G7,intP_intM_G3_1,ptr_bas_loc_ram
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 parameter F7_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table))))))))}
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table))))))))}
   unit
-  reads G12,G15,G19,G20,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G5,G6,float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table,int_P_int_M_G13_6,ptr_bas_loc_ram
-  writes G12,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G34,G6,G7,int_P_int_M_G3_1,ptr_bas_loc_ram
+  reads G12,G15,G19,G20,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G5,G6,floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,intP_G13_6_alloc_table,intP_G3_1_alloc_table,intP_intM_G13_6,ptr_bas_loc_ram
+  writes G12,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G34,G6,G7,intP_intM_G3_1,ptr_bas_loc_ram
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 parameter Frama_C_float_interval :
  min:single ->
   max:single ->
    { } single
-   reads float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table
+   reads floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,intP_G13_6_alloc_table,intP_G3_1_alloc_table
    writes Frama_C_entropy_source
    { (JC_<somenum>:
-     ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-     and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-         and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-             and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                 and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                     and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+     ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+     and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+         and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+             and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                 and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                     and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 parameter Frama_C_float_interval_requires :
  min:single ->
   max:single ->
    { (JC_<somenum>:
-     ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-     and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-         and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-             and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                 and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                     and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table))))))))}
+     ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+     and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+         and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+             and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                 and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                     and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table))))))))}
    single
-   reads float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table
+   reads floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,intP_G13_6_alloc_table,intP_G3_1_alloc_table
    writes Frama_C_entropy_source
    { (JC_<somenum>:
-     ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-     and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-         and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-             and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                 and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                     and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+     ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+     and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+         and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+             and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                 and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                     and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 parameter Frama_C_interval :
  min_0:int32 ->
   max_0:int32 ->
    { } int32
-   reads float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table
+   reads floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,intP_G13_6_alloc_table,intP_G3_1_alloc_table
    writes Frama_C_entropy_source
    { (JC_<somenum>:
-     ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-     and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-         and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-             and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                 and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                     and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+     ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+     and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+         and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+             and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                 and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                     and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 parameter Frama_C_interval_requires :
  min_0:int32 ->
   max_0:int32 ->
    { (JC_<somenum>:
-     ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-     and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-         and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-             and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                 and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                     and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table))))))))}
+     ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+     and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+         and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+             and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                 and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                     and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table))))))))}
    int32
-   reads float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table
+   reads floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,intP_G13_6_alloc_table,intP_G3_1_alloc_table
    writes Frama_C_entropy_source
    { (JC_<somenum>:
-     ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-     and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-         and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-             and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                 and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                     and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+     ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+     and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+         and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+             and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                 and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                     and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
-parameter alloc_bitvector_struct_char_P :
+parameter alloc_bitvector_struct_charP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_char_P_requires :
+parameter alloc_bitvector_struct_charP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_float_P :
+parameter alloc_bitvector_struct_floatP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_float_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_floatP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_float_P_requires :
+parameter alloc_bitvector_struct_floatP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_float_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_floatP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_int_P :
+parameter alloc_bitvector_struct_intP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_int_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_int_P_requires :
+parameter alloc_bitvector_struct_intP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_int_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P :
+parameter alloc_bitvector_struct_voidP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P_requires :
+parameter alloc_bitvector_struct_voidP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter char_P_alloc_table : char_P alloc_table ref
+parameter charP_alloc_table : charP alloc_table ref
 
-parameter char_P_tag_table : char_P tag_table ref
+parameter charP_tag_table : charP tag_table ref
 
-parameter alloc_struct_char_P :
+parameter alloc_struct_charP :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { } char_P pointer writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { } charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter alloc_struct_char_P_requires :
+parameter alloc_struct_charP_requires :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { ge_int(n, (0))} char_P pointer
-    writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { ge_int(n, (0))} charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter float_P_alloc_table : float_P alloc_table ref
+parameter floatP_alloc_table : floatP alloc_table ref
 
-parameter float_P_tag_table : float_P tag_table ref
+parameter floatP_tag_table : floatP tag_table ref
 
-parameter alloc_struct_float_P :
+parameter alloc_struct_floatP :
  n:int ->
-  float_P_alloc_table:float_P alloc_table ref ->
-   float_P_tag_table:float_P tag_table ref ->
-    { } float_P pointer writes float_P_alloc_table,float_P_tag_table
-    { (strict_valid_struct_float_P(result, (0), sub_int(n, (1)),
-       float_P_alloc_table)
-      and (alloc_extends(float_P_alloc_table@, float_P_alloc_table)
-          and (alloc_fresh(float_P_alloc_table@, result, n)
-              and instanceof(float_P_tag_table, result, float_P_tag)))) }
+  floatP_alloc_table:floatP alloc_table ref ->
+   floatP_tag_table:floatP tag_table ref ->
+    { } floatP pointer writes floatP_alloc_table,floatP_tag_table
+    { (strict_valid_struct_floatP(result, (0), sub_int(n, (1)),
+       floatP_alloc_table)
+      and (alloc_extends(floatP_alloc_table@, floatP_alloc_table)
+          and (alloc_fresh(floatP_alloc_table@, result, n)
+              and instanceof(floatP_tag_table, result, floatP_tag)))) }
 
-parameter alloc_struct_float_P_requires :
+parameter alloc_struct_floatP_requires :
  n:int ->
-  float_P_alloc_table:float_P alloc_table ref ->
-   float_P_tag_table:float_P tag_table ref ->
-    { ge_int(n, (0))} float_P pointer
-    writes float_P_alloc_table,float_P_tag_table
-    { (strict_valid_struct_float_P(result, (0), sub_int(n, (1)),
-       float_P_alloc_table)
-      and (alloc_extends(float_P_alloc_table@, float_P_alloc_table)
-          and (alloc_fresh(float_P_alloc_table@, result, n)
-              and instanceof(float_P_tag_table, result, float_P_tag)))) }
+  floatP_alloc_table:floatP alloc_table ref ->
+   floatP_tag_table:floatP tag_table ref ->
+    { ge_int(n, (0))} floatP pointer
+    writes floatP_alloc_table,floatP_tag_table
+    { (strict_valid_struct_floatP(result, (0), sub_int(n, (1)),
+       floatP_alloc_table)
+      and (alloc_extends(floatP_alloc_table@, floatP_alloc_table)
+          and (alloc_fresh(floatP_alloc_table@, result, n)
+              and instanceof(floatP_tag_table, result, floatP_tag)))) }
 
-parameter int_P_alloc_table : int_P alloc_table ref
+parameter intP_alloc_table : intP alloc_table ref
 
-parameter int_P_tag_table : int_P tag_table ref
+parameter intP_tag_table : intP tag_table ref
 
-parameter alloc_struct_int_P :
+parameter alloc_struct_intP :
  n:int ->
-  int_P_alloc_table:int_P alloc_table ref ->
-   int_P_tag_table:int_P tag_table ref ->
-    { } int_P pointer writes int_P_alloc_table,int_P_tag_table
-    { (strict_valid_struct_int_P(result, (0), sub_int(n, (1)),
-       int_P_alloc_table)
-      and (alloc_extends(int_P_alloc_table@, int_P_alloc_table)
-          and (alloc_fresh(int_P_alloc_table@, result, n)
-              and instanceof(int_P_tag_table, result, int_P_tag)))) }
+  intP_alloc_table:intP alloc_table ref ->
+   intP_tag_table:intP tag_table ref ->
+    { } intP pointer writes intP_alloc_table,intP_tag_table
+    { (strict_valid_struct_intP(result, (0), sub_int(n, (1)),
+       intP_alloc_table)
+      and (alloc_extends(intP_alloc_table@, intP_alloc_table)
+          and (alloc_fresh(intP_alloc_table@, result, n)
+              and instanceof(intP_tag_table, result, intP_tag)))) }
 
-parameter alloc_struct_int_P_requires :
+parameter alloc_struct_intP_requires :
  n:int ->
-  int_P_alloc_table:int_P alloc_table ref ->
-   int_P_tag_table:int_P tag_table ref ->
-    { ge_int(n, (0))} int_P pointer writes int_P_alloc_table,int_P_tag_table
-    { (strict_valid_struct_int_P(result, (0), sub_int(n, (1)),
-       int_P_alloc_table)
-      and (alloc_extends(int_P_alloc_table@, int_P_alloc_table)
-          and (alloc_fresh(int_P_alloc_table@, result, n)
-              and instanceof(int_P_tag_table, result, int_P_tag)))) }
+  intP_alloc_table:intP alloc_table ref ->
+   intP_tag_table:intP tag_table ref ->
+    { ge_int(n, (0))} intP pointer writes intP_alloc_table,intP_tag_table
+    { (strict_valid_struct_intP(result, (0), sub_int(n, (1)),
+       intP_alloc_table)
+      and (alloc_extends(intP_alloc_table@, intP_alloc_table)
+          and (alloc_fresh(intP_alloc_table@, result, n)
+              and instanceof(intP_tag_table, result, intP_tag)))) }
 
-parameter void_P_alloc_table : void_P alloc_table ref
+parameter voidP_alloc_table : voidP alloc_table ref
 
-parameter void_P_tag_table : void_P tag_table ref
+parameter voidP_tag_table : voidP tag_table ref
 
-parameter alloc_struct_void_P :
+parameter alloc_struct_voidP :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { } void_P pointer writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { } voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
-parameter alloc_struct_void_P_requires :
+parameter alloc_struct_voidP_requires :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { ge_int(n, (0))} void_P pointer
-    writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { ge_int(n, (0))} voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
 parameter any_int32 : unit -> { } int32 { true }
 
@@ -1307,35 +1300,35 @@ parameter int8_of_integer_ :
 parameter main :
  tt:unit ->
   { } unit
-  reads G12,G15,G16,G17,G18,G19,G20,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G4,G5,G6,float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,float_P_float_M_G10_4,float_P_float_M_G11_5,float_P_float_M_G8_2,float_P_float_M_G9_3,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table,int_P_int_M_G13_6,ptr_bas_loc_ram
-  writes Frama_C_entropy_source,G12,G15,G16,G17,G18,G19,G20,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G33,G34,G4,G5,G6,G7,int_P_int_M_G3_1,ptr_bas_loc_ram
+  reads G12,G15,G16,G17,G18,G19,G20,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G4,G5,G6,floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,floatP_floatM_G10_4,floatP_floatM_G11_5,floatP_floatM_G8_2,floatP_floatM_G9_3,intP_G13_6_alloc_table,intP_G3_1_alloc_table,intP_intM_G13_6,ptr_bas_loc_ram
+  writes Frama_C_entropy_source,G12,G15,G16,G17,G18,G19,G20,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G33,G34,G4,G5,G6,G7,intP_intM_G3_1,ptr_bas_loc_ram
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 parameter main_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table))))))))}
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table))))))))}
   unit
-  reads G12,G15,G16,G17,G18,G19,G20,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G4,G5,G6,float_P_G10_4_alloc_table,float_P_G11_5_alloc_table,float_P_G8_2_alloc_table,float_P_G9_3_alloc_table,float_P_float_M_G10_4,float_P_float_M_G11_5,float_P_float_M_G8_2,float_P_float_M_G9_3,int_P_G13_6_alloc_table,int_P_G3_1_alloc_table,int_P_int_M_G13_6,ptr_bas_loc_ram
-  writes Frama_C_entropy_source,G12,G15,G16,G17,G18,G19,G20,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G33,G34,G4,G5,G6,G7,int_P_int_M_G3_1,ptr_bas_loc_ram
+  reads G12,G15,G16,G17,G18,G19,G20,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G4,G5,G6,floatP_G10_4_alloc_table,floatP_G11_5_alloc_table,floatP_G8_2_alloc_table,floatP_G9_3_alloc_table,floatP_floatM_G10_4,floatP_floatM_G11_5,floatP_floatM_G8_2,floatP_floatM_G9_3,intP_G13_6_alloc_table,intP_G3_1_alloc_table,intP_intM_G13_6,ptr_bas_loc_ram
+  writes Frama_C_entropy_source,G12,G15,G16,G17,G18,G19,G20,G21,G22,G23,G24,G25,G26,G27,G28,G29,G30,G31,G32,G33,G34,G4,G5,G6,G7,intP_intM_G3_1,ptr_bas_loc_ram
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -1346,12 +1339,12 @@ parameter safe_int8_of_integer_ :
 let F2_ensures_default =
  fun (V2 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1370,12 +1363,12 @@ let F2_ensures_default =
 let F2_safety =
  fun (V2 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1391,22 +1384,22 @@ let F2_safety =
        void); (return := !V1); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 let F3_ensures_default =
  fun (V4 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1425,12 +1418,12 @@ let F3_ensures_default =
 let F3_safety =
  fun (V4 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1446,22 +1439,22 @@ let F3_safety =
        void); (return := !V3); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 let F4_ensures_default =
  fun (V6 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1480,12 +1473,12 @@ let F4_ensures_default =
 let F4_safety =
  fun (V6 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1501,22 +1494,22 @@ let F4_safety =
        void); (return := !V5); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 let F5_ensures_default =
  fun (V8 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1540,12 +1533,12 @@ let F5_ensures_default =
 let F5_safety =
  fun (V8 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1565,22 +1558,22 @@ let F5_safety =
         !V7 end) in void); (return := !V7); (raise Return) end); absurd  end
    with Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 let F6_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
   (init:
   try
    begin
@@ -1712,7 +1705,7 @@ let F6_ensures_default =
         void);
         (let jessie_<somenum> =
         (G18 := (C_55:
-                ((safe_acc_ !float_P_float_M_G8_2) ((shift G8) (integer_of_int32 !V20))))) in
+                ((safe_acc_ !floatP_floatM_G8_2) ((shift G8) (integer_of_int32 !V20))))) in
         void);
         (let jessie_<somenum> =
         (V21 := (C_57: (let jessie_<somenum> = !G15 in (JC_<somenum>: (F3 jessie_<somenum>))))) in
@@ -1721,7 +1714,7 @@ let F6_ensures_default =
         (G16 := (C_61:
                 (JC_<somenum>:
                 (((div_single_safe nearest_even) (C_60:
-                                                 ((safe_acc_ !float_P_float_M_G9_3) 
+                                                 ((safe_acc_ !floatP_floatM_G9_3) 
                                                   ((shift G9) (integer_of_int32 !V21))))) 
                  (C_59:
                  ((single_of_real_safe nearest_even) (real_of_int (integer_of_int32 G1)))))))) in
@@ -1731,14 +1724,14 @@ let F6_ensures_default =
         void);
         (let jessie_<somenum> =
         (G17 := (C_65:
-                ((safe_acc_ !float_P_float_M_G10_4) ((shift G10) (integer_of_int32 !V22))))) in
+                ((safe_acc_ !floatP_floatM_G10_4) ((shift G10) (integer_of_int32 !V22))))) in
         void);
         (let jessie_<somenum> =
         (V23 := (C_67: (let jessie_<somenum> = !G15 in (JC_<somenum>: (F4 jessie_<somenum>))))) in
         void);
         (let jessie_<somenum> =
         (G19 := (C_69:
-                ((safe_acc_ !float_P_float_M_G11_5) ((shift G11) (integer_of_int32 !V23))))) in
+                ((safe_acc_ !floatP_floatM_G11_5) ((shift G11) (integer_of_int32 !V23))))) in
         void);
         (let jessie_<somenum> =
         (G21 := (C_74:
@@ -1801,7 +1794,7 @@ let F6_ensures_default =
          (let jessie_<somenum> = G3 in
          (let jessie_<somenum> = (integer_of_int32 !G15) in
          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-         (((safe_upd_ int_P_int_M_G3_1) jessie_<somenum>) jessie_<somenum>))))) in void);
+         (((safe_upd_ intP_intM_G3_1) jessie_<somenum>) jessie_<somenum>))))) in void);
         (G4 := (safe_int32_of_integer_ (0))); !G4 end)) in void));
       (raise Return) end))))))))))))))))))); (raise Return) end with
    Return -> void end) { (JC_<somenum>: true) }
@@ -1809,12 +1802,12 @@ let F6_ensures_default =
 let F6_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
   (init:
   try
    begin
@@ -1960,7 +1953,7 @@ let F6_safety =
         (let jessie_<somenum> =
         (G18 := (C_55:
                 (JC_<somenum>:
-                ((((offset_acc_ !float_P_G8_2_alloc_table) !float_P_float_M_G8_2) G8) 
+                ((((offset_acc_ !floatP_G8_2_alloc_table) !floatP_floatM_G8_2) G8) 
                  (integer_of_int32 !V20))))) in void);
         (let jessie_<somenum> =
         (V21 := (C_57:
@@ -1971,7 +1964,7 @@ let F6_safety =
                 (JC_<somenum>:
                 (((div_single nearest_even) (C_60:
                                             (JC_<somenum>:
-                                            ((((offset_acc_ !float_P_G9_3_alloc_table) !float_P_float_M_G9_3) G9) 
+                                            ((((offset_acc_ !floatP_G9_3_alloc_table) !floatP_floatM_G9_3) G9) 
                                              (integer_of_int32 !V21))))) 
                  (C_59:
                  (JC_<somenum>:
@@ -1984,7 +1977,7 @@ let F6_safety =
         (let jessie_<somenum> =
         (G17 := (C_65:
                 (JC_<somenum>:
-                ((((offset_acc_ !float_P_G10_4_alloc_table) !float_P_float_M_G10_4) G10) 
+                ((((offset_acc_ !floatP_G10_4_alloc_table) !floatP_floatM_G10_4) G10) 
                  (integer_of_int32 !V22))))) in void);
         (let jessie_<somenum> =
         (V23 := (C_67:
@@ -1993,7 +1986,7 @@ let F6_safety =
         (let jessie_<somenum> =
         (G19 := (C_69:
                 (JC_<somenum>:
-                ((((offset_acc_ !float_P_G11_5_alloc_table) !float_P_float_M_G11_5) G11) 
+                ((((offset_acc_ !floatP_G11_5_alloc_table) !floatP_floatM_G11_5) G11) 
                  (integer_of_int32 !V23))))) in void);
         (let jessie_<somenum> =
         (G21 := (C_74:
@@ -2058,27 +2051,27 @@ let F6_safety =
          (let jessie_<somenum> = (integer_of_int32 !G15) in
          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
          (JC_<somenum>:
-         (((((offset_upd_ !int_P_G3_1_alloc_table) int_P_int_M_G3_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+         (((((offset_upd_ !intP_G3_1_alloc_table) intP_intM_G3_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
          void); (G4 := (safe_int32_of_integer_ (0))); !G4 end)) in void));
       (raise Return) end))))))))))))))))))); (raise Return) end with
    Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 let F7_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
   (init:
   try
    begin
@@ -2178,7 +2171,7 @@ let F7_ensures_default =
                           ((single_of_real_safe nearest_even) (real_of_int 
                                                                (integer_of_int32 
                                                                 (C_122:
-                                                                ((safe_acc_ !int_P_int_M_G13_6) !ptr_bas_loc_0))))))) in
+                                                                ((safe_acc_ !intP_intM_G13_6) !ptr_bas_loc_0))))))) in
                   void);
                   (let jessie_<somenum> =
                   (ptr_bas_loc_0 := (C_125: ((shift !ptr_bas_loc_0) (1)))) in
@@ -2245,7 +2238,7 @@ let F7_ensures_default =
                     ((single_of_real_safe nearest_even) (real_of_int 
                                                          (integer_of_int32 
                                                           (C_159:
-                                                          ((safe_acc_ !int_P_int_M_G13_6) !ptr_bas_loc_0))))))) in
+                                                          ((safe_acc_ !intP_intM_G13_6) !ptr_bas_loc_0))))))) in
             void);
            (let jessie_<somenum> =
            (V27 := (C_166:
@@ -2328,7 +2321,7 @@ let F7_ensures_default =
             (let jessie_<somenum> = (integer_of_int32 !G15) in
             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
             begin
-              (((safe_upd_ int_P_int_M_G3_1) jessie_<somenum>) jessie_<somenum>);
+              (((safe_upd_ intP_intM_G3_1) jessie_<somenum>) jessie_<somenum>);
              jessie_<somenum> end)))))
            else
             (C_190:
@@ -2337,7 +2330,7 @@ let F7_ensures_default =
             (let jessie_<somenum> = (integer_of_int32 !G15) in
             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
             begin
-              (((safe_upd_ int_P_int_M_G3_1) jessie_<somenum>) jessie_<somenum>);
+              (((safe_upd_ intP_intM_G3_1) jessie_<somenum>) jessie_<somenum>);
              jessie_<somenum> end)))))) in void);
            (let jessie_<somenum> =
            (V37 := (C_196:
@@ -2391,12 +2384,12 @@ let F7_ensures_default =
 let F7_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
   (init:
   try
    begin
@@ -2502,7 +2495,7 @@ let F7_safety =
                                                           (integer_of_int32 
                                                            (C_122:
                                                            (JC_<somenum>:
-                                                           (((acc_ !int_P_G13_6_alloc_table) !int_P_int_M_G13_6) !ptr_bas_loc_0))))))))) in
+                                                           (((acc_ !intP_G13_6_alloc_table) !intP_intM_G13_6) !ptr_bas_loc_0))))))))) in
                   void);
                   (let jessie_<somenum> =
                   (ptr_bas_loc_0 := (C_125: ((shift !ptr_bas_loc_0) (1)))) in
@@ -2570,7 +2563,7 @@ let F7_safety =
                     ((single_of_real nearest_even) (real_of_int (integer_of_int32 
                                                                  (C_159:
                                                                  (JC_<somenum>:
-                                                                 (((acc_ !int_P_G13_6_alloc_table) !int_P_int_M_G13_6) !ptr_bas_loc_0))))))))) in
+                                                                 (((acc_ !intP_G13_6_alloc_table) !intP_intM_G13_6) !ptr_bas_loc_0))))))))) in
             void);
            (let jessie_<somenum> =
            (V27 := (C_166:
@@ -2658,7 +2651,7 @@ let F7_safety =
             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
             begin
               (JC_<somenum>:
-              (((((offset_upd_ !int_P_G3_1_alloc_table) int_P_int_M_G3_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+              (((((offset_upd_ !intP_G3_1_alloc_table) intP_intM_G3_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
              jessie_<somenum> end)))))
            else
             (C_190:
@@ -2668,7 +2661,7 @@ let F7_safety =
             (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
             begin
               (JC_<somenum>:
-              (((((offset_upd_ !int_P_G3_1_alloc_table) int_P_int_M_G3_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+              (((((offset_upd_ !intP_G3_1_alloc_table) intP_intM_G3_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
              jessie_<somenum> end)))))) in void);
            (let jessie_<somenum> =
            (V37 := (C_196:
@@ -2720,22 +2713,22 @@ let F7_safety =
         end))))))))))))) in void) else void); (raise Return) end))))))))))))));
     (raise Return) end with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 let main_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
   (init:
   try
    begin
@@ -2795,12 +2788,12 @@ let main_ensures_default =
 let main_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
   (init:
   try
    begin
@@ -2860,12 +2853,12 @@ let main_safety =
        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (raise Return) end))))); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_G3(int_P_G3_1_alloc_table))
-    and ((JC_<somenum>: valid_G8(float_P_G8_2_alloc_table))
-        and ((JC_<somenum>: valid_G9(float_P_G9_3_alloc_table))
-            and ((JC_<somenum>: valid_G10(float_P_G10_4_alloc_table))
-                and ((JC_<somenum>: valid_G11(float_P_G11_5_alloc_table))
-                    and (JC_<somenum>: valid_G13(int_P_G13_6_alloc_table)))))))) }
+    ((JC_<somenum>: valid_G3(intP_G3_1_alloc_table))
+    and ((JC_<somenum>: valid_G8(floatP_G8_2_alloc_table))
+        and ((JC_<somenum>: valid_G9(floatP_G9_3_alloc_table))
+            and ((JC_<somenum>: valid_G10(floatP_G10_4_alloc_table))
+                and ((JC_<somenum>: valid_G11(floatP_G11_5_alloc_table))
+                    and (JC_<somenum>: valid_G13(intP_G13_6_alloc_table)))))))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C renamed1.jessie --quiet -f renamed1.makefile project
@@ -2985,11 +2978,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po191.why">
-      <location file = "why/renamed1.why" line = "2388" begin = "45" end = "46"/>
+      <location file = "why/renamed1.why" line = "2381" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po192.why">
-      <location file = "why/renamed1.why" line = "2388" begin = "45" end = "46"/>
+      <location file = "why/renamed1.why" line = "2381" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po193.why">
@@ -3118,11 +3111,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po128.why">
-      <location file = "why/renamed1.why" line = "2027" begin = "48" end = "49"/>
+      <location file = "why/renamed1.why" line = "2020" begin = "48" end = "49"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po129.why">
-      <location file = "why/renamed1.why" line = "2027" begin = "48" end = "49"/>
+      <location file = "why/renamed1.why" line = "2020" begin = "48" end = "49"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po130.why">
@@ -3621,12 +3614,12 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po101.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "278" begin = "18" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "278" begin = "18" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/renamed1_po102.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "278" begin = "18" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "278" begin = "18" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -5018,52 +5011,52 @@ type G8_2
 
 type G9_3
 
-type char_P
+type charP
 
-type float_P
+type floatP
 
 type int32
 
 type int8
 
-type int_P
+type intP
 
 type padding
 
-type void_P
+type voidP
 
 logic G1 : int32
 
-logic G10 : float_P pointer
+logic G10 : floatP pointer
 
-logic G11 : float_P pointer
+logic G11 : floatP pointer
 
-logic G13 : int_P pointer
+logic G13 : intP pointer
 
 logic G2 : int32
 
-logic G3 : int_P pointer
+logic G3 : intP pointer
 
-logic G8 : float_P pointer
+logic G8 : floatP pointer
 
-logic G9 : float_P pointer
+logic G9 : floatP pointer
 
-logic char_P_tag : char_P tag_id
+logic charP_tag : charP tag_id
 
-axiom char_P_int: (int_of_tag(char_P_tag) = 1)
+axiom charP_int: (int_of_tag(charP_tag) = 1)
 
-logic char_P_of_pointer_address : unit pointer -> char_P pointer
+logic charP_of_pointer_address : unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr:
-  (forall p:char_P pointer.
-    (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr:
+  (forall p:charP pointer.
+    (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom: parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom: parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags:
-  (forall x:char_P pointer.
-    (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
-      x, char_P_tag)))
+axiom charP_tags:
+  (forall x:charP pointer.
+    (forall charP_tag_table:charP tag_table. instanceof(charP_tag_table, x,
+      charP_tag)))
 
 logic integer_of_int32 : int32 -> int
 
@@ -5075,22 +5068,22 @@ logic integer_of_int8 : int8 -> int
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
 
-logic float_P_tag : float_P tag_id
+logic floatP_tag : floatP tag_id
 
-axiom float_P_int: (int_of_tag(float_P_tag) = 1)
+axiom floatP_int: (int_of_tag(floatP_tag) = 1)
 
-logic float_P_of_pointer_address : unit pointer -> float_P pointer
+logic floatP_of_pointer_address : unit pointer -> floatP pointer
 
-axiom float_P_of_pointer_address_of_pointer_addr:
-  (forall p:float_P pointer.
-    (p = float_P_of_pointer_address(pointer_address(p))))
+axiom floatP_of_pointer_address_of_pointer_addr:
+  (forall p:floatP pointer.
+    (p = floatP_of_pointer_address(pointer_address(p))))
 
-axiom float_P_parenttag_bottom: parenttag(float_P_tag, bottom_tag)
+axiom floatP_parenttag_bottom: parenttag(floatP_tag, bottom_tag)
 
-axiom float_P_tags:
-  (forall x:float_P pointer.
-    (forall float_P_tag_table:float_P tag_table.
-      instanceof(float_P_tag_table, x, float_P_tag)))
+axiom floatP_tags:
+  (forall x:floatP pointer.
+    (forall floatP_tag_table:floatP tag_table. instanceof(floatP_tag_table,
+      x, floatP_tag)))
 
 logic int32_of_integer : int -> int32
 
@@ -5115,208 +5108,205 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
-logic int_P_tag : int_P tag_id
+logic intP_tag : intP tag_id
 
-axiom int_P_int: (int_of_tag(int_P_tag) = 1)
+axiom intP_int: (int_of_tag(intP_tag) = 1)
 
-logic int_P_of_pointer_address : unit pointer -> int_P pointer
+logic intP_of_pointer_address : unit pointer -> intP pointer
 
-axiom int_P_of_pointer_address_of_pointer_addr:
-  (forall p:int_P pointer.
-    (p = int_P_of_pointer_address(pointer_address(p))))
+axiom intP_of_pointer_address_of_pointer_addr:
+  (forall p:intP pointer. (p = intP_of_pointer_address(pointer_address(p))))
 
-axiom int_P_parenttag_bottom: parenttag(int_P_tag, bottom_tag)
+axiom intP_parenttag_bottom: parenttag(intP_tag, bottom_tag)
 
-axiom int_P_tags:
-  (forall x:int_P pointer.
-    (forall int_P_tag_table:int_P tag_table. instanceof(int_P_tag_table, x,
-      int_P_tag)))
+axiom intP_tags:
+  (forall x:intP pointer.
+    (forall intP_tag_table:intP tag_table. instanceof(intP_tag_table, x,
+      intP_tag)))
 
-predicate left_valid_struct_char_P(p: char_P pointer, a: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
+predicate left_valid_struct_charP(p: charP pointer, a: int,
+  charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
   p) <= a)
 
-predicate left_valid_struct_float_P(p: float_P pointer, a: int,
-  float_P_alloc_table: float_P alloc_table) =
-  (offset_min(float_P_alloc_table, p) <= a)
-
-predicate left_valid_struct_int_P(p: int_P pointer, a: int,
-  int_P_alloc_table: int_P alloc_table) = (offset_min(int_P_alloc_table,
+predicate left_valid_struct_floatP(p: floatP pointer, a: int,
+  floatP_alloc_table: floatP alloc_table) = (offset_min(floatP_alloc_table,
   p) <= a)
 
-predicate left_valid_struct_void_P(p: void_P pointer, a: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
+predicate left_valid_struct_intP(p: intP pointer, a: int,
+  intP_alloc_table: intP alloc_table) = (offset_min(intP_alloc_table,
   p) <= a)
 
-axiom pointer_addr_of_char_P_of_pointer_address:
+predicate left_valid_struct_voidP(p: voidP pointer, a: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
+  p) <= a)
+
+axiom pointer_addr_of_charP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
+
+axiom pointer_addr_of_floatP_of_pointer_address:
   (forall p:unit pointer.
-    (p = pointer_address(char_P_of_pointer_address(p))))
+    (p = pointer_address(floatP_of_pointer_address(p))))
 
-axiom pointer_addr_of_float_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(float_P_of_pointer_address(p))))
+axiom pointer_addr_of_intP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
 
-axiom pointer_addr_of_int_P_of_pointer_address:
-  (forall p:unit pointer. (p = pointer_address(int_P_of_pointer_address(p))))
+logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
-logic void_P_of_pointer_address : unit pointer -> void_P pointer
+axiom pointer_addr_of_voidP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
-axiom pointer_addr_of_void_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(void_P_of_pointer_address(p))))
-
-predicate right_valid_struct_char_P(p: char_P pointer, b: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
+predicate right_valid_struct_charP(p: charP pointer, b: int,
+  charP_alloc_table: charP alloc_table) = (offset_max(charP_alloc_table,
   p) >= b)
 
-predicate right_valid_struct_float_P(p: float_P pointer, b: int,
-  float_P_alloc_table: float_P alloc_table) =
-  (offset_max(float_P_alloc_table, p) >= b)
-
-predicate right_valid_struct_int_P(p: int_P pointer, b: int,
-  int_P_alloc_table: int_P alloc_table) = (offset_max(int_P_alloc_table,
+predicate right_valid_struct_floatP(p: floatP pointer, b: int,
+  floatP_alloc_table: floatP alloc_table) = (offset_max(floatP_alloc_table,
   p) >= b)
 
-predicate right_valid_struct_void_P(p: void_P pointer, b: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
+predicate right_valid_struct_intP(p: intP pointer, b: int,
+  intP_alloc_table: intP alloc_table) = (offset_max(intP_alloc_table,
   p) >= b)
 
-predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
+predicate right_valid_struct_voidP(p: voidP pointer, b: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
+  p) >= b)
 
-predicate strict_valid_root_float_P(p: float_P pointer, a: int, b: int,
-  float_P_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_alloc_table, p) = a) and
-   (offset_max(float_P_alloc_table, p) = b))
-
-predicate strict_valid_root_int_P(p: int_P pointer, a: int, b: int,
-  int_P_alloc_table: int_P alloc_table) =
-  ((offset_min(int_P_alloc_table, p) = a) and (offset_max(int_P_alloc_table,
+predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
    p) = b))
 
-predicate strict_valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_floatP(p: floatP pointer, a: int, b: int,
+  floatP_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_alloc_table, p) = a) and
+   (offset_max(floatP_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
-
-predicate strict_valid_struct_float_P(p: float_P pointer, a: int, b: int,
-  float_P_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_alloc_table, p) = a) and
-   (offset_max(float_P_alloc_table, p) = b))
-
-predicate strict_valid_struct_int_P(p: int_P pointer, a: int, b: int,
-  int_P_alloc_table: int_P alloc_table) =
-  ((offset_min(int_P_alloc_table, p) = a) and (offset_max(int_P_alloc_table,
+predicate strict_valid_root_intP(p: intP pointer, a: int, b: int,
+  intP_alloc_table: intP alloc_table) =
+  ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
-predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
 
-predicate valid_G10(float_P_G10_4_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_G10_4_alloc_table, G10) <= 0) and
-   (offset_max(float_P_G10_4_alloc_table, G10) >= 63))
+predicate strict_valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
 
-predicate valid_G11(float_P_G11_5_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_G11_5_alloc_table, G11) <= 0) and
-   (offset_max(float_P_G11_5_alloc_table, G11) >= 31))
+predicate strict_valid_struct_floatP(p: floatP pointer, a: int, b: int,
+  floatP_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_alloc_table, p) = a) and
+   (offset_max(floatP_alloc_table, p) = b))
 
-predicate valid_G13(int_P_G13_6_alloc_table: int_P alloc_table) =
-  ((offset_min(int_P_G13_6_alloc_table, G13) <= 0) and
-   (offset_max(int_P_G13_6_alloc_table, G13) >= 1999))
+predicate strict_valid_struct_intP(p: intP pointer, a: int, b: int,
+  intP_alloc_table: intP alloc_table) =
+  ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
+   p) = b))
 
-predicate valid_G3(int_P_G3_1_alloc_table: int_P alloc_table) =
-  ((offset_min(int_P_G3_1_alloc_table, G3) <= 0) and
-   (offset_max(int_P_G3_1_alloc_table, G3) >= 63))
+predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
 
-predicate valid_G8(float_P_G8_2_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_G8_2_alloc_table, G8) <= 0) and
-   (offset_max(float_P_G8_2_alloc_table, G8) >= 63))
+predicate valid_G10(floatP_G10_4_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_G10_4_alloc_table, G10) <= 0) and
+   (offset_max(floatP_G10_4_alloc_table, G10) >= 63))
 
-predicate valid_G9(float_P_G9_3_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_G9_3_alloc_table, G9) <= 0) and
-   (offset_max(float_P_G9_3_alloc_table, G9) >= 63))
+predicate valid_G11(floatP_G11_5_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_G11_5_alloc_table, G11) <= 0) and
+   (offset_max(floatP_G11_5_alloc_table, G11) >= 31))
 
-predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
+predicate valid_G13(intP_G13_6_alloc_table: intP alloc_table) =
+  ((offset_min(intP_G13_6_alloc_table, G13) <= 0) and
+   (offset_max(intP_G13_6_alloc_table, G13) >= 1999))
+
+predicate valid_G3(intP_G3_1_alloc_table: intP alloc_table) =
+  ((offset_min(intP_G3_1_alloc_table, G3) <= 0) and
+   (offset_max(intP_G3_1_alloc_table, G3) >= 63))
+
+predicate valid_G8(floatP_G8_2_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_G8_2_alloc_table, G8) <= 0) and
+   (offset_max(floatP_G8_2_alloc_table, G8) >= 63))
+
+predicate valid_G9(floatP_G9_3_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_G9_3_alloc_table, G9) <= 0) and
+   (offset_max(floatP_G9_3_alloc_table, G9) >= 63))
+
+predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_float_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_floatP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_int_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
-
-predicate valid_root_float_P(p: float_P pointer, a: int, b: int,
-  float_P_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_alloc_table, p) <= a) and
-   (offset_max(float_P_alloc_table, p) >= b))
-
-predicate valid_root_int_P(p: int_P pointer, a: int, b: int,
-  int_P_alloc_table: int_P alloc_table) =
-  ((offset_min(int_P_alloc_table, p) <= a) and (offset_max(int_P_alloc_table,
+predicate valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
    p) >= b))
 
-predicate valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_floatP(p: floatP pointer, a: int, b: int,
+  floatP_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_alloc_table, p) <= a) and
+   (offset_max(floatP_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
-
-predicate valid_struct_float_P(p: float_P pointer, a: int, b: int,
-  float_P_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_alloc_table, p) <= a) and
-   (offset_max(float_P_alloc_table, p) >= b))
-
-predicate valid_struct_int_P(p: int_P pointer, a: int, b: int,
-  int_P_alloc_table: int_P alloc_table) =
-  ((offset_min(int_P_alloc_table, p) <= a) and (offset_max(int_P_alloc_table,
+predicate valid_root_intP(p: intP pointer, a: int, b: int,
+  intP_alloc_table: intP alloc_table) =
+  ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
 
-predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
-logic void_P_tag : void_P tag_id
+predicate valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
 
-axiom void_P_int: (int_of_tag(void_P_tag) = 1)
+predicate valid_struct_floatP(p: floatP pointer, a: int, b: int,
+  floatP_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_alloc_table, p) <= a) and
+   (offset_max(floatP_alloc_table, p) >= b))
 
-axiom void_P_of_pointer_address_of_pointer_addr:
-  (forall p:void_P pointer.
-    (p = void_P_of_pointer_address(pointer_address(p))))
+predicate valid_struct_intP(p: intP pointer, a: int, b: int,
+  intP_alloc_table: intP alloc_table) =
+  ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
+   p) >= b))
 
-axiom void_P_parenttag_bottom: parenttag(void_P_tag, bottom_tag)
+predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
-axiom void_P_tags:
-  (forall x:void_P pointer.
-    (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
-      x, void_P_tag)))
+logic voidP_tag : voidP tag_id
+
+axiom voidP_int: (int_of_tag(voidP_tag) = 1)
+
+axiom voidP_of_pointer_address_of_pointer_addr:
+  (forall p:voidP pointer.
+    (p = voidP_of_pointer_address(pointer_address(p))))
+
+axiom voidP_parenttag_bottom: parenttag(voidP_tag, bottom_tag)
+
+axiom voidP_tags:
+  (forall x:voidP pointer.
+    (forall voidP_tag_table:voidP tag_table. instanceof(voidP_tag_table, x,
+      voidP_tag)))
 

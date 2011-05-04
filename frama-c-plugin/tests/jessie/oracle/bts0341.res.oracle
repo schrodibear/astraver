@@ -15,16 +15,16 @@ axiomatic Padding {
   
 }
 
-tag char_P = {
-  integer char_M: 8;
+tag charP = {
+  integer charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
 tag __anonstruct_s_1 = {
   integer s1: 16; 

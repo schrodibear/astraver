@@ -16,7 +16,7 @@ void swap(int t[], int i, int j) {
 
 /*@ requires \valid_range(t,0,n-1);
   @ behavior sorted:
-  @   ensures Sorted(t,0,n-1);
+  @   ensures Sorted(t,0,n);
   @ behavior permutation:
   @   ensures Permut{Old,Here}(t,0,n-1);
   @*/
@@ -52,13 +52,15 @@ void min_sort(int t[], int n) {
 	mi = j ; mv = t[j];
       }
     }
+  L:
     swap(t,i,mi);
+    //@ assert Permut{L,Here}(t,0,n-1);
   }
 }
 
 
 /*
 Local Variables:
-compile-command: "frama-c -jessie minimum_sort.c"
+compile-command: "frama-c -jessie selection_sort.c"
 End:
 */

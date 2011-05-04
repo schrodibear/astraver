@@ -24,16 +24,16 @@ type int15 = -16384..16383
 
 type int32 = -2147483648..2147483647
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
 tag __anonstruct_si_1 = {
   int15 i1: 15; 

@@ -6932,10 +6932,10 @@ goal Gcd_gcd_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Gcd_why.why               : ........??.....#...... (19/0/2/1/0)
+why/Gcd_why.why               : ........??............ (20/0/2/0/0)
 total   :  22
-valid   :  19 ( 86%)
+valid   :  20 ( 91%)
 invalid :   0 (  0%)
 unknown :   2 (  9%)
-timeout :   1 (  5%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

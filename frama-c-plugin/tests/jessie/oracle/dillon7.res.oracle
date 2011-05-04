@@ -18,22 +18,22 @@ axiomatic Padding {
 
 type int8 = -128..127
 
-tag float_P = {
-  float float_M: 32;
+tag floatP = {
+  float floatM: 32;
 }
 
-type float_P = [float_P]
+type floatP = [floatP]
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
 tag __anonstruct_ts_1 = {
   float f0: 32; 
@@ -47,39 +47,39 @@ float v;
 
 axiomatic MyCast {
 
-  predicate simulated_cast{L}(__anonstruct_ts_1[..] p, float_P[..] t)
+  predicate simulated_cast{L}(__anonstruct_ts_1[..] p, floatP[..] t)
    
   axiom a{L} :
   (\forall __anonstruct_ts_1[..] p_0;
-    (\forall float_P[..] t_0;
+    (\forall floatP[..] t_0;
       (simulated_cast{L}(p_0, t_0) ==>
-        ((((p_0.f0 :> real) == ((t_0 + 0).float_M :> real)) &&
-           ((p_0.f1 :> real) == ((t_0 + 1).float_M :> real))) &&
-          ((p_0.f2 :> real) == ((t_0 + 2).float_M :> real))))))
+        ((((p_0.f0 :> real) == ((t_0 + 0).floatM :> real)) &&
+           ((p_0.f1 :> real) == ((t_0 + 1).floatM :> real))) &&
+          ((p_0.f2 :> real) == ((t_0 + 2).floatM :> real))))))
    
   axiom b{L} :
   (\forall __anonstruct_ts_1[..] p_1;
-    (\forall float_P[..] t_1;
+    (\forall floatP[..] t_1;
       ((simulated_cast{L}(p_1, t_1) &&
          ((\offset_min(p_1) <= 0) && (\offset_max(p_1) >= 0))) ==>
         ((\offset_min(t_1) <= 0) && (\offset_max(t_1) >= 2)))))
   
 }
 
-float_P[..] simulated_cast_to_float_ptr(__anonstruct_ts_1[..] x)
+floatP[..] simulated_cast_to_float_ptr(__anonstruct_ts_1[..] x)
 behavior default:
   assigns \nothing;
   ensures (C_1 : simulated_cast{Here}(\at(x,Old), \result));
 ;
 
-unit f(float_P[..] d)
+unit f(floatP[..] d)
   requires (C_6 : ((C_7 : (\offset_min(d) <= 0)) &&
                     (C_8 : (\offset_max(d) >= 2))));
 behavior default:
   assigns v;
-  ensures (C_5 : ((v :> real) == ((\at(d,Old) + 1).float_M :> real)));
+  ensures (C_5 : ((v :> real) == ((\at(d,Old) + 1).floatM :> real)));
 {  
-   {  (C_4 : (v = (C_3 : (C_2 : (d + 1)).float_M)));
+   {  (C_4 : (v = (C_3 : (C_2 : (d + 1)).floatM)));
       
       (return ())
    }
@@ -91,7 +91,7 @@ behavior default:
 {  
    (var __anonstruct_ts_1[0] x_0);
    
-   (var float_P[..] tmp);
+   (var floatP[..] tmp);
    
    {  (C_10 : (x_0 = (C_9 : (new __anonstruct_ts_1[1]))));
       (C_13 : ((C_12 : x_0.f1) = (C_11 : ((9.0 :> double) :> float))));
@@ -109,15 +109,15 @@ behavior default:
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs dillon7.jessie/dillon7.cloc dillon7.jessie/dillon7.jc
 type __anonstruct_ts_1
 
-type char_P
+type charP
 
-type float_P
+type floatP
 
 type int8
 
 type padding
 
-type void_P
+type voidP
 
 exception Loop_continue_exc of unit
 
@@ -143,44 +143,43 @@ axiom __anonstruct_ts_1_tags :
   (forall __anonstruct_ts_1_tag_table:__anonstruct_ts_1 tag_table.
    instanceof(__anonstruct_ts_1_tag_table, x, __anonstruct_ts_1_tag)))
 
-logic char_P_tag:  -> char_P tag_id
+logic charP_tag:  -> charP tag_id
 
-axiom char_P_int : (int_of_tag(char_P_tag) = (1))
+axiom charP_int : (int_of_tag(charP_tag) = (1))
 
-logic char_P_of_pointer_address: unit pointer -> char_P pointer
+logic charP_of_pointer_address: unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr :
- (forall p:char_P pointer.
-  (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr :
+ (forall p:charP pointer. (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom : parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom : parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags :
- (forall x:char_P pointer.
-  (forall char_P_tag_table:char_P tag_table.
-   instanceof(char_P_tag_table, x, char_P_tag)))
+axiom charP_tags :
+ (forall x:charP pointer.
+  (forall charP_tag_table:charP tag_table.
+   instanceof(charP_tag_table, x, charP_tag)))
 
 logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
-logic float_P_tag:  -> float_P tag_id
+logic floatP_tag:  -> floatP tag_id
 
-axiom float_P_int : (int_of_tag(float_P_tag) = (1))
+axiom floatP_int : (int_of_tag(floatP_tag) = (1))
 
-logic float_P_of_pointer_address: unit pointer -> float_P pointer
+logic floatP_of_pointer_address: unit pointer -> floatP pointer
 
-axiom float_P_of_pointer_address_of_pointer_addr :
- (forall p:float_P pointer.
-  (p = float_P_of_pointer_address(pointer_address(p))))
+axiom floatP_of_pointer_address_of_pointer_addr :
+ (forall p:floatP pointer.
+  (p = floatP_of_pointer_address(pointer_address(p))))
 
-axiom float_P_parenttag_bottom : parenttag(float_P_tag, bottom_tag)
+axiom floatP_parenttag_bottom : parenttag(floatP_tag, bottom_tag)
 
-axiom float_P_tags :
- (forall x:float_P pointer.
-  (forall float_P_tag_table:float_P tag_table.
-   instanceof(float_P_tag_table, x, float_P_tag)))
+axiom floatP_tags :
+ (forall x:floatP pointer.
+  (forall floatP_tag_table:floatP tag_table.
+   instanceof(floatP_tag_table, x, floatP_tag)))
 
 logic int8_of_integer: int -> int8
 
@@ -193,163 +192,162 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-logic simulated_cast: __anonstruct_ts_1 pointer, float_P pointer,
- float_P alloc_table, __anonstruct_ts_1 alloc_table,
+logic simulated_cast: __anonstruct_ts_1 pointer, floatP pointer,
+ floatP alloc_table, __anonstruct_ts_1 alloc_table,
  (__anonstruct_ts_1, single) memory, (__anonstruct_ts_1, single) memory,
- (__anonstruct_ts_1, single) memory, (float_P, single) memory -> prop
+ (__anonstruct_ts_1, single) memory, (floatP, single) memory -> prop
 
 axiom a :
- (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
+ (forall floatP_t_2_alloc_table_at_L:floatP alloc_table.
   (forall __anonstruct_ts_1_p_1_alloc_table_at_L:
    __anonstruct_ts_1 alloc_table.
    (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1, single) memory.
     (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1, single) memory.
      (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1, single) memory
       .
-      (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
+      (forall floatP_floatM_t_2_at_L:(floatP, single) memory.
        (forall p_0:__anonstruct_ts_1 pointer.
-        (forall t_0:float_P pointer.
-         (simulated_cast(p_0, t_0, float_P_t_2_alloc_table_at_L,
+        (forall t_0:floatP pointer.
+         (simulated_cast(p_0, t_0, floatP_t_2_alloc_table_at_L,
           __anonstruct_ts_1_p_1_alloc_table_at_L,
           __anonstruct_ts_1_f2_p_1_at_L, __anonstruct_ts_1_f1_p_1_at_L,
-          __anonstruct_ts_1_f0_p_1_at_L, float_P_float_M_t_2_at_L) ->
+          __anonstruct_ts_1_f0_p_1_at_L, floatP_floatM_t_2_at_L) ->
           (eq_real(single_value(select(__anonstruct_ts_1_f0_p_1_at_L, p_0)),
-           single_value(select(float_P_float_M_t_2_at_L, shift(t_0, (0)))))
+           single_value(select(floatP_floatM_t_2_at_L, shift(t_0, (0)))))
           and (eq_real(single_value(select(__anonstruct_ts_1_f1_p_1_at_L,
                                     p_0)),
-               single_value(select(float_P_float_M_t_2_at_L, shift(t_0, (1)))))
+               single_value(select(floatP_floatM_t_2_at_L, shift(t_0, (1)))))
               and eq_real(single_value(select(__anonstruct_ts_1_f2_p_1_at_L,
                                        p_0)),
-                  single_value(select(float_P_float_M_t_2_at_L,
+                  single_value(select(floatP_floatM_t_2_at_L,
                                shift(t_0, (2))))))))))))))))
 
 predicate left_valid_struct___anonstruct_ts_1(p:__anonstruct_ts_1 pointer,
  a:int, __anonstruct_ts_1_alloc_table:__anonstruct_ts_1 alloc_table) =
  (offset_min(__anonstruct_ts_1_alloc_table, p) <= a)
 
-predicate left_valid_struct_char_P(p:char_P pointer, a:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_min(char_P_alloc_table, p) <= a)
+predicate left_valid_struct_charP(p:charP pointer, a:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_min(charP_alloc_table, p) <= a)
 
-predicate left_valid_struct_float_P(p:float_P pointer, a:int,
- float_P_alloc_table:float_P alloc_table) =
- (offset_min(float_P_alloc_table, p) <= a)
+predicate left_valid_struct_floatP(p:floatP pointer, a:int,
+ floatP_alloc_table:floatP alloc_table) =
+ (offset_min(floatP_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer, a:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_min(void_P_alloc_table, p) <= a)
+predicate left_valid_struct_voidP(p:voidP pointer, a:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_min(voidP_alloc_table, p) <= a)
 
 axiom pointer_addr_of___anonstruct_ts_1_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(__anonstruct_ts_1_of_pointer_address(p))))
 
-axiom pointer_addr_of_char_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
+axiom pointer_addr_of_charP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
-axiom pointer_addr_of_float_P_of_pointer_address :
- (forall p:unit pointer.
-  (p = pointer_address(float_P_of_pointer_address(p))))
+axiom pointer_addr_of_floatP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(floatP_of_pointer_address(p))))
 
-logic void_P_of_pointer_address: unit pointer -> void_P pointer
+logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
-axiom pointer_addr_of_void_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
+axiom pointer_addr_of_voidP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
 axiom b :
- (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
+ (forall floatP_t_2_alloc_table_at_L:floatP alloc_table.
   (forall __anonstruct_ts_1_p_1_alloc_table_at_L:
    __anonstruct_ts_1 alloc_table.
    (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1, single) memory.
     (forall __anonstruct_ts_1_f1_p_1_at_L:(__anonstruct_ts_1, single) memory.
      (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1, single) memory
       .
-      (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
+      (forall floatP_floatM_t_2_at_L:(floatP, single) memory.
        (forall p_1:__anonstruct_ts_1 pointer.
-        (forall t_1:float_P pointer.
-         ((simulated_cast(p_1, t_1, float_P_t_2_alloc_table_at_L,
+        (forall t_1:floatP pointer.
+         ((simulated_cast(p_1, t_1, floatP_t_2_alloc_table_at_L,
            __anonstruct_ts_1_p_1_alloc_table_at_L,
            __anonstruct_ts_1_f2_p_1_at_L, __anonstruct_ts_1_f1_p_1_at_L,
-           __anonstruct_ts_1_f0_p_1_at_L, float_P_float_M_t_2_at_L)
+           __anonstruct_ts_1_f0_p_1_at_L, floatP_floatM_t_2_at_L)
           and (le_int(offset_min(__anonstruct_ts_1_p_1_alloc_table_at_L, p_1),
                (0))
               and ge_int(offset_max(__anonstruct_ts_1_p_1_alloc_table_at_L,
                          p_1),
                   (0)))) ->
-          (le_int(offset_min(float_P_t_2_alloc_table_at_L, t_1), (0))
-          and ge_int(offset_max(float_P_t_2_alloc_table_at_L, t_1), (2))))))))))))
+          (le_int(offset_min(floatP_t_2_alloc_table_at_L, t_1), (0))
+          and ge_int(offset_max(floatP_t_2_alloc_table_at_L, t_1), (2))))))))))))
 
 predicate right_valid_struct___anonstruct_ts_1(p:__anonstruct_ts_1 pointer,
  b:int, __anonstruct_ts_1_alloc_table:__anonstruct_ts_1 alloc_table) =
  (offset_max(__anonstruct_ts_1_alloc_table, p) >= b)
 
-predicate right_valid_struct_char_P(p:char_P pointer, b:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_max(char_P_alloc_table, p) >= b)
+predicate right_valid_struct_charP(p:charP pointer, b:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_max(charP_alloc_table, p) >= b)
 
-predicate right_valid_struct_float_P(p:float_P pointer, b:int,
- float_P_alloc_table:float_P alloc_table) =
- (offset_max(float_P_alloc_table, p) >= b)
+predicate right_valid_struct_floatP(p:floatP pointer, b:int,
+ floatP_alloc_table:floatP alloc_table) =
+ (offset_max(floatP_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer, b:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_max(void_P_alloc_table, p) >= b)
+predicate right_valid_struct_voidP(p:voidP pointer, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_max(voidP_alloc_table, p) >= b)
 
 predicate strict_valid_root___anonstruct_ts_1(p:__anonstruct_ts_1 pointer,
  a:int, b:int, __anonstruct_ts_1_alloc_table:__anonstruct_ts_1 alloc_table) =
  ((offset_min(__anonstruct_ts_1_alloc_table, p) = a)
  and (offset_max(__anonstruct_ts_1_alloc_table, p) = b))
 
-predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_root_float_P(p:float_P pointer, a:int, b:int,
- float_P_alloc_table:float_P alloc_table) =
- ((offset_min(float_P_alloc_table, p) = a)
- and (offset_max(float_P_alloc_table, p) = b))
+predicate strict_valid_root_floatP(p:floatP pointer, a:int, b:int,
+ floatP_alloc_table:floatP alloc_table) =
+ ((offset_min(floatP_alloc_table, p) = a)
+ and (offset_max(floatP_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
 predicate strict_valid_struct___anonstruct_ts_1(p:__anonstruct_ts_1 pointer,
  a:int, b:int, __anonstruct_ts_1_alloc_table:__anonstruct_ts_1 alloc_table) =
  ((offset_min(__anonstruct_ts_1_alloc_table, p) = a)
  and (offset_max(__anonstruct_ts_1_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_struct_float_P(p:float_P pointer, a:int, b:int,
- float_P_alloc_table:float_P alloc_table) =
- ((offset_min(float_P_alloc_table, p) = a)
- and (offset_max(float_P_alloc_table, p) = b))
+predicate strict_valid_struct_floatP(p:floatP pointer, a:int, b:int,
+ floatP_alloc_table:floatP alloc_table) =
+ ((offset_min(floatP_alloc_table, p) = a)
+ and (offset_max(floatP_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
 predicate valid_bitvector_struct___anonstruct_ts_1(p:unit pointer, a:int,
  b:int, bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_float_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_floatP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
@@ -359,55 +357,54 @@ predicate valid_root___anonstruct_ts_1(p:__anonstruct_ts_1 pointer, a:int,
  ((offset_min(__anonstruct_ts_1_alloc_table, p) <= a)
  and (offset_max(__anonstruct_ts_1_alloc_table, p) >= b))
 
-predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_root_float_P(p:float_P pointer, a:int, b:int,
- float_P_alloc_table:float_P alloc_table) =
- ((offset_min(float_P_alloc_table, p) <= a)
- and (offset_max(float_P_alloc_table, p) >= b))
+predicate valid_root_floatP(p:floatP pointer, a:int, b:int,
+ floatP_alloc_table:floatP alloc_table) =
+ ((offset_min(floatP_alloc_table, p) <= a)
+ and (offset_max(floatP_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
 predicate valid_struct___anonstruct_ts_1(p:__anonstruct_ts_1 pointer, a:int,
  b:int, __anonstruct_ts_1_alloc_table:__anonstruct_ts_1 alloc_table) =
  ((offset_min(__anonstruct_ts_1_alloc_table, p) <= a)
  and (offset_max(__anonstruct_ts_1_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_struct_float_P(p:float_P pointer, a:int, b:int,
- float_P_alloc_table:float_P alloc_table) =
- ((offset_min(float_P_alloc_table, p) <= a)
- and (offset_max(float_P_alloc_table, p) >= b))
+predicate valid_struct_floatP(p:floatP pointer, a:int, b:int,
+ floatP_alloc_table:floatP alloc_table) =
+ ((offset_min(floatP_alloc_table, p) <= a)
+ and (offset_max(floatP_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-logic void_P_tag:  -> void_P tag_id
+logic voidP_tag:  -> voidP tag_id
 
-axiom void_P_int : (int_of_tag(void_P_tag) = (1))
+axiom voidP_int : (int_of_tag(voidP_tag) = (1))
 
-axiom void_P_of_pointer_address_of_pointer_addr :
- (forall p:void_P pointer.
-  (p = void_P_of_pointer_address(pointer_address(p))))
+axiom voidP_of_pointer_address_of_pointer_addr :
+ (forall p:voidP pointer. (p = voidP_of_pointer_address(pointer_address(p))))
 
-axiom void_P_parenttag_bottom : parenttag(void_P_tag, bottom_tag)
+axiom voidP_parenttag_bottom : parenttag(voidP_tag, bottom_tag)
 
-axiom void_P_tags :
- (forall x:void_P pointer.
-  (forall void_P_tag_table:void_P tag_table.
-   instanceof(void_P_tag_table, x, void_P_tag)))
+axiom voidP_tags :
+ (forall x:voidP pointer.
+  (forall voidP_tag_table:voidP tag_table.
+   instanceof(voidP_tag_table, x, voidP_tag)))
 
 parameter __anonstruct_ts_1_alloc_table : __anonstruct_ts_1 alloc_table ref
 
@@ -431,56 +428,56 @@ parameter alloc_bitvector_struct___anonstruct_ts_1_requires :
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_char_P :
+parameter alloc_bitvector_struct_charP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_char_P_requires :
+parameter alloc_bitvector_struct_charP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_float_P :
+parameter alloc_bitvector_struct_floatP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_float_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_floatP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_float_P_requires :
+parameter alloc_bitvector_struct_floatP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_float_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_floatP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P :
+parameter alloc_bitvector_struct_voidP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P_requires :
+parameter alloc_bitvector_struct_voidP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
@@ -513,111 +510,109 @@ parameter alloc_struct___anonstruct_ts_1_requires :
               and instanceof(__anonstruct_ts_1_tag_table, result,
                   __anonstruct_ts_1_tag)))) }
 
-parameter char_P_alloc_table : char_P alloc_table ref
+parameter charP_alloc_table : charP alloc_table ref
 
-parameter char_P_tag_table : char_P tag_table ref
+parameter charP_tag_table : charP tag_table ref
 
-parameter alloc_struct_char_P :
+parameter alloc_struct_charP :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { } char_P pointer writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { } charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter alloc_struct_char_P_requires :
+parameter alloc_struct_charP_requires :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { ge_int(n, (0))} char_P pointer
-    writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { ge_int(n, (0))} charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter float_P_alloc_table : float_P alloc_table ref
+parameter floatP_alloc_table : floatP alloc_table ref
 
-parameter float_P_tag_table : float_P tag_table ref
+parameter floatP_tag_table : floatP tag_table ref
 
-parameter alloc_struct_float_P :
+parameter alloc_struct_floatP :
  n:int ->
-  float_P_alloc_table:float_P alloc_table ref ->
-   float_P_tag_table:float_P tag_table ref ->
-    { } float_P pointer writes float_P_alloc_table,float_P_tag_table
-    { (strict_valid_struct_float_P(result, (0), sub_int(n, (1)),
-       float_P_alloc_table)
-      and (alloc_extends(float_P_alloc_table@, float_P_alloc_table)
-          and (alloc_fresh(float_P_alloc_table@, result, n)
-              and instanceof(float_P_tag_table, result, float_P_tag)))) }
+  floatP_alloc_table:floatP alloc_table ref ->
+   floatP_tag_table:floatP tag_table ref ->
+    { } floatP pointer writes floatP_alloc_table,floatP_tag_table
+    { (strict_valid_struct_floatP(result, (0), sub_int(n, (1)),
+       floatP_alloc_table)
+      and (alloc_extends(floatP_alloc_table@, floatP_alloc_table)
+          and (alloc_fresh(floatP_alloc_table@, result, n)
+              and instanceof(floatP_tag_table, result, floatP_tag)))) }
 
-parameter alloc_struct_float_P_requires :
+parameter alloc_struct_floatP_requires :
  n:int ->
-  float_P_alloc_table:float_P alloc_table ref ->
-   float_P_tag_table:float_P tag_table ref ->
-    { ge_int(n, (0))} float_P pointer
-    writes float_P_alloc_table,float_P_tag_table
-    { (strict_valid_struct_float_P(result, (0), sub_int(n, (1)),
-       float_P_alloc_table)
-      and (alloc_extends(float_P_alloc_table@, float_P_alloc_table)
-          and (alloc_fresh(float_P_alloc_table@, result, n)
-              and instanceof(float_P_tag_table, result, float_P_tag)))) }
+  floatP_alloc_table:floatP alloc_table ref ->
+   floatP_tag_table:floatP tag_table ref ->
+    { ge_int(n, (0))} floatP pointer
+    writes floatP_alloc_table,floatP_tag_table
+    { (strict_valid_struct_floatP(result, (0), sub_int(n, (1)),
+       floatP_alloc_table)
+      and (alloc_extends(floatP_alloc_table@, floatP_alloc_table)
+          and (alloc_fresh(floatP_alloc_table@, result, n)
+              and instanceof(floatP_tag_table, result, floatP_tag)))) }
 
-parameter void_P_alloc_table : void_P alloc_table ref
+parameter voidP_alloc_table : voidP alloc_table ref
 
-parameter void_P_tag_table : void_P tag_table ref
+parameter voidP_tag_table : voidP tag_table ref
 
-parameter alloc_struct_void_P :
+parameter alloc_struct_voidP :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { } void_P pointer writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { } voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
-parameter alloc_struct_void_P_requires :
+parameter alloc_struct_voidP_requires :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { ge_int(n, (0))} void_P pointer
-    writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { ge_int(n, (0))} voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter v : single ref
 
 parameter f :
- d:float_P pointer ->
-  float_P_d_6_alloc_table:float_P alloc_table ->
-   float_P_float_M_d_6:(float_P, single) memory ->
+ d:floatP pointer ->
+  floatP_d_6_alloc_table:floatP alloc_table ->
+   floatP_floatM_d_6:(floatP, single) memory ->
     { } unit reads v writes v
     { (JC_<somenum>:
       eq_real(single_value(v),
-      single_value(select(float_P_float_M_d_6, shift(d@, (1)))))) }
+      single_value(select(floatP_floatM_d_6, shift(d@, (1)))))) }
 
 parameter f_requires :
- d:float_P pointer ->
-  float_P_d_6_alloc_table:float_P alloc_table ->
-   float_P_float_M_d_6:(float_P, single) memory ->
+ d:floatP pointer ->
+  floatP_d_6_alloc_table:floatP alloc_table ->
+   floatP_floatM_d_6:(floatP, single) memory ->
     { (JC_<somenum>:
-      ((JC_<somenum>: le_int(offset_min(float_P_d_6_alloc_table, d), (0)))
-      and (JC_<somenum>: ge_int(offset_max(float_P_d_6_alloc_table, d), (2)))))}
+      ((JC_<somenum>: le_int(offset_min(floatP_d_6_alloc_table, d), (0)))
+      and (JC_<somenum>: ge_int(offset_max(floatP_d_6_alloc_table, d), (2)))))}
     unit reads v writes v
     { (JC_<somenum>:
       eq_real(single_value(v),
-      single_value(select(float_P_float_M_d_6, shift(d@, (1)))))) }
+      single_value(select(floatP_floatM_d_6, shift(d@, (1)))))) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -637,55 +632,55 @@ parameter safe_int8_of_integer_ :
 
 parameter simulated_cast_to_float_ptr :
  x_0:__anonstruct_ts_1 pointer ->
-  float_P_result_4_alloc_table:float_P alloc_table ->
+  floatP_result_4_alloc_table:floatP alloc_table ->
    __anonstruct_ts_1_x_3_alloc_table:__anonstruct_ts_1 alloc_table ->
     __anonstruct_ts_1_f2_x_3:(__anonstruct_ts_1, single) memory ->
      __anonstruct_ts_1_f1_x_3:(__anonstruct_ts_1, single) memory ->
       __anonstruct_ts_1_f0_x_3:(__anonstruct_ts_1, single) memory ->
-       float_P_float_M_result_4:(float_P, single) memory ->
-        { } float_P pointer
+       floatP_floatM_result_4:(floatP, single) memory ->
+        { } floatP pointer
         { (JC_<somenum>:
-          simulated_cast(x_0@, result, float_P_result_4_alloc_table,
+          simulated_cast(x_0@, result, floatP_result_4_alloc_table,
           __anonstruct_ts_1_x_3_alloc_table, __anonstruct_ts_1_f2_x_3,
           __anonstruct_ts_1_f1_x_3, __anonstruct_ts_1_f0_x_3,
-          float_P_float_M_result_4)) }
+          floatP_floatM_result_4)) }
 
 parameter simulated_cast_to_float_ptr_requires :
  x_0:__anonstruct_ts_1 pointer ->
-  float_P_result_4_alloc_table:float_P alloc_table ->
+  floatP_result_4_alloc_table:floatP alloc_table ->
    __anonstruct_ts_1_x_3_alloc_table:__anonstruct_ts_1 alloc_table ->
     __anonstruct_ts_1_f2_x_3:(__anonstruct_ts_1, single) memory ->
      __anonstruct_ts_1_f1_x_3:(__anonstruct_ts_1, single) memory ->
       __anonstruct_ts_1_f0_x_3:(__anonstruct_ts_1, single) memory ->
-       float_P_float_M_result_4:(float_P, single) memory ->
-        { } float_P pointer
+       floatP_floatM_result_4:(floatP, single) memory ->
+        { } floatP pointer
         { (JC_<somenum>:
-          simulated_cast(x_0@, result, float_P_result_4_alloc_table,
+          simulated_cast(x_0@, result, floatP_result_4_alloc_table,
           __anonstruct_ts_1_x_3_alloc_table, __anonstruct_ts_1_f2_x_3,
           __anonstruct_ts_1_f1_x_3, __anonstruct_ts_1_f0_x_3,
-          float_P_float_M_result_4)) }
+          floatP_floatM_result_4)) }
 
 let f_ensures_default =
- fun (d : float_P pointer) (float_P_d_6_alloc_table : float_P alloc_table) (float_P_float_M_d_6 : (float_P, single) memory) ->
+ fun (d : floatP pointer) (floatP_d_6_alloc_table : floatP alloc_table) (floatP_floatM_d_6 : (floatP, single) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(float_P_d_6_alloc_table, d), (0)))
-    and (JC_<somenum>: ge_int(offset_max(float_P_d_6_alloc_table, d), (2))))) }
+    ((JC_<somenum>: le_int(offset_min(floatP_d_6_alloc_table, d), (0)))
+    and (JC_<somenum>: ge_int(offset_max(floatP_d_6_alloc_table, d), (2))))) }
   (init:
   try
    (C_4:
    begin
      (let jessie_<somenum> =
-     (v := (C_3: ((safe_acc_ float_P_float_M_d_6) (C_2: ((shift d) (1)))))) in
+     (v := (C_3: ((safe_acc_ floatP_floatM_d_6) (C_2: ((shift d) (1)))))) in
      void); (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     eq_real(single_value(v),
-    single_value(select(float_P_float_M_d_6, shift(d@, (1)))))) }
+    single_value(select(floatP_floatM_d_6, shift(d@, (1)))))) }
 
 let f_safety =
- fun (d : float_P pointer) (float_P_d_6_alloc_table : float_P alloc_table) (float_P_float_M_d_6 : (float_P, single) memory) ->
+ fun (d : floatP pointer) (floatP_d_6_alloc_table : floatP alloc_table) (floatP_floatM_d_6 : (floatP, single) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(float_P_d_6_alloc_table, d), (0)))
-    and (JC_<somenum>: ge_int(offset_max(float_P_d_6_alloc_table, d), (2))))) }
+    ((JC_<somenum>: le_int(offset_min(floatP_d_6_alloc_table, d), (0)))
+    and (JC_<somenum>: ge_int(offset_max(floatP_d_6_alloc_table, d), (2))))) }
   (init:
   try
    (C_4:
@@ -693,7 +688,7 @@ let f_safety =
      (let jessie_<somenum> =
      (v := (C_3:
            (JC_<somenum>:
-           ((((offset_acc_ float_P_d_6_alloc_table) float_P_float_M_d_6) d) (1))))) in
+           ((((offset_acc_ floatP_d_6_alloc_table) floatP_floatM_d_6) d) (1))))) in
      void); (raise Return); (raise Return) end) with Return -> void end)
   { true }
 
@@ -709,8 +704,8 @@ let main_ensures_default =
      ref (any_alloc_table void) in
      (let __anonstruct_ts_1_f2_x_0_11 = (any_memory void) in
      (let __anonstruct_ts_1_f0_x_0_11 = (any_memory void) in
-     (let float_P_float_M_tmp_12 = (any_memory void) in
-     (let float_P_tmp_12_alloc_table = (any_alloc_table void) in
+     (let floatP_floatM_tmp_12 = (any_memory void) in
+     (let floatP_tmp_12_alloc_table = (any_alloc_table void) in
      (let x_0_0 = ref (any_pointer void) in
      (let tmp = ref (any_pointer void) in
      (C_10:
@@ -731,12 +726,12 @@ let main_ensures_default =
       (tmp := (C_14:
               (let jessie_<somenum> = !x_0_0 in
               (JC_<somenum>:
-              (((((((simulated_cast_to_float_ptr jessie_<somenum>) float_P_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) float_P_float_M_tmp_12))))) in
+              (((((((simulated_cast_to_float_ptr jessie_<somenum>) floatP_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) floatP_floatM_tmp_12))))) in
       void);
       (C_16:
       (let jessie_<somenum> = !tmp in
       (JC_<somenum>:
-      (((f jessie_<somenum>) float_P_tmp_12_alloc_table) float_P_float_M_tmp_12))));
+      (((f jessie_<somenum>) floatP_tmp_12_alloc_table) floatP_floatM_tmp_12))));
       ((safe_free_parameter __anonstruct_ts_1_x_0_11_alloc_table) !x_0_0);
       (raise Return) end))))))))))))); (raise Return) end with Return ->
    void end) { (JC_<somenum>: eq_real(single_value(v), 9.0)) }
@@ -753,8 +748,8 @@ let main_safety =
      ref (any_alloc_table void) in
      (let __anonstruct_ts_1_f2_x_0_11 = (any_memory void) in
      (let __anonstruct_ts_1_f0_x_0_11 = (any_memory void) in
-     (let float_P_float_M_tmp_12 = (any_memory void) in
-     (let float_P_tmp_12_alloc_table = (any_alloc_table void) in
+     (let floatP_floatM_tmp_12 = (any_memory void) in
+     (let floatP_tmp_12_alloc_table = (any_alloc_table void) in
      (let x_0_0 = ref (any_pointer void) in
      (let tmp = ref (any_pointer void) in
      (C_10:
@@ -781,12 +776,12 @@ let main_safety =
       (tmp := (C_14:
               (let jessie_<somenum> = !x_0_0 in
               (JC_<somenum>:
-              (((((((simulated_cast_to_float_ptr_requires jessie_<somenum>) float_P_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) float_P_float_M_tmp_12))))) in
+              (((((((simulated_cast_to_float_ptr_requires jessie_<somenum>) floatP_tmp_12_alloc_table) !__anonstruct_ts_1_x_0_11_alloc_table) __anonstruct_ts_1_f2_x_0_11) !__anonstruct_ts_1_f1_x_0_11) __anonstruct_ts_1_f0_x_0_11) floatP_floatM_tmp_12))))) in
       void);
       (C_16:
       (let jessie_<somenum> = !tmp in
       (JC_<somenum>:
-      (((f_requires jessie_<somenum>) float_P_tmp_12_alloc_table) float_P_float_M_tmp_12))));
+      (((f_requires jessie_<somenum>) floatP_tmp_12_alloc_table) floatP_floatM_tmp_12))));
       ((free_parameter __anonstruct_ts_1_x_0_11_alloc_table) !x_0_0);
       (raise Return) end))))))))))))); (raise Return) end with Return ->
    void end) { true }
@@ -804,7 +799,7 @@ why --project [...] why/dillon7.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/dillon7_po6.why">
-      <location file = "why/dillon7.why" line = "663" begin = "19" end = "135"/>
+      <location file = "why/dillon7.why" line = "658" begin = "19" end = "135"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/dillon7_po7.why">
@@ -818,7 +813,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/dillon7_po9.why">
-      <location file = "why/dillon7.why" line = "681" begin = "7" end = "67"/>
+      <location file = "why/dillon7.why" line = "676" begin = "7" end = "67"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2008,15 +2003,15 @@ predicate abs_double_post(x: double, res: double) =
 
 type __anonstruct_ts_1
 
-type char_P
+type charP
 
-type float_P
+type floatP
 
 type int8
 
 type padding
 
-type void_P
+type voidP
 
 logic __anonstruct_ts_1_tag : __anonstruct_ts_1 tag_id
 
@@ -2036,44 +2031,44 @@ axiom __anonstruct_ts_1_tags:
     (forall __anonstruct_ts_1_tag_table:__anonstruct_ts_1 tag_table.
       instanceof(__anonstruct_ts_1_tag_table, x, __anonstruct_ts_1_tag)))
 
-logic char_P_tag : char_P tag_id
+logic charP_tag : charP tag_id
 
-axiom char_P_int: (int_of_tag(char_P_tag) = 1)
+axiom charP_int: (int_of_tag(charP_tag) = 1)
 
-logic char_P_of_pointer_address : unit pointer -> char_P pointer
+logic charP_of_pointer_address : unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr:
-  (forall p:char_P pointer.
-    (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr:
+  (forall p:charP pointer.
+    (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom: parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom: parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags:
-  (forall x:char_P pointer.
-    (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
-      x, char_P_tag)))
+axiom charP_tags:
+  (forall x:charP pointer.
+    (forall charP_tag_table:charP tag_table. instanceof(charP_tag_table, x,
+      charP_tag)))
 
 logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
 
-logic float_P_tag : float_P tag_id
+logic floatP_tag : floatP tag_id
 
-axiom float_P_int: (int_of_tag(float_P_tag) = 1)
+axiom floatP_int: (int_of_tag(floatP_tag) = 1)
 
-logic float_P_of_pointer_address : unit pointer -> float_P pointer
+logic floatP_of_pointer_address : unit pointer -> floatP pointer
 
-axiom float_P_of_pointer_address_of_pointer_addr:
-  (forall p:float_P pointer.
-    (p = float_P_of_pointer_address(pointer_address(p))))
+axiom floatP_of_pointer_address_of_pointer_addr:
+  (forall p:floatP pointer.
+    (p = floatP_of_pointer_address(pointer_address(p))))
 
-axiom float_P_parenttag_bottom: parenttag(float_P_tag, bottom_tag)
+axiom floatP_parenttag_bottom: parenttag(floatP_tag, bottom_tag)
 
-axiom float_P_tags:
-  (forall x:float_P pointer.
-    (forall float_P_tag_table:float_P tag_table.
-      instanceof(float_P_tag_table, x, float_P_tag)))
+axiom floatP_tags:
+  (forall x:floatP pointer.
+    (forall floatP_tag_table:floatP tag_table. instanceof(floatP_tag_table,
+      x, floatP_tag)))
 
 logic int8_of_integer : int -> int8
 
@@ -2086,13 +2081,13 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
-logic simulated_cast : __anonstruct_ts_1 pointer, float_P pointer,
-float_P alloc_table, __anonstruct_ts_1 alloc_table, (__anonstruct_ts_1,
+logic simulated_cast : __anonstruct_ts_1 pointer, floatP pointer,
+floatP alloc_table, __anonstruct_ts_1 alloc_table, (__anonstruct_ts_1,
 single) memory, (__anonstruct_ts_1, single) memory, (__anonstruct_ts_1,
-single) memory, (float_P, single) memory -> prop
+single) memory, (floatP, single) memory -> prop
 
 axiom a:
-  (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
+  (forall floatP_t_2_alloc_table_at_L:floatP alloc_table.
     (forall __anonstruct_ts_1_p_1_alloc_table_at_L:__anonstruct_ts_1 alloc_table.
       (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1,
         single) memory.
@@ -2100,61 +2095,58 @@ axiom a:
           single) memory.
           (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1,
             single) memory.
-            (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
+            (forall floatP_floatM_t_2_at_L:(floatP, single) memory.
               (forall p_0:__anonstruct_ts_1 pointer.
-                (forall t_0:float_P pointer.
-                  (simulated_cast(p_0, t_0, float_P_t_2_alloc_table_at_L,
+                (forall t_0:floatP pointer.
+                  (simulated_cast(p_0, t_0, floatP_t_2_alloc_table_at_L,
                    __anonstruct_ts_1_p_1_alloc_table_at_L,
                    __anonstruct_ts_1_f2_p_1_at_L,
                    __anonstruct_ts_1_f1_p_1_at_L,
-                   __anonstruct_ts_1_f0_p_1_at_L,
-                   float_P_float_M_t_2_at_L) ->
+                   __anonstruct_ts_1_f0_p_1_at_L, floatP_floatM_t_2_at_L) ->
                    ((single_value(select(__anonstruct_ts_1_f0_p_1_at_L,
-                    p_0)) = single_value(select(float_P_float_M_t_2_at_L,
+                    p_0)) = single_value(select(floatP_floatM_t_2_at_L,
                     shift(t_0, 0)))) and
                     ((single_value(select(__anonstruct_ts_1_f1_p_1_at_L,
-                     p_0)) = single_value(select(float_P_float_M_t_2_at_L,
+                     p_0)) = single_value(select(floatP_floatM_t_2_at_L,
                      shift(t_0, 1)))) and
                      (single_value(select(__anonstruct_ts_1_f2_p_1_at_L,
-                     p_0)) = single_value(select(float_P_float_M_t_2_at_L,
+                     p_0)) = single_value(select(floatP_floatM_t_2_at_L,
                      shift(t_0, 2)))))))))))))))
 
 predicate left_valid_struct___anonstruct_ts_1(p: __anonstruct_ts_1 pointer,
   a: int, __anonstruct_ts_1_alloc_table: __anonstruct_ts_1 alloc_table) =
   (offset_min(__anonstruct_ts_1_alloc_table, p) <= a)
 
-predicate left_valid_struct_char_P(p: char_P pointer, a: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
+predicate left_valid_struct_charP(p: charP pointer, a: int,
+  charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
   p) <= a)
 
-predicate left_valid_struct_float_P(p: float_P pointer, a: int,
-  float_P_alloc_table: float_P alloc_table) =
-  (offset_min(float_P_alloc_table, p) <= a)
+predicate left_valid_struct_floatP(p: floatP pointer, a: int,
+  floatP_alloc_table: floatP alloc_table) = (offset_min(floatP_alloc_table,
+  p) <= a)
 
-predicate left_valid_struct_void_P(p: void_P pointer, a: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
+predicate left_valid_struct_voidP(p: voidP pointer, a: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
 
 axiom pointer_addr_of___anonstruct_ts_1_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(__anonstruct_ts_1_of_pointer_address(p))))
 
-axiom pointer_addr_of_char_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(char_P_of_pointer_address(p))))
+axiom pointer_addr_of_charP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
-axiom pointer_addr_of_float_P_of_pointer_address:
+axiom pointer_addr_of_floatP_of_pointer_address:
   (forall p:unit pointer.
-    (p = pointer_address(float_P_of_pointer_address(p))))
+    (p = pointer_address(floatP_of_pointer_address(p))))
 
-logic void_P_of_pointer_address : unit pointer -> void_P pointer
+logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
-axiom pointer_addr_of_void_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(void_P_of_pointer_address(p))))
+axiom pointer_addr_of_voidP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
 axiom b:
-  (forall float_P_t_2_alloc_table_at_L:float_P alloc_table.
+  (forall floatP_t_2_alloc_table_at_L:floatP alloc_table.
     (forall __anonstruct_ts_1_p_1_alloc_table_at_L:__anonstruct_ts_1 alloc_table.
       (forall __anonstruct_ts_1_f2_p_1_at_L:(__anonstruct_ts_1,
         single) memory.
@@ -2162,36 +2154,36 @@ axiom b:
           single) memory.
           (forall __anonstruct_ts_1_f0_p_1_at_L:(__anonstruct_ts_1,
             single) memory.
-            (forall float_P_float_M_t_2_at_L:(float_P, single) memory.
+            (forall floatP_floatM_t_2_at_L:(floatP, single) memory.
               (forall p_1:__anonstruct_ts_1 pointer.
-                (forall t_1:float_P pointer.
-                  ((simulated_cast(p_1, t_1, float_P_t_2_alloc_table_at_L,
+                (forall t_1:floatP pointer.
+                  ((simulated_cast(p_1, t_1, floatP_t_2_alloc_table_at_L,
                     __anonstruct_ts_1_p_1_alloc_table_at_L,
                     __anonstruct_ts_1_f2_p_1_at_L,
                     __anonstruct_ts_1_f1_p_1_at_L,
                     __anonstruct_ts_1_f0_p_1_at_L,
-                    float_P_float_M_t_2_at_L) and
+                    floatP_floatM_t_2_at_L) and
                     ((offset_min(__anonstruct_ts_1_p_1_alloc_table_at_L,
                      p_1) <= 0) and
                      (offset_max(__anonstruct_ts_1_p_1_alloc_table_at_L,
                      p_1) >= 0))) ->
-                   ((offset_min(float_P_t_2_alloc_table_at_L, t_1) <= 0) and
-                    (offset_max(float_P_t_2_alloc_table_at_L, t_1) >= 2)))))))))))
+                   ((offset_min(floatP_t_2_alloc_table_at_L, t_1) <= 0) and
+                    (offset_max(floatP_t_2_alloc_table_at_L, t_1) >= 2)))))))))))
 
 predicate right_valid_struct___anonstruct_ts_1(p: __anonstruct_ts_1 pointer,
   b: int, __anonstruct_ts_1_alloc_table: __anonstruct_ts_1 alloc_table) =
   (offset_max(__anonstruct_ts_1_alloc_table, p) >= b)
 
-predicate right_valid_struct_char_P(p: char_P pointer, b: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
+predicate right_valid_struct_charP(p: charP pointer, b: int,
+  charP_alloc_table: charP alloc_table) = (offset_max(charP_alloc_table,
   p) >= b)
 
-predicate right_valid_struct_float_P(p: float_P pointer, b: int,
-  float_P_alloc_table: float_P alloc_table) =
-  (offset_max(float_P_alloc_table, p) >= b)
+predicate right_valid_struct_floatP(p: floatP pointer, b: int,
+  floatP_alloc_table: floatP alloc_table) = (offset_max(floatP_alloc_table,
+  p) >= b)
 
-predicate right_valid_struct_void_P(p: void_P pointer, b: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
+predicate right_valid_struct_voidP(p: voidP pointer, b: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
 
 predicate strict_valid_root___anonstruct_ts_1(p: __anonstruct_ts_1 pointer,
@@ -2200,20 +2192,20 @@ predicate strict_valid_root___anonstruct_ts_1(p: __anonstruct_ts_1 pointer,
   ((offset_min(__anonstruct_ts_1_alloc_table, p) = a) and
    (offset_max(__anonstruct_ts_1_alloc_table, p) = b))
 
-predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
 
-predicate strict_valid_root_float_P(p: float_P pointer, a: int, b: int,
-  float_P_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_alloc_table, p) = a) and
-   (offset_max(float_P_alloc_table, p) = b))
+predicate strict_valid_root_floatP(p: floatP pointer, a: int, b: int,
+  floatP_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_alloc_table, p) = a) and
+   (offset_max(floatP_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
 
 predicate strict_valid_struct___anonstruct_ts_1(p: __anonstruct_ts_1 pointer,
   a: int, b: int,
@@ -2221,37 +2213,37 @@ predicate strict_valid_struct___anonstruct_ts_1(p: __anonstruct_ts_1 pointer,
   ((offset_min(__anonstruct_ts_1_alloc_table, p) = a) and
    (offset_max(__anonstruct_ts_1_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
 
-predicate strict_valid_struct_float_P(p: float_P pointer, a: int, b: int,
-  float_P_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_alloc_table, p) = a) and
-   (offset_max(float_P_alloc_table, p) = b))
+predicate strict_valid_struct_floatP(p: floatP pointer, a: int, b: int,
+  floatP_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_alloc_table, p) = a) and
+   (offset_max(floatP_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
 
 predicate valid_bitvector_struct___anonstruct_ts_1(p: unit pointer, a: int,
   b: int, bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_float_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_floatP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
@@ -2261,20 +2253,20 @@ predicate valid_root___anonstruct_ts_1(p: __anonstruct_ts_1 pointer, a: int,
   ((offset_min(__anonstruct_ts_1_alloc_table, p) <= a) and
    (offset_max(__anonstruct_ts_1_alloc_table, p) >= b))
 
-predicate valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
 
-predicate valid_root_float_P(p: float_P pointer, a: int, b: int,
-  float_P_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_alloc_table, p) <= a) and
-   (offset_max(float_P_alloc_table, p) >= b))
+predicate valid_root_floatP(p: floatP pointer, a: int, b: int,
+  floatP_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_alloc_table, p) <= a) and
+   (offset_max(floatP_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
 predicate valid_struct___anonstruct_ts_1(p: __anonstruct_ts_1 pointer,
   a: int, b: int,
@@ -2282,33 +2274,33 @@ predicate valid_struct___anonstruct_ts_1(p: __anonstruct_ts_1 pointer,
   ((offset_min(__anonstruct_ts_1_alloc_table, p) <= a) and
    (offset_max(__anonstruct_ts_1_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
 
-predicate valid_struct_float_P(p: float_P pointer, a: int, b: int,
-  float_P_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_alloc_table, p) <= a) and
-   (offset_max(float_P_alloc_table, p) >= b))
+predicate valid_struct_floatP(p: floatP pointer, a: int, b: int,
+  floatP_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_alloc_table, p) <= a) and
+   (offset_max(floatP_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
-logic void_P_tag : void_P tag_id
+logic voidP_tag : voidP tag_id
 
-axiom void_P_int: (int_of_tag(void_P_tag) = 1)
+axiom voidP_int: (int_of_tag(voidP_tag) = 1)
 
-axiom void_P_of_pointer_address_of_pointer_addr:
-  (forall p:void_P pointer.
-    (p = void_P_of_pointer_address(pointer_address(p))))
+axiom voidP_of_pointer_address_of_pointer_addr:
+  (forall p:voidP pointer.
+    (p = voidP_of_pointer_address(pointer_address(p))))
 
-axiom void_P_parenttag_bottom: parenttag(void_P_tag, bottom_tag)
+axiom voidP_parenttag_bottom: parenttag(voidP_tag, bottom_tag)
 
-axiom void_P_tags:
-  (forall x:void_P pointer.
-    (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
-      x, void_P_tag)))
+axiom voidP_tags:
+  (forall x:voidP pointer.
+    (forall voidP_tag_table:voidP tag_table. instanceof(voidP_tag_table, x,
+      voidP_tag)))
 

@@ -24,19 +24,19 @@ type uint1 = 0..1
 
 type int32 = -2147483648..2147483647
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
 tag queue = {
-  char_P[..] contents: 32; 
+  charP[..] contents: 32; 
   int32 length: 32; 
   int32 first: 32; 
   int32 last: 32; 
@@ -47,7 +47,7 @@ tag queue = {
 
 type queue = [queue]
 
-char_P[0..4] t;
+charP[0..4] t;
 
 invariant valid_t :
 ((\offset_min(t) <= 0) && (\offset_max(t) >= 4))
@@ -69,9 +69,9 @@ behavior default:
   assigns q.empty,
   q.full,
   q.last,
-  (q.contents + q.last).char_M;
+  (q.contents + q.last).charM;
   ensures (C_23 : ((C_24 : (q.empty == 0)) &&
-                    (C_25 : ((q.contents + \at(q.last,Old)).char_M ==
+                    (C_25 : ((q.contents + \at(q.last,Old)).charM ==
                               \at(c,Old)))));
 {  
    (var int32 tmp);
@@ -79,7 +79,7 @@ behavior default:
    {  
       {  (C_2 : (tmp = (C_1 : q.last)));
          (C_7 : ((C_6 : q.last) = (C_5 : ((C_4 : ((C_3 : q.last) + 1)) :> int32))));
-         (C_11 : ((C_10 : (C_9 : ((C_8 : q.contents) + tmp)).char_M) = c))
+         (C_11 : ((C_10 : (C_9 : ((C_8 : q.contents) + tmp)).charM) = c))
       };
       (if ((C_15 : q.last) == (C_14 : q.length)) then (C_13 : ((C_12 : q.last) = 0)) else ());
       (C_17 : ((C_16 : q.empty) = 0));
@@ -98,7 +98,7 @@ behavior default:
   q.first;
   ensures (C_49 : ((C_50 : (q.full == 0)) &&
                     (C_51 : (\result ==
-                              (q.contents + \at(q.first,Old)).char_M))));
+                              (q.contents + \at(q.first,Old)).charM))));
 {  
    (var int8 r);
    
@@ -109,7 +109,7 @@ behavior default:
          (C_33 : ((C_32 : q.first) = (C_31 : ((C_30 : ((C_29 : q.first) + 1)) :> int32))));
          ()
       };
-      (C_37 : (r = (C_36 : (C_35 : ((C_34 : q.contents) + tmp_0)).char_M)));
+      (C_37 : (r = (C_36 : (C_35 : ((C_34 : q.contents) + tmp_0)).charM)));
       (if ((C_41 : q.first) == (C_40 : q.length)) then (C_39 : ((C_38 : q.first) = 0)) else ());
       (C_43 : ((C_42 : q.full) = 0));
       (C_48 : ((C_47 : q.empty) = (C_46 : ((if ((C_45 : q.first) ==
@@ -137,7 +137,7 @@ behavior default:
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs queue.jessie/queue.cloc queue.jessie/queue.jc
-type char_P
+type charP
 
 type int32
 
@@ -157,7 +157,7 @@ type uint1
 
 type uint32
 
-type void_P
+type voidP
 
 exception Loop_continue_exc of unit
 
@@ -165,22 +165,21 @@ exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
-logic char_P_tag:  -> char_P tag_id
+logic charP_tag:  -> charP tag_id
 
-axiom char_P_int : (int_of_tag(char_P_tag) = (1))
+axiom charP_int : (int_of_tag(charP_tag) = (1))
 
-logic char_P_of_pointer_address: unit pointer -> char_P pointer
+logic charP_of_pointer_address: unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr :
- (forall p:char_P pointer.
-  (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr :
+ (forall p:charP pointer. (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom : parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom : parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags :
- (forall x:char_P pointer.
-  (forall char_P_tag_table:char_P tag_table.
-   instanceof(char_P_tag_table, x, char_P_tag)))
+axiom charP_tags :
+ (forall x:charP pointer.
+  (forall charP_tag_table:charP tag_table.
+   instanceof(charP_tag_table, x, charP_tag)))
 
 logic integer_of_int32: int32 -> int
 
@@ -225,41 +224,40 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer, a:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_min(char_P_alloc_table, p) <= a)
+predicate left_valid_struct_charP(p:charP pointer, a:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_min(charP_alloc_table, p) <= a)
 
 predicate left_valid_struct_queue(p:queue pointer, a:int,
  queue_alloc_table:queue alloc_table) =
  (offset_min(queue_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer, a:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_min(void_P_alloc_table, p) <= a)
+predicate left_valid_struct_voidP(p:voidP pointer, a:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_min(voidP_alloc_table, p) <= a)
 
-axiom pointer_addr_of_char_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
+axiom pointer_addr_of_charP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
 logic queue_of_pointer_address: unit pointer -> queue pointer
 
 axiom pointer_addr_of_queue_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(queue_of_pointer_address(p))))
 
-logic void_P_of_pointer_address: unit pointer -> void_P pointer
+logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
-axiom pointer_addr_of_void_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
+axiom pointer_addr_of_voidP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
 logic q:  -> queue pointer
 
-predicate q_invariant(char_P_q_4_alloc_table:char_P alloc_table,
+predicate q_invariant(charP_q_4_alloc_table:charP alloc_table,
  queue_last_q_2:(queue, int32) memory, queue_first_q_2:(queue, int32) memory,
  queue_length_q_2:(queue, int32) memory,
- queue_contents_q_2:(queue, char_P pointer) memory) =
- (le_int(offset_min(char_P_q_4_alloc_table, select(queue_contents_q_2, q)),
+ queue_contents_q_2:(queue, charP pointer) memory) =
+ (le_int(offset_min(charP_q_4_alloc_table, select(queue_contents_q_2, q)),
   (0))
- and (ge_int(offset_max(char_P_q_4_alloc_table,
-             select(queue_contents_q_2, q)),
+ and (ge_int(offset_max(charP_q_4_alloc_table, select(queue_contents_q_2, q)),
       sub_int(integer_of_int32(select(queue_length_q_2, q)), (1)))
      and (le_int((0), integer_of_int32(select(queue_first_q_2, q)))
          and (lt_int(integer_of_int32(select(queue_first_q_2, q)),
@@ -282,49 +280,49 @@ axiom queue_tags :
   (forall queue_tag_table:queue tag_table.
    instanceof(queue_tag_table, x, queue_tag)))
 
-predicate right_valid_struct_char_P(p:char_P pointer, b:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_max(char_P_alloc_table, p) >= b)
+predicate right_valid_struct_charP(p:charP pointer, b:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_max(charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_queue(p:queue pointer, b:int,
  queue_alloc_table:queue alloc_table) =
  (offset_max(queue_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer, b:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_max(void_P_alloc_table, p) >= b)
+predicate right_valid_struct_voidP(p:voidP pointer, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_max(voidP_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
 predicate strict_valid_root_queue(p:queue pointer, a:int, b:int,
  queue_alloc_table:queue alloc_table) =
  ((offset_min(queue_alloc_table, p) = a)
  and (offset_max(queue_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
 predicate strict_valid_struct_queue(p:queue pointer, a:int, b:int,
  queue_alloc_table:queue alloc_table) =
  ((offset_min(queue_alloc_table, p) = a)
  and (offset_max(queue_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-logic t:  -> char_P pointer
+logic t:  -> charP pointer
 
 logic uint1_of_integer: int -> uint1
 
@@ -349,7 +347,7 @@ axiom uint32_range :
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
@@ -359,7 +357,7 @@ predicate valid_bitvector_struct_queue(p:unit pointer, a:int, b:int,
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
@@ -368,69 +366,68 @@ predicate valid_q(queue_q_2_alloc_table:queue alloc_table) =
  (le_int(offset_min(queue_q_2_alloc_table, q), (0))
  and ge_int(offset_max(queue_q_2_alloc_table, q), (0)))
 
-predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
 predicate valid_root_queue(p:queue pointer, a:int, b:int,
  queue_alloc_table:queue alloc_table) =
  ((offset_min(queue_alloc_table, p) <= a)
  and (offset_max(queue_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
 predicate valid_struct_queue(p:queue pointer, a:int, b:int,
  queue_alloc_table:queue alloc_table) =
  ((offset_min(queue_alloc_table, p) <= a)
  and (offset_max(queue_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-predicate valid_t(char_P_t_1_alloc_table:char_P alloc_table) =
- (le_int(offset_min(char_P_t_1_alloc_table, t), (0))
- and ge_int(offset_max(char_P_t_1_alloc_table, t), (4)))
+predicate valid_t(charP_t_1_alloc_table:charP alloc_table) =
+ (le_int(offset_min(charP_t_1_alloc_table, t), (0))
+ and ge_int(offset_max(charP_t_1_alloc_table, t), (4)))
 
-logic void_P_tag:  -> void_P tag_id
+logic voidP_tag:  -> voidP tag_id
 
-axiom void_P_int : (int_of_tag(void_P_tag) = (1))
+axiom voidP_int : (int_of_tag(voidP_tag) = (1))
 
-axiom void_P_of_pointer_address_of_pointer_addr :
- (forall p:void_P pointer.
-  (p = void_P_of_pointer_address(pointer_address(p))))
+axiom voidP_of_pointer_address_of_pointer_addr :
+ (forall p:voidP pointer. (p = voidP_of_pointer_address(pointer_address(p))))
 
-axiom void_P_parenttag_bottom : parenttag(void_P_tag, bottom_tag)
+axiom voidP_parenttag_bottom : parenttag(voidP_tag, bottom_tag)
 
-axiom void_P_tags :
- (forall x:void_P pointer.
-  (forall void_P_tag_table:void_P tag_table.
-   instanceof(void_P_tag_table, x, void_P_tag)))
+axiom voidP_tags :
+ (forall x:voidP pointer.
+  (forall voidP_tag_table:voidP tag_table.
+   instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_char_P :
+parameter alloc_bitvector_struct_charP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_char_P_requires :
+parameter alloc_bitvector_struct_charP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
@@ -453,50 +450,49 @@ parameter alloc_bitvector_struct_queue_requires :
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P :
+parameter alloc_bitvector_struct_voidP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P_requires :
+parameter alloc_bitvector_struct_voidP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter char_P_alloc_table : char_P alloc_table ref
+parameter charP_alloc_table : charP alloc_table ref
 
-parameter char_P_tag_table : char_P tag_table ref
+parameter charP_tag_table : charP tag_table ref
 
-parameter alloc_struct_char_P :
+parameter alloc_struct_charP :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { } char_P pointer writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { } charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter alloc_struct_char_P_requires :
+parameter alloc_struct_charP_requires :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { ge_int(n, (0))} char_P pointer
-    writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { ge_int(n, (0))} charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
 parameter queue_alloc_table : queue alloc_table ref
 
@@ -524,32 +520,31 @@ parameter alloc_struct_queue_requires :
           and (alloc_fresh(queue_alloc_table@, result, n)
               and instanceof(queue_tag_table, result, queue_tag)))) }
 
-parameter void_P_alloc_table : void_P alloc_table ref
+parameter voidP_alloc_table : voidP alloc_table ref
 
-parameter void_P_tag_table : void_P tag_table ref
+parameter voidP_tag_table : voidP tag_table ref
 
-parameter alloc_struct_void_P :
+parameter alloc_struct_voidP :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { } void_P pointer writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { } voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
-parameter alloc_struct_void_P_requires :
+parameter alloc_struct_voidP_requires :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { ge_int(n, (0))} void_P pointer
-    writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { ge_int(n, (0))} voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
 parameter any_int32 : unit -> { } int32 { true }
 
@@ -559,11 +554,11 @@ parameter any_uint1 : unit -> { } uint1 { true }
 
 parameter any_uint32 : unit -> { } uint32 { true }
 
-parameter char_P_char_M_q_4 : (char_P, int8) memory ref
+parameter charP_charM_q_4 : (charP, int8) memory ref
 
-parameter char_P_q_4_alloc_table : char_P alloc_table ref
+parameter charP_q_4_alloc_table : charP alloc_table ref
 
-parameter char_P_t_1_alloc_table : char_P alloc_table ref
+parameter charP_t_1_alloc_table : charP alloc_table ref
 
 parameter int32_of_integer_ :
  x:int ->
@@ -587,25 +582,25 @@ parameter queue_first_q_2 : (queue, int32) memory ref
 
 parameter queue_length_q_2 : (queue, int32) memory ref
 
-parameter queue_contents_q_2 : (queue, char_P pointer) memory ref
+parameter queue_contents_q_2 : (queue, charP pointer) memory ref
 
 parameter pop :
  tt:unit ->
   { } int8
-  reads char_P_char_M_q_4,char_P_q_4_alloc_table,char_P_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
+  reads charP_charM_q_4,charP_q_4_alloc_table,charP_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
   writes queue_empty_q_2,queue_first_q_2,queue_full_q_2
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+     ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
      and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
          and (JC_<somenum>:
-             q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+             q_invariant(charP_q_4_alloc_table, queue_last_q_2,
              queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
          and (JC_<somenum>:
              eq_int(integer_of_int8(result),
-             integer_of_int8(select(char_P_char_M_q_4,
+             integer_of_int8(select(charP_charM_q_4,
                              shift(select(queue_contents_q_2, q),
                              integer_of_int32(select(queue_first_q_2@, q@)))))))))
         and (JC_<somenum>:
@@ -623,26 +618,26 @@ parameter pop_requires :
  tt:unit ->
   { (JC_<somenum>:
     ((JC_<somenum>: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
-    and ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
-                q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
                 queue_first_q_2, queue_length_q_2, queue_contents_q_2))))))}
   int8
-  reads char_P_char_M_q_4,char_P_q_4_alloc_table,char_P_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
+  reads charP_charM_q_4,charP_q_4_alloc_table,charP_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
   writes queue_empty_q_2,queue_first_q_2,queue_full_q_2
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+     ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
      and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
          and (JC_<somenum>:
-             q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+             q_invariant(charP_q_4_alloc_table, queue_last_q_2,
              queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
          and (JC_<somenum>:
              eq_int(integer_of_int8(result),
-             integer_of_int8(select(char_P_char_M_q_4,
+             integer_of_int8(select(charP_charM_q_4,
                              shift(select(queue_contents_q_2, q),
                              integer_of_int32(select(queue_first_q_2@, q@)))))))))
         and (JC_<somenum>:
@@ -659,27 +654,27 @@ parameter pop_requires :
 parameter push :
  c:int8 ->
   { } unit
-  reads char_P_char_M_q_4,char_P_q_4_alloc_table,char_P_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
-  writes char_P_char_M_q_4,queue_empty_q_2,queue_full_q_2,queue_last_q_2
+  reads charP_charM_q_4,charP_q_4_alloc_table,charP_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
+  writes charP_charM_q_4,queue_empty_q_2,queue_full_q_2,queue_last_q_2
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+     ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
      and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
          and (JC_<somenum>:
-             q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+             q_invariant(charP_q_4_alloc_table, queue_last_q_2,
              queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
          and (JC_<somenum>:
-             eq_int(integer_of_int8(select(char_P_char_M_q_4,
+             eq_int(integer_of_int8(select(charP_charM_q_4,
                                     shift(select(queue_contents_q_2, q),
                                     integer_of_int32(select(queue_last_q_2@,
                                                      q@))))),
              integer_of_int8(c@)))))
         and (JC_<somenum>:
             ((((JC_<somenum>:
-               not_assigns(char_P_q_4_alloc_table@, char_P_char_M_q_4@,
-               char_P_char_M_q_4,
+               not_assigns(charP_q_4_alloc_table@, charP_charM_q_4@,
+               charP_charM_q_4,
                pset_range(pset_deref(queue_contents_q_2@, pset_singleton(q@)),
                integer_of_int32(select(queue_last_q_2@, q@)),
                integer_of_int32(select(queue_last_q_2@, q@)))))
@@ -697,33 +692,33 @@ parameter push_requires :
  c:int8 ->
   { (JC_<somenum>:
     ((JC_<somenum>: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
-    and ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
-                q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
                 queue_first_q_2, queue_length_q_2, queue_contents_q_2))))))}
   unit
-  reads char_P_char_M_q_4,char_P_q_4_alloc_table,char_P_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
-  writes char_P_char_M_q_4,queue_empty_q_2,queue_full_q_2,queue_last_q_2
+  reads charP_charM_q_4,charP_q_4_alloc_table,charP_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
+  writes charP_charM_q_4,queue_empty_q_2,queue_full_q_2,queue_last_q_2
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+     ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
      and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
          and (JC_<somenum>:
-             q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+             q_invariant(charP_q_4_alloc_table, queue_last_q_2,
              queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
          and (JC_<somenum>:
-             eq_int(integer_of_int8(select(char_P_char_M_q_4,
+             eq_int(integer_of_int8(select(charP_charM_q_4,
                                     shift(select(queue_contents_q_2, q),
                                     integer_of_int32(select(queue_last_q_2@,
                                                      q@))))),
              integer_of_int8(c@)))))
         and (JC_<somenum>:
             ((((JC_<somenum>:
-               not_assigns(char_P_q_4_alloc_table@, char_P_char_M_q_4@,
-               char_P_char_M_q_4,
+               not_assigns(charP_q_4_alloc_table@, charP_charM_q_4@,
+               charP_charM_q_4,
                pset_range(pset_deref(queue_contents_q_2@, pset_singleton(q@)),
                integer_of_int32(select(queue_last_q_2@, q@)),
                integer_of_int32(select(queue_last_q_2@, q@)))))
@@ -754,13 +749,13 @@ parameter test :
   queue_q1_3_alloc_table:queue alloc_table ->
    queue_empty_q1_3:(queue, uint32) memory ->
     { } int32
-    reads char_P_char_M_q_4,char_P_q_4_alloc_table,char_P_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
+    reads charP_charM_q_4,charP_q_4_alloc_table,charP_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
     writes queue_empty_q_2,queue_first_q_2,queue_full_q_2
     { ((JC_<somenum>:
-       ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+       ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
        and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
            and (JC_<somenum>:
-               q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+               q_invariant(charP_q_4_alloc_table, queue_last_q_2,
                queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
       and (JC_<somenum>:
           eq_int(integer_of_int32(result),
@@ -776,19 +771,19 @@ parameter test_requires :
        and ((JC_<somenum>: ge_int(offset_max(queue_q1_3_alloc_table, q1), (0)))
            and (JC_<somenum>:
                eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0))))))
-      and ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+      and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
           and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
               and (JC_<somenum>:
-                  q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+                  q_invariant(charP_q_4_alloc_table, queue_last_q_2,
                   queue_first_q_2, queue_length_q_2, queue_contents_q_2))))))}
     int32
-    reads char_P_char_M_q_4,char_P_q_4_alloc_table,char_P_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
+    reads charP_charM_q_4,charP_q_4_alloc_table,charP_t_1_alloc_table,queue_contents_q_2,queue_empty_q_2,queue_first_q_2,queue_full_q_2,queue_last_q_2,queue_length_q_2,queue_q_2_alloc_table
     writes queue_empty_q_2,queue_first_q_2,queue_full_q_2
     { ((JC_<somenum>:
-       ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+       ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
        and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
            and (JC_<somenum>:
-               q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+               q_invariant(charP_q_4_alloc_table, queue_last_q_2,
                queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
       and (JC_<somenum>:
           eq_int(integer_of_int32(result),
@@ -808,10 +803,10 @@ let pop_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
     ((JC_<somenum>: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
-    and ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
-                q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
                 queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))) }
   (init:
   (let return = ref (any_int8 void) in
@@ -836,10 +831,10 @@ let pop_ensures_default =
       (((safe_upd_ queue_first_q_2) jessie_<somenum>) jessie_<somenum>))); void;
       (let jessie_<somenum> =
       (r := (C_36:
-            ((safe_acc_ !char_P_char_M_q_4) (C_35:
-                                            ((shift (C_34:
-                                                    ((safe_acc_ !queue_contents_q_2) q))) 
-                                             (integer_of_int32 !tmp_0)))))) in
+            ((safe_acc_ !charP_charM_q_4) (C_35:
+                                          ((shift (C_34:
+                                                  ((safe_acc_ !queue_contents_q_2) q))) 
+                                           (integer_of_int32 !tmp_0)))))) in
       void);
       (if ((eq_int_ (integer_of_int32 (C_41:
                                       ((safe_acc_ !queue_first_q_2) q)))) 
@@ -867,7 +862,7 @@ let pop_ensures_default =
      ((JC_<somenum>: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
      and (JC_<somenum>:
          eq_int(integer_of_int8(result),
-         integer_of_int8(select(char_P_char_M_q_4,
+         integer_of_int8(select(charP_charM_q_4,
                          shift(select(queue_contents_q_2, q),
                          integer_of_int32(select(queue_first_q_2@, q@)))))))))
     and (JC_<somenum>:
@@ -885,10 +880,10 @@ let pop_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
     ((JC_<somenum>: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
-    and ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
-                q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
                 queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))) }
   (init:
   (let return = ref (any_int8 void) in
@@ -915,7 +910,7 @@ let pop_safety =
       (let jessie_<somenum> =
       (r := (C_36:
             (JC_<somenum>:
-            ((((offset_acc_ !char_P_q_4_alloc_table) !char_P_char_M_q_4) 
+            ((((offset_acc_ !charP_q_4_alloc_table) !charP_charM_q_4) 
               (C_34: ((safe_acc_ !queue_contents_q_2) q))) (integer_of_int32 !tmp_0))))) in
       void);
       (if ((eq_int_ (integer_of_int32 (C_41:
@@ -940,20 +935,20 @@ let pop_safety =
       (((safe_upd_ queue_empty_q_2) jessie_<somenum>) jessie_<somenum>))); (return := !r);
       (raise Return) end))))))); absurd  end with Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+    ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
     and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
         and (JC_<somenum>:
-            q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+            q_invariant(charP_q_4_alloc_table, queue_last_q_2,
             queue_first_q_2, queue_length_q_2, queue_contents_q_2))))) }
 
 let push_ensures_default =
  fun (c : int8) ->
   { (JC_<somenum>:
     ((JC_<somenum>: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
-    and ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
-                q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
                 queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))) }
   (init:
   try
@@ -981,8 +976,8 @@ let push_ensures_default =
         (let jessie_<somenum> = (integer_of_int32 !tmp) in
         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
         begin
-          (((safe_upd_ char_P_char_M_q_4) jessie_<somenum>) jessie_<somenum>); jessie_<somenum>
-        end))))) end)) in void);
+          (((safe_upd_ charP_charM_q_4) jessie_<somenum>) jessie_<somenum>); jessie_<somenum> end)))))
+       end)) in void);
       (if ((eq_int_ (integer_of_int32 (C_15: ((safe_acc_ !queue_last_q_2) q)))) 
            (integer_of_int32 (C_14: ((safe_acc_ !queue_length_q_2) q))))
       then
@@ -1009,14 +1004,14 @@ let push_ensures_default =
     ((JC_<somenum>:
      ((JC_<somenum>: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
      and (JC_<somenum>:
-         eq_int(integer_of_int8(select(char_P_char_M_q_4,
+         eq_int(integer_of_int8(select(charP_charM_q_4,
                                 shift(select(queue_contents_q_2, q),
                                 integer_of_int32(select(queue_last_q_2@, q@))))),
          integer_of_int8(c@)))))
     and (JC_<somenum>:
         ((((JC_<somenum>:
-           not_assigns(char_P_q_4_alloc_table@, char_P_char_M_q_4@,
-           char_P_char_M_q_4,
+           not_assigns(charP_q_4_alloc_table@, charP_charM_q_4@,
+           charP_charM_q_4,
            pset_range(pset_deref(queue_contents_q_2@, pset_singleton(q@)),
            integer_of_int32(select(queue_last_q_2@, q@)),
            integer_of_int32(select(queue_last_q_2@, q@)))))
@@ -1034,10 +1029,10 @@ let push_safety =
  fun (c : int8) ->
   { (JC_<somenum>:
     ((JC_<somenum>: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
-    and ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
-                q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
                 queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))) }
   (init:
   try
@@ -1067,7 +1062,7 @@ let push_safety =
         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
         begin
           (JC_<somenum>:
-          (((((offset_upd_ !char_P_q_4_alloc_table) char_P_char_M_q_4) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+          (((((offset_upd_ !charP_q_4_alloc_table) charP_charM_q_4) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
          jessie_<somenum> end))))) end)) in void);
       (if ((eq_int_ (integer_of_int32 (C_15: ((safe_acc_ !queue_last_q_2) q)))) 
            (integer_of_int32 (C_14: ((safe_acc_ !queue_length_q_2) q))))
@@ -1095,10 +1090,10 @@ let push_safety =
       (((safe_upd_ queue_full_q_2) jessie_<somenum>) jessie_<somenum>))); (raise Return)
      end))); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+    ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
     and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
         and (JC_<somenum>:
-            q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+            q_invariant(charP_q_4_alloc_table, queue_last_q_2,
             queue_first_q_2, queue_length_q_2, queue_contents_q_2))))) }
 
 let test_ensures_default =
@@ -1109,10 +1104,10 @@ let test_ensures_default =
      and ((JC_<somenum>: ge_int(offset_max(queue_q1_3_alloc_table, q1), (0)))
          and (JC_<somenum>:
              eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0))))))
-    and ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
-                q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
                 queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))) }
   (init:
   (let return = ref (any_int32 void) in
@@ -1142,10 +1137,10 @@ let test_safety =
      and ((JC_<somenum>: ge_int(offset_max(queue_q1_3_alloc_table, q1), (0)))
          and (JC_<somenum>:
              eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0))))))
-    and ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+    and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
-                q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
                 queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))) }
   (init:
   (let return = ref (any_int32 void) in
@@ -1167,10 +1162,10 @@ let test_safety =
       void); (return := !__retres); (raise Return) end)))); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_t(char_P_t_1_alloc_table))
+    ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
     and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
         and (JC_<somenum>:
-            q_invariant(char_P_q_4_alloc_table, queue_last_q_2,
+            q_invariant(charP_q_4_alloc_table, queue_last_q_2,
             queue_first_q_2, queue_length_q_2, queue_contents_q_2))))) }
 
 
@@ -1254,12 +1249,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/queue_po23.why">
-      <location file = "PPCHOME/tests/jessie/queue.jessie/queue.jc" line = "76" begin = "18" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/queue.jessie/queue.jc" line = "76" begin = "18" end = "71"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/queue_po24.why">
-      <location file = "PPCHOME/tests/jessie/queue.jessie/queue.jc" line = "76" begin = "18" end = "72"/>
+      <location file = "PPCHOME/tests/jessie/queue.jessie/queue.jc" line = "76" begin = "18" end = "71"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2322,7 +2317,7 @@ axiom frame_between_sub:
           (frame_between(sa, m1, m2) ->
            (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
-type char_P
+type charP
 
 type int32
 
@@ -2342,24 +2337,24 @@ type uint1
 
 type uint32
 
-type void_P
+type voidP
 
-logic char_P_tag : char_P tag_id
+logic charP_tag : charP tag_id
 
-axiom char_P_int: (int_of_tag(char_P_tag) = 1)
+axiom charP_int: (int_of_tag(charP_tag) = 1)
 
-logic char_P_of_pointer_address : unit pointer -> char_P pointer
+logic charP_of_pointer_address : unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr:
-  (forall p:char_P pointer.
-    (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr:
+  (forall p:charP pointer.
+    (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom: parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom: parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags:
-  (forall x:char_P pointer.
-    (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
-      x, char_P_tag)))
+axiom charP_tags:
+  (forall x:charP pointer.
+    (forall charP_tag_table:charP tag_table. instanceof(charP_tag_table, x,
+      charP_tag)))
 
 logic integer_of_int32 : int32 -> int
 
@@ -2404,42 +2399,40 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
-predicate left_valid_struct_char_P(p: char_P pointer, a: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
+predicate left_valid_struct_charP(p: charP pointer, a: int,
+  charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
   p) <= a)
 
 predicate left_valid_struct_queue(p: queue pointer, a: int,
   queue_alloc_table: queue alloc_table) = (offset_min(queue_alloc_table,
   p) <= a)
 
-predicate left_valid_struct_void_P(p: void_P pointer, a: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
+predicate left_valid_struct_voidP(p: voidP pointer, a: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
 
-axiom pointer_addr_of_char_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(char_P_of_pointer_address(p))))
+axiom pointer_addr_of_charP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
 logic queue_of_pointer_address : unit pointer -> queue pointer
 
 axiom pointer_addr_of_queue_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(queue_of_pointer_address(p))))
 
-logic void_P_of_pointer_address : unit pointer -> void_P pointer
+logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
-axiom pointer_addr_of_void_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(void_P_of_pointer_address(p))))
+axiom pointer_addr_of_voidP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
 logic q : queue pointer
 
-predicate q_invariant(char_P_q_4_alloc_table: char_P alloc_table,
+predicate q_invariant(charP_q_4_alloc_table: charP alloc_table,
   queue_last_q_2: (queue, int32) memory, queue_first_q_2: (queue,
   int32) memory, queue_length_q_2: (queue, int32) memory,
-  queue_contents_q_2: (queue, char_P pointer) memory) =
-  ((offset_min(char_P_q_4_alloc_table, select(queue_contents_q_2,
+  queue_contents_q_2: (queue, charP pointer) memory) =
+  ((offset_min(charP_q_4_alloc_table, select(queue_contents_q_2,
    q)) <= 0) and
-   ((offset_max(char_P_q_4_alloc_table, select(queue_contents_q_2,
+   ((offset_max(charP_q_4_alloc_table, select(queue_contents_q_2,
     q)) >= (integer_of_int32(select(queue_length_q_2, q)) - 1)) and
     ((0 <= integer_of_int32(select(queue_first_q_2, q))) and
      ((integer_of_int32(select(queue_first_q_2,
@@ -2463,49 +2456,49 @@ axiom queue_tags:
     (forall queue_tag_table:queue tag_table. instanceof(queue_tag_table, x,
       queue_tag)))
 
-predicate right_valid_struct_char_P(p: char_P pointer, b: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
+predicate right_valid_struct_charP(p: charP pointer, b: int,
+  charP_alloc_table: charP alloc_table) = (offset_max(charP_alloc_table,
   p) >= b)
 
 predicate right_valid_struct_queue(p: queue pointer, b: int,
   queue_alloc_table: queue alloc_table) = (offset_max(queue_alloc_table,
   p) >= b)
 
-predicate right_valid_struct_void_P(p: void_P pointer, b: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
+predicate right_valid_struct_voidP(p: voidP pointer, b: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
 
-predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
 
 predicate strict_valid_root_queue(p: queue pointer, a: int, b: int,
   queue_alloc_table: queue alloc_table) =
   ((offset_min(queue_alloc_table, p) = a) and (offset_max(queue_alloc_table,
    p) = b))
 
-predicate strict_valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
 
-predicate strict_valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
 
 predicate strict_valid_struct_queue(p: queue pointer, a: int, b: int,
   queue_alloc_table: queue alloc_table) =
   ((offset_min(queue_alloc_table, p) = a) and (offset_max(queue_alloc_table,
    p) = b))
 
-predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
 
-logic t : char_P pointer
+logic t : charP pointer
 
 logic uint1_of_integer : int -> uint1
 
@@ -2528,7 +2521,7 @@ axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
 
-predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
@@ -2538,7 +2531,7 @@ predicate valid_bitvector_struct_queue(p: unit pointer, a: int, b: int,
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
@@ -2547,52 +2540,52 @@ predicate valid_q(queue_q_2_alloc_table: queue alloc_table) =
   ((offset_min(queue_q_2_alloc_table, q) <= 0) and
    (offset_max(queue_q_2_alloc_table, q) >= 0))
 
-predicate valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
 
 predicate valid_root_queue(p: queue pointer, a: int, b: int,
   queue_alloc_table: queue alloc_table) =
   ((offset_min(queue_alloc_table, p) <= a) and (offset_max(queue_alloc_table,
    p) >= b))
 
-predicate valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
-predicate valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
 
 predicate valid_struct_queue(p: queue pointer, a: int, b: int,
   queue_alloc_table: queue alloc_table) =
   ((offset_min(queue_alloc_table, p) <= a) and (offset_max(queue_alloc_table,
    p) >= b))
 
-predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
-predicate valid_t(char_P_t_1_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_t_1_alloc_table, t) <= 0) and
-   (offset_max(char_P_t_1_alloc_table, t) >= 4))
+predicate valid_t(charP_t_1_alloc_table: charP alloc_table) =
+  ((offset_min(charP_t_1_alloc_table, t) <= 0) and
+   (offset_max(charP_t_1_alloc_table, t) >= 4))
 
-logic void_P_tag : void_P tag_id
+logic voidP_tag : voidP tag_id
 
-axiom void_P_int: (int_of_tag(void_P_tag) = 1)
+axiom voidP_int: (int_of_tag(voidP_tag) = 1)
 
-axiom void_P_of_pointer_address_of_pointer_addr:
-  (forall p:void_P pointer.
-    (p = void_P_of_pointer_address(pointer_address(p))))
+axiom voidP_of_pointer_address_of_pointer_addr:
+  (forall p:voidP pointer.
+    (p = voidP_of_pointer_address(pointer_address(p))))
 
-axiom void_P_parenttag_bottom: parenttag(void_P_tag, bottom_tag)
+axiom voidP_parenttag_bottom: parenttag(voidP_tag, bottom_tag)
 
-axiom void_P_tags:
-  (forall x:void_P pointer.
-    (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
-      x, void_P_tag)))
+axiom voidP_tags:
+  (forall x:voidP pointer.
+    (forall voidP_tag_table:voidP tag_table. instanceof(voidP_tag_table, x,
+      voidP_tag)))
 

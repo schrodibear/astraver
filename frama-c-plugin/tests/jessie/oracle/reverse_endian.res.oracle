@@ -20,39 +20,39 @@ type int16 = -32768..32767
 
 type int8 = -128..127
 
-tag short_P = {
-  int16 short_M: 16;
+tag shortP = {
+  int16 shortM: 16;
 }
 
-type short_P = [short_P]
+type shortP = [shortP]
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
-unit reverse_endian(short_P[..] s)
+unit reverse_endian(shortP[..] s)
   requires (C_13 : ((C_14 : (\offset_min(s) <= 0)) &&
                      (C_15 : (\offset_max(s) >= 0))));
 behavior default:
-  ensures (C_12 : (\at(s,Old).short_M ==
-                    ((256 * (\at(s.short_M,Old) % 256)) +
-                      (\at(s.short_M,Old) / 256))));
+  ensures (C_12 : (\at(s,Old).shortM ==
+                    ((256 * (\at(s.shortM,Old) % 256)) +
+                      (\at(s.shortM,Old) / 256))));
 {  
-   (var char_P[..] c);
+   (var charP[..] c);
    
    (var int8 tmp);
    
-   {  (C_2 : (c = (C_1 : (s :> char_P[..]))));
-      (C_4 : (tmp = (C_3 : c.char_M)));
-      (C_8 : ((C_7 : c.char_M) = (C_6 : (C_5 : (c + 1)).char_M)));
-      (C_11 : ((C_10 : (C_9 : (c + 1)).char_M) = tmp));
+   {  (C_2 : (c = (C_1 : (s :> charP[..]))));
+      (C_4 : (tmp = (C_3 : c.charM)));
+      (C_8 : ((C_7 : c.charM) = (C_6 : (C_5 : (c + 1)).charM)));
+      (C_11 : ((C_10 : (C_9 : (c + 1)).charM) = tmp));
       
       (return ())
    }

@@ -1,6 +1,6 @@
 // RUNSIMPLIFY this tells regtests to run Simplify in this example
 
-// lemma mean: \forall integer x, y; x <= y ==> x <= (x+y)/2 <= y;
+//@ lemma mean: \forall integer x, y; x <= y ==> x <= (x+y)/2 <= y;
 
 /*@ predicate sorted{L}(long *t, integer a, integer b) =
   @    \forall integer i,j; a <= i <= j <= b ==> t[i] <= t[j];

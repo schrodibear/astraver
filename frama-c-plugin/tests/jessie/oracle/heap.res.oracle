@@ -20,22 +20,22 @@ type int32 = -2147483648..2147483647
 
 type int8 = -128..127
 
-tag int_P = {
-  int32 int_M: 32;
+tag intP = {
+  int32 intM: 32;
 }
 
-type int_P = [int_P]
+type intP = [intP]
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
 lemma div2_1 :
 (\forall int32 x;
@@ -133,29 +133,29 @@ axiomatic IsHeap {
 
 axiomatic TreeOfArray {
 
-  logic tree tree_of_array{L}(int_P[..] t_1, integer root, integer bound)
-  reads (t_1 + [..]).int_M;
+  logic tree tree_of_array{L}(intP[..] t_1, integer root, integer bound)
+  reads (t_1 + [..]).intM;
    
   axiom tree_of_array_def_1{L} :
-  (\forall int_P[..] t_2;
+  (\forall intP[..] t_2;
     (\forall integer root_0;
       (\forall integer bound_0;
         ((root_0 >= bound_0) ==>
           (tree_of_array{L}(t_2, root_0, bound_0) == Empty)))))
    
   axiom tree_of_array_def_2{L} :
-  (\forall int_P[..] t_3;
+  (\forall intP[..] t_3;
     (\forall integer root_1;
       (\forall integer bound_1;
         (((0 <= root_1) && (root_1 < bound_1)) ==>
           (tree_of_array{L}(t_3, root_1, bound_1) ==
             Node(tree_of_array{L}(t_3, ((2 * root_1) + 1), bound_1),
-                 (t_3 + root_1).int_M,
+                 (t_3 + root_1).intM,
                  tree_of_array{L}(t_3, ((2 * root_1) + 2), bound_1)))))))
   
 }
 
-int_P[0..99] heap;
+intP[0..99] heap;
 
 invariant valid_heap :
 ((\offset_min(heap) <= 0) && (\offset_max(heap) >= 99))
@@ -185,7 +185,7 @@ behavior default:
 unit push(int32 x)
   requires (C_28 : (size < (100 - 1)));
 behavior default:
-  assigns (heap + [..]).int_M,
+  assigns (heap + [..]).intM,
   size;
   ensures (C_27 : (model{Here}() ==
                     add_bag(\at(x,Old), \at(model{Old}(),Old))));
@@ -201,7 +201,7 @@ behavior default:
       loop 
       behavior default:
         
-        assigns (heap + [..]).int_M;
+        assigns (heap + [..]).intM;
       behavior default:
         invariant (C_5 : ((((C_8 : (0 <= i)) && (C_9 : (i <= size))) &&
                             (C_10 : ((i == size) ==>
@@ -214,7 +214,7 @@ behavior default:
                                                                   (size + 1))) &&
                                        (bag_of_tree(tree_of_array{Here}(
                                                     (heap + 0), 0, (size + 1))) ==
-                                         add_bag((heap + i).int_M,
+                                         add_bag((heap + i).intM,
                                                  \at(model{Pre}(),Pre))))))));
       variant (C_4 : i);
       while (true)
@@ -224,16 +224,16 @@ behavior default:
             
             {  (C_16 : (parent = (C_15 : ((C_14 : ((C_13 : ((C_12 : (i - 1)) :> int32)) /
                                                     2)) :> int32))));
-               (C_18 : (p = (C_17 : (heap + parent).int_M)));
+               (C_18 : (p = (C_17 : (heap + parent).intM)));
                (if (p >= x) then 
                (goto while_0_break) else ());
-               (C_20 : ((C_19 : (heap + i).int_M) = p));
+               (C_20 : ((C_19 : (heap + i).intM) = p));
                (C_21 : (i = parent))
             }
          }
       };
       (while_0_break : ());
-      (C_23 : ((C_22 : (heap + i).int_M) = x));
+      (C_23 : ((C_22 : (heap + i).intM) = x));
       (C_26 : (size = (C_25 : ((C_24 : (size + 1)) :> int32))));
       
       (return ())
@@ -248,7 +248,7 @@ behavior default:
 {  
    (var int32 __retres);
    
-   {  (C_30 : (__retres = (C_29 : (heap + 0).int_M)));
+   {  (C_30 : (__retres = (C_29 : (heap + 0).intM)));
       
       (return __retres)
    }
@@ -257,7 +257,7 @@ behavior default:
 int32 pop()
   requires (C_71 : (size > 0));
 behavior default:
-  assigns (heap + [..]).int_M,
+  assigns (heap + [..]).intM,
   size;
   ensures (C_66 : (((C_68 : (size == (\at(size,Old) - 1))) &&
                      (C_69 : is_max_bag(\at(model{Old}(),Old), \result))) &&
@@ -272,16 +272,16 @@ behavior default:
    
    (var int32 j);
    
-   {  (C_34 : (res = (C_33 : (heap + 0).int_M)));
+   {  (C_34 : (res = (C_33 : (heap + 0).intM)));
       (C_37 : (size = (C_36 : ((C_35 : (size - 1)) :> int32))));
       (if (size != 0) then 
-      {  (C_39 : (v = (C_38 : (heap + size).int_M)));
+      {  (C_39 : (v = (C_38 : (heap + size).intM)));
          (C_40 : (i_0 = 0));
          
          loop 
          behavior default:
            
-           assigns (heap + [..]).int_M;
+           assigns (heap + [..]).intM;
          behavior default:
            invariant (C_42 : ((C_43 : (0 <= i_0)) && (C_44 : (i_0 <= size))));
          variant (C_41 : (size - i_0));
@@ -293,18 +293,18 @@ behavior default:
                {  (C_49 : (j = (C_48 : ((C_47 : ((C_46 : ((C_45 : (2 * i_0)) :> int32)) +
                                                   1)) :> int32))));
                   (if (j < (C_58 : ((C_57 : (size - 1)) :> int32))) then 
-                  (if ((C_56 : (heap + j).int_M) <
-                        (C_55 : (heap + (C_54 : ((C_53 : (j + 1)) :> int32))).int_M)) then 
+                  (if ((C_56 : (heap + j).intM) <
+                        (C_55 : (heap + (C_54 : ((C_53 : (j + 1)) :> int32))).intM)) then 
                   (C_52 : (j = (C_51 : ((C_50 : (j + 1)) :> int32)))) else ()) else ());
-                  (if (v >= (C_59 : (heap + j).int_M)) then 
+                  (if (v >= (C_59 : (heap + j).intM)) then 
                   (goto while_0_break) else ());
-                  (C_62 : ((C_61 : (heap + i_0).int_M) = (C_60 : (heap + j).int_M)));
+                  (C_62 : ((C_61 : (heap + i_0).intM) = (C_60 : (heap + j).intM)));
                   (C_63 : (i_0 = j))
                }
             }
          };
          (while_0_break : ());
-         (C_65 : ((C_64 : (heap + i_0).int_M) = v))
+         (C_65 : ((C_64 : (heap + i_0).intM) = v))
       } else ());
       
       (return res)
@@ -313,7 +313,7 @@ behavior default:
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs heap.jessie/heap.cloc heap.jessie/heap.jc
 type bag
 
-type char_P
+type charP
 
 type heap_1
 
@@ -321,13 +321,13 @@ type int32
 
 type int8
 
-type int_P
+type intP
 
 type padding
 
 type tree
 
-type void_P
+type voidP
 
 logic Empty:  -> tree
 
@@ -349,22 +349,21 @@ function add_bag(x_1:int, b:bag) : bag = union_bag(b, singleton_bag(x_1))
 
 logic bag_of_tree: tree -> bag
 
-logic char_P_tag:  -> char_P tag_id
+logic charP_tag:  -> charP tag_id
 
-axiom char_P_int : (int_of_tag(char_P_tag) = (1))
+axiom charP_int : (int_of_tag(charP_tag) = (1))
 
-logic char_P_of_pointer_address: unit pointer -> char_P pointer
+logic charP_of_pointer_address: unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr :
- (forall p:char_P pointer.
-  (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr :
+ (forall p:charP pointer. (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom : parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom : parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags :
- (forall x:char_P pointer.
-  (forall char_P_tag_table:char_P tag_table.
-   instanceof(char_P_tag_table, x, char_P_tag)))
+axiom charP_tags :
+ (forall x:charP pointer.
+  (forall charP_tag_table:charP tag_table.
+   instanceof(charP_tag_table, x, charP_tag)))
 
 logic empty_bag:  -> bag
 
@@ -378,7 +377,7 @@ logic integer_of_int8: int8 -> int
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
-logic heap:  -> int_P pointer
+logic heap:  -> intP pointer
 
 logic int32_of_integer: int -> int32
 
@@ -403,29 +402,29 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-logic int_P_tag:  -> int_P tag_id
+logic intP_tag:  -> intP tag_id
 
-axiom int_P_int : (int_of_tag(int_P_tag) = (1))
+axiom intP_int : (int_of_tag(intP_tag) = (1))
 
-logic int_P_of_pointer_address: unit pointer -> int_P pointer
+logic intP_of_pointer_address: unit pointer -> intP pointer
 
-axiom int_P_of_pointer_address_of_pointer_addr :
- (forall p:int_P pointer. (p = int_P_of_pointer_address(pointer_address(p))))
+axiom intP_of_pointer_address_of_pointer_addr :
+ (forall p:intP pointer. (p = intP_of_pointer_address(pointer_address(p))))
 
-axiom int_P_parenttag_bottom : parenttag(int_P_tag, bottom_tag)
+axiom intP_parenttag_bottom : parenttag(intP_tag, bottom_tag)
 
-axiom int_P_tags :
- (forall x:int_P pointer.
-  (forall int_P_tag_table:int_P tag_table.
-   instanceof(int_P_tag_table, x, int_P_tag)))
+axiom intP_tags :
+ (forall x:intP pointer.
+  (forall intP_tag_table:intP tag_table.
+   instanceof(intP_tag_table, x, intP_tag)))
 
 logic is_heap: tree -> prop
 
-logic tree_of_array: int_P pointer, int, int, (int_P, int32) memory -> tree
+logic tree_of_array: intP pointer, int, int, (intP, int32) memory -> tree
 
-predicate is_heap_inv(int_P_int_M_heap_1:(int_P, int32) memory, size:int32) =
+predicate is_heap_inv(intP_intM_heap_1:(intP, int32) memory, size:int32) =
  is_heap(tree_of_array(shift(heap, (0)), (0), integer_of_int32(size),
-         int_P_int_M_heap_1))
+         intP_intM_heap_1))
 
 logic occ_bag: int, bag -> int
 
@@ -434,173 +433,168 @@ predicate is_max_bag(b_1:bag, m:int) =
  and (forall x_3_0:int.
       (ge_int(occ_bag(x_3_0, b_1), (1)) -> le_int(x_3_0, m))))
 
-predicate left_valid_struct_char_P(p:char_P pointer, a:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_min(char_P_alloc_table, p) <= a)
+predicate left_valid_struct_charP(p:charP pointer, a:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_min(charP_alloc_table, p) <= a)
 
-predicate left_valid_struct_int_P(p:int_P pointer, a:int,
- int_P_alloc_table:int_P alloc_table) =
- (offset_min(int_P_alloc_table, p) <= a)
+predicate left_valid_struct_intP(p:intP pointer, a:int,
+ intP_alloc_table:intP alloc_table) = (offset_min(intP_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer, a:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_min(void_P_alloc_table, p) <= a)
+predicate left_valid_struct_voidP(p:voidP pointer, a:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_min(voidP_alloc_table, p) <= a)
 
-function model(int_P_int_M_heap_1_at_L:(int_P, int32) memory,
+function model(intP_intM_heap_1_at_L:(intP, int32) memory,
  size_at_L:int32) : bag =
  bag_of_tree(tree_of_array(shift(heap, (0)), (0),
-             integer_of_int32(size_at_L), int_P_int_M_heap_1_at_L))
+             integer_of_int32(size_at_L), intP_intM_heap_1_at_L))
 
 axiom no_assign_tree_of_array_0 :
- (forall tmp:int_P pset.
-  (forall tmpmem:(int_P, int32) memory.
-   (forall tmpalloc:int_P alloc_table.
-    (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
+ (forall tmp:intP pset.
+  (forall tmpmem:(intP, int32) memory.
+   (forall tmpalloc:intP alloc_table.
+    (forall intP_intM_t_1_2_at_L:(intP, int32) memory.
      (forall bound:int.
       (forall root:int.
-       (forall t_1:int_P pointer.
+       (forall t_1:intP pointer.
         ((pset_disjoint(tmp, pset_all(pset_singleton(t_1)))
-         and not_assigns(tmpalloc, int_P_int_M_t_1_2_at_L, tmpmem, tmp)) ->
-         (tree_of_array(t_1, root, bound, int_P_int_M_t_1_2_at_L) = tree_of_array(t_1,
-                                                                    root,
-                                                                    bound,
-                                                                    tmpmem))))))))))
+         and not_assigns(tmpalloc, intP_intM_t_1_2_at_L, tmpmem, tmp)) ->
+         (tree_of_array(t_1, root, bound, intP_intM_t_1_2_at_L) = tree_of_array(t_1,
+                                                                  root,
+                                                                  bound,
+                                                                  tmpmem))))))))))
 
 axiom no_update_tree_of_array_0 :
- (forall tmp:int_P pointer.
+ (forall tmp:intP pointer.
   (forall tmpval:int32.
-   (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
+   (forall intP_intM_t_1_2_at_L:(intP, int32) memory.
     (forall bound:int.
      (forall root:int.
-      (forall t_1:int_P pointer.
+      (forall t_1:intP pointer.
        ((not in_pset(tmp, pset_all(pset_singleton(t_1)))) ->
-        (tree_of_array(t_1, root, bound, int_P_int_M_t_1_2_at_L) = tree_of_array(t_1,
-                                                                   root,
-                                                                   bound,
-                                                                   store(int_P_int_M_t_1_2_at_L,
-                                                                   tmp,
-                                                                   tmpval))))))))))
+        (tree_of_array(t_1, root, bound, intP_intM_t_1_2_at_L) = tree_of_array(t_1,
+                                                                 root, bound,
+                                                                 store(intP_intM_t_1_2_at_L,
+                                                                 tmp, tmpval))))))))))
 
-axiom pointer_addr_of_char_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
+axiom pointer_addr_of_charP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
-axiom pointer_addr_of_int_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(int_P_of_pointer_address(p))))
+axiom pointer_addr_of_intP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
 
-logic void_P_of_pointer_address: unit pointer -> void_P pointer
+logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
-axiom pointer_addr_of_void_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
+axiom pointer_addr_of_voidP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer, b:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_max(char_P_alloc_table, p) >= b)
+predicate right_valid_struct_charP(p:charP pointer, b:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_max(charP_alloc_table, p) >= b)
 
-predicate right_valid_struct_int_P(p:int_P pointer, b:int,
- int_P_alloc_table:int_P alloc_table) =
- (offset_max(int_P_alloc_table, p) >= b)
+predicate right_valid_struct_intP(p:intP pointer, b:int,
+ intP_alloc_table:intP alloc_table) = (offset_max(intP_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer, b:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_max(void_P_alloc_table, p) >= b)
+predicate right_valid_struct_voidP(p:voidP pointer, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_max(voidP_alloc_table, p) >= b)
 
 predicate size_inv(size:int32) =
  (le_int((0), integer_of_int32(size))
  and lt_int(integer_of_int32(size), (100)))
 
-predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_root_int_P(p:int_P pointer, a:int, b:int,
- int_P_alloc_table:int_P alloc_table) =
- ((offset_min(int_P_alloc_table, p) = a)
- and (offset_max(int_P_alloc_table, p) = b))
+predicate strict_valid_root_intP(p:intP pointer, a:int, b:int,
+ intP_alloc_table:intP alloc_table) =
+ ((offset_min(intP_alloc_table, p) = a)
+ and (offset_max(intP_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_struct_int_P(p:int_P pointer, a:int, b:int,
- int_P_alloc_table:int_P alloc_table) =
- ((offset_min(int_P_alloc_table, p) = a)
- and (offset_max(int_P_alloc_table, p) = b))
+predicate strict_valid_struct_intP(p:intP pointer, a:int, b:int,
+ intP_alloc_table:intP alloc_table) =
+ ((offset_min(intP_alloc_table, p) = a)
+ and (offset_max(intP_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_int_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_heap(int_P_heap_1_alloc_table:int_P alloc_table) =
- (le_int(offset_min(int_P_heap_1_alloc_table, heap), (0))
- and ge_int(offset_max(int_P_heap_1_alloc_table, heap), (99)))
+predicate valid_heap(intP_heap_1_alloc_table:intP alloc_table) =
+ (le_int(offset_min(intP_heap_1_alloc_table, heap), (0))
+ and ge_int(offset_max(intP_heap_1_alloc_table, heap), (99)))
 
-predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_root_int_P(p:int_P pointer, a:int, b:int,
- int_P_alloc_table:int_P alloc_table) =
- ((offset_min(int_P_alloc_table, p) <= a)
- and (offset_max(int_P_alloc_table, p) >= b))
+predicate valid_root_intP(p:intP pointer, a:int, b:int,
+ intP_alloc_table:intP alloc_table) =
+ ((offset_min(intP_alloc_table, p) <= a)
+ and (offset_max(intP_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_struct_int_P(p:int_P pointer, a:int, b:int,
- int_P_alloc_table:int_P alloc_table) =
- ((offset_min(int_P_alloc_table, p) <= a)
- and (offset_max(int_P_alloc_table, p) >= b))
+predicate valid_struct_intP(p:intP pointer, a:int, b:int,
+ intP_alloc_table:intP alloc_table) =
+ ((offset_min(intP_alloc_table, p) <= a)
+ and (offset_max(intP_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-logic void_P_tag:  -> void_P tag_id
+logic voidP_tag:  -> voidP tag_id
 
-axiom void_P_int : (int_of_tag(void_P_tag) = (1))
+axiom voidP_int : (int_of_tag(voidP_tag) = (1))
 
-axiom void_P_of_pointer_address_of_pointer_addr :
- (forall p:void_P pointer.
-  (p = void_P_of_pointer_address(pointer_address(p))))
+axiom voidP_of_pointer_address_of_pointer_addr :
+ (forall p:voidP pointer. (p = voidP_of_pointer_address(pointer_address(p))))
 
-axiom void_P_parenttag_bottom : parenttag(void_P_tag, bottom_tag)
+axiom voidP_parenttag_bottom : parenttag(voidP_tag, bottom_tag)
 
-axiom void_P_tags :
- (forall x:void_P pointer.
-  (forall void_P_tag_table:void_P tag_table.
-   instanceof(void_P_tag_table, x, void_P_tag)))
+axiom voidP_tags :
+ (forall x:voidP pointer.
+  (forall voidP_tag_table:voidP tag_table.
+   instanceof(voidP_tag_table, x, voidP_tag)))
 
 lemma div2_1 :
  (forall x_5:int32.
@@ -656,191 +650,202 @@ axiom is_heap_def_5 :
             is_heap(Node(Node(ll_0, lx_0, lr_0), x_9, Node(rl_0, rx_0, rr_0))))))))))))))
 
 axiom tree_of_array_def_1 :
- (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
-  (forall t_2:int_P pointer.
+ (forall intP_intM_t_1_2_at_L:(intP, int32) memory.
+  (forall t_2:intP pointer.
    (forall root_0:int.
     (forall bound_0:int.
      (ge_int(root_0, bound_0) ->
-      (tree_of_array(t_2, root_0, bound_0, int_P_int_M_t_1_2_at_L) = Empty))))))
+      (tree_of_array(t_2, root_0, bound_0, intP_intM_t_1_2_at_L) = Empty))))))
 
 axiom tree_of_array_def_2 :
- (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
-  (forall t_3:int_P pointer.
+ (forall intP_intM_t_1_2_at_L:(intP, int32) memory.
+  (forall t_3:intP pointer.
    (forall root_1:int.
     (forall bound_1:int.
      ((le_int((0), root_1) and lt_int(root_1, bound_1)) ->
-      (tree_of_array(t_3, root_1, bound_1, int_P_int_M_t_1_2_at_L) = 
-      Node(tree_of_array(t_3, add_int(mul_int((2), root_1), (1)), bound_1,
-           int_P_int_M_t_1_2_at_L),
-      integer_of_int32(select(int_P_int_M_t_1_2_at_L, shift(t_3, root_1))),
-      tree_of_array(t_3, add_int(mul_int((2), root_1), (2)), bound_1,
-      int_P_int_M_t_1_2_at_L))))))))
+      (tree_of_array(t_3, root_1, bound_1, intP_intM_t_1_2_at_L) = Node(
+                                                                   tree_of_array(t_3,
+                                                                   add_int(
+                                                                   mul_int((2),
+                                                                   root_1),
+                                                                   (1)),
+                                                                   bound_1,
+                                                                   intP_intM_t_1_2_at_L),
+                                                                   integer_of_int32(
+                                                                   select(intP_intM_t_1_2_at_L,
+                                                                   shift(t_3,
+                                                                   root_1))),
+                                                                   tree_of_array(t_3,
+                                                                   add_int(
+                                                                   mul_int((2),
+                                                                   root_1),
+                                                                   (2)),
+                                                                   bound_1,
+                                                                   intP_intM_t_1_2_at_L))))))))
 
-parameter alloc_bitvector_struct_char_P :
+parameter alloc_bitvector_struct_charP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_char_P_requires :
+parameter alloc_bitvector_struct_charP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_int_P :
+parameter alloc_bitvector_struct_intP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_int_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_int_P_requires :
+parameter alloc_bitvector_struct_intP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_int_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P :
+parameter alloc_bitvector_struct_voidP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P_requires :
+parameter alloc_bitvector_struct_voidP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter char_P_alloc_table : char_P alloc_table ref
+parameter charP_alloc_table : charP alloc_table ref
 
-parameter char_P_tag_table : char_P tag_table ref
+parameter charP_tag_table : charP tag_table ref
 
-parameter alloc_struct_char_P :
+parameter alloc_struct_charP :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { } char_P pointer writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { } charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter alloc_struct_char_P_requires :
+parameter alloc_struct_charP_requires :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { ge_int(n, (0))} char_P pointer
-    writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { ge_int(n, (0))} charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter int_P_alloc_table : int_P alloc_table ref
+parameter intP_alloc_table : intP alloc_table ref
 
-parameter int_P_tag_table : int_P tag_table ref
+parameter intP_tag_table : intP tag_table ref
 
-parameter alloc_struct_int_P :
+parameter alloc_struct_intP :
  n:int ->
-  int_P_alloc_table:int_P alloc_table ref ->
-   int_P_tag_table:int_P tag_table ref ->
-    { } int_P pointer writes int_P_alloc_table,int_P_tag_table
-    { (strict_valid_struct_int_P(result, (0), sub_int(n, (1)),
-       int_P_alloc_table)
-      and (alloc_extends(int_P_alloc_table@, int_P_alloc_table)
-          and (alloc_fresh(int_P_alloc_table@, result, n)
-              and instanceof(int_P_tag_table, result, int_P_tag)))) }
+  intP_alloc_table:intP alloc_table ref ->
+   intP_tag_table:intP tag_table ref ->
+    { } intP pointer writes intP_alloc_table,intP_tag_table
+    { (strict_valid_struct_intP(result, (0), sub_int(n, (1)),
+       intP_alloc_table)
+      and (alloc_extends(intP_alloc_table@, intP_alloc_table)
+          and (alloc_fresh(intP_alloc_table@, result, n)
+              and instanceof(intP_tag_table, result, intP_tag)))) }
 
-parameter alloc_struct_int_P_requires :
+parameter alloc_struct_intP_requires :
  n:int ->
-  int_P_alloc_table:int_P alloc_table ref ->
-   int_P_tag_table:int_P tag_table ref ->
-    { ge_int(n, (0))} int_P pointer writes int_P_alloc_table,int_P_tag_table
-    { (strict_valid_struct_int_P(result, (0), sub_int(n, (1)),
-       int_P_alloc_table)
-      and (alloc_extends(int_P_alloc_table@, int_P_alloc_table)
-          and (alloc_fresh(int_P_alloc_table@, result, n)
-              and instanceof(int_P_tag_table, result, int_P_tag)))) }
+  intP_alloc_table:intP alloc_table ref ->
+   intP_tag_table:intP tag_table ref ->
+    { ge_int(n, (0))} intP pointer writes intP_alloc_table,intP_tag_table
+    { (strict_valid_struct_intP(result, (0), sub_int(n, (1)),
+       intP_alloc_table)
+      and (alloc_extends(intP_alloc_table@, intP_alloc_table)
+          and (alloc_fresh(intP_alloc_table@, result, n)
+              and instanceof(intP_tag_table, result, intP_tag)))) }
 
-parameter void_P_alloc_table : void_P alloc_table ref
+parameter voidP_alloc_table : voidP alloc_table ref
 
-parameter void_P_tag_table : void_P tag_table ref
+parameter voidP_tag_table : voidP tag_table ref
 
-parameter alloc_struct_void_P :
+parameter alloc_struct_voidP :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { } void_P pointer writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { } voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
-parameter alloc_struct_void_P_requires :
+parameter alloc_struct_voidP_requires :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { ge_int(n, (0))} void_P pointer
-    writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { ge_int(n, (0))} voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
 parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
-parameter int_P_heap_1_alloc_table : int_P alloc_table ref
+parameter intP_heap_1_alloc_table : intP alloc_table ref
 
-parameter int_P_int_M_heap_1 : (int_P, int32) memory ref
+parameter intP_intM_heap_1 : (intP, int32) memory ref
 
 parameter size : int32 ref
 
 parameter clear :
  tt:unit ->
-  { } unit reads int_P_heap_1_alloc_table,int_P_int_M_heap_1,size writes size
+  { } unit reads intP_heap_1_alloc_table,intP_intM_heap_1,size writes size
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+     ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
      and ((JC_<somenum>: size_inv(size))
-         and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size)))))
-    and (JC_<somenum>: (model(int_P_int_M_heap_1, size) = empty_bag))) }
+         and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size)))))
+    and (JC_<somenum>: (model(intP_intM_heap_1, size) = empty_bag))) }
 
 parameter clear_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
     and ((JC_<somenum>: size_inv(size))
-        and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size)))))}
-  unit reads int_P_heap_1_alloc_table,int_P_int_M_heap_1,size writes size
+        and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size)))))}
+  unit reads intP_heap_1_alloc_table,intP_intM_heap_1,size writes size
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+     ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
      and ((JC_<somenum>: size_inv(size))
-         and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size)))))
-    and (JC_<somenum>: (model(int_P_int_M_heap_1, size) = empty_bag))) }
+         and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size)))))
+    and (JC_<somenum>: (model(intP_intM_heap_1, size) = empty_bag))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -854,118 +859,118 @@ parameter int8_of_integer_ :
 
 parameter max :
  tt:unit ->
-  { } int32 reads int_P_heap_1_alloc_table,int_P_int_M_heap_1,size
+  { } int32 reads intP_heap_1_alloc_table,intP_intM_heap_1,size
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+     ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
      and ((JC_<somenum>: size_inv(size))
-         and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size)))))
+         and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size)))))
     and (JC_<somenum>:
-        is_max_bag(model(int_P_int_M_heap_1, size), integer_of_int32(result)))) }
+        is_max_bag(model(intP_intM_heap_1, size), integer_of_int32(result)))) }
 
 parameter max_requires :
  tt:unit ->
   { (JC_<somenum>:
     ((JC_<somenum>: gt_int(integer_of_int32(size), (0)))
-    and ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    and ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
         and ((JC_<somenum>: size_inv(size))
-            and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size))))))}
-  int32 reads int_P_heap_1_alloc_table,int_P_int_M_heap_1,size
+            and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size))))))}
+  int32 reads intP_heap_1_alloc_table,intP_intM_heap_1,size
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+     ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
      and ((JC_<somenum>: size_inv(size))
-         and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size)))))
+         and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size)))))
     and (JC_<somenum>:
-        is_max_bag(model(int_P_int_M_heap_1, size), integer_of_int32(result)))) }
+        is_max_bag(model(intP_intM_heap_1, size), integer_of_int32(result)))) }
 
 parameter pop :
  tt:unit ->
-  { } int32 reads int_P_heap_1_alloc_table,int_P_int_M_heap_1,size
-  writes int_P_int_M_heap_1,size
+  { } int32 reads intP_heap_1_alloc_table,intP_intM_heap_1,size
+  writes intP_intM_heap_1,size
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+     ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
      and ((JC_<somenum>: size_inv(size))
-         and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size)))))
+         and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>:
           eq_int(integer_of_int32(size),
           sub_int(integer_of_int32(size@), (1))))
          and ((JC_<somenum>:
-              is_max_bag(model(int_P_int_M_heap_1@, size@),
+              is_max_bag(model(intP_intM_heap_1@, size@),
               integer_of_int32(result)))
              and (JC_<somenum>:
-                 (model(int_P_int_M_heap_1@, size@) = add_bag(integer_of_int32(result),
-                                                      model(int_P_int_M_heap_1,
-                                                      size)))))))
+                 (model(intP_intM_heap_1@, size@) = add_bag(integer_of_int32(result),
+                                                    model(intP_intM_heap_1,
+                                                    size)))))))
         and (JC_<somenum>:
-            not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
-            int_P_int_M_heap_1, pset_all(pset_singleton(heap@))))))) }
+            not_assigns(intP_heap_1_alloc_table@, intP_intM_heap_1@,
+            intP_intM_heap_1, pset_all(pset_singleton(heap@))))))) }
 
 parameter pop_requires :
  tt:unit ->
   { (JC_<somenum>:
     ((JC_<somenum>: gt_int(integer_of_int32(size), (0)))
-    and ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    and ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
         and ((JC_<somenum>: size_inv(size))
-            and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size))))))}
-  int32 reads int_P_heap_1_alloc_table,int_P_int_M_heap_1,size
-  writes int_P_int_M_heap_1,size
+            and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size))))))}
+  int32 reads intP_heap_1_alloc_table,intP_intM_heap_1,size
+  writes intP_intM_heap_1,size
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+     ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
      and ((JC_<somenum>: size_inv(size))
-         and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size)))))
+         and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>:
           eq_int(integer_of_int32(size),
           sub_int(integer_of_int32(size@), (1))))
          and ((JC_<somenum>:
-              is_max_bag(model(int_P_int_M_heap_1@, size@),
+              is_max_bag(model(intP_intM_heap_1@, size@),
               integer_of_int32(result)))
              and (JC_<somenum>:
-                 (model(int_P_int_M_heap_1@, size@) = add_bag(integer_of_int32(result),
-                                                      model(int_P_int_M_heap_1,
-                                                      size)))))))
+                 (model(intP_intM_heap_1@, size@) = add_bag(integer_of_int32(result),
+                                                    model(intP_intM_heap_1,
+                                                    size)))))))
         and (JC_<somenum>:
-            not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
-            int_P_int_M_heap_1, pset_all(pset_singleton(heap@))))))) }
+            not_assigns(intP_heap_1_alloc_table@, intP_intM_heap_1@,
+            intP_intM_heap_1, pset_all(pset_singleton(heap@))))))) }
 
 parameter push :
  x_3:int32 ->
-  { } unit reads int_P_heap_1_alloc_table,int_P_int_M_heap_1,size
-  writes int_P_int_M_heap_1,size
+  { } unit reads intP_heap_1_alloc_table,intP_intM_heap_1,size
+  writes intP_intM_heap_1,size
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+     ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
      and ((JC_<somenum>: size_inv(size))
-         and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size)))))
+         and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
-         (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x_3@),
-                                            model(int_P_int_M_heap_1@, size@))))
+         (model(intP_intM_heap_1, size) = add_bag(integer_of_int32(x_3@),
+                                          model(intP_intM_heap_1@, size@))))
         and (JC_<somenum>:
-            not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
-            int_P_int_M_heap_1, pset_all(pset_singleton(heap@))))))) }
+            not_assigns(intP_heap_1_alloc_table@, intP_intM_heap_1@,
+            intP_intM_heap_1, pset_all(pset_singleton(heap@))))))) }
 
 parameter push_requires :
  x_3:int32 ->
   { (JC_<somenum>:
     ((JC_<somenum>: lt_int(integer_of_int32(size), sub_int((100), (1))))
-    and ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    and ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
         and ((JC_<somenum>: size_inv(size))
-            and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size))))))}
-  unit reads int_P_heap_1_alloc_table,int_P_int_M_heap_1,size
-  writes int_P_int_M_heap_1,size
+            and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size))))))}
+  unit reads intP_heap_1_alloc_table,intP_intM_heap_1,size
+  writes intP_intM_heap_1,size
   { ((JC_<somenum>:
-     ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+     ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
      and ((JC_<somenum>: size_inv(size))
-         and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size)))))
+         and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
-         (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x_3@),
-                                            model(int_P_int_M_heap_1@, size@))))
+         (model(intP_intM_heap_1, size) = add_bag(integer_of_int32(x_3@),
+                                          model(intP_intM_heap_1@, size@))))
         and (JC_<somenum>:
-            not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
-            int_P_int_M_heap_1, pset_all(pset_singleton(heap@))))))) }
+            not_assigns(intP_heap_1_alloc_table@, intP_intM_heap_1@,
+            intP_intM_heap_1, pset_all(pset_singleton(heap@))))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -976,23 +981,23 @@ parameter safe_int8_of_integer_ :
 let clear_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
     and ((JC_<somenum>: size_inv(size))
-        and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size))))) }
+        and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size))))) }
   (init:
   try
    (C_1:
    begin
      (let jessie_<somenum> = (size := (safe_int32_of_integer_ (0))) in void);
     (raise Return); (raise Return) end) with Return -> void end)
-  { (JC_<somenum>: (model(int_P_int_M_heap_1, size) = empty_bag)) }
+  { (JC_<somenum>: (model(intP_intM_heap_1, size) = empty_bag)) }
 
 let clear_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
     and ((JC_<somenum>: size_inv(size))
-        and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size))))) }
+        and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size))))) }
   (init:
   try
    (C_1:
@@ -1000,17 +1005,17 @@ let clear_safety =
      (let jessie_<somenum> = (size := (safe_int32_of_integer_ (0))) in void);
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
     and ((JC_<somenum>: size_inv(size))
-        and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size))))) }
+        and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size))))) }
 
 let max_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
     ((JC_<somenum>: gt_int(integer_of_int32(size), (0)))
-    and ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    and ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
         and ((JC_<somenum>: size_inv(size))
-            and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size)))))) }
+            and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1020,19 +1025,19 @@ let max_ensures_default =
      begin
        (let jessie_<somenum> =
        (__retres := (C_29:
-                    ((safe_acc_ !int_P_int_M_heap_1) ((shift heap) (0))))) in
+                    ((safe_acc_ !intP_intM_heap_1) ((shift heap) (0))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    is_max_bag(model(int_P_int_M_heap_1, size), integer_of_int32(result))) }
+    is_max_bag(model(intP_intM_heap_1, size), integer_of_int32(result))) }
 
 let max_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
     ((JC_<somenum>: gt_int(integer_of_int32(size), (0)))
-    and ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    and ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
         and ((JC_<somenum>: size_inv(size))
-            and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size)))))) }
+            and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1042,21 +1047,21 @@ let max_safety =
      begin
        (let jessie_<somenum> =
        (__retres := (C_29:
-                    ((safe_acc_ !int_P_int_M_heap_1) ((shift heap) (0))))) in
+                    ((safe_acc_ !intP_intM_heap_1) ((shift heap) (0))))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
     and ((JC_<somenum>: size_inv(size))
-        and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size))))) }
+        and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size))))) }
 
 let pop_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
     ((JC_<somenum>: gt_int(integer_of_int32(size), (0)))
-    and ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    and ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
         and ((JC_<somenum>: size_inv(size))
-            and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size)))))) }
+            and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1069,7 +1074,7 @@ let pop_ensures_default =
      (C_37:
      begin
        (let jessie_<somenum> =
-       (res := (C_33: ((safe_acc_ !int_P_int_M_heap_1) ((shift heap) (0))))) in
+       (res := (C_33: ((safe_acc_ !intP_intM_heap_1) ((shift heap) (0))))) in
        void);
       (let jessie_<somenum> =
       (size := (C_36:
@@ -1085,7 +1090,7 @@ let pop_ensures_default =
         begin
           (let jessie_<somenum> =
           (v := (C_38:
-                ((safe_acc_ !int_P_int_M_heap_1) ((shift heap) (integer_of_int32 !size))))) in
+                ((safe_acc_ !intP_intM_heap_1) ((shift heap) (integer_of_int32 !size))))) in
           void);
          (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
          (loop_4:
@@ -1098,12 +1103,12 @@ let pop_ensures_default =
              and ((JC_<somenum>:
                   ((size = size@loop_4)
                   and (JC_<somenum>:
-                      not_assigns(int_P_heap_1_alloc_table@loop_4,
-                      int_P_int_M_heap_1@loop_4, int_P_int_M_heap_1,
+                      not_assigns(intP_heap_1_alloc_table@loop_4,
+                      intP_intM_heap_1@loop_4, intP_intM_heap_1,
                       pset_all(pset_singleton(heap))))))
                  and (JC_<somenum>:
-                     not_assigns(int_P_heap_1_alloc_table@init,
-                     int_P_int_M_heap_1@init, int_P_int_M_heap_1,
+                     not_assigns(intP_heap_1_alloc_table@init,
+                     intP_intM_heap_1@init, intP_intM_heap_1,
                      pset_all(pset_singleton(heap@init))))))  }
           begin
             [ { } unit { true } ];
@@ -1137,10 +1142,10 @@ let pop_ensures_default =
                                                       ((sub_int (integer_of_int32 !size)) (1)))))))
                then
                 (if ((lt_int_ (integer_of_int32 (C_56:
-                                                ((safe_acc_ !int_P_int_M_heap_1) 
+                                                ((safe_acc_ !intP_intM_heap_1) 
                                                  ((shift heap) (integer_of_int32 !j)))))) 
                      (integer_of_int32 (C_55:
-                                       ((safe_acc_ !int_P_int_M_heap_1) 
+                                       ((safe_acc_ !intP_intM_heap_1) 
                                         ((shift heap) (integer_of_int32 
                                                        (C_54:
                                                        (safe_int32_of_integer_ 
@@ -1155,7 +1160,7 @@ let pop_ensures_default =
                  void) else void) else void);
                (if ((ge_int_ (integer_of_int32 !v)) (integer_of_int32 
                                                      (C_59:
-                                                     ((safe_acc_ !int_P_int_M_heap_1) 
+                                                     ((safe_acc_ !intP_intM_heap_1) 
                                                       ((shift heap) (integer_of_int32 !j))))))
                then
                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
@@ -1163,11 +1168,11 @@ let pop_ensures_default =
                (let jessie_<somenum> =
                (let jessie_<somenum> =
                (C_60:
-               ((safe_acc_ !int_P_int_M_heap_1) ((shift heap) (integer_of_int32 !j)))) in
+               ((safe_acc_ !intP_intM_heap_1) ((shift heap) (integer_of_int32 !j)))) in
                (let jessie_<somenum> = heap in
                (let jessie_<somenum> = (integer_of_int32 !i_0) in
                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-               (((safe_upd_ int_P_int_M_heap_1) jessie_<somenum>) jessie_<somenum>))))) in
+               (((safe_upd_ intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>))))) in
                void); (i_0 := !j); !i_0 end))) in void);
              (raise (Loop_continue_exc void)) end in void) with
             Loop_continue_exc jessie_<somenum> -> void end end done);
@@ -1183,31 +1188,30 @@ let pop_ensures_default =
          (let jessie_<somenum> = (integer_of_int32 !i_0) in
          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
          begin
-           (((safe_upd_ int_P_int_M_heap_1) jessie_<somenum>) jessie_<somenum>);
-          jessie_<somenum> end))))) end) in void) end else void); (return := !res);
+           (((safe_upd_ intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>); jessie_<somenum>
+         end))))) end) in void) end else void); (return := !res);
       (raise Return) end)))))); absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>:
       eq_int(integer_of_int32(size), sub_int(integer_of_int32(size@), (1))))
      and ((JC_<somenum>:
-          is_max_bag(model(int_P_int_M_heap_1@, size@),
+          is_max_bag(model(intP_intM_heap_1@, size@),
           integer_of_int32(result)))
          and (JC_<somenum>:
-             (model(int_P_int_M_heap_1@, size@) = add_bag(integer_of_int32(result),
-                                                  model(int_P_int_M_heap_1,
-                                                  size)))))))
+             (model(intP_intM_heap_1@, size@) = add_bag(integer_of_int32(result),
+                                                model(intP_intM_heap_1, size)))))))
     and (JC_<somenum>:
-        not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
-        int_P_int_M_heap_1, pset_all(pset_singleton(heap@)))))) }
+        not_assigns(intP_heap_1_alloc_table@, intP_intM_heap_1@,
+        intP_intM_heap_1, pset_all(pset_singleton(heap@)))))) }
 
 let pop_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
     ((JC_<somenum>: gt_int(integer_of_int32(size), (0)))
-    and ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    and ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
         and ((JC_<somenum>: size_inv(size))
-            and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size)))))) }
+            and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size)))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1220,7 +1224,7 @@ let pop_safety =
      (C_37:
      begin
        (let jessie_<somenum> =
-       (res := (C_33: ((safe_acc_ !int_P_int_M_heap_1) ((shift heap) (0))))) in
+       (res := (C_33: ((safe_acc_ !intP_intM_heap_1) ((shift heap) (0))))) in
        void);
       (let jessie_<somenum> =
       (size := (C_36:
@@ -1238,7 +1242,7 @@ let pop_safety =
           (let jessie_<somenum> =
           (v := (C_38:
                 (JC_<somenum>:
-                ((((offset_acc_ !int_P_heap_1_alloc_table) !int_P_int_M_heap_1) heap) 
+                ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
                  (integer_of_int32 !size))))) in void);
          (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
          (loop_3:
@@ -1285,11 +1289,11 @@ let pop_safety =
                then
                 (if ((lt_int_ (integer_of_int32 (C_56:
                                                 (JC_<somenum>:
-                                                ((((offset_acc_ !int_P_heap_1_alloc_table) !int_P_int_M_heap_1) heap) 
+                                                ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
                                                  (integer_of_int32 !j)))))) 
                      (integer_of_int32 (C_55:
                                        (JC_<somenum>:
-                                       ((((offset_acc_ !int_P_heap_1_alloc_table) !int_P_int_M_heap_1) heap) 
+                                       ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
                                         (integer_of_int32 (C_54:
                                                           (JC_<somenum>:
                                                           (int32_of_integer_ 
@@ -1307,7 +1311,7 @@ let pop_safety =
                (if ((ge_int_ (integer_of_int32 !v)) (integer_of_int32 
                                                      (C_59:
                                                      (JC_<somenum>:
-                                                     ((((offset_acc_ !int_P_heap_1_alloc_table) !int_P_int_M_heap_1) heap) 
+                                                     ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
                                                       (integer_of_int32 !j))))))
                then
                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
@@ -1316,13 +1320,13 @@ let pop_safety =
                (let jessie_<somenum> =
                (C_60:
                (JC_<somenum>:
-               ((((offset_acc_ !int_P_heap_1_alloc_table) !int_P_int_M_heap_1) heap) 
+               ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
                 (integer_of_int32 !j)))) in
                (let jessie_<somenum> = heap in
                (let jessie_<somenum> = (integer_of_int32 !i_0) in
                (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                (JC_<somenum>:
-               (((((offset_upd_ !int_P_heap_1_alloc_table) int_P_int_M_heap_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+               (((((offset_upd_ !intP_heap_1_alloc_table) intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
                void); (i_0 := !j); !i_0 end))) in void);
              (raise (Loop_continue_exc void)) end in void) with
             Loop_continue_exc jessie_<somenum> -> void end end done);
@@ -1339,21 +1343,21 @@ let pop_safety =
          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
          begin
            (JC_<somenum>:
-           (((((offset_upd_ !int_P_heap_1_alloc_table) int_P_int_M_heap_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+           (((((offset_upd_ !intP_heap_1_alloc_table) intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
           jessie_<somenum> end))))) end) in void) end else void); (return := !res);
       (raise Return) end)))))); absurd  end with Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
     and ((JC_<somenum>: size_inv(size))
-        and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size))))) }
+        and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size))))) }
 
 let push_ensures_default =
  fun (x_3 : int32) ->
   { (JC_<somenum>:
     ((JC_<somenum>: lt_int(integer_of_int32(size), sub_int((100), (1))))
-    and ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    and ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
         and ((JC_<somenum>: size_inv(size))
-            and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size)))))) }
+            and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size)))))) }
   (init:
   try
    begin
@@ -1374,31 +1378,31 @@ let push_ensures_default =
                 and ((JC_<somenum>:
                      (eq_int(integer_of_int32(i), integer_of_int32(size)) ->
                       (is_heap(tree_of_array(shift(heap, (0)), (0),
-                               integer_of_int32(size), int_P_int_M_heap_1))
-                      and (model(int_P_int_M_heap_1, size) = model(int_P_int_M_heap_1@init,
-                                                             size@init)))))
+                               integer_of_int32(size), intP_intM_heap_1))
+                      and (model(intP_intM_heap_1, size) = model(intP_intM_heap_1@init,
+                                                           size@init)))))
                     and (JC_<somenum>:
                         (lt_int(integer_of_int32(i), integer_of_int32(size)) ->
                          (is_heap(tree_of_array(shift(heap, (0)), (0),
                                   add_int(integer_of_int32(size), (1)),
-                                  int_P_int_M_heap_1))
+                                  intP_intM_heap_1))
                          and (bag_of_tree(tree_of_array(shift(heap, (0)),
                                           (0),
                                           add_int(integer_of_int32(size),
-                                          (1)), int_P_int_M_heap_1)) = 
-                             add_bag(integer_of_int32(select(int_P_int_M_heap_1,
+                                          (1)), intP_intM_heap_1)) = 
+                             add_bag(integer_of_int32(select(intP_intM_heap_1,
                                                       shift(heap,
                                                       integer_of_int32(i)))),
-                             model(int_P_int_M_heap_1@init, size@init))))))))))
+                             model(intP_intM_heap_1@init, size@init))))))))))
            and ((JC_<somenum>:
                 ((size = size@loop_2)
                 and (JC_<somenum>:
-                    not_assigns(int_P_heap_1_alloc_table@loop_2,
-                    int_P_int_M_heap_1@loop_2, int_P_int_M_heap_1,
+                    not_assigns(intP_heap_1_alloc_table@loop_2,
+                    intP_intM_heap_1@loop_2, intP_intM_heap_1,
                     pset_all(pset_singleton(heap))))))
                and (JC_<somenum>:
-                   not_assigns(int_P_heap_1_alloc_table@init,
-                   int_P_int_M_heap_1@init, int_P_int_M_heap_1,
+                   not_assigns(intP_heap_1_alloc_table@init,
+                   intP_intM_heap_1@init, intP_intM_heap_1,
                    pset_all(pset_singleton(heap@init))))))  }
         begin
           [ { } unit { true } ];
@@ -1428,7 +1432,7 @@ let push_ensures_default =
              void);
              (let jessie_<somenum> =
              (p := (C_17:
-                   ((safe_acc_ !int_P_int_M_heap_1) ((shift heap) (integer_of_int32 !parent))))) in
+                   ((safe_acc_ !intP_intM_heap_1) ((shift heap) (integer_of_int32 !parent))))) in
              void);
              (if ((ge_int_ (integer_of_int32 !p)) (integer_of_int32 x_3))
              then
@@ -1439,7 +1443,7 @@ let push_ensures_default =
              (let jessie_<somenum> = heap in
              (let jessie_<somenum> = (integer_of_int32 !i) in
              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-             (((safe_upd_ int_P_int_M_heap_1) jessie_<somenum>) jessie_<somenum>))))) in
+             (((safe_upd_ intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>))))) in
              void); (i := !parent); !i end)))) in void);
            (raise (Loop_continue_exc void)) end in void) with
           Loop_continue_exc jessie_<somenum> -> void end end done);
@@ -1455,7 +1459,7 @@ let push_ensures_default =
        (let jessie_<somenum> = heap in
        (let jessie_<somenum> = (integer_of_int32 !i) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-       (((safe_upd_ int_P_int_M_heap_1) jessie_<somenum>) jessie_<somenum>))))) in void);
+       (((safe_upd_ intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>))))) in void);
        (let jessie_<somenum> =
        (size := (C_25:
                 (safe_int32_of_integer_ (C_24:
@@ -1464,19 +1468,19 @@ let push_ensures_default =
    void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
-     (model(int_P_int_M_heap_1, size) = add_bag(integer_of_int32(x_3@),
-                                        model(int_P_int_M_heap_1@, size@))))
+     (model(intP_intM_heap_1, size) = add_bag(integer_of_int32(x_3@),
+                                      model(intP_intM_heap_1@, size@))))
     and (JC_<somenum>:
-        not_assigns(int_P_heap_1_alloc_table@, int_P_int_M_heap_1@,
-        int_P_int_M_heap_1, pset_all(pset_singleton(heap@)))))) }
+        not_assigns(intP_heap_1_alloc_table@, intP_intM_heap_1@,
+        intP_intM_heap_1, pset_all(pset_singleton(heap@)))))) }
 
 let push_safety =
  fun (x_3 : int32) ->
   { (JC_<somenum>:
     ((JC_<somenum>: lt_int(integer_of_int32(size), sub_int((100), (1))))
-    and ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    and ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
         and ((JC_<somenum>: size_inv(size))
-            and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size)))))) }
+            and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size)))))) }
   (init:
   try
    begin
@@ -1492,7 +1496,7 @@ let push_safety =
        while true do
        { invariant (JC_<somenum>: true) variant integer_of_int32((JC_<somenum> : i)) }
         begin
-          [ { } unit reads i,int_P_int_M_heap_1,size
+          [ { } unit reads i,intP_intM_heap_1,size
             { (JC_<somenum>:
               ((JC_<somenum>: le_int((0), integer_of_int32(i)))
               and ((JC_<somenum>:
@@ -1500,23 +1504,23 @@ let push_safety =
                   and ((JC_<somenum>:
                        (eq_int(integer_of_int32(i), integer_of_int32(size)) ->
                         (is_heap(tree_of_array(shift(heap, (0)), (0),
-                                 integer_of_int32(size), int_P_int_M_heap_1))
-                        and (model(int_P_int_M_heap_1, size) = model(int_P_int_M_heap_1@init,
-                                                               size@init)))))
+                                 integer_of_int32(size), intP_intM_heap_1))
+                        and (model(intP_intM_heap_1, size) = model(intP_intM_heap_1@init,
+                                                             size@init)))))
                       and (JC_<somenum>:
                           (lt_int(integer_of_int32(i),
                            integer_of_int32(size)) ->
                            (is_heap(tree_of_array(shift(heap, (0)), (0),
                                     add_int(integer_of_int32(size), (1)),
-                                    int_P_int_M_heap_1))
+                                    intP_intM_heap_1))
                            and (bag_of_tree(tree_of_array(shift(heap, (0)),
                                             (0),
                                             add_int(integer_of_int32(size),
-                                            (1)), int_P_int_M_heap_1)) = 
-                               add_bag(integer_of_int32(select(int_P_int_M_heap_1,
+                                            (1)), intP_intM_heap_1)) = 
+                               add_bag(integer_of_int32(select(intP_intM_heap_1,
                                                         shift(heap,
                                                         integer_of_int32(i)))),
-                               model(int_P_int_M_heap_1@init, size@init)))))))))) } ];
+                               model(intP_intM_heap_1@init, size@init)))))))))) } ];
          try
           (let jessie_<somenum> =
           begin
@@ -1546,7 +1550,7 @@ let push_safety =
              (let jessie_<somenum> =
              (p := (C_17:
                    (JC_<somenum>:
-                   ((((offset_acc_ !int_P_heap_1_alloc_table) !int_P_int_M_heap_1) heap) 
+                   ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
                     (integer_of_int32 !parent))))) in void);
              (if ((ge_int_ (integer_of_int32 !p)) (integer_of_int32 x_3))
              then
@@ -1558,7 +1562,7 @@ let push_safety =
              (let jessie_<somenum> = (integer_of_int32 !i) in
              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
              (JC_<somenum>:
-             (((((offset_upd_ !int_P_heap_1_alloc_table) int_P_int_M_heap_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+             (((((offset_upd_ !intP_heap_1_alloc_table) intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
              void); (i := !parent); !i end)))) in void);
            (raise (Loop_continue_exc void)) end in void) with
           Loop_continue_exc jessie_<somenum> -> void end end done);
@@ -1575,7 +1579,7 @@ let push_safety =
        (let jessie_<somenum> = (integer_of_int32 !i) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
        (JC_<somenum>:
-       (((((offset_upd_ !int_P_heap_1_alloc_table) int_P_int_M_heap_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+       (((((offset_upd_ !intP_heap_1_alloc_table) intP_intM_heap_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
        void);
        (let jessie_<somenum> =
        (size := (C_25:
@@ -1585,9 +1589,9 @@ let push_safety =
        void); (raise Return) end))) end))); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:
-    ((JC_<somenum>: valid_heap(int_P_heap_1_alloc_table))
+    ((JC_<somenum>: valid_heap(intP_heap_1_alloc_table))
     and ((JC_<somenum>: size_inv(size))
-        and (JC_<somenum>: is_heap_inv(int_P_int_M_heap_1, size))))) }
+        and (JC_<somenum>: is_heap_inv(intP_intM_heap_1, size))))) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C heap.jessie --quiet -f heap.makefile project
@@ -1642,30 +1646,30 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po76.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "224" begin = "24" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "224" begin = "24" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po77.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "224" begin = "24" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "224" begin = "24" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po78.why">
-      <location file = "why/heap.why" line = "1180" begin = "41" end = "70"/>
+      <location file = "why/heap.why" line = "1184" begin = "41" end = "70"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po79.why">
-      <location file = "why/heap.why" line = "1180" begin = "41" end = "70"/>
+      <location file = "why/heap.why" line = "1184" begin = "41" end = "70"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po80.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "230" begin = "15" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "230" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po81.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "230" begin = "15" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "230" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1714,11 +1718,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po57.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1619"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1615"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po58.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1619"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1615"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po59.why">
@@ -1746,11 +1750,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po65.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1619"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1615"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po66.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1619"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1615"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po67.why">
@@ -1877,12 +1881,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po43.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "295" begin = "27" end = "82"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "295" begin = "27" end = "80"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po44.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "295" begin = "27" end = "82"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "295" begin = "27" end = "80"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1895,12 +1899,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po47.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "301" begin = "18" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "301" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po48.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "301" begin = "18" end = "49"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "301" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1927,11 +1931,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po11.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1113"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1107"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po12.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1113"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1107"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po13.why">
@@ -1943,11 +1947,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po15.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1113"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1107"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po16.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1113"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1107"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po17.why">
@@ -2942,7 +2946,7 @@ axiom frame_between_sub:
 
 type bag
 
-type char_P
+type charP
 
 type heap_1
 
@@ -2950,13 +2954,13 @@ type int32
 
 type int8
 
-type int_P
+type intP
 
 type padding
 
 type tree
 
-type void_P
+type voidP
 
 logic Empty : tree
 
@@ -2970,22 +2974,22 @@ function add_bag(x_1: int, b: bag) : bag = union_bag(b, singleton_bag(x_1))
 
 logic bag_of_tree : tree -> bag
 
-logic char_P_tag : char_P tag_id
+logic charP_tag : charP tag_id
 
-axiom char_P_int: (int_of_tag(char_P_tag) = 1)
+axiom charP_int: (int_of_tag(charP_tag) = 1)
 
-logic char_P_of_pointer_address : unit pointer -> char_P pointer
+logic charP_of_pointer_address : unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr:
-  (forall p:char_P pointer.
-    (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr:
+  (forall p:charP pointer.
+    (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom: parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom: parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags:
-  (forall x:char_P pointer.
-    (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
-      x, char_P_tag)))
+axiom charP_tags:
+  (forall x:charP pointer.
+    (forall charP_tag_table:charP tag_table. instanceof(charP_tag_table, x,
+      charP_tag)))
 
 logic empty_bag : bag
 
@@ -2999,7 +3003,7 @@ logic integer_of_int8 : int8 -> int
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
 
-logic heap : int_P pointer
+logic heap : intP pointer
 
 logic int32_of_integer : int -> int32
 
@@ -3024,30 +3028,29 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
-logic int_P_tag : int_P tag_id
+logic intP_tag : intP tag_id
 
-axiom int_P_int: (int_of_tag(int_P_tag) = 1)
+axiom intP_int: (int_of_tag(intP_tag) = 1)
 
-logic int_P_of_pointer_address : unit pointer -> int_P pointer
+logic intP_of_pointer_address : unit pointer -> intP pointer
 
-axiom int_P_of_pointer_address_of_pointer_addr:
-  (forall p:int_P pointer.
-    (p = int_P_of_pointer_address(pointer_address(p))))
+axiom intP_of_pointer_address_of_pointer_addr:
+  (forall p:intP pointer. (p = intP_of_pointer_address(pointer_address(p))))
 
-axiom int_P_parenttag_bottom: parenttag(int_P_tag, bottom_tag)
+axiom intP_parenttag_bottom: parenttag(intP_tag, bottom_tag)
 
-axiom int_P_tags:
-  (forall x:int_P pointer.
-    (forall int_P_tag_table:int_P tag_table. instanceof(int_P_tag_table, x,
-      int_P_tag)))
+axiom intP_tags:
+  (forall x:intP pointer.
+    (forall intP_tag_table:intP tag_table. instanceof(intP_tag_table, x,
+      intP_tag)))
 
 logic is_heap : tree -> prop
 
-logic tree_of_array : int_P pointer, int, int, (int_P, int32) memory -> tree
+logic tree_of_array : intP pointer, int, int, (intP, int32) memory -> tree
 
-predicate is_heap_inv(int_P_int_M_heap_1: (int_P, int32) memory,
-  size: int32) = is_heap(tree_of_array(shift(heap, 0), 0,
-  integer_of_int32(size), int_P_int_M_heap_1))
+predicate is_heap_inv(intP_intM_heap_1: (intP, int32) memory, size: int32) =
+  is_heap(tree_of_array(shift(heap, 0), 0, integer_of_int32(size),
+  intP_intM_heap_1))
 
 logic occ_bag : int, bag -> int
 
@@ -3055,169 +3058,167 @@ predicate is_max_bag(b_1: bag, m: int) =
   ((occ_bag(m, b_1) >= 1) and
    (forall x_3_0:int. ((occ_bag(x_3_0, b_1) >= 1) -> (x_3_0 <= m))))
 
-predicate left_valid_struct_char_P(p: char_P pointer, a: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
+predicate left_valid_struct_charP(p: charP pointer, a: int,
+  charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
   p) <= a)
 
-predicate left_valid_struct_int_P(p: int_P pointer, a: int,
-  int_P_alloc_table: int_P alloc_table) = (offset_min(int_P_alloc_table,
+predicate left_valid_struct_intP(p: intP pointer, a: int,
+  intP_alloc_table: intP alloc_table) = (offset_min(intP_alloc_table,
   p) <= a)
 
-predicate left_valid_struct_void_P(p: void_P pointer, a: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
+predicate left_valid_struct_voidP(p: voidP pointer, a: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
 
-function model(int_P_int_M_heap_1_at_L: (int_P, int32) memory,
+function model(intP_intM_heap_1_at_L: (intP, int32) memory,
   size_at_L: int32) : bag = bag_of_tree(tree_of_array(shift(heap, 0), 0,
-  integer_of_int32(size_at_L), int_P_int_M_heap_1_at_L))
+  integer_of_int32(size_at_L), intP_intM_heap_1_at_L))
 
 axiom no_assign_tree_of_array_0:
-  (forall tmp:int_P pset.
-    (forall tmpmem:(int_P, int32) memory.
-      (forall tmpalloc:int_P alloc_table.
-        (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
+  (forall tmp:intP pset.
+    (forall tmpmem:(intP, int32) memory.
+      (forall tmpalloc:intP alloc_table.
+        (forall intP_intM_t_1_2_at_L:(intP, int32) memory.
           (forall bound:int.
             (forall root:int.
-              (forall t_1:int_P pointer.
+              (forall t_1:intP pointer.
                 ((pset_disjoint(tmp, pset_all(pset_singleton(t_1))) and
-                  not_assigns(tmpalloc, int_P_int_M_t_1_2_at_L, tmpmem, tmp)) ->
+                  not_assigns(tmpalloc, intP_intM_t_1_2_at_L, tmpmem, tmp)) ->
                  (tree_of_array(t_1, root, bound,
-                 int_P_int_M_t_1_2_at_L) = tree_of_array(t_1, root, bound,
+                 intP_intM_t_1_2_at_L) = tree_of_array(t_1, root, bound,
                  tmpmem))))))))))
 
 axiom no_update_tree_of_array_0:
-  (forall tmp:int_P pointer.
+  (forall tmp:intP pointer.
     (forall tmpval:int32.
-      (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
+      (forall intP_intM_t_1_2_at_L:(intP, int32) memory.
         (forall bound:int.
           (forall root:int.
-            (forall t_1:int_P pointer.
+            (forall t_1:intP pointer.
               ((not in_pset(tmp, pset_all(pset_singleton(t_1)))) ->
                (tree_of_array(t_1, root, bound,
-               int_P_int_M_t_1_2_at_L) = tree_of_array(t_1, root, bound,
-               store(int_P_int_M_t_1_2_at_L, tmp, tmpval))))))))))
+               intP_intM_t_1_2_at_L) = tree_of_array(t_1, root, bound,
+               store(intP_intM_t_1_2_at_L, tmp, tmpval))))))))))
 
-axiom pointer_addr_of_char_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(char_P_of_pointer_address(p))))
+axiom pointer_addr_of_charP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
-axiom pointer_addr_of_int_P_of_pointer_address:
-  (forall p:unit pointer. (p = pointer_address(int_P_of_pointer_address(p))))
+axiom pointer_addr_of_intP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
 
-logic void_P_of_pointer_address : unit pointer -> void_P pointer
+logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
-axiom pointer_addr_of_void_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(void_P_of_pointer_address(p))))
+axiom pointer_addr_of_voidP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p: char_P pointer, b: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
+predicate right_valid_struct_charP(p: charP pointer, b: int,
+  charP_alloc_table: charP alloc_table) = (offset_max(charP_alloc_table,
   p) >= b)
 
-predicate right_valid_struct_int_P(p: int_P pointer, b: int,
-  int_P_alloc_table: int_P alloc_table) = (offset_max(int_P_alloc_table,
+predicate right_valid_struct_intP(p: intP pointer, b: int,
+  intP_alloc_table: intP alloc_table) = (offset_max(intP_alloc_table,
   p) >= b)
 
-predicate right_valid_struct_void_P(p: void_P pointer, b: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
+predicate right_valid_struct_voidP(p: voidP pointer, b: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
 
 predicate size_inv(size: int32) =
   ((0 <= integer_of_int32(size)) and (integer_of_int32(size) < 100))
 
-predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
-
-predicate strict_valid_root_int_P(p: int_P pointer, a: int, b: int,
-  int_P_alloc_table: int_P alloc_table) =
-  ((offset_min(int_P_alloc_table, p) = a) and (offset_max(int_P_alloc_table,
+predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
    p) = b))
 
-predicate strict_valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
-
-predicate strict_valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
-
-predicate strict_valid_struct_int_P(p: int_P pointer, a: int, b: int,
-  int_P_alloc_table: int_P alloc_table) =
-  ((offset_min(int_P_alloc_table, p) = a) and (offset_max(int_P_alloc_table,
+predicate strict_valid_root_intP(p: intP pointer, a: int, b: int,
+  intP_alloc_table: intP alloc_table) =
+  ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
-predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
 
-predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
+predicate strict_valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
+
+predicate strict_valid_struct_intP(p: intP pointer, a: int, b: int,
+  intP_alloc_table: intP alloc_table) =
+  ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
+   p) = b))
+
+predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
+
+predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_int_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_heap(int_P_heap_1_alloc_table: int_P alloc_table) =
-  ((offset_min(int_P_heap_1_alloc_table, heap) <= 0) and
-   (offset_max(int_P_heap_1_alloc_table, heap) >= 99))
+predicate valid_heap(intP_heap_1_alloc_table: intP alloc_table) =
+  ((offset_min(intP_heap_1_alloc_table, heap) <= 0) and
+   (offset_max(intP_heap_1_alloc_table, heap) >= 99))
 
-predicate valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
-
-predicate valid_root_int_P(p: int_P pointer, a: int, b: int,
-  int_P_alloc_table: int_P alloc_table) =
-  ((offset_min(int_P_alloc_table, p) <= a) and (offset_max(int_P_alloc_table,
+predicate valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
    p) >= b))
 
-predicate valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
-
-predicate valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
-
-predicate valid_struct_int_P(p: int_P pointer, a: int, b: int,
-  int_P_alloc_table: int_P alloc_table) =
-  ((offset_min(int_P_alloc_table, p) <= a) and (offset_max(int_P_alloc_table,
+predicate valid_root_intP(p: intP pointer, a: int, b: int,
+  intP_alloc_table: intP alloc_table) =
+  ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
 
-predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
-logic void_P_tag : void_P tag_id
+predicate valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
 
-axiom void_P_int: (int_of_tag(void_P_tag) = 1)
+predicate valid_struct_intP(p: intP pointer, a: int, b: int,
+  intP_alloc_table: intP alloc_table) =
+  ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
+   p) >= b))
 
-axiom void_P_of_pointer_address_of_pointer_addr:
-  (forall p:void_P pointer.
-    (p = void_P_of_pointer_address(pointer_address(p))))
+predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
-axiom void_P_parenttag_bottom: parenttag(void_P_tag, bottom_tag)
+logic voidP_tag : voidP tag_id
 
-axiom void_P_tags:
-  (forall x:void_P pointer.
-    (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
-      x, void_P_tag)))
+axiom voidP_int: (int_of_tag(voidP_tag) = 1)
+
+axiom voidP_of_pointer_address_of_pointer_addr:
+  (forall p:voidP pointer.
+    (p = voidP_of_pointer_address(pointer_address(p))))
+
+axiom voidP_parenttag_bottom: parenttag(voidP_tag, bottom_tag)
+
+axiom voidP_tags:
+  (forall x:voidP pointer.
+    (forall voidP_tag_table:voidP tag_table. instanceof(voidP_tag_table, x,
+      voidP_tag)))
 
 axiom bag_of_tree_def_1: (bag_of_tree(Empty) = empty_bag)
 
@@ -3265,22 +3266,22 @@ axiom is_heap_def_5:
                     rx_0, rr_0))))))))))))))
 
 axiom tree_of_array_def_1:
-  (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
-    (forall t_2:int_P pointer.
+  (forall intP_intM_t_1_2_at_L:(intP, int32) memory.
+    (forall t_2:intP pointer.
       (forall root_0:int.
         (forall bound_0:int.
           ((root_0 >= bound_0) -> (tree_of_array(t_2, root_0, bound_0,
-           int_P_int_M_t_1_2_at_L) = Empty))))))
+           intP_intM_t_1_2_at_L) = Empty))))))
 
 axiom tree_of_array_def_2:
-  (forall int_P_int_M_t_1_2_at_L:(int_P, int32) memory.
-    (forall t_3:int_P pointer.
+  (forall intP_intM_t_1_2_at_L:(intP, int32) memory.
+    (forall t_3:intP pointer.
       (forall root_1:int.
         (forall bound_1:int.
           (((0 <= root_1) and (root_1 < bound_1)) -> (tree_of_array(t_3,
-           root_1, bound_1, int_P_int_M_t_1_2_at_L) = Node(tree_of_array(t_3,
-           ((2 * root_1) + 1), bound_1, int_P_int_M_t_1_2_at_L),
-           integer_of_int32(select(int_P_int_M_t_1_2_at_L, shift(t_3,
+           root_1, bound_1, intP_intM_t_1_2_at_L) = Node(tree_of_array(t_3,
+           ((2 * root_1) + 1), bound_1, intP_intM_t_1_2_at_L),
+           integer_of_int32(select(intP_intM_t_1_2_at_L, shift(t_3,
            root_1))), tree_of_array(t_3, ((2 * root_1) + 2), bound_1,
-           int_P_int_M_t_1_2_at_L))))))))
+           intP_intM_t_1_2_at_L))))))))
 

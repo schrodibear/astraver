@@ -33,6 +33,7 @@
 val window_width : int ref
 val window_height : int ref
 
+val colorblind : bool ref
 val font_size : int ref
 val font_family : string
 

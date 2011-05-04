@@ -3381,6 +3381,13 @@ and statements env b =
               local_decl ~ghost:true env s.java_pstatement_loc vd rem
           | JPSvar_decl vd -> 
               local_decl ~ghost:false env s.java_pstatement_loc vd rem
+	  | JPSlabel ((_loc,id), s)-> 
+	      [{ java_statement_node = 
+		  JSlabel(id, block  
+			    {env with label_env = 
+				(id, LabelName id)::env.label_env} 
+			    (s :: rem)) ;
+		java_statement_loc = s.java_pstatement_loc }]
           | JPSloop_annot (inv,behs_inv,dec) ->
 	      let annot = (inv,behs_inv,dec) in
               begin

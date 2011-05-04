@@ -3209,6 +3209,7 @@ let rec finalize e =
 *)
         match l with
           | [] -> assert false
+(**)
           | [(i,b1,b2,e')] ->
               if i=0 then
                  make_lets lets
@@ -3222,7 +3223,8 @@ let rec finalize e =
                 make_lets lets
                   (make_lets [tmpshift,make_app "shift" [mk_var tmpe; mk_expr (Cte i)]]
                      (make_old_style_update ~mark ~pos alloc tmpe tmpshift mem i b1 b2 e'))
-          | _ ->
+(**)
+         | _ ->
               let pre =
                 if safety_checking() then
                   make_and_list

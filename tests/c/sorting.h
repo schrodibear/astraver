@@ -25,5 +25,5 @@
   @*/
 
 /*@ predicate Sorted{L}(int *a, integer l, integer h) =
-  @   \forall integer i; l <= i < h ==> a[i] <= a[i+1] ;
+  @   \forall integer i,j; l <= i <= j < h ==> a[i] <= a[j] ;
   @*/

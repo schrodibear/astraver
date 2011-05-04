@@ -1,5 +1,5 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only renamed2.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD renamed2.c"
 [jessie] Starting Jessie translation
-renamed2.c:10:[jessie] failure: Casting from type 𝔹 to type int  not allowed
+renamed2.c:10:[jessie] failure: Casting from type 𝔹 to type int not allowed
 [jessie] warning: Not implemented feature(s). Please submit `feature request' report.

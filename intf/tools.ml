@@ -79,7 +79,10 @@ images, icons
 
 (* todo: size should adapt to current font_size ! *)
 let image ?size f =
-  let n = Filename.concat Options.lib_dir (Filename.concat "images" (f^".png"))
+  let name =
+    if !Colors.colorblind then f^"-bw.png" else f^"32.png" 
+  in
+  let n = Filename.concat Options.lib_dir (Filename.concat "images" name)
   in
   match size with
     | None ->
@@ -94,16 +97,16 @@ let set_boomy b = boomy := b
 let is_boomy () = !boomy 
 
 
-let iconname_default = "pause32"
-let iconname_running = "play32"
-let iconname_valid = "accept32"
-let iconname_unknown = "help32"
-let iconname_invalid = "delete32"
-let iconname_timeout = "clock32"
-let iconname_failure = "bug32"
-let iconname_yes = "accept32"
-let iconname_no = "delete32"
-let iconname_down = "play32"
+let iconname_default = "pause"
+let iconname_running = "play"
+let iconname_valid = "accept"
+let iconname_unknown = "help"
+let iconname_invalid = "delete"
+let iconname_timeout = "clock"
+let iconname_failure = "bug"
+let iconname_yes = "accept"
+let iconname_no = "delete"
+let iconname_down = "play"
 
 let image_default = ref (image ~size:32 iconname_default)
 let image_running = ref !image_default

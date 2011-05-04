@@ -21,27 +21,26 @@ type int8 = -128..127
 
 type int32 = -2147483648..2147483647
 
-tag double_P = {
-  real double_M: 64;
+tag doubleP = {
+  real doubleM: 64;
 }
 
-type double_P = [double_P]
+type doubleP = [doubleP]
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
 int32 i_f;
 
-real InterPolate(real x, double_P[..] X, double_P[..] Y, double_P[..] V,
-                 int32 n)
+real InterPolate(real x, doubleP[..] X, doubleP[..] Y, doubleP[..] V, int32 n)
   requires (C_57 : ((C_58 : (3 <= n)) && (C_59 : (n <= 17))));
   requires (C_54 : ((C_55 : (\offset_min(X) <= 0)) &&
                      (C_56 : (\offset_max(X) >= n))));
@@ -49,54 +48,54 @@ real InterPolate(real x, double_P[..] X, double_P[..] Y, double_P[..] V,
                      (C_53 : (\offset_max(Y) >= n))));
   requires (C_48 : ((C_49 : (\offset_min(V) <= 0)) &&
                      (C_50 : (\offset_max(V) >= n))));
-  requires (C_47 : ((X + 0).double_M == (X + 1).double_M));
+  requires (C_47 : ((X + 0).doubleM == (X + 1).doubleM));
   requires (C_46 : (\forall integer k1;
                      (\forall int32 k2;
                        (((1 <= k1) && ((k1 < k2) && (k2 <= n))) ==>
-                         ((X + k1).double_M < (X + k2).double_M)))));
+                         ((X + k1).doubleM < (X + k2).doubleM)))));
 behavior default:
   ensures (C_38 : true);
 behavior small:
-  assumes (((Y + 0).double_M == (Y + 1).double_M) &&
-            ((((V + 0).double_M == (V + n).double_M) &&
-               ((V + n).double_M == 0.0)) &&
+  assumes (((Y + 0).doubleM == (Y + 1).doubleM) &&
+            ((((V + 0).doubleM == (V + n).doubleM) &&
+               ((V + n).doubleM == 0.0)) &&
               ((\forall integer k_0;
                  (((1 <= k_0) && (k_0 <= (n - 1))) ==>
-                   ((V + k_0).double_M ==
-                     (((Y + (k_0 + 1)).double_M - (Y + k_0).double_M) /
-                       ((X + (k_0 + 1)).double_M - (X + k_0).double_M))))) &&
-                (x < (X + 0).double_M))));
-  ensures (C_39 : (\result == (\at(Y,Old) + 0).double_M));
+                   ((V + k_0).doubleM ==
+                     (((Y + (k_0 + 1)).doubleM - (Y + k_0).doubleM) /
+                       ((X + (k_0 + 1)).doubleM - (X + k_0).doubleM))))) &&
+                (x < (X + 0).doubleM))));
+  ensures (C_39 : (\result == (\at(Y,Old) + 0).doubleM));
 behavior big:
-  assumes (((Y + 0).double_M == (Y + 1).double_M) &&
-            ((((V + 0).double_M == (V + n).double_M) &&
-               ((V + n).double_M == 0.0)) &&
+  assumes (((Y + 0).doubleM == (Y + 1).doubleM) &&
+            ((((V + 0).doubleM == (V + n).doubleM) &&
+               ((V + n).doubleM == 0.0)) &&
               ((\forall integer k_1;
                  (((1 <= k_1) && (k_1 <= (n - 1))) ==>
-                   ((V + k_1).double_M ==
-                     (((Y + (k_1 + 1)).double_M - (Y + k_1).double_M) /
-                       ((X + (k_1 + 1)).double_M - (X + k_1).double_M))))) &&
-                (x >= (X + n).double_M))));
-  ensures (C_40 : (\result == (\at(Y,Old) + \at(n,Old)).double_M));
+                   ((V + k_1).doubleM ==
+                     (((Y + (k_1 + 1)).doubleM - (Y + k_1).doubleM) /
+                       ((X + (k_1 + 1)).doubleM - (X + k_1).doubleM))))) &&
+                (x >= (X + n).doubleM))));
+  ensures (C_40 : (\result == (\at(Y,Old) + \at(n,Old)).doubleM));
 behavior inter:
-  assumes (((Y + 0).double_M == (Y + 1).double_M) &&
-            ((((V + 0).double_M == (V + n).double_M) &&
-               ((V + n).double_M == 0.0)) &&
+  assumes (((Y + 0).doubleM == (Y + 1).doubleM) &&
+            ((((V + 0).doubleM == (V + n).doubleM) &&
+               ((V + n).doubleM == 0.0)) &&
               ((\forall integer k_2;
                  (((1 <= k_2) && (k_2 <= (n - 1))) ==>
-                   ((V + k_2).double_M ==
-                     (((Y + (k_2 + 1)).double_M - (Y + k_2).double_M) /
-                       ((X + (k_2 + 1)).double_M - (X + k_2).double_M))))) &&
-                (((X + 0).double_M <= x) && (x < (X + n).double_M)))));
+                   ((V + k_2).doubleM ==
+                     (((Y + (k_2 + 1)).doubleM - (Y + k_2).doubleM) /
+                       ((X + (k_2 + 1)).doubleM - (X + k_2).doubleM))))) &&
+                (((X + 0).doubleM <= x) && (x < (X + n).doubleM)))));
   ensures (C_41 : (((C_43 : (1 <= i_f)) &&
                      (C_44 : (i_f <= (\at(n,Old) - 1)))) &&
                     (C_45 : (\result ==
-                              ((\at(Y,Old) + i_f).double_M +
-                                (((\at(x,Old) - (\at(X,Old) + i_f).double_M) *
-                                   ((\at(Y,Old) + (i_f + 1)).double_M -
-                                     (\at(Y,Old) + i_f).double_M)) /
-                                  ((\at(X,Old) + (i_f + 1)).double_M -
-                                    (\at(X,Old) + i_f).double_M)))))));
+                              ((\at(Y,Old) + i_f).doubleM +
+                                (((\at(x,Old) - (\at(X,Old) + i_f).doubleM) *
+                                   ((\at(Y,Old) + (i_f + 1)).doubleM -
+                                     (\at(Y,Old) + i_f).doubleM)) /
+                                  ((\at(X,Old) + (i_f + 1)).doubleM -
+                                    (\at(X,Old) + i_f).doubleM)))))));
 {  
    (var int32 i);
    
@@ -108,7 +107,7 @@ behavior inter:
    
    {  (C_1 : (i = 0));
       (C_6 : (m = (C_5 : ((C_4 : ((C_3 : ((C_2 : (n + 1)) :> int32)) / 2)) :> int32))));
-      (if (x >= (C_9 : (C_8 : (X + m)).double_M)) then (C_7 : (i = m)) else ());
+      (if (x >= (C_9 : (C_8 : (X + m)).doubleM)) then (C_7 : (i = m)) else ());
       (C_10 : (i0 = i));
       
       {  
@@ -122,7 +121,7 @@ behavior inter:
       behavior default:
         invariant (C_14 : (\forall integer k;
                             (((i0 <= k) && (k < i)) ==>
-                              (x >= (X + i).double_M))));
+                              (x >= (X + i).doubleM))));
       behavior small:
         invariant (C_13 : (i == 0));
       variant (C_12 : (n - i));
@@ -131,7 +130,7 @@ behavior inter:
          {  (if (i < n) then (if (x >=
                                    (C_21 : (C_20 : (X +
                                                      (C_19 : ((C_18 : 
-                                                              (i + 1)) :> int32)))).double_M)) then () else 
+                                                              (i + 1)) :> int32)))).doubleM)) then () else 
                              (goto while_0_break)) else 
             (goto while_0_break));
             (C_24 : (i = (C_23 : ((C_22 : (i + 1)) :> int32))))
@@ -149,20 +148,20 @@ behavior inter:
          (assert for big: (C_27 : (i == n)));
          ()
       };
-      (C_37 : (__retres = (C_36 : ((C_35 : (C_34 : (Y + i)).double_M) +
+      (C_37 : (__retres = (C_36 : ((C_35 : (C_34 : (Y + i)).doubleM) +
                                     (C_33 : ((C_32 : (x -
                                                        (C_31 : (C_30 : 
                                                                (X +
-                                                                 i)).double_M))) *
-                                              (C_29 : (C_28 : (V + i)).double_M)))))));
+                                                                 i)).doubleM))) *
+                                              (C_29 : (C_28 : (V + i)).doubleM)))))));
       
       (return __retres)
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs floats_interp_math.jessie/floats_interp_math.cloc floats_interp_math.jessie/floats_interp_math.jc
-type char_P
+type charP
 
-type double_P
+type doubleP
 
 type int32
 
@@ -170,7 +169,7 @@ type int8
 
 type padding
 
-type void_P
+type voidP
 
 exception Goto_while_0_break_exc of unit
 
@@ -180,39 +179,38 @@ exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
-logic char_P_tag:  -> char_P tag_id
+logic charP_tag:  -> charP tag_id
 
-axiom char_P_int : (int_of_tag(char_P_tag) = (1))
+axiom charP_int : (int_of_tag(charP_tag) = (1))
 
-logic char_P_of_pointer_address: unit pointer -> char_P pointer
+logic charP_of_pointer_address: unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr :
- (forall p:char_P pointer.
-  (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr :
+ (forall p:charP pointer. (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom : parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom : parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags :
- (forall x:char_P pointer.
-  (forall char_P_tag_table:char_P tag_table.
-   instanceof(char_P_tag_table, x, char_P_tag)))
+axiom charP_tags :
+ (forall x:charP pointer.
+  (forall charP_tag_table:charP tag_table.
+   instanceof(charP_tag_table, x, charP_tag)))
 
-logic double_P_tag:  -> double_P tag_id
+logic doubleP_tag:  -> doubleP tag_id
 
-axiom double_P_int : (int_of_tag(double_P_tag) = (1))
+axiom doubleP_int : (int_of_tag(doubleP_tag) = (1))
 
-logic double_P_of_pointer_address: unit pointer -> double_P pointer
+logic doubleP_of_pointer_address: unit pointer -> doubleP pointer
 
-axiom double_P_of_pointer_address_of_pointer_addr :
- (forall p:double_P pointer.
-  (p = double_P_of_pointer_address(pointer_address(p))))
+axiom doubleP_of_pointer_address_of_pointer_addr :
+ (forall p:doubleP pointer.
+  (p = doubleP_of_pointer_address(pointer_address(p))))
 
-axiom double_P_parenttag_bottom : parenttag(double_P_tag, bottom_tag)
+axiom doubleP_parenttag_bottom : parenttag(doubleP_tag, bottom_tag)
 
-axiom double_P_tags :
- (forall x:double_P pointer.
-  (forall double_P_tag_table:double_P tag_table.
-   instanceof(double_P_tag_table, x, double_P_tag)))
+axiom doubleP_tags :
+ (forall x:doubleP pointer.
+  (forall doubleP_tag_table:doubleP tag_table.
+   instanceof(doubleP_tag_table, x, doubleP_tag)))
 
 logic integer_of_int32: int32 -> int
 
@@ -247,175 +245,173 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer, a:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_min(char_P_alloc_table, p) <= a)
+predicate left_valid_struct_charP(p:charP pointer, a:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_min(charP_alloc_table, p) <= a)
 
-predicate left_valid_struct_double_P(p:double_P pointer, a:int,
- double_P_alloc_table:double_P alloc_table) =
- (offset_min(double_P_alloc_table, p) <= a)
+predicate left_valid_struct_doubleP(p:doubleP pointer, a:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ (offset_min(doubleP_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer, a:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_min(void_P_alloc_table, p) <= a)
+predicate left_valid_struct_voidP(p:voidP pointer, a:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_min(voidP_alloc_table, p) <= a)
 
-axiom pointer_addr_of_char_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
+axiom pointer_addr_of_charP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
-axiom pointer_addr_of_double_P_of_pointer_address :
+axiom pointer_addr_of_doubleP_of_pointer_address :
  (forall p:unit pointer.
-  (p = pointer_address(double_P_of_pointer_address(p))))
+  (p = pointer_address(doubleP_of_pointer_address(p))))
 
-logic void_P_of_pointer_address: unit pointer -> void_P pointer
+logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
-axiom pointer_addr_of_void_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
+axiom pointer_addr_of_voidP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer, b:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_max(char_P_alloc_table, p) >= b)
+predicate right_valid_struct_charP(p:charP pointer, b:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_max(charP_alloc_table, p) >= b)
 
-predicate right_valid_struct_double_P(p:double_P pointer, b:int,
- double_P_alloc_table:double_P alloc_table) =
- (offset_max(double_P_alloc_table, p) >= b)
+predicate right_valid_struct_doubleP(p:doubleP pointer, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ (offset_max(doubleP_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer, b:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_max(void_P_alloc_table, p) >= b)
+predicate right_valid_struct_voidP(p:voidP pointer, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_max(voidP_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_root_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) = a)
- and (offset_max(double_P_alloc_table, p) = b))
+predicate strict_valid_root_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) = a)
+ and (offset_max(doubleP_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_struct_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) = a)
- and (offset_max(double_P_alloc_table, p) = b))
+predicate strict_valid_struct_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) = a)
+ and (offset_max(doubleP_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_double_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_doubleP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_root_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) <= a)
- and (offset_max(double_P_alloc_table, p) >= b))
+predicate valid_root_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) <= a)
+ and (offset_max(doubleP_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_struct_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) <= a)
- and (offset_max(double_P_alloc_table, p) >= b))
+predicate valid_struct_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) <= a)
+ and (offset_max(doubleP_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-logic void_P_tag:  -> void_P tag_id
+logic voidP_tag:  -> voidP tag_id
 
-axiom void_P_int : (int_of_tag(void_P_tag) = (1))
+axiom voidP_int : (int_of_tag(voidP_tag) = (1))
 
-axiom void_P_of_pointer_address_of_pointer_addr :
- (forall p:void_P pointer.
-  (p = void_P_of_pointer_address(pointer_address(p))))
+axiom voidP_of_pointer_address_of_pointer_addr :
+ (forall p:voidP pointer. (p = voidP_of_pointer_address(pointer_address(p))))
 
-axiom void_P_parenttag_bottom : parenttag(void_P_tag, bottom_tag)
+axiom voidP_parenttag_bottom : parenttag(voidP_tag, bottom_tag)
 
-axiom void_P_tags :
- (forall x:void_P pointer.
-  (forall void_P_tag_table:void_P tag_table.
-   instanceof(void_P_tag_table, x, void_P_tag)))
+axiom voidP_tags :
+ (forall x:voidP pointer.
+  (forall voidP_tag_table:voidP tag_table.
+   instanceof(voidP_tag_table, x, voidP_tag)))
 
 parameter i_f : int32 ref
 
 parameter InterPolate :
  x_0:real ->
-  X:double_P pointer ->
-   Y:double_P pointer ->
-    V:double_P pointer ->
+  X:doubleP pointer ->
+   Y:doubleP pointer ->
+    V:doubleP pointer ->
      n:int32 ->
-      double_P_V_3_alloc_table:double_P alloc_table ->
-       double_P_Y_2_alloc_table:double_P alloc_table ->
-        double_P_X_1_alloc_table:double_P alloc_table ->
-         double_P_double_M_V_3:(double_P, real) memory ->
-          double_P_double_M_Y_2:(double_P, real) memory ->
-           double_P_double_M_X_1:(double_P, real) memory ->
+      doubleP_V_3_alloc_table:doubleP alloc_table ->
+       doubleP_Y_2_alloc_table:doubleP alloc_table ->
+        doubleP_X_1_alloc_table:doubleP alloc_table ->
+         doubleP_doubleM_V_3:(doubleP, real) memory ->
+          doubleP_doubleM_Y_2:(doubleP, real) memory ->
+           doubleP_doubleM_X_1:(doubleP, real) memory ->
             { } real reads i_f writes i_f
-            { (((eq_real(select(double_P_double_M_Y_2@, shift(Y@, (0))),
-                 select(double_P_double_M_Y_2@, shift(Y@, (1))))
-                and (eq_real(select(double_P_double_M_V_3@, shift(V@, (0))),
-                     select(double_P_double_M_V_3@,
+            { (((eq_real(select(doubleP_doubleM_Y_2@, shift(Y@, (0))),
+                 select(doubleP_doubleM_Y_2@, shift(Y@, (1))))
+                and (eq_real(select(doubleP_doubleM_V_3@, shift(V@, (0))),
+                     select(doubleP_doubleM_V_3@,
                      shift(V@, integer_of_int32(n@))))
-                    and (eq_real(select(double_P_double_M_V_3@,
+                    and (eq_real(select(doubleP_doubleM_V_3@,
                                  shift(V@, integer_of_int32(n@))),
                          0.0)
                         and ((forall k_2:int.
                               ((le_int((1), k_2@)
                                and le_int(k_2@,
                                    sub_int(integer_of_int32(n@), (1)))) ->
-                               eq_real(select(double_P_double_M_V_3@,
+                               eq_real(select(doubleP_doubleM_V_3@,
                                        shift(V@, k_2@)),
-                               div_real(sub_real(select(double_P_double_M_Y_2@,
+                               div_real(sub_real(select(doubleP_doubleM_Y_2@,
                                                  shift(Y@,
                                                  add_int(k_2@, (1)))),
-                                        select(double_P_double_M_Y_2@,
+                                        select(doubleP_doubleM_Y_2@,
                                         shift(Y@, k_2@))),
-                               sub_real(select(double_P_double_M_X_1@,
+                               sub_real(select(doubleP_doubleM_X_1@,
                                         shift(X@, add_int(k_2@, (1)))),
-                               select(double_P_double_M_X_1@,
-                               shift(X@, k_2@)))))))
-                            and (le_real(select(double_P_double_M_X_1@,
+                               select(doubleP_doubleM_X_1@, shift(X@, k_2@)))))))
+                            and (le_real(select(doubleP_doubleM_X_1@,
                                          shift(X@, (0))),
                                  x_0@)
                                 and lt_real(x_0@,
-                                    select(double_P_double_M_X_1@,
+                                    select(doubleP_doubleM_X_1@,
                                     shift(X@, integer_of_int32(n@))))))))) ->
                 (JC_<somenum>:
                 ((JC_<somenum>: le_int((1), integer_of_int32(i_f)))
@@ -424,123 +420,121 @@ parameter InterPolate :
                      sub_int(integer_of_int32(n@), (1))))
                     and (JC_<somenum>:
                         eq_real(result,
-                        add_real(select(double_P_double_M_Y_2,
+                        add_real(select(doubleP_doubleM_Y_2,
                                  shift(Y@, integer_of_int32(i_f))),
                         div_real(mul_real(sub_real(x_0@,
-                                          select(double_P_double_M_X_1,
+                                          select(doubleP_doubleM_X_1,
                                           shift(X@, integer_of_int32(i_f)))),
-                                 sub_real(select(double_P_double_M_Y_2,
+                                 sub_real(select(doubleP_doubleM_Y_2,
                                           shift(Y@,
                                           add_int(integer_of_int32(i_f), (1)))),
-                                 select(double_P_double_M_Y_2,
+                                 select(doubleP_doubleM_Y_2,
                                  shift(Y@, integer_of_int32(i_f))))),
-                        sub_real(select(double_P_double_M_X_1,
+                        sub_real(select(doubleP_doubleM_X_1,
                                  shift(X@,
                                  add_int(integer_of_int32(i_f), (1)))),
-                        select(double_P_double_M_X_1,
+                        select(doubleP_doubleM_X_1,
                         shift(X@, integer_of_int32(i_f))))))))))))
-              and (((eq_real(select(double_P_double_M_Y_2@, shift(Y@, (0))),
-                     select(double_P_double_M_Y_2@, shift(Y@, (1))))
-                    and (eq_real(select(double_P_double_M_V_3@,
-                                 shift(V@, (0))),
-                         select(double_P_double_M_V_3@,
+              and (((eq_real(select(doubleP_doubleM_Y_2@, shift(Y@, (0))),
+                     select(doubleP_doubleM_Y_2@, shift(Y@, (1))))
+                    and (eq_real(select(doubleP_doubleM_V_3@, shift(V@, (0))),
+                         select(doubleP_doubleM_V_3@,
                          shift(V@, integer_of_int32(n@))))
-                        and (eq_real(select(double_P_double_M_V_3@,
+                        and (eq_real(select(doubleP_doubleM_V_3@,
                                      shift(V@, integer_of_int32(n@))),
                              0.0)
                             and ((forall k_1:int.
                                   ((le_int((1), k_1@)
                                    and le_int(k_1@,
                                        sub_int(integer_of_int32(n@), (1)))) ->
-                                   eq_real(select(double_P_double_M_V_3@,
+                                   eq_real(select(doubleP_doubleM_V_3@,
                                            shift(V@, k_1@)),
-                                   div_real(sub_real(select(double_P_double_M_Y_2@,
+                                   div_real(sub_real(select(doubleP_doubleM_Y_2@,
                                                      shift(Y@,
                                                      add_int(k_1@, (1)))),
-                                            select(double_P_double_M_Y_2@,
+                                            select(doubleP_doubleM_Y_2@,
                                             shift(Y@, k_1@))),
-                                   sub_real(select(double_P_double_M_X_1@,
+                                   sub_real(select(doubleP_doubleM_X_1@,
                                             shift(X@, add_int(k_1@, (1)))),
-                                   select(double_P_double_M_X_1@,
+                                   select(doubleP_doubleM_X_1@,
                                    shift(X@, k_1@)))))))
                                 and ge_real(x_0@,
-                                    select(double_P_double_M_X_1@,
+                                    select(doubleP_doubleM_X_1@,
                                     shift(X@, integer_of_int32(n@)))))))) ->
                     (JC_<somenum>:
                     eq_real(result,
-                    select(double_P_double_M_Y_2,
+                    select(doubleP_doubleM_Y_2,
                     shift(Y@, integer_of_int32(n@))))))
-                  and ((eq_real(select(double_P_double_M_Y_2@,
-                                shift(Y@, (0))),
-                        select(double_P_double_M_Y_2@, shift(Y@, (1))))
-                       and (eq_real(select(double_P_double_M_V_3@,
+                  and ((eq_real(select(doubleP_doubleM_Y_2@, shift(Y@, (0))),
+                        select(doubleP_doubleM_Y_2@, shift(Y@, (1))))
+                       and (eq_real(select(doubleP_doubleM_V_3@,
                                     shift(V@, (0))),
-                            select(double_P_double_M_V_3@,
+                            select(doubleP_doubleM_V_3@,
                             shift(V@, integer_of_int32(n@))))
-                           and (eq_real(select(double_P_double_M_V_3@,
+                           and (eq_real(select(doubleP_doubleM_V_3@,
                                         shift(V@, integer_of_int32(n@))),
                                 0.0)
                                and ((forall k_0:int.
                                      ((le_int((1), k_0@)
                                       and le_int(k_0@,
                                           sub_int(integer_of_int32(n@), (1)))) ->
-                                      eq_real(select(double_P_double_M_V_3@,
+                                      eq_real(select(doubleP_doubleM_V_3@,
                                               shift(V@, k_0@)),
-                                      div_real(sub_real(select(double_P_double_M_Y_2@,
+                                      div_real(sub_real(select(doubleP_doubleM_Y_2@,
                                                         shift(Y@,
                                                         add_int(k_0@, (1)))),
-                                               select(double_P_double_M_Y_2@,
+                                               select(doubleP_doubleM_Y_2@,
                                                shift(Y@, k_0@))),
-                                      sub_real(select(double_P_double_M_X_1@,
+                                      sub_real(select(doubleP_doubleM_X_1@,
                                                shift(X@, add_int(k_0@, (1)))),
-                                      select(double_P_double_M_X_1@,
+                                      select(doubleP_doubleM_X_1@,
                                       shift(X@, k_0@)))))))
                                    and lt_real(x_0@,
-                                       select(double_P_double_M_X_1@,
+                                       select(doubleP_doubleM_X_1@,
                                        shift(X@, (0)))))))) ->
                        (JC_<somenum>:
                        eq_real(result,
-                       select(double_P_double_M_Y_2, shift(Y@, (0)))))))) }
+                       select(doubleP_doubleM_Y_2, shift(Y@, (0)))))))) }
 
 parameter InterPolate_requires :
  x_0:real ->
-  X:double_P pointer ->
-   Y:double_P pointer ->
-    V:double_P pointer ->
+  X:doubleP pointer ->
+   Y:doubleP pointer ->
+    V:doubleP pointer ->
      n:int32 ->
-      double_P_V_3_alloc_table:double_P alloc_table ->
-       double_P_Y_2_alloc_table:double_P alloc_table ->
-        double_P_X_1_alloc_table:double_P alloc_table ->
-         double_P_double_M_V_3:(double_P, real) memory ->
-          double_P_double_M_Y_2:(double_P, real) memory ->
-           double_P_double_M_X_1:(double_P, real) memory ->
+      doubleP_V_3_alloc_table:doubleP alloc_table ->
+       doubleP_Y_2_alloc_table:doubleP alloc_table ->
+        doubleP_X_1_alloc_table:doubleP alloc_table ->
+         doubleP_doubleM_V_3:(doubleP, real) memory ->
+          doubleP_doubleM_Y_2:(doubleP, real) memory ->
+           doubleP_doubleM_X_1:(doubleP, real) memory ->
             { (JC_<somenum>:
               ((JC_<somenum>: le_int((3), integer_of_int32(n)))
               and ((JC_<somenum>: le_int(integer_of_int32(n), (17)))
                   and ((JC_<somenum>:
-                       le_int(offset_min(double_P_X_1_alloc_table, X), (0)))
+                       le_int(offset_min(doubleP_X_1_alloc_table, X), (0)))
                       and ((JC_<somenum>:
-                           ge_int(offset_max(double_P_X_1_alloc_table, X),
+                           ge_int(offset_max(doubleP_X_1_alloc_table, X),
                            integer_of_int32(n)))
                           and ((JC_<somenum>:
-                               le_int(offset_min(double_P_Y_2_alloc_table, Y),
+                               le_int(offset_min(doubleP_Y_2_alloc_table, Y),
                                (0)))
                               and ((JC_<somenum>:
-                                   ge_int(offset_max(double_P_Y_2_alloc_table,
+                                   ge_int(offset_max(doubleP_Y_2_alloc_table,
                                           Y),
                                    integer_of_int32(n)))
                                   and ((JC_<somenum>:
-                                       le_int(offset_min(double_P_V_3_alloc_table,
+                                       le_int(offset_min(doubleP_V_3_alloc_table,
                                               V),
                                        (0)))
                                       and ((JC_<somenum>:
-                                           ge_int(offset_max(double_P_V_3_alloc_table,
+                                           ge_int(offset_max(doubleP_V_3_alloc_table,
                                                   V),
                                            integer_of_int32(n)))
                                           and ((JC_<somenum>:
-                                               eq_real(select(double_P_double_M_X_1,
+                                               eq_real(select(doubleP_doubleM_X_1,
                                                        shift(X, (0))),
-                                               select(double_P_double_M_X_1,
+                                               select(doubleP_doubleM_X_1,
                                                shift(X, (1)))))
                                               and (JC_<somenum>:
                                                   (forall k1:int.
@@ -550,40 +544,39 @@ parameter InterPolate_requires :
                                                           integer_of_int32(k2))
                                                          and le_int(integer_of_int32(k2),
                                                              integer_of_int32(n)))) ->
-                                                     lt_real(select(double_P_double_M_X_1,
+                                                     lt_real(select(doubleP_doubleM_X_1,
                                                              shift(X, k1)),
-                                                     select(double_P_double_M_X_1,
+                                                     select(doubleP_doubleM_X_1,
                                                      shift(X,
                                                      integer_of_int32(k2))))))))))))))))))}
             real reads i_f writes i_f
-            { (((eq_real(select(double_P_double_M_Y_2@, shift(Y@, (0))),
-                 select(double_P_double_M_Y_2@, shift(Y@, (1))))
-                and (eq_real(select(double_P_double_M_V_3@, shift(V@, (0))),
-                     select(double_P_double_M_V_3@,
+            { (((eq_real(select(doubleP_doubleM_Y_2@, shift(Y@, (0))),
+                 select(doubleP_doubleM_Y_2@, shift(Y@, (1))))
+                and (eq_real(select(doubleP_doubleM_V_3@, shift(V@, (0))),
+                     select(doubleP_doubleM_V_3@,
                      shift(V@, integer_of_int32(n@))))
-                    and (eq_real(select(double_P_double_M_V_3@,
+                    and (eq_real(select(doubleP_doubleM_V_3@,
                                  shift(V@, integer_of_int32(n@))),
                          0.0)
                         and ((forall k_2:int.
                               ((le_int((1), k_2@)
                                and le_int(k_2@,
                                    sub_int(integer_of_int32(n@), (1)))) ->
-                               eq_real(select(double_P_double_M_V_3@,
+                               eq_real(select(doubleP_doubleM_V_3@,
                                        shift(V@, k_2@)),
-                               div_real(sub_real(select(double_P_double_M_Y_2@,
+                               div_real(sub_real(select(doubleP_doubleM_Y_2@,
                                                  shift(Y@,
                                                  add_int(k_2@, (1)))),
-                                        select(double_P_double_M_Y_2@,
+                                        select(doubleP_doubleM_Y_2@,
                                         shift(Y@, k_2@))),
-                               sub_real(select(double_P_double_M_X_1@,
+                               sub_real(select(doubleP_doubleM_X_1@,
                                         shift(X@, add_int(k_2@, (1)))),
-                               select(double_P_double_M_X_1@,
-                               shift(X@, k_2@)))))))
-                            and (le_real(select(double_P_double_M_X_1@,
+                               select(doubleP_doubleM_X_1@, shift(X@, k_2@)))))))
+                            and (le_real(select(doubleP_doubleM_X_1@,
                                          shift(X@, (0))),
                                  x_0@)
                                 and lt_real(x_0@,
-                                    select(double_P_double_M_X_1@,
+                                    select(doubleP_doubleM_X_1@,
                                     shift(X@, integer_of_int32(n@))))))))) ->
                 (JC_<somenum>:
                 ((JC_<somenum>: le_int((1), integer_of_int32(i_f)))
@@ -592,218 +585,214 @@ parameter InterPolate_requires :
                      sub_int(integer_of_int32(n@), (1))))
                     and (JC_<somenum>:
                         eq_real(result,
-                        add_real(select(double_P_double_M_Y_2,
+                        add_real(select(doubleP_doubleM_Y_2,
                                  shift(Y@, integer_of_int32(i_f))),
                         div_real(mul_real(sub_real(x_0@,
-                                          select(double_P_double_M_X_1,
+                                          select(doubleP_doubleM_X_1,
                                           shift(X@, integer_of_int32(i_f)))),
-                                 sub_real(select(double_P_double_M_Y_2,
+                                 sub_real(select(doubleP_doubleM_Y_2,
                                           shift(Y@,
                                           add_int(integer_of_int32(i_f), (1)))),
-                                 select(double_P_double_M_Y_2,
+                                 select(doubleP_doubleM_Y_2,
                                  shift(Y@, integer_of_int32(i_f))))),
-                        sub_real(select(double_P_double_M_X_1,
+                        sub_real(select(doubleP_doubleM_X_1,
                                  shift(X@,
                                  add_int(integer_of_int32(i_f), (1)))),
-                        select(double_P_double_M_X_1,
+                        select(doubleP_doubleM_X_1,
                         shift(X@, integer_of_int32(i_f))))))))))))
-              and (((eq_real(select(double_P_double_M_Y_2@, shift(Y@, (0))),
-                     select(double_P_double_M_Y_2@, shift(Y@, (1))))
-                    and (eq_real(select(double_P_double_M_V_3@,
-                                 shift(V@, (0))),
-                         select(double_P_double_M_V_3@,
+              and (((eq_real(select(doubleP_doubleM_Y_2@, shift(Y@, (0))),
+                     select(doubleP_doubleM_Y_2@, shift(Y@, (1))))
+                    and (eq_real(select(doubleP_doubleM_V_3@, shift(V@, (0))),
+                         select(doubleP_doubleM_V_3@,
                          shift(V@, integer_of_int32(n@))))
-                        and (eq_real(select(double_P_double_M_V_3@,
+                        and (eq_real(select(doubleP_doubleM_V_3@,
                                      shift(V@, integer_of_int32(n@))),
                              0.0)
                             and ((forall k_1:int.
                                   ((le_int((1), k_1@)
                                    and le_int(k_1@,
                                        sub_int(integer_of_int32(n@), (1)))) ->
-                                   eq_real(select(double_P_double_M_V_3@,
+                                   eq_real(select(doubleP_doubleM_V_3@,
                                            shift(V@, k_1@)),
-                                   div_real(sub_real(select(double_P_double_M_Y_2@,
+                                   div_real(sub_real(select(doubleP_doubleM_Y_2@,
                                                      shift(Y@,
                                                      add_int(k_1@, (1)))),
-                                            select(double_P_double_M_Y_2@,
+                                            select(doubleP_doubleM_Y_2@,
                                             shift(Y@, k_1@))),
-                                   sub_real(select(double_P_double_M_X_1@,
+                                   sub_real(select(doubleP_doubleM_X_1@,
                                             shift(X@, add_int(k_1@, (1)))),
-                                   select(double_P_double_M_X_1@,
+                                   select(doubleP_doubleM_X_1@,
                                    shift(X@, k_1@)))))))
                                 and ge_real(x_0@,
-                                    select(double_P_double_M_X_1@,
+                                    select(doubleP_doubleM_X_1@,
                                     shift(X@, integer_of_int32(n@)))))))) ->
                     (JC_<somenum>:
                     eq_real(result,
-                    select(double_P_double_M_Y_2,
+                    select(doubleP_doubleM_Y_2,
                     shift(Y@, integer_of_int32(n@))))))
-                  and ((eq_real(select(double_P_double_M_Y_2@,
-                                shift(Y@, (0))),
-                        select(double_P_double_M_Y_2@, shift(Y@, (1))))
-                       and (eq_real(select(double_P_double_M_V_3@,
+                  and ((eq_real(select(doubleP_doubleM_Y_2@, shift(Y@, (0))),
+                        select(doubleP_doubleM_Y_2@, shift(Y@, (1))))
+                       and (eq_real(select(doubleP_doubleM_V_3@,
                                     shift(V@, (0))),
-                            select(double_P_double_M_V_3@,
+                            select(doubleP_doubleM_V_3@,
                             shift(V@, integer_of_int32(n@))))
-                           and (eq_real(select(double_P_double_M_V_3@,
+                           and (eq_real(select(doubleP_doubleM_V_3@,
                                         shift(V@, integer_of_int32(n@))),
                                 0.0)
                                and ((forall k_0:int.
                                      ((le_int((1), k_0@)
                                       and le_int(k_0@,
                                           sub_int(integer_of_int32(n@), (1)))) ->
-                                      eq_real(select(double_P_double_M_V_3@,
+                                      eq_real(select(doubleP_doubleM_V_3@,
                                               shift(V@, k_0@)),
-                                      div_real(sub_real(select(double_P_double_M_Y_2@,
+                                      div_real(sub_real(select(doubleP_doubleM_Y_2@,
                                                         shift(Y@,
                                                         add_int(k_0@, (1)))),
-                                               select(double_P_double_M_Y_2@,
+                                               select(doubleP_doubleM_Y_2@,
                                                shift(Y@, k_0@))),
-                                      sub_real(select(double_P_double_M_X_1@,
+                                      sub_real(select(doubleP_doubleM_X_1@,
                                                shift(X@, add_int(k_0@, (1)))),
-                                      select(double_P_double_M_X_1@,
+                                      select(doubleP_doubleM_X_1@,
                                       shift(X@, k_0@)))))))
                                    and lt_real(x_0@,
-                                       select(double_P_double_M_X_1@,
+                                       select(doubleP_doubleM_X_1@,
                                        shift(X@, (0)))))))) ->
                        (JC_<somenum>:
                        eq_real(result,
-                       select(double_P_double_M_Y_2, shift(Y@, (0)))))))) }
+                       select(doubleP_doubleM_Y_2, shift(Y@, (0)))))))) }
 
-parameter alloc_bitvector_struct_char_P :
+parameter alloc_bitvector_struct_charP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_char_P_requires :
+parameter alloc_bitvector_struct_charP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_double_P :
+parameter alloc_bitvector_struct_doubleP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_double_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_double_P_requires :
+parameter alloc_bitvector_struct_doubleP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_double_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P :
+parameter alloc_bitvector_struct_voidP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P_requires :
+parameter alloc_bitvector_struct_voidP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter char_P_alloc_table : char_P alloc_table ref
+parameter charP_alloc_table : charP alloc_table ref
 
-parameter char_P_tag_table : char_P tag_table ref
+parameter charP_tag_table : charP tag_table ref
 
-parameter alloc_struct_char_P :
+parameter alloc_struct_charP :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { } char_P pointer writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { } charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter alloc_struct_char_P_requires :
+parameter alloc_struct_charP_requires :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { ge_int(n, (0))} char_P pointer
-    writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { ge_int(n, (0))} charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter double_P_alloc_table : double_P alloc_table ref
+parameter doubleP_alloc_table : doubleP alloc_table ref
 
-parameter double_P_tag_table : double_P tag_table ref
+parameter doubleP_tag_table : doubleP tag_table ref
 
-parameter alloc_struct_double_P :
+parameter alloc_struct_doubleP :
  n:int ->
-  double_P_alloc_table:double_P alloc_table ref ->
-   double_P_tag_table:double_P tag_table ref ->
-    { } double_P pointer writes double_P_alloc_table,double_P_tag_table
-    { (strict_valid_struct_double_P(result, (0), sub_int(n, (1)),
-       double_P_alloc_table)
-      and (alloc_extends(double_P_alloc_table@, double_P_alloc_table)
-          and (alloc_fresh(double_P_alloc_table@, result, n)
-              and instanceof(double_P_tag_table, result, double_P_tag)))) }
+  doubleP_alloc_table:doubleP alloc_table ref ->
+   doubleP_tag_table:doubleP tag_table ref ->
+    { } doubleP pointer writes doubleP_alloc_table,doubleP_tag_table
+    { (strict_valid_struct_doubleP(result, (0), sub_int(n, (1)),
+       doubleP_alloc_table)
+      and (alloc_extends(doubleP_alloc_table@, doubleP_alloc_table)
+          and (alloc_fresh(doubleP_alloc_table@, result, n)
+              and instanceof(doubleP_tag_table, result, doubleP_tag)))) }
 
-parameter alloc_struct_double_P_requires :
+parameter alloc_struct_doubleP_requires :
  n:int ->
-  double_P_alloc_table:double_P alloc_table ref ->
-   double_P_tag_table:double_P tag_table ref ->
-    { ge_int(n, (0))} double_P pointer
-    writes double_P_alloc_table,double_P_tag_table
-    { (strict_valid_struct_double_P(result, (0), sub_int(n, (1)),
-       double_P_alloc_table)
-      and (alloc_extends(double_P_alloc_table@, double_P_alloc_table)
-          and (alloc_fresh(double_P_alloc_table@, result, n)
-              and instanceof(double_P_tag_table, result, double_P_tag)))) }
+  doubleP_alloc_table:doubleP alloc_table ref ->
+   doubleP_tag_table:doubleP tag_table ref ->
+    { ge_int(n, (0))} doubleP pointer
+    writes doubleP_alloc_table,doubleP_tag_table
+    { (strict_valid_struct_doubleP(result, (0), sub_int(n, (1)),
+       doubleP_alloc_table)
+      and (alloc_extends(doubleP_alloc_table@, doubleP_alloc_table)
+          and (alloc_fresh(doubleP_alloc_table@, result, n)
+              and instanceof(doubleP_tag_table, result, doubleP_tag)))) }
 
-parameter void_P_alloc_table : void_P alloc_table ref
+parameter voidP_alloc_table : voidP alloc_table ref
 
-parameter void_P_tag_table : void_P tag_table ref
+parameter voidP_tag_table : voidP tag_table ref
 
-parameter alloc_struct_void_P :
+parameter alloc_struct_voidP :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { } void_P pointer writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { } voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
-parameter alloc_struct_void_P_requires :
+parameter alloc_struct_voidP_requires :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { ge_int(n, (0))} void_P pointer
-    writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { ge_int(n, (0))} voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
 parameter any_int32 : unit -> { } int32 { true }
 
@@ -826,52 +815,51 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let InterPolate_ensures_big =
- fun (x_0 : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
-  { ((eq_real(select(double_P_double_M_Y_2, shift(Y, (0))),
-      select(double_P_double_M_Y_2, shift(Y, (1))))
-     and (eq_real(select(double_P_double_M_V_3, shift(V, (0))),
-          select(double_P_double_M_V_3, shift(V, integer_of_int32(n))))
-         and (eq_real(select(double_P_double_M_V_3,
+ fun (x_0 : real) (X : doubleP pointer) (Y : doubleP pointer) (V : doubleP pointer) (n : int32) (doubleP_X_1_alloc_table : doubleP alloc_table) (doubleP_Y_2_alloc_table : doubleP alloc_table) (doubleP_V_3_alloc_table : doubleP alloc_table) (doubleP_doubleM_X_1 : (doubleP, real) memory) (doubleP_doubleM_Y_2 : (doubleP, real) memory) (doubleP_doubleM_V_3 : (doubleP, real) memory) ->
+  { ((eq_real(select(doubleP_doubleM_Y_2, shift(Y, (0))),
+      select(doubleP_doubleM_Y_2, shift(Y, (1))))
+     and (eq_real(select(doubleP_doubleM_V_3, shift(V, (0))),
+          select(doubleP_doubleM_V_3, shift(V, integer_of_int32(n))))
+         and (eq_real(select(doubleP_doubleM_V_3,
                       shift(V, integer_of_int32(n))),
               0.0)
              and ((forall k_1:int.
                    ((le_int((1), k_1)
                     and le_int(k_1, sub_int(integer_of_int32(n), (1)))) ->
-                    eq_real(select(double_P_double_M_V_3, shift(V, k_1)),
-                    div_real(sub_real(select(double_P_double_M_Y_2,
+                    eq_real(select(doubleP_doubleM_V_3, shift(V, k_1)),
+                    div_real(sub_real(select(doubleP_doubleM_Y_2,
                                       shift(Y, add_int(k_1, (1)))),
-                             select(double_P_double_M_Y_2, shift(Y, k_1))),
-                    sub_real(select(double_P_double_M_X_1,
+                             select(doubleP_doubleM_Y_2, shift(Y, k_1))),
+                    sub_real(select(doubleP_doubleM_X_1,
                              shift(X, add_int(k_1, (1)))),
-                    select(double_P_double_M_X_1, shift(X, k_1)))))))
+                    select(doubleP_doubleM_X_1, shift(X, k_1)))))))
                  and ge_real(x_0,
-                     select(double_P_double_M_X_1,
+                     select(doubleP_doubleM_X_1,
                      shift(X, integer_of_int32(n))))))))
     and (JC_<somenum>:
         ((JC_<somenum>: le_int((3), integer_of_int32(n)))
         and ((JC_<somenum>: le_int(integer_of_int32(n), (17)))
-            and ((JC_<somenum>:
-                 le_int(offset_min(double_P_X_1_alloc_table, X), (0)))
+            and ((JC_<somenum>: le_int(offset_min(doubleP_X_1_alloc_table, X), (0)))
                 and ((JC_<somenum>:
-                     ge_int(offset_max(double_P_X_1_alloc_table, X),
+                     ge_int(offset_max(doubleP_X_1_alloc_table, X),
                      integer_of_int32(n)))
                     and ((JC_<somenum>:
-                         le_int(offset_min(double_P_Y_2_alloc_table, Y), (0)))
+                         le_int(offset_min(doubleP_Y_2_alloc_table, Y), (0)))
                         and ((JC_<somenum>:
-                             ge_int(offset_max(double_P_Y_2_alloc_table, Y),
+                             ge_int(offset_max(doubleP_Y_2_alloc_table, Y),
                              integer_of_int32(n)))
                             and ((JC_<somenum>:
-                                 le_int(offset_min(double_P_V_3_alloc_table,
+                                 le_int(offset_min(doubleP_V_3_alloc_table,
                                         V),
                                  (0)))
                                 and ((JC_<somenum>:
-                                     ge_int(offset_max(double_P_V_3_alloc_table,
+                                     ge_int(offset_max(doubleP_V_3_alloc_table,
                                             V),
                                      integer_of_int32(n)))
                                     and ((JC_<somenum>:
-                                         eq_real(select(double_P_double_M_X_1,
+                                         eq_real(select(doubleP_doubleM_X_1,
                                                  shift(X, (0))),
-                                         select(double_P_double_M_X_1,
+                                         select(doubleP_doubleM_X_1,
                                          shift(X, (1)))))
                                         and (JC_<somenum>:
                                             (forall k1:int.
@@ -881,9 +869,9 @@ let InterPolate_ensures_big =
                                                     integer_of_int32(k2))
                                                    and le_int(integer_of_int32(k2),
                                                        integer_of_int32(n)))) ->
-                                               lt_real(select(double_P_double_M_X_1,
+                                               lt_real(select(doubleP_doubleM_X_1,
                                                        shift(X, k1)),
-                                               select(double_P_double_M_X_1,
+                                               select(doubleP_doubleM_X_1,
                                                shift(X, integer_of_int32(k2))))))))))))))))))) }
   (init:
   (let return = ref (any_real void) in
@@ -911,9 +899,9 @@ let InterPolate_ensures_big =
                                                       ((add_int (integer_of_int32 n)) (1))))))) (2))))))) in
        void);
        (if ((ge_real_ x_0) (C_9:
-                           ((safe_acc_ double_P_double_M_X_1) (C_8:
-                                                              ((shift X) 
-                                                               (integer_of_int32 !m))))))
+                           ((safe_acc_ doubleP_doubleM_X_1) (C_8:
+                                                            ((shift X) 
+                                                             (integer_of_int32 !m))))))
        then (let jessie_<somenum> = (C_7: (i := !m)) in void) else void);
        (let jessie_<somenum> = (i0 := !i) in void); void;
        (loop_4:
@@ -926,7 +914,7 @@ let InterPolate_ensures_big =
                 ((le_int(integer_of_int32(i0), k)
                  and lt_int(k, integer_of_int32(i))) ->
                  ge_real(x_0,
-                 select(double_P_double_M_X_1, shift(X, integer_of_int32(i)))))))
+                 select(doubleP_doubleM_X_1, shift(X, integer_of_int32(i)))))))
               and (JC_<somenum>:
                   ((JC_<somenum>: le_int(integer_of_int32(i0), integer_of_int32(i)))
                   and (JC_<somenum>:
@@ -940,12 +928,13 @@ let InterPolate_ensures_big =
               (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
               then
                (if ((ge_real_ x_0) (C_21:
-                                   ((safe_acc_ double_P_double_M_X_1) 
-                                    (C_20:
-                                    ((shift X) (integer_of_int32 (C_19:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_18:
-                                                                  ((add_int 
+                                   ((safe_acc_ doubleP_doubleM_X_1) (C_20:
+                                                                    ((shift X) 
+                                                                    (integer_of_int32 
+                                                                    (C_19:
+                                                                    (safe_int32_of_integer_ 
+                                                                    (C_18:
+                                                                    ((add_int 
                                                                     (integer_of_int32 !i)) (1)))))))))))
                then void
                else
@@ -971,49 +960,49 @@ let InterPolate_ensures_big =
        (let jessie_<somenum> =
        (__retres := (C_36:
                     ((add_real (C_35:
-                               ((safe_acc_ double_P_double_M_Y_2) (C_34:
-                                                                  ((shift Y) 
-                                                                   (integer_of_int32 !i)))))) 
+                               ((safe_acc_ doubleP_doubleM_Y_2) (C_34:
+                                                                ((shift Y) 
+                                                                 (integer_of_int32 !i)))))) 
                      (C_33:
                      ((mul_real (C_32:
                                 ((sub_real x_0) (C_31:
-                                                ((safe_acc_ double_P_double_M_X_1) 
+                                                ((safe_acc_ doubleP_doubleM_X_1) 
                                                  (C_30:
                                                  ((shift X) (integer_of_int32 !i)))))))) 
                       (C_29:
-                      ((safe_acc_ double_P_double_M_V_3) (C_28:
-                                                         ((shift V) (integer_of_int32 !i)))))))))) in
+                      ((safe_acc_ doubleP_doubleM_V_3) (C_28:
+                                                       ((shift V) (integer_of_int32 !i)))))))))) in
        void); (return := !__retres); (raise Return) end))) end)))); absurd 
    end with Return -> !return end))
   { (JC_<somenum>:
     eq_real(result,
-    select(double_P_double_M_Y_2, shift(Y@, integer_of_int32(n@))))) }
+    select(doubleP_doubleM_Y_2, shift(Y@, integer_of_int32(n@))))) }
 
 let InterPolate_ensures_default =
- fun (x_0 : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
+ fun (x_0 : real) (X : doubleP pointer) (Y : doubleP pointer) (V : doubleP pointer) (n : int32) (doubleP_X_1_alloc_table : doubleP alloc_table) (doubleP_Y_2_alloc_table : doubleP alloc_table) (doubleP_V_3_alloc_table : doubleP alloc_table) (doubleP_doubleM_X_1 : (doubleP, real) memory) (doubleP_doubleM_Y_2 : (doubleP, real) memory) (doubleP_doubleM_V_3 : (doubleP, real) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: le_int((3), integer_of_int32(n)))
     and ((JC_<somenum>: le_int(integer_of_int32(n), (17)))
-        and ((JC_<somenum>: le_int(offset_min(double_P_X_1_alloc_table, X), (0)))
+        and ((JC_<somenum>: le_int(offset_min(doubleP_X_1_alloc_table, X), (0)))
             and ((JC_<somenum>:
-                 ge_int(offset_max(double_P_X_1_alloc_table, X),
+                 ge_int(offset_max(doubleP_X_1_alloc_table, X),
                  integer_of_int32(n)))
                 and ((JC_<somenum>:
-                     le_int(offset_min(double_P_Y_2_alloc_table, Y), (0)))
+                     le_int(offset_min(doubleP_Y_2_alloc_table, Y), (0)))
                     and ((JC_<somenum>:
-                         ge_int(offset_max(double_P_Y_2_alloc_table, Y),
+                         ge_int(offset_max(doubleP_Y_2_alloc_table, Y),
                          integer_of_int32(n)))
                         and ((JC_<somenum>:
-                             le_int(offset_min(double_P_V_3_alloc_table, V),
+                             le_int(offset_min(doubleP_V_3_alloc_table, V),
                              (0)))
                             and ((JC_<somenum>:
-                                 ge_int(offset_max(double_P_V_3_alloc_table,
+                                 ge_int(offset_max(doubleP_V_3_alloc_table,
                                         V),
                                  integer_of_int32(n)))
                                 and ((JC_<somenum>:
-                                     eq_real(select(double_P_double_M_X_1,
+                                     eq_real(select(doubleP_doubleM_X_1,
                                              shift(X, (0))),
-                                     select(double_P_double_M_X_1,
+                                     select(doubleP_doubleM_X_1,
                                      shift(X, (1)))))
                                     and (JC_<somenum>:
                                         (forall k1:int.
@@ -1023,9 +1012,9 @@ let InterPolate_ensures_default =
                                                 integer_of_int32(k2))
                                                and le_int(integer_of_int32(k2),
                                                    integer_of_int32(n)))) ->
-                                           lt_real(select(double_P_double_M_X_1,
+                                           lt_real(select(doubleP_doubleM_X_1,
                                                    shift(X, k1)),
-                                           select(double_P_double_M_X_1,
+                                           select(doubleP_doubleM_X_1,
                                            shift(X, integer_of_int32(k2)))))))))))))))))) }
   (init:
   (let return = ref (any_real void) in
@@ -1053,9 +1042,9 @@ let InterPolate_ensures_default =
                                                       ((add_int (integer_of_int32 n)) (1))))))) (2))))))) in
        void);
        (if ((ge_real_ x_0) (C_9:
-                           ((safe_acc_ double_P_double_M_X_1) (C_8:
-                                                              ((shift X) 
-                                                               (integer_of_int32 !m))))))
+                           ((safe_acc_ doubleP_doubleM_X_1) (C_8:
+                                                            ((shift X) 
+                                                             (integer_of_int32 !m))))))
        then (let jessie_<somenum> = (C_7: (i := !m)) in void) else void);
        (let jessie_<somenum> = (i0 := !i) in void); void;
        (loop_2:
@@ -1066,7 +1055,7 @@ let InterPolate_ensures_default =
              ((le_int(integer_of_int32(i0), k)
               and lt_int(k, integer_of_int32(i))) ->
               ge_real(x_0,
-              select(double_P_double_M_X_1, shift(X, integer_of_int32(i)))))))
+              select(doubleP_doubleM_X_1, shift(X, integer_of_int32(i)))))))
            and (JC_<somenum>:
                ((JC_<somenum>: le_int(integer_of_int32(i0), integer_of_int32(i)))
                and (JC_<somenum>: le_int(integer_of_int32(i), integer_of_int32(n))))))
@@ -1082,12 +1071,13 @@ let InterPolate_ensures_default =
               (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
               then
                (if ((ge_real_ x_0) (C_21:
-                                   ((safe_acc_ double_P_double_M_X_1) 
-                                    (C_20:
-                                    ((shift X) (integer_of_int32 (C_19:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_18:
-                                                                  ((add_int 
+                                   ((safe_acc_ doubleP_doubleM_X_1) (C_20:
+                                                                    ((shift X) 
+                                                                    (integer_of_int32 
+                                                                    (C_19:
+                                                                    (safe_int32_of_integer_ 
+                                                                    (C_18:
+                                                                    ((add_int 
                                                                     (integer_of_int32 !i)) (1)))))))))))
                then void
                else
@@ -1111,70 +1101,69 @@ let InterPolate_ensures_default =
        (let jessie_<somenum> =
        (__retres := (C_36:
                     ((add_real (C_35:
-                               ((safe_acc_ double_P_double_M_Y_2) (C_34:
-                                                                  ((shift Y) 
-                                                                   (integer_of_int32 !i)))))) 
+                               ((safe_acc_ doubleP_doubleM_Y_2) (C_34:
+                                                                ((shift Y) 
+                                                                 (integer_of_int32 !i)))))) 
                      (C_33:
                      ((mul_real (C_32:
                                 ((sub_real x_0) (C_31:
-                                                ((safe_acc_ double_P_double_M_X_1) 
+                                                ((safe_acc_ doubleP_doubleM_X_1) 
                                                  (C_30:
                                                  ((shift X) (integer_of_int32 !i)))))))) 
                       (C_29:
-                      ((safe_acc_ double_P_double_M_V_3) (C_28:
-                                                         ((shift V) (integer_of_int32 !i)))))))))) in
+                      ((safe_acc_ doubleP_doubleM_V_3) (C_28:
+                                                       ((shift V) (integer_of_int32 !i)))))))))) in
        void); (return := !__retres); (raise Return) end))) end)))); absurd 
    end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let InterPolate_ensures_inter =
- fun (x_0 : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
-  { ((eq_real(select(double_P_double_M_Y_2, shift(Y, (0))),
-      select(double_P_double_M_Y_2, shift(Y, (1))))
-     and (eq_real(select(double_P_double_M_V_3, shift(V, (0))),
-          select(double_P_double_M_V_3, shift(V, integer_of_int32(n))))
-         and (eq_real(select(double_P_double_M_V_3,
+ fun (x_0 : real) (X : doubleP pointer) (Y : doubleP pointer) (V : doubleP pointer) (n : int32) (doubleP_X_1_alloc_table : doubleP alloc_table) (doubleP_Y_2_alloc_table : doubleP alloc_table) (doubleP_V_3_alloc_table : doubleP alloc_table) (doubleP_doubleM_X_1 : (doubleP, real) memory) (doubleP_doubleM_Y_2 : (doubleP, real) memory) (doubleP_doubleM_V_3 : (doubleP, real) memory) ->
+  { ((eq_real(select(doubleP_doubleM_Y_2, shift(Y, (0))),
+      select(doubleP_doubleM_Y_2, shift(Y, (1))))
+     and (eq_real(select(doubleP_doubleM_V_3, shift(V, (0))),
+          select(doubleP_doubleM_V_3, shift(V, integer_of_int32(n))))
+         and (eq_real(select(doubleP_doubleM_V_3,
                       shift(V, integer_of_int32(n))),
               0.0)
              and ((forall k_2:int.
                    ((le_int((1), k_2)
                     and le_int(k_2, sub_int(integer_of_int32(n), (1)))) ->
-                    eq_real(select(double_P_double_M_V_3, shift(V, k_2)),
-                    div_real(sub_real(select(double_P_double_M_Y_2,
+                    eq_real(select(doubleP_doubleM_V_3, shift(V, k_2)),
+                    div_real(sub_real(select(doubleP_doubleM_Y_2,
                                       shift(Y, add_int(k_2, (1)))),
-                             select(double_P_double_M_Y_2, shift(Y, k_2))),
-                    sub_real(select(double_P_double_M_X_1,
+                             select(doubleP_doubleM_Y_2, shift(Y, k_2))),
+                    sub_real(select(doubleP_doubleM_X_1,
                              shift(X, add_int(k_2, (1)))),
-                    select(double_P_double_M_X_1, shift(X, k_2)))))))
-                 and (le_real(select(double_P_double_M_X_1, shift(X, (0))),
+                    select(doubleP_doubleM_X_1, shift(X, k_2)))))))
+                 and (le_real(select(doubleP_doubleM_X_1, shift(X, (0))),
                       x_0)
                      and lt_real(x_0,
-                         select(double_P_double_M_X_1,
+                         select(doubleP_doubleM_X_1,
                          shift(X, integer_of_int32(n)))))))))
     and (JC_<somenum>:
         ((JC_<somenum>: le_int((3), integer_of_int32(n)))
         and ((JC_<somenum>: le_int(integer_of_int32(n), (17)))
-            and ((JC_<somenum>:
-                 le_int(offset_min(double_P_X_1_alloc_table, X), (0)))
+            and ((JC_<somenum>: le_int(offset_min(doubleP_X_1_alloc_table, X), (0)))
                 and ((JC_<somenum>:
-                     ge_int(offset_max(double_P_X_1_alloc_table, X),
+                     ge_int(offset_max(doubleP_X_1_alloc_table, X),
                      integer_of_int32(n)))
                     and ((JC_<somenum>:
-                         le_int(offset_min(double_P_Y_2_alloc_table, Y), (0)))
+                         le_int(offset_min(doubleP_Y_2_alloc_table, Y), (0)))
                         and ((JC_<somenum>:
-                             ge_int(offset_max(double_P_Y_2_alloc_table, Y),
+                             ge_int(offset_max(doubleP_Y_2_alloc_table, Y),
                              integer_of_int32(n)))
                             and ((JC_<somenum>:
-                                 le_int(offset_min(double_P_V_3_alloc_table,
+                                 le_int(offset_min(doubleP_V_3_alloc_table,
                                         V),
                                  (0)))
                                 and ((JC_<somenum>:
-                                     ge_int(offset_max(double_P_V_3_alloc_table,
+                                     ge_int(offset_max(doubleP_V_3_alloc_table,
                                             V),
                                      integer_of_int32(n)))
                                     and ((JC_<somenum>:
-                                         eq_real(select(double_P_double_M_X_1,
+                                         eq_real(select(doubleP_doubleM_X_1,
                                                  shift(X, (0))),
-                                         select(double_P_double_M_X_1,
+                                         select(doubleP_doubleM_X_1,
                                          shift(X, (1)))))
                                         and (JC_<somenum>:
                                             (forall k1:int.
@@ -1184,9 +1173,9 @@ let InterPolate_ensures_inter =
                                                     integer_of_int32(k2))
                                                    and le_int(integer_of_int32(k2),
                                                        integer_of_int32(n)))) ->
-                                               lt_real(select(double_P_double_M_X_1,
+                                               lt_real(select(doubleP_doubleM_X_1,
                                                        shift(X, k1)),
-                                               select(double_P_double_M_X_1,
+                                               select(doubleP_doubleM_X_1,
                                                shift(X, integer_of_int32(k2))))))))))))))))))) }
   (init:
   (let return = ref (any_real void) in
@@ -1214,9 +1203,9 @@ let InterPolate_ensures_inter =
                                                       ((add_int (integer_of_int32 n)) (1))))))) (2))))))) in
        void);
        (if ((ge_real_ x_0) (C_9:
-                           ((safe_acc_ double_P_double_M_X_1) (C_8:
-                                                              ((shift X) 
-                                                               (integer_of_int32 !m))))))
+                           ((safe_acc_ doubleP_doubleM_X_1) (C_8:
+                                                            ((shift X) 
+                                                             (integer_of_int32 !m))))))
        then (let jessie_<somenum> = (C_7: (i := !m)) in void) else void);
        (let jessie_<somenum> = (i0 := !i) in void); void;
        (loop_5:
@@ -1229,7 +1218,7 @@ let InterPolate_ensures_inter =
                 ((le_int(integer_of_int32(i0), k)
                  and lt_int(k, integer_of_int32(i))) ->
                  ge_real(x_0,
-                 select(double_P_double_M_X_1, shift(X, integer_of_int32(i)))))))
+                 select(doubleP_doubleM_X_1, shift(X, integer_of_int32(i)))))))
               and (JC_<somenum>:
                   ((JC_<somenum>: le_int(integer_of_int32(i0), integer_of_int32(i)))
                   and (JC_<somenum>:
@@ -1243,12 +1232,13 @@ let InterPolate_ensures_inter =
               (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
               then
                (if ((ge_real_ x_0) (C_21:
-                                   ((safe_acc_ double_P_double_M_X_1) 
-                                    (C_20:
-                                    ((shift X) (integer_of_int32 (C_19:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_18:
-                                                                  ((add_int 
+                                   ((safe_acc_ doubleP_doubleM_X_1) (C_20:
+                                                                    ((shift X) 
+                                                                    (integer_of_int32 
+                                                                    (C_19:
+                                                                    (safe_int32_of_integer_ 
+                                                                    (C_18:
+                                                                    ((add_int 
                                                                     (integer_of_int32 !i)) (1)))))))))))
                then void
                else
@@ -1272,18 +1262,18 @@ let InterPolate_ensures_inter =
        (let jessie_<somenum> =
        (__retres := (C_36:
                     ((add_real (C_35:
-                               ((safe_acc_ double_P_double_M_Y_2) (C_34:
-                                                                  ((shift Y) 
-                                                                   (integer_of_int32 !i)))))) 
+                               ((safe_acc_ doubleP_doubleM_Y_2) (C_34:
+                                                                ((shift Y) 
+                                                                 (integer_of_int32 !i)))))) 
                      (C_33:
                      ((mul_real (C_32:
                                 ((sub_real x_0) (C_31:
-                                                ((safe_acc_ double_P_double_M_X_1) 
+                                                ((safe_acc_ doubleP_doubleM_X_1) 
                                                  (C_30:
                                                  ((shift X) (integer_of_int32 !i)))))))) 
                       (C_29:
-                      ((safe_acc_ double_P_double_M_V_3) (C_28:
-                                                         ((shift V) (integer_of_int32 !i)))))))))) in
+                      ((safe_acc_ doubleP_doubleM_V_3) (C_28:
+                                                       ((shift V) (integer_of_int32 !i)))))))))) in
        void); (return := !__retres); (raise Return) end))) end)))); absurd 
    end with Return -> !return end))
   { (JC_<somenum>:
@@ -1292,65 +1282,63 @@ let InterPolate_ensures_inter =
          le_int(integer_of_int32(i_f), sub_int(integer_of_int32(n@), (1))))
         and (JC_<somenum>:
             eq_real(result,
-            add_real(select(double_P_double_M_Y_2,
+            add_real(select(doubleP_doubleM_Y_2,
                      shift(Y@, integer_of_int32(i_f))),
             div_real(mul_real(sub_real(x_0@,
-                              select(double_P_double_M_X_1,
+                              select(doubleP_doubleM_X_1,
                               shift(X@, integer_of_int32(i_f)))),
-                     sub_real(select(double_P_double_M_Y_2,
+                     sub_real(select(doubleP_doubleM_Y_2,
                               shift(Y@, add_int(integer_of_int32(i_f), (1)))),
-                     select(double_P_double_M_Y_2,
+                     select(doubleP_doubleM_Y_2,
                      shift(Y@, integer_of_int32(i_f))))),
-            sub_real(select(double_P_double_M_X_1,
+            sub_real(select(doubleP_doubleM_X_1,
                      shift(X@, add_int(integer_of_int32(i_f), (1)))),
-            select(double_P_double_M_X_1, shift(X@, integer_of_int32(i_f))))))))))) }
+            select(doubleP_doubleM_X_1, shift(X@, integer_of_int32(i_f))))))))))) }
 
 let InterPolate_ensures_small =
- fun (x_0 : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
-  { ((eq_real(select(double_P_double_M_Y_2, shift(Y, (0))),
-      select(double_P_double_M_Y_2, shift(Y, (1))))
-     and (eq_real(select(double_P_double_M_V_3, shift(V, (0))),
-          select(double_P_double_M_V_3, shift(V, integer_of_int32(n))))
-         and (eq_real(select(double_P_double_M_V_3,
+ fun (x_0 : real) (X : doubleP pointer) (Y : doubleP pointer) (V : doubleP pointer) (n : int32) (doubleP_X_1_alloc_table : doubleP alloc_table) (doubleP_Y_2_alloc_table : doubleP alloc_table) (doubleP_V_3_alloc_table : doubleP alloc_table) (doubleP_doubleM_X_1 : (doubleP, real) memory) (doubleP_doubleM_Y_2 : (doubleP, real) memory) (doubleP_doubleM_V_3 : (doubleP, real) memory) ->
+  { ((eq_real(select(doubleP_doubleM_Y_2, shift(Y, (0))),
+      select(doubleP_doubleM_Y_2, shift(Y, (1))))
+     and (eq_real(select(doubleP_doubleM_V_3, shift(V, (0))),
+          select(doubleP_doubleM_V_3, shift(V, integer_of_int32(n))))
+         and (eq_real(select(doubleP_doubleM_V_3,
                       shift(V, integer_of_int32(n))),
               0.0)
              and ((forall k_0:int.
                    ((le_int((1), k_0)
                     and le_int(k_0, sub_int(integer_of_int32(n), (1)))) ->
-                    eq_real(select(double_P_double_M_V_3, shift(V, k_0)),
-                    div_real(sub_real(select(double_P_double_M_Y_2,
+                    eq_real(select(doubleP_doubleM_V_3, shift(V, k_0)),
+                    div_real(sub_real(select(doubleP_doubleM_Y_2,
                                       shift(Y, add_int(k_0, (1)))),
-                             select(double_P_double_M_Y_2, shift(Y, k_0))),
-                    sub_real(select(double_P_double_M_X_1,
+                             select(doubleP_doubleM_Y_2, shift(Y, k_0))),
+                    sub_real(select(doubleP_doubleM_X_1,
                              shift(X, add_int(k_0, (1)))),
-                    select(double_P_double_M_X_1, shift(X, k_0)))))))
-                 and lt_real(x_0,
-                     select(double_P_double_M_X_1, shift(X, (0))))))))
+                    select(doubleP_doubleM_X_1, shift(X, k_0)))))))
+                 and lt_real(x_0, select(doubleP_doubleM_X_1, shift(X, (0))))))))
     and (JC_<somenum>:
         ((JC_<somenum>: le_int((3), integer_of_int32(n)))
         and ((JC_<somenum>: le_int(integer_of_int32(n), (17)))
-            and ((JC_<somenum>:
-                 le_int(offset_min(double_P_X_1_alloc_table, X), (0)))
+            and ((JC_<somenum>: le_int(offset_min(doubleP_X_1_alloc_table, X), (0)))
                 and ((JC_<somenum>:
-                     ge_int(offset_max(double_P_X_1_alloc_table, X),
+                     ge_int(offset_max(doubleP_X_1_alloc_table, X),
                      integer_of_int32(n)))
                     and ((JC_<somenum>:
-                         le_int(offset_min(double_P_Y_2_alloc_table, Y), (0)))
+                         le_int(offset_min(doubleP_Y_2_alloc_table, Y), (0)))
                         and ((JC_<somenum>:
-                             ge_int(offset_max(double_P_Y_2_alloc_table, Y),
+                             ge_int(offset_max(doubleP_Y_2_alloc_table, Y),
                              integer_of_int32(n)))
                             and ((JC_<somenum>:
-                                 le_int(offset_min(double_P_V_3_alloc_table,
+                                 le_int(offset_min(doubleP_V_3_alloc_table,
                                         V),
                                  (0)))
                                 and ((JC_<somenum>:
-                                     ge_int(offset_max(double_P_V_3_alloc_table,
+                                     ge_int(offset_max(doubleP_V_3_alloc_table,
                                             V),
                                      integer_of_int32(n)))
                                     and ((JC_<somenum>:
-                                         eq_real(select(double_P_double_M_X_1,
+                                         eq_real(select(doubleP_doubleM_X_1,
                                                  shift(X, (0))),
-                                         select(double_P_double_M_X_1,
+                                         select(doubleP_doubleM_X_1,
                                          shift(X, (1)))))
                                         and (JC_<somenum>:
                                             (forall k1:int.
@@ -1360,9 +1348,9 @@ let InterPolate_ensures_small =
                                                     integer_of_int32(k2))
                                                    and le_int(integer_of_int32(k2),
                                                        integer_of_int32(n)))) ->
-                                               lt_real(select(double_P_double_M_X_1,
+                                               lt_real(select(doubleP_doubleM_X_1,
                                                        shift(X, k1)),
-                                               select(double_P_double_M_X_1,
+                                               select(doubleP_doubleM_X_1,
                                                shift(X, integer_of_int32(k2))))))))))))))))))) }
   (init:
   (let return = ref (any_real void) in
@@ -1390,9 +1378,9 @@ let InterPolate_ensures_small =
                                                       ((add_int (integer_of_int32 n)) (1))))))) (2))))))) in
        void);
        (if ((ge_real_ x_0) (C_9:
-                           ((safe_acc_ double_P_double_M_X_1) (C_8:
-                                                              ((shift X) 
-                                                               (integer_of_int32 !m))))))
+                           ((safe_acc_ doubleP_doubleM_X_1) (C_8:
+                                                            ((shift X) 
+                                                             (integer_of_int32 !m))))))
        then (let jessie_<somenum> = (C_7: (i := !m)) in void) else void);
        (let jessie_<somenum> = (i0 := !i) in void);
        (assert { (JC_<somenum>: eq_int(integer_of_int32(i), (0))) }; void); void;
@@ -1406,7 +1394,7 @@ let InterPolate_ensures_small =
                 ((le_int(integer_of_int32(i0), k)
                  and lt_int(k, integer_of_int32(i))) ->
                  ge_real(x_0,
-                 select(double_P_double_M_X_1, shift(X, integer_of_int32(i)))))))
+                 select(doubleP_doubleM_X_1, shift(X, integer_of_int32(i)))))))
               and (JC_<somenum>:
                   ((JC_<somenum>: le_int(integer_of_int32(i0), integer_of_int32(i)))
                   and (JC_<somenum>:
@@ -1420,12 +1408,13 @@ let InterPolate_ensures_small =
               (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n))
               then
                (if ((ge_real_ x_0) (C_21:
-                                   ((safe_acc_ double_P_double_M_X_1) 
-                                    (C_20:
-                                    ((shift X) (integer_of_int32 (C_19:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_18:
-                                                                  ((add_int 
+                                   ((safe_acc_ doubleP_doubleM_X_1) (C_20:
+                                                                    ((shift X) 
+                                                                    (integer_of_int32 
+                                                                    (C_19:
+                                                                    (safe_int32_of_integer_ 
+                                                                    (C_18:
+                                                                    ((add_int 
                                                                     (integer_of_int32 !i)) (1)))))))))))
                then void
                else
@@ -1451,47 +1440,47 @@ let InterPolate_ensures_small =
        (let jessie_<somenum> =
        (__retres := (C_36:
                     ((add_real (C_35:
-                               ((safe_acc_ double_P_double_M_Y_2) (C_34:
-                                                                  ((shift Y) 
-                                                                   (integer_of_int32 !i)))))) 
+                               ((safe_acc_ doubleP_doubleM_Y_2) (C_34:
+                                                                ((shift Y) 
+                                                                 (integer_of_int32 !i)))))) 
                      (C_33:
                      ((mul_real (C_32:
                                 ((sub_real x_0) (C_31:
-                                                ((safe_acc_ double_P_double_M_X_1) 
+                                                ((safe_acc_ doubleP_doubleM_X_1) 
                                                  (C_30:
                                                  ((shift X) (integer_of_int32 !i)))))))) 
                       (C_29:
-                      ((safe_acc_ double_P_double_M_V_3) (C_28:
-                                                         ((shift V) (integer_of_int32 !i)))))))))) in
+                      ((safe_acc_ doubleP_doubleM_V_3) (C_28:
+                                                       ((shift V) (integer_of_int32 !i)))))))))) in
        void); (return := !__retres); (raise Return) end))) end)))); absurd 
    end with Return -> !return end))
-  { (JC_<somenum>: eq_real(result, select(double_P_double_M_Y_2, shift(Y@, (0))))) }
+  { (JC_<somenum>: eq_real(result, select(doubleP_doubleM_Y_2, shift(Y@, (0))))) }
 
 let InterPolate_safety =
- fun (x_0 : real) (X : double_P pointer) (Y : double_P pointer) (V : double_P pointer) (n : int32) (double_P_X_1_alloc_table : double_P alloc_table) (double_P_Y_2_alloc_table : double_P alloc_table) (double_P_V_3_alloc_table : double_P alloc_table) (double_P_double_M_X_1 : (double_P, real) memory) (double_P_double_M_Y_2 : (double_P, real) memory) (double_P_double_M_V_3 : (double_P, real) memory) ->
+ fun (x_0 : real) (X : doubleP pointer) (Y : doubleP pointer) (V : doubleP pointer) (n : int32) (doubleP_X_1_alloc_table : doubleP alloc_table) (doubleP_Y_2_alloc_table : doubleP alloc_table) (doubleP_V_3_alloc_table : doubleP alloc_table) (doubleP_doubleM_X_1 : (doubleP, real) memory) (doubleP_doubleM_Y_2 : (doubleP, real) memory) (doubleP_doubleM_V_3 : (doubleP, real) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: le_int((3), integer_of_int32(n)))
     and ((JC_<somenum>: le_int(integer_of_int32(n), (17)))
-        and ((JC_<somenum>: le_int(offset_min(double_P_X_1_alloc_table, X), (0)))
+        and ((JC_<somenum>: le_int(offset_min(doubleP_X_1_alloc_table, X), (0)))
             and ((JC_<somenum>:
-                 ge_int(offset_max(double_P_X_1_alloc_table, X),
+                 ge_int(offset_max(doubleP_X_1_alloc_table, X),
                  integer_of_int32(n)))
                 and ((JC_<somenum>:
-                     le_int(offset_min(double_P_Y_2_alloc_table, Y), (0)))
+                     le_int(offset_min(doubleP_Y_2_alloc_table, Y), (0)))
                     and ((JC_<somenum>:
-                         ge_int(offset_max(double_P_Y_2_alloc_table, Y),
+                         ge_int(offset_max(doubleP_Y_2_alloc_table, Y),
                          integer_of_int32(n)))
                         and ((JC_<somenum>:
-                             le_int(offset_min(double_P_V_3_alloc_table, V),
+                             le_int(offset_min(doubleP_V_3_alloc_table, V),
                              (0)))
                             and ((JC_<somenum>:
-                                 ge_int(offset_max(double_P_V_3_alloc_table,
+                                 ge_int(offset_max(doubleP_V_3_alloc_table,
                                         V),
                                  integer_of_int32(n)))
                                 and ((JC_<somenum>:
-                                     eq_real(select(double_P_double_M_X_1,
+                                     eq_real(select(doubleP_doubleM_X_1,
                                              shift(X, (0))),
-                                     select(double_P_double_M_X_1,
+                                     select(doubleP_doubleM_X_1,
                                      shift(X, (1)))))
                                     and (JC_<somenum>:
                                         (forall k1:int.
@@ -1501,9 +1490,9 @@ let InterPolate_safety =
                                                 integer_of_int32(k2))
                                                and le_int(integer_of_int32(k2),
                                                    integer_of_int32(n)))) ->
-                                           lt_real(select(double_P_double_M_X_1,
+                                           lt_real(select(doubleP_doubleM_X_1,
                                                    shift(X, k1)),
-                                           select(double_P_double_M_X_1,
+                                           select(doubleP_doubleM_X_1,
                                            shift(X, integer_of_int32(k2)))))))))))))))))) }
   (init:
   (let return = ref (any_real void) in
@@ -1534,7 +1523,7 @@ let InterPolate_safety =
        void);
        (if ((ge_real_ x_0) (C_9:
                            (JC_<somenum>:
-                           ((((offset_acc_ double_P_X_1_alloc_table) double_P_double_M_X_1) X) 
+                           ((((offset_acc_ doubleP_X_1_alloc_table) doubleP_doubleM_X_1) X) 
                             (integer_of_int32 !m)))))
        then (let jessie_<somenum> = (C_7: (i := !m)) in void) else void);
        (let jessie_<somenum> = (i0 := !i) in void); void;
@@ -1549,7 +1538,7 @@ let InterPolate_safety =
                 ((le_int(integer_of_int32(i0), k)
                  and lt_int(k, integer_of_int32(i))) ->
                  ge_real(x_0,
-                 select(double_P_double_M_X_1, shift(X, integer_of_int32(i)))))))
+                 select(doubleP_doubleM_X_1, shift(X, integer_of_int32(i)))))))
               and (JC_<somenum>:
                   ((JC_<somenum>: le_int(integer_of_int32(i0), integer_of_int32(i)))
                   and (JC_<somenum>:
@@ -1564,7 +1553,7 @@ let InterPolate_safety =
               then
                (if ((ge_real_ x_0) (C_21:
                                    (JC_<somenum>:
-                                   ((((offset_acc_ double_P_X_1_alloc_table) double_P_double_M_X_1) X) 
+                                   ((((offset_acc_ doubleP_X_1_alloc_table) doubleP_doubleM_X_1) X) 
                                     (integer_of_int32 (C_19:
                                                       (JC_<somenum>:
                                                       (int32_of_integer_ 
@@ -1594,18 +1583,18 @@ let InterPolate_safety =
        (__retres := (C_36:
                     ((add_real (C_35:
                                (JC_<somenum>:
-                               ((((offset_acc_ double_P_Y_2_alloc_table) double_P_double_M_Y_2) Y) 
+                               ((((offset_acc_ doubleP_Y_2_alloc_table) doubleP_doubleM_Y_2) Y) 
                                 (integer_of_int32 !i))))) (C_33:
                                                           ((mul_real 
                                                             (C_32:
                                                             ((sub_real x_0) 
                                                              (C_31:
                                                              (JC_<somenum>:
-                                                             ((((offset_acc_ double_P_X_1_alloc_table) double_P_double_M_X_1) X) 
+                                                             ((((offset_acc_ doubleP_X_1_alloc_table) doubleP_doubleM_X_1) X) 
                                                               (integer_of_int32 !i))))))) 
                                                            (C_29:
                                                            (JC_<somenum>:
-                                                           ((((offset_acc_ double_P_V_3_alloc_table) double_P_double_M_V_3) V) 
+                                                           ((((offset_acc_ doubleP_V_3_alloc_table) doubleP_doubleM_V_3) V) 
                                                             (integer_of_int32 !i))))))))) in
        void); (return := !__retres); (raise Return) end))) end)))); absurd 
    end with Return -> !return end)) { true }
@@ -2720,9 +2709,9 @@ axiom frame_between_sub:
           (frame_between(sa, m1, m2) ->
            (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
-type char_P
+type charP
 
-type double_P
+type doubleP
 
 type int32
 
@@ -2730,41 +2719,41 @@ type int8
 
 type padding
 
-type void_P
+type voidP
 
-logic char_P_tag : char_P tag_id
+logic charP_tag : charP tag_id
 
-axiom char_P_int: (int_of_tag(char_P_tag) = 1)
+axiom charP_int: (int_of_tag(charP_tag) = 1)
 
-logic char_P_of_pointer_address : unit pointer -> char_P pointer
+logic charP_of_pointer_address : unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr:
-  (forall p:char_P pointer.
-    (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr:
+  (forall p:charP pointer.
+    (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom: parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom: parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags:
-  (forall x:char_P pointer.
-    (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
-      x, char_P_tag)))
+axiom charP_tags:
+  (forall x:charP pointer.
+    (forall charP_tag_table:charP tag_table. instanceof(charP_tag_table, x,
+      charP_tag)))
 
-logic double_P_tag : double_P tag_id
+logic doubleP_tag : doubleP tag_id
 
-axiom double_P_int: (int_of_tag(double_P_tag) = 1)
+axiom doubleP_int: (int_of_tag(doubleP_tag) = 1)
 
-logic double_P_of_pointer_address : unit pointer -> double_P pointer
+logic doubleP_of_pointer_address : unit pointer -> doubleP pointer
 
-axiom double_P_of_pointer_address_of_pointer_addr:
-  (forall p:double_P pointer.
-    (p = double_P_of_pointer_address(pointer_address(p))))
+axiom doubleP_of_pointer_address_of_pointer_addr:
+  (forall p:doubleP pointer.
+    (p = doubleP_of_pointer_address(pointer_address(p))))
 
-axiom double_P_parenttag_bottom: parenttag(double_P_tag, bottom_tag)
+axiom doubleP_parenttag_bottom: parenttag(doubleP_tag, bottom_tag)
 
-axiom double_P_tags:
-  (forall x:double_P pointer.
-    (forall double_P_tag_table:double_P tag_table.
-      instanceof(double_P_tag_table, x, double_P_tag)))
+axiom doubleP_tags:
+  (forall x:doubleP pointer.
+    (forall doubleP_tag_table:doubleP tag_table.
+      instanceof(doubleP_tag_table, x, doubleP_tag)))
 
 logic integer_of_int32 : int32 -> int
 
@@ -2799,131 +2788,129 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
-predicate left_valid_struct_char_P(p: char_P pointer, a: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
+predicate left_valid_struct_charP(p: charP pointer, a: int,
+  charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
   p) <= a)
 
-predicate left_valid_struct_double_P(p: double_P pointer, a: int,
-  double_P_alloc_table: double_P alloc_table) =
-  (offset_min(double_P_alloc_table, p) <= a)
+predicate left_valid_struct_doubleP(p: doubleP pointer, a: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  (offset_min(doubleP_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p: void_P pointer, a: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
+predicate left_valid_struct_voidP(p: voidP pointer, a: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
 
-axiom pointer_addr_of_char_P_of_pointer_address:
+axiom pointer_addr_of_charP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
+
+axiom pointer_addr_of_doubleP_of_pointer_address:
   (forall p:unit pointer.
-    (p = pointer_address(char_P_of_pointer_address(p))))
+    (p = pointer_address(doubleP_of_pointer_address(p))))
 
-axiom pointer_addr_of_double_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(double_P_of_pointer_address(p))))
+logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
-logic void_P_of_pointer_address : unit pointer -> void_P pointer
+axiom pointer_addr_of_voidP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
-axiom pointer_addr_of_void_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(void_P_of_pointer_address(p))))
-
-predicate right_valid_struct_char_P(p: char_P pointer, b: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
+predicate right_valid_struct_charP(p: charP pointer, b: int,
+  charP_alloc_table: charP alloc_table) = (offset_max(charP_alloc_table,
   p) >= b)
 
-predicate right_valid_struct_double_P(p: double_P pointer, b: int,
-  double_P_alloc_table: double_P alloc_table) =
-  (offset_max(double_P_alloc_table, p) >= b)
+predicate right_valid_struct_doubleP(p: doubleP pointer, b: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  (offset_max(doubleP_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p: void_P pointer, b: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
+predicate right_valid_struct_voidP(p: voidP pointer, b: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
 
-predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
 
-predicate strict_valid_root_double_P(p: double_P pointer, a: int, b: int,
-  double_P_alloc_table: double_P alloc_table) =
-  ((offset_min(double_P_alloc_table, p) = a) and
-   (offset_max(double_P_alloc_table, p) = b))
+predicate strict_valid_root_doubleP(p: doubleP pointer, a: int, b: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  ((offset_min(doubleP_alloc_table, p) = a) and
+   (offset_max(doubleP_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
 
-predicate strict_valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
 
-predicate strict_valid_struct_double_P(p: double_P pointer, a: int, b: int,
-  double_P_alloc_table: double_P alloc_table) =
-  ((offset_min(double_P_alloc_table, p) = a) and
-   (offset_max(double_P_alloc_table, p) = b))
+predicate strict_valid_struct_doubleP(p: doubleP pointer, a: int, b: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  ((offset_min(doubleP_alloc_table, p) = a) and
+   (offset_max(doubleP_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
 
-predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_double_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_doubleP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
 
-predicate valid_root_double_P(p: double_P pointer, a: int, b: int,
-  double_P_alloc_table: double_P alloc_table) =
-  ((offset_min(double_P_alloc_table, p) <= a) and
-   (offset_max(double_P_alloc_table, p) >= b))
+predicate valid_root_doubleP(p: doubleP pointer, a: int, b: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  ((offset_min(doubleP_alloc_table, p) <= a) and
+   (offset_max(doubleP_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
-predicate valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
 
-predicate valid_struct_double_P(p: double_P pointer, a: int, b: int,
-  double_P_alloc_table: double_P alloc_table) =
-  ((offset_min(double_P_alloc_table, p) <= a) and
-   (offset_max(double_P_alloc_table, p) >= b))
+predicate valid_struct_doubleP(p: doubleP pointer, a: int, b: int,
+  doubleP_alloc_table: doubleP alloc_table) =
+  ((offset_min(doubleP_alloc_table, p) <= a) and
+   (offset_max(doubleP_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
-logic void_P_tag : void_P tag_id
+logic voidP_tag : voidP tag_id
 
-axiom void_P_int: (int_of_tag(void_P_tag) = 1)
+axiom voidP_int: (int_of_tag(voidP_tag) = 1)
 
-axiom void_P_of_pointer_address_of_pointer_addr:
-  (forall p:void_P pointer.
-    (p = void_P_of_pointer_address(pointer_address(p))))
+axiom voidP_of_pointer_address_of_pointer_addr:
+  (forall p:voidP pointer.
+    (p = voidP_of_pointer_address(pointer_address(p))))
 
-axiom void_P_parenttag_bottom: parenttag(void_P_tag, bottom_tag)
+axiom voidP_parenttag_bottom: parenttag(voidP_tag, bottom_tag)
 
-axiom void_P_tags:
-  (forall x:void_P pointer.
-    (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
-      x, void_P_tag)))
+axiom voidP_tags:
+  (forall x:voidP pointer.
+    (forall voidP_tag_table:voidP tag_table. instanceof(voidP_tag_table, x,
+      voidP_tag)))
 

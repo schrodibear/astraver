@@ -19,68 +19,68 @@ axiomatic Padding {
 
 type int8 = -128..127
 
-tag float_P = {
-  real float_M: 32;
+tag floatP = {
+  real floatM: 32;
 }
 
-type float_P = [float_P]
+type floatP = [floatP]
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
-predicate incr{L}(float_P[..] t, integer i, integer j) {
-case incr_ok{L}: (\forall float_P[..] t_0;
+predicate incr{L}(floatP[..] t, integer i, integer j) {
+case incr_ok{L}: (\forall floatP[..] t_0;
                    (\forall integer i_0;
                      (\forall integer j_0;
                        ((i_0 < j_0) ==>
-                         (((t_0 + i_0).float_M <= (t_0 + (i_0 + 1)).float_M) ==>
+                         (((t_0 + i_0).floatM <= (t_0 + (i_0 + 1)).floatM) ==>
                            (incr{L}(t_0, (i_0 + 1), j_0) ==>
                              incr{L}(t_0, i_0, j_0)))))));
   
-  case incr_alone{L}: (\forall float_P[..] t_1;
+  case incr_alone{L}: (\forall floatP[..] t_1;
                         (\forall integer i_1;
                           incr{L}(t_1, i_1, i_1)));
   
 }
 
-predicate incr2{L}(float_P[..] t_2, integer i_2, integer j_1) =
+predicate incr2{L}(floatP[..] t_2, integer i_2, integer j_1) =
 (\forall integer k;
   (((i_2 <= k) && (k < j_1)) ==>
-    ((t_2 + k).float_M <= (t_2 + (k + 1)).float_M)))
+    ((t_2 + k).floatM <= (t_2 + (k + 1)).floatM)))
 
 unit f()
 behavior default:
   ensures (C_356 : true);
 {  
-   (var float_P[0..14] t);
+   (var floatP[0..14] t);
    
-   (var float_P[0..99] t2);
+   (var floatP[0..99] t2);
    
-   {  (C_2 : (t = (C_1 : (new float_P[15]))));
-      (C_4 : (t2 = (C_3 : (new float_P[100]))));
-      (C_7 : ((C_6 : (t + 0).float_M) = (C_5 : (2. :> real))));
-      (C_10 : ((C_9 : (t + 1).float_M) = (C_8 : (3. :> real))));
-      (C_13 : ((C_12 : (t + 2).float_M) = (C_11 : (5. :> real))));
-      (C_16 : ((C_15 : (t + 3).float_M) = (C_14 : (7. :> real))));
-      (C_19 : ((C_18 : (t + 4).float_M) = (C_17 : (7. :> real))));
-      (C_22 : ((C_21 : (t + 5).float_M) = (C_20 : (7. :> real))));
-      (C_25 : ((C_24 : (t + 6).float_M) = (C_23 : (7. :> real))));
-      (C_28 : ((C_27 : (t + 7).float_M) = (C_26 : (7. :> real))));
-      (C_31 : ((C_30 : (t + 8).float_M) = (C_29 : (8. :> real))));
-      (C_34 : ((C_33 : (t + 9).float_M) = (C_32 : (10. :> real))));
-      (C_37 : ((C_36 : (t + 10).float_M) = (C_35 : (12. :> real))));
-      (C_40 : ((C_39 : (t + 11).float_M) = (C_38 : (18. :> real))));
-      (C_43 : ((C_42 : (t + 12).float_M) = (C_41 : (18. :> real))));
-      (C_46 : ((C_45 : (t + 13).float_M) = (C_44 : (27. :> real))));
-      (C_49 : ((C_48 : (t + 14).float_M) = (C_47 : (28. :> real))));
+   {  (C_2 : (t = (C_1 : (new floatP[15]))));
+      (C_4 : (t2 = (C_3 : (new floatP[100]))));
+      (C_7 : ((C_6 : (t + 0).floatM) = (C_5 : (2. :> real))));
+      (C_10 : ((C_9 : (t + 1).floatM) = (C_8 : (3. :> real))));
+      (C_13 : ((C_12 : (t + 2).floatM) = (C_11 : (5. :> real))));
+      (C_16 : ((C_15 : (t + 3).floatM) = (C_14 : (7. :> real))));
+      (C_19 : ((C_18 : (t + 4).floatM) = (C_17 : (7. :> real))));
+      (C_22 : ((C_21 : (t + 5).floatM) = (C_20 : (7. :> real))));
+      (C_25 : ((C_24 : (t + 6).floatM) = (C_23 : (7. :> real))));
+      (C_28 : ((C_27 : (t + 7).floatM) = (C_26 : (7. :> real))));
+      (C_31 : ((C_30 : (t + 8).floatM) = (C_29 : (8. :> real))));
+      (C_34 : ((C_33 : (t + 9).floatM) = (C_32 : (10. :> real))));
+      (C_37 : ((C_36 : (t + 10).floatM) = (C_35 : (12. :> real))));
+      (C_40 : ((C_39 : (t + 11).floatM) = (C_38 : (18. :> real))));
+      (C_43 : ((C_42 : (t + 12).floatM) = (C_41 : (18. :> real))));
+      (C_46 : ((C_45 : (t + 13).floatM) = (C_44 : (27. :> real))));
+      (C_49 : ((C_48 : (t + 14).floatM) = (C_47 : (28. :> real))));
       
       {  
          (assert for default: (C_50 : incr{Here}((t + 0), 0, 14)));
@@ -92,106 +92,106 @@ behavior default:
          ()
       };
       
-      {  (C_54 : ((C_53 : (t2 + 0).float_M) = (C_52 : (0. :> real))));
-         (C_57 : ((C_56 : (t2 + 1).float_M) = (C_55 : (1. :> real))));
-         (C_60 : ((C_59 : (t2 + 2).float_M) = (C_58 : (2. :> real))));
-         (C_63 : ((C_62 : (t2 + 3).float_M) = (C_61 : (3. :> real))));
-         (C_66 : ((C_65 : (t2 + 4).float_M) = (C_64 : (4. :> real))));
-         (C_69 : ((C_68 : (t2 + 5).float_M) = (C_67 : (5. :> real))));
-         (C_72 : ((C_71 : (t2 + 6).float_M) = (C_70 : (6. :> real))));
-         (C_75 : ((C_74 : (t2 + 7).float_M) = (C_73 : (7. :> real))));
-         (C_78 : ((C_77 : (t2 + 8).float_M) = (C_76 : (8. :> real))));
-         (C_81 : ((C_80 : (t2 + 9).float_M) = (C_79 : (9. :> real))));
-         (C_84 : ((C_83 : (t2 + 10).float_M) = (C_82 : (10. :> real))));
-         (C_87 : ((C_86 : (t2 + 11).float_M) = (C_85 : (11. :> real))));
-         (C_90 : ((C_89 : (t2 + 12).float_M) = (C_88 : (12. :> real))));
-         (C_93 : ((C_92 : (t2 + 13).float_M) = (C_91 : (13. :> real))));
-         (C_96 : ((C_95 : (t2 + 14).float_M) = (C_94 : (14. :> real))));
-         (C_99 : ((C_98 : (t2 + 15).float_M) = (C_97 : (15. :> real))));
-         (C_102 : ((C_101 : (t2 + 16).float_M) = (C_100 : (16. :> real))));
-         (C_105 : ((C_104 : (t2 + 17).float_M) = (C_103 : (17. :> real))));
-         (C_108 : ((C_107 : (t2 + 18).float_M) = (C_106 : (18. :> real))));
-         (C_111 : ((C_110 : (t2 + 19).float_M) = (C_109 : (19. :> real))));
-         (C_114 : ((C_113 : (t2 + 20).float_M) = (C_112 : (20. :> real))));
-         (C_117 : ((C_116 : (t2 + 21).float_M) = (C_115 : (21. :> real))));
-         (C_120 : ((C_119 : (t2 + 22).float_M) = (C_118 : (22. :> real))));
-         (C_123 : ((C_122 : (t2 + 23).float_M) = (C_121 : (23. :> real))));
-         (C_126 : ((C_125 : (t2 + 24).float_M) = (C_124 : (24. :> real))));
-         (C_129 : ((C_128 : (t2 + 25).float_M) = (C_127 : (25. :> real))));
-         (C_132 : ((C_131 : (t2 + 26).float_M) = (C_130 : (26. :> real))));
-         (C_135 : ((C_134 : (t2 + 27).float_M) = (C_133 : (27. :> real))));
-         (C_138 : ((C_137 : (t2 + 28).float_M) = (C_136 : (28. :> real))));
-         (C_141 : ((C_140 : (t2 + 29).float_M) = (C_139 : (29. :> real))));
-         (C_144 : ((C_143 : (t2 + 30).float_M) = (C_142 : (30. :> real))));
-         (C_147 : ((C_146 : (t2 + 31).float_M) = (C_145 : (31. :> real))));
-         (C_150 : ((C_149 : (t2 + 32).float_M) = (C_148 : (32. :> real))));
-         (C_153 : ((C_152 : (t2 + 33).float_M) = (C_151 : (33. :> real))));
-         (C_156 : ((C_155 : (t2 + 34).float_M) = (C_154 : (34. :> real))));
-         (C_159 : ((C_158 : (t2 + 35).float_M) = (C_157 : (35. :> real))));
-         (C_162 : ((C_161 : (t2 + 36).float_M) = (C_160 : (36. :> real))));
-         (C_165 : ((C_164 : (t2 + 37).float_M) = (C_163 : (37. :> real))));
-         (C_168 : ((C_167 : (t2 + 38).float_M) = (C_166 : (38. :> real))));
-         (C_171 : ((C_170 : (t2 + 39).float_M) = (C_169 : (39. :> real))));
-         (C_174 : ((C_173 : (t2 + 40).float_M) = (C_172 : (40. :> real))));
-         (C_177 : ((C_176 : (t2 + 41).float_M) = (C_175 : (41. :> real))));
-         (C_180 : ((C_179 : (t2 + 42).float_M) = (C_178 : (42. :> real))));
-         (C_183 : ((C_182 : (t2 + 43).float_M) = (C_181 : (43. :> real))));
-         (C_186 : ((C_185 : (t2 + 44).float_M) = (C_184 : (44. :> real))));
-         (C_189 : ((C_188 : (t2 + 45).float_M) = (C_187 : (45. :> real))));
-         (C_192 : ((C_191 : (t2 + 46).float_M) = (C_190 : (46. :> real))));
-         (C_195 : ((C_194 : (t2 + 47).float_M) = (C_193 : (47. :> real))));
-         (C_198 : ((C_197 : (t2 + 48).float_M) = (C_196 : (48. :> real))));
-         (C_201 : ((C_200 : (t2 + 49).float_M) = (C_199 : (49. :> real))));
-         (C_204 : ((C_203 : (t2 + 50).float_M) = (C_202 : (50. :> real))));
-         (C_207 : ((C_206 : (t2 + 51).float_M) = (C_205 : (51. :> real))));
-         (C_210 : ((C_209 : (t2 + 52).float_M) = (C_208 : (52. :> real))));
-         (C_213 : ((C_212 : (t2 + 53).float_M) = (C_211 : (53. :> real))));
-         (C_216 : ((C_215 : (t2 + 54).float_M) = (C_214 : (54. :> real))));
-         (C_219 : ((C_218 : (t2 + 55).float_M) = (C_217 : (55. :> real))));
-         (C_222 : ((C_221 : (t2 + 56).float_M) = (C_220 : (56. :> real))));
-         (C_225 : ((C_224 : (t2 + 57).float_M) = (C_223 : (57. :> real))));
-         (C_228 : ((C_227 : (t2 + 58).float_M) = (C_226 : (58. :> real))));
-         (C_231 : ((C_230 : (t2 + 59).float_M) = (C_229 : (59. :> real))));
-         (C_234 : ((C_233 : (t2 + 60).float_M) = (C_232 : (60. :> real))));
-         (C_237 : ((C_236 : (t2 + 61).float_M) = (C_235 : (61. :> real))));
-         (C_240 : ((C_239 : (t2 + 62).float_M) = (C_238 : (62. :> real))));
-         (C_243 : ((C_242 : (t2 + 63).float_M) = (C_241 : (63. :> real))));
-         (C_246 : ((C_245 : (t2 + 64).float_M) = (C_244 : (64. :> real))));
-         (C_249 : ((C_248 : (t2 + 65).float_M) = (C_247 : (65. :> real))));
-         (C_252 : ((C_251 : (t2 + 66).float_M) = (C_250 : (66. :> real))));
-         (C_255 : ((C_254 : (t2 + 67).float_M) = (C_253 : (67. :> real))));
-         (C_258 : ((C_257 : (t2 + 68).float_M) = (C_256 : (68. :> real))));
-         (C_261 : ((C_260 : (t2 + 69).float_M) = (C_259 : (69. :> real))));
-         (C_264 : ((C_263 : (t2 + 70).float_M) = (C_262 : (70. :> real))));
-         (C_267 : ((C_266 : (t2 + 71).float_M) = (C_265 : (71. :> real))));
-         (C_270 : ((C_269 : (t2 + 72).float_M) = (C_268 : (72. :> real))));
-         (C_273 : ((C_272 : (t2 + 73).float_M) = (C_271 : (73. :> real))));
-         (C_276 : ((C_275 : (t2 + 74).float_M) = (C_274 : (74. :> real))));
-         (C_279 : ((C_278 : (t2 + 75).float_M) = (C_277 : (75. :> real))));
-         (C_282 : ((C_281 : (t2 + 76).float_M) = (C_280 : (76. :> real))));
-         (C_285 : ((C_284 : (t2 + 77).float_M) = (C_283 : (77. :> real))));
-         (C_288 : ((C_287 : (t2 + 78).float_M) = (C_286 : (78. :> real))));
-         (C_291 : ((C_290 : (t2 + 79).float_M) = (C_289 : (79. :> real))));
-         (C_294 : ((C_293 : (t2 + 80).float_M) = (C_292 : (80. :> real))));
-         (C_297 : ((C_296 : (t2 + 81).float_M) = (C_295 : (81. :> real))));
-         (C_300 : ((C_299 : (t2 + 82).float_M) = (C_298 : (82. :> real))));
-         (C_303 : ((C_302 : (t2 + 83).float_M) = (C_301 : (83. :> real))));
-         (C_306 : ((C_305 : (t2 + 84).float_M) = (C_304 : (84. :> real))));
-         (C_309 : ((C_308 : (t2 + 85).float_M) = (C_307 : (85. :> real))));
-         (C_312 : ((C_311 : (t2 + 86).float_M) = (C_310 : (86. :> real))));
-         (C_315 : ((C_314 : (t2 + 87).float_M) = (C_313 : (87. :> real))));
-         (C_318 : ((C_317 : (t2 + 88).float_M) = (C_316 : (88. :> real))));
-         (C_321 : ((C_320 : (t2 + 89).float_M) = (C_319 : (89. :> real))));
-         (C_324 : ((C_323 : (t2 + 90).float_M) = (C_322 : (90. :> real))));
-         (C_327 : ((C_326 : (t2 + 91).float_M) = (C_325 : (91. :> real))));
-         (C_330 : ((C_329 : (t2 + 92).float_M) = (C_328 : (92. :> real))));
-         (C_333 : ((C_332 : (t2 + 93).float_M) = (C_331 : (93. :> real))));
-         (C_336 : ((C_335 : (t2 + 94).float_M) = (C_334 : (94. :> real))));
-         (C_339 : ((C_338 : (t2 + 95).float_M) = (C_337 : (95. :> real))));
-         (C_342 : ((C_341 : (t2 + 96).float_M) = (C_340 : (96. :> real))));
-         (C_345 : ((C_344 : (t2 + 97).float_M) = (C_343 : (97. :> real))));
-         (C_348 : ((C_347 : (t2 + 98).float_M) = (C_346 : (98. :> real))));
-         (C_351 : ((C_350 : (t2 + 99).float_M) = (C_349 : (99. :> real))))
+      {  (C_54 : ((C_53 : (t2 + 0).floatM) = (C_52 : (0. :> real))));
+         (C_57 : ((C_56 : (t2 + 1).floatM) = (C_55 : (1. :> real))));
+         (C_60 : ((C_59 : (t2 + 2).floatM) = (C_58 : (2. :> real))));
+         (C_63 : ((C_62 : (t2 + 3).floatM) = (C_61 : (3. :> real))));
+         (C_66 : ((C_65 : (t2 + 4).floatM) = (C_64 : (4. :> real))));
+         (C_69 : ((C_68 : (t2 + 5).floatM) = (C_67 : (5. :> real))));
+         (C_72 : ((C_71 : (t2 + 6).floatM) = (C_70 : (6. :> real))));
+         (C_75 : ((C_74 : (t2 + 7).floatM) = (C_73 : (7. :> real))));
+         (C_78 : ((C_77 : (t2 + 8).floatM) = (C_76 : (8. :> real))));
+         (C_81 : ((C_80 : (t2 + 9).floatM) = (C_79 : (9. :> real))));
+         (C_84 : ((C_83 : (t2 + 10).floatM) = (C_82 : (10. :> real))));
+         (C_87 : ((C_86 : (t2 + 11).floatM) = (C_85 : (11. :> real))));
+         (C_90 : ((C_89 : (t2 + 12).floatM) = (C_88 : (12. :> real))));
+         (C_93 : ((C_92 : (t2 + 13).floatM) = (C_91 : (13. :> real))));
+         (C_96 : ((C_95 : (t2 + 14).floatM) = (C_94 : (14. :> real))));
+         (C_99 : ((C_98 : (t2 + 15).floatM) = (C_97 : (15. :> real))));
+         (C_102 : ((C_101 : (t2 + 16).floatM) = (C_100 : (16. :> real))));
+         (C_105 : ((C_104 : (t2 + 17).floatM) = (C_103 : (17. :> real))));
+         (C_108 : ((C_107 : (t2 + 18).floatM) = (C_106 : (18. :> real))));
+         (C_111 : ((C_110 : (t2 + 19).floatM) = (C_109 : (19. :> real))));
+         (C_114 : ((C_113 : (t2 + 20).floatM) = (C_112 : (20. :> real))));
+         (C_117 : ((C_116 : (t2 + 21).floatM) = (C_115 : (21. :> real))));
+         (C_120 : ((C_119 : (t2 + 22).floatM) = (C_118 : (22. :> real))));
+         (C_123 : ((C_122 : (t2 + 23).floatM) = (C_121 : (23. :> real))));
+         (C_126 : ((C_125 : (t2 + 24).floatM) = (C_124 : (24. :> real))));
+         (C_129 : ((C_128 : (t2 + 25).floatM) = (C_127 : (25. :> real))));
+         (C_132 : ((C_131 : (t2 + 26).floatM) = (C_130 : (26. :> real))));
+         (C_135 : ((C_134 : (t2 + 27).floatM) = (C_133 : (27. :> real))));
+         (C_138 : ((C_137 : (t2 + 28).floatM) = (C_136 : (28. :> real))));
+         (C_141 : ((C_140 : (t2 + 29).floatM) = (C_139 : (29. :> real))));
+         (C_144 : ((C_143 : (t2 + 30).floatM) = (C_142 : (30. :> real))));
+         (C_147 : ((C_146 : (t2 + 31).floatM) = (C_145 : (31. :> real))));
+         (C_150 : ((C_149 : (t2 + 32).floatM) = (C_148 : (32. :> real))));
+         (C_153 : ((C_152 : (t2 + 33).floatM) = (C_151 : (33. :> real))));
+         (C_156 : ((C_155 : (t2 + 34).floatM) = (C_154 : (34. :> real))));
+         (C_159 : ((C_158 : (t2 + 35).floatM) = (C_157 : (35. :> real))));
+         (C_162 : ((C_161 : (t2 + 36).floatM) = (C_160 : (36. :> real))));
+         (C_165 : ((C_164 : (t2 + 37).floatM) = (C_163 : (37. :> real))));
+         (C_168 : ((C_167 : (t2 + 38).floatM) = (C_166 : (38. :> real))));
+         (C_171 : ((C_170 : (t2 + 39).floatM) = (C_169 : (39. :> real))));
+         (C_174 : ((C_173 : (t2 + 40).floatM) = (C_172 : (40. :> real))));
+         (C_177 : ((C_176 : (t2 + 41).floatM) = (C_175 : (41. :> real))));
+         (C_180 : ((C_179 : (t2 + 42).floatM) = (C_178 : (42. :> real))));
+         (C_183 : ((C_182 : (t2 + 43).floatM) = (C_181 : (43. :> real))));
+         (C_186 : ((C_185 : (t2 + 44).floatM) = (C_184 : (44. :> real))));
+         (C_189 : ((C_188 : (t2 + 45).floatM) = (C_187 : (45. :> real))));
+         (C_192 : ((C_191 : (t2 + 46).floatM) = (C_190 : (46. :> real))));
+         (C_195 : ((C_194 : (t2 + 47).floatM) = (C_193 : (47. :> real))));
+         (C_198 : ((C_197 : (t2 + 48).floatM) = (C_196 : (48. :> real))));
+         (C_201 : ((C_200 : (t2 + 49).floatM) = (C_199 : (49. :> real))));
+         (C_204 : ((C_203 : (t2 + 50).floatM) = (C_202 : (50. :> real))));
+         (C_207 : ((C_206 : (t2 + 51).floatM) = (C_205 : (51. :> real))));
+         (C_210 : ((C_209 : (t2 + 52).floatM) = (C_208 : (52. :> real))));
+         (C_213 : ((C_212 : (t2 + 53).floatM) = (C_211 : (53. :> real))));
+         (C_216 : ((C_215 : (t2 + 54).floatM) = (C_214 : (54. :> real))));
+         (C_219 : ((C_218 : (t2 + 55).floatM) = (C_217 : (55. :> real))));
+         (C_222 : ((C_221 : (t2 + 56).floatM) = (C_220 : (56. :> real))));
+         (C_225 : ((C_224 : (t2 + 57).floatM) = (C_223 : (57. :> real))));
+         (C_228 : ((C_227 : (t2 + 58).floatM) = (C_226 : (58. :> real))));
+         (C_231 : ((C_230 : (t2 + 59).floatM) = (C_229 : (59. :> real))));
+         (C_234 : ((C_233 : (t2 + 60).floatM) = (C_232 : (60. :> real))));
+         (C_237 : ((C_236 : (t2 + 61).floatM) = (C_235 : (61. :> real))));
+         (C_240 : ((C_239 : (t2 + 62).floatM) = (C_238 : (62. :> real))));
+         (C_243 : ((C_242 : (t2 + 63).floatM) = (C_241 : (63. :> real))));
+         (C_246 : ((C_245 : (t2 + 64).floatM) = (C_244 : (64. :> real))));
+         (C_249 : ((C_248 : (t2 + 65).floatM) = (C_247 : (65. :> real))));
+         (C_252 : ((C_251 : (t2 + 66).floatM) = (C_250 : (66. :> real))));
+         (C_255 : ((C_254 : (t2 + 67).floatM) = (C_253 : (67. :> real))));
+         (C_258 : ((C_257 : (t2 + 68).floatM) = (C_256 : (68. :> real))));
+         (C_261 : ((C_260 : (t2 + 69).floatM) = (C_259 : (69. :> real))));
+         (C_264 : ((C_263 : (t2 + 70).floatM) = (C_262 : (70. :> real))));
+         (C_267 : ((C_266 : (t2 + 71).floatM) = (C_265 : (71. :> real))));
+         (C_270 : ((C_269 : (t2 + 72).floatM) = (C_268 : (72. :> real))));
+         (C_273 : ((C_272 : (t2 + 73).floatM) = (C_271 : (73. :> real))));
+         (C_276 : ((C_275 : (t2 + 74).floatM) = (C_274 : (74. :> real))));
+         (C_279 : ((C_278 : (t2 + 75).floatM) = (C_277 : (75. :> real))));
+         (C_282 : ((C_281 : (t2 + 76).floatM) = (C_280 : (76. :> real))));
+         (C_285 : ((C_284 : (t2 + 77).floatM) = (C_283 : (77. :> real))));
+         (C_288 : ((C_287 : (t2 + 78).floatM) = (C_286 : (78. :> real))));
+         (C_291 : ((C_290 : (t2 + 79).floatM) = (C_289 : (79. :> real))));
+         (C_294 : ((C_293 : (t2 + 80).floatM) = (C_292 : (80. :> real))));
+         (C_297 : ((C_296 : (t2 + 81).floatM) = (C_295 : (81. :> real))));
+         (C_300 : ((C_299 : (t2 + 82).floatM) = (C_298 : (82. :> real))));
+         (C_303 : ((C_302 : (t2 + 83).floatM) = (C_301 : (83. :> real))));
+         (C_306 : ((C_305 : (t2 + 84).floatM) = (C_304 : (84. :> real))));
+         (C_309 : ((C_308 : (t2 + 85).floatM) = (C_307 : (85. :> real))));
+         (C_312 : ((C_311 : (t2 + 86).floatM) = (C_310 : (86. :> real))));
+         (C_315 : ((C_314 : (t2 + 87).floatM) = (C_313 : (87. :> real))));
+         (C_318 : ((C_317 : (t2 + 88).floatM) = (C_316 : (88. :> real))));
+         (C_321 : ((C_320 : (t2 + 89).floatM) = (C_319 : (89. :> real))));
+         (C_324 : ((C_323 : (t2 + 90).floatM) = (C_322 : (90. :> real))));
+         (C_327 : ((C_326 : (t2 + 91).floatM) = (C_325 : (91. :> real))));
+         (C_330 : ((C_329 : (t2 + 92).floatM) = (C_328 : (92. :> real))));
+         (C_333 : ((C_332 : (t2 + 93).floatM) = (C_331 : (93. :> real))));
+         (C_336 : ((C_335 : (t2 + 94).floatM) = (C_334 : (94. :> real))));
+         (C_339 : ((C_338 : (t2 + 95).floatM) = (C_337 : (95. :> real))));
+         (C_342 : ((C_341 : (t2 + 96).floatM) = (C_340 : (96. :> real))));
+         (C_345 : ((C_344 : (t2 + 97).floatM) = (C_343 : (97. :> real))));
+         (C_348 : ((C_347 : (t2 + 98).floatM) = (C_346 : (98. :> real))));
+         (C_351 : ((C_350 : (t2 + 99).floatM) = (C_349 : (99. :> real))))
       };
       
       {  
@@ -212,15 +212,15 @@ behavior default:
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs e63.jessie/e63.cloc e63.jessie/e63.jc
-type char_P
+type charP
 
-type float_P
+type floatP
 
 type int8
 
 type padding
 
-type void_P
+type voidP
 
 exception Loop_continue_exc of unit
 
@@ -228,68 +228,66 @@ exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
-logic char_P_tag:  -> char_P tag_id
+logic charP_tag:  -> charP tag_id
 
-axiom char_P_int : (int_of_tag(char_P_tag) = (1))
+axiom charP_int : (int_of_tag(charP_tag) = (1))
 
-logic char_P_of_pointer_address: unit pointer -> char_P pointer
+logic charP_of_pointer_address: unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr :
- (forall p:char_P pointer.
-  (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr :
+ (forall p:charP pointer. (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom : parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom : parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags :
- (forall x:char_P pointer.
-  (forall char_P_tag_table:char_P tag_table.
-   instanceof(char_P_tag_table, x, char_P_tag)))
+axiom charP_tags :
+ (forall x:charP pointer.
+  (forall charP_tag_table:charP tag_table.
+   instanceof(charP_tag_table, x, charP_tag)))
 
 logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
-logic float_P_tag:  -> float_P tag_id
+logic floatP_tag:  -> floatP tag_id
 
-axiom float_P_int : (int_of_tag(float_P_tag) = (1))
+axiom floatP_int : (int_of_tag(floatP_tag) = (1))
 
-logic float_P_of_pointer_address: unit pointer -> float_P pointer
+logic floatP_of_pointer_address: unit pointer -> floatP pointer
 
-axiom float_P_of_pointer_address_of_pointer_addr :
- (forall p:float_P pointer.
-  (p = float_P_of_pointer_address(pointer_address(p))))
+axiom floatP_of_pointer_address_of_pointer_addr :
+ (forall p:floatP pointer.
+  (p = floatP_of_pointer_address(pointer_address(p))))
 
-axiom float_P_parenttag_bottom : parenttag(float_P_tag, bottom_tag)
+axiom floatP_parenttag_bottom : parenttag(floatP_tag, bottom_tag)
 
-axiom float_P_tags :
- (forall x:float_P pointer.
-  (forall float_P_tag_table:float_P tag_table.
-   instanceof(float_P_tag_table, x, float_P_tag)))
+axiom floatP_tags :
+ (forall x:floatP pointer.
+  (forall floatP_tag_table:floatP tag_table.
+   instanceof(floatP_tag_table, x, floatP_tag)))
 
-inductive incr: float_P pointer, int, int, (float_P, real) memory -> prop =
- | incr_ok: (forall float_P_float_M_t_1_at_L:(float_P, real) memory.
-             (forall t_0:float_P pointer.
+inductive incr: floatP pointer, int, int, (floatP, real) memory -> prop =
+ | incr_ok: (forall floatP_floatM_t_1_at_L:(floatP, real) memory.
+             (forall t_0:floatP pointer.
               (forall i_0:int.
                (forall j_0:int.
                 (lt_int(i_0, j_0) ->
-                 (le_real(select(float_P_float_M_t_1_at_L, shift(t_0, i_0)),
-                  select(float_P_float_M_t_1_at_L,
+                 (le_real(select(floatP_floatM_t_1_at_L, shift(t_0, i_0)),
+                  select(floatP_floatM_t_1_at_L,
                   shift(t_0, add_int(i_0, (1))))) ->
-                  (incr(t_0, add_int(i_0, (1)), j_0,
-                   float_P_float_M_t_1_at_L) ->
-                   incr(t_0, i_0, j_0, float_P_float_M_t_1_at_L))))))))
- | incr_alone: (forall float_P_float_M_t_1_at_L:(float_P, real) memory.
-                (forall t_1:float_P pointer.
+                  (incr(t_0, add_int(i_0, (1)), j_0, floatP_floatM_t_1_at_L) ->
+                   incr(t_0, i_0, j_0, floatP_floatM_t_1_at_L))))))))
+ | incr_alone: (forall floatP_floatM_t_1_at_L:(floatP, real) memory.
+                (forall t_1:floatP pointer.
                  (forall i_1:int.
-                  incr(t_1, i_1, i_1, float_P_float_M_t_1_at_L))))
+                  incr(t_1, i_1, i_1, floatP_floatM_t_1_at_L))))
  
-predicate incr2(t_2:float_P pointer, i_2:int, j_1:int,
- float_P_float_M_t_2_2_at_L:(float_P, real) memory) =
+predicate incr2(t_2:floatP pointer, i_2:int, j_1:int,
+ floatP_floatM_t_2_2_at_L:(floatP, real) memory) =
  (forall k:int.
   ((le_int(i_2, k) and lt_int(k, j_1)) ->
-   le_real(select(float_P_float_M_t_2_2_at_L, shift(t_2, k)),
-   select(float_P_float_M_t_2_2_at_L, shift(t_2, add_int(k, (1)))))))
+   le_real(select(floatP_floatM_t_2_2_at_L, shift(t_2, k)),
+   select(floatP_floatM_t_2_2_at_L, shift(t_2, add_int(k, (1)))))))
 
 logic int8_of_integer: int -> int8
 
@@ -302,266 +300,262 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer, a:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_min(char_P_alloc_table, p) <= a)
+predicate left_valid_struct_charP(p:charP pointer, a:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_min(charP_alloc_table, p) <= a)
 
-predicate left_valid_struct_float_P(p:float_P pointer, a:int,
- float_P_alloc_table:float_P alloc_table) =
- (offset_min(float_P_alloc_table, p) <= a)
+predicate left_valid_struct_floatP(p:floatP pointer, a:int,
+ floatP_alloc_table:floatP alloc_table) =
+ (offset_min(floatP_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer, a:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_min(void_P_alloc_table, p) <= a)
+predicate left_valid_struct_voidP(p:voidP pointer, a:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_min(voidP_alloc_table, p) <= a)
 
-axiom pointer_addr_of_char_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
+axiom pointer_addr_of_charP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
-axiom pointer_addr_of_float_P_of_pointer_address :
- (forall p:unit pointer.
-  (p = pointer_address(float_P_of_pointer_address(p))))
+axiom pointer_addr_of_floatP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(floatP_of_pointer_address(p))))
 
-logic void_P_of_pointer_address: unit pointer -> void_P pointer
+logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
-axiom pointer_addr_of_void_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
+axiom pointer_addr_of_voidP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer, b:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_max(char_P_alloc_table, p) >= b)
+predicate right_valid_struct_charP(p:charP pointer, b:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_max(charP_alloc_table, p) >= b)
 
-predicate right_valid_struct_float_P(p:float_P pointer, b:int,
- float_P_alloc_table:float_P alloc_table) =
- (offset_max(float_P_alloc_table, p) >= b)
+predicate right_valid_struct_floatP(p:floatP pointer, b:int,
+ floatP_alloc_table:floatP alloc_table) =
+ (offset_max(floatP_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer, b:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_max(void_P_alloc_table, p) >= b)
+predicate right_valid_struct_voidP(p:voidP pointer, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_max(voidP_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_root_float_P(p:float_P pointer, a:int, b:int,
- float_P_alloc_table:float_P alloc_table) =
- ((offset_min(float_P_alloc_table, p) = a)
- and (offset_max(float_P_alloc_table, p) = b))
+predicate strict_valid_root_floatP(p:floatP pointer, a:int, b:int,
+ floatP_alloc_table:floatP alloc_table) =
+ ((offset_min(floatP_alloc_table, p) = a)
+ and (offset_max(floatP_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_struct_float_P(p:float_P pointer, a:int, b:int,
- float_P_alloc_table:float_P alloc_table) =
- ((offset_min(float_P_alloc_table, p) = a)
- and (offset_max(float_P_alloc_table, p) = b))
+predicate strict_valid_struct_floatP(p:floatP pointer, a:int, b:int,
+ floatP_alloc_table:floatP alloc_table) =
+ ((offset_min(floatP_alloc_table, p) = a)
+ and (offset_max(floatP_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_float_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_floatP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_root_float_P(p:float_P pointer, a:int, b:int,
- float_P_alloc_table:float_P alloc_table) =
- ((offset_min(float_P_alloc_table, p) <= a)
- and (offset_max(float_P_alloc_table, p) >= b))
+predicate valid_root_floatP(p:floatP pointer, a:int, b:int,
+ floatP_alloc_table:floatP alloc_table) =
+ ((offset_min(floatP_alloc_table, p) <= a)
+ and (offset_max(floatP_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_struct_float_P(p:float_P pointer, a:int, b:int,
- float_P_alloc_table:float_P alloc_table) =
- ((offset_min(float_P_alloc_table, p) <= a)
- and (offset_max(float_P_alloc_table, p) >= b))
+predicate valid_struct_floatP(p:floatP pointer, a:int, b:int,
+ floatP_alloc_table:floatP alloc_table) =
+ ((offset_min(floatP_alloc_table, p) <= a)
+ and (offset_max(floatP_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-logic void_P_tag:  -> void_P tag_id
+logic voidP_tag:  -> voidP tag_id
 
-axiom void_P_int : (int_of_tag(void_P_tag) = (1))
+axiom voidP_int : (int_of_tag(voidP_tag) = (1))
 
-axiom void_P_of_pointer_address_of_pointer_addr :
- (forall p:void_P pointer.
-  (p = void_P_of_pointer_address(pointer_address(p))))
+axiom voidP_of_pointer_address_of_pointer_addr :
+ (forall p:voidP pointer. (p = voidP_of_pointer_address(pointer_address(p))))
 
-axiom void_P_parenttag_bottom : parenttag(void_P_tag, bottom_tag)
+axiom voidP_parenttag_bottom : parenttag(voidP_tag, bottom_tag)
 
-axiom void_P_tags :
- (forall x:void_P pointer.
-  (forall void_P_tag_table:void_P tag_table.
-   instanceof(void_P_tag_table, x, void_P_tag)))
+axiom voidP_tags :
+ (forall x:voidP pointer.
+  (forall voidP_tag_table:voidP tag_table.
+   instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_char_P :
+parameter alloc_bitvector_struct_charP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_char_P_requires :
+parameter alloc_bitvector_struct_charP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_float_P :
+parameter alloc_bitvector_struct_floatP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_float_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_floatP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_float_P_requires :
+parameter alloc_bitvector_struct_floatP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_float_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_floatP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P :
+parameter alloc_bitvector_struct_voidP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P_requires :
+parameter alloc_bitvector_struct_voidP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter char_P_alloc_table : char_P alloc_table ref
+parameter charP_alloc_table : charP alloc_table ref
 
-parameter char_P_tag_table : char_P tag_table ref
+parameter charP_tag_table : charP tag_table ref
 
-parameter alloc_struct_char_P :
+parameter alloc_struct_charP :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { } char_P pointer writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { } charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter alloc_struct_char_P_requires :
+parameter alloc_struct_charP_requires :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { ge_int(n, (0))} char_P pointer
-    writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { ge_int(n, (0))} charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter float_P_alloc_table : float_P alloc_table ref
+parameter floatP_alloc_table : floatP alloc_table ref
 
-parameter float_P_tag_table : float_P tag_table ref
+parameter floatP_tag_table : floatP tag_table ref
 
-parameter alloc_struct_float_P :
+parameter alloc_struct_floatP :
  n:int ->
-  float_P_alloc_table:float_P alloc_table ref ->
-   float_P_tag_table:float_P tag_table ref ->
-    { } float_P pointer writes float_P_alloc_table,float_P_tag_table
-    { (strict_valid_struct_float_P(result, (0), sub_int(n, (1)),
-       float_P_alloc_table)
-      and (alloc_extends(float_P_alloc_table@, float_P_alloc_table)
-          and (alloc_fresh(float_P_alloc_table@, result, n)
-              and instanceof(float_P_tag_table, result, float_P_tag)))) }
+  floatP_alloc_table:floatP alloc_table ref ->
+   floatP_tag_table:floatP tag_table ref ->
+    { } floatP pointer writes floatP_alloc_table,floatP_tag_table
+    { (strict_valid_struct_floatP(result, (0), sub_int(n, (1)),
+       floatP_alloc_table)
+      and (alloc_extends(floatP_alloc_table@, floatP_alloc_table)
+          and (alloc_fresh(floatP_alloc_table@, result, n)
+              and instanceof(floatP_tag_table, result, floatP_tag)))) }
 
-parameter alloc_struct_float_P_requires :
+parameter alloc_struct_floatP_requires :
  n:int ->
-  float_P_alloc_table:float_P alloc_table ref ->
-   float_P_tag_table:float_P tag_table ref ->
-    { ge_int(n, (0))} float_P pointer
-    writes float_P_alloc_table,float_P_tag_table
-    { (strict_valid_struct_float_P(result, (0), sub_int(n, (1)),
-       float_P_alloc_table)
-      and (alloc_extends(float_P_alloc_table@, float_P_alloc_table)
-          and (alloc_fresh(float_P_alloc_table@, result, n)
-              and instanceof(float_P_tag_table, result, float_P_tag)))) }
+  floatP_alloc_table:floatP alloc_table ref ->
+   floatP_tag_table:floatP tag_table ref ->
+    { ge_int(n, (0))} floatP pointer
+    writes floatP_alloc_table,floatP_tag_table
+    { (strict_valid_struct_floatP(result, (0), sub_int(n, (1)),
+       floatP_alloc_table)
+      and (alloc_extends(floatP_alloc_table@, floatP_alloc_table)
+          and (alloc_fresh(floatP_alloc_table@, result, n)
+              and instanceof(floatP_tag_table, result, floatP_tag)))) }
 
-parameter void_P_alloc_table : void_P alloc_table ref
+parameter voidP_alloc_table : voidP alloc_table ref
 
-parameter void_P_tag_table : void_P tag_table ref
+parameter voidP_tag_table : voidP tag_table ref
 
-parameter alloc_struct_void_P :
+parameter alloc_struct_voidP :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { } void_P pointer writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { } voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
-parameter alloc_struct_void_P_requires :
+parameter alloc_struct_voidP_requires :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { ge_int(n, (0))} void_P pointer
-    writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { ge_int(n, (0))} voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
 parameter any_int8 : unit -> { } int8 { true }
 
@@ -583,12 +577,12 @@ let f_ensures_default =
   (init:
   try
    begin
-     (let float_P_float_M_t2_6 = ref (any_memory void) in
-     (let float_P_float_M_t_5 = ref (any_memory void) in
-     (let float_P_t_5_tag_table = ref (any_tag_table void) in
-     (let float_P_t2_6_tag_table = ref (any_tag_table void) in
-     (let float_P_t2_6_alloc_table = ref (any_alloc_table void) in
-     (let float_P_t_5_alloc_table = ref (any_alloc_table void) in
+     (let floatP_floatM_t2_6 = ref (any_memory void) in
+     (let floatP_floatM_t_5 = ref (any_memory void) in
+     (let floatP_t_5_tag_table = ref (any_tag_table void) in
+     (let floatP_t2_6_tag_table = ref (any_tag_table void) in
+     (let floatP_t2_6_alloc_table = ref (any_alloc_table void) in
+     (let floatP_t_5_alloc_table = ref (any_alloc_table void) in
      (let t_3 = ref (any_pointer void) in
      (let t2 = ref (any_pointer void) in
      (C_2:
@@ -614,12 +608,12 @@ let f_ensures_default =
        (let jessie_<somenum> =
        (t_3 := (C_1:
                (JC_<somenum>:
-               (((alloc_struct_float_P (15)) float_P_t_5_alloc_table) float_P_t_5_tag_table)))) in
+               (((alloc_struct_floatP (15)) floatP_t_5_alloc_table) floatP_t_5_tag_table)))) in
        void);
       (let jessie_<somenum> =
       (t2 := (C_3:
              (JC_<somenum>:
-             (((alloc_struct_float_P (100)) float_P_t2_6_alloc_table) float_P_t2_6_tag_table)))) in
+             (((alloc_struct_floatP (100)) floatP_t2_6_alloc_table) floatP_t2_6_tag_table)))) in
       void);
       (let jessie_<somenum> = (C_5: 2.) in
       (let jessie_<somenum> = !t_3 in
@@ -679,49 +673,48 @@ let f_ensures_default =
       (let jessie_<somenum> = !t_3 in
       (let jessie_<somenum> = (14) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit reads float_P_float_M_t_5,float_P_t_5_alloc_table
-        writes float_P_float_M_t_5
-        { (not_assigns(float_P_t_5_alloc_table, float_P_float_M_t_5@,
-           float_P_float_M_t_5,
+      [ { } unit reads floatP_floatM_t_5,floatP_t_5_alloc_table
+        writes floatP_floatM_t_5
+        { (not_assigns(floatP_t_5_alloc_table, floatP_floatM_t_5@,
+           floatP_floatM_t_5,
            pset_range(pset_singleton(jessie_<somenum>), (0), (14)))
-          and ((select(float_P_float_M_t_5, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(float_P_float_M_t_5, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and ((select(float_P_float_M_t_5, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
-                      and ((select(float_P_float_M_t_5,
-                            shift(jessie_<somenum>, (3))) = jessie_<somenum>)
-                          and ((select(float_P_float_M_t_5,
+          and ((select(floatP_floatM_t_5, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
+              and ((select(floatP_floatM_t_5, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
+                  and ((select(floatP_floatM_t_5, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
+                      and ((select(floatP_floatM_t_5, shift(jessie_<somenum>, (3))) = jessie_<somenum>)
+                          and ((select(floatP_floatM_t_5,
                                 shift(jessie_<somenum>, (4))) = jessie_<somenum>)
-                              and ((select(float_P_float_M_t_5,
+                              and ((select(floatP_floatM_t_5,
                                     shift(jessie_<somenum>, (5))) = jessie_<somenum>)
-                                  and ((select(float_P_float_M_t_5,
+                                  and ((select(floatP_floatM_t_5,
                                         shift(jessie_<somenum>, (6))) = jessie_<somenum>)
-                                      and ((select(float_P_float_M_t_5,
+                                      and ((select(floatP_floatM_t_5,
                                             shift(jessie_<somenum>, (7))) = jessie_<somenum>)
-                                          and ((select(float_P_float_M_t_5,
+                                          and ((select(floatP_floatM_t_5,
                                                 shift(jessie_<somenum>, (8))) = jessie_<somenum>)
-                                              and ((select(float_P_float_M_t_5,
+                                              and ((select(floatP_floatM_t_5,
                                                     shift(jessie_<somenum>, (9))) = jessie_<somenum>)
-                                                  and ((select(float_P_float_M_t_5,
+                                                  and ((select(floatP_floatM_t_5,
                                                         shift(jessie_<somenum>,
                                                         (10))) = jessie_<somenum>)
-                                                      and ((select(float_P_float_M_t_5,
+                                                      and ((select(floatP_floatM_t_5,
                                                             shift(jessie_<somenum>,
                                                             (11))) = jessie_<somenum>)
-                                                          and ((select(float_P_float_M_t_5,
+                                                          and ((select(floatP_floatM_t_5,
                                                                 shift(jessie_<somenum>,
                                                                 (12))) = jessie_<somenum>)
-                                                              and ((select(float_P_float_M_t_5,
+                                                              and ((select(floatP_floatM_t_5,
                                                                     shift(jessie_<somenum>,
                                                                     (13))) = jessie_<somenum>)
                                                                   and 
-                                                                  (select(float_P_float_M_t_5,
+                                                                  (select(floatP_floatM_t_5,
                                                                    shift(jessie_<somenum>,
                                                                    (14))) = jessie_<somenum>)))))))))))))))) } ]))))))))))))))))))))))))))))))))))))))))))))))))))))))))));
       (assert
-      { (JC_<somenum>: incr(shift(t_3, (0)), (0), (14), float_P_float_M_t_5)) };
-      void); void;
+      { (JC_<somenum>: incr(shift(t_3, (0)), (0), (14), floatP_floatM_t_5)) }; void);
+      void;
       (assert
-      { (JC_<somenum>: incr2(shift(t_3, (0)), (0), (14), float_P_float_M_t_5)) };
+      { (JC_<somenum>: incr2(shift(t_3, (0)), (0), (14), floatP_floatM_t_5)) };
       void); void;
       (let jessie_<somenum> =
       (C_54:
@@ -1218,550 +1211,549 @@ let f_ensures_default =
         (let jessie_<somenum> = !t2 in
         (let jessie_<somenum> = (98) in
         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-        [ { } unit reads float_P_float_M_t2_6,float_P_t2_6_alloc_table
-          writes float_P_float_M_t2_6
-          { (not_assigns(float_P_t2_6_alloc_table, float_P_float_M_t2_6@,
-             float_P_float_M_t2_6,
+        [ { } unit reads floatP_floatM_t2_6,floatP_t2_6_alloc_table
+          writes floatP_floatM_t2_6
+          { (not_assigns(floatP_t2_6_alloc_table, floatP_floatM_t2_6@,
+             floatP_floatM_t2_6,
              pset_range(pset_singleton(jessie_<somenum>), (0), (98)))
-            and ((select(float_P_float_M_t2_6, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-                and ((select(float_P_float_M_t2_6, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                    and ((select(float_P_float_M_t2_6,
-                          shift(jessie_<somenum>, (2))) = jessie_<somenum>)
-                        and ((select(float_P_float_M_t2_6,
+            and ((select(floatP_floatM_t2_6, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
+                and ((select(floatP_floatM_t2_6, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
+                    and ((select(floatP_floatM_t2_6, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
+                        and ((select(floatP_floatM_t2_6,
                               shift(jessie_<somenum>, (3))) = jessie_<somenum>)
-                            and ((select(float_P_float_M_t2_6,
+                            and ((select(floatP_floatM_t2_6,
                                   shift(jessie_<somenum>, (4))) = jessie_<somenum>)
-                                and ((select(float_P_float_M_t2_6,
+                                and ((select(floatP_floatM_t2_6,
                                       shift(jessie_<somenum>, (5))) = jessie_<somenum>)
-                                    and ((select(float_P_float_M_t2_6,
+                                    and ((select(floatP_floatM_t2_6,
                                           shift(jessie_<somenum>, (6))) = jessie_<somenum>)
-                                        and ((select(float_P_float_M_t2_6,
+                                        and ((select(floatP_floatM_t2_6,
                                               shift(jessie_<somenum>, (7))) = jessie_<somenum>)
-                                            and ((select(float_P_float_M_t2_6,
+                                            and ((select(floatP_floatM_t2_6,
                                                   shift(jessie_<somenum>, (8))) = jessie_<somenum>)
-                                                and ((select(float_P_float_M_t2_6,
+                                                and ((select(floatP_floatM_t2_6,
                                                       shift(jessie_<somenum>, (9))) = jessie_<somenum>)
-                                                    and ((select(float_P_float_M_t2_6,
+                                                    and ((select(floatP_floatM_t2_6,
                                                           shift(jessie_<somenum>,
                                                           (10))) = jessie_<somenum>)
-                                                        and ((select(float_P_float_M_t2_6,
+                                                        and ((select(floatP_floatM_t2_6,
                                                               shift(jessie_<somenum>,
                                                               (11))) = jessie_<somenum>)
-                                                            and ((select(float_P_float_M_t2_6,
+                                                            and ((select(floatP_floatM_t2_6,
                                                                   shift(jessie_<somenum>,
                                                                   (12))) = jessie_<somenum>)
                                                                 and (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (13))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (14))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (15))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (16))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (17))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (18))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (19))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (20))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (21))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (22))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (23))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (24))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (25))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (26))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (27))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (28))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (29))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (30))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (31))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (32))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (33))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (34))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (35))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (36))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (37))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (38))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (39))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (40))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (41))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (42))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (43))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (44))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (45))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (46))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (47))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (48))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (49))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (50))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (51))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (52))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (53))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (54))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (55))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (56))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (57))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (58))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (59))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (60))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (61))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (62))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (63))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (64))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (65))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (66))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (67))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (68))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (69))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (70))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (71))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (72))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (73))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (74))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (75))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (76))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (77))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (78))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (79))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (80))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (81))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (82))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (83))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (84))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (85))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (86))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (87))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (88))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (89))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (90))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (91))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (92))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (93))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (94))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (95))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (96))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (97))) = jessie_<somenum>)
                                                                     and 
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (98))) = jessie_<somenum>)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) } ]))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))));
        (C_351:
@@ -1771,18 +1763,17 @@ let f_ensures_default =
          (let jessie_<somenum> = (99) in
          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
          (let jessie_<somenum> = ((shift jessie_<somenum>) (99)) in
-         (((safe_upd_ float_P_float_M_t2_6) jessie_<somenum>) jessie_<somenum>)))));
+         (((safe_upd_ floatP_floatM_t2_6) jessie_<somenum>) jessie_<somenum>)))));
         jessie_<somenum> end)) end))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) in
       void);
       (assert
-      { (JC_<somenum>: incr(shift(t2, (0)), (0), (99), float_P_float_M_t2_6)) };
-      void); void;
+      { (JC_<somenum>: incr(shift(t2, (0)), (0), (99), floatP_floatM_t2_6)) }; void);
+      void;
       (assert
-      { (JC_<somenum>: incr2(shift(t2, (0)), (0), (99), float_P_float_M_t2_6)) };
-      void); void; ((safe_free_parameter float_P_t_5_alloc_table) !t_3);
-      ((safe_free_parameter float_P_t2_6_alloc_table) !t2); (raise Return)
-     end))))))))))))))))))))))))))); (raise Return) end with Return ->
-   void end) { (JC_<somenum>: true) }
+      { (JC_<somenum>: incr2(shift(t2, (0)), (0), (99), floatP_floatM_t2_6)) };
+      void); void; ((safe_free_parameter floatP_t_5_alloc_table) !t_3);
+      ((safe_free_parameter floatP_t2_6_alloc_table) !t2); (raise Return) end)))))))))))))))))))))))))));
+    (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -1790,12 +1781,12 @@ let f_safety =
   (init:
   try
    begin
-     (let float_P_float_M_t2_6 = ref (any_memory void) in
-     (let float_P_float_M_t_5 = ref (any_memory void) in
-     (let float_P_t_5_tag_table = ref (any_tag_table void) in
-     (let float_P_t2_6_tag_table = ref (any_tag_table void) in
-     (let float_P_t2_6_alloc_table = ref (any_alloc_table void) in
-     (let float_P_t_5_alloc_table = ref (any_alloc_table void) in
+     (let floatP_floatM_t2_6 = ref (any_memory void) in
+     (let floatP_floatM_t_5 = ref (any_memory void) in
+     (let floatP_t_5_tag_table = ref (any_tag_table void) in
+     (let floatP_t2_6_tag_table = ref (any_tag_table void) in
+     (let floatP_t2_6_alloc_table = ref (any_alloc_table void) in
+     (let floatP_t_5_alloc_table = ref (any_alloc_table void) in
      (let t_3 = ref (any_pointer void) in
      (let t2 = ref (any_pointer void) in
      (C_2:
@@ -1822,19 +1813,19 @@ let f_safety =
        (t_3 := (let jessie_<somenum> =
                (C_1:
                (JC_<somenum>:
-               (((alloc_struct_float_P_requires (15)) float_P_t_5_alloc_table) float_P_t_5_tag_table))) in
+               (((alloc_struct_floatP_requires (15)) floatP_t_5_alloc_table) floatP_t_5_tag_table))) in
                (JC_<somenum>:
                (assert
-               { ge_int(offset_max(float_P_t_5_alloc_table, jessie_<somenum>), (14)) };
+               { ge_int(offset_max(floatP_t_5_alloc_table, jessie_<somenum>), (14)) };
                jessie_<somenum>)))) in void);
       (let jessie_<somenum> =
       (t2 := (let jessie_<somenum> =
              (C_3:
              (JC_<somenum>:
-             (((alloc_struct_float_P_requires (100)) float_P_t2_6_alloc_table) float_P_t2_6_tag_table))) in
+             (((alloc_struct_floatP_requires (100)) floatP_t2_6_alloc_table) floatP_t2_6_tag_table))) in
              (JC_<somenum>:
              (assert
-             { ge_int(offset_max(float_P_t2_6_alloc_table, jessie_<somenum>), (99)) };
+             { ge_int(offset_max(floatP_t2_6_alloc_table, jessie_<somenum>), (99)) };
              jessie_<somenum>)))) in void);
       (let jessie_<somenum> = (C_5: 2.) in
       (let jessie_<somenum> = !t_3 in
@@ -1894,47 +1885,47 @@ let f_safety =
       (let jessie_<somenum> = !t_3 in
       (let jessie_<somenum> = (14) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit reads float_P_float_M_t_5,float_P_t_5_alloc_table
-        writes float_P_float_M_t_5
-        { (not_assigns(float_P_t_5_alloc_table, float_P_float_M_t_5@,
-           float_P_float_M_t_5,
+      [ { } unit reads floatP_floatM_t_5,floatP_t_5_alloc_table
+        writes floatP_floatM_t_5
+        { (not_assigns(floatP_t_5_alloc_table, floatP_floatM_t_5@,
+           floatP_floatM_t_5,
            pset_range(pset_singleton(jessie_<somenum>), (0), (14)))
-          and ((select(float_P_float_M_t_5, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(float_P_float_M_t_5, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and ((select(float_P_float_M_t_5, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
-                      and ((select(float_P_float_M_t_5, shift(jessie_<somenum>, (3))) = jessie_<somenum>)
-                          and ((select(float_P_float_M_t_5,
+          and ((select(floatP_floatM_t_5, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
+              and ((select(floatP_floatM_t_5, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
+                  and ((select(floatP_floatM_t_5, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
+                      and ((select(floatP_floatM_t_5, shift(jessie_<somenum>, (3))) = jessie_<somenum>)
+                          and ((select(floatP_floatM_t_5,
                                 shift(jessie_<somenum>, (4))) = jessie_<somenum>)
-                              and ((select(float_P_float_M_t_5,
+                              and ((select(floatP_floatM_t_5,
                                     shift(jessie_<somenum>, (5))) = jessie_<somenum>)
-                                  and ((select(float_P_float_M_t_5,
+                                  and ((select(floatP_floatM_t_5,
                                         shift(jessie_<somenum>, (6))) = jessie_<somenum>)
-                                      and ((select(float_P_float_M_t_5,
+                                      and ((select(floatP_floatM_t_5,
                                             shift(jessie_<somenum>, (7))) = jessie_<somenum>)
-                                          and ((select(float_P_float_M_t_5,
+                                          and ((select(floatP_floatM_t_5,
                                                 shift(jessie_<somenum>, (8))) = jessie_<somenum>)
-                                              and ((select(float_P_float_M_t_5,
+                                              and ((select(floatP_floatM_t_5,
                                                     shift(jessie_<somenum>, (9))) = jessie_<somenum>)
-                                                  and ((select(float_P_float_M_t_5,
+                                                  and ((select(floatP_floatM_t_5,
                                                         shift(jessie_<somenum>, (10))) = jessie_<somenum>)
-                                                      and ((select(float_P_float_M_t_5,
+                                                      and ((select(floatP_floatM_t_5,
                                                             shift(jessie_<somenum>,
                                                             (11))) = jessie_<somenum>)
-                                                          and ((select(float_P_float_M_t_5,
+                                                          and ((select(floatP_floatM_t_5,
                                                                 shift(jessie_<somenum>,
                                                                 (12))) = jessie_<somenum>)
-                                                              and ((select(float_P_float_M_t_5,
+                                                              and ((select(floatP_floatM_t_5,
                                                                     shift(jessie_<somenum>,
                                                                     (13))) = jessie_<somenum>)
                                                                   and 
-                                                                  (select(float_P_float_M_t_5,
+                                                                  (select(floatP_floatM_t_5,
                                                                    shift(jessie_<somenum>,
                                                                    (14))) = jessie_<somenum>)))))))))))))))) } ]))))))))))))))))))))))))))))))))))))))))))))))))))))))))));
-      [ { } unit reads float_P_float_M_t_5,t_3
-        { (JC_<somenum>: incr(shift(t_3, (0)), (0), (14), float_P_float_M_t_5)) } ];
+      [ { } unit reads floatP_floatM_t_5,t_3
+        { (JC_<somenum>: incr(shift(t_3, (0)), (0), (14), floatP_floatM_t_5)) } ];
       void;
-      [ { } unit reads float_P_float_M_t_5,t_3
-        { (JC_<somenum>: incr2(shift(t_3, (0)), (0), (14), float_P_float_M_t_5)) } ];
+      [ { } unit reads floatP_floatM_t_5,t_3
+        { (JC_<somenum>: incr2(shift(t_3, (0)), (0), (14), floatP_floatM_t_5)) } ];
       void;
       (let jessie_<somenum> =
       (C_54:
@@ -2431,549 +2422,549 @@ let f_safety =
         (let jessie_<somenum> = !t2 in
         (let jessie_<somenum> = (98) in
         (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-        [ { } unit reads float_P_float_M_t2_6,float_P_t2_6_alloc_table
-          writes float_P_float_M_t2_6
-          { (not_assigns(float_P_t2_6_alloc_table, float_P_float_M_t2_6@,
-             float_P_float_M_t2_6,
+        [ { } unit reads floatP_floatM_t2_6,floatP_t2_6_alloc_table
+          writes floatP_floatM_t2_6
+          { (not_assigns(floatP_t2_6_alloc_table, floatP_floatM_t2_6@,
+             floatP_floatM_t2_6,
              pset_range(pset_singleton(jessie_<somenum>), (0), (98)))
-            and ((select(float_P_float_M_t2_6, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-                and ((select(float_P_float_M_t2_6, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                    and ((select(float_P_float_M_t2_6, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
-                        and ((select(float_P_float_M_t2_6,
+            and ((select(floatP_floatM_t2_6, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
+                and ((select(floatP_floatM_t2_6, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
+                    and ((select(floatP_floatM_t2_6, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
+                        and ((select(floatP_floatM_t2_6,
                               shift(jessie_<somenum>, (3))) = jessie_<somenum>)
-                            and ((select(float_P_float_M_t2_6,
+                            and ((select(floatP_floatM_t2_6,
                                   shift(jessie_<somenum>, (4))) = jessie_<somenum>)
-                                and ((select(float_P_float_M_t2_6,
+                                and ((select(floatP_floatM_t2_6,
                                       shift(jessie_<somenum>, (5))) = jessie_<somenum>)
-                                    and ((select(float_P_float_M_t2_6,
+                                    and ((select(floatP_floatM_t2_6,
                                           shift(jessie_<somenum>, (6))) = jessie_<somenum>)
-                                        and ((select(float_P_float_M_t2_6,
+                                        and ((select(floatP_floatM_t2_6,
                                               shift(jessie_<somenum>, (7))) = jessie_<somenum>)
-                                            and ((select(float_P_float_M_t2_6,
+                                            and ((select(floatP_floatM_t2_6,
                                                   shift(jessie_<somenum>, (8))) = jessie_<somenum>)
-                                                and ((select(float_P_float_M_t2_6,
+                                                and ((select(floatP_floatM_t2_6,
                                                       shift(jessie_<somenum>, (9))) = jessie_<somenum>)
-                                                    and ((select(float_P_float_M_t2_6,
+                                                    and ((select(floatP_floatM_t2_6,
                                                           shift(jessie_<somenum>,
                                                           (10))) = jessie_<somenum>)
-                                                        and ((select(float_P_float_M_t2_6,
+                                                        and ((select(floatP_floatM_t2_6,
                                                               shift(jessie_<somenum>,
                                                               (11))) = jessie_<somenum>)
-                                                            and ((select(float_P_float_M_t2_6,
+                                                            and ((select(floatP_floatM_t2_6,
                                                                   shift(jessie_<somenum>,
                                                                   (12))) = jessie_<somenum>)
                                                                 and (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (13))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (14))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (15))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (16))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (17))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (18))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (19))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (20))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (21))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (22))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (23))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (24))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (25))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (26))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (27))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (28))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (29))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (30))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (31))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (32))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (33))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (34))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (35))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (36))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (37))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (38))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (39))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (40))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (41))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (42))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (43))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (44))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (45))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (46))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (47))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (48))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (49))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (50))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (51))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (52))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (53))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (54))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (55))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (56))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (57))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (58))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (59))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (60))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (61))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (62))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (63))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (64))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (65))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (66))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (67))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (68))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (69))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (70))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (71))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (72))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (73))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (74))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (75))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (76))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (77))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (78))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (79))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (80))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (81))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (82))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (83))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (84))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (85))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (86))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (87))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (88))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (89))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (90))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (91))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (92))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (93))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (94))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (95))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (96))) = jessie_<somenum>)
                                                                     and 
                                                                     (
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (97))) = jessie_<somenum>)
                                                                     and 
                                                                     (
-                                                                    select(float_P_float_M_t2_6,
+                                                                    select(floatP_floatM_t2_6,
                                                                     shift(jessie_<somenum>,
                                                                     (98))) = jessie_<somenum>)))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) } ]))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))));
        (C_351:
@@ -2983,16 +2974,16 @@ let f_safety =
          (let jessie_<somenum> = (99) in
          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
          (let jessie_<somenum> = ((shift jessie_<somenum>) (99)) in
-         (((safe_upd_ float_P_float_M_t2_6) jessie_<somenum>) jessie_<somenum>)))));
+         (((safe_upd_ floatP_floatM_t2_6) jessie_<somenum>) jessie_<somenum>)))));
         jessie_<somenum> end)) end))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))) in
       void);
-      [ { } unit reads float_P_float_M_t2_6,t2
-        { (JC_<somenum>: incr(shift(t2, (0)), (0), (99), float_P_float_M_t2_6)) } ];
+      [ { } unit reads floatP_floatM_t2_6,t2
+        { (JC_<somenum>: incr(shift(t2, (0)), (0), (99), floatP_floatM_t2_6)) } ];
       void;
-      [ { } unit reads float_P_float_M_t2_6,t2
-        { (JC_<somenum>: incr2(shift(t2, (0)), (0), (99), float_P_float_M_t2_6)) } ];
-      void; ((free_parameter float_P_t_5_alloc_table) !t_3);
-      ((free_parameter float_P_t2_6_alloc_table) !t2); (raise Return) end)))))))))))))))))))))))))));
+      [ { } unit reads floatP_floatM_t2_6,t2
+        { (JC_<somenum>: incr2(shift(t2, (0)), (0), (99), floatP_floatM_t2_6)) } ];
+      void; ((free_parameter floatP_t_5_alloc_table) !t_3);
+      ((free_parameter floatP_t2_6_alloc_table) !t2); (raise Return) end)))))))))))))))))))))))))));
     (raise Return) end with Return -> void end) { true }
 
 
@@ -3008,7 +2999,7 @@ why --project [...] why/e63.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/e63_po6.why">
-      <location file = "why/e63.why" line = "1614" begin = "17" end = "76"/>
+      <location file = "why/e63.why" line = "1605" begin = "17" end = "75"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/e63_po7.why">
@@ -3017,16 +3008,16 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/e63_po8.why">
-      <location file = "why/e63.why" line = "1623" begin = "15" end = "75"/>
+      <location file = "why/e63.why" line = "1614" begin = "15" end = "74"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/e63_po9.why">
-      <location file = "why/e63.why" line = "2780" begin = "13" end = "58"/>
+      <location file = "why/e63.why" line = "2771" begin = "13" end = "57"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/e63_po10.why">
-      <location file = "why/e63.why" line = "2781" begin = "7" end = "52"/>
+      <location file = "why/e63.why" line = "2772" begin = "7" end = "51"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -3980,80 +3971,78 @@ axiom frame_between_sub:
           (frame_between(sa, m1, m2) ->
            (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
-type char_P
+type charP
 
-type float_P
+type floatP
 
 type int8
 
 type padding
 
-type void_P
+type voidP
 
-logic char_P_tag : char_P tag_id
+logic charP_tag : charP tag_id
 
-axiom char_P_int: (int_of_tag(char_P_tag) = 1)
+axiom charP_int: (int_of_tag(charP_tag) = 1)
 
-logic char_P_of_pointer_address : unit pointer -> char_P pointer
+logic charP_of_pointer_address : unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr:
-  (forall p:char_P pointer.
-    (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr:
+  (forall p:charP pointer.
+    (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom: parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom: parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags:
-  (forall x:char_P pointer.
-    (forall char_P_tag_table:char_P tag_table. instanceof(char_P_tag_table,
-      x, char_P_tag)))
+axiom charP_tags:
+  (forall x:charP pointer.
+    (forall charP_tag_table:charP tag_table. instanceof(charP_tag_table, x,
+      charP_tag)))
 
 logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
 
-logic float_P_tag : float_P tag_id
+logic floatP_tag : floatP tag_id
 
-axiom float_P_int: (int_of_tag(float_P_tag) = 1)
+axiom floatP_int: (int_of_tag(floatP_tag) = 1)
 
-logic float_P_of_pointer_address : unit pointer -> float_P pointer
+logic floatP_of_pointer_address : unit pointer -> floatP pointer
 
-axiom float_P_of_pointer_address_of_pointer_addr:
-  (forall p:float_P pointer.
-    (p = float_P_of_pointer_address(pointer_address(p))))
+axiom floatP_of_pointer_address_of_pointer_addr:
+  (forall p:floatP pointer.
+    (p = floatP_of_pointer_address(pointer_address(p))))
 
-axiom float_P_parenttag_bottom: parenttag(float_P_tag, bottom_tag)
+axiom floatP_parenttag_bottom: parenttag(floatP_tag, bottom_tag)
 
-axiom float_P_tags:
-  (forall x:float_P pointer.
-    (forall float_P_tag_table:float_P tag_table.
-      instanceof(float_P_tag_table, x, float_P_tag)))
+axiom floatP_tags:
+  (forall x:floatP pointer.
+    (forall floatP_tag_table:floatP tag_table. instanceof(floatP_tag_table,
+      x, floatP_tag)))
 
-inductive incr: float_P pointer, int, int, (float_P, real) memory -> prop =
-  | incr_ok: (forall float_P_float_M_t_1_at_L:(float_P, real) memory.
-               (forall t_0:float_P pointer.
+inductive incr: floatP pointer, int, int, (floatP, real) memory -> prop =
+  | incr_ok: (forall floatP_floatM_t_1_at_L:(floatP, real) memory.
+               (forall t_0:floatP pointer.
                  (forall i_0:int.
                    (forall j_0:int.
                      ((i_0 < j_0) ->
-                      ((select(float_P_float_M_t_1_at_L, shift(t_0,
-                       i_0)) <= select(float_P_float_M_t_1_at_L, shift(t_0,
+                      ((select(floatP_floatM_t_1_at_L, shift(t_0,
+                       i_0)) <= select(floatP_floatM_t_1_at_L, shift(t_0,
                        (i_0 + 1)))) ->
-                       (incr(t_0, (i_0 + 1), j_0,
-                        float_P_float_M_t_1_at_L) -> incr(t_0, i_0, j_0,
-                        float_P_float_M_t_1_at_L))))))))
-  | incr_alone: (forall float_P_float_M_t_1_at_L:(float_P, real) memory.
-                  (forall t_1:float_P pointer.
+                       (incr(t_0, (i_0 + 1), j_0, floatP_floatM_t_1_at_L) ->
+                        incr(t_0, i_0, j_0, floatP_floatM_t_1_at_L))))))))
+  | incr_alone: (forall floatP_floatM_t_1_at_L:(floatP, real) memory.
+                  (forall t_1:floatP pointer.
                     (forall i_1:int. incr(t_1, i_1, i_1,
-                      float_P_float_M_t_1_at_L))))
+                      floatP_floatM_t_1_at_L))))
 
 
 
-predicate incr2(t_2: float_P pointer, i_2: int, j_1: int,
-  float_P_float_M_t_2_2_at_L: (float_P, real) memory) =
+predicate incr2(t_2: floatP pointer, i_2: int, j_1: int,
+  floatP_floatM_t_2_2_at_L: (floatP, real) memory) =
   (forall k:int.
-    (((i_2 <= k) and (k < j_1)) -> (select(float_P_float_M_t_2_2_at_L,
-     shift(t_2, k)) <= select(float_P_float_M_t_2_2_at_L, shift(t_2,
-     (k + 1))))))
+    (((i_2 <= k) and (k < j_1)) -> (select(floatP_floatM_t_2_2_at_L,
+     shift(t_2, k)) <= select(floatP_floatM_t_2_2_at_L, shift(t_2, (k + 1))))))
 
 logic int8_of_integer : int -> int8
 
@@ -4066,131 +4055,129 @@ axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
-predicate left_valid_struct_char_P(p: char_P pointer, a: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_min(char_P_alloc_table,
+predicate left_valid_struct_charP(p: charP pointer, a: int,
+  charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
   p) <= a)
 
-predicate left_valid_struct_float_P(p: float_P pointer, a: int,
-  float_P_alloc_table: float_P alloc_table) =
-  (offset_min(float_P_alloc_table, p) <= a)
-
-predicate left_valid_struct_void_P(p: void_P pointer, a: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_min(void_P_alloc_table,
+predicate left_valid_struct_floatP(p: floatP pointer, a: int,
+  floatP_alloc_table: floatP alloc_table) = (offset_min(floatP_alloc_table,
   p) <= a)
 
-axiom pointer_addr_of_char_P_of_pointer_address:
+predicate left_valid_struct_voidP(p: voidP pointer, a: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
+  p) <= a)
+
+axiom pointer_addr_of_charP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
+
+axiom pointer_addr_of_floatP_of_pointer_address:
   (forall p:unit pointer.
-    (p = pointer_address(char_P_of_pointer_address(p))))
+    (p = pointer_address(floatP_of_pointer_address(p))))
 
-axiom pointer_addr_of_float_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(float_P_of_pointer_address(p))))
+logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
-logic void_P_of_pointer_address : unit pointer -> void_P pointer
+axiom pointer_addr_of_voidP_of_pointer_address:
+  (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
-axiom pointer_addr_of_void_P_of_pointer_address:
-  (forall p:unit pointer.
-    (p = pointer_address(void_P_of_pointer_address(p))))
-
-predicate right_valid_struct_char_P(p: char_P pointer, b: int,
-  char_P_alloc_table: char_P alloc_table) = (offset_max(char_P_alloc_table,
+predicate right_valid_struct_charP(p: charP pointer, b: int,
+  charP_alloc_table: charP alloc_table) = (offset_max(charP_alloc_table,
   p) >= b)
 
-predicate right_valid_struct_float_P(p: float_P pointer, b: int,
-  float_P_alloc_table: float_P alloc_table) =
-  (offset_max(float_P_alloc_table, p) >= b)
-
-predicate right_valid_struct_void_P(p: void_P pointer, b: int,
-  void_P_alloc_table: void_P alloc_table) = (offset_max(void_P_alloc_table,
+predicate right_valid_struct_floatP(p: floatP pointer, b: int,
+  floatP_alloc_table: floatP alloc_table) = (offset_max(floatP_alloc_table,
   p) >= b)
 
-predicate strict_valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
+predicate right_valid_struct_voidP(p: voidP pointer, b: int,
+  voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
+  p) >= b)
 
-predicate strict_valid_root_float_P(p: float_P pointer, a: int, b: int,
-  float_P_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_alloc_table, p) = a) and
-   (offset_max(float_P_alloc_table, p) = b))
+predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
 
-predicate strict_valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_floatP(p: floatP pointer, a: int, b: int,
+  floatP_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_alloc_table, p) = a) and
+   (offset_max(floatP_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) = a) and
-   (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
 
-predicate strict_valid_struct_float_P(p: float_P pointer, a: int, b: int,
-  float_P_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_alloc_table, p) = a) and
-   (offset_max(float_P_alloc_table, p) = b))
+predicate strict_valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
+   p) = b))
 
-predicate strict_valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) = a) and
-   (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_struct_floatP(p: floatP pointer, a: int, b: int,
+  floatP_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_alloc_table, p) = a) and
+   (offset_max(floatP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p: unit pointer, a: int, b: int,
+predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
+   p) = b))
+
+predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_float_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_floatP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p: unit pointer, a: int, b: int,
+predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
   bitvector_alloc_table: unit alloc_table) =
   ((offset_min(bitvector_alloc_table, p) = a) and
    (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_root_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
 
-predicate valid_root_float_P(p: float_P pointer, a: int, b: int,
-  float_P_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_alloc_table, p) <= a) and
-   (offset_max(float_P_alloc_table, p) >= b))
+predicate valid_root_floatP(p: floatP pointer, a: int, b: int,
+  floatP_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_alloc_table, p) <= a) and
+   (offset_max(floatP_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
-predicate valid_struct_char_P(p: char_P pointer, a: int, b: int,
-  char_P_alloc_table: char_P alloc_table) =
-  ((offset_min(char_P_alloc_table, p) <= a) and
-   (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_struct_charP(p: charP pointer, a: int, b: int,
+  charP_alloc_table: charP alloc_table) =
+  ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
+   p) >= b))
 
-predicate valid_struct_float_P(p: float_P pointer, a: int, b: int,
-  float_P_alloc_table: float_P alloc_table) =
-  ((offset_min(float_P_alloc_table, p) <= a) and
-   (offset_max(float_P_alloc_table, p) >= b))
+predicate valid_struct_floatP(p: floatP pointer, a: int, b: int,
+  floatP_alloc_table: floatP alloc_table) =
+  ((offset_min(floatP_alloc_table, p) <= a) and
+   (offset_max(floatP_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p: void_P pointer, a: int, b: int,
-  void_P_alloc_table: void_P alloc_table) =
-  ((offset_min(void_P_alloc_table, p) <= a) and
-   (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
+  voidP_alloc_table: voidP alloc_table) =
+  ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
+   p) >= b))
 
-logic void_P_tag : void_P tag_id
+logic voidP_tag : voidP tag_id
 
-axiom void_P_int: (int_of_tag(void_P_tag) = 1)
+axiom voidP_int: (int_of_tag(voidP_tag) = 1)
 
-axiom void_P_of_pointer_address_of_pointer_addr:
-  (forall p:void_P pointer.
-    (p = void_P_of_pointer_address(pointer_address(p))))
+axiom voidP_of_pointer_address_of_pointer_addr:
+  (forall p:voidP pointer.
+    (p = voidP_of_pointer_address(pointer_address(p))))
 
-axiom void_P_parenttag_bottom: parenttag(void_P_tag, bottom_tag)
+axiom voidP_parenttag_bottom: parenttag(voidP_tag, bottom_tag)
 
-axiom void_P_tags:
-  (forall x:void_P pointer.
-    (forall void_P_tag_table:void_P tag_table. instanceof(void_P_tag_table,
-      x, void_P_tag)))
+axiom voidP_tags:
+  (forall x:voidP pointer.
+    (forall voidP_tag_table:voidP tag_table. instanceof(voidP_tag_table, x,
+      voidP_tag)))
 

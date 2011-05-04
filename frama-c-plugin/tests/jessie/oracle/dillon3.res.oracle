@@ -18,24 +18,24 @@ axiomatic Padding {
 
 type int8 = -128..127
 
-tag double_P = {
-  double double_M: 64;
+tag doubleP = {
+  double doubleM: 64;
 }
 
-type double_P = [double_P]
+type doubleP = [doubleP]
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
-double g4(double_P[..] t)
+double g4(doubleP[..] t)
   requires (C_8 : (((C_10 : (\offset_min(t) <= 0)) &&
                      (C_11 : (\offset_max(t) >= 0))) &&
                     ((C_13 : (\offset_min(t) <= 0)) &&
@@ -43,13 +43,13 @@ double g4(double_P[..] t)
 behavior default:
   assigns \nothing;
   ensures (C_7 : ((\result :> real) ==
-                   (((\at(t,Old) + 0).double_M :> real) +
-                     ((\at(t,Old) + 1).double_M :> real))));
+                   (((\at(t,Old) + 0).doubleM :> real) +
+                     ((\at(t,Old) + 1).doubleM :> real))));
 {  
    (var double y);
    
-   {  (C_6 : (y = (C_5 : ((C_4 : (C_3 : (t + 0)).double_M) +
-                           (C_2 : (C_1 : (t + 1)).double_M)))));
+   {  (C_6 : (y = (C_5 : ((C_4 : (C_3 : (t + 0)).doubleM) +
+                           (C_2 : (C_1 : (t + 1)).doubleM)))));
       
       (return y)
    }
@@ -60,13 +60,13 @@ behavior default:
   assigns \nothing;
   ensures (C_24 : true);
 {  
-   (var double_P[0..1] tab);
+   (var doubleP[0..1] tab);
    
    (var double r);
    
-   {  (C_16 : (tab = (C_15 : (new double_P[2]))));
-      (C_18 : ((C_17 : (tab + 0).double_M) = (1.0 :> double)));
-      (C_20 : ((C_19 : (tab + 1).double_M) = (2.0 :> double)));
+   {  (C_16 : (tab = (C_15 : (new doubleP[2]))));
+      (C_18 : ((C_17 : (tab + 0).doubleM) = (1.0 :> double)));
+      (C_20 : ((C_19 : (tab + 1).doubleM) = (2.0 :> double)));
       (C_22 : (r = (C_21 : g4(tab))));
       
       {  (C_23 : (free(tab)));
@@ -76,15 +76,15 @@ behavior default:
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs dillon3.jessie/dillon3.cloc dillon3.jessie/dillon3.jc
-type char_P
+type charP
 
-type double_P
+type doubleP
 
 type int8
 
 type padding
 
-type void_P
+type voidP
 
 exception Loop_continue_exc of unit
 
@@ -92,39 +92,38 @@ exception Loop_exit_exc of unit
 
 exception Return_label_exc of unit
 
-logic char_P_tag:  -> char_P tag_id
+logic charP_tag:  -> charP tag_id
 
-axiom char_P_int : (int_of_tag(char_P_tag) = (1))
+axiom charP_int : (int_of_tag(charP_tag) = (1))
 
-logic char_P_of_pointer_address: unit pointer -> char_P pointer
+logic charP_of_pointer_address: unit pointer -> charP pointer
 
-axiom char_P_of_pointer_address_of_pointer_addr :
- (forall p:char_P pointer.
-  (p = char_P_of_pointer_address(pointer_address(p))))
+axiom charP_of_pointer_address_of_pointer_addr :
+ (forall p:charP pointer. (p = charP_of_pointer_address(pointer_address(p))))
 
-axiom char_P_parenttag_bottom : parenttag(char_P_tag, bottom_tag)
+axiom charP_parenttag_bottom : parenttag(charP_tag, bottom_tag)
 
-axiom char_P_tags :
- (forall x:char_P pointer.
-  (forall char_P_tag_table:char_P tag_table.
-   instanceof(char_P_tag_table, x, char_P_tag)))
+axiom charP_tags :
+ (forall x:charP pointer.
+  (forall charP_tag_table:charP tag_table.
+   instanceof(charP_tag_table, x, charP_tag)))
 
-logic double_P_tag:  -> double_P tag_id
+logic doubleP_tag:  -> doubleP tag_id
 
-axiom double_P_int : (int_of_tag(double_P_tag) = (1))
+axiom doubleP_int : (int_of_tag(doubleP_tag) = (1))
 
-logic double_P_of_pointer_address: unit pointer -> double_P pointer
+logic doubleP_of_pointer_address: unit pointer -> doubleP pointer
 
-axiom double_P_of_pointer_address_of_pointer_addr :
- (forall p:double_P pointer.
-  (p = double_P_of_pointer_address(pointer_address(p))))
+axiom doubleP_of_pointer_address_of_pointer_addr :
+ (forall p:doubleP pointer.
+  (p = doubleP_of_pointer_address(pointer_address(p))))
 
-axiom double_P_parenttag_bottom : parenttag(double_P_tag, bottom_tag)
+axiom doubleP_parenttag_bottom : parenttag(doubleP_tag, bottom_tag)
 
-axiom double_P_tags :
- (forall x:double_P pointer.
-  (forall double_P_tag_table:double_P tag_table.
-   instanceof(double_P_tag_table, x, double_P_tag)))
+axiom doubleP_tags :
+ (forall x:doubleP pointer.
+  (forall doubleP_tag_table:doubleP tag_table.
+   instanceof(doubleP_tag_table, x, doubleP_tag)))
 
 logic integer_of_int8: int8 -> int
 
@@ -142,266 +141,263 @@ axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
-predicate left_valid_struct_char_P(p:char_P pointer, a:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_min(char_P_alloc_table, p) <= a)
+predicate left_valid_struct_charP(p:charP pointer, a:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_min(charP_alloc_table, p) <= a)
 
-predicate left_valid_struct_double_P(p:double_P pointer, a:int,
- double_P_alloc_table:double_P alloc_table) =
- (offset_min(double_P_alloc_table, p) <= a)
+predicate left_valid_struct_doubleP(p:doubleP pointer, a:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ (offset_min(doubleP_alloc_table, p) <= a)
 
-predicate left_valid_struct_void_P(p:void_P pointer, a:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_min(void_P_alloc_table, p) <= a)
+predicate left_valid_struct_voidP(p:voidP pointer, a:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_min(voidP_alloc_table, p) <= a)
 
-axiom pointer_addr_of_char_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(char_P_of_pointer_address(p))))
+axiom pointer_addr_of_charP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
-axiom pointer_addr_of_double_P_of_pointer_address :
+axiom pointer_addr_of_doubleP_of_pointer_address :
  (forall p:unit pointer.
-  (p = pointer_address(double_P_of_pointer_address(p))))
+  (p = pointer_address(doubleP_of_pointer_address(p))))
 
-logic void_P_of_pointer_address: unit pointer -> void_P pointer
+logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
-axiom pointer_addr_of_void_P_of_pointer_address :
- (forall p:unit pointer. (p = pointer_address(void_P_of_pointer_address(p))))
+axiom pointer_addr_of_voidP_of_pointer_address :
+ (forall p:unit pointer. (p = pointer_address(voidP_of_pointer_address(p))))
 
-predicate right_valid_struct_char_P(p:char_P pointer, b:int,
- char_P_alloc_table:char_P alloc_table) =
- (offset_max(char_P_alloc_table, p) >= b)
+predicate right_valid_struct_charP(p:charP pointer, b:int,
+ charP_alloc_table:charP alloc_table) =
+ (offset_max(charP_alloc_table, p) >= b)
 
-predicate right_valid_struct_double_P(p:double_P pointer, b:int,
- double_P_alloc_table:double_P alloc_table) =
- (offset_max(double_P_alloc_table, p) >= b)
+predicate right_valid_struct_doubleP(p:doubleP pointer, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ (offset_max(doubleP_alloc_table, p) >= b)
 
-predicate right_valid_struct_void_P(p:void_P pointer, b:int,
- void_P_alloc_table:void_P alloc_table) =
- (offset_max(void_P_alloc_table, p) >= b)
+predicate right_valid_struct_voidP(p:voidP pointer, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ (offset_max(voidP_alloc_table, p) >= b)
 
-predicate strict_valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_root_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) = a)
- and (offset_max(double_P_alloc_table, p) = b))
+predicate strict_valid_root_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) = a)
+ and (offset_max(doubleP_alloc_table, p) = b))
 
-predicate strict_valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-predicate strict_valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) = a)
- and (offset_max(char_P_alloc_table, p) = b))
+predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) = a)
+ and (offset_max(charP_alloc_table, p) = b))
 
-predicate strict_valid_struct_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) = a)
- and (offset_max(double_P_alloc_table, p) = b))
+predicate strict_valid_struct_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) = a)
+ and (offset_max(doubleP_alloc_table, p) = b))
 
-predicate strict_valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) = a)
- and (offset_max(void_P_alloc_table, p) = b))
+predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) = a)
+ and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_char_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_double_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_doubleP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_void_P(p:unit pointer, a:int, b:int,
+predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
  bitvector_alloc_table:unit alloc_table) =
  ((offset_min(bitvector_alloc_table, p) = a)
  and (offset_max(bitvector_alloc_table, p) = b))
 
-predicate valid_root_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_root_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_root_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) <= a)
- and (offset_max(double_P_alloc_table, p) >= b))
+predicate valid_root_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) <= a)
+ and (offset_max(doubleP_alloc_table, p) >= b))
 
-predicate valid_root_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-predicate valid_struct_char_P(p:char_P pointer, a:int, b:int,
- char_P_alloc_table:char_P alloc_table) =
- ((offset_min(char_P_alloc_table, p) <= a)
- and (offset_max(char_P_alloc_table, p) >= b))
+predicate valid_struct_charP(p:charP pointer, a:int, b:int,
+ charP_alloc_table:charP alloc_table) =
+ ((offset_min(charP_alloc_table, p) <= a)
+ and (offset_max(charP_alloc_table, p) >= b))
 
-predicate valid_struct_double_P(p:double_P pointer, a:int, b:int,
- double_P_alloc_table:double_P alloc_table) =
- ((offset_min(double_P_alloc_table, p) <= a)
- and (offset_max(double_P_alloc_table, p) >= b))
+predicate valid_struct_doubleP(p:doubleP pointer, a:int, b:int,
+ doubleP_alloc_table:doubleP alloc_table) =
+ ((offset_min(doubleP_alloc_table, p) <= a)
+ and (offset_max(doubleP_alloc_table, p) >= b))
 
-predicate valid_struct_void_P(p:void_P pointer, a:int, b:int,
- void_P_alloc_table:void_P alloc_table) =
- ((offset_min(void_P_alloc_table, p) <= a)
- and (offset_max(void_P_alloc_table, p) >= b))
+predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
+ voidP_alloc_table:voidP alloc_table) =
+ ((offset_min(voidP_alloc_table, p) <= a)
+ and (offset_max(voidP_alloc_table, p) >= b))
 
-logic void_P_tag:  -> void_P tag_id
+logic voidP_tag:  -> voidP tag_id
 
-axiom void_P_int : (int_of_tag(void_P_tag) = (1))
+axiom voidP_int : (int_of_tag(voidP_tag) = (1))
 
-axiom void_P_of_pointer_address_of_pointer_addr :
- (forall p:void_P pointer.
-  (p = void_P_of_pointer_address(pointer_address(p))))
+axiom voidP_of_pointer_address_of_pointer_addr :
+ (forall p:voidP pointer. (p = voidP_of_pointer_address(pointer_address(p))))
 
-axiom void_P_parenttag_bottom : parenttag(void_P_tag, bottom_tag)
+axiom voidP_parenttag_bottom : parenttag(voidP_tag, bottom_tag)
 
-axiom void_P_tags :
- (forall x:void_P pointer.
-  (forall void_P_tag_table:void_P tag_table.
-   instanceof(void_P_tag_table, x, void_P_tag)))
+axiom voidP_tags :
+ (forall x:voidP pointer.
+  (forall voidP_tag_table:voidP tag_table.
+   instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_char_P :
+parameter alloc_bitvector_struct_charP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_char_P_requires :
+parameter alloc_bitvector_struct_charP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_char_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_double_P :
+parameter alloc_bitvector_struct_doubleP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_double_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_double_P_requires :
+parameter alloc_bitvector_struct_doubleP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_double_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P :
+parameter alloc_bitvector_struct_voidP :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter alloc_bitvector_struct_void_P_requires :
+parameter alloc_bitvector_struct_voidP_requires :
  n:int ->
   bitvector_alloc_table:unit alloc_table ref ->
    { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_void_P(result, (0), sub_int(n, (1)),
+   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
       bitvector_alloc_table)
      and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
          and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
-parameter char_P_alloc_table : char_P alloc_table ref
+parameter charP_alloc_table : charP alloc_table ref
 
-parameter char_P_tag_table : char_P tag_table ref
+parameter charP_tag_table : charP tag_table ref
 
-parameter alloc_struct_char_P :
+parameter alloc_struct_charP :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { } char_P pointer writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { } charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter alloc_struct_char_P_requires :
+parameter alloc_struct_charP_requires :
  n:int ->
-  char_P_alloc_table:char_P alloc_table ref ->
-   char_P_tag_table:char_P tag_table ref ->
-    { ge_int(n, (0))} char_P pointer
-    writes char_P_alloc_table,char_P_tag_table
-    { (strict_valid_struct_char_P(result, (0), sub_int(n, (1)),
-       char_P_alloc_table)
-      and (alloc_extends(char_P_alloc_table@, char_P_alloc_table)
-          and (alloc_fresh(char_P_alloc_table@, result, n)
-              and instanceof(char_P_tag_table, result, char_P_tag)))) }
+  charP_alloc_table:charP alloc_table ref ->
+   charP_tag_table:charP tag_table ref ->
+    { ge_int(n, (0))} charP pointer writes charP_alloc_table,charP_tag_table
+    { (strict_valid_struct_charP(result, (0), sub_int(n, (1)),
+       charP_alloc_table)
+      and (alloc_extends(charP_alloc_table@, charP_alloc_table)
+          and (alloc_fresh(charP_alloc_table@, result, n)
+              and instanceof(charP_tag_table, result, charP_tag)))) }
 
-parameter double_P_alloc_table : double_P alloc_table ref
+parameter doubleP_alloc_table : doubleP alloc_table ref
 
-parameter double_P_tag_table : double_P tag_table ref
+parameter doubleP_tag_table : doubleP tag_table ref
 
-parameter alloc_struct_double_P :
+parameter alloc_struct_doubleP :
  n:int ->
-  double_P_alloc_table:double_P alloc_table ref ->
-   double_P_tag_table:double_P tag_table ref ->
-    { } double_P pointer writes double_P_alloc_table,double_P_tag_table
-    { (strict_valid_struct_double_P(result, (0), sub_int(n, (1)),
-       double_P_alloc_table)
-      and (alloc_extends(double_P_alloc_table@, double_P_alloc_table)
-          and (alloc_fresh(double_P_alloc_table@, result, n)
-              and instanceof(double_P_tag_table, result, double_P_tag)))) }
+  doubleP_alloc_table:doubleP alloc_table ref ->
+   doubleP_tag_table:doubleP tag_table ref ->
+    { } doubleP pointer writes doubleP_alloc_table,doubleP_tag_table
+    { (strict_valid_struct_doubleP(result, (0), sub_int(n, (1)),
+       doubleP_alloc_table)
+      and (alloc_extends(doubleP_alloc_table@, doubleP_alloc_table)
+          and (alloc_fresh(doubleP_alloc_table@, result, n)
+              and instanceof(doubleP_tag_table, result, doubleP_tag)))) }
 
-parameter alloc_struct_double_P_requires :
+parameter alloc_struct_doubleP_requires :
  n:int ->
-  double_P_alloc_table:double_P alloc_table ref ->
-   double_P_tag_table:double_P tag_table ref ->
-    { ge_int(n, (0))} double_P pointer
-    writes double_P_alloc_table,double_P_tag_table
-    { (strict_valid_struct_double_P(result, (0), sub_int(n, (1)),
-       double_P_alloc_table)
-      and (alloc_extends(double_P_alloc_table@, double_P_alloc_table)
-          and (alloc_fresh(double_P_alloc_table@, result, n)
-              and instanceof(double_P_tag_table, result, double_P_tag)))) }
+  doubleP_alloc_table:doubleP alloc_table ref ->
+   doubleP_tag_table:doubleP tag_table ref ->
+    { ge_int(n, (0))} doubleP pointer
+    writes doubleP_alloc_table,doubleP_tag_table
+    { (strict_valid_struct_doubleP(result, (0), sub_int(n, (1)),
+       doubleP_alloc_table)
+      and (alloc_extends(doubleP_alloc_table@, doubleP_alloc_table)
+          and (alloc_fresh(doubleP_alloc_table@, result, n)
+              and instanceof(doubleP_tag_table, result, doubleP_tag)))) }
 
-parameter void_P_alloc_table : void_P alloc_table ref
+parameter voidP_alloc_table : voidP alloc_table ref
 
-parameter void_P_tag_table : void_P tag_table ref
+parameter voidP_tag_table : voidP tag_table ref
 
-parameter alloc_struct_void_P :
+parameter alloc_struct_voidP :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { } void_P pointer writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { } voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
-parameter alloc_struct_void_P_requires :
+parameter alloc_struct_voidP_requires :
  n:int ->
-  void_P_alloc_table:void_P alloc_table ref ->
-   void_P_tag_table:void_P tag_table ref ->
-    { ge_int(n, (0))} void_P pointer
-    writes void_P_alloc_table,void_P_tag_table
-    { (strict_valid_struct_void_P(result, (0), sub_int(n, (1)),
-       void_P_alloc_table)
-      and (alloc_extends(void_P_alloc_table@, void_P_alloc_table)
-          and (alloc_fresh(void_P_alloc_table@, result, n)
-              and instanceof(void_P_tag_table, result, void_P_tag)))) }
+  voidP_alloc_table:voidP alloc_table ref ->
+   voidP_tag_table:voidP tag_table ref ->
+    { ge_int(n, (0))} voidP pointer writes voidP_alloc_table,voidP_tag_table
+    { (strict_valid_struct_voidP(result, (0), sub_int(n, (1)),
+       voidP_alloc_table)
+      and (alloc_extends(voidP_alloc_table@, voidP_alloc_table)
+          and (alloc_fresh(voidP_alloc_table@, result, n)
+              and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
 parameter any_int8 : unit -> { } int8 { true }
 
@@ -409,41 +405,40 @@ parameter f4 :
  tt:unit ->
   { } double
   { (JC_<somenum>:
-    not_assigns(double_P_tab_2_alloc_table@, double_P_double_M_tab_2@,
-    double_P_double_M_tab_2, pset_empty)) }
+    not_assigns(doubleP_tab_2_alloc_table@, doubleP_doubleM_tab_2@,
+    doubleP_doubleM_tab_2, pset_empty)) }
 
 parameter f4_requires :
  tt:unit ->
   { } double
   { (JC_<somenum>:
-    not_assigns(double_P_tab_2_alloc_table@, double_P_double_M_tab_2@,
-    double_P_double_M_tab_2, pset_empty)) }
+    not_assigns(doubleP_tab_2_alloc_table@, doubleP_doubleM_tab_2@,
+    doubleP_doubleM_tab_2, pset_empty)) }
 
 parameter g4 :
- t:double_P pointer ->
-  double_P_t_1_alloc_table:double_P alloc_table ->
-   double_P_double_M_t_1:(double_P, double) memory ->
+ t:doubleP pointer ->
+  doubleP_t_1_alloc_table:doubleP alloc_table ->
+   doubleP_doubleM_t_1:(doubleP, double) memory ->
     { } double
     { (JC_<somenum>:
       eq_real(double_value(result),
-      add_real(double_value(select(double_P_double_M_t_1, shift(t@, (0)))),
-      double_value(select(double_P_double_M_t_1, shift(t@, (1))))))) }
+      add_real(double_value(select(doubleP_doubleM_t_1, shift(t@, (0)))),
+      double_value(select(doubleP_doubleM_t_1, shift(t@, (1))))))) }
 
 parameter g4_requires :
- t:double_P pointer ->
-  double_P_t_1_alloc_table:double_P alloc_table ->
-   double_P_double_M_t_1:(double_P, double) memory ->
+ t:doubleP pointer ->
+  doubleP_t_1_alloc_table:doubleP alloc_table ->
+   doubleP_doubleM_t_1:(doubleP, double) memory ->
     { (JC_<somenum>:
-      ((JC_<somenum>: le_int(offset_min(double_P_t_1_alloc_table, t), (0)))
-      and ((JC_<somenum>: ge_int(offset_max(double_P_t_1_alloc_table, t), (0)))
-          and ((JC_<somenum>: le_int(offset_min(double_P_t_1_alloc_table, t), (0)))
-              and (JC_<somenum>:
-                  ge_int(offset_max(double_P_t_1_alloc_table, t), (1)))))))}
+      ((JC_<somenum>: le_int(offset_min(doubleP_t_1_alloc_table, t), (0)))
+      and ((JC_<somenum>: ge_int(offset_max(doubleP_t_1_alloc_table, t), (0)))
+          and ((JC_<somenum>: le_int(offset_min(doubleP_t_1_alloc_table, t), (0)))
+              and (JC_<somenum>: ge_int(offset_max(doubleP_t_1_alloc_table, t), (1)))))))}
     double
     { (JC_<somenum>:
       eq_real(double_value(result),
-      add_real(double_value(select(double_P_double_M_t_1, shift(t@, (0)))),
-      double_value(select(double_P_double_M_t_1, shift(t@, (1))))))) }
+      add_real(double_value(select(doubleP_doubleM_t_1, shift(t@, (0)))),
+      double_value(select(doubleP_doubleM_t_1, shift(t@, (1))))))) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -460,9 +455,9 @@ let f4_ensures_default =
   (let return = ref (any_double void) in
   try
    begin
-     (let double_P_double_M_tab_2 = ref (any_memory void) in
-     (let double_P_tab_2_tag_table = ref (any_tag_table void) in
-     (let double_P_tab_2_alloc_table = ref (any_alloc_table void) in
+     (let doubleP_doubleM_tab_2 = ref (any_memory void) in
+     (let doubleP_tab_2_tag_table = ref (any_tag_table void) in
+     (let doubleP_tab_2_alloc_table = ref (any_alloc_table void) in
      (let tab = ref (any_pointer void) in
      (let r = ref (any_double void) in
      (C_16:
@@ -474,7 +469,7 @@ let f4_ensures_default =
        (let jessie_<somenum> =
        (tab := (C_15:
                (JC_<somenum>:
-               (((alloc_struct_double_P (2)) double_P_tab_2_alloc_table) double_P_tab_2_tag_table)))) in
+               (((alloc_struct_doubleP (2)) doubleP_tab_2_alloc_table) doubleP_tab_2_tag_table)))) in
        void);
       (let jessie_<somenum> = (double_of_real_exact 1.0) in
       (let jessie_<somenum> = !tab in
@@ -482,24 +477,24 @@ let f4_ensures_default =
       (let jessie_<somenum> = !tab in
       (let jessie_<somenum> = (1) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit reads double_P_double_M_tab_2,double_P_tab_2_alloc_table
-        writes double_P_double_M_tab_2
-        { (not_assigns(double_P_tab_2_alloc_table, double_P_double_M_tab_2@,
-           double_P_double_M_tab_2,
+      [ { } unit reads doubleP_doubleM_tab_2,doubleP_tab_2_alloc_table
+        writes doubleP_doubleM_tab_2
+        { (not_assigns(doubleP_tab_2_alloc_table, doubleP_doubleM_tab_2@,
+           doubleP_doubleM_tab_2,
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-          and ((select(double_P_double_M_tab_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and (select(double_P_double_M_tab_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+          and ((select(doubleP_doubleM_tab_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
+              and (select(doubleP_doubleM_tab_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
       (let jessie_<somenum> =
       (r := (C_21:
             (let jessie_<somenum> = !tab in
             (JC_<somenum>:
-            (((g4 jessie_<somenum>) !double_P_tab_2_alloc_table) !double_P_double_M_tab_2))))) in
-      void); ((safe_free_parameter double_P_tab_2_alloc_table) !tab);
+            (((g4 jessie_<somenum>) !doubleP_tab_2_alloc_table) !doubleP_doubleM_tab_2))))) in
+      void); ((safe_free_parameter doubleP_tab_2_alloc_table) !tab);
       (return := !r); (raise Return) end)))))))))); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    not_assigns(double_P_tab_2_alloc_table@, double_P_double_M_tab_2@,
-    double_P_double_M_tab_2, pset_empty)) }
+    not_assigns(doubleP_tab_2_alloc_table@, doubleP_doubleM_tab_2@,
+    doubleP_doubleM_tab_2, pset_empty)) }
 
 let f4_safety =
  fun (tt : unit) ->
@@ -508,9 +503,9 @@ let f4_safety =
   (let return = ref (any_double void) in
   try
    begin
-     (let double_P_double_M_tab_2 = ref (any_memory void) in
-     (let double_P_tab_2_tag_table = ref (any_tag_table void) in
-     (let double_P_tab_2_alloc_table = ref (any_alloc_table void) in
+     (let doubleP_doubleM_tab_2 = ref (any_memory void) in
+     (let doubleP_tab_2_tag_table = ref (any_tag_table void) in
+     (let doubleP_tab_2_alloc_table = ref (any_alloc_table void) in
      (let tab = ref (any_pointer void) in
      (let r = ref (any_double void) in
      (C_16:
@@ -523,40 +518,40 @@ let f4_safety =
        (tab := (let jessie_<somenum> =
                (C_15:
                (JC_<somenum>:
-               (((alloc_struct_double_P_requires (2)) double_P_tab_2_alloc_table) double_P_tab_2_tag_table))) in
+               (((alloc_struct_doubleP_requires (2)) doubleP_tab_2_alloc_table) doubleP_tab_2_tag_table))) in
                (JC_<somenum>:
                (assert
-               { ge_int(offset_max(double_P_tab_2_alloc_table, jessie_<somenum>),
-                 (1)) }; jessie_<somenum>)))) in void);
+               { ge_int(offset_max(doubleP_tab_2_alloc_table, jessie_<somenum>), (1)) };
+               jessie_<somenum>)))) in void);
       (let jessie_<somenum> = (double_of_real_exact 1.0) in
       (let jessie_<somenum> = !tab in
       (let jessie_<somenum> = (double_of_real_exact 2.0) in
       (let jessie_<somenum> = !tab in
       (let jessie_<somenum> = (1) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit reads double_P_double_M_tab_2,double_P_tab_2_alloc_table
-        writes double_P_double_M_tab_2
-        { (not_assigns(double_P_tab_2_alloc_table, double_P_double_M_tab_2@,
-           double_P_double_M_tab_2,
+      [ { } unit reads doubleP_doubleM_tab_2,doubleP_tab_2_alloc_table
+        writes doubleP_doubleM_tab_2
+        { (not_assigns(doubleP_tab_2_alloc_table, doubleP_doubleM_tab_2@,
+           doubleP_doubleM_tab_2,
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
-          and ((select(double_P_double_M_tab_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and (select(double_P_double_M_tab_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+          and ((select(doubleP_doubleM_tab_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
+              and (select(doubleP_doubleM_tab_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
       (let jessie_<somenum> =
       (r := (C_21:
             (let jessie_<somenum> = !tab in
             (JC_<somenum>:
-            (((g4_requires jessie_<somenum>) !double_P_tab_2_alloc_table) !double_P_double_M_tab_2))))) in
-      void); ((free_parameter double_P_tab_2_alloc_table) !tab);
+            (((g4_requires jessie_<somenum>) !doubleP_tab_2_alloc_table) !doubleP_doubleM_tab_2))))) in
+      void); ((free_parameter doubleP_tab_2_alloc_table) !tab);
       (return := !r); (raise Return) end)))))))))); absurd  end with
    Return -> !return end)) { true }
 
 let g4_ensures_default =
- fun (t : double_P pointer) (double_P_t_1_alloc_table : double_P alloc_table) (double_P_double_M_t_1 : (double_P, double) memory) ->
+ fun (t : doubleP pointer) (doubleP_t_1_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_1 : (doubleP, double) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(double_P_t_1_alloc_table, t), (0)))
-    and ((JC_<somenum>: ge_int(offset_max(double_P_t_1_alloc_table, t), (0)))
-        and ((JC_<somenum>: le_int(offset_min(double_P_t_1_alloc_table, t), (0)))
-            and (JC_<somenum>: ge_int(offset_max(double_P_t_1_alloc_table, t), (1))))))) }
+    ((JC_<somenum>: le_int(offset_min(doubleP_t_1_alloc_table, t), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(doubleP_t_1_alloc_table, t), (0)))
+        and ((JC_<somenum>: le_int(offset_min(doubleP_t_1_alloc_table, t), (0)))
+            and (JC_<somenum>: ge_int(offset_max(doubleP_t_1_alloc_table, t), (1))))))) }
   (init:
   (let return = ref (any_double void) in
   try
@@ -568,24 +563,23 @@ let g4_ensures_default =
        (y := (C_5:
              (JC_<somenum>:
              (((add_double_safe nearest_even) (C_4:
-                                              ((safe_acc_ double_P_double_M_t_1) 
+                                              ((safe_acc_ doubleP_doubleM_t_1) 
                                                (C_3: ((shift t) (0)))))) 
-              (C_2:
-              ((safe_acc_ double_P_double_M_t_1) (C_1: ((shift t) (1))))))))) in
+              (C_2: ((safe_acc_ doubleP_doubleM_t_1) (C_1: ((shift t) (1))))))))) in
        void); (return := !y); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     eq_real(double_value(result),
-    add_real(double_value(select(double_P_double_M_t_1, shift(t@, (0)))),
-    double_value(select(double_P_double_M_t_1, shift(t@, (1))))))) }
+    add_real(double_value(select(doubleP_doubleM_t_1, shift(t@, (0)))),
+    double_value(select(doubleP_doubleM_t_1, shift(t@, (1))))))) }
 
 let g4_safety =
- fun (t : double_P pointer) (double_P_t_1_alloc_table : double_P alloc_table) (double_P_double_M_t_1 : (double_P, double) memory) ->
+ fun (t : doubleP pointer) (doubleP_t_1_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_1 : (doubleP, double) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(double_P_t_1_alloc_table, t), (0)))
-    and ((JC_<somenum>: ge_int(offset_max(double_P_t_1_alloc_table, t), (0)))
-        and ((JC_<somenum>: le_int(offset_min(double_P_t_1_alloc_table, t), (0)))
-            and (JC_<somenum>: ge_int(offset_max(double_P_t_1_alloc_table, t), (1))))))) }
+    ((JC_<somenum>: le_int(offset_min(doubleP_t_1_alloc_table, t), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(doubleP_t_1_alloc_table, t), (0)))
+        and ((JC_<somenum>: le_int(offset_min(doubleP_t_1_alloc_table, t), (0)))
+            and (JC_<somenum>: ge_int(offset_max(doubleP_t_1_alloc_table, t), (1))))))) }
   (init:
   (let return = ref (any_double void) in
   try
@@ -598,10 +592,10 @@ let g4_safety =
              (JC_<somenum>:
              (((add_double nearest_even) (C_4:
                                          (JC_<somenum>:
-                                         (((acc_ double_P_t_1_alloc_table) double_P_double_M_t_1) t)))) 
+                                         (((acc_ doubleP_t_1_alloc_table) doubleP_doubleM_t_1) t)))) 
               (C_2:
               (JC_<somenum>:
-              ((((offset_acc_ double_P_t_1_alloc_table) double_P_double_M_t_1) t) (1)))))))) in
+              ((((offset_acc_ doubleP_t_1_alloc_table) doubleP_doubleM_t_1) t) (1)))))))) in
        void); (return := !y); (raise Return) end)); absurd  end with
    Return -> !return end)) { true }
 

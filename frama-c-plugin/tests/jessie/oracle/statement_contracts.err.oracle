@@ -1,12 +1,12 @@
-File "why/statement_contracts.why", line 288, characters 8-69:
+File "why/statement_contracts.why", line 284, characters 8-69:
 warning: mutable x_0 is not declared in effect; added as read
-File "why/statement_contracts.why", line 296, characters 7-68:
+File "why/statement_contracts.why", line 292, characters 7-68:
 warning: mutable x_0 is not declared in effect; added as read
-File "why/statement_contracts.why", line 332, characters 9-69:
+File "why/statement_contracts.why", line 328, characters 9-69:
 warning: mutable x_0 is not declared in effect; added as read
-File "why/statement_contracts.why", line 339, characters 8-68:
+File "why/statement_contracts.why", line 335, characters 8-68:
 warning: mutable x_0 is not declared in effect; added as read
-File "why/statement_contracts.why", line 354, characters 6-72:
+File "why/statement_contracts.why", line 350, characters 6-72:
 warning: mutable mutable_p is not declared in effect; added as read
-File "why/statement_contracts.why", line 379, characters 6-139:
+File "why/statement_contracts.why", line 375, characters 6-139:
 warning: mutable mutable_p is not declared in effect; added as read

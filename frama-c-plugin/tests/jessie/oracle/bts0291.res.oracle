@@ -20,36 +20,36 @@ type int32 = -2147483648..2147483647
 
 type int8 = -128..127
 
-tag int_P = {
-  int32 int_M: 32;
+tag intP = {
+  int32 intM: 32;
 }
 
-type int_P = [int_P]
+type intP = [intP]
 
-tag char_P = {
-  int8 char_M: 8;
+tag charP = {
+  int8 charM: 8;
 }
 
-type char_P = [char_P]
+type charP = [charP]
 
-tag void_P = {
+tag voidP = {
 }
 
-type void_P = [void_P]
+type voidP = [voidP]
 
-unit foo(int_P[..] x, char_P[..] y)
+unit foo(intP[..] x, charP[..] y)
   requires (C_8 : (((C_10 : (\offset_min(x) <= 0)) &&
                      (C_11 : (\offset_max(x) >= 0))) &&
                     ((C_13 : (\offset_min(y) <= 0)) &&
                       (C_14 : (\offset_max(y) >= 0)))));
 behavior default:
-  assigns x.int_M,
-  y.char_M;
-  ensures (C_5 : ((C_6 : (\at(y,Old).char_M == 2)) &&
-                   (C_7 : (\at(x,Old).int_M == (- 1)))));
+  assigns x.intM,
+  y.charM;
+  ensures (C_5 : ((C_6 : (\at(y,Old).charM == 2)) &&
+                   (C_7 : (\at(x,Old).intM == (- 1)))));
 {  
-   {  (C_2 : ((C_1 : x.int_M) = -1));
-      (C_4 : ((C_3 : y.char_M) = 2));
+   {  (C_2 : ((C_1 : x.intM) = -1));
+      (C_4 : ((C_3 : y.charM) = 2));
       
       (return ())
    }
@@ -59,10 +59,10 @@ unit test1()
 behavior default:
   ensures (C_21 : true);
 {  
-   (var int_P[0] x_0);
+   (var intP[0] x_0);
    
-   {  (C_16 : (x_0 = (C_15 : (new int_P[1]))));
-      (C_18 : foo(x_0, (C_17 : (x_0 :> char_P[..]))));
+   {  (C_16 : (x_0 = (C_15 : (new intP[1]))));
+      (C_18 : foo(x_0, (C_17 : (x_0 :> charP[..]))));
       
       {  
          (assert for default: (C_19 : (2 == (- 1))));

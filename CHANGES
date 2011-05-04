@@ -1,4 +1,6 @@
 
+  o [Why] option -default-locs
+  o [Krakatoa] fixed a problem with scope of labels
   o [Krakatoa] fixed support for constant strings
   o [Jessie] order of lemmas now keeps the same is in the input. Fixes 
     Frama-C BTS 0024
