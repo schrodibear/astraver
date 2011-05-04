@@ -387,7 +387,7 @@ else
 	AC_MSG_CHECKING(Coq legacy floating-point library)
 	if test -f "$COQLIB/user-contrib/AllFloat.vo" || test -f "$COQLIB/user-contrib/Float/AllFloat.vo"; then
 	  AC_MSG_RESULT(yes)
-	  WHYFLOATS="lib/coq/WhyFloats.vo lib/coq/WhyFloatsStrictLegacy.vo"
+	  WHYFLOATS="lib/coq/WhyFloatsStrictLegacy.vo"
 	  COQFLOATSLEGACYMSG=yes
 	else
 	  AC_MSG_RESULT(no)
