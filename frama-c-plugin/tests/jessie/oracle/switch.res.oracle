@@ -242,8 +242,7 @@ behavior default:
 
 int32 f7(int32 x_6)
 behavior default:
-  ensures (C_39 : ((\at(x_6,Old) == ((5 :> __anonenum_1) :> int32)) ==>
-                    (\result == 1)));
+  ensures (C_39 : ((\at(x_6,Old) == (5 :> __anonenum_1)) ==> (\result == 1)));
 {  
    (var int32 y_6);
    
@@ -613,7 +612,7 @@ parameter f7 :
   { } int32
   { (JC_<somenum>:
     (eq_int(integer_of_int32(x_6@),
-     integer_of_int32(int32_of_integer(integer_of___anonenum_1(__anonenum_1_of_integer((5)))))) ->
+     integer_of___anonenum_1(__anonenum_1_of_integer((5)))) ->
      eq_int(integer_of_int32(result), (1)))) }
 
 parameter f7_requires :
@@ -621,7 +620,7 @@ parameter f7_requires :
   { } int32
   { (JC_<somenum>:
     (eq_int(integer_of_int32(x_6@),
-     integer_of_int32(int32_of_integer(integer_of___anonenum_1(__anonenum_1_of_integer((5)))))) ->
+     integer_of___anonenum_1(__anonenum_1_of_integer((5)))) ->
      eq_int(integer_of_int32(result), (1)))) }
 
 parameter int32_of_integer_ :
@@ -1322,7 +1321,7 @@ let f7_ensures_default =
    with Return -> !return end))
   { (JC_<somenum>:
     (eq_int(integer_of_int32(x_6@),
-     integer_of_int32(int32_of_integer(integer_of___anonenum_1(__anonenum_1_of_integer((5)))))) ->
+     integer_of___anonenum_1(__anonenum_1_of_integer((5)))) ->
      eq_int(integer_of_int32(result), (1)))) }
 
 let f7_safety =

@@ -139,9 +139,11 @@ let size_in_bytes ik =
 let integral_type_size_in_bytes ty =
   match unrollType ty with
   | TInt(IBool,_attr) -> (* TODO *)
-      Extlib.not_yet_implemented "Common.integral_type_size_in_bytes IBool"
+    Extlib.not_yet_implemented "Common.integral_type_size_in_bytes IBool"
   | TInt(ik,_attr) -> size_in_bytes ik
-  | TEnum _ -> theMachine.theMachine.sizeof_enum
+  | TEnum ({ekind = IBool},_) -> 
+    Extlib.not_yet_implemented "Common.integral_type_size_in_bytes IBool"
+  | TEnum (ei,_) -> size_in_bytes ei.ekind
   | _ -> assert false
 
 let integral_type_size_in_bits ty =
@@ -162,10 +164,9 @@ let min_value_of_integral_type ?bitsize ty =
     | TInt(IBool,_attr) -> Big_int.zero_big_int
     | TInt(ik,_attr) ->
 	min_of (isSigned ik) (size_in_bytes ik)
-    | TEnum _ ->
-	min_of
-	  theMachine.theMachine.Cil_types.enum_are_signed
-	  theMachine.theMachine.sizeof_enum
+    | TEnum ({ ekind = IBool},_) -> Big_int.zero_big_int
+    | TEnum ({ekind=ik},_) ->
+	min_of (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
 
 let max_value_of_integral_type ?bitsize ty =
@@ -186,10 +187,8 @@ let max_value_of_integral_type ?bitsize ty =
     | TInt(IBool,_attr) -> Big_int.unit_big_int
     | TInt(ik,_attr) ->
 	max_of (isSigned ik) (size_in_bytes ik)
-    | TEnum _ ->
-	max_of
-	  theMachine.theMachine.Cil_types.enum_are_signed
-	  theMachine.theMachine.sizeof_enum
+    | TEnum ({ekind=IBool},_) -> Big_int.unit_big_int
+    | TEnum ({ekind=ik},_) -> max_of (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
 
 let all_integral_types = Hashtbl.create 5
@@ -207,10 +206,8 @@ let name_of_integral_type ?bitsize ty =
     | TInt(IBool,_attr) -> "_bool"
     | TInt(ik,_attr) ->
 	name_it (isSigned ik) (size_in_bytes ik)
-    | TEnum _ ->
-	name_it
-	  theMachine.theMachine.Cil_types.enum_are_signed
-	  theMachine.theMachine.sizeof_enum
+    | TEnum ({ekind= IBool},_) -> "_bool"
+    | TEnum ({ekind = ik},_) -> name_it (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
 
 (* Reference type *)
