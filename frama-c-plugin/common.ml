@@ -474,11 +474,11 @@ let type_name ty =
 
 let logic_type_name ty =
   ignore (flush_str_formatter ());
-  let old_mode = Parameters.Unicode.get() in
-  Parameters.Unicode.set false;
+  let old_mode = Kernel.Unicode.get() in
+  Kernel.Unicode.set false;
   fprintf str_formatter "%a" !Ast_printer.d_logic_type ty;
   let name = flush_str_formatter () in
-  Parameters.Unicode.set old_mode;
+  Kernel.Unicode.set old_mode;
   filter_alphanumeric name [('*','x')] '_'
 
 let name_of_padding_type = (*reserved_logic_name*) "padding"

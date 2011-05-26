@@ -54,15 +54,15 @@ let std_include = Filename.concat Version.datadir "jessie"
 let prolog_h_name = Filename.concat std_include "jessie_prolog.h"
 
 let treat_jessie_prolog () =
-  Parameters.CppExtraArgs.add ("-include " ^ prolog_h_name)
+  Kernel.CppExtraArgs.add ("-include " ^ prolog_h_name)
 
 let treat_jessie_std_headers () =
-  Parameters.CppExtraArgs.add ("-I " ^ std_include)
+  Kernel.CppExtraArgs.add ("-I " ^ std_include)
 *)
 
 let treat_integer_model () =
   if !Interp.int_model = Interp.IMexact then
-    Parameters.CppExtraArgs.add ("-D JESSIE_EXACT_INT_MODEL")
+    Kernel.CppExtraArgs.add ("-D JESSIE_EXACT_INT_MODEL")
 
 let () =
   (* [JS 2009/10/04]
@@ -72,7 +72,7 @@ let () =
 
 (*
 let treat_jessie_no_prolog () =
-  Parameters.CppExtraArgs.add ("-D JESSIE_NO_PROLOG")
+  Kernel.CppExtraArgs.add ("-D JESSIE_NO_PROLOG")
 *)
 
 let apply_if_dir_exist name f =
@@ -157,7 +157,7 @@ let run () =
     let projname = Jessie_options.ProjectName.get () in
     let projname =
       if projname <> "" then projname else
-	match Parameters.Files.get() with
+	match Kernel.Files.get() with
 	  | [f] ->
 	      (try
 		 Filename.chop_extension f

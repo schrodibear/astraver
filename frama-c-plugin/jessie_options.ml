@@ -82,19 +82,19 @@ let () =
   ForceAdHocNormalization.add_set_hook
     (fun _ b ->
        if b then begin
-	 Parameters.SimplifyCfg.on ();
-	 Parameters.KeepSwitch.on ();
-	 Parameters.Constfold.on ();
-	 Parameters.PreprocessAnnot.on ();
+	 Kernel.SimplifyCfg.on ();
+	 Kernel.KeepSwitch.on ();
+	 Kernel.Constfold.on ();
+	 Kernel.PreprocessAnnot.on ();
 	 Cabs2cil.setDoTransformWhile ();
 	 Cabs2cil.setDoAlternateConditional ();
        end);
   State_dependency_graph.Static.add_dependencies
     ~from:ForceAdHocNormalization.self
-    [ Parameters.SimplifyCfg.self;
-      Parameters.KeepSwitch.self;
-      Parameters.Constfold.self;
-      Parameters.PreprocessAnnot.self ]
+    [ Kernel.SimplifyCfg.self;
+      Kernel.KeepSwitch.self;
+      Kernel.Constfold.self;
+      Kernel.PreprocessAnnot.self ]
 
 let () =
   Analysis.add_set_hook (fun _ b -> ForceAdHocNormalization.set b);
