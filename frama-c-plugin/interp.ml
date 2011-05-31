@@ -1211,6 +1211,8 @@ and pred p =
     | Pseparated(_seps) ->
 	(* TODO *)
 	Extlib.not_yet_implemented "Interp.pred Pseparated"
+    | Pinitialized _ ->
+      Extlib.not_yet_implemented "Interp.pred Pinitialized"
 
   in
   mkexpr enode p.loc
