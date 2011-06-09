@@ -35,7 +35,7 @@
 type prover_id =
     Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | ErgoSelect
   | Cvc3 | SimplifySelect | Z3 | Gappa | GappaSelect
-  | Coq | PVS | VeriT
+  | Coq | PVS | VeriT | Vampire
 
 type lazy_regexp =
   {
@@ -63,6 +63,8 @@ type prover_data =
 val alt_ergo : prover_data
 
 val simplify : prover_data
+
+val vampire: prover_data
 
 val z3 : prover_data
 

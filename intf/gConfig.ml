@@ -113,7 +113,8 @@ let load_default_config () =
 	     match pid with
 	       | Ergo -> Model.ergo
 	       | Simplify -> Model.simplify
-	       | Z3 -> Model.z3SS
+	       | Vampire -> Model.simplify
+               | Z3 -> Model.z3SS
 	       | Cvc3 -> Model.cvc3SS
 	       | Yices -> Model.yicesSS
 	       | Gappa -> Model.gappa

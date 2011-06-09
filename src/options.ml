@@ -139,7 +139,7 @@ let coq_version =
 
 type prover =
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
-  | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Z3
+  | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Z3 | Vampire
   | Ergo | Why | MultiWhy | Why3 | Dispatcher | WhyProject
 
 let prover_ = ref (Coq coq_version)
@@ -377,6 +377,7 @@ let files =
     | ("-mizar" | "--mizar") :: args -> prover_ := Mizar; parse args
     | ("-harvey" | "--harvey") :: args -> prover_ := Harvey; parse args
     | ("-simplify" | "--simplify") :: args -> prover_ := Simplify; parse args
+    | ("-vampire" | "--vampire") :: args -> prover_ := Vampire; parse args
     | ("-isabelle" | "--isabelle") :: args -> prover_ := Isabelle; parse args
     | ("-hol4" | "--hol4") :: args -> prover_ := Hol4; parse args
     | ("-cvcl" | "--cvcl") :: args -> prover_ := CVCLite; parse args

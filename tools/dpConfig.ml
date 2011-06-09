@@ -34,7 +34,7 @@
 type prover_id =
   | Simplify | Harvey | Cvcl | Zenon | Rvsat | Yices | Ergo | ErgoSelect
   | Cvc3 | SimplifySelect | Z3 | Gappa | GappaSelect
-  | Coq | PVS | VeriT
+  | Coq | PVS | VeriT | Vampire
 
 type lazy_regexp =
   {
@@ -109,6 +109,29 @@ let simplify =
     stdin_switch = None;
   }
 
+let vampire =
+  {
+    name = "Vampire";
+    is_interactive = false;
+    version = "";
+    version_switch = "--version";
+    version_regexp = "Vampire \\([0-9.]+\\)";
+    versions_ok = ["0.6"];
+    versions_old = [""];
+    command = "vampire";
+    command_switches = "-input_syntax simplify -input_file ";
+    valid_regexp = Some (make_regexp "\\bRefutation found\\b");
+    (* [VP] Apparently Vampire reacts to SIGXCPU by printing Got SIGXCPU
+       and exiting. Thus, the last option of the regexp should in fact
+       lead to a timeout, but this is not really feasible in the current
+       implementation of Calldp.gen_prover_call.
+     *)
+    undecided_regexp = 
+      make_regexp 
+        "\\bSatisfiable\\b\\|\\bRefutation not found\\b\\|\\bSIGXCPU\\b";
+    stdin_switch = None;
+  }
+
 let z3 =
   {
     name = "Z3";
@@ -124,7 +147,6 @@ let z3 =
     undecided_regexp = make_regexp "\\bunknown\\b\\|\\bsat\\b|\\bFail\\b";
     stdin_switch = Some "-in";
   }
-
 
 let yices =
   {
@@ -229,6 +251,7 @@ let prover_list =
   [
     Ergo, (alt_ergo, ["alt-ergo" ; "ergo"]) ;
     Simplify, (simplify, ["Simplify" ; "simplify"]) ;
+    Vampire, (vampire, ["Vampire"]);
     Z3, (z3, ["z3"]) ;
     Yices, (yices, ["yices"]) ;
     Cvc3, (cvc3, ["cvc3"]) ;
@@ -265,6 +288,7 @@ let load_rc_file () =
        match key with
 	 | "Alt-Ergo" -> load_prover_info alt_ergo key args
 	 | "Simplify" -> load_prover_info simplify key args
+	 | "Vampire" -> load_prover_info vampire key args
 	 | "Z3" -> load_prover_info z3 key args
 	 | "Yices" -> load_prover_info yices key args
 	 | "CVC3" -> load_prover_info cvc3 key args

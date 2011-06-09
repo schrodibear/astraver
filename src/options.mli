@@ -129,7 +129,7 @@ type coq_version = V7 | V8 | V81
 
 type prover =
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
-  | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Z3
+  | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Z3 | Vampire
   | Ergo | Why | MultiWhy | Why3 | Dispatcher | WhyProject
 
 val prover : (* ?ignore_gui:bool  -> *) unit -> prover

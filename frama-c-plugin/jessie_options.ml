@@ -166,7 +166,7 @@ module Atp =
        let module_name = "-jessie-atp"
        let default = "gui"
        let arg_name = ""
-       let help = "use given automated theorem prover, among `alt-ergo', `cvc3', `simplify', `yices' and `z3'. Use `goals' to simply generate goals in Why syntax."
+       let help = "use given automated theorem prover, among `alt-ergo', `cvc3', `simplify', `vampire', `yices' and `z3'. Use `goals' to simply generate goals in Why syntax."
        let kind = `Tuning
      end)
 

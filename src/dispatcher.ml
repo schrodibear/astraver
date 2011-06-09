@@ -75,7 +75,7 @@ let push_elem p e =
   if not pruning then
     assert (match e with Dgoal _ -> false | _ -> true);
   match p with
-  | Simplify -> Simplify.push_decl e
+  | Simplify | Vampire -> Simplify.push_decl e
   | Harvey -> Harvey.push_decl e
   | Cvcl -> Cvcl.push_decl e
   | Zenon -> Zenon.push_decl e
@@ -89,7 +89,7 @@ let push_elem p e =
 let push_obligation p (loc, is_lemma, expl, id, s) =
   let g = Dgoal (loc, is_lemma, expl, id, s) in
   match p with
-  | Simplify -> Simplify.push_decl g
+  | Simplify | Vampire -> Simplify.push_decl g
   | Harvey -> Harvey.push_decl g
   | Cvcl -> Cvcl.push_decl g
   | Zenon -> Zenon.push_decl g
@@ -117,7 +117,7 @@ let output_file ?encoding p (elems,o) =
       Some e -> set_types_encoding e
     | None -> () end;
   begin match p with
-    | Simplify -> Simplify.reset ()
+    | Simplify | Vampire -> Simplify.reset ()
     | Harvey -> Harvey.reset ()
     | Cvcl -> Cvcl.prelude_done := false; Cvcl.reset ()
     | Zenon -> Zenon.prelude_done := false; Zenon.reset ()
@@ -158,6 +158,9 @@ let output_file ?encoding p (elems,o) =
     | Simplify ->
 	let f = Filename.temp_file "gwhy" "_why.sx" in
 	Simplify.output_file ~allowedit:false f; f
+    | Vampire ->
+        let f = Filename.temp_file "gwhy" "_why.vp" in
+        Simplify.output_file ~allowedit:false f; f
     | Harvey ->
 	let f = Filename.temp_file "gwhy" "_why.rv" in
 	Harvey.output_file f; f
@@ -235,6 +238,8 @@ let call_prover ?(debug=false) ?timeout ?encoding ~obligation:o p =
   let r = match p with
     | Simplify ->
 	Calldp.simplify ~debug ?timeout ~filename ()
+    | Vampire ->
+        Calldp.vampire ~debug ?timeout ~filename ()
     | Harvey ->
 	Calldp.harvey ~debug ?timeout ~filename ()
     | Cvcl ->

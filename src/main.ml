@@ -63,7 +63,7 @@ let reset () =
     | Isabelle -> Isabelle.reset ()
     | Hol4 -> Hol4.reset ()
     | SmtLib ->  ()
-    | Harvey | Simplify | Zenon | Z3 | CVCLite  | Gappa 
+    | Harvey | Simplify | Zenon | Z3 | CVCLite  | Gappa | Vampire
     | Ergo | Why | MultiWhy | Why3 | Dispatcher | WhyProject -> ()
 
 let add_loc = function
@@ -114,7 +114,7 @@ let push_decl _vloc d =
 		   Pretty.push_decl ~ergo:false d)
 *)
 	  | Harvey -> Harvey.push_decl
-	  | Simplify -> Simplify.push_decl
+	  | Simplify | Vampire -> Simplify.push_decl
 	  | Zenon -> Zenon.push_decl
 	  | Z3 -> Z3.push_decl
 	  | CVCLite -> Cvcl.push_decl
@@ -164,7 +164,7 @@ let push_parameter id _v tv = match prover () with
   | Coq _ -> 
       if valid then Coq.push_parameter id tv
   | Pvs | HolLight | Isabelle | Hol4 | Mizar
-  | Harvey | Simplify | Zenon | Z3 | SmtLib | Gappa 
+  | Harvey | Simplify | Vampire | Zenon | Z3 | SmtLib | Gappa 
   | CVCLite | Ergo | Why | MultiWhy | Dispatcher | WhyProject | Why3 -> 
       ()
 
@@ -182,6 +182,7 @@ let output is_last fwe =
     | Mizar -> Mizar.output_file fwe    
     | Harvey -> Harvey.output_file fwe
     | Simplify -> Simplify.output_file ~allowedit:true (fwe ^ "_why.sx")
+    | Vampire -> Simplify.output_file ~allowedit:true (fwe ^ "_why.vp")
     | CVCLite -> Cvcl.output_file ~allowedit:true (fwe ^ "_why.cvc")
     | Zenon -> Zenon.output_file ~allowedit:true (fwe ^ "_why.znn")
     | Z3 ->  Z3.output_file fwe
@@ -222,6 +223,7 @@ let encode q =
     | Dispatcher -> Dispatcher.push_decl d      
     | Harvey -> Harvey.push_decl d
     | Simplify -> Simplify.push_decl d
+    | Vampire -> Simplify.push_decl d
     | Zenon -> Zenon.push_decl d
     | Z3 -> Z3.push_decl d
     | CVCLite -> Cvcl.push_decl d
@@ -659,7 +661,7 @@ let load_prelude () =
   try
     List.iter (load_file ~_prelude:true) lib_files_to_load;
     begin match prover () with
-      | Simplify when no_simplify_prelude -> Simplify.reset ()
+      | Simplify | Vampire when no_simplify_prelude -> Simplify.reset ()
       | _ -> ()
     end
   with e ->
@@ -678,7 +680,7 @@ let deal_channel parsef cin =
   if not parse_only then List.iter interp_decl p
 
 let single_file () = match prover () with
-  | Simplify | Harvey | Zenon | Z3 | CVCLite | Gappa | Dispatcher 
+  | Simplify | Vampire | Harvey | Zenon | Z3 | CVCLite | Gappa | Dispatcher 
   | SmtLib | Ergo | Why | MultiWhy | WhyProject | Why3 -> true
   | Coq _ | Pvs | Mizar | Hol4 | HolLight | Isabelle -> false
 

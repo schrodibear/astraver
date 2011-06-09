@@ -188,6 +188,9 @@ let pvs ?(debug=false) ?(timeout=10) ~filename () =
 let simplify ?(debug=false) ?(timeout=10) ~filename () =
   gen_prover_call ~debug ~timeout ~filename DpConfig.simplify
 
+let vampire ?(debug=false) ?(timeout=10) ~filename () =
+  gen_prover_call ~debug ~timeout ~filename DpConfig.vampire
+
 let z3 ?(debug=false) ?(timeout=10) ?filename ?buffers () =
   gen_prover_call ~debug ~timeout ?filename ?buffers DpConfig.z3
 
@@ -237,6 +240,8 @@ let generic_hypotheses_selection  ?(debug=false) ?(timeout=10) ~filename:f p () 
     match p with
       | DpConfig.Simplify ->
 	  "simplify", DpConfig.simplify, (String.sub f  0 last_dot_index) ^ "_why.sx"
+      | DpConfig.Vampire ->
+        "vampire", DpConfig.vampire, (String.sub f 0 last_dot_index) ^ "_why.vp"
       | DpConfig.Gappa ->
 	  "gappa", DpConfig.gappa, (String.sub f  0 last_dot_index) ^ "_why_po_1.gappa"
       | _ -> assert false (* TODO *)

@@ -1,4 +1,5 @@
 
+  o [Why] added support for Vampire (based on simplify output)
   o [Why] option -default-locs
   o [Krakatoa] fixed a problem with scope of labels
   o [Krakatoa] fixed support for constant strings

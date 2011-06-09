@@ -43,6 +43,7 @@ let add ~file ~f =
 *)
 
 let simplify fmt f = fprintf fmt "simplify/%s_why.sx" f
+let vampire fmt f = fprintf fmt "vampire/%s_why.vp" f
 let coq_v fmt f = fprintf fmt "coq/%s_why.v" f
 let coq_vo fmt f = fprintf fmt "coq/%s_why.vo" f
 let pvs fmt f = fprintf fmt "pvs/%s_why.pvs" f
@@ -80,7 +81,7 @@ let generic full f targets =
        out "@\n@\n";
        out "COQDEP = coqdep@\n@\n";
 
-       out ".PHONY: all coq pvs simplify cvcl harvey smtlib zenon@\n@\n";
+       out ".PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon@\n@\n";
        out "all: %a@\n@\n"
 	 (print_files simplify) targets;
 
@@ -136,6 +137,12 @@ let generic full f targets =
        out "simplify/%%_why.sx: WHYOPT=-simplify -dir simplify@\n";
        out "simplify/%%_why.sx: why/%%.why@\n";
        out "\t@@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
+
+       out "vampire: %a@\n" (print_files vampire) targets;
+       out "\t@@echo 'Running Vampire on proof obligations' && ($(DP) $^)@\n@\n";
+       out "vampire/%%_why.vp: WHYOPT=-vampire -dir vampire@\n";
+       out "vampire/%%_why.vp: why/%%.why@\n";
+       out "\t@@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why@\n@\n";
 
        out "alt-ergo ergo: %a@\n" (print_files ergo) targets;
        out "\t@@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)@\n@\n";

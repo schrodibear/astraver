@@ -74,7 +74,7 @@ let spec =
     "-simple", Arg.Set simple, "Print only Valid, I don't know, Invalid, Fail, Timeout";
     "-split", Arg.Set split, "Create a directory wich contains all the goal splitted in different file";
     "-prover", Arg.Symbol (
-      ["Alt-Ergo";"CVC3";"CVCL";"Z3";"Yices";"Simplify";"VeriT"],(fun s -> prover := Some s)), "Select the prover to use"
+      ["Alt-Ergo";"CVC3";"CVCL";"Z3";"Yices";"Simplify";"Vampire"; "VeriT"],(fun s -> prover := Some s)), "Select the prover to use"
   ]
 
 let () =
@@ -82,7 +82,7 @@ let () =
   if not (Filename.is_relative d) then
     Calldp.cpulimit := Filename.concat d "why-cpulimit"
 
-let usage = "usage: why-dp [options] [files.{why,rv,znn,cvc,cvc.all,sx,sx.all,smt,smt.all}]"
+let usage = "usage: why-dp [options] [files.{why,rv,znn,cvc,cvc.all,sx,sx.all,smt,smt.all,vp,vp.all}]"
 let () =
   Arg.parse spec
     (fun s ->
@@ -188,6 +188,8 @@ let call_cvcl f b =
   wrapper (Calldp.cvcl ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
 let call_simplify f _ =
   wrapper (Calldp.simplify ~debug ~timeout:!timeout ~filename:f ())
+let call_vampire f _ =
+  wrapper (Calldp.vampire ~debug ~timeout:!timeout ~filename:f ())
 let call_yices f b =
   wrapper (Calldp.yices ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
 let call_cvc3 f b =
@@ -236,6 +238,8 @@ let dispatch_prover_by_name cin = function
   | "Z3" -> Smtlib_split.iter call_z3 cin
   | "Yices" -> Smtlib_split.iter call_yices cin
   | "Simplify" -> Simplify_split.iter ~debug call_simplify cin
+    (* Vampire uses Simplify's syntax. *)
+  | "Vampire" -> Simplify_split.iter ~debug call_vampire cin
   | "VeriT" -> Smtlib_split.iter call_verit cin
   | _ -> assert false
 
@@ -260,6 +264,11 @@ let dispatch_prover_by_extension dir_name f =
      Filename.check_suffix f ".simplify"
   then
     Simplify_split.iter ~debug (call_split call_simplify dir_name ".sx") cin
+  else
+  if Filename.check_suffix f ".vp" ||
+     Filename.check_suffix f ".vp.all"
+  then
+    Simplify_split.iter ~debug (call_split call_vampire dir_name ".vp") cin
   else
   if Filename.check_suffix f ".znn" || Filename.check_suffix f ".znn.all" then
     Zenon_split.iter ~debug (call_split call_zenon dir_name ".znn") f (* TODO: Zenon_split *)

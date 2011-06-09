@@ -139,6 +139,16 @@ let simplify_rec = {
   pr_enc = Recursive;
   }
 
+let vampire = {
+  pr_id = DpConfig.Vampire;
+  pr_info = DpConfig.vampire;
+  pr_result = cols#add int;
+  pr_icon = cols#add GtkStock.conv;
+  pr_image = cols#add Gobject.Data.gobject;
+  pr_viewcol = None;
+  pr_enc = NoEncoding;
+  }
+
 let gappa = {
   pr_id = DpConfig.Gappa;
   pr_info = DpConfig.gappa;
@@ -335,6 +345,7 @@ let all_known_provers = [
   (*ergoSS;*)
   simplify;
   simplify_select;
+  vampire;
   z3SS ;
   yicesSS;
   cvc3SS;

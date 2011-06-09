@@ -54,6 +54,9 @@ val gappa : ?debug:bool -> ?timeout:int -> filename:string -> unit ->
 val simplify : ?debug:bool -> ?timeout:int -> filename:string -> unit ->
   prover_result
 
+val vampire : ?debug:bool -> ?timeout:int -> filename:string -> unit ->
+  prover_result
+
 val harvey :
   ?debug:bool -> ?timeout:int -> filename:string -> unit ->
   prover_result
