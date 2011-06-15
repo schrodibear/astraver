@@ -566,7 +566,7 @@ let rec const ~in_code pos = function
       JCPEconst(JCCinteger s)
 
   | CInt64(i,_ik,None) ->
-      JCPEconst(JCCinteger(Int64.to_string i))
+      JCPEconst(JCCinteger(My_bigint.to_string i))
 
   | CStr _ | CWStr _ -> assert false (* Should have been rewritten *)
 
@@ -597,7 +597,8 @@ and const_of_expr ~in_code pos e =
 
 and boolean_const = function
   | CInt64(i,_ik,_text) ->
-      if i = Int64.zero then JCCboolean false else JCCboolean true
+    if My_bigint.equal i My_bigint.zero then JCCboolean false
+    else JCCboolean true
 
   | CStr _ | CWStr _ -> JCCboolean true
 
@@ -722,9 +723,10 @@ and terms t =
 
     | TBinOp(Shiftrt,t1,t2) ->
         begin match possible_value_of_integral_term t2 with
-          | Some i when i >= 0L && i < 63L ->
+          | Some i when My_bigint.ge i My_bigint.zero 
+              && My_bigint.lt i (My_bigint.of_int 63)  ->
               (* Right shift by constant is division by constant *)
-              let pow = constant_term t2.term_loc (power_of_two i) in
+              let pow = constant_term t2.term_loc (My_bigint.two_power i) in
               List.map (fun x ->JCPEbinary(x,`Bdiv,term pow)) (terms t1)
           | _ ->
               let op = match t1.term_type with
@@ -739,9 +741,10 @@ and terms t =
 
     | TBinOp(Shiftlt as op,t1,t2) ->
         begin match possible_value_of_integral_term t2 with
-          | Some i when i >= 0L && i < 63L ->
+          | Some i when My_bigint.ge i My_bigint.zero && 
+              My_bigint.lt i (My_bigint.of_int 63) ->
               (* Left shift by constant is multiplication by constant *)
-              let pow = constant_term t2.term_loc (power_of_two i) in
+              let pow = constant_term t2.term_loc (My_bigint.two_power i) in
               List.map (fun x -> JCPEbinary(x,`Bmul,term pow)) (terms t1)
           | _ ->
               product (fun x y -> JCPEbinary(x,binop op,y))
@@ -783,7 +786,8 @@ and terms t =
           | Tnull ->
               [JCPEconst JCCnull]
           | TConst c
-              when is_integral_const c && value_of_integral_const c = Int64.zero ->
+              when is_integral_const c && 
+                My_bigint.equal (value_of_integral_const c) My_bigint.zero ->
               [JCPEconst JCCnull]
           | _ ->
 (*               if isLogicIntegralType t.term_type then *)
@@ -1543,7 +1547,7 @@ let rec expr e =
           match e.enode with
           | Const c
               when is_integral_const c
-                && value_of_integral_const c = Int64.zero ->
+                && My_bigint.equal (value_of_integral_const c) My_bigint.zero ->
               JCPEconst JCCnull
           | _ ->
               let ety = typeOf e in
@@ -1682,9 +1686,10 @@ and integral_expr e =
 
       | BinOp(Shiftrt,e1,e2,_ty) ->
           let e = match possible_value_of_integral_expr e2 with
-            | Some i when i >= 0L && i < 63L ->
+            | Some i when My_bigint.ge i My_bigint.zero && 
+                My_bigint.lt i (My_bigint.of_int 63) ->
                 (* Right shift by constant is division by constant *)
-                let pow = constant_expr (power_of_two i) in
+                let pow = constant_expr (My_bigint.two_power i) in
                 locate (mkexpr (JCPEbinary(expr e1,`Bdiv,expr pow)) e.eloc)
             | _ ->
                 let op =
@@ -1697,9 +1702,10 @@ and integral_expr e =
 
       | BinOp(Shiftlt as op,e1,e2,_ty) ->
           let e = match possible_value_of_integral_expr e2 with
-            | Some i when i >= 0L && i < 63L ->
+            | Some i when My_bigint.ge i My_bigint.zero && 
+                My_bigint.lt i (My_bigint.of_int 63) ->
                 (* Left shift by constant is multiplication by constant *)
-                let pow = constant_expr (power_of_two i) in
+                let pow = constant_expr (My_bigint.two_power i) in
                 locate (mkexpr (JCPEbinary(expr e1,`Bmul,expr pow)) e.eloc)
             | _ ->
                 locate (mkexpr (JCPEbinary(expr e1,binop op,expr e2)) e.eloc)
@@ -1830,7 +1836,7 @@ let rec instruction = function
       let enode =
         if is_malloc_function v || is_realloc_function v then
           let lvtyp = pointed_type (typeOfLval lv) in
-          let lvsiz = (bits_sizeof lvtyp) lsr 3 in
+          let lvsiz = My_bigint.of_int64 ((bits_sizeof lvtyp) lsr 3) in
           let arg =
             if is_malloc_function v then as_singleton eargs
             else (* realloc *)
@@ -1841,15 +1847,18 @@ let rec instruction = function
           let ty,arg = match arg.enode with
             | Info _ -> assert false
             | Const c when is_integral_const c ->
-                let allocsiz = (value_of_integral_expr arg) / lvsiz in
-                let siznode = JCPEconst(JCCinteger(Int64.to_string allocsiz)) in
+                let allocsiz = My_bigint.div (value_of_integral_expr arg) lvsiz
+                in
+                let siznode = 
+                  JCPEconst(JCCinteger(My_bigint.to_string allocsiz)) 
+                in
                 lvtyp, mkexpr siznode pos
             | BinOp(Mult,({enode = Const c} as arg),nelem,_ty)
             | BinOp(Mult,nelem,({enode = Const c} as arg),_ty)
                 when is_integral_const c ->
-                let factor = (value_of_integral_expr arg) / lvsiz in
+                let factor = My_bigint.div (value_of_integral_expr arg) lvsiz in
                 let siz =
-                  if factor = Int64.one then expr nelem
+                  if My_bigint.equal factor My_bigint.one then expr nelem
                   else
                     let factor = constant_expr factor in
                     expr
@@ -1857,7 +1866,7 @@ let rec instruction = function
                 in
                 lvtyp, siz
             | _ ->
-                if lvsiz = Int64.one then lvtyp, expr arg
+                if My_bigint.equal lvsiz My_bigint.one then lvtyp, expr arg
                 else
                   let esiz = constant_expr ~loc lvsiz in
                   lvtyp, expr (new_exp ~loc (BinOp(Div,arg,esiz,typeOf arg)))
@@ -1878,10 +1887,10 @@ let rec instruction = function
             | Info _ -> assert false
             | Const c when is_integral_const c ->
                 let lvtyp = pointed_type (typeOfLval lv) in
-                let lvsiz = (bits_sizeof lvtyp) lsr 3 in
-                let factor = (value_of_integral_expr arg) / lvsiz in
+                let lvsiz = My_bigint.of_int64 ((bits_sizeof lvtyp) lsr 3) in
+                let factor = My_bigint.div (value_of_integral_expr arg) lvsiz in
                 let siz =
-                  if factor = Int64.one then
+                  if My_bigint.equal factor My_bigint.one then
                     expr nelem
                   else
                     let factor = constant_expr ~loc factor in
@@ -1890,7 +1899,7 @@ let rec instruction = function
                 lvtyp, siz
             | _ ->
                 let lvtyp = pointed_type (typeOfLval lv) in
-                let lvsiz = (bits_sizeof lvtyp) lsr 3 in
+                let lvsiz = My_bigint.of_int64 ((bits_sizeof lvtyp) lsr 3) in
                 let esiz = constant_expr ~loc lvsiz in
                 lvtyp,
                 expr
@@ -2495,14 +2504,18 @@ let global vardefs g =
         in
         let emin =
           List.fold_left (fun acc enum ->
-                            if acc < enum then acc else enum) (List.hd enums) enums
+                            if My_bigint.lt acc enum then acc else enum) 
+            (List.hd enums)
+            enums
         in
-        let min = Num.num_of_string (Int64.to_string emin) in
+        let min = Num.num_of_string (My_bigint.to_string emin) in
         let emax =
           List.fold_left (fun acc enum ->
-                            if acc > enum then acc else enum) (List.hd enums) enums
+                            if My_bigint.gt acc enum then acc else enum) 
+            (List.hd enums) 
+            enums
         in
-        let max = Num.num_of_string (Int64.to_string emax) in
+        let max = Num.num_of_string (My_bigint.to_string emax) in
         [JCDenum_type(enuminfo.ename,min,max)]
 
     | GEnumTagDecl _ -> [] (* No enumeration declaration in Jessie *)
@@ -2613,8 +2626,8 @@ let global vardefs g =
   List.map (fun dnode -> mkdecl dnode pos) dnodes
 
 let integral_type name ty bitsize =
-  let min = Num.num_of_big_int (min_value_of_integral_type ~bitsize ty) in
-  let max = Num.num_of_big_int (max_value_of_integral_type ~bitsize ty) in
+  let min = My_bigint.to_num (min_value_of_integral_type ~bitsize ty) in
+  let max = My_bigint.to_num (max_value_of_integral_type ~bitsize ty) in
   mkdecl (JCDenum_type(name,min,max)) Loc.dummy_position
 
 (* let all_integral_kinds = *)

@@ -155,16 +155,16 @@ let min_value_of_integral_type ?bitsize ty =
       match bitsize with Some siz -> siz | None -> size_in_bytes * 8
     in
     if signed then
-      Big_int.minus_big_int
-	(Big_int.power_int_positive_int 2
+      My_bigint.neg
+	(My_bigint.power_int_positive_int 2
 	  (numbits - 1))
-    else Big_int.zero_big_int
+    else My_bigint.zero
   in
   match unrollType ty with
-    | TInt(IBool,_attr) -> Big_int.zero_big_int
+    | TInt(IBool,_attr) -> My_bigint.zero
     | TInt(ik,_attr) ->
 	min_of (isSigned ik) (size_in_bytes ik)
-    | TEnum ({ ekind = IBool},_) -> Big_int.zero_big_int
+    | TEnum ({ ekind = IBool},_) -> My_bigint.zero
     | TEnum ({ekind=ik},_) ->
 	min_of (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
@@ -175,19 +175,19 @@ let max_value_of_integral_type ?bitsize ty =
       match bitsize with Some siz -> siz | None -> size_in_bytes * 8
     in
     if signed then
-      Big_int.pred_big_int
-	(Big_int.power_int_positive_int 2
+      My_bigint.pred
+	(My_bigint.power_int_positive_int 2
 	  (numbits - 1))
     else
-      Big_int.pred_big_int
-	(Big_int.power_int_positive_int 2
+      My_bigint.pred
+	(My_bigint.power_int_positive_int 2
 	  numbits)
   in
   match unrollType ty with
-    | TInt(IBool,_attr) -> Big_int.unit_big_int
+    | TInt(IBool,_attr) -> My_bigint.one
     | TInt(ik,_attr) ->
 	max_of (isSigned ik) (size_in_bytes ik)
-    | TEnum ({ekind=IBool},_) -> Big_int.unit_big_int
+    | TEnum ({ekind=IBool},_) -> My_bigint.one
     | TEnum ({ekind=ik},_) -> max_of (isSigned ik) (size_in_bytes ik)
     | _ -> assert false
 
@@ -237,7 +237,7 @@ let mkTRef elemty _msg =
 (*
   Format.eprintf "mkTRef, coming from %s@." msg;
 *)
-  let size = constant_expr 1L and attr = [] in
+  let size = constant_expr My_bigint.one and attr = [] in
   (* Do the same as in [mkTRefArray] *)
   let siz = expToAttrParam size in
   let attr = addAttribute (Attr(arraylen_attr_name,[siz])) attr in
@@ -1081,7 +1081,11 @@ let rec lift_toffset ty off =
         let subty = direct_element_type ty in
         if isArrayType subty then
           let siz = array_size subty in
-          TIndex(change_idx idx1 (constant_term Cil_datatype.Location.unknown 0L) siz, TNoOffset)
+          TIndex(change_idx
+                   idx1 
+                   (constant_term Cil_datatype.Location.unknown My_bigint.zero) 
+                   siz,
+                 TNoOffset)
         else off
     | TIndex _ | TField _ | TNoOffset -> off
 
@@ -1139,7 +1143,9 @@ let mkalloc_statement v ty loc = mkStmt (Instr(mkalloc v ty loc))
 
 let mkalloc_array v ty num loc =
   let callee = new_exp ~loc (Lval(Var(malloc_function ()),NoOffset)) in
-  let arg = constant_expr (Int64.mul num (Int64.of_int (sizeOf_int ty))) in
+  let arg = constant_expr 
+    (My_bigint.of_int64 (Int64.mul num (Int64.of_int (sizeOf_int ty))))
+  in
   Call(Some(Var v,NoOffset),callee,[arg],loc)
 
 let mkalloc_array_statement v ty num loc =

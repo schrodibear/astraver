@@ -84,10 +84,10 @@ val check_types : Cil_types.file -> unit
 val integral_type_size_in_bits : Cil_types.typ -> int
 
 val max_value_of_integral_type :
-  ?bitsize:int -> Cil_types.typ -> Big_int.big_int
+  ?bitsize:int -> Cil_types.typ -> My_bigint.t
 
 val min_value_of_integral_type :
-  ?bitsize:int -> Cil_types.typ -> Big_int.big_int
+  ?bitsize:int -> Cil_types.typ -> My_bigint.t
 
 val all_integral_types : (string, Cil_types.typ * int) Hashtbl.t
 
@@ -217,4 +217,4 @@ val visit_and_push_statements :
 
 val print_to_stdout : Cil_types.file -> unit
 
-val constant_expr : ?loc:Cil_datatype.Location.t -> int64 -> Cil_types.exp
+val constant_expr : ?loc:Cil_datatype.Location.t -> My_bigint.t -> Cil_types.exp

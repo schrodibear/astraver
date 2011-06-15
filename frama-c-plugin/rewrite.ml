@@ -366,7 +366,7 @@ class replaceStringConstants =
       else
 	mkterm (Tapp(strlen,[],[tv])) strlen_type v.vdecl
     in
-    let size = constant_term v.vdecl (Int64.of_int size) in
+    let size = constant_term v.vdecl (My_bigint.of_int size) in
     let psize = Prel(Req,strsize,size) in
     let p = Pand(predicate v.vdecl pstring,predicate v.vdecl psize) in
     let globinv =
@@ -471,7 +471,7 @@ class rewritePointerCompare =
           (BinOp(op,
                  new_exp ~loc:e.eloc
                    (BinOp(MinusPP,e1,e2,theMachine.ptrdiffType)),
-	         constant_expr 0L,ty))
+	         constant_expr My_bigint.zero,ty))
     | _ -> e
   in
 object
@@ -497,7 +497,7 @@ object
 	  term_loc = loc;
 	  term_name = [];
 	} in
-	let p = Prel(rel,tsub,constant_term loc 0L) in
+	let p = Prel(rel,tsub,constant_term loc My_bigint.zero) in
 	ChangeDoChildrenPost (p, fun x -> x)
     | _ -> DoChildren
 
@@ -770,7 +770,7 @@ class rewriteCursorPointers
 	              new_exp ~loc:e.eloc
                         (UnOp(Neg,off2,theMachine.ptrdiffType))
                   | None,None ->
-		      constant_expr 0L
+		      constant_expr My_bigint.zero
               else e
 	with Not_found -> e end
     | _ -> e
@@ -828,7 +828,7 @@ object
 	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
 	  let initst =
 	    mkStmt(Instr(Set((Var voff,NoOffset),
-			     constant_expr 0L,
+			     constant_expr My_bigint.zero,
 			     CurrentLoc.get ())))
 	  in
 	  add_pending_statement ~beginning:true initst
@@ -877,7 +877,7 @@ object
 		  with Not_found -> e end
 	      | Some(v2,None) ->
 		  begin try expr_offset v2
-		  with Not_found -> constant_expr 0L end
+		  with Not_found -> constant_expr My_bigint.zero end
 	    in
 	    ChangeDoChildrenPost
 	      ([Set((Var voff,NoOffset),eoff,loc)], fun x -> x)
@@ -1108,7 +1108,7 @@ object
 	  let voff = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v in
 	  let initst =
 	    mkStmt(Instr(Set((Var voff,NoOffset),
-			     constant_expr 0L,
+			     constant_expr My_bigint.zero,
 			     CurrentLoc.get ())))
 	  in
 	  add_pending_statement ~beginning:true initst
@@ -1141,7 +1141,7 @@ object
 		begin try
 		  let voff2 = Cil_datatype.Varinfo.Hashtbl.find cursor_to_offset v2 in
 		  new_exp ~loc (Lval(Var voff2,NoOffset))
-		with Not_found -> constant_expr 0L end
+		with Not_found -> constant_expr My_bigint.zero end
 	  in
 	  ChangeDoChildrenPost
 	    ([Set((Var voff,NoOffset),eoff,loc)], fun x -> x)
@@ -1210,7 +1210,7 @@ class annotateCodeStrlen(strlen : logic_info) =
 	begin match destruct_pointer e with
 	  | None -> None
 	  | Some(v,Some off) -> Some(v,off)
-	  | Some(v,None) -> Some(v,constant_expr 0L)
+	  | Some(v,None) -> Some(v,constant_expr My_bigint.zero)
 	end
     | Var v, off ->
 	if isCharPtrType v.vtype then
@@ -1443,10 +1443,12 @@ object(self)
 	(* Check that signed shift has a positive right operand *)
 	if isSignedInteger ty1 then
 	  begin match possible_value_of_integral_expr e2' with
-	    | Some i when i >= 0L -> ()
+	    | Some i when My_bigint.ge i My_bigint.zero -> ()
 	    | _ ->
 		let check =
-                  new_exp ~loc:e.eloc (BinOp(Ge,e2',constant_expr 0L,intType))
+                  new_exp ~loc:e.eloc (BinOp(Ge,e2',
+                                             constant_expr My_bigint.zero,
+                                             intType))
                 in
 		let check =
                   !Db.Properties.Interp.force_exp_to_predicate check
@@ -1459,9 +1461,9 @@ object(self)
 	  end
 	else ();
 	(* Check that shift has not too big a right operand. *)
-	let max_right = Int64.of_int (integral_type_size_in_bits ty1) in
+	let max_right = My_bigint.of_int (integral_type_size_in_bits ty1) in
 	begin match possible_value_of_integral_expr e2' with
-	  | Some i when i < max_right -> ()
+	  | Some i when My_bigint.lt i max_right -> ()
 	  | _ ->
 	      let max_right = constant_expr max_right in
 	      let check =
@@ -1478,11 +1480,11 @@ object(self)
 	(* Check that signed left shift has a positive left operand *)
 	if is_left_shift && isSignedInteger ty1 then
 	  begin match possible_value_of_integral_expr e1' with
-	    | Some i when i >= 0L -> ()
+	    | Some i when My_bigint.ge i My_bigint.zero -> ()
 	    | _ ->
 		let check =
                   new_exp ~loc:e.eloc
-                    (BinOp(Ge,e1',constant_expr 0L,intType)) in
+                    (BinOp(Ge,e1',constant_expr My_bigint.zero,intType)) in
 		let check =
 		  !Db.Properties.Interp.force_exp_to_predicate check
 		in
@@ -1498,16 +1500,12 @@ object(self)
 	 * operand.
 	 *)
 	if is_left_shift && isSignedInteger ty1 then
-	  let max_int = Int64.of_string
-	    (Big_int.string_of_big_int (max_value_of_integral_type ty1))
-	  in
+	  let max_int = max_value_of_integral_type ty1 in
 	  begin match possible_value_of_integral_expr e2' with
-	    | Some i when i >= 0L && i < 64L ->
-		(* Only use optimization where [Int64.shift_right] is
-		 * defined in OCaml
-		 *)
-		let i = Int64.to_int i in
-		let max_left = constant_expr (Int64.shift_right max_int i) in
+	    | Some i when My_bigint.ge i My_bigint.zero && 
+                My_bigint.lt i (My_bigint.of_int 64) ->
+		let max_left = constant_expr (My_bigint.shift_right max_int i)
+                in
 		let check =
                   new_exp ~loc:e.eloc (BinOp(Le,e1',max_left,intType))
                 in
