@@ -1,5 +1,5 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0424.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0424.c"
-bts0424.c:35:[kernel] user error: invalid implicit conversion from 'int [1024 * 5]' to 'int *' in annotation.
+bts0424.c:35:[kernel] user error: In ACSL, there is no implicit conversion between a C array and a pointer. Either introduce an explicit cast or take the address of the first element of a.buf in annotation.
 [kernel] user error: skipping file "bts0424.c" that has errors.
 [kernel] Frama-C aborted because of invalid user input.
