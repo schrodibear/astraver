@@ -125,7 +125,11 @@ let prelude = [
           Env.empty_scheme (Forall (false, x, x, t, pat, peq)))))
      htypes)
   @
-  (** \forall x: U .  T2u(s2T(sort(T, x))) = x  **)
+  (** \forall x: U .  T2u(s2T(sort(T, x))) = x from CADE'08 paper
+      but contradiction with one finite type and one infinite type protected.
+      So use \forall x: U .  sort(T,T2u(s2T(sort(T, x)))) = sort(T,x)
+      (see perhaps FROCOS'11)
+  **)
   (List.map (fun t -> 
 	       (Daxiom (loc, (c2u t)^"_inv_"^(s2c t),
 	let x = Ident.create "x" in 
@@ -133,7 +137,9 @@ let prelude = [
 	let sort_t_x = Tapp (Ident.create sort, [t_term; Tvar x], []) in
 	let s2t_sort_t_x = Tapp (Ident.create (s2c t), [sort_t_x], []) in 
 	let lhs = Tapp (Ident.create (c2u t), [s2t_sort_t_x], []) in
-	let peq = Papp (Ident.t_eq,[lhs;Tvar x], []) in
+	let lhs' = Tapp (Ident.create sort, [t_term; lhs], []) in
+	let rhs = Tapp (Ident.create sort, [t_term; Tvar x], []) in
+	let peq = Papp (Ident.t_eq,[lhs';rhs], []) in
           Env.empty_scheme (Forall (false, x, x, ut, [[TPat lhs]], peq)))))
      htypes)
 
