@@ -50,24 +50,66 @@ let iter = Encoding.iter
 let is_why3_keyword =
   let ht = Hashtbl.create 43 in
   List.iter (fun kw -> Hashtbl.add ht kw ())
-    ["clone";
-     "epsilon";
-     "export";
-     "import";
-     "lemma";
-     "meta";
-     "namespace";
-     "theory";
-     "use";
-     "abstract";
-     "any";
-     "assume";
-     "downto";
-     "label";
-     "model";
-     "module";
-     "mutable";
-     "to";
+    [
+        "as";
+        "axiom";
+        "clone";
+        "else";
+        "end";
+        "epsilon";
+        "exists";
+        "export";
+        "false";
+        "forall";
+        "function";
+        "goal";
+        "if";
+        "import";
+        "in";
+        "inductive";
+        "lemma";
+        "let";
+        "match";
+        "meta";
+        "namespace";
+        "not";
+        "predicate";
+        "prop";
+        "then";
+        "theory";
+        "true";
+        "type";
+        "use";
+        "with";
+        "abstract";
+        "absurd";
+        "any";
+        "assert";
+        "assume";
+        "begin";
+        "check";
+        "do";
+        "done";
+        "downto";
+        "exception";
+        "for";
+        "fun";
+        "invariant";
+        "label";
+        "loop";
+        "model";
+        "module";
+        "mutable";
+        "raise";
+        "raises";
+        "reads";
+        "rec";
+        "to";
+        "try";
+        "val";
+        "variant";
+        "while";
+        "writes";
     ];
   Hashtbl.mem ht
 
@@ -258,12 +300,12 @@ let rec predicate fmt = function
       fprintf fmt "(@[if %a = Bool.True then@ %a else@ %a@])"
 	term a predicate b predicate c
   | Pand (_, _, a, b) ->
-      fprintf fmt "(@[%a and@ %a@])" predicate a predicate b
+      fprintf fmt "(@[%a /\\@ %a@])" predicate a predicate b
   | Forallb (_, _ptrue, _pfalse) -> assert false (* TODO What is it? *)
       (* fprintf fmt "(@[forallb(%a,@ %a)@])"  *)
       (*   predicate ptrue predicate pfalse *)
   | Por (a, b) ->
-      fprintf fmt "(@[%a or@ %a@])" predicate a predicate b
+      fprintf fmt "(@[%a \\/@ %a@])" predicate a predicate b
   | Pnot a ->
       fprintf fmt "(not %a)" predicate a
   | Forall (_,id,n,v,tl,p) ->
@@ -352,6 +394,10 @@ let explanation fmt e =
   let (f,l,b,e) = e.vc_loc in
   fprintf fmt "#\"%s\" %d %d %d#" f l (max b 0) (max e 0)
 
+let logic_kind fmt = function
+  | Function _ -> fprintf fmt "function"
+  | Predicate _ -> fprintf fmt "predicate"
+
 let decl fmt d =
   match d with
   | Dtype (_, id, pl) ->
@@ -361,10 +407,10 @@ let decl fmt d =
       fprintf fmt "@[type %a@]" (print_list andsep alg_type_single) ls
   | Dlogic (_, id, lt) ->
       let lt = specialize lt in
-      fprintf fmt "@[logic %a %a@]" ident id logic_type lt
+      fprintf fmt "@[%a %a %a@]" logic_kind lt ident id logic_type lt
   | Dpredicate_def (_, id, def) ->
       let bl,p = specialize def in
-      fprintf fmt "@[<hov 2>logic %a %a =@ %a@]" ident id
+      fprintf fmt "@[<hov 2>predicate %a %a =@ %a@]" ident id
 	(print_list space logic_binder) bl predicate p
   | Dinductive_def (_, id, indcases) ->
       let bl,l = specialize indcases in
@@ -384,7 +430,7 @@ let decl fmt d =
       end
   | Dfunction_def (_, id, def) ->
       let bl,pt,t = specialize def in
-      fprintf fmt "@[<hov 2>logic %a %a : %a =@ %a@]" ident id
+      fprintf fmt "@[<hov 2>function %a %a : %a =@ %a@]" ident id
 	(print_list space logic_binder) bl pure_type pt term t
   | Daxiom (_, id, p) ->
       let p = specialize p in
