@@ -446,6 +446,7 @@ object
           end
       | Dtype _ | Dlemma _ | Dinvariant _ | Dvolatile _  -> DoChildren
       | Daxiomatic _ -> DoChildren (* FIXME: correct ? *)
+      | Dmodel_annot _ -> DoChildren (* FIXME: correct ? *)
     in annot
 
   method vterm_lval tlv =

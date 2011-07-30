@@ -176,6 +176,7 @@ let rename_entities file =
                   )
 	 | Dlemma(name,is_axiom,labels,poly,property,loc) ->
 	     Dlemma(unique_logic_name name,is_axiom,labels,poly,property,loc)
+         | Dmodel_annot _ -> annot
 	 | Dtype_annot _ | Dinvariant _ ->
 	     (* Useful ? harmless ?
 		info.l_name <- unique_logic_name info.l_name;

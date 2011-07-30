@@ -201,7 +201,7 @@ intP[..] G34;
 
 unit F6()
 behavior default:
-  ensures (C_99 : true);
+  ensures (C_103 : true);
 {  
    (var float V9);
    
@@ -233,56 +233,58 @@ behavior default:
    
    (var int32 V23);
    
-   {  (C_20 : (V18 = (C_19 : Frama_C_interval(2, 2000))));
-      (C_22 : (G15 = (C_21 : Frama_C_interval(0, 11))));
-      (C_23 : (ptr_bas_loc = G13));
-      (C_24 : (G33 = ptr_bas_loc));
+   {  (C_22 : (let __cil_tmp = (C_19 : Frama_C_interval(2, 2000))
+              in (C_21 : (V18 = (C_20 : (__cil_tmp :> int32))))));
+      (C_26 : (let __cil_tmp_18 = (C_23 : Frama_C_interval(0, 11))
+              in (C_25 : (G15 = (C_24 : (__cil_tmp_18 :> int32))))));
+      (C_27 : (ptr_bas_loc = G13));
+      (C_28 : (G33 = ptr_bas_loc));
       (if (V18 >= 2) then 
-      {  (C_34 : (G4 = (C_33 : ((C_32 : ((C_31 : ((C_30 : (V18 /
-                                                            (C_29 : (
-                                                            (C_28 : (G5 + 1)) :> int32)))) :> int32)) +
+      {  (C_38 : (G4 = (C_37 : ((C_36 : ((C_35 : ((C_34 : (V18 /
+                                                            (C_33 : (
+                                                            (C_32 : (G5 + 1)) :> int32)))) :> int32)) +
                                           1)) :> int32))));
-         (C_36 : (V9 = (C_35 : ((0.0 :> double) :> float))));
-         (C_40 : (V10 = (C_39 : ((C_38 : ((511.5 :> double) *
-                                           (C_37 : (G20 :> double)))) :> float))));
-         (C_44 : (V11 = (C_43 : ((C_42 : ((511.5 :> double) *
+         (C_40 : (V9 = (C_39 : ((0.0 :> double) :> float))));
+         (C_44 : (V10 = (C_43 : ((C_42 : ((511.5 :> double) *
                                            (C_41 : (G20 :> double)))) :> float))));
-         (C_46 : (V12 = (C_45 : ((0.0 :> double) :> float))));
-         (C_48 : (V13 = (C_47 : ((0.0 :> double) :> float))));
-         (C_50 : (V14 = (C_49 : ((0.0 :> double) :> float))));
-         (C_52 : (V15 = (C_51 : ((0.0 :> double) :> float))));
-         (C_54 : (V20 = (C_53 : F2(G15))));
-         (C_56 : (G18 = (C_55 : (G8 + V20).floatM)));
-         (C_58 : (V21 = (C_57 : F3(G15))));
-         (C_62 : (G16 = (C_61 : ((C_60 : (G9 + V21).floatM) /
-                                  (C_59 : (G1 :> float))))));
-         (C_64 : (V22 = (C_63 : F3(G15))));
-         (C_66 : (G17 = (C_65 : (G10 + V22).floatM)));
-         (C_68 : (V23 = (C_67 : F4(G15))));
-         (C_70 : (G19 = (C_69 : (G11 + V23).floatM)));
-         (C_75 : (G21 = (C_74 : ((C_73 : ((1.0 :> double) /
-                                           (C_72 : ((C_71 : (G16 :> double)) +
+         (C_48 : (V11 = (C_47 : ((C_46 : ((511.5 :> double) *
+                                           (C_45 : (G20 :> double)))) :> float))));
+         (C_50 : (V12 = (C_49 : ((0.0 :> double) :> float))));
+         (C_52 : (V13 = (C_51 : ((0.0 :> double) :> float))));
+         (C_54 : (V14 = (C_53 : ((0.0 :> double) :> float))));
+         (C_56 : (V15 = (C_55 : ((0.0 :> double) :> float))));
+         (C_58 : (V20 = (C_57 : F2(G15))));
+         (C_60 : (G18 = (C_59 : (G8 + V20).floatM)));
+         (C_62 : (V21 = (C_61 : F3(G15))));
+         (C_66 : (G16 = (C_65 : ((C_64 : (G9 + V21).floatM) /
+                                  (C_63 : (G1 :> float))))));
+         (C_68 : (V22 = (C_67 : F3(G15))));
+         (C_70 : (G17 = (C_69 : (G10 + V22).floatM)));
+         (C_72 : (V23 = (C_71 : F4(G15))));
+         (C_74 : (G19 = (C_73 : (G11 + V23).floatM)));
+         (C_79 : (G21 = (C_78 : ((C_77 : ((1.0 :> double) /
+                                           (C_76 : ((C_75 : (G16 :> double)) +
                                                      (1.0 :> double))))) :> float))));
-         (C_77 : (V16 = (C_76 : (G17 * G21))));
-         (C_83 : (V17 = (C_82 : ((C_81 : ((C_80 : ((C_79 : (G16 :> double)) -
+         (C_81 : (V16 = (C_80 : (G17 * G21))));
+         (C_87 : (V17 = (C_86 : ((C_85 : ((C_84 : ((C_83 : (G16 :> double)) -
                                                     (1.0 :> double))) *
-                                           (C_78 : (G21 :> double)))) :> float))));
-         (C_86 : (G22 = (C_85 : ((C_84 : (G18 * G16)) * G21))));
-         (C_87 : (G23 = 0));
-         (C_88 : (G24 = V9));
-         (C_89 : (G25 = V10));
-         (C_90 : (G26 = V11));
-         (C_91 : (G27 = V12));
-         (C_92 : (G28 = V13));
-         (C_93 : (G29 = V14));
-         (C_94 : (G30 = V15));
-         (C_95 : (G31 = V16));
-         (C_96 : (G32 = V17));
-         (C_97 : (G12 = V18));
-         (C_98 : (ptr_bas_loc_ram = ptr_bas_loc))
+                                           (C_82 : (G21 :> double)))) :> float))));
+         (C_90 : (G22 = (C_89 : ((C_88 : (G18 * G16)) * G21))));
+         (C_91 : (G23 = 0));
+         (C_92 : (G24 = V9));
+         (C_93 : (G25 = V10));
+         (C_94 : (G26 = V11));
+         (C_95 : (G27 = V12));
+         (C_96 : (G28 = V13));
+         (C_97 : (G29 = V14));
+         (C_98 : (G30 = V15));
+         (C_99 : (G31 = V16));
+         (C_100 : (G32 = V17));
+         (C_101 : (G12 = V18));
+         (C_102 : (ptr_bas_loc_ram = ptr_bas_loc))
       } else 
-      {  (C_26 : ((C_25 : (G3 + G15).intM) = 0));
-         (C_27 : (G4 = 0))
+      {  (C_30 : ((C_29 : (G3 + G15).intM) = 0));
+         (C_31 : (G4 = 0))
       });
       
       (return ())
@@ -291,7 +293,7 @@ behavior default:
 
 unit F7()
 behavior default:
-  ensures (C_206 : true);
+  ensures (C_210 : true);
 {  
    (var float V24);
    
@@ -322,25 +324,25 @@ behavior default:
    (var int32 V37);
    
    {  (if (G12 >= 2) then 
-      {  (C_100 : (V24 = G24));
-         (C_101 : (V25 = G25));
-         (C_102 : (V26 = G26));
-         (C_103 : (V27 = G27));
-         (C_104 : (V28 = G28));
-         (C_105 : (V29 = G29));
-         (C_106 : (V30 = G30));
-         (C_107 : (V31 = G31));
-         (C_108 : (V32 = G32));
-         (C_109 : (V33 = G12));
-         (C_110 : (ptr_bas_loc_0 = ptr_bas_loc_ram));
-         (C_115 : (V35 = (C_114 : ((C_113 : ((C_112 : ((C_111 : (G23 + G5)) :> int32)) -
+      {  (C_104 : (V24 = G24));
+         (C_105 : (V25 = G25));
+         (C_106 : (V26 = G26));
+         (C_107 : (V27 = G27));
+         (C_108 : (V28 = G28));
+         (C_109 : (V29 = G29));
+         (C_110 : (V30 = G30));
+         (C_111 : (V31 = G31));
+         (C_112 : (V32 = G32));
+         (C_113 : (V33 = G12));
+         (C_114 : (ptr_bas_loc_0 = ptr_bas_loc_ram));
+         (C_119 : (V35 = (C_118 : ((C_117 : ((C_116 : ((C_115 : (G23 + G5)) :> int32)) -
                                               2)) :> int32))));
-         (if (V35 >= (C_120 : ((C_119 : (V33 - 2)) :> int32))) then (C_118 : (V35 = 
-                                                                    (C_117 : (
-                                                                    (C_116 : 
+         (if (V35 >= (C_124 : ((C_123 : (V33 - 2)) :> int32))) then (C_122 : (V35 = 
+                                                                    (C_121 : (
+                                                                    (C_120 : 
                                                                     (V33 -
                                                                     2)) :> int32)))) else ());
-         (C_121 : (V34 = G23));
+         (C_125 : (V34 = G23));
          
          {  
             loop 
@@ -349,67 +351,67 @@ behavior default:
                {  (if (V34 <= V35) then () else 
                   (goto while_0_break));
                   
-                  {  (C_124 : (V24 = (C_123 : ((C_122 : ptr_bas_loc_0.intM) :> float))));
-                     (C_126 : (ptr_bas_loc_0 = (C_125 : (ptr_bas_loc_0 + 1))));
-                     (C_132 : (V27 = (C_131 : ((C_130 : ((C_129 : (V24 - V26)) +
-                                                          (C_128 : (V31 *
+                  {  (C_128 : (V24 = (C_127 : ((C_126 : ptr_bas_loc_0.intM) :> float))));
+                     (C_130 : (ptr_bas_loc_0 = (C_129 : (ptr_bas_loc_0 + 1))));
+                     (C_136 : (V27 = (C_135 : ((C_134 : ((C_133 : (V24 - V26)) +
+                                                          (C_132 : (V31 *
                                                                     V28)))) +
-                                                (C_127 : (V32 * V29))))));
-                     (if ((C_137 : (V27 :> double)) >= (0.0 :> double)) then 
-                     (C_136 : (V30 = (C_135 : (V30 + V27)))) else (C_134 : (V30 = 
-                                                                  (C_133 : 
+                                                (C_131 : (V32 * V29))))));
+                     (if ((C_141 : (V27 :> double)) >= (0.0 :> double)) then 
+                     (C_140 : (V30 = (C_139 : (V30 + V27)))) else (C_138 : (V30 = 
+                                                                  (C_137 : 
                                                                   (V30 -
                                                                     V27)))));
-                     (C_138 : (V26 = V25));
-                     (C_139 : (V25 = V24));
-                     (C_140 : (V29 = V28));
-                     (C_141 : (V28 = V27));
-                     (C_144 : (V34 = (C_143 : ((C_142 : (V34 + 1)) :> int32))))
+                     (C_142 : (V26 = V25));
+                     (C_143 : (V25 = V24));
+                     (C_144 : (V29 = V28));
+                     (C_145 : (V28 = V27));
+                     (C_148 : (V34 = (C_147 : ((C_146 : (V34 + 1)) :> int32))))
                   }
                }
             };
             (while_0_break : ())
          };
-         (if (V35 >= (C_205 : ((C_204 : (V33 - 2)) :> int32))) then 
-         {  (C_161 : (V24 = (C_160 : ((C_159 : ptr_bas_loc_0.intM) :> float))));
-            (C_167 : (V27 = (C_166 : ((C_165 : ((C_164 : (V24 - V26)) +
-                                                 (C_163 : (V31 * V28)))) +
-                                       (C_162 : (V32 * V29))))));
-            (if ((C_180 : (V27 :> double)) >= (0.0 :> double)) then (C_179 : (V30 = 
-                                                                    (C_178 : (
-                                                                    (C_177 : 
-                                                                    ((C_176 : 
+         (if (V35 >= (C_209 : ((C_208 : (V33 - 2)) :> int32))) then 
+         {  (C_165 : (V24 = (C_164 : ((C_163 : ptr_bas_loc_0.intM) :> float))));
+            (C_171 : (V27 = (C_170 : ((C_169 : ((C_168 : (V24 - V26)) +
+                                                 (C_167 : (V31 * V28)))) +
+                                       (C_166 : (V32 * V29))))));
+            (if ((C_184 : (V27 :> double)) >= (0.0 :> double)) then (C_183 : (V30 = 
+                                                                    (C_182 : (
+                                                                    (C_181 : 
+                                                                    ((C_180 : 
                                                                     ((2.0 :> double) *
-                                                                    (C_175 : (V30 :> double)))) +
-                                                                    (C_174 : (V27 :> double)))) :> float)))) else 
-            (C_173 : (V30 = (C_172 : ((C_171 : ((C_170 : ((2.0 :> double) *
-                                                           (C_169 : (V30 :> double)))) -
-                                                 (C_168 : (V27 :> double)))) :> float)))));
-            (C_184 : (V30 = (C_183 : ((C_182 : ((C_181 : (G22 * G19)) * V30)) /
+                                                                    (C_179 : (V30 :> double)))) +
+                                                                    (C_178 : (V27 :> double)))) :> float)))) else 
+            (C_177 : (V30 = (C_176 : ((C_175 : ((C_174 : ((2.0 :> double) *
+                                                           (C_173 : (V30 :> double)))) -
+                                                 (C_172 : (V27 :> double)))) :> float)))));
+            (C_188 : (V30 = (C_187 : ((C_186 : ((C_185 : (G22 * G19)) * V30)) /
                                        G20))));
-            (C_188 : (V30 = (C_187 : ((C_186 : ((C_185 : (V30 :> double)) *
+            (C_192 : (V30 = (C_191 : ((C_190 : ((C_189 : (V30 :> double)) *
                                                  (64.0 :> double))) :> float))));
-            (if ((C_195 : (V30 :> double)) <= (65535.0 :> double)) then 
-            (C_194 : ((C_193 : (G3 + G15).intM) = (C_192 : \truncate_real_to_int(
-                                                  (C_191 : (V30 :> real)))))) else 
-            (C_190 : ((C_189 : (G3 + G15).intM) = 65535)));
-            (C_197 : (V37 = (C_196 : F5(G15))));
-            (C_200 : (G6 = (C_199 : ((C_198 : (G6 | V37)) :> int32))));
-            (if (G6 != 0) then (C_202 : (G7 = 1)) else (C_201 : (G7 = 0)));
-            (C_203 : (G34 = ptr_bas_loc_0))
+            (if ((C_199 : (V30 :> double)) <= (65535.0 :> double)) then 
+            (C_198 : ((C_197 : (G3 + G15).intM) = (C_196 : \truncate_real_to_int(
+                                                  (C_195 : (V30 :> real)))))) else 
+            (C_194 : ((C_193 : (G3 + G15).intM) = 65535)));
+            (C_201 : (V37 = (C_200 : F5(G15))));
+            (C_204 : (G6 = (C_203 : ((C_202 : (G6 | V37)) :> int32))));
+            (if (G6 != 0) then (C_206 : (G7 = 1)) else (C_205 : (G7 = 0)));
+            (C_207 : (G34 = ptr_bas_loc_0))
          } else 
-         {  (C_147 : (G23 = (C_146 : ((C_145 : (V35 + 1)) :> int32))));
-            (C_148 : (G24 = V24));
-            (C_149 : (G25 = V25));
-            (C_150 : (G26 = V26));
-            (C_151 : (G27 = V27));
-            (C_152 : (G28 = V28));
-            (C_153 : (G29 = V29));
-            (C_154 : (G30 = V30));
-            (C_155 : (G31 = V31));
-            (C_156 : (G32 = V32));
-            (C_157 : (G12 = V33));
-            (C_158 : (ptr_bas_loc_ram = ptr_bas_loc_0))
+         {  (C_151 : (G23 = (C_150 : ((C_149 : (V35 + 1)) :> int32))));
+            (C_152 : (G24 = V24));
+            (C_153 : (G25 = V25));
+            (C_154 : (G26 = V26));
+            (C_155 : (G27 = V27));
+            (C_156 : (G28 = V28));
+            (C_157 : (G29 = V29));
+            (C_158 : (G30 = V30));
+            (C_159 : (G31 = V31));
+            (C_160 : (G32 = V32));
+            (C_161 : (G12 = V33));
+            (C_162 : (ptr_bas_loc_ram = ptr_bas_loc_0))
          })
       } else ());
       
@@ -419,15 +421,17 @@ behavior default:
 
 unit main()
 behavior default:
-  ensures (C_219 : true);
+  ensures (C_225 : true);
 {  
    (var int32 V38);
    
-   {  (C_210 : (G20 = (C_209 : Frama_C_float_interval((C_207 : ((1.0 :> double) :> float)),
-                                                      (C_208 : ((1000.0 :> double) :> float))))));
-      (C_212 : (G5 = (C_211 : Frama_C_interval(10, 2000))));
-      (C_213 : F6());
-      (C_214 : (V38 = 0));
+   {  (C_216 : (let __cil_tmp =
+               (C_213 : Frama_C_float_interval((C_211 : ((1.0 :> double) :> float)),
+                                               (C_212 : ((1000.0 :> double) :> float))))
+               in (C_215 : (G20 = (C_214 : (__cil_tmp :> float))))));
+      (C_218 : (G5 = (C_217 : Frama_C_interval(10, 2000))));
+      (C_219 : F6());
+      (C_220 : (V38 = 0));
       
       {  
          loop 
@@ -436,8 +440,8 @@ behavior default:
             {  (if (V38 < G4) then () else 
                (goto while_0_break));
                
-               {  (C_215 : F7());
-                  (C_218 : (V38 = (C_217 : ((C_216 : (V38 + 1)) :> int32))))
+               {  (C_221 : F7());
+                  (C_224 : (V38 = (C_223 : ((C_222 : (V38 + 1)) :> int32))))
                }
             }
          };
@@ -1592,50 +1596,49 @@ let F6_ensures_default =
      (let V21 = ref (any_int32 void) in
      (let V22 = ref (any_int32 void) in
      (let V23 = ref (any_int32 void) in
-     (C_20:
      (C_22:
-     (C_23:
-     (C_24:
+     (C_26:
+     (C_27:
+     (C_28:
      begin
        (let jessie_<somenum> =
-       (V18 := (C_19:
-               (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
-               (let jessie_<somenum> = (safe_int32_of_integer_ (2000)) in
-               (JC_<somenum>: ((Frama_C_interval jessie_<somenum>) jessie_<somenum>)))))) in
-       void);
+       (let __cil_tmp =
+       (C_19:
+       (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+       (let jessie_<somenum> = (safe_int32_of_integer_ (2000)) in
+       (JC_<somenum>: ((Frama_C_interval jessie_<somenum>) jessie_<somenum>))))) in
+       (C_21: begin   (V18 := (C_20: __cil_tmp)); !V18 end)) in void);
       (let jessie_<somenum> =
-      (G15 := (C_21:
-              (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-              (let jessie_<somenum> = (safe_int32_of_integer_ (11)) in
-              (JC_<somenum>: ((Frama_C_interval jessie_<somenum>) jessie_<somenum>)))))) in
-      void); (let jessie_<somenum> = (ptr_bas_loc := G13) in void);
+      (let __cil_tmp_18 =
+      (C_23:
+      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+      (let jessie_<somenum> = (safe_int32_of_integer_ (11)) in
+      (JC_<somenum>: ((Frama_C_interval jessie_<somenum>) jessie_<somenum>))))) in
+      (C_25: begin   (G15 := (C_24: __cil_tmp_18)); !G15 end)) in void);
+      (let jessie_<somenum> = (ptr_bas_loc := G13) in void);
       (let jessie_<somenum> = (G33 := !ptr_bas_loc) in void);
       (if ((ge_int_ (integer_of_int32 !V18)) (2))
       then
        (let jessie_<somenum> =
-       (C_34:
-       (C_36:
+       (C_38:
        (C_40:
        (C_44:
-       (C_46:
        (C_48:
        (C_50:
        (C_52:
        (C_54:
        (C_56:
        (C_58:
+       (C_60:
        (C_62:
-       (C_64:
        (C_66:
        (C_68:
        (C_70:
-       (C_75:
-       (C_77:
-       (C_83:
-       (C_86:
+       (C_72:
+       (C_74:
+       (C_79:
+       (C_81:
        (C_87:
-       (C_88:
-       (C_89:
        (C_90:
        (C_91:
        (C_92:
@@ -1645,38 +1648,33 @@ let F6_ensures_default =
        (C_96:
        (C_97:
        (C_98:
+       (C_99:
+       (C_100:
+       (C_101:
+       (C_102:
        begin
          (let jessie_<somenum> =
-         (G4 := (C_33:
-                (safe_int32_of_integer_ (C_32:
-                                        ((add_int (integer_of_int32 (C_31:
+         (G4 := (C_37:
+                (safe_int32_of_integer_ (C_36:
+                                        ((add_int (integer_of_int32 (C_35:
                                                                     (safe_int32_of_integer_ 
-                                                                    (C_30:
+                                                                    (C_34:
                                                                     (JC_<somenum>:
                                                                     ((computer_div 
                                                                     (integer_of_int32 !V18)) 
                                                                     (integer_of_int32 
-                                                                    (C_29:
+                                                                    (C_33:
                                                                     (safe_int32_of_integer_ 
-                                                                    (C_28:
+                                                                    (C_32:
                                                                     ((add_int 
                                                                     (integer_of_int32 !G5)) (1))))))))))))) (1)))))) in
          void);
         (let jessie_<somenum> =
-        (V9 := (C_35:
+        (V9 := (C_39:
                ((double_to_single nearest_even) (double_of_real_exact 0.0)))) in
         void);
         (let jessie_<somenum> =
-        (V10 := (C_39:
-                ((double_to_single nearest_even) (C_38:
-                                                 (JC_<somenum>:
-                                                 (((mul_double_safe nearest_even) 
-                                                   ((double_of_real_safe nearest_even) 511.5)) 
-                                                  (C_37:
-                                                  (single_to_double !G20)))))))) in
-        void);
-        (let jessie_<somenum> =
-        (V11 := (C_43:
+        (V10 := (C_43:
                 ((double_to_single nearest_even) (C_42:
                                                  (JC_<somenum>:
                                                  (((mul_double_safe nearest_even) 
@@ -1685,89 +1683,98 @@ let F6_ensures_default =
                                                   (single_to_double !G20)))))))) in
         void);
         (let jessie_<somenum> =
-        (V12 := (C_45:
+        (V11 := (C_47:
+                ((double_to_single nearest_even) (C_46:
+                                                 (JC_<somenum>:
+                                                 (((mul_double_safe nearest_even) 
+                                                   ((double_of_real_safe nearest_even) 511.5)) 
+                                                  (C_45:
+                                                  (single_to_double !G20)))))))) in
+        void);
+        (let jessie_<somenum> =
+        (V12 := (C_49:
                 ((double_to_single nearest_even) (double_of_real_exact 0.0)))) in
         void);
         (let jessie_<somenum> =
-        (V13 := (C_47:
+        (V13 := (C_51:
                 ((double_to_single nearest_even) (double_of_real_exact 0.0)))) in
         void);
         (let jessie_<somenum> =
-        (V14 := (C_49:
+        (V14 := (C_53:
                 ((double_to_single nearest_even) (double_of_real_exact 0.0)))) in
         void);
         (let jessie_<somenum> =
-        (V15 := (C_51:
+        (V15 := (C_55:
                 ((double_to_single nearest_even) (double_of_real_exact 0.0)))) in
         void);
         (let jessie_<somenum> =
-        (V20 := (C_53: (let jessie_<somenum> = !G15 in (JC_<somenum>: (F2 jessie_<somenum>))))) in
+        (V20 := (C_57: (let jessie_<somenum> = !G15 in (JC_<somenum>: (F2 jessie_<somenum>))))) in
         void);
         (let jessie_<somenum> =
-        (G18 := (C_55:
+        (G18 := (C_59:
                 ((safe_acc_ !floatP_floatM_G8_2) ((shift G8) (integer_of_int32 !V20))))) in
         void);
         (let jessie_<somenum> =
-        (V21 := (C_57: (let jessie_<somenum> = !G15 in (JC_<somenum>: (F3 jessie_<somenum>))))) in
+        (V21 := (C_61: (let jessie_<somenum> = !G15 in (JC_<somenum>: (F3 jessie_<somenum>))))) in
         void);
         (let jessie_<somenum> =
-        (G16 := (C_61:
+        (G16 := (C_65:
                 (JC_<somenum>:
-                (((div_single_safe nearest_even) (C_60:
+                (((div_single_safe nearest_even) (C_64:
                                                  ((safe_acc_ !floatP_floatM_G9_3) 
                                                   ((shift G9) (integer_of_int32 !V21))))) 
-                 (C_59:
+                 (C_63:
                  ((single_of_real_safe nearest_even) (real_of_int (integer_of_int32 G1)))))))) in
         void);
         (let jessie_<somenum> =
-        (V22 := (C_63: (let jessie_<somenum> = !G15 in (JC_<somenum>: (F3 jessie_<somenum>))))) in
+        (V22 := (C_67: (let jessie_<somenum> = !G15 in (JC_<somenum>: (F3 jessie_<somenum>))))) in
         void);
         (let jessie_<somenum> =
-        (G17 := (C_65:
+        (G17 := (C_69:
                 ((safe_acc_ !floatP_floatM_G10_4) ((shift G10) (integer_of_int32 !V22))))) in
         void);
         (let jessie_<somenum> =
-        (V23 := (C_67: (let jessie_<somenum> = !G15 in (JC_<somenum>: (F4 jessie_<somenum>))))) in
+        (V23 := (C_71: (let jessie_<somenum> = !G15 in (JC_<somenum>: (F4 jessie_<somenum>))))) in
         void);
         (let jessie_<somenum> =
-        (G19 := (C_69:
+        (G19 := (C_73:
                 ((safe_acc_ !floatP_floatM_G11_5) ((shift G11) (integer_of_int32 !V23))))) in
         void);
         (let jessie_<somenum> =
-        (G21 := (C_74:
-                ((double_to_single nearest_even) (C_73:
+        (G21 := (C_78:
+                ((double_to_single nearest_even) (C_77:
                                                  (JC_<somenum>:
                                                  (((div_double_safe nearest_even) 
                                                    (double_of_real_exact 1.0)) 
-                                                  (C_72:
+                                                  (C_76:
                                                   (JC_<somenum>:
                                                   (((add_double_safe nearest_even) 
-                                                    (C_71:
+                                                    (C_75:
                                                     (single_to_double !G16))) 
                                                    (double_of_real_exact 1.0)))))))))) in
         void);
         (let jessie_<somenum> =
-        (V16 := (C_76:
+        (V16 := (C_80:
                 (JC_<somenum>: (((mul_single_safe nearest_even) !G17) !G21)))) in
         void);
         (let jessie_<somenum> =
-        (V17 := (C_82:
-                ((double_to_single nearest_even) (C_81:
+        (V17 := (C_86:
+                ((double_to_single nearest_even) (C_85:
                                                  (JC_<somenum>:
                                                  (((mul_double_safe nearest_even) 
-                                                   (C_80:
+                                                   (C_84:
                                                    (JC_<somenum>:
                                                    (((sub_double_safe nearest_even) 
-                                                     (C_79:
+                                                     (C_83:
                                                      (single_to_double !G16))) 
                                                     (double_of_real_exact 1.0))))) 
-                                                  (C_78:
+                                                  (C_82:
                                                   (single_to_double !G21)))))))) in
         void);
         (let jessie_<somenum> =
-        (G22 := (C_85:
+        (G22 := (C_89:
                 (JC_<somenum>:
-                (((mul_single_safe nearest_even) (C_84:
+                (((mul_single_safe nearest_even) (C_88:
                                                  (JC_<somenum>:
                                                  (((mul_single_safe nearest_even) !G18) !G16)))) !G21)))) in
         void);
@@ -1786,8 +1793,8 @@ let F6_ensures_default =
        void)
       else
        (let jessie_<somenum> =
-       (C_26:
-       (C_27:
+       (C_30:
+       (C_31:
        begin
          (let jessie_<somenum> =
          (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
@@ -1826,50 +1833,49 @@ let F6_safety =
      (let V21 = ref (any_int32 void) in
      (let V22 = ref (any_int32 void) in
      (let V23 = ref (any_int32 void) in
-     (C_20:
      (C_22:
-     (C_23:
-     (C_24:
+     (C_26:
+     (C_27:
+     (C_28:
      begin
        (let jessie_<somenum> =
-       (V18 := (C_19:
-               (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
-               (let jessie_<somenum> = (safe_int32_of_integer_ (2000)) in
-               (JC_<somenum>: ((Frama_C_interval_requires jessie_<somenum>) jessie_<somenum>)))))) in
-       void);
+       (let __cil_tmp =
+       (C_19:
+       (let jessie_<somenum> = (safe_int32_of_integer_ (2)) in
+       (let jessie_<somenum> = (safe_int32_of_integer_ (2000)) in
+       (JC_<somenum>: ((Frama_C_interval_requires jessie_<somenum>) jessie_<somenum>))))) in
+       (C_21: begin   (V18 := (C_20: __cil_tmp)); !V18 end)) in void);
       (let jessie_<somenum> =
-      (G15 := (C_21:
-              (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-              (let jessie_<somenum> = (safe_int32_of_integer_ (11)) in
-              (JC_<somenum>: ((Frama_C_interval_requires jessie_<somenum>) jessie_<somenum>)))))) in
-      void); (let jessie_<somenum> = (ptr_bas_loc := G13) in void);
+      (let __cil_tmp_18 =
+      (C_23:
+      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
+      (let jessie_<somenum> = (safe_int32_of_integer_ (11)) in
+      (JC_<somenum>: ((Frama_C_interval_requires jessie_<somenum>) jessie_<somenum>))))) in
+      (C_25: begin   (G15 := (C_24: __cil_tmp_18)); !G15 end)) in void);
+      (let jessie_<somenum> = (ptr_bas_loc := G13) in void);
       (let jessie_<somenum> = (G33 := !ptr_bas_loc) in void);
       (if ((ge_int_ (integer_of_int32 !V18)) (2))
       then
        (let jessie_<somenum> =
-       (C_34:
-       (C_36:
+       (C_38:
        (C_40:
        (C_44:
-       (C_46:
        (C_48:
        (C_50:
        (C_52:
        (C_54:
        (C_56:
        (C_58:
+       (C_60:
        (C_62:
-       (C_64:
        (C_66:
        (C_68:
        (C_70:
-       (C_75:
-       (C_77:
-       (C_83:
-       (C_86:
+       (C_72:
+       (C_74:
+       (C_79:
+       (C_81:
        (C_87:
-       (C_88:
-       (C_89:
        (C_90:
        (C_91:
        (C_92:
@@ -1879,44 +1885,37 @@ let F6_safety =
        (C_96:
        (C_97:
        (C_98:
+       (C_99:
+       (C_100:
+       (C_101:
+       (C_102:
        begin
          (let jessie_<somenum> =
-         (G4 := (C_33:
+         (G4 := (C_37:
                 (JC_<somenum>:
-                (int32_of_integer_ (C_32:
-                                   ((add_int (integer_of_int32 (C_31:
+                (int32_of_integer_ (C_36:
+                                   ((add_int (integer_of_int32 (C_35:
                                                                (JC_<somenum>:
                                                                (int32_of_integer_ 
-                                                                (C_30:
+                                                                (C_34:
                                                                 (JC_<somenum>:
                                                                 ((computer_div_ 
                                                                   (integer_of_int32 !V18)) 
                                                                  (integer_of_int32 
-                                                                  (C_29:
+                                                                  (C_33:
                                                                   (JC_<somenum>:
                                                                   (int32_of_integer_ 
-                                                                   (C_28:
+                                                                   (C_32:
                                                                    ((add_int 
                                                                     (integer_of_int32 !G5)) (1))))))))))))))) (1))))))) in
          void);
         (let jessie_<somenum> =
-        (V9 := (C_35:
+        (V9 := (C_39:
                (JC_<somenum>:
                ((double_to_single nearest_even) (double_of_real_exact 0.0))))) in
         void);
         (let jessie_<somenum> =
-        (V10 := (C_39:
-                (JC_<somenum>:
-                ((double_to_single nearest_even) (C_38:
-                                                 (JC_<somenum>:
-                                                 (((mul_double nearest_even) 
-                                                   (JC_<somenum>:
-                                                   ((double_of_real nearest_even) 511.5))) 
-                                                  (C_37:
-                                                  (single_to_double !G20))))))))) in
-        void);
-        (let jessie_<somenum> =
-        (V11 := (C_43:
+        (V10 := (C_43:
                 (JC_<somenum>:
                 ((double_to_single nearest_even) (C_42:
                                                  (JC_<somenum>:
@@ -1927,103 +1926,114 @@ let F6_safety =
                                                   (single_to_double !G20))))))))) in
         void);
         (let jessie_<somenum> =
-        (V12 := (C_45:
+        (V11 := (C_47:
+                (JC_<somenum>:
+                ((double_to_single nearest_even) (C_46:
+                                                 (JC_<somenum>:
+                                                 (((mul_double nearest_even) 
+                                                   (JC_<somenum>:
+                                                   ((double_of_real nearest_even) 511.5))) 
+                                                  (C_45:
+                                                  (single_to_double !G20))))))))) in
+        void);
+        (let jessie_<somenum> =
+        (V12 := (C_49:
                 (JC_<somenum>:
                 ((double_to_single nearest_even) (double_of_real_exact 0.0))))) in
         void);
         (let jessie_<somenum> =
-        (V13 := (C_47:
+        (V13 := (C_51:
                 (JC_<somenum>:
                 ((double_to_single nearest_even) (double_of_real_exact 0.0))))) in
         void);
         (let jessie_<somenum> =
-        (V14 := (C_49:
+        (V14 := (C_53:
                 (JC_<somenum>:
                 ((double_to_single nearest_even) (double_of_real_exact 0.0))))) in
         void);
         (let jessie_<somenum> =
-        (V15 := (C_51:
+        (V15 := (C_55:
                 (JC_<somenum>:
                 ((double_to_single nearest_even) (double_of_real_exact 0.0))))) in
         void);
         (let jessie_<somenum> =
-        (V20 := (C_53:
+        (V20 := (C_57:
                 (let jessie_<somenum> = !G15 in (JC_<somenum>: (F2_requires jessie_<somenum>))))) in
         void);
         (let jessie_<somenum> =
-        (G18 := (C_55:
+        (G18 := (C_59:
                 (JC_<somenum>:
                 ((((offset_acc_ !floatP_G8_2_alloc_table) !floatP_floatM_G8_2) G8) 
                  (integer_of_int32 !V20))))) in void);
         (let jessie_<somenum> =
-        (V21 := (C_57:
+        (V21 := (C_61:
                 (let jessie_<somenum> = !G15 in (JC_<somenum>: (F3_requires jessie_<somenum>))))) in
         void);
         (let jessie_<somenum> =
-        (G16 := (C_61:
+        (G16 := (C_65:
                 (JC_<somenum>:
-                (((div_single nearest_even) (C_60:
+                (((div_single nearest_even) (C_64:
                                             (JC_<somenum>:
                                             ((((offset_acc_ !floatP_G9_3_alloc_table) !floatP_floatM_G9_3) G9) 
                                              (integer_of_int32 !V21))))) 
-                 (C_59:
+                 (C_63:
                  (JC_<somenum>:
                  ((single_of_real nearest_even) (real_of_int (integer_of_int32 G1))))))))) in
         void);
         (let jessie_<somenum> =
-        (V22 := (C_63:
+        (V22 := (C_67:
                 (let jessie_<somenum> = !G15 in (JC_<somenum>: (F3_requires jessie_<somenum>))))) in
         void);
         (let jessie_<somenum> =
-        (G17 := (C_65:
+        (G17 := (C_69:
                 (JC_<somenum>:
                 ((((offset_acc_ !floatP_G10_4_alloc_table) !floatP_floatM_G10_4) G10) 
                  (integer_of_int32 !V22))))) in void);
         (let jessie_<somenum> =
-        (V23 := (C_67:
+        (V23 := (C_71:
                 (let jessie_<somenum> = !G15 in (JC_<somenum>: (F4_requires jessie_<somenum>))))) in
         void);
         (let jessie_<somenum> =
-        (G19 := (C_69:
+        (G19 := (C_73:
                 (JC_<somenum>:
                 ((((offset_acc_ !floatP_G11_5_alloc_table) !floatP_floatM_G11_5) G11) 
                  (integer_of_int32 !V23))))) in void);
         (let jessie_<somenum> =
-        (G21 := (C_74:
+        (G21 := (C_78:
                 (JC_<somenum>:
-                ((double_to_single nearest_even) (C_73:
+                ((double_to_single nearest_even) (C_77:
                                                  (JC_<somenum>:
                                                  (((div_double nearest_even) 
                                                    (double_of_real_exact 1.0)) 
-                                                  (C_72:
+                                                  (C_76:
                                                   (JC_<somenum>:
                                                   (((add_double nearest_even) 
-                                                    (C_71:
+                                                    (C_75:
                                                     (single_to_double !G16))) 
                                                    (double_of_real_exact 1.0))))))))))) in
         void);
         (let jessie_<somenum> =
-        (V16 := (C_76: (JC_<somenum>: (((mul_single nearest_even) !G17) !G21)))) in
+        (V16 := (C_80: (JC_<somenum>: (((mul_single nearest_even) !G17) !G21)))) in
         void);
         (let jessie_<somenum> =
-        (V17 := (C_82:
+        (V17 := (C_86:
                 (JC_<somenum>:
-                ((double_to_single nearest_even) (C_81:
+                ((double_to_single nearest_even) (C_85:
                                                  (JC_<somenum>:
                                                  (((mul_double nearest_even) 
-                                                   (C_80:
+                                                   (C_84:
                                                    (JC_<somenum>:
                                                    (((sub_double nearest_even) 
-                                                     (C_79:
+                                                     (C_83:
                                                      (single_to_double !G16))) 
                                                     (double_of_real_exact 1.0))))) 
-                                                  (C_78:
+                                                  (C_82:
                                                   (single_to_double !G21))))))))) in
         void);
         (let jessie_<somenum> =
-        (G22 := (C_85:
+        (G22 := (C_89:
                 (JC_<somenum>:
-                (((mul_single nearest_even) (C_84:
+                (((mul_single nearest_even) (C_88:
                                             (JC_<somenum>:
                                             (((mul_single nearest_even) !G18) !G16)))) !G21)))) in
         void);
@@ -2042,8 +2052,8 @@ let F6_safety =
        void)
       else
        (let jessie_<somenum> =
-       (C_26:
-       (C_27:
+       (C_30:
+       (C_31:
        begin
          (let jessie_<somenum> =
          (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
@@ -2093,10 +2103,6 @@ let F7_ensures_default =
        (if ((ge_int_ (integer_of_int32 !G12)) (2))
        then
         (let jessie_<somenum> =
-        (C_100:
-        (C_101:
-        (C_102:
-        (C_103:
         (C_104:
         (C_105:
         (C_106:
@@ -2104,8 +2110,12 @@ let F7_ensures_default =
         (C_108:
         (C_109:
         (C_110:
-        (C_115:
-        (C_121:
+        (C_111:
+        (C_112:
+        (C_113:
+        (C_114:
+        (C_119:
+        (C_125:
         begin
           (let jessie_<somenum> = (V24 := !G24) in void);
          (let jessie_<somenum> = (V25 := !G25) in void);
@@ -2119,25 +2129,25 @@ let F7_ensures_default =
          (let jessie_<somenum> = (V33 := !G12) in void);
          (let jessie_<somenum> = (ptr_bas_loc_0 := !ptr_bas_loc_ram) in void);
          (let jessie_<somenum> =
-         (V35 := (C_114:
-                 (safe_int32_of_integer_ (C_113:
+         (V35 := (C_118:
+                 (safe_int32_of_integer_ (C_117:
                                          ((sub_int (integer_of_int32 
-                                                    (C_112:
+                                                    (C_116:
                                                     (safe_int32_of_integer_ 
-                                                     (C_111:
+                                                     (C_115:
                                                      ((add_int (integer_of_int32 !G23)) 
                                                       (integer_of_int32 !G5))))))) (2)))))) in
          void);
-         (if ((ge_int_ (integer_of_int32 !V35)) (integer_of_int32 (C_120:
+         (if ((ge_int_ (integer_of_int32 !V35)) (integer_of_int32 (C_124:
                                                                   (safe_int32_of_integer_ 
-                                                                   (C_119:
+                                                                   (C_123:
                                                                    ((sub_int 
                                                                     (integer_of_int32 !V33)) (2)))))))
          then
           (let jessie_<somenum> =
-          (C_118:
-          (V35 := (C_117:
-                  (safe_int32_of_integer_ (C_116:
+          (C_122:
+          (V35 := (C_121:
+                  (safe_int32_of_integer_ (C_120:
                                           ((sub_int (integer_of_int32 !V33)) (2))))))) in
           void) else void); (let jessie_<somenum> = (V34 := !G23) in void);
          try
@@ -2152,14 +2162,14 @@ let F7_ensures_default =
                (let jessie_<somenum> =
                begin
                  (let jessie_<somenum> =
-                 (C_124:
-                 (C_126:
-                 (C_132:
-                 (C_138:
-                 (C_139:
-                 (C_140:
-                 (C_141:
+                 (C_128:
+                 (C_130:
+                 (C_136:
+                 (C_142:
+                 (C_143:
                  (C_144:
+                 (C_145:
+                 (C_148:
                  begin
                    (if ((le_int_ (integer_of_int32 !V34)) (integer_of_int32 !V35))
                    then void
@@ -2167,44 +2177,44 @@ let F7_ensures_default =
                     (let jessie_<somenum> =
                     (raise (Goto_while_0_break_exc void)) in void));
                   (let jessie_<somenum> =
-                  (V24 := (C_123:
+                  (V24 := (C_127:
                           ((single_of_real_safe nearest_even) (real_of_int 
                                                                (integer_of_int32 
-                                                                (C_122:
+                                                                (C_126:
                                                                 ((safe_acc_ !intP_intM_G13_6) !ptr_bas_loc_0))))))) in
                   void);
                   (let jessie_<somenum> =
-                  (ptr_bas_loc_0 := (C_125: ((shift !ptr_bas_loc_0) (1)))) in
+                  (ptr_bas_loc_0 := (C_129: ((shift !ptr_bas_loc_0) (1)))) in
                   void);
                   (let jessie_<somenum> =
-                  (V27 := (C_131:
+                  (V27 := (C_135:
                           (JC_<somenum>:
-                          (((add_single_safe nearest_even) (C_130:
+                          (((add_single_safe nearest_even) (C_134:
                                                            (JC_<somenum>:
                                                            (((add_single_safe nearest_even) 
-                                                             (C_129:
+                                                             (C_133:
                                                              (JC_<somenum>:
                                                              (((sub_single_safe nearest_even) !V24) !V26)))) 
-                                                            (C_128:
+                                                            (C_132:
                                                             (JC_<somenum>:
                                                             (((mul_single_safe nearest_even) !V31) !V28))))))) 
-                           (C_127:
+                           (C_131:
                            (JC_<somenum>:
                            (((mul_single_safe nearest_even) !V32) !V29))))))) in
                   void);
                   (let jessie_<somenum> =
-                  (if ((ge_double (C_137: (single_to_double !V27))) (double_of_real_exact 0.0))
+                  (if ((ge_double (C_141: (single_to_double !V27))) (double_of_real_exact 0.0))
                   then
-                   (C_136:
+                   (C_140:
                    begin
-                     (V30 := (C_135:
+                     (V30 := (C_139:
                              (JC_<somenum>:
                              (((add_single_safe nearest_even) !V30) !V27))));
                     !V30 end)
                   else
-                   (C_134:
+                   (C_138:
                    begin
-                     (V30 := (C_133:
+                     (V30 := (C_137:
                              (JC_<somenum>:
                              (((sub_single_safe nearest_even) !V30) !V27))));
                     !V30 end)) in void);
@@ -2212,110 +2222,110 @@ let F7_ensures_default =
                   (let jessie_<somenum> = (V25 := !V24) in void);
                   (let jessie_<somenum> = (V29 := !V28) in void);
                   (let jessie_<somenum> = (V28 := !V27) in void);
-                  (V34 := (C_143:
-                          (safe_int32_of_integer_ (C_142:
+                  (V34 := (C_147:
+                          (safe_int32_of_integer_ (C_146:
                                                   ((add_int (integer_of_int32 !V34)) (1))))));
                   !V34 end)))))))) in void); (raise (Loop_continue_exc void))
                end in void) with Loop_continue_exc jessie_<somenum> -> void end end
             done); (raise (Goto_while_0_break_exc void)) end in void) with
           Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-         (if ((ge_int_ (integer_of_int32 !V35)) (integer_of_int32 (C_205:
+         (if ((ge_int_ (integer_of_int32 !V35)) (integer_of_int32 (C_209:
                                                                   (safe_int32_of_integer_ 
-                                                                   (C_204:
+                                                                   (C_208:
                                                                    ((sub_int 
                                                                     (integer_of_int32 !V33)) (2)))))))
          then
-          (C_161:
-          (C_167:
-          (C_184:
+          (C_165:
+          (C_171:
           (C_188:
-          (C_197:
-          (C_200:
-          (C_203:
+          (C_192:
+          (C_201:
+          (C_204:
+          (C_207:
           begin
             (let jessie_<somenum> =
-            (V24 := (C_160:
+            (V24 := (C_164:
                     ((single_of_real_safe nearest_even) (real_of_int 
                                                          (integer_of_int32 
-                                                          (C_159:
+                                                          (C_163:
                                                           ((safe_acc_ !intP_intM_G13_6) !ptr_bas_loc_0))))))) in
             void);
            (let jessie_<somenum> =
-           (V27 := (C_166:
+           (V27 := (C_170:
                    (JC_<somenum>:
-                   (((add_single_safe nearest_even) (C_165:
+                   (((add_single_safe nearest_even) (C_169:
                                                     (JC_<somenum>:
                                                     (((add_single_safe nearest_even) 
-                                                      (C_164:
+                                                      (C_168:
                                                       (JC_<somenum>:
                                                       (((sub_single_safe nearest_even) !V24) !V26)))) 
-                                                     (C_163:
+                                                     (C_167:
                                                      (JC_<somenum>:
                                                      (((mul_single_safe nearest_even) !V31) !V28))))))) 
-                    (C_162:
+                    (C_166:
                     (JC_<somenum>: (((mul_single_safe nearest_even) !V32) !V29))))))) in
            void);
            (let jessie_<somenum> =
-           (if ((ge_double (C_180: (single_to_double !V27))) (double_of_real_exact 0.0))
+           (if ((ge_double (C_184: (single_to_double !V27))) (double_of_real_exact 0.0))
            then
-            (C_179:
+            (C_183:
             begin
-              (V30 := (C_178:
-                      ((double_to_single nearest_even) (C_177:
+              (V30 := (C_182:
+                      ((double_to_single nearest_even) (C_181:
                                                        (JC_<somenum>:
                                                        (((add_double_safe nearest_even) 
-                                                         (C_176:
+                                                         (C_180:
                                                          (JC_<somenum>:
                                                          (((mul_double_safe nearest_even) 
                                                            (double_of_real_exact 2.0)) 
-                                                          (C_175:
+                                                          (C_179:
                                                           (single_to_double !V30)))))) 
-                                                        (C_174:
+                                                        (C_178:
                                                         (single_to_double !V27))))))));
              !V30 end)
            else
-            (C_173:
+            (C_177:
             begin
-              (V30 := (C_172:
-                      ((double_to_single nearest_even) (C_171:
+              (V30 := (C_176:
+                      ((double_to_single nearest_even) (C_175:
                                                        (JC_<somenum>:
                                                        (((sub_double_safe nearest_even) 
-                                                         (C_170:
+                                                         (C_174:
                                                          (JC_<somenum>:
                                                          (((mul_double_safe nearest_even) 
                                                            (double_of_real_exact 2.0)) 
-                                                          (C_169:
+                                                          (C_173:
                                                           (single_to_double !V30)))))) 
-                                                        (C_168:
+                                                        (C_172:
                                                         (single_to_double !V27))))))));
              !V30 end)) in void);
            (let jessie_<somenum> =
-           (V30 := (C_183:
+           (V30 := (C_187:
                    (JC_<somenum>:
-                   (((div_single_safe nearest_even) (C_182:
+                   (((div_single_safe nearest_even) (C_186:
                                                     (JC_<somenum>:
                                                     (((mul_single_safe nearest_even) 
-                                                      (C_181:
+                                                      (C_185:
                                                       (JC_<somenum>:
                                                       (((mul_single_safe nearest_even) !G22) !G19)))) !V30)))) !G20)))) in
            void);
            (let jessie_<somenum> =
-           (V30 := (C_187:
-                   ((double_to_single nearest_even) (C_186:
+           (V30 := (C_191:
+                   ((double_to_single nearest_even) (C_190:
                                                     (JC_<somenum>:
                                                     (((mul_double_safe nearest_even) 
-                                                      (C_185:
+                                                      (C_189:
                                                       (single_to_double !V30))) 
                                                      (double_of_real_exact 64.0))))))) in
            void);
            (let jessie_<somenum> =
-           (if ((le_double (C_195: (single_to_double !V30))) (double_of_real_exact 65535.0))
+           (if ((le_double (C_199: (single_to_double !V30))) (double_of_real_exact 65535.0))
            then
-            (C_194:
+            (C_198:
             (let jessie_<somenum> =
-            (safe_int32_of_integer_ (C_192:
+            (safe_int32_of_integer_ (C_196:
                                     (let jessie_<somenum> =
-                                    (C_191: (single_value !V30)) in
+                                    (C_195: (single_value !V30)) in
                                     (truncate_real_to_int jessie_<somenum>)))) in
             (let jessie_<somenum> = G3 in
             (let jessie_<somenum> = (integer_of_int32 !G15) in
@@ -2324,7 +2334,7 @@ let F7_ensures_default =
               (((safe_upd_ intP_intM_G3_1) jessie_<somenum>) jessie_<somenum>);
              jessie_<somenum> end)))))
            else
-            (C_190:
+            (C_194:
             (let jessie_<somenum> = (safe_int32_of_integer_ (65535)) in
             (let jessie_<somenum> = G3 in
             (let jessie_<somenum> = (integer_of_int32 !G15) in
@@ -2333,27 +2343,23 @@ let F7_ensures_default =
               (((safe_upd_ intP_intM_G3_1) jessie_<somenum>) jessie_<somenum>);
              jessie_<somenum> end)))))) in void);
            (let jessie_<somenum> =
-           (V37 := (C_196:
+           (V37 := (C_200:
                    (let jessie_<somenum> = !G15 in (JC_<somenum>: (F5 jessie_<somenum>))))) in
            void);
            (let jessie_<somenum> =
-           (G6 := (C_199:
-                  (safe_int32_of_integer_ (C_198:
+           (G6 := (C_203:
+                  (safe_int32_of_integer_ (C_202:
                                           ((bw_or (integer_of_int32 !G6)) 
                                            (integer_of_int32 !V37)))))) in
            void);
            (let jessie_<somenum> =
            (if ((neq_int_ (integer_of_int32 !G6)) (0))
            then
-            (C_202: begin   (G7 := (safe_int32_of_integer_ (1))); !G7 end)
+            (C_206: begin   (G7 := (safe_int32_of_integer_ (1))); !G7 end)
            else
-            (C_201: begin   (G7 := (safe_int32_of_integer_ (0))); !G7 end)) in
+            (C_205: begin   (G7 := (safe_int32_of_integer_ (0))); !G7 end)) in
            void); (G34 := !ptr_bas_loc_0); !G34 end)))))))
          else
-          (C_147:
-          (C_148:
-          (C_149:
-          (C_150:
           (C_151:
           (C_152:
           (C_153:
@@ -2362,10 +2368,14 @@ let F7_ensures_default =
           (C_156:
           (C_157:
           (C_158:
+          (C_159:
+          (C_160:
+          (C_161:
+          (C_162:
           begin
             (let jessie_<somenum> =
-            (G23 := (C_146:
-                    (safe_int32_of_integer_ (C_145:
+            (G23 := (C_150:
+                    (safe_int32_of_integer_ (C_149:
                                             ((add_int (integer_of_int32 !V35)) (1)))))) in
             void); (let jessie_<somenum> = (G24 := !V24) in void);
            (let jessie_<somenum> = (G25 := !V25) in void);
@@ -2411,10 +2421,6 @@ let F7_safety =
        (if ((ge_int_ (integer_of_int32 !G12)) (2))
        then
         (let jessie_<somenum> =
-        (C_100:
-        (C_101:
-        (C_102:
-        (C_103:
         (C_104:
         (C_105:
         (C_106:
@@ -2422,8 +2428,12 @@ let F7_safety =
         (C_108:
         (C_109:
         (C_110:
-        (C_115:
-        (C_121:
+        (C_111:
+        (C_112:
+        (C_113:
+        (C_114:
+        (C_119:
+        (C_125:
         begin
           (let jessie_<somenum> = (V24 := !G24) in void);
          (let jessie_<somenum> = (V25 := !G25) in void);
@@ -2437,29 +2447,29 @@ let F7_safety =
          (let jessie_<somenum> = (V33 := !G12) in void);
          (let jessie_<somenum> = (ptr_bas_loc_0 := !ptr_bas_loc_ram) in void);
          (let jessie_<somenum> =
-         (V35 := (C_114:
+         (V35 := (C_118:
                  (JC_<somenum>:
-                 (int32_of_integer_ (C_113:
-                                    ((sub_int (integer_of_int32 (C_112:
+                 (int32_of_integer_ (C_117:
+                                    ((sub_int (integer_of_int32 (C_116:
                                                                 (JC_<somenum>:
                                                                 (int32_of_integer_ 
-                                                                 (C_111:
+                                                                 (C_115:
                                                                  ((add_int 
                                                                    (integer_of_int32 !G23)) 
                                                                   (integer_of_int32 !G5)))))))) (2))))))) in
          void);
-         (if ((ge_int_ (integer_of_int32 !V35)) (integer_of_int32 (C_120:
+         (if ((ge_int_ (integer_of_int32 !V35)) (integer_of_int32 (C_124:
                                                                   (JC_<somenum>:
                                                                   (int32_of_integer_ 
-                                                                   (C_119:
+                                                                   (C_123:
                                                                    ((sub_int 
                                                                     (integer_of_int32 !V33)) (2))))))))
          then
           (let jessie_<somenum> =
-          (C_118:
-          (V35 := (C_117:
+          (C_122:
+          (V35 := (C_121:
                   (JC_<somenum>:
-                  (int32_of_integer_ (C_116:
+                  (int32_of_integer_ (C_120:
                                      ((sub_int (integer_of_int32 !V33)) (2)))))))) in
           void) else void); (let jessie_<somenum> = (V34 := !G23) in void);
          try
@@ -2474,14 +2484,14 @@ let F7_safety =
                (let jessie_<somenum> =
                begin
                  (let jessie_<somenum> =
-                 (C_124:
-                 (C_126:
-                 (C_132:
-                 (C_138:
-                 (C_139:
-                 (C_140:
-                 (C_141:
+                 (C_128:
+                 (C_130:
+                 (C_136:
+                 (C_142:
+                 (C_143:
                  (C_144:
+                 (C_145:
+                 (C_148:
                  begin
                    (if ((le_int_ (integer_of_int32 !V34)) (integer_of_int32 !V35))
                    then void
@@ -2489,162 +2499,162 @@ let F7_safety =
                     (let jessie_<somenum> =
                     (raise (Goto_while_0_break_exc void)) in void));
                   (let jessie_<somenum> =
-                  (V24 := (C_123:
+                  (V24 := (C_127:
                           (JC_<somenum>:
                           ((single_of_real nearest_even) (real_of_int 
                                                           (integer_of_int32 
-                                                           (C_122:
+                                                           (C_126:
                                                            (JC_<somenum>:
                                                            (((acc_ !intP_G13_6_alloc_table) !intP_intM_G13_6) !ptr_bas_loc_0))))))))) in
                   void);
                   (let jessie_<somenum> =
-                  (ptr_bas_loc_0 := (C_125: ((shift !ptr_bas_loc_0) (1)))) in
+                  (ptr_bas_loc_0 := (C_129: ((shift !ptr_bas_loc_0) (1)))) in
                   void);
                   (let jessie_<somenum> =
-                  (V27 := (C_131:
+                  (V27 := (C_135:
                           (JC_<somenum>:
-                          (((add_single nearest_even) (C_130:
+                          (((add_single nearest_even) (C_134:
                                                       (JC_<somenum>:
                                                       (((add_single nearest_even) 
-                                                        (C_129:
+                                                        (C_133:
                                                         (JC_<somenum>:
                                                         (((sub_single nearest_even) !V24) !V26)))) 
-                                                       (C_128:
+                                                       (C_132:
                                                        (JC_<somenum>:
                                                        (((mul_single nearest_even) !V31) !V28))))))) 
-                           (C_127:
+                           (C_131:
                            (JC_<somenum>: (((mul_single nearest_even) !V32) !V29))))))) in
                   void);
                   (let jessie_<somenum> =
-                  (if ((ge_double (C_137: (single_to_double !V27))) (double_of_real_exact 0.0))
+                  (if ((ge_double (C_141: (single_to_double !V27))) (double_of_real_exact 0.0))
                   then
-                   (C_136:
+                   (C_140:
                    begin
-                     (V30 := (C_135:
+                     (V30 := (C_139:
                              (JC_<somenum>:
                              (((add_single nearest_even) !V30) !V27)))); !V30
                    end)
                   else
-                   (C_134:
+                   (C_138:
                    begin
-                     (V30 := (C_133:
+                     (V30 := (C_137:
                              (JC_<somenum>:
                              (((sub_single nearest_even) !V30) !V27)))); !V30
                    end)) in void); (let jessie_<somenum> = (V26 := !V25) in void);
                   (let jessie_<somenum> = (V25 := !V24) in void);
                   (let jessie_<somenum> = (V29 := !V28) in void);
                   (let jessie_<somenum> = (V28 := !V27) in void);
-                  (V34 := (C_143:
+                  (V34 := (C_147:
                           (JC_<somenum>:
-                          (int32_of_integer_ (C_142:
+                          (int32_of_integer_ (C_146:
                                              ((add_int (integer_of_int32 !V34)) (1)))))));
                   !V34 end)))))))) in void); (raise (Loop_continue_exc void))
                end in void) with Loop_continue_exc jessie_<somenum> -> void end end
             done); (raise (Goto_while_0_break_exc void)) end in void) with
           Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
-         (if ((ge_int_ (integer_of_int32 !V35)) (integer_of_int32 (C_205:
+         (if ((ge_int_ (integer_of_int32 !V35)) (integer_of_int32 (C_209:
                                                                   (JC_<somenum>:
                                                                   (int32_of_integer_ 
-                                                                   (C_204:
+                                                                   (C_208:
                                                                    ((sub_int 
                                                                     (integer_of_int32 !V33)) (2))))))))
          then
-          (C_161:
-          (C_167:
-          (C_184:
+          (C_165:
+          (C_171:
           (C_188:
-          (C_197:
-          (C_200:
-          (C_203:
+          (C_192:
+          (C_201:
+          (C_204:
+          (C_207:
           begin
             (let jessie_<somenum> =
-            (V24 := (C_160:
+            (V24 := (C_164:
                     (JC_<somenum>:
                     ((single_of_real nearest_even) (real_of_int (integer_of_int32 
-                                                                 (C_159:
+                                                                 (C_163:
                                                                  (JC_<somenum>:
                                                                  (((acc_ !intP_G13_6_alloc_table) !intP_intM_G13_6) !ptr_bas_loc_0))))))))) in
             void);
            (let jessie_<somenum> =
-           (V27 := (C_166:
+           (V27 := (C_170:
                    (JC_<somenum>:
-                   (((add_single nearest_even) (C_165:
+                   (((add_single nearest_even) (C_169:
                                                (JC_<somenum>:
                                                (((add_single nearest_even) 
-                                                 (C_164:
+                                                 (C_168:
                                                  (JC_<somenum>:
                                                  (((sub_single nearest_even) !V24) !V26)))) 
-                                                (C_163:
+                                                (C_167:
                                                 (JC_<somenum>:
                                                 (((mul_single nearest_even) !V31) !V28))))))) 
-                    (C_162:
+                    (C_166:
                     (JC_<somenum>: (((mul_single nearest_even) !V32) !V29))))))) in
            void);
            (let jessie_<somenum> =
-           (if ((ge_double (C_180: (single_to_double !V27))) (double_of_real_exact 0.0))
+           (if ((ge_double (C_184: (single_to_double !V27))) (double_of_real_exact 0.0))
            then
-            (C_179:
+            (C_183:
             begin
-              (V30 := (C_178:
+              (V30 := (C_182:
                       (JC_<somenum>:
-                      ((double_to_single nearest_even) (C_177:
+                      ((double_to_single nearest_even) (C_181:
                                                        (JC_<somenum>:
                                                        (((add_double nearest_even) 
-                                                         (C_176:
+                                                         (C_180:
                                                          (JC_<somenum>:
                                                          (((mul_double nearest_even) 
                                                            (double_of_real_exact 2.0)) 
-                                                          (C_175:
+                                                          (C_179:
                                                           (single_to_double !V30)))))) 
-                                                        (C_174:
+                                                        (C_178:
                                                         (single_to_double !V27)))))))));
              !V30 end)
            else
-            (C_173:
+            (C_177:
             begin
-              (V30 := (C_172:
+              (V30 := (C_176:
                       (JC_<somenum>:
-                      ((double_to_single nearest_even) (C_171:
+                      ((double_to_single nearest_even) (C_175:
                                                        (JC_<somenum>:
                                                        (((sub_double nearest_even) 
-                                                         (C_170:
+                                                         (C_174:
                                                          (JC_<somenum>:
                                                          (((mul_double nearest_even) 
                                                            (double_of_real_exact 2.0)) 
-                                                          (C_169:
+                                                          (C_173:
                                                           (single_to_double !V30)))))) 
-                                                        (C_168:
+                                                        (C_172:
                                                         (single_to_double !V27)))))))));
              !V30 end)) in void);
            (let jessie_<somenum> =
-           (V30 := (C_183:
+           (V30 := (C_187:
                    (JC_<somenum>:
-                   (((div_single nearest_even) (C_182:
+                   (((div_single nearest_even) (C_186:
                                                (JC_<somenum>:
                                                (((mul_single nearest_even) 
-                                                 (C_181:
+                                                 (C_185:
                                                  (JC_<somenum>:
                                                  (((mul_single nearest_even) !G22) !G19)))) !V30)))) !G20)))) in
            void);
            (let jessie_<somenum> =
-           (V30 := (C_187:
+           (V30 := (C_191:
                    (JC_<somenum>:
-                   ((double_to_single nearest_even) (C_186:
+                   ((double_to_single nearest_even) (C_190:
                                                     (JC_<somenum>:
                                                     (((mul_double nearest_even) 
-                                                      (C_185:
+                                                      (C_189:
                                                       (single_to_double !V30))) 
                                                      (double_of_real_exact 64.0)))))))) in
            void);
            (let jessie_<somenum> =
-           (if ((le_double (C_195: (single_to_double !V30))) (double_of_real_exact 65535.0))
+           (if ((le_double (C_199: (single_to_double !V30))) (double_of_real_exact 65535.0))
            then
-            (C_194:
+            (C_198:
             (let jessie_<somenum> =
             (JC_<somenum>:
-            (int32_of_integer_ (C_192:
+            (int32_of_integer_ (C_196:
                                (let jessie_<somenum> =
-                               (C_191: (single_value !V30)) in
+                               (C_195: (single_value !V30)) in
                                (truncate_real_to_int jessie_<somenum>))))) in
             (let jessie_<somenum> = G3 in
             (let jessie_<somenum> = (integer_of_int32 !G15) in
@@ -2654,7 +2664,7 @@ let F7_safety =
               (((((offset_upd_ !intP_G3_1_alloc_table) intP_intM_G3_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
              jessie_<somenum> end)))))
            else
-            (C_190:
+            (C_194:
             (let jessie_<somenum> = (safe_int32_of_integer_ (65535)) in
             (let jessie_<somenum> = G3 in
             (let jessie_<somenum> = (integer_of_int32 !G15) in
@@ -2664,27 +2674,23 @@ let F7_safety =
               (((((offset_upd_ !intP_G3_1_alloc_table) intP_intM_G3_1) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
              jessie_<somenum> end)))))) in void);
            (let jessie_<somenum> =
-           (V37 := (C_196:
+           (V37 := (C_200:
                    (let jessie_<somenum> = !G15 in
                    (JC_<somenum>: (F5_requires jessie_<somenum>))))) in void);
            (let jessie_<somenum> =
-           (G6 := (C_199:
+           (G6 := (C_203:
                   (JC_<somenum>:
-                  (int32_of_integer_ (C_198:
+                  (int32_of_integer_ (C_202:
                                      ((bw_or (integer_of_int32 !G6)) 
                                       (integer_of_int32 !V37))))))) in void);
            (let jessie_<somenum> =
            (if ((neq_int_ (integer_of_int32 !G6)) (0))
            then
-            (C_202: begin   (G7 := (safe_int32_of_integer_ (1))); !G7 end)
+            (C_206: begin   (G7 := (safe_int32_of_integer_ (1))); !G7 end)
            else
-            (C_201: begin   (G7 := (safe_int32_of_integer_ (0))); !G7 end)) in
+            (C_205: begin   (G7 := (safe_int32_of_integer_ (0))); !G7 end)) in
            void); (G34 := !ptr_bas_loc_0); !G34 end)))))))
          else
-          (C_147:
-          (C_148:
-          (C_149:
-          (C_150:
           (C_151:
           (C_152:
           (C_153:
@@ -2693,11 +2699,15 @@ let F7_safety =
           (C_156:
           (C_157:
           (C_158:
+          (C_159:
+          (C_160:
+          (C_161:
+          (C_162:
           begin
             (let jessie_<somenum> =
-            (G23 := (C_146:
+            (G23 := (C_150:
                     (JC_<somenum>:
-                    (int32_of_integer_ (C_145:
+                    (int32_of_integer_ (C_149:
                                        ((add_int (integer_of_int32 !V35)) (1))))))) in
             void); (let jessie_<somenum> = (G24 := !V24) in void);
            (let jessie_<somenum> = (G25 := !V25) in void);
@@ -2733,23 +2743,23 @@ let main_ensures_default =
   try
    begin
      (let V38 = ref (any_int32 void) in
-     (C_210:
-     (C_212:
-     (C_213:
-     (C_214:
+     (C_216:
+     (C_218:
+     (C_219:
+     (C_220:
      begin
        (let jessie_<somenum> =
-       (G20 := (C_209:
-               (let jessie_<somenum> =
-               (C_207:
-               ((double_to_single nearest_even) (double_of_real_exact 1.0))) in
-               (let jessie_<somenum> =
-               (C_208:
-               ((double_to_single nearest_even) (double_of_real_exact 1000.0))) in
-               (JC_<somenum>: ((Frama_C_float_interval jessie_<somenum>) jessie_<somenum>)))))) in
-       void);
+       (let __cil_tmp_0 =
+       (C_213:
+       (let jessie_<somenum> =
+       (C_211: ((double_to_single nearest_even) (double_of_real_exact 1.0))) in
+       (let jessie_<somenum> =
+       (C_212:
+       ((double_to_single nearest_even) (double_of_real_exact 1000.0))) in
+       (JC_<somenum>: ((Frama_C_float_interval jessie_<somenum>) jessie_<somenum>))))) in
+       (C_215: begin   (G20 := (C_214: __cil_tmp_0)); !G20 end)) in void);
       (let jessie_<somenum> =
-      (G5 := (C_211:
+      (G5 := (C_217:
              (let jessie_<somenum> = (safe_int32_of_integer_ (10)) in
              (let jessie_<somenum> = (safe_int32_of_integer_ (2000)) in
              (JC_<somenum>: ((Frama_C_interval jessie_<somenum>) jessie_<somenum>)))))) in
@@ -2767,16 +2777,16 @@ let main_ensures_default =
             (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
-              (C_215:
-              (C_218:
+              (C_221:
+              (C_224:
               begin
                 (if ((lt_int_ (integer_of_int32 !V38)) (integer_of_int32 !G4))
                 then void
                 else
                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                  void)); (JC_<somenum>: (F7 void));
-               (V38 := (C_217:
-                       (safe_int32_of_integer_ (C_216:
+               (V38 := (C_223:
+                       (safe_int32_of_integer_ (C_222:
                                                ((add_int (integer_of_int32 !V38)) (1))))));
                !V38 end)) in void); (raise (Loop_continue_exc void)) end in
             void) with Loop_continue_exc jessie_<somenum> -> void end end done);
@@ -2798,26 +2808,25 @@ let main_safety =
   try
    begin
      (let V38 = ref (any_int32 void) in
-     (C_210:
-     (C_212:
-     (C_213:
-     (C_214:
+     (C_216:
+     (C_218:
+     (C_219:
+     (C_220:
      begin
        (let jessie_<somenum> =
-       (G20 := (C_209:
-               (let jessie_<somenum> =
-               (C_207:
-               (JC_<somenum>:
-               ((double_to_single nearest_even) (double_of_real_exact 1.0)))) in
-               (let jessie_<somenum> =
-               (C_208:
-               (JC_<somenum>:
-               ((double_to_single nearest_even) (double_of_real_exact 1000.0)))) in
-               (JC_<somenum>:
-               ((Frama_C_float_interval_requires jessie_<somenum>) jessie_<somenum>)))))) in
-       void);
+       (let __cil_tmp_0 =
+       (C_213:
+       (let jessie_<somenum> =
+       (C_211:
+       (JC_<somenum>: ((double_to_single nearest_even) (double_of_real_exact 1.0)))) in
+       (let jessie_<somenum> =
+       (C_212:
+       (JC_<somenum>:
+       ((double_to_single nearest_even) (double_of_real_exact 1000.0)))) in
+       (JC_<somenum>: ((Frama_C_float_interval_requires jessie_<somenum>) jessie_<somenum>))))) in
+       (C_215: begin   (G20 := (C_214: __cil_tmp_0)); !G20 end)) in void);
       (let jessie_<somenum> =
-      (G5 := (C_211:
+      (G5 := (C_217:
              (let jessie_<somenum> = (safe_int32_of_integer_ (10)) in
              (let jessie_<somenum> = (safe_int32_of_integer_ (2000)) in
              (JC_<somenum>: ((Frama_C_interval_requires jessie_<somenum>) jessie_<somenum>)))))) in
@@ -2835,17 +2844,17 @@ let main_safety =
             (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
-              (C_215:
-              (C_218:
+              (C_221:
+              (C_224:
               begin
                 (if ((lt_int_ (integer_of_int32 !V38)) (integer_of_int32 !G4))
                 then void
                 else
                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
                  void)); (JC_<somenum>: (F7_requires void));
-               (V38 := (C_217:
+               (V38 := (C_223:
                        (JC_<somenum>:
-                       (int32_of_integer_ (C_216:
+                       (int32_of_integer_ (C_222:
                                           ((add_int (integer_of_int32 !V38)) (1)))))));
                !V38 end)) in void); (raise (Loop_continue_exc void)) end in
             void) with Loop_continue_exc jessie_<somenum> -> void end end done);
@@ -2918,52 +2927,52 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po179.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "423" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "427" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po180.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "423" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "427" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po181.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "423" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "427" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po182.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "423" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "427" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po183.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "423" begin = "15" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "427" begin = "15" end = "19"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po184.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "433" begin = "27" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "437" begin = "27" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po185.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "433" begin = "27" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "437" begin = "27" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po186.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "433" begin = "27" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "437" begin = "27" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po187.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "433" begin = "27" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "437" begin = "27" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/renamed1_po188.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "433" begin = "27" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "437" begin = "27" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2978,11 +2987,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po191.why">
-      <location file = "why/renamed1.why" line = "2381" begin = "45" end = "46"/>
+      <location file = "why/renamed1.why" line = "2386" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po192.why">
-      <location file = "why/renamed1.why" line = "2381" begin = "45" end = "46"/>
+      <location file = "why/renamed1.why" line = "2386" begin = "45" end = "46"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po193.why">
@@ -3111,11 +3120,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po128.why">
-      <location file = "why/renamed1.why" line = "2020" begin = "48" end = "49"/>
+      <location file = "why/renamed1.why" line = "2026" begin = "48" end = "49"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po129.why">
-      <location file = "why/renamed1.why" line = "2020" begin = "48" end = "49"/>
+      <location file = "why/renamed1.why" line = "2026" begin = "48" end = "49"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/renamed1_po130.why">
@@ -3399,7 +3408,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po58.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "240" begin = "42" end = "59"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "242" begin = "42" end = "59"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -3409,7 +3418,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po60.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "242" begin = "42" end = "59"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "244" begin = "42" end = "59"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -3614,12 +3623,12 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/renamed1_po101.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "278" begin = "18" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "280" begin = "18" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/renamed1_po102.why">
-      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "278" begin = "18" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/renamed1.jessie/renamed1.jc" line = "280" begin = "18" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

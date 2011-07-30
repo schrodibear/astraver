@@ -41,7 +41,7 @@ intP[..] hardwareRegister;
 
 int32 main()
 behavior default:
-  ensures (C_12 : true);
+  ensures (C_9 : true);
 {  
    (var int32 currentValue);
    
@@ -49,15 +49,15 @@ behavior default:
    
    (var int32 __retres);
    
-   {  (C_3 : (currentValue = (C_2 : ((C_1 : hardwareRegister.intM) :> int32))));
-      (C_6 : (newValue = (C_5 : ((C_4 : hardwareRegister.intM) :> int32))));
+   {  (C_2 : (currentValue = (C_1 : hardwareRegister.intM)));
+      (C_4 : (newValue = (C_3 : hardwareRegister.intM)));
       
       {  
-         (assert for default: (C_7 : (currentValue == newValue)));
+         (assert for default: (C_5 : (currentValue == newValue)));
          ()
       };
-      (C_10 : ((C_9 : hardwareRegister.intM) = (C_8 : (5 :> int32))));
-      (C_11 : (__retres = 0));
+      (C_7 : ((C_6 : hardwareRegister.intM) = 5));
+      (C_8 : (__retres = 0));
       
       (return __retres)
    }
@@ -450,26 +450,24 @@ let main_ensures_default =
      (let currentValue = ref (any_int32 void) in
      (let newValue = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
-     (C_3:
-     (C_6:
-     (C_10:
-     (C_11:
+     (C_2:
+     (C_4:
+     (C_7:
+     (C_8:
      begin
        (let jessie_<somenum> =
-       (currentValue := (C_2:
-                        (C_1:
-                        ((safe_acc_ !intP_intM_hardwareRegister_1) hardwareRegister)))) in
+       (currentValue := (C_1:
+                        ((safe_acc_ !intP_intM_hardwareRegister_1) hardwareRegister))) in
        void);
       (let jessie_<somenum> =
-      (newValue := (C_5:
-                   (C_4:
-                   ((safe_acc_ !intP_intM_hardwareRegister_1) hardwareRegister)))) in
+      (newValue := (C_3:
+                   ((safe_acc_ !intP_intM_hardwareRegister_1) hardwareRegister))) in
       void);
       (assert
       { (JC_<somenum>:
         eq_int(integer_of_int32(currentValue), integer_of_int32(newValue))) };
       void); void;
-      (let jessie_<somenum> = (C_8: (safe_int32_of_integer_ (5))) in
+      (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
       (let jessie_<somenum> = hardwareRegister in
       (((safe_upd_ intP_intM_hardwareRegister_1) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
@@ -486,28 +484,26 @@ let main_safety =
      (let currentValue = ref (any_int32 void) in
      (let newValue = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
-     (C_3:
-     (C_6:
-     (C_10:
-     (C_11:
+     (C_2:
+     (C_4:
+     (C_7:
+     (C_8:
      begin
        (let jessie_<somenum> =
-       (currentValue := (C_2:
-                        (C_1:
+       (currentValue := (C_1:
                         (JC_<somenum>:
-                        (((acc_ !intP_hardwareRegister_1_alloc_table) !intP_intM_hardwareRegister_1) hardwareRegister))))) in
+                        (((acc_ !intP_hardwareRegister_1_alloc_table) !intP_intM_hardwareRegister_1) hardwareRegister)))) in
        void);
       (let jessie_<somenum> =
-      (newValue := (C_5:
-                   (C_4:
+      (newValue := (C_3:
                    (JC_<somenum>:
-                   (((acc_ !intP_hardwareRegister_1_alloc_table) !intP_intM_hardwareRegister_1) hardwareRegister))))) in
+                   (((acc_ !intP_hardwareRegister_1_alloc_table) !intP_intM_hardwareRegister_1) hardwareRegister)))) in
       void);
       [ { } unit reads currentValue,newValue
         { (JC_<somenum>:
           eq_int(integer_of_int32(currentValue), integer_of_int32(newValue))) } ];
       void;
-      (let jessie_<somenum> = (C_8: (safe_int32_of_integer_ (5))) in
+      (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
       (let jessie_<somenum> = hardwareRegister in
       (JC_<somenum>:
       ((((upd_ !intP_hardwareRegister_1_alloc_table) intP_intM_hardwareRegister_1) jessie_<somenum>) jessie_<somenum>))));
@@ -543,12 +539,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/volatile_and_const_po6.why">
-      <location file = "PPCHOME/tests/jessie/volatile_and_const.jessie/volatile_and_const.jc" line = "53" begin = "15" end = "67"/>
+      <location file = "PPCHOME/tests/jessie/volatile_and_const.jessie/volatile_and_const.jc" line = "53" begin = "14" end = "47"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/volatile_and_const_po7.why">
-      <location file = "PPCHOME/tests/jessie/volatile_and_const.jessie/volatile_and_const.jc" line = "53" begin = "15" end = "67"/>
+      <location file = "PPCHOME/tests/jessie/volatile_and_const.jessie/volatile_and_const.jc" line = "53" begin = "14" end = "47"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
