@@ -1,7 +1,7 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only alloc.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD alloc.c"
 [jessie] Starting Jessie translation
-[kernel] warning: No code for function alloc, default assigns generated
+[kernel] warning: No code for function alloc, default assigns generated for default behavior
 [jessie] Producing Jessie files in subdir alloc.jessie
 [jessie] File alloc.jessie/alloc.jc written.
 [jessie] File alloc.jessie/alloc.cloc written.

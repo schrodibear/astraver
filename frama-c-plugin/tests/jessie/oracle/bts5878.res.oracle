@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts5878.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts5878.c"
+[kernel] warning: ignoring status of axiomatic `Foo'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of axiomatic `Foo'
 [jessie] Producing Jessie files in subdir bts5878.jessie
 [jessie] File bts5878.jessie/bts5878.jc written.
 [jessie] File bts5878.jessie/bts5878.cloc written.

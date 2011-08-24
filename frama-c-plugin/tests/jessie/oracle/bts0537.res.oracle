@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0537.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0537.c"
+[kernel] warning: ignoring status of global predicate `Sorted'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global predicate `Sorted'
 bts0537.c:2:[jessie] failure: cannot handle this lvalue
 [jessie] warning: Unsupported feature(s).
                   Jessie plugin can not be used on your code.

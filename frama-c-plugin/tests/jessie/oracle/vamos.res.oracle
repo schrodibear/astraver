@@ -1,7 +1,11 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only vamos.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD vamos.c"
+[kernel] warning: ignoring status of axiomatic `ListLength'
+[kernel] warning: ignoring status of axiomatic `Reachable'
 [jessie] Starting Jessie translation
-[kernel] warning: No code for function pid2pcb, default assigns generated
+[kernel] warning: ignoring status of axiomatic `Reachable'
+[kernel] warning: ignoring status of axiomatic `ListLength'
+[kernel] warning: No code for function pid2pcb, default assigns generated for default behavior
 [jessie] Producing Jessie files in subdir vamos.jessie
 [jessie] File vamos.jessie/vamos.jc written.
 [jessie] File vamos.jessie/vamos.cloc written.

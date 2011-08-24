@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only test5_floats.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD test5_floats.c"
+[kernel] warning: ignoring status of axiomatic `Truncate'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of axiomatic `Truncate'
 [jessie] Producing Jessie files in subdir test5_floats.jessie
 [jessie] File test5_floats.jessie/test5_floats.jc written.
 [jessie] File test5_floats.jessie/test5_floats.cloc written.

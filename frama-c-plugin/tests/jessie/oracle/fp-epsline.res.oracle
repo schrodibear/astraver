@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only fp-epsline.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD fp-epsline.c"
+[kernel] warning: ignoring status of global invariant `M22_value'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global invariant `M22_value'
 [jessie] Producing Jessie files in subdir fp-epsline.jessie
 [jessie] File fp-epsline.jessie/fp-epsline.jc written.
 [jessie] File fp-epsline.jessie/fp-epsline.cloc written.

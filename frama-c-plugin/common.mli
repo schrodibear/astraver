@@ -205,7 +205,7 @@ val add_pending_statement :  beginning:bool -> Cil_types.stmt -> unit
 val visit_until_convergence :
   Visitor.frama_c_visitor -> Cil_types.file -> unit
 
-type proxy_frama_c_visitor = Visitor.frama_c_visitor
+class proxy_frama_c_visitor:  Visitor.frama_c_visitor -> Visitor.frama_c_visitor
 
 val visit_and_push_statements_visitor :
   Visitor.frama_c_visitor -> proxy_frama_c_visitor

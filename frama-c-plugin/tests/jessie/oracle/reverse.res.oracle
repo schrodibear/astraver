@@ -1,6 +1,14 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only reverse.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD reverse.c"
+[kernel] warning: ignoring status of axiomatic `List'
+[kernel] warning: ignoring status of global predicate `linked_path'
+[kernel] warning: ignoring status of global predicate `list_contents'
+[kernel] warning: ignoring status of global predicate `null_term_list'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global predicate `null_term_list'
+[kernel] warning: ignoring status of global predicate `list_contents'
+[kernel] warning: ignoring status of global predicate `linked_path'
+[kernel] warning: ignoring status of axiomatic `List'
 [jessie] Producing Jessie files in subdir reverse.jessie
 [jessie] File reverse.jessie/reverse.jc written.
 [jessie] File reverse.jessie/reverse.cloc written.

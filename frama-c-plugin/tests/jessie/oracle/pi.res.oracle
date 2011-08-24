@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only pi.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD pi.c"
+[kernel] warning: ignoring status of axiomatic `Pi'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of axiomatic `Pi'
 [jessie] Producing Jessie files in subdir pi.jessie
 [jessie] File pi.jessie/pi.jc written.
 [jessie] File pi.jessie/pi.cloc written.

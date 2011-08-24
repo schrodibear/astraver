@@ -587,9 +587,26 @@ let insert_pending_statements f =
 
 class proxy_frama_c_visitor (visitor : Visitor.frama_c_visitor) =
 object
+  (* [VP 2011-08-24] Do not inherit from Visitor.frama_c_visitor: all methods
+     that are not overloaded have to come from visitor. Otherwise, proxy will
+     fail to delegate some of its actions. *)
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  method set_current_kf kf = visitor#set_current_kf kf
+
+  method set_current_func f = visitor#set_current_func f
+
+  method current_kf = visitor#current_kf
+
+  method current_func = visitor#current_func
+
+  method push_stmt s = visitor#push_stmt s
+  method pop_stmt s = visitor#pop_stmt s
+
+  method current_stmt = visitor#current_stmt
+  method current_kinstr = visitor#current_kinstr
+
+  method get_filling_actions = visitor#get_filling_actions
+  method fill_global_tables = visitor#fill_global_tables
 
   (* Modify visitor on functions so that it prepends/postpends statements *)
   method vfunc f =
@@ -667,6 +684,28 @@ object
   method vdeps = visitor#vdeps
   method vcode_annot = visitor#vcode_annot
   method vannotation = visitor#vannotation
+
+  method behavior = visitor#behavior
+  method frama_c_plain_copy = visitor#frama_c_plain_copy
+  method is_annot_before = visitor#is_annot_before
+  method plain_copy_visitor = visitor#plain_copy_visitor
+  method queueInstr = visitor#queueInstr
+  method reset_current_func = visitor#reset_current_func
+  method reset_current_kf = visitor#reset_current_kf
+  method unqueueInstr = visitor#unqueueInstr
+  method vcompinfo = visitor#vcompinfo
+  method venuminfo = visitor#venuminfo
+  method venumitem = visitor#venumitem
+  method vfieldinfo = visitor#vfieldinfo
+  method vfrom = visitor#vfrom
+  method vglob = visitor#vglob
+  method vimpact_pragma = visitor#vimpact_pragma
+  method vlogic_ctor_info_decl = visitor#vlogic_ctor_info_decl
+  method vlogic_ctor_info_use = visitor#vlogic_ctor_info_use
+  method vlogic_type_def = visitor#vlogic_type_def
+  method vlogic_type_info_decl = visitor#vlogic_type_info_decl
+  method vlogic_type_info_use = visitor#vlogic_type_info_use
+  method vstmt = visitor#vstmt
 
 end
 

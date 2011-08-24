@@ -2538,7 +2538,10 @@ let global vardefs g =
           in
           let id = mkidentifier v.vname pos in
           let kf = Globals.Functions.get v in
+          Jessie_options.debug 
+            "Getting spec of %s" (Kernel_function.get_name kf);
           let funspec = Kernel_function.get_spec kf in
+          Jessie_options.debug "OK";
           let params = Globals.Functions.get_params kf in
           let formal v = true, ctype v.vtype, unique_name_if_empty v.vname in
           let formals = List.map formal params in

@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only floats_interp_simple.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD floats_interp_simple.c"
+[kernel] warning: ignoring status of global predicate `bounded'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global predicate `bounded'
 [jessie] Producing Jessie files in subdir floats_interp_simple.jessie
 [jessie] File floats_interp_simple.jessie/floats_interp_simple.jc written.
 [jessie] File floats_interp_simple.jessie/floats_interp_simple.cloc written.

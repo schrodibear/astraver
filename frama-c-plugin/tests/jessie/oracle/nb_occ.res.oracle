@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only nb_occ.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD nb_occ.c"
+[kernel] warning: ignoring status of axiomatic `NbOcc'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of axiomatic `NbOcc'
 [jessie] Producing Jessie files in subdir nb_occ.jessie
 [jessie] File nb_occ.jessie/nb_occ.jc written.
 [jessie] File nb_occ.jessie/nb_occ.cloc written.

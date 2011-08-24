@@ -1,6 +1,10 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only duprat3.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD duprat3.c"
+[kernel] warning: ignoring status of global predicate `pcond1'
+[kernel] warning: ignoring status of global predicate `pcond2'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global predicate `pcond2'
+[kernel] warning: ignoring status of global predicate `pcond1'
 [jessie] Producing Jessie files in subdir duprat3.jessie
 [jessie] File duprat3.jessie/duprat3.jc written.
 [jessie] File duprat3.jessie/duprat3.cloc written.

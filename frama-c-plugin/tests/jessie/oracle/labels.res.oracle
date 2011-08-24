@@ -1,7 +1,11 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only labels.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD labels.c"
+[kernel] warning: ignoring status of global predicate `val'
+[kernel] warning: ignoring status of global predicate `valg'
 [jessie] Starting Jessie translation
-[kernel] warning: No code for function free, default assigns generated
+[kernel] warning: ignoring status of global predicate `valg'
+[kernel] warning: ignoring status of global predicate `val'
+[kernel] warning: No code for function free, default assigns generated for default behavior
 [jessie] Producing Jessie files in subdir labels.jessie
 [jessie] File labels.jessie/labels.jc written.
 [jessie] File labels.jessie/labels.cloc written.

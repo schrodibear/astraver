@@ -1,6 +1,12 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bubble_sort.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bubble_sort.c"
+[kernel] warning: ignoring status of global predicate `sorted'
+[kernel] warning: ignoring status of global predicate `swapped'
+[kernel] warning: ignoring status of global predicate `Permut'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global predicate `Permut'
+[kernel] warning: ignoring status of global predicate `swapped'
+[kernel] warning: ignoring status of global predicate `sorted'
 [jessie] Producing Jessie files in subdir bubble_sort.jessie
 [jessie] File bubble_sort.jessie/bubble_sort.jc written.
 [jessie] File bubble_sort.jessie/bubble_sort.cloc written.

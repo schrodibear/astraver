@@ -48,21 +48,18 @@ open Common
 (*****************************************************************************)
 
 class add_default_behavior =
-  object(_self)
+  object(self)
     inherit Visitor.generic_frama_c_visitor (Project.current())
       (Cil.inplace_visit())
     method vspec s =
       if not (List.exists (fun x -> x.b_name = Cil.default_behavior_name)
                 s.spec_behavior)
       then begin
-        s.spec_behavior <-
-          { b_name = Cil.default_behavior_name;
-            b_assumes = [];
-            b_requires = [];
-            b_extended = [];
-            b_assigns = WritesAny;
-            b_post_cond = [];
-          } :: s.spec_behavior
+        let bhv = Cil.mk_behavior ~name:Cil.default_behavior_name () in
+        let kf = Extlib.the self#current_kf in
+        let props = Property.ip_all_of_behavior kf Kglobal bhv in
+        List.iter Property_status.register props;
+        s.spec_behavior <- bhv :: s.spec_behavior
       end;
       SkipChildren
 
@@ -150,7 +147,9 @@ let rename_entities file =
     (fun kf ->
        add_variable (Globals.Functions.get_vi kf);
        List.iter add_variable (Globals.Functions.get_params kf));
-  Globals.Annotations.replace_all
+(* [VP 2011-08-22] replace_all has disappeared from kernel's API, but
+   it appears that info in Globals.Annotations is not used by Jessie. *)
+(*  Globals.Annotations.replace_all
     (fun annot gen ->
        let rec replace_annot annot = match annot with
 	 | Dfun_or_pred _ -> annot
@@ -184,7 +183,7 @@ let rename_entities file =
 	     annot
        in replace_annot annot,gen
     );
-
+*)
   (* preprocess of renaming logic functions  *)
   Logic_env.Logic_info.iter
     (fun name _li ->
@@ -1305,10 +1304,10 @@ object(self)
 	let off = !Db.Properties.Interp.force_exp_to_term off in
 	let app = within_bounds ~strict:false v off in
 	let cur_stmt = the self#current_stmt in
-	Annotations.add_alarm
-	  cur_stmt
+        let cur_kf = the self#current_kf in
+	Annotations.add_assert
+	  cur_kf cur_stmt
 	  [ Jessie_options.Analysis.self ]
-	  Other_alarm
 	  app
     end;
     DoChildren
@@ -1326,17 +1325,16 @@ object(self)
 		  let off = !Db.Properties.Interp.force_exp_to_term off in
 		  let rel1 = within_bounds ~strict:true v off in
 		  let supst = mkStmt(Instr(Skip(CurrentLoc.get()))) in
-		  Annotations.add_alarm
-		    supst
+                  let curr_kf = the self#current_kf in
+		  Annotations.add_assert
+		    curr_kf supst
 		    [ Jessie_options.Analysis.self ]
-		    Other_alarm
 		    rel1;
 		  let rel2 = reach_upper_bound ~loose:false v off in
 		  let eqst = mkStmt(Instr(Skip(CurrentLoc.get()))) in
-		  Annotations.add_alarm
-		    eqst
+		  Annotations.add_assert
+		    curr_kf eqst
 		    [ Jessie_options.Analysis.self ]
-		    Other_alarm
 		    rel2;
 
 		  (* Rather add skip statement as blocks may be empty *)
@@ -1369,29 +1367,17 @@ object(self)
 		    Logic_const.pred_of_id_pred
 		      { rel with ip_name = [ name_of_hint_assertion ] }
 		  in
-		  Annotations.add_alarm
-		    s
+                  let curr_kf = the self#current_kf in
+		  Annotations.add_assert
+		    curr_kf s
 		    [ Jessie_options.Analysis.self ]
-		    Other_alarm
 		    prel;
-		  (* Further help ATP by asserting that index should be
-		     positive *)
-(* 		  let rel = *)
-(* 		    Logic_const.new_predicate  *)
-(* 		      (Logic_const.prel (Rle,lzero(),off)) *)
-(* 		  in *)
-(* 		  let prel = Logic_const.pred_of_id_pred *)
-(* 		    { rel with ip_name = [ name_of_hint_assertion ] } *)
-(* 		  in *)
-(* 		  Annotations.add_alarm *)
-(* 		    s ~before:false Other_alarm prel; *)
 		  (* If setting a character to zero in a buffer, this should
 		     be the new length of a string *)
 		  let rel = reach_upper_bound ~loose:true v off in
-		  Annotations.add_alarm
-		    s
+		  Annotations.add_assert
+		    curr_kf s
 		    [ Jessie_options.Analysis.self ]
-		    Other_alarm
 		    rel
 	  else ();
 	  s
@@ -1430,8 +1416,10 @@ object(self)
   inherit Visitor.generic_frama_c_visitor
     (Project.current ()) (Cil.inplace_visit ()) as super
 
-  method vexpr e = match e.enode with
+  method vexpr e = 
+    match e.enode with
     | BinOp((Shiftlt | Shiftrt as op),e1,e2,_ty) ->
+        let curr_kf = the self#current_kf in
 	let cur_stmt = the self#current_stmt in
 	let is_left_shift = match op with Shiftlt -> true | _ -> false in
 	let ty1 = typeOf e1 in
@@ -1454,10 +1442,9 @@ object(self)
 		let check =
                   !Db.Properties.Interp.force_exp_to_predicate check
 		in
-		Annotations.add_alarm
-		  cur_stmt
+		Annotations.add_assert
+		  curr_kf cur_stmt
 		  [ Jessie_options.Analysis.self ]
-		  Shift_alarm
 		  check
 	  end
 	else ();
@@ -1472,10 +1459,9 @@ object(self)
 	      let check =
 		!Db.Properties.Interp.force_exp_to_predicate check
 	      in
-	      Annotations.add_alarm
-		cur_stmt
+	      Annotations.add_assert
+		curr_kf cur_stmt
 		[ Jessie_options.Analysis.self ]
-		Shift_alarm
 		check
 	end;
 	(* Check that signed left shift has a positive left operand *)
@@ -1489,10 +1475,9 @@ object(self)
 		let check =
 		  !Db.Properties.Interp.force_exp_to_predicate check
 		in
-		Annotations.add_alarm
-		  cur_stmt
+		Annotations.add_assert
+		  curr_kf cur_stmt
 		  [ Jessie_options.Analysis.self ]
-		  Shift_alarm
 		  check
 	  end
 	else ();
@@ -1513,10 +1498,9 @@ object(self)
 		let check =
 		  !Db.Properties.Interp.force_exp_to_predicate check
 		in
-		Annotations.add_alarm
-		  cur_stmt
+		Annotations.add_assert
+		  curr_kf cur_stmt
 		  [ Jessie_options.Analysis.self ]
-		  Shift_alarm
 		  check
 	    | _ ->
 		let max_int = constant_expr max_int in
@@ -1529,10 +1513,9 @@ object(self)
 		let check =
 		  !Db.Properties.Interp.force_exp_to_predicate check
 		in
-		Annotations.add_alarm
-		  cur_stmt
+		Annotations.add_assert
+		  curr_kf cur_stmt
 		  [ Jessie_options.Analysis.self ]
-		  Shift_alarm
 		  check
 	  end
 	else ();

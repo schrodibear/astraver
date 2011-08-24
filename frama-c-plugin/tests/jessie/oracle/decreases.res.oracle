@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only decreases.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD decreases.c"
+[kernel] warning: ignoring status of global predicate `R'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global predicate `R'
 [jessie] Producing Jessie files in subdir decreases.jessie
 [jessie] File decreases.jessie/decreases.jc written.
 [jessie] File decreases.jessie/decreases.cloc written.

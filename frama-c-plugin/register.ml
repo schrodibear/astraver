@@ -143,9 +143,11 @@ let run () =
     (* Phase 5: C to Jessie translation, should be quite straighforward at this
      * stage (after normalization)
      *)
-
+    Jessie_options.debug "Jessie pragmas";
     let pragmas = Interp.pragmas file in
+    Jessie_options.debug "Jessie translation";
     let pfile = Interp.file file in
+    Jessie_options.debug "Printing Jessie program";
 
     (* Phase 6: pretty-printing of Jessie program *)
 
@@ -292,11 +294,11 @@ let run_and_catch_error () =
     | NotImplemented _ ->
 	warn_general "Not implemented feature(s). \
 Please submit `feature request' report."
-    | Assert_failure(file,a,b) ->
+    (*| Assert_failure(file,a,b) ->
 	fatal
 	  "Unexpected failure.@\nPlease submit bug report (Ref. \"%s:%d:%d\")."
 	  file a b
-    (*| exn ->
+      | exn ->
 	fatal
 	  "Unexpected exception.@\nPlease submit bug report (Ref. \"%s\")."
 	  (Printexc.to_string exn)

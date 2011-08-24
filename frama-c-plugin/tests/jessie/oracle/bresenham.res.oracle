@@ -1,6 +1,14 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bresenham.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bresenham.c"
+[kernel] warning: ignoring status of global invariant `first_octant'
+[kernel] warning: ignoring status of axiomatic `Abs'
+[kernel] warning: ignoring status of global predicate `best'
+[kernel] warning: ignoring status of global predicate `Invariant'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global predicate `Invariant'
+[kernel] warning: ignoring status of global predicate `best'
+[kernel] warning: ignoring status of axiomatic `Abs'
+[kernel] warning: ignoring status of global invariant `first_octant'
 [jessie] Producing Jessie files in subdir bresenham.jessie
 [jessie] File bresenham.jessie/bresenham.jc written.
 [jessie] File bresenham.jessie/bresenham.cloc written.

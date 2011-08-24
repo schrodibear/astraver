@@ -32,17 +32,17 @@
 open Plugin
 include Plugin.S
 
-module ProjectName: STRING
-module Behavior: STRING
-module Analysis: BOOL
-module WhyOpt: STRING_SET
-module JcOpt: STRING_SET
-module GenOnly: BOOL
-module InferAnnot: STRING
-module AbsDomain: STRING
-module Atp: STRING
-module CpuLimit: INT
-module HintLevel: INT
+module ProjectName: Plugin.String
+module Behavior: Plugin.String
+module Analysis: Plugin.Bool
+module WhyOpt: Plugin.String_set
+module JcOpt: Plugin.String_set
+module GenOnly: Plugin.Bool
+module InferAnnot: Plugin.String
+module AbsDomain: Plugin.String
+module Atp: Plugin.String
+module CpuLimit: Plugin.Int
+module HintLevel: Plugin.Int
 
 (*
 Local Variables:

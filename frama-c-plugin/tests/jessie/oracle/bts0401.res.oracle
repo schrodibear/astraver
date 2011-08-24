@@ -1,6 +1,10 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0401.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0401.c"
+[kernel] warning: ignoring status of global predicate `foo'
+[kernel] warning: ignoring status of global predicate `bar'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global predicate `bar'
+[kernel] warning: ignoring status of global predicate `foo'
 [jessie] Producing Jessie files in subdir bts0401.jessie
 [jessie] File bts0401.jessie/bts0401.jc written.
 [jessie] File bts0401.jessie/bts0401.cloc written.

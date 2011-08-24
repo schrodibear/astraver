@@ -1,6 +1,10 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only compound_global.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD compound_global.c"
+[kernel] warning: ignoring status of global invariant `gt'
+[kernel] warning: ignoring status of global invariant `gt2'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global invariant `gt2'
+[kernel] warning: ignoring status of global invariant `gt'
 [jessie] Producing Jessie files in subdir compound_global.jessie
 [jessie] File compound_global.jessie/compound_global.jc written.
 [jessie] File compound_global.jessie/compound_global.cloc written.

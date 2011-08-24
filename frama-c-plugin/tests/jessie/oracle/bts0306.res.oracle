@@ -1,6 +1,34 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0306.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0306.c"
+[kernel] warning: ignoring status of axiomatic `MemCmp'
+[kernel] warning: ignoring status of axiomatic `MemChr'
+[kernel] warning: ignoring status of axiomatic `MemSet'
+[kernel] warning: ignoring status of axiomatic `StrLen'
+[kernel] warning: ignoring status of axiomatic `StrCmp'
+[kernel] warning: ignoring status of axiomatic `StrNCmp'
+[kernel] warning: ignoring status of axiomatic `StrChr'
+[kernel] warning: ignoring status of axiomatic `WcsLen'
+[kernel] warning: ignoring status of axiomatic `WcsCmp'
+[kernel] warning: ignoring status of axiomatic `WcsNCmp'
+[kernel] warning: ignoring status of global predicate `valid_string'
+[kernel] warning: ignoring status of global predicate `valid_string_or_null'
+[kernel] warning: ignoring status of global predicate `valid_wstring'
+[kernel] warning: ignoring status of global predicate `valid_wstring_or_null'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global predicate `valid_wstring_or_null'
+[kernel] warning: ignoring status of global predicate `valid_wstring'
+[kernel] warning: ignoring status of global predicate `valid_string_or_null'
+[kernel] warning: ignoring status of global predicate `valid_string'
+[kernel] warning: ignoring status of axiomatic `WcsNCmp'
+[kernel] warning: ignoring status of axiomatic `WcsCmp'
+[kernel] warning: ignoring status of axiomatic `WcsLen'
+[kernel] warning: ignoring status of axiomatic `StrChr'
+[kernel] warning: ignoring status of axiomatic `StrNCmp'
+[kernel] warning: ignoring status of axiomatic `StrCmp'
+[kernel] warning: ignoring status of axiomatic `StrLen'
+[kernel] warning: ignoring status of axiomatic `MemSet'
+[kernel] warning: ignoring status of axiomatic `MemChr'
+[kernel] warning: ignoring status of axiomatic `MemCmp'
 [jessie] Producing Jessie files in subdir bts0306.jessie
 [jessie] File bts0306.jessie/bts0306.jc written.
 [jessie] File bts0306.jessie/bts0306.cloc written.

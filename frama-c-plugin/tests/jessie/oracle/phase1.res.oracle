@@ -1,6 +1,12 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only phase1.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD phase1.c"
+[kernel] warning: ignoring status of global predicate `f_cond0'
+[kernel] warning: ignoring status of global predicate `f_cond1'
+[kernel] warning: ignoring status of global predicate `f_cond_OK'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global predicate `f_cond_OK'
+[kernel] warning: ignoring status of global predicate `f_cond1'
+[kernel] warning: ignoring status of global predicate `f_cond0'
 [jessie] Producing Jessie files in subdir phase1.jessie
 [jessie] File phase1.jessie/phase1.jc written.
 [jessie] File phase1.jessie/phase1.cloc written.

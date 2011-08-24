@@ -1,7 +1,9 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only cvc3.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD cvc3.c"
+[kernel] warning: ignoring status of global predicate `is_bit'
 [jessie] Starting Jessie translation
-[kernel] warning: No code for function nd, default assigns generated
+[kernel] warning: ignoring status of global predicate `is_bit'
+[kernel] warning: No code for function nd, default assigns generated for default behavior
 cvc3.c:12:[jessie] warning: skipping all arguments of implicit prototype nd
 [jessie] Producing Jessie files in subdir cvc3.jessie
 [jessie] File cvc3.jessie/cvc3.jc written.

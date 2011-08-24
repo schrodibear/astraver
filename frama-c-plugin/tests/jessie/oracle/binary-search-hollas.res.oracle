@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only binary-search-hollas.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD binary-search-hollas.c"
+[kernel] warning: ignoring status of global predicate `Sorted'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global predicate `Sorted'
 [jessie] Producing Jessie files in subdir binary-search-hollas.jessie
 [jessie] File binary-search-hollas.jessie/binary-search-hollas.jc written.
 [jessie] File binary-search-hollas.jessie/binary-search-hollas.cloc written.

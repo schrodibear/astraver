@@ -1,8 +1,36 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only hd_snoob.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD hd_snoob.c"
+[kernel] warning: ignoring status of axiomatic `MemCmp'
+[kernel] warning: ignoring status of axiomatic `MemChr'
+[kernel] warning: ignoring status of axiomatic `MemSet'
+[kernel] warning: ignoring status of axiomatic `StrLen'
+[kernel] warning: ignoring status of axiomatic `StrCmp'
+[kernel] warning: ignoring status of axiomatic `StrNCmp'
+[kernel] warning: ignoring status of axiomatic `StrChr'
+[kernel] warning: ignoring status of axiomatic `WcsLen'
+[kernel] warning: ignoring status of axiomatic `WcsCmp'
+[kernel] warning: ignoring status of axiomatic `WcsNCmp'
+[kernel] warning: ignoring status of global predicate `valid_string'
+[kernel] warning: ignoring status of global predicate `valid_string_or_null'
+[kernel] warning: ignoring status of global predicate `valid_wstring'
+[kernel] warning: ignoring status of global predicate `valid_wstring_or_null'
 [jessie] Starting Jessie translation
-[kernel] warning: No code for function printf, default assigns generated
-[kernel] warning: No code for function strtol, default assigns generated
+[kernel] warning: ignoring status of global predicate `valid_wstring_or_null'
+[kernel] warning: ignoring status of global predicate `valid_wstring'
+[kernel] warning: ignoring status of global predicate `valid_string_or_null'
+[kernel] warning: ignoring status of global predicate `valid_string'
+[kernel] warning: ignoring status of axiomatic `WcsNCmp'
+[kernel] warning: ignoring status of axiomatic `WcsCmp'
+[kernel] warning: ignoring status of axiomatic `WcsLen'
+[kernel] warning: ignoring status of axiomatic `StrChr'
+[kernel] warning: ignoring status of axiomatic `StrNCmp'
+[kernel] warning: ignoring status of axiomatic `StrCmp'
+[kernel] warning: ignoring status of axiomatic `StrLen'
+[kernel] warning: ignoring status of axiomatic `MemSet'
+[kernel] warning: ignoring status of axiomatic `MemChr'
+[kernel] warning: ignoring status of axiomatic `MemCmp'
+[kernel] warning: No code for function printf, default assigns generated for default behavior
+[kernel] warning: No code for function strtol, default assigns generated for default behavior
 hd_snoob.c:144:[jessie] warning: skipping all arguments of implicit prototype printf
 hd_snoob.c:148:[jessie] warning: skipping all arguments of implicit prototype strtol
 hd_snoob.c:150:[jessie] warning: skipping all arguments of implicit prototype printf

@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only vieira1.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD vieira1.c"
+[kernel] warning: ignoring status of axiomatic `Sumone'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of axiomatic `Sumone'
 [jessie] Producing Jessie files in subdir vieira1.jessie
 [jessie] File vieira1.jessie/vieira1.jc written.
 [jessie] File vieira1.jessie/vieira1.cloc written.

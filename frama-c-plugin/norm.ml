@@ -533,7 +533,7 @@ let return_vars = Cil_datatype.Varinfo.Hashtbl.create 17
  * assignment:
  * - recursively decompose into elementary assignments
  *)
-class expandStructAssign () =
+class expandStructAssign =
 
   let pairs = ref [] in
   let new_return_type = ref None in
@@ -636,15 +636,15 @@ class expandStructAssign () =
       | _ -> [ lv ]
   in
 
-object
+object(self)
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
-
+  inherit Visitor.frama_c_inplace as super
   method vglob_aux =
     let retype_func fvi =
       let formal (n,ty,a) =
-        let ty = if isStructOrUnionType ty then mkTRef ty "Norm.vglob_aux" else ty in
+        let ty = 
+          if isStructOrUnionType ty then mkTRef ty "Norm.vglob_aux" else ty
+        in
         n, ty, a
       in
       let rt,params,isva,a = splitFunctionTypeVI fvi in
@@ -652,7 +652,11 @@ object
         | None -> None
         | Some p -> Some(List.map formal p)
       in
-      let rt = if isStructOrUnionType rt then mkTRef rt "Norm.vgloab_aux(2)" else rt in
+      let rt = 
+        if isStructOrUnionType rt then
+          mkTRef rt "Norm.vgloab_aux(2)" 
+        else rt 
+      in
       fvi.vtype <- TFun(rt,params,isva,a)
     in
     function
@@ -706,6 +710,9 @@ object
     DoChildren
 
   method vbehavior b =
+    let kf = Extlib.the self#current_kf in
+    let ki = self#current_kinstr in
+    let old = Property.ip_all_of_behavior kf ki b in
     let lval loc lv = expand lv (typeOfLval lv) loc in
     let term t = match t.term_node with
       | TLval tlv ->
@@ -758,6 +765,8 @@ object
         WritesAny -> ()
       | Writes l ->
         b.b_assigns <- Writes (List.flatten (List.map assign l)));
+    let props = Property.ip_all_of_behavior kf ki b in
+    Property_status.merge ~old props;
     DoChildren
 
   method vstmt_aux s = match s.skind with
@@ -841,7 +850,7 @@ object
 end
 
 let expand_struct_assign file =
-  let visitor = new expandStructAssign () in
+  let visitor = new expandStructAssign in
   visitFramacFile (visit_and_push_statements_visitor visitor) file
 
 

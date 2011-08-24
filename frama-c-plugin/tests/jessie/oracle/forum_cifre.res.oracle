@@ -1,6 +1,36 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only forum_cifre.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD forum_cifre.c"
+[kernel] warning: ignoring status of axiomatic `MemCmp'
+[kernel] warning: ignoring status of axiomatic `MemChr'
+[kernel] warning: ignoring status of axiomatic `MemSet'
+[kernel] warning: ignoring status of axiomatic `StrLen'
+[kernel] warning: ignoring status of axiomatic `StrCmp'
+[kernel] warning: ignoring status of axiomatic `StrNCmp'
+[kernel] warning: ignoring status of axiomatic `StrChr'
+[kernel] warning: ignoring status of axiomatic `WcsLen'
+[kernel] warning: ignoring status of axiomatic `WcsCmp'
+[kernel] warning: ignoring status of axiomatic `WcsNCmp'
+[kernel] warning: ignoring status of global predicate `valid_string'
+[kernel] warning: ignoring status of global predicate `valid_string_or_null'
+[kernel] warning: ignoring status of global predicate `valid_wstring'
+[kernel] warning: ignoring status of global predicate `valid_wstring_or_null'
+[kernel] warning: ignoring status of type invariant `paquet_bien_forme'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of type invariant `paquet_bien_forme'
+[kernel] warning: ignoring status of global predicate `valid_wstring_or_null'
+[kernel] warning: ignoring status of global predicate `valid_wstring'
+[kernel] warning: ignoring status of global predicate `valid_string_or_null'
+[kernel] warning: ignoring status of global predicate `valid_string'
+[kernel] warning: ignoring status of axiomatic `WcsNCmp'
+[kernel] warning: ignoring status of axiomatic `WcsCmp'
+[kernel] warning: ignoring status of axiomatic `WcsLen'
+[kernel] warning: ignoring status of axiomatic `StrChr'
+[kernel] warning: ignoring status of axiomatic `StrNCmp'
+[kernel] warning: ignoring status of axiomatic `StrCmp'
+[kernel] warning: ignoring status of axiomatic `StrLen'
+[kernel] warning: ignoring status of axiomatic `MemSet'
+[kernel] warning: ignoring status of axiomatic `MemChr'
+[kernel] warning: ignoring status of axiomatic `MemCmp'
 [jessie] Producing Jessie files in subdir forum_cifre.jessie
 [jessie] File forum_cifre.jessie/forum_cifre.jc written.
 [jessie] File forum_cifre.jessie/forum_cifre.cloc written.

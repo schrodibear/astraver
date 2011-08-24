@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only fact.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD fact.c"
+[kernel] warning: ignoring status of global predicate `is_prod'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global predicate `is_prod'
 [jessie] Producing Jessie files in subdir fact.jessie
 [jessie] File fact.jessie/fact.jc written.
 [jessie] File fact.jessie/fact.cloc written.

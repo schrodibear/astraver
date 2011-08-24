@@ -1,6 +1,12 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only floats_interp2.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD floats_interp2.c"
+[kernel] warning: ignoring status of global predicate `min_step'
+[kernel] warning: ignoring status of global predicate `bounded'
+[kernel] warning: ignoring status of global predicate `array_bounded'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global predicate `array_bounded'
+[kernel] warning: ignoring status of global predicate `bounded'
+[kernel] warning: ignoring status of global predicate `min_step'
 [jessie] Producing Jessie files in subdir floats_interp2.jessie
 [jessie] File floats_interp2.jessie/floats_interp2.jc written.
 [jessie] File floats_interp2.jessie/floats_interp2.cloc written.

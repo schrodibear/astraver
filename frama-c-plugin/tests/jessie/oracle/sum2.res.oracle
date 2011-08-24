@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only sum2.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD sum2.c"
+[kernel] warning: ignoring status of axiomatic `Sum'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of axiomatic `Sum'
 [jessie] Producing Jessie files in subdir sum2.jessie
 [jessie] File sum2.jessie/sum2.jc written.
 [jessie] File sum2.jessie/sum2.cloc written.

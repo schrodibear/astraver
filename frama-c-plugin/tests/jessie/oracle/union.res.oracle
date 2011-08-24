@@ -1,7 +1,7 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only union.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD union.c"
 [jessie] Starting Jessie translation
-[kernel] warning: No code for function malloc, default assigns generated
+[kernel] warning: No code for function malloc, default assigns generated for default behavior
 [jessie] Producing Jessie files in subdir union.jessie
 [jessie] File union.jessie/union.jc written.
 [jessie] File union.jessie/union.cloc written.

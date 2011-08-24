@@ -1,6 +1,10 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only gcd.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD gcd.c"
+[kernel] warning: ignoring status of global predicate `divides'
+[kernel] warning: ignoring status of global predicate `isGcd'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global predicate `isGcd'
+[kernel] warning: ignoring status of global predicate `divides'
 [jessie] Producing Jessie files in subdir gcd.jessie
 [jessie] File gcd.jessie/gcd.jc written.
 [jessie] File gcd.jessie/gcd.cloc written.

@@ -1,6 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only separation4.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD separation4.c"
+[kernel] warning: ignoring status of global predicate `p'
 [jessie] Starting Jessie translation
+[kernel] warning: ignoring status of global predicate `p'
 [jessie] Producing Jessie files in subdir separation4.jessie
 [jessie] File separation4.jessie/separation4.jc written.
 [jessie] File separation4.jessie/separation4.cloc written.
