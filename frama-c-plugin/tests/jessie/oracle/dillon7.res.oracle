@@ -1,8 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only dillon7.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD dillon7.c"
-[kernel] warning: ignoring status of axiomatic `MyCast'
+[kernel] warning: ignoring status of global predicate `simulated_cast'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of axiomatic `MyCast'
+[kernel] warning: ignoring status of global predicate `simulated_cast'
 [jessie] Producing Jessie files in subdir dillon7.jessie
 [jessie] File dillon7.jessie/dillon7.jc written.
 [jessie] File dillon7.jessie/dillon7.cloc written.

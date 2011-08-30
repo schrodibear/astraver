@@ -1,20 +1,14 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only heap.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD heap.c"
-[kernel] warning: ignoring status of axiomatic `Bag'
 [kernel] warning: ignoring status of global predicate `is_max_bag'
-[kernel] warning: ignoring status of axiomatic `Tree'
-[kernel] warning: ignoring status of axiomatic `IsHeap'
-[kernel] warning: ignoring status of axiomatic `TreeOfArray'
+[kernel] warning: ignoring status of global predicate `is_heap'
 [kernel] warning: ignoring status of global invariant `size_inv'
 [kernel] warning: ignoring status of global invariant `is_heap_inv'
 [jessie] Starting Jessie translation
 [kernel] warning: ignoring status of global invariant `is_heap_inv'
 [kernel] warning: ignoring status of global invariant `size_inv'
-[kernel] warning: ignoring status of axiomatic `TreeOfArray'
-[kernel] warning: ignoring status of axiomatic `IsHeap'
-[kernel] warning: ignoring status of axiomatic `Tree'
+[kernel] warning: ignoring status of global predicate `is_heap'
 [kernel] warning: ignoring status of global predicate `is_max_bag'
-[kernel] warning: ignoring status of axiomatic `Bag'
 [jessie] Producing Jessie files in subdir heap.jessie
 [jessie] File heap.jessie/heap.jc written.
 [jessie] File heap.jessie/heap.cloc written.

@@ -1,8 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only array_double.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD array_double.c"
-[kernel] warning: ignoring status of axiomatic `EqMessage'
+[kernel] warning: ignoring status of global predicate `eq_message'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of axiomatic `EqMessage'
+[kernel] warning: ignoring status of global predicate `eq_message'
 [jessie] Producing Jessie files in subdir array_double.jessie
 [jessie] File array_double.jessie/array_double.jc written.
 [jessie] File array_double.jessie/array_double.cloc written.

@@ -1,10 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only cast_with_union.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD cast_with_union.c"
-[kernel] warning: ignoring status of axiomatic `Zero'
-[kernel] warning: ignoring status of axiomatic `Zero2'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of axiomatic `Zero2'
-[kernel] warning: ignoring status of axiomatic `Zero'
 cast_with_union.c:39:[jessie] failure: Casting from type uni2 * to type struct intP * not allowed in logic
 [jessie] warning: Unsupported feature(s).
                   Jessie plugin can not be used on your code.

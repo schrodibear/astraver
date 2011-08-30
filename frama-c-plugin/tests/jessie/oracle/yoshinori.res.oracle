@@ -1,8 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only yoshinori.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD yoshinori.c"
-[kernel] warning: ignoring status of axiomatic `test1'
+[kernel] warning: ignoring status of global predicate `pred1'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of axiomatic `test1'
+[kernel] warning: ignoring status of global predicate `pred1'
 yoshinori.c:8:[jessie] failure: cannot handle this lvalue
 [jessie] warning: Unsupported feature(s).
                   Jessie plugin can not be used on your code.

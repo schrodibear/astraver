@@ -1,9 +1,9 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only geanta3.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD geanta3.c"
 [kernel] warning: ignoring status of global predicate `result'
-[kernel] warning: ignoring status of axiomatic `statusInitial'
+[kernel] warning: ignoring status of global predicate `function2_res'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of axiomatic `statusInitial'
+[kernel] warning: ignoring status of global predicate `function2_res'
 [kernel] warning: ignoring status of global predicate `result'
 [jessie] Producing Jessie files in subdir geanta3.jessie
 [jessie] File geanta3.jessie/geanta3.jc written.

@@ -1,8 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only test6_floats.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD test6_floats.c"
-[kernel] warning: ignoring status of axiomatic `KillingProp'
+[kernel] warning: ignoring status of global predicate `my_killing_prop'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of axiomatic `KillingProp'
+[kernel] warning: ignoring status of global predicate `my_killing_prop'
 [jessie] Producing Jessie files in subdir test6_floats.jessie
 [jessie] File test6_floats.jessie/test6_floats.jc written.
 [jessie] File test6_floats.jessie/test6_floats.cloc written.

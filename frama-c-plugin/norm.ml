@@ -533,12 +533,11 @@ let return_vars = Cil_datatype.Varinfo.Hashtbl.create 17
  * assignment:
  * - recursively decompose into elementary assignments
  *)
-class expandStructAssign =
+class expandStructAssign () =
 
   let pairs = ref [] in
   let new_return_type = ref None in
   let return_var = ref None in
-  let curFundec : fundec ref = ref (emptyFunction "@dummy@") in
 
   let postaction_term_lval (host,off) =
     let host = match host with
@@ -669,7 +668,6 @@ object(self)
       | GEnumTag _ | GAsm _ | GPragma _ | GText _ -> SkipChildren
 
   method vfunc f =
-    curFundec := f;
     let var v =
       if isStructOrUnionType v.vtype then
         let newv = copyVarinfo v (unique_name ("v_" ^ v.vname)) in
@@ -697,7 +695,7 @@ object(self)
     (* Add local variable for return *)
     let rt = getReturnType f.svar.vtype in
     if isStructOrUnionType rt then
-      let rv = makeTempVar !curFundec rt in
+      let rv = makeTempVar (Extlib.the self#current_func) rt in
       return_var := Some rv;
       Cil_datatype.Varinfo.Hashtbl.add return_vars rv ()
     else
@@ -816,7 +814,10 @@ object(self)
                 (* Type of [lv] has not been changed. *)
                 let lvty = typeOfLval lv in
                 if isStructOrUnionType lvty then
-                  let tmpv = makeTempVar !curFundec (mkTRef lvty "Norm.vinst") in
+                  let tmpv = 
+                    makeTempVar
+                      (Extlib.the self#current_func) (mkTRef lvty "Norm.vinst")
+                  in
                   let tmplv = Var tmpv, NoOffset in
                   let call = Call(Some tmplv,callee,args,loc) in
                   let deref =
@@ -850,7 +851,7 @@ object(self)
 end
 
 let expand_struct_assign file =
-  let visitor = new expandStructAssign in
+  let visitor = new expandStructAssign () in
   visitFramacFile (visit_and_push_statements_visitor visitor) file
 
 

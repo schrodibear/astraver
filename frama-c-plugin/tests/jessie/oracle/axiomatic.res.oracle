@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only axiomatic.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD axiomatic.c"
-[kernel] warning: ignoring status of axiomatic `A'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of axiomatic `A'
 [jessie] Producing Jessie files in subdir axiomatic.jessie
 [jessie] File axiomatic.jessie/axiomatic.jc written.
 [jessie] File axiomatic.jessie/axiomatic.cloc written.

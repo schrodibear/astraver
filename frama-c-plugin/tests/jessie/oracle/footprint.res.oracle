@@ -1,8 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only footprint.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD footprint.c"
-[kernel] warning: ignoring status of axiomatic `P'
+[kernel] warning: ignoring status of global predicate `p'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of axiomatic `P'
+[kernel] warning: ignoring status of global predicate `p'
 [jessie] Producing Jessie files in subdir footprint.jessie
 [jessie] File footprint.jessie/footprint.jc written.
 [jessie] File footprint.jessie/footprint.cloc written.

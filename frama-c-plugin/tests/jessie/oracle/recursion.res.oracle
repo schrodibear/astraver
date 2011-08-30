@@ -1,8 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only recursion.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD recursion.c"
-[kernel] warning: ignoring status of axiomatic `IsList'
+[kernel] warning: ignoring status of global predicate `is_list'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of axiomatic `IsList'
+[kernel] warning: ignoring status of global predicate `is_list'
 [kernel] warning: No code for function malloc, default assigns generated for default behavior
 [jessie] Producing Jessie files in subdir recursion.jessie
 [jessie] File recursion.jessie/recursion.jc written.

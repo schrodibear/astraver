@@ -1,12 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only mac_carthy.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD mac_carthy.c"
-[kernel] warning: ignoring status of axiomatic `F91'
-[kernel] warning: ignoring status of axiomatic `Pair'
 [kernel] warning: ignoring status of global predicate `lex'
 [jessie] Starting Jessie translation
 [kernel] warning: ignoring status of global predicate `lex'
-[kernel] warning: ignoring status of axiomatic `Pair'
-[kernel] warning: ignoring status of axiomatic `F91'
 [jessie] Producing Jessie files in subdir mac_carthy.jessie
 [jessie] File mac_carthy.jessie/mac_carthy.jc written.
 [jessie] File mac_carthy.jessie/mac_carthy.cloc written.

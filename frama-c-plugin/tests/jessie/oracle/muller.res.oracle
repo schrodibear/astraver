@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only muller.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD muller.c"
-[kernel] warning: ignoring status of axiomatic `NumOfPos'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of axiomatic `NumOfPos'
 [kernel] warning: No code for function calloc, default assigns generated for default behavior
 [jessie] Producing Jessie files in subdir muller.jessie
 [jessie] File muller.jessie/muller.jc written.

@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only count_bits.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD count_bits.c"
-[kernel] warning: ignoring status of axiomatic `CountBits'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of axiomatic `CountBits'
 [jessie] Producing Jessie files in subdir count_bits.jessie
 [jessie] File count_bits.jessie/count_bits.jc written.
 [jessie] File count_bits.jessie/count_bits.cloc written.

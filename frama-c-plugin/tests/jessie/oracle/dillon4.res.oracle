@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only dillon4.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD dillon4.c"
-[kernel] warning: ignoring status of axiomatic `Cpt'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of axiomatic `Cpt'
 [jessie] Producing Jessie files in subdir dillon4.jessie
 [jessie] File dillon4.jessie/dillon4.jc written.
 [jessie] File dillon4.jessie/dillon4.cloc written.
