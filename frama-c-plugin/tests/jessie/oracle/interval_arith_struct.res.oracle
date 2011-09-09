@@ -1,18 +1,8 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only interval_arith_struct.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD interval_arith_struct.c"
-[kernel] warning: ignoring status of global predicate `dif_sign'
-[kernel] warning: ignoring status of global predicate `sam_sign'
-[kernel] warning: ignoring status of global predicate `double_le_real'
-[kernel] warning: ignoring status of global predicate `real_le_double'
 [kernel] warning: ignoring status of type invariant `is_interval'
-[kernel] warning: ignoring status of global predicate `in_interval'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global predicate `in_interval'
 [kernel] warning: ignoring status of type invariant `is_interval'
-[kernel] warning: ignoring status of global predicate `real_le_double'
-[kernel] warning: ignoring status of global predicate `double_le_real'
-[kernel] warning: ignoring status of global predicate `sam_sign'
-[kernel] warning: ignoring status of global predicate `dif_sign'
 [jessie] Producing Jessie files in subdir interval_arith_struct.jessie
 [jessie] File interval_arith_struct.jessie/interval_arith_struct.jc written.
 [jessie] File interval_arith_struct.jessie/interval_arith_struct.cloc written.

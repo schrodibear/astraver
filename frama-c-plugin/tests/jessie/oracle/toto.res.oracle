@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only toto.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD toto.c"
-[kernel] warning: ignoring status of global predicate `p'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global predicate `p'
 [jessie] warning: abrupt clause(s) ignored
 [jessie] Producing Jessie files in subdir toto.jessie
 [jessie] File toto.jessie/toto.jc written.

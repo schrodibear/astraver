@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only glob.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD glob.c"
-[kernel] warning: ignoring status of global predicate `gzero'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global predicate `gzero'
 [jessie] Producing Jessie files in subdir glob.jessie
 [jessie] File glob.jessie/glob.jc written.
 [jessie] File glob.jessie/glob.cloc written.

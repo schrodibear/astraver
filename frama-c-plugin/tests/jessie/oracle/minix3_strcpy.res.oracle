@@ -1,14 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only minix3_strcpy.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD minix3_strcpy.c"
-[kernel] warning: ignoring status of global predicate `valid_string'
-[kernel] warning: ignoring status of global predicate `valid_string_or_null'
-[kernel] warning: ignoring status of global predicate `valid_wstring'
-[kernel] warning: ignoring status of global predicate `valid_wstring_or_null'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global predicate `valid_wstring_or_null'
-[kernel] warning: ignoring status of global predicate `valid_wstring'
-[kernel] warning: ignoring status of global predicate `valid_string_or_null'
-[kernel] warning: ignoring status of global predicate `valid_string'
 [jessie] Producing Jessie files in subdir minix3_strcpy.jessie
 [jessie] File minix3_strcpy.jessie/minix3_strcpy.jc written.
 [jessie] File minix3_strcpy.jessie/minix3_strcpy.cloc written.

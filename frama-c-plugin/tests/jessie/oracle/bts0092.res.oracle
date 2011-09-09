@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0092.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0092.c"
-[kernel] warning: ignoring status of global predicate `strcmp'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global predicate `strcmp'
 [jessie] Producing Jessie files in subdir bts0092.jessie
 [jessie] File bts0092.jessie/bts0092.jc written.
 [jessie] File bts0092.jessie/bts0092.cloc written.

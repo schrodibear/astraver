@@ -1,16 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only heapsort.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD heapsort.c"
-[kernel] warning: ignoring status of global predicate `Swap'
-[kernel] warning: ignoring status of global predicate `Permut'
-[kernel] warning: ignoring status of global predicate `Sorted'
-[kernel] warning: ignoring status of global predicate `Hnode'
-[kernel] warning: ignoring status of global predicate `H'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global predicate `H'
-[kernel] warning: ignoring status of global predicate `Hnode'
-[kernel] warning: ignoring status of global predicate `Sorted'
-[kernel] warning: ignoring status of global predicate `Permut'
-[kernel] warning: ignoring status of global predicate `Swap'
 [jessie] Producing Jessie files in subdir heapsort.jessie
 [jessie] File heapsort.jessie/heapsort.jc written.
 [jessie] File heapsort.jessie/heapsort.cloc written.

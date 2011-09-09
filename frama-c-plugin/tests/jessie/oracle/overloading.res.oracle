@@ -1,10 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only overloading.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD overloading.c"
-[kernel] warning: ignoring status of global predicate `is_pos'
-[kernel] warning: ignoring status of global predicate `is_pos'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global predicate `is_pos'
-[kernel] warning: ignoring status of global predicate `is_pos'
 [jessie] Producing Jessie files in subdir overloading.jessie
 [jessie] File overloading.jessie/overloading.jc written.
 [jessie] File overloading.jessie/overloading.cloc written.

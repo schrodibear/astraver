@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only t2_annot86.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD t2_annot86.c"
-[kernel] warning: ignoring status of global predicate `I_3'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global predicate `I_3'
 [jessie] Producing Jessie files in subdir t2_annot86.jessie
 [jessie] File t2_annot86.jessie/t2_annot86.jc written.
 [jessie] File t2_annot86.jessie/t2_annot86.cloc written.

@@ -1,22 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only queens.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD queens.c"
-[kernel] warning: ignoring status of global predicate `in_'
-[kernel] warning: ignoring status of global predicate `included'
-[kernel] warning: ignoring status of global predicate `eq_prefix'
-[kernel] warning: ignoring status of global predicate `eq_sol'
-[kernel] warning: ignoring status of global predicate `partial_solution'
-[kernel] warning: ignoring status of global predicate `solution'
-[kernel] warning: ignoring status of global predicate `lt_sol'
-[kernel] warning: ignoring status of global predicate `sorted'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global predicate `sorted'
-[kernel] warning: ignoring status of global predicate `lt_sol'
-[kernel] warning: ignoring status of global predicate `solution'
-[kernel] warning: ignoring status of global predicate `partial_solution'
-[kernel] warning: ignoring status of global predicate `eq_sol'
-[kernel] warning: ignoring status of global predicate `eq_prefix'
-[kernel] warning: ignoring status of global predicate `in_'
-[kernel] warning: ignoring status of global predicate `included'
 [kernel] warning: No code for function min_elt, default assigns generated for default behavior
 queens.c:297:[jessie] warning: skipping all arguments of implicit prototype store_solution
 [jessie] Producing Jessie files in subdir queens.jessie

@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only ghost_label.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD ghost_label.c"
-[kernel] warning: ignoring status of global predicate `p'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global predicate `p'
 [jessie] Producing Jessie files in subdir ghost_label.jessie
 [jessie] File ghost_label.jessie/ghost_label.jc written.
 [jessie] File ghost_label.jessie/ghost_label.cloc written.

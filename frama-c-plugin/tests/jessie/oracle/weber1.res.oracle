@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only weber1.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD weber1.c"
-[kernel] warning: ignoring status of global predicate `disjoint_arrays'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global predicate `disjoint_arrays'
 [jessie] Producing Jessie files in subdir weber1.jessie
 [jessie] File weber1.jessie/weber1.jc written.
 [jessie] File weber1.jessie/weber1.cloc written.

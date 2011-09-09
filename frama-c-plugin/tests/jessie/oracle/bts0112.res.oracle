@@ -1,14 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0112.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0112.c"
-[kernel] warning: ignoring status of global predicate `delay'
-[kernel] warning: ignoring status of global predicate `is_exact_int_mat'
-[kernel] warning: ignoring status of global predicate `is_exact_int_mat_bounded_by'
-[kernel] warning: ignoring status of global predicate `temporary_is_exact_int_mat_bounded_by'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global predicate `temporary_is_exact_int_mat_bounded_by'
-[kernel] warning: ignoring status of global predicate `is_exact_int_mat_bounded_by'
-[kernel] warning: ignoring status of global predicate `is_exact_int_mat'
-[kernel] warning: ignoring status of global predicate `delay'
 [kernel] warning: No code for function fmod, default assigns generated for default behavior
 bts0112.c:136:[jessie] warning: skipping all arguments of implicit prototype fmod
 [jessie] Producing Jessie files in subdir bts0112.jessie

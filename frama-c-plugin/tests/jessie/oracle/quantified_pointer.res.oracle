@@ -1,14 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only quantified_pointer.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD quantified_pointer.c"
-[kernel] warning: ignoring status of global predicate `reachable'
-[kernel] warning: ignoring status of global predicate `is_list'
-[kernel] warning: ignoring status of global predicate `is_in_list'
-[kernel] warning: ignoring status of global predicate `is_cycle'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global predicate `is_cycle'
-[kernel] warning: ignoring status of global predicate `is_in_list'
-[kernel] warning: ignoring status of global predicate `is_list'
-[kernel] warning: ignoring status of global predicate `reachable'
 [jessie] Producing Jessie files in subdir quantified_pointer.jessie
 [jessie] File quantified_pointer.jessie/quantified_pointer.jc written.
 [jessie] File quantified_pointer.jessie/quantified_pointer.cloc written.

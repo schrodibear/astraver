@@ -1,10 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only e63.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD e63.c"
-[kernel] warning: ignoring status of global predicate `incr'
-[kernel] warning: ignoring status of global predicate `incr2'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global predicate `incr2'
-[kernel] warning: ignoring status of global predicate `incr'
 [jessie] Producing Jessie files in subdir e63.jessie
 [jessie] File e63.jessie/e63.jc written.
 [jessie] File e63.jessie/e63.cloc written.
