@@ -1,2 +1,4 @@
-File "reverse.jessie/reverse.jc", line 76, characters 11-23: Unable to complete region analysis, aborting. Consider using #pragma SeparationPolicy(none)
-make: *** [reverse.regtest] Error 1
+Warning, generating a dummy variant for loop. Please provide a real variant or set termination policy to user or never
+Warning: recursive definition of linked_path in generated file
+Warning: recursive definition of linked_path in generated file
+Warning: recursive definition of linked_path in generated file

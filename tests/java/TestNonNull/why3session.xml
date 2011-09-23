@@ -1,0 +1,285 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<why3session
+ name="TestNonNull/why3session.xml">
+ <prover
+  id="alt-ergo"
+  name="Alt-Ergo"
+  version="0.93"/>
+ <prover
+  id="coq"
+  name="Coq"
+  version="8.3pl2"/>
+ <prover
+  id="cvc3"
+  name="CVC3"
+  version="2.2"/>
+ <prover
+  id="gappa"
+  name="Gappa"
+  version="0.15.0"/>
+ <prover
+  id="simplify"
+  name="Simplify"
+  version="1.5.4"/>
+ <prover
+  id="spass"
+  name="Spass"
+  version="3.7"/>
+ <prover
+  id="vampire"
+  name="Vampire"
+  version="0.6"/>
+ <prover
+  id="yices"
+  name="Yices"
+  version="1.0.25"/>
+ <prover
+  id="z3"
+  name="Z3"
+  version="2.19"/>
+ <file
+  name="../TestNonNull.mlw"
+  verified="false"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="WP Jessie_program"
+   verified="false"
+   expanded="true">
+   <goal
+    name="WP_parameter _TestNonNull_test_ensures_default"
+    expl="Method test, default behavior"
+    sum="8720ad5fedd0bdae2c48ca69ec8140f8"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _TestNonNull_test_safety"
+    expl="Method test, Safety"
+    sum="13cdfd73a18b9bccd653585f657b1f76"
+    proved="true"
+    expanded="true"
+    shape="at_lengthV0V4V3Aast_lengthV4Aainfix <=c3aoffset_maxV4a_TestNonNull_stIainfix =V8astoreV6ashiftV1c3V7FAainfix <=c3aoffset_maxV4V1Iainfix =ainteger_of_int32V7c1FAainfix <=c2aoffset_maxV4V1Iainfix =V6astoreV2ashiftV1c2V5FAainfix <=c2aoffset_maxV4V1Iainfix =ainteger_of_int32V5c1FAainfix <=c3aoffset_maxV4V1Iat_lengthV0V4V3Aast_lengthV4Aainfix >=ainfix +aoffset_maxV4V1c1c4Aavalid_struct_TestNonNullV0c0c0V4V3Aavalid_struct_intMV1c0aprefix -c1V4FFFFF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_TestNonNull_ensures_default"
+    expl="assertion"
+    sum="d173ce26b6dc8199195898d53b31b15d"
+    proved="true"
+    expanded="true"
+    shape="ainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_TestNonNull_safety"
+    expl="Constructor of class TestNonNull, Safety"
+    sum="8a0ef7173aa501e4055b41f27f166dcd"
+    proved="false"
+    expanded="true"
+    shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FAainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFAainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+    <transf
+     name="split_goal"
+     proved="false"
+     expanded="true">
+     <goal
+      name="WP_parameter cons_TestNonNull_safety.1"
+      expl="allocation size"
+      sum="ac95a72d0b77e7fbbcc71e4287a3d0c4"
+      proved="true"
+      expanded="true"
+      shape="ainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter cons_TestNonNull_safety.2"
+      expl="assertion"
+      sum="b2d92d450d085905038b0d1eacc03aa2"
+      proved="true"
+      expanded="true"
+      shape="ainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter cons_TestNonNull_safety.3"
+      expl="normal postcondition"
+      sum="346341ccfa563c6eb61a5b9776dcf4d4"
+      proved="false"
+      expanded="true"
+      shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+      <transf
+       name="split_goal"
+       proved="false"
+       expanded="true">
+       <goal
+        name="WP_parameter cons_TestNonNull_safety.3.1"
+        expl="Constructor of class TestNonNull, Safety"
+        sum="9859ee2e812beec1dd2dfc51c41b76d5"
+        proved="false"
+        expanded="true"
+        shape="ast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+        <proof
+         prover="cvc3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="timeout" time="5.02"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="timeout" time="5.02"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="timeout" time="5.02"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter cons_TestNonNull_safety.3.2"
+        expl="Constructor of class TestNonNull, Safety"
+        sum="55628021967cfedaca4f7b9249a165af"
+        proved="true"
+        expanded="true"
+        shape="at_lengthV0V5V7Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+        <proof
+         prover="cvc3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+       </goal>
+      </transf>
+     </goal>
+    </transf>
+   </goal>
+  </theory>
+ </file>
+</why3session>

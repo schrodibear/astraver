@@ -357,10 +357,6 @@ type uint32
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Goto_while_1_break_exc of unit
-
 logic integer_of_int32: int32 -> int
 
 predicate Hnode(a_7:intP pointer, i_7:int, h_6:int,
@@ -380,13 +376,7 @@ predicate H(a_8:intP pointer, l_6:int, h_7:int,
   ((le_int(l_6, i_8) and le_int(i_8, h_7)) ->
    Hnode(a_8, i_8, h_7, intP_intM_a_8_4_at_L)))
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
 logic Permut: int_array, int_array, int, int -> prop
-
-exception Return_label_exc of unit
 
 predicate Sorted(a_6:intP pointer, l_5:int, h_5:int,
  intP_intM_a_6_2_at_L:(intP, int32) memory) =
@@ -399,15 +389,12 @@ predicate Sorted(a_6:intP pointer, l_5:int, h_5:int,
 logic access: int_array, int -> int32
 
 predicate Swap(a1:int_array, a2:int_array, i_3:int, j_0:int) =
- (eq_int(integer_of_int32(access(a1, i_3)),
-  integer_of_int32(access(a2, j_0)))
- and (eq_int(integer_of_int32(access(a1, j_0)),
-      integer_of_int32(access(a2, i_3)))
+ ((integer_of_int32(access(a1, i_3)) = integer_of_int32(access(a2, j_0)))
+ and ((integer_of_int32(access(a1, j_0)) = integer_of_int32(access(a2, i_3)))
      and (forall k:int.
-          (neq_int(k, i_3) ->
-           (neq_int(k, j_0) ->
-            eq_int(integer_of_int32(access(a1, k)),
-            integer_of_int32(access(a2, k))))))))
+          ((k <> i_3) ->
+           ((k <> j_0) ->
+            (integer_of_int32(access(a1, k)) = integer_of_int32(access(a2, k))))))))
 
 logic charP_tag:  -> charP tag_id
 
@@ -447,6 +434,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -458,6 +450,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -569,27 +566,17 @@ axiom uint32_coerce :
   ((le_int((0), x) and le_int(x, (4294967295))) ->
    eq_int(integer_of_uint32(uint32_of_integer(x)), x)))
 
+axiom uint32_extensionality :
+ (forall x:uint32.
+  (forall y:uint32.
+   (eq_int(integer_of_uint32(x), integer_of_uint32(y)) -> (x = y))))
+
 axiom uint32_range :
  (forall x:uint32.
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
 
 logic update: int_array, int, int32 -> int_array
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -639,17 +626,16 @@ axiom access_update_eq :
  (forall a_1_0:int_array.
   (forall i_1:int.
    (forall v_0_0:int32.
-    eq_int(integer_of_int32(access(update(a_1_0, i_1, v_0_0), i_1)),
-    integer_of_int32(v_0_0)))))
+    (integer_of_int32(access(update(a_1_0, i_1, v_0_0), i_1)) = integer_of_int32(v_0_0)))))
 
 axiom access_update_neq :
  (forall a_2:int_array.
   (forall i_2:int.
    (forall j:int.
     (forall v_1:int32.
-     (neq_int(i_2, j) ->
-      eq_int(integer_of_int32(access(update(a_2, i_2, v_1), j)),
-      integer_of_int32(access(a_2, j))))))))
+     ((i_2 <> j) ->
+      (integer_of_int32(access(update(a_2, i_2, v_1), j)) = integer_of_int32(
+                                                            access(a_2, j))))))))
 
 axiom Permut_refl :
  (forall a_3:int_array.
@@ -696,7 +682,7 @@ axiom access_contents :
  (forall intP_intM_a_4_1_at_L:(intP, int32) memory.
   (forall a_5:intP pointer.
    (forall i_5:int.
-    eq_int(integer_of_int32(access(contents(a_5, intP_intM_a_4_1_at_L), i_5)),
+    (integer_of_int32(access(contents(a_5, intP_intM_a_4_1_at_L), i_5)) = 
     integer_of_int32(select(intP_intM_a_4_1_at_L, shift(a_5, i_5)))))))
 
 lemma H_init :
@@ -751,74 +737,30 @@ lemma div2_4 :
   (forall k_0:int32.
    (le_int((0), integer_of_int32(i_13)) ->
     (le_int((0), integer_of_int32(k_0)) ->
-     (neq_int(integer_of_int32(k_0),
-      computer_div(sub_int(integer_of_int32(i_13), (1)), (2))) ->
-      neq_int(add_int(mul_int((2), integer_of_int32(k_0)), (1)),
-      integer_of_int32(i_13)))))))
+     ((integer_of_int32(k_0) <> computer_div(sub_int(integer_of_int32(i_13),
+                                             (1)),
+                                (2))) ->
+      (add_int(mul_int((2), integer_of_int32(k_0)), (1)) <> integer_of_int32(i_13)))))))
 
 lemma div2_5 :
  (forall i_14:int32.
   (forall k_1:int32.
    (le_int((0), integer_of_int32(i_14)) ->
     (le_int((0), integer_of_int32(k_1)) ->
-     (neq_int(integer_of_int32(k_1),
-      computer_div(sub_int(integer_of_int32(i_14), (1)), (2))) ->
-      neq_int(add_int(mul_int((2), integer_of_int32(k_1)), (2)),
-      integer_of_int32(i_14)))))))
+     ((integer_of_int32(k_1) <> computer_div(sub_int(integer_of_int32(i_14),
+                                             (1)),
+                                (2))) ->
+      (add_int(mul_int((2), integer_of_int32(k_1)), (2)) <> integer_of_int32(i_14)))))))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_1_break_exc of unit
 
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -912,10 +854,10 @@ parameter heapsort :
      { } unit reads intP_intM_a_6 writes intP_intM_a_6
      { (JC_<somenum>:
        ((JC_<somenum>:
-        Permut(contents(a_1@, intP_intM_a_6), contents(a_1@, intP_intM_a_6@),
-        (0), sub_int(integer_of_uint32(n@), (1))))
+        Permut(contents(a_1, intP_intM_a_6), contents(a_1, intP_intM_a_6@),
+        (0), sub_int(integer_of_uint32(n), (1))))
        and (JC_<somenum>:
-           Sorted(a_1@, (0), sub_int(integer_of_uint32(n@), (1)),
+           Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)),
            intP_intM_a_6)))) }
 
 parameter heapsort_requires :
@@ -932,10 +874,10 @@ parameter heapsort_requires :
      unit reads intP_intM_a_6 writes intP_intM_a_6
      { (JC_<somenum>:
        ((JC_<somenum>:
-        Permut(contents(a_1@, intP_intM_a_6), contents(a_1@, intP_intM_a_6@),
-        (0), sub_int(integer_of_uint32(n@), (1))))
+        Permut(contents(a_1, intP_intM_a_6), contents(a_1, intP_intM_a_6@),
+        (0), sub_int(integer_of_uint32(n), (1))))
        and (JC_<somenum>:
-           Sorted(a_1@, (0), sub_int(integer_of_uint32(n@), (1)),
+           Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)),
            intP_intM_a_6)))) }
 
 parameter int32_of_integer_ :
@@ -968,18 +910,17 @@ parameter sift_down :
        { (JC_<somenum>:
          ((JC_<somenum>:
           ((JC_<somenum>:
-           Permut(contents(a_0_0@, intP_intM_a_0_5),
-           update(contents(a_0_0@, intP_intM_a_0_5@),
-           integer_of_uint32(low@), v_0@), integer_of_uint32(low@),
-           integer_of_uint32(high@)))
+           Permut(contents(a_0_0, intP_intM_a_0_5),
+           update(contents(a_0_0, intP_intM_a_0_5@), integer_of_uint32(low),
+           v_0), integer_of_uint32(low), integer_of_uint32(high)))
           and (JC_<somenum>:
-              H(a_0_0@, integer_of_uint32(low@), integer_of_uint32(high@),
+              H(a_0_0, integer_of_uint32(low), integer_of_uint32(high),
               intP_intM_a_0_5))))
          and (JC_<somenum>:
-             not_assigns(intP_a_0_5_alloc_table@, intP_intM_a_0_5@,
+             not_assigns(intP_a_0_5_alloc_table, intP_intM_a_0_5@,
              intP_intM_a_0_5,
-             pset_range(pset_singleton(a_0_0@), integer_of_uint32(low@),
-             integer_of_uint32(high@)))))) }
+             pset_range(pset_singleton(a_0_0), integer_of_uint32(low),
+             integer_of_uint32(high)))))) }
 
 parameter sift_down_requires :
  a_0_0:intP pointer ->
@@ -1004,18 +945,17 @@ parameter sift_down_requires :
        { (JC_<somenum>:
          ((JC_<somenum>:
           ((JC_<somenum>:
-           Permut(contents(a_0_0@, intP_intM_a_0_5),
-           update(contents(a_0_0@, intP_intM_a_0_5@),
-           integer_of_uint32(low@), v_0@), integer_of_uint32(low@),
-           integer_of_uint32(high@)))
+           Permut(contents(a_0_0, intP_intM_a_0_5),
+           update(contents(a_0_0, intP_intM_a_0_5@), integer_of_uint32(low),
+           v_0), integer_of_uint32(low), integer_of_uint32(high)))
           and (JC_<somenum>:
-              H(a_0_0@, integer_of_uint32(low@), integer_of_uint32(high@),
+              H(a_0_0, integer_of_uint32(low), integer_of_uint32(high),
               intP_intM_a_0_5))))
          and (JC_<somenum>:
-             not_assigns(intP_a_0_5_alloc_table@, intP_intM_a_0_5@,
+             not_assigns(intP_a_0_5_alloc_table, intP_intM_a_0_5@,
              intP_intM_a_0_5,
-             pset_range(pset_singleton(a_0_0@), integer_of_uint32(low@),
-             integer_of_uint32(high@)))))) }
+             pset_range(pset_singleton(a_0_0), integer_of_uint32(low),
+             integer_of_uint32(high)))))) }
 
 parameter uint32_of_integer_ :
  x:int ->
@@ -1036,18 +976,14 @@ let heapsort_ensures_default =
      (let i_0_0 = ref (any_uint32 void) in
      (let tmp = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         try
-         (let jessie_<somenum> =
          begin
            try
-            (let jessie_<somenum> =
             (C_56:
             begin
               (if ((le_int_ (integer_of_uint32 n)) (1))
-              then (let jessie_<somenum> = (raise (Return_label_exc void)) in void)
-              else void);
+              then (raise (Return_label_exc void)) else void);
              (let jessie_<somenum> =
              (i_0_0 := (C_55:
                        (safe_uint32_of_integer_ (C_54:
@@ -1063,7 +999,7 @@ let heapsort_ensures_default =
                       lt_int(integer_of_uint32(i_0_0), integer_of_uint32(n)))
                      and ((JC_<somenum>:
                           Permut(contents(a_1, intP_intM_a_6),
-                          contents(a_1@init, intP_intM_a_6@init), (0),
+                          contents(a_1, intP_intM_a_6@init), (0),
                           sub_int(integer_of_uint32(n), (1))))
                          and (JC_<somenum>:
                              H(a_1, integer_of_uint32(i_0_0),
@@ -1072,16 +1008,13 @@ let heapsort_ensures_default =
               begin
                 [ { } unit { true } ];
                try
-                (let jessie_<somenum> =
                 begin
                   (let jessie_<somenum> =
                   (C_73:
                   (C_76:
                   begin
                     (if ((ge_int_ (integer_of_uint32 !i_0_0)) (1)) then void
-                    else
-                     (let jessie_<somenum> =
-                     (raise (Goto_while_0_break_exc void)) in void));
+                    else (raise (Goto_while_0_break_exc void)));
                    (let jessie_<somenum> = a_1 in
                    (let jessie_<somenum> =
                    (C_66:
@@ -1106,8 +1039,8 @@ let heapsort_ensures_default =
                              (safe_uint32_of_integer_ (C_74:
                                                       ((sub_int (integer_of_uint32 !i_0_0)) (1))))));
                    !i_0_0 end)) in void); (raise (Loop_continue_exc void))
-                end in void) with Loop_continue_exc jessie_<somenum> -> void end end
-             done); (raise (Goto_while_0_break_exc void)) end) in void) with
+                end with Loop_continue_exc jessie_<somenum> -> void end end done);
+             (raise (Goto_while_0_break_exc void)) end) with
             Goto_while_0_break_exc jessie_<somenum> ->
             (while_0_break:
             (C_79:
@@ -1127,7 +1060,7 @@ let heapsort_ensures_default =
                       lt_int(integer_of_uint32(i_0_0), integer_of_uint32(n)))
                      and ((JC_<somenum>:
                           Permut(contents(a_1, intP_intM_a_6),
-                          contents(a_1@init, intP_intM_a_6@init), (0),
+                          contents(a_1, intP_intM_a_6@init), (0),
                           sub_int(integer_of_uint32(n), (1))))
                          and ((JC_<somenum>:
                               H(a_1, (0), integer_of_uint32(i_0_0),
@@ -1157,7 +1090,6 @@ let heapsort_ensures_default =
               begin
                 [ { } unit { true } ];
                try
-                (let jessie_<somenum> =
                 begin
                   (let jessie_<somenum> =
                   (C_94:
@@ -1165,9 +1097,7 @@ let heapsort_ensures_default =
                   (C_105:
                   begin
                     (if ((ge_int_ (integer_of_uint32 !i_0_0)) (1)) then void
-                    else
-                     (let jessie_<somenum> =
-                     (raise (Goto_while_1_break_exc void)) in void));
+                    else (raise (Goto_while_1_break_exc void)));
                    (let jessie_<somenum> =
                    (tmp := (C_93:
                            ((safe_acc_ !intP_intM_a_6) (C_92:
@@ -1196,19 +1126,18 @@ let heapsort_ensures_default =
                              (safe_uint32_of_integer_ (C_103:
                                                       ((sub_int (integer_of_uint32 !i_0_0)) (1))))));
                    !i_0_0 end))) in void); (raise (Loop_continue_exc void))
-                end in void) with Loop_continue_exc jessie_<somenum> -> void end end
-             done) end)) end; (raise (Goto_while_1_break_exc void)) end in
-         void) with Goto_while_1_break_exc jessie_<somenum> ->
-         (while_1_break: void) end; (raise (Return_label_exc void)) end in
-      void) with Return_label_exc jessie_<somenum> ->
+                end with Loop_continue_exc jessie_<somenum> -> void end end done)
+            end)) end; (raise (Goto_while_1_break_exc void)) end with
+         Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: (raise Return)) end)); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
-     Permut(contents(a_1@, intP_intM_a_6), contents(a_1@, intP_intM_a_6@),
-     (0), sub_int(integer_of_uint32(n@), (1))))
+     Permut(contents(a_1, intP_intM_a_6), contents(a_1, intP_intM_a_6@), (0),
+     sub_int(integer_of_uint32(n), (1))))
     and (JC_<somenum>:
-        Sorted(a_1@, (0), sub_int(integer_of_uint32(n@), (1)), intP_intM_a_6)))) }
+        Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)), intP_intM_a_6)))) }
 
 let heapsort_safety =
  fun (a_1 : intP pointer) (n : uint32) (intP_intM_a_6 : (intP, int32) memory ref) (intP_a_6_alloc_table : intP alloc_table) ->
@@ -1224,18 +1153,14 @@ let heapsort_safety =
      (let i_0_0 = ref (any_uint32 void) in
      (let tmp = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         try
-         (let jessie_<somenum> =
          begin
            try
-            (let jessie_<somenum> =
             (C_56:
             begin
               (if ((le_int_ (integer_of_uint32 n)) (1))
-              then (let jessie_<somenum> = (raise (Return_label_exc void)) in void)
-              else void);
+              then (raise (Return_label_exc void)) else void);
              (let jessie_<somenum> =
              (i_0_0 := (C_55:
                        (JC_<somenum>:
@@ -1256,23 +1181,20 @@ let heapsort_safety =
                          integer_of_uint32(n)))
                         and ((JC_<somenum>:
                              Permut(contents(a_1, intP_intM_a_6),
-                             contents(a_1@init, intP_intM_a_6@init), (0),
+                             contents(a_1, intP_intM_a_6@init), (0),
                              sub_int(integer_of_uint32(n), (1))))
                             and (JC_<somenum>:
                                 H(a_1, integer_of_uint32(i_0_0),
                                 sub_int(integer_of_uint32(n), (1)),
                                 intP_intM_a_6)))))) } ];
                try
-                (let jessie_<somenum> =
                 begin
                   (let jessie_<somenum> =
                   (C_73:
                   (C_76:
                   begin
                     (if ((ge_int_ (integer_of_uint32 !i_0_0)) (1)) then void
-                    else
-                     (let jessie_<somenum> =
-                     (raise (Goto_while_0_break_exc void)) in void));
+                    else (raise (Goto_while_0_break_exc void)));
                    (let jessie_<somenum> = a_1 in
                    (let jessie_<somenum> =
                    (C_66:
@@ -1300,8 +1222,8 @@ let heapsort_safety =
                              (uint32_of_integer_ (C_74:
                                                  ((sub_int (integer_of_uint32 !i_0_0)) (1)))))));
                    !i_0_0 end)) in void); (raise (Loop_continue_exc void))
-                end in void) with Loop_continue_exc jessie_<somenum> -> void end end
-             done); (raise (Goto_while_0_break_exc void)) end) in void) with
+                end with Loop_continue_exc jessie_<somenum> -> void end end done);
+             (raise (Goto_while_0_break_exc void)) end) with
             Goto_while_0_break_exc jessie_<somenum> ->
             (while_0_break:
             (C_79:
@@ -1326,7 +1248,7 @@ let heapsort_safety =
                          integer_of_uint32(n)))
                         and ((JC_<somenum>:
                              Permut(contents(a_1, intP_intM_a_6),
-                             contents(a_1@init, intP_intM_a_6@init), (0),
+                             contents(a_1, intP_intM_a_6@init), (0),
                              sub_int(integer_of_uint32(n), (1))))
                             and ((JC_<somenum>:
                                  H(a_1, (0), integer_of_uint32(i_0_0),
@@ -1353,7 +1275,6 @@ let heapsort_safety =
                                                              shift(a_1,
                                                              integer_of_int32(k2)))))))))))))))) } ];
                try
-                (let jessie_<somenum> =
                 begin
                   (let jessie_<somenum> =
                   (C_94:
@@ -1361,9 +1282,7 @@ let heapsort_safety =
                   (C_105:
                   begin
                     (if ((ge_int_ (integer_of_uint32 !i_0_0)) (1)) then void
-                    else
-                     (let jessie_<somenum> =
-                     (raise (Goto_while_1_break_exc void)) in void));
+                    else (raise (Goto_while_1_break_exc void)));
                    (let jessie_<somenum> =
                    (tmp := (C_93:
                            (JC_<somenum>:
@@ -1396,11 +1315,10 @@ let heapsort_safety =
                              (uint32_of_integer_ (C_103:
                                                  ((sub_int (integer_of_uint32 !i_0_0)) (1)))))));
                    !i_0_0 end))) in void); (raise (Loop_continue_exc void))
-                end in void) with Loop_continue_exc jessie_<somenum> -> void end end
-             done) end)) end; (raise (Goto_while_1_break_exc void)) end in
-         void) with Goto_while_1_break_exc jessie_<somenum> ->
-         (while_1_break: void) end; (raise (Return_label_exc void)) end in
-      void) with Return_label_exc jessie_<somenum> ->
+                end with Loop_continue_exc jessie_<somenum> -> void end end done)
+            end)) end; (raise (Goto_while_1_break_exc void)) end with
+         Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: (raise Return)) end)); (raise Return) end with Return ->
    void end) { true }
 
@@ -1424,7 +1342,6 @@ let sift_down_ensures_default =
      (let i_15 = ref (any_uint32 void) in
      (let child = ref (any_uint32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       begin
         (let jessie_<somenum> = (i_15 := low) in void);
@@ -1437,7 +1354,7 @@ let sift_down_ensures_default =
                  le_int(integer_of_uint32(i_15), integer_of_uint32(high)))
                 and ((JC_<somenum>:
                      Permut(contents(a_0_0, intP_intM_a_0_5),
-                     contents(a_0_0@init, intP_intM_a_0_5@init),
+                     contents(a_0_0, intP_intM_a_0_5@init),
                      integer_of_uint32(low), integer_of_uint32(high)))
                     and ((JC_<somenum>:
                          (forall k_2:int32.
@@ -1464,20 +1381,18 @@ let sift_down_ensures_default =
                                                          (1)), (2))))),
                                  integer_of_int32(v_0))))))))))
            and ((JC_<somenum>:
-                not_assigns(intP_a_0_5_alloc_table@loop_2,
-                intP_intM_a_0_5@loop_2, intP_intM_a_0_5,
+                not_assigns(intP_a_0_5_alloc_table, intP_intM_a_0_5@loop_2,
+                intP_intM_a_0_5,
                 pset_range(pset_singleton(a_0_0), integer_of_uint32(low),
                 integer_of_uint32(high))))
                and (JC_<somenum>:
-                   not_assigns(intP_a_0_5_alloc_table@init,
-                   intP_intM_a_0_5@init, intP_intM_a_0_5,
-                   pset_range(pset_singleton(a_0_0@init),
-                   integer_of_uint32(low@init), integer_of_uint32(high@init))))))
-          }
+                   not_assigns(intP_a_0_5_alloc_table, intP_intM_a_0_5@init,
+                   intP_intM_a_0_5,
+                   pset_range(pset_singleton(a_0_0), integer_of_uint32(low),
+                   integer_of_uint32(high))))))  }
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_18:
@@ -1495,9 +1410,7 @@ let sift_down_ensures_default =
                                                               (integer_of_uint32 !i_15))))))) (1)))))) in
               void); void;
              (if ((le_int_ (integer_of_uint32 !child)) (integer_of_uint32 high))
-             then void
-             else
-              (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
+             then void else (raise (Goto_while_0_break_exc void)));
              (if ((le_int_ (integer_of_uint32 (C_29:
                                               (safe_uint32_of_integer_ 
                                                (C_28:
@@ -1529,9 +1442,7 @@ let sift_down_ensures_default =
                                                     ((safe_acc_ !intP_intM_a_0_5) 
                                                      (C_30:
                                                      ((shift a_0_0) (integer_of_uint32 !child)))))))
-             then
-              (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void)
-             else void);
+             then (raise (Goto_while_0_break_exc void)) else void);
              (let jessie_<somenum> =
              (let jessie_<somenum> =
              (C_33:
@@ -1545,9 +1456,9 @@ let sift_down_ensures_default =
              { (JC_<somenum>:
                Hnode(a_0_0, integer_of_uint32(i_15), integer_of_uint32(high),
                intP_intM_a_0_5)) }; void); void; (i_15 := !child); !i_15 end))) in
-            void); (raise (Loop_continue_exc void)) end in void) with
+            void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       (C_41:
@@ -1563,17 +1474,17 @@ let sift_down_ensures_default =
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>:
-      Permut(contents(a_0_0@, intP_intM_a_0_5),
-      update(contents(a_0_0@, intP_intM_a_0_5@), integer_of_uint32(low@),
-      v_0@), integer_of_uint32(low@), integer_of_uint32(high@)))
+      Permut(contents(a_0_0, intP_intM_a_0_5),
+      update(contents(a_0_0, intP_intM_a_0_5@), integer_of_uint32(low), v_0),
+      integer_of_uint32(low), integer_of_uint32(high)))
      and (JC_<somenum>:
-         H(a_0_0@, integer_of_uint32(low@), integer_of_uint32(high@),
+         H(a_0_0, integer_of_uint32(low), integer_of_uint32(high),
          intP_intM_a_0_5))))
     and (JC_<somenum>:
-        not_assigns(intP_a_0_5_alloc_table@, intP_intM_a_0_5@,
+        not_assigns(intP_a_0_5_alloc_table, intP_intM_a_0_5@,
         intP_intM_a_0_5,
-        pset_range(pset_singleton(a_0_0@), integer_of_uint32(low@),
-        integer_of_uint32(high@)))))) }
+        pset_range(pset_singleton(a_0_0), integer_of_uint32(low),
+        integer_of_uint32(high)))))) }
 
 let sift_down_safety =
  fun (a_0_0 : intP pointer) (low : uint32) (high : uint32) (v_0 : int32) (intP_intM_a_0_5 : (intP, int32) memory ref) (intP_a_0_5_alloc_table : intP alloc_table) ->
@@ -1595,7 +1506,6 @@ let sift_down_safety =
      (let i_15 = ref (any_uint32 void) in
      (let child = ref (any_uint32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       begin
         (let jessie_<somenum> = (i_15 := low) in void);
@@ -1613,7 +1523,7 @@ let sift_down_safety =
                    le_int(integer_of_uint32(i_15), integer_of_uint32(high)))
                   and ((JC_<somenum>:
                        Permut(contents(a_0_0, intP_intM_a_0_5),
-                       contents(a_0_0@init, intP_intM_a_0_5@init),
+                       contents(a_0_0, intP_intM_a_0_5@init),
                        integer_of_uint32(low), integer_of_uint32(high)))
                       and ((JC_<somenum>:
                            (forall k_2:int32.
@@ -1640,7 +1550,6 @@ let sift_down_safety =
                                                            (1)), (2))))),
                                    integer_of_int32(v_0)))))))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_18:
@@ -1660,9 +1569,7 @@ let sift_down_safety =
                                                          (integer_of_uint32 !i_15)))))))) (1))))))) in
               void); void;
              (if ((le_int_ (integer_of_uint32 !child)) (integer_of_uint32 high))
-             then void
-             else
-              (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
+             then void else (raise (Goto_while_0_break_exc void)));
              (if ((le_int_ (integer_of_uint32 (C_29:
                                               (JC_<somenum>:
                                               (uint32_of_integer_ (C_28:
@@ -1696,9 +1603,7 @@ let sift_down_safety =
                                                     (JC_<somenum>:
                                                     ((((offset_acc_ intP_a_0_5_alloc_table) !intP_intM_a_0_5) a_0_0) 
                                                      (integer_of_uint32 !child))))))
-             then
-              (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void)
-             else void);
+             then (raise (Goto_while_0_break_exc void)) else void);
              (let jessie_<somenum> =
              (let jessie_<somenum> =
              (C_33:
@@ -1716,9 +1621,9 @@ let sift_down_safety =
                  Hnode(a_0_0, integer_of_uint32(i_15),
                  integer_of_uint32(high), intP_intM_a_0_5)) } ]; void;
              (i_15 := !child); !i_15 end))) in void);
-           (raise (Loop_continue_exc void)) end in void) with
+           (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       (C_41:
@@ -1741,85 +1646,167 @@ why --project [...] why/heapsort.why
   <lemma name="H_init">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/heapsort_po1.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "143" begin = "0" end = "167"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "75" begin = "4" end = "92"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="H_reduce">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/heapsort_po2.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "149" begin = "0" end = "139"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "77" begin = "4" end = "94"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="H_max">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/heapsort_po3.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "154" begin = "0" end = "219"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "79" begin = "4" end = "127"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="div2_1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/heapsort_po4.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "162" begin = "0" end = "100"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "86" begin = "4" end = "59"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="div2_2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/heapsort_po5.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "166" begin = "0" end = "98"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "88" begin = "4" end = "57"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="div2_3">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/heapsort_po6.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "170" begin = "0" end = "94"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "90" begin = "4" end = "61"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="div2_4">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/heapsort_po7.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "174" begin = "0" end = "170"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "92" begin = "4" end = "97"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="div2_5">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/heapsort_po8.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "181" begin = "0" end = "170"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "96" begin = "4" end = "97"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <function name="div2_5">
-    <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "181" begin = "0" end = "170"/>
+  <function name="Lemma div2_5">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="div2_4">
-    <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "174" begin = "0" end = "170"/>
+  <function name="Lemma div2_4">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="div2_3">
-    <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "170" begin = "0" end = "94"/>
+  <function name="Lemma div2_3">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="div2_2">
-    <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "166" begin = "0" end = "98"/>
+  <function name="Lemma div2_2">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="div2_1">
-    <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "162" begin = "0" end = "100"/>
+  <function name="Lemma div2_1">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="H_reduce">
-    <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "149" begin = "0" end = "139"/>
+  <function name="Lemma H_reduce">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="H_max">
-    <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "154" begin = "0" end = "219"/>
+  <function name="Lemma H_max">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="H_init">
-    <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "143" begin = "0" end = "167"/>
+  <function name="Lemma H_init">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
   <function name="Function sift_down">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/heapsort_po70.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "114" begin = "8" end = "16"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po71.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "114" begin = "15" end = "24"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po72.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "115" begin = "8" end = "61"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po73.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "116" begin = "8" end = "62"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po74.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "117" begin = "8" end = "41"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po75.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "118" begin = "8" end = "44"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po76.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "206" begin = "6" end = "2405"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po77.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "206" begin = "6" end = "2405"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po78.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "128" begin = "15" end = "32"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/heapsort_po79.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "114" begin = "8" end = "16"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po80.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "114" begin = "15" end = "24"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po81.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "115" begin = "8" end = "61"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po82.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "116" begin = "8" end = "62"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po83.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "117" begin = "8" end = "41"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po84.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "118" begin = "8" end = "44"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po85.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "206" begin = "6" end = "2405"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po86.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "206" begin = "6" end = "2405"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po87.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "108" begin = "6" end = "71"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/heapsort_po88.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "109" begin = "6" end = "21"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/heapsort_po89.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "111" begin = "5" end = "14"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/heapsort_po90.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "124" begin = "18" end = "21"/>
@@ -1940,91 +1927,99 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/heapsort_po70.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "114" begin = "8" end = "16"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po71.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "114" begin = "15" end = "24"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po72.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "115" begin = "8" end = "61"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po73.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "116" begin = "8" end = "62"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po74.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "117" begin = "8" end = "41"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po75.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "118" begin = "8" end = "44"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po76.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "206" begin = "6" end = "2405"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po77.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "206" begin = "6" end = "2405"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po78.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "128" begin = "15" end = "32"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/heapsort_po79.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "114" begin = "8" end = "16"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po80.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "114" begin = "15" end = "24"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po81.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "115" begin = "8" end = "61"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po82.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "116" begin = "8" end = "62"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po83.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "117" begin = "8" end = "41"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po84.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "118" begin = "8" end = "44"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po85.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "206" begin = "6" end = "2405"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po86.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "206" begin = "6" end = "2405"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po87.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "108" begin = "6" end = "71"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/heapsort_po88.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "109" begin = "6" end = "21"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/heapsort_po89.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "111" begin = "5" end = "14"/>
-      <explain kind = "Post"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function heapsort">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/heapsort_po9.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "144" begin = "8" end = "14"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po10.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "144" begin = "13" end = "18"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po11.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "145" begin = "8" end = "58"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po12.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "146" begin = "8" end = "20"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po13.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "144" begin = "8" end = "14"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po14.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "144" begin = "13" end = "18"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po15.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "145" begin = "8" end = "58"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po16.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "146" begin = "8" end = "20"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po17.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "151" begin = "8" end = "14"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po18.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "151" begin = "13" end = "18"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po19.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "152" begin = "8" end = "58"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po20.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "153" begin = "8" end = "18"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po21.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "153" begin = "22" end = "41"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po22.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "154" begin = "8" end = "78"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/heapsort_po23.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "151" begin = "8" end = "14"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po24.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "151" begin = "13" end = "18"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po25.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "152" begin = "8" end = "58"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po26.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "153" begin = "8" end = "18"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po27.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "153" begin = "22" end = "41"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po28.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "154" begin = "8" end = "78"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/heapsort_po29.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "137" begin = "6" end = "52"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/heapsort_po30.why">
+      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "138" begin = "6" end = "23"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/heapsort_po31.why">
       <location file = "PPCHOME/tests/jessie/heapsort.c" line = "149" begin = "11" end = "14"/>
@@ -2117,11 +2112,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po49.why">
-      <location file = "why/heapsort.why" line = "906" begin = "23" end = "57"/>
+      <location file = "why/heapsort.why" line = "831" begin = "23" end = "57"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po50.why">
-      <location file = "why/heapsort.why" line = "906" begin = "23" end = "57"/>
+      <location file = "why/heapsort.why" line = "831" begin = "23" end = "57"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po51.why">
@@ -2210,102 +2205,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po68.why">
-      <location file = "why/heapsort.why" line = "976" begin = "23" end = "58"/>
+      <location file = "why/heapsort.why" line = "898" begin = "23" end = "58"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po69.why">
-      <location file = "why/heapsort.why" line = "976" begin = "23" end = "58"/>
+      <location file = "why/heapsort.why" line = "898" begin = "23" end = "58"/>
       <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/heapsort_po9.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "144" begin = "8" end = "14"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po10.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "144" begin = "13" end = "18"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po11.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "145" begin = "8" end = "58"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po12.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "146" begin = "8" end = "20"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po13.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "144" begin = "8" end = "14"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po14.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "144" begin = "13" end = "18"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po15.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "145" begin = "8" end = "58"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po16.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "146" begin = "8" end = "20"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po17.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "151" begin = "8" end = "14"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po18.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "151" begin = "13" end = "18"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po19.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "152" begin = "8" end = "58"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po20.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "153" begin = "8" end = "18"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po21.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "153" begin = "22" end = "41"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po22.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "154" begin = "8" end = "78"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/heapsort_po23.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "151" begin = "8" end = "14"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po24.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "151" begin = "13" end = "18"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po25.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "152" begin = "8" end = "58"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po26.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "153" begin = "8" end = "18"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po27.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "153" begin = "22" end = "41"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po28.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "154" begin = "8" end = "78"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/heapsort_po29.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "137" begin = "6" end = "52"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/heapsort_po30.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.c" line = "138" begin = "6" end = "23"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -3335,6 +3240,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -3346,6 +3256,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -3458,26 +3372,16 @@ axiom uint32_coerce:
     (((0 <= x) and (x <= 4294967295)) ->
      (integer_of_uint32(uint32_of_integer(x)) = x)))
 
+axiom uint32_extensionality:
+  (forall x:uint32.
+    (forall y:uint32.
+      ((integer_of_uint32(x) = integer_of_uint32(y)) -> (x = y))))
+
 axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
 
 logic update : int_array, int, int32 -> int_array
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

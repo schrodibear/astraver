@@ -166,12 +166,6 @@ type padding
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic __string_toto:  -> charP pointer
 
 logic charP_tag:  -> charP tag_id
@@ -211,6 +205,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -222,6 +221,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -276,16 +280,6 @@ predicate valid___string_toto(charP___string_toto_1_alloc_table:charP alloc_tabl
  and ge_int(offset_max(charP___string_toto_1_alloc_table, __string_toto),
      (4)))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_gtoto(charP_gtoto_2_alloc_table:charP alloc_table) =
  (le_int(offset_min(charP_gtoto_2_alloc_table, gtoto), (0))
  and ge_int(offset_max(charP_gtoto_2_alloc_table, gtoto), (4)))
@@ -324,41 +318,11 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -438,19 +402,17 @@ parameter endsat :
      { ((JC_<somenum>:
         ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
         and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))
-       and ((neq_int(integer_of_int8(select(charP_charM_p_4@,
-                                     shift(p@, integer_of_int32(i@)))),
-             (0)) ->
+       and (((integer_of_int8(select(charP_charM_p_4,
+                              shift(p, integer_of_int32(i)))) <> (0)) ->
              (JC_<somenum>:
-             ((JC_<somenum>: eq_int(integer_of_int32(result), (0)))
+             ((JC_<somenum>: (integer_of_int32(result) = (0)))
              and ((JC_<somenum>:
                   valid___string_toto(charP___string_toto_1_alloc_table))
                  and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))))
-           and (eq_int(integer_of_int8(select(charP_charM_p_4@,
-                                       shift(p@, integer_of_int32(i@)))),
-                (0)) ->
+           and ((integer_of_int8(select(charP_charM_p_4,
+                                 shift(p, integer_of_int32(i)))) = (0)) ->
                 (JC_<somenum>:
-                ((JC_<somenum>: eq_int(integer_of_int32(result), (1)))
+                ((JC_<somenum>: (integer_of_int32(result) = (1)))
                 and ((JC_<somenum>:
                      valid___string_toto(charP___string_toto_1_alloc_table))
                     and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))))))) }
@@ -472,19 +434,17 @@ parameter endsat_requires :
      { ((JC_<somenum>:
         ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
         and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))
-       and ((neq_int(integer_of_int8(select(charP_charM_p_4@,
-                                     shift(p@, integer_of_int32(i@)))),
-             (0)) ->
+       and (((integer_of_int8(select(charP_charM_p_4,
+                              shift(p, integer_of_int32(i)))) <> (0)) ->
              (JC_<somenum>:
-             ((JC_<somenum>: eq_int(integer_of_int32(result), (0)))
+             ((JC_<somenum>: (integer_of_int32(result) = (0)))
              and ((JC_<somenum>:
                   valid___string_toto(charP___string_toto_1_alloc_table))
                  and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))))
-           and (eq_int(integer_of_int8(select(charP_charM_p_4@,
-                                       shift(p@, integer_of_int32(i@)))),
-                (0)) ->
+           and ((integer_of_int8(select(charP_charM_p_4,
+                                 shift(p, integer_of_int32(i)))) = (0)) ->
                 (JC_<somenum>:
-                ((JC_<somenum>: eq_int(integer_of_int32(result), (1)))
+                ((JC_<somenum>: (integer_of_int32(result) = (1)))
                 and ((JC_<somenum>:
                      valid___string_toto(charP___string_toto_1_alloc_table))
                     and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))))))) }
@@ -595,7 +555,6 @@ let endsat_ensures_default =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_5:
       begin
         (if ((eq_int_ (integer_of_int32 (C_4:
@@ -606,22 +565,18 @@ let endsat_ensures_default =
                                                                   ((shift p) 
                                                                    (integer_of_int32 i)))))))))) (0))
         then
-         (let jessie_<somenum> =
          (C_1:
          begin
            (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) in void) else void);
+           void); (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (raise (Return_label_exc void)) end) in void) with
-      Return_label_exc jessie_<somenum> ->
+       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let endsat_ensures_ko =
  fun (p : charP pointer) (i : int32) (charP_p_4_alloc_table : charP alloc_table) (charP_charM_p_4 : (charP, int8) memory) ->
-  { (neq_int(integer_of_int8(select(charP_charM_p_4,
-                             shift(p, integer_of_int32(i)))),
-     (0))
+  { ((integer_of_int8(select(charP_charM_p_4, shift(p, integer_of_int32(i)))) <> (0))
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>:
@@ -637,7 +592,6 @@ let endsat_ensures_ko =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_5:
       begin
         (if ((eq_int_ (integer_of_int32 (C_4:
@@ -648,26 +602,22 @@ let endsat_ensures_ko =
                                                                   ((shift p) 
                                                                    (integer_of_int32 i)))))))))) (0))
         then
-         (let jessie_<somenum> =
          (C_1:
          begin
            (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) in void) else void);
+           void); (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (raise (Return_label_exc void)) end) in void) with
-      Return_label_exc jessie_<somenum> ->
+       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: eq_int(integer_of_int32(result), (0)))
+    ((JC_<somenum>: (integer_of_int32(result) = (0)))
     and ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
         and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))) }
 
 let endsat_ensures_ok =
  fun (p : charP pointer) (i : int32) (charP_p_4_alloc_table : charP alloc_table) (charP_charM_p_4 : (charP, int8) memory) ->
-  { (eq_int(integer_of_int8(select(charP_charM_p_4,
-                            shift(p, integer_of_int32(i)))),
-     (0))
+  { ((integer_of_int8(select(charP_charM_p_4, shift(p, integer_of_int32(i)))) = (0))
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>:
@@ -683,7 +633,6 @@ let endsat_ensures_ok =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_5:
       begin
         (if ((eq_int_ (integer_of_int32 (C_4:
@@ -694,18 +643,16 @@ let endsat_ensures_ok =
                                                                   ((shift p) 
                                                                    (integer_of_int32 i)))))))))) (0))
         then
-         (let jessie_<somenum> =
          (C_1:
          begin
            (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) in void) else void);
+           void); (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (raise (Return_label_exc void)) end) in void) with
-      Return_label_exc jessie_<somenum> ->
+       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: eq_int(integer_of_int32(result), (1)))
+    ((JC_<somenum>: (integer_of_int32(result) = (1)))
     and ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
         and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table))))) }
 
@@ -725,7 +672,6 @@ let endsat_safety =
    begin
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_5:
       begin
         (if ((eq_int_ (integer_of_int32 (C_4:
@@ -736,14 +682,12 @@ let endsat_safety =
                                                             ((((offset_acc_ charP_p_4_alloc_table) charP_charM_p_4) p) 
                                                              (integer_of_int32 i)))))))))) (0))
         then
-         (let jessie_<somenum> =
          (C_1:
          begin
            (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) in void) else void);
+           void); (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (raise (Return_label_exc void)) end) in void) with
-      Return_label_exc jessie_<somenum> ->
+       (raise (Return_label_exc void)) end) with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -767,8 +711,8 @@ let test1_ensures_default =
               (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
               (JC_<somenum>:
               ((((endsat jessie_<somenum>) jessie_<somenum>) !charP_gtoto_2_alloc_table) !charP_charM_gtoto_2)))))) in
-       void); (assert { (JC_<somenum>: eq_int(integer_of_int32(r1), (1))) }; void);
-      void; (raise Return) end)); (raise Return) end with Return -> void end)
+       void); (assert { (JC_<somenum>: (integer_of_int32(r1) = (1))) }; void); void;
+      (raise Return) end)); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let test1_safety =
@@ -789,8 +733,8 @@ let test1_safety =
               (JC_<somenum>:
               ((((endsat_requires jessie_<somenum>) jessie_<somenum>) !charP_gtoto_2_alloc_table) !charP_charM_gtoto_2)))))) in
        void);
-      [ { } unit reads r1 { (JC_<somenum>: eq_int(integer_of_int32(r1), (1))) } ];
-      void; (raise Return) end)); (raise Return) end with Return -> void end)
+      [ { } unit reads r1 { (JC_<somenum>: (integer_of_int32(r1) = (1))) } ]; void;
+      (raise Return) end)); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
     and (JC_<somenum>: valid_gtoto(charP_gtoto_2_alloc_table)))) }
@@ -812,9 +756,8 @@ let test1ptr_ensures_default =
                 (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
                 (JC_<somenum>:
                 ((((endsat jessie_<somenum>) jessie_<somenum>) !charP_gptoto_3_alloc_table) !charP_charM_gptoto_3)))))) in
-       void);
-      (assert { (JC_<somenum>: eq_int(integer_of_int32(r1_1), (1))) }; void); void;
-      (raise Return) end)); (raise Return) end with Return -> void end)
+       void); (assert { (JC_<somenum>: (integer_of_int32(r1_1) = (1))) }; void);
+      void; (raise Return) end)); (raise Return) end with Return -> void end)
   { (JC_<somenum>: true) }
 
 let test1ptr_safety =
@@ -835,7 +778,7 @@ let test1ptr_safety =
                 (JC_<somenum>:
                 ((((endsat_requires jessie_<somenum>) jessie_<somenum>) !charP_gptoto_3_alloc_table) !charP_charM_gptoto_3)))))) in
        void);
-      [ { } unit reads r1_1 { (JC_<somenum>: eq_int(integer_of_int32(r1_1), (1))) } ];
+      [ { } unit reads r1_1 { (JC_<somenum>: (integer_of_int32(r1_1) = (1))) } ];
       void; (raise Return) end)); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid___string_toto(charP___string_toto_1_alloc_table))
@@ -904,7 +847,7 @@ let test2_ensures_default =
                (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
                (JC_<somenum>:
                ((((endsat jessie_<somenum>) jessie_<somenum>) !charP_ltoto_5_alloc_table) !charP_charM_ltoto_5)))))) in
-      void); (assert { (JC_<somenum>: eq_int(integer_of_int32(r1_0), (1))) }; void);
+      void); (assert { (JC_<somenum>: (integer_of_int32(r1_0) = (1))) }; void);
       void; ((safe_free_parameter charP_ltoto_5_alloc_table) !ltoto);
       (raise Return) end))))))))))))); (raise Return) end with Return ->
    void end) { (JC_<somenum>: true) }
@@ -977,7 +920,7 @@ let test2_safety =
                (JC_<somenum>:
                ((((endsat_requires jessie_<somenum>) jessie_<somenum>) !charP_ltoto_5_alloc_table) !charP_charM_ltoto_5)))))) in
       void);
-      [ { } unit reads r1_0 { (JC_<somenum>: eq_int(integer_of_int32(r1_0), (1))) } ];
+      [ { } unit reads r1_0 { (JC_<somenum>: (integer_of_int32(r1_0) = (1))) } ];
       void; ((free_parameter charP_ltoto_5_alloc_table) !ltoto);
       (raise Return) end))))))))))))); (raise Return) end with Return ->
    void end)
@@ -1005,10 +948,9 @@ let test2ptr_ensures_default =
                (let jessie_<somenum> = (safe_int32_of_integer_ (4)) in
                (JC_<somenum>:
                ((((endsat jessie_<somenum>) jessie_<somenum>) !charP___string_toto_1_alloc_table) !charP_charM___string_toto_1)))))) in
-      void);
-      (assert { (JC_<somenum>: eq_int(integer_of_int32(r1_2), (1))) }; void); void;
-      (raise Return) end)))); (raise Return) end with Return -> void end)
-  { (JC_<somenum>: true) }
+      void); (assert { (JC_<somenum>: (integer_of_int32(r1_2) = (1))) }; void);
+      void; (raise Return) end)))); (raise Return) end with Return ->
+   void end) { (JC_<somenum>: true) }
 
 let test2ptr_safety =
  fun (tt : unit) ->
@@ -1031,7 +973,7 @@ let test2ptr_safety =
                (JC_<somenum>:
                ((((endsat_requires jessie_<somenum>) jessie_<somenum>) !charP___string_toto_1_alloc_table) !charP_charM___string_toto_1)))))) in
       void);
-      [ { } unit reads r1_2 { (JC_<somenum>: eq_int(integer_of_int32(r1_2), (1))) } ];
+      [ { } unit reads r1_2 { (JC_<somenum>: (integer_of_int32(r1_2) = (1))) } ];
       void; (raise Return) end)))); (raise Return) end with Return ->
    void end)
   { (JC_<somenum>:
@@ -1044,6 +986,12 @@ why --project [...] why/string_basic.why
 <project name="string_basic" context="why/string_basic_ctx.why">
   <function name="Function test2ptr">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/string_basic_po25.why">
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "40" begin = "13" end = "20"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/string_basic_po26.why">
       <location file = "PPCHOME/tests/jessie/string_basic.c" line = "39" begin = "11" end = "28"/>
@@ -1056,15 +1004,15 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/string_basic_po25.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "40" begin = "13" end = "20"/>
-      <explain kind = "Assert"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function test2">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/string_basic_po19.why">
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "27" begin = "13" end = "20"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/string_basic_po20.why">
       <location file = "PPCHOME/tests/jessie/string_basic.c" line = "25" begin = "7" end = "12"/>
@@ -1072,7 +1020,7 @@ text = "UserCall"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/string_basic_po21.why">
-      <location file = "why/string_basic.why" line = "789" begin = "19" end = "99"/>
+      <location file = "why/string_basic.why" line = "732" begin = "19" end = "99"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/string_basic_po22.why">
@@ -1086,20 +1034,20 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/string_basic_po24.why">
-      <location file = "why/string_basic.why" line = "829" begin = "13" end = "62"/>
+      <location file = "why/string_basic.why" line = "772" begin = "13" end = "62"/>
       <explain kind = "Pre"
 text = ""/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/string_basic_po19.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "27" begin = "13" end = "20"/>
-      <explain kind = "Assert"/>
     </goal>
     </behavior>
   </function>
   <function name="Function test1ptr">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/string_basic_po16.why">
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "34" begin = "13" end = "20"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/string_basic_po17.why">
       <location file = "PPCHOME/tests/jessie/string_basic.c" line = "33" begin = "11" end = "28"/>
@@ -1112,15 +1060,15 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/string_basic_po16.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "34" begin = "13" end = "20"/>
-      <explain kind = "Assert"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function test1">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/string_basic_po13.why">
+      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "21" begin = "13" end = "20"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/string_basic_po14.why">
       <location file = "PPCHOME/tests/jessie/string_basic.c" line = "20" begin = "11" end = "27"/>
@@ -1131,12 +1079,6 @@ text = "UserCall"/>
       <location file = "PPCHOME/tests/jessie/string_basic.c" line = "20" begin = "11" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/string_basic_po13.why">
-      <location file = "PPCHOME/tests/jessie/string_basic.c" line = "21" begin = "13" end = "20"/>
-      <explain kind = "Assert"/>
     </goal>
     </behavior>
   </function>
@@ -1172,7 +1114,7 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `ok'">
+    <behavior name="Behavior `ok'">
     <goal why_file="why/string_basic_po4.why">
       <location file = "PPCHOME/tests/jessie/string_basic.c" line = "7" begin = "14" end = "26"/>
       <explain kind = "Post"/>
@@ -1186,7 +1128,7 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `ko'">
+    <behavior name="Behavior `ko'">
     <goal why_file="why/string_basic_po1.why">
       <location file = "PPCHOME/tests/jessie/string_basic.c" line = "10" begin = "14" end = "26"/>
       <explain kind = "Post"/>
@@ -2187,6 +2129,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -2198,6 +2145,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2250,16 +2201,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
 predicate valid___string_toto(charP___string_toto_1_alloc_table: charP alloc_table) =
   ((offset_min(charP___string_toto_1_alloc_table, __string_toto) <= 0) and
    (offset_max(charP___string_toto_1_alloc_table, __string_toto) >= 4))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_gtoto(charP_gtoto_2_alloc_table: charP alloc_table) =
   ((offset_min(charP_gtoto_2_alloc_table, gtoto) <= 0) and

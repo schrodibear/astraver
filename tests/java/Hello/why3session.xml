@@ -1,0 +1,730 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<why3session
+ name="Hello/why3session.xml">
+ <prover
+  id="alt-ergo"
+  name="Alt-Ergo"
+  version="0.93"/>
+ <prover
+  id="coq"
+  name="Coq"
+  version="8.3pl2"/>
+ <prover
+  id="cvc3"
+  name="CVC3"
+  version="2.2"/>
+ <prover
+  id="gappa"
+  name="Gappa"
+  version="0.15.0"/>
+ <prover
+  id="simplify"
+  name="Simplify"
+  version="1.5.4"/>
+ <prover
+  id="spass"
+  name="Spass"
+  version="3.7"/>
+ <prover
+  id="vampire"
+  name="Vampire"
+  version="0.6"/>
+ <prover
+  id="yices"
+  name="Yices"
+  version="1.0.25"/>
+ <prover
+  id="z3"
+  name="Z3"
+  version="2.19"/>
+ <file
+  name="../Hello.mlw"
+  verified="false"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="WP Jessie_program"
+   verified="false"
+   expanded="true">
+   <goal
+    name="WP_parameter _Hello_main_ensures_default"
+    expl="Method main, default behavior"
+    sum="97642deeb20e6cf83dbd62324a853a09"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Hello_main_safety"
+    expl="assertion"
+    sum="0ddd81287283fc844e59cfbf67f24e85"
+    proved="false"
+    expanded="true"
+    shape="ainfix >=aoffset_maxV1a_System_outc0Ialeft_valid_struct_StringMV0c0V1FF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="timeout" time="5.04"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="unknown" time="0.03"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="timeout" time="5.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_FilterOutputStream_OutputStream_ensures_default"
+    expl="Constructor of class FilterOutputStream, default behavior"
+    sum="77549b1b4299594974b28500b99b2b76"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_FilterOutputStream_OutputStream_safety"
+    expl="Constructor of class FilterOutputStream, Safety"
+    sum="188e7304d3788d200a656c4b78099ee6"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Hello_ensures_default"
+    expl="Constructor of class Hello, default behavior"
+    sum="d7d284330dad31d9aad98e7cb3a47b02"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Hello_safety"
+    expl="Constructor of class Hello, Safety"
+    sum="41500f1dddfc5677615aa8286ef85934"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Object_ensures_default"
+    expl="Constructor of class Object, default behavior"
+    sum="c68f7c1ccd127d25bdd47b16e6e6be55"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Object_safety"
+    expl="Constructor of class Object, Safety"
+    sum="168adbeae71f47e25fbcfd7a24d956e3"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_OutputStream_ensures_default"
+    expl="Constructor of class OutputStream, default behavior"
+    sum="56dff8b3662ccb8ef3ff9aa7bdfe579c"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_OutputStream_safety"
+    expl="Constructor of class OutputStream, Safety"
+    sum="9b38b8bfc27d92fb54942ba96ca425b8"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_PrintStream_OutputStream_boolean_String_ensures_default"
+    expl="Constructor of class PrintStream, default behavior"
+    sum="9ccdf4e79536053e8a67d11ffeaa4b41"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_PrintStream_OutputStream_boolean_String_safety"
+    expl="Constructor of class PrintStream, Safety"
+    sum="47ff1717b58aa1bd3404abdca5208c2a"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_PrintStream_OutputStream_boolean_ensures_default"
+    expl="Constructor of class PrintStream, default behavior"
+    sum="a5ca2c721b967f80164290f792650b93"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_PrintStream_OutputStream_boolean_safety"
+    expl="Constructor of class PrintStream, Safety"
+    sum="872d0208ded1efc5773dfe4a2dddf810"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_PrintStream_OutputStream_ensures_default"
+    expl="Constructor of class PrintStream, default behavior"
+    sum="3ee8763c226d78cd37ff24dd22a4ba91"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_PrintStream_OutputStream_safety"
+    expl="Constructor of class PrintStream, Safety"
+    sum="d678208dff0b13c5d9ddc4e3b7b242a7"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_PrintStream_boolean_OutputStream_ensures_default"
+    expl="Constructor of class PrintStream, default behavior"
+    sum="9c2860dd6d6824abad356ae5db1c53e4"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_PrintStream_boolean_OutputStream_safety"
+    expl="Constructor of class PrintStream, Safety"
+    sum="9e22c313872dce683062f701b78cf095"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_StringBuffer_ensures_default"
+    expl="Constructor of class String, default behavior"
+    sum="e1e531d1ef6e97af2d80f27c40bd2496"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_StringBuffer_safety"
+    expl="Constructor of class String, Safety"
+    sum="0867afec64f773f44cc4101537f446d1"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_String_ensures_default"
+    expl="Constructor of class String, default behavior"
+    sum="1aa4c9e067e6b19ab9e14a05babc5fa3"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_String_safety"
+    expl="Constructor of class String, Safety"
+    sum="3043bd81960a63c6de980ad3bbda625c"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_byteA_String_ensures_default"
+    expl="Constructor of class String, default behavior"
+    sum="c6611f646d3ede84f1f4691697343542"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_byteA_String_safety"
+    expl="Constructor of class String, Safety"
+    sum="48055a6e6ead0e4ca5d5ea31400e14c3"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_byteA_ensures_default"
+    expl="Constructor of class String, default behavior"
+    sum="e38abc0f3ba57760ff135bf172479649"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_byteA_int_ensures_default"
+    expl="Constructor of class String, default behavior"
+    sum="58e5835856ffd05071513f60a402a330"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_byteA_int_int_String_ensures_default"
+    expl="Constructor of class String, default behavior"
+    sum="8543233ae7fa71f2d1b3de12421d6084"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_byteA_int_int_String_safety"
+    expl="Constructor of class String, Safety"
+    sum="1b27d7494618342a51bb81f7193e3e48"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_byteA_int_int_ensures_default"
+    expl="Constructor of class String, default behavior"
+    sum="bd2e75fa8e7a6e03efb78948555b693d"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_byteA_int_int_int_ensures_default"
+    expl="Constructor of class String, default behavior"
+    sum="01853585d909c892cf330657d370e546"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_byteA_int_int_int_safety"
+    expl="Constructor of class String, Safety"
+    sum="d3a4bfe108d4a9f623fb1dec463ef478"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_byteA_int_int_safety"
+    expl="Constructor of class String, Safety"
+    sum="218a9e5a6ea97bda96bbbbf27a9e5e9e"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_byteA_int_safety"
+    expl="Constructor of class String, Safety"
+    sum="0a8d735fb02d120802510a74a52a0b59"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_byteA_safety"
+    expl="Constructor of class String, Safety"
+    sum="7997eb6c25ca8918fad66df849b3ae9b"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_charA_ensures_default"
+    expl="Constructor of class String, default behavior"
+    sum="f7690e4280e43159a5f440431273a8a0"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_charA_int_int_ensures_default"
+    expl="Constructor of class String, default behavior"
+    sum="178c40a70224208ee76e7584029d94e9"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_charA_int_int_safety"
+    expl="Constructor of class String, Safety"
+    sum="7bd60131cad9266d4bf5dcd32e8fa2d7"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_charA_safety"
+    expl="Constructor of class String, Safety"
+    sum="984e4b1e84e311f3506a3ae0699b7126"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_ensures_default"
+    expl="Constructor of class String, default behavior"
+    sum="6f98eab820d3d4ee40f11393518669c2"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_int_int_charA_ensures_default"
+    expl="Constructor of class String, default behavior"
+    sum="b3eb667018c2178495c546671a67784a"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_int_int_charA_safety"
+    expl="Constructor of class String, Safety"
+    sum="a000c8cb0191adf382215e9a99955fe2"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_String_safety"
+    expl="Constructor of class String, Safety"
+    sum="fb015d0623659b8ee304dd10e706b58e"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_System_ensures_default"
+    expl="Constructor of class System, default behavior"
+    sum="44281385d82ca4d5b06f0fd001a13777"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_System_safety"
+    expl="Constructor of class System, Safety"
+    sum="d1ad7422a522505643197f3d5351903b"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+  </theory>
+ </file>
+</why3session>

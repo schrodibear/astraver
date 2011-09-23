@@ -2,16 +2,16 @@
 #                                                                        #
 #  The Why platform for program certification                            #
 #                                                                        #
-#  Copyright (C) 2002-2010                                               #
+#  Copyright (C) 2002-2011                                               #
 #                                                                        #
-#    Jean-Christophe FILLIATRE, CNRS                                     #
+#    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                #
 #    Claude MARCHE, INRIA & Univ. Paris-sud 11                           #
 #    Yannick MOY, Univ. Paris-sud 11                                     #
 #    Romain BARDOU, Univ. Paris-sud 11                                   #
-#    Thierry HUBERT, Univ. Paris-sud 11                                  #
 #                                                                        #
 #  Secondary contributors:                                               #
 #                                                                        #
+#    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     #
 #    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          #
 #    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        #
 #    Sylvie BOLDO, INRIA                 (floating-point support)        #
@@ -103,10 +103,8 @@ VO8= lib/coq/WhyInt.vo lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo \
      lib/coq/WhySorted.vo  \
      lib/coq/WhyExn.vo lib/coq/WhyLemmas.vo  lib/coq/WhyTactics.vo \
      lib/coq/WhyPrelude.vo lib/coq/WhyCM.vo lib/coq/Why.vo lib/coq/WhyReal.vo \
-     @WHYFLOATS@ \
-     lib/coq/caduceus_why.vo lib/coq/caduceus_tactics.vo \
-     lib/coq/caduceus_lists.vo lib/coq/Caduceus.vo \
-     @JESSIELIBCOQ@
+     @JESSIELIBCOQ@ \
+     @WHYFLOATS@
 
 V8FILES=$(VO8:.vo=.v)
 
@@ -141,7 +139,6 @@ GENERATED = src/version.ml src/rc.ml src/xml.ml \
 
 BINARY=bin/why.$(OCAMLBEST)
 WHYCONFIG=bin/why-config.$(OCAMLBEST)
-CADUCEUS=bin/caduceus.$(OCAMLBEST)
 JESSIE=bin/jessie.$(OCAMLBEST)
 KRAKATOA=bin/krakatoa.$(OCAMLBEST)
 JESSICA=bin/jessica.$(OCAMLBEST)
@@ -167,14 +164,14 @@ endif
 
 all: all-without-frama-c-plugin .depend $(JESSIE_PLUGIN_BEST)
 
-all-without-frama-c-plugin: $(BINARY) $(WHYCONFIG) check $(CADUCEUS) $(JESSIE) $(KRAKATOA) coq-@COQ@ pvs-@PVS@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB) $(REGTEST)
+all-without-frama-c-plugin: $(BINARY) $(WHYCONFIG) check $(JESSIE) $(KRAKATOA) coq-@COQ@ pvs-@PVS@ $(TOOLS) gwhy-@LABLGTK2@ $(JCLIB) $(REGTEST)
 
 # refrain parallel make (-j nn) from starting ocaml compilation too early
 *.cm*: .depend
 
-opt: bin/why.opt bin/gwhy.opt bin/caduceus.opt bin/jessie.opt bin/krakatoa.opt \
+opt: bin/why.opt bin/gwhy.opt bin/jessie.opt bin/krakatoa.opt \
 	$(JESSIE_PLUGIN_OPT)
-byte: bin/why.byte bin/gwhy.byte bin/caduceus.byte bin/jessie.byte bin/krakatoa.byte \
+byte: bin/why.byte bin/gwhy.byte bin/jessie.byte bin/krakatoa.byte \
 	$(JESSIE_PLUGIN_BYTE)
 
 .PHONY: check
@@ -185,8 +182,7 @@ WHYLIBS=lib/why/bool.why lib/why/integer.why lib/why/divisions.why \
 	lib/why/mybag.why \
 	lib/why/mix.why \
 	lib/why/floats_common.why lib/why/floats_strict.why \
-	lib/why/floats_full.why lib/why/floats_multi_rounding.why
-
+	lib/why/floats_full.why lib/why/floats_multi_rounding.why 
 
 
 
@@ -275,38 +271,6 @@ bin/top: $(CMO)
 # 	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) \
 # 	      $(OFLAGS) -thread -o $@ str.cmxa unix.cmxa threads.cmxa $^
 # 	$(STRIP)    $@
-
-# caduceus
-CCMO = src/lib.cmo src/linenum.cmo \
-	src/loc.cmo src/pp.cmo src/option_misc.cmo \
-	src/version.cmo jc/output.cmo \
-	c/cversion.cmo c/coptions.cmo c/cutil.cmo \
-	c/ctypes.cmo c/info.cmo c/creport.cmo c/cconst.cmo \
-	c/cenv.cmo c/cltyping.cmo c/ctyping.cmo c/cprint_graph.cmo \
-	c/cgraph.cmo c/cinit.cmo \
-	c/cast_misc.cmo c/clparser.cmo c/cllexer.cmo \
-	c/cparser.cmo c/clexer.cmo \
-	c/cprint.cmo c/cnorm.cmo  c/cseparation.cmo \
-	c/invariant.cmo c/ceffect.cmo \
-	c/cinterp.cmo c/cpp.cmo c/cmake.cmo c/cabsint.cmo c/cptr.cmo \
-	c/csymbol.cmo c/cmain.cmo
-CCMA =
-CCMX = $(CCMO:.cmo=.cmx)
-CCMXA = $(CCMA:.cma=.cmxa)
-
-bin/caduceus.opt: $(CCMXA) $(CCMX)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) \
-	      $(OFLAGS) -o $@ unix.cmxa str.cmxa graph.cmxa $^
-	$(STRIP)    $@
-
-bin/caduceus.byte: $(CCMA) $(CCMO)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLC) \
-	      $(BFLAGS) -o $@ unix.cma str.cma graph.cma $^
-
-bin/caduceus.static: $(CCMXA) $(CCMX)
-	$(if $(QUIET),@echo 'Linking  $@' &&) $(OCAMLOPT) -cclib -static $(OFLAGS) -o $@ unix.cmxa str.cmxa graph.cmxa $^
-
-	$(STRIP)    $@
 
 
 # jessie
@@ -682,12 +646,6 @@ include Version
 doc/version.tex src/version.ml c/cversion.ml: Version version.sh config.status
 	BINDIR=$(BINDIR) LIBDIR=$(LIBDIR) COQVER=$(COQVER) ./version.sh
 
-lib/coq/caduceus_why.v: lib/why/caduceus.why $(BINARY)
-	WHYLIB=lib $(BINARY) --dir lib/coq --coq-v8 lib/why/caduceus.why
-
-lib/coq-v7/caduceus_why.v: lib/why/caduceus.why $(BINARY)
-	WHYLIB=lib $(BINARY) --dir lib/coq-v7 --coq-v7 lib/why/caduceus.why
-
 lib/coq/jessie_why.v: lib/why/jessie.why $(BINARY)
 	WHYLIB=lib $(BINARY) --dir lib/coq --coq-v8 -coq-preamble \
         "Require Export Reals. Require Export Why." \
@@ -731,15 +689,6 @@ java-bench:: $(KRAKATOA) bin/cadlog.opt
 ml-bench:: $(JESSICA) $(JESSIE)
 	make -C bench/ml -f Makefile good.bench
 
-BENCHLOG=bench-caduceus-`date +%d-%m-%y`.log
-
-bench-c:: $(CADUCEUS) $(WHYVO) bin/cadlog.opt
-	(cd bench/c; sh ./bench 2>&1) | bin/cadlog.opt $(BENCHLOG)
-	(cd examples-c/linked-lists; make swap reverse)
-
-bench-absint:: $(CADUCEUS) $(WHYVO) bin/cadlog.opt
-	(cd bench/c/absint; sh ./bench 2>&1) | bin/cadlog.opt $(BENCHLOG)
-
 bench-pvs:: $(BINARY) $(WHYVO)
 	cd bench; sh ./bench "../$(BINARY) --valid" pvs
 
@@ -753,9 +702,6 @@ test:: $(BINARY) $(WHYVO)
 
 examples:: $(BINARY) $(WHYVO)
 	make -C examples check
-
-examples-c:: $(BINARY) $(CADUCEUS) $(WHYVO)
-	make -C examples-c
 
 # debugging
 
@@ -778,7 +724,7 @@ java_api:
 
 install: install-binary install-lib install-man install-coq-@COQ@ install-pvs-@PVS@
 
-BINARYFILES = $(BINARY) $(WHYCONFIG) $(CADUCEUS) $(JESSIE) $(KRAKATOA) \
+BINARYFILES = $(BINARY) $(WHYCONFIG) $(JESSIE) $(KRAKATOA) \
 	$(WHY2HTML) $(DP) $(CPULIMIT) $(RVMERGE) bin/gwhy.$(OCAMLBEST) \
 	$(WHYSTAT) $(TOOLSTAT) $(WHYOBFUSCATOR) $(SIMPLIFY2WHY)
 
@@ -788,7 +734,6 @@ install-binary:
 	mkdir -p $(BINDIR)
 	cp -f $(BINARY) $(BINDIR)/why$(EXE)
 	cp -f $(WHYCONFIG) $(BINDIR)/why-config$(EXE)
-	cp -f $(CADUCEUS) $(BINDIR)/caduceus$(EXE)
 	cp -f $(JESSIE) $(BINDIR)/jessie$(EXE)
 	cp -f $(KRAKATOA) $(BINDIR)/krakatoa$(EXE)
 	cp -f bin/gwhy.sh $(BINDIR)/gwhy
@@ -807,23 +752,16 @@ install-binary:
 install-lib: $(JCLIB)
 	mkdir -p $(LIBDIR)/why/why
 	cp -f $(PRELUDE) $(LIBDIR)/why/why
-	mkdir -p $(LIBDIR)/caduceus/why
+	mkdir -p $(LIBDIR)/why/why3
+	cp -f lib/why3/jessie3.why lib/why3/jessie3.mlw $(LIBDIR)/why/why3
 	mkdir -p $(LIBDIR)/jessie
 	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)/jessie
-	cp -f lib/why/caduceus.why $(LIBDIR)/caduceus/why
-	cp -f lib/why/caduceus_arith.why $(LIBDIR)/caduceus/why
-	mkdir -p $(LIBDIR)/caduceus/coq
 	mkdir -p $(LIBDIR)/coq
 	if test "@COQVER@" = "v7"; then \
-	  cp -f lib/coq-v7/caduceus_why.v lib/coq-v7/caduceus_tactics.v $(LIBDIR)/caduceus/coq; \
+	    true \
 	else \
-	  cp -f lib/coq/caduceus_why.v lib/coq/caduceus_tactics.v $(LIBDIR)/caduceus/coq; \
 	  cp -f lib/coq/jessie_why.v $(LIBDIR)/coq; \
 	fi
-	mkdir -p $(LIBDIR)/caduceus/isabelle
-	cp -f lib/isabelle/caduceus_why.thy $(LIBDIR)/caduceus/isabelle
-	mkdir -p $(LIBDIR)/caduceus/harvey
-	cp -f lib/harvey/caduceus_why.rv $(LIBDIR)/caduceus/harvey
 	cd lib; cp -rf java_api $(LIBDIR)/why
 	cd lib; cp -rf javacard_api $(LIBDIR)/why
 	mkdir -p $(LIBDIR)/why/images
@@ -868,19 +806,17 @@ install-mizar-yes:
 	cp lib/mizar/why.miz @MIZARLIB@/mml
 	cp lib/mizar/dict/why.voc @MIZARLIB@/mml/dict
 
-local-install: $(BINARY) $(WHYCONFIG) $(CADUCEUS) $(JESSIE) bin/gwhy.$(OCAMLBEST) byte bin/gwhy.byte
+local-install: $(BINARY) $(WHYCONFIG) $(JESSIE) bin/gwhy.$(OCAMLBEST) byte bin/gwhy.byte
 	cp $(BINARY) $$HOME/bin/why
 	cp $(WHYCONFIG) $$HOME/bin/why
-	cp $(CADUCEUS) $$HOME/bin/caduceus
 	cp $(JESSIE) $$HOME/bin/jessie
 	if test -f bin/gwhy.$(OCAMLBEST); then \
 	  cp -f bin/gwhy.$(OCAMLBEST) $$HOME/bin/gwhy; \
 	fi
 
 local: install
-# local: bin/why.opt $(CADUCEUS) $(WHY2HTML) $(DP) $(RVMERGE) coq-@COQ@
+# local: bin/why.opt $(WHY2HTML) $(DP) $(RVMERGE) coq-@COQ@
 # 	cp -f bin/why.opt $$HOME/bin/$$OSTYPE/why
-# 	cp -f $(CADUCEUS) $$HOME/bin/$$OSTYPE/caduceus
 # 	cp -f $(WHY2HTML) $$HOME/bin/$$OSTYPE/why2html
 # 	cp -f $(DP) $$HOME/bin/$$OSTYPE/dp
 # 	cp -f $(RVMERGE) $$HOME/bin/$$OSTYPE/rv_merge
@@ -908,7 +844,7 @@ zip:
 
 # doc
 
-DOC=doc/manual.ps doc/manual.html doc/caduceus.ps doc/caduceus.html \
+DOC=doc/manual.ps doc/manual.html \
 	doc/krakatoa.pdf doc/krakatoa.html \
 	doc/main.pdf doc/main.html
 
@@ -920,18 +856,11 @@ doc/manual.ps: doc/manual.tex doc/version.tex
 
 # doc/version.tex: Version Makefile.in
 #	echo '\newcommand{\whyversion}'"{$(VERSION)}" > $@
-#	echo '\newcommand{\caduceusversion}'"{$(CVERSION)}" >> $@
 #	echo '\newcommand{\jessieversion}'"{$(JCVERSION)}" >> $@
 #	echo '\newcommand{\krakatoaversion}'"{$(KVERSION)}" >> $@
 
 doc/manual.html: doc/manual.tex doc/version.tex
 	make -C doc manual.html
-
-doc/caduceus.ps: doc/caduceus.tex doc/version.tex
-	make -C doc caduceus.ps
-
-doc/caduceus.html: doc/caduceus.tex doc/version.tex
-	make -C doc caduceus.html
 
 doc/krakatoa.pdf: doc/krakatoa.tex doc/version.tex
 	make -C doc krakatoa.pdf
@@ -1103,7 +1032,7 @@ export-www:
 	make -C /users/demons/filliatr/www/why install
 
 source: export/$(NAME).tar.gz
-	cp CHANGES CHANGES.caduceus export/$(NAME).tar.gz $(FTP)
+	cp CHANGES export/$(NAME).tar.gz $(FTP)
 
 export/$(NAME).tar.gz: $(FILES)
 	rm -rf $(EXPORT)
@@ -1128,19 +1057,10 @@ export-examples:
 	make -C $(WWW)/examples clean depend
 	echo "*** faire make all dans $(WWW)/examples ***"
 
-export-examples-c:
-	mkdir -p $(WWW)/caduceus/examples
-	cd examples-c; cp --parents */*.c */*.h $(WWW)/caduceus/examples
-	mkdir -p $(WWW)/caduceus/examples/bench
-	cp bench/c/good/*.c $(WWW)/caduceus/examples/bench
-	rm -f $(WWW)/caduceus/examples/bench/test.c
-
 export-doc: $(DOC) export-krakatoa-doc
 	cp doc/manual.ps doc/manual.html $(WWW)/manual
 	cp doc/logic_syntax.bnf $(WWW)/manual
 	(cd $(WWW)/manual; hacha manual.html)
-	cp doc/caduceus.ps doc/caduceus.html $(WWW)/caduceus/manual
-	(cd $(WWW)/caduceus/manual; hacha caduceus.html)
 
 export-krakatoa-doc:
 	cp doc/krakatoa.pdf doc/krakatoa.html doc/*.png $(WWWKRAKATOA)/manual
@@ -1167,6 +1087,8 @@ headers:
 		Makefile.in configure.in README \
 		*/*.ml */*.ml[ily4] tools/*.c bench/c/good/*.c \
 		bench/java/good/*.java \
+		tests/java/*.java \
+		tests/c/*.c \
 		doc/*.tex
 
 # myself
@@ -1197,7 +1119,6 @@ clean::
 	rm -f ml/utils/*.cm[iox] ml/utils/*.o ml/utils/*~ ml/utils/*.annot
 	rm -f ml/typing/*.cm[iox] ml/typing/*.o ml/typing/*~ ml/typing/*.annot
 	rm -f bin/why.opt bin/why.byte bin/why.static bin/top
-	rm -f bin/caduceus.opt bin/caduceus.byte
 	rm -f bin/jessie.opt bin/jessie.byte
 	rm -f bin/jessica.opt bin/jessica.byte
 	rm -f bin/why-obfuscator.opt bin/why-obfuscator.byte

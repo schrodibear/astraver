@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -95,6 +95,7 @@ let files_to_load_ = ref []
 let show_time_ = ref false
 let locs_files = ref []
 let default_locs = ref false
+let delete_old_vcs = ref false
 let explain_vc = ref false
 let locs_table = Hashtbl.create 97
 
@@ -140,7 +141,7 @@ let coq_version =
 type prover =
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
   | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Z3 | Vampire
-  | Ergo | Why | MultiWhy | Why3 | Dispatcher | WhyProject
+  | Ergo | Why | MultiWhy | MultiAltergo | Why3 | Dispatcher | WhyProject
 
 let prover_ = ref (Coq coq_version)
 
@@ -199,7 +200,7 @@ See the GNU General Public License version 2 for more details
 let banner () =
   eprintf "\
 This is why version %s, compiled on %s
-Copyright (c) 2002 Jean-Christophe Filliâtre
+Copyright (c) 2002-2011 CNRS/INRIA/Univ Paris 11, team ProVal
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
 " Version.version Version.date;
   flush stderr
@@ -238,6 +239,9 @@ Typing/Annotations/VCG options:
   --explain          outputs explanations for VCs in file.xpl
   --locs f           reads source locations from file f
   --default-locs     reads source locations from file basename.loc
+  --delete-old-vcs   delete files that originate from a previous call to Why on
+                     the same file; active only when option --multi-why or
+                     --multi-altergo is given
   --phantom <name>   declare <name> as a phantom type
 
 VC transformation options:
@@ -295,6 +299,7 @@ Prover selection:
   --why       selects the Why pretty-printer
   --why3       selects the Why3 pretty-printer
   --multi-why selects the Why pretty-printer, with one file per goal
+  --multi-altergo selects the Alt-Ergo pretty-printer, with one file per goal
   --project   selects the Why project format, with one file per goal
 
 Coq-specific options:
@@ -387,6 +392,8 @@ let files =
     | ("-why" | "--why") :: args -> prover_ := Why; parse args
     | ("-why3" | "--why3") :: args -> prover_ := Why3; parse args
     | ("-multi-why" | "--multi-why") :: args -> prover_ := MultiWhy; parse args
+    | ("-multi-altergo" | "--multi-altergo") :: args ->
+          prover_ := MultiAltergo; parse args
     | ("-project" | "--project") :: args -> prover_ := WhyProject; parse args
     | ("-gappa" | "--gappa") :: args -> prover_ := Gappa; parse args
     | ("-show-time" | "--show-time") :: args -> show_time_ := true; parse args
@@ -610,6 +617,9 @@ let files =
     | ("-default-locs" | "--default-locs" ) :: args ->
           default_locs := true;
           parse args
+    | ("-delete-old-vcs" | "--delete-old-vcs" ) :: args ->
+          delete_old_vcs := true;
+          parse args
     | ("-phantom" | "--phantom") :: s :: args ->
 	Hashtbl.add phantom_types s ();
 	parse args
@@ -627,6 +637,8 @@ let type_only = !type_only_
 let wp_only = !wp_only_
 let prover (* ?(ignore_gui=false) *) () =
   if (* not ignore_gui &&*) !gui then Dispatcher else !prover_
+let delete_old_vcs =
+   !delete_old_vcs && (let p = prover () in p = MultiWhy || p = MultiAltergo)
 let valid = !valid_
 let coq_tactic = !coq_tactic_
 let coq_preamble = match !coq_preamble_ with

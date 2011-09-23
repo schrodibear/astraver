@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -84,8 +84,8 @@ let alt_ergo =
     version = "";
     version_switch = "-version";
     version_regexp = ".*Ergo \\([^ ]*\\)";
-    versions_ok = ["0.91"; "0.92.1"; "0.92.2"];
-    versions_old = ["0.8"; "0.9"];
+    versions_ok = ["0.93"];
+    versions_old = ["0.8"; "0.9" ; "0.91"; "0.92.1"; "0.92.2" ];
     command = "alt-ergo";
     command_switches = "";
     valid_regexp = Some (make_regexp "\\bValid\\b");
@@ -139,8 +139,8 @@ let z3 =
     version = "";
     version_switch = "-version";
     version_regexp = "Z3 version \\([^ \r]+\\)";
-    versions_ok = ["2.2"];
-    versions_old = ["2.1";"1.3"];
+    versions_ok = [ "2.19"];
+    versions_old = ["2.2" ; "2.1";"1.3"];
     command = "z3";
     command_switches = "-smt ";
     valid_regexp = Some (make_regexp "\\bunsat\\b");
@@ -155,7 +155,7 @@ let yices =
     version = "";
     version_switch = "--version";
     version_regexp = "[Yices ]*\\([0-9.]+\\)";
-    versions_ok = ["1.0.17";"1.0.24"];
+    versions_ok = ["1.0.11" ; "1.0.17";"1.0.24"];
     versions_old = [""];
     command = "yices";
     command_switches = "-smt ";

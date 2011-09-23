@@ -1,4 +1,35 @@
 ========== file tests/c/Sterbenz.c ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
+
 // RUNCOQ: will ask regtests to check Coq proofs of this program
 
 /*@ requires  y / 2.0 <= x <= 2.0 * y;
@@ -13,7 +44,7 @@ float Sterbenz(float x, float y) {
 
 /*
 Local Variables:
-compile-command: "frama-c -jessie -jessie-atp coq Sterbenz.c"
+compile-command: "make Sterbenz.why3ml"
 End:
 */
 ========== frama-c -jessie execution ==========
@@ -75,56 +106,56 @@ behavior default:
 ========== file tests/c/Sterbenz.jessie/Sterbenz.cloc ==========
 [C_1]
 file = "HOME/tests/c/Sterbenz.c"
-line = 7
+line = 38
 begin = 13
 end = 21
 
 [C_2]
 file = "HOME/tests/c/Sterbenz.c"
-line = 8
+line = 39
 begin = 13
 end = 21
 
 [C_3]
 file = "HOME/tests/c/Sterbenz.c"
-line = 9
+line = 40
 begin = 9
 end = 12
 
 [C_4]
 file = "HOME/tests/c/Sterbenz.c"
-line = 9
+line = 40
 begin = 2
 end = 13
 
 [C_5]
 file = "HOME/tests/c/Sterbenz.c"
-line = 4
+line = 35
 begin = 12
 end = 28
 
 [C_6]
 file = "HOME/tests/c/Sterbenz.c"
-line = 3
+line = 34
 begin = 13
 end = 36
 
 [C_7]
 file = "HOME/tests/c/Sterbenz.c"
-line = 3
+line = 34
 begin = 13
 end = 25
 
 [C_8]
 file = "HOME/tests/c/Sterbenz.c"
-line = 3
+line = 34
 begin = 24
 end = 36
 
 [Sterbenz]
 name = "Function Sterbenz"
 file = "HOME/tests/c/Sterbenz.c"
-line = 6
+line = 37
 begin = 6
 end = 14
 
@@ -145,10 +176,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Sterb
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Sterbenz.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/Sterbenz_why.sx
 
@@ -208,6 +240,13 @@ simplify: simplify/Sterbenz_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/Sterbenz_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/Sterbenz_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -281,6 +320,9 @@ why/%_why3.why: why/%.why
 why3ide: why/Sterbenz_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: Sterbenz.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include Sterbenz.depend
 
 depend: coq/Sterbenz_why.v
@@ -292,19 +334,19 @@ clean:
 ========== file tests/c/Sterbenz.jessie/Sterbenz.loc ==========
 [JC_1]
 file = "HOME/tests/c/Sterbenz.c"
-line = 3
+line = 34
 begin = 13
 end = 25
 
 [JC_2]
 file = "HOME/tests/c/Sterbenz.c"
-line = 3
+line = 34
 begin = 24
 end = 36
 
 [JC_3]
 file = "HOME/tests/c/Sterbenz.c"
-line = 3
+line = 34
 begin = 13
 end = 36
 
@@ -316,19 +358,19 @@ end = -1
 
 [JC_5]
 file = "HOME/tests/c/Sterbenz.c"
-line = 3
+line = 34
 begin = 13
 end = 25
 
 [JC_6]
 file = "HOME/tests/c/Sterbenz.c"
-line = 3
+line = 34
 begin = 24
 end = 36
 
 [JC_7]
 file = "HOME/tests/c/Sterbenz.c"
-line = 3
+line = 34
 begin = 13
 end = 36
 
@@ -340,21 +382,21 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/c/Sterbenz.c"
-line = 4
+line = 35
 begin = 12
 end = 28
 
 [Sterbenz_ensures_default]
 name = "Function Sterbenz"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/Sterbenz.c"
-line = 6
+line = 37
 begin = 6
 end = 14
 
 [JC_10]
 file = "HOME/tests/c/Sterbenz.c"
-line = 4
+line = 35
 begin = 12
 end = 28
 
@@ -372,39 +414,39 @@ end = -1
 
 [JC_13]
 file = "HOME/tests/c/Sterbenz.c"
-line = 7
+line = 38
 begin = 13
 end = 21
 
 [JC_14]
 file = "HOME/tests/c/Sterbenz.c"
-line = 8
+line = 39
 begin = 13
 end = 21
 
 [JC_15]
 kind = FPOverflow
 file = "HOME/tests/c/Sterbenz.c"
-line = 9
+line = 40
 begin = 9
 end = 12
 
 [JC_16]
 file = "HOME/tests/c/Sterbenz.c"
-line = 7
+line = 38
 begin = 13
 end = 21
 
 [JC_17]
 file = "HOME/tests/c/Sterbenz.c"
-line = 8
+line = 39
 begin = 13
 end = 21
 
 [JC_18]
 kind = FPOverflow
 file = "HOME/tests/c/Sterbenz.c"
-line = 9
+line = 40
 begin = 9
 end = 12
 
@@ -412,7 +454,7 @@ end = 12
 name = "Function Sterbenz"
 behavior = "Safety"
 file = "HOME/tests/c/Sterbenz.c"
-line = 6
+line = 37
 begin = 6
 end = 14
 
@@ -424,12 +466,6 @@ type int8
 type padding
 
 type voidP
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
 
 logic charP_tag:  -> charP tag_id
 
@@ -458,6 +494,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -507,16 +548,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -551,13 +582,18 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
+exception Return_label_exc of unit
+
 parameter Sterbenz :
  x_0:single ->
   y:single ->
    { } single
    { (JC_10:
-     eq_real(single_value(result),
-     sub_real(single_value(x_0@), single_value(y@)))) }
+     (single_value(result) = sub_real(single_value(x_0), single_value(y)))) }
 
 parameter Sterbenz_requires :
  x_0:single ->
@@ -567,44 +603,7 @@ parameter Sterbenz_requires :
      and (JC_2: le_real(single_value(x_0), mul_real(2.0, single_value(y))))))}
    single
    { (JC_10:
-     eq_real(single_value(result),
-     sub_real(single_value(x_0@), single_value(y@)))) }
-
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+     (single_value(result) = sub_real(single_value(x_0), single_value(y)))) }
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -687,8 +686,7 @@ let Sterbenz_ensures_default =
       void); (return := !__retres); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_9:
-    eq_real(single_value(result),
-    sub_real(single_value(x_0@), single_value(y@)))) }
+    (single_value(result) = sub_real(single_value(x_0), single_value(y)))) }
 
 let Sterbenz_safety =
  fun (x_0 : single) (y : single) ->
@@ -1839,21 +1837,20 @@ axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
 
 axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
 
-logic single_to_double : single -> double
+axiom single_value_is_bounded:
+  (forall x:single. (abs_real(single_value(x)) <= max_single))
 
-logic double_to_single : mode, double -> single
-
-axiom single_to_double_val:
-  (forall s:single. (double_value(single_to_double(s)) = single_value(s)))
-
-axiom double_to_single_val:
-  (forall m:mode.
-    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
-      double_value(d)))))
+axiom double_value_is_bounded:
+  (forall x:double. (abs_real(double_value(x)) <= max_double))
 
 predicate single_of_real_post(m: mode, x: real, res: single) =
   ((single_value(res) = round_single(m, x)) and
    ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate single_of_double_post(m: mode, x: double, res: single) =
+  ((single_value(res) = round_single(m, double_value(x))) and
+   ((single_exact(res) = double_exact(x)) and
+    (single_model(res) = double_model(x))))
 
 predicate add_single_post(m: mode, x: single, y: single, res: single) =
   ((single_value(res) = round_single(m,
@@ -1897,6 +1894,11 @@ predicate abs_single_post(x: single, res: single) =
 predicate double_of_real_post(m: mode, x: real, res: double) =
   ((double_value(res) = round_double(m, x)) and
    ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate double_of_single_post(x: single, res: double) =
+  ((double_value(res) = single_value(x)) and
+   ((double_exact(res) = single_exact(x)) and
+    (double_model(res) = single_model(x))))
 
 predicate add_double_post(m: mode, x: double, y: double, res: double) =
   ((double_value(res) = round_double(m,
@@ -1974,6 +1976,10 @@ axiom int8_coerce:
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
 
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
+
 axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
@@ -2021,16 +2027,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -2093,9 +2089,7 @@ goal Sterbenz_ensures_default_po_3:
   ("JC_16": (0.0 <= single_value(y))) ->
   ("JC_17": (0.0 <= single_value(x_0))) ->
   forall result:single.
-  (no_overflow_single(nearest_even,
-   (single_value(x_0) - single_value(y))) and sub_single_post(nearest_even,
-   x_0, y, result)) ->
+  sub_single_post(nearest_even, x_0, y, result) ->
   forall __retres:single.
   (__retres = result) ->
   forall return:single.
@@ -2115,21 +2109,25 @@ goal Sterbenz_safety_po_1:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Sterbenz_why.why          : ???? (0/0/4/0/0)
+why/Sterbenz_why.why          : ?#?. (1/0/2/1/0)
 total   :   4
-valid   :   0 (  0%)
+valid   :   1 ( 25%)
 invalid :   0 (  0%)
-unknown :   4 (100%)
-timeout :   0 (  0%)
+unknown :   2 ( 50%)
+timeout :   1 ( 25%)
 failure :   0 (  0%)
 // RUNCOQ: will ask regtests to check Coq proofs of this program
 ========== generation of Coq VC output ==========
 why -coq [...] why/Sterbenz.why
+File "/home/cmarche/why2-trunk/tests/c/Sterbenz.jessie/coq/Sterbenz_why.v",
+line 3, characters 0-26:
+Error: File /usr/lib/coq/user-contrib/jessie_why.vo has bad magic number.
+It is corrupted or was compiled with another version of Coq.
 ========== file tests/c/Sterbenz.jessie/coq/Sterbenz_why.v ==========
 (* This file was originally generated by why.
    It can be modified; only the generated parts will be overwritten. *)
 Require Export jessie_why.
-Require Export floats_strict.
+Require Export WhyFloatsStrictLegacy.
 
 (*Why type*) Definition charP: Set.
 Admitted.
@@ -2186,6 +2184,12 @@ Admitted.
    ((-128) <= x /\ x <= 127 -> (integer_of_int8 (int8_of_integer x)) = x)).
 Admitted.
 
+(*Why axiom*) Lemma int8_extensionality :
+  (forall (x:int8),
+   (forall (y:int8), ((integer_of_int8 x) = (integer_of_int8 y) -> x = y))).
+Admitted.
+Dp_hint int8_extensionality.
+
 (*Why axiom*) Lemma int8_range :
   (forall (x:int8), (-128) <= (integer_of_int8 x) /\ (integer_of_int8 x) <=
    127).
@@ -2237,14 +2241,6 @@ Dp_hint pointer_addr_of_voidP_of_pointer_address.
   := (offset_min voidP_alloc_table p) = a /\
      (offset_max voidP_alloc_table p) = b.
 
-(*Why predicate*) Definition valid_bitvector_struct_charP  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
-  := (offset_min bitvector_alloc_table p) = a /\
-     (offset_max bitvector_alloc_table p) = b.
-
-(*Why predicate*) Definition valid_bitvector_struct_voidP  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
-  := (offset_min bitvector_alloc_table p) = a /\
-     (offset_max bitvector_alloc_table p) = b.
-
 (*Why predicate*) Definition valid_root_charP  (p:(pointer charP)) (a:Z) (b:Z) (charP_alloc_table:(alloc_table charP))
   := (offset_min charP_alloc_table p) <= a /\
      (offset_max charP_alloc_table p) >= b.
@@ -2286,7 +2282,7 @@ Dp_hint voidP_parenttag_bottom.
 Admitted.
 Dp_hint voidP_tags.
 
-(* Why obligation from file "Sterbenz.c", line 7, characters 13-21: *)
+(* Why obligation from file "Sterbenz.c", line 38, characters 13-21: *)
 (*Why goal*) Lemma Sterbenz_ensures_default_po_1 : 
   forall (x_0: single),
   forall (y: single),
@@ -2307,7 +2303,7 @@ apply Rle_trans with (single_value x); [apply h1|idtac].
 apply Rle_trans with  (2 * single_value y)%R; [ apply h2 | right; field].
 Qed.
 
-(* Why obligation from file "Sterbenz.c", line 8, characters 13-21: *)
+(* Why obligation from file "Sterbenz.c", line 39, characters 13-21: *)
 (*Why goal*) Lemma Sterbenz_ensures_default_po_2 : 
   forall (x_0: single),
   forall (y: single),
@@ -2324,7 +2320,7 @@ apply Rle_trans with (single_value y / 2)%R; [idtac|apply h1].
 unfold Rdiv; apply Rmult_le_pos; auto with real.
 Save.
 
-(* Why obligation from file "Sterbenz.c", line 4, characters 12-28: *)
+(* Why obligation from file "Sterbenz.c", line 35, characters 12-28: *)
 (*Why goal*) Lemma Sterbenz_ensures_default_po_3 : 
   forall (x_0: single),
   forall (y: single),
@@ -2336,9 +2332,7 @@ Save.
   forall (HW_4: (* JC_16 *) (Rle (0)%R (single_value y))),
   forall (HW_5: (* JC_17 *) (Rle (0)%R (single_value x_0))),
   forall (result: single),
-  forall (HW_6: (no_overflow_single
-                 nearest_even (Rminus (single_value x_0) (single_value y))) /\
-                (sub_single_post nearest_even x_0 y result)),
+  forall (HW_6: (sub_single_post nearest_even x_0 y result)),
   forall (__retres: single),
   forall (HW_7: __retres = result),
   forall (why__return: single),
@@ -2347,7 +2341,7 @@ Save.
   (eq (single_value why__return) (Rminus (single_value x_0) (single_value y))).
 Proof.
 intros x y (H1,H2) _ _ r (H4,(H5a,H5b)) r' H6 r'' H7.
-rewrite H7,H6,H5a; unfold single_value in *.
+rewrite H7,H6,H4; unfold single_value in *.
 unfold FtoRradix; rewrite <- Fminus_correct; auto with zarith.
 elim (mode_single_RoundingMode nearest_even); intros P (H8,H9).
 apply sym_eq; apply RoundedModeProjectorIdemEq with bsingle 24%nat P; try apply psGivesBound; auto with zarith.
@@ -2355,7 +2349,7 @@ apply Sterbenz; auto with zarith; try apply FcanonicBound with radix; try now de
 fold FtoRradix; apply Rle_trans with (2:=H1); unfold Rdiv; simpl; right; ring.
 Save.
 
-(* Why obligation from file "Sterbenz.c", line 9, characters 9-12: *)
+(* Why obligation from file "Sterbenz.c", line 40, characters 9-12: *)
 (*Why goal*) Lemma Sterbenz_safety_po_1 : 
   forall (x_0: single),
   forall (y: single),
@@ -2390,3 +2384,7 @@ apply Rle_ge; apply Rplus_le_reg_l with (single_value y); ring_simplify; auto wi
 Save.
 
 ========== running Coq ==========
+File "/home/cmarche/why2-trunk/tests/c/Sterbenz.jessie/coq/Sterbenz_why.v",
+line 3, characters 0-26:
+Error: File /usr/lib/coq/user-contrib/jessie_why.vo has bad magic number.
+It is corrupted or was compiled with another version of Coq.

@@ -1,0 +1,172 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<why3session
+ name="SideEffects/why3session.xml">
+ <prover
+  id="alt-ergo"
+  name="Alt-Ergo"
+  version="0.93"/>
+ <prover
+  id="coq"
+  name="Coq"
+  version="8.3pl2"/>
+ <prover
+  id="cvc3"
+  name="CVC3"
+  version="2.2"/>
+ <prover
+  id="gappa"
+  name="Gappa"
+  version="0.15.0"/>
+ <prover
+  id="simplify"
+  name="Simplify"
+  version="1.5.4"/>
+ <prover
+  id="spass"
+  name="Spass"
+  version="3.7"/>
+ <prover
+  id="vampire"
+  name="Vampire"
+  version="0.6"/>
+ <prover
+  id="yices"
+  name="Yices"
+  version="1.0.25"/>
+ <prover
+  id="z3"
+  name="Z3"
+  version="2.19"/>
+ <file
+  name="../SideEffects.mlw"
+  verified="true"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="WP Jessie_program"
+   verified="true"
+   expanded="true">
+   <goal
+    name="WP_parameter _SideEffects_m1_ensures_default"
+    expl="Method m1, default behavior"
+    sum="64e998a2c80e91e741ed0a31c4cb9e39"
+    proved="true"
+    expanded="true"
+    shape="ainfix =V10c0Aainfix =aselectV11ashiftV1c1c4Aainfix =aselectV11ashiftV1c2c2Aainfix =aselectV11ashiftV1c0c1Iainfix =V11astoreV9ashiftV1V8c4FIainfix =V10ainfix -V8c1FAainfix =V8c1Aainfix =aselectV9ashiftV1c1c3Aainfix =aselectV9ashiftV1c2c2Aainfix =aselectV9ashiftV1c0c1Iainfix =V9astoreV7ashiftV1V8c3FIainfix =V8ainfix -V6c1FAainfix =V6c2Aainfix =aselectV7ashiftV1c2c2Aainfix =aselectV7ashiftV1c0c1Iainfix =V7astoreV5ashiftV1V6c2FIainfix =V6ainfix +V4c1FAainfix =V4c1Aainfix =aselectV5ashiftV1c0c1Iainfix =V5astoreV2ashiftV1c0c1FIainfix =V4ainfix +c0c1FIainfix >ainfix +aoffset_maxV3V1c1c10Aavalid_struct_SideEffectsV0c0c0V3Aaleft_valid_struct_intMV1c0V3FFFF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.39"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.22"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _SideEffects_m1_safety"
+    expl="Method m1, Safety"
+    sum="50eab385f541cff6a2a7db21892b2968"
+    proved="true"
+    expanded="true"
+    shape="ainfix <=V8aoffset_maxV3V1Aainfix <=aoffset_minV3V1V8Iainfix =V10ainfix -V8c1FIainfix =V8c1Aainfix =aselectV9ashiftV1c1c3Aainfix =aselectV9ashiftV1c2c2Aainfix =aselectV9ashiftV1c0c1Iainfix =V9astoreV7ashiftV1V8c3FAainfix <=V8aoffset_maxV3V1Aainfix <=aoffset_minV3V1V8Iainfix =V8ainfix -V6c1FIainfix =V6c2Aainfix =aselectV7ashiftV1c2c2Aainfix =aselectV7ashiftV1c0c1Iainfix =V7astoreV5ashiftV1V6c2FAainfix <=V6aoffset_maxV3V1Aainfix <=aoffset_minV3V1V6Iainfix =V6ainfix +V4c1FIainfix =V4c1Aainfix =aselectV5ashiftV1c0c1Iainfix =V5astoreV2ashiftV1c0c1FAainfix <=c0aoffset_maxV3V1Aainfix <=aoffset_minV3V1c0Iainfix =V4ainfix +c0c1FIainfix >ainfix +aoffset_maxV3V1c1c10Aavalid_struct_SideEffectsV0c0c0V3Aaleft_valid_struct_intMV1c0V3FFFF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_SideEffects_ensures_default"
+    expl="Constructor of class SideEffects, default behavior"
+    sum="69dc927d1f1d53a5b56fcaa7843f8881"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_SideEffects_safety"
+    expl="Constructor of class SideEffects, Safety"
+    sum="e12b412382aad2d145ce87421f3bf1d8"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+  </theory>
+ </file>
+</why3session>

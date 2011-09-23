@@ -86,12 +86,6 @@ type padding
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -136,6 +130,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -207,21 +206,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_doubleP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -266,59 +250,11 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_doubleP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_doubleP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -421,9 +357,10 @@ parameter g4 :
    doubleP_doubleM_t_1:(doubleP, double) memory ->
     { } double
     { (JC_<somenum>:
-      eq_real(double_value(result),
-      add_real(double_value(select(doubleP_doubleM_t_1, shift(t@, (0)))),
-      double_value(select(doubleP_doubleM_t_1, shift(t@, (1))))))) }
+      (double_value(result) = add_real(double_value(select(doubleP_doubleM_t_1,
+                                                    shift(t, (0)))),
+                              double_value(select(doubleP_doubleM_t_1,
+                                           shift(t, (1))))))) }
 
 parameter g4_requires :
  t:doubleP pointer ->
@@ -436,9 +373,10 @@ parameter g4_requires :
               and (JC_<somenum>: ge_int(offset_max(doubleP_t_1_alloc_table, t), (1)))))))}
     double
     { (JC_<somenum>:
-      eq_real(double_value(result),
-      add_real(double_value(select(doubleP_doubleM_t_1, shift(t@, (0)))),
-      double_value(select(doubleP_doubleM_t_1, shift(t@, (1))))))) }
+      (double_value(result) = add_real(double_value(select(doubleP_doubleM_t_1,
+                                                    shift(t, (0)))),
+                              double_value(select(doubleP_doubleM_t_1,
+                                           shift(t, (1))))))) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -569,9 +507,10 @@ let g4_ensures_default =
        void); (return := !y); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    eq_real(double_value(result),
-    add_real(double_value(select(doubleP_doubleM_t_1, shift(t@, (0)))),
-    double_value(select(doubleP_doubleM_t_1, shift(t@, (1))))))) }
+    (double_value(result) = add_real(double_value(select(doubleP_doubleM_t_1,
+                                                  shift(t, (0)))),
+                            double_value(select(doubleP_doubleM_t_1,
+                                         shift(t, (1))))))) }
 
 let g4_safety =
  fun (t : doubleP pointer) (doubleP_t_1_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_1 : (doubleP, double) memory) ->

@@ -161,12 +161,6 @@ type uint32
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -210,6 +204,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -221,6 +220,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -333,6 +337,11 @@ axiom uint1_coerce :
   ((le_int((0), x) and le_int(x, (1))) ->
    eq_int(integer_of_uint1(uint1_of_integer(x)), x)))
 
+axiom uint1_extensionality :
+ (forall x:uint1.
+  (forall y:uint1.
+   (eq_int(integer_of_uint1(x), integer_of_uint1(y)) -> (x = y))))
+
 axiom uint1_range :
  (forall x:uint1.
   (le_int((0), integer_of_uint1(x)) and le_int(integer_of_uint1(x), (1))))
@@ -344,25 +353,15 @@ axiom uint32_coerce :
   ((le_int((0), x) and le_int(x, (4294967295))) ->
    eq_int(integer_of_uint32(uint32_of_integer(x)), x)))
 
+axiom uint32_extensionality :
+ (forall x:uint32.
+  (forall y:uint32.
+   (eq_int(integer_of_uint32(x), integer_of_uint32(y)) -> (x = y))))
+
 axiom uint32_range :
  (forall x:uint32.
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_queue(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_q(queue_q_2_alloc_table:queue alloc_table) =
  (le_int(offset_min(queue_q_2_alloc_table, q), (0))
@@ -416,59 +415,11 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_queue :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_queue(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_queue_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_queue(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -599,27 +550,29 @@ parameter pop :
              queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
-         ((JC_<somenum>: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
+         ((JC_<somenum>: (integer_of_uint1(select(queue_full_q_2, q)) = (0)))
          and (JC_<somenum>:
-             eq_int(integer_of_int8(result),
-             integer_of_int8(select(charP_charM_q_4,
-                             shift(select(queue_contents_q_2, q),
-                             integer_of_int32(select(queue_first_q_2@, q@)))))))))
+             (integer_of_int8(result) = integer_of_int8(select(charP_charM_q_4,
+                                                        shift(select(queue_contents_q_2,
+                                                              q),
+                                                        integer_of_int32(
+                                                        select(queue_first_q_2@,
+                                                        q)))))))))
         and (JC_<somenum>:
             (((JC_<somenum>:
               not_assigns(queue_q_2_alloc_table@, queue_first_q_2@,
-              queue_first_q_2, pset_singleton(q@)))
+              queue_first_q_2, pset_singleton(q)))
              and (JC_<somenum>:
                  not_assigns(queue_q_2_alloc_table@, queue_empty_q_2@,
-                 queue_empty_q_2, pset_singleton(q@))))
+                 queue_empty_q_2, pset_singleton(q))))
             and (JC_<somenum>:
                 not_assigns(queue_q_2_alloc_table@, queue_full_q_2@,
-                queue_full_q_2, pset_singleton(q@)))))))) }
+                queue_full_q_2, pset_singleton(q)))))))) }
 
 parameter pop_requires :
  tt:unit ->
   { (JC_<somenum>:
-    ((JC_<somenum>: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
+    ((JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0)))
     and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
@@ -636,22 +589,24 @@ parameter pop_requires :
              queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
-         ((JC_<somenum>: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
+         ((JC_<somenum>: (integer_of_uint1(select(queue_full_q_2, q)) = (0)))
          and (JC_<somenum>:
-             eq_int(integer_of_int8(result),
-             integer_of_int8(select(charP_charM_q_4,
-                             shift(select(queue_contents_q_2, q),
-                             integer_of_int32(select(queue_first_q_2@, q@)))))))))
+             (integer_of_int8(result) = integer_of_int8(select(charP_charM_q_4,
+                                                        shift(select(queue_contents_q_2,
+                                                              q),
+                                                        integer_of_int32(
+                                                        select(queue_first_q_2@,
+                                                        q)))))))))
         and (JC_<somenum>:
             (((JC_<somenum>:
               not_assigns(queue_q_2_alloc_table@, queue_first_q_2@,
-              queue_first_q_2, pset_singleton(q@)))
+              queue_first_q_2, pset_singleton(q)))
              and (JC_<somenum>:
                  not_assigns(queue_q_2_alloc_table@, queue_empty_q_2@,
-                 queue_empty_q_2, pset_singleton(q@))))
+                 queue_empty_q_2, pset_singleton(q))))
             and (JC_<somenum>:
                 not_assigns(queue_q_2_alloc_table@, queue_full_q_2@,
-                queue_full_q_2, pset_singleton(q@)))))))) }
+                queue_full_q_2, pset_singleton(q)))))))) }
 
 parameter push :
  c:int8 ->
@@ -666,34 +621,33 @@ parameter push :
              queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
-         ((JC_<somenum>: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
+         ((JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0)))
          and (JC_<somenum>:
-             eq_int(integer_of_int8(select(charP_charM_q_4,
-                                    shift(select(queue_contents_q_2, q),
-                                    integer_of_int32(select(queue_last_q_2@,
-                                                     q@))))),
-             integer_of_int8(c@)))))
+             (integer_of_int8(select(charP_charM_q_4,
+                              shift(select(queue_contents_q_2, q),
+                              integer_of_int32(select(queue_last_q_2@, q))))) = 
+             integer_of_int8(c)))))
         and (JC_<somenum>:
             ((((JC_<somenum>:
                not_assigns(charP_q_4_alloc_table@, charP_charM_q_4@,
                charP_charM_q_4,
-               pset_range(pset_deref(queue_contents_q_2@, pset_singleton(q@)),
-               integer_of_int32(select(queue_last_q_2@, q@)),
-               integer_of_int32(select(queue_last_q_2@, q@)))))
+               pset_range(pset_deref(queue_contents_q_2@, pset_singleton(q)),
+               integer_of_int32(select(queue_last_q_2@, q)),
+               integer_of_int32(select(queue_last_q_2@, q)))))
               and (JC_<somenum>:
                   not_assigns(queue_q_2_alloc_table@, queue_last_q_2@,
-                  queue_last_q_2, pset_singleton(q@))))
+                  queue_last_q_2, pset_singleton(q))))
              and (JC_<somenum>:
                  not_assigns(queue_q_2_alloc_table@, queue_empty_q_2@,
-                 queue_empty_q_2, pset_singleton(q@))))
+                 queue_empty_q_2, pset_singleton(q))))
             and (JC_<somenum>:
                 not_assigns(queue_q_2_alloc_table@, queue_full_q_2@,
-                queue_full_q_2, pset_singleton(q@)))))))) }
+                queue_full_q_2, pset_singleton(q)))))))) }
 
 parameter push_requires :
  c:int8 ->
   { (JC_<somenum>:
-    ((JC_<somenum>: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
+    ((JC_<somenum>: (integer_of_uint1(select(queue_full_q_2, q)) = (0)))
     and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
@@ -710,29 +664,28 @@ parameter push_requires :
              queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
     and (JC_<somenum>:
         ((JC_<somenum>:
-         ((JC_<somenum>: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
+         ((JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0)))
          and (JC_<somenum>:
-             eq_int(integer_of_int8(select(charP_charM_q_4,
-                                    shift(select(queue_contents_q_2, q),
-                                    integer_of_int32(select(queue_last_q_2@,
-                                                     q@))))),
-             integer_of_int8(c@)))))
+             (integer_of_int8(select(charP_charM_q_4,
+                              shift(select(queue_contents_q_2, q),
+                              integer_of_int32(select(queue_last_q_2@, q))))) = 
+             integer_of_int8(c)))))
         and (JC_<somenum>:
             ((((JC_<somenum>:
                not_assigns(charP_q_4_alloc_table@, charP_charM_q_4@,
                charP_charM_q_4,
-               pset_range(pset_deref(queue_contents_q_2@, pset_singleton(q@)),
-               integer_of_int32(select(queue_last_q_2@, q@)),
-               integer_of_int32(select(queue_last_q_2@, q@)))))
+               pset_range(pset_deref(queue_contents_q_2@, pset_singleton(q)),
+               integer_of_int32(select(queue_last_q_2@, q)),
+               integer_of_int32(select(queue_last_q_2@, q)))))
               and (JC_<somenum>:
                   not_assigns(queue_q_2_alloc_table@, queue_last_q_2@,
-                  queue_last_q_2, pset_singleton(q@))))
+                  queue_last_q_2, pset_singleton(q))))
              and (JC_<somenum>:
                  not_assigns(queue_q_2_alloc_table@, queue_empty_q_2@,
-                 queue_empty_q_2, pset_singleton(q@))))
+                 queue_empty_q_2, pset_singleton(q))))
             and (JC_<somenum>:
                 not_assigns(queue_q_2_alloc_table@, queue_full_q_2@,
-                queue_full_q_2, pset_singleton(q@)))))))) }
+                queue_full_q_2, pset_singleton(q)))))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -760,8 +713,8 @@ parameter test :
                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
                queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
       and (JC_<somenum>:
-          eq_int(integer_of_int32(result),
-          integer_of_uint32(select(queue_empty_q1_3@, q1@))))) }
+          (integer_of_int32(result) = integer_of_uint32(select(queue_empty_q1_3,
+                                                        q1))))) }
 
 parameter test_requires :
  q1:queue pointer ->
@@ -771,8 +724,7 @@ parameter test_requires :
       ((JC_<somenum>:
        ((JC_<somenum>: le_int(offset_min(queue_q1_3_alloc_table, q1), (0)))
        and ((JC_<somenum>: ge_int(offset_max(queue_q1_3_alloc_table, q1), (0)))
-           and (JC_<somenum>:
-               eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0))))))
+           and (JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0))))))
       and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
           and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
               and (JC_<somenum>:
@@ -788,8 +740,8 @@ parameter test_requires :
                q_invariant(charP_q_4_alloc_table, queue_last_q_2,
                queue_first_q_2, queue_length_q_2, queue_contents_q_2)))))
       and (JC_<somenum>:
-          eq_int(integer_of_int32(result),
-          integer_of_uint32(select(queue_empty_q1_3@, q1@))))) }
+          (integer_of_int32(result) = integer_of_uint32(select(queue_empty_q1_3,
+                                                        q1))))) }
 
 parameter uint1_of_integer_ :
  x:int ->
@@ -804,7 +756,7 @@ parameter uint32_of_integer_ :
 let pop_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
+    ((JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0)))
     and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
@@ -861,27 +813,29 @@ let pop_ensures_default =
    !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
-     ((JC_<somenum>: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
+     ((JC_<somenum>: (integer_of_uint1(select(queue_full_q_2, q)) = (0)))
      and (JC_<somenum>:
-         eq_int(integer_of_int8(result),
-         integer_of_int8(select(charP_charM_q_4,
-                         shift(select(queue_contents_q_2, q),
-                         integer_of_int32(select(queue_first_q_2@, q@)))))))))
+         (integer_of_int8(result) = integer_of_int8(select(charP_charM_q_4,
+                                                    shift(select(queue_contents_q_2,
+                                                          q),
+                                                    integer_of_int32(
+                                                    select(queue_first_q_2@,
+                                                    q)))))))))
     and (JC_<somenum>:
         (((JC_<somenum>:
           not_assigns(queue_q_2_alloc_table@, queue_first_q_2@,
-          queue_first_q_2, pset_singleton(q@)))
+          queue_first_q_2, pset_singleton(q)))
          and (JC_<somenum>:
              not_assigns(queue_q_2_alloc_table@, queue_empty_q_2@,
-             queue_empty_q_2, pset_singleton(q@))))
+             queue_empty_q_2, pset_singleton(q))))
         and (JC_<somenum>:
             not_assigns(queue_q_2_alloc_table@, queue_full_q_2@,
-            queue_full_q_2, pset_singleton(q@))))))) }
+            queue_full_q_2, pset_singleton(q))))))) }
 
 let pop_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
+    ((JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0)))
     and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
@@ -946,7 +900,7 @@ let pop_safety =
 let push_ensures_default =
  fun (c : int8) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
+    ((JC_<somenum>: (integer_of_uint1(select(queue_full_q_2, q)) = (0)))
     and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
@@ -1004,33 +958,33 @@ let push_ensures_default =
      end))); (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
-     ((JC_<somenum>: eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0)))
+     ((JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0)))
      and (JC_<somenum>:
-         eq_int(integer_of_int8(select(charP_charM_q_4,
-                                shift(select(queue_contents_q_2, q),
-                                integer_of_int32(select(queue_last_q_2@, q@))))),
-         integer_of_int8(c@)))))
+         (integer_of_int8(select(charP_charM_q_4,
+                          shift(select(queue_contents_q_2, q),
+                          integer_of_int32(select(queue_last_q_2@, q))))) = 
+         integer_of_int8(c)))))
     and (JC_<somenum>:
         ((((JC_<somenum>:
            not_assigns(charP_q_4_alloc_table@, charP_charM_q_4@,
            charP_charM_q_4,
-           pset_range(pset_deref(queue_contents_q_2@, pset_singleton(q@)),
-           integer_of_int32(select(queue_last_q_2@, q@)),
-           integer_of_int32(select(queue_last_q_2@, q@)))))
+           pset_range(pset_deref(queue_contents_q_2@, pset_singleton(q)),
+           integer_of_int32(select(queue_last_q_2@, q)),
+           integer_of_int32(select(queue_last_q_2@, q)))))
           and (JC_<somenum>:
               not_assigns(queue_q_2_alloc_table@, queue_last_q_2@,
-              queue_last_q_2, pset_singleton(q@))))
+              queue_last_q_2, pset_singleton(q))))
          and (JC_<somenum>:
              not_assigns(queue_q_2_alloc_table@, queue_empty_q_2@,
-             queue_empty_q_2, pset_singleton(q@))))
+             queue_empty_q_2, pset_singleton(q))))
         and (JC_<somenum>:
             not_assigns(queue_q_2_alloc_table@, queue_full_q_2@,
-            queue_full_q_2, pset_singleton(q@))))))) }
+            queue_full_q_2, pset_singleton(q))))))) }
 
 let push_safety =
  fun (c : int8) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: eq_int(integer_of_uint1(select(queue_full_q_2, q)), (0)))
+    ((JC_<somenum>: (integer_of_uint1(select(queue_full_q_2, q)) = (0)))
     and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
@@ -1104,8 +1058,7 @@ let test_ensures_default =
     ((JC_<somenum>:
      ((JC_<somenum>: le_int(offset_min(queue_q1_3_alloc_table, q1), (0)))
      and ((JC_<somenum>: ge_int(offset_max(queue_q1_3_alloc_table, q1), (0)))
-         and (JC_<somenum>:
-             eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0))))))
+         and (JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0))))))
     and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
@@ -1128,8 +1081,8 @@ let test_ensures_default =
       void); (return := !__retres); (raise Return) end)))); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    eq_int(integer_of_int32(result),
-    integer_of_uint32(select(queue_empty_q1_3@, q1@)))) }
+    (integer_of_int32(result) = integer_of_uint32(select(queue_empty_q1_3,
+                                                  q1)))) }
 
 let test_safety =
  fun (q1 : queue pointer) (queue_q1_3_alloc_table : queue alloc_table) (queue_empty_q1_3 : (queue, uint32) memory) ->
@@ -1137,8 +1090,7 @@ let test_safety =
     ((JC_<somenum>:
      ((JC_<somenum>: le_int(offset_min(queue_q1_3_alloc_table, q1), (0)))
      and ((JC_<somenum>: ge_int(offset_max(queue_q1_3_alloc_table, q1), (0)))
-         and (JC_<somenum>:
-             eq_int(integer_of_uint32(select(queue_empty_q_2, q)), (0))))))
+         and (JC_<somenum>: (integer_of_uint32(select(queue_empty_q_2, q)) = (0))))))
     and ((JC_<somenum>: valid_t(charP_t_1_alloc_table))
         and ((JC_<somenum>: valid_q(queue_q_2_alloc_table))
             and (JC_<somenum>:
@@ -1176,6 +1128,12 @@ why --project [...] why/queue.why
 <project name="queue" context="why/queue_ctx.why">
   <function name="Function test">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/queue_po32.why">
+      <location file = "PPCHOME/tests/jessie/queue.c" line = "69" begin = "12" end = "38"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/queue_po33.why">
       <location file = "PPCHOME/tests/jessie/queue.c" line = "72" begin = "11" end = "16"/>
@@ -1230,15 +1188,35 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/queue_po32.why">
-      <location file = "PPCHOME/tests/jessie/queue.c" line = "69" begin = "12" end = "38"/>
-      <explain kind = "Post"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function push">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/queue_po15.why">
+      <location file = "PPCHOME/tests/jessie/queue.c" line = "45" begin = "12" end = "20"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/queue_po16.why">
+      <location file = "PPCHOME/tests/jessie/queue.c" line = "45" begin = "24" end = "53"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/queue_po17.why">
+      <location file = "PPCHOME/tests/jessie/queue.c" line = "47" begin = "5" end = "9"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/queue_po18.why">
+      <location file = "PPCHOME/tests/jessie/queue.c" line = "47" begin = "5" end = "9"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/queue_po19.why">
+      <location file = "PPCHOME/tests/jessie/queue.c" line = "47" begin = "5" end = "9"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/queue_po20.why">
+      <location file = "PPCHOME/tests/jessie/queue.c" line = "47" begin = "5" end = "9"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/queue_po21.why">
       <location file = "PPCHOME/tests/jessie/queue.c" line = "48" begin = "13" end = "21"/>
@@ -1293,35 +1271,31 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/queue_po15.why">
-      <location file = "PPCHOME/tests/jessie/queue.c" line = "45" begin = "12" end = "20"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/queue_po16.why">
-      <location file = "PPCHOME/tests/jessie/queue.c" line = "45" begin = "24" end = "53"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/queue_po17.why">
-      <location file = "PPCHOME/tests/jessie/queue.c" line = "47" begin = "5" end = "9"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/queue_po18.why">
-      <location file = "PPCHOME/tests/jessie/queue.c" line = "47" begin = "5" end = "9"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/queue_po19.why">
-      <location file = "PPCHOME/tests/jessie/queue.c" line = "47" begin = "5" end = "9"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/queue_po20.why">
-      <location file = "PPCHOME/tests/jessie/queue.c" line = "47" begin = "5" end = "9"/>
-      <explain kind = "Post"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function pop">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/queue_po1.why">
+      <location file = "PPCHOME/tests/jessie/queue.c" line = "58" begin = "12" end = "19"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/queue_po2.why">
+      <location file = "PPCHOME/tests/jessie/queue.c" line = "58" begin = "23" end = "59"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/queue_po3.why">
+      <location file = "PPCHOME/tests/jessie/queue.c" line = "60" begin = "5" end = "8"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/queue_po4.why">
+      <location file = "PPCHOME/tests/jessie/queue.c" line = "60" begin = "5" end = "8"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/queue_po5.why">
+      <location file = "PPCHOME/tests/jessie/queue.c" line = "60" begin = "5" end = "8"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/queue_po6.why">
       <location file = "PPCHOME/tests/jessie/queue.c" line = "61" begin = "22" end = "31"/>
@@ -1362,28 +1336,6 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/queue_po14.why">
-      <location file = "PPCHOME/tests/jessie/queue.c" line = "60" begin = "5" end = "8"/>
-      <explain kind = "Post"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/queue_po1.why">
-      <location file = "PPCHOME/tests/jessie/queue.c" line = "58" begin = "12" end = "19"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/queue_po2.why">
-      <location file = "PPCHOME/tests/jessie/queue.c" line = "58" begin = "23" end = "59"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/queue_po3.why">
-      <location file = "PPCHOME/tests/jessie/queue.c" line = "60" begin = "5" end = "8"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/queue_po4.why">
-      <location file = "PPCHOME/tests/jessie/queue.c" line = "60" begin = "5" end = "8"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/queue_po5.why">
       <location file = "PPCHOME/tests/jessie/queue.c" line = "60" begin = "5" end = "8"/>
       <explain kind = "Post"/>
     </goal>
@@ -2385,6 +2337,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -2396,6 +2353,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2508,6 +2469,11 @@ axiom uint1_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 1)) -> (integer_of_uint1(uint1_of_integer(x)) = x)))
 
+axiom uint1_extensionality:
+  (forall x:uint1.
+    (forall y:uint1.
+      ((integer_of_uint1(x) = integer_of_uint1(y)) -> (x = y))))
+
 axiom uint1_range:
   (forall x:uint1.
     ((0 <= integer_of_uint1(x)) and (integer_of_uint1(x) <= 1)))
@@ -2519,24 +2485,14 @@ axiom uint32_coerce:
     (((0 <= x) and (x <= 4294967295)) ->
      (integer_of_uint32(uint32_of_integer(x)) = x)))
 
+axiom uint32_extensionality:
+  (forall x:uint32.
+    (forall y:uint32.
+      ((integer_of_uint32(x) = integer_of_uint32(y)) -> (x = y))))
+
 axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_queue(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_q(queue_q_2_alloc_table: queue alloc_table) =
   ((offset_min(queue_q_2_alloc_table, q) <= 0) and

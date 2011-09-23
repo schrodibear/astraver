@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -208,6 +208,8 @@ let builtins_table =
       t_le_real , "Real.(<=)";
       t_gt_real , "Real.(>)";
 
+      t_real_of_int, "FromInt.from_int";
+
       t_abs_int , "AbsInt.abs";
       t_abs_real , "AbsReal.abs";
 
@@ -282,7 +284,7 @@ let rec predicate fmt = function
   | Papp (id, [t1; t2], _) when is_neq id ->
       fprintf fmt "(%a <> %a)" term t1 term t2
   | Papp (id, [a;b], _) when id == t_zwf_zero ->
-      fprintf fmt "@[((Int.(<=) 0 %a) and@ (Int.(<) %a %a))@]"
+      fprintf fmt "@[((Int.(<=) 0 %a) /\\@ (Int.(<) %a %a))@]"
         term b term a term b
   | Papp (id, [_t], _) when id == well_founded ->
       fprintf fmt "@[false (* was well_founded(...) *)@]"
@@ -299,8 +301,11 @@ let rec predicate fmt = function
   | Pif (a, b, c) ->
       fprintf fmt "(@[if %a = Bool.True then@ %a else@ %a@])"
 	term a predicate b predicate c
-  | Pand (_, _, a, b) ->
-      fprintf fmt "(@[%a /\\@ %a@])" predicate a predicate b
+  | Pand (_is_wp, is_sym, a, b) ->
+      if is_sym then
+        fprintf fmt "(@[%a /\\@ %a@])" predicate a predicate b
+      else
+        fprintf fmt "(@[%a &&@ %a@])" predicate a predicate b
   | Forallb (_, _ptrue, _pfalse) -> assert false (* TODO What is it? *)
       (* fprintf fmt "(@[forallb(%a,@ %a)@])"  *)
       (*   predicate ptrue predicate pfalse *)
@@ -357,12 +362,17 @@ let sequent fmt (ctx, p) =
 let logic_binder fmt (id, pt) =
   fprintf fmt "(%a : %a)" ident id pure_type pt
 
-let logic_type fmt = function
-  | Predicate [] -> ()
-  | Function ([], pt) -> fprintf fmt " : %a" pure_type pt
-  | Predicate ptl -> fprintf fmt "%a" (print_list space pure_type) ptl
+let logic_type fmt id = function
+  | Predicate [] ->
+      fprintf fmt "@[predicate %a@]" ident id
+  | Function ([], pt) ->
+    fprintf fmt "@[function %a : %a@]" ident id pure_type pt
+  | Predicate ptl ->
+      fprintf fmt "@[predicate %a %a@]" ident id
+        (print_list space pure_type) ptl
   | Function (ptl, pt) ->
-      fprintf fmt "%a : %a" (print_list space pure_type) ptl pure_type pt
+      fprintf fmt "@[function %a %a : %a@]" ident id
+        (print_list space pure_type) ptl pure_type pt
 
 let type_parameters fmt l =
   let type_var fmt id = fprintf fmt "'%s" id in
@@ -390,7 +400,8 @@ let alg_type_single fmt (_, id, d) =
 let explanation fmt e =
   fprintf fmt "\"fun:%s\"@ " e.lemma_or_fun_name;
   fprintf fmt "\"beh:%s\"@ " e.behavior;
-  fprintf fmt "\"expl:%s\"@ " (Explain.msg_of_kind ~name:e.lemma_or_fun_name e.vc_kind);
+  fprintf fmt "\"expl:%s\"@ "
+    (Explain.msg_of_kind ~name:e.lemma_or_fun_name e.vc_kind);
   let (f,l,b,e) = e.vc_loc in
   fprintf fmt "#\"%s\" %d %d %d#" f l (max b 0) (max e 0)
 
@@ -407,7 +418,7 @@ let decl fmt d =
       fprintf fmt "@[type %a@]" (print_list andsep alg_type_single) ls
   | Dlogic (_, id, lt) ->
       let lt = specialize lt in
-      fprintf fmt "@[%a %a %a@]" logic_kind lt ident id logic_type lt
+      logic_type fmt id lt
   | Dpredicate_def (_, id, def) ->
       let bl,p = specialize def in
       fprintf fmt "@[<hov 2>predicate %a %a =@ %a@]" ident id
@@ -528,6 +539,7 @@ let print_structured_file f fmt =
   fprintf fmt "use int.Abs as AbsInt@\n";
   fprintf fmt "use int.ComputerDivision@\n";
   fprintf fmt "use real.Real@\n";
+  fprintf fmt "use real.FromInt@\n";
   fprintf fmt "use real.Abs as AbsReal@\n";
   fprintf fmt "use real.Square as SquareReal@\n";
   fprintf fmt "use real.Trigonometry@\n";
@@ -584,7 +596,8 @@ let print_structured_file f fmt =
 *)
        SMap.iter
 	 (fun beh vcs ->
-	    fprintf fmt "@[<hov 2>theory %a_%s@\n" string_capitalize (escape fname) (escape beh);
+	    fprintf fmt "@[<hov 2>theory %a_%s@\n" string_capitalize
+              (escape fname) (escape beh);
 	    fprintf fmt "use import %s_ctx@\n" f;
 	    List.iter (decl fmt) (List.rev vcs);
 	    fprintf fmt "@]@\nend@\n@.")

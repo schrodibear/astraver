@@ -1,13 +1,25 @@
 
-  o [Why3 output] update for Why3 0.70 syntax
-  o [Why] fix encoding to multi-sorted logic with finite type
-  o [Why] added support for Vampire (based on simplify output)
-  o [Why] option -default-locs
-  o [Krakatoa] fixed a problem with scope of labels
-  o [Krakatoa] fixed support for constant strings
-  o [Jessie] order of lemmas now keeps the same is in the input. Fixes 
-    Frama-C BTS 0024
+  o [Krakatoa/Jessie/Frama-C plugin] fixed traceability issues
+  o [Krakatoa/Jessie/Frama-C plugin] new backend using Why3 VC generator
+  o [Jessie] add extensionality axiom to integer range type. allows to
+    prove valid properties that were unprovable before.
+  o [Caduceus] support discontinued, not distributed anymore
+  o [Why3 output] support for syntax changes of Why3 0.70
   o [Why3 output] better explanations
+  o [Why] fix encoding to multi-sorted logic with finite type
+  o [Why] option -default-locs
+  o [Why] added support for Vampire (based on simplify output)
+  o [Why] option --delete-old-vcs erases previous files when using
+    --multi-why or --multi-altergo
+  o [Why] option --multi-altergo outputs VCs in separate files, like
+    --multi-why but in Alt-Ergo's syntax instead of the general Why's
+    syntax (e.g. algebraic types are encoded for Alt-Ergo)
+  o [Jessie] fixed bug with region analysis, case of pointer
+    comparison in annotations. fixes Frama-C BTS 0814
+  o [Krakatoa] fixed a problem with scope of labels
+  o [Krakatoa] fixed support for string constants
+  o [Jessie] order of lemmas now kept the same as in the input. Fixes
+    Frama-C BTS 0024
   o [Why lib] completed axiomatization of floats
 
 version 2.29, Mar 1, 2011

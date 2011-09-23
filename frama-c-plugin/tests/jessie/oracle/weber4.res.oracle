@@ -97,14 +97,6 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -138,6 +130,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -149,6 +146,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -233,21 +235,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -292,59 +279,13 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -435,15 +376,14 @@ parameter fill_int_array :
     intP_intM_first_1:(intP, int32) memory ref ->
      intP_first_1_alloc_table:intP alloc_table ->
       { } unit reads intP_intM_first_1 writes intP_intM_first_1
-      { (((last@ = first@) -> (JC_<somenum>: (last@ = first@)))
-        and (gt_int(sub_pointer(last@, first@), (0)) ->
+      { (((last = first) -> (JC_<somenum>: (last = first)))
+        and (gt_int(sub_pointer(last, first), (0)) ->
              (JC_<somenum>:
              (forall i:int.
               ((le_int((0), i)
-               and lt_int(i, computer_div(sub_pointer(last@, first@), (4)))) ->
-               eq_int(integer_of_int32(select(intP_intM_first_1,
-                                       shift(first@, i))),
-               integer_of_int32(value@))))))) }
+               and lt_int(i, computer_div(sub_pointer(last, first), (4)))) ->
+               (integer_of_int32(select(intP_intM_first_1, shift(first, i))) = 
+               integer_of_int32(value))))))) }
 
 parameter fill_int_array_requires :
  first:intP pointer ->
@@ -458,15 +398,14 @@ parameter fill_int_array_requires :
                 ge_int(offset_max(intP_first_1_alloc_table, first),
                 sub_int(computer_div(sub_pointer(last, first), (4)), (1)))))))}
       unit reads intP_intM_first_1 writes intP_intM_first_1
-      { (((last@ = first@) -> (JC_<somenum>: (last@ = first@)))
-        and (gt_int(sub_pointer(last@, first@), (0)) ->
+      { (((last = first) -> (JC_<somenum>: (last = first)))
+        and (gt_int(sub_pointer(last, first), (0)) ->
              (JC_<somenum>:
              (forall i:int.
               ((le_int((0), i)
-               and lt_int(i, computer_div(sub_pointer(last@, first@), (4)))) ->
-               eq_int(integer_of_int32(select(intP_intM_first_1,
-                                       shift(first@, i))),
-               integer_of_int32(value@))))))) }
+               and lt_int(i, computer_div(sub_pointer(last, first), (4)))) ->
+               (integer_of_int32(select(intP_intM_first_1, shift(first, i))) = 
+               integer_of_int32(value))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -499,7 +438,6 @@ let fill_int_array_ensures_default =
      (let a = ref (any_pointer void) in
      (let tmp = ref (any_pointer void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       begin
         (let jessie_<somenum> = (a := !mutable_first) in void);
@@ -509,7 +447,7 @@ let fill_int_array_ensures_default =
            ((JC_<somenum>:
             (forall k:int.
              ((le_int((0), k) and lt_int(k, sub_pointer(mutable_first, a))) ->
-              eq_int(integer_of_int32(select(intP_intM_first_1, shift(a, k))),
+              (integer_of_int32(select(intP_intM_first_1, shift(a, k))) = 
               integer_of_int32(value)))))
            and (JC_<somenum>:
                ((JC_<somenum>: le_int(sub_pointer(a, mutable_first), (0)))
@@ -518,16 +456,14 @@ let fill_int_array_ensures_default =
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_6:
             (C_8:
             begin
               (if ((safe_neq_pointer !mutable_first) last) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void)); (let jessie_<somenum> = (tmp := !mutable_first) in void);
+              else (raise (Goto_while_0_break_exc void)));
+             (let jessie_<somenum> = (tmp := !mutable_first) in void);
              (let jessie_<somenum> =
              (mutable_first := (C_7: ((shift !mutable_first) (1)))) in void);
              (C_10:
@@ -536,9 +472,9 @@ let fill_int_array_ensures_default =
                (let jessie_<somenum> = !tmp in
                (((safe_upd_ intP_intM_first_1) jessie_<somenum>) jessie_<somenum>));
               jessie_<somenum> end)) end)) in void);
-           (raise (Loop_continue_exc void)) end in void) with
+           (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end)) { (JC_<somenum>: true) }
@@ -559,7 +495,6 @@ let fill_int_array_ensures_is_empty =
      (let a = ref (any_pointer void) in
      (let tmp = ref (any_pointer void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       begin
         (let jessie_<somenum> = (a := !mutable_first) in void);
@@ -572,23 +507,20 @@ let fill_int_array_ensures_is_empty =
                (forall k:int.
                 ((le_int((0), k)
                  and lt_int(k, sub_pointer(mutable_first, a))) ->
-                 eq_int(integer_of_int32(select(intP_intM_first_1,
-                                         shift(a, k))),
+                 (integer_of_int32(select(intP_intM_first_1, shift(a, k))) = 
                  integer_of_int32(value)))))
               and (JC_<somenum>:
                   ((JC_<somenum>: le_int(sub_pointer(a, mutable_first), (0)))
                   and (JC_<somenum>: le_int(sub_pointer(mutable_first, last), (0)))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_6:
             (C_8:
             begin
               (if ((safe_neq_pointer !mutable_first) last) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void)); (let jessie_<somenum> = (tmp := !mutable_first) in void);
+              else (raise (Goto_while_0_break_exc void)));
+             (let jessie_<somenum> = (tmp := !mutable_first) in void);
              (let jessie_<somenum> =
              (mutable_first := (C_7: ((shift !mutable_first) (1)))) in void);
              (C_10:
@@ -597,12 +529,12 @@ let fill_int_array_ensures_is_empty =
                (let jessie_<somenum> = !tmp in
                (((safe_upd_ intP_intM_first_1) jessie_<somenum>) jessie_<somenum>));
               jessie_<somenum> end)) end)) in void);
-           (raise (Loop_continue_exc void)) end in void) with
+           (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
-   end with Return -> void end)) { (JC_<somenum>: (last@ = first@)) }
+   end with Return -> void end)) { (JC_<somenum>: (last = first)) }
 
 let fill_int_array_ensures_is_not_empty =
  fun (first : intP pointer) (last : intP pointer) (value : int32) (intP_intM_first_1 : (intP, int32) memory ref) (intP_first_1_alloc_table : intP alloc_table) ->
@@ -620,7 +552,6 @@ let fill_int_array_ensures_is_not_empty =
      (let a = ref (any_pointer void) in
      (let tmp = ref (any_pointer void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       begin
         (let jessie_<somenum> = (a := !mutable_first) in void);
@@ -633,23 +564,20 @@ let fill_int_array_ensures_is_not_empty =
                (forall k:int.
                 ((le_int((0), k)
                  and lt_int(k, sub_pointer(mutable_first, a))) ->
-                 eq_int(integer_of_int32(select(intP_intM_first_1,
-                                         shift(a, k))),
+                 (integer_of_int32(select(intP_intM_first_1, shift(a, k))) = 
                  integer_of_int32(value)))))
               and (JC_<somenum>:
                   ((JC_<somenum>: le_int(sub_pointer(a, mutable_first), (0)))
                   and (JC_<somenum>: le_int(sub_pointer(mutable_first, last), (0)))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_6:
             (C_8:
             begin
               (if ((safe_neq_pointer !mutable_first) last) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void)); (let jessie_<somenum> = (tmp := !mutable_first) in void);
+              else (raise (Goto_while_0_break_exc void)));
+             (let jessie_<somenum> = (tmp := !mutable_first) in void);
              (let jessie_<somenum> =
              (mutable_first := (C_7: ((shift !mutable_first) (1)))) in void);
              (C_10:
@@ -658,18 +586,18 @@ let fill_int_array_ensures_is_not_empty =
                (let jessie_<somenum> = !tmp in
                (((safe_upd_ intP_intM_first_1) jessie_<somenum>) jessie_<somenum>));
               jessie_<somenum> end)) end)) in void);
-           (raise (Loop_continue_exc void)) end in void) with
+           (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end))
   { (JC_<somenum>:
     (forall i:int.
      ((le_int((0), i)
-      and lt_int(i, computer_div(sub_pointer(last@, first@), (4)))) ->
-      eq_int(integer_of_int32(select(intP_intM_first_1, shift(first@, i))),
-      integer_of_int32(value@))))) }
+      and lt_int(i, computer_div(sub_pointer(last, first), (4)))) ->
+      (integer_of_int32(select(intP_intM_first_1, shift(first, i))) = 
+      integer_of_int32(value))))) }
 
 let fill_int_array_safety =
  fun (first : intP pointer) (last : intP pointer) (value : int32) (intP_intM_first_1 : (intP, int32) memory ref) (intP_first_1_alloc_table : intP alloc_table) ->
@@ -686,7 +614,6 @@ let fill_int_array_safety =
      (let a = ref (any_pointer void) in
      (let tmp = ref (any_pointer void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       begin
         (let jessie_<somenum> = (a := !mutable_first) in void);
@@ -699,22 +626,19 @@ let fill_int_array_safety =
                (forall k:int.
                 ((le_int((0), k)
                  and lt_int(k, sub_pointer(mutable_first, a))) ->
-                 eq_int(integer_of_int32(select(intP_intM_first_1,
-                                         shift(a, k))),
+                 (integer_of_int32(select(intP_intM_first_1, shift(a, k))) = 
                  integer_of_int32(value)))))
               and (JC_<somenum>:
                   ((JC_<somenum>: le_int(sub_pointer(a, mutable_first), (0)))
                   and (JC_<somenum>: le_int(sub_pointer(mutable_first, last), (0)))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_6:
             (C_8:
             begin
               (if ((neq_pointer !mutable_first) last) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
+              else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> = (tmp := !mutable_first) in void);
              (let jessie_<somenum> =
              (mutable_first := (C_7: ((shift !mutable_first) (1)))) in void);
@@ -725,9 +649,9 @@ let fill_int_array_safety =
                (JC_<somenum>:
                ((((upd_ intP_first_1_alloc_table) intP_intM_first_1) jessie_<somenum>) jessie_<somenum>)));
               jessie_<somenum> end)) end)) in void);
-           (raise (Loop_continue_exc void)) end in void) with
+           (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end)) { true }
@@ -738,38 +662,7 @@ why --project [...] why/weber4.why
 <project name="weber4" context="why/weber4_ctx.why">
   <function name="Function fill_int_array">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/weber4_po8.why">
-      <location file = "why/weber4.why" line = "628" begin = "19" end = "52"/>
-      <explain kind = "Pre"
-text = ""/>
-    </goal>
-    <goal why_file="why/weber4_po9.why">
-      <location file = "PPCHOME/tests/jessie/weber4.jessie/weber4.jc" line = "72" begin = "24" end = "48"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/weber4_po10.why">
-      <location file = "PPCHOME/tests/jessie/weber4.jessie/weber4.jc" line = "72" begin = "24" end = "48"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/weber4_po11.why">
-      <location file = "why/weber4.why" line = "608" begin = "42" end = "43"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/weber4_po12.why">
-      <location file = "why/weber4.why" line = "608" begin = "42" end = "43"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Normal behavior `is_not_empty'">
-    <goal why_file="why/weber4_po7.why">
-      <location file = "PPCHOME/tests/jessie/weber4.c" line = "9" begin = "13" end = "87"/>
-      <explain kind = "Post"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/weber4_po1.why">
       <location file = "PPCHOME/tests/jessie/weber4.c" line = "20" begin = "20" end = "73"/>
       <explain kind = "LoopInvInit"/>
@@ -793,6 +686,37 @@ text = "PointerDeref"/>
     <goal why_file="why/weber4_po6.why">
       <location file = "PPCHOME/tests/jessie/weber4.c" line = "19" begin = "25" end = "38"/>
       <explain kind = "LoopInvPreserv"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/weber4_po8.why">
+      <location file = "why/weber4.why" line = "553" begin = "19" end = "52"/>
+      <explain kind = "Pre"
+text = ""/>
+    </goal>
+    <goal why_file="why/weber4_po9.why">
+      <location file = "PPCHOME/tests/jessie/weber4.jessie/weber4.jc" line = "72" begin = "24" end = "48"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/weber4_po10.why">
+      <location file = "PPCHOME/tests/jessie/weber4.jessie/weber4.jc" line = "72" begin = "24" end = "48"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/weber4_po11.why">
+      <location file = "why/weber4.why" line = "535" begin = "42" end = "43"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/weber4_po12.why">
+      <location file = "why/weber4.why" line = "535" begin = "42" end = "43"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    </behavior>
+    <behavior name="Behavior `is_not_empty'">
+    <goal why_file="why/weber4_po7.why">
+      <location file = "PPCHOME/tests/jessie/weber4.c" line = "9" begin = "13" end = "87"/>
+      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1772,6 +1696,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -1783,6 +1712,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -1868,21 +1801,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

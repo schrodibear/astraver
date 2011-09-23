@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -130,36 +130,39 @@ let term rresult t = Jc_iterators.iter_term (single_term rresult) t
 
 let single_assertion _rresult a =
   match a#node with
-       | JCAapp app -> 
-	   let li = app.jc_app_fun in
-	   let param_regions =
-	     if in_current_logic_component li then
-	       (* No generalization here, plain unification *)
-	       List.map (fun vi -> vi.jc_var_info_region) 
-		 li.jc_logic_info_parameters 
-	     else
-	       (* Apply generalization before unification *)
-	       let regions = li.jc_logic_info_param_regions in
-	       let assoc = RegionList.duplicate regions in
-	       app.jc_app_region_assoc <- assoc;
-	       List.map (fun vi -> 
-			   if is_dummy_region vi.jc_var_info_region then dummy_region else
-			     try RegionList.assoc vi.jc_var_info_region assoc
-			     with Not_found -> assert false)
-		 li.jc_logic_info_parameters
-	   in
-	   let arg_regions = 
-	     List.map (fun t -> t#region) app.jc_app_args
-	   in
-	   Jc_options.lprintf "param:%a@." (print_list comma Region.print) param_regions;
-	   Jc_options.lprintf "arg:%a@." (print_list comma Region.print) arg_regions;
-	   List.iter2 Region.unify param_regions arg_regions
-       | JCAtrue | JCAfalse | JCArelation _  | JCAeqtype _ 
-       | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ 
-       | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAif _ 
-       | JCAlet _ | JCAmatch _
-       | JCAnot _ | JCAquantifier _ | JCAold _ | JCAat _ | JCAsubtype _ ->
-	   ()
+    | JCArelation(t1,(_,`Pointer),t2) ->
+	Region.unify t1#region t2#region
+    | JCArelation _ -> ()
+    | JCAapp app -> 
+	let li = app.jc_app_fun in
+	let param_regions =
+	  if in_current_logic_component li then
+	    (* No generalization here, plain unification *)
+	    List.map (fun vi -> vi.jc_var_info_region) 
+	      li.jc_logic_info_parameters 
+	  else
+	    (* Apply generalization before unification *)
+	    let regions = li.jc_logic_info_param_regions in
+	    let assoc = RegionList.duplicate regions in
+	    app.jc_app_region_assoc <- assoc;
+	    List.map (fun vi -> 
+			if is_dummy_region vi.jc_var_info_region then dummy_region else
+			  try RegionList.assoc vi.jc_var_info_region assoc
+			  with Not_found -> assert false)
+	      li.jc_logic_info_parameters
+	in
+	let arg_regions = 
+	  List.map (fun t -> t#region) app.jc_app_args
+	in
+	Jc_options.lprintf "param:%a@." (print_list comma Region.print) param_regions;
+	Jc_options.lprintf "arg:%a@." (print_list comma Region.print) arg_regions;
+	List.iter2 Region.unify param_regions arg_regions
+    | JCAtrue | JCAfalse | JCAeqtype _ 
+    | JCAinstanceof _ | JCAbool_term _ | JCAmutable _ 
+    | JCAand _ | JCAor _ | JCAimplies _ | JCAiff _ | JCAif _ 
+    | JCAlet _ | JCAmatch _
+    | JCAnot _ | JCAquantifier _ | JCAold _ | JCAat _ | JCAsubtype _ ->
+	()
 
 let assertion rresult a = 
   Jc_iterators.iter_term_and_assertion 

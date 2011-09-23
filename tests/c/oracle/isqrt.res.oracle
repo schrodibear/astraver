@@ -1,4 +1,38 @@
 ========== file tests/c/isqrt.c ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
+
+
+#pragma JessieIntegerModel(math)
+
 //@ logic integer sqr(integer x) = x * x;
 
 /*@ requires x >= 0;
@@ -24,7 +58,7 @@ int main () {
 
 /*
 Local Variables:
-compile-command: "frama-c -jessie -jessie-atp why3ide isqrt.c"
+compile-command: "make isqrt.why3ml"
 End:
 */
 
@@ -36,7 +70,6 @@ End:
 [jessie] File tests/c/isqrt.jessie/isqrt.jc written.
 [jessie] File tests/c/isqrt.jessie/isqrt.cloc written.
 ========== file tests/c/isqrt.jessie/isqrt.jc ==========
-# IntModel = bounded
 # InvariantPolicy = Arguments
 # SeparationPolicy = Regions
 # AnnotationPolicy = None
@@ -48,12 +81,8 @@ axiomatic Padding {
   
 }
 
-type int8 = -128..127
-
-type int32 = -2147483648..2147483647
-
 tag charP = {
-  int8 charM: 8;
+  integer charM: 8;
 }
 
 type charP = [charP]
@@ -66,16 +95,16 @@ type voidP = [voidP]
 logic integer sqr(integer x) =
 (x * x)
 
-int32 isqrt(int32 x)
-  requires (C_24 : (x >= 0));
+integer isqrt(integer x)
+  requires (C_20 : (x >= 0));
 behavior default:
-  ensures (C_19 : (((C_21 : (\result >= 0)) &&
-                     (C_22 : (sqr(\result) <= \at(x,Old)))) &&
-                    (C_23 : (\at(x,Old) < sqr((\result + 1))))));
+  ensures (C_15 : (((C_17 : (\result >= 0)) &&
+                     (C_18 : (sqr(\result) <= \at(x,Old)))) &&
+                    (C_19 : (\at(x,Old) < sqr((\result + 1))))));
 {  
-   (var int32 count);
+   (var integer count);
    
-   (var int32 sum);
+   (var integer sum);
    
    {  (C_1 : (count = 0));
       (C_2 : (sum = 1));
@@ -90,13 +119,9 @@ behavior default:
          {  (if (sum <= x) then () else 
             (goto while_0_break));
             
-            {  (C_11 : (count = (C_10 : ((C_9 : (count + 1)) :> int32))));
-               (C_18 : (sum = (C_17 : ((C_16 : (sum +
-                                                 (C_15 : ((C_14 : ((C_13 : (
-                                                                   (C_12 : 
-                                                                   (2 *
-                                                                    count)) :> int32)) +
-                                                                    1)) :> int32)))) :> int32))))
+            {  (C_10 : (count = (C_9 : (count + 1))));
+               (C_14 : (sum = (C_13 : (sum +
+                                        (C_12 : ((C_11 : (2 * count)) + 1))))))
             }
          }
       };
@@ -106,21 +131,21 @@ behavior default:
    }
 }
 
-int32 main()
+integer main()
 behavior default:
-  ensures (C_29 : (\result == 4));
+  ensures (C_25 : (\result == 4));
 {  
-   (var int32 r);
+   (var integer r);
    
-   {  (C_26 : (r = (C_25 : isqrt(17))));
+   {  (C_22 : (r = (C_21 : isqrt(17))));
       
       {  
-         (assert for default: (C_27 : ((r < 4) ==> false)));
+         (assert for default: (C_23 : ((r < 4) ==> false)));
          ()
       };
       
       {  
-         (assert for default: (C_28 : ((r > 4) ==> false)));
+         (assert for default: (C_24 : ((r > 4) ==> false)));
          ()
       };
       
@@ -131,188 +156,164 @@ behavior default:
 [isqrt]
 name = "Function isqrt"
 file = "HOME/tests/c/isqrt.c"
-line = 6
+line = 40
 begin = 4
 end = 9
 
 [main]
 name = "Function main"
 file = "HOME/tests/c/isqrt.c"
-line = 16
+line = 50
 begin = 4
 end = 8
 
 [C_10]
 file = "HOME/tests/c/isqrt.c"
-line = 11
+line = 45
 begin = 30
 end = 37
 
 [C_11]
 file = "HOME/tests/c/isqrt.c"
-line = 11
-begin = 30
+line = 45
+begin = 26
 end = 37
 
 [C_12]
 file = "HOME/tests/c/isqrt.c"
-line = 11
+line = 45
 begin = 26
-end = 37
+end = 41
 
 [C_13]
 file = "HOME/tests/c/isqrt.c"
-line = 11
-begin = 26
-end = 37
+line = 45
+begin = 19
+end = 41
 
 [C_14]
 file = "HOME/tests/c/isqrt.c"
-line = 11
-begin = 26
+line = 45
+begin = 19
 end = 41
 
 [C_15]
 file = "HOME/tests/c/isqrt.c"
-line = 11
-begin = 26
-end = 41
+line = 38
+begin = 12
+end = 69
 
 [C_16]
 file = "HOME/tests/c/isqrt.c"
-line = 11
-begin = 19
-end = 41
+line = 38
+begin = 12
+end = 45
 
 [C_17]
 file = "HOME/tests/c/isqrt.c"
-line = 11
-begin = 19
-end = 41
+line = 38
+begin = 12
+end = 24
 
 [C_18]
 file = "HOME/tests/c/isqrt.c"
-line = 11
-begin = 19
-end = 41
+line = 38
+begin = 28
+end = 45
 
 [C_19]
 file = "HOME/tests/c/isqrt.c"
-line = 4
-begin = 12
+line = 38
+begin = 49
 end = 69
 
 [C_1]
 file = "HOME/tests/c/isqrt.c"
-line = 7
+line = 41
 begin = 2
 end = 5
 
 [C_2]
 file = "HOME/tests/c/isqrt.c"
-line = 7
+line = 41
 begin = 2
 end = 5
 
 [C_3]
 file = "HOME/tests/c/isqrt.c"
-line = 9
+line = 43
 begin = 19
 end = 28
 
 [C_4]
 file = "HOME/tests/c/isqrt.c"
-line = 8
+line = 42
 begin = 21
 end = 73
 
 [C_20]
 file = "HOME/tests/c/isqrt.c"
-line = 4
-begin = 12
-end = 45
+line = 37
+begin = 13
+end = 19
 
 [C_5]
 file = "HOME/tests/c/isqrt.c"
-line = 8
+line = 42
 begin = 21
 end = 50
 
 [C_21]
 file = "HOME/tests/c/isqrt.c"
-line = 4
-begin = 12
-end = 24
+line = 52
+begin = 6
+end = 15
 
 [C_6]
 file = "HOME/tests/c/isqrt.c"
-line = 8
+line = 42
 begin = 21
 end = 31
 
 [C_22]
 file = "HOME/tests/c/isqrt.c"
-line = 4
-begin = 28
-end = 45
+line = 52
+begin = 6
+end = 15
 
 [C_7]
 file = "HOME/tests/c/isqrt.c"
-line = 8
+line = 42
 begin = 35
 end = 50
 
 [C_23]
 file = "HOME/tests/c/isqrt.c"
-line = 4
-begin = 49
-end = 69
+line = 53
+begin = 13
+end = 29
 
 [C_8]
 file = "HOME/tests/c/isqrt.c"
-line = 8
+line = 42
 begin = 54
 end = 73
 
 [C_24]
 file = "HOME/tests/c/isqrt.c"
-line = 3
+line = 54
 begin = 13
-end = 19
+end = 29
 
 [C_9]
 file = "HOME/tests/c/isqrt.c"
-line = 11
+line = 45
 begin = 30
 end = 37
 
 [C_25]
 file = "HOME/tests/c/isqrt.c"
-line = 18
-begin = 6
-end = 15
-
-[C_26]
-file = "HOME/tests/c/isqrt.c"
-line = 18
-begin = 6
-end = 15
-
-[C_27]
-file = "HOME/tests/c/isqrt.c"
-line = 19
-begin = 13
-end = 29
-
-[C_28]
-file = "HOME/tests/c/isqrt.c"
-line = 20
-begin = 13
-end = 29
-
-[C_29]
-file = "HOME/tests/c/isqrt.c"
-line = 15
+line = 49
 begin = 12
 end = 24
 
@@ -334,10 +335,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs isqrt
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs isqrt.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/isqrt_why.sx
 
@@ -397,6 +399,13 @@ simplify: simplify/isqrt_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/isqrt_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/isqrt_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -470,6 +479,9 @@ why/%_why3.why: why/%.why
 why3ide: why/isqrt_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: isqrt.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include isqrt.depend
 
 depend: coq/isqrt_why.v
@@ -481,67 +493,42 @@ clean:
 ========== file tests/c/isqrt.jessie/isqrt.loc ==========
 [main_ensures_default]
 name = "Function main"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/isqrt.c"
-line = 16
+line = 50
 begin = 4
 end = 8
 
 [JC_40]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/isqrt.c"
+line = 54
+begin = 13
+end = 29
 
 [JC_41]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_42]
 kind = UserCall
 file = "HOME/tests/c/isqrt.c"
-line = 18
+line = 52
 begin = 6
 end = 15
+
+[JC_42]
+file = "HOME/tests/c/isqrt.c"
+line = 53
+begin = 13
+end = 29
 
 [JC_43]
 file = "HOME/tests/c/isqrt.c"
-line = 19
-begin = 13
-end = 29
-
-[JC_44]
-file = "HOME/tests/c/isqrt.c"
-line = 20
-begin = 13
-end = 29
-
-[JC_45]
-kind = UserCall
-file = "HOME/tests/c/isqrt.c"
-line = 18
-begin = 6
-end = 15
-
-[JC_46]
-file = "HOME/tests/c/isqrt.c"
-line = 19
+line = 54
 begin = 13
 end = 29
 
 [JC_1]
 file = "HOME/tests/c/isqrt.c"
-line = 3
+line = 37
 begin = 13
 end = 19
-
-[JC_47]
-file = "HOME/tests/c/isqrt.c"
-line = 20
-begin = 13
-end = 29
 
 [JC_2]
 file = "HOME/"
@@ -551,7 +538,7 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/c/isqrt.c"
-line = 3
+line = 37
 begin = 13
 end = 19
 
@@ -563,31 +550,31 @@ end = -1
 
 [JC_5]
 file = "HOME/tests/c/isqrt.c"
-line = 4
+line = 38
 begin = 12
 end = 24
 
 [JC_6]
 file = "HOME/tests/c/isqrt.c"
-line = 4
+line = 38
 begin = 28
 end = 45
 
 [JC_7]
 file = "HOME/tests/c/isqrt.c"
-line = 4
+line = 38
 begin = 49
 end = 69
 
 [JC_8]
 file = "HOME/tests/c/isqrt.c"
-line = 4
+line = 38
 begin = 12
 end = 69
 
 [JC_9]
 file = "HOME/tests/c/isqrt.c"
-line = 4
+line = 38
 begin = 12
 end = 24
 
@@ -595,25 +582,25 @@ end = 24
 name = "Function isqrt"
 behavior = "Safety"
 file = "HOME/tests/c/isqrt.c"
-line = 6
+line = 40
 begin = 4
 end = 9
 
 [JC_10]
 file = "HOME/tests/c/isqrt.c"
-line = 4
+line = 38
 begin = 28
 end = 45
 
 [JC_11]
 file = "HOME/tests/c/isqrt.c"
-line = 4
+line = 38
 begin = 49
 end = 69
 
 [JC_12]
 file = "HOME/tests/c/isqrt.c"
-line = 4
+line = 38
 begin = 12
 end = 69
 
@@ -631,25 +618,25 @@ end = -1
 
 [JC_15]
 file = "HOME/tests/c/isqrt.c"
-line = 8
+line = 42
 begin = 21
 end = 31
 
 [JC_16]
 file = "HOME/tests/c/isqrt.c"
-line = 8
+line = 42
 begin = 35
 end = 50
 
 [JC_17]
 file = "HOME/tests/c/isqrt.c"
-line = 8
+line = 42
 begin = 54
 end = 73
 
 [JC_18]
 file = "HOME/tests/c/isqrt.c"
-line = 8
+line = 42
 begin = 21
 end = 73
 
@@ -661,81 +648,77 @@ end = -1
 
 [JC_20]
 file = "HOME/tests/c/isqrt.jessie/isqrt.jc"
-line = 45
+line = 40
 begin = 6
-end = 907
+end = 546
 
 [JC_21]
 file = "HOME/tests/c/isqrt.jessie/isqrt.jc"
-line = 45
+line = 40
 begin = 6
-end = 907
+end = 546
 
 [JC_22]
-kind = ArithOverflow
 file = "HOME/tests/c/isqrt.c"
-line = 11
-begin = 30
-end = 37
-
-[JC_23]
-kind = ArithOverflow
-file = "HOME/tests/c/isqrt.c"
-line = 11
-begin = 26
-end = 37
-
-[JC_24]
-kind = ArithOverflow
-file = "HOME/tests/c/isqrt.c"
-line = 11
-begin = 26
-end = 41
-
-[JC_25]
-kind = ArithOverflow
-file = "HOME/tests/c/isqrt.c"
-line = 11
-begin = 19
-end = 41
-
-[JC_26]
-file = "HOME/tests/c/isqrt.c"
-line = 9
+line = 43
 begin = 19
 end = 28
 
-[JC_27]
+[JC_23]
 file = "HOME/tests/c/isqrt.c"
-line = 8
+line = 42
 begin = 21
 end = 31
 
-[JC_28]
+[JC_24]
 file = "HOME/tests/c/isqrt.c"
-line = 8
+line = 42
 begin = 35
 end = 50
 
-[JC_29]
+[JC_25]
 file = "HOME/tests/c/isqrt.c"
-line = 8
+line = 42
 begin = 54
 end = 73
 
+[JC_26]
+file = "HOME/tests/c/isqrt.c"
+line = 42
+begin = 21
+end = 73
+
+[JC_27]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_28]
+file = "HOME/tests/c/isqrt.jessie/isqrt.jc"
+line = 40
+begin = 6
+end = 546
+
+[JC_29]
+file = "HOME/tests/c/isqrt.jessie/isqrt.jc"
+line = 40
+begin = 6
+end = 546
+
 [isqrt_ensures_default]
 name = "Function isqrt"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/isqrt.c"
-line = 6
+line = 40
 begin = 4
 end = 9
 
 [JC_30]
 file = "HOME/tests/c/isqrt.c"
-line = 8
-begin = 21
-end = 73
+line = 50
+begin = 4
+end = 8
 
 [JC_31]
 file = "HOME/"
@@ -744,42 +727,42 @@ begin = -1
 end = -1
 
 [JC_32]
-file = "HOME/tests/c/isqrt.jessie/isqrt.jc"
-line = 45
-begin = 6
-end = 907
+file = "HOME/tests/c/isqrt.c"
+line = 50
+begin = 4
+end = 8
 
 [JC_33]
-file = "HOME/tests/c/isqrt.jessie/isqrt.jc"
-line = 45
-begin = 6
-end = 907
-
-[JC_34]
-file = "HOME/tests/c/isqrt.c"
-line = 16
-begin = 4
-end = 8
-
-[main_safety]
-name = "Function main"
-behavior = "Safety"
-file = "HOME/tests/c/isqrt.c"
-line = 16
-begin = 4
-end = 8
-
-[JC_35]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_36]
+[JC_34]
 file = "HOME/tests/c/isqrt.c"
-line = 16
+line = 49
+begin = 12
+end = 24
+
+[main_safety]
+name = "Function main"
+behavior = "Safety"
+file = "HOME/tests/c/isqrt.c"
+line = 50
 begin = 4
 end = 8
+
+[JC_35]
+file = "HOME/tests/c/isqrt.c"
+line = 49
+begin = 12
+end = 24
+
+[JC_36]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_37]
 file = "HOME/"
@@ -788,35 +771,24 @@ begin = -1
 end = -1
 
 [JC_38]
+kind = UserCall
 file = "HOME/tests/c/isqrt.c"
-line = 15
-begin = 12
-end = 24
+line = 52
+begin = 6
+end = 15
 
 [JC_39]
 file = "HOME/tests/c/isqrt.c"
-line = 15
-begin = 12
-end = 24
+line = 53
+begin = 13
+end = 29
 
 ========== file tests/c/isqrt.jessie/why/isqrt.why ==========
 type charP
 
-type int32
-
-type int8
-
 type padding
 
 type voidP
-
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
 
 logic charP_tag:  -> charP tag_id
 
@@ -833,39 +805,6 @@ axiom charP_tags :
  (forall x:charP pointer.
   (forall charP_tag_table:charP tag_table.
    instanceof(charP_tag_table, x, charP_tag)))
-
-logic integer_of_int32: int32 -> int
-
-predicate eq_int32(x:int32, y:int32) =
- eq_int(integer_of_int32(x), integer_of_int32(y))
-
-logic integer_of_int8: int8 -> int
-
-predicate eq_int8(x:int8, y:int8) =
- eq_int(integer_of_int8(x), integer_of_int8(y))
-
-logic int32_of_integer: int -> int32
-
-axiom int32_coerce :
- (forall x:int.
-  ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
-   eq_int(integer_of_int32(int32_of_integer(x)), x)))
-
-axiom int32_range :
- (forall x:int32.
-  (le_int((-2147483648), integer_of_int32(x))
-  and le_int(integer_of_int32(x), (2147483647))))
-
-logic int8_of_integer: int -> int8
-
-axiom int8_coerce :
- (forall x:int.
-  ((le_int((-128), x) and le_int(x, (127))) ->
-   eq_int(integer_of_int8(int8_of_integer(x)), x)))
-
-axiom int8_range :
- (forall x:int8.
-  (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
 
 predicate left_valid_struct_charP(p:charP pointer, a:int,
  charP_alloc_table:charP alloc_table) =
@@ -913,16 +852,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -957,41 +886,13 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -1045,238 +946,152 @@ parameter alloc_struct_voidP_requires :
           and (alloc_fresh(voidP_alloc_table@, result, n)
               and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
-parameter any_int32 : unit -> { } int32 { true }
-
-parameter any_int8 : unit -> { } int8 { true }
-
-parameter int32_of_integer_ :
- x:int ->
-  { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
-  { eq_int(integer_of_int32(result), x) }
-
-parameter int8_of_integer_ :
- x:int ->
-  { (le_int((-128), x) and le_int(x, (127)))} int8
-  { eq_int(integer_of_int8(result), x) }
-
 parameter isqrt :
- x_1:int32 ->
-  { } int32
+ x_1:int ->
+  { } int
   { (JC_12:
-    ((JC_9: ge_int(integer_of_int32(result), (0)))
-    and ((JC_10:
-         le_int(sqr(integer_of_int32(result)), integer_of_int32(x_1@)))
-        and (JC_11:
-            lt_int(integer_of_int32(x_1@),
-            sqr(add_int(integer_of_int32(result), (1)))))))) }
+    ((JC_9: ge_int(result, (0)))
+    and ((JC_10: le_int(sqr(result), x_1))
+        and (JC_11: lt_int(x_1, sqr(add_int(result, (1)))))))) }
 
 parameter isqrt_requires :
- x_1:int32 ->
-  { (JC_1: ge_int(integer_of_int32(x_1), (0)))} int32
+ x_1:int ->
+  { (JC_1: ge_int(x_1, (0)))} int
   { (JC_12:
-    ((JC_9: ge_int(integer_of_int32(result), (0)))
-    and ((JC_10:
-         le_int(sqr(integer_of_int32(result)), integer_of_int32(x_1@)))
-        and (JC_11:
-            lt_int(integer_of_int32(x_1@),
-            sqr(add_int(integer_of_int32(result), (1)))))))) }
+    ((JC_9: ge_int(result, (0)))
+    and ((JC_10: le_int(sqr(result), x_1))
+        and (JC_11: lt_int(x_1, sqr(add_int(result, (1)))))))) }
 
-parameter main :
- tt:unit -> { } int32 { (JC_39: eq_int(integer_of_int32(result), (4))) }
+parameter main : tt:unit -> { } int { (JC_35: (result = (4))) }
 
-parameter main_requires :
- tt:unit -> { } int32 { (JC_39: eq_int(integer_of_int32(result), (4))) }
-
-parameter safe_int32_of_integer_ :
- x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
-
-parameter safe_int8_of_integer_ :
- x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
+parameter main_requires : tt:unit -> { } int { (JC_35: (result = (4))) }
 
 let isqrt_ensures_default =
- fun (x_1 : int32) ->
-  { (JC_3: ge_int(integer_of_int32(x_1), (0))) }
+ fun (x_1 : int) ->
+  { (JC_3: ge_int(x_1, (0))) }
   (init:
-  (let return = ref (any_int32 void) in
+  (let return = ref (any_int void) in
   try
    begin
-     (let count = ref (any_int32 void) in
-     (let sum = ref (any_int32 void) in
+     (let count = ref (any_int void) in
+     (let sum = ref (any_int void) in
      try
-      (let jessie_<num> =
       (C_1:
       (C_2:
       begin
-        (let jessie_<num> = (count := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<num> = (sum := (safe_int32_of_integer_ (1))) in void);
+        (let jessie_<num> = (count := (0)) in void);
+       (let jessie_<num> = (sum := (1)) in void);
        (loop_2:
        while true do
        { invariant
-           (JC_30:
-           ((JC_27: ge_int(integer_of_int32(count), (0)))
-           and ((JC_28:
-                ge_int(integer_of_int32(x_1), sqr(integer_of_int32(count))))
-               and (JC_29:
-                   eq_int(integer_of_int32(sum),
-                   sqr(add_int(integer_of_int32(count), (1))))))))  }
+           (JC_26:
+           ((JC_23: ge_int(count, (0)))
+           and ((JC_24: ge_int(x_1, sqr(count)))
+               and (JC_25: (sum = sqr(add_int(count, (1))))))))  }
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<num> =
           begin
             (let jessie_<num> =
-            (C_11:
-            (C_18:
+            (C_10:
+            (C_14:
             begin
-              (if ((le_int_ (integer_of_int32 !sum)) (integer_of_int32 x_1))
-              then void
-              else
-               (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-               void));
-             (let jessie_<num> =
-             (count := (C_10:
-                       (safe_int32_of_integer_ (C_9:
-                                               ((add_int (integer_of_int32 !count)) (1)))))) in
+              (if ((le_int_ !sum) x_1) then void
+              else (raise (Goto_while_0_break_exc void)));
+             (let jessie_<num> = (count := (C_9: ((add_int !count) (1)))) in
              void);
-             (sum := (C_17:
-                     (safe_int32_of_integer_ (C_16:
-                                             ((add_int (integer_of_int32 !sum)) 
-                                              (integer_of_int32 (C_15:
-                                                                (safe_int32_of_integer_ 
-                                                                 (C_14:
-                                                                 ((add_int 
-                                                                   (integer_of_int32 
-                                                                    (C_13:
-                                                                    (safe_int32_of_integer_ 
-                                                                    (C_12:
-                                                                    ((mul_int (2)) 
-                                                                    (integer_of_int32 !count))))))) (1)))))))))));
-             !sum end)) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<num> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) in void) with
+             (sum := (C_13:
+                     ((add_int !sum) (C_12:
+                                     ((add_int (C_11: ((mul_int (2)) !count))) (1))))));
+             !sum end)) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<num> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<num> ->
       (while_0_break: begin   void; (return := !count); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_8:
-    ((JC_5: ge_int(integer_of_int32(result), (0)))
-    and ((JC_6:
-         le_int(sqr(integer_of_int32(result)), integer_of_int32(x_1@)))
-        and (JC_7:
-            lt_int(integer_of_int32(x_1@),
-            sqr(add_int(integer_of_int32(result), (1)))))))) }
+    ((JC_5: ge_int(result, (0)))
+    and ((JC_6: le_int(sqr(result), x_1))
+        and (JC_7: lt_int(x_1, sqr(add_int(result, (1)))))))) }
 
 let isqrt_safety =
- fun (x_1 : int32) ->
-  { (JC_3: ge_int(integer_of_int32(x_1), (0))) }
+ fun (x_1 : int) ->
+  { (JC_3: ge_int(x_1, (0))) }
   (init:
-  (let return = ref (any_int32 void) in
+  (let return = ref (any_int void) in
   try
    begin
-     (let count = ref (any_int32 void) in
-     (let sum = ref (any_int32 void) in
+     (let count = ref (any_int void) in
+     (let sum = ref (any_int void) in
      try
-      (let jessie_<num> =
       (C_1:
       (C_2:
       begin
-        (let jessie_<num> = (count := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<num> = (sum := (safe_int32_of_integer_ (1))) in void);
+        (let jessie_<num> = (count := (0)) in void);
+       (let jessie_<num> = (sum := (1)) in void);
        (loop_1:
        while true do
-       { invariant (JC_20: true)
-         variant (JC_26 : sub_int(integer_of_int32(x_1),
-                          integer_of_int32(count))) }
+       { invariant (JC_20: true) variant (JC_22 : sub_int(x_1, count)) }
         begin
           [ { } unit reads count,sum
             { (JC_18:
-              ((JC_15: ge_int(integer_of_int32(count), (0)))
-              and ((JC_16:
-                   ge_int(integer_of_int32(x_1),
-                   sqr(integer_of_int32(count))))
-                  and (JC_17:
-                      eq_int(integer_of_int32(sum),
-                      sqr(add_int(integer_of_int32(count), (1)))))))) } ];
+              ((JC_15: ge_int(count, (0)))
+              and ((JC_16: ge_int(x_1, sqr(count)))
+                  and (JC_17: (sum = sqr(add_int(count, (1)))))))) } ];
          try
-          (let jessie_<num> =
           begin
             (let jessie_<num> =
-            (C_11:
-            (C_18:
+            (C_10:
+            (C_14:
             begin
-              (if ((le_int_ (integer_of_int32 !sum)) (integer_of_int32 x_1))
-              then void
-              else
-               (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in void));
-             (let jessie_<num> =
-             (count := (C_10:
-                       (JC_22:
-                       (int32_of_integer_ (C_9:
-                                          ((add_int (integer_of_int32 !count)) (1))))))) in
+              (if ((le_int_ !sum) x_1) then void
+              else (raise (Goto_while_0_break_exc void)));
+             (let jessie_<num> = (count := (C_9: ((add_int !count) (1)))) in
              void);
-             (sum := (C_17:
-                     (JC_25:
-                     (int32_of_integer_ (C_16:
-                                        ((add_int (integer_of_int32 !sum)) 
-                                         (integer_of_int32 (C_15:
-                                                           (JC_24:
-                                                           (int32_of_integer_ 
-                                                            (C_14:
-                                                            ((add_int 
-                                                              (integer_of_int32 
-                                                               (C_13:
-                                                               (JC_23:
-                                                               (int32_of_integer_ 
-                                                                (C_12:
-                                                                ((mul_int (2)) 
-                                                                 (integer_of_int32 !count)))))))) (1)))))))))))));
-             !sum end)) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<num> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) in void) with
+             (sum := (C_13:
+                     ((add_int !sum) (C_12:
+                                     ((add_int (C_11: ((mul_int (2)) !count))) (1))))));
+             !sum end)) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<num> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<num> ->
       (while_0_break: begin   void; (return := !count); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { (JC_37: true) }
+  { (JC_33: true) }
   (init:
-  (let return = ref (any_int32 void) in
+  (let return = ref (any_int void) in
   try
    begin
-     (let r = ref (any_int32 void) in
-     (C_26:
+     (let r = ref (any_int void) in
+     (C_22:
      begin
        (let jessie_<num> =
-       (r := (C_25:
-             (let jessie_<num> = (safe_int32_of_integer_ (17)) in
-             (JC_45: (isqrt jessie_<num>))))) in void);
-      (assert
-      { (JC_46: (lt_int(integer_of_int32(r), (4)) -> (false = true))) };
-      void); void;
-      (assert
-      { (JC_47: (gt_int(integer_of_int32(r), (4)) -> (false = true))) };
-      void); void; (return := !r); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_38: eq_int(integer_of_int32(result), (4))) }
+       (r := (C_21: (let jessie_<num> = (17) in (JC_41: (isqrt jessie_<num>))))) in
+       void); (assert { (JC_42: (lt_int(r, (4)) -> (false = true))) }; void);
+      void; (assert { (JC_43: (gt_int(r, (4)) -> (false = true))) }; void);
+      void; (return := !r); (raise Return) end)); absurd  end with Return ->
+   !return end)) { (JC_34: (result = (4))) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_37: true) }
+  { (JC_33: true) }
   (init:
-  (let return = ref (any_int32 void) in
+  (let return = ref (any_int void) in
   try
    begin
-     (let r = ref (any_int32 void) in
-     (C_26:
+     (let r = ref (any_int void) in
+     (C_22:
      begin
        (let jessie_<num> =
-       (r := (C_25:
-             (let jessie_<num> = (safe_int32_of_integer_ (17)) in
-             (JC_42: (isqrt_requires jessie_<num>))))) in void);
-      [ { } unit reads r
-        { (JC_43: (lt_int(integer_of_int32(r), (4)) -> (false = true))) } ];
+       (r := (C_21:
+             (let jessie_<num> = (17) in (JC_38: (isqrt_requires jessie_<num>))))) in
+       void);
+      [ { } unit reads r { (JC_39: (lt_int(r, (4)) -> (false = true))) } ];
       void;
-      [ { } unit reads r
-        { (JC_44: (gt_int(integer_of_int32(r), (4)) -> (false = true))) } ];
+      [ { } unit reads r { (JC_40: (gt_int(r, (4)) -> (false = true))) } ];
       void; (return := !r); (raise Return) end)); absurd  end with Return ->
    !return end)) { true }
 
@@ -2215,10 +2030,6 @@ axiom frame_between_sub:
 
 type charP
 
-type int32
-
-type int8
-
 type padding
 
 type voidP
@@ -2239,39 +2050,6 @@ axiom charP_tags:
   (forall x:charP pointer.
     (forall charP_tag_table:charP tag_table. instanceof(charP_tag_table, x,
       charP_tag)))
-
-logic integer_of_int32 : int32 -> int
-
-predicate eq_int32(x: int32, y: int32) =
-  (integer_of_int32(x) = integer_of_int32(y))
-
-logic integer_of_int8 : int8 -> int
-
-predicate eq_int8(x: int8, y: int8) =
-  (integer_of_int8(x) = integer_of_int8(y))
-
-logic int32_of_integer : int -> int32
-
-axiom int32_coerce:
-  (forall x:int.
-    ((((-2147483648) <= x) and (x <= 2147483647)) ->
-     (integer_of_int32(int32_of_integer(x)) = x)))
-
-axiom int32_range:
-  (forall x:int32.
-    (((-2147483648) <= integer_of_int32(x)) and
-     (integer_of_int32(x) <= 2147483647)))
-
-logic int8_of_integer : int -> int8
-
-axiom int8_coerce:
-  (forall x:int.
-    ((((-128) <= x) and (x <= 127)) ->
-     (integer_of_int8(int8_of_integer(x)) = x)))
-
-axiom int8_range:
-  (forall x:int8.
-    (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
 
 predicate left_valid_struct_charP(p: charP pointer, a: int,
   charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
@@ -2319,16 +2097,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
 
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
@@ -2365,585 +2133,228 @@ axiom voidP_tags:
       voidP_tag)))
 
 goal isqrt_ensures_default_po_1:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  ("JC_30": ("JC_27": (integer_of_int32(count) >= 0)))
+  forall x_1:int.
+  ("JC_3": (x_1 >= 0)) ->
+  forall count:int.
+  (count = 0) ->
+  forall sum:int.
+  (sum = 1) ->
+  ("JC_26": ("JC_23": (count >= 0)))
 
 goal isqrt_ensures_default_po_2:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  ("JC_30":
-  ("JC_28": (integer_of_int32(x_1) >= sqr(integer_of_int32(count)))))
+  forall x_1:int.
+  ("JC_3": (x_1 >= 0)) ->
+  forall count:int.
+  (count = 0) ->
+  forall sum:int.
+  (sum = 1) ->
+  ("JC_26": ("JC_24": (x_1 >= sqr(count))))
 
 goal isqrt_ensures_default_po_3:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  ("JC_30":
-  ("JC_29": (integer_of_int32(sum) = sqr((integer_of_int32(count) + 1)))))
+  forall x_1:int.
+  ("JC_3": (x_1 >= 0)) ->
+  forall count:int.
+  (count = 0) ->
+  forall sum:int.
+  (sum = 1) ->
+  ("JC_26": ("JC_25": (sum = sqr((count + 1)))))
 
 goal isqrt_ensures_default_po_4:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
-  ("JC_30":
-  (("JC_27": (integer_of_int32(count0) >= 0)) and
-   (("JC_28": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_29": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) <= integer_of_int32(x_1)) ->
-  forall result1:int32.
-  (integer_of_int32(result1) = (integer_of_int32(count0) + 1)) ->
-  forall count1:int32.
-  (count1 = result1) ->
-  forall result2:int32.
-  (integer_of_int32(result2) = (2 * integer_of_int32(count1))) ->
-  forall result3:int32.
-  (integer_of_int32(result3) = (integer_of_int32(result2) + 1)) ->
-  forall result4:int32.
-  (integer_of_int32(result4) = (integer_of_int32(sum0) + integer_of_int32(result3))) ->
-  forall sum1:int32.
-  (sum1 = result4) ->
-  ("JC_30": ("JC_27": (integer_of_int32(count1) >= 0)))
+  forall x_1:int.
+  ("JC_3": (x_1 >= 0)) ->
+  forall count:int.
+  (count = 0) ->
+  forall sum:int.
+  (sum = 1) ->
+  forall count0:int.
+  forall sum0:int.
+  ("JC_26":
+  (("JC_23": (count0 >= 0)) and
+   (("JC_24": (x_1 >= sqr(count0))) and ("JC_25": (sum0 = sqr((count0 + 1))))))) ->
+  (sum0 <= x_1) ->
+  forall count1:int.
+  (count1 = (count0 + 1)) ->
+  forall sum1:int.
+  (sum1 = (sum0 + ((2 * count1) + 1))) ->
+  ("JC_26": ("JC_23": (count1 >= 0)))
 
 goal isqrt_ensures_default_po_5:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
-  ("JC_30":
-  (("JC_27": (integer_of_int32(count0) >= 0)) and
-   (("JC_28": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_29": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) <= integer_of_int32(x_1)) ->
-  forall result1:int32.
-  (integer_of_int32(result1) = (integer_of_int32(count0) + 1)) ->
-  forall count1:int32.
-  (count1 = result1) ->
-  forall result2:int32.
-  (integer_of_int32(result2) = (2 * integer_of_int32(count1))) ->
-  forall result3:int32.
-  (integer_of_int32(result3) = (integer_of_int32(result2) + 1)) ->
-  forall result4:int32.
-  (integer_of_int32(result4) = (integer_of_int32(sum0) + integer_of_int32(result3))) ->
-  forall sum1:int32.
-  (sum1 = result4) ->
-  ("JC_30":
-  ("JC_28": (integer_of_int32(x_1) >= sqr(integer_of_int32(count1)))))
+  forall x_1:int.
+  ("JC_3": (x_1 >= 0)) ->
+  forall count:int.
+  (count = 0) ->
+  forall sum:int.
+  (sum = 1) ->
+  forall count0:int.
+  forall sum0:int.
+  ("JC_26":
+  (("JC_23": (count0 >= 0)) and
+   (("JC_24": (x_1 >= sqr(count0))) and ("JC_25": (sum0 = sqr((count0 + 1))))))) ->
+  (sum0 <= x_1) ->
+  forall count1:int.
+  (count1 = (count0 + 1)) ->
+  forall sum1:int.
+  (sum1 = (sum0 + ((2 * count1) + 1))) ->
+  ("JC_26": ("JC_24": (x_1 >= sqr(count1))))
 
 goal isqrt_ensures_default_po_6:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
-  ("JC_30":
-  (("JC_27": (integer_of_int32(count0) >= 0)) and
-   (("JC_28": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_29": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) <= integer_of_int32(x_1)) ->
-  forall result1:int32.
-  (integer_of_int32(result1) = (integer_of_int32(count0) + 1)) ->
-  forall count1:int32.
-  (count1 = result1) ->
-  forall result2:int32.
-  (integer_of_int32(result2) = (2 * integer_of_int32(count1))) ->
-  forall result3:int32.
-  (integer_of_int32(result3) = (integer_of_int32(result2) + 1)) ->
-  forall result4:int32.
-  (integer_of_int32(result4) = (integer_of_int32(sum0) + integer_of_int32(result3))) ->
-  forall sum1:int32.
-  (sum1 = result4) ->
-  ("JC_30":
-  ("JC_29": (integer_of_int32(sum1) = sqr((integer_of_int32(count1) + 1)))))
+  forall x_1:int.
+  ("JC_3": (x_1 >= 0)) ->
+  forall count:int.
+  (count = 0) ->
+  forall sum:int.
+  (sum = 1) ->
+  forall count0:int.
+  forall sum0:int.
+  ("JC_26":
+  (("JC_23": (count0 >= 0)) and
+   (("JC_24": (x_1 >= sqr(count0))) and ("JC_25": (sum0 = sqr((count0 + 1))))))) ->
+  (sum0 <= x_1) ->
+  forall count1:int.
+  (count1 = (count0 + 1)) ->
+  forall sum1:int.
+  (sum1 = (sum0 + ((2 * count1) + 1))) ->
+  ("JC_26": ("JC_25": (sum1 = sqr((count1 + 1)))))
 
 goal isqrt_ensures_default_po_7:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
-  ("JC_30":
-  (("JC_27": (integer_of_int32(count0) >= 0)) and
-   (("JC_28": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_29": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) > integer_of_int32(x_1)) ->
-  forall return:int32.
+  forall x_1:int.
+  ("JC_3": (x_1 >= 0)) ->
+  forall count:int.
+  (count = 0) ->
+  forall sum:int.
+  (sum = 1) ->
+  forall count0:int.
+  forall sum0:int.
+  ("JC_26":
+  (("JC_23": (count0 >= 0)) and
+   (("JC_24": (x_1 >= sqr(count0))) and ("JC_25": (sum0 = sqr((count0 + 1))))))) ->
+  (sum0 > x_1) ->
+  forall return:int.
   (return = count0) ->
-  ("JC_8": ("JC_5": (integer_of_int32(return) >= 0)))
+  ("JC_8": ("JC_5": (return >= 0)))
 
 goal isqrt_ensures_default_po_8:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
-  ("JC_30":
-  (("JC_27": (integer_of_int32(count0) >= 0)) and
-   (("JC_28": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_29": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) > integer_of_int32(x_1)) ->
-  forall return:int32.
+  forall x_1:int.
+  ("JC_3": (x_1 >= 0)) ->
+  forall count:int.
+  (count = 0) ->
+  forall sum:int.
+  (sum = 1) ->
+  forall count0:int.
+  forall sum0:int.
+  ("JC_26":
+  (("JC_23": (count0 >= 0)) and
+   (("JC_24": (x_1 >= sqr(count0))) and ("JC_25": (sum0 = sqr((count0 + 1))))))) ->
+  (sum0 > x_1) ->
+  forall return:int.
   (return = count0) ->
-  ("JC_8":
-  ("JC_6": (sqr(integer_of_int32(return)) <= integer_of_int32(x_1))))
+  ("JC_8": ("JC_6": (sqr(return) <= x_1)))
 
 goal isqrt_ensures_default_po_9:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
-  ("JC_30":
-  (("JC_27": (integer_of_int32(count0) >= 0)) and
-   (("JC_28": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_29": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) > integer_of_int32(x_1)) ->
-  forall return:int32.
+  forall x_1:int.
+  ("JC_3": (x_1 >= 0)) ->
+  forall count:int.
+  (count = 0) ->
+  forall sum:int.
+  (sum = 1) ->
+  forall count0:int.
+  forall sum0:int.
+  ("JC_26":
+  (("JC_23": (count0 >= 0)) and
+   (("JC_24": (x_1 >= sqr(count0))) and ("JC_25": (sum0 = sqr((count0 + 1))))))) ->
+  (sum0 > x_1) ->
+  forall return:int.
   (return = count0) ->
-  ("JC_8":
-  ("JC_7": (integer_of_int32(x_1) < sqr((integer_of_int32(return) + 1)))))
+  ("JC_8": ("JC_7": (x_1 < sqr((return + 1)))))
 
 goal isqrt_safety_po_1:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
+  forall x_1:int.
+  ("JC_3": (x_1 >= 0)) ->
+  forall count:int.
+  (count = 0) ->
+  forall sum:int.
+  (sum = 1) ->
+  forall count0:int.
+  forall sum0:int.
   ("JC_20": true) ->
   ("JC_18":
-  (("JC_15": (integer_of_int32(count0) >= 0)) and
-   (("JC_16": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_17": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) <= integer_of_int32(x_1)) ->
-  ((-2147483648) <= (integer_of_int32(count0) + 1))
+  (("JC_15": (count0 >= 0)) and
+   (("JC_16": (x_1 >= sqr(count0))) and ("JC_17": (sum0 = sqr((count0 + 1))))))) ->
+  (sum0 <= x_1) ->
+  forall count1:int.
+  (count1 = (count0 + 1)) ->
+  forall sum1:int.
+  (sum1 = (sum0 + ((2 * count1) + 1))) ->
+  (0 <= ("JC_22": (x_1 - count0)))
 
 goal isqrt_safety_po_2:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
+  forall x_1:int.
+  ("JC_3": (x_1 >= 0)) ->
+  forall count:int.
+  (count = 0) ->
+  forall sum:int.
+  (sum = 1) ->
+  forall count0:int.
+  forall sum0:int.
   ("JC_20": true) ->
   ("JC_18":
-  (("JC_15": (integer_of_int32(count0) >= 0)) and
-   (("JC_16": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_17": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) <= integer_of_int32(x_1)) ->
-  ((integer_of_int32(count0) + 1) <= 2147483647)
-
-goal isqrt_safety_po_3:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
-  ("JC_20": true) ->
-  ("JC_18":
-  (("JC_15": (integer_of_int32(count0) >= 0)) and
-   (("JC_16": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_17": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) <= integer_of_int32(x_1)) ->
-  (((-2147483648) <= (integer_of_int32(count0) + 1)) and
-   ((integer_of_int32(count0) + 1) <= 2147483647)) ->
-  forall result1:int32.
-  (integer_of_int32(result1) = (integer_of_int32(count0) + 1)) ->
-  forall count1:int32.
-  (count1 = result1) ->
-  ((-2147483648) <= (2 * integer_of_int32(count1)))
-
-goal isqrt_safety_po_4:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
-  ("JC_20": true) ->
-  ("JC_18":
-  (("JC_15": (integer_of_int32(count0) >= 0)) and
-   (("JC_16": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_17": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) <= integer_of_int32(x_1)) ->
-  (((-2147483648) <= (integer_of_int32(count0) + 1)) and
-   ((integer_of_int32(count0) + 1) <= 2147483647)) ->
-  forall result1:int32.
-  (integer_of_int32(result1) = (integer_of_int32(count0) + 1)) ->
-  forall count1:int32.
-  (count1 = result1) ->
-  ((2 * integer_of_int32(count1)) <= 2147483647)
-
-goal isqrt_safety_po_5:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
-  ("JC_20": true) ->
-  ("JC_18":
-  (("JC_15": (integer_of_int32(count0) >= 0)) and
-   (("JC_16": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_17": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) <= integer_of_int32(x_1)) ->
-  (((-2147483648) <= (integer_of_int32(count0) + 1)) and
-   ((integer_of_int32(count0) + 1) <= 2147483647)) ->
-  forall result1:int32.
-  (integer_of_int32(result1) = (integer_of_int32(count0) + 1)) ->
-  forall count1:int32.
-  (count1 = result1) ->
-  (((-2147483648) <= (2 * integer_of_int32(count1))) and
-   ((2 * integer_of_int32(count1)) <= 2147483647)) ->
-  forall result2:int32.
-  (integer_of_int32(result2) = (2 * integer_of_int32(count1))) ->
-  ((-2147483648) <= (integer_of_int32(result2) + 1))
-
-goal isqrt_safety_po_6:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
-  ("JC_20": true) ->
-  ("JC_18":
-  (("JC_15": (integer_of_int32(count0) >= 0)) and
-   (("JC_16": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_17": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) <= integer_of_int32(x_1)) ->
-  (((-2147483648) <= (integer_of_int32(count0) + 1)) and
-   ((integer_of_int32(count0) + 1) <= 2147483647)) ->
-  forall result1:int32.
-  (integer_of_int32(result1) = (integer_of_int32(count0) + 1)) ->
-  forall count1:int32.
-  (count1 = result1) ->
-  (((-2147483648) <= (2 * integer_of_int32(count1))) and
-   ((2 * integer_of_int32(count1)) <= 2147483647)) ->
-  forall result2:int32.
-  (integer_of_int32(result2) = (2 * integer_of_int32(count1))) ->
-  ((integer_of_int32(result2) + 1) <= 2147483647)
-
-goal isqrt_safety_po_7:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
-  ("JC_20": true) ->
-  ("JC_18":
-  (("JC_15": (integer_of_int32(count0) >= 0)) and
-   (("JC_16": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_17": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) <= integer_of_int32(x_1)) ->
-  (((-2147483648) <= (integer_of_int32(count0) + 1)) and
-   ((integer_of_int32(count0) + 1) <= 2147483647)) ->
-  forall result1:int32.
-  (integer_of_int32(result1) = (integer_of_int32(count0) + 1)) ->
-  forall count1:int32.
-  (count1 = result1) ->
-  (((-2147483648) <= (2 * integer_of_int32(count1))) and
-   ((2 * integer_of_int32(count1)) <= 2147483647)) ->
-  forall result2:int32.
-  (integer_of_int32(result2) = (2 * integer_of_int32(count1))) ->
-  (((-2147483648) <= (integer_of_int32(result2) + 1)) and
-   ((integer_of_int32(result2) + 1) <= 2147483647)) ->
-  forall result3:int32.
-  (integer_of_int32(result3) = (integer_of_int32(result2) + 1)) ->
-  ((-2147483648) <= (integer_of_int32(sum0) + integer_of_int32(result3)))
-
-goal isqrt_safety_po_8:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
-  ("JC_20": true) ->
-  ("JC_18":
-  (("JC_15": (integer_of_int32(count0) >= 0)) and
-   (("JC_16": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_17": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) <= integer_of_int32(x_1)) ->
-  (((-2147483648) <= (integer_of_int32(count0) + 1)) and
-   ((integer_of_int32(count0) + 1) <= 2147483647)) ->
-  forall result1:int32.
-  (integer_of_int32(result1) = (integer_of_int32(count0) + 1)) ->
-  forall count1:int32.
-  (count1 = result1) ->
-  (((-2147483648) <= (2 * integer_of_int32(count1))) and
-   ((2 * integer_of_int32(count1)) <= 2147483647)) ->
-  forall result2:int32.
-  (integer_of_int32(result2) = (2 * integer_of_int32(count1))) ->
-  (((-2147483648) <= (integer_of_int32(result2) + 1)) and
-   ((integer_of_int32(result2) + 1) <= 2147483647)) ->
-  forall result3:int32.
-  (integer_of_int32(result3) = (integer_of_int32(result2) + 1)) ->
-  ((integer_of_int32(sum0) + integer_of_int32(result3)) <= 2147483647)
-
-goal isqrt_safety_po_9:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
-  ("JC_20": true) ->
-  ("JC_18":
-  (("JC_15": (integer_of_int32(count0) >= 0)) and
-   (("JC_16": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_17": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) <= integer_of_int32(x_1)) ->
-  (((-2147483648) <= (integer_of_int32(count0) + 1)) and
-   ((integer_of_int32(count0) + 1) <= 2147483647)) ->
-  forall result1:int32.
-  (integer_of_int32(result1) = (integer_of_int32(count0) + 1)) ->
-  forall count1:int32.
-  (count1 = result1) ->
-  (((-2147483648) <= (2 * integer_of_int32(count1))) and
-   ((2 * integer_of_int32(count1)) <= 2147483647)) ->
-  forall result2:int32.
-  (integer_of_int32(result2) = (2 * integer_of_int32(count1))) ->
-  (((-2147483648) <= (integer_of_int32(result2) + 1)) and
-   ((integer_of_int32(result2) + 1) <= 2147483647)) ->
-  forall result3:int32.
-  (integer_of_int32(result3) = (integer_of_int32(result2) + 1)) ->
-  (((-2147483648) <= (integer_of_int32(sum0) + integer_of_int32(result3))) and
-   ((integer_of_int32(sum0) + integer_of_int32(result3)) <= 2147483647)) ->
-  forall result4:int32.
-  (integer_of_int32(result4) = (integer_of_int32(sum0) + integer_of_int32(result3))) ->
-  forall sum1:int32.
-  (sum1 = result4) ->
-  (0 <= ("JC_26": (integer_of_int32(x_1) - integer_of_int32(count0))))
-
-goal isqrt_safety_po_10:
-  forall x_1:int32.
-  ("JC_3": (integer_of_int32(x_1) >= 0)) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall count:int32.
-  (count = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 1) ->
-  forall sum:int32.
-  (sum = result0) ->
-  forall count0:int32.
-  forall sum0:int32.
-  ("JC_20": true) ->
-  ("JC_18":
-  (("JC_15": (integer_of_int32(count0) >= 0)) and
-   (("JC_16": (integer_of_int32(x_1) >= sqr(integer_of_int32(count0)))) and
-    ("JC_17": (integer_of_int32(sum0) = sqr((integer_of_int32(count0) + 1))))))) ->
-  (integer_of_int32(sum0) <= integer_of_int32(x_1)) ->
-  (((-2147483648) <= (integer_of_int32(count0) + 1)) and
-   ((integer_of_int32(count0) + 1) <= 2147483647)) ->
-  forall result1:int32.
-  (integer_of_int32(result1) = (integer_of_int32(count0) + 1)) ->
-  forall count1:int32.
-  (count1 = result1) ->
-  (((-2147483648) <= (2 * integer_of_int32(count1))) and
-   ((2 * integer_of_int32(count1)) <= 2147483647)) ->
-  forall result2:int32.
-  (integer_of_int32(result2) = (2 * integer_of_int32(count1))) ->
-  (((-2147483648) <= (integer_of_int32(result2) + 1)) and
-   ((integer_of_int32(result2) + 1) <= 2147483647)) ->
-  forall result3:int32.
-  (integer_of_int32(result3) = (integer_of_int32(result2) + 1)) ->
-  (((-2147483648) <= (integer_of_int32(sum0) + integer_of_int32(result3))) and
-   ((integer_of_int32(sum0) + integer_of_int32(result3)) <= 2147483647)) ->
-  forall result4:int32.
-  (integer_of_int32(result4) = (integer_of_int32(sum0) + integer_of_int32(result3))) ->
-  forall sum1:int32.
-  (sum1 = result4) ->
-  (("JC_26": (integer_of_int32(x_1) - integer_of_int32(count1))) < ("JC_26":
-                                                                   (integer_of_int32(x_1) - integer_of_int32(count0))))
+  (("JC_15": (count0 >= 0)) and
+   (("JC_16": (x_1 >= sqr(count0))) and ("JC_17": (sum0 = sqr((count0 + 1))))))) ->
+  (sum0 <= x_1) ->
+  forall count1:int.
+  (count1 = (count0 + 1)) ->
+  forall sum1:int.
+  (sum1 = (sum0 + ((2 * count1) + 1))) ->
+  (("JC_22": (x_1 - count1)) < ("JC_22": (x_1 - count0)))
 
 goal main_ensures_default_po_1:
-  ("JC_37": true) ->
-  forall result:int32.
-  (integer_of_int32(result) = 17) ->
-  forall result0:int32.
+  ("JC_33": true) ->
+  forall result:int.
   ("JC_12":
-  (("JC_9": (integer_of_int32(result0) >= 0)) and
-   (("JC_10": (sqr(integer_of_int32(result0)) <= integer_of_int32(result))) and
-    ("JC_11":
-    (integer_of_int32(result) < sqr((integer_of_int32(result0) + 1))))))) ->
-  forall r:int32.
-  (r = result0) ->
-  (integer_of_int32(r) < 4) ->
-  ("JC_46": (false = true))
+  (("JC_9": (result >= 0)) and
+   (("JC_10": (sqr(result) <= 17)) and ("JC_11": (17 < sqr((result + 1))))))) ->
+  forall r:int.
+  (r = result) ->
+  (r < 4) ->
+  ("JC_42": (false = true))
 
 goal main_ensures_default_po_2:
-  ("JC_37": true) ->
-  forall result:int32.
-  (integer_of_int32(result) = 17) ->
-  forall result0:int32.
+  ("JC_33": true) ->
+  forall result:int.
   ("JC_12":
-  (("JC_9": (integer_of_int32(result0) >= 0)) and
-   (("JC_10": (sqr(integer_of_int32(result0)) <= integer_of_int32(result))) and
-    ("JC_11":
-    (integer_of_int32(result) < sqr((integer_of_int32(result0) + 1))))))) ->
-  forall r:int32.
-  (r = result0) ->
-  ("JC_46": ((integer_of_int32(r) < 4) -> (false = true))) ->
-  (integer_of_int32(r) > 4) ->
-  ("JC_47": (false = true))
+  (("JC_9": (result >= 0)) and
+   (("JC_10": (sqr(result) <= 17)) and ("JC_11": (17 < sqr((result + 1))))))) ->
+  forall r:int.
+  (r = result) ->
+  ("JC_42": ((r < 4) -> (false = true))) ->
+  (r > 4) ->
+  ("JC_43": (false = true))
 
 goal main_ensures_default_po_3:
-  ("JC_37": true) ->
-  forall result:int32.
-  (integer_of_int32(result) = 17) ->
-  forall result0:int32.
+  ("JC_33": true) ->
+  forall result:int.
   ("JC_12":
-  (("JC_9": (integer_of_int32(result0) >= 0)) and
-   (("JC_10": (sqr(integer_of_int32(result0)) <= integer_of_int32(result))) and
-    ("JC_11":
-    (integer_of_int32(result) < sqr((integer_of_int32(result0) + 1))))))) ->
-  forall r:int32.
-  (r = result0) ->
-  ("JC_46": ((integer_of_int32(r) < 4) -> (false = true))) ->
-  ("JC_47": ((integer_of_int32(r) > 4) -> (false = true))) ->
-  forall return:int32.
+  (("JC_9": (result >= 0)) and
+   (("JC_10": (sqr(result) <= 17)) and ("JC_11": (17 < sqr((result + 1))))))) ->
+  forall r:int.
+  (r = result) ->
+  ("JC_42": ((r < 4) -> (false = true))) ->
+  ("JC_43": ((r > 4) -> (false = true))) ->
+  forall return:int.
   (return = r) ->
-  ("JC_38": (integer_of_int32(return) = 4))
+  ("JC_34": (return = 4))
 
 goal main_safety_po_1:
-  ("JC_37": true) ->
-  forall result:int32.
-  (integer_of_int32(result) = 17) ->
-  ("JC_1": (integer_of_int32(result) >= 0))
+  ("JC_33": true) ->
+  ("JC_1": (17 >= 0))
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/isqrt_why.why             : ............#...##..#.. (19/0/0/4/0)
-total   :  23
-valid   :  19 ( 83%)
+why/isqrt_why.why             : .....?...?..?.. (12/0/3/0/0)
+total   :  15
+valid   :  12 ( 80%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   4 ( 17%)
+unknown :   3 ( 20%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -51,15 +51,18 @@ let var_name v = v.jc_var_info_name
 let var_id v = new identifier v.jc_var_info_name
 let fi_name f = f.jc_field_info_name
 
-let reg_pos ?id ?kind ?name pos = Output.reg_pos "K" ?id ?kind ?name pos
+let reg_pos ?id ?kind ?name pos = Output.old_reg_pos "K" ?id ?kind ?name pos
+
+let reg_position ?id ?kind ?name pos =
+  Output.old_reg_pos "K" ?id ?kind ?name (Loc.extract pos)
 
 let locate ?id ?kind ?name pos e =
-  let lab = reg_pos ?id ?kind ?name pos in
+  let lab = reg_position ?id ?kind ?name pos in
   new pexpr ~pos (JCPElabel(lab,e))
 
 (*s loop tags *)
 
-let get_loop_counter = 
+let get_loop_counter =
   let counter = ref 0 in
   function () -> let tag = !counter in incr counter; tag
 
@@ -113,15 +116,15 @@ let range_types acc =
           ~name: ri.jc_enum_info_name
           ~left: ri.jc_enum_info_min
           ~right: ri.jc_enum_info_max
-          ())::acc) 
+          ())::acc)
     acc [ byte_range ; short_range ; int_range ; long_range ; char_range ]
 
 
 let byte_type = JCTenum byte_range
-let short_type = JCTenum short_range 
-let int_type = JCTenum int_range 
-let long_type = JCTenum long_range 
-let char_type = JCTenum char_range 
+let short_type = JCTenum short_range
+let int_type = JCTenum int_range
+let long_type = JCTenum long_range
+let char_type = JCTenum char_range
 
 let get_enum_info t =
   match t with
@@ -138,19 +141,19 @@ let tr_base_type t =
     | Tunit -> Jc_pervasives.unit_type
     | Tboolean -> Jc_pervasives.boolean_type
     | Tinteger -> Jc_pervasives.integer_type
-    | Tshort -> 
+    | Tshort ->
 	if !Java_options.ignore_overflow then Jc_pervasives.integer_type else
 	short_type
-    | Tint -> 
+    | Tint ->
 	if !Java_options.ignore_overflow then Jc_pervasives.integer_type else
 	int_type
-    | Tlong -> 
+    | Tlong ->
 	if !Java_options.ignore_overflow then Jc_pervasives.integer_type else
 	long_type
-    | Tchar -> 
+    | Tchar ->
 	if !Java_options.ignore_overflow then Jc_pervasives.integer_type else
 	char_type
-    | Tbyte  -> 
+    | Tbyte  ->
 	if !Java_options.ignore_overflow then Jc_pervasives.integer_type else
 	byte_type
     | Treal -> Jc_pervasives.real_type
@@ -205,7 +208,7 @@ let rec interface_root = {
 }
 *)
 
-let st_interface = 
+let st_interface =
   {
     jc_struct_info_params = [];
     jc_struct_info_name = "Object/*interface*/";
@@ -221,23 +224,23 @@ let num_zero = Num.Int 0
 let num_minus_one = Num.Int (-1)
 
 let array_struct_table = Hashtbl.create 17
-      
-let rec get_array_struct pos t = 
-  let n = Java_analysis.name_type t in 
+
+let rec get_array_struct pos t =
+  let n = Java_analysis.name_type t in
   try
     (Hashtbl.find array_struct_table n : struct_info)
-  with Not_found -> 
-    eprintf "Array struct for type %a (name : %s) not found: %a@." 
+  with Not_found ->
+    eprintf "Array struct for type %a (name : %s) not found: %a@."
       Java_typing.print_type t n Loc.report_position pos;
     raise Not_found
 
 and tr_type pos t =
   match t with
-    | JTYbase t -> tr_base_type t	
+    | JTYbase t -> tr_base_type t
     | JTYnull -> JCTnull
-    | JTYclass (non_null, ci) -> 
+    | JTYclass (non_null, ci) ->
 	let st = get_class ci.class_info_name in
-	  JCTpointer 
+	  JCTpointer
 	    (JCtag(st, []), Some num_zero, if non_null then Some num_zero else None)
     | JTYinterface _ii ->
 	JCTpointer(JCtag(st_interface, []), Some num_zero,None)
@@ -246,7 +249,7 @@ and tr_type pos t =
 	JCTpointer(st,Some num_zero,
 	           (* if non_null then Some num_zero else *) None)
 *)
-	
+
     | JTYarray (non_null, t) ->
 	let st = get_array_struct pos t in
 	  JCTpointer (JCtag(st, []), Some num_zero, if non_null then Some num_minus_one else None)
@@ -275,15 +278,15 @@ let get_field fi =
   try
     Hashtbl.find fi_table fi.java_field_info_tag
   with
-      Not_found -> 
-	eprintf "Internal error: field '%s' not found@." 
+      Not_found ->
+	eprintf "Internal error: field '%s' not found@."
 	  fi.java_field_info_name;
 	assert false
 
 let create_field pos fi =
   Java_options.lprintf "Creating JC field '%s'@." fi.java_field_info_name;
   let ty = tr_type pos fi.java_field_info_type in
-  let ci = 
+  let ci =
     match fi.java_field_info_class_or_interface with
       | TypeClass ci -> get_class ci.class_info_name
       | TypeInterface ii -> get_class ii.interface_info_name
@@ -314,10 +317,10 @@ let get_static_var fi =
   try
     Hashtbl.find static_fields_table fi.java_field_info_tag
   with
-      Not_found -> 
+      Not_found ->
 	eprintf "Java_interp.get_static_var->Not_found: %s@." fi.java_field_info_name;
 	raise Not_found
- 
+
 
 (* local variables and parameters *)
 
@@ -327,8 +330,8 @@ let get_var vi =
   try
     Hashtbl.find vi_table vi.java_var_info_tag
   with
-      Not_found -> 
-	eprintf "Java_interp.get_var->Not_found: '%s', %a@." 
+      Not_found ->
+	eprintf "Java_interp.get_var->Not_found: '%s', %a@."
 	  vi.java_var_info_final_name
 	  Loc.report_position vi.java_var_info_decl_loc
 	;
@@ -354,10 +357,10 @@ let get_logic_fun fi =
   try
     Hashtbl.find logics_table fi.java_logic_info_tag
   with
-      Not_found -> 
+      Not_found ->
 	eprintf "Anomaly: cannot find logic symbol `%s'@." fi.java_logic_info_name;
 	eprintf "[";
-	Hashtbl.iter  
+	Hashtbl.iter
 	  (fun _ d -> eprintf "%s;" d.jc_logic_info_name) logics_table;
 	eprintf "]@.";
 	assert false
@@ -366,9 +369,9 @@ let tr_logic_label = function
   | LabelPre -> Jc_env.LabelPre
   | LabelHere -> Jc_env.LabelHere
   | LabelOld -> Jc_env.LabelOld
-  | LabelName s -> 
-      Jc_env.LabelName { 
-	label_info_name = s; 
+  | LabelName s ->
+      Jc_env.LabelName {
+	label_info_name = s;
 	label_info_final_name = s;
 	times_used = 0;
       }
@@ -377,14 +380,14 @@ let create_logic_fun pos fi =
   let nfi =
     match fi.java_logic_info_result_type with
       | None ->
-	  Jc_pervasives.make_pred fi.java_logic_info_name 
+	  Jc_pervasives.make_pred fi.java_logic_info_name
       | Some t ->
-	  Jc_pervasives.make_logic_fun fi.java_logic_info_name 
-	    (tr_type pos t) 
+	  Jc_pervasives.make_logic_fun fi.java_logic_info_name
+	    (tr_type pos t)
   in
   nfi.jc_logic_info_parameters <-
     List.map (create_var pos) fi.java_logic_info_parameters;
-  nfi.jc_logic_info_labels <- 
+  nfi.jc_logic_info_labels <-
     List.map tr_logic_label fi.java_logic_info_labels;
   Hashtbl.add logics_table fi.java_logic_info_tag nfi;
   nfi
@@ -402,7 +405,7 @@ let get_fun pos tag =
   try
     Hashtbl.find funs_table tag
   with
-      Not_found -> 
+      Not_found ->
 	eprintf "Java_interp.get_fun->Not_found: %a@." Loc.report_position pos;
 	raise Not_found
 
@@ -410,11 +413,11 @@ let create_fun pos tag result name params =
   let nfi =
     match result with
       | None ->
-	  Jc_pervasives.make_fun_info name 
+	  Jc_pervasives.make_fun_info name
 	    Jc_pervasives.unit_type
       | Some vi ->
 	  Jc_pervasives.make_fun_info name
-	    (tr_type pos vi.java_var_info_type) 
+	    (tr_type pos vi.java_var_info_type)
   in
   nfi.jc_fun_info_parameters <-
     List.map (fun (vi, _) -> (true,create_var pos vi)) params;
@@ -423,7 +426,7 @@ let create_fun pos tag result name params =
 
 (*s exceptions *)
 
-let exceptions_table = Hashtbl.create 17 
+let exceptions_table = Hashtbl.create 17
 
 let get_exception ty =
   match ty with
@@ -432,7 +435,7 @@ let get_exception ty =
 	  try
 	    Hashtbl.find exceptions_table ci.class_info_name
 	  with
-	      Not_found -> 
+	      Not_found ->
 		eprintf "exception %s not found@." ci.class_info_name;
 		assert false
 	end
@@ -445,7 +448,7 @@ let create_exception ty n =
   let ei =
     { jc_exception_info_name = n;
       jc_exception_info_tag = !exceptions_tag;
-      jc_exception_info_type = ty     
+      jc_exception_info_type = ty
     }
   in
   Hashtbl.add exceptions_table n ei;
@@ -454,7 +457,7 @@ let create_exception ty n =
 (*s terms *)
 
 
-let any_string = 
+let any_string =
   mkapp
     ~fun_name: "any_string"
     ~args: []
@@ -471,7 +474,7 @@ let any_string_decl =
     ()
 (**)
 
-let decl_any_string = 
+let decl_any_string =
   if !Java_options.javacard then [] else
     [ any_string_decl ]
 
@@ -487,9 +490,9 @@ let lun_op t op: [> Jc_ast.unary_op] =
   match op with
     | Unot -> `Unot
     | Uminus when (t = Tinteger || t = Tint || t = Treal) -> `Uminus
-    | Uminus -> 
+    | Uminus ->
 	begin match t with
-	  | Tstring -> assert false 
+	  | Tstring -> assert false
 	  | Tshort  -> assert false (* TODO *)
 	  | Tboolean  -> assert false (* TODO *)
 	  | Tbyte  -> assert false (* TODO *)
@@ -504,7 +507,7 @@ let lun_op t op: [> Jc_ast.unary_op] =
 	end
     | Uplus -> assert false
     | Ucompl -> `Ubw_not
-	
+
 let lbin_op _t op: [> Jc_ast.bin_op] =
   match op with
     | Bgt -> `Bgt
@@ -537,10 +540,10 @@ let lobj_op op: [> comparison_op] =
     | _ -> assert false
 
 (* non_null funs & preds *)
-    
+
 let non_null_funs = Hashtbl.create 17
 let non_null_preds = Hashtbl.create 17
-  
+
 let non_null_fun si =
   try
     Hashtbl.find non_null_funs si.jc_struct_info_name
@@ -551,13 +554,13 @@ let non_null_pred name =
   try
     Hashtbl.find non_null_preds name
   with
-      Not_found -> 
+      Not_found ->
 	Format.eprintf "Java_interp: non_null_pred(%s)@." name;
 	assert false
-	
+
 let create_non_null_fun si =
-  let fi = 
-    Jc_pervasives.make_fun_info 
+  let fi =
+    Jc_pervasives.make_fun_info
       ("non_null_" ^ si.jc_struct_info_name)
       Jc_pervasives.boolean_type
   in
@@ -565,8 +568,8 @@ let create_non_null_fun si =
     fi
 
 let create_non_null_pred si =
-  let li = 
-    Jc_pervasives.make_pred 
+  let li =
+    Jc_pervasives.make_pred
       ("Non_null_" ^ si.jc_struct_info_name)
   in
     Hashtbl.add non_null_preds si.jc_struct_info_name li;
@@ -575,12 +578,12 @@ let create_non_null_pred si =
 let dummy_pos_term ty t =
   new term ~typ:ty t
 
-let term_zero = 
-  dummy_loc_term Jc_pervasives.integer_type 
+let term_zero =
+  dummy_loc_term Jc_pervasives.integer_type
     (JCTconst (JCCinteger "0"))
 
-let term_maxint = 
-  dummy_loc_term Jc_pervasives.integer_type 
+let term_maxint =
+  dummy_loc_term Jc_pervasives.integer_type
     (JCTconst (JCCinteger "2147483647"))
 
 let term_plus_one t =
@@ -609,7 +612,7 @@ let rec term t =
             ~op:(lbin_op t op)
             ~expr2:(term e2)
             ()
-      | JTapp (fi, labels, el) -> 
+      | JTapp (fi, labels, el) ->
           mkapp
             ~fun_name: (get_logic_fun fi).jc_logic_info_name
 	    ~labels:(List.map (fun (_,l) -> tr_logic_label l) labels)
@@ -622,9 +625,9 @@ let rec term t =
             ~expr: (term t)
             ~field: (fi_name (get_field fi))
             ()
-      | JTstatic_field_access(_ci,fi) ->	  
+      | JTstatic_field_access(_ci,fi) ->
 	  mkvar ~name:(var_name (get_static_var fi)) ()
-      | JTarray_length(t) -> 
+      | JTarray_length(t) ->
 	  begin
 	    match t.java_term_type with
 	      | JTYarray (_, ty) ->
@@ -633,7 +636,7 @@ let rec term t =
 		  plus_one (mkoffset_max ~pos:t#pos ~expr:t ())
 	      | _ -> assert false
 	  end
-      | JTarray_access(t1,t2) -> 
+      | JTarray_access(t1,t2) ->
 	  begin
 	    match t1.java_term_type with
 	      | JTYarray (_, ty) ->
@@ -692,9 +695,9 @@ let rec assertion ?(reg=false) a =
           mkboolean ~value:true ()
       | JAfalse ->
           mkboolean ~value:false ()
-      | JAat(a,lab) -> 
-	  mkat 
-	    ~expr:(assertion a) 
+      | JAat(a,lab) ->
+	  mkat
+	    ~expr:(assertion a)
 	    ~label:(tr_logic_label lab)
 	    ()
       | JAnot a ->
@@ -705,7 +708,7 @@ let rec assertion ?(reg=false) a =
             ~op: (lbin_op t op)
             ~expr2: (term e2)
             ()
-      | JAbin_obj (e1, op, e2) -> (* case e1 != null *) 
+      | JAbin_obj (e1, op, e2) -> (* case e1 != null *)
 	  if op = Bne && e2.java_term_node = JTlit Null then
 	    let t1 = term e1 in
 	      match e1.java_term_type with
@@ -732,13 +735,13 @@ let rec assertion ?(reg=false) a =
             ~op: (lobj_op op)
             ~expr2: (term e2)
             ()
-      | JAapp (fi, labels, el)-> 
+      | JAapp (fi, labels, el)->
           mkapp
             ~fun_name: (get_logic_fun fi).jc_logic_info_name
 	    ~labels:(List.map (fun (_,l) -> tr_logic_label l) labels)
             ~args: (List.map term el)
             ()
-      | JAquantifier (q, vi, a)-> 
+      | JAquantifier (q, vi, a)->
 	  let vi = create_var a.java_assertion_loc vi in
           mkquantifier
             ~quantifier: (quantifier q)
@@ -746,22 +749,22 @@ let rec assertion ?(reg=false) a =
             ~vars: [var_id vi]
             ~body: (assertion a)
             ()
-      | JAimpl (a1, a2)-> 
+      | JAimpl (a1, a2)->
           mkimplies
             ~expr1: (assertion a1)
             ~expr2: (assertion a2)
             ()
-      | JAiff (a1, a2)-> 
+      | JAiff (a1, a2)->
           mkiff
             ~expr1: (assertion a1)
             ~expr2: (assertion a2)
             ()
-      | JAor (a1, a2)-> 
+      | JAor (a1, a2)->
           mkor
             ~expr1: (assertion a1)
             ~expr2: (assertion a2)
             ()
-      | JAand (a1, a2)-> 
+      | JAand (a1, a2)->
 	  mkand
             ~expr1: (assertion ~reg a1)
             ~expr2: (assertion ~reg a2)
@@ -788,9 +791,9 @@ let rec assertion ?(reg=false) a =
   in
   let a' = new pexpr ~pos:a.java_assertion_loc a'#node in
   if reg then locate a.java_assertion_loc a' else a'
-    
+
 (*let dummy_loc_assertion a =
-  { jc_assertion_loc = Loc.dummy_position; 
+  { jc_assertion_loc = Loc.dummy_position;
     jc_assertion_label = "";
     jc_assertion_node = a }
 *)
@@ -804,12 +807,12 @@ let create_static_var pos type_name fi =
 
 (*s translation of structure types *)
 
-let rec term_of_expr e = 
+let rec term_of_expr e =
   let t =
     match e.java_expr_node with
       | JElit l -> JTlit l
       | JEvar vi -> JTvar vi
-      | JEbin (e1, op, e2) -> 
+      | JEbin (e1, op, e2) ->
 	  JTbin (term_of_expr e1, Tinteger, op, term_of_expr e2)
       | JEun (op, e) -> JTun (Tinteger, op, term_of_expr e)
       | JEfield_access (e, fi) -> JTfield_access (term_of_expr e, fi)
@@ -822,7 +825,7 @@ let rec term_of_expr e =
     { java_term_loc = e.java_expr_loc;
       java_term_type = e.java_expr_type;
       java_term_node = t }
-      
+
 (* exceptions *)
 
 let tr_exception ei acc =
@@ -830,26 +833,26 @@ let tr_exception ei acc =
      ~name:ei.jc_exception_info_name
      ?arg_type:(Option_misc.map ptype_of_type ei.jc_exception_info_type)
      ()) :: acc
-  
+
 (* array_length funs *)
 
 let java_array_length_funs = Hashtbl.create 17
 
 let java_array_length_fun st =
   try
-    Hashtbl.find java_array_length_funs st.jc_struct_info_name 
+    Hashtbl.find java_array_length_funs st.jc_struct_info_name
   with
       Not_found -> assert false
 
 let create_java_array_length_fun st =
-  let fi = 
-    Jc_pervasives.make_fun_info 
+  let fi =
+    Jc_pervasives.make_fun_info
       ("java_array_length_" ^ st.jc_struct_info_name)
       Jc_pervasives.integer_type
   in
   Hashtbl.add java_array_length_funs st.jc_struct_info_name fi;
   fi
-    
+
 let array_types decls =
   Java_options.lprintf "(**********************)@.";
   Java_options.lprintf "(* array types        *)@.";
@@ -865,7 +868,7 @@ let array_types decls =
 	 jc_struct_info_root = Some object_variant;
        }
        in
-       let fi = { 
+       let fi = {
 	 jc_field_info_name = f;
 	 jc_field_info_final_name = f;
 	 jc_field_info_tag = 0 (* TODO *);
@@ -880,17 +883,17 @@ let array_types decls =
        st.jc_struct_info_fields <- [fi];
        Java_options.lprintf "%s@." st.jc_struct_info_name;
        Hashtbl.add array_struct_table n st;
-       
+
        (* predicate non_null *)
        let non_null_pred = create_non_null_pred st in
-       
+
        (* java_array_length fun *)
        let fi = create_java_array_length_fun st in
        let vi =
-	 (* type is T[0..-1] here 
+	 (* type is T[0..-1] here
 	    (i.e. access to array length has meaning for non null arrays only) *)
-         Jc_pervasives.var 
-	   (JCTpointer (JCtag (st, []), Some num_zero, Some num_minus_one)) "x" 
+         Jc_pervasives.var
+	   (JCTpointer (JCtag (st, []), Some num_zero, Some num_minus_one)) "x"
        in
        let vie = mkvar ~name:(var_name vi) () in
        let result_var = mkvar ~name:"\\result" () in
@@ -922,7 +925,7 @@ let array_types decls =
 	    ~name: (new identifier fi.jc_fun_info_name)
             ~params: args
             ~clauses: spec
-            ()) 	 
+            ())
        in
        (* non_null fun & pred *)
        let non_null_fi = create_non_null_fun st in
@@ -944,8 +947,8 @@ let array_types decls =
        ] in
        let vi =
 	 (* type is T[0..] here *)
-         Jc_pervasives.var 
-	   (JCTpointer (JCtag (st, []), Some num_zero, None)) "x" 
+         Jc_pervasives.var
+	   (JCTpointer (JCtag (st, []), Some num_zero, None)) "x"
        in
        let args = [false, ptype_of_type vi.jc_var_info_type, var_name vi] in
        let largs = [ptype_of_type vi.jc_var_info_type, var_name vi] in
@@ -980,22 +983,22 @@ let array_types decls =
 	     None
            end st.jc_struct_info_fields)
           ()) :: acc,
-       array_length_fun :: 
+       array_length_fun ::
 	 non_null_fun :: decls)
     Java_analysis.array_struct_table
-    ([], 
+    ([],
      ((mktag_def ~name:"interface" ()) ::
 	(mkvariant_type_def
            ~name:"interface"
            ~tags:[ new identifier "interface" ]
            ())
-      ::if !Java_options.minimal_class_hierarchy then [] 
+      ::if !Java_options.minimal_class_hierarchy then []
       else [ mkvariant_type_def
                ~name:"Object"
                ~tags:[ new identifier "Object" ]
                () ]
      ), decls)
-    
+
 
 (*****************
 
@@ -1011,7 +1014,7 @@ let rec location_set logic_label t =
       | JTapp (_, _, _) -> assert false (* TODO *)
       | JTvar vi ->
           mkvar ~name:(var_name (get_var vi)) ()
-      | JTfield_access(t,fi) -> 
+      | JTfield_access(t,fi) ->
 	  begin match logic_label with
 	    | None -> assert false
 	    | Some lab ->
@@ -1024,7 +1027,7 @@ let rec location_set logic_label t =
       | JTstatic_field_access(_ci,fi) ->
 	  mkvar ~name:(var_name (get_static_var fi)) ()
       | JTarray_length(_t) -> assert false (* TODO *)
-      | JTarray_access(t1,t2) -> 
+      | JTarray_access(t1,t2) ->
 	  begin
 	    match t1.java_term_type with
 	      | JTYarray (_, ty) ->
@@ -1044,7 +1047,7 @@ let rec location_set logic_label t =
 		  end
 	      | _ -> assert false
 	  end
-      | JTarray_range(t1,t2,t3) -> 
+      | JTarray_range(t1,t2,t3) ->
 	  begin
 	    match t1.java_term_type with
 	      | JTYarray (_, ty) ->
@@ -1077,7 +1080,7 @@ let location logic_label t =
       | JTapp (_, _, _) -> assert false (* TODO *)
       | JTvar vi ->
           mkvar ~name:(var_name (get_var vi)) ()
-      | JTfield_access(t,fi) -> 
+      | JTfield_access(t,fi) ->
 	  begin match logic_label with
 	    | None -> assert false
 	    | Some lab ->
@@ -1090,7 +1093,7 @@ let location logic_label t =
       | JTstatic_field_access(_ci,fi) ->
 	  mkvar ~name:(var_name (get_static_var fi)) ()
       | JTarray_length(_t) -> assert false (* TODO *)
-      | JTarray_access(t1,t2) -> 
+      | JTarray_access(t1,t2) ->
 	  begin
 	    match t1.java_term_type with
 	      | JTYarray (_, ty) ->
@@ -1110,7 +1113,7 @@ let location logic_label t =
 		  end
 	      | _ -> assert false
 	  end
-      | JTarray_range(t1,t2,t3) -> 
+      | JTarray_range(t1,t2,t3) ->
 	  begin
 	    match t1.java_term_type with
 	      | JTYarray (_, ty) ->
@@ -1134,7 +1137,7 @@ let location logic_label t =
       | JTat _ -> assert false (* TODO, maybe change logic_label ? *)
       | JTcast(_ty,_t) -> assert false (* TODO *)
       | JTif _ -> assert false (* TODO *)
-  
+
 
 let un_op op: [> Jc_ast.unary_op] =
   match op with
@@ -1153,7 +1156,7 @@ let bin_op op: [> Jc_ast.bin_op] =
     | Biff -> assert false
     | Bor -> `Blor
     | Band -> `Bland
-    | Bimpl -> assert false 
+    | Bimpl -> assert false
     | Bgt -> `Bgt
     | Bne -> `Bneq
     | Beq -> `Beq
@@ -1194,13 +1197,13 @@ let rec expr ?(reg=false) e =
       | JElit (String _s) -> any_string
       | JElit l ->
           mkconst ~const:(lit l) ()
-      | JEincr_local_var(op,v) -> 
+      | JEincr_local_var(op,v) ->
 	  reg := true;
           mkunary
             ~op: (incr_op op)
             ~expr: (mkvar ~name:(var_name (get_var v)) ())
             ()
-      | JEincr_field(op,e1,fi) -> 
+      | JEincr_field(op,e1,fi) ->
 	  reg := true;
           mkincr_heap
             ~op: (incr_op op)
@@ -1227,9 +1230,9 @@ let rec expr ?(reg=false) e =
                     ()
 	      | _ -> assert false
 	  end
-      | JEun (op, e1) -> 
+      | JEun (op, e1) ->
 	  let e1 = expr e1 in
-	  reg := true;	  
+	  reg := true;
 	  int_cast e.java_expr_loc e.java_expr_type
             (mkunary ~op:(un_op op) ~expr:e1 ())
       | JEbin (e1, op, e2) (* case e1 == null *)
@@ -1244,7 +1247,7 @@ let rec expr ?(reg=false) e =
             mknot
               ~expr:
               (mkapp
-                 (* Romain: pourquoi non_null_fun et pas null_fun ? 
+                 (* Romain: pourquoi non_null_fun et pas null_fun ?
 		    Claude: parce que mknot au-dessus *)
                  ~fun_name: (non_null_fun st).jc_fun_info_name
                  ~args: [e]
@@ -1270,7 +1273,7 @@ let rec expr ?(reg=false) e =
 	  reg := true;
 	  int_cast e.java_expr_loc e.java_expr_type
             (mkbinary ~expr1:e1 ~op:(bin_op op) ~expr2:e2 ())
-      | JEif (e1,e2,e3) -> 
+      | JEif (e1,e2,e3) ->
           mkif
             ~condition: (expr e1)
             ~expr_then: (expr e2)
@@ -1280,10 +1283,10 @@ let rec expr ?(reg=false) e =
           mkvar ~name:(var_name (get_var vi)) ()
       | JEstatic_field_access(_ci,fi) ->
 	  mkvar ~name:(var_name (get_static_var fi)) ()
-      | JEfield_access(e1,fi) -> 
+      | JEfield_access(e1,fi) ->
 	  reg := true;
 	  mkderef ~expr:(expr e1) ~field:(fi_name (get_field fi)) ()
-      | JEarray_length e -> 
+      | JEarray_length e ->
 	  begin
 	    match e.java_expr_type with
 	      | JTYarray (_, ty) ->
@@ -1295,7 +1298,7 @@ let rec expr ?(reg=false) e =
                     ()
 	      | _ -> assert false
 	  end
-      | JEarray_access(e1,e2) -> 
+      | JEarray_access(e1,e2) ->
 	  begin
 	    match e1.java_expr_type with
 	      | JTYarray (_, ty) ->
@@ -1400,21 +1403,21 @@ let rec expr ?(reg=false) e =
                     ()
 	      | _ -> assert false
 	  end
-      | JEcall(e1,mi,args) -> 
+      | JEcall(e1,mi,args) ->
 	  reg := true;
           mkapp
             ~fun_name:
             (get_fun e.java_expr_loc mi.method_info_tag).jc_fun_info_name
             ~args: (List.map expr (e1 :: args))
             ()
-      | JEconstr_call (e1, ci, args) -> 
+      | JEconstr_call (e1, ci, args) ->
 	  reg := true;
           mkapp
             ~fun_name:
             (get_fun e.java_expr_loc ci.constr_info_tag).jc_fun_info_name
             ~args: (List.map expr (e1 :: args))
             ()
-      | JEstatic_call(mi,args) -> 
+      | JEstatic_call(mi,args) ->
 	  reg := true;
           mkapp
             ~fun_name:
@@ -1456,7 +1459,7 @@ let rec expr ?(reg=false) e =
       | JEcast(ty,e1) ->
 	  begin
 	    match ty with
-	      | JTYbase _t -> 
+	      | JTYbase _t ->
 		  if !Java_options.ignore_overflow then expr e1 else begin
                     reg := true;
                     mkcast
@@ -1465,11 +1468,11 @@ let rec expr ?(reg=false) e =
                       ()
                   end
 	      | JTYclass(_,_ci) ->
-		  reg := true;	    
-                  mkcast ~expr:(expr e1) 
+		  reg := true;
+                  mkcast ~expr:(expr e1)
 		    ~typ: (ptype_of_type (tr_type e.java_expr_loc ty))
 		    ()
-	      | JTYinterface _ii -> 
+	      | JTYinterface _ii ->
 		  begin
 		    match e1.java_expr_type with
 		      | JTYclass _ -> expr e1 (* TODO *)
@@ -1482,11 +1485,11 @@ let rec expr ?(reg=false) e =
 *)
 		  end
 	      | JTYarray (_, ty) ->
-		  reg := true;	    
-                  mkcast ~expr:(expr e1) 
+		  reg := true;
+                  mkcast ~expr:(expr e1)
 		    ~typ: (ptype_of_type (tr_type e.java_expr_loc ty))
 		    ()
-	      | JTYnull | JTYlogic _ -> assert false 
+	      | JTYnull | JTYlogic _ -> assert false
 	  end
       | JEinstanceof(e,ty) ->
 	  begin
@@ -1507,7 +1510,7 @@ let tr_initializer ty e =
     | JIexpr e -> expr ~reg:true e
     | JIlist il ->
 	begin match ty with
-	  | JTYarray (_, ty) -> 
+	  | JTYarray (_, ty) ->
 	      let si = get_array_struct Loc.dummy_position ty in
 		mkalloc
 		  ~count: (mkint ~value:(List.length il) ())
@@ -1519,7 +1522,7 @@ let tr_initializer ty e =
 
 (*
 let dummy_loc_statement s =
-  { jc_tstatement_loc = Loc.dummy_position; 
+  { jc_tstatement_loc = Loc.dummy_position;
     jc_tstatement_node = s }
 
 let make_block l =
@@ -1548,15 +1551,15 @@ let variant v =
   match v with
     | None -> None
     | Some(t,None) -> Some(reg_term t,None)
-    | Some(t,Some fi) -> 
+    | Some(t,Some fi) ->
         Some(reg_term t,Some (new identifier fi.java_logic_info_name))
 
 let loop_annot annot =
   let invariant = reg_assertion annot.loop_inv in
   let behs_inv =
-    List.map 
-      (fun ((loc,id),a) -> 
-	 ([new identifier ~pos:loc id],Some (reg_assertion a), None)) 
+    List.map
+      (fun ((loc,id),a) ->
+	 ([new identifier ~pos:loc id],Some (reg_assertion a), None))
       annot.behs_loop_inv
   in
   let v = variant annot.loop_var in
@@ -1590,13 +1593,13 @@ let rec statement s =
           mkvoid ()
       | JSlabel(lab,s) ->
 	  mklabel lab (statement s) ()
-      | JSbreak label -> 
+      | JSbreak label ->
           mkbreak ?label ()
-      | JScontinue label -> 
+      | JScontinue label ->
           mkcontinue ?label ()
       | JSreturn_void ->
           mkreturn ()
-      | JSreturn e -> 
+      | JSreturn e ->
           let _ = tr_type e.java_expr_loc e.java_expr_type in
 	  mkreturn ~expr:(expr e) ()
       | JSthrow e ->
@@ -1606,10 +1609,10 @@ let rec statement s =
 	  let li = non_null_pred "Object" in
 	  let tmp_name = "java_thrown_exception" in
 	  let tmp_var = mkvar ~name:"java_thrown_exception" () in
-          let ass = 
-	    mkassert 
-	      ~expr:(mkapp ~fun_name:li.jc_logic_info_name 
-		       ~args:[tmp_var] ()) () 
+          let ass =
+	    mkassert
+	      ~expr:(mkapp ~fun_name:li.jc_logic_info_name
+		       ~args:[tmp_var] ()) ()
 	  in
           let th =
 	    mkthrow
@@ -1625,7 +1628,7 @@ let rec statement s =
             ()
       | JSblock l ->
           mkblock ~exprs:(List.map statement l)	()
-      | JSvar_decl (vi, init, s) -> 
+      | JSvar_decl (vi, init, s) ->
 	  let ty = vi.java_var_info_type in
 	  let vi = create_var s.java_statement_loc vi in
           mklet
@@ -1642,7 +1645,7 @@ let rec statement s =
             ()
       | JSdo (s, annot, e) ->
 	  let (behaviors, variant) = loop_annot annot in
-	  let while_expr = 
+	  let while_expr =
 	    mkwhile ~behaviors
 	      ?variant ~condition:(expr e) ~body:(statement s) ()
 	  in
@@ -1689,24 +1692,24 @@ let rec statement s =
                  ())
 	  in mkblock ~exprs:[res] ()
       | JSexpr e -> expr e
-      | JSassert(forid,id,e) -> 
+      | JSassert(forid,id,e) ->
 	  let pos = e.java_assertion_loc in
 	  let e' = reg_assertion e in
-	  let behs = 
+	  let behs =
 	    Option_misc.fold_left
-	      (fun acc id -> 
+	      (fun acc id ->
 		 (new identifier id)::acc)
 	      [] forid
 	  in
           let e = mkassert ~behs:behs ~expr:e' () in
 	  locate ?id pos e
-      | JSswitch(e,l) -> 
+      | JSswitch(e,l) ->
           mkswitch ~expr:(expr e) ~cases:(List.map switch_case l) ()
       | JStry(s1, catches, finally) ->
           mktry
             ~expr: (block s1)
             ~catches:
-            (List.map 
+            (List.map
 	       (fun (vi,s2) ->
 		  let e = get_exception vi.java_var_info_type in
 		  let vti = create_var s.java_statement_loc vi in
@@ -1759,24 +1762,24 @@ let tr_method mi req dec behs b acc =
     (fun vi -> (true, ptype_of_type vi.jc_var_info_type, (var_name vi)))
     params
   in
-  let return_type = 
-    Option_misc.map 
-      (fun vi -> 	
- 	 let _nvi = create_var Loc.dummy_position vi in 
- 	 vi.java_var_info_type) 
-      mi.method_info_result 
+  let return_type =
+    Option_misc.map
+      (fun vi ->
+ 	 let _nvi = create_var Loc.dummy_position vi in
+ 	 vi.java_var_info_type)
+      mi.method_info_result
   in
-  let behaviors = 
-    List.map (fun beh -> Jc_ast.JCCbehavior (behavior beh)) behs 
+  let behaviors =
+    List.map (fun beh -> Jc_ast.JCCbehavior (behavior beh)) behs
   in
-  let nfi = 
-    create_fun Loc.dummy_position 
-      mi.method_info_tag mi.method_info_result 
+  let nfi =
+    create_fun Loc.dummy_position
+      mi.method_info_tag mi.method_info_result
       mi.method_info_trans_name mi.method_info_parameters
   in
   let body = Option_misc.map block b in
-  let _ = 
-    reg_pos ~id:nfi.jc_fun_info_name 
+  let _ =
+    reg_pos ~id:nfi.jc_fun_info_name
       ~name:("Method " ^ mi.method_info_name)
       mi.method_info_loc
   in
@@ -1803,7 +1806,7 @@ let tr_method mi req dec behs b acc =
     ()
   in def::acc
      *)
-    
+
 let tr_method_spec mi req dec behs b acc =
   let java_params = mi.method_info_parameters in
   let params =
@@ -1817,23 +1820,23 @@ let tr_method_spec mi req dec behs b acc =
     (fun vi -> (true, ptype_of_type vi.jc_var_info_type, (var_name vi)))
     params
   in
-  let return_type = 
-    Option_misc.map 
-      (fun vi -> 	
- 	 let _nvi = create_var Loc.dummy_position vi in 
- 	 vi.java_var_info_type) 
-      mi.method_info_result 
+  let return_type =
+    Option_misc.map
+      (fun vi ->
+ 	 let _nvi = create_var Loc.dummy_position vi in
+ 	 vi.java_var_info_type)
+      mi.method_info_result
   in
-  let behaviors = 
-    List.map (fun beh -> Jc_ast.JCCbehavior (behavior beh)) behs 
+  let behaviors =
+    List.map (fun beh -> Jc_ast.JCCbehavior (behavior beh)) behs
   in
-  let nfi = 
-    create_fun Loc.dummy_position 
-      mi.method_info_tag mi.method_info_result 
+  let nfi =
+    create_fun Loc.dummy_position
+      mi.method_info_tag mi.method_info_result
       mi.method_info_trans_name mi.method_info_parameters
   in
-  let _ = 
-    reg_pos ~id:nfi.jc_fun_info_name 
+  let _ =
+    reg_position ~id:nfi.jc_fun_info_name
       ~name:("Method " ^ mi.method_info_name)
       mi.method_info_loc
   in
@@ -1863,11 +1866,11 @@ let tr_method_body (result_type,nfi,params,clauses,b) acc =
     ?body
     ()
   in def::acc
-    
+
 let default_base_value t =
   match t with
     | Tshort | Tbyte | Tchar | Tint | Tlong ->
-	JCCinteger "0"  
+	JCCinteger "0"
     | Tboolean -> JCCboolean false
     | Tfloat | Tdouble -> JCCreal "0.0"
     | Tinteger | Treal -> assert false
@@ -1892,47 +1895,47 @@ let init_field this fi =
 let tr_constr ci req behs b acc =
   let params = List.map
     (fun (vi, _) -> create_var Loc.dummy_position vi)
-    ci.constr_info_parameters 
+    ci.constr_info_parameters
   in
   let this =
     match ci.constr_info_this with
       | None -> assert false
-      | Some vi -> (create_var Loc.dummy_position vi) 
+      | Some vi -> (create_var Loc.dummy_position vi)
   in
-  let nfi = 
+  let nfi =
     create_fun Loc.dummy_position ci.constr_info_tag None
       ci.constr_info_trans_name ci.constr_info_parameters
   in
   let body = statements b
 (*
-@ 
+@
     [dummy_loc_statement (JCTSreturn(this.jc_var_info_type,
-				     dummy_loc_expr 
+				     dummy_loc_expr
 				       this.jc_var_info_type
-				       (JCTEvar this)))] 
+				       (JCTEvar this)))]
 *)
   in
-(* NO: TODO 
-  let body = 
+(* NO: TODO
+  let body =
     dummy_loc_statement (JCTSdecl(this,None,make_block body))
   in
   *)
   let fields = ci.constr_info_class.class_info_fields in
-  let body = 
+  let body =
     List.fold_right
-      (fun fi acc -> 
+      (fun fi acc ->
 	 if fi.java_field_info_is_static then acc else
 	 try
 	   init_field (mkvar ~name:(var_name this) ()) fi::acc
 	 with Assert_failure _ -> acc)
 	fields body
   in
-  let _ = 
-    reg_pos ~id:nfi.jc_fun_info_name 
+  let _ =
+    reg_pos ~id:nfi.jc_fun_info_name
       ~name:("Constructor of class "^ci.constr_info_class.class_info_name)
-      ci.constr_info_loc 
+      ci.constr_info_loc
   in
-  let params = 
+  let params =
     (* false because this not yet valid *)
     (false, ptype_of_type this.jc_var_info_type, var_name this)
     ::
@@ -1941,8 +1944,8 @@ let tr_constr ci req behs b acc =
       params
   in
   let requires = mkrequires_clause (reg_assertion_option req) in
-  let behaviors = 
-    List.map (fun beh -> Jc_ast.JCCbehavior (behavior beh)) behs 
+  let behaviors =
+    List.map (fun beh -> Jc_ast.JCCbehavior (behavior beh)) behs
   in
   let def = mkfun_def
     ~name: (new identifier nfi.jc_fun_info_name)
@@ -1956,23 +1959,23 @@ let tr_constr ci req behs b acc =
 let tr_constr_spec ci req behs b acc =
   let params = List.map
     (fun (vi, _) -> create_var Loc.dummy_position vi)
-    ci.constr_info_parameters 
+    ci.constr_info_parameters
   in
   let this =
     match ci.constr_info_this with
       | None -> assert false
-      | Some vi -> (create_var Loc.dummy_position vi) 
+      | Some vi -> (create_var Loc.dummy_position vi)
   in
-  let nfi = 
+  let nfi =
     create_fun Loc.dummy_position ci.constr_info_tag None
       ci.constr_info_trans_name ci.constr_info_parameters
   in
-  let _ = 
-    reg_pos ~id:nfi.jc_fun_info_name 
+  let _ =
+    reg_position ~id:nfi.jc_fun_info_name
       ~name:("Constructor of class "^ci.constr_info_class.class_info_name)
-      ci.constr_info_loc 
+      ci.constr_info_loc
   in
-  let params = 
+  let params =
     (* false because this not yet valid *)
     (false, ptype_of_type this.jc_var_info_type, var_name this)
     ::
@@ -1981,30 +1984,30 @@ let tr_constr_spec ci req behs b acc =
       params
   in
   let requires = mkrequires_clause (reg_assertion_option req) in
-  let behaviors = 
-    List.map (fun beh -> Jc_ast.JCCbehavior (behavior beh)) behs 
+  let behaviors =
+    List.map (fun beh -> Jc_ast.JCCbehavior (behavior beh)) behs
   in
   (ci,this,nfi,params,requires::behaviors,b) :: acc
 
 let tr_constr_body (ci,this,nfi,params,clauses,b) acc =
   let body = statements b
     (*
-      @ 
+      @
       [dummy_loc_statement (JCTSreturn(this.jc_var_info_type,
-      dummy_loc_expr 
+      dummy_loc_expr
       this.jc_var_info_type
-      (JCTEvar this)))] 
+      (JCTEvar this)))]
     *)
   in
-  (* NO: TODO 
-     let body = 
+  (* NO: TODO
+     let body =
      dummy_loc_statement (JCTSdecl(this,None,make_block body))
      in
   *)
   let fields = ci.constr_info_class.class_info_fields in
-  let body = 
+  let body =
     List.fold_right
-      (fun fi acc -> 
+      (fun fi acc ->
 	 if fi.java_field_info_is_static then acc else
 	   try
 	     init_field (mkvar ~name:(var_name this) ()) fi::acc
@@ -2018,7 +2021,7 @@ let tr_constr_body (ci,this,nfi,params,clauses,b) acc =
     ~clauses
     ()
   in def :: acc
-       
+
 let default_label l =
   match l with
     | [l] -> Some l
@@ -2038,8 +2041,8 @@ let tr_non_null_logic_fun () =
     ~params: [ptype_of_type vi.jc_var_info_type, var_name vi]
     ~body: offset_maxa
     ()
-      
-let tr_logic_fun fi (b : logic_decl_body) acc =   
+
+let tr_logic_fun fi (b : logic_decl_body) acc =
   if b = `Builtin then acc else
   let nfi = create_logic_fun Loc.dummy_position fi in
   let def_ =
@@ -2054,17 +2057,17 @@ let tr_logic_fun fi (b : logic_decl_body) acc =
   in
   let def = match b with
     | `Assertion a -> def_ ~body:(assertion a) ()
-    | `Inductive l -> 
+    | `Inductive l ->
 	def_ ~inductive:
-	  (List.map 
-	     (fun ((loc,id),labels,a) -> 
+	  (List.map
+	     (fun ((loc,id),labels,a) ->
 		(new identifier ~pos:loc id,
 		 List.map tr_logic_label labels,
-		 assertion a)) l) 
+		 assertion a)) l)
 	  ()
     | `Term t -> def_ ~body:(term t) ()
     | `None -> def_ ()
-    | `Reads l -> 
+    | `Reads l ->
 	let logic_label = default_label fi.java_logic_info_labels in
         def_ ~reads:(List.map (location logic_label) l) ()
     | `Builtin -> assert false
@@ -2072,7 +2075,12 @@ let tr_logic_fun fi (b : logic_decl_body) acc =
 
 (*s axioms *)
 
-let tr_axiom id is_axiom lab p acc =
+let tr_axiom id is_axiom loc lab p acc =
+  let (_ : string) =
+    reg_pos ~id
+      ~name:("Lemma " ^ id)
+      loc
+  in
   let def = mklemma_def
     ~name: id
     ~axiom:is_axiom
@@ -2086,7 +2094,7 @@ let tr_axiomatic_decl acc d =
   match d with
     | Aaxiom(id,is_axiom,labels,a) -> acc
     | Atype _ -> assert false
-    | Areads (fi, r) -> tr_logic_fun fi (JReads r) 
+    | Areads (fi, r) -> tr_logic_fun fi (JReads r)
     | Aind_def (_, _) -> assert false
     | Afun_def (_, _) -> assert false
     | Apred_def (_, _) -> assert false
@@ -2109,18 +2117,18 @@ let tr_axiomatic_axioms id l acc =
 let tr_axiomatic_decl acc d =
   match d with
     | Aaxiom(_id,_is_axiom,_labels,_a) -> acc
-    | Atype s -> 
+    | Atype s ->
 	Java_options.lprintf "translating logic type %s@." s;
 	tr_logic_type s acc
-    | Adecl(fi, b) -> 
+    | Adecl(fi, b) ->
 	Java_options.lprintf "translating axiomatic function %s@." fi.java_logic_info_name;
-	tr_logic_fun fi b acc 
+	tr_logic_fun fi b acc
 
 let tr_axiomatic_axiom acc d =
   match d with
-    | Aaxiom(id,is_axiom,labels,a) -> 
+    | Aaxiom(id,is_axiom,labels,a) ->
 	Java_options.lprintf "translating axiom %s@." id;
-	tr_axiom id is_axiom labels a acc
+	tr_axiom id is_axiom Loc.dummy_floc labels a acc
     | Atype _s -> acc
     | Adecl(_fi, _b) -> acc
 
@@ -2135,31 +2143,31 @@ let tr_field type_name acc fi =
   let vi_ty = vi.jc_var_info_type in
   let fi_ty = fi.java_field_info_type in
   if fi.java_field_info_is_final then
-    let logic_body, axiom_body = 
+    let logic_body, axiom_body =
       try
-	let e = 
+	let e =
 	  Hashtbl.find Java_typing.field_initializer_table fi.java_field_info_tag
 	in
 	let values =
 	  Hashtbl.find Java_typing.final_field_values_table fi.java_field_info_tag
 	in
 	let get_value value = match fi_ty with
-	  | JTYarray (_,JTYbase t) | JTYbase t -> 
+	  | JTYarray (_,JTYbase t) | JTYbase t ->
 	      begin match t with
-		| Tshort | Tbyte | Tchar | Tint 
-		| Tlong | Tdouble | Tinteger -> 
+		| Tshort | Tbyte | Tchar | Tint
+		| Tlong | Tdouble | Tinteger ->
 		    JCCinteger (Num.string_of_num value)
-		| Tboolean -> 
+		| Tboolean ->
 		    let b = match Num.string_of_num value with
 		      | "0" -> false
 		      | "1" -> true
 		      | _ -> assert false (* should never happen *)
 		    in JCCboolean b
-		| Tfloat | Treal -> assert false (* TODO *) 
+		| Tfloat | Treal -> assert false (* TODO *)
 		| Tstring -> assert false (* TODO *)
 		| Tunit -> assert false
 	      end
-	  | JTYnull | JTYclass _ | JTYinterface _ | JTYarray _ | JTYlogic _ -> 
+	  | JTYnull | JTYclass _ | JTYinterface _ | JTYarray _ | JTYlogic _ ->
 	      assert false
 	in
 	match e with
@@ -2196,7 +2204,7 @@ let tr_field type_name acc fi =
                      ())
                   ()
 	      in
-	      let fi' = List.hd si.jc_struct_info_fields in 
+	      let fi' = List.hd si.jc_struct_info_fields in
 	      let a, _ = List.fold_left2 begin fun (acc, cpt) init n ->
 		match init with
 		  | JIexpr e ->
@@ -2224,22 +2232,22 @@ let tr_field type_name acc fi =
       with Not_found ->
 	Java_options.lprintf
           "Warning: final field '%s' of %a has no known value@."
-	  fi.java_field_info_name 
-	  Java_typing.print_type_name 
+	  fi.java_field_info_name
+	  Java_typing.print_type_name
 	  fi.java_field_info_class_or_interface;
 	None, None
     in
     let def1 =
       mklogic_var_def
         ~typ: (ptype_of_type vi_ty)
-        ~name: (var_name vi) 
-	?body:logic_body 
+        ~name: (var_name vi)
+	?body:logic_body
 	()
     in
     match logic_body,axiom_body with
       | (Some _,None) ->
-	  def1 :: acc 
-      | (None, _ (* Some a *)) -> 
+	  def1 :: acc
+      | (None, _ (* Some a *)) ->
 	  let ax =
           mkaxiomatic
 	    ~name: (fi.java_field_info_name^"_theory")
@@ -2258,8 +2266,8 @@ let tr_field type_name acc fi =
 	  ax :: acc
       | _ -> assert false
   else
-    let e = 
-      try match Hashtbl.find Java_typing.field_initializer_table 
+    let e =
+      try match Hashtbl.find Java_typing.field_initializer_table
 	fi.java_field_info_tag with
 	  | None -> None
 	  | Some e -> Some (tr_initializer fi_ty e)
@@ -2277,23 +2285,23 @@ let tr_field type_name acc fi =
 (* class *)
 
 let tr_class ci acc0 acc =
-  let non_final_fields = 
+  let non_final_fields =
     List.filter
       (fun fi -> not fi.java_field_info_is_final)
       ci.class_info_fields
   in
-  let (static_fields, fields) = 
-    List.partition 
+  let (static_fields, fields) =
+    List.partition
       (fun fi -> fi.java_field_info_is_static)
       non_final_fields
   in
   let super =
     let superclass = Option_misc.map (fun ci -> ci.class_info_name, [])
-      ci.class_info_extends 
+      ci.class_info_extends
     in
-    match superclass with 
-      | None -> 
-	  if ci.class_info_name = "Object" 
+    match superclass with
+      | None ->
+	  if ci.class_info_name = "Object"
 	  then None
           else Some ("Object", [])
       | _ -> superclass
@@ -2302,14 +2310,14 @@ let tr_class ci acc0 acc =
     (* create exceptions if subclass of Exception *)
     begin
       if ci.class_info_is_exception then
-	ignore (create_exception 
+	ignore (create_exception
 		  (Some (tr_type Loc.dummy_position (JTYclass (false, ci))))
 		  ci.class_info_name);
     end;
     let jc_fields = List.map (create_field Loc.dummy_position) fields in
       (* non_null fun & pred *)
     let si = get_class ci.class_info_name in
-    let acc = 
+    let acc =
       if ci.class_info_name = "Object" then
 	let non_null_fi = create_non_null_fun si in
 	let vi = Jc_pervasives.var
@@ -2354,12 +2362,12 @@ let tr_class ci acc0 acc =
             ~tags:[ new identifier ci.class_info_name ]
             ())::acc0 else acc0)
       , acc
-	
+
 (* interfaces *)
 
-let tr_interface ii acc = 
-  let fields = 
-    List.filter 
+let tr_interface ii acc =
+  let fields =
+    List.filter
       (fun fi -> not fi.java_field_info_is_static)
       ii.interface_info_fields
   in
@@ -2368,33 +2376,33 @@ let tr_interface ii acc =
 
 let tr_class_or_interface ti acc0 acc =
   match ti with
-    | TypeClass ci -> 
+    | TypeClass ci ->
 	Java_options.lprintf "Creating JC structure for class '%s'@."
           ci.class_info_name;
 	tr_class ci acc0 acc
-    | TypeInterface ii -> 
+    | TypeInterface ii ->
 	Java_options.lprintf "Handling interface '%s'@." ii.interface_info_name;
 	(acc0, tr_interface ii acc)
 
 let tr_final_static_fields ti acc =
     match ti with
-      | TypeClass ci -> 
-	  let final_static_fields = 
+      | TypeClass ci ->
+	  let final_static_fields =
 	    List.filter
-	      (fun fi -> 
+	      (fun fi ->
 		 fi.java_field_info_is_final && fi.java_field_info_is_static)
 	      ci.class_info_fields
 	  in
 	    List.fold_left (tr_field ci.class_info_name) acc final_static_fields
-      | TypeInterface ii -> 
-	  List.fold_left 
-	    (tr_field ii.interface_info_name) 
-	    acc ii.interface_info_final_fields 
+      | TypeInterface ii ->
+	  List.fold_left
+	    (tr_field ii.interface_info_name)
+	    acc ii.interface_info_final_fields
 
 let tr_invariants ci id invs decls =
   let invs =
     List.map
-      (fun ((_, s), a) -> 
+      (fun ((_, s), a) ->
 	 let vi = create_var Loc.dummy_position id in
 	 new identifier s, var_name vi, assertion a)
       invs
@@ -2413,12 +2421,12 @@ let tr_invariants ci id invs decls =
 
 (* static invariants *)
 
-let tr_static_invariant (s, a) = 
+let tr_static_invariant (s, a) =
   mkglobal_inv_def ~name:s ~body:(assertion a) ()
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "LC_ALL=C make -C .. byte"
-End: 
+End:
 *)
 

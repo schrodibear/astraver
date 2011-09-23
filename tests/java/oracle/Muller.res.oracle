@@ -2,29 +2,31 @@
 /**************************************************************************/
 /*                                                                        */
 /*  The Why platform for program certification                            */
-/*  Copyright (C) 2002-2008                                               */
-/*    Romain BARDOU                                                       */
-/*    Jean-Francois COUCHOT                                               */
-/*    Mehdi DOGGUY                                                        */
-/*    Jean-Christophe FILLIATRE                                           */
-/*    Thierry HUBERT                                                      */
-/*    Claude MARCHE                                                       */
-/*    Yannick MOY                                                         */
-/*    Christine PAULIN                                                    */
-/*    Yann REGIS-GIANAS                                                   */
-/*    Nicolas ROUSSET                                                     */
-/*    Xavier URBAIN                                                       */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
 /*                                                                        */
 /*  This software is free software; you can redistribute it and/or        */
-/*  modify it under the terms of the GNU General Public                   */
-/*  License version 2, as published by the Free Software Foundation.      */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
 /*                                                                        */
 /*  This software is distributed in the hope that it will be useful,      */
 /*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
 /*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
-/*                                                                        */
-/*  See the GNU General Public License version 2 for more details         */
-/*  (enclosed in the file GPL).                                           */
 /*                                                                        */
 /**************************************************************************/
 
@@ -37,11 +39,11 @@
   @    i >= j ==> num_of_pos(i,j,t) == 0;
   @  axiom num_of_pos_true_case{L} :
   @   \forall integer i j k, int t[];
-  @       i < j && t[j-1] > 0 ==> 
+  @       i < j && t[j-1] > 0 ==>
   @         num_of_pos(i,j,t) == num_of_pos(i,j-1,t) + 1;
   @  axiom num_of_pos_false_case{L} :
   @   \forall integer i j k, int t[];
-  @       i < j && ! (t[j-1] > 0) ==> 
+  @       i < j && ! (t[j-1] > 0) ==>
   @         num_of_pos(i,j,t) == num_of_pos(i,j-1,t);
   @ }
   @*/
@@ -63,7 +65,7 @@
 
 /*@ lemma num_of_pos_strictly_increasing{L} :
   @   \forall integer i n, int t[];
-  @       0 <= i < n && t[i] > 0 ==> 
+  @       0 <= i < n && t[i] > 0 ==>
   @       num_of_pos(0,i,t) < num_of_pos(0,n,t);
   @*/
 
@@ -73,21 +75,21 @@ public class Muller {
       @*/
     public static int[] m(int t[]) {
 	int count = 0;
-	
+
 	/*@ loop_invariant
-	  @    0 <= i <= t.length && 
-	  @    0 <= count <= i && 
-	  @    count == num_of_pos(0,i,t) ; 
+	  @    0 <= i <= t.length &&
+	  @    0 <= count <= i &&
+	  @    count == num_of_pos(0,i,t) ;
 	  @ loop_variant t.length - i;
 	  @*/
 	for (int i=0 ; i < t.length; i++) if (t[i] > 0) count++;
-	
+
 	int u[] = new int[count];
 	count = 0;
-	
+
 	/*@ loop_invariant
-	  @    0 <= i <= t.length && 
-	  @    0 <= count <= i && 
+	  @    0 <= i <= t.length &&
+	  @    0 <= count <= i &&
 	  @    count == num_of_pos(0,i,t);
 	  @ loop_variant t.length - i;
 	  @*/
@@ -96,13 +98,13 @@ public class Muller {
 	}
 	return u;
     }
-    
+
 }
 
 /*
-Local Variables: 
-compile-command: "gwhy Muller.java"
-End: 
+Local Variables:
+compile-command: "make Muller.why3ml"
+End:
 */
 ========== krakatoa execution ==========
 Parsing OK.
@@ -332,206 +334,213 @@ End:
 ========== file tests/java/Muller.jloc ==========
 [K_10]
 file = "HOME/tests/java/Muller.java"
-line = 77
+line = 79
 begin = 8
-end = 54
+end = 53
 
 [K_11]
 file = "HOME/tests/java/Muller.java"
-line = 77
+line = 79
 begin = 8
-end = 93
+end = 91
 
 [K_12]
 file = "HOME/tests/java/Muller.java"
-line = 80
+line = 82
 begin = 18
 end = 30
 
 [K_13]
 file = "HOME/tests/java/Muller.java"
-line = 82
+line = 84
 begin = 49
 end = 56
 
 [K_14]
 file = "HOME/tests/java/Muller.java"
-line = 82
+line = 84
 begin = 39
 end = 43
 
 [K_15]
 file = "HOME/tests/java/Muller.java"
-line = 82
+line = 84
 begin = 39
 end = 47
 
 [K_16]
 file = "HOME/tests/java/Muller.java"
-line = 82
+line = 84
 begin = 30
 end = 33
 
 [K_17]
 file = "HOME/tests/java/Muller.java"
-line = 82
+line = 84
 begin = 20
 end = 28
 
 [K_18]
 file = "HOME/tests/java/Muller.java"
-line = 82
+line = 84
 begin = 16
 end = 28
 
 [Muller_m]
 name = "Method m"
 file = "HOME/tests/java/Muller.java"
-line = 73
+line = 75
 begin = 24
 end = 25
 
 [K_19]
 file = "HOME/tests/java/Muller.java"
-line = 93
+line = 95
 begin = 12
 end = 13
 
 [K_20]
 file = "HOME/tests/java/Muller.java"
-line = 90
+line = 92
 begin = 8
 end = 34
 
 [K_21]
 file = "HOME/tests/java/Muller.java"
-line = 89
+line = 91
 begin = 13
 end = 23
 
 [K_22]
 file = "HOME/tests/java/Muller.java"
-line = 89
+line = 91
 begin = 8
 end = 18
 
+[num_of_pos_non_negative]
+name = "Lemma num_of_pos_non_negative"
+file = "HOME/tests/java/Muller.java"
+line = 51
+begin = 10
+end = 33
+
 [K_23]
 file = "HOME/tests/java/Muller.java"
-line = 89
+line = 91
 begin = 8
 end = 23
 
 [K_24]
 file = "HOME/tests/java/Muller.java"
-line = 88
+line = 90
 begin = 13
 end = 26
 
 [K_1]
 file = "HOME/tests/java/Muller.java"
-line = 71
+line = 73
 begin = 17
 end = 26
 
 [K_25]
 file = "HOME/tests/java/Muller.java"
-line = 88
+line = 90
 begin = 8
 end = 14
 
 [K_2]
 file = "HOME/tests/java/Muller.java"
-line = 82
+line = 84
 begin = 12
 end = 13
 
 [K_26]
 file = "HOME/tests/java/Muller.java"
-line = 88
+line = 90
 begin = 8
 end = 26
 
 [K_3]
 file = "HOME/tests/java/Muller.java"
-line = 79
+line = 81
 begin = 8
 end = 34
 
 [K_27]
 file = "HOME/tests/java/Muller.java"
-line = 88
+line = 90
 begin = 8
-end = 54
+end = 53
 
 [K_4]
 file = "HOME/tests/java/Muller.java"
-line = 78
+line = 80
 begin = 13
 end = 23
 
 [K_28]
 file = "HOME/tests/java/Muller.java"
-line = 88
+line = 90
 begin = 8
-end = 93
+end = 91
 
 [K_5]
 file = "HOME/tests/java/Muller.java"
-line = 78
+line = 80
 begin = 8
 end = 18
 
 [K_29]
 file = "HOME/tests/java/Muller.java"
-line = 91
+line = 93
 begin = 18
 end = 30
 
 [K_6]
 file = "HOME/tests/java/Muller.java"
-line = 78
+line = 80
 begin = 8
 end = 23
 
 [K_7]
 file = "HOME/tests/java/Muller.java"
-line = 77
+line = 79
 begin = 13
 end = 26
 
 [K_8]
 file = "HOME/tests/java/Muller.java"
-line = 77
+line = 79
 begin = 8
 end = 14
 
 [K_9]
 file = "HOME/tests/java/Muller.java"
-line = 77
+line = 79
 begin = 8
 end = 26
 
 [K_30]
 file = "HOME/tests/java/Muller.java"
-line = 94
+line = 96
 begin = 21
 end = 28
 
 [K_31]
 file = "HOME/tests/java/Muller.java"
-line = 94
+line = 96
 begin = 32
 end = 36
 
 [K_32]
 file = "HOME/tests/java/Muller.java"
-line = 94
+line = 96
 begin = 19
 end = 36
 
 [K_33]
 file = "HOME/tests/java/Muller.java"
-line = 94
+line = 96
 begin = 9
 end = 13
 
@@ -544,39 +553,81 @@ end = -1
 
 [K_34]
 file = "HOME/tests/java/Muller.java"
-line = 94
+line = 96
 begin = 9
 end = 17
 
 [K_35]
 file = "HOME/tests/java/Muller.java"
-line = 93
+line = 95
 begin = 30
 end = 33
 
 [K_36]
 file = "HOME/tests/java/Muller.java"
-line = 93
+line = 95
 begin = 20
 end = 28
 
 [K_37]
 file = "HOME/tests/java/Muller.java"
-line = 93
+line = 95
 begin = 16
 end = 28
 
 [K_38]
 file = "HOME/tests/java/Muller.java"
-line = 84
+line = 86
 begin = 11
 end = 25
 
 [K_39]
 file = "HOME/tests/java/Muller.java"
-line = 74
+line = 76
 begin = 13
 end = 14
+
+[num_of_pos_empty]
+name = "Lemma num_of_pos_empty"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
+
+[num_of_pos_true_case]
+name = "Lemma num_of_pos_true_case"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
+
+[num_of_pos_additive]
+name = "Lemma num_of_pos_additive"
+file = "HOME/tests/java/Muller.java"
+line = 55
+begin = 10
+end = 29
+
+[num_of_pos_strictly_increasing]
+name = "Lemma num_of_pos_strictly_increasing"
+file = "HOME/tests/java/Muller.java"
+line = 65
+begin = 10
+end = 40
+
+[num_of_pos_increasing]
+name = "Lemma num_of_pos_increasing"
+file = "HOME/tests/java/Muller.java"
+line = 60
+begin = 10
+end = 31
+
+[num_of_pos_false_case]
+name = "Lemma num_of_pos_false_case"
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
 
 ========== jessie execution ==========
 Generating Why function Muller_m
@@ -596,10 +647,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Mulle
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Muller.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/Muller_why.sx
 
@@ -659,6 +711,13 @@ simplify: simplify/Muller_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/Muller_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/Muller_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -732,6 +791,9 @@ why/%_why3.why: why/%.why
 why3ide: why/Muller_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: Muller.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include Muller.depend
 
 depend: coq/Muller_why.v
@@ -744,19 +806,19 @@ clean:
 [JC_90]
 kind = AllocSize
 file = "HOME/tests/java/Muller.java"
-line = 84
+line = 86
 begin = 11
 end = 25
 
 [JC_91]
 file = "HOME/tests/java/Muller.java"
-line = 88
+line = 90
 begin = 8
 end = 14
 
 [JC_92]
 file = "HOME/tests/java/Muller.java"
-line = 88
+line = 90
 begin = 13
 end = 26
 
@@ -768,19 +830,19 @@ end = -1
 
 [JC_93]
 file = "HOME/tests/java/Muller.java"
-line = 89
+line = 91
 begin = 8
 end = 18
 
 [JC_41]
 file = "HOME/tests/java/Muller.java"
-line = 71
+line = 73
 begin = 17
 end = 26
 
 [JC_94]
 file = "HOME/tests/java/Muller.java"
-line = 89
+line = 91
 begin = 13
 end = 23
 
@@ -792,7 +854,7 @@ end = -1
 
 [JC_95]
 file = "HOME/tests/java/Muller.java"
-line = 90
+line = 92
 begin = 8
 end = 34
 
@@ -804,9 +866,9 @@ end = -1
 
 [JC_96]
 file = "HOME/tests/java/Muller.java"
-line = 88
+line = 90
 begin = 8
-end = 93
+end = 91
 
 [JC_44]
 file = "HOME/"
@@ -847,7 +909,7 @@ end = 22
 [JC_100]
 kind = UserCall
 file = "HOME/tests/java/Muller.java"
-line = 93
+line = 95
 begin = 20
 end = 28
 
@@ -859,7 +921,7 @@ end = 1740
 
 [JC_47]
 file = "HOME/tests/java/Muller.java"
-line = 77
+line = 79
 begin = 8
 end = 14
 
@@ -877,7 +939,7 @@ end = -1
 
 [JC_48]
 file = "HOME/tests/java/Muller.java"
-line = 77
+line = 79
 begin = 13
 end = 26
 
@@ -895,7 +957,7 @@ end = -1
 
 [JC_49]
 file = "HOME/tests/java/Muller.java"
-line = 78
+line = 80
 begin = 8
 end = 18
 
@@ -972,22 +1034,22 @@ begin = -1
 end = -1
 
 [num_of_pos_non_negative]
-name = "num_of_pos_non_negative"
+name = "Lemma num_of_pos_non_negative"
 behavior = "lemma"
-file = "HOME/tests/java/Muller.jc"
-line = 100
-begin = 0
-end = 153
+file = "HOME/tests/java/Muller.java"
+line = 51
+begin = 10
+end = 33
 
 [JC_50]
 file = "HOME/tests/java/Muller.java"
-line = 78
+line = 80
 begin = 13
 end = 23
 
 [cons_Muller_ensures_default]
 name = "Constructor of class Muller"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/"
 line = 0
 begin = -1
@@ -995,15 +1057,15 @@ end = -1
 
 [JC_51]
 file = "HOME/tests/java/Muller.java"
-line = 79
+line = 81
 begin = 8
 end = 34
 
 [JC_52]
 file = "HOME/tests/java/Muller.java"
-line = 77
+line = 79
 begin = 8
-end = 93
+end = 91
 
 [cons_Muller_safety]
 name = "Constructor of class Muller"
@@ -1034,21 +1096,21 @@ end = 1030
 [JC_56]
 kind = UserCall
 file = "HOME/tests/java/Muller.java"
-line = 82
+line = 84
 begin = 20
 end = 28
 
 [JC_57]
 kind = IndexBounds
 file = "HOME/tests/java/Muller.java"
-line = 82
+line = 84
 begin = 20
 end = 28
 
 [JC_58]
 kind = PointerDeref
 file = "HOME/tests/java/Muller.java"
-line = 82
+line = 84
 begin = 39
 end = 43
 
@@ -1056,7 +1118,7 @@ end = 43
 name = "Method m"
 behavior = "Safety"
 file = "HOME/tests/java/Muller.java"
-line = 73
+line = 75
 begin = 24
 end = 25
 
@@ -1076,14 +1138,14 @@ end = 30
 
 [JC_61]
 file = "HOME/tests/java/Muller.java"
-line = 80
+line = 82
 begin = 18
 end = 30
 
 [JC_62]
 kind = AllocSize
 file = "HOME/tests/java/Muller.java"
-line = 84
+line = 86
 begin = 11
 end = 25
 
@@ -1095,7 +1157,7 @@ end = -1
 
 [JC_63]
 file = "HOME/tests/java/Muller.java"
-line = 88
+line = 90
 begin = 8
 end = 14
 
@@ -1107,7 +1169,7 @@ end = 21
 
 [JC_64]
 file = "HOME/tests/java/Muller.java"
-line = 88
+line = 90
 begin = 13
 end = 26
 
@@ -1119,7 +1181,7 @@ end = -1
 
 [JC_65]
 file = "HOME/tests/java/Muller.java"
-line = 89
+line = 91
 begin = 8
 end = 18
 
@@ -1131,7 +1193,7 @@ end = 66
 
 [JC_66]
 file = "HOME/tests/java/Muller.java"
-line = 89
+line = 91
 begin = 13
 end = 23
 
@@ -1143,7 +1205,7 @@ end = 18
 
 [JC_67]
 file = "HOME/tests/java/Muller.java"
-line = 90
+line = 92
 begin = 8
 end = 34
 
@@ -1155,9 +1217,9 @@ end = 66
 
 [JC_68]
 file = "HOME/tests/java/Muller.java"
-line = 88
+line = 90
 begin = 8
-end = 93
+end = 91
 
 [JC_16]
 file = "HOME/tests/java/Muller.jc"
@@ -1204,7 +1266,7 @@ end = 1740
 [JC_72]
 kind = UserCall
 file = "HOME/tests/java/Muller.java"
-line = 93
+line = 95
 begin = 20
 end = 28
 
@@ -1217,7 +1279,7 @@ end = -1
 [JC_73]
 kind = IndexBounds
 file = "HOME/tests/java/Muller.java"
-line = 93
+line = 95
 begin = 20
 end = 28
 
@@ -1230,7 +1292,7 @@ end = 30
 [JC_74]
 kind = PointerDeref
 file = "HOME/tests/java/Muller.java"
-line = 94
+line = 96
 begin = 9
 end = 13
 
@@ -1243,7 +1305,7 @@ end = -1
 [JC_75]
 kind = PointerDeref
 file = "HOME/tests/java/Muller.java"
-line = 94
+line = 96
 begin = 32
 end = 36
 
@@ -1267,17 +1329,17 @@ begin = 10
 end = 18
 
 [num_of_pos_empty]
-name = "num_of_pos_empty"
+name = "Lemma num_of_pos_empty"
 behavior = "axiom"
-file = "HOME/tests/java/Muller.jc"
-line = 92
-begin = 2
-end = 175
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
 
 [JC_77]
 kind = PointerDeref
 file = "HOME/tests/java/Muller.java"
-line = 94
+line = 96
 begin = 19
 end = 36
 
@@ -1302,7 +1364,7 @@ end = 18
 
 [JC_79]
 file = "HOME/tests/java/Muller.java"
-line = 91
+line = 93
 begin = 18
 end = 30
 
@@ -1313,12 +1375,12 @@ begin = -1
 end = -1
 
 [num_of_pos_true_case]
-name = "num_of_pos_true_case"
+name = "Lemma num_of_pos_true_case"
 behavior = "axiom"
-file = "HOME/tests/java/Muller.jc"
-line = 83
-begin = 2
-end = 308
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
 
 [JC_28]
 file = "HOME/"
@@ -1333,28 +1395,28 @@ begin = 8
 end = 23
 
 [num_of_pos_additive]
-name = "num_of_pos_additive"
+name = "Lemma num_of_pos_additive"
 behavior = "lemma"
-file = "HOME/tests/java/Muller.jc"
-line = 106
-begin = 0
-end = 299
+file = "HOME/tests/java/Muller.java"
+line = 55
+begin = 10
+end = 29
 
 [JC_80]
 file = "HOME/tests/java/Muller.java"
-line = 77
+line = 79
 begin = 8
 end = 14
 
 [JC_81]
 file = "HOME/tests/java/Muller.java"
-line = 77
+line = 79
 begin = 13
 end = 26
 
 [JC_82]
 file = "HOME/tests/java/Muller.java"
-line = 78
+line = 80
 begin = 8
 end = 18
 
@@ -1366,7 +1428,7 @@ end = -1
 
 [JC_83]
 file = "HOME/tests/java/Muller.java"
-line = 78
+line = 80
 begin = 13
 end = 23
 
@@ -1378,7 +1440,7 @@ end = 23
 
 [JC_84]
 file = "HOME/tests/java/Muller.java"
-line = 79
+line = 81
 begin = 8
 end = 34
 
@@ -1389,26 +1451,26 @@ begin = -1
 end = -1
 
 [num_of_pos_strictly_increasing]
-name = "num_of_pos_strictly_increasing"
+name = "Lemma num_of_pos_strictly_increasing"
 behavior = "lemma"
-file = "HOME/tests/java/Muller.jc"
-line = 123
-begin = 0
-end = 246
+file = "HOME/tests/java/Muller.java"
+line = 65
+begin = 10
+end = 40
 
 [Muller_m_ensures_default]
 name = "Method m"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/Muller.java"
-line = 73
+line = 75
 begin = 24
 end = 25
 
 [JC_85]
 file = "HOME/tests/java/Muller.java"
-line = 77
+line = 79
 begin = 8
-end = 93
+end = 91
 
 [JC_33]
 file = "HOME/"
@@ -1455,7 +1517,7 @@ end = -1
 [JC_89]
 kind = UserCall
 file = "HOME/tests/java/Muller.java"
-line = 82
+line = 84
 begin = 20
 end = 28
 
@@ -1472,26 +1534,26 @@ begin = 11
 end = 65
 
 [num_of_pos_increasing]
-name = "num_of_pos_increasing"
+name = "Lemma num_of_pos_increasing"
 behavior = "lemma"
-file = "HOME/tests/java/Muller.jc"
-line = 115
-begin = 0
-end = 238
+file = "HOME/tests/java/Muller.java"
+line = 60
+begin = 10
+end = 31
 
 [JC_39]
 file = "HOME/tests/java/Muller.java"
-line = 71
+line = 73
 begin = 17
 end = 26
 
 [num_of_pos_false_case]
-name = "num_of_pos_false_case"
+name = "Lemma num_of_pos_false_case"
 behavior = "axiom"
-file = "HOME/tests/java/Muller.jc"
-line = 74
-begin = 2
-end = 309
+file = "HOME/"
+line = 0
+begin = 0
+end = 0
 
 ========== file tests/java/why/Muller.why ==========
 type Object
@@ -1508,17 +1570,11 @@ type long
 
 type short
 
-exception Exception_exc of Object pointer
-
 logic Exception_tag:  -> Object tag_id
 
 logic Object_tag:  -> Object tag_id
 
 axiom Exception_parenttag_Object : parenttag(Exception_tag, Object_tag)
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
 
 logic Muller_tag:  -> Object tag_id
 
@@ -1526,7 +1582,7 @@ axiom Muller_parenttag_Object : parenttag(Muller_tag, Object_tag)
 
 predicate Non_null_Object(x_1:Object pointer,
  Object_x_2_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_x_2_alloc_table, x_1), (0))
+ (offset_max(Object_x_2_alloc_table, x_1) = (0))
 
 predicate Non_null_intM(x_0:Object pointer,
  Object_x_1_alloc_table:Object alloc_table) =
@@ -1547,13 +1603,9 @@ axiom Object_tags :
   (forall Object_tag_table:Object tag_table.
    instanceof(Object_tag_table, x, Object_tag)))
 
-exception Return_label_exc of unit
-
 logic String_tag:  -> Object tag_id
 
 axiom String_parenttag_Object : parenttag(String_tag, Object_tag)
-
-exception Throwable_exc of Object pointer
 
 logic Throwable_tag:  -> Object tag_id
 
@@ -1568,6 +1620,11 @@ axiom byte_coerce :
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_byte(byte_of_integer(x)), x)))
 
+axiom byte_extensionality :
+ (forall x:byte.
+  (forall y:byte.
+   (eq_int(integer_of_byte(x), integer_of_byte(y)) -> (x = y))))
+
 axiom byte_range :
  (forall x:byte.
   (le_int((-128), integer_of_byte(x)) and le_int(integer_of_byte(x), (127))))
@@ -1580,6 +1637,11 @@ axiom char_coerce :
  (forall x:int.
   ((le_int((0), x) and le_int(x, (65535))) ->
    eq_int(integer_of_char(char_of_integer(x)), x)))
+
+axiom char_extensionality :
+ (forall x:char.
+  (forall y:char.
+   (eq_int(integer_of_char(x), integer_of_char(y)) -> (x = y))))
 
 axiom char_range :
  (forall x:char.
@@ -1612,6 +1674,11 @@ axiom int32_coerce :
  (forall x:int.
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
+
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range :
  (forall x:int32.
@@ -1674,6 +1741,11 @@ axiom long_coerce :
   ((le_int((-9223372036854775808), x) and le_int(x, (9223372036854775807))) ->
    eq_int(integer_of_long(long_of_integer(x)), x)))
 
+axiom long_extensionality :
+ (forall x:long.
+  (forall y:long.
+   (eq_int(integer_of_long(x), integer_of_long(y)) -> (x = y))))
+
 axiom long_range :
  (forall x:long.
   (le_int((-9223372036854775808), integer_of_long(x))
@@ -1723,6 +1795,11 @@ axiom short_coerce :
   ((le_int((-32768), x) and le_int(x, (32767))) ->
    eq_int(integer_of_short(short_of_integer(x)), x)))
 
+axiom short_extensionality :
+ (forall x:short.
+  (forall y:short.
+   (eq_int(integer_of_short(x), integer_of_short(y)) -> (x = y))))
+
 axiom short_range :
  (forall x:short.
   (le_int((-32768), integer_of_short(x))
@@ -1767,36 +1844,6 @@ predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  interface_alloc_table:interface alloc_table) =
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Muller(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_intM(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
@@ -1848,8 +1895,10 @@ axiom num_of_pos_false_case :
        and (not gt_int(integer_of_int32(select(intM_intP_t_8_at_L,
                                         shift(t_2, sub_int(j_2, (1))))),
                 (0)))) ->
-       eq_int(num_of_pos(i_2, j_2, t_2, intM_intP_t_8_at_L),
-       num_of_pos(i_2, sub_int(j_2, (1)), t_2, intM_intP_t_8_at_L))))))))
+       (num_of_pos(i_2, j_2, t_2, intM_intP_t_8_at_L) = num_of_pos(i_2,
+                                                        sub_int(j_2, (1)),
+                                                        t_2,
+                                                        intM_intP_t_8_at_L))))))))
 
 axiom num_of_pos_true_case :
  (forall intM_intP_t_8_at_L:(Object, int32) memory.
@@ -1861,9 +1910,11 @@ axiom num_of_pos_true_case :
        and gt_int(integer_of_int32(select(intM_intP_t_8_at_L,
                                    shift(t_1, sub_int(j_1, (1))))),
            (0))) ->
-       eq_int(num_of_pos(i_1, j_1, t_1, intM_intP_t_8_at_L),
-       add_int(num_of_pos(i_1, sub_int(j_1, (1)), t_1, intM_intP_t_8_at_L),
-       (1)))))))))
+       (num_of_pos(i_1, j_1, t_1, intM_intP_t_8_at_L) = add_int(num_of_pos(i_1,
+                                                                sub_int(j_1,
+                                                                (1)), t_1,
+                                                                intM_intP_t_8_at_L),
+                                                        (1)))))))))
 
 axiom num_of_pos_empty :
  (forall intM_intP_t_8_at_L:(Object, int32) memory.
@@ -1871,7 +1922,7 @@ axiom num_of_pos_empty :
    (forall j_0:int.
     (forall t_0:Object pointer.
      (ge_int(i_0, j_0) ->
-      eq_int(num_of_pos(i_0, j_0, t_0, intM_intP_t_8_at_L), (0)))))))
+      (num_of_pos(i_0, j_0, t_0, intM_intP_t_8_at_L) = (0)))))))
 
 lemma num_of_pos_non_negative :
  (forall intM_intP_t_3_18_at_L:(Object, int32) memory.
@@ -1887,9 +1938,12 @@ lemma num_of_pos_additive :
     (forall k_1:int.
      (forall t_4:Object pointer.
       ((le_int(i_4, j_4) and le_int(j_4, k_1)) ->
-       eq_int(num_of_pos(i_4, k_1, t_4, intM_intP_t_4_19_at_L),
-       add_int(num_of_pos(i_4, j_4, t_4, intM_intP_t_4_19_at_L),
-       num_of_pos(j_4, k_1, t_4, intM_intP_t_4_19_at_L)))))))))
+       (num_of_pos(i_4, k_1, t_4, intM_intP_t_4_19_at_L) = add_int(num_of_pos(i_4,
+                                                                   j_4, t_4,
+                                                                   intM_intP_t_4_19_at_L),
+                                                           num_of_pos(j_4,
+                                                           k_1, t_4,
+                                                           intM_intP_t_4_19_at_L)))))))))
 
 lemma num_of_pos_increasing :
  (forall intM_intP_t_5_20_at_L:(Object, int32) memory.
@@ -1913,6 +1967,12 @@ lemma num_of_pos_strictly_increasing :
               (0)))) ->
       lt_int(num_of_pos((0), i_6, t_6, intM_intP_t_6_21_at_L),
       num_of_pos((0), n, t_6, intM_intP_t_6_21_at_L)))))))
+
+exception Exception_exc of Object pointer
+
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
 
 parameter Muller_m :
  t_7:Object pointer ->
@@ -1941,131 +2001,9 @@ parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_tag_table : Object tag_table ref
 
-parameter alloc_bitvector_struct_Exception :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
-parameter alloc_bitvector_struct_Exception_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Muller :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Muller(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Muller_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Muller(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_String :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_String_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intM :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intM(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intM_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intM(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Throwable_exc of Object pointer
 
 parameter alloc_struct_Exception :
  n:int ->
@@ -2276,8 +2214,7 @@ parameter java_array_length_intM :
    { (JC_25:
      (le_int(result, (2147483647))
      and (ge_int(result, (0))
-         and eq_int(result,
-             add_int(offset_max(Object_x_6_alloc_table, x_3), (1)))))) }
+         and (result = add_int(offset_max(Object_x_6_alloc_table, x_3), (1)))))) }
 
 parameter java_array_length_intM_requires :
  x_3:Object pointer ->
@@ -2286,8 +2223,7 @@ parameter java_array_length_intM_requires :
    { (JC_25:
      (le_int(result, (2147483647))
      and (ge_int(result, (0))
-         and eq_int(result,
-             add_int(offset_max(Object_x_6_alloc_table, x_3), (1)))))) }
+         and (result = add_int(offset_max(Object_x_6_alloc_table, x_3), (1)))))) }
 
 parameter long_of_integer_ :
  x:int ->
@@ -2299,7 +2235,7 @@ parameter non_null_Object :
   Object_x_7_alloc_table:Object alloc_table ->
    { } bool
    { (JC_38:
-     (if result then eq_int(offset_max(Object_x_7_alloc_table, x_4), (0))
+     (if result then (offset_max(Object_x_7_alloc_table, x_4) = (0))
       else (x_4 = null))) }
 
 parameter non_null_Object_requires :
@@ -2307,7 +2243,7 @@ parameter non_null_Object_requires :
   Object_x_7_alloc_table:Object alloc_table ->
    { } bool
    { (JC_38:
-     (if result then eq_int(offset_max(Object_x_7_alloc_table, x_4), (0))
+     (if result then (offset_max(Object_x_7_alloc_table, x_4) = (0))
       else (x_4 = null))) }
 
 parameter non_null_intM :
@@ -2373,13 +2309,13 @@ let Muller_m_ensures_default =
                          le_int(integer_of_int32(count),
                          integer_of_int32(i_7)))
                         and (JC_84:
-                            eq_int(integer_of_int32(count),
-                            num_of_pos((0), integer_of_int32(i_7), t_7,
-                            intM_intP_t_7_9))))))))  }
+                            (integer_of_int32(count) = num_of_pos((0),
+                                                       integer_of_int32(i_7),
+                                                       t_7, intM_intP_t_7_9))))))))
+           }
          begin
            [ { } unit { true } ];
           try
-           (let jessie_<num> =
            begin
              (if (K_18:
                  ((lt_int_ (integer_of_int32 !i_7)) (K_17:
@@ -2399,8 +2335,8 @@ let Muller_m_ensures_default =
                  (let jessie_<num> =
                  (count := (safe_int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1)))) in
                  void); jessie_<num> end)) in void) else void)
-             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
-            (raise (Loop_continue_exc void)) end in void) with
+             else (raise (Loop_exit_exc void)));
+            (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<num> ->
            (let jessie_<num> =
            (K_16:
@@ -2431,13 +2367,13 @@ let Muller_m_ensures_default =
                          le_int(integer_of_int32(count),
                          integer_of_int32(i_8)))
                         and (JC_95:
-                            eq_int(integer_of_int32(count),
-                            num_of_pos((0), integer_of_int32(i_8), t_7,
-                            intM_intP_t_7_9))))))))  }
+                            (integer_of_int32(count) = num_of_pos((0),
+                                                       integer_of_int32(i_8),
+                                                       t_7, intM_intP_t_7_9))))))))
+           }
          begin
            [ { } unit { true } ];
           try
-           (let jessie_<num> =
            begin
              (if (K_37:
                  ((lt_int_ (integer_of_int32 !i_8)) (K_36:
@@ -2466,9 +2402,8 @@ let Muller_m_ensures_default =
                                    void); jessie_<num> end))) in
                (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
                (((safe_upd_ intM_intP_Muller_m_11) jessie_<num>) jessie_<num>)))))) in
-               void) else void)
-             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
-            (raise (Loop_continue_exc void)) end in void) with
+               void) else void) else (raise (Loop_exit_exc void)));
+            (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<num> ->
            (let jessie_<num> =
            (K_35:
@@ -2511,11 +2446,11 @@ let Muller_m_safety =
                             le_int(integer_of_int32(count),
                             integer_of_int32(i_7)))
                            and (JC_51:
-                               eq_int(integer_of_int32(count),
-                               num_of_pos((0), integer_of_int32(i_7), t_7,
-                               intM_intP_t_7_9)))))))) } ];
+                               (integer_of_int32(count) = num_of_pos((0),
+                                                          integer_of_int32(i_7),
+                                                          t_7,
+                                                          intM_intP_t_7_9)))))))) } ];
           try
-           (let jessie_<num> =
            begin
              (if (K_18:
                  ((lt_int_ (integer_of_int32 !i_7)) (K_17:
@@ -2542,8 +2477,8 @@ let Muller_m_safety =
                  (count := (JC_59:
                            (int32_of_integer_ ((add_int (integer_of_int32 jessie_<num>)) (1))))) in
                  void); jessie_<num> end)) in void) else void)
-             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
-            (raise (Loop_continue_exc void)) end in void) with
+             else (raise (Loop_exit_exc void)));
+            (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<num> ->
            (let jessie_<num> =
            (K_16:
@@ -2581,11 +2516,11 @@ let Muller_m_safety =
                             le_int(integer_of_int32(count),
                             integer_of_int32(i_8)))
                            and (JC_67:
-                               eq_int(integer_of_int32(count),
-                               num_of_pos((0), integer_of_int32(i_8), t_7,
-                               intM_intP_t_7_9)))))))) } ];
+                               (integer_of_int32(count) = num_of_pos((0),
+                                                          integer_of_int32(i_8),
+                                                          t_7,
+                                                          intM_intP_t_7_9)))))))) } ];
           try
-           (let jessie_<num> =
            begin
              (if (K_37:
                  ((lt_int_ (integer_of_int32 !i_8)) (K_36:
@@ -2624,9 +2559,8 @@ let Muller_m_safety =
                (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
                (JC_77:
                (((((offset_upd_ !Object_Muller_m_11_alloc_table) intM_intP_Muller_m_11) jessie_<num>) jessie_<num>) jessie_<num>))))))) in
-               void) else void)
-             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
-            (raise (Loop_continue_exc void)) end in void) with
+               void) else void) else (raise (Loop_exit_exc void)));
+            (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<num> ->
            (let jessie_<num> =
            (K_35:
@@ -2659,57 +2593,167 @@ why --project [...] why/Muller.why
   <lemma name="num_of_pos_non_negative">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Muller_po1.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "100" begin = "0" end = "153"/>
+      <location file = "HOME/tests/java/Muller.java" line = "51" begin = "10" end = "33"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="num_of_pos_additive">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Muller_po2.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "106" begin = "0" end = "299"/>
+      <location file = "HOME/tests/java/Muller.java" line = "55" begin = "10" end = "29"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="num_of_pos_increasing">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Muller_po3.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "115" begin = "0" end = "238"/>
+      <location file = "HOME/tests/java/Muller.java" line = "60" begin = "10" end = "31"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="num_of_pos_strictly_increasing">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/Muller_po4.why">
-      <location file = "HOME/tests/java/Muller.jc" line = "123" begin = "0" end = "246"/>
+      <location file = "HOME/tests/java/Muller.java" line = "65" begin = "10" end = "40"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <function name="num_of_pos_strictly_increasing">
-    <location file = "HOME/tests/java/Muller.jc" line = "123" begin = "0" end = "246"/>
-  </function>
-  <function name="num_of_pos_non_negative">
-    <location file = "HOME/tests/java/Muller.jc" line = "100" begin = "0" end = "153"/>
-  </function>
-  <function name="num_of_pos_increasing">
-    <location file = "HOME/tests/java/Muller.jc" line = "115" begin = "0" end = "238"/>
-  </function>
-  <function name="num_of_pos_additive">
-    <location file = "HOME/tests/java/Muller.jc" line = "106" begin = "0" end = "299"/>
-  </function>
   <function name="Method m">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/Muller_po5.why">
+      <location file = "HOME/tests/java/Muller.java" line = "79" begin = "8" end = "14"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/Muller_po6.why">
+      <location file = "HOME/tests/java/Muller.java" line = "79" begin = "13" end = "26"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/Muller_po7.why">
+      <location file = "HOME/tests/java/Muller.java" line = "80" begin = "8" end = "18"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/Muller_po8.why">
+      <location file = "HOME/tests/java/Muller.java" line = "80" begin = "13" end = "23"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/Muller_po9.why">
+      <location file = "HOME/tests/java/Muller.java" line = "81" begin = "8" end = "34"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/Muller_po10.why">
+      <location file = "HOME/tests/java/Muller.java" line = "79" begin = "8" end = "14"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po11.why">
+      <location file = "HOME/tests/java/Muller.java" line = "79" begin = "13" end = "26"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po12.why">
+      <location file = "HOME/tests/java/Muller.java" line = "80" begin = "8" end = "18"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po13.why">
+      <location file = "HOME/tests/java/Muller.java" line = "80" begin = "13" end = "23"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po14.why">
+      <location file = "HOME/tests/java/Muller.java" line = "81" begin = "8" end = "34"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po15.why">
+      <location file = "HOME/tests/java/Muller.java" line = "79" begin = "8" end = "14"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po16.why">
+      <location file = "HOME/tests/java/Muller.java" line = "79" begin = "13" end = "26"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po17.why">
+      <location file = "HOME/tests/java/Muller.java" line = "80" begin = "8" end = "18"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po18.why">
+      <location file = "HOME/tests/java/Muller.java" line = "80" begin = "13" end = "23"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po19.why">
+      <location file = "HOME/tests/java/Muller.java" line = "81" begin = "8" end = "34"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po20.why">
+      <location file = "HOME/tests/java/Muller.java" line = "90" begin = "8" end = "14"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/Muller_po21.why">
+      <location file = "HOME/tests/java/Muller.java" line = "90" begin = "13" end = "26"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/Muller_po22.why">
+      <location file = "HOME/tests/java/Muller.java" line = "91" begin = "8" end = "18"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/Muller_po23.why">
+      <location file = "HOME/tests/java/Muller.java" line = "91" begin = "13" end = "23"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/Muller_po24.why">
+      <location file = "HOME/tests/java/Muller.java" line = "92" begin = "8" end = "34"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/Muller_po25.why">
+      <location file = "HOME/tests/java/Muller.java" line = "90" begin = "8" end = "14"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po26.why">
+      <location file = "HOME/tests/java/Muller.java" line = "90" begin = "13" end = "26"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po27.why">
+      <location file = "HOME/tests/java/Muller.java" line = "91" begin = "8" end = "18"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po28.why">
+      <location file = "HOME/tests/java/Muller.java" line = "91" begin = "13" end = "23"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po29.why">
+      <location file = "HOME/tests/java/Muller.java" line = "92" begin = "8" end = "34"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po30.why">
+      <location file = "HOME/tests/java/Muller.java" line = "90" begin = "8" end = "14"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po31.why">
+      <location file = "HOME/tests/java/Muller.java" line = "90" begin = "13" end = "26"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po32.why">
+      <location file = "HOME/tests/java/Muller.java" line = "91" begin = "8" end = "18"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po33.why">
+      <location file = "HOME/tests/java/Muller.java" line = "91" begin = "13" end = "23"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/Muller_po34.why">
+      <location file = "HOME/tests/java/Muller.java" line = "92" begin = "8" end = "34"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/Muller_po35.why">
-      <location file = "why/Muller.why" line = "1029" begin = "54" end = "230"/>
+      <location file = "why/Muller.why" line = "902" begin = "54" end = "230"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/Muller_po36.why">
-      <location file = "HOME/tests/java/Muller.java" line = "82" begin = "39" end = "43"/>
+      <location file = "HOME/tests/java/Muller.java" line = "84" begin = "39" end = "43"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/Muller_po37.why">
-      <location file = "HOME/tests/java/Muller.java" line = "82" begin = "39" end = "43"/>
+      <location file = "HOME/tests/java/Muller.java" line = "84" begin = "39" end = "43"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2734,11 +2778,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/Muller_po42.why">
-      <location file = "HOME/tests/java/Muller.java" line = "80" begin = "18" end = "30"/>
+      <location file = "HOME/tests/java/Muller.java" line = "82" begin = "18" end = "30"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Muller_po43.why">
-      <location file = "HOME/tests/java/Muller.java" line = "80" begin = "18" end = "30"/>
+      <location file = "HOME/tests/java/Muller.java" line = "82" begin = "18" end = "30"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Muller_po44.why">
@@ -2752,25 +2796,25 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/Muller_po46.why">
-      <location file = "HOME/tests/java/Muller.java" line = "80" begin = "18" end = "30"/>
+      <location file = "HOME/tests/java/Muller.java" line = "82" begin = "18" end = "30"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Muller_po47.why">
-      <location file = "HOME/tests/java/Muller.java" line = "80" begin = "18" end = "30"/>
+      <location file = "HOME/tests/java/Muller.java" line = "82" begin = "18" end = "30"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Muller_po48.why">
-      <location file = "HOME/tests/java/Muller.java" line = "84" begin = "11" end = "25"/>
+      <location file = "HOME/tests/java/Muller.java" line = "86" begin = "11" end = "25"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Muller_po49.why">
-      <location file = "HOME/tests/java/Muller.java" line = "94" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/Muller.java" line = "96" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/Muller_po50.why">
-      <location file = "HOME/tests/java/Muller.java" line = "94" begin = "9" end = "13"/>
+      <location file = "HOME/tests/java/Muller.java" line = "96" begin = "9" end = "13"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2785,12 +2829,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/Muller_po53.why">
-      <location file = "HOME/tests/java/Muller.java" line = "94" begin = "19" end = "36"/>
+      <location file = "HOME/tests/java/Muller.java" line = "96" begin = "19" end = "36"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/Muller_po54.why">
-      <location file = "HOME/tests/java/Muller.java" line = "94" begin = "19" end = "36"/>
+      <location file = "HOME/tests/java/Muller.java" line = "96" begin = "19" end = "36"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2805,11 +2849,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/Muller_po57.why">
-      <location file = "HOME/tests/java/Muller.java" line = "91" begin = "18" end = "30"/>
+      <location file = "HOME/tests/java/Muller.java" line = "93" begin = "18" end = "30"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Muller_po58.why">
-      <location file = "HOME/tests/java/Muller.java" line = "91" begin = "18" end = "30"/>
+      <location file = "HOME/tests/java/Muller.java" line = "93" begin = "18" end = "30"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Muller_po59.why">
@@ -2823,136 +2867,26 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/Muller_po61.why">
-      <location file = "HOME/tests/java/Muller.java" line = "91" begin = "18" end = "30"/>
+      <location file = "HOME/tests/java/Muller.java" line = "93" begin = "18" end = "30"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Muller_po62.why">
-      <location file = "HOME/tests/java/Muller.java" line = "91" begin = "18" end = "30"/>
+      <location file = "HOME/tests/java/Muller.java" line = "93" begin = "18" end = "30"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/Muller_po5.why">
-      <location file = "HOME/tests/java/Muller.java" line = "77" begin = "8" end = "14"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/Muller_po6.why">
-      <location file = "HOME/tests/java/Muller.java" line = "77" begin = "13" end = "26"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/Muller_po7.why">
-      <location file = "HOME/tests/java/Muller.java" line = "78" begin = "8" end = "18"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/Muller_po8.why">
-      <location file = "HOME/tests/java/Muller.java" line = "78" begin = "13" end = "23"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/Muller_po9.why">
-      <location file = "HOME/tests/java/Muller.java" line = "79" begin = "8" end = "34"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/Muller_po10.why">
-      <location file = "HOME/tests/java/Muller.java" line = "77" begin = "8" end = "14"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po11.why">
-      <location file = "HOME/tests/java/Muller.java" line = "77" begin = "13" end = "26"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po12.why">
-      <location file = "HOME/tests/java/Muller.java" line = "78" begin = "8" end = "18"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po13.why">
-      <location file = "HOME/tests/java/Muller.java" line = "78" begin = "13" end = "23"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po14.why">
-      <location file = "HOME/tests/java/Muller.java" line = "79" begin = "8" end = "34"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po15.why">
-      <location file = "HOME/tests/java/Muller.java" line = "77" begin = "8" end = "14"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po16.why">
-      <location file = "HOME/tests/java/Muller.java" line = "77" begin = "13" end = "26"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po17.why">
-      <location file = "HOME/tests/java/Muller.java" line = "78" begin = "8" end = "18"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po18.why">
-      <location file = "HOME/tests/java/Muller.java" line = "78" begin = "13" end = "23"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po19.why">
-      <location file = "HOME/tests/java/Muller.java" line = "79" begin = "8" end = "34"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po20.why">
-      <location file = "HOME/tests/java/Muller.java" line = "88" begin = "8" end = "14"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/Muller_po21.why">
-      <location file = "HOME/tests/java/Muller.java" line = "88" begin = "13" end = "26"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/Muller_po22.why">
-      <location file = "HOME/tests/java/Muller.java" line = "89" begin = "8" end = "18"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/Muller_po23.why">
-      <location file = "HOME/tests/java/Muller.java" line = "89" begin = "13" end = "23"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/Muller_po24.why">
-      <location file = "HOME/tests/java/Muller.java" line = "90" begin = "8" end = "34"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/Muller_po25.why">
-      <location file = "HOME/tests/java/Muller.java" line = "88" begin = "8" end = "14"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po26.why">
-      <location file = "HOME/tests/java/Muller.java" line = "88" begin = "13" end = "26"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po27.why">
-      <location file = "HOME/tests/java/Muller.java" line = "89" begin = "8" end = "18"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po28.why">
-      <location file = "HOME/tests/java/Muller.java" line = "89" begin = "13" end = "23"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po29.why">
-      <location file = "HOME/tests/java/Muller.java" line = "90" begin = "8" end = "34"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po30.why">
-      <location file = "HOME/tests/java/Muller.java" line = "88" begin = "8" end = "14"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po31.why">
-      <location file = "HOME/tests/java/Muller.java" line = "88" begin = "13" end = "26"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po32.why">
-      <location file = "HOME/tests/java/Muller.java" line = "89" begin = "8" end = "18"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po33.why">
-      <location file = "HOME/tests/java/Muller.java" line = "89" begin = "13" end = "23"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/Muller_po34.why">
-      <location file = "HOME/tests/java/Muller.java" line = "90" begin = "8" end = "34"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    </behavior>
+  </function>
+  <function name="Lemma num_of_pos_strictly_increasing">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+  </function>
+  <function name="Lemma num_of_pos_non_negative">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+  </function>
+  <function name="Lemma num_of_pos_increasing">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+  </function>
+  <function name="Lemma num_of_pos_additive">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
   <function name="Constructor of class Muller">
     <location file = "" line = "0" begin = "0" end = "0"/>
@@ -3952,6 +3886,10 @@ axiom byte_coerce:
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_byte(byte_of_integer(x)) = x)))
 
+axiom byte_extensionality:
+  (forall x:byte.
+    (forall y:byte. ((integer_of_byte(x) = integer_of_byte(y)) -> (x = y))))
+
 axiom byte_range:
   (forall x:byte.
     (((-128) <= integer_of_byte(x)) and (integer_of_byte(x) <= 127)))
@@ -3963,6 +3901,10 @@ logic char_of_integer : int -> char
 axiom char_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 65535)) -> (integer_of_char(char_of_integer(x)) = x)))
+
+axiom char_extensionality:
+  (forall x:char.
+    (forall y:char. ((integer_of_char(x) = integer_of_char(y)) -> (x = y))))
 
 axiom char_range:
   (forall x:char.
@@ -3995,6 +3937,11 @@ axiom int32_coerce:
   (forall x:int.
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
+
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range:
   (forall x:int32.
@@ -4057,6 +4004,10 @@ axiom long_coerce:
     ((((-9223372036854775808) <= x) and (x <= 9223372036854775807)) ->
      (integer_of_long(long_of_integer(x)) = x)))
 
+axiom long_extensionality:
+  (forall x:long.
+    (forall y:long. ((integer_of_long(x) = integer_of_long(y)) -> (x = y))))
+
 axiom long_range:
   (forall x:long.
     (((-9223372036854775808) <= integer_of_long(x)) and
@@ -4107,6 +4058,11 @@ axiom short_coerce:
     ((((-32768) <= x) and (x <= 32767)) ->
      (integer_of_short(short_of_integer(x)) = x)))
 
+axiom short_extensionality:
+  (forall x:short.
+    (forall y:short.
+      ((integer_of_short(x) = integer_of_short(y)) -> (x = y))))
+
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
@@ -4150,36 +4106,6 @@ predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Muller(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_intM(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
@@ -4252,6 +4178,14 @@ axiom num_of_pos_empty:
         (forall t_0:Object pointer.
           ((i_0 >= j_0) -> (num_of_pos(i_0, j_0, t_0,
            intM_intP_t_8_at_L) = 0))))))
+
+========== file tests/java/why/Muller_po1.why ==========
+lemma num_of_pos_non_negative:
+  (forall intM_intP_t_3_18_at_L:(Object, int32) memory.
+    (forall i_3:int.
+      (forall j_3:int.
+        (forall t_3:Object pointer. (0 <= num_of_pos(i_3, j_3, t_3,
+          intM_intP_t_3_18_at_L))))))
 
 ========== file tests/java/why/Muller_po10.why ==========
 goal Muller_m_ensures_default_po_6:
@@ -4651,13 +4585,17 @@ goal Muller_m_ensures_default_po_15:
   ("JC_84": (integer_of_int32(count) = num_of_pos(0, integer_of_int32(i_7_0),
   t_7, intM_intP_t_7_9))))
 
-========== file tests/java/why/Muller_po1.why ==========
-lemma num_of_pos_non_negative:
-  (forall intM_intP_t_3_18_at_L:(Object, int32) memory.
-    (forall i_3:int.
-      (forall j_3:int.
-        (forall t_3:Object pointer. (0 <= num_of_pos(i_3, j_3, t_3,
-          intM_intP_t_3_18_at_L))))))
+========== file tests/java/why/Muller_po2.why ==========
+lemma num_of_pos_additive:
+  (forall intM_intP_t_4_19_at_L:(Object, int32) memory.
+    (forall i_4:int.
+      (forall j_4:int.
+        (forall k_1:int.
+          (forall t_4:Object pointer.
+            (((i_4 <= j_4) and (j_4 <= k_1)) -> (num_of_pos(i_4, k_1, t_4,
+             intM_intP_t_4_19_at_L) = (num_of_pos(i_4, j_4, t_4,
+             intM_intP_t_4_19_at_L) + num_of_pos(j_4, k_1, t_4,
+             intM_intP_t_4_19_at_L)))))))))
 
 ========== file tests/java/why/Muller_po20.why ==========
 goal Muller_m_ensures_default_po_16:
@@ -5314,17 +5252,16 @@ goal Muller_m_ensures_default_po_25:
   ("JC_95": (integer_of_int32(count2) = num_of_pos(0,
   integer_of_int32(i_8_0), t_7, intM_intP_t_7_9))))
 
-========== file tests/java/why/Muller_po2.why ==========
-lemma num_of_pos_additive:
-  (forall intM_intP_t_4_19_at_L:(Object, int32) memory.
-    (forall i_4:int.
-      (forall j_4:int.
-        (forall k_1:int.
-          (forall t_4:Object pointer.
-            (((i_4 <= j_4) and (j_4 <= k_1)) -> (num_of_pos(i_4, k_1, t_4,
-             intM_intP_t_4_19_at_L) = (num_of_pos(i_4, j_4, t_4,
-             intM_intP_t_4_19_at_L) + num_of_pos(j_4, k_1, t_4,
-             intM_intP_t_4_19_at_L)))))))))
+========== file tests/java/why/Muller_po3.why ==========
+lemma num_of_pos_increasing:
+  (forall intM_intP_t_5_20_at_L:(Object, int32) memory.
+    (forall i_5:int.
+      (forall j_5:int.
+        (forall k_2:int.
+          (forall t_5:Object pointer.
+            ((j_5 <= k_2) -> (num_of_pos(i_5, j_5, t_5,
+             intM_intP_t_5_20_at_L) <= num_of_pos(i_5, k_2, t_5,
+             intM_intP_t_5_20_at_L))))))))
 
 ========== file tests/java/why/Muller_po30.why ==========
 goal Muller_m_ensures_default_po_26:
@@ -5843,16 +5780,17 @@ goal Muller_m_safety_po_5:
   (integer_of_int32(result2) > 0) ->
   ((integer_of_int32(count) + 1) <= 2147483647)
 
-========== file tests/java/why/Muller_po3.why ==========
-lemma num_of_pos_increasing:
-  (forall intM_intP_t_5_20_at_L:(Object, int32) memory.
-    (forall i_5:int.
-      (forall j_5:int.
-        (forall k_2:int.
-          (forall t_5:Object pointer.
-            ((j_5 <= k_2) -> (num_of_pos(i_5, j_5, t_5,
-             intM_intP_t_5_20_at_L) <= num_of_pos(i_5, k_2, t_5,
-             intM_intP_t_5_20_at_L))))))))
+========== file tests/java/why/Muller_po4.why ==========
+lemma num_of_pos_strictly_increasing:
+  (forall intM_intP_t_6_21_at_L:(Object, int32) memory.
+    (forall i_6:int.
+      (forall n:int.
+        (forall t_6:Object pointer.
+          (((0 <= i_6) and
+            ((i_6 < n) and (integer_of_int32(select(intM_intP_t_6_21_at_L,
+             shift(t_6, i_6))) > 0))) ->
+           (num_of_pos(0, i_6, t_6, intM_intP_t_6_21_at_L) < num_of_pos(0, n,
+           t_6, intM_intP_t_6_21_at_L)))))))
 
 ========== file tests/java/why/Muller_po40.why ==========
 goal Muller_m_safety_po_6:
@@ -6306,17 +6244,17 @@ goal Muller_m_safety_po_15:
   (integer_of_int32(i_8) < result5) ->
   (offset_min(Object_t_7_9_alloc_table, t_7) <= integer_of_int32(i_8))
 
-========== file tests/java/why/Muller_po4.why ==========
-lemma num_of_pos_strictly_increasing:
-  (forall intM_intP_t_6_21_at_L:(Object, int32) memory.
-    (forall i_6:int.
-      (forall n:int.
-        (forall t_6:Object pointer.
-          (((0 <= i_6) and
-            ((i_6 < n) and (integer_of_int32(select(intM_intP_t_6_21_at_L,
-             shift(t_6, i_6))) > 0))) ->
-           (num_of_pos(0, i_6, t_6, intM_intP_t_6_21_at_L) < num_of_pos(0, n,
-           t_6, intM_intP_t_6_21_at_L)))))))
+========== file tests/java/why/Muller_po5.why ==========
+goal Muller_m_ensures_default_po_1:
+  forall t_7:Object pointer.
+  forall Object_t_7_9_alloc_table:Object alloc_table.
+  (left_valid_struct_intM(t_7, 0, Object_t_7_9_alloc_table) and
+   ("JC_41": Non_null_intM(t_7, Object_t_7_9_alloc_table))) ->
+  forall result:int32.
+  (integer_of_int32(result) = 0) ->
+  forall result0:int32.
+  (integer_of_int32(result0) = 0) ->
+  ("JC_85": ("JC_80": (0 <= integer_of_int32(result0))))
 
 ========== file tests/java/why/Muller_po50.why ==========
 goal Muller_m_safety_po_16:
@@ -7169,8 +7107,8 @@ goal Muller_m_safety_po_25:
   (integer_of_int32(result6) <= 0) ->
   ((-2147483648) <= (integer_of_int32(i_8) + 1))
 
-========== file tests/java/why/Muller_po5.why ==========
-goal Muller_m_ensures_default_po_1:
+========== file tests/java/why/Muller_po6.why ==========
+goal Muller_m_ensures_default_po_2:
   forall t_7:Object pointer.
   forall Object_t_7_9_alloc_table:Object alloc_table.
   (left_valid_struct_intM(t_7, 0, Object_t_7_9_alloc_table) and
@@ -7179,7 +7117,10 @@ goal Muller_m_ensures_default_po_1:
   (integer_of_int32(result) = 0) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  ("JC_85": ("JC_80": (0 <= integer_of_int32(result0))))
+  ("JC_85":
+  ("JC_81":
+  (integer_of_int32(result0) <= (offset_max(Object_t_7_9_alloc_table,
+  t_7) + 1))))
 
 ========== file tests/java/why/Muller_po60.why ==========
 goal Muller_m_safety_po_26:
@@ -7415,21 +7356,6 @@ goal Muller_m_safety_po_28:
    t_7) + 1) - integer_of_int32(i_8_0))) < ("JC_79":
                                            ((offset_max(Object_t_7_9_alloc_table,
                                            t_7) + 1) - integer_of_int32(i_8))))
-
-========== file tests/java/why/Muller_po6.why ==========
-goal Muller_m_ensures_default_po_2:
-  forall t_7:Object pointer.
-  forall Object_t_7_9_alloc_table:Object alloc_table.
-  (left_valid_struct_intM(t_7, 0, Object_t_7_9_alloc_table) and
-   ("JC_41": Non_null_intM(t_7, Object_t_7_9_alloc_table))) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = 0) ->
-  ("JC_85":
-  ("JC_81":
-  (integer_of_int32(result0) <= (offset_max(Object_t_7_9_alloc_table,
-  t_7) + 1))))
 
 ========== file tests/java/why/Muller_po7.why ==========
 goal Muller_m_ensures_default_po_3:
@@ -8334,6 +8260,11 @@ why -simplify [...] why/Muller.why
  (EQ (integer_of_byte (byte_of_integer x)) x))))
 
 (BG_PUSH
+ ;; Why axiom byte_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_byte x) (integer_of_byte y)) (EQ x y))))
+
+(BG_PUSH
  ;; Why axiom byte_range
  (FORALL (x)
  (AND (<= (- 0 128) (integer_of_byte x)) (<= (integer_of_byte x) 127))))
@@ -8343,6 +8274,11 @@ why -simplify [...] why/Muller.why
  (FORALL (x)
  (IMPLIES (AND (<= 0 x) (<= x 65535))
  (EQ (integer_of_char (char_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom char_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_char x) (integer_of_char y)) (EQ x y))))
 
 (BG_PUSH
  ;; Why axiom char_range
@@ -8365,6 +8301,11 @@ why -simplify [...] why/Muller.why
  (AND (<= (- 0 constant_too_large_2147483648) x)
  (<= x constant_too_large_2147483647))
  (EQ (integer_of_int32 (int32_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom int32_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_int32 x) (integer_of_int32 y)) (EQ x y))))
 
 (BG_PUSH
  ;; Why axiom int32_range
@@ -8423,6 +8364,11 @@ why -simplify [...] why/Muller.why
  (EQ (integer_of_long (long_of_integer x)) x))))
 
 (BG_PUSH
+ ;; Why axiom long_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_long x) (integer_of_long y)) (EQ x y))))
+
+(BG_PUSH
  ;; Why axiom long_range
  (FORALL (x)
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
@@ -8464,6 +8410,11 @@ why -simplify [...] why/Muller.why
  (EQ (integer_of_short (short_of_integer x)) x))))
 
 (BG_PUSH
+ ;; Why axiom short_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_short x) (integer_of_short y)) (EQ x y))))
+
+(BG_PUSH
  ;; Why axiom short_range
  (FORALL (x)
  (AND (<= (- 0 32768) (integer_of_short x)) (<= (integer_of_short x) 32767))))
@@ -8498,29 +8449,6 @@ why -simplify [...] why/Muller.why
 (DEFPRED (strict_valid_struct_interface p a b interface_alloc_table)
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_Exception p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Muller p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_String p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Throwable p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_intM p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_interface p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
 
 (DEFPRED (valid_root_Object p a b Object_alloc_table)
   (AND (<= (offset_min Object_alloc_table p) a)
@@ -8599,7 +8527,7 @@ why -simplify [...] why/Muller.why
  (FORALL (intM_intP_t_8_at_L t_0)
  (EQ (num_of_pos i_0 j_0 t_0 intM_intP_t_8_at_L) 0)))))
 
-;; num_of_pos_non_negative, File "HOME/tests/java/Muller.jc", line 100, characters 0-153
+;; num_of_pos_non_negative, File "HOME/tests/java/Muller.java", line 51, characters 10-33
 (FORALL (intM_intP_t_3_18_at_L i_3 j_3 t_3)
 (<= 0 (num_of_pos i_3 j_3 t_3 intM_intP_t_3_18_at_L)))
 
@@ -8608,7 +8536,7 @@ why -simplify [...] why/Muller.why
 (FORALL (intM_intP_t_3_18_at_L i_3 j_3 t_3)
 (<= 0 (num_of_pos i_3 j_3 t_3 intM_intP_t_3_18_at_L))))
 
-;; num_of_pos_additive, File "HOME/tests/java/Muller.jc", line 106, characters 0-299
+;; num_of_pos_additive, File "HOME/tests/java/Muller.java", line 55, characters 10-29
 (FORALL (intM_intP_t_4_19_at_L i_4 j_4 k_1 t_4)
 (IMPLIES (AND (<= i_4 j_4) (<= j_4 k_1))
 (EQ (num_of_pos i_4 k_1 t_4 intM_intP_t_4_19_at_L)
@@ -8623,7 +8551,7 @@ why -simplify [...] why/Muller.why
 (+ (num_of_pos i_4 j_4 t_4 intM_intP_t_4_19_at_L) (num_of_pos
                                                   j_4 k_1 t_4 intM_intP_t_4_19_at_L))))))
 
-;; num_of_pos_increasing, File "HOME/tests/java/Muller.jc", line 115, characters 0-238
+;; num_of_pos_increasing, File "HOME/tests/java/Muller.java", line 60, characters 10-31
 (FORALL (intM_intP_t_5_20_at_L i_5 j_5 k_2 t_5)
 (IMPLIES (<= j_5 k_2)
 (<= (num_of_pos i_5 j_5 t_5 intM_intP_t_5_20_at_L) (num_of_pos
@@ -8636,7 +8564,7 @@ why -simplify [...] why/Muller.why
 (<= (num_of_pos i_5 j_5 t_5 intM_intP_t_5_20_at_L) (num_of_pos
                                                    i_5 k_2 t_5 intM_intP_t_5_20_at_L)))))
 
-;; num_of_pos_strictly_increasing, File "HOME/tests/java/Muller.jc", line 123, characters 0-246
+;; num_of_pos_strictly_increasing, File "HOME/tests/java/Muller.java", line 65, characters 10-40
 (FORALL (intM_intP_t_6_21_at_L i_6 n t_6)
 (IMPLIES
 (AND (<= 0 i_6)
@@ -8655,7 +8583,7 @@ why -simplify [...] why/Muller.why
 (< (num_of_pos 0 i_6 t_6 intM_intP_t_6_21_at_L) (num_of_pos
                                                 0 n t_6 intM_intP_t_6_21_at_L)))))
 
-;; Muller_m_ensures_default_po_1, File "HOME/tests/java/Muller.java", line 77, characters 8-14
+;; Muller_m_ensures_default_po_1, File "HOME/tests/java/Muller.java", line 79, characters 8-14
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM t_7 0 Object_t_7_9_alloc_table)
@@ -8665,7 +8593,7 @@ why -simplify [...] why/Muller.why
 (FORALL (result0)
 (IMPLIES (EQ (integer_of_int32 result0) 0) (<= 0 (integer_of_int32 result0)))))))))
 
-;; Muller_m_ensures_default_po_2, File "HOME/tests/java/Muller.java", line 77, characters 13-26
+;; Muller_m_ensures_default_po_2, File "HOME/tests/java/Muller.java", line 79, characters 13-26
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM t_7 0 Object_t_7_9_alloc_table)
@@ -8676,7 +8604,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ (integer_of_int32 result0) 0)
 (<= (integer_of_int32 result0) (+ (offset_max Object_t_7_9_alloc_table t_7) 1)))))))))
 
-;; Muller_m_ensures_default_po_3, File "HOME/tests/java/Muller.java", line 78, characters 8-18
+;; Muller_m_ensures_default_po_3, File "HOME/tests/java/Muller.java", line 80, characters 8-18
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM t_7 0 Object_t_7_9_alloc_table)
@@ -8686,7 +8614,7 @@ why -simplify [...] why/Muller.why
 (FORALL (result0)
 (IMPLIES (EQ (integer_of_int32 result0) 0) (<= 0 (integer_of_int32 result)))))))))
 
-;; Muller_m_ensures_default_po_4, File "HOME/tests/java/Muller.java", line 78, characters 13-23
+;; Muller_m_ensures_default_po_4, File "HOME/tests/java/Muller.java", line 80, characters 13-23
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (IMPLIES (AND (left_valid_struct_intM t_7 0 Object_t_7_9_alloc_table)
@@ -8697,7 +8625,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ (integer_of_int32 result0) 0)
 (<= (integer_of_int32 result) (integer_of_int32 result0)))))))))
 
-;; Muller_m_ensures_default_po_5, File "HOME/tests/java/Muller.java", line 79, characters 8-34
+;; Muller_m_ensures_default_po_5, File "HOME/tests/java/Muller.java", line 81, characters 8-34
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -8710,7 +8638,7 @@ why -simplify [...] why/Muller.why
 (EQ (integer_of_int32 result)
 (num_of_pos 0 (integer_of_int32 result0) t_7 intM_intP_t_7_9))))))))))
 
-;; Muller_m_ensures_default_po_6, File "HOME/tests/java/Muller.java", line 77, characters 8-14
+;; Muller_m_ensures_default_po_6, File "HOME/tests/java/Muller.java", line 79, characters 8-14
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -8747,7 +8675,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ (integer_of_int32 result4) (+ (integer_of_int32 i_7) 1))
 (FORALL (i_7_0) (IMPLIES (EQ i_7_0 result4) (<= 0 (integer_of_int32 i_7_0)))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_7, File "HOME/tests/java/Muller.java", line 77, characters 13-26
+;; Muller_m_ensures_default_po_7, File "HOME/tests/java/Muller.java", line 79, characters 13-26
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -8786,7 +8714,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ i_7_0 result4)
 (<= (integer_of_int32 i_7_0) (+ (offset_max Object_t_7_9_alloc_table t_7) 1)))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_8, File "HOME/tests/java/Muller.java", line 78, characters 8-18
+;; Muller_m_ensures_default_po_8, File "HOME/tests/java/Muller.java", line 80, characters 8-18
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -8824,7 +8752,7 @@ why -simplify [...] why/Muller.why
 (FORALL (i_7_0)
 (IMPLIES (EQ i_7_0 result4) (<= 0 (integer_of_int32 count0)))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_9, File "HOME/tests/java/Muller.java", line 78, characters 13-23
+;; Muller_m_ensures_default_po_9, File "HOME/tests/java/Muller.java", line 80, characters 13-23
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -8863,7 +8791,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ i_7_0 result4)
 (<= (integer_of_int32 count0) (integer_of_int32 i_7_0)))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_10, File "HOME/tests/java/Muller.java", line 79, characters 8-34
+;; Muller_m_ensures_default_po_10, File "HOME/tests/java/Muller.java", line 81, characters 8-34
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -8903,7 +8831,7 @@ why -simplify [...] why/Muller.why
 (EQ (integer_of_int32 count0)
 (num_of_pos 0 (integer_of_int32 i_7_0) t_7 intM_intP_t_7_9)))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_11, File "HOME/tests/java/Muller.java", line 77, characters 8-14
+;; Muller_m_ensures_default_po_11, File "HOME/tests/java/Muller.java", line 79, characters 8-14
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -8936,7 +8864,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ (integer_of_int32 result3) (+ (integer_of_int32 i_7) 1))
 (FORALL (i_7_0) (IMPLIES (EQ i_7_0 result3) (<= 0 (integer_of_int32 i_7_0)))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_12, File "HOME/tests/java/Muller.java", line 77, characters 13-26
+;; Muller_m_ensures_default_po_12, File "HOME/tests/java/Muller.java", line 79, characters 13-26
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -8971,7 +8899,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ i_7_0 result3)
 (<= (integer_of_int32 i_7_0) (+ (offset_max Object_t_7_9_alloc_table t_7) 1)))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_13, File "HOME/tests/java/Muller.java", line 78, characters 8-18
+;; Muller_m_ensures_default_po_13, File "HOME/tests/java/Muller.java", line 80, characters 8-18
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9004,7 +8932,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ (integer_of_int32 result3) (+ (integer_of_int32 i_7) 1))
 (FORALL (i_7_0) (IMPLIES (EQ i_7_0 result3) (<= 0 (integer_of_int32 count)))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_14, File "HOME/tests/java/Muller.java", line 78, characters 13-23
+;; Muller_m_ensures_default_po_14, File "HOME/tests/java/Muller.java", line 80, characters 13-23
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9039,7 +8967,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ i_7_0 result3)
 (<= (integer_of_int32 count) (integer_of_int32 i_7_0)))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_15, File "HOME/tests/java/Muller.java", line 79, characters 8-34
+;; Muller_m_ensures_default_po_15, File "HOME/tests/java/Muller.java", line 81, characters 8-34
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9075,7 +9003,7 @@ why -simplify [...] why/Muller.why
 (EQ (integer_of_int32 count)
 (num_of_pos 0 (integer_of_int32 i_7_0) t_7 intM_intP_t_7_9)))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_16, File "HOME/tests/java/Muller.java", line 88, characters 8-14
+;; Muller_m_ensures_default_po_16, File "HOME/tests/java/Muller.java", line 90, characters 8-14
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9121,7 +9049,7 @@ why -simplify [...] why/Muller.why
 (FORALL (result4)
 (IMPLIES (EQ (integer_of_int32 result4) 0) (<= 0 (integer_of_int32 result4)))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_17, File "HOME/tests/java/Muller.java", line 88, characters 13-26
+;; Muller_m_ensures_default_po_17, File "HOME/tests/java/Muller.java", line 90, characters 13-26
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9168,7 +9096,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ (integer_of_int32 result4) 0)
 (<= (integer_of_int32 result4) (+ (offset_max Object_t_7_9_alloc_table t_7) 1)))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_18, File "HOME/tests/java/Muller.java", line 89, characters 8-18
+;; Muller_m_ensures_default_po_18, File "HOME/tests/java/Muller.java", line 91, characters 8-18
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9214,7 +9142,7 @@ why -simplify [...] why/Muller.why
 (FORALL (result4)
 (IMPLIES (EQ (integer_of_int32 result4) 0) (<= 0 (integer_of_int32 count0)))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_19, File "HOME/tests/java/Muller.java", line 89, characters 13-23
+;; Muller_m_ensures_default_po_19, File "HOME/tests/java/Muller.java", line 91, characters 13-23
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9261,7 +9189,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ (integer_of_int32 result4) 0)
 (<= (integer_of_int32 count0) (integer_of_int32 result4)))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_20, File "HOME/tests/java/Muller.java", line 90, characters 8-34
+;; Muller_m_ensures_default_po_20, File "HOME/tests/java/Muller.java", line 92, characters 8-34
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9309,7 +9237,7 @@ why -simplify [...] why/Muller.why
 (EQ (integer_of_int32 count0)
 (num_of_pos 0 (integer_of_int32 result4) t_7 intM_intP_t_7_9)))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_21, File "HOME/tests/java/Muller.java", line 88, characters 8-14
+;; Muller_m_ensures_default_po_21, File "HOME/tests/java/Muller.java", line 90, characters 8-14
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9389,7 +9317,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ (integer_of_int32 result9) (+ (integer_of_int32 i_8) 1))
 (FORALL (i_8_0) (IMPLIES (EQ i_8_0 result9) (<= 0 (integer_of_int32 i_8_0)))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_22, File "HOME/tests/java/Muller.java", line 88, characters 13-26
+;; Muller_m_ensures_default_po_22, File "HOME/tests/java/Muller.java", line 90, characters 13-26
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9471,7 +9399,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ i_8_0 result9)
 (<= (integer_of_int32 i_8_0) (+ (offset_max Object_t_7_9_alloc_table t_7) 1)))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_23, File "HOME/tests/java/Muller.java", line 89, characters 8-18
+;; Muller_m_ensures_default_po_23, File "HOME/tests/java/Muller.java", line 91, characters 8-18
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9552,7 +9480,7 @@ why -simplify [...] why/Muller.why
 (FORALL (i_8_0)
 (IMPLIES (EQ i_8_0 result9) (<= 0 (integer_of_int32 count2)))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_24, File "HOME/tests/java/Muller.java", line 89, characters 13-23
+;; Muller_m_ensures_default_po_24, File "HOME/tests/java/Muller.java", line 91, characters 13-23
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9634,7 +9562,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ i_8_0 result9)
 (<= (integer_of_int32 count2) (integer_of_int32 i_8_0)))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_25, File "HOME/tests/java/Muller.java", line 90, characters 8-34
+;; Muller_m_ensures_default_po_25, File "HOME/tests/java/Muller.java", line 92, characters 8-34
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9717,7 +9645,7 @@ why -simplify [...] why/Muller.why
 (EQ (integer_of_int32 count2)
 (num_of_pos 0 (integer_of_int32 i_8_0) t_7 intM_intP_t_7_9)))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_26, File "HOME/tests/java/Muller.java", line 88, characters 8-14
+;; Muller_m_ensures_default_po_26, File "HOME/tests/java/Muller.java", line 90, characters 8-14
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9785,7 +9713,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ (integer_of_int32 result7) (+ (integer_of_int32 i_8) 1))
 (FORALL (i_8_0) (IMPLIES (EQ i_8_0 result7) (<= 0 (integer_of_int32 i_8_0))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_27, File "HOME/tests/java/Muller.java", line 88, characters 13-26
+;; Muller_m_ensures_default_po_27, File "HOME/tests/java/Muller.java", line 90, characters 13-26
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9855,7 +9783,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ i_8_0 result7)
 (<= (integer_of_int32 i_8_0) (+ (offset_max Object_t_7_9_alloc_table t_7) 1))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_28, File "HOME/tests/java/Muller.java", line 89, characters 8-18
+;; Muller_m_ensures_default_po_28, File "HOME/tests/java/Muller.java", line 91, characters 8-18
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9924,7 +9852,7 @@ why -simplify [...] why/Muller.why
 (FORALL (i_8_0)
 (IMPLIES (EQ i_8_0 result7) (<= 0 (integer_of_int32 count1))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_29, File "HOME/tests/java/Muller.java", line 89, characters 13-23
+;; Muller_m_ensures_default_po_29, File "HOME/tests/java/Muller.java", line 91, characters 13-23
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -9994,7 +9922,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ i_8_0 result7)
 (<= (integer_of_int32 count1) (integer_of_int32 i_8_0))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_ensures_default_po_30, File "HOME/tests/java/Muller.java", line 90, characters 8-34
+;; Muller_m_ensures_default_po_30, File "HOME/tests/java/Muller.java", line 92, characters 8-34
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10065,7 +9993,7 @@ why -simplify [...] why/Muller.why
 (EQ (integer_of_int32 count1)
 (num_of_pos 0 (integer_of_int32 i_8_0) t_7 intM_intP_t_7_9))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_1, File "why/Muller.why", line 1029, characters 54-230
+;; Muller_m_safety_po_1, File "why/Muller.why", line 902, characters 54-230
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10088,7 +10016,7 @@ why -simplify [...] why/Muller.why
          (num_of_pos 0 (integer_of_int32 i_7) t_7 intM_intP_t_7_9))))))
 (>= (offset_max Object_t_7_9_alloc_table t_7) (- 0 1))))))))))))))
 
-;; Muller_m_safety_po_2, File "HOME/tests/java/Muller.java", line 82, characters 39-43
+;; Muller_m_safety_po_2, File "HOME/tests/java/Muller.java", line 84, characters 39-43
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10117,7 +10045,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (< (integer_of_int32 i_7) result1)
 (<= (offset_min Object_t_7_9_alloc_table t_7) (integer_of_int32 i_7))))))))))))))))))
 
-;; Muller_m_safety_po_3, File "HOME/tests/java/Muller.java", line 82, characters 39-43
+;; Muller_m_safety_po_3, File "HOME/tests/java/Muller.java", line 84, characters 39-43
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10304,7 +10232,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (EQ count0 result3)
 (<= (+ (integer_of_int32 i_7) 1) constant_too_large_2147483647))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_8, File "HOME/tests/java/Muller.java", line 80, characters 18-30
+;; Muller_m_safety_po_8, File "HOME/tests/java/Muller.java", line 82, characters 18-30
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10355,7 +10283,7 @@ why -simplify [...] why/Muller.why
 (<= 0 (- (+ (offset_max Object_t_7_9_alloc_table t_7) 1) (integer_of_int32
                                                          i_7)))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_9, File "HOME/tests/java/Muller.java", line 80, characters 18-30
+;; Muller_m_safety_po_9, File "HOME/tests/java/Muller.java", line 82, characters 18-30
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10481,7 +10409,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (<= (integer_of_int32 result2) 0)
 (<= (+ (integer_of_int32 i_7) 1) constant_too_large_2147483647)))))))))))))))))))))
 
-;; Muller_m_safety_po_12, File "HOME/tests/java/Muller.java", line 80, characters 18-30
+;; Muller_m_safety_po_12, File "HOME/tests/java/Muller.java", line 82, characters 18-30
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10525,7 +10453,7 @@ why -simplify [...] why/Muller.why
 (<= 0 (- (+ (offset_max Object_t_7_9_alloc_table t_7) 1) (integer_of_int32
                                                          i_7))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_13, File "HOME/tests/java/Muller.java", line 80, characters 18-30
+;; Muller_m_safety_po_13, File "HOME/tests/java/Muller.java", line 82, characters 18-30
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10572,7 +10500,7 @@ why -simplify [...] why/Muller.why
                                                               (integer_of_int32
                                                               i_7))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_14, File "HOME/tests/java/Muller.java", line 84, characters 11-25
+;; Muller_m_safety_po_14, File "HOME/tests/java/Muller.java", line 86, characters 11-25
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10600,7 +10528,7 @@ why -simplify [...] why/Muller.why
          (EQ result1 (+ (offset_max Object_t_7_9_alloc_table t_7) 1))))
 (IMPLIES (>= (integer_of_int32 i_7) result1) (>= (integer_of_int32 count) 0)))))))))))))))))
 
-;; Muller_m_safety_po_15, File "HOME/tests/java/Muller.java", line 94, characters 9-13
+;; Muller_m_safety_po_15, File "HOME/tests/java/Muller.java", line 96, characters 9-13
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10667,7 +10595,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (< (integer_of_int32 i_8) result5)
 (<= (offset_min Object_t_7_9_alloc_table t_7) (integer_of_int32 i_8))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_16, File "HOME/tests/java/Muller.java", line 94, characters 9-13
+;; Muller_m_safety_po_16, File "HOME/tests/java/Muller.java", line 96, characters 9-13
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10894,7 +10822,7 @@ why -simplify [...] why/Muller.why
          (select intM_intP_t_7_9 (shift t_7 (integer_of_int32 i_8))))
 (<= (+ (integer_of_int32 count1) 1) constant_too_large_2147483647))))))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_19, File "HOME/tests/java/Muller.java", line 94, characters 19-36
+;; Muller_m_safety_po_19, File "HOME/tests/java/Muller.java", line 96, characters 19-36
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -10982,7 +10910,7 @@ why -simplify [...] why/Muller.why
 (<= (offset_min Object_Muller_m_11_alloc_table0 result2) (integer_of_int32
                                                          count1))))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_20, File "HOME/tests/java/Muller.java", line 94, characters 19-36
+;; Muller_m_safety_po_20, File "HOME/tests/java/Muller.java", line 96, characters 19-36
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -11264,7 +11192,7 @@ why -simplify [...] why/Muller.why
          intM_intP_Muller_m_11 (shift result2 (integer_of_int32 count1)) result7))
 (<= (+ (integer_of_int32 i_8) 1) constant_too_large_2147483647)))))))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_23, File "HOME/tests/java/Muller.java", line 91, characters 18-30
+;; Muller_m_safety_po_23, File "HOME/tests/java/Muller.java", line 93, characters 18-30
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -11369,7 +11297,7 @@ why -simplify [...] why/Muller.why
 (<= 0 (- (+ (offset_max Object_t_7_9_alloc_table t_7) 1) (integer_of_int32
                                                          i_8))))))))))))))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_24, File "HOME/tests/java/Muller.java", line 91, characters 18-30
+;; Muller_m_safety_po_24, File "HOME/tests/java/Muller.java", line 93, characters 18-30
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -11625,7 +11553,7 @@ why -simplify [...] why/Muller.why
 (IMPLIES (<= (integer_of_int32 result6) 0)
 (<= (+ (integer_of_int32 i_8) 1) constant_too_large_2147483647)))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_27, File "HOME/tests/java/Muller.java", line 91, characters 18-30
+;; Muller_m_safety_po_27, File "HOME/tests/java/Muller.java", line 93, characters 18-30
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -11707,7 +11635,7 @@ why -simplify [...] why/Muller.why
 (<= 0 (- (+ (offset_max Object_t_7_9_alloc_table t_7) 1) (integer_of_int32
                                                          i_8))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; Muller_m_safety_po_28, File "HOME/tests/java/Muller.java", line 91, characters 18-30
+;; Muller_m_safety_po_28, File "HOME/tests/java/Muller.java", line 93, characters 18-30
 (FORALL (t_7)
 (FORALL (Object_t_7_9_alloc_table)
 (FORALL (intM_intP_t_7_9)
@@ -12798,6 +12726,10 @@ axiom byte_coerce:
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_byte(byte_of_integer(x)) = x)))
 
+axiom byte_extensionality:
+  (forall x:byte.
+    (forall y:byte. ((integer_of_byte(x) = integer_of_byte(y)) -> (x = y))))
+
 axiom byte_range:
   (forall x:byte.
     (((-128) <= integer_of_byte(x)) and (integer_of_byte(x) <= 127)))
@@ -12809,6 +12741,10 @@ logic char_of_integer : int -> char
 axiom char_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 65535)) -> (integer_of_char(char_of_integer(x)) = x)))
+
+axiom char_extensionality:
+  (forall x:char.
+    (forall y:char. ((integer_of_char(x) = integer_of_char(y)) -> (x = y))))
 
 axiom char_range:
   (forall x:char.
@@ -12841,6 +12777,11 @@ axiom int32_coerce:
   (forall x:int.
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
+
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range:
   (forall x:int32.
@@ -12903,6 +12844,10 @@ axiom long_coerce:
     ((((-9223372036854775808) <= x) and (x <= 9223372036854775807)) ->
      (integer_of_long(long_of_integer(x)) = x)))
 
+axiom long_extensionality:
+  (forall x:long.
+    (forall y:long. ((integer_of_long(x) = integer_of_long(y)) -> (x = y))))
+
 axiom long_range:
   (forall x:long.
     (((-9223372036854775808) <= integer_of_long(x)) and
@@ -12953,6 +12898,11 @@ axiom short_coerce:
     ((((-32768) <= x) and (x <= 32767)) ->
      (integer_of_short(short_of_integer(x)) = x)))
 
+axiom short_extensionality:
+  (forall x:short.
+    (forall y:short.
+      ((integer_of_short(x) = integer_of_short(y)) -> (x = y))))
+
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
@@ -12996,36 +12946,6 @@ predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Muller(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_intM(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
@@ -16298,10 +16218,10 @@ goal Muller_m_safety_po_28:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Muller_why.why            : ????.......................................................... (58/0/4/0/0)
+why/Muller_why.why            : ?###.......................................................... (58/0/1/3/0)
 total   :  62
 valid   :  58 ( 94%)
 invalid :   0 (  0%)
-unknown :   4 (  6%)
-timeout :   0 (  0%)
+unknown :   1 (  2%)
+timeout :   3 (  5%)
 failure :   0 (  0%)

@@ -151,14 +151,6 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -194,6 +186,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -205,6 +202,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -289,21 +291,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_ga(intP_ga_1_alloc_table:intP alloc_table) =
  (le_int(offset_min(intP_ga_1_alloc_table, ga), (0))
  and ge_int(offset_max(intP_ga_1_alloc_table, ga), (9)))
@@ -352,59 +339,13 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -500,9 +441,8 @@ parameter init_0 :
         (forall i:int32.
          ((le_int((0), integer_of_int32(i))
           and lt_int(integer_of_int32(i), (10))) ->
-          eq_int(integer_of_int32(select(intP_intM_ga_1,
-                                  shift(ga, integer_of_int32(i)))),
-          integer_of_int32(i)))))) }
+          (integer_of_int32(select(intP_intM_ga_1,
+                            shift(ga, integer_of_int32(i)))) = integer_of_int32(i)))))) }
 
 parameter init_0_requires :
  tt:unit ->
@@ -513,9 +453,8 @@ parameter init_0_requires :
         (forall i:int32.
          ((le_int((0), integer_of_int32(i))
           and lt_int(integer_of_int32(i), (10))) ->
-          eq_int(integer_of_int32(select(intP_intM_ga_1,
-                                  shift(ga, integer_of_int32(i)))),
-          integer_of_int32(i)))))) }
+          (integer_of_int32(select(intP_intM_ga_1,
+                            shift(ga, integer_of_int32(i)))) = integer_of_int32(i)))))) }
 
 parameter initp :
  tt:unit ->
@@ -525,9 +464,8 @@ parameter initp :
         (forall i_0_0:int32.
          ((le_int((0), integer_of_int32(i_0_0))
           and lt_int(integer_of_int32(i_0_0), (10))) ->
-          eq_int(integer_of_int32(select(intP_intM_ga_1,
-                                  shift(ga, integer_of_int32(i_0_0)))),
-          integer_of_int32(i_0_0)))))) }
+          (integer_of_int32(select(intP_intM_ga_1,
+                            shift(ga, integer_of_int32(i_0_0)))) = integer_of_int32(i_0_0)))))) }
 
 parameter initp_requires :
  tt:unit ->
@@ -538,9 +476,8 @@ parameter initp_requires :
         (forall i_0_0:int32.
          ((le_int((0), integer_of_int32(i_0_0))
           and lt_int(integer_of_int32(i_0_0), (10))) ->
-          eq_int(integer_of_int32(select(intP_intM_ga_1,
-                                  shift(ga, integer_of_int32(i_0_0)))),
-          integer_of_int32(i_0_0)))))) }
+          (integer_of_int32(select(intP_intM_ga_1,
+                            shift(ga, integer_of_int32(i_0_0)))) = integer_of_int32(i_0_0)))))) }
 
 parameter initparith :
  tt:unit ->
@@ -550,9 +487,8 @@ parameter initparith :
         (forall i_1:int32.
          ((le_int((0), integer_of_int32(i_1))
           and lt_int(integer_of_int32(i_1), (10))) ->
-          eq_int(integer_of_int32(select(intP_intM_ga_1,
-                                  shift(ga, integer_of_int32(i_1)))),
-          integer_of_int32(i_1)))))) }
+          (integer_of_int32(select(intP_intM_ga_1,
+                            shift(ga, integer_of_int32(i_1)))) = integer_of_int32(i_1)))))) }
 
 parameter initparith_requires :
  tt:unit ->
@@ -563,9 +499,8 @@ parameter initparith_requires :
         (forall i_1:int32.
          ((le_int((0), integer_of_int32(i_1))
           and lt_int(integer_of_int32(i_1), (10))) ->
-          eq_int(integer_of_int32(select(intP_intM_ga_1,
-                                  shift(ga, integer_of_int32(i_1)))),
-          integer_of_int32(i_1)))))) }
+          (integer_of_int32(select(intP_intM_ga_1,
+                            shift(ga, integer_of_int32(i_1)))) = integer_of_int32(i_1)))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -591,7 +526,6 @@ let init_ensures_default =
    begin
      (let i_0 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       begin
         (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
@@ -604,22 +538,19 @@ let init_ensures_default =
                (forall k:int32.
                 ((le_int((0), integer_of_int32(k))
                  and lt_int(integer_of_int32(k), integer_of_int32(i_0))) ->
-                 eq_int(integer_of_int32(select(intP_intM_ga_1,
-                                         shift(ga, integer_of_int32(k)))),
+                 (integer_of_int32(select(intP_intM_ga_1,
+                                   shift(ga, integer_of_int32(k)))) = 
                  integer_of_int32(k)))))))  }
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_6:
             (C_9:
             begin
               (if ((lt_int_ (integer_of_int32 !i_0)) (10)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (let jessie_<somenum> = !i_0 in
              (let jessie_<somenum> = ga in
@@ -629,9 +560,9 @@ let init_ensures_default =
              (i_0 := (C_8:
                      (safe_int32_of_integer_ (C_7:
                                              ((add_int (integer_of_int32 !i_0)) (1))))));
-             !i_0 end)) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+             !i_0 end)) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end)
@@ -639,9 +570,8 @@ let init_ensures_default =
     (forall i:int32.
      ((le_int((0), integer_of_int32(i))
       and lt_int(integer_of_int32(i), (10))) ->
-      eq_int(integer_of_int32(select(intP_intM_ga_1,
-                              shift(ga, integer_of_int32(i)))),
-      integer_of_int32(i))))) }
+      (integer_of_int32(select(intP_intM_ga_1,
+                        shift(ga, integer_of_int32(i)))) = integer_of_int32(i))))) }
 
 let init_safety =
  fun (tt : unit) ->
@@ -651,7 +581,6 @@ let init_safety =
    begin
      (let i_0 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       begin
         (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
@@ -666,20 +595,17 @@ let init_safety =
                   (forall k:int32.
                    ((le_int((0), integer_of_int32(k))
                     and lt_int(integer_of_int32(k), integer_of_int32(i_0))) ->
-                    eq_int(integer_of_int32(select(intP_intM_ga_1,
-                                            shift(ga, integer_of_int32(k)))),
+                    (integer_of_int32(select(intP_intM_ga_1,
+                                      shift(ga, integer_of_int32(k)))) = 
                     integer_of_int32(k))))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_6:
             (C_9:
             begin
               (if ((lt_int_ (integer_of_int32 !i_0)) (10)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (let jessie_<somenum> = !i_0 in
              (let jessie_<somenum> = ga in
@@ -692,9 +618,9 @@ let init_safety =
                      (JC_<somenum>:
                      (int32_of_integer_ (C_7:
                                         ((add_int (integer_of_int32 !i_0)) (1)))))));
-             !i_0 end)) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+             !i_0 end)) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end) { (JC_<somenum>: valid_ga(intP_ga_1_alloc_table)) }
@@ -708,7 +634,6 @@ let initp_ensures_default =
      (let i_0_1 = ref (any_int32 void) in
      (let p = ref (any_pointer void) in
      try
-      (let jessie_<somenum> =
       (C_11:
       (C_12:
       begin
@@ -723,22 +648,19 @@ let initp_ensures_default =
                (forall k_0:int32.
                 ((le_int((0), integer_of_int32(k_0))
                  and lt_int(integer_of_int32(k_0), integer_of_int32(i_0_1))) ->
-                 eq_int(integer_of_int32(select(intP_intM_ga_1,
-                                         shift(ga, integer_of_int32(k_0)))),
+                 (integer_of_int32(select(intP_intM_ga_1,
+                                   shift(ga, integer_of_int32(k_0)))) = 
                  integer_of_int32(k_0)))))))  }
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_18:
             (C_21:
             begin
               (if ((lt_int_ (integer_of_int32 !i_0_1)) (10)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (let jessie_<somenum> = !i_0_1 in
              (let jessie_<somenum> = !p in
@@ -748,9 +670,9 @@ let initp_ensures_default =
              (i_0_1 := (C_20:
                        (safe_int32_of_integer_ (C_19:
                                                ((add_int (integer_of_int32 !i_0_1)) (1))))));
-             !i_0_1 end)) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) in void) with
+             !i_0_1 end)) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end)
@@ -758,9 +680,8 @@ let initp_ensures_default =
     (forall i_0_0:int32.
      ((le_int((0), integer_of_int32(i_0_0))
       and lt_int(integer_of_int32(i_0_0), (10))) ->
-      eq_int(integer_of_int32(select(intP_intM_ga_1,
-                              shift(ga, integer_of_int32(i_0_0)))),
-      integer_of_int32(i_0_0))))) }
+      (integer_of_int32(select(intP_intM_ga_1,
+                        shift(ga, integer_of_int32(i_0_0)))) = integer_of_int32(i_0_0))))) }
 
 let initp_safety =
  fun (tt : unit) ->
@@ -771,7 +692,6 @@ let initp_safety =
      (let i_0_1 = ref (any_int32 void) in
      (let p = ref (any_pointer void) in
      try
-      (let jessie_<somenum> =
       (C_11:
       (C_12:
       begin
@@ -789,20 +709,17 @@ let initp_safety =
                    ((le_int((0), integer_of_int32(k_0))
                     and lt_int(integer_of_int32(k_0),
                         integer_of_int32(i_0_1))) ->
-                    eq_int(integer_of_int32(select(intP_intM_ga_1,
-                                            shift(ga, integer_of_int32(k_0)))),
+                    (integer_of_int32(select(intP_intM_ga_1,
+                                      shift(ga, integer_of_int32(k_0)))) = 
                     integer_of_int32(k_0))))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_18:
             (C_21:
             begin
               (if ((lt_int_ (integer_of_int32 !i_0_1)) (10)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (let jessie_<somenum> = !i_0_1 in
              (let jessie_<somenum> = !p in
@@ -815,9 +732,9 @@ let initp_safety =
                        (JC_<somenum>:
                        (int32_of_integer_ (C_19:
                                           ((add_int (integer_of_int32 !i_0_1)) (1)))))));
-             !i_0_1 end)) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) in void) with
+             !i_0_1 end)) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end) { (JC_<somenum>: valid_ga(intP_ga_1_alloc_table)) }
@@ -831,7 +748,6 @@ let initparith_ensures_default =
      (let i_1_0 = ref (any_int32 void) in
      (let p_0 = ref (any_pointer void) in
      try
-      (let jessie_<somenum> =
       (C_23:
       (C_24:
       begin
@@ -848,13 +764,12 @@ let initparith_ensures_default =
                     ((le_int((0), integer_of_int32(k_1))
                      and lt_int(integer_of_int32(k_1),
                          integer_of_int32(i_1_0))) ->
-                     eq_int(integer_of_int32(select(intP_intM_ga_1,
-                                             shift(ga, integer_of_int32(k_1)))),
+                     (integer_of_int32(select(intP_intM_ga_1,
+                                       shift(ga, integer_of_int32(k_1)))) = 
                      integer_of_int32(k_1))))))))  }
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_31:
@@ -862,9 +777,7 @@ let initparith_ensures_default =
             (C_36:
             begin
               (if ((lt_int_ (integer_of_int32 !i_1_0)) (10)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> = !i_1_0 in
              (let jessie_<somenum> = !p_0 in
              (((safe_upd_ intP_intM_ga_1) jessie_<somenum>) jessie_<somenum>)));
@@ -873,9 +786,9 @@ let initparith_ensures_default =
                        (safe_int32_of_integer_ (C_32:
                                                ((add_int (integer_of_int32 !i_1_0)) (1)))))) in
              void); (p_0 := (C_35: ((shift !p_0) (1)))); !p_0 end))) in void);
-           (raise (Loop_continue_exc void)) end in void) with
+           (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) in void) with
+       (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end)
@@ -883,9 +796,8 @@ let initparith_ensures_default =
     (forall i_1:int32.
      ((le_int((0), integer_of_int32(i_1))
       and lt_int(integer_of_int32(i_1), (10))) ->
-      eq_int(integer_of_int32(select(intP_intM_ga_1,
-                              shift(ga, integer_of_int32(i_1)))),
-      integer_of_int32(i_1))))) }
+      (integer_of_int32(select(intP_intM_ga_1,
+                        shift(ga, integer_of_int32(i_1)))) = integer_of_int32(i_1))))) }
 
 let initparith_safety =
  fun (tt : unit) ->
@@ -896,7 +808,6 @@ let initparith_safety =
      (let i_1_0 = ref (any_int32 void) in
      (let p_0 = ref (any_pointer void) in
      try
-      (let jessie_<somenum> =
       (C_23:
       (C_24:
       begin
@@ -915,12 +826,10 @@ let initparith_safety =
                        ((le_int((0), integer_of_int32(k_1))
                         and lt_int(integer_of_int32(k_1),
                             integer_of_int32(i_1_0))) ->
-                        eq_int(integer_of_int32(select(intP_intM_ga_1,
-                                                shift(ga,
-                                                integer_of_int32(k_1)))),
+                        (integer_of_int32(select(intP_intM_ga_1,
+                                          shift(ga, integer_of_int32(k_1)))) = 
                         integer_of_int32(k_1)))))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_31:
@@ -928,9 +837,7 @@ let initparith_safety =
             (C_36:
             begin
               (if ((lt_int_ (integer_of_int32 !i_1_0)) (10)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> = !i_1_0 in
              (let jessie_<somenum> = !p_0 in
              (JC_<somenum>:
@@ -941,9 +848,9 @@ let initparith_safety =
                        (int32_of_integer_ (C_32:
                                           ((add_int (integer_of_int32 !i_1_0)) (1))))))) in
              void); (p_0 := (C_35: ((shift !p_0) (1)))); !p_0 end))) in void);
-           (raise (Loop_continue_exc void)) end in void) with
+           (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) in void) with
+       (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end) { (JC_<somenum>: valid_ga(intP_ga_1_alloc_table)) }
@@ -954,37 +861,7 @@ why --project [...] why/array_ptr.why
 <project name="array_ptr" context="why/array_ptr_ctx.why">
   <function name="Function initparith">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/array_ptr_po30.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "123" begin = "21" end = "44"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/array_ptr_po31.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "123" begin = "21" end = "44"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/array_ptr_po32.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "28" begin = "22" end = "25"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/array_ptr_po33.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "28" begin = "22" end = "25"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/array_ptr_po34.why">
-      <location file = "why/array_ptr.why" line = "768" begin = "42" end = "43"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/array_ptr_po35.why">
-      <location file = "why/array_ptr.why" line = "768" begin = "42" end = "43"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/array_ptr_po23.why">
       <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "26" begin = "21" end = "27"/>
       <explain kind = "LoopInvInit"/>
@@ -1014,9 +891,61 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/array_ptr_po30.why">
+      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "123" begin = "21" end = "44"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/array_ptr_po31.why">
+      <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "123" begin = "21" end = "44"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/array_ptr_po32.why">
+      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "28" begin = "22" end = "25"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/array_ptr_po33.why">
+      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "28" begin = "22" end = "25"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/array_ptr_po34.why">
+      <location file = "why/array_ptr.why" line = "679" begin = "42" end = "43"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/array_ptr_po35.why">
+      <location file = "why/array_ptr.why" line = "679" begin = "42" end = "43"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    </behavior>
   </function>
   <function name="Function initp">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/array_ptr_po12.why">
+      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "17" begin = "21" end = "27"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/array_ptr_po13.why">
+      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "17" begin = "31" end = "71"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/array_ptr_po14.why">
+      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "17" begin = "21" end = "27"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/array_ptr_po15.why">
+      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "17" begin = "31" end = "71"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/array_ptr_po16.why">
+      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "12" begin = "12" end = "53"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/array_ptr_po17.why">
       <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "90" begin = "21" end = "59"/>
@@ -1039,39 +968,39 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/array_ptr_po21.why">
-      <location file = "why/array_ptr.why" line = "643" begin = "42" end = "43"/>
+      <location file = "why/array_ptr.why" line = "563" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/array_ptr_po22.why">
-      <location file = "why/array_ptr.why" line = "643" begin = "42" end = "43"/>
+      <location file = "why/array_ptr.why" line = "563" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/array_ptr_po12.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "17" begin = "21" end = "27"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/array_ptr_po13.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "17" begin = "31" end = "71"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/array_ptr_po14.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "17" begin = "21" end = "27"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/array_ptr_po15.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "17" begin = "31" end = "71"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/array_ptr_po16.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "12" begin = "12" end = "53"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
   <function name="Function init">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/array_ptr_po1.why">
+      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "8" begin = "21" end = "27"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/array_ptr_po2.why">
+      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "8" begin = "31" end = "71"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/array_ptr_po3.why">
+      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "8" begin = "21" end = "27"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/array_ptr_po4.why">
+      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "8" begin = "31" end = "71"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/array_ptr_po5.why">
+      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "4" begin = "12" end = "53"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/array_ptr_po6.why">
       <location file = "PPCHOME/tests/jessie/array_ptr.jessie/array_ptr.jc" line = "58" begin = "20" end = "45"/>
@@ -1094,34 +1023,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/array_ptr_po10.why">
-      <location file = "why/array_ptr.why" line = "521" begin = "42" end = "43"/>
+      <location file = "why/array_ptr.why" line = "450" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/array_ptr_po11.why">
-      <location file = "why/array_ptr.why" line = "521" begin = "42" end = "43"/>
+      <location file = "why/array_ptr.why" line = "450" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/array_ptr_po1.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "8" begin = "21" end = "27"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/array_ptr_po2.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "8" begin = "31" end = "71"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/array_ptr_po3.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "8" begin = "21" end = "27"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/array_ptr_po4.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "8" begin = "31" end = "71"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/array_ptr_po5.why">
-      <location file = "PPCHOME/tests/jessie/array_ptr.c" line = "4" begin = "12" end = "53"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -2105,6 +2012,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -2116,6 +2028,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2201,21 +2117,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_ga(intP_ga_1_alloc_table: intP alloc_table) =
   ((offset_min(intP_ga_1_alloc_table, ga) <= 0) and

@@ -108,12 +108,6 @@ type uint32
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic integer_of___anonenum_RESULTAT_1: __anonenum_RESULTAT_1 -> int
 
 logic __anonenum_RESULTAT_1_of_integer: int -> __anonenum_RESULTAT_1
@@ -123,6 +117,12 @@ axiom __anonenum_RESULTAT_1_coerce :
   ((le_int((0), x) and le_int(x, (1))) ->
    eq_int(integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer(x)),
    x)))
+
+axiom __anonenum_RESULTAT_1_extensionality :
+ (forall x:__anonenum_RESULTAT_1.
+  (forall y:__anonenum_RESULTAT_1.
+   (eq_int(integer_of___anonenum_RESULTAT_1(x),
+    integer_of___anonenum_RESULTAT_1(y)) -> (x = y))))
 
 axiom __anonenum_RESULTAT_1_range :
  (forall x:__anonenum_RESULTAT_1.
@@ -187,8 +187,8 @@ predicate eq_uint32(x:uint32, y:uint32) =
  eq_int(integer_of_uint32(x), integer_of_uint32(y))
 
 predicate result_0(status:__anonenum_RESULTAT_1, n:int32) =
- (eq_int(integer_of___anonenum_RESULTAT_1(status),
-  integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0))))
+ ((integer_of___anonenum_RESULTAT_1(status) = integer_of___anonenum_RESULTAT_1(
+                                              __anonenum_RESULTAT_1_of_integer((0))))
  and gt_int(integer_of_int32(n), (0)))
 
 logic status_initial: int -> __anonenum_RESULTAT_1
@@ -202,6 +202,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -213,6 +218,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -295,25 +305,15 @@ axiom uint32_coerce :
   ((le_int((0), x) and le_int(x, (4294967295))) ->
    eq_int(integer_of_uint32(uint32_of_integer(x)), x)))
 
+axiom uint32_extensionality :
+ (forall x:uint32.
+  (forall y:uint32.
+   (eq_int(integer_of_uint32(x), integer_of_uint32(y)) -> (x = y))))
+
 axiom uint32_range :
  (forall x:uint32.
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_enum___anonenum_RESULTAT_1P(p:unit pointer,
- a:int, b:int, bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -363,67 +363,19 @@ axiom voidP_tags :
 
 axiom status_initial_ok :
  (forall i_0:int.
-  eq_int(integer_of___anonenum_RESULTAT_1(status_initial(i_0)),
-  integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0)))))
+  (integer_of___anonenum_RESULTAT_1(status_initial(i_0)) = integer_of___anonenum_RESULTAT_1(
+                                                           __anonenum_RESULTAT_1_of_integer((0)))))
+
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
+exception Return_label_exc of unit
 
 parameter __anonenum_RESULTAT_1_of_integer_ :
  x:int ->
   { (le_int((0), x) and le_int(x, (1)))} __anonenum_RESULTAT_1
   { eq_int(integer_of___anonenum_RESULTAT_1(result), x) }
-
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_enum___anonenum_RESULTAT_1P :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_enum___anonenum_RESULTAT_1P(result, (0),
-      sub_int(n, (1)), bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_enum___anonenum_RESULTAT_1P_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_enum___anonenum_RESULTAT_1P(result, (0),
-      sub_int(n, (1)), bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -526,17 +478,17 @@ parameter f2 :
  n_1:int32 ->
   { } __anonenum_RESULTAT_1
   { (JC_<somenum>:
-    (function2_res(n_1@) ->
-     eq_int(integer_of___anonenum_RESULTAT_1(result),
-     integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0)))))) }
+    (function2_res(n_1) ->
+     (integer_of___anonenum_RESULTAT_1(result) = integer_of___anonenum_RESULTAT_1(
+                                                 __anonenum_RESULTAT_1_of_integer((0)))))) }
 
 parameter f2_requires :
  n_1:int32 ->
   { } __anonenum_RESULTAT_1
   { (JC_<somenum>:
-    (function2_res(n_1@) ->
-     eq_int(integer_of___anonenum_RESULTAT_1(result),
-     integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0)))))) }
+    (function2_res(n_1) ->
+     (integer_of___anonenum_RESULTAT_1(result) = integer_of___anonenum_RESULTAT_1(
+                                                 __anonenum_RESULTAT_1_of_integer((0)))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -559,16 +511,16 @@ parameter p1 :
      { (JC_<somenum>:
        ((JC_<somenum>:
         (result_0(select(enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1@,
-                  last@),
-         n_0_0@) ->
-         eq_int(integer_of___anonenum_RESULTAT_1(select(enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1,
-                                                 last@)),
-         integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0))))))
+                  last),
+         n_0_0) ->
+         (integer_of___anonenum_RESULTAT_1(select(enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1,
+                                           last)) = integer_of___anonenum_RESULTAT_1(
+                                                    __anonenum_RESULTAT_1_of_integer((0))))))
        and (JC_<somenum>:
-           not_assigns(enum___anonenum_RESULTAT_1P_last_1_alloc_table@,
+           not_assigns(enum___anonenum_RESULTAT_1P_last_1_alloc_table,
            enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1@,
            enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1,
-           pset_singleton(last@))))) }
+           pset_singleton(last))))) }
 
 parameter p1_requires :
  last:enum___anonenum_RESULTAT_1P pointer ->
@@ -590,16 +542,16 @@ parameter p1_requires :
      { (JC_<somenum>:
        ((JC_<somenum>:
         (result_0(select(enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1@,
-                  last@),
-         n_0_0@) ->
-         eq_int(integer_of___anonenum_RESULTAT_1(select(enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1,
-                                                 last@)),
-         integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0))))))
+                  last),
+         n_0_0) ->
+         (integer_of___anonenum_RESULTAT_1(select(enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1,
+                                           last)) = integer_of___anonenum_RESULTAT_1(
+                                                    __anonenum_RESULTAT_1_of_integer((0))))))
        and (JC_<somenum>:
-           not_assigns(enum___anonenum_RESULTAT_1P_last_1_alloc_table@,
+           not_assigns(enum___anonenum_RESULTAT_1P_last_1_alloc_table,
            enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1@,
            enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1,
-           pset_singleton(last@))))) }
+           pset_singleton(last))))) }
 
 parameter safe___anonenum_RESULTAT_1_of_integer_ :
  x:int ->
@@ -650,9 +602,9 @@ let f2_ensures_default =
       void); (return := !__retres); (raise Return) end))))))); absurd  end
    with Return -> !return end))
   { (JC_<somenum>:
-    (function2_res(n_1@) ->
-     eq_int(integer_of___anonenum_RESULTAT_1(result),
-     integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0)))))) }
+    (function2_res(n_1) ->
+     (integer_of___anonenum_RESULTAT_1(result) = integer_of___anonenum_RESULTAT_1(
+                                                 __anonenum_RESULTAT_1_of_integer((0)))))) }
 
 let f2_safety =
  fun (n_1 : int32) ->
@@ -724,16 +676,16 @@ let p1_ensures_default =
   { (JC_<somenum>:
     ((JC_<somenum>:
      (result_0(select(enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1@,
-               last@),
-      n_0_0@) ->
-      eq_int(integer_of___anonenum_RESULTAT_1(select(enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1,
-                                              last@)),
-      integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer((0))))))
+               last),
+      n_0_0) ->
+      (integer_of___anonenum_RESULTAT_1(select(enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1,
+                                        last)) = integer_of___anonenum_RESULTAT_1(
+                                                 __anonenum_RESULTAT_1_of_integer((0))))))
     and (JC_<somenum>:
-        not_assigns(enum___anonenum_RESULTAT_1P_last_1_alloc_table@,
+        not_assigns(enum___anonenum_RESULTAT_1P_last_1_alloc_table,
         enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1@,
         enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1,
-        pset_singleton(last@))))) }
+        pset_singleton(last))))) }
 
 let p1_safety =
  fun (last : enum___anonenum_RESULTAT_1P pointer) (n_0_0 : int32) (enum___anonenum_RESULTAT_1P_enum___anonenum_RESULTAT_1M_last_1 : (enum___anonenum_RESULTAT_1P, __anonenum_RESULTAT_1) memory ref) (enum___anonenum_RESULTAT_1P_last_1_alloc_table : enum___anonenum_RESULTAT_1P alloc_table) ->
@@ -781,6 +733,16 @@ why --project [...] why/geanta3.why
 <project name="geanta3" context="why/geanta3_ctx.why">
   <function name="Function p1">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/geanta3_po8.why">
+      <location file = "PPCHOME/tests/jessie/geanta3.c" line = "30" begin = "12" end = "57"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/geanta3_po9.why">
+      <location file = "PPCHOME/tests/jessie/geanta3.c" line = "32" begin = "5" end = "7"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/geanta3_po10.why">
       <location file = "PPCHOME/tests/jessie/geanta3.c" line = "35" begin = "4" end = "9"/>
@@ -823,19 +785,15 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/geanta3_po8.why">
-      <location file = "PPCHOME/tests/jessie/geanta3.c" line = "30" begin = "12" end = "57"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/geanta3_po9.why">
-      <location file = "PPCHOME/tests/jessie/geanta3.c" line = "32" begin = "5" end = "7"/>
-      <explain kind = "Post"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function f2">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/geanta3_po1.why">
+      <location file = "PPCHOME/tests/jessie/geanta3.c" line = "46" begin = "12" end = "52"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/geanta3_po2.why">
       <location file = "PPCHOME/tests/jessie/geanta3.jessie/geanta3.jc" line = "81" begin = "15" end = "63"/>
@@ -866,12 +824,6 @@ text = "PointerDeref"/>
       <location file = "PPCHOME/tests/jessie/geanta3.c" line = "57" begin = "8" end = "16"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/geanta3_po1.why">
-      <location file = "PPCHOME/tests/jessie/geanta3.c" line = "46" begin = "12" end = "52"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1830,6 +1782,12 @@ axiom __anonenum_RESULTAT_1_coerce:
     (((0 <= x) and (x <= 1)) ->
      (integer_of___anonenum_RESULTAT_1(__anonenum_RESULTAT_1_of_integer(x)) = x)))
 
+axiom __anonenum_RESULTAT_1_extensionality:
+  (forall x:__anonenum_RESULTAT_1.
+    (forall y:__anonenum_RESULTAT_1.
+      ((integer_of___anonenum_RESULTAT_1(x) = integer_of___anonenum_RESULTAT_1(y)) ->
+       (x = y))))
+
 axiom __anonenum_RESULTAT_1_range:
   (forall x:__anonenum_RESULTAT_1.
     ((0 <= integer_of___anonenum_RESULTAT_1(x)) and
@@ -1906,6 +1864,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -1917,6 +1880,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -1999,24 +1966,14 @@ axiom uint32_coerce:
     (((0 <= x) and (x <= 4294967295)) ->
      (integer_of_uint32(uint32_of_integer(x)) = x)))
 
+axiom uint32_extensionality:
+  (forall x:uint32.
+    (forall y:uint32.
+      ((integer_of_uint32(x) = integer_of_uint32(y)) -> (x = y))))
+
 axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_enum___anonenum_RESULTAT_1P(p: unit pointer,
-  a: int, b: int, bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

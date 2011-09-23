@@ -167,14 +167,6 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -191,8 +183,7 @@ axiom charP_tags :
   (forall charP_tag_table:charP tag_table.
    instanceof(charP_tag_table, x, charP_tag)))
 
-predicate divides(x_5:int, y_5:int) =
- (exists q:int. eq_int(y_5, mul_int(q, x_5)))
+predicate divides(x_5:int, y_5:int) = (exists q:int. (y_5 = mul_int(q, x_5)))
 
 predicate isGcd(a:int, b:int, d:int) =
  (divides(d, a)
@@ -244,16 +235,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -292,46 +273,45 @@ lemma distr_right :
  (forall x_1:int.
   (forall y_0:int.
    (forall z:int.
-    eq_int(mul_int(x_1, add_int(y_0, z)),
-    add_int(mul_int(x_1, y_0), mul_int(x_1, z))))))
+    (mul_int(x_1, add_int(y_0, z)) = add_int(mul_int(x_1, y_0),
+                                     mul_int(x_1, z))))))
 
 lemma distr_left :
  (forall x_0_0:int.
   (forall y_0_0:int.
    (forall z_0:int.
-    eq_int(mul_int(add_int(x_0_0, y_0_0), z_0),
-    add_int(mul_int(x_0_0, z_0), mul_int(y_0_0, z_0))))))
+    (mul_int(add_int(x_0_0, y_0_0), z_0) = add_int(mul_int(x_0_0, z_0),
+                                           mul_int(y_0_0, z_0))))))
 
 lemma distr_right_minus :
  (forall x_1_0:int.
   (forall y_1:int.
    (forall z_1:int.
-    eq_int(mul_int(x_1_0, sub_int(y_1, z_1)),
-    sub_int(mul_int(x_1_0, y_1), mul_int(x_1_0, z_1))))))
+    (mul_int(x_1_0, sub_int(y_1, z_1)) = sub_int(mul_int(x_1_0, y_1),
+                                         mul_int(x_1_0, z_1))))))
 
 lemma distr_left_minus :
  (forall x_2:int.
   (forall y_2:int.
    (forall z_2:int.
-    eq_int(mul_int(sub_int(x_2, y_2), z_2),
-    sub_int(mul_int(x_2, z_2), mul_int(y_2, z_2))))))
+    (mul_int(sub_int(x_2, y_2), z_2) = sub_int(mul_int(x_2, z_2),
+                                       mul_int(y_2, z_2))))))
 
 lemma mul_comm :
- (forall x_3:int.
-  (forall y_3:int. eq_int(mul_int(x_3, y_3), mul_int(y_3, x_3))))
+ (forall x_3:int. (forall y_3:int. (mul_int(x_3, y_3) = mul_int(y_3, x_3))))
 
 lemma mul_assoc :
  (forall x_4:int.
   (forall y_4:int.
    (forall z_3:int.
-    eq_int(mul_int(x_4, mul_int(y_4, z_3)), mul_int(mul_int(x_4, y_4), z_3)))))
+    (mul_int(x_4, mul_int(y_4, z_3)) = mul_int(mul_int(x_4, y_4), z_3)))))
 
 lemma div_mod_property :
  (forall x_6:int.
   (forall y_6:int.
    ((ge_int(x_6, (0)) and gt_int(y_6, (0))) ->
-    eq_int(computer_mod(x_6, y_6),
-    sub_int(x_6, mul_int(y_6, computer_div(x_6, y_6)))))))
+    (computer_mod(x_6, y_6) = sub_int(x_6,
+                              mul_int(y_6, computer_div(x_6, y_6)))))))
 
 lemma mod_property :
  (forall x_7:int.
@@ -350,41 +330,13 @@ lemma gcd_property :
      ((gt_int(b_0, (0)) and isGcd(b_0, computer_mod(a_1, b_0), d_0)) ->
       isGcd(a_1, b_0, d_0))))))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -445,8 +397,8 @@ parameter gcd :
    { ((JC_<somenum>:
       (exists a_2:int.
        (exists b_1:int.
-        eq_int(add_int(mul_int(a_2, x_0@), mul_int(b_1, y@)), result))))
-     and (JC_<somenum>: isGcd(x_0@, y@, result))) }
+        (add_int(mul_int(a_2, x_0), mul_int(b_1, y)) = result))))
+     and (JC_<somenum>: isGcd(x_0, y, result))) }
 
 parameter gcd_requires :
  x_0:int ->
@@ -455,8 +407,8 @@ parameter gcd_requires :
    { ((JC_<somenum>:
       (exists a_2:int.
        (exists b_1:int.
-        eq_int(add_int(mul_int(a_2, x_0@), mul_int(b_1, y@)), result))))
-     and (JC_<somenum>: isGcd(x_0@, y@, result))) }
+        (add_int(mul_int(a_2, x_0), mul_int(b_1, y)) = result))))
+     and (JC_<somenum>: isGcd(x_0, y, result))) }
 
 let gcd_ensures_bezoutProperty =
  fun (x_0 : int) (y : int) ->
@@ -476,7 +428,6 @@ let gcd_ensures_bezoutProperty =
      (let ta = ref (any_int void) in
      (let tb = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       (C_2:
       (C_3:
@@ -491,20 +442,17 @@ let gcd_ensures_bezoutProperty =
        { invariant
            (JC_<somenum>:
            ((JC_<somenum>:
-            eq_int(add_int(mul_int(a_3, mutable_x_0@init),
-                   mul_int(b_2, mutable_y@init)),
-            mutable_x_0))
+            (add_int(mul_int(a_3, mutable_x_0@init),
+             mul_int(b_2, mutable_y@init)) = mutable_x_0))
            and (JC_<somenum>:
-               eq_int(add_int(mul_int(c, mutable_x_0@init),
-                      mul_int(d_1, mutable_y@init)),
-               mutable_y))))  }
+               (add_int(mul_int(c, mutable_x_0@init),
+                mul_int(d_1, mutable_y@init)) = mutable_y))))  }
         begin
           [ { } unit reads mutable_x_0,mutable_y
             { (JC_<somenum>:
               ((JC_<somenum>: ge_int(mutable_x_0, (0)))
               and (JC_<somenum>: ge_int(mutable_y, (0))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_14:
@@ -519,9 +467,7 @@ let gcd_ensures_bezoutProperty =
             (C_28:
             begin
               (if ((gt_int_ !mutable_y) (0)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (r := (C_13: (JC_<somenum>: ((computer_mod !mutable_x_0) !mutable_y)))) in
              void);
@@ -539,16 +485,15 @@ let gcd_ensures_bezoutProperty =
              void);
              (d_1 := (C_27: ((sub_int !tb) (C_26: ((mul_int !d_1) !q_1)))));
              !d_1 end)))))))))) in void); (raise (Loop_continue_exc void))
-          end in void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))) in void) with
+          end with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       begin   void; (return := !mutable_x_0); (raise Return) end) end))))))));
     absurd  end with Return -> !return end))))
   { (JC_<somenum>:
     (exists a_2:int.
-     (exists b_1:int.
-      eq_int(add_int(mul_int(a_2, x_0@), mul_int(b_1, y@)), result)))) }
+     (exists b_1:int. (add_int(mul_int(a_2, x_0), mul_int(b_1, y)) = result)))) }
 
 let gcd_ensures_default =
  fun (x_0 : int) (y : int) ->
@@ -568,7 +513,6 @@ let gcd_ensures_default =
      (let ta = ref (any_int void) in
      (let tb = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       (C_2:
       (C_3:
@@ -587,7 +531,6 @@ let gcd_ensures_default =
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_14:
@@ -602,9 +545,7 @@ let gcd_ensures_default =
             (C_28:
             begin
               (if ((gt_int_ !mutable_y) (0)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (r := (C_13: (JC_<somenum>: ((computer_mod !mutable_x_0) !mutable_y)))) in
              void);
@@ -622,8 +563,8 @@ let gcd_ensures_default =
              void);
              (d_1 := (C_27: ((sub_int !tb) (C_26: ((mul_int !d_1) !q_1)))));
              !d_1 end)))))))))) in void); (raise (Loop_continue_exc void))
-          end in void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))) in void) with
+          end with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       begin   void; (return := !mutable_x_0); (raise Return) end) end))))))));
@@ -647,7 +588,6 @@ let gcd_ensures_resultIsGcd =
      (let ta = ref (any_int void) in
      (let tb = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       (C_2:
       (C_3:
@@ -663,14 +603,13 @@ let gcd_ensures_resultIsGcd =
            (JC_<somenum>:
            (forall d_1_0:int.
             (isGcd(mutable_x_0, mutable_y, d_1_0) ->
-             isGcd(mutable_x_0@init, mutable_y@init, d_1_0@init))))  }
+             isGcd(mutable_x_0@init, mutable_y@init, d_1_0))))  }
         begin
           [ { } unit reads mutable_x_0,mutable_y
             { (JC_<somenum>:
               ((JC_<somenum>: ge_int(mutable_x_0, (0)))
               and (JC_<somenum>: ge_int(mutable_y, (0))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_14:
@@ -685,9 +624,7 @@ let gcd_ensures_resultIsGcd =
             (C_28:
             begin
               (if ((gt_int_ !mutable_y) (0)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (r := (C_13: (JC_<somenum>: ((computer_mod !mutable_x_0) !mutable_y)))) in
              void);
@@ -705,13 +642,13 @@ let gcd_ensures_resultIsGcd =
              void);
              (d_1 := (C_27: ((sub_int !tb) (C_26: ((mul_int !d_1) !q_1)))));
              !d_1 end)))))))))) in void); (raise (Loop_continue_exc void))
-          end in void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))) in void) with
+          end with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       begin   void; (return := !mutable_x_0); (raise Return) end) end))))))));
     absurd  end with Return -> !return end))))
-  { (JC_<somenum>: isGcd(x_0@, y@, result)) }
+  { (JC_<somenum>: isGcd(x_0, y, result)) }
 
 let gcd_safety =
  fun (x_0 : int) (y : int) ->
@@ -731,7 +668,6 @@ let gcd_safety =
      (let ta = ref (any_int void) in
      (let tb = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       (C_2:
       (C_3:
@@ -750,7 +686,6 @@ let gcd_safety =
               ((JC_<somenum>: ge_int(mutable_x_0, (0)))
               and (JC_<somenum>: ge_int(mutable_y, (0))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_14:
@@ -765,9 +700,7 @@ let gcd_safety =
             (C_28:
             begin
               (if ((gt_int_ !mutable_y) (0)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (r := (C_13: (JC_<somenum>: ((computer_mod_ !mutable_x_0) !mutable_y)))) in
              void);
@@ -785,8 +718,8 @@ let gcd_safety =
              void);
              (d_1 := (C_27: ((sub_int !tb) (C_26: ((mul_int !d_1) !q_1)))));
              !d_1 end)))))))))) in void); (raise (Loop_continue_exc void))
-          end in void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))) in void) with
+          end with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       begin   void; (return := !mutable_x_0); (raise Return) end) end))))))));
@@ -799,105 +732,123 @@ why --project [...] why/gcd.why
   <lemma name="distr_right">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/gcd_po1.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "23" begin = "0" end = "133"/>
+      <location file = "PPCHOME/tests/jessie/gcd.c" line = "34" begin = "4" end = "75"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="distr_left">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/gcd_po2.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "29" begin = "0" end = "152"/>
+      <location file = "PPCHOME/tests/jessie/gcd.c" line = "38" begin = "4" end = "74"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="distr_right_minus">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/gcd_po3.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "35" begin = "0" end = "159"/>
+      <location file = "PPCHOME/tests/jessie/gcd.c" line = "42" begin = "4" end = "81"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="distr_left_minus">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/gcd_po4.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "41" begin = "0" end = "158"/>
+      <location file = "PPCHOME/tests/jessie/gcd.c" line = "46" begin = "4" end = "80"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="mul_comm">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/gcd_po5.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "47" begin = "0" end = "97"/>
+      <location file = "PPCHOME/tests/jessie/gcd.c" line = "50" begin = "4" end = "58"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="mul_assoc">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/gcd_po6.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "52" begin = "0" end = "143"/>
+      <location file = "PPCHOME/tests/jessie/gcd.c" line = "54" begin = "4" end = "69"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="div_mod_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/gcd_po7.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "62" begin = "0" end = "159"/>
+      <location file = "PPCHOME/tests/jessie/gcd.c" line = "62" begin = "4" end = "99"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="mod_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/gcd_po8.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "68" begin = "0" end = "154"/>
+      <location file = "PPCHOME/tests/jessie/gcd.c" line = "67" begin = "4" end = "89"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="gcd_zero">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/gcd_po9.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "79" begin = "0" end = "60"/>
+      <location file = "PPCHOME/tests/jessie/gcd.c" line = "78" begin = "4" end = "60"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="gcd_property">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/gcd_po10.why">
-      <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "83" begin = "0" end = "213"/>
+      <location file = "PPCHOME/tests/jessie/gcd.c" line = "82" begin = "4" end = "109"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <function name="mul_comm">
-    <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "47" begin = "0" end = "97"/>
+  <function name="Lemma mul_comm">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="mul_assoc">
-    <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "52" begin = "0" end = "143"/>
+  <function name="Lemma mul_assoc">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="mod_property">
-    <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "68" begin = "0" end = "154"/>
+  <function name="Lemma mod_property">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="gcd_zero">
-    <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "79" begin = "0" end = "60"/>
+  <function name="Lemma gcd_zero">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="gcd_property">
-    <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "83" begin = "0" end = "213"/>
+  <function name="Lemma gcd_property">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="div_mod_property">
-    <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "62" begin = "0" end = "159"/>
+  <function name="Lemma div_mod_property">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="distr_right_minus">
-    <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "35" begin = "0" end = "159"/>
+  <function name="Lemma distr_right_minus">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="distr_right">
-    <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "23" begin = "0" end = "133"/>
+  <function name="Lemma distr_right">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="distr_left_minus">
-    <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "41" begin = "0" end = "158"/>
+  <function name="Lemma distr_left_minus">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="distr_left">
-    <location file = "PPCHOME/tests/jessie/gcd.jessie/gcd.jc" line = "29" begin = "0" end = "152"/>
+  <function name="Lemma distr_left">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
   <function name="Function gcd">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/gcd_po16.why">
+      <location file = "PPCHOME/tests/jessie/gcd.c" line = "95" begin = "21" end = "27"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/gcd_po17.why">
+      <location file = "PPCHOME/tests/jessie/gcd.c" line = "95" begin = "31" end = "37"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/gcd_po18.why">
+      <location file = "PPCHOME/tests/jessie/gcd.c" line = "95" begin = "21" end = "27"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/gcd_po19.why">
+      <location file = "PPCHOME/tests/jessie/gcd.c" line = "95" begin = "31" end = "37"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/gcd_po22.why">
       <location file = "PPCHOME/tests/jessie/gcd.c" line = "107" begin = "12" end = "17"/>
@@ -918,7 +869,7 @@ text = "DivByZero"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `resultIsGcd'">
+    <behavior name="Behavior `resultIsGcd'">
     <goal why_file="why/gcd_po20.why">
       <location file = "PPCHOME/tests/jessie/gcd.c" line = "98" begin = "11" end = "84"/>
       <explain kind = "LoopInvPreserv"/>
@@ -928,7 +879,7 @@ text = "DivByZero"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `bezoutProperty'">
+    <behavior name="Behavior `bezoutProperty'">
     <goal why_file="why/gcd_po11.why">
       <location file = "PPCHOME/tests/jessie/gcd.c" line = "102" begin = "12" end = "42"/>
       <explain kind = "LoopInvInit"/>
@@ -948,24 +899,6 @@ text = "DivByZero"/>
     <goal why_file="why/gcd_po15.why">
       <location file = "PPCHOME/tests/jessie/gcd.c" line = "91" begin = "14" end = "53"/>
       <explain kind = "Post"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/gcd_po16.why">
-      <location file = "PPCHOME/tests/jessie/gcd.c" line = "95" begin = "21" end = "27"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/gcd_po17.why">
-      <location file = "PPCHOME/tests/jessie/gcd.c" line = "95" begin = "31" end = "37"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/gcd_po18.why">
-      <location file = "PPCHOME/tests/jessie/gcd.c" line = "95" begin = "21" end = "27"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/gcd_po19.why">
-      <location file = "PPCHOME/tests/jessie/gcd.c" line = "95" begin = "31" end = "37"/>
-      <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>
   </function>
@@ -1973,16 +1906,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

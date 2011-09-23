@@ -1,4 +1,35 @@
 ========== file tests/c/clock_drift.c ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
+
 // RUNGAPPA: will ask regtests to run gappa on VCs of this program
 
 #define NMAX 1000000
@@ -53,6 +84,14 @@ float f_single(int n)
   }
   return t;
 }
+
+
+/*
+Local Variables:
+compile-command: "make clock_drift.why3ml"
+End:
+*/
+
 
 ========== frama-c -jessie execution ==========
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/clock_drift.c"
@@ -154,130 +193,144 @@ behavior default:
 ========== file tests/c/clock_drift.jessie/clock_drift.cloc ==========
 [C_10]
 file = "HOME/tests/c/clock_drift.c"
-line = 49
+line = 80
 begin = 22
 end = 65
 
 [C_11]
 file = "HOME/tests/c/clock_drift.c"
-line = 50
+line = 81
 begin = 8
 end = 16
 
 [C_12]
 file = "HOME/tests/c/clock_drift.c"
-line = 50
+line = 81
 begin = 8
 end = 16
 
 [C_13]
 file = "HOME/tests/c/clock_drift.c"
-line = 51
+line = 82
 begin = 15
 end = 58
 
 [C_14]
 file = "HOME/tests/c/clock_drift.c"
-line = 47
+line = 78
 begin = 14
 end = 17
 
 [C_15]
 file = "HOME/tests/c/clock_drift.c"
-line = 47
+line = 78
 begin = 14
 end = 17
 
 [C_16]
 file = "HOME/tests/c/clock_drift.c"
-line = 47
+line = 78
 begin = 14
 end = 17
 
 [C_17]
 file = "HOME/tests/c/clock_drift.c"
-line = 36
+line = 67
 begin = 12
 end = 63
 
 [C_18]
 file = "HOME/tests/c/clock_drift.c"
-line = 35
+line = 66
 begin = 13
 end = 30
 
 [C_19]
 file = "HOME/tests/c/clock_drift.c"
-line = 35
+line = 66
 begin = 13
 end = 19
 
 [C_1]
 file = "HOME/tests/c/clock_drift.c"
-line = 40
+line = 71
 begin = 2
 end = 7
 
 [C_2]
 file = "HOME/tests/c/clock_drift.c"
-line = 47
+line = 78
 begin = 8
 end = 9
 
 [C_3]
 file = "HOME/tests/c/clock_drift.c"
-line = 45
+line = 76
 begin = 19
 end = 22
 
 [C_4]
 file = "HOME/tests/c/clock_drift.c"
-line = 44
+line = 75
 begin = 21
 end = 68
 
 [C_20]
 file = "HOME/tests/c/clock_drift.c"
-line = 35
+line = 66
 begin = 18
 end = 30
 
 [C_5]
 file = "HOME/tests/c/clock_drift.c"
-line = 43
+line = 74
 begin = 21
 end = 32
 
 [C_6]
 file = "HOME/tests/c/clock_drift.c"
-line = 43
+line = 74
 begin = 21
 end = 27
 
 [C_7]
 file = "HOME/tests/c/clock_drift.c"
-line = 43
+line = 74
 begin = 26
 end = 32
 
 [C_8]
 file = "HOME/tests/c/clock_drift.c"
-line = 49
+line = 80
 begin = 15
 end = 65
 
 [C_9]
 file = "HOME/tests/c/clock_drift.c"
-line = 49
+line = 80
 begin = 15
 end = 23
 
 [f_single]
 name = "Function f_single"
 file = "HOME/tests/c/clock_drift.c"
-line = 38
+line = 69
 begin = 6
 end = 14
+
+[real_of_int_succ]
+name = "Lemma real_of_int_succ"
+file = "HOME/tests/c/clock_drift.c"
+line = 45
+begin = 4
+end = 62
+
+[real_of_int_inf_NMAX]
+name = "Lemma real_of_int_inf_NMAX"
+file = "HOME/tests/c/clock_drift.c"
+line = 38
+begin = 4
+end = 89
 
 ========== jessie execution ==========
 Generating Why function f_single
@@ -296,10 +349,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs clock
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs clock_drift.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/clock_drift_why.sx
 
@@ -359,6 +413,13 @@ simplify: simplify/clock_drift_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/clock_drift_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/clock_drift_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -432,6 +493,9 @@ why/%_why3.why: why/%.why
 why3ide: why/clock_drift_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: clock_drift.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include clock_drift.depend
 
 depend: coq/clock_drift_why.v
@@ -443,19 +507,19 @@ clean:
 ========== file tests/c/clock_drift.jessie/clock_drift.loc ==========
 [JC_1]
 file = "HOME/tests/c/clock_drift.c"
-line = 35
+line = 66
 begin = 13
 end = 19
 
 [JC_2]
 file = "HOME/tests/c/clock_drift.c"
-line = 35
+line = 66
 begin = 18
 end = 30
 
 [JC_3]
 file = "HOME/tests/c/clock_drift.c"
-line = 35
+line = 66
 begin = 13
 end = 30
 
@@ -467,19 +531,19 @@ end = -1
 
 [JC_5]
 file = "HOME/tests/c/clock_drift.c"
-line = 35
+line = 66
 begin = 13
 end = 19
 
 [JC_6]
 file = "HOME/tests/c/clock_drift.c"
-line = 35
+line = 66
 begin = 18
 end = 30
 
 [JC_7]
 file = "HOME/tests/c/clock_drift.c"
-line = 35
+line = 66
 begin = 13
 end = 30
 
@@ -491,7 +555,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/c/clock_drift.c"
-line = 36
+line = 67
 begin = 12
 end = 63
 
@@ -499,21 +563,21 @@ end = 63
 name = "Function f_single"
 behavior = "Safety"
 file = "HOME/tests/c/clock_drift.c"
-line = 38
+line = 69
 begin = 6
 end = 14
 
 [f_single_ensures_default]
 name = "Function f_single"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/clock_drift.c"
-line = 38
+line = 69
 begin = 6
 end = 14
 
 [JC_10]
 file = "HOME/tests/c/clock_drift.c"
-line = 36
+line = 67
 begin = 12
 end = 63
 
@@ -531,25 +595,25 @@ end = -1
 
 [JC_13]
 file = "HOME/tests/c/clock_drift.c"
-line = 44
+line = 75
 begin = 21
 end = 68
 
 [JC_14]
 file = "HOME/tests/c/clock_drift.c"
-line = 43
+line = 74
 begin = 21
 end = 27
 
 [JC_15]
 file = "HOME/tests/c/clock_drift.c"
-line = 43
+line = 74
 begin = 26
 end = 32
 
 [JC_16]
 file = "HOME/tests/c/clock_drift.c"
-line = 43
+line = 74
 begin = 21
 end = 32
 
@@ -573,77 +637,77 @@ end = 1528
 
 [JC_20]
 file = "HOME/tests/c/clock_drift.c"
-line = 49
+line = 80
 begin = 15
 end = 23
 
 [JC_21]
 file = "HOME/tests/c/clock_drift.c"
-line = 49
+line = 80
 begin = 22
 end = 65
 
 [JC_22]
 file = "HOME/tests/c/clock_drift.c"
-line = 49
+line = 80
 begin = 15
 end = 65
 
 [JC_23]
 kind = FPOverflow
 file = "HOME/tests/c/clock_drift.c"
-line = 50
+line = 81
 begin = 8
 end = 16
 
 [JC_24]
 file = "HOME/tests/c/clock_drift.c"
-line = 51
+line = 82
 begin = 15
 end = 58
 
 [JC_25]
 kind = ArithOverflow
 file = "HOME/tests/c/clock_drift.c"
-line = 47
+line = 78
 begin = 14
 end = 17
 
 [JC_26]
 file = "HOME/tests/c/clock_drift.c"
-line = 45
+line = 76
 begin = 19
 end = 22
 
 [JC_27]
 file = "HOME/tests/c/clock_drift.c"
-line = 44
+line = 75
 begin = 21
 end = 68
 
 [JC_28]
 file = "HOME/tests/c/clock_drift.c"
-line = 43
+line = 74
 begin = 21
 end = 27
 
 [JC_29]
 file = "HOME/tests/c/clock_drift.c"
-line = 43
+line = 74
 begin = 26
 end = 32
 
 [real_of_int_succ]
-name = "real_of_int_succ"
+name = "Lemma real_of_int_succ"
 behavior = "lemma"
-file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
-line = 32
-begin = 0
-end = 70
+file = "HOME/tests/c/clock_drift.c"
+line = 45
+begin = 4
+end = 62
 
 [JC_30]
 file = "HOME/tests/c/clock_drift.c"
-line = 43
+line = 74
 begin = 21
 end = 32
 
@@ -667,41 +731,41 @@ end = 1528
 
 [JC_34]
 file = "HOME/tests/c/clock_drift.c"
-line = 49
+line = 80
 begin = 15
 end = 23
 
 [JC_35]
 file = "HOME/tests/c/clock_drift.c"
-line = 49
+line = 80
 begin = 22
 end = 65
 
 [JC_36]
 file = "HOME/tests/c/clock_drift.c"
-line = 49
+line = 80
 begin = 15
 end = 65
 
 [JC_37]
 kind = FPOverflow
 file = "HOME/tests/c/clock_drift.c"
-line = 50
+line = 81
 begin = 8
 end = 16
 
 [JC_38]
 file = "HOME/tests/c/clock_drift.c"
-line = 51
+line = 82
 begin = 15
 end = 58
 
 [real_of_int_inf_NMAX]
-name = "real_of_int_inf_NMAX"
+name = "Lemma real_of_int_inf_NMAX"
 behavior = "lemma"
-file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
-line = 28
-begin = 0
+file = "HOME/tests/c/clock_drift.c"
+line = 38
+begin = 4
 end = 89
 
 ========== file tests/c/clock_drift.jessie/why/clock_drift.why ==========
@@ -714,14 +778,6 @@ type int8
 type padding
 
 type voidP
-
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
 
 logic charP_tag:  -> charP tag_id
 
@@ -756,6 +812,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -767,6 +828,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -816,16 +882,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -865,43 +921,15 @@ lemma real_of_int_inf_NMAX :
 
 lemma real_of_int_succ :
  (forall n_0:int.
-  eq_real(real_of_int(add_int(n_0, (1))), add_real(real_of_int(n_0), 1.0)))
+  (real_of_int(add_int(n_0, (1))) = add_real(real_of_int(n_0), 1.0)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -964,9 +992,8 @@ parameter f_single :
   { } single
   { (JC_10:
     le_real(abs_real(sub_real(single_value(result),
-                     mul_real(real_of_int(integer_of_int32(n@)), 0.1))),
-    mul_real(real_of_int(integer_of_int32(n@)),
-    add_real(0x1p-8, 1.49012e-09)))) }
+                     mul_real(real_of_int(integer_of_int32(n)), 0.1))),
+    mul_real(real_of_int(integer_of_int32(n)), add_real(0x1p-8, 1.49012e-09)))) }
 
 parameter f_single_requires :
  n:int32 ->
@@ -976,9 +1003,8 @@ parameter f_single_requires :
   single
   { (JC_10:
     le_real(abs_real(sub_real(single_value(result),
-                     mul_real(real_of_int(integer_of_int32(n@)), 0.1))),
-    mul_real(real_of_int(integer_of_int32(n@)),
-    add_real(0x1p-8, 1.49012e-09)))) }
+                     mul_real(real_of_int(integer_of_int32(n)), 0.1))),
+    mul_real(real_of_int(integer_of_int32(n)), add_real(0x1p-8, 1.49012e-09)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1008,7 +1034,6 @@ let f_single_ensures_default =
      (let t = ref (any_single void) in
      (let i_0 = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       (C_1:
       (C_2:
       begin
@@ -1031,17 +1056,13 @@ let f_single_ensures_default =
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<num> =
           begin
             (let jessie_<num> =
             (L:
             (C_16:
             begin
               (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 n))
-              then void
-              else
-               (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              then void else (raise (Goto_while_0_break_exc void)));
              (let jessie_<num> =
              (C_12:
              begin
@@ -1065,17 +1086,16 @@ let f_single_ensures_default =
              (i_0 := (C_15:
                      (safe_int32_of_integer_ (C_14:
                                              ((add_int (integer_of_int32 !i_0)) (1))))));
-             !i_0 end)) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<num> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) in void) with
+             !i_0 end)) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<num> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<num> ->
       (while_0_break: begin   void; (return := !t); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_9:
     le_real(abs_real(sub_real(single_value(result),
-                     mul_real(real_of_int(integer_of_int32(n@)), 0.1))),
-    mul_real(real_of_int(integer_of_int32(n@)),
-    add_real(0x1p-8, 1.49012e-09)))) }
+                     mul_real(real_of_int(integer_of_int32(n)), 0.1))),
+    mul_real(real_of_int(integer_of_int32(n)), add_real(0x1p-8, 1.49012e-09)))) }
 
 let f_single_safety =
  fun (n : int32) ->
@@ -1089,7 +1109,6 @@ let f_single_safety =
      (let t = ref (any_single void) in
      (let i_0 = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       (C_1:
       (C_2:
       begin
@@ -1112,16 +1131,13 @@ let f_single_safety =
                   and (JC_15:
                       le_int(integer_of_int32(i_0), integer_of_int32(n)))))) } ];
          try
-          (let jessie_<num> =
           begin
             (let jessie_<num> =
             (L:
             (C_16:
             begin
               (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 n))
-              then void
-              else
-               (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in void));
+              then void else (raise (Goto_while_0_break_exc void)));
              (let jessie_<num> =
              (C_12:
              begin
@@ -1146,9 +1162,9 @@ let f_single_safety =
                      (JC_25:
                      (int32_of_integer_ (C_14:
                                         ((add_int (integer_of_int32 !i_0)) (1)))))));
-             !i_0 end)) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<num> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) in void) with
+             !i_0 end)) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<num> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<num> ->
       (while_0_break: begin   void; (return := !t); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
@@ -2283,21 +2299,20 @@ axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
 
 axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
 
-logic single_to_double : single -> double
+axiom single_value_is_bounded:
+  (forall x:single. (abs_real(single_value(x)) <= max_single))
 
-logic double_to_single : mode, double -> single
-
-axiom single_to_double_val:
-  (forall s:single. (double_value(single_to_double(s)) = single_value(s)))
-
-axiom double_to_single_val:
-  (forall m:mode.
-    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
-      double_value(d)))))
+axiom double_value_is_bounded:
+  (forall x:double. (abs_real(double_value(x)) <= max_double))
 
 predicate single_of_real_post(m: mode, x: real, res: single) =
   ((single_value(res) = round_single(m, x)) and
    ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate single_of_double_post(m: mode, x: double, res: single) =
+  ((single_value(res) = round_single(m, double_value(x))) and
+   ((single_exact(res) = double_exact(x)) and
+    (single_model(res) = double_model(x))))
 
 predicate add_single_post(m: mode, x: single, y: single, res: single) =
   ((single_value(res) = round_single(m,
@@ -2341,6 +2356,11 @@ predicate abs_single_post(x: single, res: single) =
 predicate double_of_real_post(m: mode, x: real, res: double) =
   ((double_value(res) = round_double(m, x)) and
    ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate double_of_single_post(x: single, res: double) =
+  ((double_value(res) = single_value(x)) and
+   ((double_exact(res) = single_exact(x)) and
+    (double_model(res) = single_model(x))))
 
 predicate add_double_post(m: mode, x: double, y: double, res: double) =
   ((double_value(res) = round_double(m,
@@ -2425,6 +2445,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -2436,6 +2461,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2484,16 +2513,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -2672,9 +2691,7 @@ goal f_single_ensures_default_po_6:
    ((single_exact(result1) = 0x1.99999ap-4) and
     (single_model(result1) = 0x1.99999ap-4))) ->
   forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(t0) + single_value(result1))) and
-   add_single_post(nearest_even, t0, result1, result2)) ->
+  add_single_post(nearest_even, t0, result1, result2) ->
   forall t1:single.
   (t1 = result2) ->
   ("JC_38":
@@ -2711,9 +2728,7 @@ goal f_single_ensures_default_po_7:
    ((single_exact(result1) = 0x1.99999ap-4) and
     (single_model(result1) = 0x1.99999ap-4))) ->
   forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(t0) + single_value(result1))) and
-   add_single_post(nearest_even, t0, result1, result2)) ->
+  add_single_post(nearest_even, t0, result1, result2) ->
   forall t1:single.
   (t1 = result2) ->
   ("JC_38":
@@ -2756,9 +2771,7 @@ goal f_single_ensures_default_po_8:
    ((single_exact(result1) = 0x1.99999ap-4) and
     (single_model(result1) = 0x1.99999ap-4))) ->
   forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(t0) + single_value(result1))) and
-   add_single_post(nearest_even, t0, result1, result2)) ->
+  add_single_post(nearest_even, t0, result1, result2) ->
   forall t1:single.
   (t1 = result2) ->
   ("JC_38":
@@ -2800,9 +2813,7 @@ goal f_single_ensures_default_po_9:
    ((single_exact(result1) = 0x1.99999ap-4) and
     (single_model(result1) = 0x1.99999ap-4))) ->
   forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(t0) + single_value(result1))) and
-   add_single_post(nearest_even, t0, result1, result2)) ->
+  add_single_post(nearest_even, t0, result1, result2) ->
   forall t1:single.
   (t1 = result2) ->
   ("JC_38":
@@ -3054,12 +3065,12 @@ goal f_single_safety_po_5:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/clock_drift_why.why       : ?......#......... (15/0/1/1/0)
+why/clock_drift_why.why       : ?......##........ (14/0/1/2/0)
 total   :  17
-valid   :  15 ( 88%)
+valid   :  14 ( 82%)
 invalid :   0 (  0%)
 unknown :   1 (  6%)
-timeout :   1 (  6%)
+timeout :   2 ( 12%)
 failure :   0 (  0%)
 // RUNGAPPA: will ask regtests to run gappa on VCs of this program
 ========== generation of Gappa VC output ==========

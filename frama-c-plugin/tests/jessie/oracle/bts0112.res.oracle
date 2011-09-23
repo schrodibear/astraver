@@ -614,18 +614,6 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Goto_while_1_break_exc of unit
-
-exception Goto_while_2_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -688,6 +676,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -699,6 +692,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -719,17 +717,13 @@ predicate is_exact_int_mat(X:doubleP pointer, LDX:int, N:int, M:int,
                            ((le_int((0), i)
                             and (lt_int(i, N)
                                 and (le_int((0), j) and lt_int(j, M)))) ->
-                            (eq_real(double_round_error(select(doubleP_doubleM_X_1_at_L,
-                                                        shift(X,
-                                                        add_int(mul_int(i,
-                                                                LDX),
-                                                        j)))),
-                             0.0)
+                            ((double_round_error(select(doubleP_doubleM_X_1_at_L,
+                                                 shift(X,
+                                                 add_int(mul_int(i, LDX), j)))) = 0.0)
                             and (exists v:int.
-                                 eq_real(double_value(select(doubleP_doubleM_X_1_at_L,
-                                                      shift(X,
-                                                      add_int(mul_int(i, LDX),
-                                                      j)))),
+                                 (double_value(select(doubleP_doubleM_X_1_at_L,
+                                               shift(X,
+                                               add_int(mul_int(i, LDX), j)))) = 
                                  real_of_int(v)))))))))))))
 
 predicate is_exact_int_mat_bounded_by(X_0:doubleP pointer, LDX_0:int,
@@ -748,19 +742,15 @@ predicate is_exact_int_mat_bounded_by(X_0:doubleP pointer, LDX_0:int,
                            ((le_int((0), i_0)
                             and (lt_int(i_0, N_0)
                                 and (le_int((0), j_0) and lt_int(j_0, M_0)))) ->
-                            (eq_real(double_round_error(select(doubleP_doubleM_X_0_2_at_L,
-                                                        shift(X_0,
-                                                        add_int(mul_int(i_0,
-                                                                LDX_0),
-                                                        j_0)))),
-                             0.0)
+                            ((double_round_error(select(doubleP_doubleM_X_0_2_at_L,
+                                                 shift(X_0,
+                                                 add_int(mul_int(i_0, LDX_0),
+                                                 j_0)))) = 0.0)
                             and ((exists v_0:int.
-                                  eq_real(double_value(select(doubleP_doubleM_X_0_2_at_L,
-                                                       shift(X_0,
-                                                       add_int(mul_int(i_0,
-                                                               LDX_0),
-                                                       j_0)))),
-                                  real_of_int(v_0)))
+                                  (double_value(select(doubleP_doubleM_X_0_2_at_L,
+                                                shift(X_0,
+                                                add_int(mul_int(i_0, LDX_0),
+                                                j_0)))) = real_of_int(v_0)))
                                 and (le_real(real_of_int(min),
                                      double_value(select(doubleP_doubleM_X_0_2_at_L,
                                                   shift(X_0,
@@ -857,21 +847,17 @@ predicate temporary_is_exact_int_mat_bounded_by(X_1:doubleP pointer,
                            (((le_int((0), i_1)
                              and (lt_int(i_1, N_1)
                                  and (le_int((0), j_1) and lt_int(j_1, M_1))))
-                            or (eq_int(i_1, N_1)
+                            or ((i_1 = N_1)
                                and (le_int((0), j_1) and lt_int(j_1, k)))) ->
-                            (eq_real(double_round_error(select(doubleP_doubleM_X_1_3_at_L,
-                                                        shift(X_1,
-                                                        add_int(mul_int(i_1,
-                                                                LDX_1),
-                                                        j_1)))),
-                             0.0)
+                            ((double_round_error(select(doubleP_doubleM_X_1_3_at_L,
+                                                 shift(X_1,
+                                                 add_int(mul_int(i_1, LDX_1),
+                                                 j_1)))) = 0.0)
                             and ((exists v_1:int.
-                                  eq_real(double_value(select(doubleP_doubleM_X_1_3_at_L,
-                                                       shift(X_1,
-                                                       add_int(mul_int(i_1,
-                                                               LDX_1),
-                                                       j_1)))),
-                                  real_of_int(v_1)))
+                                  (double_value(select(doubleP_doubleM_X_1_3_at_L,
+                                                shift(X_1,
+                                                add_int(mul_int(i_1, LDX_1),
+                                                j_1)))) = real_of_int(v_1)))
                                 and (le_real(real_of_int(min_0),
                                      double_value(select(doubleP_doubleM_X_1_3_at_L,
                                                   shift(X_1,
@@ -883,21 +869,6 @@ predicate temporary_is_exact_int_mat_bounded_by(X_1:doubleP pointer,
                                                              mul_int(i_1,
                                                              LDX_1), j_1)))),
                                         real_of_int(max_0))))))))))))))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_doubleP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -943,7 +914,7 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-axiom max_int_eq : eq_real(real_of_int(max_int), 0x1p53)
+axiom max_int_eq : (real_of_int(max_int) = 0x1p53)
 
 axiom delay_decreases :
  (forall n1:int.
@@ -975,32 +946,29 @@ parameter DGEMM_NEG :
         LDX_2:int32 ->
          Y:doubleP pointer ->
           LDY:int32 ->
-           doubleP_doubleM_Y_6:(doubleP, double) memory ref ->
-            doubleP_Y_6_alloc_table:doubleP alloc_table ->
-             doubleP_X_5_alloc_table:doubleP alloc_table ->
-              doubleP_A_4_alloc_table:doubleP alloc_table ->
-               doubleP_doubleM_X_5:(doubleP, double) memory ->
-                doubleP_doubleM_A_4:(doubleP, double) memory ->
-                 { } unit reads doubleP_doubleM_Y_6
-                 writes doubleP_doubleM_Y_6
-                 { (JC_<somenum>:
-                   ((JC_<somenum>:
-                    is_exact_int_mat_bounded_by(Y@, integer_of_int32(LDY@),
-                    integer_of_int32(N_2@), integer_of_int32(K@),
-                    mul_int(mul_int(sub_int((1), integer_of_int32(p_0@)),
-                            sub_int(integer_of_int32(p_0@), (1))),
-                    integer_of_int32(M_2@)),
-                    sub_int(integer_of_int32(p_0@), (1)),
-                    doubleP_Y_6_alloc_table, doubleP_doubleM_Y_6))
-                   and (JC_<somenum>:
-                       not_assigns(doubleP_Y_6_alloc_table@,
-                       doubleP_doubleM_Y_6@, doubleP_doubleM_Y_6,
-                       pset_range(pset_singleton(Y@), (0),
-                       sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2@),
-                                               (1)),
-                                       integer_of_int32(LDY@)),
-                               integer_of_int32(K@)),
-                       (1))))))) }
+           doubleP_doubleM_X_5:(doubleP, double) memory ref ->
+            doubleP_X_5_alloc_table:doubleP alloc_table ->
+             doubleP_A_4_alloc_table:doubleP alloc_table ->
+              doubleP_doubleM_A_4:(doubleP, double) memory ->
+               { } unit reads doubleP_doubleM_X_5 writes doubleP_doubleM_X_5
+               { (JC_<somenum>:
+                 ((JC_<somenum>:
+                  is_exact_int_mat_bounded_by(Y, integer_of_int32(LDY),
+                  integer_of_int32(N_2), integer_of_int32(K),
+                  mul_int(mul_int(sub_int((1), integer_of_int32(p_0)),
+                          sub_int(integer_of_int32(p_0), (1))),
+                  integer_of_int32(M_2)),
+                  sub_int(integer_of_int32(p_0), (1)),
+                  doubleP_X_5_alloc_table, doubleP_doubleM_X_5))
+                 and (JC_<somenum>:
+                     not_assigns(doubleP_X_5_alloc_table,
+                     doubleP_doubleM_X_5@, doubleP_doubleM_X_5,
+                     pset_range(pset_singleton(Y), (0),
+                     sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2),
+                                             (1)),
+                                     integer_of_int32(LDY)),
+                             integer_of_int32(K)),
+                     (1))))))) }
 
 parameter DGEMM_NEG_requires :
  N_2:int32 ->
@@ -1013,84 +981,81 @@ parameter DGEMM_NEG_requires :
         LDX_2:int32 ->
          Y:doubleP pointer ->
           LDY:int32 ->
-           doubleP_doubleM_Y_6:(doubleP, double) memory ref ->
-            doubleP_Y_6_alloc_table:doubleP alloc_table ->
-             doubleP_X_5_alloc_table:doubleP alloc_table ->
-              doubleP_A_4_alloc_table:doubleP alloc_table ->
-               doubleP_doubleM_X_5:(doubleP, double) memory ->
-                doubleP_doubleM_A_4:(doubleP, double) memory ->
-                 { (JC_<somenum>:
-                   ((JC_<somenum>: le_int((2), integer_of_int32(p_0)))
-                   and ((JC_<somenum>:
-                        le_int(mul_int(mul_int(sub_int(integer_of_int32(p_0),
-                                               (1)),
-                                       sub_int(integer_of_int32(p_0), (1))),
-                               integer_of_int32(M_2)),
-                        max_int))
-                       and ((JC_<somenum>: (not same_block(Y, A)))
-                           and ((JC_<somenum>:
-                                (forall i_2:int.
-                                 (forall j_2:int.
-                                  ((le_int((0), i_2)
-                                   and le_int(i_2,
-                                       sub_int(add_int(mul_int(sub_int(
-                                                               integer_of_int32(N_2),
-                                                               (1)),
-                                                       integer_of_int32(LDY)),
-                                               integer_of_int32(K)),
-                                       (1)))) ->
-                                   ((le_int((0), j_2)
-                                    and le_int(j_2,
-                                        sub_int(add_int(mul_int(sub_int(
-                                                                integer_of_int32(M_2),
-                                                                (1)),
-                                                        integer_of_int32(LDX_2)),
-                                                integer_of_int32(K)),
-                                        (1)))) ->
-                                    (shift(Y, i_2) <> shift(X_2, j_2)))))))
-                               and ((JC_<somenum>:
-                                    is_exact_int_mat_bounded_by(Y,
-                                    integer_of_int32(LDY),
-                                    integer_of_int32(N_2),
-                                    integer_of_int32(K), (0),
-                                    sub_int(integer_of_int32(p_0), (1)),
-                                    doubleP_Y_6_alloc_table,
-                                    doubleP_doubleM_Y_6))
-                                   and ((JC_<somenum>:
-                                        is_exact_int_mat_bounded_by(A,
-                                        integer_of_int32(LDA),
-                                        integer_of_int32(N_2),
-                                        integer_of_int32(M_2), (0),
-                                        sub_int(integer_of_int32(p_0), (1)),
-                                        doubleP_A_4_alloc_table,
-                                        doubleP_doubleM_A_4))
-                                       and (JC_<somenum>:
-                                           is_exact_int_mat_bounded_by(X_2,
-                                           integer_of_int32(LDX_2),
-                                           integer_of_int32(M_2),
-                                           integer_of_int32(K), (0),
-                                           sub_int(integer_of_int32(p_0),
-                                           (1)), doubleP_X_5_alloc_table,
-                                           doubleP_doubleM_X_5)))))))))}
-                 unit reads doubleP_doubleM_Y_6 writes doubleP_doubleM_Y_6
-                 { (JC_<somenum>:
-                   ((JC_<somenum>:
-                    is_exact_int_mat_bounded_by(Y@, integer_of_int32(LDY@),
-                    integer_of_int32(N_2@), integer_of_int32(K@),
-                    mul_int(mul_int(sub_int((1), integer_of_int32(p_0@)),
-                            sub_int(integer_of_int32(p_0@), (1))),
-                    integer_of_int32(M_2@)),
-                    sub_int(integer_of_int32(p_0@), (1)),
-                    doubleP_Y_6_alloc_table, doubleP_doubleM_Y_6))
-                   and (JC_<somenum>:
-                       not_assigns(doubleP_Y_6_alloc_table@,
-                       doubleP_doubleM_Y_6@, doubleP_doubleM_Y_6,
-                       pset_range(pset_singleton(Y@), (0),
-                       sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2@),
-                                               (1)),
-                                       integer_of_int32(LDY@)),
-                               integer_of_int32(K@)),
-                       (1))))))) }
+           doubleP_doubleM_X_5:(doubleP, double) memory ref ->
+            doubleP_X_5_alloc_table:doubleP alloc_table ->
+             doubleP_A_4_alloc_table:doubleP alloc_table ->
+              doubleP_doubleM_A_4:(doubleP, double) memory ->
+               { (JC_<somenum>:
+                 ((JC_<somenum>: le_int((2), integer_of_int32(p_0)))
+                 and ((JC_<somenum>:
+                      le_int(mul_int(mul_int(sub_int(integer_of_int32(p_0),
+                                             (1)),
+                                     sub_int(integer_of_int32(p_0), (1))),
+                             integer_of_int32(M_2)),
+                      max_int))
+                     and ((JC_<somenum>: (not same_block(Y, A)))
+                         and ((JC_<somenum>:
+                              (forall i_2:int.
+                               (forall j_2:int.
+                                ((le_int((0), i_2)
+                                 and le_int(i_2,
+                                     sub_int(add_int(mul_int(sub_int(
+                                                             integer_of_int32(N_2),
+                                                             (1)),
+                                                     integer_of_int32(LDY)),
+                                             integer_of_int32(K)),
+                                     (1)))) ->
+                                 ((le_int((0), j_2)
+                                  and le_int(j_2,
+                                      sub_int(add_int(mul_int(sub_int(
+                                                              integer_of_int32(M_2),
+                                                              (1)),
+                                                      integer_of_int32(LDX_2)),
+                                              integer_of_int32(K)),
+                                      (1)))) ->
+                                  (shift(Y, i_2) <> shift(X_2, j_2)))))))
+                             and ((JC_<somenum>:
+                                  is_exact_int_mat_bounded_by(Y,
+                                  integer_of_int32(LDY),
+                                  integer_of_int32(N_2), integer_of_int32(K),
+                                  (0), sub_int(integer_of_int32(p_0), (1)),
+                                  doubleP_X_5_alloc_table,
+                                  doubleP_doubleM_X_5))
+                                 and ((JC_<somenum>:
+                                      is_exact_int_mat_bounded_by(A,
+                                      integer_of_int32(LDA),
+                                      integer_of_int32(N_2),
+                                      integer_of_int32(M_2), (0),
+                                      sub_int(integer_of_int32(p_0), (1)),
+                                      doubleP_A_4_alloc_table,
+                                      doubleP_doubleM_A_4))
+                                     and (JC_<somenum>:
+                                         is_exact_int_mat_bounded_by(X_2,
+                                         integer_of_int32(LDX_2),
+                                         integer_of_int32(M_2),
+                                         integer_of_int32(K), (0),
+                                         sub_int(integer_of_int32(p_0), (1)),
+                                         doubleP_X_5_alloc_table,
+                                         doubleP_doubleM_X_5)))))))))}
+               unit reads doubleP_doubleM_X_5 writes doubleP_doubleM_X_5
+               { (JC_<somenum>:
+                 ((JC_<somenum>:
+                  is_exact_int_mat_bounded_by(Y, integer_of_int32(LDY),
+                  integer_of_int32(N_2), integer_of_int32(K),
+                  mul_int(mul_int(sub_int((1), integer_of_int32(p_0)),
+                          sub_int(integer_of_int32(p_0), (1))),
+                  integer_of_int32(M_2)),
+                  sub_int(integer_of_int32(p_0), (1)),
+                  doubleP_X_5_alloc_table, doubleP_doubleM_X_5))
+                 and (JC_<somenum>:
+                     not_assigns(doubleP_X_5_alloc_table,
+                     doubleP_doubleM_X_5@, doubleP_doubleM_X_5,
+                     pset_range(pset_singleton(Y), (0),
+                     sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2),
+                                             (1)),
+                                     integer_of_int32(LDY)),
+                             integer_of_int32(K)),
+                     (1))))))) }
 
 parameter DREMM :
  N_0_0:int32 ->
@@ -1104,36 +1069,37 @@ parameter DREMM :
         { (JC_<somenum>:
           ((JC_<somenum>:
            ((JC_<somenum>:
-            is_exact_int_mat_bounded_by(X_0_0@, integer_of_int32(LDX_0_0@),
-            integer_of_int32(N_0_0@), integer_of_int32(K_0@), (0),
-            sub_int(integer_of_int32(p_0_0@), (1)),
-            doubleP_X_0_7_alloc_table, doubleP_doubleM_X_0_7))
+            is_exact_int_mat_bounded_by(X_0_0, integer_of_int32(LDX_0_0),
+            integer_of_int32(N_0_0), integer_of_int32(K_0), (0),
+            sub_int(integer_of_int32(p_0_0), (1)), doubleP_X_0_7_alloc_table,
+            doubleP_doubleM_X_0_7))
            and (JC_<somenum>:
                (forall i_3_0:int.
                 (forall j_3_0:int.
                  ((le_int((0), i_3_0)
-                  and (lt_int(i_3_0, integer_of_int32(N_0_0@))
+                  and (lt_int(i_3_0, integer_of_int32(N_0_0))
                       and (le_int((0), j_3_0)
-                          and lt_int(j_3_0, integer_of_int32(K_0@))))) ->
+                          and lt_int(j_3_0, integer_of_int32(K_0))))) ->
                   (exists d:int.
-                   eq_real(double_value(select(doubleP_doubleM_X_0_7,
-                                        shift(X_0_0@,
-                                        add_int(mul_int(i_3_0,
-                                                integer_of_int32(LDX_0_0@)),
-                                        j_3_0)))),
-                   add_real(double_value(select(doubleP_doubleM_X_0_7@,
-                                         shift(X_0_0@,
-                                         add_int(mul_int(i_3_0@,
-                                                 integer_of_int32(LDX_0_0@)),
-                                         j_3_0@)))),
-                   real_of_int(mul_int(d, integer_of_int32(p_0_0@))))))))))))
+                   (double_value(select(doubleP_doubleM_X_0_7,
+                                 shift(X_0_0,
+                                 add_int(mul_int(i_3_0,
+                                         integer_of_int32(LDX_0_0)),
+                                 j_3_0)))) = add_real(double_value(select(doubleP_doubleM_X_0_7@,
+                                                                   shift(X_0_0,
+                                                                   add_int(
+                                                                   mul_int(i_3_0,
+                                                                   integer_of_int32(LDX_0_0)),
+                                                                   j_3_0)))),
+                                             real_of_int(mul_int(d,
+                                                         integer_of_int32(p_0_0))))))))))))
           and (JC_<somenum>:
-              not_assigns(doubleP_X_0_7_alloc_table@, doubleP_doubleM_X_0_7@,
+              not_assigns(doubleP_X_0_7_alloc_table, doubleP_doubleM_X_0_7@,
               doubleP_doubleM_X_0_7,
-              pset_range(pset_singleton(X_0_0@), (0),
-              sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0@), (1)),
-                              integer_of_int32(LDX_0_0@)),
-                      integer_of_int32(K_0@)),
+              pset_range(pset_singleton(X_0_0), (0),
+              sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0), (1)),
+                              integer_of_int32(LDX_0_0)),
+                      integer_of_int32(K_0)),
               (1))))))) }
 
 parameter DREMM_requires :
@@ -1152,36 +1118,37 @@ parameter DREMM_requires :
         { (JC_<somenum>:
           ((JC_<somenum>:
            ((JC_<somenum>:
-            is_exact_int_mat_bounded_by(X_0_0@, integer_of_int32(LDX_0_0@),
-            integer_of_int32(N_0_0@), integer_of_int32(K_0@), (0),
-            sub_int(integer_of_int32(p_0_0@), (1)),
-            doubleP_X_0_7_alloc_table, doubleP_doubleM_X_0_7))
+            is_exact_int_mat_bounded_by(X_0_0, integer_of_int32(LDX_0_0),
+            integer_of_int32(N_0_0), integer_of_int32(K_0), (0),
+            sub_int(integer_of_int32(p_0_0), (1)), doubleP_X_0_7_alloc_table,
+            doubleP_doubleM_X_0_7))
            and (JC_<somenum>:
                (forall i_3_0:int.
                 (forall j_3_0:int.
                  ((le_int((0), i_3_0)
-                  and (lt_int(i_3_0, integer_of_int32(N_0_0@))
+                  and (lt_int(i_3_0, integer_of_int32(N_0_0))
                       and (le_int((0), j_3_0)
-                          and lt_int(j_3_0, integer_of_int32(K_0@))))) ->
+                          and lt_int(j_3_0, integer_of_int32(K_0))))) ->
                   (exists d:int.
-                   eq_real(double_value(select(doubleP_doubleM_X_0_7,
-                                        shift(X_0_0@,
-                                        add_int(mul_int(i_3_0,
-                                                integer_of_int32(LDX_0_0@)),
-                                        j_3_0)))),
-                   add_real(double_value(select(doubleP_doubleM_X_0_7@,
-                                         shift(X_0_0@,
-                                         add_int(mul_int(i_3_0@,
-                                                 integer_of_int32(LDX_0_0@)),
-                                         j_3_0@)))),
-                   real_of_int(mul_int(d, integer_of_int32(p_0_0@))))))))))))
+                   (double_value(select(doubleP_doubleM_X_0_7,
+                                 shift(X_0_0,
+                                 add_int(mul_int(i_3_0,
+                                         integer_of_int32(LDX_0_0)),
+                                 j_3_0)))) = add_real(double_value(select(doubleP_doubleM_X_0_7@,
+                                                                   shift(X_0_0,
+                                                                   add_int(
+                                                                   mul_int(i_3_0,
+                                                                   integer_of_int32(LDX_0_0)),
+                                                                   j_3_0)))),
+                                             real_of_int(mul_int(d,
+                                                         integer_of_int32(p_0_0))))))))))))
           and (JC_<somenum>:
-              not_assigns(doubleP_X_0_7_alloc_table@, doubleP_doubleM_X_0_7@,
+              not_assigns(doubleP_X_0_7_alloc_table, doubleP_doubleM_X_0_7@,
               doubleP_doubleM_X_0_7,
-              pset_range(pset_singleton(X_0_0@), (0),
-              sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0@), (1)),
-                              integer_of_int32(LDX_0_0@)),
-                      integer_of_int32(K_0@)),
+              pset_range(pset_singleton(X_0_0), (0),
+              sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0), (1)),
+                              integer_of_int32(LDX_0_0)),
+                      integer_of_int32(K_0)),
               (1))))))) }
 
 parameter DTRSM :
@@ -1198,18 +1165,18 @@ parameter DTRSM :
            { } unit reads doubleP_doubleM_X_1_9 writes doubleP_doubleM_X_1_9
            { (JC_<somenum>:
              ((JC_<somenum>:
-              is_exact_int_mat_bounded_by(X_1_0@, integer_of_int32(LDX_1_0@),
-              integer_of_int32(N_1_0@), integer_of_int32(K_1@),
+              is_exact_int_mat_bounded_by(X_1_0, integer_of_int32(LDX_1_0),
+              integer_of_int32(N_1_0), integer_of_int32(K_1),
               neg_int(max_int), max_int, doubleP_X_1_9_alloc_table,
               doubleP_doubleM_X_1_9))
              and (JC_<somenum>:
-                 not_assigns(doubleP_X_1_9_alloc_table@,
+                 not_assigns(doubleP_X_1_9_alloc_table,
                  doubleP_doubleM_X_1_9@, doubleP_doubleM_X_1_9,
-                 pset_range(pset_singleton(X_1_0@), (0),
-                 sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@),
+                 pset_range(pset_singleton(X_1_0), (0),
+                 sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0),
                                          (1)),
-                                 integer_of_int32(LDX_1_0@)),
-                         integer_of_int32(K_1@)),
+                                 integer_of_int32(LDX_1_0)),
+                         integer_of_int32(K_1)),
                  (1))))))) }
 
 parameter DTRSM_requires :
@@ -1240,19 +1207,25 @@ parameter DTRSM_requires :
            unit reads doubleP_doubleM_X_1_9 writes doubleP_doubleM_X_1_9
            { (JC_<somenum>:
              ((JC_<somenum>:
-              is_exact_int_mat_bounded_by(X_1_0@, integer_of_int32(LDX_1_0@),
-              integer_of_int32(N_1_0@), integer_of_int32(K_1@),
+              is_exact_int_mat_bounded_by(X_1_0, integer_of_int32(LDX_1_0),
+              integer_of_int32(N_1_0), integer_of_int32(K_1),
               neg_int(max_int), max_int, doubleP_X_1_9_alloc_table,
               doubleP_doubleM_X_1_9))
              and (JC_<somenum>:
-                 not_assigns(doubleP_X_1_9_alloc_table@,
+                 not_assigns(doubleP_X_1_9_alloc_table,
                  doubleP_doubleM_X_1_9@, doubleP_doubleM_X_1_9,
-                 pset_range(pset_singleton(X_1_0@), (0),
-                 sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@),
+                 pset_range(pset_singleton(X_1_0), (0),
+                 sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0),
                                          (1)),
-                                 integer_of_int32(LDX_1_0@)),
-                         integer_of_int32(K_1@)),
+                                 integer_of_int32(LDX_1_0)),
+                         integer_of_int32(K_1)),
                  (1))))))) }
+
+exception Goto_while_0_break_exc of unit
+
+exception Goto_while_1_break_exc of unit
+
+exception Goto_while_2_break_exc of unit
 
 parameter LZ_TRSM :
  N_2_0:int32 ->
@@ -1269,18 +1242,18 @@ parameter LZ_TRSM :
             { } unit reads doubleP_doubleM_B_11 writes doubleP_doubleM_B_11
             { (JC_<somenum>:
               ((JC_<somenum>:
-               is_exact_int_mat_bounded_by(B@, integer_of_int32(LDB@),
-               integer_of_int32(N_2_0@), integer_of_int32(K_2@), (0),
-               sub_int(integer_of_int32(p_1@), (1)),
-               doubleP_B_11_alloc_table, doubleP_doubleM_B_11))
+               is_exact_int_mat_bounded_by(B, integer_of_int32(LDB),
+               integer_of_int32(N_2_0), integer_of_int32(K_2), (0),
+               sub_int(integer_of_int32(p_1), (1)), doubleP_B_11_alloc_table,
+               doubleP_doubleM_B_11))
               and (JC_<somenum>:
-                  not_assigns(doubleP_B_11_alloc_table@,
+                  not_assigns(doubleP_B_11_alloc_table,
                   doubleP_doubleM_B_11@, doubleP_doubleM_B_11,
-                  pset_range(pset_singleton(B@), (0),
-                  sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2_0@),
+                  pset_range(pset_singleton(B), (0),
+                  sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2_0),
                                           (1)),
-                                  integer_of_int32(LDB@)),
-                          integer_of_int32(K_2@)),
+                                  integer_of_int32(LDB)),
+                          integer_of_int32(K_2)),
                   (1))))))) }
 
 parameter LZ_TRSM_requires :
@@ -1319,95 +1292,47 @@ parameter LZ_TRSM_requires :
             unit reads doubleP_doubleM_B_11 writes doubleP_doubleM_B_11
             { (JC_<somenum>:
               ((JC_<somenum>:
-               is_exact_int_mat_bounded_by(B@, integer_of_int32(LDB@),
-               integer_of_int32(N_2_0@), integer_of_int32(K_2@), (0),
-               sub_int(integer_of_int32(p_1@), (1)),
-               doubleP_B_11_alloc_table, doubleP_doubleM_B_11))
+               is_exact_int_mat_bounded_by(B, integer_of_int32(LDB),
+               integer_of_int32(N_2_0), integer_of_int32(K_2), (0),
+               sub_int(integer_of_int32(p_1), (1)), doubleP_B_11_alloc_table,
+               doubleP_doubleM_B_11))
               and (JC_<somenum>:
-                  not_assigns(doubleP_B_11_alloc_table@,
+                  not_assigns(doubleP_B_11_alloc_table,
                   doubleP_doubleM_B_11@, doubleP_doubleM_B_11,
-                  pset_range(pset_singleton(B@), (0),
-                  sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2_0@),
+                  pset_range(pset_singleton(B), (0),
+                  sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2_0),
                                           (1)),
-                                  integer_of_int32(LDB@)),
-                          integer_of_int32(K_2@)),
+                                  integer_of_int32(LDB)),
+                          integer_of_int32(K_2)),
                   (1))))))) }
+
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
 
 parameter Nmax :
  p_2:int32 ->
   { } int32
   { (JC_<somenum>:
-    ((JC_<somenum>: delay(integer_of_int32(result), integer_of_int32(p_2@)))
+    ((JC_<somenum>: delay(integer_of_int32(result), integer_of_int32(p_2)))
     and ((JC_<somenum>:
          (forall q:int.
           ((le_int((1), q) and le_int(q, integer_of_int32(result)))
-          <-> delay(q, integer_of_int32(p_2@)))))
+          <-> delay(q, integer_of_int32(p_2)))))
         and (JC_<somenum>: le_int(integer_of_int32(result), (55)))))) }
 
 parameter Nmax_requires :
  p_2:int32 ->
   { (JC_<somenum>: le_int((2), integer_of_int32(p_2)))} int32
   { (JC_<somenum>:
-    ((JC_<somenum>: delay(integer_of_int32(result), integer_of_int32(p_2@)))
+    ((JC_<somenum>: delay(integer_of_int32(result), integer_of_int32(p_2)))
     and ((JC_<somenum>:
          (forall q:int.
           ((le_int((1), q) and le_int(q, integer_of_int32(result)))
-          <-> delay(q, integer_of_int32(p_2@)))))
+          <-> delay(q, integer_of_int32(p_2)))))
         and (JC_<somenum>: le_int(integer_of_int32(result), (55)))))) }
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_doubleP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_doubleP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -1509,14 +1434,12 @@ parameter int8_of_integer_ :
 parameter pmax :
  N_3:int32 ->
   { } int32
-  { (JC_<somenum>:
-    eq_int(integer_of_int32(result), l_pmax(integer_of_int32(N_3@)))) }
+  { (JC_<somenum>: (integer_of_int32(result) = l_pmax(integer_of_int32(N_3)))) }
 
 parameter pmax_requires :
  N_3:int32 ->
   { } int32
-  { (JC_<somenum>:
-    eq_int(integer_of_int32(result), l_pmax(integer_of_int32(N_3@)))) }
+  { (JC_<somenum>: (integer_of_int32(result) = l_pmax(integer_of_int32(N_3)))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -1525,7 +1448,7 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let DGEMM_NEG_ensures_default =
- fun (N_2 : int32) (M_2 : int32) (K : int32) (p_0 : int32) (A : doubleP pointer) (LDA : int32) (X_2 : doubleP pointer) (LDX_2 : int32) (Y : doubleP pointer) (LDY : int32) (doubleP_doubleM_Y_6 : (doubleP, double) memory ref) (doubleP_A_4_alloc_table : doubleP alloc_table) (doubleP_X_5_alloc_table : doubleP alloc_table) (doubleP_Y_6_alloc_table : doubleP alloc_table) (doubleP_doubleM_A_4 : (doubleP, double) memory) (doubleP_doubleM_X_5 : (doubleP, double) memory) ->
+ fun (N_2 : int32) (M_2 : int32) (K : int32) (p_0 : int32) (A : doubleP pointer) (LDA : int32) (X_2 : doubleP pointer) (LDX_2 : int32) (Y : doubleP pointer) (LDY : int32) (doubleP_doubleM_X_5 : (doubleP, double) memory ref) (doubleP_A_4_alloc_table : doubleP alloc_table) (doubleP_X_5_alloc_table : doubleP alloc_table) (doubleP_doubleM_A_4 : (doubleP, double) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: le_int((2), integer_of_int32(p_0)))
     and ((JC_<somenum>:
@@ -1555,7 +1478,7 @@ let DGEMM_NEG_ensures_default =
                      is_exact_int_mat_bounded_by(Y, integer_of_int32(LDY),
                      integer_of_int32(N_2), integer_of_int32(K), (0),
                      sub_int(integer_of_int32(p_0), (1)),
-                     doubleP_Y_6_alloc_table, doubleP_doubleM_Y_6))
+                     doubleP_X_5_alloc_table, doubleP_doubleM_X_5))
                     and ((JC_<somenum>:
                          is_exact_int_mat_bounded_by(A,
                          integer_of_int32(LDA), integer_of_int32(N_2),
@@ -1575,7 +1498,6 @@ let DGEMM_NEG_ensures_default =
      (let j_3 = ref (any_int32 void) in
      (let k_0 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       begin
         (let jessie_<somenum> = (i_3 := (safe_int32_of_integer_ (0))) in void);
@@ -1593,38 +1515,33 @@ let DGEMM_NEG_ensures_default =
                             sub_int(integer_of_int32(p_0), (1))),
                     integer_of_int32(M_2)),
                     sub_int(integer_of_int32(p_0), (1)),
-                    doubleP_Y_6_alloc_table, doubleP_doubleM_Y_6)))))
+                    doubleP_X_5_alloc_table, doubleP_doubleM_X_5)))))
            and ((JC_<somenum>:
-                not_assigns(doubleP_Y_6_alloc_table@loop_4,
-                doubleP_doubleM_Y_6@loop_4, doubleP_doubleM_Y_6,
+                not_assigns(doubleP_X_5_alloc_table,
+                doubleP_doubleM_X_5@loop_4, doubleP_doubleM_X_5,
                 pset_range(pset_singleton(Y), (0),
                 sub_int(add_int(mul_int(sub_int(integer_of_int32(i_3), (1)),
                                 integer_of_int32(LDY)),
                         integer_of_int32(K)),
                 (1)))))
                and (JC_<somenum>:
-                   not_assigns(doubleP_Y_6_alloc_table@init,
-                   doubleP_doubleM_Y_6@init, doubleP_doubleM_Y_6,
-                   pset_range(pset_singleton(Y@init), (0),
-                   sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2@init),
+                   not_assigns(doubleP_X_5_alloc_table,
+                   doubleP_doubleM_X_5@init, doubleP_doubleM_X_5,
+                   pset_range(pset_singleton(Y), (0),
+                   sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2),
                                            (1)),
-                                   integer_of_int32(LDY@init)),
-                           integer_of_int32(K@init)),
+                                   integer_of_int32(LDY)),
+                           integer_of_int32(K)),
                    (1)))))))  }
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             try
-             (let jessie_<somenum> =
              (C_7:
              begin
                (if ((lt_int_ (integer_of_int32 !i_3)) (integer_of_int32 N_2))
-               then void
-               else
-                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<somenum> = (k_0 := (safe_int32_of_integer_ (0))) in void);
               (loop_5:
               while true do
@@ -1642,38 +1559,33 @@ let DGEMM_NEG_ensures_default =
                                    sub_int(integer_of_int32(p_0), (1))),
                            integer_of_int32(M_2)),
                            sub_int(integer_of_int32(p_0), (1)),
-                           doubleP_Y_6_alloc_table, doubleP_doubleM_Y_6)))))
+                           doubleP_X_5_alloc_table, doubleP_doubleM_X_5)))))
                   and ((JC_<somenum>:
-                       not_assigns(doubleP_Y_6_alloc_table@loop_5,
-                       doubleP_doubleM_Y_6@loop_5, doubleP_doubleM_Y_6,
+                       not_assigns(doubleP_X_5_alloc_table,
+                       doubleP_doubleM_X_5@loop_5, doubleP_doubleM_X_5,
                        pset_range(pset_singleton(Y),
                        mul_int(integer_of_int32(i_3), integer_of_int32(LDY)),
                        add_int(mul_int(integer_of_int32(i_3),
                                integer_of_int32(LDY)),
                        sub_int(integer_of_int32(k_0), (1))))))
                       and (JC_<somenum>:
-                          not_assigns(doubleP_Y_6_alloc_table@init,
-                          doubleP_doubleM_Y_6@init, doubleP_doubleM_Y_6,
-                          pset_range(pset_singleton(Y@init), (0),
-                          sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2@init),
+                          not_assigns(doubleP_X_5_alloc_table,
+                          doubleP_doubleM_X_5@init, doubleP_doubleM_X_5,
+                          pset_range(pset_singleton(Y), (0),
+                          sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2),
                                                   (1)),
-                                          integer_of_int32(LDY@init)),
-                                  integer_of_int32(K@init)),
+                                          integer_of_int32(LDY)),
+                                  integer_of_int32(K)),
                           (1)))))))  }
                begin
                  [ { } unit { true } ];
                 try
-                 (let jessie_<somenum> =
                  begin
                    try
-                    (let jessie_<somenum> =
                     (C_13:
                     begin
                       (if ((lt_int_ (integer_of_int32 !k_0)) (integer_of_int32 K))
-                      then void
-                      else
-                       (let jessie_<somenum> =
-                       (raise (Goto_while_1_break_exc void)) in void));
+                      then void else (raise (Goto_while_1_break_exc void)));
                      (let jessie_<somenum> =
                      (j_3 := (safe_int32_of_integer_ (0))) in void);
                      (loop_6:
@@ -1685,23 +1597,20 @@ let DGEMM_NEG_ensures_default =
                                le_int(integer_of_int32(j_3),
                                integer_of_int32(M_2)))
                               and ((JC_<somenum>:
-                                   eq_real(double_round_error(select(doubleP_doubleM_Y_6,
-                                                              shift(Y,
-                                                              add_int(
-                                                              mul_int(
-                                                              integer_of_int32(i_3),
-                                                              integer_of_int32(LDY)),
-                                                              integer_of_int32(k_0))))),
-                                   0.0))
+                                   (double_round_error(select(doubleP_doubleM_X_5,
+                                                       shift(Y,
+                                                       add_int(mul_int(
+                                                               integer_of_int32(i_3),
+                                                               integer_of_int32(LDY)),
+                                                       integer_of_int32(k_0))))) = 0.0))
                                   and ((JC_<somenum>:
                                        (exists v_2:int.
-                                        eq_real(double_value(select(doubleP_doubleM_Y_6,
-                                                             shift(Y,
-                                                             add_int(
-                                                             mul_int(
-                                                             integer_of_int32(i_3),
-                                                             integer_of_int32(LDY)),
-                                                             integer_of_int32(k_0))))),
+                                        (double_value(select(doubleP_doubleM_X_5,
+                                                      shift(Y,
+                                                      add_int(mul_int(
+                                                              integer_of_int32(i_3),
+                                                              integer_of_int32(LDY)),
+                                                      integer_of_int32(k_0))))) = 
                                         real_of_int(v_2))))
                                       and ((JC_<somenum>:
                                            le_real(real_of_int(mul_int(
@@ -1712,14 +1621,14 @@ let DGEMM_NEG_ensures_default =
                                                                integer_of_int32(p_0),
                                                                (1))),
                                                                integer_of_int32(j_3))),
-                                           double_value(select(doubleP_doubleM_Y_6,
+                                           double_value(select(doubleP_doubleM_X_5,
                                                         shift(Y,
                                                         add_int(mul_int(
                                                                 integer_of_int32(i_3),
                                                                 integer_of_int32(LDY)),
                                                         integer_of_int32(k_0)))))))
                                           and (JC_<somenum>:
-                                              le_real(double_value(select(doubleP_doubleM_Y_6,
+                                              le_real(double_value(select(doubleP_doubleM_X_5,
                                                                    shift(Y,
                                                                    add_int(
                                                                    mul_int(
@@ -1729,9 +1638,9 @@ let DGEMM_NEG_ensures_default =
                                               real_of_int(sub_int(integer_of_int32(p_0),
                                                           (1)))))))))))
                          and ((JC_<somenum>:
-                              not_assigns(doubleP_Y_6_alloc_table@loop_6,
-                              doubleP_doubleM_Y_6@loop_6,
-                              doubleP_doubleM_Y_6,
+                              not_assigns(doubleP_X_5_alloc_table,
+                              doubleP_doubleM_X_5@loop_6,
+                              doubleP_doubleM_X_5,
                               pset_range(pset_singleton(Y),
                               add_int(mul_int(integer_of_int32(i_3),
                                       integer_of_int32(LDY)),
@@ -1740,19 +1649,18 @@ let DGEMM_NEG_ensures_default =
                                       integer_of_int32(LDY)),
                               integer_of_int32(k_0)))))
                              and (JC_<somenum>:
-                                 not_assigns(doubleP_Y_6_alloc_table@init,
-                                 doubleP_doubleM_Y_6@init,
-                                 doubleP_doubleM_Y_6,
-                                 pset_range(pset_singleton(Y@init), (0),
-                                 sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2@init),
+                                 not_assigns(doubleP_X_5_alloc_table,
+                                 doubleP_doubleM_X_5@init,
+                                 doubleP_doubleM_X_5,
+                                 pset_range(pset_singleton(Y), (0),
+                                 sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2),
                                                          (1)),
-                                                 integer_of_int32(LDY@init)),
-                                         integer_of_int32(K@init)),
+                                                 integer_of_int32(LDY)),
+                                         integer_of_int32(K)),
                                  (1)))))))  }
                       begin
                         [ { } unit { true } ];
                        try
-                        (let jessie_<somenum> =
                         begin
                           (let jessie_<somenum> =
                           (C_51:
@@ -1760,15 +1668,13 @@ let DGEMM_NEG_ensures_default =
                           begin
                             (if ((lt_int_ (integer_of_int32 !j_3)) (integer_of_int32 M_2))
                             then void
-                            else
-                             (let jessie_<somenum> =
-                             (raise (Goto_while_2_break_exc void)) in void));
+                            else (raise (Goto_while_2_break_exc void)));
                            (let jessie_<somenum> =
                            (let jessie_<somenum> =
                            (C_44:
                            (JC_<somenum>:
                            (((sub_double_safe nearest_even) (C_43:
-                                                            ((safe_acc_ !doubleP_doubleM_Y_6) 
+                                                            ((safe_acc_ !doubleP_doubleM_X_5) 
                                                              (C_42:
                                                              ((shift Y) 
                                                               (integer_of_int32 
@@ -1804,21 +1710,21 @@ let DGEMM_NEG_ensures_default =
                                                                     (integer_of_int32 LDA))))))) 
                                                                   (integer_of_int32 !j_3))))))))))) 
                              (C_30:
-                             ((safe_acc_ doubleP_doubleM_X_5) (C_29:
-                                                              ((shift X_2) 
-                                                               (integer_of_int32 
-                                                                (C_28:
-                                                                (safe_int32_of_integer_ 
-                                                                 (C_27:
-                                                                 ((add_int 
-                                                                   (integer_of_int32 
+                             ((safe_acc_ !doubleP_doubleM_X_5) (C_29:
+                                                               ((shift X_2) 
+                                                                (integer_of_int32 
+                                                                 (C_28:
+                                                                 (safe_int32_of_integer_ 
+                                                                  (C_27:
+                                                                  ((add_int 
+                                                                    (integer_of_int32 
                                                                     (C_26:
                                                                     (safe_int32_of_integer_ 
                                                                     (C_25:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !j_3)) 
                                                                     (integer_of_int32 LDX_2))))))) 
-                                                                  (integer_of_int32 !k_0)))))))))))))))) in
+                                                                   (integer_of_int32 !k_0)))))))))))))))) in
                            (let jessie_<somenum> = Y in
                            (let jessie_<somenum> =
                            (integer_of_int32 (C_48:
@@ -1832,16 +1738,16 @@ let DGEMM_NEG_ensures_default =
                                                            (integer_of_int32 LDY))))))) 
                                                (integer_of_int32 !k_0)))))) in
                            (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-                           (((safe_upd_ doubleP_doubleM_Y_6) jessie_<somenum>) jessie_<somenum>))))) in
+                           (((safe_upd_ doubleP_doubleM_X_5) jessie_<somenum>) jessie_<somenum>))))) in
                            void);
                            (j_3 := (C_53:
                                    (safe_int32_of_integer_ (C_52:
                                                            ((add_int 
                                                              (integer_of_int32 !j_3)) (1))))));
                            !j_3 end)) in void);
-                         (raise (Loop_continue_exc void)) end in void) with
+                         (raise (Loop_continue_exc void)) end with
                         Loop_continue_exc jessie_<somenum> -> void end end done);
-                     (raise (Goto_while_2_break_exc void)) end) in void) with
+                     (raise (Goto_while_2_break_exc void)) end) with
                     Goto_while_2_break_exc jessie_<somenum> ->
                     (let jessie_<somenum> =
                     (while_2_break:
@@ -1852,9 +1758,9 @@ let DGEMM_NEG_ensures_default =
                              (safe_int32_of_integer_ (C_55:
                                                      ((add_int (integer_of_int32 !k_0)) (1))))));
                      !k_0 end)) in void) end;
-                  (raise (Loop_continue_exc void)) end in void) with
+                  (raise (Loop_continue_exc void)) end with
                  Loop_continue_exc jessie_<somenum> -> void end end done);
-              (raise (Goto_while_1_break_exc void)) end) in void) with
+              (raise (Goto_while_1_break_exc void)) end) with
              Goto_while_1_break_exc jessie_<somenum> ->
              (let jessie_<somenum> =
              (while_1_break:
@@ -1864,31 +1770,31 @@ let DGEMM_NEG_ensures_default =
               (i_3 := (C_59:
                       (safe_int32_of_integer_ (C_58:
                                               ((add_int (integer_of_int32 !i_3)) (1))))));
-              !i_3 end)) in void) end; (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+              !i_3 end)) in void) end; (raise (Loop_continue_exc void)) end
+          with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)));
     (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
-     is_exact_int_mat_bounded_by(Y@, integer_of_int32(LDY@),
-     integer_of_int32(N_2@), integer_of_int32(K@),
-     mul_int(mul_int(sub_int((1), integer_of_int32(p_0@)),
-             sub_int(integer_of_int32(p_0@), (1))),
-     integer_of_int32(M_2@)), sub_int(integer_of_int32(p_0@), (1)),
-     doubleP_Y_6_alloc_table, doubleP_doubleM_Y_6))
+     is_exact_int_mat_bounded_by(Y, integer_of_int32(LDY),
+     integer_of_int32(N_2), integer_of_int32(K),
+     mul_int(mul_int(sub_int((1), integer_of_int32(p_0)),
+             sub_int(integer_of_int32(p_0), (1))),
+     integer_of_int32(M_2)), sub_int(integer_of_int32(p_0), (1)),
+     doubleP_X_5_alloc_table, doubleP_doubleM_X_5))
     and (JC_<somenum>:
-        not_assigns(doubleP_Y_6_alloc_table@, doubleP_doubleM_Y_6@,
-        doubleP_doubleM_Y_6,
-        pset_range(pset_singleton(Y@), (0),
-        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2@), (1)),
-                        integer_of_int32(LDY@)),
-                integer_of_int32(K@)),
+        not_assigns(doubleP_X_5_alloc_table, doubleP_doubleM_X_5@,
+        doubleP_doubleM_X_5,
+        pset_range(pset_singleton(Y), (0),
+        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2), (1)),
+                        integer_of_int32(LDY)),
+                integer_of_int32(K)),
         (1))))))) }
 
 let DGEMM_NEG_safety =
- fun (N_2 : int32) (M_2 : int32) (K : int32) (p_0 : int32) (A : doubleP pointer) (LDA : int32) (X_2 : doubleP pointer) (LDX_2 : int32) (Y : doubleP pointer) (LDY : int32) (doubleP_doubleM_Y_6 : (doubleP, double) memory ref) (doubleP_A_4_alloc_table : doubleP alloc_table) (doubleP_X_5_alloc_table : doubleP alloc_table) (doubleP_Y_6_alloc_table : doubleP alloc_table) (doubleP_doubleM_A_4 : (doubleP, double) memory) (doubleP_doubleM_X_5 : (doubleP, double) memory) ->
+ fun (N_2 : int32) (M_2 : int32) (K : int32) (p_0 : int32) (A : doubleP pointer) (LDA : int32) (X_2 : doubleP pointer) (LDX_2 : int32) (Y : doubleP pointer) (LDY : int32) (doubleP_doubleM_X_5 : (doubleP, double) memory ref) (doubleP_A_4_alloc_table : doubleP alloc_table) (doubleP_X_5_alloc_table : doubleP alloc_table) (doubleP_doubleM_A_4 : (doubleP, double) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: le_int((2), integer_of_int32(p_0)))
     and ((JC_<somenum>:
@@ -1918,7 +1824,7 @@ let DGEMM_NEG_safety =
                      is_exact_int_mat_bounded_by(Y, integer_of_int32(LDY),
                      integer_of_int32(N_2), integer_of_int32(K), (0),
                      sub_int(integer_of_int32(p_0), (1)),
-                     doubleP_Y_6_alloc_table, doubleP_doubleM_Y_6))
+                     doubleP_X_5_alloc_table, doubleP_doubleM_X_5))
                     and ((JC_<somenum>:
                          is_exact_int_mat_bounded_by(A,
                          integer_of_int32(LDA), integer_of_int32(N_2),
@@ -1938,7 +1844,6 @@ let DGEMM_NEG_safety =
      (let j_3 = ref (any_int32 void) in
      (let k_0 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       begin
         (let jessie_<somenum> = (i_3 := (safe_int32_of_integer_ (0))) in void);
@@ -1946,7 +1851,7 @@ let DGEMM_NEG_safety =
        while true do
        { invariant (JC_<somenum>: true) variant (0) }
         begin
-          [ { } unit reads doubleP_doubleM_Y_6,i_3
+          [ { } unit reads doubleP_doubleM_X_5,i_3
             { (JC_<somenum>:
               ((JC_<somenum>: le_int((0), integer_of_int32(i_3)))
               and ((JC_<somenum>:
@@ -1958,25 +1863,20 @@ let DGEMM_NEG_safety =
                               sub_int(integer_of_int32(p_0), (1))),
                       integer_of_int32(M_2)),
                       sub_int(integer_of_int32(p_0), (1)),
-                      doubleP_Y_6_alloc_table, doubleP_doubleM_Y_6))))) } ];
+                      doubleP_X_5_alloc_table, doubleP_doubleM_X_5))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             try
-             (let jessie_<somenum> =
              (C_7:
              begin
                (if ((lt_int_ (integer_of_int32 !i_3)) (integer_of_int32 N_2))
-               then void
-               else
-                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<somenum> = (k_0 := (safe_int32_of_integer_ (0))) in void);
               (loop_2:
               while true do
               { invariant (JC_<somenum>: true) variant (0) }
                begin
-                 [ { } unit reads doubleP_doubleM_Y_6,i_3,k_0
+                 [ { } unit reads doubleP_doubleM_X_5,i_3,k_0
                    { (JC_<somenum>:
                      ((JC_<somenum>: le_int((0), integer_of_int32(k_0)))
                      and ((JC_<somenum>:
@@ -1990,49 +1890,41 @@ let DGEMM_NEG_safety =
                                      sub_int(integer_of_int32(p_0), (1))),
                              integer_of_int32(M_2)),
                              sub_int(integer_of_int32(p_0), (1)),
-                             doubleP_Y_6_alloc_table, doubleP_doubleM_Y_6))))) } ];
+                             doubleP_X_5_alloc_table, doubleP_doubleM_X_5))))) } ];
                 try
-                 (let jessie_<somenum> =
                  begin
                    try
-                    (let jessie_<somenum> =
                     (C_13:
                     begin
                       (if ((lt_int_ (integer_of_int32 !k_0)) (integer_of_int32 K))
-                      then void
-                      else
-                       (let jessie_<somenum> =
-                       (raise (Goto_while_1_break_exc void)) in void));
+                      then void else (raise (Goto_while_1_break_exc void)));
                      (let jessie_<somenum> =
                      (j_3 := (safe_int32_of_integer_ (0))) in void);
                      (loop_3:
                      while true do
                      { invariant (JC_<somenum>: true) variant (0) }
                       begin
-                        [ { } unit reads doubleP_doubleM_Y_6,i_3,j_3,k_0
+                        [ { } unit reads doubleP_doubleM_X_5,i_3,j_3,k_0
                           { (JC_<somenum>:
                             ((JC_<somenum>: le_int((0), integer_of_int32(j_3)))
                             and ((JC_<somenum>:
                                  le_int(integer_of_int32(j_3),
                                  integer_of_int32(M_2)))
                                 and ((JC_<somenum>:
-                                     eq_real(double_round_error(select(doubleP_doubleM_Y_6,
-                                                                shift(Y,
-                                                                add_int(
-                                                                mul_int(
-                                                                integer_of_int32(i_3),
-                                                                integer_of_int32(LDY)),
-                                                                integer_of_int32(k_0))))),
-                                     0.0))
+                                     (double_round_error(select(doubleP_doubleM_X_5,
+                                                         shift(Y,
+                                                         add_int(mul_int(
+                                                                 integer_of_int32(i_3),
+                                                                 integer_of_int32(LDY)),
+                                                         integer_of_int32(k_0))))) = 0.0))
                                     and ((JC_<somenum>:
                                          (exists v_2:int.
-                                          eq_real(double_value(select(doubleP_doubleM_Y_6,
-                                                               shift(Y,
-                                                               add_int(
-                                                               mul_int(
-                                                               integer_of_int32(i_3),
-                                                               integer_of_int32(LDY)),
-                                                               integer_of_int32(k_0))))),
+                                          (double_value(select(doubleP_doubleM_X_5,
+                                                        shift(Y,
+                                                        add_int(mul_int(
+                                                                integer_of_int32(i_3),
+                                                                integer_of_int32(LDY)),
+                                                        integer_of_int32(k_0))))) = 
                                           real_of_int(v_2))))
                                         and ((JC_<somenum>:
                                              le_real(real_of_int(mul_int(
@@ -2043,7 +1935,7 @@ let DGEMM_NEG_safety =
                                                                  integer_of_int32(p_0),
                                                                  (1))),
                                                                  integer_of_int32(j_3))),
-                                             double_value(select(doubleP_doubleM_Y_6,
+                                             double_value(select(doubleP_doubleM_X_5,
                                                           shift(Y,
                                                           add_int(mul_int(
                                                                   integer_of_int32(i_3),
@@ -2051,7 +1943,7 @@ let DGEMM_NEG_safety =
                                                           integer_of_int32(k_0)))))))
                                             and (JC_<somenum>:
                                                 le_real(double_value(
-                                                        select(doubleP_doubleM_Y_6,
+                                                        select(doubleP_doubleM_X_5,
                                                         shift(Y,
                                                         add_int(mul_int(
                                                                 integer_of_int32(i_3),
@@ -2060,7 +1952,6 @@ let DGEMM_NEG_safety =
                                                 real_of_int(sub_int(integer_of_int32(p_0),
                                                             (1))))))))))) } ];
                        try
-                        (let jessie_<somenum> =
                         begin
                           (let jessie_<somenum> =
                           (C_51:
@@ -2068,16 +1959,14 @@ let DGEMM_NEG_safety =
                           begin
                             (if ((lt_int_ (integer_of_int32 !j_3)) (integer_of_int32 M_2))
                             then void
-                            else
-                             (let jessie_<somenum> =
-                             (raise (Goto_while_2_break_exc void)) in void));
+                            else (raise (Goto_while_2_break_exc void)));
                            (let jessie_<somenum> =
                            (let jessie_<somenum> =
                            (C_44:
                            (JC_<somenum>:
                            (((sub_double nearest_even) (C_43:
                                                        (JC_<somenum>:
-                                                       ((((offset_acc_ doubleP_Y_6_alloc_table) !doubleP_doubleM_Y_6) Y) 
+                                                       ((((offset_acc_ doubleP_X_5_alloc_table) !doubleP_doubleM_X_5) Y) 
                                                         (integer_of_int32 
                                                          (C_41:
                                                          (JC_<somenum>:
@@ -2114,7 +2003,7 @@ let DGEMM_NEG_safety =
                                                             (integer_of_int32 !j_3))))))))))) 
                              (C_30:
                              (JC_<somenum>:
-                             ((((offset_acc_ doubleP_X_5_alloc_table) doubleP_doubleM_X_5) X_2) 
+                             ((((offset_acc_ doubleP_X_5_alloc_table) !doubleP_doubleM_X_5) X_2) 
                               (integer_of_int32 (C_28:
                                                 (JC_<somenum>:
                                                 (int32_of_integer_ (C_27:
@@ -2145,16 +2034,16 @@ let DGEMM_NEG_safety =
                                                                  (integer_of_int32 !k_0))))))) in
                            (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                            (JC_<somenum>:
-                           (((((offset_upd_ doubleP_Y_6_alloc_table) doubleP_doubleM_Y_6) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+                           (((((offset_upd_ doubleP_X_5_alloc_table) doubleP_doubleM_X_5) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
                            void);
                            (j_3 := (C_53:
                                    (JC_<somenum>:
                                    (int32_of_integer_ (C_52:
                                                       ((add_int (integer_of_int32 !j_3)) (1)))))));
                            !j_3 end)) in void);
-                         (raise (Loop_continue_exc void)) end in void) with
+                         (raise (Loop_continue_exc void)) end with
                         Loop_continue_exc jessie_<somenum> -> void end end done);
-                     (raise (Goto_while_2_break_exc void)) end) in void) with
+                     (raise (Goto_while_2_break_exc void)) end) with
                     Goto_while_2_break_exc jessie_<somenum> ->
                     (let jessie_<somenum> =
                     (while_2_break:
@@ -2166,9 +2055,9 @@ let DGEMM_NEG_safety =
                              (int32_of_integer_ (C_55:
                                                 ((add_int (integer_of_int32 !k_0)) (1)))))));
                      !k_0 end)) in void) end;
-                  (raise (Loop_continue_exc void)) end in void) with
+                  (raise (Loop_continue_exc void)) end with
                  Loop_continue_exc jessie_<somenum> -> void end end done);
-              (raise (Goto_while_1_break_exc void)) end) in void) with
+              (raise (Goto_while_1_break_exc void)) end) with
              Goto_while_1_break_exc jessie_<somenum> ->
              (let jessie_<somenum> =
              (while_1_break:
@@ -2179,9 +2068,9 @@ let DGEMM_NEG_safety =
                       (JC_<somenum>:
                       (int32_of_integer_ (C_58:
                                          ((add_int (integer_of_int32 !i_3)) (1)))))));
-              !i_3 end)) in void) end; (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+              !i_3 end)) in void) end; (raise (Loop_continue_exc void)) end
+          with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)));
     (raise Return) end with Return -> void end) { true }
@@ -2198,7 +2087,6 @@ let DREMM_ensures_default =
      (let i_0_0 = ref (any_int32 void) in
      (let k_0_0 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_76:
       begin
         (let jessie_<somenum> = (i_0_0 := (safe_int32_of_integer_ (0))) in void);
@@ -2206,55 +2094,46 @@ let DREMM_ensures_default =
        while true do
        { invariant
            (JC_<somenum>:
-           not_assigns(doubleP_X_0_7_alloc_table@init,
-           doubleP_doubleM_X_0_7@init, doubleP_doubleM_X_0_7,
-           pset_range(pset_singleton(X_0_0@init), (0),
-           sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0@init), (1)),
-                           integer_of_int32(LDX_0_0@init)),
-                   integer_of_int32(K_0@init)),
+           not_assigns(doubleP_X_0_7_alloc_table, doubleP_doubleM_X_0_7@init,
+           doubleP_doubleM_X_0_7,
+           pset_range(pset_singleton(X_0_0), (0),
+           sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0), (1)),
+                           integer_of_int32(LDX_0_0)),
+                   integer_of_int32(K_0)),
            (1)))))  }
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             try
-             (let jessie_<somenum> =
              (C_77:
              begin
                (if ((lt_int_ (integer_of_int32 !i_0_0)) (integer_of_int32 N_0_0))
-               then void
-               else
-                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<somenum> = (k_0_0 := (safe_int32_of_integer_ (0))) in
               void);
               (loop_10:
               while true do
               { invariant
                   (JC_<somenum>:
-                  not_assigns(doubleP_X_0_7_alloc_table@init,
+                  not_assigns(doubleP_X_0_7_alloc_table,
                   doubleP_doubleM_X_0_7@init, doubleP_doubleM_X_0_7,
-                  pset_range(pset_singleton(X_0_0@init), (0),
-                  sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0@init),
+                  pset_range(pset_singleton(X_0_0), (0),
+                  sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0),
                                           (1)),
-                                  integer_of_int32(LDX_0_0@init)),
-                          integer_of_int32(K_0@init)),
+                                  integer_of_int32(LDX_0_0)),
+                          integer_of_int32(K_0)),
                   (1)))))  }
                begin
                  [ { } unit { true } ];
                 try
-                 (let jessie_<somenum> =
                  begin
                    (let jessie_<somenum> =
                    (C_93:
                    (C_118:
                    begin
                      (if ((lt_int_ (integer_of_int32 !k_0_0)) (integer_of_int32 K_0))
-                     then void
-                     else
-                      (let jessie_<somenum> =
-                      (raise (Goto_while_1_break_exc void)) in void));
+                     then void else (raise (Goto_while_1_break_exc void)));
                     (let jessie_<somenum> =
                     (let __cil_tmp = (C_84: (JC_<somenum>: (fmod void))) in
                     (C_92:
@@ -2279,21 +2158,21 @@ let DREMM_ensures_default =
                     begin
                       (((safe_upd_ doubleP_doubleM_X_0_7) jessie_<somenum>) jessie_<somenum>);
                      jessie_<somenum> end)))))) in void);
-                    (if ((lt_double (C_115:
-                                    ((safe_acc_ !doubleP_doubleM_X_0_7) 
-                                     (C_114:
-                                     ((shift X_0_0) (integer_of_int32 
-                                                     (C_113:
-                                                     (safe_int32_of_integer_ 
-                                                      (C_112:
-                                                      ((add_int (integer_of_int32 
-                                                                 (C_111:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_110:
-                                                                  ((mul_int 
+                    (if ((lt_double_ (C_115:
+                                     ((safe_acc_ !doubleP_doubleM_X_0_7) 
+                                      (C_114:
+                                      ((shift X_0_0) (integer_of_int32 
+                                                      (C_113:
+                                                      (safe_int32_of_integer_ 
+                                                       (C_112:
+                                                       ((add_int (integer_of_int32 
+                                                                  (C_111:
+                                                                  (safe_int32_of_integer_ 
+                                                                   (C_110:
+                                                                   ((mul_int 
                                                                     (integer_of_int32 !i_0_0)) 
-                                                                   (integer_of_int32 LDX_0_0))))))) 
-                                                       (integer_of_int32 !k_0_0))))))))))) 
+                                                                    (integer_of_int32 LDX_0_0))))))) 
+                                                        (integer_of_int32 !k_0_0))))))))))) 
                          (C_109: (double_of_real_exact 0.0)))
                     then
                      (let jessie_<somenum> =
@@ -2340,9 +2219,9 @@ let DREMM_ensures_default =
                               (safe_int32_of_integer_ (C_116:
                                                       ((add_int (integer_of_int32 !k_0_0)) (1))))));
                     !k_0_0 end)) in void); (raise (Loop_continue_exc void))
-                 end in void) with Loop_continue_exc jessie_<somenum> -> void end
-               end done); (raise (Goto_while_1_break_exc void)) end) in void)
-             with Goto_while_1_break_exc jessie_<somenum> ->
+                 end with Loop_continue_exc jessie_<somenum> -> void end end done);
+              (raise (Goto_while_1_break_exc void)) end) with
+             Goto_while_1_break_exc jessie_<somenum> ->
              (let jessie_<somenum> =
              (while_1_break:
              (C_121:
@@ -2351,45 +2230,45 @@ let DREMM_ensures_default =
               (i_0_0 := (C_120:
                         (safe_int32_of_integer_ (C_119:
                                                 ((add_int (integer_of_int32 !i_0_0)) (1))))));
-              !i_0_0 end)) in void) end; (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+              !i_0_0 end)) in void) end; (raise (Loop_continue_exc void)) end
+          with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>:
-      is_exact_int_mat_bounded_by(X_0_0@, integer_of_int32(LDX_0_0@),
-      integer_of_int32(N_0_0@), integer_of_int32(K_0@), (0),
-      sub_int(integer_of_int32(p_0_0@), (1)), doubleP_X_0_7_alloc_table,
+      is_exact_int_mat_bounded_by(X_0_0, integer_of_int32(LDX_0_0),
+      integer_of_int32(N_0_0), integer_of_int32(K_0), (0),
+      sub_int(integer_of_int32(p_0_0), (1)), doubleP_X_0_7_alloc_table,
       doubleP_doubleM_X_0_7))
      and (JC_<somenum>:
          (forall i_3_0:int.
           (forall j_3_0:int.
            ((le_int((0), i_3_0)
-            and (lt_int(i_3_0, integer_of_int32(N_0_0@))
+            and (lt_int(i_3_0, integer_of_int32(N_0_0))
                 and (le_int((0), j_3_0)
-                    and lt_int(j_3_0, integer_of_int32(K_0@))))) ->
+                    and lt_int(j_3_0, integer_of_int32(K_0))))) ->
             (exists d:int.
-             eq_real(double_value(select(doubleP_doubleM_X_0_7,
-                                  shift(X_0_0@,
-                                  add_int(mul_int(i_3_0,
-                                          integer_of_int32(LDX_0_0@)),
-                                  j_3_0)))),
-             add_real(double_value(select(doubleP_doubleM_X_0_7@,
-                                   shift(X_0_0@,
-                                   add_int(mul_int(i_3_0@,
-                                           integer_of_int32(LDX_0_0@)),
-                                   j_3_0@)))),
-             real_of_int(mul_int(d, integer_of_int32(p_0_0@))))))))))))
+             (double_value(select(doubleP_doubleM_X_0_7,
+                           shift(X_0_0,
+                           add_int(mul_int(i_3_0, integer_of_int32(LDX_0_0)),
+                           j_3_0)))) = add_real(double_value(select(doubleP_doubleM_X_0_7@,
+                                                             shift(X_0_0,
+                                                             add_int(
+                                                             mul_int(i_3_0,
+                                                             integer_of_int32(LDX_0_0)),
+                                                             j_3_0)))),
+                                       real_of_int(mul_int(d,
+                                                   integer_of_int32(p_0_0))))))))))))
     and (JC_<somenum>:
-        not_assigns(doubleP_X_0_7_alloc_table@, doubleP_doubleM_X_0_7@,
+        not_assigns(doubleP_X_0_7_alloc_table, doubleP_doubleM_X_0_7@,
         doubleP_doubleM_X_0_7,
-        pset_range(pset_singleton(X_0_0@), (0),
-        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0@), (1)),
-                        integer_of_int32(LDX_0_0@)),
-                integer_of_int32(K_0@)),
+        pset_range(pset_singleton(X_0_0), (0),
+        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_0_0), (1)),
+                        integer_of_int32(LDX_0_0)),
+                integer_of_int32(K_0)),
         (1))))))) }
 
 let DREMM_safety =
@@ -2404,7 +2283,6 @@ let DREMM_safety =
      (let i_0_0 = ref (any_int32 void) in
      (let k_0_0 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_76:
       begin
         (let jessie_<somenum> = (i_0_0 := (safe_int32_of_integer_ (0))) in void);
@@ -2414,17 +2292,12 @@ let DREMM_safety =
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             try
-             (let jessie_<somenum> =
              (C_77:
              begin
                (if ((lt_int_ (integer_of_int32 !i_0_0)) (integer_of_int32 N_0_0))
-               then void
-               else
-                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<somenum> = (k_0_0 := (safe_int32_of_integer_ (0))) in
               void);
               (loop_8:
@@ -2433,17 +2306,13 @@ let DREMM_safety =
                begin
                  [ { } unit { true } ];
                 try
-                 (let jessie_<somenum> =
                  begin
                    (let jessie_<somenum> =
                    (C_93:
                    (C_118:
                    begin
                      (if ((lt_int_ (integer_of_int32 !k_0_0)) (integer_of_int32 K_0))
-                     then void
-                     else
-                      (let jessie_<somenum> =
-                      (raise (Goto_while_1_break_exc void)) in void));
+                     then void else (raise (Goto_while_1_break_exc void)));
                     (let jessie_<somenum> =
                     (let __cil_tmp =
                     (C_84: (JC_<somenum>: (fmod_requires void))) in
@@ -2471,22 +2340,22 @@ let DREMM_safety =
                       (JC_<somenum>:
                       (((((offset_upd_ doubleP_X_0_7_alloc_table) doubleP_doubleM_X_0_7) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
                      jessie_<somenum> end)))))) in void);
-                    (if ((lt_double (C_115:
-                                    (JC_<somenum>:
-                                    ((((offset_acc_ doubleP_X_0_7_alloc_table) !doubleP_doubleM_X_0_7) X_0_0) 
-                                     (integer_of_int32 (C_113:
-                                                       (JC_<somenum>:
-                                                       (int32_of_integer_ 
-                                                        (C_112:
-                                                        ((add_int (integer_of_int32 
-                                                                   (C_111:
-                                                                   (JC_<somenum>:
-                                                                   (int32_of_integer_ 
+                    (if ((lt_double_ (C_115:
+                                     (JC_<somenum>:
+                                     ((((offset_acc_ doubleP_X_0_7_alloc_table) !doubleP_doubleM_X_0_7) X_0_0) 
+                                      (integer_of_int32 (C_113:
+                                                        (JC_<somenum>:
+                                                        (int32_of_integer_ 
+                                                         (C_112:
+                                                         ((add_int (integer_of_int32 
+                                                                    (C_111:
+                                                                    (JC_<somenum>:
+                                                                    (int32_of_integer_ 
                                                                     (C_110:
                                                                     ((mul_int 
                                                                     (integer_of_int32 !i_0_0)) 
                                                                     (integer_of_int32 LDX_0_0)))))))) 
-                                                         (integer_of_int32 !k_0_0))))))))))) 
+                                                          (integer_of_int32 !k_0_0))))))))))) 
                          (C_109: (double_of_real_exact 0.0)))
                     then
                      (let jessie_<somenum> =
@@ -2537,9 +2406,9 @@ let DREMM_safety =
                               (int32_of_integer_ (C_116:
                                                  ((add_int (integer_of_int32 !k_0_0)) (1)))))));
                     !k_0_0 end)) in void); (raise (Loop_continue_exc void))
-                 end in void) with Loop_continue_exc jessie_<somenum> -> void end
-               end done); (raise (Goto_while_1_break_exc void)) end) in void)
-             with Goto_while_1_break_exc jessie_<somenum> ->
+                 end with Loop_continue_exc jessie_<somenum> -> void end end done);
+              (raise (Goto_while_1_break_exc void)) end) with
+             Goto_while_1_break_exc jessie_<somenum> ->
              (let jessie_<somenum> =
              (while_1_break:
              (C_121:
@@ -2549,9 +2418,9 @@ let DREMM_safety =
                         (JC_<somenum>:
                         (int32_of_integer_ (C_119:
                                            ((add_int (integer_of_int32 !i_0_0)) (1)))))));
-              !i_0_0 end)) in void) end; (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+              !i_0_0 end)) in void) end; (raise (Loop_continue_exc void)) end
+          with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end) { true }
@@ -2577,7 +2446,6 @@ let DTRSM_ensures_default =
      (let j_0_0 = ref (any_int32 void) in
      (let k_1 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_128:
       begin
         (let jessie_<somenum> =
@@ -2589,26 +2457,22 @@ let DTRSM_ensures_default =
        while true do
        { invariant
            (JC_<somenum>:
-           not_assigns(doubleP_X_1_9_alloc_table@init,
-           doubleP_doubleM_X_1_9@init, doubleP_doubleM_X_1_9,
-           pset_range(pset_singleton(X_1_0@init), (0),
-           sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@init), (1)),
-                           integer_of_int32(LDX_1_0@init)),
-                   integer_of_int32(K_1@init)),
+           not_assigns(doubleP_X_1_9_alloc_table, doubleP_doubleM_X_1_9@init,
+           doubleP_doubleM_X_1_9,
+           pset_range(pset_singleton(X_1_0), (0),
+           sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0), (1)),
+                           integer_of_int32(LDX_1_0)),
+                   integer_of_int32(K_1)),
            (1)))))  }
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             try
-             (let jessie_<somenum> =
              (C_131:
              begin
                (if ((ge_int_ (integer_of_int32 !i_1_0)) (0)) then void
-               else
-                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               else (raise (Goto_while_0_break_exc void)));
               (let jessie_<somenum> =
               (j_0_0 := (C_130:
                         (safe_int32_of_integer_ (C_129:
@@ -2618,46 +2482,40 @@ let DTRSM_ensures_default =
               while true do
               { invariant
                   (JC_<somenum>:
-                  not_assigns(doubleP_X_1_9_alloc_table@init,
+                  not_assigns(doubleP_X_1_9_alloc_table,
                   doubleP_doubleM_X_1_9@init, doubleP_doubleM_X_1_9,
-                  pset_range(pset_singleton(X_1_0@init), (0),
-                  sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@init),
+                  pset_range(pset_singleton(X_1_0), (0),
+                  sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0),
                                           (1)),
-                                  integer_of_int32(LDX_1_0@init)),
-                          integer_of_int32(K_1@init)),
+                                  integer_of_int32(LDX_1_0)),
+                          integer_of_int32(K_1)),
                   (1)))))  }
                begin
                  [ { } unit { true } ];
                 try
-                 (let jessie_<somenum> =
                  begin
                    try
-                    (let jessie_<somenum> =
                     (C_132:
                     begin
                       (if ((lt_int_ (integer_of_int32 !j_0_0)) (integer_of_int32 N_1_0))
-                      then void
-                      else
-                       (let jessie_<somenum> =
-                       (raise (Goto_while_1_break_exc void)) in void));
+                      then void else (raise (Goto_while_1_break_exc void)));
                      (let jessie_<somenum> =
                      (k_1 := (safe_int32_of_integer_ (0))) in void);
                      (loop_16:
                      while true do
                      { invariant
                          (JC_<somenum>:
-                         not_assigns(doubleP_X_1_9_alloc_table@init,
+                         not_assigns(doubleP_X_1_9_alloc_table,
                          doubleP_doubleM_X_1_9@init, doubleP_doubleM_X_1_9,
-                         pset_range(pset_singleton(X_1_0@init), (0),
-                         sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@init),
+                         pset_range(pset_singleton(X_1_0), (0),
+                         sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0),
                                                  (1)),
-                                         integer_of_int32(LDX_1_0@init)),
-                                 integer_of_int32(K_1@init)),
+                                         integer_of_int32(LDX_1_0)),
+                                 integer_of_int32(K_1)),
                          (1)))))  }
                       begin
                         [ { } unit { true } ];
                        try
-                        (let jessie_<somenum> =
                         begin
                           (let jessie_<somenum> =
                           (C_159:
@@ -2665,9 +2523,7 @@ let DTRSM_ensures_default =
                           begin
                             (if ((lt_int_ (integer_of_int32 !k_1)) (integer_of_int32 K_1))
                             then void
-                            else
-                             (let jessie_<somenum> =
-                             (raise (Goto_while_2_break_exc void)) in void));
+                            else (raise (Goto_while_2_break_exc void)));
                            (let jessie_<somenum> =
                            (let jessie_<somenum> =
                            (C_152:
@@ -2745,9 +2601,9 @@ let DTRSM_ensures_default =
                                                            ((add_int 
                                                              (integer_of_int32 !k_1)) (1))))));
                            !k_1 end)) in void);
-                         (raise (Loop_continue_exc void)) end in void) with
+                         (raise (Loop_continue_exc void)) end with
                         Loop_continue_exc jessie_<somenum> -> void end end done);
-                     (raise (Goto_while_2_break_exc void)) end) in void) with
+                     (raise (Goto_while_2_break_exc void)) end) with
                     Goto_while_2_break_exc jessie_<somenum> ->
                     (let jessie_<somenum> =
                     (while_2_break:
@@ -2758,9 +2614,9 @@ let DTRSM_ensures_default =
                                (safe_int32_of_integer_ (C_163:
                                                        ((add_int (integer_of_int32 !j_0_0)) (1))))));
                      !j_0_0 end)) in void) end;
-                  (raise (Loop_continue_exc void)) end in void) with
+                  (raise (Loop_continue_exc void)) end with
                  Loop_continue_exc jessie_<somenum> -> void end end done);
-              (raise (Goto_while_1_break_exc void)) end) in void) with
+              (raise (Goto_while_1_break_exc void)) end) with
              Goto_while_1_break_exc jessie_<somenum> ->
              (let jessie_<somenum> =
              (while_1_break:
@@ -2770,24 +2626,24 @@ let DTRSM_ensures_default =
               (i_1_0 := (C_167:
                         (safe_int32_of_integer_ (C_166:
                                                 ((sub_int (integer_of_int32 !i_1_0)) (1))))));
-              !i_1_0 end)) in void) end; (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+              !i_1_0 end)) in void) end; (raise (Loop_continue_exc void)) end
+          with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)));
     (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
-     is_exact_int_mat_bounded_by(X_1_0@, integer_of_int32(LDX_1_0@),
-     integer_of_int32(N_1_0@), integer_of_int32(K_1@), neg_int(max_int),
+     is_exact_int_mat_bounded_by(X_1_0, integer_of_int32(LDX_1_0),
+     integer_of_int32(N_1_0), integer_of_int32(K_1), neg_int(max_int),
      max_int, doubleP_X_1_9_alloc_table, doubleP_doubleM_X_1_9))
     and (JC_<somenum>:
-        not_assigns(doubleP_X_1_9_alloc_table@, doubleP_doubleM_X_1_9@,
+        not_assigns(doubleP_X_1_9_alloc_table, doubleP_doubleM_X_1_9@,
         doubleP_doubleM_X_1_9,
-        pset_range(pset_singleton(X_1_0@), (0),
-        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0@), (1)),
-                        integer_of_int32(LDX_1_0@)),
-                integer_of_int32(K_1@)),
+        pset_range(pset_singleton(X_1_0), (0),
+        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_1_0), (1)),
+                        integer_of_int32(LDX_1_0)),
+                integer_of_int32(K_1)),
         (1))))))) }
 
 let DTRSM_safety =
@@ -2811,7 +2667,6 @@ let DTRSM_safety =
      (let j_0_0 = ref (any_int32 void) in
      (let k_1 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_128:
       begin
         (let jessie_<somenum> =
@@ -2826,16 +2681,12 @@ let DTRSM_safety =
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             try
-             (let jessie_<somenum> =
              (C_131:
              begin
                (if ((ge_int_ (integer_of_int32 !i_1_0)) (0)) then void
-               else
-                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               else (raise (Goto_while_0_break_exc void)));
               (let jessie_<somenum> =
               (j_0_0 := (C_130:
                         (JC_<somenum>:
@@ -2848,17 +2699,12 @@ let DTRSM_safety =
                begin
                  [ { } unit { true } ];
                 try
-                 (let jessie_<somenum> =
                  begin
                    try
-                    (let jessie_<somenum> =
                     (C_132:
                     begin
                       (if ((lt_int_ (integer_of_int32 !j_0_0)) (integer_of_int32 N_1_0))
-                      then void
-                      else
-                       (let jessie_<somenum> =
-                       (raise (Goto_while_1_break_exc void)) in void));
+                      then void else (raise (Goto_while_1_break_exc void)));
                      (let jessie_<somenum> =
                      (k_1 := (safe_int32_of_integer_ (0))) in void);
                      (loop_13:
@@ -2867,7 +2713,6 @@ let DTRSM_safety =
                       begin
                         [ { } unit { true } ];
                        try
-                        (let jessie_<somenum> =
                         begin
                           (let jessie_<somenum> =
                           (C_159:
@@ -2875,9 +2720,7 @@ let DTRSM_safety =
                           begin
                             (if ((lt_int_ (integer_of_int32 !k_1)) (integer_of_int32 K_1))
                             then void
-                            else
-                             (let jessie_<somenum> =
-                             (raise (Goto_while_2_break_exc void)) in void));
+                            else (raise (Goto_while_2_break_exc void)));
                            (let jessie_<somenum> =
                            (let jessie_<somenum> =
                            (C_152:
@@ -2960,9 +2803,9 @@ let DTRSM_safety =
                                    (int32_of_integer_ (C_160:
                                                       ((add_int (integer_of_int32 !k_1)) (1)))))));
                            !k_1 end)) in void);
-                         (raise (Loop_continue_exc void)) end in void) with
+                         (raise (Loop_continue_exc void)) end with
                         Loop_continue_exc jessie_<somenum> -> void end end done);
-                     (raise (Goto_while_2_break_exc void)) end) in void) with
+                     (raise (Goto_while_2_break_exc void)) end) with
                     Goto_while_2_break_exc jessie_<somenum> ->
                     (let jessie_<somenum> =
                     (while_2_break:
@@ -2974,9 +2817,9 @@ let DTRSM_safety =
                                (int32_of_integer_ (C_163:
                                                   ((add_int (integer_of_int32 !j_0_0)) (1)))))));
                      !j_0_0 end)) in void) end;
-                  (raise (Loop_continue_exc void)) end in void) with
+                  (raise (Loop_continue_exc void)) end with
                  Loop_continue_exc jessie_<somenum> -> void end end done);
-              (raise (Goto_while_1_break_exc void)) end) in void) with
+              (raise (Goto_while_1_break_exc void)) end) with
              Goto_while_1_break_exc jessie_<somenum> ->
              (let jessie_<somenum> =
              (while_1_break:
@@ -2987,9 +2830,9 @@ let DTRSM_safety =
                         (JC_<somenum>:
                         (int32_of_integer_ (C_166:
                                            ((sub_int (integer_of_int32 !i_1_0)) (1)))))));
-              !i_1_0 end)) in void) end; (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+              !i_1_0 end)) in void) end; (raise (Loop_continue_exc void)) end
+          with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)));
     (raise Return) end with Return -> void end) { true }
@@ -3110,7 +2953,7 @@ let LZ_TRSM_ensures_default =
         (let jessie_<somenum> = B in
         (let jessie_<somenum> = LDB in
         (JC_<somenum>:
-        ((((((((((((((((DGEMM_NEG jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) doubleP_doubleM_B_11) doubleP_B_11_alloc_table) doubleP_B_11_alloc_table) doubleP_A_1_10_alloc_table) !doubleP_doubleM_B_11) doubleP_doubleM_A_1_10))))))))))));
+        ((((((((((((((DGEMM_NEG jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) doubleP_doubleM_B_11) doubleP_B_11_alloc_table) doubleP_A_1_10_alloc_table) doubleP_doubleM_A_1_10))))))))))));
         (let jessie_<somenum> = !P in
         (let jessie_<somenum> = K_2 in
         (let jessie_<somenum> = p_1 in
@@ -3132,17 +2975,17 @@ let LZ_TRSM_ensures_default =
    void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
-     is_exact_int_mat_bounded_by(B@, integer_of_int32(LDB@),
-     integer_of_int32(N_2_0@), integer_of_int32(K_2@), (0),
-     sub_int(integer_of_int32(p_1@), (1)), doubleP_B_11_alloc_table,
+     is_exact_int_mat_bounded_by(B, integer_of_int32(LDB),
+     integer_of_int32(N_2_0), integer_of_int32(K_2), (0),
+     sub_int(integer_of_int32(p_1), (1)), doubleP_B_11_alloc_table,
      doubleP_doubleM_B_11))
     and (JC_<somenum>:
-        not_assigns(doubleP_B_11_alloc_table@, doubleP_doubleM_B_11@,
+        not_assigns(doubleP_B_11_alloc_table, doubleP_doubleM_B_11@,
         doubleP_doubleM_B_11,
-        pset_range(pset_singleton(B@), (0),
-        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2_0@), (1)),
-                        integer_of_int32(LDB@)),
-                integer_of_int32(K_2@)),
+        pset_range(pset_singleton(B), (0),
+        sub_int(add_int(mul_int(sub_int(integer_of_int32(N_2_0), (1)),
+                        integer_of_int32(LDB)),
+                integer_of_int32(K_2)),
         (1))))))) }
 
 let LZ_TRSM_safety =
@@ -3266,7 +3109,7 @@ let LZ_TRSM_safety =
         (let jessie_<somenum> = B in
         (let jessie_<somenum> = LDB in
         (JC_<somenum>:
-        ((((((((((((((((DGEMM_NEG_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) doubleP_doubleM_B_11) doubleP_B_11_alloc_table) doubleP_B_11_alloc_table) doubleP_A_1_10_alloc_table) !doubleP_doubleM_B_11) doubleP_doubleM_A_1_10))))))))))));
+        ((((((((((((((DGEMM_NEG_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) doubleP_doubleM_B_11) doubleP_B_11_alloc_table) doubleP_A_1_10_alloc_table) doubleP_doubleM_A_1_10))))))))))));
         (let jessie_<somenum> = !P in
         (let jessie_<somenum> = K_2 in
         (let jessie_<somenum> = p_1 in
@@ -3300,7 +3143,6 @@ let Nmax_ensures_default =
      (let p2_0 = ref (any_double void) in
      (let N_4 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_176:
       (C_178:
       (C_179:
@@ -3316,7 +3158,6 @@ let Nmax_ensures_default =
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_201:
@@ -3327,7 +3168,7 @@ let Nmax_ensures_default =
                                                 ((bw_xor (integer_of_int32 
                                                           (C_188:
                                                           (safe_int32_of_integer_ 
-                                                           (if ((lt_double 
+                                                           (if ((lt_double_ 
                                                                  (C_187:
                                                                  (JC_<somenum>:
                                                                  (((div_double_safe nearest_even) 
@@ -3352,10 +3193,7 @@ let Nmax_ensures_default =
                                                                 (double_of_real_exact 1.0)))
                                                            then (1) else (0)))))) 
                                                  (neg_int (53)))))))) (0))
-              then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              then void else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (C_193:
              (C_198:
@@ -3383,18 +3221,18 @@ let Nmax_ensures_default =
              (N_4 := (C_200:
                      (safe_int32_of_integer_ (C_199:
                                              ((add_int (integer_of_int32 !N_4)) (1))))));
-             !N_4 end) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end))) in void) with
+             !N_4 end) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (return := !N_4); (raise Return) end) end)));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: delay(integer_of_int32(result), integer_of_int32(p_2@)))
+    ((JC_<somenum>: delay(integer_of_int32(result), integer_of_int32(p_2)))
     and ((JC_<somenum>:
          (forall q:int.
           ((le_int((1), q) and le_int(q, integer_of_int32(result)))
-          <-> delay(q, integer_of_int32(p_2@)))))
+          <-> delay(q, integer_of_int32(p_2)))))
         and (JC_<somenum>: le_int(integer_of_int32(result), (55)))))) }
 
 let Nmax_safety =
@@ -3408,7 +3246,6 @@ let Nmax_safety =
      (let p2_0 = ref (any_double void) in
      (let N_4 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_176:
       (C_178:
       (C_179:
@@ -3424,7 +3261,6 @@ let Nmax_safety =
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_201:
@@ -3438,7 +3274,7 @@ let Nmax_safety =
                                                                     (JC_<somenum>:
                                                                     (int32_of_integer_ 
                                                                     (if 
-                                                                    ((lt_double 
+                                                                    ((lt_double_ 
                                                                     (C_187:
                                                                     (JC_<somenum>:
                                                                     (((div_double nearest_even) 
@@ -3466,10 +3302,7 @@ let Nmax_safety =
                                                                     then (1)
                                                                     else (0))))))) 
                                                                    (neg_int (53))))))))) (0))
-              then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              then void else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (C_193:
              (C_198:
@@ -3501,9 +3334,9 @@ let Nmax_safety =
                      (JC_<somenum>:
                      (int32_of_integer_ (C_199:
                                         ((add_int (integer_of_int32 !N_4)) (1)))))));
-             !N_4 end) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end))) in void) with
+             !N_4 end) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (return := !N_4); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { true }
@@ -3519,7 +3352,6 @@ let pmax_ensures_default =
      (let tmp = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_208:
       begin
         (let jessie_<somenum> = (p_3 := (safe_int32_of_integer_ (1))) in void);
@@ -3529,7 +3361,6 @@ let pmax_ensures_default =
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_210:
@@ -3540,16 +3371,13 @@ let pmax_ensures_default =
                       (let jessie_<somenum> = !p_3 in (JC_<somenum>: (Nmax jessie_<somenum>))))) in
               void); void;
              (if ((le_int_ (integer_of_int32 N_3)) (integer_of_int32 !tmp))
-             then void
-             else
-              (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-              void));
+             then void else (raise (Goto_while_0_break_exc void)));
              (p_3 := (C_212:
                      (safe_int32_of_integer_ (C_211:
                                              ((add_int (integer_of_int32 !p_3)) (1))))));
-             !p_3 end)) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+             !p_3 end)) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       (C_216:
@@ -3561,8 +3389,7 @@ let pmax_ensures_default =
                                             ((sub_int (integer_of_int32 !p_3)) (1)))))) in
        void); (return := !__retres); (raise Return) end)) end))); absurd  end
    with Return -> !return end))
-  { (JC_<somenum>:
-    eq_int(integer_of_int32(result), l_pmax(integer_of_int32(N_3@)))) }
+  { (JC_<somenum>: (integer_of_int32(result) = l_pmax(integer_of_int32(N_3)))) }
 
 let pmax_safety =
  fun (N_3 : int32) ->
@@ -3575,7 +3402,6 @@ let pmax_safety =
      (let tmp = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_208:
       begin
         (let jessie_<somenum> = (p_3 := (safe_int32_of_integer_ (1))) in void);
@@ -3585,7 +3411,6 @@ let pmax_safety =
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_210:
@@ -3596,17 +3421,14 @@ let pmax_safety =
                       (let jessie_<somenum> = !p_3 in
                       (JC_<somenum>: (Nmax_requires jessie_<somenum>))))) in void); void;
              (if ((le_int_ (integer_of_int32 N_3)) (integer_of_int32 !tmp))
-             then void
-             else
-              (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-              void));
+             then void else (raise (Goto_while_0_break_exc void)));
              (p_3 := (C_212:
                      (JC_<somenum>:
                      (int32_of_integer_ (C_211:
                                         ((add_int (integer_of_int32 !p_3)) (1)))))));
-             !p_3 end)) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+             !p_3 end)) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       (C_216:
@@ -3626,6 +3448,12 @@ why --project [...] why/bts0112.why
 <project name="bts0112" context="why/bts0112_ctx.why">
   <function name="Function pmax">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/bts0112_po235.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "175" begin = "12" end = "30"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0112_po236.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "178" begin = "19" end = "26"/>
@@ -3643,11 +3471,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po239.why">
-      <location file = "why/bts0112.why" line = "2980" begin = "43" end = "44"/>
+      <location file = "why/bts0112.why" line = "2806" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po240.why">
-      <location file = "why/bts0112.why" line = "2980" begin = "43" end = "44"/>
+      <location file = "why/bts0112.why" line = "2806" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po241.why">
@@ -3661,15 +3489,31 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/bts0112_po235.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "175" begin = "12" end = "30"/>
-      <explain kind = "Post"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function Nmax">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/bts0112_po209.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "164" begin = "13" end = "29"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/bts0112_po210.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "165" begin = "5" end = "59"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/bts0112_po211.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "165" begin = "5" end = "59"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/bts0112_po212.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "165" begin = "5" end = "59"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/bts0112_po213.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "166" begin = "11" end = "24"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0112_po214.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "170" begin = "16" end = "19"/>
@@ -3767,39 +3611,31 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po233.why">
-      <location file = "why/bts0112.why" line = "2819" begin = "43" end = "44"/>
+      <location file = "why/bts0112.why" line = "2656" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po234.why">
-      <location file = "why/bts0112.why" line = "2819" begin = "43" end = "44"/>
+      <location file = "why/bts0112.why" line = "2656" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/bts0112_po209.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "164" begin = "13" end = "29"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/bts0112_po210.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "165" begin = "5" end = "59"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/bts0112_po211.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "165" begin = "5" end = "59"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/bts0112_po212.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "165" begin = "5" end = "59"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/bts0112_po213.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "166" begin = "11" end = "24"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
   <function name="Function LZ_TRSM">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/bts0112_po166.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "194" begin = "15" end = "22"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/bts0112_po167.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "189" begin = "12" end = "56"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/bts0112_po168.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "191" begin = "5" end = "12"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0112_po169.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "193" begin = "11" end = "18"/>
@@ -3882,11 +3718,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po185.why">
-      <location file = "why/bts0112.why" line = "2645" begin = "17" end = "35"/>
+      <location file = "why/bts0112.why" line = "2488" begin = "17" end = "35"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0112_po186.why">
-      <location file = "why/bts0112.why" line = "2645" begin = "17" end = "35"/>
+      <location file = "why/bts0112.why" line = "2488" begin = "17" end = "35"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0112_po187.why">
@@ -3965,11 +3801,11 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0112_po202.why">
-      <location file = "why/bts0112.why" line = "2682" begin = "17" end = "35"/>
+      <location file = "why/bts0112.why" line = "2525" begin = "17" end = "35"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0112_po203.why">
-      <location file = "why/bts0112.why" line = "2682" begin = "17" end = "35"/>
+      <location file = "why/bts0112.why" line = "2525" begin = "17" end = "35"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0112_po204.why">
@@ -3998,23 +3834,35 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/bts0112_po166.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "194" begin = "15" end = "22"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/bts0112_po167.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "189" begin = "12" end = "56"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/bts0112_po168.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "191" begin = "5" end = "12"/>
-      <explain kind = "Post"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function DTRSM">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/bts0112_po118.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "384" begin = "6" end = "3344"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/bts0112_po119.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "398" begin = "18" end = "2662"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bts0112_po120.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "391" begin = "12" end = "3017"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bts0112_po121.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "384" begin = "6" end = "3344"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bts0112_po122.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "150" begin = "6" end = "61"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/bts0112_po123.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "152" begin = "5" end = "10"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0112_po124.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "154" begin = "11" end = "14"/>
@@ -4177,11 +4025,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po156.why">
-      <location file = "why/bts0112.why" line = "2262" begin = "57" end = "58"/>
+      <location file = "why/bts0112.why" line = "2108" begin = "57" end = "58"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po157.why">
-      <location file = "why/bts0112.why" line = "2262" begin = "57" end = "58"/>
+      <location file = "why/bts0112.why" line = "2108" begin = "57" end = "58"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po158.why">
@@ -4195,11 +4043,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po160.why">
-      <location file = "why/bts0112.why" line = "2243" begin = "50" end = "51"/>
+      <location file = "why/bts0112.why" line = "2094" begin = "50" end = "51"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po161.why">
-      <location file = "why/bts0112.why" line = "2243" begin = "50" end = "51"/>
+      <location file = "why/bts0112.why" line = "2094" begin = "50" end = "51"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po162.why">
@@ -4213,43 +4061,43 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po164.why">
-      <location file = "why/bts0112.why" line = "2221" begin = "43" end = "44"/>
+      <location file = "why/bts0112.why" line = "2076" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po165.why">
-      <location file = "why/bts0112.why" line = "2221" begin = "43" end = "44"/>
+      <location file = "why/bts0112.why" line = "2076" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/bts0112_po118.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "384" begin = "6" end = "3344"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/bts0112_po119.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "398" begin = "18" end = "2662"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bts0112_po120.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "391" begin = "12" end = "3017"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bts0112_po121.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "384" begin = "6" end = "3344"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bts0112_po122.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "150" begin = "6" end = "61"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/bts0112_po123.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "152" begin = "5" end = "10"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
   <function name="Function DREMM">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/bts0112_po77.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "291" begin = "6" end = "3448"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/bts0112_po78.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "298" begin = "12" end = "3160"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bts0112_po79.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "291" begin = "6" end = "3448"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bts0112_po80.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "129" begin = "12" end = "56"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/bts0112_po81.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "130" begin = "6" end = "136"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/bts0112_po82.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "133" begin = "5" end = "10"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0112_po83.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "136" begin = "17" end = "37"/>
@@ -4397,11 +4245,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po112.why">
-      <location file = "why/bts0112.why" line = "1828" begin = "50" end = "51"/>
+      <location file = "why/bts0112.why" line = "1701" begin = "50" end = "51"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po113.why">
-      <location file = "why/bts0112.why" line = "1828" begin = "50" end = "51"/>
+      <location file = "why/bts0112.why" line = "1701" begin = "50" end = "51"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po114.why">
@@ -4415,230 +4263,18 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0112_po116.why">
-      <location file = "why/bts0112.why" line = "1809" begin = "43" end = "44"/>
+      <location file = "why/bts0112.why" line = "1687" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0112_po117.why">
-      <location file = "why/bts0112.why" line = "1809" begin = "43" end = "44"/>
+      <location file = "why/bts0112.why" line = "1687" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/bts0112_po77.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "291" begin = "6" end = "3448"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/bts0112_po78.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "298" begin = "12" end = "3160"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bts0112_po79.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "291" begin = "6" end = "3448"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bts0112_po80.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "129" begin = "12" end = "56"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/bts0112_po81.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "130" begin = "6" end = "136"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/bts0112_po82.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "133" begin = "5" end = "10"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
   <function name="Function DGEMM_NEG">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/bts0112_po39.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "18" end = "23"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po40.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "18" end = "23"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po41.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "18" end = "25"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po42.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "18" end = "25"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po43.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "16" end = "26"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/bts0112_po44.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "16" end = "26"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/bts0112_po45.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "31" end = "36"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po46.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "31" end = "36"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po47.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "31" end = "38"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po48.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "31" end = "38"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po49.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "29" end = "39"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/bts0112_po50.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "29" end = "39"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/bts0112_po51.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "44" end = "49"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po52.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "44" end = "49"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po53.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "44" end = "51"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po54.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "44" end = "51"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po55.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "42" end = "52"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/bts0112_po56.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "42" end = "52"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/bts0112_po57.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "29" end = "52"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po58.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "16" end = "52"/>
-      <explain kind = "Pre"
-text = "FPOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po59.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "5" end = "10"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po60.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "5" end = "10"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po61.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "5" end = "12"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po62.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "5" end = "12"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po63.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "213" begin = "33" end = "2120"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/bts0112_po64.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "213" begin = "33" end = "2120"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/bts0112_po65.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "120" begin = "21" end = "24"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po66.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "120" begin = "21" end = "24"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po67.why">
-      <location file = "why/bts0112.why" line = "1406" begin = "56" end = "57"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/bts0112_po68.why">
-      <location file = "why/bts0112.why" line = "1406" begin = "56" end = "57"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/bts0112_po69.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "112" begin = "25" end = "28"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po70.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "112" begin = "25" end = "28"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po71.why">
-      <location file = "why/bts0112.why" line = "1373" begin = "49" end = "50"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/bts0112_po72.why">
-      <location file = "why/bts0112.why" line = "1373" begin = "49" end = "50"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/bts0112_po73.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "107" begin = "21" end = "24"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po74.why">
-      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "107" begin = "21" end = "24"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0112_po75.why">
-      <location file = "why/bts0112.why" line = "1343" begin = "42" end = "43"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/bts0112_po76.why">
-      <location file = "why/bts0112.why" line = "1343" begin = "42" end = "43"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/bts0112_po1.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "103" begin = "21" end = "27"/>
       <explain kind = "LoopInvInit"/>
@@ -4790,6 +4426,192 @@ text = "ArithOverflow"/>
     <goal why_file="why/bts0112_po38.why">
       <location file = "PPCHOME/tests/jessie/bts0112.c" line = "100" begin = "5" end = "14"/>
       <explain kind = "Post"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/bts0112_po39.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "18" end = "23"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po40.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "18" end = "23"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po41.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "18" end = "25"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po42.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "18" end = "25"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po43.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "16" end = "26"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bts0112_po44.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "16" end = "26"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bts0112_po45.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "31" end = "36"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po46.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "31" end = "36"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po47.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "31" end = "38"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po48.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "31" end = "38"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po49.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "29" end = "39"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bts0112_po50.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "29" end = "39"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bts0112_po51.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "44" end = "49"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po52.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "44" end = "49"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po53.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "44" end = "51"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po54.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "44" end = "51"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po55.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "42" end = "52"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bts0112_po56.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "42" end = "52"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bts0112_po57.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "29" end = "52"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po58.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "16" end = "52"/>
+      <explain kind = "Pre"
+text = "FPOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po59.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "5" end = "10"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po60.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "5" end = "10"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po61.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "5" end = "12"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po62.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "121" begin = "5" end = "12"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po63.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "213" begin = "33" end = "2120"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bts0112_po64.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.jessie/bts0112.jc" line = "213" begin = "33" end = "2120"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bts0112_po65.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "120" begin = "21" end = "24"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po66.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "120" begin = "21" end = "24"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po67.why">
+      <location file = "why/bts0112.why" line = "1301" begin = "56" end = "57"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/bts0112_po68.why">
+      <location file = "why/bts0112.why" line = "1301" begin = "56" end = "57"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/bts0112_po69.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "112" begin = "25" end = "28"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po70.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "112" begin = "25" end = "28"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po71.why">
+      <location file = "why/bts0112.why" line = "1273" begin = "49" end = "50"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/bts0112_po72.why">
+      <location file = "why/bts0112.why" line = "1273" begin = "49" end = "50"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/bts0112_po73.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "107" begin = "21" end = "24"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po74.why">
+      <location file = "PPCHOME/tests/jessie/bts0112.c" line = "107" begin = "21" end = "24"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/bts0112_po75.why">
+      <location file = "why/bts0112.why" line = "1248" begin = "42" end = "43"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/bts0112_po76.why">
+      <location file = "why/bts0112.why" line = "1248" begin = "42" end = "43"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
   </function>
@@ -5850,21 +5672,20 @@ axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
 
 axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
 
-logic single_to_double : single -> double
+axiom single_value_is_bounded:
+  (forall x:single. (abs_real(single_value(x)) <= max_single))
 
-logic double_to_single : mode, double -> single
-
-axiom single_to_double_val:
-  (forall s:single. (double_value(single_to_double(s)) = single_value(s)))
-
-axiom double_to_single_val:
-  (forall m:mode.
-    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
-      double_value(d)))))
+axiom double_value_is_bounded:
+  (forall x:double. (abs_real(double_value(x)) <= max_double))
 
 predicate single_of_real_post(m: mode, x: real, res: single) =
   ((single_value(res) = round_single(m, x)) and
    ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate single_of_double_post(m: mode, x: double, res: single) =
+  ((single_value(res) = round_single(m, double_value(x))) and
+   ((single_exact(res) = double_exact(x)) and
+    (single_model(res) = double_model(x))))
 
 predicate add_single_post(m: mode, x: single, y: single, res: single) =
   ((single_value(res) = round_single(m,
@@ -5908,6 +5729,11 @@ predicate abs_single_post(x: single, res: single) =
 predicate double_of_real_post(m: mode, x: real, res: double) =
   ((double_value(res) = round_double(m, x)) and
    ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate double_of_single_post(x: single, res: double) =
+  ((double_value(res) = single_value(x)) and
+   ((double_exact(res) = single_exact(x)) and
+    (double_model(res) = single_model(x))))
 
 predicate add_double_post(m: mode, x: double, y: double, res: double) =
   ((double_value(res) = round_double(m,
@@ -6020,6 +5846,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -6031,6 +5862,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -6169,21 +6004,6 @@ predicate temporary_is_exact_int_mat_bounded_by(X_1: doubleP pointer,
                 shift(X_1, ((i_1 * LDX_1) + j_1))))) and
                 (double_value(select(doubleP_doubleM_X_1_3_at_L, shift(X_1,
                 ((i_1 * LDX_1) + j_1)))) <= real_of_int(max_0))))))))))))))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_doubleP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

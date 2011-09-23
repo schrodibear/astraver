@@ -176,12 +176,6 @@ type padding
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -220,6 +214,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -232,6 +231,11 @@ axiom int64_coerce :
   ((le_int((-9223372036854775808), x) and le_int(x, (9223372036854775807))) ->
    eq_int(integer_of_int64(int64_of_integer(x)), x)))
 
+axiom int64_extensionality :
+ (forall x:int64.
+  (forall y:int64.
+   (eq_int(integer_of_int64(x), integer_of_int64(y)) -> (x = y))))
+
 axiom int64_range :
  (forall x:int64.
   (le_int((-9223372036854775808), integer_of_int64(x))
@@ -243,6 +247,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -327,21 +336,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -386,59 +380,11 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -613,7 +559,6 @@ let interpolationSearch_ensures_default =
      (let offset = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       (C_4:
       (C_7:
@@ -650,37 +595,32 @@ let interpolationSearch_ensures_default =
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             begin
               (if ((gt_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
               then
-               (let jessie_<somenum> =
                (C_19:
                begin
                  (let jessie_<somenum> =
                  (__retres := (safe_int32_of_integer_ (neg_int (1)))) in
-                 void); (raise (Return_label_exc void)) end) in void)
+                 void); (raise (Return_label_exc void)) end)
               else
                (if ((lt_int_ (integer_of_int32 key)) (integer_of_int32 !min))
                then
-                (let jessie_<somenum> =
                 (C_18:
                 begin
                   (let jessie_<somenum> =
                   (__retres := (safe_int32_of_integer_ (neg_int (1)))) in
-                  void); (raise (Return_label_exc void)) end) in void)
+                  void); (raise (Return_label_exc void)) end)
                else
                 (if ((gt_int_ (integer_of_int32 key)) (integer_of_int32 !max))
                 then
-                 (let jessie_<somenum> =
                  (C_17:
                  begin
                    (let jessie_<somenum> =
                    (__retres := (safe_int32_of_integer_ (neg_int (1)))) in
-                   void); (raise (Return_label_exc void)) end) in void)
-                else void)));
+                   void); (raise (Return_label_exc void)) end) else void)));
              (let jessie_<somenum> =
              (if ((eq_int_ (integer_of_int32 !high)) (integer_of_int32 !low))
              then (C_41: begin   (guess := !high); !guess end)
@@ -747,19 +687,17 @@ let interpolationSearch_ensures_default =
                                               ((shift array_0) (integer_of_int32 !guess))))))) 
                   (integer_of_int32 key))
              then
-              (let jessie_<somenum> =
               (C_42:
               begin
                 (let jessie_<somenum> = (__retres := !guess) in void);
-               (raise (Return_label_exc void)) end) in void) else void);
+               (raise (Return_label_exc void)) end) else void);
              (if ((eq_int_ (integer_of_int32 !guess)) (0))
              then
-              (let jessie_<somenum> =
               (C_48:
               begin
                 (let jessie_<somenum> =
                 (__retres := (safe_int32_of_integer_ (neg_int (1)))) in void);
-               (raise (Return_label_exc void)) end) in void)
+               (raise (Return_label_exc void)) end)
              else
               (if ((eq_int_ (integer_of_int32 !guess)) (integer_of_int32 
                                                         (C_47:
@@ -767,13 +705,11 @@ let interpolationSearch_ensures_default =
                                                          (C_46:
                                                          ((sub_int (integer_of_int32 array_length)) (1)))))))
               then
-               (let jessie_<somenum> =
                (C_45:
                begin
                  (let jessie_<somenum> =
                  (__retres := (safe_int32_of_integer_ (neg_int (1)))) in
-                 void); (raise (Return_label_exc void)) end) in void)
-              else void));
+                 void); (raise (Return_label_exc void)) end) else void));
              (if ((gt_int_ (integer_of_int32 (C_66:
                                              ((safe_acc_ intP_intM_array_1) 
                                               (C_65:
@@ -814,9 +750,9 @@ let interpolationSearch_ensures_default =
                                                         (safe_int32_of_integer_ 
                                                          (C_52:
                                                          ((add_int (integer_of_int32 !guess)) (1)))))))))));
-               !min end))) end in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Return_label_exc void)) end)))) in void) with
+               !min end))) end in void); (raise (Loop_continue_exc void)) end
+          with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Return_label_exc void)) end)))) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))))))));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
@@ -851,7 +787,6 @@ let interpolationSearch_safety =
      (let offset = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       (C_4:
       (C_7:
@@ -890,37 +825,32 @@ let interpolationSearch_safety =
                       lt_int(integer_of_int32(low),
                       integer_of_int32(array_length)))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             begin
               (if ((gt_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
               then
-               (let jessie_<somenum> =
                (C_19:
                begin
                  (let jessie_<somenum> =
                  (__retres := (safe_int32_of_integer_ (neg_int (1)))) in
-                 void); (raise (Return_label_exc void)) end) in void)
+                 void); (raise (Return_label_exc void)) end)
               else
                (if ((lt_int_ (integer_of_int32 key)) (integer_of_int32 !min))
                then
-                (let jessie_<somenum> =
                 (C_18:
                 begin
                   (let jessie_<somenum> =
                   (__retres := (safe_int32_of_integer_ (neg_int (1)))) in
-                  void); (raise (Return_label_exc void)) end) in void)
+                  void); (raise (Return_label_exc void)) end)
                else
                 (if ((gt_int_ (integer_of_int32 key)) (integer_of_int32 !max))
                 then
-                 (let jessie_<somenum> =
                  (C_17:
                  begin
                    (let jessie_<somenum> =
                    (__retres := (safe_int32_of_integer_ (neg_int (1)))) in
-                   void); (raise (Return_label_exc void)) end) in void)
-                else void)));
+                   void); (raise (Return_label_exc void)) end) else void)));
              (let jessie_<somenum> =
              (if ((eq_int_ (integer_of_int32 !high)) (integer_of_int32 !low))
              then (C_41: begin   (guess := !high); !guess end)
@@ -998,19 +928,17 @@ let interpolationSearch_safety =
                                               (integer_of_int32 !guess)))))) 
                   (integer_of_int32 key))
              then
-              (let jessie_<somenum> =
               (C_42:
               begin
                 (let jessie_<somenum> = (__retres := !guess) in void);
-               (raise (Return_label_exc void)) end) in void) else void);
+               (raise (Return_label_exc void)) end) else void);
              (if ((eq_int_ (integer_of_int32 !guess)) (0))
              then
-              (let jessie_<somenum> =
               (C_48:
               begin
                 (let jessie_<somenum> =
                 (__retres := (safe_int32_of_integer_ (neg_int (1)))) in void);
-               (raise (Return_label_exc void)) end) in void)
+               (raise (Return_label_exc void)) end)
              else
               (if ((eq_int_ (integer_of_int32 !guess)) (integer_of_int32 
                                                         (C_47:
@@ -1019,13 +947,11 @@ let interpolationSearch_safety =
                                                          (C_46:
                                                          ((sub_int (integer_of_int32 array_length)) (1))))))))
               then
-               (let jessie_<somenum> =
                (C_45:
                begin
                  (let jessie_<somenum> =
                  (__retres := (safe_int32_of_integer_ (neg_int (1)))) in
-                 void); (raise (Return_label_exc void)) end) in void)
-              else void));
+                 void); (raise (Return_label_exc void)) end) else void));
              (if ((gt_int_ (integer_of_int32 (C_66:
                                              (JC_<somenum>:
                                              ((((offset_acc_ intP_array_1_alloc_table) intP_intM_array_1) array_0) 
@@ -1068,9 +994,9 @@ let interpolationSearch_safety =
                                           (int32_of_integer_ (C_52:
                                                              ((add_int 
                                                                (integer_of_int32 !guess)) (1)))))))))));
-               !min end))) end in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Return_label_exc void)) end)))) in void) with
+               !min end))) end in void); (raise (Loop_continue_exc void)) end
+          with Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Return_label_exc void)) end)))) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))))))));
     absurd  end with Return -> !return end)) { true }
@@ -1220,7 +1146,7 @@ why --project [...] why/bts0514.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0514_po59.why">
-      <location file = "why/bts0514.why" line = "1006" begin = "16" end = "73"/>
+      <location file = "why/bts0514.why" line = "932" begin = "16" end = "73"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0514_po60.why">
@@ -1244,7 +1170,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0514_po64.why">
-      <location file = "why/bts0514.why" line = "1042" begin = "14" end = "56"/>
+      <location file = "why/bts0514.why" line = "968" begin = "14" end = "56"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1252,6 +1178,40 @@ text = ""/>
   </function>
   <function name="Function interpolationSearch">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/bts0514_po1.why">
+      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "24" begin = "21" end = "30"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/bts0514_po2.why">
+      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "24" begin = "26" end = "45"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/bts0514_po3.why">
+      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "23" begin = "21" end = "29"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/bts0514_po4.why">
+      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "23" begin = "26" end = "44"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/bts0514_po5.why">
+      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "24" begin = "21" end = "30"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bts0514_po6.why">
+      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "24" begin = "26" end = "45"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bts0514_po7.why">
+      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "23" begin = "21" end = "29"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bts0514_po8.why">
+      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "23" begin = "26" end = "44"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0514_po9.why">
       <location file = "PPCHOME/tests/jessie/bts0514.c" line = "19" begin = "15" end = "31"/>
@@ -1489,46 +1449,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0514_po56.why">
-      <location file = "why/bts0514.why" line = "715" begin = "42" end = "43"/>
+      <location file = "why/bts0514.why" line = "650" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0514_po57.why">
-      <location file = "why/bts0514.why" line = "715" begin = "42" end = "43"/>
+      <location file = "why/bts0514.why" line = "650" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/bts0514_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "24" begin = "21" end = "30"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/bts0514_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "24" begin = "26" end = "45"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/bts0514_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "23" begin = "21" end = "29"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/bts0514_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "23" begin = "26" end = "44"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/bts0514_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "24" begin = "21" end = "30"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bts0514_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "24" begin = "26" end = "45"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bts0514_po7.why">
-      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "23" begin = "21" end = "29"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bts0514_po8.why">
-      <location file = "PPCHOME/tests/jessie/bts0514.c" line = "23" begin = "26" end = "44"/>
-      <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>
   </function>
@@ -2515,6 +2441,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -2527,6 +2458,11 @@ axiom int64_coerce:
     ((((-9223372036854775808) <= x) and (x <= 9223372036854775807)) ->
      (integer_of_int64(int64_of_integer(x)) = x)))
 
+axiom int64_extensionality:
+  (forall x:int64.
+    (forall y:int64.
+      ((integer_of_int64(x) = integer_of_int64(y)) -> (x = y))))
+
 axiom int64_range:
   (forall x:int64.
     (((-9223372036854775808) <= integer_of_int64(x)) and
@@ -2538,6 +2474,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2623,21 +2563,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

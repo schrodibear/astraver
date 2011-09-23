@@ -1,4 +1,35 @@
 ========== file tests/c/binary_search.c ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
+
 // RUNSIMPLIFY this tells regtests to run Simplify in this example
 
 //@ lemma mean: \forall integer x, y; x <= y ==> x <= (x+y)/2 <= y;
@@ -37,7 +68,7 @@ int binary_search(long t[], int n, long v) {
 
 /*
 Local Variables:
-compile-command: "frama-c -jessie binary_search.c"
+compile-command: "make binary_search.why3ml"
 End:
 */
 ========== frama-c -jessie execution ==========
@@ -168,242 +199,249 @@ behavior failure:
 ========== file tests/c/binary_search.jessie/binary_search.cloc ==========
 [C_10]
 file = "HOME/tests/c/binary_search.c"
-line = 28
+line = 59
 begin = 13
 end = 18
 
 [C_11]
 file = "HOME/tests/c/binary_search.c"
-line = 28
+line = 59
 begin = 13
 end = 18
 
 [C_12]
 file = "HOME/tests/c/binary_search.c"
-line = 28
+line = 59
 begin = 12
 end = 23
 
 [C_13]
 file = "HOME/tests/c/binary_search.c"
-line = 28
+line = 59
 begin = 12
 end = 23
 
 [C_14]
 file = "HOME/tests/c/binary_search.c"
-line = 28
+line = 59
 begin = 4
 end = 7
 
 [C_15]
 file = "HOME/tests/c/binary_search.c"
-line = 29
+line = 60
 begin = 15
 end = 26
 
 [C_16]
 file = "HOME/tests/c/binary_search.c"
-line = 29
+line = 60
 begin = 15
 end = 21
 
 [C_17]
 file = "HOME/tests/c/binary_search.c"
-line = 29
+line = 60
 begin = 20
 end = 26
 
 [C_18]
 file = "HOME/tests/c/binary_search.c"
-line = 32
+line = 63
 begin = 9
 end = 18
 
 [C_19]
 file = "HOME/tests/c/binary_search.c"
-line = 31
+line = 62
 begin = 27
 end = 32
 
 [C_1]
 file = "HOME/tests/c/binary_search.c"
-line = 19
+line = 50
 begin = 2
 end = 5
 
 [C_2]
 file = "HOME/tests/c/binary_search.c"
-line = 19
+line = 50
 begin = 17
 end = 20
 
 [C_3]
 file = "HOME/tests/c/binary_search.c"
-line = 19
+line = 50
 begin = 17
 end = 20
 
 [C_4]
 file = "HOME/tests/c/binary_search.c"
-line = 19
+line = 50
 begin = 2
 end = 5
 
 [binary_search]
 name = "Function binary_search"
 file = "HOME/tests/c/binary_search.c"
-line = 18
+line = 49
 begin = 4
 end = 17
 
 [C_20]
 file = "HOME/tests/c/binary_search.c"
-line = 31
+line = 62
 begin = 27
 end = 32
 
 [C_5]
 file = "HOME/tests/c/binary_search.c"
-line = 25
+line = 56
 begin = 19
 end = 22
 
 [C_21]
 file = "HOME/tests/c/binary_search.c"
-line = 31
+line = 62
 begin = 27
 end = 32
 
 [C_6]
 file = "HOME/tests/c/binary_search.c"
-line = 24
+line = 55
 begin = 8
 end = 66
 
 [C_22]
 file = "HOME/tests/c/binary_search.c"
-line = 31
+line = 62
 begin = 13
 end = 14
 
 [C_7]
 file = "HOME/tests/c/binary_search.c"
-line = 21
+line = 52
 begin = 8
 end = 26
 
 [C_23]
 file = "HOME/tests/c/binary_search.c"
-line = 31
+line = 62
 begin = 13
 end = 17
 
 [C_8]
 file = "HOME/tests/c/binary_search.c"
-line = 21
+line = 52
 begin = 8
 end = 14
 
 [C_24]
 file = "HOME/tests/c/binary_search.c"
-line = 30
+line = 61
 begin = 22
 end = 27
 
 [C_9]
 file = "HOME/tests/c/binary_search.c"
-line = 21
+line = 52
 begin = 18
 end = 26
 
 [C_25]
 file = "HOME/tests/c/binary_search.c"
-line = 30
+line = 61
 begin = 22
 end = 27
 
+[mean]
+name = "Lemma mean"
+file = "HOME/tests/c/binary_search.c"
+line = 34
+begin = 4
+end = 67
+
 [C_26]
 file = "HOME/tests/c/binary_search.c"
-line = 30
+line = 61
 begin = 22
 end = 27
 
 [C_27]
 file = "HOME/tests/c/binary_search.c"
-line = 30
+line = 61
 begin = 8
 end = 9
 
 [C_28]
 file = "HOME/tests/c/binary_search.c"
-line = 30
+line = 61
 begin = 8
 end = 12
 
 [C_29]
 file = "HOME/tests/c/binary_search.c"
-line = 34
+line = 65
 begin = 2
 end = 12
 
 [C_30]
 file = "HOME/tests/c/binary_search.c"
-line = 10
+line = 41
 begin = 12
 end = 29
 
 [C_31]
 file = "HOME/tests/c/binary_search.c"
-line = 10
+line = 41
 begin = 12
 end = 25
 
 [C_32]
 file = "HOME/tests/c/binary_search.c"
-line = 10
+line = 41
 begin = 18
 end = 29
 
 [C_33]
 file = "HOME/tests/c/binary_search.c"
-line = 12
+line = 43
 begin = 14
 end = 46
 
 [C_34]
 file = "HOME/tests/c/binary_search.c"
-line = 15
+line = 46
 begin = 14
 end = 83
 
 [C_35]
 file = "HOME/tests/c/binary_search.c"
-line = 9
+line = 40
 begin = 13
 end = 44
 
 [C_36]
 file = "HOME/tests/c/binary_search.c"
-line = 9
+line = 40
 begin = 13
 end = 19
 
 [C_37]
 file = "HOME/tests/c/binary_search.c"
-line = 9
+line = 40
 begin = 23
 end = 44
 
 [C_38]
 file = "HOME/tests/c/binary_search.c"
-line = 9
+line = 40
 begin = 23
 end = 44
 
 [C_39]
 file = "HOME/tests/c/binary_search.c"
-line = 9
+line = 40
 begin = 23
 end = 44
 
@@ -424,10 +462,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs binar
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs binary_search.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/binary_search_why.sx
 
@@ -487,6 +526,13 @@ simplify: simplify/binary_search_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/binary_search_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/binary_search_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -560,6 +606,9 @@ why/%_why3.why: why/%.why
 why3ide: why/binary_search_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: binary_search.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include binary_search.depend
 
 depend: coq/binary_search_why.v
@@ -573,31 +622,31 @@ clean:
 name = "Function binary_search"
 behavior = "Safety"
 file = "HOME/tests/c/binary_search.c"
-line = 18
+line = 49
 begin = 4
 end = 17
 
 [JC_40]
 file = "HOME/tests/c/binary_search.c"
-line = 25
+line = 56
 begin = 19
 end = 22
 
 [JC_41]
 file = "HOME/tests/c/binary_search.c"
-line = 21
+line = 52
 begin = 8
 end = 14
 
 [JC_42]
 file = "HOME/tests/c/binary_search.c"
-line = 21
+line = 52
 begin = 18
 end = 26
 
 [JC_43]
 file = "HOME/tests/c/binary_search.c"
-line = 21
+line = 52
 begin = 8
 end = 26
 
@@ -621,44 +670,44 @@ end = 1796
 
 [JC_1]
 file = "HOME/tests/c/binary_search.c"
-line = 9
+line = 40
 begin = 13
 end = 19
 
 [JC_47]
 kind = DivByZero
 file = "HOME/tests/c/binary_search.c"
-line = 28
+line = 59
 begin = 12
 end = 23
 
 [JC_2]
 file = "HOME/tests/c/binary_search.c"
-line = 9
+line = 40
 begin = 23
 end = 44
 
 [JC_48]
 file = "HOME/tests/c/binary_search.c"
-line = 29
+line = 60
 begin = 15
 end = 21
 
 [JC_3]
 file = "HOME/tests/c/binary_search.c"
-line = 9
+line = 40
 begin = 23
 end = 44
 
 [JC_49]
 file = "HOME/tests/c/binary_search.c"
-line = 29
+line = 60
 begin = 20
 end = 26
 
 [JC_4]
 file = "HOME/tests/c/binary_search.c"
-line = 9
+line = 40
 begin = 13
 end = 44
 
@@ -670,57 +719,57 @@ end = -1
 
 [JC_6]
 file = "HOME/tests/c/binary_search.c"
-line = 9
+line = 40
 begin = 13
 end = 19
 
 [JC_7]
 file = "HOME/tests/c/binary_search.c"
-line = 9
+line = 40
 begin = 23
 end = 44
 
 [JC_8]
 file = "HOME/tests/c/binary_search.c"
-line = 9
+line = 40
 begin = 23
 end = 44
 
 [JC_9]
 file = "HOME/tests/c/binary_search.c"
-line = 9
+line = 40
 begin = 13
 end = 44
 
 [JC_50]
 file = "HOME/tests/c/binary_search.c"
-line = 29
+line = 60
 begin = 15
 end = 26
 
 [binary_search_ensures_failure]
 name = "Function binary_search"
-behavior = "Normal behavior `failure'"
+behavior = "Behavior `failure'"
 file = "HOME/tests/c/binary_search.c"
-line = 18
+line = 49
 begin = 4
 end = 17
 
 [JC_51]
 file = "HOME/tests/c/binary_search.c"
-line = 21
+line = 52
 begin = 8
 end = 14
 
 [JC_52]
 file = "HOME/tests/c/binary_search.c"
-line = 21
+line = 52
 begin = 18
 end = 26
 
 [JC_53]
 file = "HOME/tests/c/binary_search.c"
-line = 21
+line = 52
 begin = 8
 end = 26
 
@@ -745,37 +794,37 @@ end = 1796
 [JC_57]
 kind = DivByZero
 file = "HOME/tests/c/binary_search.c"
-line = 28
+line = 59
 begin = 12
 end = 23
 
 [JC_58]
 file = "HOME/tests/c/binary_search.c"
-line = 29
+line = 60
 begin = 15
 end = 21
 
 [JC_59]
 file = "HOME/tests/c/binary_search.c"
-line = 29
+line = 60
 begin = 20
 end = 26
 
 [JC_60]
 file = "HOME/tests/c/binary_search.c"
-line = 29
+line = 60
 begin = 15
 end = 26
 
 [JC_61]
 file = "HOME/tests/c/binary_search.c"
-line = 24
+line = 55
 begin = 8
 end = 66
 
 [JC_62]
 file = "HOME/tests/c/binary_search.c"
-line = 21
+line = 52
 begin = 8
 end = 14
 
@@ -787,25 +836,25 @@ end = -1
 
 [JC_63]
 file = "HOME/tests/c/binary_search.c"
-line = 21
+line = 52
 begin = 18
 end = 26
 
 [JC_11]
 file = "HOME/tests/c/binary_search.c"
-line = 10
+line = 41
 begin = 12
 end = 25
 
 [JC_64]
 file = "HOME/tests/c/binary_search.c"
-line = 21
+line = 52
 begin = 8
 end = 26
 
 [JC_12]
 file = "HOME/tests/c/binary_search.c"
-line = 10
+line = 41
 begin = 18
 end = 29
 
@@ -817,7 +866,7 @@ end = -1
 
 [JC_13]
 file = "HOME/tests/c/binary_search.c"
-line = 10
+line = 41
 begin = 12
 end = 29
 
@@ -829,15 +878,15 @@ end = 1796
 
 [binary_search_ensures_success]
 name = "Function binary_search"
-behavior = "Normal behavior `success'"
+behavior = "Behavior `success'"
 file = "HOME/tests/c/binary_search.c"
-line = 18
+line = 49
 begin = 4
 end = 17
 
 [JC_14]
 file = "HOME/tests/c/binary_search.c"
-line = 10
+line = 41
 begin = 12
 end = 25
 
@@ -849,26 +898,26 @@ end = 1796
 
 [JC_15]
 file = "HOME/tests/c/binary_search.c"
-line = 10
+line = 41
 begin = 18
 end = 29
 
 [JC_68]
 kind = DivByZero
 file = "HOME/tests/c/binary_search.c"
-line = 28
+line = 59
 begin = 12
 end = 23
 
 [JC_16]
 file = "HOME/tests/c/binary_search.c"
-line = 10
+line = 41
 begin = 12
 end = 29
 
 [JC_69]
 file = "HOME/tests/c/binary_search.c"
-line = 29
+line = 60
 begin = 15
 end = 21
 
@@ -886,70 +935,70 @@ end = -1
 
 [JC_19]
 file = "HOME/tests/c/binary_search.c"
-line = 12
+line = 43
 begin = 14
 end = 46
 
 [mean]
-name = "mean"
+name = "Lemma mean"
 behavior = "lemma"
-file = "HOME/tests/c/binary_search.jessie/binary_search.jc"
+file = "HOME/tests/c/binary_search.c"
 line = 34
-begin = 0
-end = 122
+begin = 4
+end = 67
 
 [JC_70]
 file = "HOME/tests/c/binary_search.c"
-line = 29
+line = 60
 begin = 20
 end = 26
 
 [JC_71]
 file = "HOME/tests/c/binary_search.c"
-line = 29
+line = 60
 begin = 15
 end = 26
 
 [JC_20]
 file = "HOME/tests/c/binary_search.c"
-line = 12
+line = 43
 begin = 14
 end = 46
 
 [JC_21]
 file = "HOME/tests/c/binary_search.c"
-line = 15
+line = 46
 begin = 14
 end = 83
 
 [JC_22]
 file = "HOME/tests/c/binary_search.c"
-line = 15
+line = 46
 begin = 14
 end = 83
 
 [JC_23]
 kind = ArithOverflow
 file = "HOME/tests/c/binary_search.c"
-line = 19
+line = 50
 begin = 17
 end = 20
 
 [JC_24]
 file = "HOME/tests/c/binary_search.c"
-line = 21
+line = 52
 begin = 8
 end = 14
 
 [JC_25]
 file = "HOME/tests/c/binary_search.c"
-line = 21
+line = 52
 begin = 18
 end = 26
 
 [JC_26]
 file = "HOME/tests/c/binary_search.c"
-line = 21
+line = 52
 begin = 8
 end = 26
 
@@ -974,75 +1023,75 @@ end = 1796
 [JC_30]
 kind = ArithOverflow
 file = "HOME/tests/c/binary_search.c"
-line = 28
+line = 59
 begin = 13
 end = 18
 
 [JC_31]
 kind = DivByZero
 file = "HOME/tests/c/binary_search.c"
-line = 28
+line = 59
 begin = 12
 end = 23
 
 [binary_search_ensures_default]
 name = "Function binary_search"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/binary_search.c"
-line = 18
+line = 49
 begin = 4
 end = 17
 
 [JC_32]
 kind = ArithOverflow
 file = "HOME/tests/c/binary_search.c"
-line = 28
+line = 59
 begin = 12
 end = 23
 
 [JC_33]
 file = "HOME/tests/c/binary_search.c"
-line = 29
+line = 60
 begin = 15
 end = 21
 
 [JC_34]
 file = "HOME/tests/c/binary_search.c"
-line = 29
+line = 60
 begin = 20
 end = 26
 
 [JC_35]
 file = "HOME/tests/c/binary_search.c"
-line = 29
+line = 60
 begin = 15
 end = 26
 
 [JC_36]
 kind = PointerDeref
 file = "HOME/tests/c/binary_search.c"
-line = 30
+line = 61
 begin = 8
 end = 12
 
 [JC_37]
 kind = ArithOverflow
 file = "HOME/tests/c/binary_search.c"
-line = 30
+line = 61
 begin = 22
 end = 27
 
 [JC_38]
 kind = PointerDeref
 file = "HOME/tests/c/binary_search.c"
-line = 31
+line = 62
 begin = 13
 end = 17
 
 [JC_39]
 kind = ArithOverflow
 file = "HOME/tests/c/binary_search.c"
-line = 31
+line = 62
 begin = 27
 end = 32
 
@@ -1058,14 +1107,6 @@ type longP
 type padding
 
 type voidP
-
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
 
 logic charP_tag:  -> charP tag_id
 
@@ -1100,6 +1141,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -1111,6 +1157,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -1205,21 +1256,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_longP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -1271,59 +1307,13 @@ lemma mean :
     (le_int(x_0, computer_div(add_int(x_0, y), (2)))
     and le_int(computer_div(add_int(x_0, y), (2)), y)))))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_longP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_longP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_longP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_longP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -1414,24 +1404,23 @@ parameter binary_search :
     longP_t_2_alloc_table:longP alloc_table ->
      longP_longM_t_2:(longP, int32) memory ->
       { } int32
-      { ((sorted(t_0@, (0), sub_int(integer_of_int32(n@), (1)),
-          longP_longM_t_2@) ->
+      { ((sorted(t_0, (0), sub_int(integer_of_int32(n), (1)),
+          longP_longM_t_2) ->
           (JC_22:
-          (eq_int(integer_of_int32(result), neg_int((1))) ->
+          ((integer_of_int32(result) = neg_int((1))) ->
            (forall k_0:int.
-            ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n@))) ->
-             neq_int(integer_of_int32(select(longP_longM_t_2,
-                                      shift(t_0@, k_0))),
-             integer_of_int32(v@)))))))
+            ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
+             (integer_of_int32(select(longP_longM_t_2, shift(t_0, k_0))) <> 
+             integer_of_int32(v)))))))
         and ((JC_20:
              (ge_int(integer_of_int32(result), (0)) ->
-              eq_int(integer_of_int32(select(longP_longM_t_2,
-                                      shift(t_0@, integer_of_int32(result)))),
-              integer_of_int32(v@))))
+              (integer_of_int32(select(longP_longM_t_2,
+                                shift(t_0, integer_of_int32(result)))) = 
+              integer_of_int32(v))))
             and (JC_16:
                 ((JC_14: le_int(neg_int((1)), integer_of_int32(result)))
                 and (JC_15:
-                    lt_int(integer_of_int32(result), integer_of_int32(n@))))))) }
+                    lt_int(integer_of_int32(result), integer_of_int32(n))))))) }
 
 parameter binary_search_requires :
  t_0:longP pointer ->
@@ -1446,24 +1435,23 @@ parameter binary_search_requires :
                 ge_int(offset_max(longP_t_2_alloc_table, t_0),
                 sub_int(integer_of_int32(n), (1)))))))}
       int32
-      { ((sorted(t_0@, (0), sub_int(integer_of_int32(n@), (1)),
-          longP_longM_t_2@) ->
+      { ((sorted(t_0, (0), sub_int(integer_of_int32(n), (1)),
+          longP_longM_t_2) ->
           (JC_22:
-          (eq_int(integer_of_int32(result), neg_int((1))) ->
+          ((integer_of_int32(result) = neg_int((1))) ->
            (forall k_0:int.
-            ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n@))) ->
-             neq_int(integer_of_int32(select(longP_longM_t_2,
-                                      shift(t_0@, k_0))),
-             integer_of_int32(v@)))))))
+            ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
+             (integer_of_int32(select(longP_longM_t_2, shift(t_0, k_0))) <> 
+             integer_of_int32(v)))))))
         and ((JC_20:
              (ge_int(integer_of_int32(result), (0)) ->
-              eq_int(integer_of_int32(select(longP_longM_t_2,
-                                      shift(t_0@, integer_of_int32(result)))),
-              integer_of_int32(v@))))
+              (integer_of_int32(select(longP_longM_t_2,
+                                shift(t_0, integer_of_int32(result)))) = 
+              integer_of_int32(v))))
             and (JC_16:
                 ((JC_14: le_int(neg_int((1)), integer_of_int32(result)))
                 and (JC_15:
-                    lt_int(integer_of_int32(result), integer_of_int32(n@))))))) }
+                    lt_int(integer_of_int32(result), integer_of_int32(n))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1498,10 +1486,8 @@ let binary_search_ensures_default =
      (let m = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_1:
          (C_4:
          begin
@@ -1522,14 +1508,10 @@ let binary_search_ensures_default =
            begin
              [ { } unit { true } ];
             try
-             (let jessie_<num> =
              (C_14:
              begin
                (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
-               then void
-               else
-                (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<num> =
               (m := (C_13:
                     (safe_int32_of_integer_ (C_12:
@@ -1573,27 +1555,26 @@ let binary_search_ensures_default =
                                               ((sub_int (integer_of_int32 !m)) (1))))))) in
                 void)
                else
-                (let jessie_<num> =
                 (C_18:
                 begin
                   (let jessie_<num> = (__retres := !m) in void);
-                 (raise (Return_label_exc void)) end) in void)));
-              (raise (Loop_continue_exc void)) end) in void) with
+                 (raise (Return_label_exc void)) end)));
+              (raise (Loop_continue_exc void)) end) with
              Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end)) in void) with
+          (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<num> ->
          (let jessie_<num> =
          (while_0_break:
          (C_29:
          begin
            void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
-          !__retres end)) in void) end; (raise (Return_label_exc void)) end in
-      void) with Return_label_exc jessie_<num> ->
+          !__retres end)) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_13:
     ((JC_11: le_int(neg_int((1)), integer_of_int32(result)))
-    and (JC_12: lt_int(integer_of_int32(result), integer_of_int32(n@))))) }
+    and (JC_12: lt_int(integer_of_int32(result), integer_of_int32(n))))) }
 
 let binary_search_ensures_failure =
  fun (t_0 : longP pointer) (n : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
@@ -1613,10 +1594,8 @@ let binary_search_ensures_failure =
      (let m = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_1:
          (C_4:
          begin
@@ -1633,9 +1612,8 @@ let binary_search_ensures_failure =
               (forall k:int.
                ((le_int((0), k)
                 and (lt_int(k, integer_of_int32(n))
-                    and eq_int(integer_of_int32(select(longP_longM_t_2,
-                                                shift(t_0, k))),
-                        integer_of_int32(v)))) ->
+                    and (integer_of_int32(select(longP_longM_t_2,
+                                          shift(t_0, k))) = integer_of_int32(v)))) ->
                 (le_int(integer_of_int32(l), k)
                 and le_int(k, integer_of_int32(u))))))  }
            begin
@@ -1646,14 +1624,10 @@ let binary_search_ensures_failure =
                      le_int(integer_of_int32(u),
                      sub_int(integer_of_int32(n), (1)))))) } ];
             try
-             (let jessie_<num> =
              (C_14:
              begin
                (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
-               then void
-               else
-                (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<num> =
               (m := (C_13:
                     (safe_int32_of_integer_ (C_12:
@@ -1698,30 +1672,29 @@ let binary_search_ensures_failure =
                                               ((sub_int (integer_of_int32 !m)) (1))))))) in
                 void)
                else
-                (let jessie_<num> =
                 (C_18:
                 begin
                   (let jessie_<num> = (__retres := !m) in void);
-                 (raise (Return_label_exc void)) end) in void)));
-              (raise (Loop_continue_exc void)) end) in void) with
+                 (raise (Return_label_exc void)) end)));
+              (raise (Loop_continue_exc void)) end) with
              Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end)) in void) with
+          (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<num> ->
          (let jessie_<num> =
          (while_0_break:
          (C_29:
          begin
            void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
-          !__retres end)) in void) end; (raise (Return_label_exc void)) end in
-      void) with Return_label_exc jessie_<num> ->
+          !__retres end)) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_21:
-    (eq_int(integer_of_int32(result), neg_int((1))) ->
+    ((integer_of_int32(result) = neg_int((1))) ->
      (forall k_0:int.
-      ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n@))) ->
-       neq_int(integer_of_int32(select(longP_longM_t_2, shift(t_0@, k_0))),
-       integer_of_int32(v@)))))) }
+      ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
+       (integer_of_int32(select(longP_longM_t_2, shift(t_0, k_0))) <> 
+       integer_of_int32(v)))))) }
 
 let binary_search_ensures_success =
  fun (t_0 : longP pointer) (n : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
@@ -1740,10 +1713,8 @@ let binary_search_ensures_success =
      (let m = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_1:
          (C_4:
          begin
@@ -1764,14 +1735,10 @@ let binary_search_ensures_success =
                      le_int(integer_of_int32(u),
                      sub_int(integer_of_int32(n), (1)))))) } ];
             try
-             (let jessie_<num> =
              (C_14:
              begin
                (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
-               then void
-               else
-                (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<num> =
               (m := (C_13:
                     (safe_int32_of_integer_ (C_12:
@@ -1816,29 +1783,27 @@ let binary_search_ensures_success =
                                               ((sub_int (integer_of_int32 !m)) (1))))))) in
                 void)
                else
-                (let jessie_<num> =
                 (C_18:
                 begin
                   (let jessie_<num> = (__retres := !m) in void);
-                 (raise (Return_label_exc void)) end) in void)));
-              (raise (Loop_continue_exc void)) end) in void) with
+                 (raise (Return_label_exc void)) end)));
+              (raise (Loop_continue_exc void)) end) with
              Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end)) in void) with
+          (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<num> ->
          (let jessie_<num> =
          (while_0_break:
          (C_29:
          begin
            void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
-          !__retres end)) in void) end; (raise (Return_label_exc void)) end in
-      void) with Return_label_exc jessie_<num> ->
+          !__retres end)) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_19:
     (ge_int(integer_of_int32(result), (0)) ->
-     eq_int(integer_of_int32(select(longP_longM_t_2,
-                             shift(t_0@, integer_of_int32(result)))),
-     integer_of_int32(v@)))) }
+     (integer_of_int32(select(longP_longM_t_2,
+                       shift(t_0, integer_of_int32(result)))) = integer_of_int32(v)))) }
 
 let binary_search_safety =
  fun (t_0 : longP pointer) (n : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
@@ -1857,10 +1822,8 @@ let binary_search_safety =
      (let m = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_1:
          (C_4:
          begin
@@ -1884,14 +1847,10 @@ let binary_search_safety =
                      le_int(integer_of_int32(u),
                      sub_int(integer_of_int32(n), (1)))))) } ];
             try
-             (let jessie_<num> =
              (C_14:
              begin
                (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
-               then void
-               else
-                (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<num> =
               (m := (C_13:
                     (JC_32:
@@ -1939,22 +1898,21 @@ let binary_search_safety =
                                          ((sub_int (integer_of_int32 !m)) (1)))))))) in
                 void)
                else
-                (let jessie_<num> =
                 (C_18:
                 begin
                   (let jessie_<num> = (__retres := !m) in void);
-                 (raise (Return_label_exc void)) end) in void)));
-              (raise (Loop_continue_exc void)) end) in void) with
+                 (raise (Return_label_exc void)) end)));
+              (raise (Loop_continue_exc void)) end) with
              Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end)) in void) with
+          (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<num> ->
          (let jessie_<num> =
          (while_0_break:
          (C_29:
          begin
            void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
-          !__retres end)) in void) end; (raise (Return_label_exc void)) end in
-      void) with Return_label_exc jessie_<num> ->
+          !__retres end)) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end)) { true }
 
@@ -2937,6 +2895,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -2948,6 +2911,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -3042,21 +3009,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_longP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -4671,12 +4623,12 @@ goal binary_search_safety_po_17:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/binary_search_why.why     : ?............#..........?............. (35/0/2/1/0)
+why/binary_search_why.why     : ?.......................?............. (36/0/2/0/0)
 total   :  38
-valid   :  35 ( 92%)
+valid   :  36 ( 95%)
 invalid :   0 (  0%)
 unknown :   2 (  5%)
-timeout :   1 (  3%)
+timeout :   0 (  0%)
 failure :   0 (  0%)
 // RUNSIMPLIFY this tells regtests to run Simplify in this example
 ========== generation of Simplify VC output ==========
@@ -5525,6 +5477,11 @@ why -simplify [...] why/binary_search.why
  (EQ (integer_of_int32 (int32_of_integer x)) x))))
 
 (BG_PUSH
+ ;; Why axiom int32_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_int32 x) (integer_of_int32 y)) (EQ x y))))
+
+(BG_PUSH
  ;; Why axiom int32_range
  (FORALL (x)
  (AND (<= (- 0 constant_too_large_2147483648) (integer_of_int32 x))
@@ -5535,6 +5492,11 @@ why -simplify [...] why/binary_search.why
  (FORALL (x)
  (IMPLIES (AND (<= (- 0 128) x) (<= x 127))
  (EQ (integer_of_int8 (int8_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom int8_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_int8 x) (integer_of_int8 y)) (EQ x y))))
 
 (BG_PUSH
  ;; Why axiom int8_range
@@ -5620,18 +5582,6 @@ why -simplify [...] why/binary_search.why
   (AND (EQ (offset_min voidP_alloc_table p) a)
   (EQ (offset_max voidP_alloc_table p) b)))
 
-(DEFPRED (valid_bitvector_struct_charP p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_longP p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_voidP p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
 (DEFPRED (valid_root_charP p a b charP_alloc_table)
   (AND (<= (offset_min charP_alloc_table p) a)
   (>= (offset_max charP_alloc_table p) b)))
@@ -5672,7 +5622,7 @@ why -simplify [...] why/binary_search.why
  ;; Why axiom voidP_tags
  (FORALL (x voidP_tag_table) (instanceof voidP_tag_table x voidP_tag)))
 
-;; mean, File "HOME/tests/c/binary_search.jessie/binary_search.jc", line 34, characters 0-122
+;; mean, File "HOME/tests/c/binary_search.c", line 34, characters 4-67
 (FORALL (x_0 y)
 (IMPLIES (<= x_0 y)
 (AND (<= x_0 (computer_div (+ x_0 y) 2)) (<= (computer_div (+ x_0 y) 2) y))))
@@ -5683,7 +5633,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (<= x_0 y)
 (AND (<= x_0 (computer_div (+ x_0 y) 2)) (<= (computer_div (+ x_0 y) 2) y)))))
 
-;; binary_search_ensures_default_po_1, File "HOME/tests/c/binary_search.c", line 21, characters 8-14
+;; binary_search_ensures_default_po_1, File "HOME/tests/c/binary_search.c", line 52, characters 8-14
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (longP_t_2_alloc_table)
@@ -5698,7 +5648,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ (integer_of_int32 result0) (- (integer_of_int32 n) 1))
 (FORALL (u) (IMPLIES (EQ u result0) (<= 0 (integer_of_int32 l))))))))))))))
 
-;; binary_search_ensures_default_po_2, File "HOME/tests/c/binary_search.c", line 21, characters 18-26
+;; binary_search_ensures_default_po_2, File "HOME/tests/c/binary_search.c", line 52, characters 18-26
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (longP_t_2_alloc_table)
@@ -5714,7 +5664,7 @@ why -simplify [...] why/binary_search.why
 (FORALL (u)
 (IMPLIES (EQ u result0) (<= (integer_of_int32 u) (- (integer_of_int32 n) 1))))))))))))))
 
-;; binary_search_ensures_default_po_3, File "HOME/tests/c/binary_search.c", line 29, characters 15-21
+;; binary_search_ensures_default_po_3, File "HOME/tests/c/binary_search.c", line 60, characters 15-21
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (longP_t_2_alloc_table)
@@ -5743,7 +5693,7 @@ why -simplify [...] why/binary_search.why
 (FORALL (m)
 (IMPLIES (EQ m result2) (<= (integer_of_int32 l0) (integer_of_int32 m))))))))))))))))))))))))
 
-;; binary_search_ensures_default_po_4, File "HOME/tests/c/binary_search.c", line 29, characters 20-26
+;; binary_search_ensures_default_po_4, File "HOME/tests/c/binary_search.c", line 60, characters 20-26
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (longP_t_2_alloc_table)
@@ -5772,7 +5722,7 @@ why -simplify [...] why/binary_search.why
 (FORALL (m)
 (IMPLIES (EQ m result2) (<= (integer_of_int32 m) (integer_of_int32 u0))))))))))))))))))))))))
 
-;; binary_search_ensures_default_po_5, File "HOME/tests/c/binary_search.c", line 21, characters 8-14
+;; binary_search_ensures_default_po_5, File "HOME/tests/c/binary_search.c", line 52, characters 8-14
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -5812,7 +5762,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ (integer_of_int32 result4) (+ (integer_of_int32 m) 1))
 (FORALL (l1) (IMPLIES (EQ l1 result4) (<= 0 (integer_of_int32 l1))))))))))))))))))))))))))))))))))
 
-;; binary_search_ensures_default_po_6, File "HOME/tests/c/binary_search.c", line 21, characters 18-26
+;; binary_search_ensures_default_po_6, File "HOME/tests/c/binary_search.c", line 52, characters 18-26
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -5858,7 +5808,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ u1 result5)
 (<= (integer_of_int32 u1) (- (integer_of_int32 n) 1)))))))))))))))))))))))))))))))))))))
 
-;; binary_search_ensures_default_po_7, File "HOME/tests/c/binary_search.c", line 10, characters 12-25
+;; binary_search_ensures_default_po_7, File "HOME/tests/c/binary_search.c", line 41, characters 12-25
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -5903,7 +5853,7 @@ why -simplify [...] why/binary_search.why
 (FORALL (return)
 (IMPLIES (EQ return |__retres|) (<= (- 0 1) (integer_of_int32 return)))))))))))))))))))))))))))))))))))))
 
-;; binary_search_ensures_default_po_8, File "HOME/tests/c/binary_search.c", line 10, characters 18-29
+;; binary_search_ensures_default_po_8, File "HOME/tests/c/binary_search.c", line 41, characters 18-29
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -5949,7 +5899,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ return |__retres|)
 (< (integer_of_int32 return) (integer_of_int32 n)))))))))))))))))))))))))))))))))))))
 
-;; binary_search_ensures_default_po_9, File "HOME/tests/c/binary_search.c", line 10, characters 12-25
+;; binary_search_ensures_default_po_9, File "HOME/tests/c/binary_search.c", line 41, characters 12-25
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (longP_t_2_alloc_table)
@@ -5976,7 +5926,7 @@ why -simplify [...] why/binary_search.why
 (FORALL (return)
 (IMPLIES (EQ return |__retres|) (<= (- 0 1) (integer_of_int32 return))))))))))))))))))))))))
 
-;; binary_search_ensures_default_po_10, File "HOME/tests/c/binary_search.c", line 10, characters 18-29
+;; binary_search_ensures_default_po_10, File "HOME/tests/c/binary_search.c", line 41, characters 18-29
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (longP_t_2_alloc_table)
@@ -6004,7 +5954,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ return |__retres|)
 (< (integer_of_int32 return) (integer_of_int32 n))))))))))))))))))))))))
 
-;; binary_search_ensures_failure_po_1, File "HOME/tests/c/binary_search.c", line 24, characters 8-66
+;; binary_search_ensures_failure_po_1, File "HOME/tests/c/binary_search.c", line 55, characters 8-66
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -6029,7 +5979,7 @@ why -simplify [...] why/binary_search.why
          (integer_of_int32 v))))
 (<= (integer_of_int32 l) k)))))))))))))))))
 
-;; binary_search_ensures_failure_po_2, File "HOME/tests/c/binary_search.c", line 24, characters 8-66
+;; binary_search_ensures_failure_po_2, File "HOME/tests/c/binary_search.c", line 55, characters 8-66
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -6054,7 +6004,7 @@ why -simplify [...] why/binary_search.why
          (integer_of_int32 v))))
 (<= k (integer_of_int32 u))))))))))))))))))
 
-;; binary_search_ensures_failure_po_3, File "HOME/tests/c/binary_search.c", line 24, characters 8-66
+;; binary_search_ensures_failure_po_3, File "HOME/tests/c/binary_search.c", line 55, characters 8-66
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -6109,7 +6059,7 @@ why -simplify [...] why/binary_search.why
          (integer_of_int32 v))))
 (<= (integer_of_int32 l1) k))))))))))))))))))))))))))))))))))))
 
-;; binary_search_ensures_failure_po_4, File "HOME/tests/c/binary_search.c", line 24, characters 8-66
+;; binary_search_ensures_failure_po_4, File "HOME/tests/c/binary_search.c", line 55, characters 8-66
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -6164,7 +6114,7 @@ why -simplify [...] why/binary_search.why
          (integer_of_int32 v))))
 (<= k (integer_of_int32 u0)))))))))))))))))))))))))))))))))))))
 
-;; binary_search_ensures_failure_po_5, File "HOME/tests/c/binary_search.c", line 24, characters 8-66
+;; binary_search_ensures_failure_po_5, File "HOME/tests/c/binary_search.c", line 55, characters 8-66
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -6223,7 +6173,7 @@ why -simplify [...] why/binary_search.why
          (integer_of_int32 v))))
 (<= (integer_of_int32 l0) k)))))))))))))))))))))))))))))))))))))))
 
-;; binary_search_ensures_failure_po_6, File "HOME/tests/c/binary_search.c", line 24, characters 8-66
+;; binary_search_ensures_failure_po_6, File "HOME/tests/c/binary_search.c", line 55, characters 8-66
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -6282,7 +6232,7 @@ why -simplify [...] why/binary_search.why
          (integer_of_int32 v))))
 (<= k (integer_of_int32 u1))))))))))))))))))))))))))))))))))))))))
 
-;; binary_search_ensures_failure_po_7, File "HOME/tests/c/binary_search.c", line 15, characters 14-83
+;; binary_search_ensures_failure_po_7, File "HOME/tests/c/binary_search.c", line 46, characters 14-83
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -6340,7 +6290,7 @@ why -simplify [...] why/binary_search.why
 (NEQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k_0)))
 (integer_of_int32 v)))))))))))))))))))))))))))))))))))))))))
 
-;; binary_search_ensures_failure_po_8, File "HOME/tests/c/binary_search.c", line 15, characters 14-83
+;; binary_search_ensures_failure_po_8, File "HOME/tests/c/binary_search.c", line 46, characters 14-83
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -6382,7 +6332,7 @@ why -simplify [...] why/binary_search.why
 (NEQ (integer_of_int32 (select longP_longM_t_2 (shift t_0 k_0)))
 (integer_of_int32 v))))))))))))))))))))))))))))))
 
-;; binary_search_ensures_success_po_1, File "HOME/tests/c/binary_search.c", line 12, characters 14-46
+;; binary_search_ensures_success_po_1, File "HOME/tests/c/binary_search.c", line 43, characters 14-46
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -6432,7 +6382,7 @@ why -simplify [...] why/binary_search.why
     (select longP_longM_t_2 (shift t_0 (integer_of_int32 return))))
 (integer_of_int32 v)))))))))))))))))))))))))))))))))))))))
 
-;; binary_search_ensures_success_po_2, File "HOME/tests/c/binary_search.c", line 12, characters 14-46
+;; binary_search_ensures_success_po_2, File "HOME/tests/c/binary_search.c", line 43, characters 14-46
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -6466,7 +6416,7 @@ why -simplify [...] why/binary_search.why
     (select longP_longM_t_2 (shift t_0 (integer_of_int32 return))))
 (integer_of_int32 v))))))))))))))))))))))))))))
 
-;; binary_search_safety_po_1, File "HOME/tests/c/binary_search.c", line 19, characters 17-20
+;; binary_search_safety_po_1, File "HOME/tests/c/binary_search.c", line 50, characters 17-20
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (longP_t_2_alloc_table)
@@ -6479,7 +6429,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ l result)
 (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 n) 1))))))))))
 
-;; binary_search_safety_po_2, File "HOME/tests/c/binary_search.c", line 19, characters 17-20
+;; binary_search_safety_po_2, File "HOME/tests/c/binary_search.c", line 50, characters 17-20
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (longP_t_2_alloc_table)
@@ -6492,7 +6442,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ l result)
 (<= (- (integer_of_int32 n) 1) constant_too_large_2147483647)))))))))
 
-;; binary_search_safety_po_3, File "HOME/tests/c/binary_search.c", line 28, characters 13-18
+;; binary_search_safety_po_3, File "HOME/tests/c/binary_search.c", line 59, characters 13-18
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (longP_t_2_alloc_table)
@@ -6519,7 +6469,7 @@ why -simplify [...] why/binary_search.why
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 l0) (integer_of_int32
                                                                  u0)))))))))))))))))))))
 
-;; binary_search_safety_po_4, File "HOME/tests/c/binary_search.c", line 28, characters 13-18
+;; binary_search_safety_po_4, File "HOME/tests/c/binary_search.c", line 59, characters 13-18
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (longP_t_2_alloc_table)
@@ -6545,7 +6495,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (<= (integer_of_int32 l0) (integer_of_int32 u0))
 (<= (+ (integer_of_int32 l0) (integer_of_int32 u0)) constant_too_large_2147483647)))))))))))))))))))
 
-;; binary_search_safety_po_5, File "HOME/tests/c/binary_search.c", line 28, characters 12-23
+;; binary_search_safety_po_5, File "HOME/tests/c/binary_search.c", line 59, characters 12-23
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (longP_t_2_alloc_table)
@@ -6578,7 +6528,7 @@ why -simplify [...] why/binary_search.why
          (+ (integer_of_int32 l0) (integer_of_int32 u0)))
 (NEQ 2 0))))))))))))))))))))))
 
-;; binary_search_safety_po_6, File "HOME/tests/c/binary_search.c", line 28, characters 12-23
+;; binary_search_safety_po_6, File "HOME/tests/c/binary_search.c", line 59, characters 12-23
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (longP_t_2_alloc_table)
@@ -6614,7 +6564,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ result2 (computer_div (integer_of_int32 result1) 2))
 (<= (- 0 constant_too_large_2147483648) result2)))))))))))))))))))))))))
 
-;; binary_search_safety_po_7, File "HOME/tests/c/binary_search.c", line 28, characters 12-23
+;; binary_search_safety_po_7, File "HOME/tests/c/binary_search.c", line 59, characters 12-23
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (longP_t_2_alloc_table)
@@ -6650,7 +6600,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ result2 (computer_div (integer_of_int32 result1) 2))
 (<= result2 constant_too_large_2147483647)))))))))))))))))))))))))
 
-;; binary_search_safety_po_8, File "HOME/tests/c/binary_search.c", line 30, characters 8-12
+;; binary_search_safety_po_8, File "HOME/tests/c/binary_search.c", line 61, characters 8-12
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (longP_t_2_alloc_table)
@@ -6694,7 +6644,7 @@ why -simplify [...] why/binary_search.why
          (<= (integer_of_int32 m) (integer_of_int32 u0)))
 (<= (offset_min longP_t_2_alloc_table t_0) (integer_of_int32 m))))))))))))))))))))))))))))))))
 
-;; binary_search_safety_po_9, File "HOME/tests/c/binary_search.c", line 30, characters 8-12
+;; binary_search_safety_po_9, File "HOME/tests/c/binary_search.c", line 61, characters 8-12
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (longP_t_2_alloc_table)
@@ -6738,7 +6688,7 @@ why -simplify [...] why/binary_search.why
          (<= (integer_of_int32 m) (integer_of_int32 u0)))
 (<= (integer_of_int32 m) (offset_max longP_t_2_alloc_table t_0))))))))))))))))))))))))))))))))
 
-;; binary_search_safety_po_10, File "HOME/tests/c/binary_search.c", line 30, characters 22-27
+;; binary_search_safety_po_10, File "HOME/tests/c/binary_search.c", line 61, characters 22-27
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -6791,7 +6741,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (< (integer_of_int32 result4) (integer_of_int32 v))
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_int32 m) 1))))))))))))))))))))))))))))))))))))))
 
-;; binary_search_safety_po_11, File "HOME/tests/c/binary_search.c", line 30, characters 22-27
+;; binary_search_safety_po_11, File "HOME/tests/c/binary_search.c", line 61, characters 22-27
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -6844,7 +6794,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (< (integer_of_int32 result4) (integer_of_int32 v))
 (<= (+ (integer_of_int32 m) 1) constant_too_large_2147483647)))))))))))))))))))))))))))))))))))))
 
-;; binary_search_safety_po_12, File "HOME/tests/c/binary_search.c", line 25, characters 19-22
+;; binary_search_safety_po_12, File "HOME/tests/c/binary_search.c", line 56, characters 19-22
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -6904,7 +6854,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ l1 result5)
 (<= 0 (- (integer_of_int32 u0) (integer_of_int32 l0))))))))))))))))))))))))))))))))))))))))))))
 
-;; binary_search_safety_po_13, File "HOME/tests/c/binary_search.c", line 25, characters 19-22
+;; binary_search_safety_po_13, File "HOME/tests/c/binary_search.c", line 56, characters 19-22
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -6965,7 +6915,7 @@ why -simplify [...] why/binary_search.why
 (< (- (integer_of_int32 u0) (integer_of_int32 l1)) (- (integer_of_int32 u0) 
                                                    (integer_of_int32 l0))))))))))))))))))))))))))))))))))))))))))))
 
-;; binary_search_safety_po_14, File "HOME/tests/c/binary_search.c", line 31, characters 27-32
+;; binary_search_safety_po_14, File "HOME/tests/c/binary_search.c", line 62, characters 27-32
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -7025,7 +6975,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (> (integer_of_int32 result5) (integer_of_int32 v))
 (<= (- 0 constant_too_large_2147483648) (- (integer_of_int32 m) 1))))))))))))))))))))))))))))))))))))))))))
 
-;; binary_search_safety_po_15, File "HOME/tests/c/binary_search.c", line 31, characters 27-32
+;; binary_search_safety_po_15, File "HOME/tests/c/binary_search.c", line 62, characters 27-32
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -7085,7 +7035,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (> (integer_of_int32 result5) (integer_of_int32 v))
 (<= (- (integer_of_int32 m) 1) constant_too_large_2147483647)))))))))))))))))))))))))))))))))))))))))
 
-;; binary_search_safety_po_16, File "HOME/tests/c/binary_search.c", line 25, characters 19-22
+;; binary_search_safety_po_16, File "HOME/tests/c/binary_search.c", line 56, characters 19-22
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)
@@ -7152,7 +7102,7 @@ why -simplify [...] why/binary_search.why
 (IMPLIES (EQ u1 result6)
 (<= 0 (- (integer_of_int32 u0) (integer_of_int32 l0))))))))))))))))))))))))))))))))))))))))))))))))
 
-;; binary_search_safety_po_17, File "HOME/tests/c/binary_search.c", line 25, characters 19-22
+;; binary_search_safety_po_17, File "HOME/tests/c/binary_search.c", line 56, characters 19-22
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (v)

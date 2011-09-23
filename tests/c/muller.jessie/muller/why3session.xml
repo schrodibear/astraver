@@ -1,0 +1,149 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<why3session
+ name="muller.jessie/muller/why3session.xml">
+ <prover
+  id="alt-ergo"
+  name="Alt-Ergo"
+  version="0.93"/>
+ <prover
+  id="coq"
+  name="Coq"
+  version="8.2pl1"/>
+ <prover
+  id="cvc3"
+  name="CVC3"
+  version="2.2"/>
+ <prover
+  id="gappa"
+  name="Gappa"
+  version="0.14.0"/>
+ <prover
+  id="simplify"
+  name="Simplify"
+  version="1.5.4"/>
+ <prover
+  id="vampire"
+  name="Vampire"
+  version="0.6"/>
+ <prover
+  id="yices"
+  name="Yices"
+  version="1.0.25"/>
+ <prover
+  id="z3"
+  name="Z3"
+  version="2.19"/>
+ <file
+  name="../muller.mlw"
+  verified="true"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   verified="true"
+   expanded="true">
+   <goal
+    name="num_of_pos_non_negative"
+    expl="Lemma num_of_pos_non_negative, lemma"
+    sum="6b90d50e459d3a2a7a6d8b9a010ed380"
+    proved="true"
+    expanded="true"
+    shape="ainfix <=c0anum_of_posV1V2V3V0FFFF">
+    <proof
+     prover="coq"
+     timelimit="5"
+     edited="muller_Jessie_model_num_of_pos_non_negative_1.v"
+     obsolete="false">
+     <result status="valid" time="1.33"/>
+    </proof>
+   </goal>
+   <goal
+    name="num_of_pos_additive"
+    expl="Lemma num_of_pos_additive, lemma"
+    sum="cd91e1122217ecd61c2e39c325974877"
+    proved="true"
+    expanded="true"
+    shape="ainfix =anum_of_posV1V3V4V0ainfix +anum_of_posV1V2V4V0anum_of_posV2V3V4V0Iainfix <=V2V3Aainfix <=V1V2FFFFF">
+    <proof
+     prover="coq"
+     timelimit="5"
+     edited="muller_Jessie_model_num_of_pos_additive_1.v"
+     obsolete="false">
+     <result status="valid" time="1.40"/>
+    </proof>
+   </goal>
+   <goal
+    name="num_of_pos_increasing"
+    expl="Lemma num_of_pos_increasing, lemma"
+    sum="41cbd018af26456a7c3b770160e954c3"
+    proved="true"
+    expanded="true"
+    shape="ainfix <=anum_of_posV1V2V4V0anum_of_posV1V3V4V0Iainfix <=V2V3FFFFF">
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.11"/>
+    </proof>
+   </goal>
+   <goal
+    name="num_of_pos_strictly_increasing"
+    expl="Lemma num_of_pos_strictly_increasing, lemma"
+    sum="284784edbddaef0e70eef9902ae42ac0"
+    proved="true"
+    expanded="true"
+    shape="ainfix <anum_of_posc0V1V3V0anum_of_posc0V2V3V0Iainfix >ainteger_of_int32aselectV0ashiftV3V1c0Aainfix <V1V2Aainfix <=c0V1FFFF">
+    <proof
+     prover="coq"
+     timelimit="5"
+     edited="muller_Jessie_model_num_of_pos_strictly_increasing_1.v"
+     obsolete="false">
+     <result status="valid" time="1.17"/>
+    </proof>
+   </goal>
+  </theory>
+  <theory
+   name="WP Jessie_program"
+   verified="true"
+   expanded="true">
+   <goal
+    name="WP_parameter m_ensures_default"
+    expl="Function m, default behavior"
+    sum="c900ba753ae6b417787baf0c27a19156"
+    proved="true"
+    expanded="true"
+    shape="iainfix <ainteger_of_int32V10ainteger_of_int32V1iainfix >ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V10c0ainfix =ainteger_of_int32V12anum_of_posc0ainteger_of_int32V14V0V3Aainfix <=ainteger_of_int32V12ainteger_of_int32V14Aainfix <=c0ainteger_of_int32V12Aainfix <=ainteger_of_int32V14ainteger_of_int32V1Aainfix <=c0ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10c1FIainfix =V12V11FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9c1Fainfix =ainteger_of_int32V9anum_of_posc0ainteger_of_int32V16V0V3Aainfix <=ainteger_of_int32V9ainteger_of_int32V16Aainfix <=c0ainteger_of_int32V9Aainfix <=ainteger_of_int32V16ainteger_of_int32V1Aainfix <=c0ainteger_of_int32V16Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V10c1Fiainfix >ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V25c0ainfix =ainteger_of_int32V30anum_of_posc0ainteger_of_int32V33V0V3Aainfix <=ainteger_of_int32V30ainteger_of_int32V33Aainfix <=c0ainteger_of_int32V30Aainfix <=ainteger_of_int32V33ainteger_of_int32V1Aainfix <=c0ainteger_of_int32V33Iainfix =V33V32FIainfix =ainteger_of_int32V32ainfix +ainteger_of_int32V25c1FIainfix =V31astoreV27ashiftV20ainteger_of_int32V28aselectV3ashiftV0ainteger_of_int32V25FIainfix =V30V29FIainfix =ainteger_of_int32V29ainfix +ainteger_of_int32V26c1FIainfix =V28V26Fainfix =ainteger_of_int32V26anum_of_posc0ainteger_of_int32V35V0V3Aainfix <=ainteger_of_int32V26ainteger_of_int32V35Aainfix <=c0ainteger_of_int32V26Aainfix <=ainteger_of_int32V35ainteger_of_int32V1Aainfix <=c0ainteger_of_int32V35Iainfix =V35V34FIainfix =ainteger_of_int32V34ainfix +ainteger_of_int32V25c1FIainfix <ainteger_of_int32V25ainteger_of_int32V1Iainfix =ainteger_of_int32V26anum_of_posc0ainteger_of_int32V25V0V3Aainfix <=ainteger_of_int32V26ainteger_of_int32V25Aainfix <=c0ainteger_of_int32V26Aainfix <=ainteger_of_int32V25ainteger_of_int32V1Aainfix <=c0ainteger_of_int32V25FFFAainfix =ainteger_of_int32V22anum_of_posc0ainteger_of_int32V24V0V3Aainfix <=ainteger_of_int32V22ainteger_of_int32V24Aainfix <=c0ainteger_of_int32V22Aainfix <=ainteger_of_int32V24ainteger_of_int32V1Aainfix <=c0ainteger_of_int32V24Iainfix =V24V23FIainfix =ainteger_of_int32V23c0FIainfix =V22V21FIainfix =ainteger_of_int32V21c0FIainfix =V20V19FIainstanceofV17V19aintP_tagAaalloc_freshV4V19ainteger_of_int32V9Aaalloc_extendsV4V18Aastrict_valid_struct_intPV19c0ainfix -ainteger_of_int32V9c1V18FFFIainfix =ainteger_of_int32V9anum_of_posc0ainteger_of_int32V10V0V3Aainfix <=ainteger_of_int32V9ainteger_of_int32V10Aainfix <=c0ainteger_of_int32V9Aainfix <=ainteger_of_int32V10ainteger_of_int32V1Aainfix <=c0ainteger_of_int32V10FFAainfix =ainteger_of_int32V6anum_of_posc0ainteger_of_int32V8V0V3Aainfix <=ainteger_of_int32V6ainteger_of_int32V8Aainfix <=c0ainteger_of_int32V6Aainfix <=ainteger_of_int32V8ainteger_of_int32V1Aainfix <=c0ainteger_of_int32V8Iainfix =V8V7FIainfix =ainteger_of_int32V7c0FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV2V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV2V0c0Aainfix >=ainteger_of_int32V1c0FFFFF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.24"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.33"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter m_safety"
+    expl="Function m, Safety"
+    sum="1c60251611483aabc4be12252ccf3734"
+    proved="true"
+    expanded="true"
+    shape="iainfix <ainteger_of_int32V10ainteger_of_int32V1iainfix >ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V10c0ainfix <ainfix -ainteger_of_int32V1ainteger_of_int32V14ainfix -ainteger_of_int32V1ainteger_of_int32V10Aainfix <=c0ainfix -ainteger_of_int32V1ainteger_of_int32V10Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10c1FAainfix <=ainfix +ainteger_of_int32V10c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V10c1Iainfix =V12V11FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V9c1FAainfix <=ainfix +ainteger_of_int32V9c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V9c1ainfix <ainfix -ainteger_of_int32V1ainteger_of_int32V16ainfix -ainteger_of_int32V1ainteger_of_int32V10Aainfix <=c0ainfix -ainteger_of_int32V1ainteger_of_int32V10Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V10c1FAainfix <=ainfix +ainteger_of_int32V10c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V10c1Aainfix <=ainteger_of_int32V10aoffset_maxV2V0Aainfix <=aoffset_minV2V0ainteger_of_int32V10iainfix >ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V25c0ainfix <ainfix -ainteger_of_int32V1ainteger_of_int32V33ainfix -ainteger_of_int32V1ainteger_of_int32V25Aainfix <=c0ainfix -ainteger_of_int32V1ainteger_of_int32V25Iainfix =V33V32FIainfix =ainteger_of_int32V32ainfix +ainteger_of_int32V25c1FAainfix <=ainfix +ainteger_of_int32V25c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V25c1Iainfix =V31astoreV27ashiftV20ainteger_of_int32V28aselectV3ashiftV0ainteger_of_int32V25FAainfix <=ainteger_of_int32V28aoffset_maxV18V20Aainfix <=aoffset_minV18V20ainteger_of_int32V28Aainfix <=ainteger_of_int32V25aoffset_maxV2V0Aainfix <=aoffset_minV2V0ainteger_of_int32V25Iainfix =V30V29FIainfix =ainteger_of_int32V29ainfix +ainteger_of_int32V26c1FAainfix <=ainfix +ainteger_of_int32V26c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V26c1Iainfix =V28V26Fainfix <ainfix -ainteger_of_int32V1ainteger_of_int32V35ainfix -ainteger_of_int32V1ainteger_of_int32V25Aainfix <=c0ainfix -ainteger_of_int32V1ainteger_of_int32V25Iainfix =V35V34FIainfix =ainteger_of_int32V34ainfix +ainteger_of_int32V25c1FAainfix <=ainfix +ainteger_of_int32V25c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V25c1Aainfix <=ainteger_of_int32V25aoffset_maxV2V0Aainfix <=aoffset_minV2V0ainteger_of_int32V25Iainfix <ainteger_of_int32V25ainteger_of_int32V1Iainfix =ainteger_of_int32V26anum_of_posc0ainteger_of_int32V25V0V3Aainfix <=ainteger_of_int32V26ainteger_of_int32V25Aainfix <=c0ainteger_of_int32V26Aainfix <=ainteger_of_int32V25ainteger_of_int32V1Aainfix <=c0ainteger_of_int32V25FFFIainfix =V24V23FIainfix =ainteger_of_int32V23c0FIainfix =V22V21FIainfix =ainteger_of_int32V21c0FIainfix =V20V19FIainstanceofV17V19aintP_tagAaalloc_freshV4V19ainteger_of_int32V9Aaalloc_extendsV4V18Aastrict_valid_struct_intPV19c0ainfix -ainteger_of_int32V9c1V18FFFAainfix >=ainteger_of_int32V9c0Iainfix =ainteger_of_int32V9anum_of_posc0ainteger_of_int32V10V0V3Aainfix <=ainteger_of_int32V9ainteger_of_int32V10Aainfix <=c0ainteger_of_int32V9Aainfix <=ainteger_of_int32V10ainteger_of_int32V1Aainfix <=c0ainteger_of_int32V10FFIainfix =V8V7FIainfix =ainteger_of_int32V7c0FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV2V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV2V0c0Aainfix >=ainteger_of_int32V1c0FFFFF">
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.17"/>
+    </proof>
+   </goal>
+  </theory>
+ </file>
+</why3session>

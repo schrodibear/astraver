@@ -1,4 +1,4 @@
-Fatal error: Output.iter_expr called on MultiAssign
-File "jc/output.ml", line 498, characters 8-8:
-Uncaught exception: File "jc/output.ml", line 498, characters 8-14: Assertion failed
+Fatal error: Output.iter_expr should not be called on MultiAssign
+File "jc/output.ml", line 932, characters 8-8:
+Uncaught exception: File "jc/output.ml", line 932, characters 8-14: Assertion failed
 make: *** [sum3.regtest] Error 2

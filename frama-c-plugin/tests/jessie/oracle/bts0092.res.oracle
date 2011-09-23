@@ -71,12 +71,6 @@ type padding
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic T:  -> charP pointer
 
 logic charP_tag:  -> charP tag_id
@@ -114,6 +108,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -125,6 +124,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -160,9 +164,8 @@ predicate strcmp(x_0_0:charP pointer, y:charP pointer,
  (forall i:int.
   ((forall j:int.
     ((le_int((0), j) and lt_int(j, i)) ->
-     neq_int(integer_of_int8(select(charP_charM_x_0_3_at_L, shift(x_0_0, j))),
-     (0)))) ->
-   eq_int(integer_of_int8(select(charP_charM_x_0_3_at_L, shift(x_0_0, i))),
+     (integer_of_int8(select(charP_charM_x_0_3_at_L, shift(x_0_0, j))) <> (0)))) ->
+   (integer_of_int8(select(charP_charM_x_0_3_at_L, shift(x_0_0, i))) = 
    integer_of_int8(select(charP_charM_y_4_at_L, shift(y, i))))))
 
 predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
@@ -184,16 +187,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -229,41 +222,11 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -325,14 +288,14 @@ parameter f :
  x_1:int32 ->
   { } int32
   { (JC_<somenum>:
-    strcmp(foo(integer_of_int32(x_1@)), foo(integer_of_int32(result)),
+    strcmp(foo(integer_of_int32(x_1)), foo(integer_of_int32(result)),
     charP_charM_foo_6, charP_charM_foo_5)) }
 
 parameter f_requires :
  x_1:int32 ->
   { } int32
   { (JC_<somenum>:
-    strcmp(foo(integer_of_int32(x_1@)), foo(integer_of_int32(result)),
+    strcmp(foo(integer_of_int32(x_1)), foo(integer_of_int32(result)),
     charP_charM_foo_6, charP_charM_foo_5)) }
 
 parameter int32_of_integer_ :
@@ -374,7 +337,7 @@ let f_ensures_default =
         !mutable_x_1 end)) in void); (return := !tmp); (raise Return) end)));
     absurd  end with Return -> !return end)))
   { (JC_<somenum>:
-    strcmp(foo(integer_of_int32(x_1@)), foo(integer_of_int32(result)),
+    strcmp(foo(integer_of_int32(x_1)), foo(integer_of_int32(result)),
     charP_charM_foo_6, charP_charM_foo_5)) }
 
 let f_safety =

@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -96,7 +96,11 @@ let mkdecl dnode pos = new decl ~pos dnode
 (* Locate Jessie expressions on source program.                              *)
 (*****************************************************************************)
 
-let reg_pos ?id ?kind ?name pos = Output.reg_pos "C" ?id ?kind ?name pos
+let reg_pos ?id ?kind ?name pos = 
+  Output.old_reg_pos "C" ?id ?kind ?name pos
+
+let reg_position ?id ?kind ?name pos = 
+  Output.old_reg_pos "C" ?id ?kind ?name (Loc.extract pos)
 
 (* [locate] should be called on every Jessie expression which we would like to
  * locate in the original source program.
@@ -114,19 +118,19 @@ let locate ?alarm ?pos e =
     in
     let lab = match alarm with
       | None ->
-          reg_pos pos
+          reg_position pos
       | Some Division_alarm ->
-          reg_pos ~kind:Output.DivByZero pos
+          reg_position ~kind:Output.DivByZero pos
       | Some Memory_alarm | Some Index_alarm ->
-          reg_pos ~kind:Output.PointerDeref pos
+          reg_position ~kind:Output.PointerDeref pos
       | Some (Shift_alarm|Signed_overflow_alarm) ->
-          reg_pos ~kind:Output.ArithOverflow pos
+          reg_position ~kind:Output.ArithOverflow pos
       | Some Pointer_compare_alarm
       | Some Using_nan_or_infinite_alarm
       | Some Result_is_nan_or_infinite_alarm ->
-          reg_pos pos
-      | Some Separation_alarm -> reg_pos pos
-      | Some Other_alarm -> reg_pos pos
+          reg_position pos
+      | Some Separation_alarm -> reg_position pos
+      | Some Other_alarm -> reg_position pos
     in
     let e = match e#node with
       | JCPEbinary(e1,`Bland,e2) ->
@@ -2214,6 +2218,9 @@ let rec annotation is_axiomatic annot =
 
   | Dlemma(name,is_axiom,labels,_poly,property,pos) ->
       CurrentLoc.set pos;
+      ignore
+        (reg_position ~id:name
+           ~name:("Lemma " ^ name) pos);
       begin try
         [JCDlemma(name,is_axiom,[],logic_labels labels,pred property)]
       with (Unsupported _ | NotImplemented _)
@@ -2610,7 +2617,7 @@ let global vardefs g =
             in
             let body = mkexpr (JCPEblock body) pos in
             ignore
-              (reg_pos ~id:f.svar.vname
+              (reg_position ~id:f.svar.vname
                  ~name:("Function " ^ f.svar.vname) f.svar.vdecl);
             [JCDfun(ctype rty,id,formals,s,Some body)]
           with (Unsupported _ | NotImplemented _) when drop_on_unsupported_feature ->

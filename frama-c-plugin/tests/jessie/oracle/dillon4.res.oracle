@@ -113,14 +113,6 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -173,6 +165,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -184,6 +181,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -282,21 +284,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_doubleP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -349,10 +336,12 @@ axiom c1 :
      ((ge_int(i, (0))
       and ge_real(u_0_0,
           double_value(select(doubleP_doubleM_t_1_at_L, shift(t_0_0, i))))) ->
-      eq_int(cpt(t_0_0, u_0_0, (0), i, doubleP_doubleM_t_1_at_L),
-      add_int(cpt(t_0_0, u_0_0, (0), sub_int(i, (1)),
-              doubleP_doubleM_t_1_at_L),
-      (1))))))))
+      (cpt(t_0_0, u_0_0, (0), i, doubleP_doubleM_t_1_at_L) = add_int(
+                                                             cpt(t_0_0,
+                                                             u_0_0, (0),
+                                                             sub_int(i, (1)),
+                                                             doubleP_doubleM_t_1_at_L),
+                                                             (1))))))))
 
 axiom c2 :
  (forall doubleP_doubleM_t_1_at_L:(doubleP, double) memory.
@@ -362,8 +351,9 @@ axiom c2 :
      ((ge_int(i_0, (0))
       and lt_real(u_1,
           double_value(select(doubleP_doubleM_t_1_at_L, shift(t_1, i_0))))) ->
-      eq_int(cpt(t_1, u_1, (0), i_0, doubleP_doubleM_t_1_at_L),
-      cpt(t_1, u_1, (0), sub_int(i_0, (1)), doubleP_doubleM_t_1_at_L)))))))
+      (cpt(t_1, u_1, (0), i_0, doubleP_doubleM_t_1_at_L) = cpt(t_1, u_1, (0),
+                                                           sub_int(i_0, (1)),
+                                                           doubleP_doubleM_t_1_at_L)))))))
 
 axiom c3 :
  (forall doubleP_doubleM_t_1_at_L:(doubleP, double) memory.
@@ -371,7 +361,13 @@ axiom c3 :
    (forall u_2:real.
     (forall i_1:int.
      (lt_int(i_1, (0)) ->
-      eq_int(cpt(t_2, u_2, (0), i_1, doubleP_doubleM_t_1_at_L), (0)))))))
+      (cpt(t_2, u_2, (0), i_1, doubleP_doubleM_t_1_at_L) = (0)))))))
+
+exception Goto_while_0_break_exc of unit
+
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
 
 parameter NNN :
  u_0:single ->
@@ -385,59 +381,7 @@ parameter NNN_requires :
    doubleP_t_2_alloc_table:doubleP alloc_table ->
     doubleP_doubleM_t_2:(doubleP, double) memory -> { } unit { true }
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_doubleP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_doubleP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -547,7 +491,6 @@ let NNN_ensures_default =
      (let i_2 = ref (any_int32 void) in
      (let tmp_1 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       begin
         (let jessie_<somenum> = (i_2 := (safe_int32_of_integer_ (0))) in void);
@@ -567,15 +510,12 @@ let NNN_ensures_default =
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_11:
             begin
               (if ((lt_int_ (integer_of_int32 !i_2)) (5)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (C_8:
              begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end) in
@@ -583,9 +523,9 @@ let NNN_ensures_default =
              (i_2 := (C_10:
                      (safe_int32_of_integer_ (C_9:
                                              ((add_int (integer_of_int32 !i_2)) (1))))));
-             !i_2 end) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+             !i_2 end) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end) { (JC_<somenum>: true) }
@@ -599,7 +539,6 @@ let NNN_safety =
      (let i_2 = ref (any_int32 void) in
      (let tmp_1 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       begin
         (let jessie_<somenum> = (i_2 := (safe_int32_of_integer_ (0))) in void);
@@ -620,14 +559,12 @@ let NNN_safety =
                        sub_int(integer_of_int32(i_2), (1)),
                        doubleP_doubleM_t_2))))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_11:
             begin
               (if ((lt_int_ (integer_of_int32 !i_2)) (5)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
+              else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (C_8:
              begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end) in
@@ -636,9 +573,9 @@ let NNN_safety =
                      (JC_<somenum>:
                      (int32_of_integer_ (C_9:
                                         ((add_int (integer_of_int32 !i_2)) (1)))))));
-             !i_2 end) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+             !i_2 end) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)); (raise Return)
    end with Return -> void end) { true }
@@ -649,27 +586,7 @@ why --project [...] why/dillon4.why
 <project name="dillon4" context="why/dillon4_ctx.why">
   <function name="Function NNN">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/dillon4_po7.why">
-      <location file = "PPCHOME/tests/jessie/dillon4.c" line = "31" begin = "21" end = "24"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/dillon4_po8.why">
-      <location file = "PPCHOME/tests/jessie/dillon4.c" line = "31" begin = "21" end = "24"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/dillon4_po9.why">
-      <location file = "PPCHOME/tests/jessie/dillon4.c" line = "29" begin = "13" end = "18"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/dillon4_po10.why">
-      <location file = "PPCHOME/tests/jessie/dillon4.c" line = "29" begin = "13" end = "18"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/dillon4_po1.why">
       <location file = "PPCHOME/tests/jessie/dillon4.c" line = "26" begin = "15" end = "21"/>
       <explain kind = "LoopInvInit"/>
@@ -693,6 +610,26 @@ text = "ArithOverflow"/>
     <goal why_file="why/dillon4_po6.why">
       <location file = "PPCHOME/tests/jessie/dillon4.c" line = "27" begin = "5" end = "53"/>
       <explain kind = "LoopInvPreserv"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/dillon4_po7.why">
+      <location file = "PPCHOME/tests/jessie/dillon4.c" line = "31" begin = "21" end = "24"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/dillon4_po8.why">
+      <location file = "PPCHOME/tests/jessie/dillon4.c" line = "31" begin = "21" end = "24"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/dillon4_po9.why">
+      <location file = "PPCHOME/tests/jessie/dillon4.c" line = "29" begin = "13" end = "18"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/dillon4_po10.why">
+      <location file = "PPCHOME/tests/jessie/dillon4.c" line = "29" begin = "13" end = "18"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
   </function>
@@ -1753,21 +1690,20 @@ axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
 
 axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
 
-logic single_to_double : single -> double
+axiom single_value_is_bounded:
+  (forall x:single. (abs_real(single_value(x)) <= max_single))
 
-logic double_to_single : mode, double -> single
-
-axiom single_to_double_val:
-  (forall s:single. (double_value(single_to_double(s)) = single_value(s)))
-
-axiom double_to_single_val:
-  (forall m:mode.
-    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
-      double_value(d)))))
+axiom double_value_is_bounded:
+  (forall x:double. (abs_real(double_value(x)) <= max_double))
 
 predicate single_of_real_post(m: mode, x: real, res: single) =
   ((single_value(res) = round_single(m, x)) and
    ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate single_of_double_post(m: mode, x: double, res: single) =
+  ((single_value(res) = round_single(m, double_value(x))) and
+   ((single_exact(res) = double_exact(x)) and
+    (single_model(res) = double_model(x))))
 
 predicate add_single_post(m: mode, x: single, y: single, res: single) =
   ((single_value(res) = round_single(m,
@@ -1811,6 +1747,11 @@ predicate abs_single_post(x: single, res: single) =
 predicate double_of_real_post(m: mode, x: real, res: double) =
   ((double_value(res) = round_double(m, x)) and
    ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate double_of_single_post(x: single, res: double) =
+  ((double_value(res) = single_value(x)) and
+   ((double_exact(res) = single_exact(x)) and
+    (double_model(res) = single_model(x))))
 
 predicate add_double_post(m: mode, x: double, y: double, res: double) =
   ((double_value(res) = round_double(m,
@@ -1916,6 +1857,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -1927,6 +1873,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2024,21 +1974,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_doubleP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

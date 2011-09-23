@@ -1,4 +1,35 @@
 ========== file tests/c/floats_bsearch.c ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
+
 #pragma JessieFloatModel(full)
 
 /*@ predicate sorted{L}(double *t, integer a, integer b) =
@@ -35,16 +66,14 @@ int binary_search(double t[], int n, double v) {
     if (t[m] < v) l = m + 1;
     else if (t[m] > v) u = m - 1;
     else
-      //@ assert 0;
       return m;
   }
-  //@ assert 0;
   return -1;
 }
 
 /*
 Local Variables:
-compile-command: "PPCHOME=../.. LC_ALL=C make floats_bsearch"
+compile-command: "make floats_bsearch.why3ml"
 End:
 */
 ========== frama-c -jessie execution ==========
@@ -95,22 +124,22 @@ predicate sorted{L}(doubleP[..] t, integer a, integer b) =
       \le_double((t + i).doubleM, (t + j).doubleM))))
 
 int32 binary_search(doubleP[..] t, int32 n, double v)
-  requires (C_42 : ((C_43 : (n >= 0)) &&
-                     ((C_45 : (\offset_min(t) <= 0)) &&
-                       (C_46 : (\offset_max(t) >= (n - 1))))));
-  requires (C_41 : (! \double_is_NaN(v)));
-  requires (C_40 : (\forall integer i_0;
+  requires (C_40 : ((C_41 : (n >= 0)) &&
+                     ((C_43 : (\offset_min(t) <= 0)) &&
+                       (C_44 : (\offset_max(t) >= (n - 1))))));
+  requires (C_39 : (! \double_is_NaN(v)));
+  requires (C_38 : (\forall integer i_0;
                      (((0 <= i_0) && (i_0 <= (n - 1))) ==>
                        (! \double_is_NaN((t + i_0).doubleM)))));
 behavior default:
-  ensures (C_35 : ((C_36 : ((- 1) <= \result)) &&
-                    (C_37 : (\result < \at(n,Old)))));
+  ensures (C_33 : ((C_34 : ((- 1) <= \result)) &&
+                    (C_35 : (\result < \at(n,Old)))));
 behavior success:
-  ensures (C_38 : ((\result >= 0) ==>
+  ensures (C_36 : ((\result >= 0) ==>
                     \eq_double((\at(t,Old) + \result).doubleM, \at(v,Old))));
 behavior failure:
   assumes sorted{Here}(t, 0, (n - 1));
-  ensures (C_39 : ((\result == (- 1)) ==>
+  ensures (C_37 : ((\result == (- 1)) ==>
                     (\forall integer k_1;
                       (((0 <= k_1) && (k_1 < \at(n,Old))) ==>
                         \ne_double((\at(t,Old) + k_1).doubleM, \at(v,Old))))));
@@ -156,22 +185,17 @@ behavior failure:
                   ()
                };
                
-               {  (if ((C_32 : (C_31 : (t + m)).doubleM) < v) then (C_30 : (l = 
-                                                                   (C_29 : (
-                                                                   (C_28 : 
+               {  (if ((C_31 : (C_30 : (t + m)).doubleM) < v) then (C_29 : (l = 
+                                                                   (C_28 : (
+                                                                   (C_27 : 
                                                                    (m +
                                                                     1)) :> int32)))) else 
-                  (if ((C_27 : (C_26 : (t + m)).doubleM) > v) then (C_25 : (u = 
-                                                                   (C_24 : (
-                                                                   (C_23 : 
+                  (if ((C_26 : (C_25 : (t + m)).doubleM) > v) then (C_24 : (u = 
+                                                                   (C_23 : (
+                                                                   (C_22 : 
                                                                    (m -
                                                                     1)) :> int32)))) else 
-                  {  
-                     {  
-                        (assert for default: (C_21 : (0 != 0)));
-                        ()
-                     };
-                     (C_22 : (__retres = m));
+                  {  (C_21 : (__retres = m));
                      
                      (goto return_label)
                   }))
@@ -180,12 +204,7 @@ behavior failure:
          }
       };
       (while_0_break : ());
-      
-      {  
-         (assert for default: (C_33 : (0 != 0)));
-         ()
-      };
-      (C_34 : (__retres = -1));
+      (C_32 : (__retres = -1));
       (return_label : 
       (return __retres))
    }
@@ -193,284 +212,272 @@ behavior failure:
 ========== file tests/c/floats_bsearch.jessie/floats_bsearch.cloc ==========
 [C_10]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 21
+line = 52
 begin = 18
 end = 26
 
 [C_11]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 32
+line = 63
 begin = 17
 end = 22
 
 [C_12]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 32
+line = 63
 begin = 17
 end = 22
 
 [C_13]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 32
+line = 63
 begin = 16
 end = 27
 
 [C_14]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 32
+line = 63
 begin = 16
 end = 27
 
 [C_15]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 32
+line = 63
 begin = 12
 end = 27
 
 [C_16]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 32
+line = 63
 begin = 12
 end = 27
 
 [C_17]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 32
+line = 63
 begin = 4
 end = 7
 
 [C_18]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 33
+line = 64
 begin = 15
 end = 26
 
 [C_19]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 33
+line = 64
 begin = 15
 end = 21
 
 [C_1]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 19
+line = 50
 begin = 2
 end = 5
 
 [C_2]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 19
+line = 50
 begin = 17
 end = 20
 
 [C_3]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 19
+line = 50
 begin = 17
 end = 20
 
 [C_4]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 19
+line = 50
 begin = 2
 end = 5
 
 [binary_search]
 name = "Function binary_search"
 file = "HOME/tests/c/floats_bsearch.c"
-line = 18
+line = 49
 begin = 4
 end = 17
 
 [C_20]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 33
+line = 64
 begin = 20
 end = 26
 
 [C_5]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 29
+line = 60
 begin = 19
 end = 22
 
 [C_21]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 37
-begin = 17
-end = 18
+line = 68
+begin = 6
+end = 15
 
 [C_6]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 27
+line = 58
 begin = 10
 end = 74
 
 [C_22]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 38
-begin = 6
-end = 15
+line = 66
+begin = 27
+end = 32
 
 [C_7]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 24
+line = 55
 begin = 10
 end = 72
 
 [C_23]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 35
+line = 66
 begin = 27
 end = 32
 
 [C_8]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 21
+line = 52
 begin = 8
 end = 26
 
 [C_24]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 35
+line = 66
 begin = 27
 end = 32
 
 [C_9]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 21
+line = 52
 begin = 8
 end = 14
 
 [C_25]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 35
-begin = 27
-end = 32
-
-[C_26]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 35
+line = 66
 begin = 13
 end = 14
 
-[C_27]
+[C_26]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 35
+line = 66
 begin = 13
 end = 17
 
+[C_27]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 65
+begin = 22
+end = 27
+
 [C_28]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 34
+line = 65
 begin = 22
 end = 27
 
 [C_29]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 34
+line = 65
 begin = 22
 end = 27
 
 [C_30]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 34
-begin = 22
-end = 27
-
-[C_31]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 34
+line = 65
 begin = 8
 end = 9
 
+[C_31]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 65
+begin = 8
+end = 12
+
 [C_32]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 34
-begin = 8
+line = 70
+begin = 2
 end = 12
 
 [C_33]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 40
-begin = 13
-end = 14
+line = 41
+begin = 12
+end = 29
 
 [C_34]
 file = "HOME/tests/c/floats_bsearch.c"
 line = 41
-begin = 2
-end = 12
+begin = 12
+end = 25
 
 [C_35]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 10
-begin = 12
+line = 41
+begin = 18
 end = 29
 
 [C_36]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 10
-begin = 12
-end = 25
-
-[C_37]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 10
-begin = 18
-end = 29
-
-[C_38]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 12
+line = 43
 begin = 14
 end = 54
 
-[C_39]
+[C_37]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 15
+line = 46
 begin = 14
 end = 91
 
-[C_40]
+[C_38]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 9
+line = 40
 begin = 13
 end = 65
 
-[C_41]
+[C_39]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 8
+line = 39
 begin = 13
 end = 25
 
+[C_40]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 38
+begin = 13
+end = 44
+
+[C_41]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 38
+begin = 13
+end = 19
+
 [C_42]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 7
-begin = 13
+line = 38
+begin = 23
 end = 44
 
 [C_43]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 7
-begin = 13
-end = 19
+line = 38
+begin = 23
+end = 44
 
 [C_44]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 7
-begin = 23
-end = 44
-
-[C_45]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 7
-begin = 23
-end = 44
-
-[C_46]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 7
+line = 38
 begin = 23
 end = 44
 
@@ -491,10 +498,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs float
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs floats_bsearch.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_full.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/floats_bsearch_why.sx
 
@@ -554,6 +562,13 @@ simplify: simplify/floats_bsearch_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/floats_bsearch_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/floats_bsearch_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -627,6 +642,9 @@ why/%_why3.why: why/%.why
 why3ide: why/floats_bsearch_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: floats_bsearch.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include floats_bsearch.depend
 
 depend: coq/floats_bsearch_why.v
@@ -640,101 +658,101 @@ clean:
 name = "Function binary_search"
 behavior = "Safety"
 file = "HOME/tests/c/floats_bsearch.c"
-line = 18
+line = 49
 begin = 4
 end = 17
 
 [JC_40]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 33
+line = 64
 begin = 15
 end = 26
 
 [JC_41]
 kind = PointerDeref
 file = "HOME/tests/c/floats_bsearch.c"
-line = 34
+line = 65
 begin = 8
 end = 12
 
 [JC_42]
 kind = ArithOverflow
 file = "HOME/tests/c/floats_bsearch.c"
-line = 34
+line = 65
 begin = 22
 end = 27
 
 [JC_43]
 kind = PointerDeref
 file = "HOME/tests/c/floats_bsearch.c"
-line = 35
+line = 66
 begin = 13
 end = 17
 
 [JC_44]
 kind = ArithOverflow
 file = "HOME/tests/c/floats_bsearch.c"
-line = 35
+line = 66
 begin = 27
 end = 32
 
 [JC_45]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 37
-begin = 17
-end = 18
-
-[JC_46]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 29
+line = 60
 begin = 19
 end = 22
 
+[JC_46]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 52
+begin = 8
+end = 14
+
 [JC_1]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 7
+line = 38
 begin = 13
 end = 19
 
 [JC_47]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 40
-begin = 13
-end = 14
+line = 52
+begin = 18
+end = 26
 
 [JC_2]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 7
+line = 38
 begin = 23
 end = 44
 
 [JC_48]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 21
+line = 52
 begin = 8
-end = 14
+end = 26
 
 [JC_3]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 7
+line = 38
 begin = 23
 end = 44
 
 [JC_49]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 21
-begin = 18
-end = 26
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_4]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 8
+line = 39
 begin = 13
 end = 25
 
 [JC_5]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 9
+line = 40
 begin = 13
 end = 65
 
@@ -752,138 +770,139 @@ end = -1
 
 [JC_8]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 7
+line = 38
 begin = 13
 end = 19
 
 [JC_9]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 7
+line = 38
 begin = 23
 end = 44
 
 [JC_50]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 21
-begin = 8
-end = 26
+file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
+line = 73
+begin = 6
+end = 2298
 
 [binary_search_ensures_failure]
 name = "Function binary_search"
-behavior = "Normal behavior `failure'"
+behavior = "Behavior `failure'"
 file = "HOME/tests/c/floats_bsearch.c"
-line = 18
+line = 49
 begin = 4
 end = 17
 
 [JC_51]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
+line = 73
+begin = 6
+end = 2298
 
 [JC_52]
-file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
-line = 73
-begin = 6
-end = 2461
-
-[JC_53]
-file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
-line = 73
-begin = 6
-end = 2461
-
-[JC_54]
 kind = DivByZero
 file = "HOME/tests/c/floats_bsearch.c"
-line = 32
+line = 63
 begin = 16
 end = 27
 
-[JC_55]
+[JC_53]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 33
+line = 64
 begin = 15
 end = 21
 
-[JC_56]
+[JC_54]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 33
+line = 64
 begin = 20
 end = 26
 
+[JC_55]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 64
+begin = 15
+end = 26
+
+[JC_56]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 52
+begin = 8
+end = 14
+
 [JC_57]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 33
-begin = 15
+line = 52
+begin = 18
 end = 26
 
 [JC_58]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 37
-begin = 17
-end = 18
+line = 52
+begin = 8
+end = 26
 
 [JC_59]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 40
-begin = 13
-end = 14
-
-[JC_60]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 21
-begin = 8
-end = 14
-
-[JC_61]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 21
-begin = 18
-end = 26
-
-[JC_62]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 21
-begin = 8
-end = 26
-
-[JC_10]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 7
-begin = 23
-end = 44
-
-[JC_63]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
+[JC_60]
+file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
+line = 73
+begin = 6
+end = 2298
+
+[JC_61]
+file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
+line = 73
+begin = 6
+end = 2298
+
+[JC_62]
+kind = DivByZero
+file = "HOME/tests/c/floats_bsearch.c"
+line = 63
+begin = 16
+end = 27
+
+[JC_10]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 38
+begin = 23
+end = 44
+
+[JC_63]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 64
+begin = 15
+end = 21
+
 [JC_11]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 8
+line = 39
 begin = 13
 end = 25
 
 [JC_64]
-file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
-line = 73
-begin = 6
-end = 2461
+file = "HOME/tests/c/floats_bsearch.c"
+line = 64
+begin = 20
+end = 26
 
 [JC_12]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 9
+line = 40
 begin = 13
 end = 65
 
 [JC_65]
-file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
-line = 73
-begin = 6
-end = 2461
+file = "HOME/tests/c/floats_bsearch.c"
+line = 64
+begin = 15
+end = 26
 
 [JC_13]
 file = "HOME/"
@@ -891,20 +910,19 @@ line = 0
 begin = -1
 end = -1
 
+[JC_66]
+file = "HOME/tests/c/floats_bsearch.c"
+line = 58
+begin = 10
+end = 74
+
 [binary_search_ensures_success]
 name = "Function binary_search"
-behavior = "Normal behavior `success'"
+behavior = "Behavior `success'"
 file = "HOME/tests/c/floats_bsearch.c"
-line = 18
+line = 49
 begin = 4
 end = 17
-
-[JC_66]
-kind = DivByZero
-file = "HOME/tests/c/floats_bsearch.c"
-line = 32
-begin = 16
-end = 27
 
 [JC_14]
 file = "HOME/"
@@ -914,81 +932,81 @@ end = -1
 
 [JC_67]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 33
-begin = 15
-end = 21
+line = 55
+begin = 10
+end = 72
 
 [JC_15]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 10
+line = 41
 begin = 12
 end = 25
 
 [JC_68]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 33
-begin = 20
-end = 26
+line = 52
+begin = 8
+end = 14
 
 [JC_16]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 10
+line = 41
 begin = 18
 end = 29
 
 [JC_69]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 33
-begin = 15
+line = 52
+begin = 18
 end = 26
 
 [JC_17]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 10
+line = 41
 begin = 12
 end = 29
 
 [JC_18]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 10
+line = 41
 begin = 12
 end = 25
 
 [JC_19]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 10
+line = 41
 begin = 18
 end = 29
 
 [JC_70]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 37
-begin = 17
-end = 18
+line = 52
+begin = 8
+end = 26
 
 [JC_71]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 40
-begin = 13
-end = 14
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_72]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 27
-begin = 10
-end = 74
+file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
+line = 73
+begin = 6
+end = 2298
 
 [JC_20]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 10
+line = 41
 begin = 12
 end = 29
 
 [JC_73]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 24
-begin = 10
-end = 72
+file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
+line = 73
+begin = 6
+end = 2298
 
 [JC_21]
 file = "HOME/"
@@ -997,10 +1015,11 @@ begin = -1
 end = -1
 
 [JC_74]
+kind = DivByZero
 file = "HOME/tests/c/floats_bsearch.c"
-line = 21
-begin = 8
-end = 14
+line = 63
+begin = 16
+end = 27
 
 [JC_22]
 file = "HOME/"
@@ -1010,106 +1029,69 @@ end = -1
 
 [JC_75]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 21
-begin = 18
-end = 26
+line = 64
+begin = 15
+end = 21
 
 [JC_23]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 12
+line = 43
 begin = 14
 end = 54
 
 [JC_76]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 21
-begin = 8
+line = 64
+begin = 20
 end = 26
 
 [JC_24]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 12
+line = 43
 begin = 14
 end = 54
 
 [JC_77]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/floats_bsearch.c"
+line = 64
+begin = 15
+end = 26
 
 [JC_25]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 15
+line = 46
 begin = 14
 end = 91
-
-[JC_78]
-file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
-line = 73
-begin = 6
-end = 2461
 
 [JC_26]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 15
+line = 46
 begin = 14
 end = 91
-
-[JC_79]
-file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
-line = 73
-begin = 6
-end = 2461
 
 [JC_27]
 kind = ArithOverflow
 file = "HOME/tests/c/floats_bsearch.c"
-line = 19
+line = 50
 begin = 17
 end = 20
 
 [JC_28]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 21
+line = 52
 begin = 8
 end = 14
 
 [JC_29]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 21
+line = 52
 begin = 18
-end = 26
-
-[JC_80]
-kind = DivByZero
-file = "HOME/tests/c/floats_bsearch.c"
-line = 32
-begin = 16
-end = 27
-
-[JC_81]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 33
-begin = 15
-end = 21
-
-[JC_82]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 33
-begin = 20
 end = 26
 
 [JC_30]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 21
+line = 52
 begin = 8
-end = 26
-
-[JC_83]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 33
-begin = 15
 end = 26
 
 [JC_31]
@@ -1118,17 +1100,11 @@ line = 0
 begin = -1
 end = -1
 
-[JC_84]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 37
-begin = 17
-end = 18
-
 [binary_search_ensures_default]
 name = "Function binary_search"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/floats_bsearch.c"
-line = 18
+line = 49
 begin = 4
 end = 17
 
@@ -1136,57 +1112,51 @@ end = 17
 file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
 line = 73
 begin = 6
-end = 2461
-
-[JC_85]
-file = "HOME/tests/c/floats_bsearch.c"
-line = 40
-begin = 13
-end = 14
+end = 2298
 
 [JC_33]
 file = "HOME/tests/c/floats_bsearch.jessie/floats_bsearch.jc"
 line = 73
 begin = 6
-end = 2461
+end = 2298
 
 [JC_34]
 kind = ArithOverflow
 file = "HOME/tests/c/floats_bsearch.c"
-line = 32
+line = 63
 begin = 17
 end = 22
 
 [JC_35]
 kind = DivByZero
 file = "HOME/tests/c/floats_bsearch.c"
-line = 32
+line = 63
 begin = 16
 end = 27
 
 [JC_36]
 kind = ArithOverflow
 file = "HOME/tests/c/floats_bsearch.c"
-line = 32
+line = 63
 begin = 16
 end = 27
 
 [JC_37]
 kind = ArithOverflow
 file = "HOME/tests/c/floats_bsearch.c"
-line = 32
+line = 63
 begin = 12
 end = 27
 
 [JC_38]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 33
+line = 64
 begin = 15
 end = 21
 
 [JC_39]
 file = "HOME/tests/c/floats_bsearch.c"
-line = 33
+line = 64
 begin = 20
 end = 26
 
@@ -1202,14 +1172,6 @@ type int8
 type padding
 
 type voidP
-
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
 
 logic charP_tag:  -> charP tag_id
 
@@ -1261,6 +1223,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -1272,6 +1239,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -1318,7 +1290,7 @@ predicate sorted(t:doubleP pointer, a:int, b:int,
  (forall i:int.
   (forall j:int.
    ((le_int(a, i) and (le_int(i, j) and le_int(j, b))) ->
-    le_double(select(doubleP_doubleM_t_1_at_L, shift(t, i)),
+    le_double_full(select(doubleP_doubleM_t_1_at_L, shift(t, i)),
     select(doubleP_doubleM_t_1_at_L, shift(t, j))))))
 
 predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
@@ -1350,21 +1322,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_doubleP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -1410,59 +1367,13 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_doubleP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_doubleP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_doubleP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -1554,22 +1465,22 @@ parameter binary_search :
     doubleP_t_2_alloc_table:doubleP alloc_table ->
      doubleP_doubleM_t_2:(doubleP, double) memory ->
       { } int32
-      { ((sorted(t_0@, (0), sub_int(integer_of_int32(n@), (1)),
-          doubleP_doubleM_t_2@) ->
+      { ((sorted(t_0, (0), sub_int(integer_of_int32(n), (1)),
+          doubleP_doubleM_t_2) ->
           (JC_26:
-          (eq_int(integer_of_int32(result), neg_int((1))) ->
+          ((integer_of_int32(result) = neg_int((1))) ->
            (forall k_1:int.
-            ((le_int((0), k_1) and lt_int(k_1, integer_of_int32(n@))) ->
-             ne_double(select(doubleP_doubleM_t_2, shift(t_0@, k_1)), v@))))))
+            ((le_int((0), k_1) and lt_int(k_1, integer_of_int32(n))) ->
+             ne_double_full(select(doubleP_doubleM_t_2, shift(t_0, k_1)), v))))))
         and ((JC_24:
              (ge_int(integer_of_int32(result), (0)) ->
-              eq_double(select(doubleP_doubleM_t_2,
-                        shift(t_0@, integer_of_int32(result))),
-              v@)))
+              eq_double_full(select(doubleP_doubleM_t_2,
+                             shift(t_0, integer_of_int32(result))),
+              v)))
             and (JC_20:
                 ((JC_18: le_int(neg_int((1)), integer_of_int32(result)))
                 and (JC_19:
-                    lt_int(integer_of_int32(result), integer_of_int32(n@))))))) }
+                    lt_int(integer_of_int32(result), integer_of_int32(n))))))) }
 
 parameter binary_search_requires :
  t_0:doubleP pointer ->
@@ -1591,22 +1502,22 @@ parameter binary_search_requires :
                           (not double_is_NaN(select(doubleP_doubleM_t_2,
                                              shift(t_0, i_0))))))))))))}
       int32
-      { ((sorted(t_0@, (0), sub_int(integer_of_int32(n@), (1)),
-          doubleP_doubleM_t_2@) ->
+      { ((sorted(t_0, (0), sub_int(integer_of_int32(n), (1)),
+          doubleP_doubleM_t_2) ->
           (JC_26:
-          (eq_int(integer_of_int32(result), neg_int((1))) ->
+          ((integer_of_int32(result) = neg_int((1))) ->
            (forall k_1:int.
-            ((le_int((0), k_1) and lt_int(k_1, integer_of_int32(n@))) ->
-             ne_double(select(doubleP_doubleM_t_2, shift(t_0@, k_1)), v@))))))
+            ((le_int((0), k_1) and lt_int(k_1, integer_of_int32(n))) ->
+             ne_double_full(select(doubleP_doubleM_t_2, shift(t_0, k_1)), v))))))
         and ((JC_24:
              (ge_int(integer_of_int32(result), (0)) ->
-              eq_double(select(doubleP_doubleM_t_2,
-                        shift(t_0@, integer_of_int32(result))),
-              v@)))
+              eq_double_full(select(doubleP_doubleM_t_2,
+                             shift(t_0, integer_of_int32(result))),
+              v)))
             and (JC_20:
                 ((JC_18: le_int(neg_int((1)), integer_of_int32(result)))
                 and (JC_19:
-                    lt_int(integer_of_int32(result), integer_of_int32(n@))))))) }
+                    lt_int(integer_of_int32(result), integer_of_int32(n))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1648,10 +1559,8 @@ let binary_search_ensures_default =
      (let m = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_1:
          (C_4:
          begin
@@ -1664,22 +1573,18 @@ let binary_search_ensures_default =
           (loop_2:
           while true do
           { invariant
-              (JC_50:
-              ((JC_48: le_int((0), integer_of_int32(l)))
-              and (JC_49:
+              (JC_48:
+              ((JC_46: le_int((0), integer_of_int32(l)))
+              and (JC_47:
                   le_int(integer_of_int32(u),
                   sub_int(integer_of_int32(n), (1))))))  }
            begin
              [ { } unit { true } ];
             try
-             (let jessie_<num> =
              (C_17:
              begin
                (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
-               then void
-               else
-                (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<num> =
               (m := (C_16:
                     (safe_int32_of_integer_ (C_15:
@@ -1687,7 +1592,7 @@ let binary_search_ensures_default =
                                              (integer_of_int32 (C_14:
                                                                (safe_int32_of_integer_ 
                                                                 (C_13:
-                                                                (JC_54:
+                                                                (JC_52:
                                                                 ((computer_div 
                                                                   (integer_of_int32 
                                                                    (C_12:
@@ -1698,57 +1603,54 @@ let binary_search_ensures_default =
                                                                     (integer_of_int32 !l))))))) (2)))))))))))) in
               void);
               (assert
-              { (JC_57:
-                ((JC_55: le_int(integer_of_int32(l), integer_of_int32(m)))
-                and (JC_56: le_int(integer_of_int32(m), integer_of_int32(u))))) };
+              { (JC_55:
+                ((JC_53: le_int(integer_of_int32(l), integer_of_int32(m)))
+                and (JC_54: le_int(integer_of_int32(m), integer_of_int32(u))))) };
               void); void;
-              (if ((lt_double (C_32:
-                              ((safe_acc_ doubleP_doubleM_t_2) (C_31:
-                                                               ((shift t_0) 
-                                                                (integer_of_int32 !m)))))) v)
+              (if ((lt_double_ (C_31:
+                               ((safe_acc_ doubleP_doubleM_t_2) (C_30:
+                                                                ((shift t_0) 
+                                                                 (integer_of_int32 !m)))))) v)
               then
                (let jessie_<num> =
-               (C_30:
-               (l := (C_29:
-                     (safe_int32_of_integer_ (C_28:
+               (C_29:
+               (l := (C_28:
+                     (safe_int32_of_integer_ (C_27:
                                              ((add_int (integer_of_int32 !m)) (1))))))) in
                void)
               else
-               (if ((gt_double (C_27:
-                               ((safe_acc_ doubleP_doubleM_t_2) (C_26:
-                                                                ((shift t_0) 
-                                                                 (integer_of_int32 !m)))))) v)
+               (if ((gt_double_ (C_26:
+                                ((safe_acc_ doubleP_doubleM_t_2) (C_25:
+                                                                 ((shift t_0) 
+                                                                  (integer_of_int32 !m)))))) v)
                then
                 (let jessie_<num> =
-                (C_25:
-                (u := (C_24:
-                      (safe_int32_of_integer_ (C_23:
+                (C_24:
+                (u := (C_23:
+                      (safe_int32_of_integer_ (C_22:
                                               ((sub_int (integer_of_int32 !m)) (1))))))) in
                 void)
                else
-                (let jessie_<num> =
-                (C_22:
+                (C_21:
                 begin
-                  (assert { (JC_58: neq_int((0), (0))) }; void); void;
-                 (let jessie_<num> = (__retres := !m) in void);
-                 (raise (Return_label_exc void)) end) in void)));
-              (raise (Loop_continue_exc void)) end) in void) with
+                  (let jessie_<num> = (__retres := !m) in void);
+                 (raise (Return_label_exc void)) end)));
+              (raise (Loop_continue_exc void)) end) with
              Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end)) in void) with
+          (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<num> ->
          (let jessie_<num> =
          (while_0_break:
-         (C_34:
+         (C_32:
          begin
-           void; (assert { (JC_59: neq_int((0), (0))) }; void); void;
-          (__retres := (safe_int32_of_integer_ (neg_int (1)))); !__retres end)) in
-         void) end; (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<num> ->
+           void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
+          !__retres end)) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_17:
     ((JC_15: le_int(neg_int((1)), integer_of_int32(result)))
-    and (JC_16: lt_int(integer_of_int32(result), integer_of_int32(n@))))) }
+    and (JC_16: lt_int(integer_of_int32(result), integer_of_int32(n))))) }
 
 let binary_search_ensures_failure =
  fun (t_0 : doubleP pointer) (n : int32) (v : double) (doubleP_t_2_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_2 : (doubleP, double) memory) ->
@@ -1775,10 +1677,8 @@ let binary_search_ensures_failure =
      (let m = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_1:
          (C_4:
          begin
@@ -1791,32 +1691,29 @@ let binary_search_ensures_failure =
           (loop_4:
           while true do
           { invariant
-              ((JC_72:
+              ((JC_66:
                (forall k_0:int.
                 ((lt_int(integer_of_int32(u), k_0)
                  and le_int(k_0, sub_int(integer_of_int32(n), (1)))) ->
-                 lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0))))))
-              and (JC_73:
+                 lt_double_full(v,
+                 select(doubleP_doubleM_t_2, shift(t_0, k_0))))))
+              and (JC_67:
                   (forall k:int.
                    ((le_int((0), k) and lt_int(k, integer_of_int32(l))) ->
-                    lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v)))))
-             }
+                    lt_double_full(select(doubleP_doubleM_t_2, shift(t_0, k)),
+                    v)))))  }
            begin
              [ { } unit reads l,u
-               { (JC_76:
-                 ((JC_74: le_int((0), integer_of_int32(l)))
-                 and (JC_75:
+               { (JC_70:
+                 ((JC_68: le_int((0), integer_of_int32(l)))
+                 and (JC_69:
                      le_int(integer_of_int32(u),
                      sub_int(integer_of_int32(n), (1)))))) } ];
             try
-             (let jessie_<num> =
              (C_17:
              begin
                (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
-               then void
-               else
-                (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<num> =
               (m := (C_16:
                     (safe_int32_of_integer_ (C_15:
@@ -1824,7 +1721,7 @@ let binary_search_ensures_failure =
                                              (integer_of_int32 (C_14:
                                                                (safe_int32_of_integer_ 
                                                                 (C_13:
-                                                                (JC_80:
+                                                                (JC_74:
                                                                 ((computer_div 
                                                                   (integer_of_int32 
                                                                    (C_12:
@@ -1835,60 +1732,57 @@ let binary_search_ensures_failure =
                                                                     (integer_of_int32 !l))))))) (2)))))))))))) in
               void);
               [ { } unit reads l,m,u
-                { (JC_83:
-                  ((JC_81: le_int(integer_of_int32(l), integer_of_int32(m)))
-                  and (JC_82:
+                { (JC_77:
+                  ((JC_75: le_int(integer_of_int32(l), integer_of_int32(m)))
+                  and (JC_76:
                       le_int(integer_of_int32(m), integer_of_int32(u))))) } ];
               void;
-              (if ((lt_double (C_32:
-                              ((safe_acc_ doubleP_doubleM_t_2) (C_31:
-                                                               ((shift t_0) 
-                                                                (integer_of_int32 !m)))))) v)
+              (if ((lt_double_ (C_31:
+                               ((safe_acc_ doubleP_doubleM_t_2) (C_30:
+                                                                ((shift t_0) 
+                                                                 (integer_of_int32 !m)))))) v)
               then
                (let jessie_<num> =
-               (C_30:
-               (l := (C_29:
-                     (safe_int32_of_integer_ (C_28:
+               (C_29:
+               (l := (C_28:
+                     (safe_int32_of_integer_ (C_27:
                                              ((add_int (integer_of_int32 !m)) (1))))))) in
                void)
               else
-               (if ((gt_double (C_27:
-                               ((safe_acc_ doubleP_doubleM_t_2) (C_26:
-                                                                ((shift t_0) 
-                                                                 (integer_of_int32 !m)))))) v)
+               (if ((gt_double_ (C_26:
+                                ((safe_acc_ doubleP_doubleM_t_2) (C_25:
+                                                                 ((shift t_0) 
+                                                                  (integer_of_int32 !m)))))) v)
                then
                 (let jessie_<num> =
-                (C_25:
-                (u := (C_24:
-                      (safe_int32_of_integer_ (C_23:
+                (C_24:
+                (u := (C_23:
+                      (safe_int32_of_integer_ (C_22:
                                               ((sub_int (integer_of_int32 !m)) (1))))))) in
                 void)
                else
-                (let jessie_<num> =
-                (C_22:
+                (C_21:
                 begin
-                  [ { } unit { (JC_84: neq_int((0), (0))) } ]; void;
-                 (let jessie_<num> = (__retres := !m) in void);
-                 (raise (Return_label_exc void)) end) in void)));
-              (raise (Loop_continue_exc void)) end) in void) with
+                  (let jessie_<num> = (__retres := !m) in void);
+                 (raise (Return_label_exc void)) end)));
+              (raise (Loop_continue_exc void)) end) with
              Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end)) in void) with
+          (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<num> ->
          (let jessie_<num> =
          (while_0_break:
-         (C_34:
+         (C_32:
          begin
-           void; [ { } unit { (JC_85: neq_int((0), (0))) } ]; void;
-          (__retres := (safe_int32_of_integer_ (neg_int (1)))); !__retres end)) in
-         void) end; (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<num> ->
+           void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
+          !__retres end)) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_25:
-    (eq_int(integer_of_int32(result), neg_int((1))) ->
+    ((integer_of_int32(result) = neg_int((1))) ->
      (forall k_1:int.
-      ((le_int((0), k_1) and lt_int(k_1, integer_of_int32(n@))) ->
-       ne_double(select(doubleP_doubleM_t_2, shift(t_0@, k_1)), v@))))) }
+      ((le_int((0), k_1) and lt_int(k_1, integer_of_int32(n))) ->
+       ne_double_full(select(doubleP_doubleM_t_2, shift(t_0, k_1)), v))))) }
 
 let binary_search_ensures_success =
  fun (t_0 : doubleP pointer) (n : int32) (v : double) (doubleP_t_2_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_2 : (doubleP, double) memory) ->
@@ -1914,10 +1808,8 @@ let binary_search_ensures_success =
      (let m = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_1:
          (C_4:
          begin
@@ -1929,23 +1821,19 @@ let binary_search_ensures_success =
           void);
           (loop_3:
           while true do
-          { invariant (JC_64: true)  }
+          { invariant (JC_60: true)  }
            begin
              [ { } unit reads l,u
-               { (JC_62:
-                 ((JC_60: le_int((0), integer_of_int32(l)))
-                 and (JC_61:
+               { (JC_58:
+                 ((JC_56: le_int((0), integer_of_int32(l)))
+                 and (JC_57:
                      le_int(integer_of_int32(u),
                      sub_int(integer_of_int32(n), (1)))))) } ];
             try
-             (let jessie_<num> =
              (C_17:
              begin
                (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
-               then void
-               else
-                (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<num> =
               (m := (C_16:
                     (safe_int32_of_integer_ (C_15:
@@ -1953,7 +1841,7 @@ let binary_search_ensures_success =
                                              (integer_of_int32 (C_14:
                                                                (safe_int32_of_integer_ 
                                                                 (C_13:
-                                                                (JC_66:
+                                                                (JC_62:
                                                                 ((computer_div 
                                                                   (integer_of_int32 
                                                                    (C_12:
@@ -1964,60 +1852,57 @@ let binary_search_ensures_success =
                                                                     (integer_of_int32 !l))))))) (2)))))))))))) in
               void);
               [ { } unit reads l,m,u
-                { (JC_69:
-                  ((JC_67: le_int(integer_of_int32(l), integer_of_int32(m)))
-                  and (JC_68:
+                { (JC_65:
+                  ((JC_63: le_int(integer_of_int32(l), integer_of_int32(m)))
+                  and (JC_64:
                       le_int(integer_of_int32(m), integer_of_int32(u))))) } ];
               void;
-              (if ((lt_double (C_32:
-                              ((safe_acc_ doubleP_doubleM_t_2) (C_31:
-                                                               ((shift t_0) 
-                                                                (integer_of_int32 !m)))))) v)
+              (if ((lt_double_ (C_31:
+                               ((safe_acc_ doubleP_doubleM_t_2) (C_30:
+                                                                ((shift t_0) 
+                                                                 (integer_of_int32 !m)))))) v)
               then
                (let jessie_<num> =
-               (C_30:
-               (l := (C_29:
-                     (safe_int32_of_integer_ (C_28:
+               (C_29:
+               (l := (C_28:
+                     (safe_int32_of_integer_ (C_27:
                                              ((add_int (integer_of_int32 !m)) (1))))))) in
                void)
               else
-               (if ((gt_double (C_27:
-                               ((safe_acc_ doubleP_doubleM_t_2) (C_26:
-                                                                ((shift t_0) 
-                                                                 (integer_of_int32 !m)))))) v)
+               (if ((gt_double_ (C_26:
+                                ((safe_acc_ doubleP_doubleM_t_2) (C_25:
+                                                                 ((shift t_0) 
+                                                                  (integer_of_int32 !m)))))) v)
                then
                 (let jessie_<num> =
-                (C_25:
-                (u := (C_24:
-                      (safe_int32_of_integer_ (C_23:
+                (C_24:
+                (u := (C_23:
+                      (safe_int32_of_integer_ (C_22:
                                               ((sub_int (integer_of_int32 !m)) (1))))))) in
                 void)
                else
-                (let jessie_<num> =
-                (C_22:
+                (C_21:
                 begin
-                  [ { } unit { (JC_70: neq_int((0), (0))) } ]; void;
-                 (let jessie_<num> = (__retres := !m) in void);
-                 (raise (Return_label_exc void)) end) in void)));
-              (raise (Loop_continue_exc void)) end) in void) with
+                  (let jessie_<num> = (__retres := !m) in void);
+                 (raise (Return_label_exc void)) end)));
+              (raise (Loop_continue_exc void)) end) with
              Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end)) in void) with
+          (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<num> ->
          (let jessie_<num> =
          (while_0_break:
-         (C_34:
+         (C_32:
          begin
-           void; [ { } unit { (JC_71: neq_int((0), (0))) } ]; void;
-          (__retres := (safe_int32_of_integer_ (neg_int (1)))); !__retres end)) in
-         void) end; (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<num> ->
+           void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
+          !__retres end)) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_23:
     (ge_int(integer_of_int32(result), (0)) ->
-     eq_double(select(doubleP_doubleM_t_2,
-               shift(t_0@, integer_of_int32(result))),
-     v@))) }
+     eq_double_full(select(doubleP_doubleM_t_2,
+                    shift(t_0, integer_of_int32(result))),
+     v))) }
 
 let binary_search_safety =
  fun (t_0 : doubleP pointer) (n : int32) (v : double) (doubleP_t_2_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_2 : (doubleP, double) memory) ->
@@ -2043,10 +1928,8 @@ let binary_search_safety =
      (let m = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_1:
          (C_4:
          begin
@@ -2060,7 +1943,7 @@ let binary_search_safety =
           (loop_1:
           while true do
           { invariant (JC_32: true)
-            variant (JC_46 : sub_int(integer_of_int32(u),
+            variant (JC_45 : sub_int(integer_of_int32(u),
                              integer_of_int32(l))) }
            begin
              [ { } unit reads l,u
@@ -2070,14 +1953,10 @@ let binary_search_safety =
                      le_int(integer_of_int32(u),
                      sub_int(integer_of_int32(n), (1)))))) } ];
             try
-             (let jessie_<num> =
              (C_17:
              begin
                (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
-               then void
-               else
-                (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<num> =
               (m := (C_16:
                     (JC_37:
@@ -2104,50 +1983,47 @@ let binary_search_safety =
                   and (JC_39:
                       le_int(integer_of_int32(m), integer_of_int32(u))))) } ];
               void;
-              (if ((lt_double (C_32:
-                              (JC_41:
-                              ((((offset_acc_ doubleP_t_2_alloc_table) doubleP_doubleM_t_2) t_0) 
-                               (integer_of_int32 !m))))) v)
+              (if ((lt_double_ (C_31:
+                               (JC_41:
+                               ((((offset_acc_ doubleP_t_2_alloc_table) doubleP_doubleM_t_2) t_0) 
+                                (integer_of_int32 !m))))) v)
               then
                (let jessie_<num> =
-               (C_30:
-               (l := (C_29:
+               (C_29:
+               (l := (C_28:
                      (JC_42:
-                     (int32_of_integer_ (C_28:
+                     (int32_of_integer_ (C_27:
                                         ((add_int (integer_of_int32 !m)) (1)))))))) in
                void)
               else
-               (if ((gt_double (C_27:
-                               (JC_43:
-                               ((((offset_acc_ doubleP_t_2_alloc_table) doubleP_doubleM_t_2) t_0) 
-                                (integer_of_int32 !m))))) v)
+               (if ((gt_double_ (C_26:
+                                (JC_43:
+                                ((((offset_acc_ doubleP_t_2_alloc_table) doubleP_doubleM_t_2) t_0) 
+                                 (integer_of_int32 !m))))) v)
                then
                 (let jessie_<num> =
-                (C_25:
-                (u := (C_24:
+                (C_24:
+                (u := (C_23:
                       (JC_44:
-                      (int32_of_integer_ (C_23:
+                      (int32_of_integer_ (C_22:
                                          ((sub_int (integer_of_int32 !m)) (1)))))))) in
                 void)
                else
-                (let jessie_<num> =
-                (C_22:
+                (C_21:
                 begin
-                  [ { } unit { (JC_45: neq_int((0), (0))) } ]; void;
-                 (let jessie_<num> = (__retres := !m) in void);
-                 (raise (Return_label_exc void)) end) in void)));
-              (raise (Loop_continue_exc void)) end) in void) with
+                  (let jessie_<num> = (__retres := !m) in void);
+                 (raise (Return_label_exc void)) end)));
+              (raise (Loop_continue_exc void)) end) with
              Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end)) in void) with
+          (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<num> ->
          (let jessie_<num> =
          (while_0_break:
-         (C_34:
+         (C_32:
          begin
-           void; [ { } unit { (JC_47: neq_int((0), (0))) } ]; void;
-          (__retres := (safe_int32_of_integer_ (neg_int (1)))); !__retres end)) in
-         void) end; (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<num> ->
+           void; (__retres := (safe_int32_of_integer_ (neg_int (1))));
+          !__retres end)) in void) end; (raise (Return_label_exc void)) end
+      with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end)) { true }
 
@@ -3281,18 +3157,6 @@ axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
 
 axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
 
-logic single_to_double : single -> double
-
-logic double_to_single : mode, double -> single
-
-axiom single_to_double_val:
-  (forall s:single. (double_value(single_to_double(s)) = single_value(s)))
-
-axiom double_to_single_val:
-  (forall m:mode.
-    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
-      double_value(d)))))
-
 function min_single() : real = 0x1.p-149
 
 function min_double() : real = 0x1.p-1074
@@ -3660,13 +3524,13 @@ predicate double_sign_zero_result(m: mode, x: double) =
    (((m = down) -> (double_sign(x) = Negative)) and
     ((m <> down) -> (double_sign(x) = Positive))))
 
-predicate le_single(x: single, y: single) =
+predicate le_single_full(x: single, y: single) =
   ((single_is_finite(x) and
     (single_is_finite(y) and (single_value(x) <= single_value(y)))) or
    ((single_is_minus_infinity(x) and single_is_not_NaN(y)) or
     (single_is_not_NaN(x) and single_is_plus_infinity(y))))
 
-predicate lt_single(x: single, y: single) =
+predicate lt_single_full(x: single, y: single) =
   ((single_is_finite(x) and
     (single_is_finite(y) and (single_value(x) < single_value(y)))) or
    ((single_is_minus_infinity(x) and
@@ -3674,11 +3538,11 @@ predicate lt_single(x: single, y: single) =
     (single_is_not_NaN(x) and
      ((not single_is_plus_infinity(x)) and single_is_plus_infinity(y)))))
 
-predicate ge_single(x: single, y: single) = le_single(y, x)
+predicate ge_single_full(x: single, y: single) = le_single_full(y, x)
 
-predicate gt_single(x: single, y: single) = lt_single(y, x)
+predicate gt_single_full(x: single, y: single) = lt_single_full(y, x)
 
-predicate eq_single(x: single, y: single) =
+predicate eq_single_full(x: single, y: single) =
   (single_is_not_NaN(x) and
    (single_is_not_NaN(y) and
     ((single_is_finite(x) and
@@ -3686,15 +3550,15 @@ predicate eq_single(x: single, y: single) =
      (single_is_infinite(x) and
       (single_is_infinite(y) and single_same_sign(x, y))))))
 
-predicate ne_single(x: single, y: single) = (not eq_single(x, y))
+predicate ne_single_full(x: single, y: single) = (not eq_single_full(x, y))
 
-predicate le_double(x: double, y: double) =
+predicate le_double_full(x: double, y: double) =
   ((double_is_finite(x) and
     (double_is_finite(y) and (double_value(x) <= double_value(y)))) or
    ((double_is_minus_infinity(x) and double_is_not_NaN(y)) or
     (double_is_not_NaN(x) and double_is_plus_infinity(y))))
 
-predicate lt_double(x: double, y: double) =
+predicate lt_double_full(x: double, y: double) =
   ((double_is_finite(x) and
     (double_is_finite(y) and (double_value(x) < double_value(y)))) or
    ((double_is_minus_infinity(x) and
@@ -3702,11 +3566,11 @@ predicate lt_double(x: double, y: double) =
     (double_is_not_NaN(x) and
      ((not double_is_plus_infinity(x)) and double_is_plus_infinity(y)))))
 
-predicate ge_double(x: double, y: double) = le_double(y, x)
+predicate ge_double_full(x: double, y: double) = le_double_full(y, x)
 
-predicate gt_double(x: double, y: double) = lt_double(y, x)
+predicate gt_double_full(x: double, y: double) = lt_double_full(y, x)
 
-predicate eq_double(x: double, y: double) =
+predicate eq_double_full(x: double, y: double) =
   (double_is_not_NaN(x) and
    (double_is_not_NaN(y) and
     ((double_is_finite(x) and
@@ -3714,19 +3578,21 @@ predicate eq_double(x: double, y: double) =
      (double_is_infinite(x) and
       (double_is_infinite(y) and double_same_sign(x, y))))))
 
-predicate ne_double(x: double, y: double) = (not eq_double(x, y))
+predicate ne_double_full(x: double, y: double) = (not eq_double_full(x, y))
 
 axiom le_lt_double_trans:
   (forall x:double.
     (forall y:double.
       (forall z:double.
-        ((le_double(x, y) and lt_double(y, z)) -> lt_double(x, z)))))
+        ((le_double_full(x, y) and lt_double_full(y, z)) -> lt_double_full(x,
+         z)))))
 
 axiom lt_le_double_trans:
   (forall x:double.
     (forall y:double.
       (forall z:double.
-        ((lt_double(x, y) and le_double(y, z)) -> lt_double(x, z)))))
+        ((lt_double_full(x, y) and le_double_full(y, z)) -> lt_double_full(x,
+         z)))))
 
 axiom round_single1:
   (forall m:mode.
@@ -3927,6 +3793,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -3938,6 +3809,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -3984,7 +3859,7 @@ predicate sorted(t: doubleP pointer, a: int, b: int,
   (forall i:int.
     (forall j:int.
       (((a <= i) and ((i <= j) and (j <= b))) ->
-       le_double(select(doubleP_doubleM_t_1_at_L, shift(t, i)),
+       le_double_full(select(doubleP_doubleM_t_1_at_L, shift(t, i)),
        select(doubleP_doubleM_t_1_at_L, shift(t, j))))))
 
 predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
@@ -4016,21 +3891,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_doubleP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -4102,7 +3962,7 @@ goal binary_search_ensures_default_po_1:
   (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
   forall u:int32.
   (u = result0) ->
-  ("JC_50": ("JC_48": (0 <= integer_of_int32(l))))
+  ("JC_48": ("JC_46": (0 <= integer_of_int32(l))))
 
 goal binary_search_ensures_default_po_2:
   forall t_0:doubleP pointer.
@@ -4129,7 +3989,7 @@ goal binary_search_ensures_default_po_2:
   (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
   forall u:int32.
   (u = result0) ->
-  ("JC_50": ("JC_49": (integer_of_int32(u) <= (integer_of_int32(n) - 1))))
+  ("JC_48": ("JC_47": (integer_of_int32(u) <= (integer_of_int32(n) - 1))))
 
 goal binary_search_ensures_default_po_3:
   forall t_0:doubleP pointer.
@@ -4158,9 +4018,9 @@ goal binary_search_ensures_default_po_3:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  ("JC_50":
-  (("JC_48": (0 <= integer_of_int32(l0))) and
-   ("JC_49": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+  ("JC_48":
+  (("JC_46": (0 <= integer_of_int32(l0))) and
+   ("JC_47": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(u0) - integer_of_int32(l0))) ->
@@ -4170,7 +4030,7 @@ goal binary_search_ensures_default_po_3:
   (integer_of_int32(result3) = (integer_of_int32(l0) + integer_of_int32(result2))) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_57": ("JC_55": (integer_of_int32(l0) <= integer_of_int32(m))))
+  ("JC_55": ("JC_53": (integer_of_int32(l0) <= integer_of_int32(m))))
 
 goal binary_search_ensures_default_po_4:
   forall t_0:doubleP pointer.
@@ -4199,9 +4059,9 @@ goal binary_search_ensures_default_po_4:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  ("JC_50":
-  (("JC_48": (0 <= integer_of_int32(l0))) and
-   ("JC_49": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+  ("JC_48":
+  (("JC_46": (0 <= integer_of_int32(l0))) and
+   ("JC_47": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(u0) - integer_of_int32(l0))) ->
@@ -4211,7 +4071,7 @@ goal binary_search_ensures_default_po_4:
   (integer_of_int32(result3) = (integer_of_int32(l0) + integer_of_int32(result2))) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_57": ("JC_56": (integer_of_int32(m) <= integer_of_int32(u0))))
+  ("JC_55": ("JC_54": (integer_of_int32(m) <= integer_of_int32(u0))))
 
 goal binary_search_ensures_default_po_5:
   forall t_0:doubleP pointer.
@@ -4240,9 +4100,9 @@ goal binary_search_ensures_default_po_5:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  ("JC_50":
-  (("JC_48": (0 <= integer_of_int32(l0))) and
-   ("JC_49": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+  ("JC_48":
+  (("JC_46": (0 <= integer_of_int32(l0))) and
+   ("JC_47": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(u0) - integer_of_int32(l0))) ->
@@ -4252,17 +4112,17 @@ goal binary_search_ensures_default_po_5:
   (integer_of_int32(result3) = (integer_of_int32(l0) + integer_of_int32(result2))) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_57":
-  (("JC_55": (integer_of_int32(l0) <= integer_of_int32(m))) and
-   ("JC_56": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
+  ("JC_55":
+  (("JC_53": (integer_of_int32(l0) <= integer_of_int32(m))) and
+   ("JC_54": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
   (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  lt_double(result4, v) ->
+  lt_double_full(result4, v) ->
   forall result5:int32.
   (integer_of_int32(result5) = (integer_of_int32(m) + 1)) ->
   forall l1:int32.
   (l1 = result5) ->
-  ("JC_50": ("JC_48": (0 <= integer_of_int32(l1))))
+  ("JC_48": ("JC_46": (0 <= integer_of_int32(l1))))
 
 goal binary_search_ensures_default_po_6:
   forall t_0:doubleP pointer.
@@ -4291,9 +4151,9 @@ goal binary_search_ensures_default_po_6:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  ("JC_50":
-  (("JC_48": (0 <= integer_of_int32(l0))) and
-   ("JC_49": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+  ("JC_48":
+  (("JC_46": (0 <= integer_of_int32(l0))) and
+   ("JC_47": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(u0) - integer_of_int32(l0))) ->
@@ -4303,20 +4163,20 @@ goal binary_search_ensures_default_po_6:
   (integer_of_int32(result3) = (integer_of_int32(l0) + integer_of_int32(result2))) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_57":
-  (("JC_55": (integer_of_int32(l0) <= integer_of_int32(m))) and
-   ("JC_56": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
+  ("JC_55":
+  (("JC_53": (integer_of_int32(l0) <= integer_of_int32(m))) and
+   ("JC_54": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
   (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not lt_double(result4, v)) ->
+  (not lt_double_full(result4, v)) ->
   forall result5:double.
   (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  gt_double(result5, v) ->
+  gt_double_full(result5, v) ->
   forall result6:int32.
   (integer_of_int32(result6) = (integer_of_int32(m) - 1)) ->
   forall u1:int32.
   (u1 = result6) ->
-  ("JC_50": ("JC_49": (integer_of_int32(u1) <= (integer_of_int32(n) - 1))))
+  ("JC_48": ("JC_47": (integer_of_int32(u1) <= (integer_of_int32(n) - 1))))
 
 goal binary_search_ensures_default_po_7:
   forall t_0:doubleP pointer.
@@ -4345,9 +4205,9 @@ goal binary_search_ensures_default_po_7:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  ("JC_50":
-  (("JC_48": (0 <= integer_of_int32(l0))) and
-   ("JC_49": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+  ("JC_48":
+  (("JC_46": (0 <= integer_of_int32(l0))) and
+   ("JC_47": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(u0) - integer_of_int32(l0))) ->
@@ -4357,16 +4217,20 @@ goal binary_search_ensures_default_po_7:
   (integer_of_int32(result3) = (integer_of_int32(l0) + integer_of_int32(result2))) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_57":
-  (("JC_55": (integer_of_int32(l0) <= integer_of_int32(m))) and
-   ("JC_56": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
+  ("JC_55":
+  (("JC_53": (integer_of_int32(l0) <= integer_of_int32(m))) and
+   ("JC_54": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
   (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not lt_double(result4, v)) ->
+  (not lt_double_full(result4, v)) ->
   forall result5:double.
   (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not gt_double(result5, v)) ->
-  ("JC_58": (0 <> 0))
+  (not gt_double_full(result5, v)) ->
+  forall __retres:int32.
+  (__retres = m) ->
+  forall return:int32.
+  (return = __retres) ->
+  ("JC_17": ("JC_15": ((-1) <= integer_of_int32(return))))
 
 goal binary_search_ensures_default_po_8:
   forall t_0:doubleP pointer.
@@ -4395,9 +4259,9 @@ goal binary_search_ensures_default_po_8:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  ("JC_50":
-  (("JC_48": (0 <= integer_of_int32(l0))) and
-   ("JC_49": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+  ("JC_48":
+  (("JC_46": (0 <= integer_of_int32(l0))) and
+   ("JC_47": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(u0) - integer_of_int32(l0))) ->
@@ -4407,21 +4271,20 @@ goal binary_search_ensures_default_po_8:
   (integer_of_int32(result3) = (integer_of_int32(l0) + integer_of_int32(result2))) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_57":
-  (("JC_55": (integer_of_int32(l0) <= integer_of_int32(m))) and
-   ("JC_56": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
+  ("JC_55":
+  (("JC_53": (integer_of_int32(l0) <= integer_of_int32(m))) and
+   ("JC_54": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
   (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not lt_double(result4, v)) ->
+  (not lt_double_full(result4, v)) ->
   forall result5:double.
   (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not gt_double(result5, v)) ->
-  ("JC_58": (0 <> 0)) ->
+  (not gt_double_full(result5, v)) ->
   forall __retres:int32.
   (__retres = m) ->
   forall return:int32.
   (return = __retres) ->
-  ("JC_17": ("JC_15": ((-1) <= integer_of_int32(return))))
+  ("JC_17": ("JC_16": (integer_of_int32(return) < integer_of_int32(n))))
 
 goal binary_search_ensures_default_po_9:
   forall t_0:doubleP pointer.
@@ -4450,33 +4313,17 @@ goal binary_search_ensures_default_po_9:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  ("JC_50":
-  (("JC_48": (0 <= integer_of_int32(l0))) and
-   ("JC_49": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
-  (integer_of_int32(l0) <= integer_of_int32(u0)) ->
+  ("JC_48":
+  (("JC_46": (0 <= integer_of_int32(l0))) and
+   ("JC_47": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+  (integer_of_int32(l0) > integer_of_int32(u0)) ->
   forall result1:int32.
-  (integer_of_int32(result1) = (integer_of_int32(u0) - integer_of_int32(l0))) ->
-  forall result2:int32.
-  (integer_of_int32(result2) = computer_div(integer_of_int32(result1), 2)) ->
-  forall result3:int32.
-  (integer_of_int32(result3) = (integer_of_int32(l0) + integer_of_int32(result2))) ->
-  forall m:int32.
-  (m = result3) ->
-  ("JC_57":
-  (("JC_55": (integer_of_int32(l0) <= integer_of_int32(m))) and
-   ("JC_56": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
-  forall result4:double.
-  (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not lt_double(result4, v)) ->
-  forall result5:double.
-  (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not gt_double(result5, v)) ->
-  ("JC_58": (0 <> 0)) ->
+  (integer_of_int32(result1) = (-1)) ->
   forall __retres:int32.
-  (__retres = m) ->
+  (__retres = result1) ->
   forall return:int32.
   (return = __retres) ->
-  ("JC_17": ("JC_16": (integer_of_int32(return) < integer_of_int32(n))))
+  ("JC_17": ("JC_15": ((-1) <= integer_of_int32(return))))
 
 goal binary_search_ensures_default_po_10:
   forall t_0:doubleP pointer.
@@ -4505,84 +4352,10 @@ goal binary_search_ensures_default_po_10:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  ("JC_50":
-  (("JC_48": (0 <= integer_of_int32(l0))) and
-   ("JC_49": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+  ("JC_48":
+  (("JC_46": (0 <= integer_of_int32(l0))) and
+   ("JC_47": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) > integer_of_int32(u0)) ->
-  ("JC_59": (0 <> 0))
-
-goal binary_search_ensures_default_po_11:
-  forall t_0:doubleP pointer.
-  forall n:int32.
-  forall v:double.
-  forall doubleP_t_2_alloc_table:doubleP alloc_table.
-  forall doubleP_doubleM_t_2:(doubleP,
-  double) memory.
-  ("JC_13":
-  (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
-     t_0) >= (integer_of_int32(n) - 1))) and
-     (("JC_11": (not double_is_NaN(v))) and
-      ("JC_12":
-      (forall i_0:int.
-        (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall l:int32.
-  (l = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
-  forall u:int32.
-  (u = result0) ->
-  forall l0:int32.
-  forall u0:int32.
-  ("JC_50":
-  (("JC_48": (0 <= integer_of_int32(l0))) and
-   ("JC_49": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
-  (integer_of_int32(l0) > integer_of_int32(u0)) ->
-  ("JC_59": (0 <> 0)) ->
-  forall result1:int32.
-  (integer_of_int32(result1) = (-1)) ->
-  forall __retres:int32.
-  (__retres = result1) ->
-  forall return:int32.
-  (return = __retres) ->
-  ("JC_17": ("JC_15": ((-1) <= integer_of_int32(return))))
-
-goal binary_search_ensures_default_po_12:
-  forall t_0:doubleP pointer.
-  forall n:int32.
-  forall v:double.
-  forall doubleP_t_2_alloc_table:doubleP alloc_table.
-  forall doubleP_doubleM_t_2:(doubleP,
-  double) memory.
-  ("JC_13":
-  (("JC_8": (integer_of_int32(n) >= 0)) and
-   (("JC_9": (offset_min(doubleP_t_2_alloc_table, t_0) <= 0)) and
-    (("JC_10": (offset_max(doubleP_t_2_alloc_table,
-     t_0) >= (integer_of_int32(n) - 1))) and
-     (("JC_11": (not double_is_NaN(v))) and
-      ("JC_12":
-      (forall i_0:int.
-        (((0 <= i_0) and (i_0 <= (integer_of_int32(n) - 1))) ->
-         (not double_is_NaN(select(doubleP_doubleM_t_2, shift(t_0, i_0)))))))))))) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall l:int32.
-  (l = result) ->
-  forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(n) - 1)) ->
-  forall u:int32.
-  (u = result0) ->
-  forall l0:int32.
-  forall u0:int32.
-  ("JC_50":
-  (("JC_48": (0 <= integer_of_int32(l0))) and
-   ("JC_49": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
-  (integer_of_int32(l0) > integer_of_int32(u0)) ->
-  ("JC_59": (0 <> 0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (-1)) ->
   forall __retres:int32.
@@ -4619,7 +4392,7 @@ goal binary_search_ensures_failure_po_1:
   (u = result0) ->
   forall k_0:int.
   ((integer_of_int32(u) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-  ("JC_72": lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0))))
+  ("JC_66": lt_double_full(v, select(doubleP_doubleM_t_2, shift(t_0, k_0))))
 
 goal binary_search_ensures_failure_po_2:
   forall t_0:doubleP pointer.
@@ -4649,7 +4422,7 @@ goal binary_search_ensures_failure_po_2:
   (u = result0) ->
   forall k:int.
   ((0 <= k) and (k < integer_of_int32(l))) ->
-  ("JC_73": lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))
+  ("JC_67": lt_double_full(select(doubleP_doubleM_t_2, shift(t_0, k)), v))
 
 goal binary_search_ensures_failure_po_3:
   forall t_0:doubleP pointer.
@@ -4679,17 +4452,17 @@ goal binary_search_ensures_failure_po_3:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  (("JC_72":
+  (("JC_66":
    (forall k_0:int.
      (((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-      lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
-   ("JC_73":
+      lt_double_full(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
+   ("JC_67":
    (forall k:int.
      (((0 <= k) and (k < integer_of_int32(l0))) ->
-      lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
-  ("JC_76":
-  (("JC_74": (0 <= integer_of_int32(l0))) and
-   ("JC_75": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+      lt_double_full(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
+  ("JC_70":
+  (("JC_68": (0 <= integer_of_int32(l0))) and
+   ("JC_69": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(u0) - integer_of_int32(l0))) ->
@@ -4699,19 +4472,19 @@ goal binary_search_ensures_failure_po_3:
   (integer_of_int32(result3) = (integer_of_int32(l0) + integer_of_int32(result2))) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_83":
-  (("JC_81": (integer_of_int32(l0) <= integer_of_int32(m))) and
-   ("JC_82": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l0) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
   (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  lt_double(result4, v) ->
+  lt_double_full(result4, v) ->
   forall result5:int32.
   (integer_of_int32(result5) = (integer_of_int32(m) + 1)) ->
   forall l1:int32.
   (l1 = result5) ->
   forall k_0:int.
   ((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-  ("JC_72": lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0))))
+  ("JC_66": lt_double_full(v, select(doubleP_doubleM_t_2, shift(t_0, k_0))))
 
 goal binary_search_ensures_failure_po_4:
   forall t_0:doubleP pointer.
@@ -4741,17 +4514,17 @@ goal binary_search_ensures_failure_po_4:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  (("JC_72":
+  (("JC_66":
    (forall k_0:int.
      (((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-      lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
-   ("JC_73":
+      lt_double_full(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
+   ("JC_67":
    (forall k:int.
      (((0 <= k) and (k < integer_of_int32(l0))) ->
-      lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
-  ("JC_76":
-  (("JC_74": (0 <= integer_of_int32(l0))) and
-   ("JC_75": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+      lt_double_full(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
+  ("JC_70":
+  (("JC_68": (0 <= integer_of_int32(l0))) and
+   ("JC_69": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(u0) - integer_of_int32(l0))) ->
@@ -4761,19 +4534,19 @@ goal binary_search_ensures_failure_po_4:
   (integer_of_int32(result3) = (integer_of_int32(l0) + integer_of_int32(result2))) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_83":
-  (("JC_81": (integer_of_int32(l0) <= integer_of_int32(m))) and
-   ("JC_82": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l0) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
   (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  lt_double(result4, v) ->
+  lt_double_full(result4, v) ->
   forall result5:int32.
   (integer_of_int32(result5) = (integer_of_int32(m) + 1)) ->
   forall l1:int32.
   (l1 = result5) ->
   forall k:int.
   ((0 <= k) and (k < integer_of_int32(l1))) ->
-  ("JC_73": lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))
+  ("JC_67": lt_double_full(select(doubleP_doubleM_t_2, shift(t_0, k)), v))
 
 goal binary_search_ensures_failure_po_5:
   forall t_0:doubleP pointer.
@@ -4803,17 +4576,17 @@ goal binary_search_ensures_failure_po_5:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  (("JC_72":
+  (("JC_66":
    (forall k_0:int.
      (((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-      lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
-   ("JC_73":
+      lt_double_full(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
+   ("JC_67":
    (forall k:int.
      (((0 <= k) and (k < integer_of_int32(l0))) ->
-      lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
-  ("JC_76":
-  (("JC_74": (0 <= integer_of_int32(l0))) and
-   ("JC_75": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+      lt_double_full(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
+  ("JC_70":
+  (("JC_68": (0 <= integer_of_int32(l0))) and
+   ("JC_69": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(u0) - integer_of_int32(l0))) ->
@@ -4823,22 +4596,22 @@ goal binary_search_ensures_failure_po_5:
   (integer_of_int32(result3) = (integer_of_int32(l0) + integer_of_int32(result2))) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_83":
-  (("JC_81": (integer_of_int32(l0) <= integer_of_int32(m))) and
-   ("JC_82": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l0) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
   (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not lt_double(result4, v)) ->
+  (not lt_double_full(result4, v)) ->
   forall result5:double.
   (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  gt_double(result5, v) ->
+  gt_double_full(result5, v) ->
   forall result6:int32.
   (integer_of_int32(result6) = (integer_of_int32(m) - 1)) ->
   forall u1:int32.
   (u1 = result6) ->
   forall k_0:int.
   ((integer_of_int32(u1) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-  ("JC_72": lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0))))
+  ("JC_66": lt_double_full(v, select(doubleP_doubleM_t_2, shift(t_0, k_0))))
 
 goal binary_search_ensures_failure_po_6:
   forall t_0:doubleP pointer.
@@ -4868,17 +4641,17 @@ goal binary_search_ensures_failure_po_6:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  (("JC_72":
+  (("JC_66":
    (forall k_0:int.
      (((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-      lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
-   ("JC_73":
+      lt_double_full(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
+   ("JC_67":
    (forall k:int.
      (((0 <= k) and (k < integer_of_int32(l0))) ->
-      lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
-  ("JC_76":
-  (("JC_74": (0 <= integer_of_int32(l0))) and
-   ("JC_75": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+      lt_double_full(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
+  ("JC_70":
+  (("JC_68": (0 <= integer_of_int32(l0))) and
+   ("JC_69": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(u0) - integer_of_int32(l0))) ->
@@ -4888,22 +4661,22 @@ goal binary_search_ensures_failure_po_6:
   (integer_of_int32(result3) = (integer_of_int32(l0) + integer_of_int32(result2))) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_83":
-  (("JC_81": (integer_of_int32(l0) <= integer_of_int32(m))) and
-   ("JC_82": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l0) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
   (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not lt_double(result4, v)) ->
+  (not lt_double_full(result4, v)) ->
   forall result5:double.
   (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  gt_double(result5, v) ->
+  gt_double_full(result5, v) ->
   forall result6:int32.
   (integer_of_int32(result6) = (integer_of_int32(m) - 1)) ->
   forall u1:int32.
   (u1 = result6) ->
   forall k:int.
   ((0 <= k) and (k < integer_of_int32(l0))) ->
-  ("JC_73": lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))
+  ("JC_67": lt_double_full(select(doubleP_doubleM_t_2, shift(t_0, k)), v))
 
 goal binary_search_ensures_failure_po_7:
   forall t_0:doubleP pointer.
@@ -4933,17 +4706,17 @@ goal binary_search_ensures_failure_po_7:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  (("JC_72":
+  (("JC_66":
    (forall k_0:int.
      (((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-      lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
-   ("JC_73":
+      lt_double_full(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
+   ("JC_67":
    (forall k:int.
      (((0 <= k) and (k < integer_of_int32(l0))) ->
-      lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
-  ("JC_76":
-  (("JC_74": (0 <= integer_of_int32(l0))) and
-   ("JC_75": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+      lt_double_full(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
+  ("JC_70":
+  (("JC_68": (0 <= integer_of_int32(l0))) and
+   ("JC_69": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(u0) - integer_of_int32(l0))) ->
@@ -4953,16 +4726,15 @@ goal binary_search_ensures_failure_po_7:
   (integer_of_int32(result3) = (integer_of_int32(l0) + integer_of_int32(result2))) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_83":
-  (("JC_81": (integer_of_int32(l0) <= integer_of_int32(m))) and
-   ("JC_82": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
+  ("JC_77":
+  (("JC_75": (integer_of_int32(l0) <= integer_of_int32(m))) and
+   ("JC_76": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
   (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not lt_double(result4, v)) ->
+  (not lt_double_full(result4, v)) ->
   forall result5:double.
   (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not gt_double(result5, v)) ->
-  ("JC_84": (0 <> 0)) ->
+  (not gt_double_full(result5, v)) ->
   forall __retres:int32.
   (__retres = m) ->
   forall return:int32.
@@ -4970,7 +4742,7 @@ goal binary_search_ensures_failure_po_7:
   (integer_of_int32(return) = (-1)) ->
   forall k_1:int.
   ((0 <= k_1) and (k_1 < integer_of_int32(n))) ->
-  ("JC_25": ne_double(select(doubleP_doubleM_t_2, shift(t_0, k_1)), v))
+  ("JC_25": ne_double_full(select(doubleP_doubleM_t_2, shift(t_0, k_1)), v))
 
 goal binary_search_ensures_failure_po_8:
   forall t_0:doubleP pointer.
@@ -5000,19 +4772,18 @@ goal binary_search_ensures_failure_po_8:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  (("JC_72":
+  (("JC_66":
    (forall k_0:int.
      (((integer_of_int32(u0) < k_0) and (k_0 <= (integer_of_int32(n) - 1))) ->
-      lt_double(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
-   ("JC_73":
+      lt_double_full(v, select(doubleP_doubleM_t_2, shift(t_0, k_0)))))) and
+   ("JC_67":
    (forall k:int.
      (((0 <= k) and (k < integer_of_int32(l0))) ->
-      lt_double(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
-  ("JC_76":
-  (("JC_74": (0 <= integer_of_int32(l0))) and
-   ("JC_75": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+      lt_double_full(select(doubleP_doubleM_t_2, shift(t_0, k)), v))))) ->
+  ("JC_70":
+  (("JC_68": (0 <= integer_of_int32(l0))) and
+   ("JC_69": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) > integer_of_int32(u0)) ->
-  ("JC_85": (0 <> 0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (-1)) ->
   forall __retres:int32.
@@ -5022,7 +4793,7 @@ goal binary_search_ensures_failure_po_8:
   (integer_of_int32(return) = (-1)) ->
   forall k_1:int.
   ((0 <= k_1) and (k_1 < integer_of_int32(n))) ->
-  ("JC_25": ne_double(select(doubleP_doubleM_t_2, shift(t_0, k_1)), v))
+  ("JC_25": ne_double_full(select(doubleP_doubleM_t_2, shift(t_0, k_1)), v))
 
 goal binary_search_ensures_success_po_1:
   forall t_0:doubleP pointer.
@@ -5051,10 +4822,10 @@ goal binary_search_ensures_success_po_1:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  ("JC_64": true) ->
-  ("JC_62":
-  (("JC_60": (0 <= integer_of_int32(l0))) and
-   ("JC_61": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+  ("JC_60": true) ->
+  ("JC_58":
+  (("JC_56": (0 <= integer_of_int32(l0))) and
+   ("JC_57": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) <= integer_of_int32(u0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (integer_of_int32(u0) - integer_of_int32(l0))) ->
@@ -5064,22 +4835,21 @@ goal binary_search_ensures_success_po_1:
   (integer_of_int32(result3) = (integer_of_int32(l0) + integer_of_int32(result2))) ->
   forall m:int32.
   (m = result3) ->
-  ("JC_69":
-  (("JC_67": (integer_of_int32(l0) <= integer_of_int32(m))) and
-   ("JC_68": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
+  ("JC_65":
+  (("JC_63": (integer_of_int32(l0) <= integer_of_int32(m))) and
+   ("JC_64": (integer_of_int32(m) <= integer_of_int32(u0))))) ->
   forall result4:double.
   (result4 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not lt_double(result4, v)) ->
+  (not lt_double_full(result4, v)) ->
   forall result5:double.
   (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not gt_double(result5, v)) ->
-  ("JC_70": (0 <> 0)) ->
+  (not gt_double_full(result5, v)) ->
   forall __retres:int32.
   (__retres = m) ->
   forall return:int32.
   (return = __retres) ->
   (integer_of_int32(return) >= 0) ->
-  ("JC_23": eq_double(select(doubleP_doubleM_t_2, shift(t_0,
+  ("JC_23": eq_double_full(select(doubleP_doubleM_t_2, shift(t_0,
   integer_of_int32(return))), v))
 
 goal binary_search_ensures_success_po_2:
@@ -5109,12 +4879,11 @@ goal binary_search_ensures_success_po_2:
   (u = result0) ->
   forall l0:int32.
   forall u0:int32.
-  ("JC_64": true) ->
-  ("JC_62":
-  (("JC_60": (0 <= integer_of_int32(l0))) and
-   ("JC_61": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
+  ("JC_60": true) ->
+  ("JC_58":
+  (("JC_56": (0 <= integer_of_int32(l0))) and
+   ("JC_57": (integer_of_int32(u0) <= (integer_of_int32(n) - 1))))) ->
   (integer_of_int32(l0) > integer_of_int32(u0)) ->
-  ("JC_71": (0 <> 0)) ->
   forall result1:int32.
   (integer_of_int32(result1) = (-1)) ->
   forall __retres:int32.
@@ -5122,7 +4891,7 @@ goal binary_search_ensures_success_po_2:
   forall return:int32.
   (return = __retres) ->
   (integer_of_int32(return) >= 0) ->
-  ("JC_23": eq_double(select(doubleP_doubleM_t_2, shift(t_0,
+  ("JC_23": eq_double_full(select(doubleP_doubleM_t_2, shift(t_0,
   integer_of_int32(return))), v))
 
 goal binary_search_safety_po_1:
@@ -5628,7 +5397,7 @@ goal binary_search_safety_po_12:
    (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
   (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  lt_double(result5, v) ->
+  lt_double_full(result5, v) ->
   ((-2147483648) <= (integer_of_int32(m) + 1))
 
 goal binary_search_safety_po_13:
@@ -5688,7 +5457,7 @@ goal binary_search_safety_po_13:
    (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
   (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  lt_double(result5, v) ->
+  lt_double_full(result5, v) ->
   ((integer_of_int32(m) + 1) <= 2147483647)
 
 goal binary_search_safety_po_14:
@@ -5748,14 +5517,14 @@ goal binary_search_safety_po_14:
    (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
   (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  lt_double(result5, v) ->
+  lt_double_full(result5, v) ->
   (((-2147483648) <= (integer_of_int32(m) + 1)) and
    ((integer_of_int32(m) + 1) <= 2147483647)) ->
   forall result6:int32.
   (integer_of_int32(result6) = (integer_of_int32(m) + 1)) ->
   forall l1:int32.
   (l1 = result6) ->
-  (0 <= ("JC_46": (integer_of_int32(u0) - integer_of_int32(l0))))
+  (0 <= ("JC_45": (integer_of_int32(u0) - integer_of_int32(l0))))
 
 goal binary_search_safety_po_15:
   forall t_0:doubleP pointer.
@@ -5814,14 +5583,14 @@ goal binary_search_safety_po_15:
    (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
   (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  lt_double(result5, v) ->
+  lt_double_full(result5, v) ->
   (((-2147483648) <= (integer_of_int32(m) + 1)) and
    ((integer_of_int32(m) + 1) <= 2147483647)) ->
   forall result6:int32.
   (integer_of_int32(result6) = (integer_of_int32(m) + 1)) ->
   forall l1:int32.
   (l1 = result6) ->
-  (("JC_46": (integer_of_int32(u0) - integer_of_int32(l1))) < ("JC_46":
+  (("JC_45": (integer_of_int32(u0) - integer_of_int32(l1))) < ("JC_45":
                                                               (integer_of_int32(u0) - integer_of_int32(l0))))
 
 goal binary_search_safety_po_16:
@@ -5881,12 +5650,12 @@ goal binary_search_safety_po_16:
    (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
   (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not lt_double(result5, v)) ->
+  (not lt_double_full(result5, v)) ->
   ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result6:double.
   (result6 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  gt_double(result6, v) ->
+  gt_double_full(result6, v) ->
   ((-2147483648) <= (integer_of_int32(m) - 1))
 
 goal binary_search_safety_po_17:
@@ -5946,12 +5715,12 @@ goal binary_search_safety_po_17:
    (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
   (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not lt_double(result5, v)) ->
+  (not lt_double_full(result5, v)) ->
   ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result6:double.
   (result6 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  gt_double(result6, v) ->
+  gt_double_full(result6, v) ->
   ((integer_of_int32(m) - 1) <= 2147483647)
 
 goal binary_search_safety_po_18:
@@ -6011,19 +5780,19 @@ goal binary_search_safety_po_18:
    (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
   (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not lt_double(result5, v)) ->
+  (not lt_double_full(result5, v)) ->
   ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result6:double.
   (result6 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  gt_double(result6, v) ->
+  gt_double_full(result6, v) ->
   (((-2147483648) <= (integer_of_int32(m) - 1)) and
    ((integer_of_int32(m) - 1) <= 2147483647)) ->
   forall result7:int32.
   (integer_of_int32(result7) = (integer_of_int32(m) - 1)) ->
   forall u1:int32.
   (u1 = result7) ->
-  (0 <= ("JC_46": (integer_of_int32(u0) - integer_of_int32(l0))))
+  (0 <= ("JC_45": (integer_of_int32(u0) - integer_of_int32(l0))))
 
 goal binary_search_safety_po_19:
   forall t_0:doubleP pointer.
@@ -6082,28 +5851,28 @@ goal binary_search_safety_po_19:
    (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result5:double.
   (result5 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  (not lt_double(result5, v)) ->
+  (not lt_double_full(result5, v)) ->
   ((offset_min(doubleP_t_2_alloc_table, t_0) <= integer_of_int32(m)) and
    (integer_of_int32(m) <= offset_max(doubleP_t_2_alloc_table, t_0))) ->
   forall result6:double.
   (result6 = select(doubleP_doubleM_t_2, shift(t_0, integer_of_int32(m)))) ->
-  gt_double(result6, v) ->
+  gt_double_full(result6, v) ->
   (((-2147483648) <= (integer_of_int32(m) - 1)) and
    ((integer_of_int32(m) - 1) <= 2147483647)) ->
   forall result7:int32.
   (integer_of_int32(result7) = (integer_of_int32(m) - 1)) ->
   forall u1:int32.
   (u1 = result7) ->
-  (("JC_46": (integer_of_int32(u1) - integer_of_int32(l0))) < ("JC_46":
+  (("JC_45": (integer_of_int32(u1) - integer_of_int32(l0))) < ("JC_45":
                                                               (integer_of_int32(u0) - integer_of_int32(l0))))
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/floats_bsearch_why.why    : ......#..?......#........................ (38/0/1/2/0)
-total   :  41
-valid   :  38 ( 93%)
+why/floats_bsearch_why.why    : ..##.............##.........#.......... (34/0/0/5/0)
+total   :  39
+valid   :  34 ( 87%)
 invalid :   0 (  0%)
-unknown :   1 (  2%)
-timeout :   2 (  5%)
+unknown :   0 (  0%)
+timeout :   5 ( 13%)
 failure :   0 (  0%)

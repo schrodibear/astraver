@@ -1,4 +1,34 @@
 ========== file tests/java/PreAndOld.java ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
 
 
 //@+ CheckArithOverflow = no
@@ -9,7 +39,7 @@
 class PreAndOld {
 
     static int y;
-    
+
     /*@ ensures \result == \old(f(x))
       @      && \result == f{Old}(x)
       @      && \result == \at(f(x),Pre);
@@ -20,7 +50,16 @@ class PreAndOld {
         return x+tmp;
     }
 }
-  
+
+
+
+
+
+/*
+Local Variables:
+compile-command: "make PreAndOld.why3ml"
+End:
+*/
 
 ========== krakatoa execution ==========
 Parsing OK.
@@ -104,50 +143,50 @@ End:
 ========== file tests/java/PreAndOld.jloc ==========
 [K_1]
 file = "HOME/tests/java/PreAndOld.java"
-line = 14
+line = 44
 begin = 16
 end = 40
 
 [K_2]
 file = "HOME/tests/java/PreAndOld.java"
-line = 13
+line = 43
 begin = 16
 end = 36
 
 [K_3]
 file = "HOME/tests/java/PreAndOld.java"
-line = 12
+line = 42
 begin = 16
 end = 37
 
 [K_4]
 file = "HOME/tests/java/PreAndOld.java"
-line = 12
+line = 42
 begin = 16
 end = 74
 
 [K_5]
 file = "HOME/tests/java/PreAndOld.java"
-line = 12
+line = 42
 begin = 16
 end = 115
 
 [K_6]
 file = "HOME/tests/java/PreAndOld.java"
-line = 19
+line = 49
 begin = 15
 end = 20
 
 [K_7]
 file = "HOME/tests/java/PreAndOld.java"
-line = 17
+line = 47
 begin = 18
 end = 19
 
 [PreAndOld_g]
 name = "Method g"
 file = "HOME/tests/java/PreAndOld.java"
-line = 16
+line = 46
 begin = 8
 end = 9
 
@@ -176,10 +215,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs PreAn
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs PreAndOld.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/PreAndOld_why.sx
 
@@ -239,6 +279,13 @@ simplify: simplify/PreAndOld_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/PreAndOld_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/PreAndOld_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -312,6 +359,9 @@ why/%_why3.why: why/%.why
 why3ide: why/PreAndOld_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: PreAndOld.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include PreAndOld.depend
 
 depend: coq/PreAndOld_why.v
@@ -383,7 +433,7 @@ end = 23
 
 [cons_PreAndOld_ensures_default]
 name = "Constructor of class PreAndOld"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/"
 line = 0
 begin = -1
@@ -391,9 +441,9 @@ end = -1
 
 [PreAndOld_g_ensures_default]
 name = "Method g"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/PreAndOld.java"
-line = 16
+line = 46
 begin = 8
 end = 9
 
@@ -407,7 +457,7 @@ end = -1
 name = "Method g"
 behavior = "Safety"
 file = "HOME/tests/java/PreAndOld.java"
-line = 16
+line = 46
 begin = 8
 end = 9
 
@@ -461,7 +511,7 @@ end = 65
 
 [JC_19]
 file = "HOME/tests/java/PreAndOld.java"
-line = 16
+line = 46
 begin = 8
 end = 9
 
@@ -473,7 +523,7 @@ end = -1
 
 [JC_21]
 file = "HOME/tests/java/PreAndOld.java"
-line = 16
+line = 46
 begin = 8
 end = 9
 
@@ -485,49 +535,49 @@ end = -1
 
 [JC_23]
 file = "HOME/tests/java/PreAndOld.java"
-line = 12
+line = 42
 begin = 16
 end = 37
 
 [JC_24]
 file = "HOME/tests/java/PreAndOld.java"
-line = 13
+line = 43
 begin = 16
 end = 36
 
 [JC_25]
 file = "HOME/tests/java/PreAndOld.java"
-line = 14
+line = 44
 begin = 16
 end = 40
 
 [JC_26]
 file = "HOME/tests/java/PreAndOld.java"
-line = 12
+line = 42
 begin = 16
 end = 115
 
 [JC_27]
 file = "HOME/tests/java/PreAndOld.java"
-line = 12
+line = 42
 begin = 16
 end = 37
 
 [JC_28]
 file = "HOME/tests/java/PreAndOld.java"
-line = 13
+line = 43
 begin = 16
 end = 36
 
 [JC_29]
 file = "HOME/tests/java/PreAndOld.java"
-line = 14
+line = 44
 begin = 16
 end = 40
 
 [JC_30]
 file = "HOME/tests/java/PreAndOld.java"
-line = 12
+line = 42
 begin = 16
 end = 115
 
@@ -598,21 +648,15 @@ type Object
 
 type interface
 
-exception Exception_exc of Object pointer
-
 logic Exception_tag:  -> Object tag_id
 
 logic Object_tag:  -> Object tag_id
 
 axiom Exception_parenttag_Object : parenttag(Exception_tag, Object_tag)
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
 predicate Non_null_Object(x_0:Object pointer,
  Object_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_alloc_table, x_0), (0))
+ (offset_max(Object_alloc_table, x_0) = (0))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
@@ -633,13 +677,9 @@ logic PreAndOld_tag:  -> Object tag_id
 
 axiom PreAndOld_parenttag_Object : parenttag(PreAndOld_tag, Object_tag)
 
-exception Return_label_exc of unit
-
 logic String_tag:  -> Object tag_id
 
 axiom String_parenttag_Object : parenttag(String_tag, Object_tag)
-
-exception Throwable_exc of Object pointer
 
 logic Throwable_tag:  -> Object tag_id
 
@@ -755,32 +795,6 @@ predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_PreAndOld(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
@@ -817,6 +831,12 @@ predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
+exception Exception_exc of Object pointer
+
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
 parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_tag_table : Object tag_table ref
@@ -828,126 +848,22 @@ parameter PreAndOld_g :
   x_2:int ->
    { } int reads Object_alloc_table,PreAndOld_y writes PreAndOld_y
    { (JC_30:
-     ((JC_27: eq_int(result, f(x_2@, PreAndOld_y@)))
-     and ((JC_28: eq_int(result, f(x_2, PreAndOld_y@)))
-         and (JC_29: eq_int(result, f(x_2@, PreAndOld_y@)))))) }
+     ((JC_27: (result = f(x_2, PreAndOld_y@)))
+     and ((JC_28: (result = f(x_2, PreAndOld_y@)))
+         and (JC_29: (result = f(x_2, PreAndOld_y@)))))) }
 
 parameter PreAndOld_g_requires :
  this_0:Object pointer ->
   x_2:int ->
    { } int reads Object_alloc_table,PreAndOld_y writes PreAndOld_y
    { (JC_30:
-     ((JC_27: eq_int(result, f(x_2@, PreAndOld_y@)))
-     and ((JC_28: eq_int(result, f(x_2, PreAndOld_y@)))
-         and (JC_29: eq_int(result, f(x_2@, PreAndOld_y@)))))) }
+     ((JC_27: (result = f(x_2, PreAndOld_y@)))
+     and ((JC_28: (result = f(x_2, PreAndOld_y@)))
+         and (JC_29: (result = f(x_2, PreAndOld_y@)))))) }
 
-parameter alloc_bitvector_struct_Exception :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
-parameter alloc_bitvector_struct_Exception_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_PreAndOld :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_PreAndOld(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_PreAndOld_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_PreAndOld(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_String :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_String_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Throwable_exc of Object pointer
 
 parameter alloc_struct_Exception :
  n:int ->
@@ -1105,14 +1021,14 @@ parameter non_null_Object :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_18:
-    (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
+    (if result then (offset_max(Object_alloc_table, x_1) = (0))
      else (x_1 = null))) }
 
 parameter non_null_Object_requires :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_18:
-    (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
+    (if result then (offset_max(Object_alloc_table, x_1) = (0))
      else (x_1 = null))) }
 
 let PreAndOld_g_ensures_default =
@@ -1128,9 +1044,9 @@ let PreAndOld_g_ensures_default =
       (return := (K_6: ((add_int x_2) tmp))); (raise Return) end); absurd 
    end with Return -> !return end))
   { (JC_26:
-    ((JC_23: eq_int(result, f(x_2@, PreAndOld_y@)))
-    and ((JC_24: eq_int(result, f(x_2, PreAndOld_y@)))
-        and (JC_25: eq_int(result, f(x_2@, PreAndOld_y@)))))) }
+    ((JC_23: (result = f(x_2, PreAndOld_y@)))
+    and ((JC_24: (result = f(x_2, PreAndOld_y@)))
+        and (JC_25: (result = f(x_2, PreAndOld_y@)))))) }
 
 let PreAndOld_g_safety =
  fun (this_0 : Object pointer) (x_2 : int) ->
@@ -1164,17 +1080,17 @@ why --project [...] why/PreAndOld.why
 <project name="PreAndOld" context="why/PreAndOld_ctx.why">
   <function name="Method g">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/PreAndOld_po1.why">
-      <location file = "HOME/tests/java/PreAndOld.java" line = "12" begin = "16" end = "37"/>
+      <location file = "HOME/tests/java/PreAndOld.java" line = "42" begin = "16" end = "37"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/PreAndOld_po2.why">
-      <location file = "HOME/tests/java/PreAndOld.java" line = "13" begin = "16" end = "36"/>
+      <location file = "HOME/tests/java/PreAndOld.java" line = "43" begin = "16" end = "36"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/PreAndOld_po3.why">
-      <location file = "HOME/tests/java/PreAndOld.java" line = "14" begin = "16" end = "40"/>
+      <location file = "HOME/tests/java/PreAndOld.java" line = "44" begin = "16" end = "40"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -2265,32 +2181,6 @@ predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_PreAndOld(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
   ((offset_min(Object_alloc_table, p) <= a) and
@@ -3312,26 +3202,6 @@ why -simplify [...] why/PreAndOld.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-(DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_Exception p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_PreAndOld p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_String p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Throwable p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_interface p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
 (DEFPRED (valid_root_Object p a b Object_alloc_table)
   (AND (<= (offset_min Object_alloc_table p) a)
   (>= (offset_max Object_alloc_table p) b)))
@@ -3360,7 +3230,7 @@ why -simplify [...] why/PreAndOld.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; PreAndOld_g_ensures_default_po_1, File "HOME/tests/java/PreAndOld.java", line 12, characters 16-37
+;; PreAndOld_g_ensures_default_po_1, File "HOME/tests/java/PreAndOld.java", line 42, characters 16-37
 (FORALL (this_0)
 (FORALL (x_2)
 (FORALL (Object_alloc_table)
@@ -3371,7 +3241,7 @@ why -simplify [...] why/PreAndOld.why
 (FORALL (return)
 (IMPLIES (EQ return (+ x_2 PreAndOld_y)) (EQ return (f x_2 PreAndOld_y)))))))))))
 
-;; PreAndOld_g_ensures_default_po_2, File "HOME/tests/java/PreAndOld.java", line 13, characters 16-36
+;; PreAndOld_g_ensures_default_po_2, File "HOME/tests/java/PreAndOld.java", line 43, characters 16-36
 (FORALL (this_0)
 (FORALL (x_2)
 (FORALL (Object_alloc_table)
@@ -3382,7 +3252,7 @@ why -simplify [...] why/PreAndOld.why
 (FORALL (return)
 (IMPLIES (EQ return (+ x_2 PreAndOld_y)) (EQ return (f x_2 PreAndOld_y)))))))))))
 
-;; PreAndOld_g_ensures_default_po_3, File "HOME/tests/java/PreAndOld.java", line 14, characters 16-40
+;; PreAndOld_g_ensures_default_po_3, File "HOME/tests/java/PreAndOld.java", line 44, characters 16-40
 (FORALL (this_0)
 (FORALL (x_2)
 (FORALL (Object_alloc_table)
@@ -4486,32 +4356,6 @@ predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_PreAndOld(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =

@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -87,6 +87,8 @@ let verify_invariants_only = ref false
 let verify = ref []
 let behavior = ref ""
 
+let why3_backend = ref false
+
 let add_why_opt s = why_opt := !why_opt ^ " " ^ s
 
 let annotation_sem = ref AnnotNone
@@ -113,7 +115,7 @@ let pos_table = Hashtbl.create 97
 
 let version () =
   Printf.printf "This is Jessie version %s, compiled on %s
-Copyright (c) 2006-2008 - INRIA team-project ProVal
+Copyright (c) 2006-2011 - CNRS/INRIA/Univ Paris 11, team ProVal
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
 " Version.version Version.date;
   exit 0
@@ -136,6 +138,9 @@ let _ =
 	  "  <f> reads source locations from file f" ;
         "-behavior", Arg.String (fun s -> behavior := s),
 	  "  verify only specified behavior (safety, default or user-defined behavior)";
+
+        "-why3ml", Arg.Set why3_backend,
+          "  (experimental) produce a program in why3ml syntax" ;
 
         "-why-opt", Arg.String add_why_opt,
 	  "  <why options>  passes options to Why";
@@ -198,6 +203,7 @@ let print_graph = !print_graph
 let debug = !debug
 let verbose = !verbose
 let werror = !werror
+let why3_backend = !why3_backend
 let why_opt = !why_opt
 let inv_sem = inv_sem
 let separation_sem = separation_sem

@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -31,7 +31,9 @@
 
 
 
+(*
 open Jc_stdlib
+*)
 open Jc_env
 open Jc_envset
 open Jc_region
@@ -59,8 +61,6 @@ let unsupported = Jc_typing.typing_error
 (*                            source positioning                              *)
 (******************************************************************************)
 
-let pos_table = Hashtbl.create 97
-
 let abs_fname f =
   if Filename.is_relative f then
     Filename.concat (Unix.getcwd ()) f
@@ -81,11 +81,13 @@ type gui_elem =
     }
 
 let reg_pos sce gui =
-  if gui.out_mark <> "" && StdHashtbl.mem Output.pos_table gui.out_mark then
-    (* If GUI element already refered to in output table, do not
-     * reference it twice. This is the case in particular for generated
-     * annotations. *)
-    gui.out_mark
+  if gui.out_mark <> "" && false (* Jc_stdlib.StdHashtbl.mem Output.my_pos_table gui.out_mark *) then 
+    begin
+      (* If GUI element already refered to in output table, do not
+       * reference it twice. This is the case in particular for generated
+       * annotations. *)
+      gui.out_mark
+    end
   else
     (* Generate a new mark if not fixed in GUI element *)
     let mark =
@@ -94,10 +96,10 @@ let reg_pos sce gui =
       else gui.out_mark
     in
     let (n,f,l,b,e,k) =
-      if sce.in_mark <> "" && Hashtbl.mem Jc_options.pos_table sce.in_mark then
+      if sce.in_mark <> "" && Jc_stdlib.Hashtbl.mem Jc_options.pos_table sce.in_mark then
 	(* If source location present in input table, copy information to
 	 * output table. *)
-	let (f,l,b,e,k,o) = Hashtbl.find Jc_options.pos_table sce.in_mark in
+	let (f,l,b,e,k,o) = Jc_stdlib.Hashtbl.find Jc_options.pos_table sce.in_mark in
 	let n =
 	  try match List.assoc "name" o with
             | Rc.RCident s | Rc.RCstring s -> Some s
@@ -106,17 +108,19 @@ let reg_pos sce gui =
 	in
 	(n,f,l,b,e,k)
       else
-	(* By default, refer to the Jessie source file *)
-	let b,e = sce.pos in
-	let f = abs_fname b.Lexing.pos_fname in
-	let l = b.Lexing.pos_lnum in
-	let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
-	let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in
-	(gui.name,f,l,fc,lc,None)
+        begin
+	  (* By default, refer to the Jessie source file *)
+	  let b,e = sce.pos in
+	  let f = abs_fname b.Lexing.pos_fname in
+	  let l = b.Lexing.pos_lnum in
+	  let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
+	  let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in
+	  (gui.name,f,l,fc,lc,None)
+        end
     in
     (* If present, always prefer new kind *)
     let k = match gui.kind with None -> k | Some k -> Some k in
-    Hashtbl.replace pos_table mark (k,n,gui.beh,f,l,b,e);
+    my_add_pos mark (k,n,gui.beh,f,l,b,e);
     mark
 
 let reg_check ?mark ?kind pos =
@@ -143,10 +147,16 @@ let make_check ?mark ?kind pos e' =
 let make_guarded_app ~mark kind pos f args =
   make_check ~mark ~kind pos (make_app f args)
 
-
+(*
 let print_locs fmt =
   Hashtbl.iter
-    (fun id (kind,name,beh,f,l,b,e) ->
+    (fun id (kind,name,beh,(f,l,b,e)) ->
+(*
+       let f = b.Lexing.pos_fname in
+       let l = b.Lexing.pos_lnum in
+       let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
+       let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in
+*)
        fprintf fmt "[%s]@\n" id;
        Option_misc.iter
          (fun k -> fprintf fmt "kind = %a@\n" print_kind k) kind;
@@ -158,8 +168,8 @@ let print_locs fmt =
        fprintf fmt "line = %d@\n" l;
        fprintf fmt "begin = %d@\n" b;
        fprintf fmt "end = %d@\n@\n" e)
-    pos_table
-
+    Output.pos_table
+  *)
 
 (******************************************************************************)
 (*                                 Operators                                  *)
@@ -260,18 +270,18 @@ let bin_op: expr_bin_op -> string = function
   | `Ble, `Real -> "le_real_"
   | `Beq, `Real -> "eq_real_"
   | `Bneq, `Real -> "neq_real_"
-  | `Bgt, `Float -> "gt_single"
-  | `Blt, `Float -> "lt_single"
-  | `Bge, `Float -> "ge_single"
-  | `Ble, `Float -> "le_single"
-  | `Beq, `Float -> "eq_single"
-  | `Bneq,`Float -> "ne_single"
-  | `Bgt, `Double -> "gt_double"
-  | `Blt, `Double -> "lt_double"
-  | `Bge, `Double -> "ge_double"
-  | `Ble, `Double -> "le_double"
-  | `Beq, `Double -> "eq_double"
-  | `Bneq, `Double -> "ne_double"
+  | `Bgt, `Float -> "gt_single_"
+  | `Blt, `Float -> "lt_single_"
+  | `Bge, `Float -> "ge_single_"
+  | `Ble, `Float -> "le_single_"
+  | `Beq, `Float -> "eq_single_"
+  | `Bneq,`Float -> "ne_single_"
+  | `Bgt, `Double -> "gt_double_"
+  | `Blt, `Double -> "lt_double_"
+  | `Bge, `Double -> "ge_double_"
+  | `Ble, `Double -> "le_double_"
+  | `Beq, `Double -> "eq_double_"
+  | `Bneq, `Double -> "ne_double_"
   | `Badd, `Real -> "add_real"
   | `Bsub, `Real -> "sub_real"
   | `Bmul, `Real -> "mul_real"
@@ -356,14 +366,14 @@ let pred_bin_op: pred_bin_op -> string = function
   | `Blt, `Integer -> "lt_int"
   | `Bge, `Integer -> "ge_int"
   | `Ble, `Integer -> "le_int"
-  | `Beq, `Integer -> "eq_int"
-  | `Bneq, `Integer -> "neq_int"
+  | `Beq, `Integer -> "eq"
+  | `Bneq, `Integer -> "neq"
       (* pointer *)
   | `Beq, (`Pointer | `Logic) -> "eq"
   | `Bneq, (`Pointer | `Logic) -> "neq"
       (* real *)
-  | `Beq, `Real -> "eq_real"
-  | `Bneq, `Real -> "neq_real"
+  | `Beq, `Real -> "eq"
+  | `Bneq, `Real -> "neq"
   | `Bgt, `Real -> "gt_real"
   | `Blt, `Real -> "lt_real"
   | `Bge, `Real -> "ge_real"
@@ -374,8 +384,8 @@ let pred_bin_op: pred_bin_op -> string = function
   | `Biff, `Boolean
   | `Bimplies, `Boolean -> assert false (* TODO *)
       (* boolean *)
-  | `Beq, `Boolean -> "eq_bool"
-  | `Bneq, `Boolean -> "eq_bool"
+  | `Beq, `Boolean -> "eq"
+  | `Bneq, `Boolean -> "eq"
   | op, opty ->
       Jc_typing.typing_error Loc.dummy_position
         "Can't use operator %s with type %s in assertions"
@@ -435,6 +445,7 @@ let tr_struct st acc =
           acc st.jc_struct_info_fields
   in
   (* Declarations of translation functions for union *)
+(*
   let vi = struct_root st in
   let acc =
     if not (root_is_union vi) then acc else
@@ -458,6 +469,7 @@ let tr_struct st acc =
 	     else acc)
           acc st.jc_struct_info_fields
   in
+*)
   (* declaration of the tag_id *)
   let acc =
     Logic(false,id_no_loc (tag_name st),[],tagid_type)::acc
@@ -468,19 +480,24 @@ let tr_struct st acc =
     else
       let pc = JCtag(st,[]) in
       let ac = alloc_class_of_pointer_class pc in
+      let in_param = false in
 	(* Validity parameters *)
-	make_valid_pred ~equal:true ac pc
-	:: make_valid_pred ~equal:false ac pc
-	:: make_valid_pred ~equal:false ~right:false ac pc
-	:: make_valid_pred ~equal:false ~left:false ac pc
-	:: make_valid_pred ~equal:true (* TODO ? *) JCalloc_bitvector pc
+	make_valid_pred ~in_param ~equal:true ac pc
+	:: make_valid_pred ~in_param ~equal:false ac pc
+	:: make_valid_pred ~in_param ~equal:false ~right:false ac pc
+	:: make_valid_pred ~in_param ~equal:false ~left:false ac pc
+(*
+	:: make_valid_pred ~in_param ~equal:true (* TODO ? *) JCalloc_bitvector pc
+*)
 	  (* Allocation parameters *)
 	:: make_alloc_param ~check_size:true ac pc
 	:: make_alloc_param ~check_size:false ac pc
+(*
 	:: make_alloc_param ~check_size:true JCalloc_bitvector pc
 	:: make_alloc_param ~check_size:false JCalloc_bitvector pc
+*)
 	:: (if Region.exists_bitwise () then make_conversion_params pc else [])
-	@ acc
+        @ acc
   in
 
   match st.jc_struct_info_parent with
@@ -702,15 +719,14 @@ let rec coerce ~check_int_overflow mark pos ty_dst ty_src e e' =
           | _, `Float -> false
           | `Double, _ -> true
           | _, _ -> false in
+        let name = (float_format f1)^"_of_"^(float_format f2) in
         if enlarge then
-          make_app ((float_format f2)^"_to_"^(float_format f1)) [ e' ]
+          make_app name [ e' ]
         else if check_int_overflow then
-          make_guarded_app ~mark FPoverflow pos
-            ((float_format f2)^"_to_"^(float_format f1))
-            [current_rounding_mode () ; e' ]
-        else
-          make_app ((float_format f2)^"_to_"^(float_format f1))
+          make_guarded_app ~mark FPoverflow pos name
             [ current_rounding_mode () ; e' ]
+        else
+          make_app (name^"_safe") [ current_rounding_mode () ; e' ]
     | JCTnative (Tgenfloat f), JCTnative Treal ->
 	begin
           try
@@ -1104,6 +1120,18 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
         let t1' = ft t1 in
         let t2' = ft t2 in
         LPred (pred_bin_op (op :> pred_bin_op),[ t1'; t2' ])
+(* disabled because cause other problems
+
+  o [Jessie] removed some superfluous conversion on enums which
+    prevented some proofs by rewriting
+
+    | JCArelation(t1, (((`Beq | `Bneq), _)as op),t2) ->
+
+(* 	if Jc_options.debug then printf "%a@." Jc_output.assertion a; *)
+        let t1' = ft t1 in
+        let t2' = ft t2 in
+        LPred(pred_bin_op (op), [ t1'; t2' ])
+*)
     | JCArelation(t1,(_, #native_operator_type as op),t2) ->
 (* 	if Jc_options.debug then printf "%a@." Jc_output.assertion a; *)
         let t1' = ft t1 in
@@ -1397,7 +1425,7 @@ let assigns ~type_safe ?region_list before ef locs loc =
                 [alloc;
                  lvar ~constant:false (* <<- CHANGE THIS *)
                    ~label_in_name:false before v;
-                 LVar v; location_list' p]) in
+                 LDeref v; location_list' p]) in
 	  LNamed(reg_check loc,a))
     ) mems a
 
@@ -1433,7 +1461,7 @@ let rec const_int_term t =
 	begin
 	  try
 	    let _, init =
-	      Hashtbl.find
+	      Jc_stdlib.Hashtbl.find
 		Jc_typing.logic_constants_table
 		vi.jc_var_info_tag
 	    in
@@ -1444,7 +1472,7 @@ let rec const_int_term t =
 	begin
 	  try
 	    let _, init =
-	      Hashtbl.find
+	      Jc_stdlib.Hashtbl.find
 		Jc_typing.logic_constants_table
 		app.jc_app_fun.jc_logic_info_tag
 	    in
@@ -1493,7 +1521,7 @@ let rec const_int_expr e =
 	begin
 	  try
 	    let _, init =
-	      Hashtbl.find
+	      Jc_stdlib.Hashtbl.find
 		Jc_typing.logic_constants_table
 		vi.jc_var_info_tag
 	    in
@@ -1506,7 +1534,7 @@ let rec const_int_expr e =
 	      begin
 		try
 		  let _, init =
-		    Hashtbl.find
+		    Jc_stdlib.Hashtbl.find
 		      Jc_typing.logic_constants_table
 		      li.jc_logic_info_tag
 		  in
@@ -2404,7 +2432,8 @@ and expr e =
 	      let with_body =
 		try
                   let _f,body =
-		    Hashtbl.find Jc_typing.logic_functions_table
+		    Jc_stdlib.Hashtbl.find 
+                      Jc_typing.logic_functions_table
 		      f.jc_logic_info_tag
 		  in
 		  match body with
@@ -2490,7 +2519,8 @@ and expr e =
 	      let with_body =
 		try
 		  let _f,_loc,_s,body =
-                    Hashtbl.find Jc_typing.functions_table f.jc_fun_info_tag
+                    Jc_stdlib.Hashtbl.find 
+                      Jc_typing.functions_table f.jc_fun_info_tag
 		  in
 		  body <> None
                 with Not_found ->
@@ -2998,11 +3028,11 @@ and expr e =
                     (mk_expr (Triple(true,LTrue,expr e,post,[])))
               else
 (*
-                let reads = read_effects 
+                let reads = read_effects
                   ~callee_reads:ef.jc_reads
                   ~callee_writes:ef.jc_writes ~params:[] ~region_list:[]
                 in
-                let _writes = write_effects 
+                let _writes = write_effects
                   ~callee_reads:ef.jc_reads
                   ~callee_writes:ef.jc_writes ~params:[] ~region_list:[]
                 in
@@ -3068,7 +3098,10 @@ and expr e =
   in
   let e' =
     if e#typ = Jc_pervasives.unit_type then
-      if e#original_type <> Jc_pervasives.unit_type then
+      if match e#original_type with
+        | JCTany | JCTnative Tunit -> false
+        | _ -> true
+      then
         match e'.expr_node with
           | MultiAssign _ -> e'
           | _ ->
@@ -3162,7 +3195,7 @@ let make_not_assigns talloc mem t l =
     (pset_of_interval i)
     l
   in
-  LPred("not_assigns",[talloc;LVarAtLabel(mem,"") ; LVar mem ; pset])
+  LPred("not_assigns",[talloc;LDerefAtLabel(mem,"") ; LDeref mem ; pset])
 
 
 
@@ -3258,7 +3291,7 @@ let rec finalize e =
                         (* (e+i).f == e' *)
                         LPred("eq",
                               [ LApp("select",
-                                     [ LVar mem;
+                                     [ LDeref mem;
                                        LApp("shift",
                                             [ LVar tmpe ; LConst (Prim_int (string_of_int i))] )]);
                                 LVar e'])) l)
@@ -3266,6 +3299,7 @@ let rec finalize e =
               let reads = if isrefalloc then
                 match talloc with
                   | LVar v -> [v;mem]
+                  | LDeref v -> [v;mem]
                   | _ -> assert false
               else
                 [mem]
@@ -3299,8 +3333,8 @@ let tr_axiom loc id ~is_axiom labels a acc =
     ~name:id
     ~beh:(if is_axiom then "axiom" else "lemma")
     loc;
-  let a' = 
-    List.fold_right (fun (n,_v,ty') a' -> LForall(n,ty',[],a')) params a' 
+  let a' =
+    List.fold_right (fun (n,_v,ty') a' -> LForall(n,ty',[],a')) params a'
   in
   Goal((if is_axiom then KAxiom else KLemma),
        {Output.name = new_id; loc = Loc.extract loc},a') :: acc
@@ -3387,9 +3421,9 @@ let assume_in_postcondition b post =
 	in
 	make_impl a' post
 
-let function_prototypes = Hashtbl.create 0
+let function_prototypes = Hashtbl.create 7
 
-let get_valid_pred_app vi =
+let get_valid_pred_app ~in_param vi =
   match vi.jc_var_info_type with
     | JCTpointer (pc, n1o, n2o) ->
 	(* TODO: what about bitwise? *)
@@ -3402,7 +3436,7 @@ let get_valid_pred_app vi =
 	    | Some n, None ->
 		let ac = alloc_class_of_pointer_class pc in
                 let a' =
-		  make_valid_pred_app ~equal:false
+		  make_valid_pred_app ~in_param ~equal:false
 		    (ac, vi.jc_var_info_region) pc
                     v' (Some (const_of_num n)) None
                 in
@@ -3410,7 +3444,7 @@ let get_valid_pred_app vi =
 	    | None, Some n ->
 		let ac = alloc_class_of_pointer_class pc in
                 let a' =
-		  make_valid_pred_app ~equal:false
+		  make_valid_pred_app ~in_param ~equal:false
 		    (ac, vi.jc_var_info_region) pc
                     v' None (Some (const_of_num n))
                 in
@@ -3418,7 +3452,7 @@ let get_valid_pred_app vi =
             | Some n1, Some n2 ->
 		let ac = alloc_class_of_pointer_class pc in
                 let a' =
-		  make_valid_pred_app ~equal:false (ac, vi.jc_var_info_region) pc
+		  make_valid_pred_app  ~in_param ~equal:false (ac, vi.jc_var_info_region) pc
                     v' (Some (const_of_num n1)) (Some (const_of_num n2))
                 in
 		  bind_pattern_lets a'
@@ -3441,8 +3475,23 @@ let tr_fun f funpos spec body acc =
 
   if Jc_options.debug then
     Format.printf "[interp] function %s@." f.jc_fun_info_name;
-
   Jc_options.lprintf "Jc_interp: function %s@." f.jc_fun_info_name;
+
+  (* handle parameters that are assigned in the body *)
+
+  let assigned_params =
+    List.fold_left
+      (fun acc (_,v) ->
+         if v.jc_var_info_assigned then
+           begin
+             v.jc_var_info_assigned <- false;
+             v :: acc
+           end
+         else
+           acc)
+      [] f.jc_fun_info_parameters
+  in
+
   (* global variables valid predicates *)
   let variables_valid_pred_apps = LTrue
 (* Yannick: commented out because not taken into account in effects
@@ -3484,7 +3533,7 @@ let tr_fun f funpos spec body acc =
   let internal_requires =
     List.fold_left
       (fun acc (_,v) ->
-         let req = get_valid_pred_app v in
+         let req = get_valid_pred_app  ~in_param:true v in
 	   make_and req acc)
       internal_requires f.jc_fun_info_parameters
   in
@@ -3743,6 +3792,13 @@ let tr_fun f funpos spec body acc =
     Param(false, id_no_loc newid, fun_type) :: acc
   in
 
+
+  (* restore assigned status for parameters assigned in the body *)
+
+  List.iter
+    (fun v -> v.jc_var_info_assigned <- true)
+    assigned_params;
+
   (* Function body *)
 
   match body with
@@ -3846,8 +3902,8 @@ let tr_fun f funpos spec body acc =
                    let normal_body = wrap_body f spec id body in
                    let newid = f.jc_fun_info_name ^ "_ensures_" ^ id in
                    let beh =
-                     if id="default" then "Default behavior" else
-		       "Normal behavior `"^id^"'"
+                     if id="default" then "default behavior" else
+		       "Behavior `"^id^"'"
                    in
                    reg_decl
                      ~out_mark:newid
@@ -3881,7 +3937,7 @@ let tr_fun f funpos spec body acc =
                           ~out_mark:newid
                           ~in_mark:f.jc_fun_info_name
                           ~name:("function " ^ f.jc_fun_info_name)
-                          ~beh:("Exceptional behavior `" ^ id ^ "'")
+                          ~beh:("Behavior `" ^ id ^ "'")
                           funpos;
                         Def(id_no_loc newid,
                             mk_expr (Fun(
@@ -3950,9 +4006,12 @@ let tr_specialized_fun n fname param_name_assoc acc =
       | LVar(id) ->
 	  let id = StringMap.find_or_default id id param_name_assoc in
 	  LVar id
-      | LVarAtLabel(id,l) ->
+      | LDeref(id) ->
 	  let id = StringMap.find_or_default id id param_name_assoc in
-	  LVarAtLabel(id,l)
+	  LDeref id
+      | LDerefAtLabel(id,l) ->
+	  let id = StringMap.find_or_default id id param_name_assoc in
+	  LDerefAtLabel(id,l)
       | Tnamed(n,t) -> Tnamed(n,modif_term t)
       | TIf(t1,t2,t3) ->
 	  TIf(modif_term t1,modif_term t2,modif_term t3)
@@ -4139,6 +4198,25 @@ let tr_enum_type ri (* to_int of_int *) acc =
                                      [LApp(logic_enum_of_int ri,
                                            [LVar "x"])]) ;
                                 LVar "x"]))))
+(*
+  :: Goal(KAxiom,id_no_loc (name^"_extensionality"),
+           LForall("x",lt, [],
+           LForall("y",lt, [ (* [LPatP(LPred(eq_of_enum ri,
+                                         [LVar "x"; LVar "y"]))] *) ],
+                   LImpl(LPred(eq_of_enum ri,[LVar "x"; LVar "y"]),
+                         LPred("eq",[LVar "x"; LVar "y"])
+                         ))))
+*)
+  :: Goal(KAxiom,id_no_loc (name^"_extensionality"),
+           LForall("x",lt, [],
+           LForall("y",lt, [ (* [LPatP(LPred("eq_int",
+                               [LApp(logic_int_of_enum ri, [LVar "x"]);
+                                LApp(logic_int_of_enum ri, [LVar "y"])]))] *)],
+                   LImpl(LPred("eq_int",
+                               [LApp(logic_int_of_enum ri, [LVar "x"]);
+                                LApp(logic_int_of_enum ri, [LVar "y"])]),
+                         LPred("eq",[LVar "x"; LVar "y"])
+                         ))))
   :: bv_conv
   @ acc
 
@@ -4229,20 +4307,27 @@ let tr_root rt acc =
             Param(false,id_no_loc (union_memory_name rt),
 		  Ref_type(Base_type mem)) :: acc
       in
+      let in_param = false in
 	(* Validity parameters *)
-	make_valid_pred ~equal:true ac pc
-	:: make_valid_pred ~equal:false ac pc
-	:: make_valid_pred ~equal:false ~right:false ac pc
-	:: make_valid_pred ~equal:false ~left:false ac pc
-        :: make_valid_pred ~equal:false (* TODO ? *) JCalloc_bitvector pc
+	make_valid_pred ~in_param ~equal:true ac pc
+	:: make_valid_pred ~in_param ~equal:false ac pc
+	:: make_valid_pred ~in_param ~equal:false ~right:false ac pc
+	:: make_valid_pred ~in_param ~equal:false ~left:false ac pc
+(*
+        :: make_valid_pred ~in_param ~equal:false (* TODO ? *) JCalloc_bitvector pc
+*)
 	  (* Allocation parameter *)
 	:: make_alloc_param ~check_size:true ac pc
 	:: make_alloc_param ~check_size:false ac pc
+(*
 	:: make_alloc_param ~check_size:true JCalloc_bitvector pc
 	:: make_alloc_param ~check_size:false JCalloc_bitvector pc
+*)
 	:: acc
     else
-      make_valid_pred ~equal:true ac pc :: make_valid_pred ~equal:false ac pc :: acc
+      make_valid_pred ~in_param:false ~equal:true ac pc
+      :: make_valid_pred ~in_param:false ~equal:false ac pc
+      :: acc
   in
   let of_ptr_addr =
     Logic(false, id_no_loc (of_pointer_address_name rt),

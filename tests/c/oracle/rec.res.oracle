@@ -1,4 +1,34 @@
 ========== file tests/c/rec.c ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
 
 //@ logic integer sum_upto(integer n) = n*(n+1) / 2;
 
@@ -13,7 +43,7 @@
   @*/
 long sum(int x) {
   if (x == 0) return 0;
-  else return x + g (x-1);
+  else return x + sum (x-1);
 }
 
 
@@ -41,11 +71,17 @@ int f91(int n) {
   else
     return n - 10;
 }
+
+/*
+Local Variables:
+compile-command: "make rec.why3ml"
+End:
+*/
+
+
 ========== frama-c -jessie execution ==========
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/rec.c"
 [jessie] Starting Jessie translation
-[kernel] warning: No code for function g, default assigns generated
-tests/c/rec.c:15:[jessie] warning: skipping all arguments of implicit prototype g
 [jessie] Producing Jessie files in subdir tests/c/rec.jessie
 [jessie] File tests/c/rec.jessie/rec.jc written.
 [jessie] File tests/c/rec.jessie/rec.cloc written.
@@ -84,12 +120,6 @@ lemma sum_rec :
 (\forall integer n_0;
   ((n_0 >= 0) ==> (sum_upto((n_0 + 1)) == ((sum_upto(n_0) + n_0) + 1))))
 
-int32 g()
-behavior default:
-  assigns \nothing;
-  ensures (C_1 : true);
-;
-
 int32 sum(int32 x)
   requires (C_12 : (x >= 0));
   requires (C_11 : (x <= 1000));
@@ -106,8 +136,8 @@ behavior default:
          
          (goto return_label)
       } else 
-      {  (C_5 : (tmp = (C_4 : g())));
-         (C_8 : (__retres = (C_7 : ((C_6 : (x + tmp)) :> int32))));
+      {  (C_4 : (tmp = (C_3 : sum((C_2 : ((C_1 : (x - 1)) :> int32))))));
+         (C_8 : (__retres = (C_7 : ((C_6 : ((C_5 : (x :> int32)) + tmp)) :> int32))));
          
          (goto return_label)
       });
@@ -166,177 +196,184 @@ behavior greater_than_100:
 [sum]
 name = "Function sum"
 file = "HOME/tests/c/rec.c"
-line = 13
+line = 43
 begin = 5
 end = 8
 
 [main]
 name = "Function main"
 file = "HOME/tests/c/rec.c"
-line = 21
+line = 51
 begin = 5
 end = 9
 
 [f91]
 name = "Function f91"
 file = "HOME/tests/c/rec.c"
-line = 36
+line = 66
 begin = 4
 end = 7
 
 [C_10]
 file = "HOME/tests/c/rec.c"
-line = 11
+line = 41
 begin = 12
 end = 34
 
 [C_11]
 file = "HOME/tests/c/rec.c"
-line = 9
+line = 39
 begin = 13
 end = 22
 
 [C_12]
 file = "HOME/tests/c/rec.c"
-line = 8
+line = 38
 begin = 13
 end = 19
 
 [C_13]
 file = "HOME/tests/c/rec.c"
-line = 10
+line = 40
 begin = 14
 end = 15
 
 [C_14]
 file = "HOME/tests/c/rec.c"
-line = 22
+line = 52
 begin = 11
 end = 17
 
 [C_15]
 file = "HOME/tests/c/rec.c"
-line = 22
+line = 52
 begin = 11
 end = 17
 
 [C_16]
 file = "HOME/tests/c/rec.c"
-line = 19
+line = 49
 begin = 12
 end = 25
 
 [C_17]
 file = "HOME/tests/c/rec.c"
-line = 41
+line = 71
 begin = 11
 end = 17
 
 [C_18]
 file = "HOME/tests/c/rec.c"
-line = 41
+line = 71
 begin = 11
 end = 17
 
 [C_19]
 file = "HOME/tests/c/rec.c"
-line = 41
+line = 71
 begin = 4
 end = 18
 
 [C_1]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/rec.c"
+line = 45
+begin = 23
+end = 26
 
 [C_2]
 file = "HOME/tests/c/rec.c"
-line = 15
-begin = 21
-end = 24
+line = 45
+begin = 23
+end = 26
 
 [C_3]
 file = "HOME/tests/c/rec.c"
-line = 15
-begin = 21
-end = 24
+line = 45
+begin = 18
+end = 27
 
 [C_4]
 file = "HOME/tests/c/rec.c"
-line = 15
+line = 45
 begin = 18
-end = 25
+end = 27
+
+[sum_rec]
+name = "Lemma sum_rec"
+file = "HOME/tests/c/rec.c"
+line = 34
+begin = 4
+end = 89
 
 [C_20]
 file = "HOME/tests/c/rec.c"
-line = 38
+line = 68
 begin = 19
 end = 25
 
 [C_5]
 file = "HOME/tests/c/rec.c"
-line = 15
-begin = 18
-end = 25
+line = 45
+begin = 14
+end = 15
 
 [C_21]
 file = "HOME/tests/c/rec.c"
-line = 38
+line = 68
 begin = 19
 end = 25
 
 [C_6]
 file = "HOME/tests/c/rec.c"
-line = 15
+line = 45
 begin = 14
-end = 25
+end = 27
 
 [C_22]
 file = "HOME/tests/c/rec.c"
-line = 38
+line = 68
 begin = 15
 end = 26
 
 [C_7]
 file = "HOME/tests/c/rec.c"
-line = 15
+line = 45
 begin = 14
-end = 25
+end = 27
 
 [C_23]
 file = "HOME/tests/c/rec.c"
-line = 38
+line = 68
 begin = 15
 end = 26
 
 [C_8]
 file = "HOME/tests/c/rec.c"
-line = 15
+line = 45
 begin = 7
-end = 26
+end = 28
 
 [C_24]
 file = "HOME/tests/c/rec.c"
-line = 38
+line = 68
 begin = 11
 end = 27
 
 [C_9]
 file = "HOME/tests/c/rec.c"
-line = 14
+line = 44
 begin = 14
 end = 23
 
 [C_25]
 file = "HOME/tests/c/rec.c"
-line = 38
+line = 68
 begin = 11
 end = 27
 
 [C_26]
 file = "HOME/tests/c/rec.c"
-line = 38
+line = 68
 begin = 4
 end = 28
 
@@ -348,19 +385,19 @@ end = -1
 
 [C_28]
 file = "HOME/tests/c/rec.c"
-line = 31
+line = 61
 begin = 14
 end = 27
 
 [C_29]
 file = "HOME/tests/c/rec.c"
-line = 34
+line = 64
 begin = 14
 end = 31
 
 [C_30]
 file = "HOME/tests/c/rec.c"
-line = 28
+line = 58
 begin = 14
 end = 19
 
@@ -383,10 +420,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs rec.l
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs rec.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/rec_why.sx
 
@@ -446,6 +484,13 @@ simplify: simplify/rec_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/rec_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/rec_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -519,6 +564,9 @@ why/%_why3.why: why/%.why
 why3ide: why/rec_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: rec.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include rec.depend
 
 depend: coq/rec_why.v
@@ -530,91 +578,93 @@ clean:
 ========== file tests/c/rec.jessie/rec.loc ==========
 [main_ensures_default]
 name = "Function main"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/rec.c"
-line = 21
+line = 51
 begin = 5
 end = 9
 
 [JC_40]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/rec.c"
+line = 64
+begin = 14
+end = 31
 
 [JC_41]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/rec.c"
+line = 64
+begin = 14
+end = 31
 
 [JC_42]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_43]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_44]
-file = "HOME/tests/c/rec.c"
-line = 31
-begin = 14
-end = 27
-
-[JC_45]
-file = "HOME/tests/c/rec.c"
-line = 31
-begin = 14
-end = 27
-
-[JC_46]
-file = "HOME/tests/c/rec.c"
-line = 34
-begin = 14
-end = 31
-
-[JC_1]
-file = "HOME/tests/c/rec.jessie/rec.jc"
-line = 35
-begin = 6
-end = 7
-
-[JC_47]
-file = "HOME/tests/c/rec.c"
-line = 34
-begin = 14
-end = 31
-
-[JC_2]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_48]
 kind = ArithOverflow
 file = "HOME/tests/c/rec.c"
-line = 38
+line = 68
 begin = 19
 end = 25
 
-[JC_3]
-file = "HOME/tests/c/rec.jessie/rec.jc"
-line = 35
-begin = 6
-end = 7
-
-[JC_49]
+[JC_43]
 kind = UserCall
 file = "HOME/tests/c/rec.c"
-line = 38
+line = 68
 begin = 15
 end = 26
+
+[JC_44]
+file = "HOME/tests/c/rec.c"
+line = 58
+begin = 14
+end = 19
+
+[JC_45]
+file = "HOME/tests/c/rec.c"
+line = 58
+begin = 14
+end = 19
+
+[JC_46]
+kind = VarDecr
+file = "HOME/tests/c/rec.c"
+line = 68
+begin = 15
+end = 26
+
+[JC_1]
+file = "HOME/tests/c/rec.c"
+line = 38
+begin = 13
+end = 19
+
+[JC_47]
+kind = UserCall
+file = "HOME/tests/c/rec.c"
+line = 68
+begin = 11
+end = 27
+
+[JC_2]
+file = "HOME/tests/c/rec.c"
+line = 39
+begin = 13
+end = 22
+
+[JC_48]
+file = "HOME/tests/c/rec.c"
+line = 58
+begin = 14
+end = 19
+
+[JC_3]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_49]
+file = "HOME/tests/c/rec.c"
+line = 58
+begin = 14
+end = 19
 
 [JC_4]
 file = "HOME/"
@@ -623,16 +673,16 @@ begin = -1
 end = -1
 
 [JC_5]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/rec.c"
+line = 38
+begin = 13
+end = 19
 
 [JC_6]
-file = "HOME/tests/c/rec.jessie/rec.jc"
-line = 37
-begin = 10
-end = 18
+file = "HOME/tests/c/rec.c"
+line = 39
+begin = 13
+end = 22
 
 [JC_7]
 file = "HOME/"
@@ -641,80 +691,70 @@ begin = -1
 end = -1
 
 [JC_8]
-file = "HOME/tests/c/rec.jessie/rec.jc"
-line = 37
-begin = 10
-end = 18
-
-[JC_9]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
+[JC_9]
+file = "HOME/tests/c/rec.c"
+line = 41
+begin = 12
+end = 34
+
 [JC_50]
-file = "HOME/tests/c/rec.c"
-line = 28
-begin = 14
-end = 19
-
-[JC_51]
-file = "HOME/tests/c/rec.c"
-line = 28
-begin = 14
-end = 19
-
-[JC_52]
 kind = VarDecr
 file = "HOME/tests/c/rec.c"
-line = 38
+line = 68
+begin = 11
+end = 27
+
+[JC_51]
+kind = ArithOverflow
+file = "HOME/tests/c/rec.c"
+line = 71
+begin = 11
+end = 17
+
+[JC_52]
+kind = UserCall
+file = "HOME/tests/c/rec.c"
+line = 68
 begin = 15
 end = 26
 
 [JC_53]
 kind = UserCall
 file = "HOME/tests/c/rec.c"
-line = 38
+line = 68
 begin = 11
 end = 27
 
 [JC_54]
-file = "HOME/tests/c/rec.c"
-line = 28
-begin = 14
-end = 19
-
-[JC_55]
-file = "HOME/tests/c/rec.c"
-line = 28
-begin = 14
-end = 19
-
-[JC_56]
-kind = VarDecr
-file = "HOME/tests/c/rec.c"
-line = 38
-begin = 11
-end = 27
-
-[JC_57]
-kind = ArithOverflow
-file = "HOME/tests/c/rec.c"
-line = 41
-begin = 11
-end = 17
-
-[JC_58]
 kind = UserCall
 file = "HOME/tests/c/rec.c"
-line = 38
+line = 68
 begin = 15
 end = 26
 
-[JC_59]
+[JC_55]
 kind = UserCall
 file = "HOME/tests/c/rec.c"
-line = 38
+line = 68
+begin = 11
+end = 27
+
+[JC_56]
+kind = UserCall
+file = "HOME/tests/c/rec.c"
+line = 68
+begin = 15
+end = 26
+
+[JC_57]
+kind = UserCall
+file = "HOME/tests/c/rec.c"
+line = 68
 begin = 11
 end = 27
 
@@ -722,127 +762,104 @@ end = 27
 name = "Function f91"
 behavior = "Safety"
 file = "HOME/tests/c/rec.c"
-line = 36
+line = 66
 begin = 4
 end = 7
 
 [f91_ensures_greater_than_100]
 name = "Function f91"
-behavior = "Normal behavior `greater_than_100'"
+behavior = "Behavior `greater_than_100'"
 file = "HOME/tests/c/rec.c"
-line = 36
+line = 66
 begin = 4
 end = 7
 
-[JC_60]
-kind = UserCall
-file = "HOME/tests/c/rec.c"
-line = 38
-begin = 15
-end = 26
-
-[JC_61]
-kind = UserCall
-file = "HOME/tests/c/rec.c"
-line = 38
-begin = 11
-end = 27
-
-[JC_62]
-kind = UserCall
-file = "HOME/tests/c/rec.c"
-line = 38
-begin = 15
-end = 26
-
 [JC_10]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_63]
-kind = UserCall
 file = "HOME/tests/c/rec.c"
-line = 38
-begin = 11
-end = 27
-
-[JC_11]
-file = "HOME/tests/c/rec.c"
-line = 8
-begin = 13
-end = 19
-
-[JC_12]
-file = "HOME/tests/c/rec.c"
-line = 9
-begin = 13
-end = 22
-
-[JC_13]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_14]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[sum_rec]
-name = "sum_rec"
-behavior = "lemma"
-file = "HOME/tests/c/rec.jessie/rec.jc"
-line = 31
-begin = 0
-end = 110
-
-[JC_15]
-file = "HOME/tests/c/rec.c"
-line = 8
-begin = 13
-end = 19
-
-[JC_16]
-file = "HOME/tests/c/rec.c"
-line = 9
-begin = 13
-end = 22
-
-[JC_17]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_18]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_19]
-file = "HOME/tests/c/rec.c"
-line = 11
+line = 41
 begin = 12
 end = 34
 
+[JC_11]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_12]
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
+
+[JC_13]
+kind = ArithOverflow
+file = "HOME/tests/c/rec.c"
+line = 45
+begin = 23
+end = 26
+
+[JC_14]
+kind = UserCall
+file = "HOME/tests/c/rec.c"
+line = 45
+begin = 18
+end = 27
+
+[sum_rec]
+name = "Lemma sum_rec"
+behavior = "lemma"
+file = "HOME/tests/c/rec.c"
+line = 34
+begin = 4
+end = 89
+
+[JC_15]
+file = "HOME/tests/c/rec.c"
+line = 40
+begin = 14
+end = 15
+
+[JC_16]
+file = "HOME/tests/c/rec.c"
+line = 40
+begin = 14
+end = 15
+
+[JC_17]
+kind = VarDecr
+file = "HOME/tests/c/rec.c"
+line = 45
+begin = 18
+end = 27
+
+[JC_18]
+kind = ArithOverflow
+file = "HOME/tests/c/rec.c"
+line = 45
+begin = 14
+end = 27
+
+[JC_19]
+kind = UserCall
+file = "HOME/tests/c/rec.c"
+line = 45
+begin = 18
+end = 27
+
 [f91_ensures_default]
 name = "Function f91"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/rec.c"
-line = 36
+line = 66
 begin = 4
 end = 7
 
 [JC_20]
 file = "HOME/tests/c/rec.c"
-line = 11
-begin = 12
-end = 34
+line = 51
+begin = 5
+end = 9
 
 [JC_21]
 file = "HOME/"
@@ -850,46 +867,43 @@ line = 0
 begin = -1
 end = -1
 
+[JC_22]
+file = "HOME/tests/c/rec.c"
+line = 51
+begin = 5
+end = 9
+
 [sum_safety]
 name = "Function sum"
 behavior = "Safety"
 file = "HOME/tests/c/rec.c"
-line = 13
+line = 43
 begin = 5
 end = 8
 
-[JC_22]
+[JC_23]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_23]
-kind = UserCall
-file = "HOME/tests/c/rec.c"
-line = 15
-begin = 18
-end = 25
-
 [JC_24]
-kind = ArithOverflow
 file = "HOME/tests/c/rec.c"
-line = 15
-begin = 14
+line = 49
+begin = 12
 end = 25
 
 [JC_25]
-kind = UserCall
 file = "HOME/tests/c/rec.c"
-line = 15
-begin = 18
+line = 49
+begin = 12
 end = 25
 
 [JC_26]
-file = "HOME/tests/c/rec.c"
-line = 21
-begin = 5
-end = 9
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_27]
 file = "HOME/"
@@ -898,42 +912,44 @@ begin = -1
 end = -1
 
 [JC_28]
+kind = UserCall
 file = "HOME/tests/c/rec.c"
-line = 21
-begin = 5
-end = 9
+line = 52
+begin = 11
+end = 17
 
 [JC_29]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+kind = UserCall
+file = "HOME/tests/c/rec.c"
+line = 52
+begin = 11
+end = 17
 
 [f91_ensures_less_than_101]
 name = "Function f91"
-behavior = "Normal behavior `less_than_101'"
+behavior = "Behavior `less_than_101'"
 file = "HOME/tests/c/rec.c"
-line = 36
+line = 66
 begin = 4
 end = 7
 
 [JC_30]
 file = "HOME/tests/c/rec.c"
-line = 19
-begin = 12
-end = 25
+line = 66
+begin = 4
+end = 7
 
 [JC_31]
-file = "HOME/tests/c/rec.c"
-line = 19
-begin = 12
-end = 25
-
-[JC_32]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[JC_32]
+file = "HOME/tests/c/rec.c"
+line = 66
+begin = 4
+end = 7
 
 [JC_33]
 file = "HOME/"
@@ -942,32 +958,30 @@ begin = -1
 end = -1
 
 [JC_34]
-kind = UserCall
-file = "HOME/tests/c/rec.c"
-line = 22
-begin = 11
-end = 17
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_35]
-kind = UserCall
-file = "HOME/tests/c/rec.c"
-line = 22
-begin = 11
-end = 17
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [main_safety]
 name = "Function main"
 behavior = "Safety"
 file = "HOME/tests/c/rec.c"
-line = 21
+line = 51
 begin = 5
 end = 9
 
 [JC_36]
-file = "HOME/tests/c/rec.c"
-line = 36
-begin = 4
-end = 7
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_37]
 file = "HOME/"
@@ -977,21 +991,21 @@ end = -1
 
 [JC_38]
 file = "HOME/tests/c/rec.c"
-line = 36
-begin = 4
-end = 7
+line = 61
+begin = 14
+end = 27
 
 [JC_39]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/rec.c"
+line = 61
+begin = 14
+end = 27
 
 [sum_ensures_default]
 name = "Function sum"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/rec.c"
-line = 13
+line = 43
 begin = 5
 end = 8
 
@@ -1005,12 +1019,6 @@ type int8
 type padding
 
 type voidP
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
 
 logic charP_tag:  -> charP tag_id
 
@@ -1045,6 +1053,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -1056,6 +1069,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -1108,16 +1126,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
 function sum_upto(n:int) : int =
  computer_div(mul_int(n, add_int(n, (1))), (2))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -1155,44 +1163,14 @@ axiom voidP_tags :
 lemma sum_rec :
  (forall n_0_0:int.
   (ge_int(n_0_0, (0)) ->
-   eq_int(sum_upto(add_int(n_0_0, (1))),
-   add_int(add_int(sum_upto(n_0_0), n_0_0), (1)))))
+   (sum_upto(add_int(n_0_0, (1))) = add_int(add_int(sum_upto(n_0_0), n_0_0),
+                                    (1)))))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -1253,24 +1231,20 @@ parameter any_int8 : unit -> { } int8 { true }
 parameter f91 :
  n_0:int32 ->
   { } int32
-  { ((ge_int(integer_of_int32(n_0@), (101)) ->
-      (JC_47:
-      eq_int(integer_of_int32(result), sub_int(integer_of_int32(n_0@), (10)))))
-    and (le_int(integer_of_int32(n_0@), (100)) ->
-         (JC_45: eq_int(integer_of_int32(result), (91))))) }
+  { ((ge_int(integer_of_int32(n_0), (101)) ->
+      (JC_41:
+      (integer_of_int32(result) = sub_int(integer_of_int32(n_0), (10)))))
+    and (le_int(integer_of_int32(n_0), (100)) ->
+         (JC_39: (integer_of_int32(result) = (91))))) }
 
 parameter f91_requires :
  n_0:int32 ->
   { } int32
-  { ((ge_int(integer_of_int32(n_0@), (101)) ->
-      (JC_47:
-      eq_int(integer_of_int32(result), sub_int(integer_of_int32(n_0@), (10)))))
-    and (le_int(integer_of_int32(n_0@), (100)) ->
-         (JC_45: eq_int(integer_of_int32(result), (91))))) }
-
-parameter g : tt:unit -> { } int32 { true }
-
-parameter g_requires : tt:unit -> { } int32 { true }
+  { ((ge_int(integer_of_int32(n_0), (101)) ->
+      (JC_41:
+      (integer_of_int32(result) = sub_int(integer_of_int32(n_0), (10)))))
+    and (le_int(integer_of_int32(n_0), (100)) ->
+         (JC_39: (integer_of_int32(result) = (91))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1283,10 +1257,10 @@ parameter int8_of_integer_ :
   { eq_int(integer_of_int8(result), x) }
 
 parameter main :
- tt:unit -> { } int32 { (JC_31: eq_int(integer_of_int32(result), (36))) }
+ tt:unit -> { } int32 { (JC_25: (integer_of_int32(result) = (36))) }
 
 parameter main_requires :
- tt:unit -> { } int32 { (JC_31: eq_int(integer_of_int32(result), (36))) }
+ tt:unit -> { } int32 { (JC_25: (integer_of_int32(result) = (36))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -1297,21 +1271,19 @@ parameter safe_int8_of_integer_ :
 parameter sum :
  x_0:int32 ->
   { } int32
-  { (JC_20:
-    eq_int(integer_of_int32(result), sum_upto(integer_of_int32(x_0@)))) }
+  { (JC_10: (integer_of_int32(result) = sum_upto(integer_of_int32(x_0)))) }
 
 parameter sum_requires :
  x_0:int32 ->
-  { (JC_13:
-    ((JC_11: ge_int(integer_of_int32(x_0), (0)))
-    and (JC_12: le_int(integer_of_int32(x_0), (1000)))))}
+  { (JC_3:
+    ((JC_1: ge_int(integer_of_int32(x_0), (0)))
+    and (JC_2: le_int(integer_of_int32(x_0), (1000)))))}
   int32
-  { (JC_20:
-    eq_int(integer_of_int32(result), sum_upto(integer_of_int32(x_0@)))) }
+  { (JC_10: (integer_of_int32(result) = sum_upto(integer_of_int32(x_0)))) }
 
 let f91_ensures_default =
  fun (n_0 : int32) ->
-  { (JC_39: true) }
+  { (JC_33: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1320,11 +1292,9 @@ let f91_ensures_default =
      (let tmp_0_0 = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       begin
         (if ((le_int_ (integer_of_int32 n_0)) (100))
         then
-         (let jessie_<num> =
          (C_26:
          begin
            (let jessie_<num> =
@@ -1337,25 +1307,23 @@ let f91_ensures_default =
                        (C_21:
                        (safe_int32_of_integer_ (C_20:
                                                ((add_int (integer_of_int32 n_0)) (11))))) in
-                       (JC_58: (f91 jessie_<num>))))) in void);
+                       (JC_52: (f91 jessie_<num>))))) in void);
             (tmp_0_0 := (C_24:
-                        (let jessie_<num> = !tmp_0 in (JC_59: (f91 jessie_<num>)))));
+                        (let jessie_<num> = !tmp_0 in (JC_53: (f91 jessie_<num>)))));
             !tmp_0_0 end)) in void);
           (let jessie_<num> = (__retres_0 := !tmp_0_0) in void);
-          (raise (Return_label_exc void)) end) in void)
+          (raise (Return_label_exc void)) end)
         else
-         (let jessie_<num> =
          (C_19:
          begin
            (let jessie_<num> =
            (__retres_0 := (C_18:
                           (safe_int32_of_integer_ (C_17:
                                                   ((sub_int (integer_of_int32 n_0)) (10)))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<num> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end)));
-    absurd  end with Return -> !return end)) { (JC_40: true) }
+    absurd  end with Return -> !return end)) { (JC_34: true) }
 
 let f91_ensures_greater_than_100 =
  fun (n_0 : int32) ->
@@ -1368,11 +1336,9 @@ let f91_ensures_greater_than_100 =
      (let tmp_0_0 = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       begin
         (if ((le_int_ (integer_of_int32 n_0)) (100))
         then
-         (let jessie_<num> =
          (C_26:
          begin
            (let jessie_<num> =
@@ -1385,27 +1351,25 @@ let f91_ensures_greater_than_100 =
                        (C_21:
                        (safe_int32_of_integer_ (C_20:
                                                ((add_int (integer_of_int32 n_0)) (11))))) in
-                       (JC_62: (f91 jessie_<num>))))) in void);
+                       (JC_56: (f91 jessie_<num>))))) in void);
             (tmp_0_0 := (C_24:
-                        (let jessie_<num> = !tmp_0 in (JC_63: (f91 jessie_<num>)))));
+                        (let jessie_<num> = !tmp_0 in (JC_57: (f91 jessie_<num>)))));
             !tmp_0_0 end)) in void);
           (let jessie_<num> = (__retres_0 := !tmp_0_0) in void);
-          (raise (Return_label_exc void)) end) in void)
+          (raise (Return_label_exc void)) end)
         else
-         (let jessie_<num> =
          (C_19:
          begin
            (let jessie_<num> =
            (__retres_0 := (C_18:
                           (safe_int32_of_integer_ (C_17:
                                                   ((sub_int (integer_of_int32 n_0)) (10)))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<num> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end)));
     absurd  end with Return -> !return end))
-  { (JC_46:
-    eq_int(integer_of_int32(result), sub_int(integer_of_int32(n_0@), (10)))) }
+  { (JC_40:
+    (integer_of_int32(result) = sub_int(integer_of_int32(n_0), (10)))) }
 
 let f91_ensures_less_than_101 =
  fun (n_0 : int32) ->
@@ -1418,11 +1382,9 @@ let f91_ensures_less_than_101 =
      (let tmp_0_0 = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       begin
         (if ((le_int_ (integer_of_int32 n_0)) (100))
         then
-         (let jessie_<num> =
          (C_26:
          begin
            (let jessie_<num> =
@@ -1435,30 +1397,28 @@ let f91_ensures_less_than_101 =
                        (C_21:
                        (safe_int32_of_integer_ (C_20:
                                                ((add_int (integer_of_int32 n_0)) (11))))) in
-                       (JC_60: (f91 jessie_<num>))))) in void);
+                       (JC_54: (f91 jessie_<num>))))) in void);
             (tmp_0_0 := (C_24:
-                        (let jessie_<num> = !tmp_0 in (JC_61: (f91 jessie_<num>)))));
+                        (let jessie_<num> = !tmp_0 in (JC_55: (f91 jessie_<num>)))));
             !tmp_0_0 end)) in void);
           (let jessie_<num> = (__retres_0 := !tmp_0_0) in void);
-          (raise (Return_label_exc void)) end) in void)
+          (raise (Return_label_exc void)) end)
         else
-         (let jessie_<num> =
          (C_19:
          begin
            (let jessie_<num> =
            (__retres_0 := (C_18:
                           (safe_int32_of_integer_ (C_17:
                                                   ((sub_int (integer_of_int32 n_0)) (10)))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<num> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end)));
     absurd  end with Return -> !return end))
-  { (JC_44: eq_int(integer_of_int32(result), (91))) }
+  { (JC_38: (integer_of_int32(result) = (91))) }
 
 let f91_safety =
  fun (n_0 : int32) ->
-  { (JC_39: true) }
+  { (JC_33: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1467,11 +1427,9 @@ let f91_safety =
      (let tmp_0_0 = ref (any_int32 void) in
      (let __retres_0 = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       begin
         (if ((le_int_ (integer_of_int32 n_0)) (100))
         then
-         (let jessie_<num> =
          (C_26:
          begin
            (let jessie_<num> =
@@ -1482,43 +1440,41 @@ let f91_safety =
              (tmp_0 := (C_22:
                        (let jessie_<num> =
                        (C_21:
-                       (JC_48:
+                       (JC_42:
                        (int32_of_integer_ (C_20:
                                           ((add_int (integer_of_int32 n_0)) (11)))))) in
-                       (JC_52:
+                       (JC_46:
                        (check
-                       { zwf_zero((JC_51 : sub_int((101),
+                       { zwf_zero((JC_45 : sub_int((101),
                                            integer_of_int32(jessie_<num>))),
-                         (JC_50 : sub_int((101), integer_of_int32(n_0)))) };
-                       (JC_49: (f91_requires jessie_<num>))))))) in void);
+                         (JC_44 : sub_int((101), integer_of_int32(n_0)))) };
+                       (JC_43: (f91_requires jessie_<num>))))))) in void);
             (tmp_0_0 := (C_24:
                         (let jessie_<num> = !tmp_0 in
-                        (JC_56:
+                        (JC_50:
                         (check
-                        { zwf_zero((JC_55 : sub_int((101),
+                        { zwf_zero((JC_49 : sub_int((101),
                                             integer_of_int32(jessie_<num>))),
-                          (JC_54 : sub_int((101), integer_of_int32(n_0)))) };
-                        (JC_53: (f91_requires jessie_<num>))))))); !tmp_0_0 end)) in
+                          (JC_48 : sub_int((101), integer_of_int32(n_0)))) };
+                        (JC_47: (f91_requires jessie_<num>))))))); !tmp_0_0 end)) in
            void); (let jessie_<num> = (__retres_0 := !tmp_0_0) in void);
-          (raise (Return_label_exc void)) end) in void)
+          (raise (Return_label_exc void)) end)
         else
-         (let jessie_<num> =
          (C_19:
          begin
            (let jessie_<num> =
            (__retres_0 := (C_18:
-                          (JC_57:
+                          (JC_51:
                           (int32_of_integer_ (C_17:
                                              ((sub_int (integer_of_int32 n_0)) (10))))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<num> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { true }
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { (JC_29: true) }
+  { (JC_23: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1529,13 +1485,13 @@ let main_ensures_default =
        (let jessie_<num> =
        (i := (C_14:
              (let jessie_<num> = (safe_int32_of_integer_ (8)) in
-             (JC_35: (sum jessie_<num>))))) in void); (return := !i);
+             (JC_29: (sum jessie_<num>))))) in void); (return := !i);
       (raise Return) end)); absurd  end with Return -> !return end))
-  { (JC_30: eq_int(integer_of_int32(result), (36))) }
+  { (JC_24: (integer_of_int32(result) = (36))) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_29: true) }
+  { (JC_23: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1546,15 +1502,15 @@ let main_safety =
        (let jessie_<num> =
        (i := (C_14:
              (let jessie_<num> = (safe_int32_of_integer_ (8)) in
-             (JC_34: (sum_requires jessie_<num>))))) in void); (return := !i);
+             (JC_28: (sum_requires jessie_<num>))))) in void); (return := !i);
       (raise Return) end)); absurd  end with Return -> !return end)) 
   { true }
 
 let sum_ensures_default =
  fun (x_0 : int32) ->
-  { (JC_17:
-    ((JC_15: ge_int(integer_of_int32(x_0), (0)))
-    and (JC_16: le_int(integer_of_int32(x_0), (1000))))) }
+  { (JC_7:
+    ((JC_5: ge_int(integer_of_int32(x_0), (0)))
+    and (JC_6: le_int(integer_of_int32(x_0), (1000))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1562,39 +1518,41 @@ let sum_ensures_default =
      (let tmp = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       begin
         (if ((eq_int_ (integer_of_int32 x_0)) (0))
         then
-         (let jessie_<num> =
          (C_9:
          begin
            (let jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<num> =
-         (C_5:
+         (C_4:
          (C_8:
          begin
-           (let jessie_<num> = (tmp := (C_4: (JC_25: (g void)))) in void);
+           (let jessie_<num> =
+           (tmp := (C_3:
+                   (let jessie_<num> =
+                   (C_2:
+                   (safe_int32_of_integer_ (C_1:
+                                           ((sub_int (integer_of_int32 x_0)) (1))))) in
+                   (JC_19: (sum jessie_<num>))))) in void);
           (let jessie_<num> =
           (__retres := (C_7:
                        (safe_int32_of_integer_ (C_6:
-                                               ((add_int (integer_of_int32 x_0)) 
+                                               ((add_int (integer_of_int32 
+                                                          (C_5: x_0))) 
                                                 (integer_of_int32 !tmp)))))) in
-          void); (raise (Return_label_exc void)) end)) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<num> ->
+          void); (raise (Return_label_exc void)) end)));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
-  { (JC_19:
-    eq_int(integer_of_int32(result), sum_upto(integer_of_int32(x_0@)))) }
+  { (JC_9: (integer_of_int32(result) = sum_upto(integer_of_int32(x_0)))) }
 
 let sum_safety =
  fun (x_0 : int32) ->
-  { (JC_17:
-    ((JC_15: ge_int(integer_of_int32(x_0), (0)))
-    and (JC_16: le_int(integer_of_int32(x_0), (1000))))) }
+  { (JC_7:
+    ((JC_5: ge_int(integer_of_int32(x_0), (0)))
+    and (JC_6: le_int(integer_of_int32(x_0), (1000))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1602,31 +1560,37 @@ let sum_safety =
      (let tmp = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<num> =
       begin
         (if ((eq_int_ (integer_of_int32 x_0)) (0))
         then
-         (let jessie_<num> =
          (C_9:
          begin
            (let jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<num> =
-         (C_5:
+         (C_4:
          (C_8:
          begin
-           (let jessie_<num> = (tmp := (C_4: (JC_23: (g_requires void)))) in
-           void);
+           (let jessie_<num> =
+           (tmp := (C_3:
+                   (let jessie_<num> =
+                   (C_2:
+                   (JC_13:
+                   (int32_of_integer_ (C_1:
+                                      ((sub_int (integer_of_int32 x_0)) (1)))))) in
+                   (JC_17:
+                   (check
+                   { zwf_zero(integer_of_int32((JC_16 : jessie_<num>)),
+                     integer_of_int32((JC_15 : x_0))) };
+                   (JC_14: (sum_requires jessie_<num>))))))) in void);
           (let jessie_<num> =
           (__retres := (C_7:
-                       (JC_24:
+                       (JC_18:
                        (int32_of_integer_ (C_6:
-                                          ((add_int (integer_of_int32 x_0)) 
-                                           (integer_of_int32 !tmp))))))) in
-          void); (raise (Return_label_exc void)) end)) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<num> ->
+                                          ((add_int (integer_of_int32 
+                                                     (C_5: x_0))) (integer_of_int32 !tmp))))))) in
+          void); (raise (Return_label_exc void)) end)));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
 
@@ -2607,6 +2571,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -2618,6 +2587,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2668,16 +2641,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
    p) = b))
 
 function sum_upto(n: int) : int = computer_div((n * (n + 1)), 2)
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -2732,23 +2695,23 @@ goal f91_ensures_greater_than_100_po_1:
   (integer_of_int32(result) = (integer_of_int32(n_0) + 11)) ->
   forall result0:int32.
   (((integer_of_int32(result) >= 101) ->
-    ("JC_47": (integer_of_int32(result0) = (integer_of_int32(result) - 10)))) and
+    ("JC_41": (integer_of_int32(result0) = (integer_of_int32(result) - 10)))) and
    ((integer_of_int32(result) <= 100) ->
-    ("JC_45": (integer_of_int32(result0) = 91)))) ->
+    ("JC_39": (integer_of_int32(result0) = 91)))) ->
   forall tmp_0:int32.
   (tmp_0 = result0) ->
   forall result1:int32.
   (((integer_of_int32(tmp_0) >= 101) ->
-    ("JC_47": (integer_of_int32(result1) = (integer_of_int32(tmp_0) - 10)))) and
+    ("JC_41": (integer_of_int32(result1) = (integer_of_int32(tmp_0) - 10)))) and
    ((integer_of_int32(tmp_0) <= 100) ->
-    ("JC_45": (integer_of_int32(result1) = 91)))) ->
+    ("JC_39": (integer_of_int32(result1) = 91)))) ->
   forall tmp_0_0:int32.
   (tmp_0_0 = result1) ->
   forall __retres_0:int32.
   (__retres_0 = tmp_0_0) ->
   forall return:int32.
   (return = __retres_0) ->
-  ("JC_46": (integer_of_int32(return) = (integer_of_int32(n_0) - 10)))
+  ("JC_40": (integer_of_int32(return) = (integer_of_int32(n_0) - 10)))
 
 goal f91_ensures_greater_than_100_po_2:
   forall n_0:int32.
@@ -2760,7 +2723,7 @@ goal f91_ensures_greater_than_100_po_2:
   (__retres_0 = result) ->
   forall return:int32.
   (return = __retres_0) ->
-  ("JC_46": (integer_of_int32(return) = (integer_of_int32(n_0) - 10)))
+  ("JC_40": (integer_of_int32(return) = (integer_of_int32(n_0) - 10)))
 
 goal f91_ensures_less_than_101_po_1:
   forall n_0:int32.
@@ -2770,23 +2733,23 @@ goal f91_ensures_less_than_101_po_1:
   (integer_of_int32(result) = (integer_of_int32(n_0) + 11)) ->
   forall result0:int32.
   (((integer_of_int32(result) >= 101) ->
-    ("JC_47": (integer_of_int32(result0) = (integer_of_int32(result) - 10)))) and
+    ("JC_41": (integer_of_int32(result0) = (integer_of_int32(result) - 10)))) and
    ((integer_of_int32(result) <= 100) ->
-    ("JC_45": (integer_of_int32(result0) = 91)))) ->
+    ("JC_39": (integer_of_int32(result0) = 91)))) ->
   forall tmp_0:int32.
   (tmp_0 = result0) ->
   forall result1:int32.
   (((integer_of_int32(tmp_0) >= 101) ->
-    ("JC_47": (integer_of_int32(result1) = (integer_of_int32(tmp_0) - 10)))) and
+    ("JC_41": (integer_of_int32(result1) = (integer_of_int32(tmp_0) - 10)))) and
    ((integer_of_int32(tmp_0) <= 100) ->
-    ("JC_45": (integer_of_int32(result1) = 91)))) ->
+    ("JC_39": (integer_of_int32(result1) = 91)))) ->
   forall tmp_0_0:int32.
   (tmp_0_0 = result1) ->
   forall __retres_0:int32.
   (__retres_0 = tmp_0_0) ->
   forall return:int32.
   (return = __retres_0) ->
-  ("JC_44": (integer_of_int32(return) = 91))
+  ("JC_38": (integer_of_int32(return) = 91))
 
 goal f91_ensures_less_than_101_po_2:
   forall n_0:int32.
@@ -2798,44 +2761,44 @@ goal f91_ensures_less_than_101_po_2:
   (__retres_0 = result) ->
   forall return:int32.
   (return = __retres_0) ->
-  ("JC_44": (integer_of_int32(return) = 91))
+  ("JC_38": (integer_of_int32(return) = 91))
 
 goal f91_safety_po_1:
   forall n_0:int32.
-  ("JC_39": true) ->
+  ("JC_33": true) ->
   (integer_of_int32(n_0) <= 100) ->
   ((-2147483648) <= (integer_of_int32(n_0) + 11))
 
 goal f91_safety_po_2:
   forall n_0:int32.
-  ("JC_39": true) ->
+  ("JC_33": true) ->
   (integer_of_int32(n_0) <= 100) ->
   ((integer_of_int32(n_0) + 11) <= 2147483647)
 
 goal f91_safety_po_3:
   forall n_0:int32.
-  ("JC_39": true) ->
+  ("JC_33": true) ->
   (integer_of_int32(n_0) <= 100) ->
   (((-2147483648) <= (integer_of_int32(n_0) + 11)) and
    ((integer_of_int32(n_0) + 11) <= 2147483647)) ->
   forall result:int32.
   (integer_of_int32(result) = (integer_of_int32(n_0) + 11)) ->
-  (0 <= ("JC_50": (101 - integer_of_int32(n_0))))
+  (0 <= ("JC_44": (101 - integer_of_int32(n_0))))
 
 goal f91_safety_po_4:
   forall n_0:int32.
-  ("JC_39": true) ->
+  ("JC_33": true) ->
   (integer_of_int32(n_0) <= 100) ->
   (((-2147483648) <= (integer_of_int32(n_0) + 11)) and
    ((integer_of_int32(n_0) + 11) <= 2147483647)) ->
   forall result:int32.
   (integer_of_int32(result) = (integer_of_int32(n_0) + 11)) ->
-  (("JC_51": (101 - integer_of_int32(result))) < ("JC_50":
+  (("JC_45": (101 - integer_of_int32(result))) < ("JC_44":
                                                  (101 - integer_of_int32(n_0))))
 
 goal f91_safety_po_5:
   forall n_0:int32.
-  ("JC_39": true) ->
+  ("JC_33": true) ->
   (integer_of_int32(n_0) <= 100) ->
   (((-2147483648) <= (integer_of_int32(n_0) + 11)) and
    ((integer_of_int32(n_0) + 11) <= 2147483647)) ->
@@ -2843,16 +2806,16 @@ goal f91_safety_po_5:
   (integer_of_int32(result) = (integer_of_int32(n_0) + 11)) ->
   forall result0:int32.
   (((integer_of_int32(result) >= 101) ->
-    ("JC_47": (integer_of_int32(result0) = (integer_of_int32(result) - 10)))) and
+    ("JC_41": (integer_of_int32(result0) = (integer_of_int32(result) - 10)))) and
    ((integer_of_int32(result) <= 100) ->
-    ("JC_45": (integer_of_int32(result0) = 91)))) ->
+    ("JC_39": (integer_of_int32(result0) = 91)))) ->
   forall tmp_0:int32.
   (tmp_0 = result0) ->
-  (0 <= ("JC_54": (101 - integer_of_int32(n_0))))
+  (0 <= ("JC_48": (101 - integer_of_int32(n_0))))
 
 goal f91_safety_po_6:
   forall n_0:int32.
-  ("JC_39": true) ->
+  ("JC_33": true) ->
   (integer_of_int32(n_0) <= 100) ->
   (((-2147483648) <= (integer_of_int32(n_0) + 11)) and
    ((integer_of_int32(n_0) + 11) <= 2147483647)) ->
@@ -2860,55 +2823,55 @@ goal f91_safety_po_6:
   (integer_of_int32(result) = (integer_of_int32(n_0) + 11)) ->
   forall result0:int32.
   (((integer_of_int32(result) >= 101) ->
-    ("JC_47": (integer_of_int32(result0) = (integer_of_int32(result) - 10)))) and
+    ("JC_41": (integer_of_int32(result0) = (integer_of_int32(result) - 10)))) and
    ((integer_of_int32(result) <= 100) ->
-    ("JC_45": (integer_of_int32(result0) = 91)))) ->
+    ("JC_39": (integer_of_int32(result0) = 91)))) ->
   forall tmp_0:int32.
   (tmp_0 = result0) ->
-  (("JC_55": (101 - integer_of_int32(tmp_0))) < ("JC_54":
+  (("JC_49": (101 - integer_of_int32(tmp_0))) < ("JC_48":
                                                 (101 - integer_of_int32(n_0))))
 
 goal f91_safety_po_7:
   forall n_0:int32.
-  ("JC_39": true) ->
+  ("JC_33": true) ->
   (integer_of_int32(n_0) > 100) ->
   ((-2147483648) <= (integer_of_int32(n_0) - 10))
 
 goal f91_safety_po_8:
   forall n_0:int32.
-  ("JC_39": true) ->
+  ("JC_33": true) ->
   (integer_of_int32(n_0) > 100) ->
   ((integer_of_int32(n_0) - 10) <= 2147483647)
 
 goal main_ensures_default_po_1:
-  ("JC_29": true) ->
+  ("JC_23": true) ->
   forall result:int32.
   (integer_of_int32(result) = 8) ->
   forall result0:int32.
-  ("JC_20": (integer_of_int32(result0) = sum_upto(integer_of_int32(result)))) ->
+  ("JC_10": (integer_of_int32(result0) = sum_upto(integer_of_int32(result)))) ->
   forall i:int32.
   (i = result0) ->
   forall return:int32.
   (return = i) ->
-  ("JC_30": (integer_of_int32(return) = 36))
+  ("JC_24": (integer_of_int32(return) = 36))
 
 goal main_safety_po_1:
-  ("JC_29": true) ->
+  ("JC_23": true) ->
   forall result:int32.
   (integer_of_int32(result) = 8) ->
-  ("JC_13": ("JC_11": (integer_of_int32(result) >= 0)))
+  ("JC_3": ("JC_1": (integer_of_int32(result) >= 0)))
 
 goal main_safety_po_2:
-  ("JC_29": true) ->
+  ("JC_23": true) ->
   forall result:int32.
   (integer_of_int32(result) = 8) ->
-  ("JC_13": ("JC_12": (integer_of_int32(result) <= 1000)))
+  ("JC_3": ("JC_2": (integer_of_int32(result) <= 1000)))
 
 goal sum_ensures_default_po_1:
   forall x_0:int32.
-  ("JC_17":
-  (("JC_15": (integer_of_int32(x_0) >= 0)) and
-   ("JC_16": (integer_of_int32(x_0) <= 1000)))) ->
+  ("JC_7":
+  (("JC_5": (integer_of_int32(x_0) >= 0)) and
+   ("JC_6": (integer_of_int32(x_0) <= 1000)))) ->
   (integer_of_int32(x_0) = 0) ->
   forall result:int32.
   (integer_of_int32(result) = 0) ->
@@ -2916,54 +2879,137 @@ goal sum_ensures_default_po_1:
   (__retres = result) ->
   forall return:int32.
   (return = __retres) ->
-  ("JC_19": (integer_of_int32(return) = sum_upto(integer_of_int32(x_0))))
+  ("JC_9": (integer_of_int32(return) = sum_upto(integer_of_int32(x_0))))
 
 goal sum_ensures_default_po_2:
   forall x_0:int32.
-  ("JC_17":
-  (("JC_15": (integer_of_int32(x_0) >= 0)) and
-   ("JC_16": (integer_of_int32(x_0) <= 1000)))) ->
+  ("JC_7":
+  (("JC_5": (integer_of_int32(x_0) >= 0)) and
+   ("JC_6": (integer_of_int32(x_0) <= 1000)))) ->
   (integer_of_int32(x_0) <> 0) ->
   forall result:int32.
-  forall tmp:int32.
-  (tmp = result) ->
+  (integer_of_int32(result) = (integer_of_int32(x_0) - 1)) ->
   forall result0:int32.
-  (integer_of_int32(result0) = (integer_of_int32(x_0) + integer_of_int32(tmp))) ->
+  ("JC_10": (integer_of_int32(result0) = sum_upto(integer_of_int32(result)))) ->
+  forall tmp:int32.
+  (tmp = result0) ->
+  forall result1:int32.
+  (integer_of_int32(result1) = (integer_of_int32(x_0) + integer_of_int32(tmp))) ->
   forall __retres:int32.
-  (__retres = result0) ->
+  (__retres = result1) ->
   forall return:int32.
   (return = __retres) ->
-  ("JC_19": (integer_of_int32(return) = sum_upto(integer_of_int32(x_0))))
+  ("JC_9": (integer_of_int32(return) = sum_upto(integer_of_int32(x_0))))
 
 goal sum_safety_po_1:
   forall x_0:int32.
-  ("JC_17":
-  (("JC_15": (integer_of_int32(x_0) >= 0)) and
-   ("JC_16": (integer_of_int32(x_0) <= 1000)))) ->
+  ("JC_7":
+  (("JC_5": (integer_of_int32(x_0) >= 0)) and
+   ("JC_6": (integer_of_int32(x_0) <= 1000)))) ->
   (integer_of_int32(x_0) <> 0) ->
-  forall result:int32.
-  forall tmp:int32.
-  (tmp = result) ->
-  ((-2147483648) <= (integer_of_int32(x_0) + integer_of_int32(tmp)))
+  ((-2147483648) <= (integer_of_int32(x_0) - 1))
 
 goal sum_safety_po_2:
   forall x_0:int32.
-  ("JC_17":
-  (("JC_15": (integer_of_int32(x_0) >= 0)) and
-   ("JC_16": (integer_of_int32(x_0) <= 1000)))) ->
+  ("JC_7":
+  (("JC_5": (integer_of_int32(x_0) >= 0)) and
+   ("JC_6": (integer_of_int32(x_0) <= 1000)))) ->
   (integer_of_int32(x_0) <> 0) ->
+  ((integer_of_int32(x_0) - 1) <= 2147483647)
+
+goal sum_safety_po_3:
+  forall x_0:int32.
+  ("JC_7":
+  (("JC_5": (integer_of_int32(x_0) >= 0)) and
+   ("JC_6": (integer_of_int32(x_0) <= 1000)))) ->
+  (integer_of_int32(x_0) <> 0) ->
+  (((-2147483648) <= (integer_of_int32(x_0) - 1)) and
+   ((integer_of_int32(x_0) - 1) <= 2147483647)) ->
   forall result:int32.
+  (integer_of_int32(result) = (integer_of_int32(x_0) - 1)) ->
+  (0 <= integer_of_int32(("JC_15": x_0)))
+
+goal sum_safety_po_4:
+  forall x_0:int32.
+  ("JC_7":
+  (("JC_5": (integer_of_int32(x_0) >= 0)) and
+   ("JC_6": (integer_of_int32(x_0) <= 1000)))) ->
+  (integer_of_int32(x_0) <> 0) ->
+  (((-2147483648) <= (integer_of_int32(x_0) - 1)) and
+   ((integer_of_int32(x_0) - 1) <= 2147483647)) ->
+  forall result:int32.
+  (integer_of_int32(result) = (integer_of_int32(x_0) - 1)) ->
+  (integer_of_int32(("JC_16": result)) < integer_of_int32(("JC_15": x_0)))
+
+goal sum_safety_po_5:
+  forall x_0:int32.
+  ("JC_7":
+  (("JC_5": (integer_of_int32(x_0) >= 0)) and
+   ("JC_6": (integer_of_int32(x_0) <= 1000)))) ->
+  (integer_of_int32(x_0) <> 0) ->
+  (((-2147483648) <= (integer_of_int32(x_0) - 1)) and
+   ((integer_of_int32(x_0) - 1) <= 2147483647)) ->
+  forall result:int32.
+  (integer_of_int32(result) = (integer_of_int32(x_0) - 1)) ->
+  ("JC_3": ("JC_1": (integer_of_int32(result) >= 0)))
+
+goal sum_safety_po_6:
+  forall x_0:int32.
+  ("JC_7":
+  (("JC_5": (integer_of_int32(x_0) >= 0)) and
+   ("JC_6": (integer_of_int32(x_0) <= 1000)))) ->
+  (integer_of_int32(x_0) <> 0) ->
+  (((-2147483648) <= (integer_of_int32(x_0) - 1)) and
+   ((integer_of_int32(x_0) - 1) <= 2147483647)) ->
+  forall result:int32.
+  (integer_of_int32(result) = (integer_of_int32(x_0) - 1)) ->
+  ("JC_3": ("JC_2": (integer_of_int32(result) <= 1000)))
+
+goal sum_safety_po_7:
+  forall x_0:int32.
+  ("JC_7":
+  (("JC_5": (integer_of_int32(x_0) >= 0)) and
+   ("JC_6": (integer_of_int32(x_0) <= 1000)))) ->
+  (integer_of_int32(x_0) <> 0) ->
+  (((-2147483648) <= (integer_of_int32(x_0) - 1)) and
+   ((integer_of_int32(x_0) - 1) <= 2147483647)) ->
+  forall result:int32.
+  (integer_of_int32(result) = (integer_of_int32(x_0) - 1)) ->
+  ("JC_3":
+  (("JC_1": (integer_of_int32(result) >= 0)) and
+   ("JC_2": (integer_of_int32(result) <= 1000)))) ->
+  forall result0:int32.
+  ("JC_10": (integer_of_int32(result0) = sum_upto(integer_of_int32(result)))) ->
   forall tmp:int32.
-  (tmp = result) ->
+  (tmp = result0) ->
+  ((-2147483648) <= (integer_of_int32(x_0) + integer_of_int32(tmp)))
+
+goal sum_safety_po_8:
+  forall x_0:int32.
+  ("JC_7":
+  (("JC_5": (integer_of_int32(x_0) >= 0)) and
+   ("JC_6": (integer_of_int32(x_0) <= 1000)))) ->
+  (integer_of_int32(x_0) <> 0) ->
+  (((-2147483648) <= (integer_of_int32(x_0) - 1)) and
+   ((integer_of_int32(x_0) - 1) <= 2147483647)) ->
+  forall result:int32.
+  (integer_of_int32(result) = (integer_of_int32(x_0) - 1)) ->
+  ("JC_3":
+  (("JC_1": (integer_of_int32(result) >= 0)) and
+   ("JC_2": (integer_of_int32(result) <= 1000)))) ->
+  forall result0:int32.
+  ("JC_10": (integer_of_int32(result0) = sum_upto(integer_of_int32(result)))) ->
+  forall tmp:int32.
+  (tmp = result0) ->
   ((integer_of_int32(x_0) + integer_of_int32(tmp)) <= 2147483647)
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/rec_why.why               : ?............?...#.? (16/0/3/1/0)
-total   :  20
-valid   :  16 ( 80%)
+why/rec_why.why               : ?............?...........# (23/0/2/1/0)
+total   :  26
+valid   :  23 ( 88%)
 invalid :   0 (  0%)
-unknown :   3 ( 15%)
-timeout :   1 (  5%)
+unknown :   2 (  8%)
+timeout :   1 (  4%)
 failure :   0 (  0%)

@@ -184,14 +184,6 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -231,6 +223,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -242,6 +239,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -329,21 +331,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -397,9 +384,8 @@ axiom remove_copy_empty :
       (forall i_1:int.
        (forall j_0:int.
         ((gt_int((0), i_1) or gt_int((0), j_0)) ->
-         eq_int(spec_remove_copy(a_1_0, i_1, b_1_0, j_0, value_0_0,
-                intP_intM_b_0_4_at_Lb, intP_intM_a_0_3_at_La),
-         (0))))))))))
+         (spec_remove_copy(a_1_0, i_1, b_1_0, j_0, value_0_0,
+          intP_intM_b_0_4_at_Lb, intP_intM_a_0_3_at_La) = (0))))))))))
 
 axiom remove_copy_equal_value :
  (forall intP_intM_b_0_4_at_Lb:(intP, int32) memory.
@@ -410,13 +396,14 @@ axiom remove_copy_equal_value :
       (forall i_2:int.
        (forall j_1:int.
         ((le_int((0), i_2)
-         and eq_int(integer_of_int32(select(intP_intM_a_0_3_at_La,
-                                     shift(a_2, i_2))),
+         and (integer_of_int32(select(intP_intM_a_0_3_at_La, shift(a_2, i_2))) = 
              integer_of_int32(value_1))) ->
-         eq_int(spec_remove_copy(a_2, i_2, b_2, j_1, value_1,
-                intP_intM_b_0_4_at_Lb, intP_intM_a_0_3_at_La),
-         spec_remove_copy(a_2, sub_int(i_2, (1)), b_2, j_1, value_1,
-         intP_intM_b_0_4_at_Lb, intP_intM_a_0_3_at_La))))))))))
+         (spec_remove_copy(a_2, i_2, b_2, j_1, value_1,
+          intP_intM_b_0_4_at_Lb, intP_intM_a_0_3_at_La) = spec_remove_copy(a_2,
+                                                          sub_int(i_2, (1)),
+                                                          b_2, j_1, value_1,
+                                                          intP_intM_b_0_4_at_Lb,
+                                                          intP_intM_a_0_3_at_La))))))))))
 
 axiom remove_copy_not_equal_value :
  (forall intP_intM_b_0_4_at_Lb:(intP, int32) memory.
@@ -428,19 +415,22 @@ axiom remove_copy_not_equal_value :
        (forall j_2:int.
         ((le_int((0), i_3)
          and (le_int((0), j_2)
-             and (neq_int(integer_of_int32(select(intP_intM_a_0_3_at_La,
-                                           shift(a_3, i_3))),
-                  integer_of_int32(value_2))
-                 <-> eq_int(integer_of_int32(select(intP_intM_a_0_3_at_La,
-                                             shift(a_3, i_3))),
-                     integer_of_int32(select(intP_intM_b_0_4_at_Lb,
-                                      shift(b_3, j_2))))))) ->
-         eq_int(spec_remove_copy(a_3, i_3, b_3, j_2, value_2,
-                intP_intM_b_0_4_at_Lb, intP_intM_a_0_3_at_La),
-         add_int(spec_remove_copy(a_3, sub_int(i_3, (1)), b_3,
-                 sub_int(j_2, (1)), value_2, intP_intM_b_0_4_at_Lb,
-                 intP_intM_a_0_3_at_La),
-         (1)))))))))))
+             and ((integer_of_int32(select(intP_intM_a_0_3_at_La,
+                                    shift(a_3, i_3))) <> integer_of_int32(value_2))
+                 <-> (integer_of_int32(select(intP_intM_a_0_3_at_La,
+                                       shift(a_3, i_3))) = integer_of_int32(
+                                                           select(intP_intM_b_0_4_at_Lb,
+                                                           shift(b_3, j_2))))))) ->
+         (spec_remove_copy(a_3, i_3, b_3, j_2, value_2,
+          intP_intM_b_0_4_at_Lb, intP_intM_a_0_3_at_La) = add_int(spec_remove_copy(a_3,
+                                                                  sub_int(i_3,
+                                                                  (1)), b_3,
+                                                                  sub_int(j_2,
+                                                                  (1)),
+                                                                  value_2,
+                                                                  intP_intM_b_0_4_at_Lb,
+                                                                  intP_intM_a_0_3_at_La),
+                                                          (1)))))))))))
 
 axiom remove_copy_label :
  (forall intP_intM_b_0_4_at_Lb2:(intP, int32) memory.
@@ -453,67 +443,22 @@ axiom remove_copy_label :
         (forall j_3:int.
          ((forall k_0:int.
            ((le_int((0), k_0) and le_int(k_0, j_3)) ->
-            eq_int(integer_of_int32(select(intP_intM_b_0_4_at_Lb1,
-                                    shift(b_4, k_0))),
+            (integer_of_int32(select(intP_intM_b_0_4_at_Lb1, shift(b_4, k_0))) = 
             integer_of_int32(select(intP_intM_b_0_4_at_Lb2, shift(b_4, k_0)))))) ->
-          eq_int(spec_remove_copy(a_4, i_4, b_4, j_3, value_3,
-                 intP_intM_b_0_4_at_Lb1, intP_intM_a_0_3_at_La),
-          spec_remove_copy(a_4, i_4, b_4, j_3, value_3,
-          intP_intM_b_0_4_at_Lb2, intP_intM_a_0_3_at_La)))))))))))
+          (spec_remove_copy(a_4, i_4, b_4, j_3, value_3,
+           intP_intM_b_0_4_at_Lb1, intP_intM_a_0_3_at_La) = spec_remove_copy(a_4,
+                                                            i_4, b_4, j_3,
+                                                            value_3,
+                                                            intP_intM_b_0_4_at_Lb2,
+                                                            intP_intM_a_0_3_at_La)))))))))))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -623,31 +568,31 @@ parameter remove_copy_array :
              (forall k_3:int.
               ((not (le_int((0), k_3)
                     and lt_int(k_3, integer_of_int32(result)))) ->
-               eq_int(integer_of_int32(select(intP_intM_b_6,
-                                       shift(b_1@, k_3))),
-               integer_of_int32(select(intP_intM_b_6@, shift(b_1@, k_3@)))))))
+               (integer_of_int32(select(intP_intM_b_6, shift(b_1, k_3))) = 
+               integer_of_int32(select(intP_intM_b_6@, shift(b_1, k_3)))))))
             and ((JC_<somenum>: le_int((0), integer_of_int32(result)))
                 and ((JC_<somenum>:
                      le_int(integer_of_int32(result),
-                     integer_of_int32(length@)))
+                     integer_of_int32(length)))
                     and ((JC_<somenum>:
                          (forall k_4:int.
                           ((le_int((0), k_4)
                            and lt_int(k_4, integer_of_int32(result))) ->
-                           neq_int(integer_of_int32(select(intP_intM_b_6,
-                                                    shift(b_1@, k_4))),
-                           integer_of_int32(value_0@)))))
+                           (integer_of_int32(select(intP_intM_b_6,
+                                             shift(b_1, k_4))) <> integer_of_int32(value_0)))))
                         and (JC_<somenum>:
-                            eq_int(integer_of_int32(result),
-                            spec_remove_copy(a_1@,
-                            sub_int(integer_of_int32(length@), (1)), b_1@,
-                            sub_int(integer_of_int32(result), (1)), value_0@,
-                            intP_intM_b_6, intP_intM_a_5@))))))))
+                            (integer_of_int32(result) = spec_remove_copy(a_1,
+                                                        sub_int(integer_of_int32(length),
+                                                        (1)), b_1,
+                                                        sub_int(integer_of_int32(result),
+                                                        (1)), value_0,
+                                                        intP_intM_b_6,
+                                                        intP_intM_a_5))))))))
            and (JC_<somenum>:
-               not_assigns(intP_b_6_alloc_table@, intP_intM_b_6@,
+               not_assigns(intP_b_6_alloc_table, intP_intM_b_6@,
                intP_intM_b_6,
-               pset_range(pset_singleton(b_1@), (0),
-               sub_int(integer_of_int32(length@), (1))))))) }
+               pset_range(pset_singleton(b_1), (0),
+               sub_int(integer_of_int32(length), (1))))))) }
 
 parameter remove_copy_array_requires :
  a_1:intP pointer ->
@@ -676,31 +621,31 @@ parameter remove_copy_array_requires :
              (forall k_3:int.
               ((not (le_int((0), k_3)
                     and lt_int(k_3, integer_of_int32(result)))) ->
-               eq_int(integer_of_int32(select(intP_intM_b_6,
-                                       shift(b_1@, k_3))),
-               integer_of_int32(select(intP_intM_b_6@, shift(b_1@, k_3@)))))))
+               (integer_of_int32(select(intP_intM_b_6, shift(b_1, k_3))) = 
+               integer_of_int32(select(intP_intM_b_6@, shift(b_1, k_3)))))))
             and ((JC_<somenum>: le_int((0), integer_of_int32(result)))
                 and ((JC_<somenum>:
                      le_int(integer_of_int32(result),
-                     integer_of_int32(length@)))
+                     integer_of_int32(length)))
                     and ((JC_<somenum>:
                          (forall k_4:int.
                           ((le_int((0), k_4)
                            and lt_int(k_4, integer_of_int32(result))) ->
-                           neq_int(integer_of_int32(select(intP_intM_b_6,
-                                                    shift(b_1@, k_4))),
-                           integer_of_int32(value_0@)))))
+                           (integer_of_int32(select(intP_intM_b_6,
+                                             shift(b_1, k_4))) <> integer_of_int32(value_0)))))
                         and (JC_<somenum>:
-                            eq_int(integer_of_int32(result),
-                            spec_remove_copy(a_1@,
-                            sub_int(integer_of_int32(length@), (1)), b_1@,
-                            sub_int(integer_of_int32(result), (1)), value_0@,
-                            intP_intM_b_6, intP_intM_a_5@))))))))
+                            (integer_of_int32(result) = spec_remove_copy(a_1,
+                                                        sub_int(integer_of_int32(length),
+                                                        (1)), b_1,
+                                                        sub_int(integer_of_int32(result),
+                                                        (1)), value_0,
+                                                        intP_intM_b_6,
+                                                        intP_intM_a_5))))))))
            and (JC_<somenum>:
-               not_assigns(intP_b_6_alloc_table@, intP_intM_b_6@,
+               not_assigns(intP_b_6_alloc_table, intP_intM_b_6@,
                intP_intM_b_6,
-               pset_range(pset_singleton(b_1@), (0),
-               sub_int(integer_of_int32(length@), (1))))))) }
+               pset_range(pset_singleton(b_1), (0),
+               sub_int(integer_of_int32(length), (1))))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -727,7 +672,6 @@ let remove_copy_array_ensures_default =
      (let i_5 = ref (any_int32 void) in
      (let j_4 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       (C_2:
       begin
@@ -737,24 +681,24 @@ let remove_copy_array_ensures_default =
        while true do
        { invariant
            (((JC_<somenum>:
-             eq_int(integer_of_int32(j_4),
-             spec_remove_copy(a_1, sub_int(integer_of_int32(i_5), (1)), b_1,
-             sub_int(integer_of_int32(j_4), (1)), value_0, intP_intM_b_6,
-             intP_intM_a_5@init)))
+             (integer_of_int32(j_4) = spec_remove_copy(a_1,
+                                      sub_int(integer_of_int32(i_5), (1)),
+                                      b_1,
+                                      sub_int(integer_of_int32(j_4), (1)),
+                                      value_0, intP_intM_b_6, intP_intM_a_5)))
             and ((JC_<somenum>:
                  (forall k_2:int.
                   ((le_int((0), k_2) and lt_int(k_2, integer_of_int32(j_4))) ->
-                   neq_int(integer_of_int32(select(intP_intM_b_6,
-                                            shift(b_1, k_2))),
+                   (integer_of_int32(select(intP_intM_b_6, shift(b_1, k_2))) <> 
                    integer_of_int32(value_0)))))
                 and ((JC_<somenum>:
                      (forall k_1:int.
                       ((not (le_int((0), k_1)
                             and lt_int(k_1, integer_of_int32(j_4)))) ->
-                       eq_int(integer_of_int32(select(intP_intM_b_6,
-                                               shift(b_1, k_1))),
-                       integer_of_int32(select(intP_intM_b_6@init,
-                                        shift(b_1@init, k_1@init)))))))
+                       (integer_of_int32(select(intP_intM_b_6,
+                                         shift(b_1, k_1))) = integer_of_int32(
+                                                             select(intP_intM_b_6@init,
+                                                             shift(b_1, k_1)))))))
                     and ((JC_<somenum>:
                          ((JC_<somenum>: le_int((0), integer_of_int32(j_4)))
                          and (JC_<somenum>:
@@ -769,28 +713,24 @@ let remove_copy_array_ensures_default =
                                     le_int(integer_of_int32(i_5),
                                     integer_of_int32(length))))))))))
            and ((JC_<somenum>:
-                not_assigns(intP_b_6_alloc_table@loop_2,
-                intP_intM_b_6@loop_2, intP_intM_b_6,
+                not_assigns(intP_b_6_alloc_table, intP_intM_b_6@loop_2,
+                intP_intM_b_6,
                 pset_range(pset_singleton(b_1), (0),
                 sub_int(integer_of_int32(j_4), (1)))))
                and (JC_<somenum>:
-                   not_assigns(intP_b_6_alloc_table@init, intP_intM_b_6@init,
+                   not_assigns(intP_b_6_alloc_table, intP_intM_b_6@init,
                    intP_intM_b_6,
-                   pset_range(pset_singleton(b_1@init), (0),
-                   sub_int(integer_of_int32(length@init), (1)))))))  }
+                   pset_range(pset_singleton(b_1), (0),
+                   sub_int(integer_of_int32(length), (1)))))))  }
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_25:
             begin
               (if ((lt_int_ (integer_of_int32 !i_5)) (integer_of_int32 length))
-              then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              then void else (raise (Goto_while_0_break_exc void)));
              (if ((neq_int_ (integer_of_int32 (C_22:
                                               ((safe_acc_ intP_intM_a_5) 
                                                (C_21:
@@ -818,9 +758,9 @@ let remove_copy_array_ensures_default =
              (i_5 := (C_24:
                      (safe_int32_of_integer_ (C_23:
                                              ((add_int (integer_of_int32 !i_5)) (1))))));
-             !i_5 end) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) in void) with
+             !i_5 end) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (return := !j_4); (raise Return) end) end));
     absurd  end with Return -> !return end))
@@ -829,28 +769,31 @@ let remove_copy_array_ensures_default =
      ((JC_<somenum>:
       (forall k_3:int.
        ((not (le_int((0), k_3) and lt_int(k_3, integer_of_int32(result)))) ->
-        eq_int(integer_of_int32(select(intP_intM_b_6, shift(b_1@, k_3))),
-        integer_of_int32(select(intP_intM_b_6@, shift(b_1@, k_3@)))))))
+        (integer_of_int32(select(intP_intM_b_6, shift(b_1, k_3))) = integer_of_int32(
+                                                                    select(intP_intM_b_6@,
+                                                                    shift(b_1,
+                                                                    k_3)))))))
      and ((JC_<somenum>: le_int((0), integer_of_int32(result)))
          and ((JC_<somenum>:
-              le_int(integer_of_int32(result), integer_of_int32(length@)))
+              le_int(integer_of_int32(result), integer_of_int32(length)))
              and ((JC_<somenum>:
                   (forall k_4:int.
                    ((le_int((0), k_4)
                     and lt_int(k_4, integer_of_int32(result))) ->
-                    neq_int(integer_of_int32(select(intP_intM_b_6,
-                                             shift(b_1@, k_4))),
-                    integer_of_int32(value_0@)))))
+                    (integer_of_int32(select(intP_intM_b_6, shift(b_1, k_4))) <> 
+                    integer_of_int32(value_0)))))
                  and (JC_<somenum>:
-                     eq_int(integer_of_int32(result),
-                     spec_remove_copy(a_1@,
-                     sub_int(integer_of_int32(length@), (1)), b_1@,
-                     sub_int(integer_of_int32(result), (1)), value_0@,
-                     intP_intM_b_6, intP_intM_a_5@))))))))
+                     (integer_of_int32(result) = spec_remove_copy(a_1,
+                                                 sub_int(integer_of_int32(length),
+                                                 (1)), b_1,
+                                                 sub_int(integer_of_int32(result),
+                                                 (1)), value_0,
+                                                 intP_intM_b_6,
+                                                 intP_intM_a_5))))))))
     and (JC_<somenum>:
-        not_assigns(intP_b_6_alloc_table@, intP_intM_b_6@, intP_intM_b_6,
-        pset_range(pset_singleton(b_1@), (0),
-        sub_int(integer_of_int32(length@), (1))))))) }
+        not_assigns(intP_b_6_alloc_table, intP_intM_b_6@, intP_intM_b_6,
+        pset_range(pset_singleton(b_1), (0),
+        sub_int(integer_of_int32(length), (1))))))) }
 
 let remove_copy_array_safety =
  fun (a_1 : intP pointer) (length : int32) (b_1 : intP pointer) (value_0 : int32) (intP_intM_b_6 : (intP, int32) memory ref) (intP_a_5_alloc_table : intP alloc_table) (intP_b_6_alloc_table : intP alloc_table) (intP_intM_a_5 : (intP, int32) memory) ->
@@ -871,7 +814,6 @@ let remove_copy_array_safety =
      (let i_5 = ref (any_int32 void) in
      (let j_4 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       (C_2:
       begin
@@ -883,25 +825,27 @@ let remove_copy_array_safety =
         begin
           [ { } unit reads i_5,intP_intM_b_6,j_4
             { ((JC_<somenum>:
-               eq_int(integer_of_int32(j_4),
-               spec_remove_copy(a_1, sub_int(integer_of_int32(i_5), (1)),
-               b_1, sub_int(integer_of_int32(j_4), (1)), value_0,
-               intP_intM_b_6, intP_intM_a_5@init)))
+               (integer_of_int32(j_4) = spec_remove_copy(a_1,
+                                        sub_int(integer_of_int32(i_5), (1)),
+                                        b_1,
+                                        sub_int(integer_of_int32(j_4), (1)),
+                                        value_0, intP_intM_b_6,
+                                        intP_intM_a_5)))
               and ((JC_<somenum>:
                    (forall k_2:int.
                     ((le_int((0), k_2)
                      and lt_int(k_2, integer_of_int32(j_4))) ->
-                     neq_int(integer_of_int32(select(intP_intM_b_6,
-                                              shift(b_1, k_2))),
+                     (integer_of_int32(select(intP_intM_b_6, shift(b_1, k_2))) <> 
                      integer_of_int32(value_0)))))
                   and ((JC_<somenum>:
                        (forall k_1:int.
                         ((not (le_int((0), k_1)
                               and lt_int(k_1, integer_of_int32(j_4)))) ->
-                         eq_int(integer_of_int32(select(intP_intM_b_6,
-                                                 shift(b_1, k_1))),
-                         integer_of_int32(select(intP_intM_b_6@init,
-                                          shift(b_1@init, k_1@init)))))))
+                         (integer_of_int32(select(intP_intM_b_6,
+                                           shift(b_1, k_1))) = integer_of_int32(
+                                                               select(intP_intM_b_6@init,
+                                                               shift(b_1,
+                                                               k_1)))))))
                       and ((JC_<somenum>:
                            ((JC_<somenum>: le_int((0), integer_of_int32(j_4)))
                            and (JC_<somenum>:
@@ -917,15 +861,12 @@ let remove_copy_array_safety =
                                       le_int(integer_of_int32(i_5),
                                       integer_of_int32(length)))))))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_25:
             begin
               (if ((lt_int_ (integer_of_int32 !i_5)) (integer_of_int32 length))
-              then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
+              then void else (raise (Goto_while_0_break_exc void)));
              (if ((neq_int_ (integer_of_int32 (C_22:
                                               (JC_<somenum>:
                                               ((((offset_acc_ intP_a_5_alloc_table) intP_intM_a_5) a_1) 
@@ -957,9 +898,9 @@ let remove_copy_array_safety =
                      (JC_<somenum>:
                      (int32_of_integer_ (C_23:
                                         ((add_int (integer_of_int32 !i_5)) (1)))))));
-             !i_5 end) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)) in void) with
+             !i_5 end) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (return := !j_4); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
@@ -970,67 +911,7 @@ why --project [...] why/remove_copy_array.why
 <project name="remove_copy_array" context="why/remove_copy_array_ctx.why">
   <function name="Function remove_copy_array">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/remove_copy_array_po26.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "23" begin = "12" end = "16"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po27.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "23" begin = "12" end = "16"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po28.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "25" begin = "19" end = "23"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po29.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "25" begin = "19" end = "23"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po30.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "155" begin = "24" end = "220"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po31.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "155" begin = "24" end = "220"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po32.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "26" begin = "12" end = "15"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po33.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "26" begin = "12" end = "15"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po34.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "22" begin = "24" end = "27"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po35.why">
-      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "22" begin = "24" end = "27"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po36.why">
-      <location file = "why/remove_copy_array.why" line = "708" begin = "42" end = "43"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/remove_copy_array_po37.why">
-      <location file = "why/remove_copy_array.why" line = "708" begin = "42" end = "43"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/remove_copy_array_po1.why">
       <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "19" begin = "18" end = "72"/>
       <explain kind = "LoopInvInit"/>
@@ -1130,6 +1011,66 @@ text = "ArithOverflow"/>
     <goal why_file="why/remove_copy_array_po25.why">
       <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "3" begin = "4" end = "21"/>
       <explain kind = "Post"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/remove_copy_array_po26.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "23" begin = "12" end = "16"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/remove_copy_array_po27.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "23" begin = "12" end = "16"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/remove_copy_array_po28.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "25" begin = "19" end = "23"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/remove_copy_array_po29.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "25" begin = "19" end = "23"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/remove_copy_array_po30.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "155" begin = "24" end = "220"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/remove_copy_array_po31.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.jessie/remove_copy_array.jc" line = "155" begin = "24" end = "220"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/remove_copy_array_po32.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "26" begin = "12" end = "15"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/remove_copy_array_po33.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "26" begin = "12" end = "15"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/remove_copy_array_po34.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "22" begin = "24" end = "27"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/remove_copy_array_po35.why">
+      <location file = "PPCHOME/tests/jessie/remove_copy_array.c" line = "22" begin = "24" end = "27"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/remove_copy_array_po36.why">
+      <location file = "why/remove_copy_array.why" line = "650" begin = "42" end = "43"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/remove_copy_array_po37.why">
+      <location file = "why/remove_copy_array.why" line = "650" begin = "42" end = "43"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
   </function>
@@ -2115,6 +2056,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -2126,6 +2072,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2214,21 +2164,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

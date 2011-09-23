@@ -189,14 +189,6 @@ type uint32
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Goto_while_1_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
 logic Proc_tag:  -> Proc tag_id
 
 axiom Proc_int : (int_of_tag(Proc_tag) = (1))
@@ -212,8 +204,6 @@ axiom Proc_tags :
  (forall x:Proc pointer.
   (forall Proc_tag_table:Proc tag_table.
    instanceof(Proc_tag_table, x, Proc_tag)))
-
-exception Return_label_exc of unit
 
 logic charP_tag:  -> charP tag_id
 
@@ -253,6 +243,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -264,6 +259,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -390,25 +390,15 @@ axiom uint32_coerce :
   ((le_int((0), x) and le_int(x, (4294967295))) ->
    eq_int(integer_of_uint32(uint32_of_integer(x)), x)))
 
+axiom uint32_extensionality :
+ (forall x:uint32.
+  (forall y:uint32.
+   (eq_int(integer_of_uint32(x), integer_of_uint32(y)) -> (x = y))))
+
 axiom uint32_range :
  (forall x:uint32.
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
-
-predicate valid_bitvector_struct_Proc(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_Proc(p:Proc pointer, a:int, b:int,
  Proc_alloc_table:Proc alloc_table) =
@@ -457,7 +447,7 @@ axiom voidP_tags :
 axiom list_length_zero :
  (forall Proc_next_p_4_at_State:(Proc, Proc pointer) memory.
   (forall p_0:Proc pointer.
-   (eq_int(integer_of_int32(list_length(p_0, Proc_next_p_4_at_State)), (0))
+   ((integer_of_int32(list_length(p_0, Proc_next_p_4_at_State)) = (0))
    <-> (p_0 = null))))
 
 axiom list_length_pos :
@@ -467,12 +457,12 @@ axiom list_length_pos :
     (gt_int(integer_of_int32(list_length(p_1, Proc_next_p_4_at_State)), (0)) ->
      (le_int(offset_min(Proc_p_4_alloc_table_at_State, p_1), (0))
      and (ge_int(offset_max(Proc_p_4_alloc_table_at_State, p_1), (0))
-         and eq_int(integer_of_int32(list_length(select(Proc_next_p_4_at_State,
-                                                 p_1),
-                                     Proc_next_p_4_at_State)),
-             sub_int(integer_of_int32(list_length(p_1,
-                                      Proc_next_p_4_at_State)),
-             (1)))))))))
+         and (integer_of_int32(list_length(select(Proc_next_p_4_at_State,
+                                           p_1),
+                               Proc_next_p_4_at_State)) = sub_int(integer_of_int32(
+                                                                  list_length(p_1,
+                                                                  Proc_next_p_4_at_State)),
+                                                          (1)))))))))
 
 axiom list_length_remove :
  (forall Proc_p_4_alloc_table_at_State:Proc alloc_table.
@@ -481,12 +471,12 @@ axiom list_length_remove :
     (gt_int(integer_of_int32(list_length(p_2, Proc_next_p_4_at_State)), (0)) ->
      (le_int(offset_min(Proc_p_4_alloc_table_at_State, p_2), (0))
      and (ge_int(offset_max(Proc_p_4_alloc_table_at_State, p_2), (0))
-         and eq_int(integer_of_int32(list_length(select(Proc_next_p_4_at_State,
-                                                 p_2),
-                                     Proc_next_p_4_at_State)),
-             sub_int(integer_of_int32(list_length(p_2,
-                                      Proc_next_p_4_at_State)),
-             (1)))))))))
+         and (integer_of_int32(list_length(select(Proc_next_p_4_at_State,
+                                           p_2),
+                               Proc_next_p_4_at_State)) = sub_int(integer_of_int32(
+                                                                  list_length(p_2,
+                                                                  Proc_next_p_4_at_State)),
+                                                          (1)))))))))
 
 axiom reachable_def :
  (forall Proc_next_p_3_5_at_State:(Proc, Proc pointer) memory.
@@ -496,6 +486,14 @@ axiom reachable_def :
      ((p_4 = q_0)
      or reachable(select(Proc_next_p_3_5_at_State, p_4), q_0,
         Proc_next_p_3_5_at_State))))))
+
+exception Goto_while_0_break_exc of unit
+
+exception Goto_while_1_break_exc of unit
+
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
 
 parameter Proc_alloc_table : Proc alloc_table ref
 
@@ -509,59 +507,7 @@ parameter Proc_ready_list_1_alloc_table : Proc alloc_table ref
 
 parameter Proc_tag_table : Proc tag_table ref
 
-parameter alloc_bitvector_struct_Proc :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Proc(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Proc_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Proc(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter alloc_struct_Proc :
  n:int ->
@@ -723,7 +669,6 @@ let process_kill_ensures_default =
      (let highest_prio = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_4:
       (C_7:
       (C_9:
@@ -767,7 +712,6 @@ let process_kill_ensures_default =
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_22:
@@ -777,12 +721,8 @@ let process_kill_ensures_default =
               (if ((safe_neq_pointer !ready_list_elem) null)
               then
                (if ((eq_int_ (integer_of_int32 !found)) (0)) then void
-               else
-                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                void))
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+               else (raise (Goto_while_0_break_exc void)))
+              else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (proc_id2 := (C_21:
                           (safe_uint32_of_integer_ (integer_of_int32 
@@ -820,7 +760,6 @@ let process_kill_ensures_default =
                     (integer_of_int32 !max_prio))
                then
                 try
-                 (let jessie_<somenum> =
                  (C_30:
                  (C_31:
                  begin
@@ -837,16 +776,13 @@ let process_kill_ensures_default =
                    begin
                      [ { } unit { true } ];
                     try
-                     (let jessie_<somenum> =
                      begin
                        (let jessie_<somenum> =
                        (C_37:
                        begin
                          (if ((safe_neq_pointer !highest_search) null)
                          then void
-                         else
-                          (let jessie_<somenum> =
-                          (raise (Goto_while_1_break_exc void)) in void));
+                         else (raise (Goto_while_1_break_exc void)));
                         (if ((gt_int_ (integer_of_int32 (C_35:
                                                         ((safe_acc_ !Proc_priority_ready_list_1) !highest_search)))) 
                              (integer_of_int32 !highest_prio))
@@ -859,9 +795,9 @@ let process_kill_ensures_default =
                         (highest_search := (C_36:
                                            ((safe_acc_ !Proc_next_ready_list_1) !highest_search)));
                         !highest_search end) in void);
-                      (raise (Loop_continue_exc void)) end in void) with
+                      (raise (Loop_continue_exc void)) end with
                      Loop_continue_exc jessie_<somenum> -> void end end done);
-                  (raise (Goto_while_1_break_exc void)) end)) in void) with
+                  (raise (Goto_while_1_break_exc void)) end)) with
                  Goto_while_1_break_exc jessie_<somenum> ->
                  (let jessie_<somenum> =
                  (while_1_break:
@@ -874,9 +810,9 @@ let process_kill_ensures_default =
              (ready_list_elem := (C_42:
                                  ((safe_acc_ !Proc_next_ready_list_1) !ready_list_elem)));
              !ready_list_elem end))) in void);
-           (raise (Loop_continue_exc void)) end in void) with
+           (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))))) in void) with
+       (raise (Goto_while_0_break_exc void)) end)))))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       (C_44:
@@ -907,7 +843,6 @@ let process_kill_safety =
      (let highest_prio = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_4:
       (C_7:
       (C_9:
@@ -954,7 +889,6 @@ let process_kill_safety =
                                                   Proc_next_ready_list_1)),
                           (0))))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_22:
@@ -964,12 +898,8 @@ let process_kill_safety =
               (if ((neq_pointer !ready_list_elem) null)
               then
                (if ((eq_int_ (integer_of_int32 !found)) (0)) then void
-               else
-                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                void))
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+               else (raise (Goto_while_0_break_exc void)))
+              else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (proc_id2 := (C_21:
                           (JC_<somenum>:
@@ -1013,7 +943,6 @@ let process_kill_safety =
                     (integer_of_int32 !max_prio))
                then
                 try
-                 (let jessie_<somenum> =
                  (C_30:
                  (C_31:
                  begin
@@ -1030,15 +959,12 @@ let process_kill_safety =
                                                  Proc_next_ready_list_1)),
                          (0))) } ];
                     try
-                     (let jessie_<somenum> =
                      begin
                        (let jessie_<somenum> =
                        (C_37:
                        begin
                          (if ((neq_pointer !highest_search) null) then void
-                         else
-                          (let jessie_<somenum> =
-                          (raise (Goto_while_1_break_exc void)) in void));
+                         else (raise (Goto_while_1_break_exc void)));
                         (if ((gt_int_ (integer_of_int32 (C_35:
                                                         (JC_<somenum>:
                                                         (((acc_ !Proc_ready_list_1_alloc_table) !Proc_priority_ready_list_1) !highest_search))))) 
@@ -1054,9 +980,9 @@ let process_kill_safety =
                                            (JC_<somenum>:
                                            (((acc_ !Proc_ready_list_1_alloc_table) !Proc_next_ready_list_1) !highest_search))));
                         !highest_search end) in void);
-                      (raise (Loop_continue_exc void)) end in void) with
+                      (raise (Loop_continue_exc void)) end with
                      Loop_continue_exc jessie_<somenum> -> void end end done);
-                  (raise (Goto_while_1_break_exc void)) end)) in void) with
+                  (raise (Goto_while_1_break_exc void)) end)) with
                  Goto_while_1_break_exc jessie_<somenum> ->
                  (let jessie_<somenum> =
                  (while_1_break:
@@ -1070,9 +996,9 @@ let process_kill_safety =
                                  (JC_<somenum>:
                                  (((acc_ !Proc_ready_list_1_alloc_table) !Proc_next_ready_list_1) !ready_list_elem))));
              !ready_list_elem end))) in void);
-           (raise (Loop_continue_exc void)) end in void) with
+           (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))))) in void) with
+       (raise (Goto_while_0_break_exc void)) end)))))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       (C_44:
@@ -1088,6 +1014,44 @@ why --project [...] why/vamos.why
 <project name="vamos" context="why/vamos_ctx.why">
   <function name="Function process_kill">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/vamos_po1.why">
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "64" begin = "21" end = "54"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/vamos_po2.why">
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "65" begin = "21" end = "48"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/vamos_po3.why">
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "66" begin = "21" end = "53"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/vamos_po4.why">
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "79" begin = "20" end = "52"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/vamos_po5.why">
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "79" begin = "20" end = "52"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/vamos_po6.why">
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "63" begin = "21" end = "49"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/vamos_po7.why">
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "64" begin = "21" end = "54"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/vamos_po8.why">
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "65" begin = "21" end = "48"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/vamos_po9.why">
+      <location file = "PPCHOME/tests/jessie/vamos.c" line = "66" begin = "21" end = "53"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/vamos_po10.why">
       <location file = "PPCHOME/tests/jessie/vamos.c" line = "56" begin = "21" end = "31"/>
@@ -1100,7 +1064,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/vamos_po12.why">
-      <location file = "why/vamos.why" line = "789" begin = "19" end = "54"/>
+      <location file = "why/vamos.why" line = "723" begin = "19" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1125,7 +1089,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/vamos_po17.why">
-      <location file = "why/vamos.why" line = "812" begin = "21" end = "50"/>
+      <location file = "why/vamos.why" line = "742" begin = "21" end = "50"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1180,7 +1144,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po28.why">
-      <location file = "why/vamos.why" line = "863" begin = "30" end = "64"/>
+      <location file = "why/vamos.why" line = "791" begin = "30" end = "64"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1215,11 +1179,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po35.why">
-      <location file = "why/vamos.why" line = "850" begin = "53" end = "54"/>
+      <location file = "why/vamos.why" line = "779" begin = "53" end = "54"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/vamos_po36.why">
-      <location file = "why/vamos.why" line = "850" begin = "53" end = "54"/>
+      <location file = "why/vamos.why" line = "779" begin = "53" end = "54"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/vamos_po37.why">
@@ -1233,50 +1197,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po39.why">
-      <location file = "why/vamos.why" line = "760" begin = "42" end = "43"/>
+      <location file = "why/vamos.why" line = "695" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/vamos_po40.why">
-      <location file = "why/vamos.why" line = "760" begin = "42" end = "43"/>
+      <location file = "why/vamos.why" line = "695" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/vamos_po1.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "64" begin = "21" end = "54"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/vamos_po2.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "65" begin = "21" end = "48"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/vamos_po3.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "66" begin = "21" end = "53"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/vamos_po4.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "79" begin = "20" end = "52"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/vamos_po5.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "79" begin = "20" end = "52"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/vamos_po6.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "63" begin = "21" end = "49"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/vamos_po7.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "64" begin = "21" end = "54"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/vamos_po8.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "65" begin = "21" end = "48"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/vamos_po9.why">
-      <location file = "PPCHOME/tests/jessie/vamos.c" line = "66" begin = "21" end = "53"/>
-      <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>
   </function>
@@ -2281,6 +2207,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -2292,6 +2223,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2419,24 +2354,14 @@ axiom uint32_coerce:
     (((0 <= x) and (x <= 4294967295)) ->
      (integer_of_uint32(uint32_of_integer(x)) = x)))
 
+axiom uint32_extensionality:
+  (forall x:uint32.
+    (forall y:uint32.
+      ((integer_of_uint32(x) = integer_of_uint32(y)) -> (x = y))))
+
 axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
-
-predicate valid_bitvector_struct_Proc(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_Proc(p: Proc pointer, a: int, b: int,
   Proc_alloc_table: Proc alloc_table) =

@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -86,6 +86,12 @@ let operator_of_type = function
   | JCTnative n -> operator_of_native n
   | JCTenum _ -> `Integer
   | JCTlogic _ -> `Logic
+  | JCTany | JCTtype_var _ -> assert false (* TODO? *)
+  | JCTnull | JCTpointer _ -> `Pointer
+
+let eq_operator_of_type = function
+  | JCTnative n -> operator_of_native n
+  | JCTenum _ | JCTlogic _ -> `Logic
   | JCTany | JCTtype_var _ -> assert false (* TODO? *)
   | JCTnull | JCTpointer _ -> `Pointer
 
@@ -1059,11 +1065,10 @@ let builtin_logic_symbols =
     Some (JCTnative Tboolean), "\\single_is_plus_infinity", "single_is_plus_infinity", [float_type];
     Some (JCTnative Tboolean), "\\double_is_plus_infinity", "double_is_plus_infinity", [double_type];
 
-  
     Some real_type, "\\exp", "exp", [real_type] ;
     Some real_type, "\\log", "log", [real_type] ;
     Some real_type, "\\log10", "log10", [real_type] ;
-    
+
     Some real_type, "\\cos", "cos", [real_type] ;
     Some real_type, "\\sin", "sin", [real_type] ;
     Some real_type, "\\tan", "tan", [real_type] ;
@@ -1079,7 +1084,7 @@ let builtin_logic_symbols =
     Some real_type, "\\round_float", "round_float", [float_format; rounding_mode; real_type];
     None, "\\no_overflow_single", "no_overflow_single", [rounding_mode; real_type];
     None, "\\no_overflow_double", "no_overflow_double", [rounding_mode; real_type];
-    
+
     Some real_type, "\\round_single", "round_single", [rounding_mode; real_type];
     Some real_type, "\\round_double", "round_double", [rounding_mode; real_type];
 
@@ -1095,24 +1100,24 @@ let builtin_logic_symbols =
 
     Some sign, "\\Positive", "Positive", [];
     Some sign, "\\Negative", "Negative", [];
-    
-    Some (JCTnative Tboolean), "\\le_float", "le_single", [float_type;float_type];
-    Some (JCTnative Tboolean), "\\le_double", "le_double", [double_type;double_type];
 
-    Some (JCTnative Tboolean), "\\lt_float", "lt_single", [float_type;float_type];
-    Some (JCTnative Tboolean), "\\lt_double", "lt_double", [double_type;double_type];
+    Some (JCTnative Tboolean), "\\le_float", "le_single_full", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\le_double", "le_double_full", [double_type;double_type];
 
-    Some (JCTnative Tboolean), "\\ge_float", "ge_single", [float_type;float_type];
-    Some (JCTnative Tboolean), "\\ge_double", "ge_double", [double_type;double_type];
+    Some (JCTnative Tboolean), "\\lt_float", "lt_single_full", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\lt_double", "lt_double_full", [double_type;double_type];
 
-    Some (JCTnative Tboolean), "\\gt_float", "gt_single", [float_type;float_type];
-    Some (JCTnative Tboolean), "\\gt_double", "gt_double", [double_type;double_type];
+    Some (JCTnative Tboolean), "\\ge_float", "ge_single_full", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\ge_double", "ge_double_full", [double_type;double_type];
 
-    Some (JCTnative Tboolean), "\\eq_float", "eq_single", [float_type;float_type];
-    Some (JCTnative Tboolean), "\\eq_double", "eq_double", [double_type;double_type];
+    Some (JCTnative Tboolean), "\\gt_float", "gt_single_full", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\gt_double", "gt_double_full", [double_type;double_type];
 
-    Some (JCTnative Tboolean), "\\ne_float", "ne_single", [float_type;float_type];
-    Some (JCTnative Tboolean), "\\ne_double", "ne_double", [double_type;double_type];
+    Some (JCTnative Tboolean), "\\eq_float", "eq_single_full", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\eq_double", "eq_double_full", [double_type;double_type];
+
+    Some (JCTnative Tboolean), "\\ne_float", "ne_single_full", [float_type;float_type];
+    Some (JCTnative Tboolean), "\\ne_double", "ne_double_full", [double_type;double_type];
 ]
 
 let treatdouble = TreatGenFloat (`Double :> float_format)

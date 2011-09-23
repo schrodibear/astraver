@@ -1,4 +1,35 @@
 ========== file tests/c/quick_sort.c ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
+
 // RUNSIMPLIFY: will ask regtests to run Simplify on this program
 
 #pragma JessieIntegerModel(math)
@@ -65,7 +96,7 @@ void quick_sort(int t[], int n) {
 
 /*
 Local Variables:
-compile-command: "frama-c -jessie quick_sort.c"
+compile-command: "make quick_sort.why3ml"
 End:
 */
 ========== frama-c -jessie execution ==========
@@ -275,32 +306,32 @@ behavior permutation:
 ========== file tests/c/quick_sort.jessie/quick_sort.cloc ==========
 [C_50]
 file = "HOME/tests/c/quick_sort.c"
-line = 50
+line = 81
 begin = 16
 end = 19
 
 [C_51]
 file = "HOME/tests/c/quick_sort.c"
-line = 50
+line = 81
 begin = 2
 end = 20
 
 [quick_rec]
 name = "Function quick_rec"
 file = "HOME/tests/c/quick_sort.c"
-line = 26
+line = 57
 begin = 5
 end = 14
 
 [C_52]
 file = "HOME/tests/c/quick_sort.c"
-line = 51
+line = 82
 begin = 14
 end = 17
 
 [C_53]
 file = "HOME/tests/c/quick_sort.c"
-line = 51
+line = 82
 begin = 2
 end = 20
 
@@ -312,55 +343,55 @@ end = -1
 
 [C_55]
 file = "HOME/tests/c/quick_sort.c"
-line = 22
+line = 53
 begin = 14
 end = 29
 
 [C_56]
 file = "HOME/tests/c/quick_sort.c"
-line = 24
+line = 55
 begin = 14
 end = 37
 
 [C_57]
 file = "HOME/tests/c/quick_sort.c"
-line = 18
+line = 49
 begin = 13
 end = 32
 
 [C_58]
 file = "HOME/tests/c/quick_sort.c"
-line = 18
+line = 49
 begin = 13
 end = 32
 
 [C_59]
 file = "HOME/tests/c/quick_sort.c"
-line = 18
+line = 49
 begin = 13
 end = 32
 
 [C_60]
 file = "HOME/tests/c/quick_sort.c"
-line = 19
+line = 50
 begin = 14
 end = 17
 
 [C_61]
 file = "HOME/tests/c/quick_sort.c"
-line = 61
+line = 92
 begin = 16
 end = 19
 
 [C_62]
 file = "HOME/tests/c/quick_sort.c"
-line = 61
+line = 92
 begin = 2
 end = 20
 
 [C_10]
 file = "HOME/tests/c/quick_sort.c"
-line = 14
+line = 45
 begin = 9
 end = 12
 
@@ -372,333 +403,333 @@ end = -1
 
 [C_11]
 file = "HOME/tests/c/quick_sort.c"
-line = 14
+line = 45
 begin = 9
 end = 12
 
 [C_64]
 file = "HOME/tests/c/quick_sort.c"
-line = 56
+line = 87
 begin = 14
 end = 27
 
 [C_12]
 file = "HOME/tests/c/quick_sort.c"
-line = 9
+line = 40
 begin = 12
 end = 33
 
 [C_65]
 file = "HOME/tests/c/quick_sort.c"
-line = 58
+line = 89
 begin = 14
 end = 39
 
 [C_13]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 39
 
 [C_66]
 file = "HOME/tests/c/quick_sort.c"
-line = 54
+line = 85
 begin = 13
 end = 34
 
 [C_14]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 24
 
 [C_67]
 file = "HOME/tests/c/quick_sort.c"
-line = 54
+line = 85
 begin = 13
 end = 34
 
 [C_15]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 24
 
 [C_68]
 file = "HOME/tests/c/quick_sort.c"
-line = 54
+line = 85
 begin = 13
 end = 34
 
 [C_16]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 24
 
 [C_17]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 28
 end = 39
 
 [C_18]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 28
 end = 39
 
 [C_19]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 28
 end = 39
 
 [C_1]
 file = "HOME/tests/c/quick_sort.c"
-line = 12
+line = 43
 begin = 12
 end = 13
 
 [quick_sort]
 name = "Function quick_sort"
 file = "HOME/tests/c/quick_sort.c"
-line = 60
+line = 91
 begin = 5
 end = 15
 
 [C_2]
 file = "HOME/tests/c/quick_sort.c"
-line = 12
+line = 43
 begin = 12
 end = 16
 
 [C_3]
 file = "HOME/tests/c/quick_sort.c"
-line = 12
+line = 43
 begin = 2
 end = 5
 
 [C_4]
 file = "HOME/tests/c/quick_sort.c"
-line = 13
+line = 44
 begin = 9
 end = 10
 
 [C_20]
 file = "HOME/tests/c/quick_sort.c"
-line = 29
+line = 60
 begin = 6
 end = 7
 
 [C_5]
 file = "HOME/tests/c/quick_sort.c"
-line = 13
+line = 44
 begin = 9
 end = 13
 
 [C_21]
 file = "HOME/tests/c/quick_sort.c"
-line = 29
+line = 60
 begin = 6
 end = 10
 
 [C_6]
 file = "HOME/tests/c/quick_sort.c"
-line = 13
+line = 44
 begin = 2
 end = 3
 
 [C_22]
 file = "HOME/tests/c/quick_sort.c"
-line = 29
+line = 60
 begin = 6
 end = 10
 
 [C_7]
 file = "HOME/tests/c/quick_sort.c"
-line = 13
+line = 44
 begin = 9
 end = 13
 
 [C_23]
 file = "HOME/tests/c/quick_sort.c"
-line = 30
+line = 61
 begin = 6
 end = 7
 
 [C_8]
 file = "HOME/tests/c/quick_sort.c"
-line = 13
+line = 44
 begin = 9
 end = 13
 
 [C_24]
 file = "HOME/tests/c/quick_sort.c"
-line = 40
+line = 71
 begin = 11
 end = 16
 
 [C_9]
 file = "HOME/tests/c/quick_sort.c"
-line = 14
+line = 45
 begin = 2
 end = 3
 
 [C_25]
 file = "HOME/tests/c/quick_sort.c"
-line = 40
+line = 71
 begin = 11
 end = 16
 
 [C_26]
 file = "HOME/tests/c/quick_sort.c"
-line = 38
+line = 69
 begin = 19
 end = 22
 
 [C_27]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 21
 end = 51
 
 [C_28]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 21
 end = 30
 
 [C_29]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 34
 end = 51
 
 [C_30]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 34
 end = 40
 
 [C_31]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 39
 end = 51
 
 [C_32]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 39
 end = 44
 
 [C_33]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 43
 end = 51
 
 [C_34]
 file = "HOME/tests/c/quick_sort.c"
-line = 36
+line = 67
 begin = 8
 end = 31
 
 [C_35]
 file = "HOME/tests/c/quick_sort.c"
-line = 34
+line = 65
 begin = 8
 end = 50
 
 [C_36]
 file = "HOME/tests/c/quick_sort.c"
-line = 32
+line = 63
 begin = 8
 end = 50
 
 [C_37]
 file = "HOME/tests/c/quick_sort.c"
-line = 43
+line = 74
 begin = 15
 end = 18
 
 [C_38]
 file = "HOME/tests/c/quick_sort.c"
-line = 43
+line = 74
 begin = 15
 end = 18
 
 [C_39]
 file = "HOME/tests/c/quick_sort.c"
-line = 43
+line = 74
 begin = 6
 end = 19
 
 [swap]
 name = "Function swap"
 file = "HOME/tests/c/quick_sort.c"
-line = 11
+line = 42
 begin = 5
 end = 9
 
 [C_40]
 file = "HOME/tests/c/quick_sort.c"
-line = 44
+line = 75
 begin = 17
 end = 39
 
 [C_41]
 file = "HOME/tests/c/quick_sort.c"
-line = 41
+line = 72
 begin = 8
 end = 9
 
 [C_42]
 file = "HOME/tests/c/quick_sort.c"
-line = 41
+line = 72
 begin = 8
 end = 12
 
 [C_43]
 file = "HOME/tests/c/quick_sort.c"
-line = 40
+line = 71
 begin = 26
 end = 29
 
 [C_44]
 file = "HOME/tests/c/quick_sort.c"
-line = 40
+line = 71
 begin = 26
 end = 29
 
 [C_45]
 file = "HOME/tests/c/quick_sort.c"
-line = 47
+line = 78
 begin = 13
 end = 24
 
 [C_46]
 file = "HOME/tests/c/quick_sort.c"
-line = 47
+line = 78
 begin = 13
 end = 19
 
 [C_47]
 file = "HOME/tests/c/quick_sort.c"
-line = 47
+line = 78
 begin = 18
 end = 24
 
 [C_48]
 file = "HOME/tests/c/quick_sort.c"
-line = 48
+line = 79
 begin = 4
 end = 15
 
 [C_49]
 file = "HOME/tests/c/quick_sort.c"
-line = 49
+line = 80
 begin = 13
 end = 34
 
@@ -721,10 +752,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs quick
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs quick_sort.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/quick_sort_why.sx
 
@@ -784,6 +816,13 @@ simplify: simplify/quick_sort_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/quick_sort_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/quick_sort_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -857,6 +896,9 @@ why/%_why3.why: why/%.why
 why3ide: why/quick_sort_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: quick_sort.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include quick_sort.depend
 
 depend: coq/quick_sort_why.v
@@ -882,70 +924,70 @@ end = 47
 
 [JC_92]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 21
 end = 30
 
 [JC_40]
 file = "HOME/tests/c/quick_sort.c"
-line = 22
+line = 53
 begin = 14
 end = 29
 
 [JC_93]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 34
 end = 40
 
 [JC_41]
 file = "HOME/tests/c/quick_sort.c"
-line = 24
+line = 55
 begin = 14
 end = 37
 
 [quick_rec_ensures_permutation]
 name = "Function quick_rec"
-behavior = "Normal behavior `permutation'"
+behavior = "Behavior `permutation'"
 file = "HOME/tests/c/quick_sort.c"
-line = 26
+line = 57
 begin = 5
 end = 14
 
 [JC_94]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 39
 end = 44
 
 [JC_42]
 file = "HOME/tests/c/quick_sort.c"
-line = 24
+line = 55
 begin = 14
 end = 37
 
 [JC_95]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 43
 end = 51
 
 [JC_43]
 kind = PointerDeref
 file = "HOME/tests/c/quick_sort.c"
-line = 29
+line = 60
 begin = 6
 end = 10
 
 [JC_96]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 21
 end = 51
 
 [JC_44]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 21
 end = 30
 
@@ -958,13 +1000,13 @@ end = 49
 
 [JC_97]
 file = "HOME/tests/c/quick_sort.c"
-line = 36
+line = 67
 begin = 8
 end = 31
 
 [JC_45]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 34
 end = 40
 
@@ -977,19 +1019,19 @@ end = 49
 
 [JC_98]
 file = "HOME/tests/c/quick_sort.c"
-line = 34
+line = 65
 begin = 8
 end = 50
 
 [JC_46]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 39
 end = 44
 
 [JC_1]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 24
 
@@ -1001,19 +1043,19 @@ end = -1
 
 [JC_99]
 file = "HOME/tests/c/quick_sort.c"
-line = 32
+line = 63
 begin = 8
 end = 50
 
 [JC_47]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 43
 end = 51
 
 [JC_2]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 24
 
@@ -1025,13 +1067,13 @@ end = 1398
 
 [JC_48]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 21
 end = 51
 
 [JC_3]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 28
 end = 39
 
@@ -1043,13 +1085,13 @@ end = 1398
 
 [JC_49]
 file = "HOME/tests/c/quick_sort.c"
-line = 36
+line = 67
 begin = 8
 end = 31
 
 [JC_4]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 28
 end = 39
 
@@ -1062,13 +1104,13 @@ end = 44
 
 [JC_5]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 39
 
 [JC_104]
 file = "HOME/tests/c/quick_sort.c"
-line = 44
+line = 75
 begin = 17
 end = 39
 
@@ -1080,21 +1122,21 @@ end = -1
 
 [quick_sort_ensures_sorted]
 name = "Function quick_sort"
-behavior = "Normal behavior `sorted'"
+behavior = "Behavior `sorted'"
 file = "HOME/tests/c/quick_sort.c"
-line = 60
+line = 91
 begin = 5
 end = 15
 
 [JC_105]
 file = "HOME/tests/c/quick_sort.c"
-line = 47
+line = 78
 begin = 13
 end = 19
 
 [JC_7]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 24
 
@@ -1102,56 +1144,56 @@ end = 24
 name = "Function quick_sort"
 behavior = "Safety"
 file = "HOME/tests/c/quick_sort.c"
-line = 60
+line = 91
 begin = 5
 end = 15
 
 [JC_106]
 file = "HOME/tests/c/quick_sort.c"
-line = 47
+line = 78
 begin = 18
 end = 24
 
 [JC_8]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 24
 
 [JC_107]
 file = "HOME/tests/c/quick_sort.c"
-line = 47
+line = 78
 begin = 13
 end = 24
 
 [JC_9]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 28
 end = 39
 
 [JC_108]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.c"
-line = 48
+line = 79
 begin = 4
 end = 15
 
 [JC_109]
 file = "HOME/tests/c/quick_sort.c"
-line = 49
+line = 80
 begin = 13
 end = 34
 
 [JC_50]
 file = "HOME/tests/c/quick_sort.c"
-line = 34
+line = 65
 begin = 8
 end = 50
 
 [JC_51]
 file = "HOME/tests/c/quick_sort.c"
-line = 32
+line = 63
 begin = 8
 end = 50
 
@@ -1176,7 +1218,7 @@ end = 1398
 [JC_55]
 kind = PointerDeref
 file = "HOME/tests/c/quick_sort.c"
-line = 41
+line = 72
 begin = 8
 end = 12
 
@@ -1196,7 +1238,7 @@ end = 47
 
 [JC_57]
 file = "HOME/tests/c/quick_sort.c"
-line = 44
+line = 75
 begin = 17
 end = 39
 
@@ -1209,69 +1251,69 @@ end = 47
 
 [JC_58]
 file = "HOME/tests/c/quick_sort.c"
-line = 38
+line = 69
 begin = 19
 end = 22
 
 [JC_112]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 21
 end = 30
 
 [JC_59]
 file = "HOME/tests/c/quick_sort.c"
-line = 47
+line = 78
 begin = 13
 end = 19
 
 [JC_113]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 34
 end = 40
 
 [JC_114]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 39
 end = 44
 
 [JC_115]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 43
 end = 51
 
 [JC_116]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 21
 end = 51
 
 [JC_117]
 file = "HOME/tests/c/quick_sort.c"
-line = 36
+line = 67
 begin = 8
 end = 31
 
 [JC_118]
 file = "HOME/tests/c/quick_sort.c"
-line = 34
+line = 65
 begin = 8
 end = 50
 
 [JC_119]
 file = "HOME/tests/c/quick_sort.c"
-line = 32
+line = 63
 begin = 8
 end = 50
 
 [quick_rec_ensures_default]
 name = "Function quick_rec"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/quick_sort.c"
-line = 26
+line = 57
 begin = 5
 end = 14
 
@@ -1279,44 +1321,44 @@ end = 14
 name = "Function swap"
 behavior = "Safety"
 file = "HOME/tests/c/quick_sort.c"
-line = 11
+line = 42
 begin = 5
 end = 9
 
 [JC_60]
 file = "HOME/tests/c/quick_sort.c"
-line = 47
+line = 78
 begin = 18
 end = 24
 
 [JC_61]
 file = "HOME/tests/c/quick_sort.c"
-line = 47
+line = 78
 begin = 13
 end = 24
 
 [JC_62]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.c"
-line = 48
+line = 79
 begin = 4
 end = 15
 
 [JC_10]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 28
 end = 39
 
 [JC_63]
 file = "HOME/tests/c/quick_sort.c"
-line = 49
+line = 80
 begin = 13
 end = 34
 
 [JC_11]
 file = "HOME/tests/c/quick_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 39
 
@@ -1335,25 +1377,25 @@ end = -1
 
 [JC_65]
 file = "HOME/tests/c/quick_sort.c"
-line = 19
+line = 50
 begin = 14
 end = 17
 
 [JC_13]
 file = "HOME/tests/c/quick_sort.c"
-line = 9
+line = 40
 begin = 12
 end = 33
 
 [JC_66]
 file = "HOME/tests/c/quick_sort.c"
-line = 19
+line = 50
 begin = 14
 end = 17
 
 [JC_14]
 file = "HOME/tests/c/quick_sort.c"
-line = 11
+line = 42
 begin = 5
 end = 9
 
@@ -1386,7 +1428,7 @@ end = 1398
 name = "Function quick_rec"
 behavior = "Safety"
 file = "HOME/tests/c/quick_sort.c"
-line = 26
+line = 57
 begin = 5
 end = 14
 
@@ -1399,7 +1441,7 @@ end = 47
 
 [JC_16]
 file = "HOME/tests/c/quick_sort.c"
-line = 9
+line = 40
 begin = 12
 end = 33
 
@@ -1411,13 +1453,13 @@ end = 1398
 
 [JC_69]
 file = "HOME/tests/c/quick_sort.c"
-line = 19
+line = 50
 begin = 14
 end = 17
 
 [JC_17]
 file = "HOME/tests/c/quick_sort.c"
-line = 11
+line = 42
 begin = 5
 end = 9
 
@@ -1436,15 +1478,15 @@ end = 16
 
 [quick_sort_ensures_default]
 name = "Function quick_sort"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/quick_sort.c"
-line = 60
+line = 91
 begin = 5
 end = 15
 
 [JC_124]
 file = "HOME/tests/c/quick_sort.c"
-line = 44
+line = 75
 begin = 17
 end = 39
 
@@ -1456,38 +1498,38 @@ end = -1
 
 [JC_125]
 file = "HOME/tests/c/quick_sort.c"
-line = 47
+line = 78
 begin = 13
 end = 19
 
 [JC_126]
 file = "HOME/tests/c/quick_sort.c"
-line = 47
+line = 78
 begin = 18
 end = 24
 
 [JC_127]
 file = "HOME/tests/c/quick_sort.c"
-line = 47
+line = 78
 begin = 13
 end = 24
 
 [JC_128]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.c"
-line = 48
+line = 79
 begin = 4
 end = 15
 
 [JC_129]
 file = "HOME/tests/c/quick_sort.c"
-line = 49
+line = 80
 begin = 13
 end = 34
 
 [JC_70]
 file = "HOME/tests/c/quick_sort.c"
-line = 19
+line = 50
 begin = 14
 end = 17
 
@@ -1500,7 +1542,7 @@ end = 47
 
 [JC_72]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 21
 end = 30
 
@@ -1512,33 +1554,33 @@ end = -1
 
 [JC_73]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 34
 end = 40
 
 [JC_21]
 kind = PointerDeref
 file = "HOME/tests/c/quick_sort.c"
-line = 12
+line = 43
 begin = 12
 end = 16
 
 [JC_74]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 39
 end = 44
 
 [JC_22]
 kind = PointerDeref
 file = "HOME/tests/c/quick_sort.c"
-line = 13
+line = 44
 begin = 9
 end = 13
 
 [JC_75]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 43
 end = 51
 
@@ -1551,15 +1593,15 @@ end = 77
 
 [JC_76]
 file = "HOME/tests/c/quick_sort.c"
-line = 37
+line = 68
 begin = 21
 end = 51
 
 [swap_ensures_default]
 name = "Function swap"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/quick_sort.c"
-line = 11
+line = 42
 begin = 5
 end = 9
 
@@ -1579,13 +1621,13 @@ end = 47
 
 [JC_77]
 file = "HOME/tests/c/quick_sort.c"
-line = 36
+line = 67
 begin = 8
 end = 31
 
 [JC_25]
 file = "HOME/tests/c/quick_sort.c"
-line = 18
+line = 49
 begin = 13
 end = 32
 
@@ -1598,37 +1640,37 @@ end = 47
 
 [JC_78]
 file = "HOME/tests/c/quick_sort.c"
-line = 34
+line = 65
 begin = 8
 end = 50
 
 [JC_26]
 file = "HOME/tests/c/quick_sort.c"
-line = 18
+line = 49
 begin = 13
 end = 32
 
 [JC_132]
 file = "HOME/tests/c/quick_sort.c"
-line = 54
+line = 85
 begin = 13
 end = 34
 
 [JC_79]
 file = "HOME/tests/c/quick_sort.c"
-line = 32
+line = 63
 begin = 8
 end = 50
 
 [JC_27]
 file = "HOME/tests/c/quick_sort.c"
-line = 18
+line = 49
 begin = 13
 end = 32
 
 [JC_133]
 file = "HOME/tests/c/quick_sort.c"
-line = 54
+line = 85
 begin = 13
 end = 34
 
@@ -1640,13 +1682,13 @@ end = -1
 
 [JC_134]
 file = "HOME/tests/c/quick_sort.c"
-line = 54
+line = 85
 begin = 13
 end = 34
 
 [JC_29]
 file = "HOME/tests/c/quick_sort.c"
-line = 18
+line = 49
 begin = 13
 end = 32
 
@@ -1658,19 +1700,19 @@ end = -1
 
 [JC_136]
 file = "HOME/tests/c/quick_sort.c"
-line = 54
+line = 85
 begin = 13
 end = 34
 
 [JC_137]
 file = "HOME/tests/c/quick_sort.c"
-line = 54
+line = 85
 begin = 13
 end = 34
 
 [JC_138]
 file = "HOME/tests/c/quick_sort.c"
-line = 54
+line = 85
 begin = 13
 end = 34
 
@@ -1700,7 +1742,7 @@ end = 1398
 
 [JC_30]
 file = "HOME/tests/c/quick_sort.c"
-line = 18
+line = 49
 begin = 13
 end = 32
 
@@ -1713,21 +1755,21 @@ end = 44
 
 [JC_31]
 file = "HOME/tests/c/quick_sort.c"
-line = 18
+line = 49
 begin = 13
 end = 32
 
 [quick_sort_ensures_permutation]
 name = "Function quick_sort"
-behavior = "Normal behavior `permutation'"
+behavior = "Behavior `permutation'"
 file = "HOME/tests/c/quick_sort.c"
-line = 60
+line = 91
 begin = 5
 end = 15
 
 [JC_84]
 file = "HOME/tests/c/quick_sort.c"
-line = 44
+line = 75
 begin = 17
 end = 39
 
@@ -1739,15 +1781,15 @@ end = -1
 
 [quick_rec_ensures_sorted]
 name = "Function quick_rec"
-behavior = "Normal behavior `sorted'"
+behavior = "Behavior `sorted'"
 file = "HOME/tests/c/quick_sort.c"
-line = 26
+line = 57
 begin = 5
 end = 14
 
 [JC_85]
 file = "HOME/tests/c/quick_sort.c"
-line = 47
+line = 78
 begin = 13
 end = 19
 
@@ -1759,13 +1801,13 @@ end = -1
 
 [JC_86]
 file = "HOME/tests/c/quick_sort.c"
-line = 47
+line = 78
 begin = 18
 end = 24
 
 [JC_34]
 file = "HOME/tests/c/quick_sort.c"
-line = 26
+line = 57
 begin = 5
 end = 14
 
@@ -1777,7 +1819,7 @@ end = -1
 
 [JC_87]
 file = "HOME/tests/c/quick_sort.c"
-line = 47
+line = 78
 begin = 13
 end = 24
 
@@ -1796,13 +1838,13 @@ end = -1
 [JC_88]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.c"
-line = 48
+line = 79
 begin = 4
 end = 15
 
 [JC_36]
 file = "HOME/tests/c/quick_sort.c"
-line = 26
+line = 57
 begin = 5
 end = 14
 
@@ -1814,7 +1856,7 @@ end = -1
 
 [JC_89]
 file = "HOME/tests/c/quick_sort.c"
-line = 49
+line = 80
 begin = 13
 end = 34
 
@@ -1838,31 +1880,31 @@ end = -1
 
 [JC_144]
 file = "HOME/tests/c/quick_sort.c"
-line = 56
+line = 87
 begin = 14
 end = 27
 
 [JC_39]
 file = "HOME/tests/c/quick_sort.c"
-line = 22
+line = 53
 begin = 14
 end = 29
 
 [JC_145]
 file = "HOME/tests/c/quick_sort.c"
-line = 56
+line = 87
 begin = 14
 end = 27
 
 [JC_146]
 file = "HOME/tests/c/quick_sort.c"
-line = 58
+line = 89
 begin = 14
 end = 39
 
 [JC_147]
 file = "HOME/tests/c/quick_sort.c"
-line = 58
+line = 89
 begin = 14
 end = 39
 
@@ -1889,23 +1931,17 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
 predicate Swap(a:intP pointer, i:int, j:int,
  intP_intM_a_1_at_L2:(intP, int) memory,
  intP_intM_a_1_at_L1:(intP, int) memory) =
- (eq_int(select(intP_intM_a_1_at_L1, shift(a, i)),
-  select(intP_intM_a_1_at_L2, shift(a, j)))
- and (eq_int(select(intP_intM_a_1_at_L1, shift(a, j)),
-      select(intP_intM_a_1_at_L2, shift(a, i)))
+ ((select(intP_intM_a_1_at_L1, shift(a, i)) = select(intP_intM_a_1_at_L2,
+                                              shift(a, j)))
+ and ((select(intP_intM_a_1_at_L1, shift(a, j)) = select(intP_intM_a_1_at_L2,
+                                                  shift(a, i)))
      and (forall k:int.
-          ((neq_int(k, i) and neq_int(k, j)) ->
-           eq_int(select(intP_intM_a_1_at_L1, shift(a, k)),
-           select(intP_intM_a_1_at_L2, shift(a, k)))))))
+          (((k <> i) and (k <> j)) ->
+           (select(intP_intM_a_1_at_L1, shift(a, k)) = select(intP_intM_a_1_at_L2,
+                                                       shift(a, k)))))))
 
 inductive Permut: intP pointer, int, int, (intP, int) memory,
                   (intP, int) memory -> prop =
@@ -1953,8 +1989,6 @@ inductive Permut: intP pointer, int, int, (intP, int) memory,
                         Permut(a_4, l_3, h_3, intP_intM_a_0_2_at_L2,
                         intP_intM_a_0_2_at_L1)))))))))
  
-exception Return_label_exc of unit
-
 predicate Sorted(a_5:intP pointer, l_4:int, h_4:int,
  intP_intM_a_5_3_at_L:(intP, int) memory) =
  (forall i_1:int.
@@ -2058,21 +2092,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -2117,59 +2136,13 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -2256,11 +2229,11 @@ parameter quick_rec :
     intP_intM_t_5:(intP, int) memory ref ->
      intP_t_5_alloc_table:intP alloc_table ->
       { } unit reads intP_intM_t_5 writes intP_intM_t_5
-      { ((JC_42: Permut(t@, l_0@, r@, intP_intM_t_5, intP_intM_t_5@))
-        and ((JC_40: Sorted(t@, l_0@, add_int(r@, (1)), intP_intM_t_5))
+      { ((JC_42: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@))
+        and ((JC_40: Sorted(t, l_0, add_int(r, (1)), intP_intM_t_5))
             and (JC_36:
-                not_assigns(intP_t_5_alloc_table@, intP_intM_t_5@,
-                intP_intM_t_5, pset_range(pset_singleton(t@), l_0@, r@))))) }
+                not_assigns(intP_t_5_alloc_table, intP_intM_t_5@,
+                intP_intM_t_5, pset_range(pset_singleton(t), l_0, r))))) }
 
 parameter quick_rec_requires :
  t:intP pointer ->
@@ -2272,11 +2245,11 @@ parameter quick_rec_requires :
         ((JC_25: le_int(offset_min(intP_t_5_alloc_table, t), l_0))
         and (JC_26: ge_int(offset_max(intP_t_5_alloc_table, t), r))))}
       unit reads intP_intM_t_5 writes intP_intM_t_5
-      { ((JC_42: Permut(t@, l_0@, r@, intP_intM_t_5, intP_intM_t_5@))
-        and ((JC_40: Sorted(t@, l_0@, add_int(r@, (1)), intP_intM_t_5))
+      { ((JC_42: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@))
+        and ((JC_40: Sorted(t, l_0, add_int(r, (1)), intP_intM_t_5))
             and (JC_36:
-                not_assigns(intP_t_5_alloc_table@, intP_intM_t_5@,
-                intP_intM_t_5, pset_range(pset_singleton(t@), l_0@, r@))))) }
+                not_assigns(intP_t_5_alloc_table, intP_intM_t_5@,
+                intP_intM_t_5, pset_range(pset_singleton(t), l_0, r))))) }
 
 parameter quick_sort :
  t_0:intP pointer ->
@@ -2285,9 +2258,8 @@ parameter quick_sort :
     intP_t_0_6_alloc_table:intP alloc_table ->
      { } unit reads intP_intM_t_0_6 writes intP_intM_t_0_6
      { ((JC_147:
-        Permut(t_0@, (0), sub_int(n@, (1)), intP_intM_t_0_6,
-        intP_intM_t_0_6@))
-       and (JC_145: Sorted(t_0@, (0), n@, intP_intM_t_0_6))) }
+        Permut(t_0, (0), sub_int(n, (1)), intP_intM_t_0_6, intP_intM_t_0_6@))
+       and (JC_145: Sorted(t_0, (0), n, intP_intM_t_0_6))) }
 
 parameter quick_sort_requires :
  t_0:intP pointer ->
@@ -2300,9 +2272,8 @@ parameter quick_sort_requires :
            ge_int(offset_max(intP_t_0_6_alloc_table, t_0), sub_int(n, (1))))))}
      unit reads intP_intM_t_0_6 writes intP_intM_t_0_6
      { ((JC_147:
-        Permut(t_0@, (0), sub_int(n@, (1)), intP_intM_t_0_6,
-        intP_intM_t_0_6@))
-       and (JC_145: Sorted(t_0@, (0), n@, intP_intM_t_0_6))) }
+        Permut(t_0, (0), sub_int(n, (1)), intP_intM_t_0_6, intP_intM_t_0_6@))
+       and (JC_145: Sorted(t_0, (0), n, intP_intM_t_0_6))) }
 
 parameter swap :
  t_1:intP pointer ->
@@ -2312,12 +2283,12 @@ parameter swap :
      intP_t_1_4_alloc_table:intP alloc_table ->
       { } unit reads intP_intM_t_1_4 writes intP_intM_t_1_4
       { (JC_18:
-        ((JC_16: Swap(t_1@, i_0@, j_0@, intP_intM_t_1_4, intP_intM_t_1_4@))
+        ((JC_16: Swap(t_1, i_0, j_0, intP_intM_t_1_4, intP_intM_t_1_4@))
         and (JC_17:
-            not_assigns(intP_t_1_4_alloc_table@, intP_intM_t_1_4@,
+            not_assigns(intP_t_1_4_alloc_table, intP_intM_t_1_4@,
             intP_intM_t_1_4,
-            pset_union(pset_range(pset_singleton(t_1@), j_0@, j_0@),
-            pset_range(pset_singleton(t_1@), i_0@, i_0@)))))) }
+            pset_union(pset_range(pset_singleton(t_1), j_0, j_0),
+            pset_range(pset_singleton(t_1), i_0, i_0)))))) }
 
 parameter swap_requires :
  t_1:intP pointer ->
@@ -2333,12 +2304,12 @@ parameter swap_requires :
                     ge_int(offset_max(intP_t_1_4_alloc_table, t_1), j_0))))))}
       unit reads intP_intM_t_1_4 writes intP_intM_t_1_4
       { (JC_18:
-        ((JC_16: Swap(t_1@, i_0@, j_0@, intP_intM_t_1_4, intP_intM_t_1_4@))
+        ((JC_16: Swap(t_1, i_0, j_0, intP_intM_t_1_4, intP_intM_t_1_4@))
         and (JC_17:
-            not_assigns(intP_t_1_4_alloc_table@, intP_intM_t_1_4@,
+            not_assigns(intP_t_1_4_alloc_table, intP_intM_t_1_4@,
             intP_intM_t_1_4,
-            pset_union(pset_range(pset_singleton(t_1@), j_0@, j_0@),
-            pset_range(pset_singleton(t_1@), i_0@, i_0@)))))) }
+            pset_union(pset_range(pset_singleton(t_1), j_0, j_0),
+            pset_range(pset_singleton(t_1), i_0, i_0)))))) }
 
 let quick_rec_ensures_default =
  fun (t : intP pointer) (l_0 : int) (r : int) (intP_intM_t_5 : (intP, int) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
@@ -2352,16 +2323,13 @@ let quick_rec_ensures_default =
      (let m = ref (any_int void) in
      (let i_0_1 = ref (any_int void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_22:
          (C_23:
          (C_25:
          begin
-           (if ((ge_int_ l_0) r)
-           then (let jessie_<num> = (raise (Return_label_exc void)) in void)
+           (if ((ge_int_ l_0) r) then (raise (Return_label_exc void))
            else void);
           (let jessie_<num> =
           (v := (C_21: ((safe_acc_ !intP_intM_t_5) (C_20: ((shift t) l_0))))) in
@@ -2371,7 +2339,7 @@ let quick_rec_ensures_default =
           while true do
           { invariant
               (((JC_76:
-                ((JC_72: eq_int(select(intP_intM_t_5, shift(t, l_0)), v))
+                ((JC_72: (select(intP_intM_t_5, shift(t, l_0)) = v))
                 and ((JC_73: le_int(l_0, m))
                     and ((JC_74: lt_int(m, i_0_1))
                         and (JC_75: le_int(i_0_1, add_int(r, (1))))))))
@@ -2386,22 +2354,18 @@ let quick_rec_ensures_default =
                             ((lt_int(l_0, j_2) and le_int(j_2, m)) ->
                              lt_int(select(intP_intM_t_5, shift(t, j_2)), v)))))))
               and (JC_81:
-                  not_assigns(intP_t_5_alloc_table@init, intP_intM_t_5@init,
-                  intP_intM_t_5,
-                  pset_range(pset_singleton(t@init), l_0@init, r@init)))) 
+                  not_assigns(intP_t_5_alloc_table, intP_intM_t_5@init,
+                  intP_intM_t_5, pset_range(pset_singleton(t), l_0, r)))) 
              }
            begin
              [ { } unit { true } ];
             try
-             (let jessie_<num> =
              begin
                (let jessie_<num> =
                (C_44:
                begin
                  (if ((le_int_ !i_0_1) r) then void
-                 else
-                  (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                  void));
+                 else (raise (Goto_while_0_break_exc void)));
                 (if ((lt_int_ (C_42:
                               ((safe_acc_ !intP_intM_t_5) (C_41:
                                                           ((shift t) !i_0_1))))) !v)
@@ -2422,9 +2386,9 @@ let quick_rec_ensures_default =
                     Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) };
                   void); void end)) else void);
                 (i_0_1 := (C_43: ((add_int !i_0_1) (1)))); !i_0_1 end) in
-               void); (raise (Loop_continue_exc void)) end in void) with
+               void); (raise (Loop_continue_exc void)) end with
              Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end))) in void) with
+          (raise (Goto_while_0_break_exc void)) end))) with
          Goto_while_0_break_exc jessie_<num> ->
          (while_0_break:
          (L:
@@ -2454,12 +2418,12 @@ let quick_rec_ensures_default =
           (let jessie_<num> = r in
           (JC_91:
           (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
-         end))) end; (raise (Return_label_exc void)) end in void) with
+         end))) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<num> -> (return_label: (raise Return)) end)));
     (raise Return) end with Return -> void end)
   { (JC_34:
-    not_assigns(intP_t_5_alloc_table@, intP_intM_t_5@, intP_intM_t_5,
-    pset_range(pset_singleton(t@), l_0@, r@))) }
+    not_assigns(intP_t_5_alloc_table, intP_intM_t_5@, intP_intM_t_5,
+    pset_range(pset_singleton(t), l_0, r))) }
 
 let quick_rec_ensures_permutation =
  fun (t : intP pointer) (l_0 : int) (r : int) (intP_intM_t_5 : (intP, int) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
@@ -2473,16 +2437,13 @@ let quick_rec_ensures_permutation =
      (let m = ref (any_int void) in
      (let i_0_1 = ref (any_int void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_22:
          (C_23:
          (C_25:
          begin
-           (if ((ge_int_ l_0) r)
-           then (let jessie_<num> = (raise (Return_label_exc void)) in void)
+           (if ((ge_int_ l_0) r) then (raise (Return_label_exc void))
            else void);
           (let jessie_<num> =
           (v := (C_21: ((safe_acc_ !intP_intM_t_5) (C_20: ((shift t) l_0))))) in
@@ -2494,7 +2455,7 @@ let quick_rec_ensures_permutation =
            begin
              [ { } unit reads i_0_1,intP_intM_t_5,m,v
                { ((JC_116:
-                  ((JC_112: eq_int(select(intP_intM_t_5, shift(t, l_0)), v))
+                  ((JC_112: (select(intP_intM_t_5, shift(t, l_0)) = v))
                   and ((JC_113: le_int(l_0, m))
                       and ((JC_114: lt_int(m, i_0_1))
                           and (JC_115: le_int(i_0_1, add_int(r, (1))))))))
@@ -2510,15 +2471,12 @@ let quick_rec_ensures_permutation =
                                lt_int(select(intP_intM_t_5, shift(t, j_2)),
                                v))))))) } ];
             try
-             (let jessie_<num> =
              begin
                (let jessie_<num> =
                (C_44:
                begin
                  (if ((le_int_ !i_0_1) r) then void
-                 else
-                  (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                  void));
+                 else (raise (Goto_while_0_break_exc void)));
                 (if ((lt_int_ (C_42:
                               ((safe_acc_ !intP_intM_t_5) (C_41:
                                                           ((shift t) !i_0_1))))) !v)
@@ -2539,9 +2497,9 @@ let quick_rec_ensures_permutation =
                       Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) } ];
                   void end)) else void);
                 (i_0_1 := (C_43: ((add_int !i_0_1) (1)))); !i_0_1 end) in
-               void); (raise (Loop_continue_exc void)) end in void) with
+               void); (raise (Loop_continue_exc void)) end with
              Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end))) in void) with
+          (raise (Goto_while_0_break_exc void)) end))) with
          Goto_while_0_break_exc jessie_<num> ->
          (while_0_break:
          (L:
@@ -2571,10 +2529,10 @@ let quick_rec_ensures_permutation =
           (let jessie_<num> = r in
           (JC_131:
           (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
-         end))) end; (raise (Return_label_exc void)) end in void) with
+         end))) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<num> -> (return_label: (raise Return)) end)));
     (raise Return) end with Return -> void end)
-  { (JC_41: Permut(t@, l_0@, r@, intP_intM_t_5, intP_intM_t_5@)) }
+  { (JC_41: Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@)) }
 
 let quick_rec_ensures_sorted =
  fun (t : intP pointer) (l_0 : int) (r : int) (intP_intM_t_5 : (intP, int) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
@@ -2588,16 +2546,13 @@ let quick_rec_ensures_sorted =
      (let m = ref (any_int void) in
      (let i_0_1 = ref (any_int void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_22:
          (C_23:
          (C_25:
          begin
-           (if ((ge_int_ l_0) r)
-           then (let jessie_<num> = (raise (Return_label_exc void)) in void)
+           (if ((ge_int_ l_0) r) then (raise (Return_label_exc void))
            else void);
           (let jessie_<num> =
           (v := (C_21: ((safe_acc_ !intP_intM_t_5) (C_20: ((shift t) l_0))))) in
@@ -2609,7 +2564,7 @@ let quick_rec_ensures_sorted =
            begin
              [ { } unit reads i_0_1,intP_intM_t_5,m,v
                { ((JC_96:
-                  ((JC_92: eq_int(select(intP_intM_t_5, shift(t, l_0)), v))
+                  ((JC_92: (select(intP_intM_t_5, shift(t, l_0)) = v))
                   and ((JC_93: le_int(l_0, m))
                       and ((JC_94: lt_int(m, i_0_1))
                           and (JC_95: le_int(i_0_1, add_int(r, (1))))))))
@@ -2625,15 +2580,12 @@ let quick_rec_ensures_sorted =
                                lt_int(select(intP_intM_t_5, shift(t, j_2)),
                                v))))))) } ];
             try
-             (let jessie_<num> =
              begin
                (let jessie_<num> =
                (C_44:
                begin
                  (if ((le_int_ !i_0_1) r) then void
-                 else
-                  (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                  void));
+                 else (raise (Goto_while_0_break_exc void)));
                 (if ((lt_int_ (C_42:
                               ((safe_acc_ !intP_intM_t_5) (C_41:
                                                           ((shift t) !i_0_1))))) !v)
@@ -2654,9 +2606,9 @@ let quick_rec_ensures_sorted =
                       Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) } ];
                   void end)) else void);
                 (i_0_1 := (C_43: ((add_int !i_0_1) (1)))); !i_0_1 end) in
-               void); (raise (Loop_continue_exc void)) end in void) with
+               void); (raise (Loop_continue_exc void)) end with
              Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end))) in void) with
+          (raise (Goto_while_0_break_exc void)) end))) with
          Goto_while_0_break_exc jessie_<num> ->
          (while_0_break:
          (L:
@@ -2686,10 +2638,10 @@ let quick_rec_ensures_sorted =
           (let jessie_<num> = r in
           (JC_111:
           (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))
-         end))) end; (raise (Return_label_exc void)) end in void) with
+         end))) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<num> -> (return_label: (raise Return)) end)));
     (raise Return) end with Return -> void end)
-  { (JC_39: Sorted(t@, l_0@, add_int(r@, (1)), intP_intM_t_5)) }
+  { (JC_39: Sorted(t, l_0, add_int(r, (1)), intP_intM_t_5)) }
 
 let quick_rec_safety =
  fun (t : intP pointer) (l_0 : int) (r : int) (intP_intM_t_5 : (intP, int) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
@@ -2703,16 +2655,13 @@ let quick_rec_safety =
      (let m = ref (any_int void) in
      (let i_0_1 = ref (any_int void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_22:
          (C_23:
          (C_25:
          begin
-           (if ((ge_int_ l_0) r)
-           then (let jessie_<num> = (raise (Return_label_exc void)) in void)
+           (if ((ge_int_ l_0) r) then (raise (Return_label_exc void))
            else void);
           (let jessie_<num> =
           (v := (C_21:
@@ -2726,7 +2675,7 @@ let quick_rec_safety =
            begin
              [ { } unit reads i_0_1,intP_intM_t_5,m,v
                { ((JC_48:
-                  ((JC_44: eq_int(select(intP_intM_t_5, shift(t, l_0)), v))
+                  ((JC_44: (select(intP_intM_t_5, shift(t, l_0)) = v))
                   and ((JC_45: le_int(l_0, m))
                       and ((JC_46: lt_int(m, i_0_1))
                           and (JC_47: le_int(i_0_1, add_int(r, (1))))))))
@@ -2742,15 +2691,12 @@ let quick_rec_safety =
                                lt_int(select(intP_intM_t_5, shift(t, j_2)),
                                v))))))) } ];
             try
-             (let jessie_<num> =
              begin
                (let jessie_<num> =
                (C_44:
                begin
                  (if ((le_int_ !i_0_1) r) then void
-                 else
-                  (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                  void));
+                 else (raise (Goto_while_0_break_exc void)));
                 (if ((lt_int_ (C_42:
                               (JC_55:
                               ((((offset_acc_ intP_t_5_alloc_table) !intP_intM_t_5) t) !i_0_1)))) !v)
@@ -2771,9 +2717,9 @@ let quick_rec_safety =
                       Permut(t, l_0, r, intP_intM_t_5, intP_intM_t_5@L1)) } ];
                   void end)) else void);
                 (i_0_1 := (C_43: ((add_int !i_0_1) (1)))); !i_0_1 end) in
-               void); (raise (Loop_continue_exc void)) end in void) with
+               void); (raise (Loop_continue_exc void)) end with
              Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end))) in void) with
+          (raise (Goto_while_0_break_exc void)) end))) with
          Goto_while_0_break_exc jessie_<num> ->
          (while_0_break:
          (L:
@@ -2811,7 +2757,7 @@ let quick_rec_safety =
             (JC_69 : sub_int(r, l_0))) };
           (JC_68:
           (((((quick_rec_requires jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_5) intP_t_5_alloc_table))))))))
-         end))) end; (raise (Return_label_exc void)) end in void) with
+         end))) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<num> -> (return_label: (raise Return)) end)));
     (raise Return) end with Return -> void end) { true }
 
@@ -2850,7 +2796,7 @@ let quick_sort_ensures_permutation =
      (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_0_6) intP_t_0_6_alloc_table)))));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_146:
-    Permut(t_0@, (0), sub_int(n@, (1)), intP_intM_t_0_6, intP_intM_t_0_6@)) }
+    Permut(t_0, (0), sub_int(n, (1)), intP_intM_t_0_6, intP_intM_t_0_6@)) }
 
 let quick_sort_ensures_sorted =
  fun (t_0 : intP pointer) (n : int) (intP_intM_t_0_6 : (intP, int) memory ref) (intP_t_0_6_alloc_table : intP alloc_table) ->
@@ -2868,7 +2814,7 @@ let quick_sort_ensures_sorted =
      (JC_150:
      (((((quick_rec jessie_<num>) jessie_<num>) jessie_<num>) intP_intM_t_0_6) intP_t_0_6_alloc_table)))));
     (raise Return); (raise Return) end) with Return -> void end)
-  { (JC_144: Sorted(t_0@, (0), n@, intP_intM_t_0_6)) }
+  { (JC_144: Sorted(t_0, (0), n, intP_intM_t_0_6)) }
 
 let quick_sort_safety =
  fun (t_0 : intP pointer) (n : int) (intP_intM_t_0_6 : (intP, int) memory ref) (intP_t_0_6_alloc_table : intP alloc_table) ->
@@ -2920,12 +2866,12 @@ let swap_ensures_default =
       (((safe_upd_ intP_intM_t_1_4) jessie_<num>) jessie_<num>))))) in void);
       (raise Return) end)))); (raise Return) end with Return -> void end)
   { (JC_15:
-    ((JC_13: Swap(t_1@, i_0@, j_0@, intP_intM_t_1_4, intP_intM_t_1_4@))
+    ((JC_13: Swap(t_1, i_0, j_0, intP_intM_t_1_4, intP_intM_t_1_4@))
     and (JC_14:
-        not_assigns(intP_t_1_4_alloc_table@, intP_intM_t_1_4@,
+        not_assigns(intP_t_1_4_alloc_table, intP_intM_t_1_4@,
         intP_intM_t_1_4,
-        pset_union(pset_range(pset_singleton(t_1@), j_0@, j_0@),
-        pset_range(pset_singleton(t_1@), i_0@, i_0@)))))) }
+        pset_union(pset_range(pset_singleton(t_1), j_0, j_0),
+        pset_range(pset_singleton(t_1), i_0, i_0)))))) }
 
 let swap_safety =
  fun (t_1 : intP pointer) (i_0 : int) (j_0 : int) (intP_intM_t_1_4 : (intP, int) memory ref) (intP_t_1_4_alloc_table : intP alloc_table) ->
@@ -4136,21 +4082,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -7676,18 +7607,6 @@ why -simplify [...] why/quick_sort.why
   (AND (EQ (offset_min voidP_alloc_table p) a)
   (EQ (offset_max voidP_alloc_table p) b)))
 
-(DEFPRED (valid_bitvector_struct_charP p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_intP p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_voidP p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
 (DEFPRED (valid_root_charP p a b charP_alloc_table)
   (AND (<= (offset_min charP_alloc_table p) a)
   (>= (offset_max charP_alloc_table p) b)))
@@ -7728,7 +7647,7 @@ why -simplify [...] why/quick_sort.why
  ;; Why axiom voidP_tags
  (FORALL (x voidP_tag_table) (instanceof voidP_tag_table x voidP_tag)))
 
-;; quick_rec_ensures_default_po_1, File "HOME/tests/c/quick_sort.c", line 26, characters 5-14
+;; quick_rec_ensures_default_po_1, File "HOME/tests/c/quick_sort.c", line 57, characters 5-14
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -7741,7 +7660,7 @@ why -simplify [...] why/quick_sort.why
 intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
                                                  (pset_singleton t) l_0 r)))))))))
 
-;; quick_rec_ensures_default_po_2, File "HOME/tests/c/quick_sort.c", line 37, characters 21-30
+;; quick_rec_ensures_default_po_2, File "HOME/tests/c/quick_sort.c", line 68, characters 21-30
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -7759,7 +7678,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (FORALL (i_0_1)
 (IMPLIES (EQ i_0_1 (+ l_0 1)) (EQ (select intP_intM_t_5 (shift t l_0)) v))))))))))))))))
 
-;; quick_rec_ensures_default_po_3, File "HOME/tests/c/quick_sort.c", line 37, characters 34-40
+;; quick_rec_ensures_default_po_3, File "HOME/tests/c/quick_sort.c", line 68, characters 34-40
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -7776,7 +7695,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (IMPLIES (EQ m l_0)
 (FORALL (i_0_1) (IMPLIES (EQ i_0_1 (+ l_0 1)) (<= l_0 m))))))))))))))))
 
-;; quick_rec_ensures_default_po_4, File "HOME/tests/c/quick_sort.c", line 37, characters 39-44
+;; quick_rec_ensures_default_po_4, File "HOME/tests/c/quick_sort.c", line 68, characters 39-44
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -7793,7 +7712,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (IMPLIES (EQ m l_0)
 (FORALL (i_0_1) (IMPLIES (EQ i_0_1 (+ l_0 1)) (< m i_0_1))))))))))))))))
 
-;; quick_rec_ensures_default_po_5, File "HOME/tests/c/quick_sort.c", line 37, characters 43-51
+;; quick_rec_ensures_default_po_5, File "HOME/tests/c/quick_sort.c", line 68, characters 43-51
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -7810,7 +7729,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (IMPLIES (EQ m l_0)
 (FORALL (i_0_1) (IMPLIES (EQ i_0_1 (+ l_0 1)) (<= i_0_1 (+ r 1)))))))))))))))))
 
-;; quick_rec_ensures_default_po_6, File "HOME/tests/c/quick_sort.c", line 36, characters 8-31
+;; quick_rec_ensures_default_po_6, File "HOME/tests/c/quick_sort.c", line 67, characters 8-31
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -7829,7 +7748,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (IMPLIES (EQ i_0_1 (+ l_0 1))
 (EQ (Permut t l_0 r intP_intM_t_5 intP_intM_t_5) |@true|))))))))))))))))
 
-;; quick_rec_ensures_default_po_7, File "HOME/tests/c/quick_sort.c", line 34, characters 8-50
+;; quick_rec_ensures_default_po_7, File "HOME/tests/c/quick_sort.c", line 65, characters 8-50
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -7850,7 +7769,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (IMPLIES (AND (< m j_3) (< j_3 i_0_1))
 (>= (select intP_intM_t_5 (shift t j_3)) v))))))))))))))))))
 
-;; quick_rec_ensures_default_po_8, File "HOME/tests/c/quick_sort.c", line 32, characters 8-50
+;; quick_rec_ensures_default_po_8, File "HOME/tests/c/quick_sort.c", line 63, characters 8-50
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -7892,7 +7811,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
                                                  (pset_singleton t) l_0 r)))))))))))))))))
 
-;; quick_rec_ensures_default_po_10, File "HOME/tests/c/quick_sort.c", line 44, characters 17-39
+;; quick_rec_ensures_default_po_10, File "HOME/tests/c/quick_sort.c", line 75, characters 17-39
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -7946,7 +7865,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
                                                               t) i_0_1_0 i_0_1_0))))
 (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5_0) |@true|))))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_11, File "HOME/tests/c/quick_sort.c", line 37, characters 21-30
+;; quick_rec_ensures_default_po_11, File "HOME/tests/c/quick_sort.c", line 68, characters 21-30
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8003,7 +7922,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1))
 (EQ (select intP_intM_t_5_1 (shift t l_0)) v)))))))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_12, File "HOME/tests/c/quick_sort.c", line 37, characters 34-40
+;; quick_rec_ensures_default_po_12, File "HOME/tests/c/quick_sort.c", line 68, characters 34-40
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8058,7 +7977,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (IMPLIES (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5_0) |@true|)
 (FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (<= l_0 m1)))))))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_13, File "HOME/tests/c/quick_sort.c", line 37, characters 39-44
+;; quick_rec_ensures_default_po_13, File "HOME/tests/c/quick_sort.c", line 68, characters 39-44
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8113,7 +8032,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (IMPLIES (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5_0) |@true|)
 (FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (< m1 i_0_1_1)))))))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_14, File "HOME/tests/c/quick_sort.c", line 37, characters 43-51
+;; quick_rec_ensures_default_po_14, File "HOME/tests/c/quick_sort.c", line 68, characters 43-51
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8168,7 +8087,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (IMPLIES (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5_0) |@true|)
 (FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (<= i_0_1_1 (+ r 1))))))))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_15, File "HOME/tests/c/quick_sort.c", line 36, characters 8-31
+;; quick_rec_ensures_default_po_15, File "HOME/tests/c/quick_sort.c", line 67, characters 8-31
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8225,7 +8144,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1))
 (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5) |@true|)))))))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_16, File "HOME/tests/c/quick_sort.c", line 34, characters 8-50
+;; quick_rec_ensures_default_po_16, File "HOME/tests/c/quick_sort.c", line 65, characters 8-50
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8284,7 +8203,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (IMPLIES (AND (< m1 j_3) (< j_3 i_0_1_1))
 (>= (select intP_intM_t_5_1 (shift t j_3)) v)))))))))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_17, File "HOME/tests/c/quick_sort.c", line 32, characters 8-50
+;; quick_rec_ensures_default_po_17, File "HOME/tests/c/quick_sort.c", line 63, characters 8-50
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8402,7 +8321,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_1 (pset_range
                                                    (pset_singleton t) l_0 r))))))))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_19, File "HOME/tests/c/quick_sort.c", line 37, characters 21-30
+;; quick_rec_ensures_default_po_19, File "HOME/tests/c/quick_sort.c", line 68, characters 21-30
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8446,7 +8365,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_1 (pset_range
 (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1))
 (EQ (select intP_intM_t_5_0 (shift t l_0)) v))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_20, File "HOME/tests/c/quick_sort.c", line 37, characters 34-40
+;; quick_rec_ensures_default_po_20, File "HOME/tests/c/quick_sort.c", line 68, characters 34-40
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8488,7 +8407,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_1 (pset_range
 (IMPLIES (>= result0 v)
 (FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (<= l_0 m0))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_21, File "HOME/tests/c/quick_sort.c", line 37, characters 39-44
+;; quick_rec_ensures_default_po_21, File "HOME/tests/c/quick_sort.c", line 68, characters 39-44
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8530,7 +8449,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_1 (pset_range
 (IMPLIES (>= result0 v)
 (FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (< m0 i_0_1_1))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_22, File "HOME/tests/c/quick_sort.c", line 37, characters 43-51
+;; quick_rec_ensures_default_po_22, File "HOME/tests/c/quick_sort.c", line 68, characters 43-51
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8572,7 +8491,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_1 (pset_range
 (IMPLIES (>= result0 v)
 (FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (<= i_0_1_1 (+ r 1)))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_23, File "HOME/tests/c/quick_sort.c", line 36, characters 8-31
+;; quick_rec_ensures_default_po_23, File "HOME/tests/c/quick_sort.c", line 67, characters 8-31
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8616,7 +8535,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_1 (pset_range
 (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1))
 (EQ (Permut t l_0 r intP_intM_t_5_0 intP_intM_t_5) |@true|))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_24, File "HOME/tests/c/quick_sort.c", line 34, characters 8-50
+;; quick_rec_ensures_default_po_24, File "HOME/tests/c/quick_sort.c", line 65, characters 8-50
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8662,7 +8581,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_1 (pset_range
 (IMPLIES (AND (< m0 j_3) (< j_3 i_0_1_1))
 (>= (select intP_intM_t_5_0 (shift t j_3)) v))))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_25, File "HOME/tests/c/quick_sort.c", line 32, characters 8-50
+;; quick_rec_ensures_default_po_25, File "HOME/tests/c/quick_sort.c", line 63, characters 8-50
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8708,7 +8627,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_1 (pset_range
 (IMPLIES (AND (< l_0 j_2) (<= j_2 m0))
 (< (select intP_intM_t_5_0 (shift t j_2)) v))))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_26, File "HOME/tests/c/quick_sort.c", line 47, characters 13-19
+;; quick_rec_ensures_default_po_26, File "HOME/tests/c/quick_sort.c", line 78, characters 13-19
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8746,7 +8665,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_1 (pset_range
                                                             t) l_0 r)))
 (IMPLIES (> i_0_1_0 r) (<= l_0 m0)))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_27, File "HOME/tests/c/quick_sort.c", line 47, characters 18-24
+;; quick_rec_ensures_default_po_27, File "HOME/tests/c/quick_sort.c", line 78, characters 18-24
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8784,7 +8703,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_1 (pset_range
                                                             t) l_0 r)))
 (IMPLIES (> i_0_1_0 r) (<= m0 r)))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_28, File "HOME/tests/c/quick_sort.c", line 49, characters 13-34
+;; quick_rec_ensures_default_po_28, File "HOME/tests/c/quick_sort.c", line 80, characters 13-34
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8834,7 +8753,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_1 (pset_range
                                                               t) l_0 l_0))))
 (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5_0) |@true|))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_29, File "HOME/tests/c/quick_sort.c", line 26, characters 5-14
+;; quick_rec_ensures_default_po_29, File "HOME/tests/c/quick_sort.c", line 57, characters 5-14
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8904,7 +8823,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_1 (pset_range
 intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
                                                    (pset_singleton t) l_0 r))))))))))))))))))))))))))))))
 
-;; quick_rec_ensures_permutation_po_1, File "HOME/tests/c/quick_sort.c", line 24, characters 14-37
+;; quick_rec_ensures_permutation_po_1, File "HOME/tests/c/quick_sort.c", line 55, characters 14-37
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8915,7 +8834,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (>= l_0 r)
 (EQ (Permut t l_0 r intP_intM_t_5 intP_intM_t_5) |@true|))))))))
 
-;; quick_rec_ensures_permutation_po_2, File "HOME/tests/c/quick_sort.c", line 24, characters 14-37
+;; quick_rec_ensures_permutation_po_2, File "HOME/tests/c/quick_sort.c", line 55, characters 14-37
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8979,7 +8898,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
                                                               t) (+ m0 1) r))))
 (EQ (Permut t l_0 r intP_intM_t_5_3 intP_intM_t_5) |@true|))))))))))))))))))))))))))))))
 
-;; quick_rec_ensures_sorted_po_1, File "HOME/tests/c/quick_sort.c", line 22, characters 14-29
+;; quick_rec_ensures_sorted_po_1, File "HOME/tests/c/quick_sort.c", line 53, characters 14-29
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8989,7 +8908,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
          (>= (offset_max intP_t_5_alloc_table t) r))
 (IMPLIES (>= l_0 r) (Sorted t l_0 (+ r 1) intP_intM_t_5))))))))
 
-;; quick_rec_ensures_sorted_po_2, File "HOME/tests/c/quick_sort.c", line 22, characters 14-29
+;; quick_rec_ensures_sorted_po_2, File "HOME/tests/c/quick_sort.c", line 53, characters 14-29
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9053,7 +8972,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
                                                               t) (+ m0 1) r))))
 (Sorted t l_0 (+ r 1) intP_intM_t_5_3))))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_1, File "HOME/tests/c/quick_sort.c", line 29, characters 6-10
+;; quick_rec_safety_po_1, File "HOME/tests/c/quick_sort.c", line 60, characters 6-10
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9062,7 +8981,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
          (>= (offset_max intP_t_5_alloc_table t) r))
 (IMPLIES (< l_0 r) (<= l_0 (offset_max intP_t_5_alloc_table t))))))))
 
-;; quick_rec_safety_po_2, File "HOME/tests/c/quick_sort.c", line 41, characters 8-12
+;; quick_rec_safety_po_2, File "HOME/tests/c/quick_sort.c", line 72, characters 8-12
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9098,7 +9017,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
          (< (select intP_intM_t_5_0 (shift t j_2)) v))))))
 (IMPLIES (<= i_0_1_0 r) (<= (offset_min intP_t_5_alloc_table t) i_0_1_0)))))))))))))))))))))))
 
-;; quick_rec_safety_po_3, File "HOME/tests/c/quick_sort.c", line 41, characters 8-12
+;; quick_rec_safety_po_3, File "HOME/tests/c/quick_sort.c", line 72, characters 8-12
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9263,7 +9182,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (FORALL (m1)
 (IMPLIES (EQ m1 (+ m0 1)) (>= (offset_max intP_t_5_alloc_table t) m1)))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_7, File "HOME/tests/c/quick_sort.c", line 38, characters 19-22
+;; quick_rec_safety_po_7, File "HOME/tests/c/quick_sort.c", line 69, characters 19-22
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9322,7 +9241,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5_0) |@true|)
 (FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (<= 0 (- r i_0_1_0))))))))))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_8, File "HOME/tests/c/quick_sort.c", line 38, characters 19-22
+;; quick_rec_safety_po_8, File "HOME/tests/c/quick_sort.c", line 69, characters 19-22
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9382,7 +9301,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (FORALL (i_0_1_1)
 (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (< (- r i_0_1_1) (- r i_0_1_0))))))))))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_9, File "HOME/tests/c/quick_sort.c", line 38, characters 19-22
+;; quick_rec_safety_po_9, File "HOME/tests/c/quick_sort.c", line 69, characters 19-22
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9424,7 +9343,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (>= result0 v)
 (FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (<= 0 (- r i_0_1_0))))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_10, File "HOME/tests/c/quick_sort.c", line 38, characters 19-22
+;; quick_rec_safety_po_10, File "HOME/tests/c/quick_sort.c", line 69, characters 19-22
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9467,7 +9386,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (FORALL (i_0_1_1)
 (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (< (- r i_0_1_1) (- r i_0_1_0))))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_11, File "HOME/tests/c/quick_sort.c", line 48, characters 4-15
+;; quick_rec_safety_po_11, File "HOME/tests/c/quick_sort.c", line 79, characters 4-15
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9505,7 +9424,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (AND (<= l_0 m0) (<= m0 r))
 (>= (offset_max intP_t_5_alloc_table t) l_0))))))))))))))))))))))))
 
-;; quick_rec_safety_po_12, File "HOME/tests/c/quick_sort.c", line 48, characters 4-15
+;; quick_rec_safety_po_12, File "HOME/tests/c/quick_sort.c", line 79, characters 4-15
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9543,7 +9462,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (AND (<= l_0 m0) (<= m0 r))
 (<= (offset_min intP_t_5_alloc_table t) m0))))))))))))))))))))))))
 
-;; quick_rec_safety_po_13, File "HOME/tests/c/quick_sort.c", line 48, characters 4-15
+;; quick_rec_safety_po_13, File "HOME/tests/c/quick_sort.c", line 79, characters 4-15
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9581,7 +9500,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (AND (<= l_0 m0) (<= m0 r))
 (>= (offset_max intP_t_5_alloc_table t) m0))))))))))))))))))))))))
 
-;; quick_rec_safety_po_14, File "why/quick_sort.why", line 917, characters 12-100
+;; quick_rec_safety_po_14, File "why/quick_sort.why", line 821, characters 12-100
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9634,7 +9553,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5_0) |@true|)
 (<= 0 (- r l_0)))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_15, File "why/quick_sort.why", line 917, characters 12-100
+;; quick_rec_safety_po_15, File "why/quick_sort.why", line 821, characters 12-100
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9740,7 +9659,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5_0) |@true|)
 (>= (offset_max intP_t_5_alloc_table t) (- m0 1)))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_17, File "why/quick_sort.why", line 927, characters 12-100
+;; quick_rec_safety_po_17, File "why/quick_sort.why", line 831, characters 12-100
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9804,7 +9723,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
                                                               (- m0 1)))))
 (<= 0 (- r l_0))))))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_18, File "why/quick_sort.why", line 927, characters 12-100
+;; quick_rec_safety_po_18, File "why/quick_sort.why", line 831, characters 12-100
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9932,7 +9851,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
                                                               (- m0 1)))))
 (<= (offset_min intP_t_5_alloc_table t) (+ m0 1))))))))))))))))))))))))))))))))
 
-;; quick_sort_ensures_sorted_po_1, File "HOME/tests/c/quick_sort.c", line 56, characters 14-27
+;; quick_sort_ensures_sorted_po_1, File "HOME/tests/c/quick_sort.c", line 87, characters 14-27
 (FORALL (t_0)
 (FORALL (n)
 (FORALL (intP_t_0_6_alloc_table)
@@ -9951,7 +9870,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
                                                                   (- n 1)))))
 (Sorted t_0 0 n intP_intM_t_0_6_0))))))))
 
-;; swap_ensures_default_po_1, File "HOME/tests/c/quick_sort.c", line 9, characters 12-33
+;; swap_ensures_default_po_1, File "HOME/tests/c/quick_sort.c", line 40, characters 12-33
 (FORALL (t_1)
 (FORALL (i_0)
 (FORALL (j_0)
@@ -9975,7 +9894,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
          (|why__store| intP_intM_t_1_4_0 (shift t_1 j_0) tmp))
 (Swap t_1 i_0 j_0 intP_intM_t_1_4_1 intP_intM_t_1_4)))))))))))))))))
 
-;; swap_ensures_default_po_2, File "HOME/tests/c/quick_sort.c", line 11, characters 5-9
+;; swap_ensures_default_po_2, File "HOME/tests/c/quick_sort.c", line 42, characters 5-9
 (FORALL (t_1)
 (FORALL (i_0)
 (FORALL (j_0)
@@ -10004,7 +9923,7 @@ intP_t_1_4_alloc_table intP_intM_t_1_4 intP_intM_t_1_4_1 (pset_union
                                                          (pset_range
                                                          (pset_singleton t_1) i_0 i_0)))))))))))))))))))
 
-;; swap_safety_po_1, File "HOME/tests/c/quick_sort.c", line 12, characters 12-16
+;; swap_safety_po_1, File "HOME/tests/c/quick_sort.c", line 43, characters 12-16
 (FORALL (t_1)
 (FORALL (i_0)
 (FORALL (j_0)
@@ -10015,7 +9934,7 @@ intP_t_1_4_alloc_table intP_intM_t_1_4 intP_intM_t_1_4_1 (pset_union
          (>= (offset_max intP_t_1_4_alloc_table t_1) j_0))))
 (<= i_0 (offset_max intP_t_1_4_alloc_table t_1)))))))
 
-;; swap_safety_po_2, File "HOME/tests/c/quick_sort.c", line 13, characters 9-13
+;; swap_safety_po_2, File "HOME/tests/c/quick_sort.c", line 44, characters 9-13
 (FORALL (t_1)
 (FORALL (i_0)
 (FORALL (j_0)
@@ -10032,7 +9951,7 @@ intP_t_1_4_alloc_table intP_intM_t_1_4 intP_intM_t_1_4_1 (pset_union
 (FORALL (tmp)
 (IMPLIES (EQ tmp result) (<= (offset_min intP_t_1_4_alloc_table t_1) j_0))))))))))))
 
-;; swap_safety_po_3, File "HOME/tests/c/quick_sort.c", line 13, characters 9-13
+;; swap_safety_po_3, File "HOME/tests/c/quick_sort.c", line 44, characters 9-13
 (FORALL (t_1)
 (FORALL (i_0)
 (FORALL (j_0)

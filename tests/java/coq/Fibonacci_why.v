@@ -178,25 +178,11 @@ Dp_hint pointer_addr_of_interface_of_pointer_address.
   := (offset_min interface_alloc_table p) = a /\
      (offset_max interface_alloc_table p) = b.
 
-(*Why predicate*) Definition valid_bitvector_struct_Object  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
-  := (offset_min bitvector_alloc_table p) = a /\
-     (offset_max bitvector_alloc_table p) = b.
 
-(*Why predicate*) Definition valid_bitvector_struct_Exception  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
-  := (valid_bitvector_struct_Object p a b bitvector_alloc_table).
 
-(*Why predicate*) Definition valid_bitvector_struct_Fibonacci  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
-  := (valid_bitvector_struct_Object p a b bitvector_alloc_table).
 
-(*Why predicate*) Definition valid_bitvector_struct_String  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
-  := (valid_bitvector_struct_Object p a b bitvector_alloc_table).
 
-(*Why predicate*) Definition valid_bitvector_struct_Throwable  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
-  := (valid_bitvector_struct_Object p a b bitvector_alloc_table).
 
-(*Why predicate*) Definition valid_bitvector_struct_interface  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
-  := (offset_min bitvector_alloc_table p) = a /\
-     (offset_max bitvector_alloc_table p) = b.
 
 (*Why predicate*) Definition valid_root_Object  (p:(pointer Object)) (a:Z) (b:Z) (Object_alloc_table:(alloc_table Object))
   := (offset_min Object_alloc_table p) <= a /\
@@ -226,7 +212,7 @@ Dp_hint pointer_addr_of_interface_of_pointer_address.
   := (offset_min interface_alloc_table p) <= a /\
      (offset_max interface_alloc_table p) >= b.
 
-(* Why obligation from file "Fibonacci.jc", line 54, characters 0-29: *)
+(* Why obligation from file "Fibonacci.java", line 46, characters 10-19: *)
 (*Why goal*) Lemma isfib_2_1 : 
   (isfib 2 1).
 Proof.
@@ -236,7 +222,7 @@ apply isfib1.
 Save.
 Dp_hint isfib_2_1.
 
-(* Why obligation from file "Fibonacci.jc", line 57, characters 0-29: *)
+(* Why obligation from file "Fibonacci.java", line 47, characters 10-19: *)
 (*Why goal*) Lemma isfib_6_8 : 
   (isfib 6 8).
 Proof.
@@ -253,7 +239,7 @@ apply isfibn with (r_0:=3) (p:=5); intuition.
 Save.
 Dp_hint isfib_6_8.
 
-(* Why obligation from file "Fibonacci.jc", line 60, characters 0-37: *)
+(* Why obligation from file "Fibonacci.java", line 50, characters 10-23: *)
 (*Why goal*) Lemma not_isfib_2_2 : 
   ~(isfib 2 2).
 Proof.
@@ -302,7 +288,7 @@ Dp_hint not_isfib_2_2.
 
 
 
-(* Why obligation from file "Fibonacci.java", line 29, characters 20-26: *)
+(* Why obligation from file "Fibonacci.java", line 60, characters 20-26: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_1 : 
   forall (n_0: Z),
   forall (HW_1: (* JC_21 *) n_0 >= 0),
@@ -311,7 +297,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "Fibonacci.java", line 29, characters 25-31: *)
+(* Why obligation from file "Fibonacci.java", line 60, characters 25-31: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_2 : 
   forall (n_0: Z),
   forall (HW_1: (* JC_21 *) n_0 >= 0),
@@ -320,7 +306,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "Fibonacci.java", line 29, characters 35-47: *)
+(* Why obligation from file "Fibonacci.java", line 60, characters 35-47: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_3 : 
   forall (n_0: Z),
   forall (HW_1: (* JC_21 *) n_0 >= 0),
@@ -329,7 +315,7 @@ Proof.
 intros; apply isfib1.
 Save.
 
-(* Why obligation from file "Fibonacci.java", line 29, characters 51-61: *)
+(* Why obligation from file "Fibonacci.java", line 60, characters 51-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_4 : 
   forall (n_0: Z),
   forall (HW_1: (* JC_21 *) n_0 >= 0),
@@ -338,7 +324,7 @@ Proof.
 intros; apply isfib0.
 Save.
 
-(* Why obligation from file "Fibonacci.java", line 29, characters 20-26: *)
+(* Why obligation from file "Fibonacci.java", line 60, characters 20-26: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_5 : 
   forall (n_0: Z),
   forall (HW_1: (* JC_21 *) n_0 >= 0),
@@ -361,7 +347,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "Fibonacci.java", line 29, characters 25-31: *)
+(* Why obligation from file "Fibonacci.java", line 60, characters 25-31: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_6 : 
   forall (n_0: Z),
   forall (HW_1: (* JC_21 *) n_0 >= 0),
@@ -384,7 +370,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "Fibonacci.java", line 29, characters 35-47: *)
+(* Why obligation from file "Fibonacci.java", line 60, characters 35-47: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_7 : 
   forall (n_0: Z),
   forall (HW_1: (* JC_21 *) n_0 >= 0),
@@ -410,7 +396,7 @@ replace (i+1+1-2) with i; auto with zarith.
 replace (i+1+1-1) with (i+1); auto with zarith.
 Save.
 
-(* Why obligation from file "Fibonacci.java", line 29, characters 51-61: *)
+(* Why obligation from file "Fibonacci.java", line 60, characters 51-61: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_8 : 
   forall (n_0: Z),
   forall (HW_1: (* JC_21 *) n_0 >= 0),
@@ -433,7 +419,7 @@ Proof.
 intuition; subst; auto.
 Save.
 
-(* Why obligation from file "Fibonacci.java", line 24, characters 16-33: *)
+(* Why obligation from file "Fibonacci.java", line 55, characters 16-33: *)
 (*Why goal*) Lemma Fibonacci_Fib_ensures_default_po_9 : 
   forall (n_0: Z),
   forall (HW_1: (* JC_21 *) n_0 >= 0),
@@ -452,7 +438,7 @@ assert (i=n_0) by omega.
 subst; auto.
 Save.
 
-(* Why obligation from file "Fibonacci.java", line 30, characters 18-21: *)
+(* Why obligation from file "Fibonacci.java", line 61, characters 18-21: *)
 (*Why goal*) Lemma Fibonacci_Fib_safety_po_1 : 
   forall (n_0: Z),
   forall (HW_1: (* JC_21 *) n_0 >= 0),
@@ -476,7 +462,7 @@ Proof.
 intuition.
 Save.
 
-(* Why obligation from file "Fibonacci.java", line 30, characters 18-21: *)
+(* Why obligation from file "Fibonacci.java", line 61, characters 18-21: *)
 (*Why goal*) Lemma Fibonacci_Fib_safety_po_2 : 
   forall (n_0: Z),
   forall (HW_1: (* JC_21 *) n_0 >= 0),

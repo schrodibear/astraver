@@ -1,4 +1,34 @@
 ========== file tests/c/sparse_array2.c ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
 
 typedef unsigned int uint;
 
@@ -103,11 +133,17 @@ int main() {
 
 
 
+
+/*
+Local Variables:
+compile-command: "make sparse_array2.why3ml"
+End:
+*/
 ========== frama-c -jessie execution ==========
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/sparse_array2.c"
 [jessie] Starting Jessie translation
-[kernel] warning: No code for function calloc, default assigns generated
-[kernel] warning: No code for function malloc, default assigns generated
+[kernel] warning: No code for function calloc, default assigns generated for default behavior
+[kernel] warning: No code for function malloc, default assigns generated for default behavior
 [jessie] Producing Jessie files in subdir tests/c/sparse_array2.jessie
 [jessie] File tests/c/sparse_array2.jessie/sparse_array2.jc written.
 [jessie] File tests/c/sparse_array2.jessie/sparse_array2.cloc written.
@@ -364,189 +400,196 @@ behavior default:
 ========== file tests/c/sparse_array2.jessie/sparse_array2.cloc ==========
 [C_50]
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 37
 end = 43
 
 [C_51]
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 37
 end = 43
 
 [C_52]
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 37
 end = 46
 
 [C_53]
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 28
 end = 36
 
 [C_54]
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 28
 end = 36
 
 [C_55]
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 28
 end = 47
 
 [C_56]
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 20
 end = 24
 
 [C_57]
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 8
 end = 14
 
+[model_in]
+name = "Lemma model_in"
+file = "HOME/tests/c/sparse_array2.c"
+line = 51
+begin = 6
+end = 105
+
 [C_58]
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 8
 end = 14
 
 [C_59]
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 8
 end = 17
 
 [main]
 name = "Function main"
 file = "HOME/tests/c/sparse_array2.c"
-line = 89
+line = 119
 begin = 4
 end = 8
 
 [C_60]
 file = "HOME/tests/c/sparse_array2.c"
-line = 82
+line = 112
 begin = 15
 end = 27
 
 [C_61]
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 16
 end = 20
 
 [C_62]
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 4
 end = 10
 
 [get]
 name = "Function get"
 file = "HOME/tests/c/sparse_array2.c"
-line = 62
+line = 92
 begin = 4
 end = 7
 
 [C_10]
 file = "HOME/tests/c/sparse_array2.c"
-line = 50
+line = 80
 begin = 19
 end = 42
 
 [C_63]
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 4
 end = 10
 
 [C_11]
 file = "HOME/tests/c/sparse_array2.c"
-line = 50
+line = 80
 begin = 19
 end = 42
 
 [C_64]
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 16
 end = 20
 
 [C_12]
 file = "HOME/tests/c/sparse_array2.c"
-line = 50
+line = 80
 begin = 19
 end = 42
 
 [C_65]
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 16
 end = 20
 
 [C_13]
 file = "HOME/tests/c/sparse_array2.c"
-line = 51
+line = 81
 begin = 9
 end = 10
 
 [C_66]
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 30
 end = 34
 
 [C_14]
 file = "HOME/tests/c/sparse_array2.c"
-line = 51
+line = 81
 begin = 9
 end = 10
 
 [C_67]
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 22
 end = 29
 
 [C_15]
 file = "HOME/tests/c/sparse_array2.c"
-line = 52
+line = 82
 begin = 10
 end = 12
 
 [C_100]
 file = "HOME/tests/c/sparse_array2.c"
-line = 95
+line = 125
 begin = 6
 end = 14
 
 [C_68]
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 22
 end = 29
 
 [C_16]
 file = "HOME/tests/c/sparse_array2.c"
-line = 52
+line = 82
 begin = 10
 end = 12
 
 [C_101]
 file = "HOME/tests/c/sparse_array2.c"
-line = 95
+line = 125
 begin = 20
 end = 28
 
 [C_69]
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 38
 end = 39
 
@@ -558,19 +601,19 @@ end = -1
 
 [C_102]
 file = "HOME/tests/c/sparse_array2.c"
-line = 95
+line = 125
 begin = 20
 end = 28
 
 [C_18]
 file = "HOME/tests/c/sparse_array2.c"
-line = 42
+line = 72
 begin = 12
 end = 24
 
 [C_103]
 file = "HOME/tests/c/sparse_array2.c"
-line = 96
+line = 126
 begin = 13
 end = 29
 
@@ -582,37 +625,37 @@ end = -1
 
 [C_104]
 file = "HOME/tests/c/sparse_array2.c"
-line = 96
+line = 126
 begin = 13
 end = 19
 
 [C_105]
 file = "HOME/tests/c/sparse_array2.c"
-line = 96
+line = 126
 begin = 23
 end = 29
 
 [C_106]
 file = "HOME/tests/c/sparse_array2.c"
-line = 97
+line = 127
 begin = 6
 end = 14
 
 [C_107]
 file = "HOME/tests/c/sparse_array2.c"
-line = 97
+line = 127
 begin = 6
 end = 14
 
 [C_108]
 file = "HOME/tests/c/sparse_array2.c"
-line = 97
+line = 127
 begin = 20
 end = 28
 
 [C_109]
 file = "HOME/tests/c/sparse_array2.c"
-line = 97
+line = 127
 begin = 20
 end = 28
 
@@ -624,103 +667,103 @@ end = -1
 
 [C_2]
 file = "HOME/tests/c/sparse_array2.c"
-line = 47
+line = 77
 begin = 33
 end = 67
 
 [C_70]
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 38
 end = 39
 
 [C_3]
 file = "HOME/tests/c/sparse_array2.c"
-line = 47
+line = 77
 begin = 33
 end = 67
 
 [C_71]
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 41
 end = 45
 
 [C_4]
 file = "HOME/tests/c/sparse_array2.c"
-line = 48
+line = 78
 begin = 17
 end = 39
 
 [C_72]
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 41
 end = 47
 
 [C_20]
 file = "HOME/tests/c/sparse_array2.c"
-line = 43
+line = 73
 begin = 12
 end = 29
 
 [C_5]
 file = "HOME/tests/c/sparse_array2.c"
-line = 48
+line = 78
 begin = 17
 end = 39
 
 [C_73]
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 41
 end = 47
 
 [C_21]
 file = "HOME/tests/c/sparse_array2.c"
-line = 44
+line = 74
 begin = 12
 end = 52
 
 [C_6]
 file = "HOME/tests/c/sparse_array2.c"
-line = 48
+line = 78
 begin = 17
 end = 39
 
 [C_74]
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 41
 end = 47
 
 [C_22]
 file = "HOME/tests/c/sparse_array2.c"
-line = 39
+line = 69
 begin = 13
 end = 20
 
 [C_7]
 file = "HOME/tests/c/sparse_array2.c"
-line = 49
+line = 79
 begin = 18
 end = 41
 
 [C_75]
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 41
 end = 47
 
 [C_23]
 file = "HOME/tests/c/sparse_array2.c"
-line = 64
+line = 94
 begin = 13
 end = 27
 
 [C_8]
 file = "HOME/tests/c/sparse_array2.c"
-line = 49
+line = 79
 begin = 18
 end = 41
 
@@ -732,31 +775,31 @@ end = -1
 
 [C_24]
 file = "HOME/tests/c/sparse_array2.c"
-line = 67
+line = 97
 begin = 7
 end = 16
 
 [C_9]
 file = "HOME/tests/c/sparse_array2.c"
-line = 49
+line = 79
 begin = 18
 end = 41
 
 [C_77]
 file = "HOME/tests/c/sparse_array2.c"
-line = 74
+line = 104
 begin = 12
 end = 18
 
 [C_25]
 file = "HOME/tests/c/sparse_array2.c"
-line = 67
+line = 97
 begin = 7
 end = 16
 
 [C_110]
 file = "HOME/tests/c/sparse_array2.c"
-line = 98
+line = 128
 begin = 13
 end = 29
 
@@ -768,49 +811,56 @@ end = -1
 
 [C_26]
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 38
 end = 44
 
 [C_111]
 file = "HOME/tests/c/sparse_array2.c"
-line = 98
+line = 128
 begin = 13
 end = 19
 
 [C_79]
 file = "HOME/tests/c/sparse_array2.c"
-line = 75
+line = 105
 begin = 12
 end = 27
 
 [C_27]
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 38
 end = 44
 
 [C_112]
 file = "HOME/tests/c/sparse_array2.c"
-line = 98
+line = 128
 begin = 23
 end = 29
 
 [C_28]
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 38
 end = 47
 
+[model_out]
+name = "Lemma model_out"
+file = "HOME/tests/c/sparse_array2.c"
+line = 53
+begin = 6
+end = 99
+
 [C_113]
 file = "HOME/tests/c/sparse_array2.c"
-line = 99
+line = 129
 begin = 2
 end = 11
 
 [C_29]
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 31
 end = 48
 
@@ -822,255 +872,255 @@ end = -1
 
 [C_80]
 file = "HOME/tests/c/sparse_array2.c"
-line = 76
+line = 106
 begin = 12
 end = 79
 
 [C_81]
 file = "HOME/tests/c/sparse_array2.c"
-line = 72
+line = 102
 begin = 13
 end = 27
 
 [C_82]
 file = "HOME/tests/c/sparse_array2.c"
-line = 71
+line = 101
 begin = 13
 end = 19
 
 [C_30]
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 14
 end = 20
 
 [C_83]
 file = "HOME/tests/c/sparse_array2.c"
-line = 70
+line = 100
 begin = 13
 end = 22
 
 [C_31]
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 14
 end = 20
 
 [C_84]
 file = "HOME/tests/c/sparse_array2.c"
-line = 70
+line = 100
 begin = 13
 end = 22
 
 [C_32]
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 14
 end = 23
 
 [C_85]
 file = "HOME/tests/c/sparse_array2.c"
-line = 70
+line = 100
 begin = 13
 end = 22
 
 [C_33]
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 6
 end = 13
 
 [C_86]
 file = "HOME/tests/c/sparse_array2.c"
-line = 90
+line = 120
 begin = 19
 end = 29
 
 [C_34]
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 6
 end = 13
 
 [C_87]
 file = "HOME/tests/c/sparse_array2.c"
-line = 90
+line = 120
 begin = 19
 end = 29
 
 [C_35]
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 6
 end = 24
 
 [C_88]
 file = "HOME/tests/c/sparse_array2.c"
-line = 90
+line = 120
 begin = 35
 end = 45
 
 [C_36]
 file = "HOME/tests/c/sparse_array2.c"
-line = 65
+line = 95
 begin = 18
 end = 22
 
 [C_89]
 file = "HOME/tests/c/sparse_array2.c"
-line = 90
+line = 120
 begin = 35
 end = 45
 
 [C_37]
 file = "HOME/tests/c/sparse_array2.c"
-line = 65
+line = 95
 begin = 6
 end = 12
 
 [C_38]
 file = "HOME/tests/c/sparse_array2.c"
-line = 65
+line = 95
 begin = 6
 end = 12
 
 [C_39]
 file = "HOME/tests/c/sparse_array2.c"
-line = 65
+line = 95
 begin = 6
 end = 15
 
 [C_90]
 file = "HOME/tests/c/sparse_array2.c"
-line = 92
+line = 122
 begin = 6
 end = 14
 
 [C_91]
 file = "HOME/tests/c/sparse_array2.c"
-line = 92
+line = 122
 begin = 6
 end = 14
 
 [C_92]
 file = "HOME/tests/c/sparse_array2.c"
-line = 92
+line = 122
 begin = 20
 end = 28
 
 [C_40]
 file = "HOME/tests/c/sparse_array2.c"
-line = 60
+line = 90
 begin = 12
 end = 33
 
 [C_93]
 file = "HOME/tests/c/sparse_array2.c"
-line = 92
+line = 122
 begin = 20
 end = 28
 
 [C_41]
 file = "HOME/tests/c/sparse_array2.c"
-line = 58
+line = 88
 begin = 13
 end = 27
 
 [C_94]
 file = "HOME/tests/c/sparse_array2.c"
-line = 93
+line = 123
 begin = 13
 end = 29
 
 [C_42]
 file = "HOME/tests/c/sparse_array2.c"
-line = 57
+line = 87
 begin = 13
 end = 19
 
 [C_95]
 file = "HOME/tests/c/sparse_array2.c"
-line = 93
+line = 123
 begin = 13
 end = 19
 
 [C_43]
 file = "HOME/tests/c/sparse_array2.c"
-line = 56
+line = 86
 begin = 13
 end = 22
 
 [C_96]
 file = "HOME/tests/c/sparse_array2.c"
-line = 93
+line = 123
 begin = 23
 end = 29
 
 [C_44]
 file = "HOME/tests/c/sparse_array2.c"
-line = 56
+line = 86
 begin = 13
 end = 22
 
 [C_97]
 file = "HOME/tests/c/sparse_array2.c"
-line = 94
+line = 124
 begin = 2
 end = 12
 
 [C_45]
 file = "HOME/tests/c/sparse_array2.c"
-line = 56
+line = 86
 begin = 13
 end = 22
 
 [C_98]
 file = "HOME/tests/c/sparse_array2.c"
-line = 94
+line = 124
 begin = 14
 end = 24
 
 [C_46]
 file = "HOME/tests/c/sparse_array2.c"
-line = 80
+line = 110
 begin = 2
 end = 8
 
 [create]
 name = "Function create"
 file = "HOME/tests/c/sparse_array2.c"
-line = 46
+line = 76
 begin = 13
 end = 19
 
 [C_99]
 file = "HOME/tests/c/sparse_array2.c"
-line = 95
+line = 125
 begin = 6
 end = 14
 
 [set]
 name = "Function set"
 file = "HOME/tests/c/sparse_array2.c"
-line = 79
+line = 109
 begin = 5
 end = 8
 
 [C_47]
 file = "HOME/tests/c/sparse_array2.c"
-line = 80
+line = 110
 begin = 2
 end = 8
 
 [C_48]
 file = "HOME/tests/c/sparse_array2.c"
-line = 80
+line = 110
 begin = 14
 end = 15
 
 [C_49]
 file = "HOME/tests/c/sparse_array2.c"
-line = 80
+line = 110
 begin = 14
 end = 15
 
@@ -1094,10 +1144,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs spars
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs sparse_array2.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/sparse_array2_why.sx
 
@@ -1157,6 +1208,13 @@ simplify: simplify/sparse_array2_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/sparse_array2_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/sparse_array2_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -1230,6 +1288,9 @@ why/%_why3.why: why/%.why
 why3ide: why/sparse_array2_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: sparse_array2.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include sparse_array2.depend
 
 depend: coq/sparse_array2_why.v
@@ -1241,15 +1302,15 @@ clean:
 ========== file tests/c/sparse_array2.jessie/sparse_array2.loc ==========
 [JC_90]
 file = "HOME/tests/c/sparse_array2.c"
-line = 72
+line = 102
 begin = 13
 end = 27
 
 [main_ensures_default]
 name = "Function main"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/sparse_array2.c"
-line = 89
+line = 119
 begin = 4
 end = 8
 
@@ -1268,39 +1329,39 @@ end = -1
 [JC_40]
 kind = AllocSize
 file = "HOME/tests/c/sparse_array2.c"
-line = 48
+line = 78
 begin = 17
 end = 39
 
 [JC_93]
 file = "HOME/tests/c/sparse_array2.c"
-line = 74
+line = 104
 begin = 12
 end = 18
 
 [JC_41]
 kind = AllocSize
 file = "HOME/tests/c/sparse_array2.c"
-line = 49
+line = 79
 begin = 18
 end = 41
 
 [JC_94]
 file = "HOME/tests/c/sparse_array2.c"
-line = 75
+line = 105
 begin = 12
 end = 27
 
 [JC_42]
 kind = AllocSize
 file = "HOME/tests/c/sparse_array2.c"
-line = 50
+line = 80
 begin = 19
 end = 42
 
 [JC_95]
 file = "HOME/tests/c/sparse_array2.c"
-line = 76
+line = 106
 begin = 12
 end = 79
 
@@ -1333,7 +1394,7 @@ end = 28
 
 [JC_97]
 file = "HOME/tests/c/sparse_array2.c"
-line = 79
+line = 109
 begin = 5
 end = 8
 
@@ -1353,7 +1414,7 @@ end = 26
 
 [JC_98]
 file = "HOME/tests/c/sparse_array2.c"
-line = 79
+line = 109
 begin = 5
 end = 8
 
@@ -1373,19 +1434,19 @@ end = 12
 [JC_152]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 95
+line = 125
 begin = 6
 end = 14
 
 [JC_100]
 file = "HOME/tests/c/sparse_array2.c"
-line = 79
+line = 109
 begin = 5
 end = 8
 
 [JC_99]
 file = "HOME/tests/c/sparse_array2.c"
-line = 79
+line = 109
 begin = 5
 end = 8
 
@@ -1405,7 +1466,7 @@ end = -1
 [JC_153]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 95
+line = 125
 begin = 20
 end = 28
 
@@ -1418,7 +1479,7 @@ end = 108
 [JC_48]
 kind = AllocSize
 file = "HOME/tests/c/sparse_array2.c"
-line = 47
+line = 77
 begin = 33
 end = 67
 
@@ -1430,7 +1491,7 @@ end = 12
 
 [JC_154]
 file = "HOME/tests/c/sparse_array2.c"
-line = 96
+line = 126
 begin = 13
 end = 19
 
@@ -1444,14 +1505,14 @@ end = 16
 name = "Function get"
 behavior = "Safety"
 file = "HOME/tests/c/sparse_array2.c"
-line = 62
+line = 92
 begin = 4
 end = 7
 
 [JC_49]
 kind = AllocSize
 file = "HOME/tests/c/sparse_array2.c"
-line = 48
+line = 78
 begin = 17
 end = 39
 
@@ -1463,13 +1524,13 @@ end = -1
 
 [JC_155]
 file = "HOME/tests/c/sparse_array2.c"
-line = 96
+line = 126
 begin = 23
 end = 29
 
 [JC_103]
 file = "HOME/tests/c/sparse_array2.c"
-line = 74
+line = 104
 begin = 12
 end = 18
 
@@ -1481,13 +1542,13 @@ end = -1
 
 [JC_156]
 file = "HOME/tests/c/sparse_array2.c"
-line = 96
+line = 126
 begin = 13
 end = 29
 
 [JC_104]
 file = "HOME/tests/c/sparse_array2.c"
-line = 75
+line = 105
 begin = 12
 end = 27
 
@@ -1500,13 +1561,13 @@ end = 18
 [JC_157]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 97
+line = 127
 begin = 6
 end = 14
 
 [JC_105]
 file = "HOME/tests/c/sparse_array2.c"
-line = 76
+line = 106
 begin = 12
 end = 79
 
@@ -1517,17 +1578,17 @@ begin = -1
 end = -1
 
 [model_in]
-name = "model_in"
+name = "Lemma model_in"
 behavior = "axiom"
-file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 60
-begin = 2
-end = 158
+file = "HOME/tests/c/sparse_array2.c"
+line = 51
+begin = 6
+end = 105
 
 [JC_158]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 97
+line = 127
 begin = 20
 end = 28
 
@@ -1545,13 +1606,13 @@ end = 18
 
 [JC_159]
 file = "HOME/tests/c/sparse_array2.c"
-line = 98
+line = 128
 begin = 13
 end = 19
 
 [JC_107]
 file = "HOME/tests/c/sparse_array2.c"
-line = 79
+line = 109
 begin = 5
 end = 8
 
@@ -1563,71 +1624,71 @@ end = -1
 
 [JC_108]
 file = "HOME/tests/c/sparse_array2.c"
-line = 79
+line = 109
 begin = 5
 end = 8
 
 [JC_109]
 file = "HOME/tests/c/sparse_array2.c"
-line = 79
+line = 109
 begin = 5
 end = 8
 
 [JC_50]
 kind = AllocSize
 file = "HOME/tests/c/sparse_array2.c"
-line = 49
+line = 79
 begin = 18
 end = 41
 
 [JC_51]
 kind = AllocSize
 file = "HOME/tests/c/sparse_array2.c"
-line = 50
+line = 80
 begin = 19
 end = 42
 
 [JC_52]
 file = "HOME/tests/c/sparse_array2.c"
-line = 56
+line = 86
 begin = 13
 end = 22
 
 [JC_53]
 file = "HOME/tests/c/sparse_array2.c"
-line = 56
+line = 86
 begin = 13
 end = 22
 
 [JC_54]
 file = "HOME/tests/c/sparse_array2.c"
-line = 57
+line = 87
 begin = 13
 end = 19
 
 [JC_160]
 file = "HOME/tests/c/sparse_array2.c"
-line = 98
+line = 128
 begin = 23
 end = 29
 
 [JC_55]
 file = "HOME/tests/c/sparse_array2.c"
-line = 58
+line = 88
 begin = 13
 end = 27
 
 [create_ensures_default]
 name = "Function create"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/sparse_array2.c"
-line = 46
+line = 76
 begin = 13
 end = 19
 
 [JC_161]
 file = "HOME/tests/c/sparse_array2.c"
-line = 98
+line = 128
 begin = 13
 end = 29
 
@@ -1635,7 +1696,7 @@ end = 29
 name = "Function set"
 behavior = "Safety"
 file = "HOME/tests/c/sparse_array2.c"
-line = 79
+line = 109
 begin = 5
 end = 8
 
@@ -1648,13 +1709,13 @@ end = -1
 [JC_162]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 90
+line = 120
 begin = 19
 end = 29
 
 [JC_110]
 file = "HOME/tests/c/sparse_array2.c"
-line = 79
+line = 109
 begin = 5
 end = 8
 
@@ -1667,7 +1728,7 @@ end = -1
 [JC_163]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 90
+line = 120
 begin = 35
 end = 45
 
@@ -1679,14 +1740,14 @@ end = 108
 
 [JC_58]
 file = "HOME/tests/c/sparse_array2.c"
-line = 56
+line = 86
 begin = 13
 end = 22
 
 [JC_164]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 92
+line = 122
 begin = 6
 end = 14
 
@@ -1698,14 +1759,14 @@ end = 16
 
 [JC_59]
 file = "HOME/tests/c/sparse_array2.c"
-line = 56
+line = 86
 begin = 13
 end = 22
 
 [JC_165]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 92
+line = 122
 begin = 20
 end = 28
 
@@ -1717,7 +1778,7 @@ end = -1
 
 [JC_166]
 file = "HOME/tests/c/sparse_array2.c"
-line = 93
+line = 123
 begin = 13
 end = 19
 
@@ -1729,20 +1790,20 @@ end = -1
 
 [JC_167]
 file = "HOME/tests/c/sparse_array2.c"
-line = 93
+line = 123
 begin = 23
 end = 29
 
 [JC_115]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 80
+line = 110
 begin = 2
 end = 8
 
 [JC_168]
 file = "HOME/tests/c/sparse_array2.c"
-line = 93
+line = 123
 begin = 13
 end = 29
 
@@ -1763,33 +1824,33 @@ end = 28
 [JC_117]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 8
 end = 14
 
 [JC_118]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 8
 end = 17
 
 [JC_119]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 20
 end = 24
 
 [JC_60]
 file = "HOME/tests/c/sparse_array2.c"
-line = 57
+line = 87
 begin = 13
 end = 19
 
 [JC_61]
 file = "HOME/tests/c/sparse_array2.c"
-line = 58
+line = 88
 begin = 13
 end = 27
 
@@ -1813,13 +1874,13 @@ end = -1
 
 [JC_11]
 file = "HOME/tests/c/sparse_array2.c"
-line = 39
+line = 69
 begin = 13
 end = 20
 
 [JC_64]
 file = "HOME/tests/c/sparse_array2.c"
-line = 60
+line = 90
 begin = 12
 end = 33
 
@@ -1844,20 +1905,20 @@ end = 18
 
 [JC_13]
 file = "HOME/tests/c/sparse_array2.c"
-line = 39
+line = 69
 begin = 13
 end = 20
 
 [JC_171]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 95
+line = 125
 begin = 6
 end = 14
 
 [JC_66]
 file = "HOME/tests/c/sparse_array2.c"
-line = 60
+line = 90
 begin = 12
 end = 33
 
@@ -1870,14 +1931,14 @@ end = -1
 [JC_172]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 95
+line = 125
 begin = 20
 end = 28
 
 [JC_120]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 37
 end = 43
 
@@ -1889,20 +1950,20 @@ end = 18
 
 [JC_15]
 file = "HOME/tests/c/sparse_array2.c"
-line = 42
+line = 72
 begin = 12
 end = 24
 
 [JC_173]
 file = "HOME/tests/c/sparse_array2.c"
-line = 96
+line = 126
 begin = 13
 end = 19
 
 [JC_121]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 37
 end = 46
 
@@ -1914,20 +1975,20 @@ end = -1
 
 [JC_16]
 file = "HOME/tests/c/sparse_array2.c"
-line = 43
+line = 73
 begin = 12
 end = 29
 
 [JC_174]
 file = "HOME/tests/c/sparse_array2.c"
-line = 96
+line = 126
 begin = 23
 end = 29
 
 [JC_122]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 28
 end = 36
 
@@ -1939,20 +2000,20 @@ end = -1
 
 [JC_17]
 file = "HOME/tests/c/sparse_array2.c"
-line = 44
+line = 74
 begin = 12
 end = 52
 
 [JC_175]
 file = "HOME/tests/c/sparse_array2.c"
-line = 96
+line = 126
 begin = 13
 end = 29
 
 [JC_123]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 81
+line = 111
 begin = 28
 end = 47
 
@@ -1965,52 +2026,52 @@ end = -1
 [JC_176]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 97
+line = 127
 begin = 6
 end = 14
 
 [JC_124]
 file = "HOME/tests/c/sparse_array2.c"
-line = 82
+line = 112
 begin = 15
 end = 27
 
 [JC_19]
 file = "HOME/tests/c/sparse_array2.c"
-line = 46
+line = 76
 begin = 13
 end = 19
 
 [JC_177]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 97
+line = 127
 begin = 20
 end = 28
 
 [JC_125]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 16
 end = 20
 
 [JC_178]
 file = "HOME/tests/c/sparse_array2.c"
-line = 98
+line = 128
 begin = 13
 end = 19
 
 [JC_126]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 4
 end = 10
 
 [JC_179]
 file = "HOME/tests/c/sparse_array2.c"
-line = 98
+line = 128
 begin = 23
 end = 29
 
@@ -2024,42 +2085,42 @@ end = 101
 [JC_128]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 22
 end = 29
 
 [model_out]
-name = "model_out"
+name = "Lemma model_out"
 behavior = "axiom"
-file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 65
-begin = 2
-end = 144
+file = "HOME/tests/c/sparse_array2.c"
+line = 53
+begin = 6
+end = 99
 
 [JC_129]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 30
 end = 34
 
 [JC_70]
 file = "HOME/tests/c/sparse_array2.c"
-line = 64
+line = 94
 begin = 13
 end = 27
 
 [JC_71]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 65
+line = 95
 begin = 6
 end = 12
 
 [JC_72]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 65
+line = 95
 begin = 6
 end = 15
 
@@ -2067,65 +2128,65 @@ end = 15
 name = "Function create"
 behavior = "Safety"
 file = "HOME/tests/c/sparse_array2.c"
-line = 46
+line = 76
 begin = 13
 end = 19
 
 [JC_20]
 file = "HOME/tests/c/sparse_array2.c"
-line = 46
+line = 76
 begin = 13
 end = 19
 
 [JC_73]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 65
+line = 95
 begin = 18
 end = 22
 
 [JC_21]
 file = "HOME/tests/c/sparse_array2.c"
-line = 46
+line = 76
 begin = 13
 end = 19
 
 [JC_74]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 14
 end = 20
 
 [JC_22]
 file = "HOME/tests/c/sparse_array2.c"
-line = 46
+line = 76
 begin = 13
 end = 19
 
 [JC_180]
 file = "HOME/tests/c/sparse_array2.c"
-line = 98
+line = 128
 begin = 13
 end = 29
 
 [JC_75]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 14
 end = 23
 
 [JC_23]
 file = "HOME/tests/c/sparse_array2.c"
-line = 46
+line = 76
 begin = 13
 end = 19
 
 [JC_76]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 6
 end = 13
 
@@ -2145,7 +2206,7 @@ end = 92
 [JC_77]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 6
 end = 24
 
@@ -2158,40 +2219,40 @@ end = 16
 [JC_131]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 41
 end = 45
 
 [JC_78]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 38
 end = 44
 
 [JC_26]
 file = "HOME/tests/c/sparse_array2.c"
-line = 42
+line = 72
 begin = 12
 end = 24
 
 [JC_132]
 kind = ArithOverflow
 file = "HOME/tests/c/sparse_array2.c"
-line = 83
+line = 113
 begin = 41
 end = 47
 
 [JC_79]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.c"
-line = 66
+line = 96
 begin = 38
 end = 47
 
 [JC_27]
 file = "HOME/tests/c/sparse_array2.c"
-line = 43
+line = 73
 begin = 12
 end = 29
 
@@ -2204,13 +2265,13 @@ end = 85
 
 [JC_28]
 file = "HOME/tests/c/sparse_array2.c"
-line = 44
+line = 74
 begin = 12
 end = 52
 
 [JC_134]
 file = "HOME/tests/c/sparse_array2.c"
-line = 82
+line = 112
 begin = 15
 end = 27
 
@@ -2222,7 +2283,7 @@ end = -1
 
 [JC_135]
 file = "HOME/tests/c/sparse_array2.c"
-line = 89
+line = 119
 begin = 4
 end = 8
 
@@ -2234,7 +2295,7 @@ end = -1
 
 [JC_137]
 file = "HOME/tests/c/sparse_array2.c"
-line = 89
+line = 119
 begin = 4
 end = 8
 
@@ -2246,9 +2307,9 @@ end = -1
 
 [set_ensures_default]
 name = "Function set"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/sparse_array2.c"
-line = 79
+line = 109
 begin = 5
 end = 8
 
@@ -2260,49 +2321,49 @@ end = -1
 
 [JC_80]
 file = "HOME/tests/c/sparse_array2.c"
-line = 64
+line = 94
 begin = 13
 end = 27
 
 [JC_81]
 file = "HOME/tests/c/sparse_array2.c"
-line = 70
+line = 100
 begin = 13
 end = 22
 
 [JC_82]
 file = "HOME/tests/c/sparse_array2.c"
-line = 70
+line = 100
 begin = 13
 end = 22
 
 [JC_30]
 file = "HOME/tests/c/sparse_array2.c"
-line = 46
+line = 76
 begin = 13
 end = 19
 
 [JC_83]
 file = "HOME/tests/c/sparse_array2.c"
-line = 71
+line = 101
 begin = 13
 end = 19
 
 [JC_31]
 file = "HOME/tests/c/sparse_array2.c"
-line = 46
+line = 76
 begin = 13
 end = 19
 
 [JC_84]
 file = "HOME/tests/c/sparse_array2.c"
-line = 72
+line = 102
 begin = 13
 end = 27
 
 [JC_32]
 file = "HOME/tests/c/sparse_array2.c"
-line = 46
+line = 76
 begin = 13
 end = 19
 
@@ -2314,7 +2375,7 @@ end = -1
 
 [JC_33]
 file = "HOME/tests/c/sparse_array2.c"
-line = 46
+line = 76
 begin = 13
 end = 19
 
@@ -2326,15 +2387,15 @@ end = -1
 
 [get_ensures_default]
 name = "Function get"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/sparse_array2.c"
-line = 62
+line = 92
 begin = 4
 end = 7
 
 [JC_34]
 file = "HOME/tests/c/sparse_array2.c"
-line = 46
+line = 76
 begin = 13
 end = 19
 
@@ -2342,7 +2403,7 @@ end = 19
 name = "Function main"
 behavior = "Safety"
 file = "HOME/tests/c/sparse_array2.c"
-line = 89
+line = 119
 begin = 4
 end = 8
 
@@ -2354,7 +2415,7 @@ end = -1
 
 [JC_87]
 file = "HOME/tests/c/sparse_array2.c"
-line = 70
+line = 100
 begin = 13
 end = 22
 
@@ -2372,7 +2433,7 @@ end = -1
 
 [JC_88]
 file = "HOME/tests/c/sparse_array2.c"
-line = 70
+line = 100
 begin = 13
 end = 22
 
@@ -2390,7 +2451,7 @@ end = -1
 
 [JC_89]
 file = "HOME/tests/c/sparse_array2.c"
-line = 71
+line = 101
 begin = 13
 end = 19
 
@@ -2403,7 +2464,7 @@ end = -1
 [JC_143]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 90
+line = 120
 begin = 19
 end = 29
 
@@ -2416,46 +2477,46 @@ end = -1
 [JC_144]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 90
+line = 120
 begin = 35
 end = 45
 
 [JC_39]
 kind = AllocSize
 file = "HOME/tests/c/sparse_array2.c"
-line = 47
+line = 77
 begin = 33
 end = 67
 
 [JC_145]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 92
+line = 122
 begin = 6
 end = 14
 
 [JC_146]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.c"
-line = 92
+line = 122
 begin = 20
 end = 28
 
 [JC_147]
 file = "HOME/tests/c/sparse_array2.c"
-line = 93
+line = 123
 begin = 13
 end = 19
 
 [JC_148]
 file = "HOME/tests/c/sparse_array2.c"
-line = 93
+line = 123
 begin = 23
 end = 29
 
 [JC_149]
 file = "HOME/tests/c/sparse_array2.c"
-line = 93
+line = 123
 begin = 13
 end = 29
 
@@ -2477,16 +2538,6 @@ type uint32
 type unsigned_intP
 
 type voidP
-
-exception Goto__LAND_0_exc of unit
-
-exception Goto__LAND_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
 
 logic SparseArray_tag:  -> SparseArray tag_id
 
@@ -2543,6 +2594,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -2554,6 +2610,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -2636,16 +2697,15 @@ predicate inv(a_3:SparseArray pointer,
                                                        i_3))),
                                                 integer_of_uint32(select(SparseArray_sz_0_a_3_3_at_L,
                                                                   a_3)))
-                                               and eq_int(integer_of_uint32(
-                                                          select(unsigned_intP_unsigned_intM_idx_14_at_L,
-                                                          shift(select(SparseArray_idx_a_3_3_at_L,
-                                                                a_3),
-                                                          integer_of_uint32(
-                                                          select(unsigned_intP_unsigned_intM_back_15_at_L,
-                                                          shift(select(SparseArray_back_a_3_3_at_L,
-                                                                a_3),
-                                                          i_3)))))),
-                                                   i_3)))))))))))))))
+                                               and (integer_of_uint32(
+                                                    select(unsigned_intP_unsigned_intM_idx_14_at_L,
+                                                    shift(select(SparseArray_idx_a_3_3_at_L,
+                                                          a_3),
+                                                    integer_of_uint32(
+                                                    select(unsigned_intP_unsigned_intM_back_15_at_L,
+                                                    shift(select(SparseArray_back_a_3_3_at_L,
+                                                          a_3),
+                                                    i_3)))))) = i_3)))))))))))))))
 
 predicate is_elt(a:SparseArray pointer, i:int,
  SparseArray_n_a_1_at_L:(SparseArray, uint32) memory,
@@ -2659,13 +2719,12 @@ predicate is_elt(a:SparseArray pointer, i:int,
  and (lt_int(integer_of_uint32(select(unsigned_intP_unsigned_intM_idx_8_at_L,
                                shift(select(SparseArray_idx_a_1_at_L, a), i))),
       integer_of_uint32(select(SparseArray_n_a_1_at_L, a)))
-     and eq_int(integer_of_uint32(select(unsigned_intP_unsigned_intM_back_9_at_L,
-                                  shift(select(SparseArray_back_a_1_at_L, a),
-                                  integer_of_uint32(select(unsigned_intP_unsigned_intM_idx_8_at_L,
-                                                    shift(select(SparseArray_idx_a_1_at_L,
-                                                          a),
-                                                    i)))))),
-         i)))
+     and (integer_of_uint32(select(unsigned_intP_unsigned_intM_back_9_at_L,
+                            shift(select(SparseArray_back_a_1_at_L, a),
+                            integer_of_uint32(select(unsigned_intP_unsigned_intM_idx_8_at_L,
+                                              shift(select(SparseArray_idx_a_1_at_L,
+                                                    a),
+                                              i)))))) = i)))
 
 predicate left_valid_struct_SparseArray(p:SparseArray pointer, a:int,
  SparseArray_alloc_table:SparseArray alloc_table) =
@@ -2789,6 +2848,11 @@ axiom uint32_coerce :
   ((le_int((0), x) and le_int(x, (4294967295))) ->
    eq_int(integer_of_uint32(uint32_of_integer(x)), x)))
 
+axiom uint32_extensionality :
+ (forall x:uint32.
+  (forall y:uint32.
+   (eq_int(integer_of_uint32(x), integer_of_uint32(y)) -> (x = y))))
+
 axiom uint32_range :
  (forall x:uint32.
   (le_int((0), integer_of_uint32(x))
@@ -2809,31 +2873,6 @@ axiom unsigned_intP_tags :
  (forall x:unsigned_intP pointer.
   (forall unsigned_intP_tag_table:unsigned_intP tag_table.
    instanceof(unsigned_intP_tag_table, x, unsigned_intP_tag)))
-
-predicate valid_bitvector_struct_SparseArray(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_unsigned_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_SparseArray(p:SparseArray pointer, a:int, b:int,
  SparseArray_alloc_table:SparseArray alloc_table) =
@@ -2917,14 +2956,15 @@ axiom model_in :
            SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
            unsigned_intP_unsigned_intM_back_34_at_L,
            unsigned_intP_unsigned_intM_idx_35_at_L) ->
-           eq_int(model(a_1_0, i_1_0, SparseArray_n_a_0_2_at_L,
-                  SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
-                  SparseArray_val_a_0_2_at_L, intP_intM_val_11_at_L,
-                  unsigned_intP_unsigned_intM_idx_35_at_L,
-                  unsigned_intP_unsigned_intM_back_34_at_L),
-           integer_of_int32(select(intP_intM_val_11_at_L,
-                            shift(select(SparseArray_val_a_0_2_at_L, a_1_0),
-                            i_1_0))))))))))))))
+           (model(a_1_0, i_1_0, SparseArray_n_a_0_2_at_L,
+            SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
+            SparseArray_val_a_0_2_at_L, intP_intM_val_11_at_L,
+            unsigned_intP_unsigned_intM_idx_35_at_L,
+            unsigned_intP_unsigned_intM_back_34_at_L) = integer_of_int32(
+                                                        select(intP_intM_val_11_at_L,
+                                                        shift(select(SparseArray_val_a_0_2_at_L,
+                                                              a_1_0),
+                                                        i_1_0))))))))))))))
 
 axiom model_out :
  (forall SparseArray_n_a_0_2_at_L:(SparseArray, uint32) memory.
@@ -2944,106 +2984,25 @@ axiom model_out :
                 SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
                 unsigned_intP_unsigned_intM_back_34_at_L,
                 unsigned_intP_unsigned_intM_idx_35_at_L)) ->
-           eq_int(model(a_2, i_2, SparseArray_n_a_0_2_at_L,
-                  SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
-                  SparseArray_val_a_0_2_at_L, intP_intM_val_11_at_L,
-                  unsigned_intP_unsigned_intM_idx_35_at_L,
-                  unsigned_intP_unsigned_intM_back_34_at_L),
-           (0))))))))))))
+           (model(a_2, i_2, SparseArray_n_a_0_2_at_L,
+            SparseArray_back_a_0_2_at_L, SparseArray_idx_a_0_2_at_L,
+            SparseArray_val_a_0_2_at_L, intP_intM_val_11_at_L,
+            unsigned_intP_unsigned_intM_idx_35_at_L,
+            unsigned_intP_unsigned_intM_back_34_at_L) = (0))))))))))))
+
+exception Goto__LAND_0_exc of unit
+
+exception Goto__LAND_exc of unit
+
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
+exception Return_label_exc of unit
 
 parameter SparseArray_alloc_table : SparseArray alloc_table ref
 
 parameter SparseArray_tag_table : SparseArray tag_table ref
-
-parameter alloc_bitvector_struct_SparseArray :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_SparseArray(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_SparseArray_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_SparseArray(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_unsigned_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_unsigned_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_unsigned_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_unsigned_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
 parameter alloc_struct_SparseArray :
  n:int ->
@@ -3223,20 +3182,16 @@ parameter create :
                       unsigned_intP_unsigned_intM_back_22,
                       unsigned_intP_unsigned_intM_idx_20))
                      and ((JC_27:
-                          eq_int(integer_of_uint32(select(SparseArray_sz_0_result_4,
-                                                   result)),
-                          integer_of_uint32(sz@)))
+                          (integer_of_uint32(select(SparseArray_sz_0_result_4,
+                                             result)) = integer_of_uint32(sz)))
                          and (JC_28:
                              (forall i_4:int.
-                              eq_int(model(result, i_4,
-                                     SparseArray_n_result_4,
-                                     SparseArray_back_result_4,
-                                     SparseArray_idx_result_4,
-                                     SparseArray_val_result_4,
-                                     intP_intM_val_18,
-                                     unsigned_intP_unsigned_intM_idx_20,
-                                     unsigned_intP_unsigned_intM_back_22),
-                              (0)))))))
+                              (model(result, i_4, SparseArray_n_result_4,
+                               SparseArray_back_result_4,
+                               SparseArray_idx_result_4,
+                               SparseArray_val_result_4, intP_intM_val_18,
+                               unsigned_intP_unsigned_intM_idx_20,
+                               unsigned_intP_unsigned_intM_back_22) = (0)))))))
                     and (JC_35:
                         (((((JC_30:
                             not_assigns(SparseArray_result_4_alloc_table@,
@@ -3294,20 +3249,16 @@ parameter create_requires :
                       unsigned_intP_unsigned_intM_back_22,
                       unsigned_intP_unsigned_intM_idx_20))
                      and ((JC_27:
-                          eq_int(integer_of_uint32(select(SparseArray_sz_0_result_4,
-                                                   result)),
-                          integer_of_uint32(sz@)))
+                          (integer_of_uint32(select(SparseArray_sz_0_result_4,
+                                             result)) = integer_of_uint32(sz)))
                          and (JC_28:
                              (forall i_4:int.
-                              eq_int(model(result, i_4,
-                                     SparseArray_n_result_4,
-                                     SparseArray_back_result_4,
-                                     SparseArray_idx_result_4,
-                                     SparseArray_val_result_4,
-                                     intP_intM_val_18,
-                                     unsigned_intP_unsigned_intM_idx_20,
-                                     unsigned_intP_unsigned_intM_back_22),
-                              (0)))))))
+                              (model(result, i_4, SparseArray_n_result_4,
+                               SparseArray_back_result_4,
+                               SparseArray_idx_result_4,
+                               SparseArray_val_result_4, intP_intM_val_18,
+                               unsigned_intP_unsigned_intM_idx_20,
+                               unsigned_intP_unsigned_intM_back_22) = (0)))))))
                     and (JC_35:
                         (((((JC_30:
                             not_assigns(SparseArray_result_4_alloc_table@,
@@ -3347,12 +3298,15 @@ parameter get :
               unsigned_intP_unsigned_intM_idx_24:(unsigned_intP, uint32) memory ->
                { } int32
                { (JC_66:
-                 eq_int(integer_of_int32(result),
-                 model(a_1@, integer_of_uint32(i_1@), SparseArray_n_a_6,
-                 SparseArray_back_a_6, SparseArray_idx_a_6,
-                 SparseArray_val_a_6, intP_intM_val_26,
-                 unsigned_intP_unsigned_intM_idx_24,
-                 unsigned_intP_unsigned_intM_back_25))) }
+                 (integer_of_int32(result) = model(a_1,
+                                             integer_of_uint32(i_1),
+                                             SparseArray_n_a_6,
+                                             SparseArray_back_a_6,
+                                             SparseArray_idx_a_6,
+                                             SparseArray_val_a_6,
+                                             intP_intM_val_26,
+                                             unsigned_intP_unsigned_intM_idx_24,
+                                             unsigned_intP_unsigned_intM_back_25))) }
 
 parameter get_requires :
  a_1:SparseArray pointer ->
@@ -3391,12 +3345,15 @@ parameter get_requires :
                              (1))))))))}
                int32
                { (JC_66:
-                 eq_int(integer_of_int32(result),
-                 model(a_1@, integer_of_uint32(i_1@), SparseArray_n_a_6,
-                 SparseArray_back_a_6, SparseArray_idx_a_6,
-                 SparseArray_val_a_6, intP_intM_val_26,
-                 unsigned_intP_unsigned_intM_idx_24,
-                 unsigned_intP_unsigned_intM_back_25))) }
+                 (integer_of_int32(result) = model(a_1,
+                                             integer_of_uint32(i_1),
+                                             SparseArray_n_a_6,
+                                             SparseArray_back_a_6,
+                                             SparseArray_idx_a_6,
+                                             SparseArray_val_a_6,
+                                             intP_intM_val_26,
+                                             unsigned_intP_unsigned_intM_idx_24,
+                                             unsigned_intP_unsigned_intM_back_25))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -3443,7 +3400,7 @@ parameter set :
                 { (JC_112:
                   ((JC_106:
                    ((JC_103:
-                    inv(a_0_0@, unsigned_intP_back_29_alloc_table,
+                    inv(a_0_0, unsigned_intP_back_29_alloc_table,
                     unsigned_intP_idx_28_alloc_table,
                     intP_val_27_alloc_table, SparseArray_a_0_7_alloc_table,
                     SparseArray_sz_0_a_0_7, SparseArray_n_a_0_7,
@@ -3452,51 +3409,49 @@ parameter set :
                     unsigned_intP_unsigned_intM_back_29,
                     unsigned_intP_unsigned_intM_idx_28))
                    and ((JC_104:
-                        eq_int(model(a_0_0@, integer_of_uint32(i_0_0@),
-                               SparseArray_n_a_0_7, SparseArray_back_a_0_7,
-                               SparseArray_idx_a_0_7, SparseArray_val_a_0_7,
-                               intP_intM_val_27,
-                               unsigned_intP_unsigned_intM_idx_28,
-                               unsigned_intP_unsigned_intM_back_29),
-                        integer_of_int32(v@)))
+                        (model(a_0_0, integer_of_uint32(i_0_0),
+                         SparseArray_n_a_0_7, SparseArray_back_a_0_7,
+                         SparseArray_idx_a_0_7, SparseArray_val_a_0_7,
+                         intP_intM_val_27,
+                         unsigned_intP_unsigned_intM_idx_28,
+                         unsigned_intP_unsigned_intM_back_29) = integer_of_int32(v)))
                        and (JC_105:
                            (forall j:int.
-                            (neq_int(j, integer_of_uint32(i_0_0@)) ->
-                             eq_int(model(a_0_0@, j, SparseArray_n_a_0_7,
-                                    SparseArray_back_a_0_7,
-                                    SparseArray_idx_a_0_7,
-                                    SparseArray_val_a_0_7, intP_intM_val_27,
-                                    unsigned_intP_unsigned_intM_idx_28,
-                                    unsigned_intP_unsigned_intM_back_29),
-                             model(a_0_0@, j@, SparseArray_n_a_0_7@,
-                             SparseArray_back_a_0_7@, SparseArray_idx_a_0_7@,
-                             SparseArray_val_a_0_7@, intP_intM_val_27@,
+                            ((j <> integer_of_uint32(i_0_0)) ->
+                             (model(a_0_0, j, SparseArray_n_a_0_7,
+                              SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
+                              SparseArray_val_a_0_7, intP_intM_val_27,
+                              unsigned_intP_unsigned_intM_idx_28,
+                              unsigned_intP_unsigned_intM_back_29) = 
+                             model(a_0_0, j, SparseArray_n_a_0_7@,
+                             SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
+                             SparseArray_val_a_0_7, intP_intM_val_27@,
                              unsigned_intP_unsigned_intM_idx_28@,
                              unsigned_intP_unsigned_intM_back_29@))))))))
                   and (JC_111:
                       ((((JC_107:
-                         not_assigns(unsigned_intP_idx_28_alloc_table@,
+                         not_assigns(unsigned_intP_idx_28_alloc_table,
                          unsigned_intP_unsigned_intM_idx_28@,
                          unsigned_intP_unsigned_intM_idx_28,
-                         pset_all(pset_deref(SparseArray_idx_a_0_7@,
-                                  pset_singleton(a_0_0@)))))
+                         pset_all(pset_deref(SparseArray_idx_a_0_7,
+                                  pset_singleton(a_0_0)))))
                         and (JC_108:
-                            not_assigns(unsigned_intP_back_29_alloc_table@,
+                            not_assigns(unsigned_intP_back_29_alloc_table,
                             unsigned_intP_unsigned_intM_back_29@,
                             unsigned_intP_unsigned_intM_back_29,
-                            pset_all(pset_deref(SparseArray_back_a_0_7@,
-                                     pset_singleton(a_0_0@))))))
+                            pset_all(pset_deref(SparseArray_back_a_0_7,
+                                     pset_singleton(a_0_0))))))
                        and (JC_109:
-                           not_assigns(intP_val_27_alloc_table@,
+                           not_assigns(intP_val_27_alloc_table,
                            intP_intM_val_27@, intP_intM_val_27,
-                           pset_range(pset_deref(SparseArray_val_a_0_7@,
-                                      pset_singleton(a_0_0@)),
-                           integer_of_uint32(i_0_0@),
-                           integer_of_uint32(i_0_0@)))))
+                           pset_range(pset_deref(SparseArray_val_a_0_7,
+                                      pset_singleton(a_0_0)),
+                           integer_of_uint32(i_0_0),
+                           integer_of_uint32(i_0_0)))))
                       and (JC_110:
-                          not_assigns(SparseArray_a_0_7_alloc_table@,
+                          not_assigns(SparseArray_a_0_7_alloc_table,
                           SparseArray_n_a_0_7@, SparseArray_n_a_0_7,
-                          pset_singleton(a_0_0@))))))) }
+                          pset_singleton(a_0_0))))))) }
 
 parameter set_requires :
  a_0_0:SparseArray pointer ->
@@ -3543,7 +3498,7 @@ parameter set_requires :
                 { (JC_112:
                   ((JC_106:
                    ((JC_103:
-                    inv(a_0_0@, unsigned_intP_back_29_alloc_table,
+                    inv(a_0_0, unsigned_intP_back_29_alloc_table,
                     unsigned_intP_idx_28_alloc_table,
                     intP_val_27_alloc_table, SparseArray_a_0_7_alloc_table,
                     SparseArray_sz_0_a_0_7, SparseArray_n_a_0_7,
@@ -3552,51 +3507,49 @@ parameter set_requires :
                     unsigned_intP_unsigned_intM_back_29,
                     unsigned_intP_unsigned_intM_idx_28))
                    and ((JC_104:
-                        eq_int(model(a_0_0@, integer_of_uint32(i_0_0@),
-                               SparseArray_n_a_0_7, SparseArray_back_a_0_7,
-                               SparseArray_idx_a_0_7, SparseArray_val_a_0_7,
-                               intP_intM_val_27,
-                               unsigned_intP_unsigned_intM_idx_28,
-                               unsigned_intP_unsigned_intM_back_29),
-                        integer_of_int32(v@)))
+                        (model(a_0_0, integer_of_uint32(i_0_0),
+                         SparseArray_n_a_0_7, SparseArray_back_a_0_7,
+                         SparseArray_idx_a_0_7, SparseArray_val_a_0_7,
+                         intP_intM_val_27,
+                         unsigned_intP_unsigned_intM_idx_28,
+                         unsigned_intP_unsigned_intM_back_29) = integer_of_int32(v)))
                        and (JC_105:
                            (forall j:int.
-                            (neq_int(j, integer_of_uint32(i_0_0@)) ->
-                             eq_int(model(a_0_0@, j, SparseArray_n_a_0_7,
-                                    SparseArray_back_a_0_7,
-                                    SparseArray_idx_a_0_7,
-                                    SparseArray_val_a_0_7, intP_intM_val_27,
-                                    unsigned_intP_unsigned_intM_idx_28,
-                                    unsigned_intP_unsigned_intM_back_29),
-                             model(a_0_0@, j@, SparseArray_n_a_0_7@,
-                             SparseArray_back_a_0_7@, SparseArray_idx_a_0_7@,
-                             SparseArray_val_a_0_7@, intP_intM_val_27@,
+                            ((j <> integer_of_uint32(i_0_0)) ->
+                             (model(a_0_0, j, SparseArray_n_a_0_7,
+                              SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
+                              SparseArray_val_a_0_7, intP_intM_val_27,
+                              unsigned_intP_unsigned_intM_idx_28,
+                              unsigned_intP_unsigned_intM_back_29) = 
+                             model(a_0_0, j, SparseArray_n_a_0_7@,
+                             SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
+                             SparseArray_val_a_0_7, intP_intM_val_27@,
                              unsigned_intP_unsigned_intM_idx_28@,
                              unsigned_intP_unsigned_intM_back_29@))))))))
                   and (JC_111:
                       ((((JC_107:
-                         not_assigns(unsigned_intP_idx_28_alloc_table@,
+                         not_assigns(unsigned_intP_idx_28_alloc_table,
                          unsigned_intP_unsigned_intM_idx_28@,
                          unsigned_intP_unsigned_intM_idx_28,
-                         pset_all(pset_deref(SparseArray_idx_a_0_7@,
-                                  pset_singleton(a_0_0@)))))
+                         pset_all(pset_deref(SparseArray_idx_a_0_7,
+                                  pset_singleton(a_0_0)))))
                         and (JC_108:
-                            not_assigns(unsigned_intP_back_29_alloc_table@,
+                            not_assigns(unsigned_intP_back_29_alloc_table,
                             unsigned_intP_unsigned_intM_back_29@,
                             unsigned_intP_unsigned_intM_back_29,
-                            pset_all(pset_deref(SparseArray_back_a_0_7@,
-                                     pset_singleton(a_0_0@))))))
+                            pset_all(pset_deref(SparseArray_back_a_0_7,
+                                     pset_singleton(a_0_0))))))
                        and (JC_109:
-                           not_assigns(intP_val_27_alloc_table@,
+                           not_assigns(intP_val_27_alloc_table,
                            intP_intM_val_27@, intP_intM_val_27,
-                           pset_range(pset_deref(SparseArray_val_a_0_7@,
-                                      pset_singleton(a_0_0@)),
-                           integer_of_uint32(i_0_0@),
-                           integer_of_uint32(i_0_0@)))))
+                           pset_range(pset_deref(SparseArray_val_a_0_7,
+                                      pset_singleton(a_0_0)),
+                           integer_of_uint32(i_0_0),
+                           integer_of_uint32(i_0_0)))))
                       and (JC_110:
-                          not_assigns(SparseArray_a_0_7_alloc_table@,
+                          not_assigns(SparseArray_a_0_7_alloc_table,
                           SparseArray_n_a_0_7@, SparseArray_n_a_0_7,
-                          pset_singleton(a_0_0@))))))) }
+                          pset_singleton(a_0_0))))))) }
 
 parameter uint32_of_integer_ :
  x:int ->
@@ -3660,16 +3613,15 @@ let create_ensures_default =
       unsigned_intP_unsigned_intM_back_22,
       unsigned_intP_unsigned_intM_idx_20))
      and ((JC_16:
-          eq_int(integer_of_uint32(select(SparseArray_sz_0_result_4, result)),
-          integer_of_uint32(sz@)))
+          (integer_of_uint32(select(SparseArray_sz_0_result_4, result)) = 
+          integer_of_uint32(sz)))
          and (JC_17:
              (forall i_4:int.
-              eq_int(model(result, i_4, SparseArray_n_result_4,
-                     SparseArray_back_result_4, SparseArray_idx_result_4,
-                     SparseArray_val_result_4, intP_intM_val_18,
-                     unsigned_intP_unsigned_intM_idx_20,
-                     unsigned_intP_unsigned_intM_back_22),
-              (0)))))))
+              (model(result, i_4, SparseArray_n_result_4,
+               SparseArray_back_result_4, SparseArray_idx_result_4,
+               SparseArray_val_result_4, intP_intM_val_18,
+               unsigned_intP_unsigned_intM_idx_20,
+               unsigned_intP_unsigned_intM_back_22) = (0)))))))
     and (JC_24:
         (((((JC_19:
             not_assigns(SparseArray_result_4_alloc_table@,
@@ -3771,7 +3723,6 @@ let get_ensures_default =
                            shift(select(SparseArray_idx_a_6, a_1),
                            integer_of_uint32(i_1)))))) }; void); void;
       try
-       (let jessie_<num> =
        begin
          (if ((lt_int_ (integer_of_uint32 (C_39:
                                           ((safe_acc_ unsigned_intP_unsigned_intM_idx_24) 
@@ -3795,7 +3746,6 @@ let get_ensures_default =
                                                                   (integer_of_uint32 i_1)))))))))))) 
                (integer_of_uint32 i_1))
           then
-           (let jessie_<num> =
            (C_29:
            begin
              (let jessie_<num> =
@@ -3804,29 +3754,27 @@ let get_ensures_default =
                                                         ((shift (C_26:
                                                                 ((safe_acc_ SparseArray_val_a_6) a_1))) 
                                                          (integer_of_uint32 i_1)))))) in
-             void); (raise (Return_label_exc void)) end) in void)
+             void); (raise (Return_label_exc void)) end)
           else
-           (let jessie_<num> =
            (C_25:
            begin
              (let jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in
-             void); (raise (Return_label_exc void)) end) in void))
+             void); (raise (Return_label_exc void)) end))
          else
-          (let jessie_<num> =
           (C_24:
           begin
             (let jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in
-            void); (raise (Return_label_exc void)) end) in void));
-        (raise (Return_label_exc void)) end in void) with
-       Return_label_exc jessie_<num> ->
+            void); (raise (Return_label_exc void)) end));
+        (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
        (return_label: begin   (return := !__retres); (raise Return) end) end
      end); absurd  end with Return -> !return end))
   { (JC_64:
-    eq_int(integer_of_int32(result),
-    model(a_1@, integer_of_uint32(i_1@), SparseArray_n_a_6,
-    SparseArray_back_a_6, SparseArray_idx_a_6, SparseArray_val_a_6,
-    intP_intM_val_26, unsigned_intP_unsigned_intM_idx_24,
-    unsigned_intP_unsigned_intM_back_25))) }
+    (integer_of_int32(result) = model(a_1, integer_of_uint32(i_1),
+                                SparseArray_n_a_6, SparseArray_back_a_6,
+                                SparseArray_idx_a_6, SparseArray_val_a_6,
+                                intP_intM_val_26,
+                                unsigned_intP_unsigned_intM_idx_24,
+                                unsigned_intP_unsigned_intM_back_25))) }
 
 let get_safety =
  fun (a_1 : SparseArray pointer) (i_1 : uint32) (SparseArray_a_6_alloc_table : SparseArray alloc_table) (intP_val_26_alloc_table : intP alloc_table) (unsigned_intP_idx_24_alloc_table : unsigned_intP alloc_table) (unsigned_intP_back_25_alloc_table : unsigned_intP alloc_table) (unsigned_intP_unsigned_intM_idx_24 : (unsigned_intP, uint32) memory) (unsigned_intP_unsigned_intM_back_25 : (unsigned_intP, uint32) memory) (intP_intM_val_26 : (intP, int32) memory) (SparseArray_val_a_6 : (SparseArray, intP pointer) memory) (SparseArray_idx_a_6 : (SparseArray, unsigned_intP pointer) memory) (SparseArray_back_a_6 : (SparseArray, unsigned_intP pointer) memory) (SparseArray_n_a_6 : (SparseArray, uint32) memory) (SparseArray_sz_0_a_6 : (SparseArray, uint32) memory) ->
@@ -3857,7 +3805,6 @@ let get_safety =
                              shift(select(SparseArray_idx_a_6, a_1),
                              integer_of_uint32(i_1)))))) } ]; void;
       try
-       (let jessie_<num> =
        begin
          (if ((lt_int_ (integer_of_uint32 (C_39:
                                           (JC_72:
@@ -3885,7 +3832,6 @@ let get_safety =
                                                                 (integer_of_uint32 i_1)))))))))) 
                (integer_of_uint32 i_1))
           then
-           (let jessie_<num> =
            (C_29:
            begin
              (let jessie_<num> =
@@ -3896,21 +3842,18 @@ let get_safety =
                             (JC_78:
                             (((acc_ SparseArray_a_6_alloc_table) SparseArray_val_a_6) a_1)))) 
                            (integer_of_uint32 i_1))))) in void);
-            (raise (Return_label_exc void)) end) in void)
+            (raise (Return_label_exc void)) end)
           else
-           (let jessie_<num> =
            (C_25:
            begin
              (let jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in
-             void); (raise (Return_label_exc void)) end) in void))
+             void); (raise (Return_label_exc void)) end))
          else
-          (let jessie_<num> =
           (C_24:
           begin
             (let jessie_<num> = (__retres := (safe_int32_of_integer_ (0))) in
-            void); (raise (Return_label_exc void)) end) in void));
-        (raise (Return_label_exc void)) end in void) with
-       Return_label_exc jessie_<num> ->
+            void); (raise (Return_label_exc void)) end));
+        (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
        (return_label: begin   (return := !__retres); (raise Return) end) end
      end); absurd  end with Return -> !return end)) { true }
 
@@ -3998,8 +3941,8 @@ let main_ensures_default =
       void);
       (assert
       { (JC_168:
-        ((JC_166: eq_int(integer_of_int32(x_0), (0)))
-        and (JC_167: eq_int(integer_of_int32(y), (0))))) }; void); void;
+        ((JC_166: (integer_of_int32(x_0) = (0)))
+        and (JC_167: (integer_of_int32(y) = (0))))) }; void); void;
       (let jessie_<num> = !a_2_0 in
       (let jessie_<num> = (safe_uint32_of_integer_ (5)) in
       (let jessie_<num> = (safe_int32_of_integer_ (1)) in
@@ -4026,8 +3969,8 @@ let main_ensures_default =
       void);
       (assert
       { (JC_175:
-        ((JC_173: eq_int(integer_of_int32(x_0), (1)))
-        and (JC_174: eq_int(integer_of_int32(y), (2))))) }; void); void;
+        ((JC_173: (integer_of_int32(x_0) = (1)))
+        and (JC_174: (integer_of_int32(y) = (2))))) }; void); void;
       (let jessie_<num> =
       (x_0 := (C_106:
               (let jessie_<num> = !a_2_0 in
@@ -4044,8 +3987,8 @@ let main_ensures_default =
       void);
       (assert
       { (JC_180:
-        ((JC_178: eq_int(integer_of_int32(x_0), (0)))
-        and (JC_179: eq_int(integer_of_int32(y), (0))))) }; void); void;
+        ((JC_178: (integer_of_int32(x_0) = (0)))
+        and (JC_179: (integer_of_int32(y) = (0))))) }; void); void;
       (let jessie_<num> = (__retres_0 := (safe_int32_of_integer_ (0))) in void);
       (return := !__retres_0); (raise Return) end))))))))))))))))))))))))))))))))))))))))))))))));
     absurd  end with Return -> !return end)) { (JC_139: true) }
@@ -4134,8 +4077,8 @@ let main_safety =
       void);
       [ { } unit reads x_0,y
         { (JC_149:
-          ((JC_147: eq_int(integer_of_int32(x_0), (0)))
-          and (JC_148: eq_int(integer_of_int32(y), (0))))) } ]; void;
+          ((JC_147: (integer_of_int32(x_0) = (0)))
+          and (JC_148: (integer_of_int32(y) = (0))))) } ]; void;
       (let jessie_<num> = !a_2_0 in
       (let jessie_<num> = (safe_uint32_of_integer_ (5)) in
       (let jessie_<num> = (safe_int32_of_integer_ (1)) in
@@ -4162,8 +4105,8 @@ let main_safety =
       void);
       [ { } unit reads x_0,y
         { (JC_156:
-          ((JC_154: eq_int(integer_of_int32(x_0), (1)))
-          and (JC_155: eq_int(integer_of_int32(y), (2))))) } ]; void;
+          ((JC_154: (integer_of_int32(x_0) = (1)))
+          and (JC_155: (integer_of_int32(y) = (2))))) } ]; void;
       (let jessie_<num> =
       (x_0 := (C_106:
               (let jessie_<num> = !a_2_0 in
@@ -4180,8 +4123,8 @@ let main_safety =
       void);
       [ { } unit reads x_0,y
         { (JC_161:
-          ((JC_159: eq_int(integer_of_int32(x_0), (0)))
-          and (JC_160: eq_int(integer_of_int32(y), (0))))) } ]; void;
+          ((JC_159: (integer_of_int32(x_0) = (0)))
+          and (JC_160: (integer_of_int32(y) = (0))))) } ]; void;
       (let jessie_<num> = (__retres_0 := (safe_int32_of_integer_ (0))) in void);
       (return := !__retres_0); (raise Return) end))))))))))))))))))))))))))))))))))))))))))))))));
     absurd  end with Return -> !return end)) { true }
@@ -4209,10 +4152,8 @@ let set_ensures_default =
   try
    begin
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_49:
          begin
            (let jessie_<num> =
@@ -4221,8 +4162,7 @@ let set_ensures_default =
            (C_46: ((safe_acc_ SparseArray_val_a_0_7) a_0_0)) in
            (let jessie_<num> = (integer_of_uint32 i_0_0) in
            (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
-           (((safe_upd_ intP_intM_val_27) jessie_<num>) jessie_<num>))))) in
-           void);
+           (((safe_upd_ intP_intM_val_27) jessie_<num>) jessie_<num>))))) in void);
           (if ((lt_int_ (integer_of_uint32 (C_59:
                                            ((safe_acc_ !unsigned_intP_unsigned_intM_idx_28) 
                                             (C_58:
@@ -4245,11 +4185,10 @@ let set_ensures_default =
                                                                     ((safe_acc_ SparseArray_idx_a_0_7) a_0_0))) 
                                                                    (integer_of_uint32 i_0_0)))))))))))) 
                 (integer_of_uint32 i_0_0)) then void
-           else (let jessie_<num> = (raise (Goto__LAND_exc void)) in void))
-          else (let jessie_<num> = (raise (Goto__LAND_exc void)) in void));
-          (let jessie_<num> = (raise (Goto__LAND_0_exc void)) in void);
-          (raise (Goto__LAND_exc void)) end) in void) with
-         Goto__LAND_exc jessie_<num> ->
+           else (raise (Goto__LAND_exc void)))
+          else (raise (Goto__LAND_exc void)));
+          (raise (Goto__LAND_0_exc void)); (raise (Goto__LAND_exc void)) end)
+         with Goto__LAND_exc jessie_<num> ->
          (let jessie_<num> =
          (_LAND:
          (C_65:
@@ -4288,61 +4227,59 @@ let set_ensures_default =
             (let jessie_<num> = a_0_0 in
             (((safe_upd_ SparseArray_n_a_0_7) jessie_<num>) jessie_<num>));
            jessie_<num> end)) end))) in void) end;
-       (raise (Goto__LAND_0_exc void)) end in void) with
-      Goto__LAND_0_exc jessie_<num> ->
+       (raise (Goto__LAND_0_exc void)) end with Goto__LAND_0_exc jessie_<num> ->
       (_LAND_0: begin   void; (raise Return) end) end; (raise Return) end
    with Return -> void end)
   { (JC_102:
     ((JC_96:
      ((JC_93:
-      inv(a_0_0@, unsigned_intP_back_29_alloc_table,
+      inv(a_0_0, unsigned_intP_back_29_alloc_table,
       unsigned_intP_idx_28_alloc_table, intP_val_27_alloc_table,
       SparseArray_a_0_7_alloc_table, SparseArray_sz_0_a_0_7,
       SparseArray_n_a_0_7, SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
       SparseArray_val_a_0_7, unsigned_intP_unsigned_intM_back_29,
       unsigned_intP_unsigned_intM_idx_28))
      and ((JC_94:
-          eq_int(model(a_0_0@, integer_of_uint32(i_0_0@),
-                 SparseArray_n_a_0_7, SparseArray_back_a_0_7,
-                 SparseArray_idx_a_0_7, SparseArray_val_a_0_7,
-                 intP_intM_val_27, unsigned_intP_unsigned_intM_idx_28,
-                 unsigned_intP_unsigned_intM_back_29),
-          integer_of_int32(v@)))
+          (model(a_0_0, integer_of_uint32(i_0_0), SparseArray_n_a_0_7,
+           SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
+           SparseArray_val_a_0_7, intP_intM_val_27,
+           unsigned_intP_unsigned_intM_idx_28,
+           unsigned_intP_unsigned_intM_back_29) = integer_of_int32(v)))
          and (JC_95:
              (forall j:int.
-              (neq_int(j, integer_of_uint32(i_0_0@)) ->
-               eq_int(model(a_0_0@, j, SparseArray_n_a_0_7,
-                      SparseArray_back_a_0_7, SparseArray_idx_a_0_7,
-                      SparseArray_val_a_0_7, intP_intM_val_27,
-                      unsigned_intP_unsigned_intM_idx_28,
-                      unsigned_intP_unsigned_intM_back_29),
-               model(a_0_0@, j@, SparseArray_n_a_0_7@,
-               SparseArray_back_a_0_7@, SparseArray_idx_a_0_7@,
-               SparseArray_val_a_0_7@, intP_intM_val_27@,
-               unsigned_intP_unsigned_intM_idx_28@,
-               unsigned_intP_unsigned_intM_back_29@))))))))
+              ((j <> integer_of_uint32(i_0_0)) ->
+               (model(a_0_0, j, SparseArray_n_a_0_7, SparseArray_back_a_0_7,
+                SparseArray_idx_a_0_7, SparseArray_val_a_0_7,
+                intP_intM_val_27, unsigned_intP_unsigned_intM_idx_28,
+                unsigned_intP_unsigned_intM_back_29) = model(a_0_0, j,
+                                                       SparseArray_n_a_0_7@,
+                                                       SparseArray_back_a_0_7,
+                                                       SparseArray_idx_a_0_7,
+                                                       SparseArray_val_a_0_7,
+                                                       intP_intM_val_27@,
+                                                       unsigned_intP_unsigned_intM_idx_28@,
+                                                       unsigned_intP_unsigned_intM_back_29@))))))))
     and (JC_101:
         ((((JC_97:
-           not_assigns(unsigned_intP_idx_28_alloc_table@,
+           not_assigns(unsigned_intP_idx_28_alloc_table,
            unsigned_intP_unsigned_intM_idx_28@,
            unsigned_intP_unsigned_intM_idx_28,
-           pset_all(pset_deref(SparseArray_idx_a_0_7@,
-                    pset_singleton(a_0_0@)))))
+           pset_all(pset_deref(SparseArray_idx_a_0_7, pset_singleton(a_0_0)))))
           and (JC_98:
-              not_assigns(unsigned_intP_back_29_alloc_table@,
+              not_assigns(unsigned_intP_back_29_alloc_table,
               unsigned_intP_unsigned_intM_back_29@,
               unsigned_intP_unsigned_intM_back_29,
-              pset_all(pset_deref(SparseArray_back_a_0_7@,
-                       pset_singleton(a_0_0@))))))
+              pset_all(pset_deref(SparseArray_back_a_0_7,
+                       pset_singleton(a_0_0))))))
          and (JC_99:
-             not_assigns(intP_val_27_alloc_table@, intP_intM_val_27@,
+             not_assigns(intP_val_27_alloc_table, intP_intM_val_27@,
              intP_intM_val_27,
-             pset_range(pset_deref(SparseArray_val_a_0_7@,
-                        pset_singleton(a_0_0@)),
-             integer_of_uint32(i_0_0@), integer_of_uint32(i_0_0@)))))
+             pset_range(pset_deref(SparseArray_val_a_0_7,
+                        pset_singleton(a_0_0)),
+             integer_of_uint32(i_0_0), integer_of_uint32(i_0_0)))))
         and (JC_100:
-            not_assigns(SparseArray_a_0_7_alloc_table@, SparseArray_n_a_0_7@,
-            SparseArray_n_a_0_7, pset_singleton(a_0_0@))))))) }
+            not_assigns(SparseArray_a_0_7_alloc_table, SparseArray_n_a_0_7@,
+            SparseArray_n_a_0_7, pset_singleton(a_0_0))))))) }
 
 let set_safety =
  fun (a_0_0 : SparseArray pointer) (i_0_0 : uint32) (v : int32) (unsigned_intP_unsigned_intM_idx_28 : (unsigned_intP, uint32) memory ref) (unsigned_intP_unsigned_intM_back_29 : (unsigned_intP, uint32) memory ref) (intP_intM_val_27 : (intP, int32) memory ref) (SparseArray_n_a_0_7 : (SparseArray, uint32) memory ref) (SparseArray_a_0_7_alloc_table : SparseArray alloc_table) (intP_val_27_alloc_table : intP alloc_table) (unsigned_intP_idx_28_alloc_table : unsigned_intP alloc_table) (unsigned_intP_back_29_alloc_table : unsigned_intP alloc_table) (SparseArray_val_a_0_7 : (SparseArray, intP pointer) memory) (SparseArray_idx_a_0_7 : (SparseArray, unsigned_intP pointer) memory) (SparseArray_back_a_0_7 : (SparseArray, unsigned_intP pointer) memory) (SparseArray_sz_0_a_0_7 : (SparseArray, uint32) memory) ->
@@ -4367,10 +4304,8 @@ let set_safety =
   try
    begin
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_49:
          begin
            (let jessie_<num> =
@@ -4409,11 +4344,10 @@ let set_safety =
                                                                   (((acc_ SparseArray_a_0_7_alloc_table) SparseArray_idx_a_0_7) a_0_0)))) 
                                                                  (integer_of_uint32 i_0_0)))))))))) 
                 (integer_of_uint32 i_0_0)) then void
-           else (let jessie_<num> = (raise (Goto__LAND_exc void)) in void))
-          else (let jessie_<num> = (raise (Goto__LAND_exc void)) in void));
-          (let jessie_<num> = (raise (Goto__LAND_0_exc void)) in void);
-          (raise (Goto__LAND_exc void)) end) in void) with
-         Goto__LAND_exc jessie_<num> ->
+           else (raise (Goto__LAND_exc void)))
+          else (raise (Goto__LAND_exc void)));
+          (raise (Goto__LAND_0_exc void)); (raise (Goto__LAND_exc void)) end)
+         with Goto__LAND_exc jessie_<num> ->
          (let jessie_<num> =
          (_LAND:
          (C_65:
@@ -4465,8 +4399,7 @@ let set_safety =
             (JC_133:
             ((((upd_ SparseArray_a_0_7_alloc_table) SparseArray_n_a_0_7) jessie_<num>) jessie_<num>)));
            jessie_<num> end)) end))) in void) end;
-       (raise (Goto__LAND_0_exc void)) end in void) with
-      Goto__LAND_0_exc jessie_<num> ->
+       (raise (Goto__LAND_0_exc void)) end with Goto__LAND_0_exc jessie_<num> ->
       (_LAND_0: begin   void; (raise Return) end) end; (raise Return) end
    with Return -> void end) { true }
 
@@ -5477,6 +5410,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -5488,6 +5426,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -5701,6 +5643,11 @@ axiom uint32_coerce:
     (((0 <= x) and (x <= 4294967295)) ->
      (integer_of_uint32(uint32_of_integer(x)) = x)))
 
+axiom uint32_extensionality:
+  (forall x:uint32.
+    (forall y:uint32.
+      ((integer_of_uint32(x) = integer_of_uint32(y)) -> (x = y))))
+
 axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
@@ -5720,31 +5667,6 @@ axiom unsigned_intP_tags:
   (forall x:unsigned_intP pointer.
     (forall unsigned_intP_tag_table:unsigned_intP tag_table.
       instanceof(unsigned_intP_tag_table, x, unsigned_intP_tag)))
-
-predicate valid_bitvector_struct_SparseArray(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_unsigned_intP(p: unit pointer, a: int,
-  b: int, bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_SparseArray(p: SparseArray pointer, a: int, b: int,
   SparseArray_alloc_table: SparseArray alloc_table) =
@@ -18424,10 +18346,10 @@ goal set_safety_po_21:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/sparse_array2_why.why     : #..#####....###.#.....#.##..##..##..##.....................##..#.#######.#######..#.#..........#.....# (62/0/0/40/0)
+why/sparse_array2_why.why     : ...#####....................##.................................#.?######.??#####...................... (80/0/3/19/0)
 total   : 102
-valid   :  62 ( 61%)
+valid   :  80 ( 78%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :  40 ( 39%)
+unknown :   3 (  3%)
+timeout :  19 ( 19%)
 failure :   0 (  0%)

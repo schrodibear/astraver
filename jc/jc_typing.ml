@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -300,6 +300,8 @@ let mintype loc t1 t2 =
     | JCTnative n1, JCTnative n2 ->
         if n1=n2 then t1 else raise Not_found
           (* TODO: integer is subtype of real *)
+    | JCTenum e1, JCTenum e2 ->
+        if e1=e2 then t1 else  Jc_pervasives.integer_type
     | (JCTenum _ | JCTnative Tinteger), (JCTenum _| JCTnative Tinteger) ->
         Jc_pervasives.integer_type
     | JCTlogic s1, JCTlogic s2 ->
@@ -342,6 +344,8 @@ let same_type_no_coercion t1 t2 =
 
 let comparable_types t1 t2 =
   match t1,t2 with
+    | JCTnative Tinteger, JCTnative Treal -> true
+    | JCTnative Treal, JCTnative Tinteger -> true
     | JCTnative t1, JCTnative t2 -> t1=t2
     | JCTenum _, JCTenum _ -> true
     | JCTenum _, JCTnative Tinteger -> true
@@ -1233,13 +1237,15 @@ let make_rel_bin_op loc (op: [< comparison_op]) e1 e2 =
         else
           typing_error loc "numeric types expected for >, <, >= and <="
     | `Beq | `Bneq ->
+(**)
         if is_numeric t1 && is_numeric t2 then
           let t = lub_numeric_types t1 t2 in
           JCArelation(term_coerce t1 t e1,
                       rel_bin_op (operator_of_native t) op,
                       term_coerce t2 t e2)
         else
-          let t = operator_of_type (mintype loc t1 t2) in
+(**)
+          let t = eq_operator_of_type (mintype loc t1 t2) in
           if comparable_types t1 t2 then
             JCArelation(e1, rel_bin_op t op, e2)
           else

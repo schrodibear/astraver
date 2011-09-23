@@ -70,12 +70,6 @@ type s1
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -170,21 +164,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_s1(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -233,62 +212,14 @@ lemma shift_prop :
  (forall x_0:int.
   (forall y:int.
    (ge_int(y, (8)) ->
-    eq_int(mul_int(mul_int(x_0, (256)), lsl((1), sub_int(y, (8)))),
-    mul_int(x_0, lsl((1), y))))))
+    (mul_int(mul_int(x_0, (256)), lsl((1), sub_int(y, (8)))) = mul_int(x_0,
+                                                               lsl((1), y))))))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_s1 :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_s1(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_s1_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_s1(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -374,10 +305,11 @@ parameter sizetype_normalize :
      { } int reads s1_exponent_e_1,s1_mantissa_e_1
      writes s1_exponent_e_1,s1_mantissa_e_1
      { (JC_<somenum>:
-       eq_int(mul_int(select(s1_mantissa_e_1, e@),
-              lsl((1), select(s1_exponent_e_1, e@))),
-       mul_int(select(s1_mantissa_e_1@, e@),
-       lsl((1), select(s1_exponent_e_1@, e@))))) }
+       (mul_int(select(s1_mantissa_e_1, e),
+        lsl((1), select(s1_exponent_e_1, e))) = mul_int(select(s1_mantissa_e_1@,
+                                                        e),
+                                                lsl((1),
+                                                select(s1_exponent_e_1@, e))))) }
 
 parameter sizetype_normalize_requires :
  e:s1 pointer ->
@@ -394,10 +326,11 @@ parameter sizetype_normalize_requires :
      int reads s1_exponent_e_1,s1_mantissa_e_1
      writes s1_exponent_e_1,s1_mantissa_e_1
      { (JC_<somenum>:
-       eq_int(mul_int(select(s1_mantissa_e_1, e@),
-              lsl((1), select(s1_exponent_e_1, e@))),
-       mul_int(select(s1_mantissa_e_1@, e@),
-       lsl((1), select(s1_exponent_e_1@, e@))))) }
+       (mul_int(select(s1_mantissa_e_1, e),
+        lsl((1), select(s1_exponent_e_1, e))) = mul_int(select(s1_mantissa_e_1@,
+                                                        e),
+                                                lsl((1),
+                                                select(s1_exponent_e_1@, e))))) }
 
 let sizetype_normalize_ensures_default =
  fun (e : s1 pointer) (s1_mantissa_e_1 : (s1, int) memory ref) (s1_exponent_e_1 : (s1, int) memory ref) (s1_e_1_alloc_table : s1 alloc_table) ->
@@ -437,10 +370,11 @@ let sizetype_normalize_ensures_default =
       (return := !__retres); (raise Return) end)))); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    eq_int(mul_int(select(s1_mantissa_e_1, e@),
-           lsl((1), select(s1_exponent_e_1, e@))),
-    mul_int(select(s1_mantissa_e_1@, e@),
-    lsl((1), select(s1_exponent_e_1@, e@))))) }
+    (mul_int(select(s1_mantissa_e_1, e),
+     lsl((1), select(s1_exponent_e_1, e))) = mul_int(select(s1_mantissa_e_1@,
+                                                     e),
+                                             lsl((1),
+                                             select(s1_exponent_e_1@, e))))) }
 
 let sizetype_normalize_safety =
  fun (e : s1 pointer) (s1_mantissa_e_1 : (s1, int) memory ref) (s1_exponent_e_1 : (s1, int) memory ref) (s1_e_1_alloc_table : s1 alloc_table) ->
@@ -495,15 +429,21 @@ why --project [...] why/schausten2.why
   <lemma name="shift_prop">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/schausten2_po1.why">
-      <location file = "PPCHOME/tests/jessie/schausten2.jessie/schausten2.jc" line = "30" begin = "0" end = "130"/>
+      <location file = "PPCHOME/tests/jessie/schausten2.c" line = "7" begin = "4" end = "106"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <function name="shift_prop">
-    <location file = "PPCHOME/tests/jessie/schausten2.jessie/schausten2.jc" line = "30" begin = "0" end = "130"/>
+  <function name="Lemma shift_prop">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
   <function name="Function sizetype_normalize">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/schausten2_po2.why">
+      <location file = "PPCHOME/tests/jessie/schausten2.c" line = "16" begin = "6" end = "90"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/schausten2_po3.why">
       <location file = "PPCHOME/tests/jessie/schausten2.c" line = "21" begin = "9" end = "20"/>
@@ -554,12 +494,6 @@ text = "PointerDeref"/>
       <location file = "PPCHOME/tests/jessie/schausten2.jessie/schausten2.jc" line = "51" begin = "17" end = "70"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/schausten2_po2.why">
-      <location file = "PPCHOME/tests/jessie/schausten2.c" line = "16" begin = "6" end = "90"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1595,21 +1529,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_s1(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

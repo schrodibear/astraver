@@ -3,7 +3,9 @@
 echo 'Format.eprintf "%s@." (Sys.getcwd());;' | ocaml 1>/dev/null 2> /tmp/regtests.cwd
 
 DIR=`cat /tmp/regtests.cwd`
+rm -f /tmp/regtests.cwd
 LIBDIR=`grep "libdir" $DIR/src/version.ml | sed -e 's|[^"]*"\([^"]*\)"[^"]*|\1|g' | head -n 1`
+LANG=
 
 echofilename () {
   echo "========== file $1 =========="

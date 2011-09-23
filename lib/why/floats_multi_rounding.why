@@ -397,32 +397,32 @@ parameter abs_double :
 (******** comparisons of doubles in the code ********)
 (***************************************************)
 
-parameter lt_double :
+parameter lt_double_ :
   x:double -> y:double -> 
   {} bool { if result then double_value(x) < double_value(y) 
             else double_value(x) >= double_value(y) }
 
-parameter le_double :
+parameter le_double_ :
   x:double -> y:double -> 
   {} bool { if result then double_value(x) <= double_value(y) 
             else double_value(x) > double_value(y) }
 
-parameter gt_double :
+parameter gt_double_ :
   x:double -> y:double -> 
   {} bool { if result then double_value(x) > double_value(y) 
             else double_value(x) <= double_value(y) }
 
-parameter ge_double :
+parameter ge_double_ :
   x:double -> y:double -> 
   {} bool { if result then double_value(x) >= double_value(y) 
             else double_value(x) < double_value(y) }
 
-parameter eq_double :
+parameter eq_double_ :
   x:double -> y:double -> 
   {} bool { if result then double_value(x) = double_value(y) 
             else double_value(x) <> double_value(y) }
 
-parameter neq_double :
+parameter neq_double_ :
   x:double -> y:double -> 
   {} bool { if result then double_value(x) <> double_value(y) 
             else double_value(x) = double_value(y) }

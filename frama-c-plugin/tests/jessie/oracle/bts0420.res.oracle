@@ -115,14 +115,6 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -144,8 +136,8 @@ axiom charP_tags :
 predicate e(a:intP pointer, b:intP pointer,
  intP_intM_b_2_at_L:(intP, int) memory,
  intP_intM_a_1_at_L:(intP, int) memory) =
- eq_int(select(intP_intM_a_1_at_L, shift(a, (0))),
- select(intP_intM_b_2_at_L, shift(b, (0))))
+ (select(intP_intM_a_1_at_L, shift(a, (0))) = select(intP_intM_b_2_at_L,
+                                              shift(b, (0))))
 
 logic intP_tag:  -> intP tag_id
 
@@ -226,21 +218,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -295,59 +272,13 @@ axiom ax2 :
           and e(a_1_0, b_0_0, intP_intM_a_0_3_at_L2, intP_intM_a_0_3_at_L2))) ->
       p(b_0_0, intP_intM_a_0_3_at_L2, intP_intM_a_0_3_at_L1))))))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -468,7 +399,6 @@ let ftest_ensures_default =
      (L2:
      begin
        try
-        (let jessie_<somenum> =
         (C_1:
         begin
           (let jessie_<somenum> = (i := (0)) in void);
@@ -480,15 +410,12 @@ let ftest_ensures_default =
           begin
             [ { } unit { true } ];
            try
-            (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
               (C_23:
               begin
                 (if ((lt_int_ !i) (9)) then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
+                else (raise (Goto_while_0_break_exc void)));
                (let jessie_<somenum> =
                (C_13:
                begin
@@ -513,9 +440,9 @@ let ftest_ensures_default =
                   (((safe_upd_ intP_intM_b_5) jessie_<somenum>) jessie_<somenum>));
                  jessie_<somenum> end)) end) in void);
                (i := (C_22: ((add_int !i) (1)))); !i end) in void);
-             (raise (Loop_continue_exc void)) end in void) with
+             (raise (Loop_continue_exc void)) end with
             Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end) in void) with
+         (raise (Goto_while_0_break_exc void)) end) with
         Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       (assert
       { (JC_<somenum>:
@@ -541,7 +468,6 @@ let ftest_safety =
      (L2:
      begin
        try
-        (let jessie_<somenum> =
         (C_1:
         begin
           (let jessie_<somenum> = (i := (0)) in void);
@@ -553,15 +479,12 @@ let ftest_safety =
               { (JC_<somenum>:
                 ((JC_<somenum>: le_int((0), i)) and (JC_<somenum>: le_int(i, (9))))) } ];
            try
-            (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
               (C_23:
               begin
                 (if ((lt_int_ !i) (9)) then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
+                else (raise (Goto_while_0_break_exc void)));
                (let jessie_<somenum> =
                (C_13:
                begin
@@ -591,9 +514,9 @@ let ftest_safety =
                   ((((upd_ intP_b_5_alloc_table) intP_intM_b_5) jessie_<somenum>) jessie_<somenum>)));
                  jessie_<somenum> end)) end) in void);
                (i := (C_22: ((add_int !i) (1)))); !i end) in void);
-             (raise (Loop_continue_exc void)) end in void) with
+             (raise (Loop_continue_exc void)) end with
             Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end) in void) with
+         (raise (Goto_while_0_break_exc void)) end) with
         Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end;
       [ { } unit reads intP_intM_a_4,intP_intM_b_5
         { (JC_<somenum>:
@@ -610,6 +533,28 @@ why --project [...] why/bts0420.why
 <project name="bts0420" context="why/bts0420_ctx.why">
   <function name="Function ftest">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/bts0420_po1.why">
+      <location file = "PPCHOME/tests/jessie/bts0420.c" line = "30" begin = "21" end = "27"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/bts0420_po2.why">
+      <location file = "PPCHOME/tests/jessie/bts0420.c" line = "30" begin = "26" end = "32"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/bts0420_po3.why">
+      <location file = "PPCHOME/tests/jessie/bts0420.c" line = "30" begin = "21" end = "27"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bts0420_po4.why">
+      <location file = "PPCHOME/tests/jessie/bts0420.c" line = "30" begin = "26" end = "32"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bts0420_po5.why">
+      <location file = "PPCHOME/tests/jessie/bts0420.c" line = "36" begin = "15" end = "70"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0420_po6.why">
       <location file = "PPCHOME/tests/jessie/bts0420.c" line = "32" begin = "1" end = "5"/>
@@ -678,28 +623,6 @@ text = "PointerDeref"/>
     <goal why_file="why/bts0420_po19.why">
       <location file = "PPCHOME/tests/jessie/bts0420.c" line = "30" begin = "47" end = "50"/>
       <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/bts0420_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts0420.c" line = "30" begin = "21" end = "27"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/bts0420_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0420.c" line = "30" begin = "26" end = "32"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/bts0420_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0420.c" line = "30" begin = "21" end = "27"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bts0420_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0420.c" line = "30" begin = "26" end = "32"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bts0420_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0420.c" line = "36" begin = "15" end = "70"/>
-      <explain kind = "Assert"/>
     </goal>
     </behavior>
   </function>
@@ -1745,21 +1668,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

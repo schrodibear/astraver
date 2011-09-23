@@ -202,12 +202,6 @@ type padding
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -285,6 +279,11 @@ axiom int8_coerce :
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
 
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
+
 axiom int8_range :
  (forall x:int8.
   (le_int((-128), integer_of_int8(x)) and le_int(integer_of_int8(x), (127))))
@@ -354,21 +353,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_floatP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -413,59 +397,11 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_floatP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_floatP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_floatP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_floatP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -580,84 +516,84 @@ let f_ensures_default =
        void);
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (0)))), 0.)) };
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (0)))) = 0.)) };
       void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (1)))), 1.)) };
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (1)))) = 1.)) };
       void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (2)))), 2.)) };
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (2)))) = 2.)) };
       void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (3)))), 3.)) };
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (3)))) = 3.)) };
       void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (4)))), 4.)) };
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (4)))) = 4.)) };
       void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (5)))), 5.)) };
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (5)))) = 5.)) };
       void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (6)))), 6.)) };
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (6)))) = 6.)) };
       void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (7)))), 7.)) };
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (7)))) = 7.)) };
       void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (8)))), 8.)) };
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (8)))) = 8.)) };
       void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (9)))), 9.)) };
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (9)))) = 9.)) };
       void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (10)))),
-        10.)) }; void); void;
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (10)))) = 10.)) };
+      void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (11)))),
-        11.)) }; void); void;
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (11)))) = 11.)) };
+      void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (12)))),
-        12.)) }; void); void;
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (12)))) = 12.)) };
+      void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (13)))),
-        13.)) }; void); void;
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (13)))) = 13.)) };
+      void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (14)))),
-        14.)) }; void); void;
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (14)))) = 14.)) };
+      void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (15)))),
-        15.)) }; void); void;
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (15)))) = 15.)) };
+      void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (16)))),
-        16.)) }; void); void;
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (16)))) = 16.)) };
+      void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (17)))),
-        17.)) }; void); void;
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (17)))) = 17.)) };
+      void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (18)))),
-        18.)) }; void); void;
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (18)))) = 18.)) };
+      void); void;
       (assert
       { (JC_<somenum>:
-        eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (19)))),
-        19.)) }; void); void;
+        (single_value(select(floatP_floatM_t_6, shift(t_4, (19)))) = 19.)) };
+      void); void;
       (assert
       { (JC_<somenum>: incr3(shift(t_4, (0)), (0), (4), floatP_floatM_t_6)) }; void);
       void;
@@ -694,84 +630,84 @@ let f_safety =
                jessie_<somenum>)))) in void);
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (0)))),
-          0.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (0)))) = 0.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (1)))),
-          1.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (1)))) = 1.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (2)))),
-          2.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (2)))) = 2.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (3)))),
-          3.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (3)))) = 3.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (4)))),
-          4.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (4)))) = 4.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (5)))),
-          5.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (5)))) = 5.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (6)))),
-          6.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (6)))) = 6.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (7)))),
-          7.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (7)))) = 7.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (8)))),
-          8.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (8)))) = 8.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (9)))),
-          9.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (9)))) = 9.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (10)))),
-          10.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (10)))) = 10.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (11)))),
-          11.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (11)))) = 11.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (12)))),
-          12.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (12)))) = 12.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (13)))),
-          13.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (13)))) = 13.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (14)))),
-          14.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (14)))) = 14.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (15)))),
-          15.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (15)))) = 15.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (16)))),
-          16.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (16)))) = 16.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (17)))),
-          17.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (17)))) = 17.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (18)))),
-          18.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (18)))) = 18.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>:
-          eq_real(single_value(select(floatP_floatM_t_6, shift(t_4, (19)))),
-          19.)) } ]; void;
+          (single_value(select(floatP_floatM_t_6, shift(t_4, (19)))) = 19.)) } ];
+      void;
       [ { } unit reads t_4
         { (JC_<somenum>: incr3(shift(t_4, (0)), (0), (4), floatP_floatM_t_6)) } ];
       void;
@@ -789,23 +725,7 @@ why --project [...] why/e63-bis.why
 <project name="e63-bis" context="why/e63-bis_ctx.why">
   <function name="Function f">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/e63-bis_po24.why">
-      <location file = "PPCHOME/tests/jessie/e63-bis.c" line = "31" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "AllocSize"/>
-    </goal>
-    <goal why_file="why/e63-bis_po25.why">
-      <location file = "why/e63-bis.why" line = "499" begin = "17" end = "75"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/e63-bis_po26.why">
-      <location file = "why/e63-bis.why" line = "589" begin = "13" end = "57"/>
-      <explain kind = "Pre"
-text = ""/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/e63-bis_po1.why">
       <location file = "PPCHOME/tests/jessie/e63-bis.c" line = "36" begin = "13" end = "23"/>
       <explain kind = "Assert"/>
@@ -897,6 +817,22 @@ text = ""/>
     <goal why_file="why/e63-bis_po23.why">
       <location file = "PPCHOME/tests/jessie/e63-bis.c" line = "67" begin = "13" end = "28"/>
       <explain kind = "Assert"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/e63-bis_po24.why">
+      <location file = "PPCHOME/tests/jessie/e63-bis.c" line = "31" begin = "6" end = "7"/>
+      <explain kind = "Pre"
+text = "AllocSize"/>
+    </goal>
+    <goal why_file="why/e63-bis_po25.why">
+      <location file = "why/e63-bis.why" line = "435" begin = "17" end = "75"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/e63-bis_po26.why">
+      <location file = "why/e63-bis.why" line = "525" begin = "13" end = "57"/>
+      <explain kind = "Pre"
+text = ""/>
     </goal>
     </behavior>
   </function>
@@ -1957,21 +1893,20 @@ axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
 
 axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
 
-logic single_to_double : single -> double
+axiom single_value_is_bounded:
+  (forall x:single. (abs_real(single_value(x)) <= max_single))
 
-logic double_to_single : mode, double -> single
-
-axiom single_to_double_val:
-  (forall s:single. (double_value(single_to_double(s)) = single_value(s)))
-
-axiom double_to_single_val:
-  (forall m:mode.
-    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
-      double_value(d)))))
+axiom double_value_is_bounded:
+  (forall x:double. (abs_real(double_value(x)) <= max_double))
 
 predicate single_of_real_post(m: mode, x: real, res: single) =
   ((single_value(res) = round_single(m, x)) and
    ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate single_of_double_post(m: mode, x: double, res: single) =
+  ((single_value(res) = round_single(m, double_value(x))) and
+   ((single_exact(res) = double_exact(x)) and
+    (single_model(res) = double_model(x))))
 
 predicate add_single_post(m: mode, x: single, y: single, res: single) =
   ((single_value(res) = round_single(m,
@@ -2015,6 +1950,11 @@ predicate abs_single_post(x: single, res: single) =
 predicate double_of_real_post(m: mode, x: real, res: double) =
   ((double_value(res) = round_double(m, x)) and
    ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate double_of_single_post(x: single, res: double) =
+  ((double_value(res) = single_value(x)) and
+   ((double_exact(res) = single_exact(x)) and
+    (double_model(res) = single_model(x))))
 
 predicate add_double_post(m: mode, x: double, y: double, res: double) =
   ((double_value(res) = round_double(m,
@@ -2147,6 +2087,10 @@ axiom int8_coerce:
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
 
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
+
 axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
@@ -2216,21 +2160,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_floatP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

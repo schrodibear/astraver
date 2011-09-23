@@ -143,8 +143,6 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
 logic integer_of_int32: int32 -> int
 
 logic y2:  -> int32
@@ -152,19 +150,12 @@ logic y2:  -> int32
 logic x2:  -> int32
 
 predicate Invariant(x_2:int, y_0:int, e:int) =
- (eq_int(e,
-  sub_int(mul_int(mul_int((2), add_int(x_2, (1))), integer_of_int32(y2)),
-  mul_int(add_int(mul_int((2), y_0), (1)), integer_of_int32(x2))))
+ ((e = sub_int(mul_int(mul_int((2), add_int(x_2, (1))), integer_of_int32(y2)),
+       mul_int(add_int(mul_int((2), y_0), (1)), integer_of_int32(x2))))
  and (le_int(mul_int((2),
              sub_int(integer_of_int32(y2), integer_of_int32(x2))),
       e)
      and le_int(e, mul_int((2), integer_of_int32(y2)))))
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
 
 logic abs: int -> int
 
@@ -210,6 +201,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -221,6 +217,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -270,16 +271,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -316,8 +307,8 @@ axiom voidP_tags :
 
 axiom abs_def :
  (forall x_0_0:int.
-  ((ge_int(x_0_0, (0)) and eq_int(abs(x_0_0), x_0_0))
-  or (le_int(x_0_0, (0)) and eq_int(abs(x_0_0), neg_int(x_0_0)))))
+  ((ge_int(x_0_0, (0)) and (abs(x_0_0) = x_0_0))
+  or (le_int(x_0_0, (0)) and (abs(x_0_0) = neg_int(x_0_0)))))
 
 lemma invariant_is_ok :
  (forall x_3:int.
@@ -328,50 +319,22 @@ lemma z_ring_0 :
  (forall a:int.
   (forall b:int.
    (forall c:int.
-    eq_int(mul_int(a, add_int(b, c)), add_int(mul_int(a, b), mul_int(a, c))))))
+    (mul_int(a, add_int(b, c)) = add_int(mul_int(a, b), mul_int(a, c))))))
 
 lemma z_ring_1 :
  (forall a_0:int.
   (forall b_0:int.
    (forall c_0:int.
-    eq_int(mul_int(add_int(b_0, c_0), a_0),
-    add_int(mul_int(b_0, a_0), mul_int(c_0, a_0))))))
+    (mul_int(add_int(b_0, c_0), a_0) = add_int(mul_int(b_0, a_0),
+                                       mul_int(c_0, a_0))))))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -460,7 +423,6 @@ let bresenham_ensures_default =
      (let y_2 = ref (any_int32 void) in
      (let e_1 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       (C_2:
       (C_7:
@@ -492,16 +454,12 @@ let bresenham_ensures_default =
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_33:
             begin
               (if ((le_int_ (integer_of_int32 !x_4)) (integer_of_int32 x2))
-              then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              then void else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              begin
                (assert
@@ -547,9 +505,9 @@ let bresenham_ensures_default =
              (x_4 := (C_32:
                      (safe_int32_of_integer_ (C_31:
                                              ((add_int (integer_of_int32 !x_4)) (1))))));
-             !x_4 end) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))) in void) with
+             !x_4 end) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)));
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
@@ -564,7 +522,6 @@ let bresenham_safety =
      (let y_2 = ref (any_int32 void) in
      (let e_1 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       (C_2:
       (C_7:
@@ -600,16 +557,12 @@ let bresenham_safety =
                       Invariant(integer_of_int32(x_4), integer_of_int32(y_2),
                       integer_of_int32(e_1)))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_33:
             begin
               (if ((le_int_ (integer_of_int32 !x_4)) (integer_of_int32 x2))
-              then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              then void else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              begin
                [ { } unit reads x_4,y_2
@@ -663,9 +616,9 @@ let bresenham_safety =
                      (JC_<somenum>:
                      (int32_of_integer_ (C_31:
                                         ((add_int (integer_of_int32 !x_4)) (1)))))));
-             !x_4 end) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))) in void) with
+             !x_4 end) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end)));
     (raise Return) end with Return -> void end) { (JC_<somenum>: first_octant) }
@@ -677,35 +630,65 @@ why --project [...] why/bresenham.why
   <lemma name="invariant_is_ok">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/bresenham_po1.why">
-      <location file = "PPCHOME/tests/jessie/bresenham.jessie/bresenham.jc" line = "54" begin = "0" end = "168"/>
+      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "34" begin = "4" end = "95"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="z_ring_0">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/bresenham_po2.why">
-      <location file = "PPCHOME/tests/jessie/bresenham.jessie/bresenham.jc" line = "60" begin = "0" end = "130"/>
+      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "38" begin = "4" end = "69"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="z_ring_1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/bresenham_po3.why">
-      <location file = "PPCHOME/tests/jessie/bresenham.jessie/bresenham.jc" line = "66" begin = "0" end = "150"/>
+      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "39" begin = "4" end = "69"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <function name="z_ring_1">
-    <location file = "PPCHOME/tests/jessie/bresenham.jessie/bresenham.jc" line = "66" begin = "0" end = "150"/>
+  <function name="Lemma z_ring_1">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="z_ring_0">
-    <location file = "PPCHOME/tests/jessie/bresenham.jessie/bresenham.jc" line = "60" begin = "0" end = "130"/>
+  <function name="Lemma z_ring_0">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="invariant_is_ok">
-    <location file = "PPCHOME/tests/jessie/bresenham.jessie/bresenham.jc" line = "54" begin = "0" end = "168"/>
+  <function name="Lemma invariant_is_ok">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
   <function name="Function bresenham">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/bresenham_po4.why">
+      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "45" begin = "21" end = "27"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/bresenham_po5.why">
+      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "45" begin = "26" end = "37"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/bresenham_po6.why">
+      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "45" begin = "41" end = "57"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/bresenham_po7.why">
+      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "50" begin = "15" end = "24"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/bresenham_po8.why">
+      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "45" begin = "21" end = "27"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bresenham_po9.why">
+      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "45" begin = "26" end = "37"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/bresenham_po10.why">
+      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "45" begin = "41" end = "57"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/bresenham_po11.why">
       <location file = "PPCHOME/tests/jessie/bresenham.c" line = "44" begin = "10" end = "16"/>
@@ -804,36 +787,6 @@ text = "ArithOverflow"/>
     <goal why_file="why/bresenham_po30.why">
       <location file = "PPCHOME/tests/jessie/bresenham.c" line = "46" begin = "19" end = "25"/>
       <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/bresenham_po4.why">
-      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "45" begin = "21" end = "27"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/bresenham_po5.why">
-      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "45" begin = "26" end = "37"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/bresenham_po6.why">
-      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "45" begin = "41" end = "57"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/bresenham_po7.why">
-      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "50" begin = "15" end = "24"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/bresenham_po8.why">
-      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "45" begin = "21" end = "27"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bresenham_po9.why">
-      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "45" begin = "26" end = "37"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/bresenham_po10.why">
-      <location file = "PPCHOME/tests/jessie/bresenham.c" line = "45" begin = "41" end = "57"/>
-      <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>
   </function>
@@ -1830,6 +1783,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -1841,6 +1799,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -1889,16 +1851,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

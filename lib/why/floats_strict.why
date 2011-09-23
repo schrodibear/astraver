@@ -6,8 +6,11 @@
 
 include "floats_common.why"
 
+axiom single_value_is_bounded:
+  forall x:single. abs_real(single_value(x)) <= max_single
 
-
+axiom double_value_is_bounded:
+  forall x:double. abs_real(double_value(x)) <= max_double
 
 (* Specification of operations in single precision *)
 predicate single_of_real_post(m:mode,x:real,res:single) =
@@ -16,6 +19,13 @@ predicate single_of_real_post(m:mode,x:real,res:single) =
     single_exact(res) = x
     and
     single_model(res) = x
+
+predicate single_of_double_post(m:mode,x:double,res:single) =
+    single_value(res) = round_single(m, double_value(x))
+    and
+    single_exact(res) = double_exact(x)
+    and
+    single_model(res) = double_model(x)
 
 predicate add_single_post(m:mode,x:single,y:single,res:single) =
     single_value(res) = round_single(m,single_value(x) + single_value(y))
@@ -74,6 +84,13 @@ predicate double_of_real_post(m:mode,x:real,res:double) =
     double_exact(res) = x
     and
     double_model(res) = x
+
+predicate double_of_single_post(x:single,res:double) =
+    double_value(res) = single_value(x)
+    and
+    double_exact(res) = single_exact(x)
+    and
+    double_model(res) = single_model(x)
 
 predicate add_double_post(m:mode,x:double,y:double,res:double) =
     double_value(res) = round_double(m,double_value(x) + double_value(y))
@@ -134,14 +151,22 @@ parameter single_of_real : m:mode -> x:real ->
 parameter single_of_real_safe : m:mode -> x:real ->
   { }
   single
-  { no_overflow_single(m,x) and
-    single_of_real_post(m,x,result) }
+  { single_of_real_post(m,x,result) }
 parameter single_of_real_exact : x:real ->
   { }
   single
   { single_value(result) = x and
     single_exact(result) = x and
     single_model(result) = x }
+
+parameter single_of_double : m:mode -> x:double ->
+  { no_overflow_single(m, double_value(x)) }
+  single
+  { single_of_double_post(m,x,result) }
+parameter single_of_double_safe : m:mode -> x:double ->
+  { }
+  single
+  { single_of_double_post(m,x,result) }
 
 parameter add_single : m:mode -> x:single -> y:single -> 
   { no_overflow_single(m,single_value(x) + single_value(y)) }
@@ -150,8 +175,7 @@ parameter add_single : m:mode -> x:single -> y:single ->
 parameter add_single_safe : m:mode -> x:single -> y:single -> 
   { }
   single
-  { no_overflow_single(m,single_value(x) + single_value(y)) and
-    add_single_post(m,x,y,result) }
+  { add_single_post(m,x,y,result) }
 
 parameter sub_single : m:mode -> x:single -> y:single -> 
   { no_overflow_single(m,single_value(x) - single_value(y)) }
@@ -160,8 +184,7 @@ parameter sub_single : m:mode -> x:single -> y:single ->
 parameter sub_single_safe : m:mode -> x:single -> y:single -> 
   { }
   single
-  { no_overflow_single(m,single_value(x) - single_value(y)) and
-    sub_single_post(m,x,y,result) }
+  { sub_single_post(m,x,y,result) }
 
 parameter mul_single : m:mode -> x:single -> y:single -> 
   { no_overflow_single(m,single_value(x) * single_value(y)) }
@@ -170,8 +193,7 @@ parameter mul_single : m:mode -> x:single -> y:single ->
 parameter mul_single_safe : m:mode -> x:single -> y:single -> 
   { }
   single
-  { no_overflow_single(m,single_value(x) * single_value(y)) and
-    mul_single_post(m,x,y,result) }
+  { mul_single_post(m,x,y,result) }
 
 parameter div_single : m:mode -> x:single -> y:single -> 
   { single_value(y) <> 0.0 
@@ -183,7 +205,6 @@ parameter div_single_safe : m:mode -> x:single -> y:single ->
   { }
   single
   { single_value(y) <> 0.0  and
-    no_overflow_single(m,single_value(x) / single_value(y)) and
     div_single_post(m,x,y,result) }
 
 parameter sqrt_single : m:mode -> x:single -> 
@@ -213,14 +234,18 @@ parameter double_of_real : m:mode -> x:real ->
 parameter double_of_real_safe : m:mode -> x:real ->
   { }
   double
-  { no_overflow_double(m,x) and
-    double_of_real_post(m,x,result) }
+  { double_of_real_post(m,x,result) }
 parameter double_of_real_exact : x:real ->
   { }
   double
   { double_value(result) = x and
     double_exact(result) = x and
     double_model(result) = x }
+
+parameter double_of_single : x:single ->
+  { }
+  double
+  { double_of_single_post(x,result) }
 
 parameter add_double : m:mode -> x:double -> y:double -> 
   { no_overflow_double(m,double_value(x) + double_value(y)) }
@@ -229,8 +254,7 @@ parameter add_double : m:mode -> x:double -> y:double ->
 parameter add_double_safe : m:mode -> x:double -> y:double -> 
   { }
   double
-  { no_overflow_double(m,double_value(x) + double_value(y)) and
-    add_double_post(m,x,y,result) }
+  { add_double_post(m,x,y,result) }
 
 parameter sub_double : m:mode -> x:double -> y:double -> 
   { no_overflow_double(m,double_value(x) - double_value(y)) }
@@ -239,8 +263,7 @@ parameter sub_double : m:mode -> x:double -> y:double ->
 parameter sub_double_safe : m:mode -> x:double -> y:double -> 
   { }
   double
-  { no_overflow_double(m,double_value(x) - double_value(y)) and
-    sub_double_post(m,x,y,result) }
+  { sub_double_post(m,x,y,result) }
 
 parameter mul_double : m:mode -> x:double -> y:double -> 
   { no_overflow_double(m,double_value(x) * double_value(y)) }
@@ -249,8 +272,7 @@ parameter mul_double : m:mode -> x:double -> y:double ->
 parameter mul_double_safe : m:mode -> x:double -> y:double -> 
   { }
   double
-  { no_overflow_double(m,double_value(x) * double_value(y)) and
-    mul_double_post(m,x,y,result) }
+  { mul_double_post(m,x,y,result) }
 
 parameter div_double : m:mode -> x:double -> y:double -> 
   { double_value(y) <> 0.0 
@@ -262,7 +284,6 @@ parameter div_double_safe : m:mode -> x:double -> y:double ->
   { }
   double
   { double_value(y) <> 0.0  and
-    no_overflow_double(m,double_value(x) / double_value(y)) and
     div_double_post(m,x,y,result) }
 
 parameter sqrt_double : m:mode -> x:double -> 
@@ -286,43 +307,43 @@ parameter abs_double : x:double ->
 
 
 (* Comparisons in single precision *)
-parameter lt_single : x:single -> y:single -> 
+parameter lt_single_ : x:single -> y:single -> 
   {} bool { if result then single_value(x) < single_value(y) 
             else single_value(x) >= single_value(y) }
-parameter le_single : x:single -> y:single -> 
+parameter le_single_ : x:single -> y:single -> 
   {} bool { if result then single_value(x) <= single_value(y) 
             else single_value(x) > single_value(y) }
-parameter gt_single : x:single -> y:single -> 
+parameter gt_single_ : x:single -> y:single -> 
   {} bool { if result then single_value(x) > single_value(y) 
             else single_value(x) <= single_value(y) }
-parameter ge_single : x:single -> y:single -> 
+parameter ge_single_ : x:single -> y:single -> 
   {} bool { if result then single_value(x) >= single_value(y) 
             else single_value(x) < single_value(y) }
-parameter eq_single : x:single -> y:single -> 
+parameter eq_single_ : x:single -> y:single -> 
   {} bool { if result then single_value(x) = single_value(y) 
             else single_value(x) <> single_value(y) }
-parameter ne_single : x:single -> y:single -> 
+parameter ne_single_ : x:single -> y:single -> 
   {} bool { if result then single_value(x) <> single_value(y) 
             else single_value(x) = single_value(y) }
 
 
 (* Comparisons in double precision *)
-parameter lt_double : x:double -> y:double -> 
+parameter lt_double_ : x:double -> y:double -> 
   {} bool { if result then double_value(x) < double_value(y) 
             else double_value(x) >= double_value(y) }
-parameter le_double : x:double -> y:double -> 
+parameter le_double_ : x:double -> y:double -> 
   {} bool { if result then double_value(x) <= double_value(y) 
             else double_value(x) > double_value(y) }
-parameter gt_double : x:double -> y:double -> 
+parameter gt_double_ : x:double -> y:double -> 
   {} bool { if result then double_value(x) > double_value(y) 
             else double_value(x) <= double_value(y) }
-parameter ge_double : x:double -> y:double -> 
+parameter ge_double_ : x:double -> y:double -> 
   {} bool { if result then double_value(x) >= double_value(y) 
             else double_value(x) < double_value(y) }
-parameter eq_double : x:double -> y:double -> 
+parameter eq_double_ : x:double -> y:double -> 
   {} bool { if result then double_value(x) = double_value(y) 
             else double_value(x) <> double_value(y) }
-parameter ne_double : x:double -> y:double -> 
+parameter ne_double_ : x:double -> y:double -> 
   {} bool { if result then double_value(x) <> double_value(y) 
             else double_value(x) = double_value(y) }
 

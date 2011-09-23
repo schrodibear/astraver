@@ -96,12 +96,6 @@ type padding
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -135,6 +129,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -146,6 +145,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -195,16 +199,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -243,55 +237,24 @@ lemma dist1 :
  (forall x_0:int.
   (forall y:int.
    (forall z:int.
-    eq_int(mul_int(x_0, add_int(y, z)),
-    add_int(mul_int(x_0, y), mul_int(x_0, z))))))
+    (mul_int(x_0, add_int(y, z)) = add_int(mul_int(x_0, y), mul_int(x_0, z))))))
 
 lemma dist2 :
  (forall x_0_0:int.
   (forall y_0:int.
    (forall z_0:int.
-    eq_int(mul_int(add_int(x_0_0, y_0), z_0),
-    add_int(mul_int(x_0_0, z_0), mul_int(y_0, z_0))))))
+    (mul_int(add_int(x_0_0, y_0), z_0) = add_int(mul_int(x_0_0, z_0),
+                                         mul_int(y_0, z_0))))))
 
-lemma id1 : (forall x_1:int. eq_int(mul_int(x_1, (1)), x_1))
+lemma id1 : (forall x_1:int. (mul_int(x_1, (1)) = x_1))
 
-lemma id2 : (forall x_2:int. eq_int(mul_int((1), x_2), x_2))
+lemma id2 : (forall x_2:int. (mul_int((1), x_2) = x_2))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -374,26 +337,26 @@ parameter test :
   { } unit reads i,j writes i,j
   { (JC_<somenum>:
     ((JC_<somenum>:
-     eq_int(integer_of_int32(i),
-     add_int(integer_of_int32(j@), integer_of_int32(k@))))
+     (integer_of_int32(i) = add_int(integer_of_int32(j@),
+                            integer_of_int32(k))))
     and (JC_<somenum>:
-        eq_int(integer_of_int32(j),
-        add_int(add_int(mul_int((3), integer_of_int32(j@)),
-                mul_int((11), integer_of_int32(k@))),
-        (12)))))) }
+        (integer_of_int32(j) = add_int(add_int(mul_int((3),
+                                               integer_of_int32(j@)),
+                                       mul_int((11), integer_of_int32(k))),
+                               (12)))))) }
 
 parameter test_requires :
  k:int32 ->
   { } unit reads i,j writes i,j
   { (JC_<somenum>:
     ((JC_<somenum>:
-     eq_int(integer_of_int32(i),
-     add_int(integer_of_int32(j@), integer_of_int32(k@))))
+     (integer_of_int32(i) = add_int(integer_of_int32(j@),
+                            integer_of_int32(k))))
     and (JC_<somenum>:
-        eq_int(integer_of_int32(j),
-        add_int(add_int(mul_int((3), integer_of_int32(j@)),
-                mul_int((11), integer_of_int32(k@))),
-        (12)))))) }
+        (integer_of_int32(j) = add_int(add_int(mul_int((3),
+                                               integer_of_int32(j@)),
+                                       mul_int((11), integer_of_int32(k))),
+                               (12)))))) }
 
 let test_ensures_default =
  fun (k : int32) ->
@@ -451,13 +414,13 @@ let test_ensures_default =
    void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
-     eq_int(integer_of_int32(i),
-     add_int(integer_of_int32(j@), integer_of_int32(k@))))
+     (integer_of_int32(i) = add_int(integer_of_int32(j@),
+                            integer_of_int32(k))))
     and (JC_<somenum>:
-        eq_int(integer_of_int32(j),
-        add_int(add_int(mul_int((3), integer_of_int32(j@)),
-                mul_int((11), integer_of_int32(k@))),
-        (12)))))) }
+        (integer_of_int32(j) = add_int(add_int(mul_int((3),
+                                               integer_of_int32(j@)),
+                                       mul_int((11), integer_of_int32(k))),
+                               (12)))))) }
 
 let test_safety =
  fun (k : int32) ->
@@ -529,45 +492,55 @@ why --project [...] why/arith.why
   <lemma name="dist1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/arith_po1.why">
-      <location file = "PPCHOME/tests/jessie/arith.jessie/arith.jc" line = "28" begin = "0" end = "127"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "6" begin = "4" end = "211"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="dist2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/arith_po2.why">
-      <location file = "PPCHOME/tests/jessie/arith.jessie/arith.jc" line = "34" begin = "0" end = "147"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "7" begin = "4" end = "149"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="id1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/arith_po3.why">
-      <location file = "PPCHOME/tests/jessie/arith.jessie/arith.jc" line = "40" begin = "0" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "8" begin = "4" end = "87"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
   <lemma name="id2">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/arith_po4.why">
-      <location file = "PPCHOME/tests/jessie/arith.jessie/arith.jc" line = "44" begin = "0" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "9" begin = "4" end = "43"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <function name="id2">
-    <location file = "PPCHOME/tests/jessie/arith.jessie/arith.jc" line = "44" begin = "0" end = "55"/>
+  <function name="Lemma id2">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="id1">
-    <location file = "PPCHOME/tests/jessie/arith.jessie/arith.jc" line = "40" begin = "0" end = "55"/>
+  <function name="Lemma id1">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="dist2">
-    <location file = "PPCHOME/tests/jessie/arith.jessie/arith.jc" line = "34" begin = "0" end = "147"/>
+  <function name="Lemma dist2">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
-  <function name="dist1">
-    <location file = "PPCHOME/tests/jessie/arith.jessie/arith.jc" line = "28" begin = "0" end = "127"/>
+  <function name="Lemma dist1">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
   <function name="Function test">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/arith_po5.why">
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "15" begin = "12" end = "28"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/arith_po6.why">
+      <location file = "PPCHOME/tests/jessie/arith.c" line = "16" begin = "12" end = "42"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/arith_po7.why">
       <location file = "PPCHOME/tests/jessie/arith.c" line = "22" begin = "6" end = "11"/>
@@ -638,16 +611,6 @@ text = "ArithOverflow"/>
       <location file = "PPCHOME/tests/jessie/arith.c" line = "24" begin = "2" end = "25"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/arith_po5.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "15" begin = "12" end = "28"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/arith_po6.why">
-      <location file = "PPCHOME/tests/jessie/arith.c" line = "16" begin = "12" end = "42"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1625,6 +1588,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -1636,6 +1604,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -1684,16 +1656,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

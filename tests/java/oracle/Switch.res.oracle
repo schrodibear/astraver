@@ -2,29 +2,31 @@
 /**************************************************************************/
 /*                                                                        */
 /*  The Why platform for program certification                            */
-/*  Copyright (C) 2002-2008                                               */
-/*    Romain BARDOU                                                       */
-/*    Jean-François COUCHOT                                               */
-/*    Mehdi DOGGUY                                                        */
-/*    Jean-Christophe FILLIÂTRE                                           */
-/*    Thierry HUBERT                                                      */
-/*    Claude MARCHÉ                                                       */
-/*    Yannick MOY                                                         */
-/*    Christine PAULIN                                                    */
-/*    Yann RÉGIS-GIANAS                                                   */
-/*    Nicolas ROUSSET                                                     */
-/*    Xavier URBAIN                                                       */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
 /*                                                                        */
 /*  This software is free software; you can redistribute it and/or        */
-/*  modify it under the terms of the GNU General Public                   */
-/*  License version 2, as published by the Free Software Foundation.      */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
 /*                                                                        */
 /*  This software is distributed in the hope that it will be useful,      */
 /*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
 /*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
-/*                                                                        */
-/*  See the GNU General Public License version 2 for more details         */
-/*  (enclosed in the file GPL).                                           */
 /*                                                                        */
 /**************************************************************************/
 
@@ -49,7 +51,7 @@ public class Switch {
 
     /*@ behavior normal:
       @   assigns \nothing;
-      @   ensures ((n==4 || n==7) <==> \result == 1) && 
+      @   ensures ((n==4 || n==7) <==> \result == 1) &&
       @            ((n==0 || n==1) <==> \result == 0);
       @*/
     public static int test2 (int n) {
@@ -74,9 +76,9 @@ public class Switch {
 }
 
 /*
-Local Variables: 
-compile-command: "gwhy Switch.java"
-End: 
+Local Variables:
+compile-command: "make Switch.why3ml"
+End:
 */
 
 ========== krakatoa execution ==========
@@ -212,27 +214,27 @@ End:
 ========== file tests/java/Switch.jloc ==========
 [K_1]
 file = "HOME/tests/java/Switch.java"
-line = 34
+line = 36
 begin = 18
 end = 50
 
 [K_2]
 file = "HOME/tests/java/Switch.java"
-line = 52
+line = 54
 begin = 20
 end = 52
 
 [K_3]
 file = "HOME/tests/java/Switch.java"
-line = 51
+line = 53
 begin = 19
 end = 51
 
 [K_4]
 file = "HOME/tests/java/Switch.java"
-line = 51
+line = 53
 begin = 18
-end = 110
+end = 109
 
 [cons_Switch]
 name = "Constructor of class Switch"
@@ -244,14 +246,14 @@ end = -1
 [Switch_test1]
 name = "Method test1"
 file = "HOME/tests/java/Switch.java"
-line = 36
+line = 38
 begin = 22
 end = 27
 
 [Switch_test2]
 name = "Method test2"
 file = "HOME/tests/java/Switch.java"
-line = 54
+line = 56
 begin = 22
 end = 27
 
@@ -274,10 +276,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Switc
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Switch.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/Switch_why.sx
 
@@ -337,6 +340,13 @@ simplify: simplify/Switch_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/Switch_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/Switch_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -410,6 +420,9 @@ why/%_why3.why: why/%.why
 why3ide: why/Switch_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: Switch.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include Switch.depend
 
 depend: coq/Switch_why.v
@@ -421,15 +434,15 @@ clean:
 ========== file tests/java/Switch.loc ==========
 [JC_40]
 file = "HOME/tests/java/Switch.java"
-line = 52
+line = 54
 begin = 20
 end = 52
 
 [JC_41]
 file = "HOME/tests/java/Switch.java"
-line = 51
+line = 53
 begin = 18
-end = 110
+end = 109
 
 [JC_42]
 file = "HOME/tests/java/Switch.jc"
@@ -439,21 +452,21 @@ end = 18
 
 [JC_43]
 file = "HOME/tests/java/Switch.java"
-line = 51
+line = 53
 begin = 19
 end = 51
 
 [JC_44]
 file = "HOME/tests/java/Switch.java"
-line = 52
+line = 54
 begin = 20
 end = 52
 
 [JC_45]
 file = "HOME/tests/java/Switch.java"
-line = 51
+line = 53
 begin = 18
-end = 110
+end = 109
 
 [JC_46]
 file = "HOME/tests/java/Switch.jc"
@@ -487,9 +500,9 @@ end = -1
 
 [Switch_test1_ensures_normal]
 name = "Method test1"
-behavior = "Normal behavior `normal'"
+behavior = "Behavior `normal'"
 file = "HOME/tests/java/Switch.java"
-line = 36
+line = 38
 begin = 22
 end = 27
 
@@ -513,9 +526,9 @@ end = -1
 
 [Switch_test2_ensures_default]
 name = "Method test2"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/Switch.java"
-line = 54
+line = 56
 begin = 22
 end = 27
 
@@ -551,7 +564,7 @@ end = 23
 
 [cons_Switch_ensures_default]
 name = "Constructor of class Switch"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/"
 line = 0
 begin = -1
@@ -591,7 +604,7 @@ end = -1
 name = "Method test1"
 behavior = "Safety"
 file = "HOME/tests/java/Switch.java"
-line = 36
+line = 38
 begin = 22
 end = 27
 
@@ -651,7 +664,7 @@ end = 65
 
 [JC_19]
 file = "HOME/tests/java/Switch.java"
-line = 36
+line = 38
 begin = 22
 end = 27
 
@@ -667,7 +680,7 @@ end = -1
 name = "Method test2"
 behavior = "Safety"
 file = "HOME/tests/java/Switch.java"
-line = 54
+line = 56
 begin = 22
 end = 27
 
@@ -679,7 +692,7 @@ end = -1
 
 [JC_21]
 file = "HOME/tests/java/Switch.java"
-line = 36
+line = 38
 begin = 22
 end = 27
 
@@ -715,7 +728,7 @@ end = -1
 
 [JC_27]
 file = "HOME/tests/java/Switch.java"
-line = 34
+line = 36
 begin = 18
 end = 50
 
@@ -727,23 +740,23 @@ end = 18
 
 [JC_29]
 file = "HOME/tests/java/Switch.java"
-line = 34
+line = 36
 begin = 18
 end = 50
 
 [Switch_test1_ensures_default]
 name = "Method test1"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/Switch.java"
-line = 36
+line = 38
 begin = 22
 end = 27
 
 [Switch_test2_ensures_normal]
 name = "Method test2"
-behavior = "Normal behavior `normal'"
+behavior = "Behavior `normal'"
 file = "HOME/tests/java/Switch.java"
-line = 54
+line = 56
 begin = 22
 end = 27
 
@@ -755,7 +768,7 @@ end = 18
 
 [JC_31]
 file = "HOME/tests/java/Switch.java"
-line = 54
+line = 56
 begin = 22
 end = 27
 
@@ -767,7 +780,7 @@ end = -1
 
 [JC_33]
 file = "HOME/tests/java/Switch.java"
-line = 54
+line = 56
 begin = 22
 end = 27
 
@@ -803,7 +816,7 @@ end = -1
 
 [JC_39]
 file = "HOME/tests/java/Switch.java"
-line = 51
+line = 53
 begin = 19
 end = 51
 
@@ -822,21 +835,15 @@ type long
 
 type short
 
-exception Exception_exc of Object pointer
-
 logic Exception_tag:  -> Object tag_id
 
 logic Object_tag:  -> Object tag_id
 
 axiom Exception_parenttag_Object : parenttag(Exception_tag, Object_tag)
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
 predicate Non_null_Object(x_0:Object pointer,
  Object_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_alloc_table, x_0), (0))
+ (offset_max(Object_alloc_table, x_0) = (0))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
@@ -853,8 +860,6 @@ axiom Object_tags :
   (forall Object_tag_table:Object tag_table.
    instanceof(Object_tag_table, x, Object_tag)))
 
-exception Return_label_exc of unit
-
 logic String_tag:  -> Object tag_id
 
 axiom String_parenttag_Object : parenttag(String_tag, Object_tag)
@@ -862,8 +867,6 @@ axiom String_parenttag_Object : parenttag(String_tag, Object_tag)
 logic Switch_tag:  -> Object tag_id
 
 axiom Switch_parenttag_Object : parenttag(Switch_tag, Object_tag)
-
-exception Throwable_exc of Object pointer
 
 logic Throwable_tag:  -> Object tag_id
 
@@ -878,6 +881,11 @@ axiom byte_coerce :
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_byte(byte_of_integer(x)), x)))
 
+axiom byte_extensionality :
+ (forall x:byte.
+  (forall y:byte.
+   (eq_int(integer_of_byte(x), integer_of_byte(y)) -> (x = y))))
+
 axiom byte_range :
  (forall x:byte.
   (le_int((-128), integer_of_byte(x)) and le_int(integer_of_byte(x), (127))))
@@ -890,6 +898,11 @@ axiom char_coerce :
  (forall x:int.
   ((le_int((0), x) and le_int(x, (65535))) ->
    eq_int(integer_of_char(char_of_integer(x)), x)))
+
+axiom char_extensionality :
+ (forall x:char.
+  (forall y:char.
+   (eq_int(integer_of_char(x), integer_of_char(y)) -> (x = y))))
 
 axiom char_range :
  (forall x:char.
@@ -922,6 +935,11 @@ axiom int32_coerce :
  (forall x:int.
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
+
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range :
  (forall x:int32.
@@ -976,6 +994,11 @@ axiom long_coerce :
   ((le_int((-9223372036854775808), x) and le_int(x, (9223372036854775807))) ->
    eq_int(integer_of_long(long_of_integer(x)), x)))
 
+axiom long_extensionality :
+ (forall x:long.
+  (forall y:long.
+   (eq_int(integer_of_long(x), integer_of_long(y)) -> (x = y))))
+
 axiom long_range :
  (forall x:long.
   (le_int((-9223372036854775808), integer_of_long(x))
@@ -1019,6 +1042,11 @@ axiom short_coerce :
   ((le_int((-32768), x) and le_int(x, (32767))) ->
    eq_int(integer_of_short(short_of_integer(x)), x)))
 
+axiom short_extensionality :
+ (forall x:short.
+  (forall y:short.
+   (eq_int(integer_of_short(x), integer_of_short(y)) -> (x = y))))
+
 axiom short_range :
  (forall x:short.
   (le_int((-32768), integer_of_short(x))
@@ -1060,32 +1088,6 @@ predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Switch(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
@@ -1122,157 +1124,55 @@ predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
+exception Exception_exc of Object pointer
+
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
 parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_tag_table : Object tag_table ref
+
+exception Return_label_exc of unit
 
 parameter Switch_test1 :
  n:int32 ->
   { } int32
   { (JC_29:
-    ((eq_int(integer_of_int32(n), (0)) or eq_int(integer_of_int32(n), (1)))
-    <-> eq_int(integer_of_int32(result), (0)))) }
+    (((integer_of_int32(n) = (0)) or (integer_of_int32(n) = (1)))
+    <-> (integer_of_int32(result) = (0)))) }
 
 parameter Switch_test1_requires :
  n:int32 ->
   { } int32
   { (JC_29:
-    ((eq_int(integer_of_int32(n), (0)) or eq_int(integer_of_int32(n), (1)))
-    <-> eq_int(integer_of_int32(result), (0)))) }
+    (((integer_of_int32(n) = (0)) or (integer_of_int32(n) = (1)))
+    <-> (integer_of_int32(result) = (0)))) }
 
 parameter Switch_test2 :
  n_0:int32 ->
   { } int32
   { (JC_45:
     ((JC_43:
-     ((eq_int(integer_of_int32(n_0), (4))
-      or eq_int(integer_of_int32(n_0), (7)))
-     <-> eq_int(integer_of_int32(result), (1))))
+     (((integer_of_int32(n_0) = (4)) or (integer_of_int32(n_0) = (7)))
+     <-> (integer_of_int32(result) = (1))))
     and (JC_44:
-        ((eq_int(integer_of_int32(n_0), (0))
-         or eq_int(integer_of_int32(n_0), (1)))
-        <-> eq_int(integer_of_int32(result), (0)))))) }
+        (((integer_of_int32(n_0) = (0)) or (integer_of_int32(n_0) = (1)))
+        <-> (integer_of_int32(result) = (0)))))) }
 
 parameter Switch_test2_requires :
  n_0:int32 ->
   { } int32
   { (JC_45:
     ((JC_43:
-     ((eq_int(integer_of_int32(n_0), (4))
-      or eq_int(integer_of_int32(n_0), (7)))
-     <-> eq_int(integer_of_int32(result), (1))))
+     (((integer_of_int32(n_0) = (4)) or (integer_of_int32(n_0) = (7)))
+     <-> (integer_of_int32(result) = (1))))
     and (JC_44:
-        ((eq_int(integer_of_int32(n_0), (0))
-         or eq_int(integer_of_int32(n_0), (1)))
-        <-> eq_int(integer_of_int32(result), (0)))))) }
+        (((integer_of_int32(n_0) = (0)) or (integer_of_int32(n_0) = (1)))
+        <-> (integer_of_int32(result) = (0)))))) }
 
-parameter alloc_bitvector_struct_Exception :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Exception_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_String :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_String_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Switch :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Switch(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Switch_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Switch(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Throwable_exc of Object pointer
 
 parameter alloc_struct_Exception :
  n:int ->
@@ -1460,14 +1360,14 @@ parameter non_null_Object :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_18:
-    (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
+    (if result then (offset_max(Object_alloc_table, x_1) = (0))
      else (x_1 = null))) }
 
 parameter non_null_Object_requires :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_18:
-    (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
+    (if result then (offset_max(Object_alloc_table, x_1) = (0))
      else (x_1 = null))) }
 
 parameter safe_byte_of_integer_ :
@@ -1504,10 +1404,9 @@ let Switch_test1_ensures_default =
         (if (((eq_int_ (integer_of_int32 jessie_<num>)) (1)) || ((eq_int_ 
                                                               (integer_of_int32 jessie_<num>)) (0)))
         then
-         (let jessie_<num> =
          begin
            (let jessie_<num> = (r_0 := (safe_int32_of_integer_ (0))) in void);
-          (raise (Loop_exit_exc void)) end in void)
+          (raise (Loop_exit_exc void)) end
         else
          (if true
          then
@@ -1531,10 +1430,9 @@ let Switch_test1_ensures_normal =
         (if (((eq_int_ (integer_of_int32 jessie_<num>)) (1)) || ((eq_int_ 
                                                               (integer_of_int32 jessie_<num>)) (0)))
         then
-         (let jessie_<num> =
          begin
            (let jessie_<num> = (r_0 := (safe_int32_of_integer_ (0))) in void);
-          (raise (Loop_exit_exc void)) end in void)
+          (raise (Loop_exit_exc void)) end
         else
          (if true
          then
@@ -1544,8 +1442,8 @@ let Switch_test1_ensures_normal =
       (return := !r_0); (raise Return) end); absurd  end with Return ->
    !return end))
   { (JC_27:
-    ((eq_int(integer_of_int32(n), (0)) or eq_int(integer_of_int32(n), (1)))
-    <-> eq_int(integer_of_int32(result), (0)))) }
+    (((integer_of_int32(n) = (0)) or (integer_of_int32(n) = (1)))
+    <-> (integer_of_int32(result) = (0)))) }
 
 let Switch_test1_safety =
  fun (n : int32) ->
@@ -1561,10 +1459,9 @@ let Switch_test1_safety =
         (if (((eq_int_ (integer_of_int32 jessie_<num>)) (1)) || ((eq_int_ 
                                                               (integer_of_int32 jessie_<num>)) (0)))
         then
-         (let jessie_<num> =
          begin
            (let jessie_<num> = (r_0 := (safe_int32_of_integer_ (0))) in void);
-          (raise (Loop_exit_exc void)) end in void)
+          (raise (Loop_exit_exc void)) end
         else
          (if true
          then
@@ -1588,18 +1485,16 @@ let Switch_test2_ensures_default =
         (if (((eq_int_ (integer_of_int32 jessie_<num>)) (1)) || ((eq_int_ 
                                                               (integer_of_int32 jessie_<num>)) (0)))
         then
-         (let jessie_<num> =
          begin
            (let jessie_<num> = (r := (safe_int32_of_integer_ (0))) in void);
-          (raise (Loop_exit_exc void)) end in void)
+          (raise (Loop_exit_exc void)) end
         else
          (if (((eq_int_ (integer_of_int32 jessie_<num>)) (7)) || ((eq_int_ 
                                                                (integer_of_int32 jessie_<num>)) (4)))
          then
-          (let jessie_<num> =
           begin
             (let jessie_<num> = (r := (safe_int32_of_integer_ (1))) in void);
-           (raise (Loop_exit_exc void)) end in void)
+           (raise (Loop_exit_exc void)) end
          else
           (if (((eq_int_ (integer_of_int32 jessie_<num>)) (26)) || (true || 
                                                                ((eq_int_ 
@@ -1625,18 +1520,16 @@ let Switch_test2_ensures_normal =
         (if (((eq_int_ (integer_of_int32 jessie_<num>)) (1)) || ((eq_int_ 
                                                               (integer_of_int32 jessie_<num>)) (0)))
         then
-         (let jessie_<num> =
          begin
            (let jessie_<num> = (r := (safe_int32_of_integer_ (0))) in void);
-          (raise (Loop_exit_exc void)) end in void)
+          (raise (Loop_exit_exc void)) end
         else
          (if (((eq_int_ (integer_of_int32 jessie_<num>)) (7)) || ((eq_int_ 
                                                                (integer_of_int32 jessie_<num>)) (4)))
          then
-          (let jessie_<num> =
           begin
             (let jessie_<num> = (r := (safe_int32_of_integer_ (1))) in void);
-           (raise (Loop_exit_exc void)) end in void)
+           (raise (Loop_exit_exc void)) end
          else
           (if (((eq_int_ (integer_of_int32 jessie_<num>)) (26)) || (true || 
                                                                ((eq_int_ 
@@ -1649,13 +1542,11 @@ let Switch_test2_ensures_normal =
    !return end))
   { (JC_41:
     ((JC_39:
-     ((eq_int(integer_of_int32(n_0), (4))
-      or eq_int(integer_of_int32(n_0), (7)))
-     <-> eq_int(integer_of_int32(result), (1))))
+     (((integer_of_int32(n_0) = (4)) or (integer_of_int32(n_0) = (7)))
+     <-> (integer_of_int32(result) = (1))))
     and (JC_40:
-        ((eq_int(integer_of_int32(n_0), (0))
-         or eq_int(integer_of_int32(n_0), (1)))
-        <-> eq_int(integer_of_int32(result), (0)))))) }
+        (((integer_of_int32(n_0) = (0)) or (integer_of_int32(n_0) = (1)))
+        <-> (integer_of_int32(result) = (0)))))) }
 
 let Switch_test2_safety =
  fun (n_0 : int32) ->
@@ -1671,18 +1562,16 @@ let Switch_test2_safety =
         (if (((eq_int_ (integer_of_int32 jessie_<num>)) (1)) || ((eq_int_ 
                                                               (integer_of_int32 jessie_<num>)) (0)))
         then
-         (let jessie_<num> =
          begin
            (let jessie_<num> = (r := (safe_int32_of_integer_ (0))) in void);
-          (raise (Loop_exit_exc void)) end in void)
+          (raise (Loop_exit_exc void)) end
         else
          (if (((eq_int_ (integer_of_int32 jessie_<num>)) (7)) || ((eq_int_ 
                                                                (integer_of_int32 jessie_<num>)) (4)))
          then
-          (let jessie_<num> =
           begin
             (let jessie_<num> = (r := (safe_int32_of_integer_ (1))) in void);
-           (raise (Loop_exit_exc void)) end in void)
+           (raise (Loop_exit_exc void)) end
          else
           (if (((eq_int_ (integer_of_int32 jessie_<num>)) (26)) || (true || 
                                                                ((eq_int_ 
@@ -1713,90 +1602,90 @@ why --project [...] why/Switch.why
 <project name="Switch" context="why/Switch_ctx.why">
   <function name="Method test2">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Normal behavior `normal'">
+    <behavior name="Behavior `normal'">
     <goal why_file="why/Switch_po5.why">
-      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "53" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po6.why">
-      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "53" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po7.why">
-      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "54" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po8.why">
-      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "54" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po9.why">
-      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "53" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po10.why">
-      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "53" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po11.why">
-      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "54" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po12.why">
-      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "54" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po13.why">
-      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "53" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po14.why">
-      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "53" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po15.why">
-      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "54" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po16.why">
-      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "54" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po17.why">
-      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "53" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po18.why">
-      <location file = "HOME/tests/java/Switch.java" line = "51" begin = "19" end = "51"/>
+      <location file = "HOME/tests/java/Switch.java" line = "53" begin = "19" end = "51"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po19.why">
-      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "54" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po20.why">
-      <location file = "HOME/tests/java/Switch.java" line = "52" begin = "20" end = "52"/>
+      <location file = "HOME/tests/java/Switch.java" line = "54" begin = "20" end = "52"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
   <function name="Method test1">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Normal behavior `normal'">
+    <behavior name="Behavior `normal'">
     <goal why_file="why/Switch_po1.why">
-      <location file = "HOME/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
+      <location file = "HOME/tests/java/Switch.java" line = "36" begin = "18" end = "50"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po2.why">
-      <location file = "HOME/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
+      <location file = "HOME/tests/java/Switch.java" line = "36" begin = "18" end = "50"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po3.why">
-      <location file = "HOME/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
+      <location file = "HOME/tests/java/Switch.java" line = "36" begin = "18" end = "50"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Switch_po4.why">
-      <location file = "HOME/tests/java/Switch.java" line = "34" begin = "18" end = "50"/>
+      <location file = "HOME/tests/java/Switch.java" line = "36" begin = "18" end = "50"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -2795,6 +2684,10 @@ axiom byte_coerce:
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_byte(byte_of_integer(x)) = x)))
 
+axiom byte_extensionality:
+  (forall x:byte.
+    (forall y:byte. ((integer_of_byte(x) = integer_of_byte(y)) -> (x = y))))
+
 axiom byte_range:
   (forall x:byte.
     (((-128) <= integer_of_byte(x)) and (integer_of_byte(x) <= 127)))
@@ -2806,6 +2699,10 @@ logic char_of_integer : int -> char
 axiom char_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 65535)) -> (integer_of_char(char_of_integer(x)) = x)))
+
+axiom char_extensionality:
+  (forall x:char.
+    (forall y:char. ((integer_of_char(x) = integer_of_char(y)) -> (x = y))))
 
 axiom char_range:
   (forall x:char.
@@ -2838,6 +2735,11 @@ axiom int32_coerce:
   (forall x:int.
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
+
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range:
   (forall x:int32.
@@ -2892,6 +2794,10 @@ axiom long_coerce:
     ((((-9223372036854775808) <= x) and (x <= 9223372036854775807)) ->
      (integer_of_long(long_of_integer(x)) = x)))
 
+axiom long_extensionality:
+  (forall x:long.
+    (forall y:long. ((integer_of_long(x) = integer_of_long(y)) -> (x = y))))
+
 axiom long_range:
   (forall x:long.
     (((-9223372036854775808) <= integer_of_long(x)) and
@@ -2936,6 +2842,11 @@ axiom short_coerce:
     ((((-32768) <= x) and (x <= 32767)) ->
      (integer_of_short(short_of_integer(x)) = x)))
 
+axiom short_extensionality:
+  (forall x:short.
+    (forall y:short.
+      ((integer_of_short(x) = integer_of_short(y)) -> (x = y))))
+
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
@@ -2976,32 +2887,6 @@ predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Switch(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
   ((offset_min(Object_alloc_table, p) <= a) and
@@ -3037,6 +2922,21 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
   ((offset_min(interface_alloc_table, p) <= a) and
    (offset_max(interface_alloc_table, p) >= b))
+
+========== file tests/java/why/Switch_po1.why ==========
+goal Switch_test1_ensures_normal_po_1:
+  forall n:int32.
+  ("JC_22": true) ->
+  ((integer_of_int32(n) = 1) or
+   ((integer_of_int32(n) <> 1) and (integer_of_int32(n) = 0))) ->
+  forall result:int32.
+  (integer_of_int32(result) = 0) ->
+  forall r_0:int32.
+  (r_0 = result) ->
+  forall return:int32.
+  (return = r_0) ->
+  ((integer_of_int32(n) = 0) or (integer_of_int32(n) = 1)) ->
+  ("JC_27": (integer_of_int32(return) = 0))
 
 ========== file tests/java/why/Switch_po10.why ==========
 goal Switch_test2_ensures_normal_po_6:
@@ -3205,8 +3105,8 @@ goal Switch_test2_ensures_normal_po_15:
   ((integer_of_int32(n_0) = 0) or (integer_of_int32(n_0) = 1)) ->
   ("JC_41": ("JC_40": (integer_of_int32(return) = 0)))
 
-========== file tests/java/why/Switch_po1.why ==========
-goal Switch_test1_ensures_normal_po_1:
+========== file tests/java/why/Switch_po2.why ==========
+goal Switch_test1_ensures_normal_po_2:
   forall n:int32.
   ("JC_22": true) ->
   ((integer_of_int32(n) = 1) or
@@ -3217,8 +3117,8 @@ goal Switch_test1_ensures_normal_po_1:
   (r_0 = result) ->
   forall return:int32.
   (return = r_0) ->
-  ((integer_of_int32(n) = 0) or (integer_of_int32(n) = 1)) ->
-  ("JC_27": (integer_of_int32(return) = 0))
+  (integer_of_int32(return) = 0) ->
+  ("JC_27": ((integer_of_int32(n) = 0) or (integer_of_int32(n) = 1)))
 
 ========== file tests/java/why/Switch_po20.why ==========
 goal Switch_test2_ensures_normal_po_16:
@@ -3234,21 +3134,6 @@ goal Switch_test2_ensures_normal_po_16:
   (integer_of_int32(return) = 0) ->
   ("JC_41":
   ("JC_40": ((integer_of_int32(n_0) = 0) or (integer_of_int32(n_0) = 1))))
-
-========== file tests/java/why/Switch_po2.why ==========
-goal Switch_test1_ensures_normal_po_2:
-  forall n:int32.
-  ("JC_22": true) ->
-  ((integer_of_int32(n) = 1) or
-   ((integer_of_int32(n) <> 1) and (integer_of_int32(n) = 0))) ->
-  forall result:int32.
-  (integer_of_int32(result) = 0) ->
-  forall r_0:int32.
-  (r_0 = result) ->
-  forall return:int32.
-  (return = r_0) ->
-  (integer_of_int32(return) = 0) ->
-  ("JC_27": ((integer_of_int32(n) = 0) or (integer_of_int32(n) = 1)))
 
 ========== file tests/java/why/Switch_po3.why ==========
 goal Switch_test1_ensures_normal_po_3:
@@ -4215,6 +4100,11 @@ why -simplify [...] why/Switch.why
  (EQ (integer_of_byte (byte_of_integer x)) x))))
 
 (BG_PUSH
+ ;; Why axiom byte_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_byte x) (integer_of_byte y)) (EQ x y))))
+
+(BG_PUSH
  ;; Why axiom byte_range
  (FORALL (x)
  (AND (<= (- 0 128) (integer_of_byte x)) (<= (integer_of_byte x) 127))))
@@ -4224,6 +4114,11 @@ why -simplify [...] why/Switch.why
  (FORALL (x)
  (IMPLIES (AND (<= 0 x) (<= x 65535))
  (EQ (integer_of_char (char_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom char_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_char x) (integer_of_char y)) (EQ x y))))
 
 (BG_PUSH
  ;; Why axiom char_range
@@ -4246,6 +4141,11 @@ why -simplify [...] why/Switch.why
  (AND (<= (- 0 constant_too_large_2147483648) x)
  (<= x constant_too_large_2147483647))
  (EQ (integer_of_int32 (int32_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom int32_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_int32 x) (integer_of_int32 y)) (EQ x y))))
 
 (BG_PUSH
  ;; Why axiom int32_range
@@ -4297,6 +4197,11 @@ why -simplify [...] why/Switch.why
  (EQ (integer_of_long (long_of_integer x)) x))))
 
 (BG_PUSH
+ ;; Why axiom long_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_long x) (integer_of_long y)) (EQ x y))))
+
+(BG_PUSH
  ;; Why axiom long_range
  (FORALL (x)
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
@@ -4335,6 +4240,11 @@ why -simplify [...] why/Switch.why
  (EQ (integer_of_short (short_of_integer x)) x))))
 
 (BG_PUSH
+ ;; Why axiom short_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_short x) (integer_of_short y)) (EQ x y))))
+
+(BG_PUSH
  ;; Why axiom short_range
  (FORALL (x)
  (AND (<= (- 0 32768) (integer_of_short x)) (<= (integer_of_short x) 32767))))
@@ -4367,26 +4277,6 @@ why -simplify [...] why/Switch.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-(DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_Exception p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_String p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Switch p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Throwable p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_interface p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
 (DEFPRED (valid_root_Object p a b Object_alloc_table)
   (AND (<= (offset_min Object_alloc_table p) a)
   (>= (offset_max Object_alloc_table p) b)))
@@ -4415,7 +4305,7 @@ why -simplify [...] why/Switch.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; Switch_test1_ensures_normal_po_1, File "HOME/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_1, File "HOME/tests/java/Switch.java", line 36, characters 18-50
 (FORALL (n)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n) 1)
@@ -4429,7 +4319,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n) 0) (EQ (integer_of_int32 n) 1))
 (EQ (integer_of_int32 return) 0)))))))))))
 
-;; Switch_test1_ensures_normal_po_2, File "HOME/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_2, File "HOME/tests/java/Switch.java", line 36, characters 18-50
 (FORALL (n)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n) 1)
@@ -4443,7 +4333,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n) 0) (EQ (integer_of_int32 n) 1))))))))))))
 
-;; Switch_test1_ensures_normal_po_3, File "HOME/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_3, File "HOME/tests/java/Switch.java", line 36, characters 18-50
 (FORALL (n)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n) 1) (NEQ (integer_of_int32 n) 0))
@@ -4456,7 +4346,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n) 0) (EQ (integer_of_int32 n) 1))
 (EQ (integer_of_int32 return) 0)))))))))))
 
-;; Switch_test1_ensures_normal_po_4, File "HOME/tests/java/Switch.java", line 34, characters 18-50
+;; Switch_test1_ensures_normal_po_4, File "HOME/tests/java/Switch.java", line 36, characters 18-50
 (FORALL (n)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n) 1) (NEQ (integer_of_int32 n) 0))
@@ -4469,7 +4359,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n) 0) (EQ (integer_of_int32 n) 1))))))))))))
 
-;; Switch_test2_ensures_normal_po_1, File "HOME/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_1, File "HOME/tests/java/Switch.java", line 53, characters 19-51
 (FORALL (n_0)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_0) 1)
@@ -4483,7 +4373,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0) 4) (EQ (integer_of_int32 n_0) 7))
 (EQ (integer_of_int32 return) 1)))))))))))
 
-;; Switch_test2_ensures_normal_po_2, File "HOME/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_2, File "HOME/tests/java/Switch.java", line 53, characters 19-51
 (FORALL (n_0)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_0) 1)
@@ -4497,7 +4387,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 1)
 (OR (EQ (integer_of_int32 n_0) 4) (EQ (integer_of_int32 n_0) 7))))))))))))
 
-;; Switch_test2_ensures_normal_po_3, File "HOME/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_3, File "HOME/tests/java/Switch.java", line 54, characters 20-52
 (FORALL (n_0)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_0) 1)
@@ -4511,7 +4401,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0) 0) (EQ (integer_of_int32 n_0) 1))
 (EQ (integer_of_int32 return) 0)))))))))))
 
-;; Switch_test2_ensures_normal_po_4, File "HOME/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_4, File "HOME/tests/java/Switch.java", line 54, characters 20-52
 (FORALL (n_0)
 (IMPLIES TRUE
 (IMPLIES (OR (EQ (integer_of_int32 n_0) 1)
@@ -4525,7 +4415,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n_0) 0) (EQ (integer_of_int32 n_0) 1))))))))))))
 
-;; Switch_test2_ensures_normal_po_5, File "HOME/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_5, File "HOME/tests/java/Switch.java", line 53, characters 19-51
 (FORALL (n_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0) 1) (NEQ (integer_of_int32 n_0) 0))
@@ -4540,7 +4430,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0) 4) (EQ (integer_of_int32 n_0) 7))
 (EQ (integer_of_int32 return) 1))))))))))))
 
-;; Switch_test2_ensures_normal_po_6, File "HOME/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_6, File "HOME/tests/java/Switch.java", line 53, characters 19-51
 (FORALL (n_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0) 1) (NEQ (integer_of_int32 n_0) 0))
@@ -4555,7 +4445,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 1)
 (OR (EQ (integer_of_int32 n_0) 4) (EQ (integer_of_int32 n_0) 7)))))))))))))
 
-;; Switch_test2_ensures_normal_po_7, File "HOME/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_7, File "HOME/tests/java/Switch.java", line 54, characters 20-52
 (FORALL (n_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0) 1) (NEQ (integer_of_int32 n_0) 0))
@@ -4570,7 +4460,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0) 0) (EQ (integer_of_int32 n_0) 1))
 (EQ (integer_of_int32 return) 0))))))))))))
 
-;; Switch_test2_ensures_normal_po_8, File "HOME/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_8, File "HOME/tests/java/Switch.java", line 54, characters 20-52
 (FORALL (n_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0) 1) (NEQ (integer_of_int32 n_0) 0))
@@ -4585,7 +4475,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n_0) 0) (EQ (integer_of_int32 n_0) 1)))))))))))))
 
-;; Switch_test2_ensures_normal_po_9, File "HOME/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_9, File "HOME/tests/java/Switch.java", line 53, characters 19-51
 (FORALL (n_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0) 1) (NEQ (integer_of_int32 n_0) 0))
@@ -4603,7 +4493,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0) 4) (EQ (integer_of_int32 n_0) 7))
 (EQ (integer_of_int32 return) 1)))))))))))))
 
-;; Switch_test2_ensures_normal_po_10, File "HOME/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_10, File "HOME/tests/java/Switch.java", line 53, characters 19-51
 (FORALL (n_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0) 1) (NEQ (integer_of_int32 n_0) 0))
@@ -4621,7 +4511,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 1)
 (OR (EQ (integer_of_int32 n_0) 4) (EQ (integer_of_int32 n_0) 7))))))))))))))
 
-;; Switch_test2_ensures_normal_po_11, File "HOME/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_11, File "HOME/tests/java/Switch.java", line 54, characters 20-52
 (FORALL (n_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0) 1) (NEQ (integer_of_int32 n_0) 0))
@@ -4639,7 +4529,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0) 0) (EQ (integer_of_int32 n_0) 1))
 (EQ (integer_of_int32 return) 0)))))))))))))
 
-;; Switch_test2_ensures_normal_po_12, File "HOME/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_12, File "HOME/tests/java/Switch.java", line 54, characters 20-52
 (FORALL (n_0)
 (IMPLIES TRUE
 (IMPLIES (AND (NEQ (integer_of_int32 n_0) 1) (NEQ (integer_of_int32 n_0) 0))
@@ -4657,7 +4547,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 0)
 (OR (EQ (integer_of_int32 n_0) 0) (EQ (integer_of_int32 n_0) 1))))))))))))))
 
-;; Switch_test2_ensures_normal_po_13, File "HOME/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_13, File "HOME/tests/java/Switch.java", line 53, characters 19-51
 (FORALL (n_0)
 (IMPLIES TRUE
 (FORALL (result)
@@ -4670,7 +4560,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0) 4) (EQ (integer_of_int32 n_0) 7))
 (EQ (integer_of_int32 return) 1))))))))))
 
-;; Switch_test2_ensures_normal_po_14, File "HOME/tests/java/Switch.java", line 51, characters 19-51
+;; Switch_test2_ensures_normal_po_14, File "HOME/tests/java/Switch.java", line 53, characters 19-51
 (FORALL (n_0)
 (IMPLIES TRUE
 (FORALL (result)
@@ -4683,7 +4573,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (EQ (integer_of_int32 return) 1)
 (OR (EQ (integer_of_int32 n_0) 4) (EQ (integer_of_int32 n_0) 7)))))))))))
 
-;; Switch_test2_ensures_normal_po_15, File "HOME/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_15, File "HOME/tests/java/Switch.java", line 54, characters 20-52
 (FORALL (n_0)
 (IMPLIES TRUE
 (FORALL (result)
@@ -4696,7 +4586,7 @@ why -simplify [...] why/Switch.why
 (IMPLIES (OR (EQ (integer_of_int32 n_0) 0) (EQ (integer_of_int32 n_0) 1))
 (EQ (integer_of_int32 return) 0))))))))))
 
-;; Switch_test2_ensures_normal_po_16, File "HOME/tests/java/Switch.java", line 52, characters 20-52
+;; Switch_test2_ensures_normal_po_16, File "HOME/tests/java/Switch.java", line 54, characters 20-52
 (FORALL (n_0)
 (IMPLIES TRUE
 (FORALL (result)
@@ -5711,6 +5601,10 @@ axiom byte_coerce:
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_byte(byte_of_integer(x)) = x)))
 
+axiom byte_extensionality:
+  (forall x:byte.
+    (forall y:byte. ((integer_of_byte(x) = integer_of_byte(y)) -> (x = y))))
+
 axiom byte_range:
   (forall x:byte.
     (((-128) <= integer_of_byte(x)) and (integer_of_byte(x) <= 127)))
@@ -5722,6 +5616,10 @@ logic char_of_integer : int -> char
 axiom char_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 65535)) -> (integer_of_char(char_of_integer(x)) = x)))
+
+axiom char_extensionality:
+  (forall x:char.
+    (forall y:char. ((integer_of_char(x) = integer_of_char(y)) -> (x = y))))
 
 axiom char_range:
   (forall x:char.
@@ -5754,6 +5652,11 @@ axiom int32_coerce:
   (forall x:int.
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
+
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range:
   (forall x:int32.
@@ -5808,6 +5711,10 @@ axiom long_coerce:
     ((((-9223372036854775808) <= x) and (x <= 9223372036854775807)) ->
      (integer_of_long(long_of_integer(x)) = x)))
 
+axiom long_extensionality:
+  (forall x:long.
+    (forall y:long. ((integer_of_long(x) = integer_of_long(y)) -> (x = y))))
+
 axiom long_range:
   (forall x:long.
     (((-9223372036854775808) <= integer_of_long(x)) and
@@ -5852,6 +5759,11 @@ axiom short_coerce:
     ((((-32768) <= x) and (x <= 32767)) ->
      (integer_of_short(short_of_integer(x)) = x)))
 
+axiom short_extensionality:
+  (forall x:short.
+    (forall y:short.
+      ((integer_of_short(x) = integer_of_short(y)) -> (x = y))))
+
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
@@ -5891,32 +5803,6 @@ predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Switch(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =

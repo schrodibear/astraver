@@ -1499,14 +1499,6 @@ type unsigned_shortP
 
 type voidP
 
-exception Goto__LOR_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic __string_abc:  -> charP pointer
 
 logic a:  -> intP pointer
@@ -1554,6 +1546,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -1565,6 +1562,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -2179,6 +2181,11 @@ axiom uint16_coerce :
   ((le_int((0), x) and le_int(x, (65535))) ->
    eq_int(integer_of_uint16(uint16_of_integer(x)), x)))
 
+axiom uint16_extensionality :
+ (forall x:uint16.
+  (forall y:uint16.
+   (eq_int(integer_of_uint16(x), integer_of_uint16(y)) -> (x = y))))
+
 axiom uint16_range :
  (forall x:uint16.
   (le_int((0), integer_of_uint16(x))
@@ -2190,6 +2197,11 @@ axiom uint32_coerce :
  (forall x:int.
   ((le_int((0), x) and le_int(x, (4294967295))) ->
    eq_int(integer_of_uint32(uint32_of_integer(x)), x)))
+
+axiom uint32_extensionality :
+ (forall x:uint32.
+  (forall y:uint32.
+   (eq_int(integer_of_uint32(x), integer_of_uint32(y)) -> (x = y))))
 
 axiom uint32_range :
  (forall x:uint32.
@@ -2219,26 +2231,6 @@ predicate valid___string_abc(charP___string_abc_1_alloc_table:charP alloc_table)
 predicate valid_a(intP_a_2_alloc_table:intP alloc_table) =
  (le_int(offset_min(intP_a_2_alloc_table, a), (0))
  and ge_int(offset_max(intP_a_2_alloc_table, a), (1)))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_unsigned_shortP(p:unit pointer, a:int,
- b:int, bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -2313,40 +2305,36 @@ axiom memcmp_zero :
    (forall s1_1_0:charP pointer.
     (forall s2_1_0:charP pointer.
      (forall n_1:int.
-      (eq_int(memcmp(s1_1_0, s2_1_0, n_1, charP_charM_s2_4_at_L,
-              charP_charM_s1_3_at_L),
-       (0))
+      ((memcmp(s1_1_0, s2_1_0, n_1, charP_charM_s2_4_at_L,
+        charP_charM_s1_3_at_L) = (0))
       <-> (forall i_6:int.
            ((le_int((0), i_6) and lt_int(i_6, n_1)) ->
-            eq_int(integer_of_int8(select(charP_charM_s1_3_at_L,
-                                   shift(s1_1_0, i_6))),
-            integer_of_int8(select(charP_charM_s2_4_at_L, shift(s2_1_0, i_6))))))))))))
+            (integer_of_int8(select(charP_charM_s1_3_at_L,
+                             shift(s1_1_0, i_6))) = integer_of_int8(select(charP_charM_s2_4_at_L,
+                                                                    shift(s2_1_0,
+                                                                    i_6))))))))))))
 
 axiom memchr_def :
  (forall charP_charM_s_5_at_L:(charP, int8) memory.
   (forall s_0_0:charP pointer.
    (forall c_0:int.
     (forall n_3:int.
-     (eq_bool(memchr(s_0_0, c_0, n_3, charP_charM_s_5_at_L), true)
+     ((memchr(s_0_0, c_0, n_3, charP_charM_s_5_at_L) = true)
      <-> (exists i_0_0:int32.
           (le_int((0), integer_of_int32(i_0_0))
           and (lt_int(integer_of_int32(i_0_0), n_3)
-              and eq_int(integer_of_int8(select(charP_charM_s_5_at_L,
-                                         shift(s_0_0,
-                                         integer_of_int32(i_0_0)))),
-                  c_0)))))))))
+              and (integer_of_int8(select(charP_charM_s_5_at_L,
+                                   shift(s_0_0, integer_of_int32(i_0_0)))) = c_0)))))))))
 
 axiom memset_def :
  (forall charP_charM_s_1_6_at_L:(charP, int8) memory.
   (forall s_2:charP pointer.
    (forall c_2:int.
     (forall n_5:int.
-     (eq_bool(memset(s_2, c_2, n_5, charP_charM_s_1_6_at_L), true)
+     ((memset(s_2, c_2, n_5, charP_charM_s_1_6_at_L) = true)
      <-> (forall i_1_0:int.
           ((le_int((0), i_1_0) and lt_int(i_1_0, n_5)) ->
-           eq_int(integer_of_int8(select(charP_charM_s_1_6_at_L,
-                                  shift(s_2, i_1_0))),
-           c_2))))))))
+           (integer_of_int8(select(charP_charM_s_1_6_at_L, shift(s_2, i_1_0))) = c_2))))))))
 
 axiom strlen_pos_or_null :
  (forall charP_charM_s_3_7_at_L:(charP, int8) memory.
@@ -2356,22 +2344,19 @@ axiom strlen_pos_or_null :
      and (le_int(i_2_0, (2147483647))
          and ((forall j:int.
                ((le_int((0), j) and lt_int(j, i_2_0)) ->
-                neq_int(integer_of_int8(select(charP_charM_s_3_7_at_L,
-                                        shift(s_4, j))),
-                (0))))
-             and eq_int(integer_of_int8(select(charP_charM_s_3_7_at_L,
-                                        shift(s_4, i_2_0))),
-                 (0))))) ->
-     eq_int(strlen(s_4, charP_charM_s_3_7_at_L), i_2_0)))))
+                (integer_of_int8(select(charP_charM_s_3_7_at_L,
+                                 shift(s_4, j))) <> (0))))
+             and (integer_of_int8(select(charP_charM_s_3_7_at_L,
+                                  shift(s_4, i_2_0))) = (0))))) ->
+     (strlen(s_4, charP_charM_s_3_7_at_L) = i_2_0)))))
 
 axiom strlen_neg :
  (forall charP_charM_s_3_7_at_L:(charP, int8) memory.
   (forall s_5:charP pointer.
    ((forall i_3_0:int.
      ((le_int((0), i_3_0) and le_int(i_3_0, (2147483647))) ->
-      neq_int(integer_of_int8(select(charP_charM_s_3_7_at_L,
-                              shift(s_5, i_3_0))),
-      (0)))) -> lt_int(strlen(s_5, charP_charM_s_3_7_at_L), (0)))))
+      (integer_of_int8(select(charP_charM_s_3_7_at_L, shift(s_5, i_3_0))) <> (0)))) ->
+    lt_int(strlen(s_5, charP_charM_s_3_7_at_L), (0)))))
 
 axiom strlen_range :
  (forall charP_charM_s_3_7_at_L:(charP, int8) memory.
@@ -2384,17 +2369,14 @@ axiom strlen_before_null :
    (forall i_4_0:int.
     ((le_int((0), i_4_0)
      and lt_int(i_4_0, strlen(s_7, charP_charM_s_3_7_at_L))) ->
-     neq_int(integer_of_int8(select(charP_charM_s_3_7_at_L,
-                             shift(s_7, i_4_0))),
-     (0))))))
+     (integer_of_int8(select(charP_charM_s_3_7_at_L, shift(s_7, i_4_0))) <> (0))))))
 
 axiom strlen_at_null :
  (forall charP_charM_s_3_7_at_L:(charP, int8) memory.
   (forall s_8:charP pointer.
    (le_int((0), strlen(s_8, charP_charM_s_3_7_at_L)) ->
-    eq_int(integer_of_int8(select(charP_charM_s_3_7_at_L,
-                           shift(s_8, strlen(s_8, charP_charM_s_3_7_at_L)))),
-    (0)))))
+    (integer_of_int8(select(charP_charM_s_3_7_at_L,
+                     shift(s_8, strlen(s_8, charP_charM_s_3_7_at_L)))) = (0)))))
 
 axiom strlen_not_zero :
  (forall charP_charM_s_3_7_at_L:(charP, int8) memory.
@@ -2402,9 +2384,9 @@ axiom strlen_not_zero :
    (forall i_5_0:int.
     ((le_int((0), i_5_0)
      and (le_int(i_5_0, strlen(s_9, charP_charM_s_3_7_at_L))
-         and neq_int(integer_of_int8(select(charP_charM_s_3_7_at_L,
-                                     shift(s_9, i_5_0))),
-             (0)))) -> lt_int(i_5_0, strlen(s_9, charP_charM_s_3_7_at_L))))))
+         and (integer_of_int8(select(charP_charM_s_3_7_at_L,
+                              shift(s_9, i_5_0))) <> (0)))) ->
+     lt_int(i_5_0, strlen(s_9, charP_charM_s_3_7_at_L))))))
 
 axiom strlen_zero :
  (forall charP_charM_s_3_7_at_L:(charP, int8) memory.
@@ -2412,18 +2394,16 @@ axiom strlen_zero :
    (forall i_6_0:int.
     ((le_int((0), i_6_0)
      and (le_int(i_6_0, strlen(s_10, charP_charM_s_3_7_at_L))
-         and eq_int(integer_of_int8(select(charP_charM_s_3_7_at_L,
-                                    shift(s_10, i_6_0))),
-             (0)))) -> eq_int(i_6_0, strlen(s_10, charP_charM_s_3_7_at_L))))))
+         and (integer_of_int8(select(charP_charM_s_3_7_at_L,
+                              shift(s_10, i_6_0))) = (0)))) ->
+     (i_6_0 = strlen(s_10, charP_charM_s_3_7_at_L))))))
 
 axiom strlen_sup :
  (forall charP_charM_s_3_7_at_L:(charP, int8) memory.
   (forall s_11:charP pointer.
    (forall i_7:int.
     ((le_int((0), i_7)
-     and eq_int(integer_of_int8(select(charP_charM_s_3_7_at_L,
-                                shift(s_11, i_7))),
-         (0))) ->
+     and (integer_of_int8(select(charP_charM_s_3_7_at_L, shift(s_11, i_7))) = (0))) ->
      (le_int((0), strlen(s_11, charP_charM_s_3_7_at_L))
      and le_int(strlen(s_11, charP_charM_s_3_7_at_L), i_7))))))
 
@@ -2432,8 +2412,9 @@ axiom strlen_shift :
   (forall s_12:charP pointer.
    (forall i_8:int.
     ((le_int((0), i_8) and le_int(i_8, strlen(s_12, charP_charM_s_3_7_at_L))) ->
-     eq_int(strlen(shift(s_12, i_8), charP_charM_s_3_7_at_L),
-     sub_int(strlen(s_12, charP_charM_s_3_7_at_L), i_8))))))
+     (strlen(shift(s_12, i_8), charP_charM_s_3_7_at_L) = sub_int(strlen(s_12,
+                                                                 charP_charM_s_3_7_at_L),
+                                                         i_8))))))
 
 axiom strlen_create :
  (forall charP_charM_s_3_7_at_L:(charP, int8) memory.
@@ -2441,9 +2422,8 @@ axiom strlen_create :
    (forall i_9:int.
     ((le_int((0), i_9)
      and (le_int(i_9, (2147483647))
-         and eq_int(integer_of_int8(select(charP_charM_s_3_7_at_L,
-                                    shift(s_13, i_9))),
-             (0)))) ->
+         and (integer_of_int8(select(charP_charM_s_3_7_at_L,
+                              shift(s_13, i_9))) = (0)))) ->
      (le_int((0), strlen(s_13, charP_charM_s_3_7_at_L))
      and le_int(strlen(s_13, charP_charM_s_3_7_at_L), i_9))))))
 
@@ -2455,9 +2435,8 @@ axiom strlen_create_shift :
      ((le_int((0), k)
       and (le_int(k, i_10)
           and (le_int(i_10, (2147483647))
-              and eq_int(integer_of_int8(select(charP_charM_s_3_7_at_L,
-                                         shift(s_14, i_10))),
-                  (0))))) ->
+              and (integer_of_int8(select(charP_charM_s_3_7_at_L,
+                                   shift(s_14, i_10))) = (0))))) ->
       (le_int((0), strlen(shift(s_14, k), charP_charM_s_3_7_at_L))
       and le_int(strlen(shift(s_14, k), charP_charM_s_3_7_at_L),
           sub_int(i_10, k))))))))
@@ -2467,24 +2446,22 @@ axiom memcmp_strlen_left :
   (forall s1_2:charP pointer.
    (forall s2_2:charP pointer.
     (forall n_6:int.
-     ((eq_int(memcmp(s1_2, s2_2, n_6, charP_charM_s_3_7_at_L,
-              charP_charM_s_3_7_at_L),
-       (0))
+     (((memcmp(s1_2, s2_2, n_6, charP_charM_s_3_7_at_L,
+        charP_charM_s_3_7_at_L) = (0))
       and lt_int(strlen(s1_2, charP_charM_s_3_7_at_L), n_6)) ->
-      eq_int(strlen(s1_2, charP_charM_s_3_7_at_L),
-      strlen(s2_2, charP_charM_s_3_7_at_L)))))))
+      (strlen(s1_2, charP_charM_s_3_7_at_L) = strlen(s2_2,
+                                              charP_charM_s_3_7_at_L)))))))
 
 axiom memcmp_strlen_right :
  (forall charP_charM_s_3_7_at_L:(charP, int8) memory.
   (forall s1_3:charP pointer.
    (forall s2_3:charP pointer.
     (forall n_7:int.
-     ((eq_int(memcmp(s1_3, s2_3, n_7, charP_charM_s_3_7_at_L,
-              charP_charM_s_3_7_at_L),
-       (0))
+     (((memcmp(s1_3, s2_3, n_7, charP_charM_s_3_7_at_L,
+        charP_charM_s_3_7_at_L) = (0))
       and lt_int(strlen(s2_3, charP_charM_s_3_7_at_L), n_7)) ->
-      eq_int(strlen(s1_3, charP_charM_s_3_7_at_L),
-      strlen(s2_3, charP_charM_s_3_7_at_L)))))))
+      (strlen(s1_3, charP_charM_s_3_7_at_L) = strlen(s2_3,
+                                              charP_charM_s_3_7_at_L)))))))
 
 axiom memcmp_strlen_shift_left :
  (forall charP_charM_s_3_7_at_L:(charP, int8) memory.
@@ -2492,9 +2469,8 @@ axiom memcmp_strlen_shift_left :
    (forall s2_4:charP pointer.
     (forall k_0:int.
      (forall n_8:int.
-      ((eq_int(memcmp(s1_4, shift(s2_4, k_0), n_8, charP_charM_s_3_7_at_L,
-               charP_charM_s_3_7_at_L),
-        (0))
+      (((memcmp(s1_4, shift(s2_4, k_0), n_8, charP_charM_s_3_7_at_L,
+         charP_charM_s_3_7_at_L) = (0))
        and (le_int((0), k_0)
            and lt_int(strlen(s1_4, charP_charM_s_3_7_at_L), n_8))) ->
        (le_int((0), strlen(s2_4, charP_charM_s_3_7_at_L))
@@ -2507,9 +2483,8 @@ axiom memcmp_strlen_shift_right :
    (forall s2_5:charP pointer.
     (forall k_1:int.
      (forall n_9:int.
-      ((eq_int(memcmp(shift(s1_5, k_1), s2_5, n_9, charP_charM_s_3_7_at_L,
-               charP_charM_s_3_7_at_L),
-        (0))
+      (((memcmp(shift(s1_5, k_1), s2_5, n_9, charP_charM_s_3_7_at_L,
+         charP_charM_s_3_7_at_L) = (0))
        and (le_int((0), k_1)
            and lt_int(strlen(s2_5, charP_charM_s_3_7_at_L), n_9))) ->
        (le_int((0), strlen(s1_5, charP_charM_s_3_7_at_L))
@@ -2532,18 +2507,16 @@ axiom strcmp_zero :
   (forall charP_charM_s1_6_8_at_L:(charP, int8) memory.
    (forall s1_8:charP pointer.
     (forall s2_8:charP pointer.
-     (eq_int(strcmp(s1_8, s2_8, charP_charM_s2_6_9_at_L,
-             charP_charM_s1_6_8_at_L),
-      (0))
-     <-> (eq_int(strlen(s1_8, charP_charM_s1_6_8_at_L),
-          strlen(s2_8, charP_charM_s2_6_9_at_L))
+     ((strcmp(s1_8, s2_8, charP_charM_s2_6_9_at_L, charP_charM_s1_6_8_at_L) = (0))
+     <-> ((strlen(s1_8, charP_charM_s1_6_8_at_L) = strlen(s2_8,
+                                                   charP_charM_s2_6_9_at_L))
          and (forall i_11:int.
               ((le_int((0), i_11)
                and le_int(i_11, strlen(s1_8, charP_charM_s1_6_8_at_L))) ->
-               eq_int(integer_of_int8(select(charP_charM_s1_6_8_at_L,
-                                      shift(s1_8, i_11))),
-               integer_of_int8(select(charP_charM_s2_6_9_at_L,
-                               shift(s2_8, i_11))))))))))))
+               (integer_of_int8(select(charP_charM_s1_6_8_at_L,
+                                shift(s1_8, i_11))) = integer_of_int8(
+                                                      select(charP_charM_s2_6_9_at_L,
+                                                      shift(s2_8, i_11))))))))))))
 
 axiom strncmp_zero :
  (forall charP_charM_s2_9_11_at_L:(charP, int8) memory.
@@ -2551,31 +2524,28 @@ axiom strncmp_zero :
    (forall s1_10:charP pointer.
     (forall s2_10:charP pointer.
      (forall n_11:int.
-      (eq_int(strncmp(s1_10, s2_10, n_11, charP_charM_s2_9_11_at_L,
-              charP_charM_s1_9_10_at_L),
-       (0))
+      ((strncmp(s1_10, s2_10, n_11, charP_charM_s2_9_11_at_L,
+        charP_charM_s1_9_10_at_L) = (0))
       <-> ((lt_int(strlen(s1_10, charP_charM_s1_9_10_at_L), n_11)
-           and eq_int(strcmp(s1_10, s2_10, charP_charM_s2_9_11_at_L,
-                      charP_charM_s1_9_10_at_L),
-               (0)))
+           and (strcmp(s1_10, s2_10, charP_charM_s2_9_11_at_L,
+                charP_charM_s1_9_10_at_L) = (0)))
           or (forall i_12:int.
               ((le_int((0), i_12) and lt_int(i_12, n_11)) ->
-               eq_int(integer_of_int8(select(charP_charM_s1_9_10_at_L,
-                                      shift(s1_10, i_12))),
-               integer_of_int8(select(charP_charM_s2_9_11_at_L,
-                               shift(s2_10, i_12)))))))))))))
+               (integer_of_int8(select(charP_charM_s1_9_10_at_L,
+                                shift(s1_10, i_12))) = integer_of_int8(
+                                                       select(charP_charM_s2_9_11_at_L,
+                                                       shift(s2_10, i_12)))))))))))))
 
 axiom strchr_def :
  (forall charP_charM_s_15_12_at_L:(charP, int8) memory.
   (forall s_16:charP pointer.
    (forall c_4:int.
-    (eq_bool(strchr(s_16, c_4, charP_charM_s_15_12_at_L), true)
+    ((strchr(s_16, c_4, charP_charM_s_15_12_at_L) = true)
     <-> (exists i_13:int.
          (le_int((0), i_13)
          and (le_int(i_13, strlen(s_16, charP_charM_s_15_12_at_L))
-             and eq_int(integer_of_int8(select(charP_charM_s_15_12_at_L,
-                                        shift(s_16, i_13))),
-                 c_4))))))))
+             and (integer_of_int8(select(charP_charM_s_15_12_at_L,
+                                  shift(s_16, i_13))) = c_4))))))))
 
 axiom wcslen_pos_or_null :
  (forall unsigned_shortP_unsigned_shortM_s_17_13_at_L:
@@ -2585,13 +2555,11 @@ axiom wcslen_pos_or_null :
     ((le_int((0), i_14)
      and ((forall j_0:int.
            ((le_int((0), j_0) and lt_int(j_0, i_14)) ->
-            neq_int(integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
-                                      shift(s_18, j_0))),
-            (0))))
-         and eq_int(integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
-                                      shift(s_18, i_14))),
-             (0)))) ->
-     eq_int(wcslen(s_18, unsigned_shortP_unsigned_shortM_s_17_13_at_L), i_14)))))
+            (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
+                               shift(s_18, j_0))) <> (0))))
+         and (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
+                                shift(s_18, i_14))) = (0)))) ->
+     (wcslen(s_18, unsigned_shortP_unsigned_shortM_s_17_13_at_L) = i_14)))))
 
 axiom wcslen_neg :
  (forall unsigned_shortP_unsigned_shortM_s_17_13_at_L:
@@ -2599,9 +2567,8 @@ axiom wcslen_neg :
   (forall s_19:unsigned_shortP pointer.
    ((forall i_15:int.
      (le_int((0), i_15) ->
-      neq_int(integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
-                                shift(s_19, i_15))),
-      (0)))) ->
+      (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
+                         shift(s_19, i_15))) <> (0)))) ->
     lt_int(wcslen(s_19, unsigned_shortP_unsigned_shortM_s_17_13_at_L), (0)))))
 
 axiom wcslen_before_null :
@@ -2612,20 +2579,18 @@ axiom wcslen_before_null :
     ((le_int((0), integer_of_int32(i_16))
      and lt_int(integer_of_int32(i_16),
          wcslen(s_20, unsigned_shortP_unsigned_shortM_s_17_13_at_L))) ->
-     neq_int(integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
-                               shift(s_20, integer_of_int32(i_16)))),
-     (0))))))
+     (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
+                        shift(s_20, integer_of_int32(i_16)))) <> (0))))))
 
 axiom wcslen_at_null :
  (forall unsigned_shortP_unsigned_shortM_s_17_13_at_L:
   (unsigned_shortP, uint16) memory.
   (forall s_21:unsigned_shortP pointer.
    (le_int((0), wcslen(s_21, unsigned_shortP_unsigned_shortM_s_17_13_at_L)) ->
-    eq_int(integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
-                             shift(s_21,
-                             wcslen(s_21,
-                             unsigned_shortP_unsigned_shortM_s_17_13_at_L)))),
-    (0)))))
+    (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
+                       shift(s_21,
+                       wcslen(s_21,
+                       unsigned_shortP_unsigned_shortM_s_17_13_at_L)))) = (0)))))
 
 axiom wcslen_not_zero :
  (forall unsigned_shortP_unsigned_shortM_s_17_13_at_L:
@@ -2635,9 +2600,8 @@ axiom wcslen_not_zero :
     ((le_int((0), integer_of_int32(i_17))
      and (le_int(integer_of_int32(i_17),
           wcslen(s_22, unsigned_shortP_unsigned_shortM_s_17_13_at_L))
-         and neq_int(integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
-                                       shift(s_22, integer_of_int32(i_17)))),
-             (0)))) ->
+         and (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
+                                shift(s_22, integer_of_int32(i_17)))) <> (0)))) ->
      lt_int(integer_of_int32(i_17),
      wcslen(s_22, unsigned_shortP_unsigned_shortM_s_17_13_at_L))))))
 
@@ -2649,11 +2613,10 @@ axiom wcslen_zero :
     ((le_int((0), integer_of_int32(i_18))
      and (le_int(integer_of_int32(i_18),
           wcslen(s_23, unsigned_shortP_unsigned_shortM_s_17_13_at_L))
-         and eq_int(integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
-                                      shift(s_23, integer_of_int32(i_18)))),
-             (0)))) ->
-     eq_int(integer_of_int32(i_18),
-     wcslen(s_23, unsigned_shortP_unsigned_shortM_s_17_13_at_L))))))
+         and (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
+                                shift(s_23, integer_of_int32(i_18)))) = (0)))) ->
+     (integer_of_int32(i_18) = wcslen(s_23,
+                               unsigned_shortP_unsigned_shortM_s_17_13_at_L))))))
 
 axiom wcslen_sup :
  (forall unsigned_shortP_unsigned_shortM_s_17_13_at_L:
@@ -2661,9 +2624,8 @@ axiom wcslen_sup :
   (forall s_24:unsigned_shortP pointer.
    (forall i_19:int32.
     ((le_int((0), integer_of_int32(i_19))
-     and eq_int(integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
-                                  shift(s_24, integer_of_int32(i_19)))),
-         (0))) ->
+     and (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
+                            shift(s_24, integer_of_int32(i_19)))) = (0))) ->
      (le_int((0), wcslen(s_24, unsigned_shortP_unsigned_shortM_s_17_13_at_L))
      and le_int(wcslen(s_24, unsigned_shortP_unsigned_shortM_s_17_13_at_L),
          integer_of_int32(i_19)))))))
@@ -2676,10 +2638,10 @@ axiom wcslen_shift :
     ((le_int((0), integer_of_int32(i_20))
      and le_int(integer_of_int32(i_20),
          wcslen(s_25, unsigned_shortP_unsigned_shortM_s_17_13_at_L))) ->
-     eq_int(wcslen(shift(s_25, integer_of_int32(i_20)),
-            unsigned_shortP_unsigned_shortM_s_17_13_at_L),
-     sub_int(wcslen(s_25, unsigned_shortP_unsigned_shortM_s_17_13_at_L),
-     integer_of_int32(i_20)))))))
+     (wcslen(shift(s_25, integer_of_int32(i_20)),
+      unsigned_shortP_unsigned_shortM_s_17_13_at_L) = sub_int(wcslen(s_25,
+                                                              unsigned_shortP_unsigned_shortM_s_17_13_at_L),
+                                                      integer_of_int32(i_20)))))))
 
 axiom wcslen_create :
  (forall unsigned_shortP_unsigned_shortM_s_17_13_at_L:
@@ -2687,9 +2649,8 @@ axiom wcslen_create :
   (forall s_26:unsigned_shortP pointer.
    (forall i_21:int32.
     ((le_int((0), integer_of_int32(i_21))
-     and eq_int(integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
-                                  shift(s_26, integer_of_int32(i_21)))),
-         (0))) ->
+     and (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
+                            shift(s_26, integer_of_int32(i_21)))) = (0))) ->
      (le_int((0), wcslen(s_26, unsigned_shortP_unsigned_shortM_s_17_13_at_L))
      and le_int(wcslen(s_26, unsigned_shortP_unsigned_shortM_s_17_13_at_L),
          integer_of_int32(i_21)))))))
@@ -2702,9 +2663,8 @@ axiom wcslen_create_shift :
     (forall k_2:int32.
      ((le_int((0), integer_of_int32(k_2))
       and (le_int(integer_of_int32(k_2), integer_of_int32(i_22))
-          and eq_int(integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
-                                       shift(s_27, integer_of_int32(i_22)))),
-              (0)))) ->
+          and (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_13_at_L,
+                                 shift(s_27, integer_of_int32(i_22)))) = (0)))) ->
       (le_int((0),
        wcslen(shift(s_27, integer_of_int32(k_2)),
        unsigned_shortP_unsigned_shortM_s_17_13_at_L))
@@ -2719,21 +2679,19 @@ axiom wcscmp_zero :
    (unsigned_shortP, uint16) memory.
    (forall s1_12:unsigned_shortP pointer.
     (forall s2_12:unsigned_shortP pointer.
-     (eq_int(wcscmp(s1_12, s2_12,
-             unsigned_shortP_unsigned_shortM_s2_11_15_at_L,
-             unsigned_shortP_unsigned_shortM_s1_11_14_at_L),
-      (0))
-     <-> (eq_int(wcslen(s1_12, unsigned_shortP_unsigned_shortM_s1_11_14_at_L),
+     ((wcscmp(s1_12, s2_12, unsigned_shortP_unsigned_shortM_s2_11_15_at_L,
+       unsigned_shortP_unsigned_shortM_s1_11_14_at_L) = (0))
+     <-> ((wcslen(s1_12, unsigned_shortP_unsigned_shortM_s1_11_14_at_L) = 
           wcslen(s2_12, unsigned_shortP_unsigned_shortM_s2_11_15_at_L))
          and (forall i_23:int.
               ((le_int((0), i_23)
                and le_int(i_23,
                    wcslen(s1_12,
                    unsigned_shortP_unsigned_shortM_s1_11_14_at_L))) ->
-               eq_int(integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s1_11_14_at_L,
-                                        shift(s1_12, i_23))),
-               integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s2_11_15_at_L,
-                                 shift(s2_12, i_23))))))))))))
+               (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s1_11_14_at_L,
+                                  shift(s1_12, i_23))) = integer_of_uint16(
+                                                         select(unsigned_shortP_unsigned_shortM_s2_11_15_at_L,
+                                                         shift(s2_12, i_23))))))))))))
 
 axiom wcsncmp_zero :
  (forall unsigned_shortP_unsigned_shortM_s2_13_17_at_L:
@@ -2743,95 +2701,29 @@ axiom wcsncmp_zero :
    (forall s1_14:unsigned_shortP pointer.
     (forall s2_14:unsigned_shortP pointer.
      (forall n_13:int.
-      (eq_int(wcsncmp(s1_14, s2_14, n_13,
-              unsigned_shortP_unsigned_shortM_s2_13_17_at_L,
-              unsigned_shortP_unsigned_shortM_s1_13_16_at_L),
-       (0))
+      ((wcsncmp(s1_14, s2_14, n_13,
+        unsigned_shortP_unsigned_shortM_s2_13_17_at_L,
+        unsigned_shortP_unsigned_shortM_s1_13_16_at_L) = (0))
       <-> ((lt_int(wcslen(s1_14,
                    unsigned_shortP_unsigned_shortM_s1_13_16_at_L),
             n_13)
-           and eq_int(wcscmp(s1_14, s2_14,
-                      unsigned_shortP_unsigned_shortM_s2_13_17_at_L,
-                      unsigned_shortP_unsigned_shortM_s1_13_16_at_L),
-               (0)))
+           and (wcscmp(s1_14, s2_14,
+                unsigned_shortP_unsigned_shortM_s2_13_17_at_L,
+                unsigned_shortP_unsigned_shortM_s1_13_16_at_L) = (0)))
           or (forall i_24:int.
               ((le_int((0), i_24) and lt_int(i_24, n_13)) ->
-               eq_int(integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s1_13_16_at_L,
-                                        shift(s1_14, i_24))),
-               integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s2_13_17_at_L,
-                                 shift(s2_14, i_24)))))))))))))
+               (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s1_13_16_at_L,
+                                  shift(s1_14, i_24))) = integer_of_uint16(
+                                                         select(unsigned_shortP_unsigned_shortM_s2_13_17_at_L,
+                                                         shift(s2_14, i_24)))))))))))))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto__LOR_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_unsigned_shortP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_unsigned_shortP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_unsigned_shortP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_unsigned_shortP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -3177,7 +3069,7 @@ parameter div0_unsafe_requires :
  x_1:int32 ->
   y_1:int32 ->
    { (JC_<somenum>:
-     ((JC_<somenum>: neq_int(integer_of_int32(y_1), (0)))
+     ((JC_<somenum>: (integer_of_int32(y_1) <> (0)))
      and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
          and (JC_<somenum>: valid_a(intP_a_2_alloc_table)))))}
    int32 reads charP___string_abc_1_alloc_table,intP_a_2_alloc_table
@@ -3250,7 +3142,7 @@ parameter initialization_unsafe :
 parameter initialization_unsafe_requires :
  i_3:int32 ->
   { (JC_<somenum>:
-    ((JC_<somenum>: neq_int(integer_of_int32(i_3), (0)))
+    ((JC_<somenum>: (integer_of_int32(i_3) <> (0)))
     and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
         and (JC_<somenum>: valid_a(intP_a_2_alloc_table)))))}
   int32 reads charP___string_abc_1_alloc_table,intP_a_2_alloc_table
@@ -3368,7 +3260,7 @@ parameter mod0_unsafe_requires :
  x_8:int32 ->
   y_5:int32 ->
    { (JC_<somenum>:
-     ((JC_<somenum>: neq_int(integer_of_int32(y_5), (0)))
+     ((JC_<somenum>: (integer_of_int32(y_5) <> (0)))
      and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
          and (JC_<somenum>: valid_a(intP_a_2_alloc_table)))))}
    int32 reads charP___string_abc_1_alloc_table,intP_a_2_alloc_table
@@ -3442,32 +3334,28 @@ parameter multiple_update_safe_requires :
 parameter multiple_update_unsafe :
  x_11:intP pointer ->
   y_8:intP pointer ->
-   intP_intM_y_8_28:(intP, int32) memory ref ->
-    intP_intM_x_11_27:(intP, int32) memory ref ->
-     intP_y_8_28_alloc_table:intP alloc_table ->
-      intP_x_11_27_alloc_table:intP alloc_table ->
-       { } int32 reads charP___string_abc_1_alloc_table,intP_a_2_alloc_table
-       writes intP_intM_x_11_27,intP_intM_y_8_28
-       { (JC_<somenum>:
-         ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
-         and (JC_<somenum>: valid_a(intP_a_2_alloc_table)))) }
+   intP_intM_x_11_27:(intP, int32) memory ref ->
+    intP_x_11_27_alloc_table:intP alloc_table ->
+     { } int32 reads charP___string_abc_1_alloc_table,intP_a_2_alloc_table
+     writes intP_intM_x_11_27
+     { (JC_<somenum>:
+       ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
+       and (JC_<somenum>: valid_a(intP_a_2_alloc_table)))) }
 
 parameter multiple_update_unsafe_requires :
  x_11:intP pointer ->
   y_8:intP pointer ->
-   intP_intM_y_8_28:(intP, int32) memory ref ->
-    intP_intM_x_11_27:(intP, int32) memory ref ->
-     intP_y_8_28_alloc_table:intP alloc_table ->
-      intP_x_11_27_alloc_table:intP alloc_table ->
-       { (JC_<somenum>:
-         ((JC_<somenum>: (x_11 <> y_8))
-         and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
-             and (JC_<somenum>: valid_a(intP_a_2_alloc_table)))))}
-       int32 reads charP___string_abc_1_alloc_table,intP_a_2_alloc_table
-       writes intP_intM_x_11_27,intP_intM_y_8_28
-       { (JC_<somenum>:
-         ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
-         and (JC_<somenum>: valid_a(intP_a_2_alloc_table)))) }
+   intP_intM_x_11_27:(intP, int32) memory ref ->
+    intP_x_11_27_alloc_table:intP alloc_table ->
+     { (JC_<somenum>:
+       ((JC_<somenum>: (x_11 <> y_8))
+       and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
+           and (JC_<somenum>: valid_a(intP_a_2_alloc_table)))))}
+     int32 reads charP___string_abc_1_alloc_table,intP_a_2_alloc_table
+     writes intP_intM_x_11_27
+     { (JC_<somenum>:
+       ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
+       and (JC_<somenum>: valid_a(intP_a_2_alloc_table)))) }
 
 parameter multiple_update_wrong_1 :
  x_12:intP pointer ->
@@ -4136,7 +4024,7 @@ parameter udiv0_unsafe_requires :
  x_39:uint32 ->
   y_27:uint32 ->
    { (JC_<somenum>:
-     ((JC_<somenum>: neq_int(integer_of_uint32(y_27), (0)))
+     ((JC_<somenum>: (integer_of_uint32(y_27) <> (0)))
      and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
          and (JC_<somenum>: valid_a(intP_a_2_alloc_table)))))}
    uint32 reads charP___string_abc_1_alloc_table,intP_a_2_alloc_table
@@ -4205,27 +4093,23 @@ let array_bounds_safe_ensures_default =
    begin
      (let __retres_38 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((lt_int_ (integer_of_uint32 i)) (2))
         then
-         (let jessie_<somenum> =
          (C_251:
          begin
            (let jessie_<somenum> =
            (__retres_38 := (C_250:
                            ((safe_acc_ !intP_intM_a_2) ((shift a) (integer_of_uint32 i))))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_249:
          begin
            (let jessie_<somenum> =
            (__retres_38 := (C_248:
                            ((safe_acc_ !intP_intM_a_2) ((shift a) (0))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_38); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -4240,11 +4124,9 @@ let array_bounds_safe_safety =
    begin
      (let __retres_38 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((lt_int_ (integer_of_uint32 i)) (2))
         then
-         (let jessie_<somenum> =
          (C_251:
          begin
            (let jessie_<somenum> =
@@ -4252,17 +4134,15 @@ let array_bounds_safe_safety =
                            (JC_<somenum>:
                            ((((offset_acc_ !intP_a_2_alloc_table) !intP_intM_a_2) a) 
                             (integer_of_uint32 i))))) in void);
-          (raise (Return_label_exc void)) end) in void)
+          (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_249:
          begin
            (let jessie_<somenum> =
            (__retres_38 := (C_248:
                            ((safe_acc_ !intP_intM_a_2) ((shift a) (0))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_38); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -4482,17 +4362,14 @@ let div0_safe_ensures_default =
    begin
      (let __retres_2 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((eq_int_ (integer_of_int32 y)) (0))
         then
-         (let jessie_<somenum> =
          (C_18:
          begin
            (let jessie_<somenum> = (__retres_2 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_17:
          begin
            (let jessie_<somenum> =
@@ -4501,9 +4378,8 @@ let div0_safe_ensures_default =
                                                   (JC_<somenum>:
                                                   ((computer_div (integer_of_int32 x_0)) 
                                                    (integer_of_int32 y))))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_2); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -4518,17 +4394,14 @@ let div0_safe_pos_ensures_default =
    begin
      (let __retres_3 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((le_int_ (integer_of_int32 y_0)) (0))
         then
-         (let jessie_<somenum> =
          (C_24:
          begin
            (let jessie_<somenum> = (__retres_3 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_23:
          begin
            (let jessie_<somenum> =
@@ -4537,9 +4410,8 @@ let div0_safe_pos_ensures_default =
                                                   (JC_<somenum>:
                                                   ((computer_div (integer_of_int32 x_0_0)) 
                                                    (integer_of_int32 y_0))))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_3); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -4554,17 +4426,14 @@ let div0_safe_pos_safety =
    begin
      (let __retres_3 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((le_int_ (integer_of_int32 y_0)) (0))
         then
-         (let jessie_<somenum> =
          (C_24:
          begin
            (let jessie_<somenum> = (__retres_3 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_23:
          begin
            (let jessie_<somenum> =
@@ -4574,9 +4443,8 @@ let div0_safe_pos_safety =
                                              (JC_<somenum>:
                                              ((computer_div_ (integer_of_int32 x_0_0)) 
                                               (integer_of_int32 y_0)))))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_3); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -4594,17 +4462,14 @@ let div0_safe_safety =
    begin
      (let __retres_2 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((eq_int_ (integer_of_int32 y)) (0))
         then
-         (let jessie_<somenum> =
          (C_18:
          begin
            (let jessie_<somenum> = (__retres_2 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_17:
          begin
            (let jessie_<somenum> =
@@ -4614,9 +4479,8 @@ let div0_safe_safety =
                                              (JC_<somenum>:
                                              ((computer_div_ (integer_of_int32 x_0)) 
                                               (integer_of_int32 y)))))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_2); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -4626,7 +4490,7 @@ let div0_safe_safety =
 let div0_unsafe_ensures_default =
  fun (x_1 : int32) (y_1 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: neq_int(integer_of_int32(y_1), (0)))
+    ((JC_<somenum>: (integer_of_int32(y_1) <> (0)))
     and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
         and (JC_<somenum>: valid_a(intP_a_2_alloc_table))))) }
   (init:
@@ -4696,7 +4560,7 @@ let div0_unsafe_pos_safety =
 let div0_unsafe_safety =
  fun (x_1 : int32) (y_1 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: neq_int(integer_of_int32(y_1), (0)))
+    ((JC_<somenum>: (integer_of_int32(y_1) <> (0)))
     and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
         and (JC_<somenum>: valid_a(intP_a_2_alloc_table))))) }
   (init:
@@ -4809,7 +4673,7 @@ let initialization_safe_safety =
 let initialization_unsafe_ensures_default =
  fun (i_3 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: neq_int(integer_of_int32(i_3), (0)))
+    ((JC_<somenum>: (integer_of_int32(i_3) <> (0)))
     and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
         and (JC_<somenum>: valid_a(intP_a_2_alloc_table))))) }
   (init:
@@ -4827,7 +4691,7 @@ let initialization_unsafe_ensures_default =
 let initialization_unsafe_safety =
  fun (i_3 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: neq_int(integer_of_int32(i_3), (0)))
+    ((JC_<somenum>: (integer_of_int32(i_3) <> (0)))
     and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
         and (JC_<somenum>: valid_a(intP_a_2_alloc_table))))) }
   (init:
@@ -4885,23 +4749,19 @@ let missing_return_safe_ensures_default =
    begin
      (let __retres_44 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((lt_int_ (integer_of_int32 x_4)) (0))
         then
-         (let jessie_<somenum> =
          (C_291:
          begin
            (let jessie_<somenum> = (__retres_44 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_290:
          begin
            (let jessie_<somenum> = (__retres_44 := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_44); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -4916,23 +4776,19 @@ let missing_return_safe_safety =
    begin
      (let __retres_44 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((lt_int_ (integer_of_int32 x_4)) (0))
         then
-         (let jessie_<somenum> =
          (C_291:
          begin
            (let jessie_<somenum> = (__retres_44 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_290:
          begin
            (let jessie_<somenum> = (__retres_44 := (safe_int32_of_integer_ (1))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_44); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -4951,18 +4807,16 @@ let missing_return_unsafe_ensures_default =
    begin
      (let __retres_43 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_287:
       begin
         (if ((lt_int_ (integer_of_int32 x_5)) (0))
         then
-         (let jessie_<somenum> =
          (C_286:
          begin
            (let jessie_<somenum> = (__retres_43 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void) else void);
+           void); (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> = (__retres_43 := (safe_int32_of_integer_ (0))) in
-       void); (raise (Return_label_exc void)) end) in void) with
+       void); (raise (Return_label_exc void)) end) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_43); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
@@ -4979,18 +4833,16 @@ let missing_return_unsafe_safety =
    begin
      (let __retres_43 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_287:
       begin
         (if ((lt_int_ (integer_of_int32 x_5)) (0))
         then
-         (let jessie_<somenum> =
          (C_286:
          begin
            (let jessie_<somenum> = (__retres_43 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void) else void);
+           void); (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> = (__retres_43 := (safe_int32_of_integer_ (0))) in
-       void); (raise (Return_label_exc void)) end) in void) with
+       void); (raise (Return_label_exc void)) end) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_43); (raise Return) end) end);
     absurd  end with Return -> !return end))
@@ -5044,17 +4896,14 @@ let mod0_safe_ensures_default =
    begin
      (let __retres_9 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((eq_int_ (integer_of_int32 y_4)) (0))
         then
-         (let jessie_<somenum> =
          (C_54:
          begin
            (let jessie_<somenum> = (__retres_9 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_53:
          begin
            (let jessie_<somenum> =
@@ -5063,9 +4912,8 @@ let mod0_safe_ensures_default =
                                                   (JC_<somenum>:
                                                   ((computer_mod (integer_of_int32 x_7)) 
                                                    (integer_of_int32 y_4))))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_9); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -5080,17 +4928,14 @@ let mod0_safe_safety =
    begin
      (let __retres_9 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((eq_int_ (integer_of_int32 y_4)) (0))
         then
-         (let jessie_<somenum> =
          (C_54:
          begin
            (let jessie_<somenum> = (__retres_9 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_53:
          begin
            (let jessie_<somenum> =
@@ -5100,9 +4945,8 @@ let mod0_safe_safety =
                                              (JC_<somenum>:
                                              ((computer_mod_ (integer_of_int32 x_7)) 
                                               (integer_of_int32 y_4)))))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_9); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -5112,7 +4956,7 @@ let mod0_safe_safety =
 let mod0_unsafe_ensures_default =
  fun (x_8 : int32) (y_5 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: neq_int(integer_of_int32(y_5), (0)))
+    ((JC_<somenum>: (integer_of_int32(y_5) <> (0)))
     and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
         and (JC_<somenum>: valid_a(intP_a_2_alloc_table))))) }
   (init:
@@ -5134,7 +4978,7 @@ let mod0_unsafe_ensures_default =
 let mod0_unsafe_safety =
  fun (x_8 : int32) (y_5 : int32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: neq_int(integer_of_int32(y_5), (0)))
+    ((JC_<somenum>: (integer_of_int32(y_5) <> (0)))
     and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
         and (JC_<somenum>: valid_a(intP_a_2_alloc_table))))) }
   (init:
@@ -5261,17 +5105,14 @@ let multiple_update_safe_ensures_default =
      (let tmp_0_4 = ref (any_int32 void) in
      (let __retres_47 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((safe_eq_pointer x_10) y_7)
         then
-         (let jessie_<somenum> =
          (C_338:
          begin
            (let jessie_<somenum> = (__retres_47 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_337:
          begin
            (let jessie_<somenum> =
@@ -5297,9 +5138,8 @@ let multiple_update_safe_ensures_default =
                           (safe_int32_of_integer_ (C_335:
                                                   ((add_int (integer_of_int32 !tmp_0_3)) 
                                                    (integer_of_int32 !tmp_0_4)))))) in
-          void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+          void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_47); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -5316,17 +5156,14 @@ let multiple_update_safe_safety =
      (let tmp_0_4 = ref (any_int32 void) in
      (let __retres_47 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((eq_pointer x_10) y_7)
         then
-         (let jessie_<somenum> =
          (C_338:
          begin
            (let jessie_<somenum> = (__retres_47 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_337:
          begin
            (let jessie_<somenum> =
@@ -5355,9 +5192,8 @@ let multiple_update_safe_safety =
                           (int32_of_integer_ (C_335:
                                              ((add_int (integer_of_int32 !tmp_0_3)) 
                                               (integer_of_int32 !tmp_0_4))))))) in
-          void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+          void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_47); (raise Return) end) end)));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -5365,7 +5201,7 @@ let multiple_update_safe_safety =
     and (JC_<somenum>: valid_a(intP_a_2_alloc_table)))) }
 
 let multiple_update_unsafe_ensures_default =
- fun (x_11 : intP pointer) (y_8 : intP pointer) (intP_intM_x_11_27 : (intP, int32) memory ref) (intP_intM_y_8_28 : (intP, int32) memory ref) (intP_x_11_27_alloc_table : intP alloc_table) (intP_y_8_28_alloc_table : intP alloc_table) ->
+ fun (x_11 : intP pointer) (y_8 : intP pointer) (intP_intM_x_11_27 : (intP, int32) memory ref) (intP_x_11_27_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
     ((JC_<somenum>: (x_11 <> y_8))
     and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
@@ -5393,8 +5229,8 @@ let multiple_update_unsafe_ensures_default =
         (let jessie_<somenum> = !tmp_0_2 in
         begin
           (let jessie_<somenum> = y_8 in
-          (((safe_upd_ intP_intM_y_8_28) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum>
-        end)) end))) in void);
+          (((safe_upd_ intP_intM_x_11_27) jessie_<somenum>) jessie_<somenum>));
+         jessie_<somenum> end)) end))) in void);
       (let jessie_<somenum> =
       (__retres_46 := (C_325:
                       (safe_int32_of_integer_ (C_324:
@@ -5404,7 +5240,7 @@ let multiple_update_unsafe_ensures_default =
    with Return -> !return end)) { (JC_<somenum>: true) }
 
 let multiple_update_unsafe_safety =
- fun (x_11 : intP pointer) (y_8 : intP pointer) (intP_intM_x_11_27 : (intP, int32) memory ref) (intP_intM_y_8_28 : (intP, int32) memory ref) (intP_x_11_27_alloc_table : intP alloc_table) (intP_y_8_28_alloc_table : intP alloc_table) ->
+ fun (x_11 : intP pointer) (y_8 : intP pointer) (intP_intM_x_11_27 : (intP, int32) memory ref) (intP_x_11_27_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
     ((JC_<somenum>: (x_11 <> y_8))
     and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
@@ -5434,7 +5270,7 @@ let multiple_update_unsafe_safety =
         begin
           (let jessie_<somenum> = y_8 in
           (JC_<somenum>:
-          ((((upd_ intP_y_8_28_alloc_table) intP_intM_y_8_28) jessie_<somenum>) jessie_<somenum>)));
+          ((((upd_ intP_x_11_27_alloc_table) intP_intM_x_11_27) jessie_<somenum>) jessie_<somenum>)));
          jessie_<somenum> end)) end))) in void);
       (let jessie_<somenum> =
       (__retres_46 := (C_325:
@@ -5669,24 +5505,20 @@ let null_ptr_safe_ensures_default =
    begin
      (let __retres_27 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((safe_eq_pointer x_13) null)
         then
-         (let jessie_<somenum> =
          (C_169:
          begin
            (let jessie_<somenum> = (__retres_27 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_168:
          begin
            (let jessie_<somenum> =
            (__retres_27 := (C_167: ((safe_acc_ intP_intM_x_13_20) x_13))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_27); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -5705,26 +5537,22 @@ let null_ptr_safe_safety =
    begin
      (let __retres_27 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((eq_pointer x_13) null)
         then
-         (let jessie_<somenum> =
          (C_169:
          begin
            (let jessie_<somenum> = (__retres_27 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_168:
          begin
            (let jessie_<somenum> =
            (__retres_27 := (C_167:
                            (JC_<somenum>:
                            (((acc_ intP_x_13_20_alloc_table) intP_intM_x_13_20) x_13)))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_27); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -5833,11 +5661,9 @@ let oob_pointer_safe_ensures_default =
      (let i_8_0 = ref (any_pointer void) in
      (let __retres_35 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((lt_int_ (integer_of_uint32 x_16)) (2))
         then
-         (let jessie_<somenum> =
          (C_235:
          (C_237:
          begin
@@ -5845,15 +5671,13 @@ let oob_pointer_safe_ensures_default =
            (i_8_0 := (C_234: ((shift a) (integer_of_uint32 x_16)))) in void);
           (let jessie_<somenum> =
           (__retres_35 := (C_236: ((safe_acc_ !intP_intM_a_2) !i_8_0))) in
-          void); (raise (Return_label_exc void)) end)) in void)
+          void); (raise (Return_label_exc void)) end))
         else
-         (let jessie_<somenum> =
          (C_233:
          begin
            (let jessie_<somenum> = (__retres_35 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_35); (raise Return) end) end));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -5869,11 +5693,9 @@ let oob_pointer_safe_safety =
      (let i_8_0 = ref (any_pointer void) in
      (let __retres_35 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((lt_int_ (integer_of_uint32 x_16)) (2))
         then
-         (let jessie_<somenum> =
          (C_235:
          (C_237:
          begin
@@ -5883,15 +5705,13 @@ let oob_pointer_safe_safety =
           (__retres_35 := (C_236:
                           (JC_<somenum>:
                           (((acc_ !intP_a_2_alloc_table) !intP_intM_a_2) !i_8_0)))) in
-          void); (raise (Return_label_exc void)) end)) in void)
+          void); (raise (Return_label_exc void)) end))
         else
-         (let jessie_<somenum> =
          (C_233:
          begin
            (let jessie_<somenum> = (__retres_35 := (safe_int32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_35); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -6311,21 +6131,19 @@ let shift_left_signed_safe_ensures_default =
    begin
      (let __retres_14 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         try
-         (let jessie_<somenum> =
          begin
            (if ((lt_int_ (integer_of_int32 x_20)) (0))
-           then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+           then (raise (Goto__LOR_exc void))
            else
             (if ((lt_int_ (integer_of_int32 y_11)) (0))
-            then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+            then (raise (Goto__LOR_exc void))
             else
              (if ((ge_int_ (integer_of_uint32 (C_92:
                                               (safe_uint32_of_integer_ 
                                                (integer_of_int32 y_11))))) (32))
-             then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+             then (raise (Goto__LOR_exc void))
              else
               begin
                 (assert { (JC_<somenum>: lt_int(integer_of_int32(y_11), (32))) };
@@ -6338,9 +6156,8 @@ let shift_left_signed_safe_ensures_default =
                                                         (C_90:
                                                         ((asr (2147483647)) 
                                                          (integer_of_int32 y_11)))))))
-               then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+               then (raise (Goto__LOR_exc void))
                else
-                (let jessie_<somenum> =
                 begin
                   (let jessie_<somenum> =
                   (C_89:
@@ -6360,21 +6177,17 @@ let shift_left_signed_safe_ensures_default =
                                                            ((lsl (integer_of_int32 x_20)) 
                                                             (integer_of_int32 y_11))))));
                    !__retres_14 end) in void);
-                 (raise (Return_label_exc void)) end in void)) end)));
-          (raise (Goto__LOR_exc void)) end in void) with
-         Goto__LOR_exc jessie_<somenum> ->
+                 (raise (Return_label_exc void)) end) end)));
+          (raise (Goto__LOR_exc void)) end with Goto__LOR_exc jessie_<somenum> ->
          (let jessie_<somenum> =
          (_LOR:
+         (C_93:
          (C_94:
          begin
-           (let jessie_<somenum> =
-           (C_93:
-           begin
-             (let jessie_<somenum> =
-             (__retres_14 := (safe_int32_of_integer_ (0))) in void);
-            (raise (Return_label_exc void)) end) in void);
-          (__retres_14 := (safe_int32_of_integer_ (0))); !__retres_14 end)) in
-         void) end; (raise (Return_label_exc void)) end in void) with
+           (let jessie_<somenum> = (__retres_14 := (safe_int32_of_integer_ (0))) in
+           void); (raise (Return_label_exc void));
+          (__retres_14 := (safe_int32_of_integer_ (0))); !__retres_14 end))) in
+         void) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_14); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
@@ -6390,21 +6203,19 @@ let shift_left_signed_safe_safety =
    begin
      (let __retres_14 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         try
-         (let jessie_<somenum> =
          begin
            (if ((lt_int_ (integer_of_int32 x_20)) (0))
-           then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+           then (raise (Goto__LOR_exc void))
            else
             (if ((lt_int_ (integer_of_int32 y_11)) (0))
-            then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+            then (raise (Goto__LOR_exc void))
             else
              (if ((ge_int_ (integer_of_uint32 (C_92:
                                               (JC_<somenum>:
                                               (uint32_of_integer_ (integer_of_int32 y_11)))))) (32))
-             then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+             then (raise (Goto__LOR_exc void))
              else
               begin
                 [ { } unit { (JC_<somenum>: lt_int(integer_of_int32(y_11), (32))) } ];
@@ -6416,9 +6227,8 @@ let shift_left_signed_safe_safety =
                                                         (C_90:
                                                         ((asr (2147483647)) 
                                                          (integer_of_int32 y_11))))))))
-               then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+               then (raise (Goto__LOR_exc void))
                else
-                (let jessie_<somenum> =
                 begin
                   (let jessie_<somenum> =
                   (C_89:
@@ -6439,21 +6249,17 @@ let shift_left_signed_safe_safety =
                                                       ((lsl (integer_of_int32 x_20)) 
                                                        (integer_of_int32 y_11)))))));
                    !__retres_14 end) in void);
-                 (raise (Return_label_exc void)) end in void)) end)));
-          (raise (Goto__LOR_exc void)) end in void) with
-         Goto__LOR_exc jessie_<somenum> ->
+                 (raise (Return_label_exc void)) end) end)));
+          (raise (Goto__LOR_exc void)) end with Goto__LOR_exc jessie_<somenum> ->
          (let jessie_<somenum> =
          (_LOR:
+         (C_93:
          (C_94:
          begin
-           (let jessie_<somenum> =
-           (C_93:
-           begin
-             (let jessie_<somenum> =
-             (__retres_14 := (safe_int32_of_integer_ (0))) in void);
-            (raise (Return_label_exc void)) end) in void);
-          (__retres_14 := (safe_int32_of_integer_ (0))); !__retres_14 end)) in
-         void) end; (raise (Return_label_exc void)) end in void) with
+           (let jessie_<somenum> = (__retres_14 := (safe_int32_of_integer_ (0))) in
+           void); (raise (Return_label_exc void));
+          (__retres_14 := (safe_int32_of_integer_ (0))); !__retres_14 end))) in
+         void) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_14); (raise Return) end) end);
     absurd  end with Return -> !return end))
@@ -6676,18 +6482,15 @@ let shift_left_unsigned_safe_ensures_default =
    begin
      (let __retres_17 = ref (any_uint32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((ge_int_ (integer_of_uint32 y_16)) (32))
         then
-         (let jessie_<somenum> =
          (C_111:
          begin
            (let jessie_<somenum> =
            (__retres_17 := (safe_uint32_of_integer_ (0))) in void);
-          (raise (Return_label_exc void)) end) in void)
+          (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          begin
            (let jessie_<somenum> =
            (C_110:
@@ -6698,9 +6501,8 @@ let shift_left_unsigned_safe_ensures_default =
                             (safe_uint32_of_integer_ (C_108:
                                                      ((lsl (integer_of_uint32 x_25)) 
                                                       (integer_of_uint32 y_16))))));
-            !__retres_17 end) in void); (raise (Return_label_exc void)) end in
-         void)); (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+            !__retres_17 end) in void); (raise (Return_label_exc void)) end);
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_17); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -6715,18 +6517,15 @@ let shift_left_unsigned_safe_safety =
    begin
      (let __retres_17 = ref (any_uint32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((ge_int_ (integer_of_uint32 y_16)) (32))
         then
-         (let jessie_<somenum> =
          (C_111:
          begin
            (let jessie_<somenum> =
            (__retres_17 := (safe_uint32_of_integer_ (0))) in void);
-          (raise (Return_label_exc void)) end) in void)
+          (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          begin
            (let jessie_<somenum> =
            (C_110:
@@ -6737,9 +6536,8 @@ let shift_left_unsigned_safe_safety =
                             (uint32_of_integer_ (C_108:
                                                 ((lsl (integer_of_uint32 x_25)) 
                                                  (integer_of_uint32 y_16)))))));
-            !__retres_17 end) in void); (raise (Return_label_exc void)) end in
-         void)); (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+            !__retres_17 end) in void); (raise (Return_label_exc void)) end);
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_17); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -6851,20 +6649,17 @@ let shift_right_signed_safe_ensures_default =
    begin
      (let __retres_21 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         try
-         (let jessie_<somenum> =
          begin
            (if ((lt_int_ (integer_of_int32 y_19)) (0))
-           then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+           then (raise (Goto__LOR_exc void))
            else
             (if ((ge_int_ (integer_of_uint32 (C_135:
                                              (safe_uint32_of_integer_ 
                                               (integer_of_int32 y_19))))) (32))
-            then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+            then (raise (Goto__LOR_exc void))
             else
-             (let jessie_<somenum> =
              begin
                (let jessie_<somenum> =
                (C_134:
@@ -6878,20 +6673,17 @@ let shift_right_signed_safe_ensures_default =
                                                         ((asr (integer_of_int32 x_28)) 
                                                          (integer_of_int32 y_19))))));
                 !__retres_21 end) in void); (raise (Return_label_exc void))
-             end in void))); (raise (Goto__LOR_exc void)) end in void) with
+             end)); (raise (Goto__LOR_exc void)) end with
          Goto__LOR_exc jessie_<somenum> ->
          (let jessie_<somenum> =
          (_LOR:
+         (C_136:
          (C_137:
          begin
-           (let jessie_<somenum> =
-           (C_136:
-           begin
-             (let jessie_<somenum> =
-             (__retres_21 := (safe_int32_of_integer_ (0))) in void);
-            (raise (Return_label_exc void)) end) in void);
-          (__retres_21 := (safe_int32_of_integer_ (0))); !__retres_21 end)) in
-         void) end; (raise (Return_label_exc void)) end in void) with
+           (let jessie_<somenum> = (__retres_21 := (safe_int32_of_integer_ (0))) in
+           void); (raise (Return_label_exc void));
+          (__retres_21 := (safe_int32_of_integer_ (0))); !__retres_21 end))) in
+         void) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_21); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
@@ -6907,20 +6699,17 @@ let shift_right_signed_safe_safety =
    begin
      (let __retres_21 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         try
-         (let jessie_<somenum> =
          begin
            (if ((lt_int_ (integer_of_int32 y_19)) (0))
-           then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+           then (raise (Goto__LOR_exc void))
            else
             (if ((ge_int_ (integer_of_uint32 (C_135:
                                              (JC_<somenum>:
                                              (uint32_of_integer_ (integer_of_int32 y_19)))))) (32))
-            then (let jessie_<somenum> = (raise (Goto__LOR_exc void)) in void)
+            then (raise (Goto__LOR_exc void))
             else
-             (let jessie_<somenum> =
              begin
                (let jessie_<somenum> =
                (C_134:
@@ -6934,20 +6723,17 @@ let shift_right_signed_safe_safety =
                                                    ((asr (integer_of_int32 x_28)) 
                                                     (integer_of_int32 y_19)))))));
                 !__retres_21 end) in void); (raise (Return_label_exc void))
-             end in void))); (raise (Goto__LOR_exc void)) end in void) with
+             end)); (raise (Goto__LOR_exc void)) end with
          Goto__LOR_exc jessie_<somenum> ->
          (let jessie_<somenum> =
          (_LOR:
+         (C_136:
          (C_137:
          begin
-           (let jessie_<somenum> =
-           (C_136:
-           begin
-             (let jessie_<somenum> =
-             (__retres_21 := (safe_int32_of_integer_ (0))) in void);
-            (raise (Return_label_exc void)) end) in void);
-          (__retres_21 := (safe_int32_of_integer_ (0))); !__retres_21 end)) in
-         void) end; (raise (Return_label_exc void)) end in void) with
+           (let jessie_<somenum> = (__retres_21 := (safe_int32_of_integer_ (0))) in
+           void); (raise (Return_label_exc void));
+          (__retres_21 := (safe_int32_of_integer_ (0))); !__retres_21 end))) in
+         void) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_21); (raise Return) end) end);
     absurd  end with Return -> !return end))
@@ -7112,18 +6898,15 @@ let shift_right_unsigned_safe_ensures_default =
    begin
      (let __retres_24 = ref (any_uint32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((ge_int_ (integer_of_uint32 y_23)) (32))
         then
-         (let jessie_<somenum> =
          (C_154:
          begin
            (let jessie_<somenum> =
            (__retres_24 := (safe_uint32_of_integer_ (0))) in void);
-          (raise (Return_label_exc void)) end) in void)
+          (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          begin
            (let jessie_<somenum> =
            (C_153:
@@ -7134,9 +6917,8 @@ let shift_right_unsigned_safe_ensures_default =
                             (safe_uint32_of_integer_ (C_151:
                                                      ((lsr (integer_of_uint32 x_32)) 
                                                       (integer_of_uint32 y_23))))));
-            !__retres_24 end) in void); (raise (Return_label_exc void)) end in
-         void)); (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+            !__retres_24 end) in void); (raise (Return_label_exc void)) end);
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_24); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -7151,18 +6933,15 @@ let shift_right_unsigned_safe_safety =
    begin
      (let __retres_24 = ref (any_uint32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((ge_int_ (integer_of_uint32 y_23)) (32))
         then
-         (let jessie_<somenum> =
          (C_154:
          begin
            (let jessie_<somenum> =
            (__retres_24 := (safe_uint32_of_integer_ (0))) in void);
-          (raise (Return_label_exc void)) end) in void)
+          (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          begin
            (let jessie_<somenum> =
            (C_153:
@@ -7173,9 +6952,8 @@ let shift_right_unsigned_safe_safety =
                             (uint32_of_integer_ (C_151:
                                                 ((lsr (integer_of_uint32 x_32)) 
                                                  (integer_of_uint32 y_23)))))));
-            !__retres_24 end) in void); (raise (Return_label_exc void)) end in
-         void)); (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+            !__retres_24 end) in void); (raise (Return_label_exc void)) end);
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_24); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -7289,29 +7067,25 @@ let signed_overflow_safe_ensures_default =
    begin
      (let __retres_41 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((lt_int_ (integer_of_int32 x_35)) (0))
         then
-         (let jessie_<somenum> =
          (C_281:
          begin
            (let jessie_<somenum> =
            (__retres_41 := (C_280:
                            (safe_int32_of_integer_ (C_279:
                                                    ((add_int (integer_of_int32 x_35)) (2147483647)))))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_278:
          begin
            (let jessie_<somenum> =
            (__retres_41 := (C_277:
                            (safe_int32_of_integer_ (C_276:
                                                    ((sub_int (integer_of_int32 x_35)) (2147483647)))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_41); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -7326,11 +7100,9 @@ let signed_overflow_safe_safety =
    begin
      (let __retres_41 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((lt_int_ (integer_of_int32 x_35)) (0))
         then
-         (let jessie_<somenum> =
          (C_281:
          begin
            (let jessie_<somenum> =
@@ -7338,9 +7110,8 @@ let signed_overflow_safe_safety =
                            (JC_<somenum>:
                            (int32_of_integer_ (C_279:
                                               ((add_int (integer_of_int32 x_35)) (2147483647))))))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_278:
          begin
            (let jessie_<somenum> =
@@ -7348,9 +7119,8 @@ let signed_overflow_safe_safety =
                            (JC_<somenum>:
                            (int32_of_integer_ (C_276:
                                               ((sub_int (integer_of_int32 x_35)) (2147483647))))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_41); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -7412,20 +7182,17 @@ let signed_overflow_wrong_ensures_default =
    begin
      (let __retres_39 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((gt_int_ (integer_of_int32 x_37)) (0))
         then
-         (let jessie_<somenum> =
          (C_269:
          begin
            (let jessie_<somenum> =
            (__retres_39 := (C_268:
                            (safe_int32_of_integer_ (C_267:
                                                    ((add_int (integer_of_int32 x_37)) (2147483647)))))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_266:
          begin
            (let jessie_<somenum> =
@@ -7437,9 +7204,8 @@ let signed_overflow_wrong_ensures_default =
                                                                (C_262:
                                                                ((sub_int 
                                                                  (integer_of_int32 x_37)) (1))))))) (2147483647)))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_39); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -7454,11 +7220,9 @@ let signed_overflow_wrong_safety =
    begin
      (let __retres_39 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((gt_int_ (integer_of_int32 x_37)) (0))
         then
-         (let jessie_<somenum> =
          (C_269:
          begin
            (let jessie_<somenum> =
@@ -7466,9 +7230,8 @@ let signed_overflow_wrong_safety =
                            (JC_<somenum>:
                            (int32_of_integer_ (C_267:
                                               ((add_int (integer_of_int32 x_37)) (2147483647))))))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_266:
          begin
            (let jessie_<somenum> =
@@ -7481,9 +7244,8 @@ let signed_overflow_wrong_safety =
                                                          (int32_of_integer_ 
                                                           (C_262:
                                                           ((sub_int (integer_of_int32 x_37)) (1)))))))) (2147483647))))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_39); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -7560,17 +7322,14 @@ let udiv0_safe_ensures_default =
    begin
      (let __retres_6 = ref (any_uint32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((eq_int_ (integer_of_uint32 y_26)) (0))
         then
-         (let jessie_<somenum> =
          (C_39:
          begin
            (let jessie_<somenum> = (__retres_6 := (safe_uint32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_38:
          begin
            (let jessie_<somenum> =
@@ -7579,9 +7338,8 @@ let udiv0_safe_ensures_default =
                                                    (JC_<somenum>:
                                                    ((computer_div (integer_of_uint32 x_38)) 
                                                     (integer_of_uint32 y_26))))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_6); (raise Return) end) end);
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -7596,17 +7354,14 @@ let udiv0_safe_safety =
    begin
      (let __retres_6 = ref (any_uint32 void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((eq_int_ (integer_of_uint32 y_26)) (0))
         then
-         (let jessie_<somenum> =
          (C_39:
          begin
            (let jessie_<somenum> = (__retres_6 := (safe_uint32_of_integer_ (0))) in
-           void); (raise (Return_label_exc void)) end) in void)
+           void); (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_38:
          begin
            (let jessie_<somenum> =
@@ -7616,9 +7371,8 @@ let udiv0_safe_safety =
                                               (JC_<somenum>:
                                               ((computer_div_ (integer_of_uint32 x_38)) 
                                                (integer_of_uint32 y_26)))))))) in
-           void); (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+           void); (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_6); (raise Return) end) end);
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
@@ -7628,7 +7382,7 @@ let udiv0_safe_safety =
 let udiv0_unsafe_ensures_default =
  fun (x_39 : uint32) (y_27 : uint32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: neq_int(integer_of_uint32(y_27), (0)))
+    ((JC_<somenum>: (integer_of_uint32(y_27) <> (0)))
     and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
         and (JC_<somenum>: valid_a(intP_a_2_alloc_table))))) }
   (init:
@@ -7650,7 +7404,7 @@ let udiv0_unsafe_ensures_default =
 let udiv0_unsafe_safety =
  fun (x_39 : uint32) (y_27 : uint32) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: neq_int(integer_of_uint32(y_27), (0)))
+    ((JC_<somenum>: (integer_of_uint32(y_27) <> (0)))
     and ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
         and (JC_<somenum>: valid_a(intP_a_2_alloc_table))))) }
   (init:
@@ -7949,6 +7703,12 @@ text = "ArithOverflow"/>
   </function>
   <function name="Function shift_right_unsigned_wrong">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/undef_po180.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "260" begin = "9" end = "35"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/undef_po181.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "260" begin = "9" end = "35"/>
@@ -7966,15 +7726,15 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/undef_po180.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "260" begin = "9" end = "35"/>
-      <explain kind = "Assert"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function shift_right_unsigned_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/undef_po177.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "268" begin = "9" end = "15"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/undef_po178.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "268" begin = "9" end = "15"/>
@@ -7987,15 +7747,15 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/undef_po177.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "268" begin = "9" end = "15"/>
-      <explain kind = "Assert"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function shift_right_unsigned_safe">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/undef_po174.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "281" begin = "13" end = "19"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/undef_po175.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "281" begin = "13" end = "19"/>
@@ -8008,15 +7768,15 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/undef_po174.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "281" begin = "13" end = "19"/>
-      <explain kind = "Assert"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function shift_right_signed_wrong_2">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/undef_po170.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "227" begin = "9" end = "30"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/undef_po171.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "227" begin = "9" end = "30"/>
@@ -8034,15 +7794,15 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/undef_po170.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "227" begin = "9" end = "30"/>
-      <explain kind = "Assert"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function shift_right_signed_wrong_1">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/undef_po167.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "220" begin = "9" end = "16"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/undef_po168.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "220" begin = "9" end = "16"/>
@@ -8055,15 +7815,19 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/undef_po167.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "220" begin = "9" end = "16"/>
-      <explain kind = "Assert"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function shift_right_signed_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/undef_po163.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "235" begin = "9" end = "15"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/undef_po164.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "235" begin = "9" end = "15"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/undef_po165.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "235" begin = "9" end = "15"/>
@@ -8076,19 +7840,19 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/undef_po163.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "235" begin = "9" end = "15"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/undef_po164.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "235" begin = "9" end = "15"/>
-      <explain kind = "Assert"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function shift_right_signed_safe">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/undef_po157.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "248" begin = "13" end = "19"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/undef_po158.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "248" begin = "13" end = "19"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/undef_po159.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "242" begin = "18" end = "19"/>
@@ -8111,19 +7875,15 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/undef_po157.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "248" begin = "13" end = "19"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/undef_po158.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "248" begin = "13" end = "19"/>
-      <explain kind = "Assert"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function shift_left_unsigned_wrong">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/undef_po154.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "184" begin = "9" end = "35"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/undef_po155.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "184" begin = "9" end = "35"/>
@@ -8136,15 +7896,15 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/undef_po154.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "184" begin = "9" end = "35"/>
-      <explain kind = "Assert"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function shift_left_unsigned_unsafe">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/undef_po151.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "192" begin = "9" end = "15"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/undef_po152.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "192" begin = "9" end = "15"/>
@@ -8157,15 +7917,15 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/undef_po151.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "192" begin = "9" end = "15"/>
-      <explain kind = "Assert"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function shift_left_unsigned_safe">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/undef_po148.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "205" begin = "13" end = "19"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/undef_po149.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "205" begin = "13" end = "19"/>
@@ -8178,31 +7938,13 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/undef_po148.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "205" begin = "13" end = "19"/>
-      <explain kind = "Assert"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function shift_left_signed_wrong_3">
     <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
   <function name="Function shift_left_signed_wrong_2">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/undef_po146.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "141" begin = "9" end = "16"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/undef_po147.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "141" begin = "9" end = "16"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/undef_po143.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "141" begin = "9" end = "16"/>
       <explain kind = "Assert"/>
@@ -8216,22 +7958,22 @@ text = "ArithOverflow"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
-  </function>
-  <function name="Function shift_left_signed_wrong_1">
-    <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po141.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "134" begin = "9" end = "32"/>
+    <goal why_file="why/undef_po146.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "141" begin = "9" end = "16"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po142.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "134" begin = "9" end = "32"/>
+    <goal why_file="why/undef_po147.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "141" begin = "9" end = "16"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
+  </function>
+  <function name="Function shift_left_signed_wrong_1">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
     <goal why_file="why/undef_po138.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "134" begin = "9" end = "32"/>
       <explain kind = "Assert"/>
@@ -8245,22 +7987,22 @@ text = "ArithOverflow"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
-  </function>
-  <function name="Function shift_left_signed_unsafe">
-    <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/undef_po136.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "158" begin = "9" end = "15"/>
+    <goal why_file="why/undef_po141.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "134" begin = "9" end = "32"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/undef_po137.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "158" begin = "9" end = "15"/>
+    <goal why_file="why/undef_po142.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "134" begin = "9" end = "32"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
+  </function>
+  <function name="Function shift_left_signed_unsafe">
+    <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
     <goal why_file="why/undef_po132.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "158" begin = "9" end = "15"/>
       <explain kind = "Assert"/>
@@ -8278,9 +8020,39 @@ text = "ArithOverflow"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/undef_po136.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "158" begin = "9" end = "15"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/undef_po137.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "158" begin = "9" end = "15"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    </behavior>
   </function>
   <function name="Function shift_left_signed_safe">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/undef_po122.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "166" begin = "50" end = "65"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/undef_po123.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "166" begin = "50" end = "65"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/undef_po124.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "172" begin = "13" end = "19"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/undef_po125.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "172" begin = "13" end = "19"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/undef_po126.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "166" begin = "18" end = "19"/>
@@ -8313,24 +8085,6 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/undef_po122.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "166" begin = "50" end = "65"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/undef_po123.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "166" begin = "50" end = "65"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/undef_po124.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "172" begin = "13" end = "19"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/undef_po125.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "172" begin = "13" end = "19"/>
-      <explain kind = "Assert"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function ptr_sub_wrong">
     <location file = "" line = "0" begin = "0" end = "0"/>
@@ -8341,7 +8095,7 @@ text = "ArithOverflow"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po114.why">
-      <location file = "why/undef.why" line = "4798" begin = "17" end = "95"/>
+      <location file = "why/undef.why" line = "4618" begin = "17" end = "95"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po115.why">
@@ -8350,11 +8104,11 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po116.why">
-      <location file = "why/undef.why" line = "4807" begin = "14" end = "74"/>
+      <location file = "why/undef.why" line = "4627" begin = "14" end = "74"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po117.why">
-      <location file = "why/undef.why" line = "4815" begin = "42" end = "68"/>
+      <location file = "why/undef.why" line = "4635" begin = "42" end = "68"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8369,12 +8123,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/undef_po120.why">
-      <location file = "why/undef.why" line = "4816" begin = "14" end = "59"/>
+      <location file = "why/undef.why" line = "4636" begin = "14" end = "59"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/undef_po121.why">
-      <location file = "why/undef.why" line = "4817" begin = "7" end = "50"/>
+      <location file = "why/undef.why" line = "4637" begin = "7" end = "50"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8384,7 +8138,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po108.why">
-      <location file = "why/undef.why" line = "4715" begin = "51" end = "75"/>
+      <location file = "why/undef.why" line = "4535" begin = "51" end = "75"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8417,11 +8171,11 @@ text = "ArithOverflow"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po103.why">
-      <location file = "why/undef.why" line = "4651" begin = "19" end = "100"/>
+      <location file = "why/undef.why" line = "4471" begin = "19" end = "100"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po104.why">
-      <location file = "why/undef.why" line = "4659" begin = "42" end = "68"/>
+      <location file = "why/undef.why" line = "4479" begin = "42" end = "68"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8436,7 +8190,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/undef_po107.why">
-      <location file = "why/undef.why" line = "4660" begin = "14" end = "63"/>
+      <location file = "why/undef.why" line = "4480" begin = "14" end = "63"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8540,7 +8294,7 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po83.why">
-      <location file = "why/undef.why" line = "4231" begin = "13" end = "35"/>
+      <location file = "why/undef.why" line = "4062" begin = "13" end = "35"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8696,7 +8450,7 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po54.why">
-      <location file = "why/undef.why" line = "3842" begin = "13" end = "34"/>
+      <location file = "why/undef.why" line = "3681" begin = "13" end = "34"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8986,23 +8740,7 @@ text = "PointerDeref"/>
   </function>
   <function name="Function bad_local_pointer">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/undef_po13.why">
-      <location file = "PPCHOME/tests/jessie/undef.c" line = "322" begin = "6" end = "7"/>
-      <explain kind = "Pre"
-text = "AllocSize"/>
-    </goal>
-    <goal why_file="why/undef_po14.why">
-      <location file = "why/undef.why" line = "2935" begin = "18" end = "99"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/undef_po15.why">
-      <location file = "why/undef.why" line = "2938" begin = "7" end = "56"/>
-      <explain kind = "Pre"
-text = ""/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/undef_po11.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "318" begin = "12" end = "27"/>
       <explain kind = "Post"/>
@@ -9010,6 +8748,22 @@ text = ""/>
     <goal why_file="why/undef_po12.why">
       <location file = "PPCHOME/tests/jessie/undef.c" line = "318" begin = "12" end = "27"/>
       <explain kind = "Post"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/undef_po13.why">
+      <location file = "PPCHOME/tests/jessie/undef.c" line = "322" begin = "6" end = "7"/>
+      <explain kind = "Pre"
+text = "AllocSize"/>
+    </goal>
+    <goal why_file="why/undef_po14.why">
+      <location file = "why/undef.why" line = "2815" begin = "18" end = "99"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/undef_po15.why">
+      <location file = "why/undef.why" line = "2818" begin = "7" end = "56"/>
+      <explain kind = "Pre"
+text = ""/>
     </goal>
     </behavior>
   </function>
@@ -10076,6 +9830,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -10087,6 +9846,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -10688,6 +10451,11 @@ axiom uint16_coerce:
     (((0 <= x) and (x <= 65535)) ->
      (integer_of_uint16(uint16_of_integer(x)) = x)))
 
+axiom uint16_extensionality:
+  (forall x:uint16.
+    (forall y:uint16.
+      ((integer_of_uint16(x) = integer_of_uint16(y)) -> (x = y))))
+
 axiom uint16_range:
   (forall x:uint16.
     ((0 <= integer_of_uint16(x)) and (integer_of_uint16(x) <= 65535)))
@@ -10698,6 +10466,11 @@ axiom uint32_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 4294967295)) ->
      (integer_of_uint32(uint32_of_integer(x)) = x)))
+
+axiom uint32_extensionality:
+  (forall x:uint32.
+    (forall y:uint32.
+      ((integer_of_uint32(x) = integer_of_uint32(y)) -> (x = y))))
 
 axiom uint32_range:
   (forall x:uint32.
@@ -10726,26 +10499,6 @@ predicate valid___string_abc(charP___string_abc_1_alloc_table: charP alloc_table
 predicate valid_a(intP_a_2_alloc_table: intP alloc_table) =
   ((offset_min(intP_a_2_alloc_table, a) <= 0) and
    (offset_max(intP_a_2_alloc_table, a) >= 1))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_unsigned_shortP(p: unit pointer, a: int,
-  b: int, bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

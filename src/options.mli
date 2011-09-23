@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -130,7 +130,7 @@ type coq_version = V7 | V8 | V81
 type prover =
   | Coq of coq_version | Pvs | HolLight | Mizar | Harvey | Simplify | CVCLite
   | SmtLib | Isabelle | Hol4 | Gappa | Zenon | Z3 | Vampire
-  | Ergo | Why | MultiWhy | Why3 | Dispatcher | WhyProject
+  | Ergo | Why | MultiWhy | MultiAltergo | Why3 | Dispatcher | WhyProject
 
 val prover : (* ?ignore_gui:bool  -> *) unit -> prover
 
@@ -150,6 +150,7 @@ val simplify_triggers : bool
 val no_harvey_prelude : bool
 val no_zenon_prelude : bool
 val no_cvcl_prelude : bool
+val delete_old_vcs : bool
 
 val floats : bool
 val show_time : bool

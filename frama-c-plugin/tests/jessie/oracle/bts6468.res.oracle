@@ -116,16 +116,6 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Goto_while_1_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic __string__:  -> charP pointer
 
 logic charP_tag:  -> charP tag_id
@@ -161,6 +151,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -172,6 +167,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -225,16 +225,6 @@ predicate valid___string__(charP___string___1_alloc_table:charP alloc_table) =
  (le_int(offset_min(charP___string___1_alloc_table, __string__), (0))
  and ge_int(offset_max(charP___string___1_alloc_table, __string__), (1)))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -269,41 +259,15 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_1_break_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
+
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -508,10 +472,8 @@ let strcat_ensures_default =
      (let tmp_0 = ref (any_int8 void) in
      (let tmp_1 = ref (any_pointer void) in
      try
-      (let jessie_<somenum> =
       begin
         try
-         (let jessie_<somenum> =
          (C_1:
          begin
            (let jessie_<somenum> = (ret := !mutable_dest) in void);
@@ -521,21 +483,17 @@ let strcat_ensures_default =
            begin
              [ { } unit { true } ];
             try
-             (let jessie_<somenum> =
              begin
                (let jessie_<somenum> =
                (C_4:
                begin
                  (if ((neq_int_ (integer_of_int8 (C_2:
                                                  ((safe_acc_ !charP_charM_dest_2) !mutable_dest)))) (0))
-                 then void
-                 else
-                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                  void));
+                 then void else (raise (Goto_while_0_break_exc void)));
                 (mutable_dest := (C_3: ((shift !mutable_dest) (1))));
                 !mutable_dest end) in void); (raise (Loop_continue_exc void))
-             end in void) with Loop_continue_exc jessie_<somenum> -> void end end
-          done); (raise (Goto_while_0_break_exc void)) end) in void) with
+             end with Loop_continue_exc jessie_<somenum> -> void end end done);
+          (raise (Goto_while_0_break_exc void)) end) with
          Goto_while_0_break_exc jessie_<somenum> ->
          (while_0_break:
          begin
@@ -546,7 +504,6 @@ let strcat_ensures_default =
            begin
              [ { } unit { true } ];
             try
-             (let jessie_<somenum> =
              begin
                (let jessie_<somenum> =
                (C_5:
@@ -571,11 +528,10 @@ let strcat_ensures_default =
                   (((safe_upd_ charP_charM_dest_2) jessie_<somenum>) jessie_<somenum>));
                  jessie_<somenum> end)) end))))) in void);
               (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
-               void)); (raise (Loop_continue_exc void)) end in void) with
+              else (raise (Goto_while_1_break_exc void)));
+              (raise (Loop_continue_exc void)) end with
              Loop_continue_exc jessie_<somenum> -> void end end done) end) end;
-       (raise (Goto_while_1_break_exc void)) end in void) with
+       (raise (Goto_while_1_break_exc void)) end with
       Goto_while_1_break_exc jessie_<somenum> ->
       (while_1_break: begin   void; (return := !ret); (raise Return) end) end))));
     absurd  end with Return -> !return end)))) { (JC_<somenum>: true) }
@@ -594,10 +550,8 @@ let strcat_safety =
      (let tmp_0 = ref (any_int8 void) in
      (let tmp_1 = ref (any_pointer void) in
      try
-      (let jessie_<somenum> =
       begin
         try
-         (let jessie_<somenum> =
          (C_1:
          begin
            (let jessie_<somenum> = (ret := !mutable_dest) in void);
@@ -607,7 +561,6 @@ let strcat_safety =
            begin
              [ { } unit { true } ];
             try
-             (let jessie_<somenum> =
              begin
                (let jessie_<somenum> =
                (C_4:
@@ -615,14 +568,11 @@ let strcat_safety =
                  (if ((neq_int_ (integer_of_int8 (C_2:
                                                  (JC_<somenum>:
                                                  (((acc_ charP_dest_2_alloc_table) !charP_charM_dest_2) !mutable_dest))))) (0))
-                 then void
-                 else
-                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                  void));
+                 then void else (raise (Goto_while_0_break_exc void)));
                 (mutable_dest := (C_3: ((shift !mutable_dest) (1))));
                 !mutable_dest end) in void); (raise (Loop_continue_exc void))
-             end in void) with Loop_continue_exc jessie_<somenum> -> void end end
-          done); (raise (Goto_while_0_break_exc void)) end) in void) with
+             end with Loop_continue_exc jessie_<somenum> -> void end end done);
+          (raise (Goto_while_0_break_exc void)) end) with
          Goto_while_0_break_exc jessie_<somenum> ->
          (while_0_break:
          begin
@@ -633,7 +583,6 @@ let strcat_safety =
            begin
              [ { } unit { true } ];
             try
-             (let jessie_<somenum> =
              begin
                (let jessie_<somenum> =
                (C_5:
@@ -661,11 +610,10 @@ let strcat_safety =
                   ((((upd_ charP_dest_2_alloc_table) charP_charM_dest_2) jessie_<somenum>) jessie_<somenum>)));
                  jessie_<somenum> end)) end))))) in void);
               (if ((neq_int_ (integer_of_int8 !tmp_0)) (0)) then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_1_break_exc void)) in
-               void)); (raise (Loop_continue_exc void)) end in void) with
+              else (raise (Goto_while_1_break_exc void)));
+              (raise (Loop_continue_exc void)) end with
              Loop_continue_exc jessie_<somenum> -> void end end done) end) end;
-       (raise (Goto_while_1_break_exc void)) end in void) with
+       (raise (Goto_while_1_break_exc void)) end with
       Goto_while_1_break_exc jessie_<somenum> ->
       (while_1_break: begin   void; (return := !ret); (raise Return) end) end))));
     absurd  end with Return -> !return end))))
@@ -719,11 +667,11 @@ text = "PointerDeref"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts6468_po2.why">
-      <location file = "why/bts6468.why" line = "375" begin = "17" end = "76"/>
+      <location file = "why/bts6468.why" line = "339" begin = "17" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts6468_po3.why">
-      <location file = "why/bts6468.why" line = "387" begin = "7" end = "52"/>
+      <location file = "why/bts6468.why" line = "351" begin = "7" end = "52"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1707,6 +1655,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -1718,6 +1671,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -1770,16 +1727,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
 predicate valid___string__(charP___string___1_alloc_table: charP alloc_table) =
   ((offset_min(charP___string___1_alloc_table, __string__) <= 0) and
    (offset_max(charP___string___1_alloc_table, __string__) >= 1))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

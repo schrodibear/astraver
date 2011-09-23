@@ -1,18 +1,18 @@
-File "why/binary-search-hollas.why", line 686, characters 15-270:
+File "why/binary-search-hollas.why", line 602, characters 15-270:
 warning: mutable high is not declared in effect; added as read
-File "why/binary-search-hollas.why", line 686, characters 15-270:
+File "why/binary-search-hollas.why", line 602, characters 15-270:
 warning: mutable low is not declared in effect; added as read
-File "why/binary-search-hollas.why", line 686, characters 15-270:
+File "why/binary-search-hollas.why", line 602, characters 15-270:
 warning: mutable mid is not declared in effect; added as read
-File "why/binary-search-hollas.why", line 829, characters 15-270:
+File "why/binary-search-hollas.why", line 738, characters 15-270:
 warning: mutable high is not declared in effect; added as read
-File "why/binary-search-hollas.why", line 829, characters 15-270:
+File "why/binary-search-hollas.why", line 738, characters 15-270:
 warning: mutable low is not declared in effect; added as read
-File "why/binary-search-hollas.why", line 829, characters 15-270:
+File "why/binary-search-hollas.why", line 738, characters 15-270:
 warning: mutable mid is not declared in effect; added as read
-File "why/binary-search-hollas.why", line 976, characters 16-275:
+File "why/binary-search-hollas.why", line 877, characters 16-275:
 warning: mutable high is not declared in effect; added as read
-File "why/binary-search-hollas.why", line 976, characters 16-275:
+File "why/binary-search-hollas.why", line 877, characters 16-275:
 warning: mutable low is not declared in effect; added as read
-File "why/binary-search-hollas.why", line 976, characters 16-275:
+File "why/binary-search-hollas.why", line 877, characters 16-275:
 warning: mutable mid is not declared in effect; added as read

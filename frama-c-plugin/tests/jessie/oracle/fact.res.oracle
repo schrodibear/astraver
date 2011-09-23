@@ -67,12 +67,6 @@ type padding
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -144,16 +138,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -188,41 +172,11 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -276,11 +230,11 @@ parameter alloc_struct_voidP_requires :
           and (alloc_fresh(voidP_alloc_table@, result, n)
               and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
-parameter fact : n_0:int -> { } int { (JC_<somenum>: is_prod((1), n_0@, result)) }
+parameter fact : n_0:int -> { } int { (JC_<somenum>: is_prod((1), n_0, result)) }
 
 parameter fact_requires :
  n_0:int ->
-  { (JC_<somenum>: ge_int(n_0, (0)))} int { (JC_<somenum>: is_prod((1), n_0@, result)) }
+  { (JC_<somenum>: ge_int(n_0, (0)))} int { (JC_<somenum>: is_prod((1), n_0, result)) }
 
 let fact_ensures_default =
  fun (n_0 : int) ->
@@ -292,27 +246,25 @@ let fact_ensures_default =
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       (C_4:
       (C_6:
       begin
         (if ((eq_int_ n_0) (0))
         then
-         (let jessie_<somenum> =
          (C_1:
          begin
            (let jessie_<somenum> = (__retres := (1)) in void);
-          (raise (Return_label_exc void)) end) in void) else void);
+          (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> =
        (tmp := (C_3:
                (let jessie_<somenum> = (C_2: ((sub_int n_0) (1))) in
                (JC_<somenum>: (fact jessie_<somenum>))))) in void);
        (let jessie_<somenum> = (__retres := (C_5: ((mul_int n_0) !tmp))) in void);
-       (raise (Return_label_exc void)) end)) in void) with
+       (raise (Return_label_exc void)) end)) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
-  { (JC_<somenum>: is_prod((1), n_0@, result)) }
+  { (JC_<somenum>: is_prod((1), n_0, result)) }
 
 let fact_safety =
  fun (n_0 : int) ->
@@ -324,17 +276,15 @@ let fact_safety =
      (let tmp = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       (C_4:
       (C_6:
       begin
         (if ((eq_int_ n_0) (0))
         then
-         (let jessie_<somenum> =
          (C_1:
          begin
            (let jessie_<somenum> = (__retres := (1)) in void);
-          (raise (Return_label_exc void)) end) in void) else void);
+          (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> =
        (tmp := (C_3:
                (let jessie_<somenum> = (C_2: ((sub_int n_0) (1))) in
@@ -342,7 +292,7 @@ let fact_safety =
                (check { zwf_zero((JC_<somenum> : jessie_<somenum>), (JC_<somenum> : n_0)) };
                (JC_<somenum>: (fact_requires jessie_<somenum>))))))) in void);
        (let jessie_<somenum> = (__retres := (C_5: ((mul_int n_0) !tmp))) in void);
-       (raise (Return_label_exc void)) end)) in void) with
+       (raise (Return_label_exc void)) end)) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end)) { true }
@@ -353,25 +303,25 @@ why --project [...] why/fact.why
 <project name="fact" context="why/fact_ctx.why">
   <function name="Function fact">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/fact_po1.why">
+      <location file = "PPCHOME/tests/jessie/fact.c" line = "44" begin = "12" end = "32"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/fact_po2.why">
-      <location file = "why/fact.why" line = "279" begin = "24" end = "67"/>
+      <location file = "why/fact.why" line = "229" begin = "24" end = "67"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/fact_po3.why">
-      <location file = "why/fact.why" line = "279" begin = "24" end = "67"/>
+      <location file = "why/fact.why" line = "229" begin = "24" end = "67"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/fact_po4.why">
       <location file = "PPCHOME/tests/jessie/fact.c" line = "48" begin = "13" end = "22"/>
       <explain kind = "Pre"
 text = "UserCall"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/fact_po1.why">
-      <location file = "PPCHOME/tests/jessie/fact.c" line = "44" begin = "12" end = "32"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1382,16 +1332,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

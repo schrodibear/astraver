@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -173,8 +173,8 @@ let main () =
     (* phase 8: computation of effects *)
     compute_effects logic_components components;
 
-    (* (optional) 
-       generation of the separation predicates : compute the needed 
+    (* (optional)
+       generation of the separation predicates : compute the needed
        generated predicates *)
     if Jc_options.gen_frame_rule_with_ft then
       (Jc_options.lprintf "Compute needed predicates@.";
@@ -387,22 +387,55 @@ let main () =
     (*                       PART 5: OUTPUT FILES                            *)
     (*************************************************************************)
 
+    (* union and pointer casts: disabled *)
+    if !Region.some_bitwise_region then
+      begin
+        eprintf "Jessie support for unions and pointer casts is disabled@.";
+        exit 1
+      end;
+
     let decls = pop_decls () in
 
     (* output phase 1: produce Why file *)
-    Jc_options.lprintf "Produce Why file@.";
-    Pp.print_in_file
-      (fun fmt -> fprintf fmt "%a@." Output.fprintf_why_decls decls)
-      (Lib.file_subdir "why" (filename ^ ".why"));
+    if Jc_options.why3_backend then
+      begin
+        Jc_options.lprintf "Produce Why3ml file@.";
+        Pp.print_in_file
+          (fun fmt -> fprintf fmt "%a@."
+             (Output.fprintf_why_decls ~why3:true
+                ~use_floats:!Jc_options.has_floats
+                ~full_floats:(!Jc_options.float_model = Jc_env.FMfull)
+             ) decls)
+          (filename ^ ".mlw");
+        (* not used by why3, but useful for debugging traceability *)
+        let cout_locs,fmt_locs =
+          Pp.open_file_and_formatter (Lib.file_subdir "." (filename ^ ".loc"))
+        in
+        Output.my_print_locs fmt_locs;
+        Pp.close_file_and_formatter (cout_locs,fmt_locs);
+      end
+    else
+      begin
+        Jc_options.lprintf "Produce Why file@.";
+        Pp.print_in_file
+          (fun fmt -> fprintf fmt "%a@."
+             (Output.fprintf_why_decls ~why3:false
+                ~use_floats:!Jc_options.has_floats
+                ~full_floats:(!Jc_options.float_model = Jc_env.FMfull)
+             ) decls)
+          (Lib.file_subdir "why" (filename ^ ".why"));
 
-    (* output phase 2: produce locs file *)
-    Jc_options.lprintf "Produce locs file@.";
-    let cout_locs,fmt_locs =
-      Pp.open_file_and_formatter (Lib.file_subdir "." (filename ^ ".loc"))
-    in
-    Jc_interp.print_locs fmt_locs;
-    Output.print_pos fmt_locs; (* Generated annotations. *)
-    Pp.close_file_and_formatter (cout_locs,fmt_locs);
+        (* output phase 2: produce locs file *)
+        Jc_options.lprintf "Produce locs file@.";
+        let cout_locs,fmt_locs =
+          Pp.open_file_and_formatter (Lib.file_subdir "." (filename ^ ".loc"))
+        in
+        Output.my_print_locs fmt_locs;
+(*
+        Output.old_print_pos fmt_locs; (* Generated annotations. *)
+*)
+        Pp.close_file_and_formatter (cout_locs,fmt_locs);
+      end;
 
     (* output phase 3: produce makefile *)
     Jc_options.lprintf "Produce makefile@.";
@@ -410,12 +443,6 @@ let main () =
       we first have to update Jc_options.libfiles depending on the current
       pragmas
     *)
-    if !Region.some_bitwise_region then
-      begin
-        eprintf "Jessie support for unions and pointer casts is disabled@.";
-        exit 1
-      end;
-    
     Jc_options.add_to_libfiles
       (if !Region.some_bitwise_region then
          "jessie_bitvectors.why" else "jessie.why");

@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -78,7 +78,9 @@ let generic full f targets =
 		      (String.escaped (Filename.concat "$(WHYLIB)"
 					 (Filename.concat "why" s))))
 	 (Jc_options.get_libfiles ());
-       out "@\n@\n";
+       out "@\n";
+       out "JESSIE3LIB ?=%s@\n@\n" (String.escaped (Filename.concat "$(WHYLIB)"
+					 "why3"));
        out "COQDEP = coqdep@\n@\n";
 
        out ".PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon@\n@\n";
@@ -217,6 +219,16 @@ let generic full f targets =
        out "why3ide: why/%s@\n" why3_target;
        out "\t@@echo 'why3ide [...] $<' \
             && why3ide $<@\n@\n";
+
+       let why3ml_target =
+	 (match targets with f::_ -> f^".mlw" | [] -> "")
+       in
+       out "why3ml: %s@\n" why3ml_target;
+       out "\t@@echo 'why3ml [...] $<' \
+            && why3ide -I $(JESSIE3LIB) $<@\n@\n";
+(*
+       out "\twhy3ide -I $(JESSIE3LIB) $<@\n@\n";
+*)
 
        out "-include %s.depend@\n@\n" f;
        out "depend: %a@\n" (print_files coq_v) targets;

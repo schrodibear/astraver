@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -1071,9 +1071,9 @@ let hierarchy_committed_postcond this root fields value =
   let pset = pset_union_list pset_list in
   (* "not_assigns" saying that only the pointers of pset
      have been modified *)
-  let not_assigns = make_not_assigns (LVar alloc)
-    (LVarAtLabel(com, ""))
-    (LVar com)
+  let not_assigns = make_not_assigns (LDeref alloc)
+    (LDerefAtLabel(com, ""))
+    (LDeref com)
     pset
   in
   (* new values for the fields in their ranges *)
@@ -1208,7 +1208,7 @@ let pack_declaration st acc =
 	 [ LVar mutable_name;
 	   LApp(
 	     "store",
-	     [ LVarAtLabel(mutable_name, "");
+	     [ LDerefAtLabel(mutable_name, "");
 	       LVar this;
 	       LVar tag ])]))
       components_post
@@ -1270,10 +1270,10 @@ let unpack_declaration st acc =
     make_and
       (LPred(
 	 "eq",
-	 [ LVar mutable_name;
+	 [ LDeref mutable_name;
 	   LApp(
 	     "store",
-	     [ LVarAtLabel(mutable_name, "");
+	     [ LDerefAtLabel(mutable_name, "");
 	       LVar this;
 	       LVar tag ])]))
       components_post

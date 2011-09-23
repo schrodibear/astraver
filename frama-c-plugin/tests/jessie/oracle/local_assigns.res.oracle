@@ -84,12 +84,6 @@ type padding
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic _my_type_tag:  -> _my_type tag_id
 
 axiom _my_type_int : (int_of_tag(_my_type_tag) = (1))
@@ -140,6 +134,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -151,6 +150,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -222,21 +226,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct__my_type(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root__my_type(p:_my_type pointer, a:int, b:int,
  _my_type_alloc_table:_my_type alloc_table) =
  ((offset_min(_my_type_alloc_table, p) <= a)
@@ -281,6 +270,12 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
+exception Return_label_exc of unit
+
 parameter _my_type_alloc_table : _my_type alloc_table ref
 
 parameter _my_type_i : (_my_type, int32) memory ref
@@ -288,60 +283,6 @@ parameter _my_type_i : (_my_type, int32) memory ref
 parameter _my_type_j : (_my_type, int32) memory ref
 
 parameter _my_type_tag_table : _my_type tag_table ref
-
-parameter alloc_bitvector_struct__my_type :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct__my_type(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct__my_type_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct__my_type(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
 parameter alloc_struct__my_type :
  n:int ->
@@ -439,11 +380,11 @@ parameter my_changes :
   { } unit reads _my_type_alloc_table,_my_type_i,_my_type_j writes _my_type_i
   { (JC_<somenum>:
     ((JC_<somenum>:
-     eq_int(integer_of_int32(select(_my_type_i, s_0@)),
-     integer_of_int32(select(_my_type_j, s_0@))))
+     (integer_of_int32(select(_my_type_i, s_0)) = integer_of_int32(select(_my_type_j,
+                                                                   s_0))))
     and (JC_<somenum>:
         not_assigns(_my_type_alloc_table@, _my_type_i@, _my_type_i,
-        pset_singleton(s_0@))))) }
+        pset_singleton(s_0))))) }
 
 parameter my_changes_requires :
  s_0:_my_type pointer ->
@@ -453,18 +394,18 @@ parameter my_changes_requires :
   unit reads _my_type_alloc_table,_my_type_i,_my_type_j writes _my_type_i
   { (JC_<somenum>:
     ((JC_<somenum>:
-     eq_int(integer_of_int32(select(_my_type_i, s_0@)),
-     integer_of_int32(select(_my_type_j, s_0@))))
+     (integer_of_int32(select(_my_type_i, s_0)) = integer_of_int32(select(_my_type_j,
+                                                                   s_0))))
     and (JC_<somenum>:
         not_assigns(_my_type_alloc_table@, _my_type_i@, _my_type_i,
-        pset_singleton(s_0@))))) }
+        pset_singleton(s_0))))) }
 
 parameter my_main :
  n:int32 ->
   { } int32 reads _my_type_alloc_table,_my_type_i,_my_type_j
   writes _my_type_alloc_table,_my_type_i,_my_type_j,_my_type_tag_table
   { (JC_<somenum>:
-    ((JC_<somenum>: eq_int(integer_of_int32(result), integer_of_int32(n@)))
+    ((JC_<somenum>: (integer_of_int32(result) = integer_of_int32(n)))
     and (JC_<somenum>:
         ((JC_<somenum>:
          not_assigns(_my_type_alloc_table@, _my_type_i@, _my_type_i,
@@ -478,7 +419,7 @@ parameter my_main_requires :
   { } int32 reads _my_type_alloc_table,_my_type_i,_my_type_j
   writes _my_type_alloc_table,_my_type_i,_my_type_j,_my_type_tag_table
   { (JC_<somenum>:
-    ((JC_<somenum>: eq_int(integer_of_int32(result), integer_of_int32(n@)))
+    ((JC_<somenum>: (integer_of_int32(result) = integer_of_int32(n)))
     and (JC_<somenum>:
         ((JC_<somenum>:
          not_assigns(_my_type_alloc_table@, _my_type_i@, _my_type_i,
@@ -507,11 +448,11 @@ let my_changes_ensures_default =
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
-     eq_int(integer_of_int32(select(_my_type_i, s_0@)),
-     integer_of_int32(select(_my_type_j, s_0@))))
+     (integer_of_int32(select(_my_type_i, s_0)) = integer_of_int32(select(_my_type_j,
+                                                                   s_0))))
     and (JC_<somenum>:
         not_assigns(_my_type_alloc_table@, _my_type_i@, _my_type_i,
-        pset_singleton(s_0@))))) }
+        pset_singleton(s_0))))) }
 
 let my_changes_safety =
  fun (s_0 : _my_type pointer) ->
@@ -556,7 +497,7 @@ let my_main_ensures_default =
       (return := !__retres); (raise Return) end))))))); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>: eq_int(integer_of_int32(result), integer_of_int32(n@)))
+    ((JC_<somenum>: (integer_of_int32(result) = integer_of_int32(n)))
     and (JC_<somenum>:
         ((JC_<somenum>:
          not_assigns(_my_type_alloc_table@, _my_type_i@, _my_type_i,
@@ -603,33 +544,7 @@ why --project [...] why/local_assigns.why
 <project name="local_assigns" context="why/local_assigns_ctx.why">
   <function name="Function my_main">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/local_assigns_po10.why">
-      <location file = "PPCHOME/tests/jessie/local_assigns.c" line = "19" begin = "9" end = "10"/>
-      <explain kind = "Pre"
-text = "AllocSize"/>
-    </goal>
-    <goal why_file="why/local_assigns_po11.why">
-      <location file = "why/local_assigns.why" line = "516" begin = "15" end = "71"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/local_assigns_po12.why">
-      <location file = "PPCHOME/tests/jessie/local_assigns.jessie/local_assigns.jc" line = "59" begin = "14" end = "27"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/local_assigns_po13.why">
-      <location file = "PPCHOME/tests/jessie/local_assigns.jessie/local_assigns.jc" line = "59" begin = "14" end = "27"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/local_assigns_po14.why">
-      <location file = "why/local_assigns.why" line = "522" begin = "14" end = "54"/>
-      <explain kind = "Pre"
-text = ""/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/local_assigns_po7.why">
       <location file = "PPCHOME/tests/jessie/local_assigns.c" line = "16" begin = "9" end = "21"/>
       <explain kind = "Post"/>
@@ -643,9 +558,45 @@ text = ""/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/local_assigns_po10.why">
+      <location file = "PPCHOME/tests/jessie/local_assigns.c" line = "19" begin = "9" end = "10"/>
+      <explain kind = "Pre"
+text = "AllocSize"/>
+    </goal>
+    <goal why_file="why/local_assigns_po11.why">
+      <location file = "why/local_assigns.why" line = "457" begin = "15" end = "71"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/local_assigns_po12.why">
+      <location file = "PPCHOME/tests/jessie/local_assigns.jessie/local_assigns.jc" line = "59" begin = "14" end = "27"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/local_assigns_po13.why">
+      <location file = "PPCHOME/tests/jessie/local_assigns.jessie/local_assigns.jc" line = "59" begin = "14" end = "27"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/local_assigns_po14.why">
+      <location file = "why/local_assigns.why" line = "463" begin = "14" end = "54"/>
+      <explain kind = "Pre"
+text = ""/>
+    </goal>
+    </behavior>
   </function>
   <function name="Function my_changes">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/local_assigns_po1.why">
+      <location file = "PPCHOME/tests/jessie/local_assigns.c" line = "10" begin = "9" end = "21"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/local_assigns_po2.why">
+      <location file = "PPCHOME/tests/jessie/local_assigns.c" line = "12" begin = "5" end = "15"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/local_assigns_po3.why">
       <location file = "PPCHOME/tests/jessie/local_assigns.c" line = "12" begin = "36" end = "40"/>
@@ -666,16 +617,6 @@ text = "PointerDeref"/>
       <location file = "PPCHOME/tests/jessie/local_assigns.jessie/local_assigns.jc" line = "42" begin = "14" end = "39"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/local_assigns_po1.why">
-      <location file = "PPCHOME/tests/jessie/local_assigns.c" line = "10" begin = "9" end = "21"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/local_assigns_po2.why">
-      <location file = "PPCHOME/tests/jessie/local_assigns.c" line = "12" begin = "5" end = "15"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1672,6 +1613,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -1683,6 +1629,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -1753,21 +1703,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct__my_type(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root__my_type(p: _my_type pointer, a: int, b: int,
   _my_type_alloc_table: _my_type alloc_table) =

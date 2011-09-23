@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -35,6 +35,8 @@ open Lexing
 open Format
 open Pp
 
+let why3syntax = ref false
+
 type constant =
   | Prim_void
   | Prim_int of string
@@ -46,19 +48,29 @@ type constant =
 
 let fprintf_constant form e =
   match e with
-    | Prim_void -> fprintf form "void"
-    | Prim_int(n) -> fprintf form "(%s)" n
+    | Prim_void ->
+        if !why3syntax then
+          fprintf form "()"
+        else
+          fprintf form "void"
+    | Prim_int(n) ->
+          fprintf form "(%s)" n
     | Prim_real(f) -> fprintf form "%s" f
-    | Prim_bool(b) -> fprintf form "%b" b
+    | Prim_bool(b) ->
+        if !why3syntax then
+          fprintf form "%s" (if b then "True" else "False")
+        else
+          fprintf form "%b" b
 (*
     | Prim_string s -> fprintf form "\"%s\"" s
 *)
 
-type term = 
+type term =
   | LConst of constant
   | LApp of string * term list
-  | LVar of string
-  | LVarAtLabel of string * string     (*r x@L *)
+  | LVar of string                  (*r immutable logic var *)
+  | LDeref of string                     (*r !r *)
+  | LDerefAtLabel of string * string     (*r x@L *)
   | Tnamed of string * term
   | TIf of term * term * term
   | TLet of string * term * term
@@ -67,53 +79,399 @@ let rec iter_term f t =
   match t with
   | LConst(_c) -> ()
   | LApp(id,l) -> f id; List.iter (iter_term f) l
-  | LVar(id) -> f id
-  | LVarAtLabel(id,_l) -> f id
+  | LVar id | LDeref id | LDerefAtLabel(id,_) -> f id
   | Tnamed(_,t) -> iter_term f t
-  | TIf(t1,t2,t3) -> 
+  | TIf(t1,t2,t3) ->
       iter_term f t1; iter_term f t2; iter_term f t3
-  | TLet(id,t1,t2) -> 
+  | TLet(id,t1,t2) ->
       f id; iter_term f t1; iter_term f t2
 
 let rec match_term acc t1 t2 =
   match t1, t2 with
     | LVar id, _ -> (id,t2)::acc
-    | LApp(id1,l1), LApp(id2,l2) when id1 = id2 -> 
+    | LApp(id1,l1), LApp(id2,l2) when id1 = id2 ->
       List.fold_left2 match_term acc l1 l2
     | _ -> invalid_arg "match_term : t1 is not a valid context"
+
+let why3id s =
+  match s.[0] with
+  | 'A'..'Z' -> "_" ^ s
+  | _ -> s
+
+let why3constr s =
+  match s.[0] with
+  | 'A'..'Z' -> s
+  | 'a'..'z' -> String.capitalize s
+  | _ -> "U_" ^ s
+
+let why3id_if s =
+  if !why3syntax then why3id s else s
+
+let why3ident s =
+  match s with
+    | "le_int" -> "Int.(<=)"
+    | "le_int_" -> "Int.(<=)"
+    | "le_int_bool" -> "Int.(<=)"
+    | "ge_int" -> "Int.(>=)"
+    | "ge_int_" -> "Int.(>=)"
+    | "ge_int_bool" -> "Int.(>=)"
+    | "lt_int" -> "Int.(<)"
+    | "lt_int_" -> "Int.(<)"
+    | "lt_int_bool" -> "Int.(<)"
+    | "gt_int" -> "Int.(>)"
+    | "gt_int_" -> "Int.(>)"
+    | "gt_int_bool" -> "Int.(>)"
+    | "add_int" -> "Int.(+)"
+    | "sub_int" -> "Int.(-)"
+    | "neg_int" -> "Int.(-_)"
+    | "mul_int" -> "Int.(*)"
+    | "computer_div" -> "ComputerDivision.div"
+    | "computer_mod" -> "ComputerDivision.mod"
+    | "int_min" -> "IntMinMax.min"
+    | "int_max" -> "IntMinMax.max"
+        (* reals *)
+    | "le_real" -> "Real.(<=)"
+    | "le_real_" -> "Real.(<=)"
+    | "le_real_bool" -> "Real.(<=)"
+    | "ge_real" -> "Real.(>=)"
+    | "ge_real_" -> "Real.(>=)"
+    | "ge_real_bool" -> "Real.(>=)"
+    | "lt_real" -> "Real.(<)"
+    | "lt_real_" -> "Real.(<)"
+    | "lt_real_bool" -> "Real.(<)"
+    | "gt_real" -> "Real.(>)"
+    | "gt_real_" -> "Real.(>)"
+    | "gt_real_bool" -> "Real.(>)"
+    | "add_real" -> "Real.(+)"
+    | "sub_real" -> "Real.(-)"
+    | "neg_real" -> "Real.(-_)"
+    | "mul_real" -> "Real.(*)"
+    | "div_real" -> "Real.(/)"
+        (* real functions *)
+    | "real_of_int" -> "FromInt.from_int"
+    | "truncate_real_to_int" -> "Truncate.truncate"
+    | "real_min" -> "RealMinMax.min"
+    | "real_max" -> "RealMinMax.max"
+    | "abs_real" -> "AbsReal.abs"
+    | "sqrt_real" -> "Square.sqrt"
+    | "pow_real" -> "Power.pow"
+    | "cos" -> "Trigonometry.cos"
+    | "sin" -> "Trigonometry.sin"
+    | "tan" -> "Trigonometry.tan"
+    | "atan" -> "Trigonometry.atan"
+        (* floats *)
+    | "nearest_even" -> "Rounding.NearestTiesToEven"
+    | "single_value" -> "Single.value"
+    | "single_exact" -> "Single.exact"
+    | "single_round_error" -> "Single.round_error"
+    | "round_single" -> "Single.round"
+    | "double_value" -> "Double.value"
+    | "double_exact" -> "Double.exact"
+    | "double_round_error" -> "Double.round_error"
+    | "round_double" -> "Double.round"
+        (* floats full *)
+    | "le_double_full" -> "DoubleFull.le_full"
+    | "lt_double_full" -> "DoubleFull.lt_full"
+    | "ge_double_full" -> "DoubleFull.ge_full"
+    | "gt_double_full" -> "DoubleFull.gt_full"
+    | "eq_double_full" -> "DoubleFull.eq_full"
+    | "ne_double_full" -> "DoubleFull.ne_full"
+    | "double_is_NaN" -> "DoubleFull.is_NaN"
+    | _ -> why3id s
+
+let why3ident_if s =
+  if !why3syntax then why3ident s else s
+
+let why3param s =
+  match s with
+    | "le_int_" -> "Int.(<=)"
+    | "ge_int_" -> "Int.(>=)"
+    | "lt_int_" -> "Int.(<)"
+    | "gt_int_" -> "Int.(>)"
+        (* reals *)
+    | "le_real_" -> "Real.(<=)"
+    | "ge_real_" -> "Real.(>=)"
+    | "lt_real_" -> "Real.(<)"
+    | "gt_real_" -> "Real.(>)"
+    | _ -> why3ident s
+
+
+
+let why3_ComputerDivision = ref false
+let why3_IntMinMax = ref false
+let why3_reals = ref false
+let why3_FromInt = ref false
+let why3_Truncate = ref false
+let why3_Square = ref false
+let why3_Power = ref false
+let why3_RealMinMax = ref false
+let why3_AbsReal = ref false
+let why3_Trigonometry = ref false
+
+let compute_why3_dependencies f =
+  match f with
+    | "computer_div"
+    | "computer_mod" -> why3_ComputerDivision := true
+    | "int_min"
+    | "int_max" -> why3_IntMinMax := true
+    | "add_real"
+    | "sub_real"
+    | "neg_real"
+    | "mul_real"
+    | "div_real" -> why3_reals := true
+    | "sqrt_real" -> why3_Square := true
+    | "pow_real" -> why3_Power := true
+    | "real_of_int" -> why3_FromInt := true
+    | "truncate_real_to_int" -> why3_Truncate := true
+    | "real_min" 
+    | "real_max" -> why3_RealMinMax := true
+    | "abs_real" -> why3_AbsReal := true
+    | "cos"
+    | "sin"
+    | "tan"
+    | "atan" -> why3_Trigonometry := true
+    | _ -> ()
+
+
+(* localization *)
+
+type kind =
+  | VarDecr
+  | ArithOverflow
+  | DownCast
+  | IndexBounds
+  | PointerDeref
+  | UserCall
+  | DivByZero
+  | AllocSize
+  | Pack
+  | Unpack
+  | FPoverflow
+
+
+(*
+let pos_table :
+    (string, (kind option * string option * string option *
+             string * int * int * int))
+    Hashtbl.t
+    = Hashtbl.create 97
+*)
+
+let old_pos_table = Hashtbl.create 97
+
+let name_counter = ref 0
+
+let old_reg_pos prefix ?id ?kind ?name ?formula pos =
+  let id = match id with
+    | None ->
+	incr name_counter;
+	prefix ^ "_" ^ string_of_int !name_counter
+    | Some n -> n
+  in
+  Hashtbl.add old_pos_table id (kind,name,formula,pos);
+  id
+
+let print_kind fmt k =
+  fprintf fmt "%s"
+    (match k with
+       | VarDecr -> "VarDecr"
+       | Pack -> "Pack"
+       | Unpack -> "Unpack"
+       | DivByZero -> "DivByZero"
+       | AllocSize -> "AllocSize"
+       | UserCall -> "UserCall"
+       | PointerDeref -> "PointerDeref"
+       | IndexBounds -> "IndexBounds"
+       | DownCast -> "DownCast"
+       | ArithOverflow -> "ArithOverflow"
+       | FPoverflow -> "FPOverflow")
+
+let print_kind_why3 fmt k =
+  fprintf fmt "%s"
+    (match k with
+       | VarDecr -> "variant decreases"
+       | Pack -> "pack"
+       | Unpack -> "unpack"
+       | DivByZero -> "division by zero"
+       | AllocSize -> "allocation size"
+       | UserCall -> "precondition for call"
+       | PointerDeref -> "pointer dereference"
+       | IndexBounds -> "index bounds"
+       | DownCast -> "downcast"
+       | ArithOverflow -> "arithmetic overflow"
+       | FPoverflow -> "floating-point overflow")
+
+let abs_fname f =
+  if Filename.is_relative f then
+    Filename.concat (Unix.getcwd ()) f
+  else f
+
+(*
+let print_pos fmt =
+  Hashtbl.iter
+    (fun id (kind,name,formula,f,l,fc,lc) ->
+       fprintf fmt "[%s]@\n" id;
+       Option_misc.iter
+	 (fun k -> fprintf fmt "kind = %a@\n" print_kind k) kind;
+       Option_misc.iter
+	 (fun n -> fprintf fmt "name = \"%s\"@\n" n) name;
+       Option_misc.iter
+	 (fun n -> fprintf fmt "formula = \"%s\"@\n" n) formula;
+(*
+       let f = b.Lexing.pos_fname in
+*)
+       fprintf fmt "file = \"%s\"@\n"
+         (String.escaped (abs_fname f));
+(*
+       let l = b.Lexing.pos_lnum in
+       let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
+       let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in
+*)
+       fprintf fmt "line = %d@\n" l;
+       fprintf fmt "begin = %d@\n" fc;
+       fprintf fmt "end = %d@\n@\n" lc)
+    pos_table
+*)
+
+let old_print_pos fmt =
+  Hashtbl.iter
+    (fun id (kind,name,formula,(f,l,fc,lc)) ->
+       fprintf fmt "[%s]@\n" id;
+       Option_misc.iter
+	 (fun k -> fprintf fmt "kind = %a@\n" print_kind k) kind;
+       Option_misc.iter
+	 (fun n -> fprintf fmt "name = \"%s\"@\n" n) name;
+       Option_misc.iter
+	 (fun n -> fprintf fmt "formula = \"%s\"@\n" n) formula;
+       fprintf fmt "file = \"%s\"@\n"
+         (String.escaped (abs_fname f));
+       fprintf fmt "line = %d@\n" l;
+       fprintf fmt "begin = %d@\n" fc;
+       fprintf fmt "end = %d@\n@\n" lc)
+    old_pos_table
+
+
+let my_pos_table :
+    (string, (kind option * string option * string option *
+             string * int * int * int))
+    Hashtbl.t
+    = Hashtbl.create 97
+
+let my_add_pos m pos = Hashtbl.add my_pos_table m pos
+
+let my_print_locs fmt =
+  Hashtbl.iter
+    (fun id (kind,name,beh,f,l,fc,lc) ->
+       fprintf fmt "[%s]@\n" id;
+       Option_misc.iter
+         (fun k -> fprintf fmt "kind = %a@\n" print_kind k) kind;
+       Option_misc.iter
+         (fun n -> fprintf fmt "name = \"%s\"@\n" n) name;
+       Option_misc.iter
+	 (fun b -> fprintf fmt "behavior = \"%s\"@\n" b) beh;
+       fprintf fmt "file = \"%s\"@\n" (String.escaped f);
+       fprintf fmt "line = %d@\n" l;
+       fprintf fmt "begin = %d@\n" fc;
+       fprintf fmt "end = %d@\n@\n" lc)
+    my_pos_table
+
+let why3_prloc fmt (f,l,fc,lc) =
+  fprintf fmt "#\"%s\" %d %d %d#" f l (max fc 0) (max lc 0)
+
+let why3loc ~prog fmt lab =
+  try
+    let (k,n,beh,f,l,fc,lc) = Hashtbl.find my_pos_table lab in
+    begin
+      match n,beh,k with
+        | Some n, None,_ -> fprintf fmt "\"expl:%s\"@ " n
+        | Some n, Some b,_ -> fprintf fmt "\"expl:%s, %s\"@ " n b
+        | None, _, Some k -> fprintf fmt "\"expl:%a\"@ " print_kind_why3 k
+        | _ -> ()
+    end;
+(*
+    Option_misc.iter (fun n -> fprintf fmt "\"fun:%s\"@ " n) n;
+    Option_misc.iter (fun b -> fprintf fmt "\"beh:%s\"@ " b) beh;
+    Option_misc.iter (fun k -> fprintf fmt "\"expl:%a\"@ " print_kind_why3 k) k;
+*)
+    why3_prloc fmt (f,l,fc,lc)
+  with
+      Not_found ->
+        if prog then
+          fprintf fmt "'%s:" (why3constr lab)
+        else
+          fprintf fmt "\"%s\"" lab
+
+let why3_locals = Hashtbl.create 97
+
+let is_why3_local id = Hashtbl.mem why3_locals id
+
+let add_why3_local id = Hashtbl.add why3_locals id ()
+
+let remove_why3_local id = Hashtbl.remove why3_locals id 
 
 let rec fprintf_term form t =
   match t with
   | LConst(c) -> fprintf_constant form c
   | LApp("eq_pointer",[t1;t2]) ->
-      fprintf form "@[(%a=%a)@]" 
+      fprintf form "@[(%a=%a)@]"
 	fprintf_term t1
 	fprintf_term t2
   | LApp("ne_pointer",[t1;t2]) ->
-      fprintf form "@[(%a<>%a)@]" 
+      fprintf form "@[(%a<>%a)@]"
 	fprintf_term t1
 	fprintf_term t2
   | LApp(id,t::tl) ->
-      fprintf form "@[%s(%a" id fprintf_term t;
-      List.iter (fun t -> fprintf form ",@ %a" fprintf_term t) tl;
-      fprintf form ")@]"
-  | LApp(id,[])
-  | LVar(id) -> fprintf form "%s" id
-  | LVarAtLabel(id,l) -> fprintf form "%s@@%s" id l
-  | Tnamed(lab,t) -> 
-      fprintf form "(%s : %a)" lab fprintf_term t
-  | TIf(t1,t2,t3) -> 
-      fprintf form "@[<hov 1>(if %a@ then %a@ else %a)@]" 
+      if !why3syntax then
+        begin
+          fprintf form "@[(%s@ %a" (why3ident id) fprintf_term t;
+          List.iter (fun t -> fprintf form "@ %a" fprintf_term t) tl;
+          fprintf form ")@]"
+        end
+      else
+        begin
+          fprintf form "@[%s(%a" id fprintf_term t;
+          List.iter (fun t -> fprintf form ",@ %a" fprintf_term t) tl;
+          fprintf form ")@]"
+        end
+  | LApp(id,[]) ->
+      fprintf form "%s" (why3ident_if id)
+  | LVar id ->
+      fprintf form "%s" (why3ident_if id)
+  | LDeref id ->
+      if !why3syntax then
+        if is_why3_local id then
+          fprintf form "%s" (why3ident_if id)
+        else
+          fprintf form "!%s" (why3ident id)
+      else
+        fprintf form "%s" id
+  | LDerefAtLabel(id,l) ->
+      if !why3syntax then
+        if l="" then
+          fprintf form "(old !%s)" (why3ident id)
+        else
+          fprintf form "(at !%s '%s)" (why3ident id) (why3constr l)
+      else
+        fprintf form "%s@@%s" id l
+  | Tnamed(lab,t) ->
+      if !why3syntax then
+        fprintf form "(%a %a)" (why3loc ~prog:false) lab fprintf_term t
+      else
+        fprintf form "(%s : %a)" lab fprintf_term t
+  | TIf(t1,t2,t3) ->
+      fprintf form "@[<hov 1>(if %a@ then %a@ else %a)@]"
 	fprintf_term t1 fprintf_term t2 fprintf_term t3
-  | TLet(v,t1,t2) -> 
+  | TLet(v,t1,t2) ->
       fprintf form "@[<hov 1>(let %s@ = %a@ in %a)@]" v
-	fprintf_term t1 fprintf_term t2 
+	fprintf_term t1 fprintf_term t2
 
-type logic_type = 
+type logic_type =
     { logic_type_name : string;
       logic_type_args : logic_type list;
     }
 (*r int, float, int list, ... *)
+
+let is_prop t = t.logic_type_name = "prop"
 
 let logic_type_var s = { logic_type_name = "'"^s;
                    logic_type_args = [];
@@ -122,8 +480,8 @@ let logic_type_var s = { logic_type_name = "'"^s;
 let rec iter_logic_type f t =
   f t.logic_type_name;
   List.iter (iter_logic_type f) t.logic_type_args
-  
-type assertion = 
+
+type assertion =
   | LTrue | LFalse
   | LAnd of assertion * assertion
   | LOr of assertion * assertion
@@ -217,115 +575,158 @@ let make_equiv a1 a2 =
 let rec iter_assertion f a =
   match a with
   | LTrue -> ()
-  | LFalse -> () 
-  | LAnd(a1,a2) -> iter_assertion f a1; iter_assertion f a2 
-  | LOr(a1,a2) -> iter_assertion f a1; iter_assertion f a2 
-  | LIff(a1,a2) -> iter_assertion f a1; iter_assertion f a2 
+  | LFalse -> ()
+  | LAnd(a1,a2) -> iter_assertion f a1; iter_assertion f a2
+  | LOr(a1,a2) -> iter_assertion f a1; iter_assertion f a2
+  | LIff(a1,a2) -> iter_assertion f a1; iter_assertion f a2
   | LNot(a1) -> iter_assertion f a1
-  | LImpl(a1,a2) -> iter_assertion f a1; iter_assertion f a2 
-  | LIf(t,a1,a2) -> 
-      iter_term f t; iter_assertion f a1; iter_assertion f a2 
+  | LImpl(a1,a2) -> iter_assertion f a1; iter_assertion f a2
+  | LIf(t,a1,a2) ->
+      iter_term f t; iter_assertion f a1; iter_assertion f a2
   | LLet(_id,t,a) -> iter_term f t; iter_assertion f a
-  | LForall(_id,t,trigs,a) -> iter_logic_type f t; 
+  | LForall(_id,t,trigs,a) -> iter_logic_type f t;
       iter_triggers f trigs;
       iter_assertion f a
-  | LExists(_id,t,trigs,a) -> iter_logic_type f t; 
+  | LExists(_id,t,trigs,a) -> iter_logic_type f t;
       iter_triggers f trigs;
       iter_assertion f a
   | LPred(id,l) -> f id; List.iter (iter_term f) l
   | LNamed (_, a) -> iter_assertion f a
 
 and iter_triggers f trigs =
-  List.iter (List.iter 
-               (function 
+  List.iter (List.iter
+               (function
                   | LPatP a -> iter_assertion f a
                   | LPatT t -> iter_term f t)) trigs
 
 
+let logic_type_name t =
+  if !why3syntax then
+    match t.logic_type_name with
+      | "unit" -> "()"
+      | s -> why3ident s
+  else
+    t.logic_type_name
+
 let rec fprintf_logic_type form t =
   match t.logic_type_args with
-    | [] -> fprintf form "%s" t.logic_type_name
+    | [] -> fprintf form "%s" (logic_type_name t)
     | [x] ->
-	fprintf form "%a %s" fprintf_logic_type x t.logic_type_name
+        if !why3syntax then
+	  fprintf form "(%s %a)" (logic_type_name t) fprintf_logic_type x
+        else
+	  fprintf form "%a %s" fprintf_logic_type x t.logic_type_name
     | l ->
-	fprintf form "(%a) %s" 
-	  (print_list simple_comma fprintf_logic_type) l
-	  t.logic_type_name
+        if !why3syntax then
+	  fprintf form "(%s %a)"
+	    (logic_type_name t)
+	    (print_list space fprintf_logic_type) l
+        else
+	  fprintf form "(%a) %s"
+	    (print_list simple_comma fprintf_logic_type) l
+	    t.logic_type_name
 
 let rec fprintf_assertion form a =
   match a with
   | LTrue -> fprintf form "true"
   | LFalse -> fprintf form "false"
-  | LAnd(a1,a2) -> 
-      fprintf form "@[(%a@ and %a)@]" 
-	fprintf_assertion a1 
-	fprintf_assertion a2
-  | LOr(a1,a2) -> 
-      fprintf form "@[(%a@ or %a)@]" 
-	fprintf_assertion a1 
-	fprintf_assertion a2
-  | LIff(a1,a2) -> 
-      fprintf form "@[(%a@ <-> %a)@]" 
-	fprintf_assertion a1 
-	fprintf_assertion a2
-  | LNot(a1) -> 
-      fprintf form "@[(not %a)@]" 
+  | LAnd(a1,a2) ->
+      fprintf form "@[(%a@ %s %a)@]"
 	fprintf_assertion a1
-  | LImpl(a1,a2) -> 
-      fprintf form "@[<hov 1>(%a ->@ %a)@]" 
+        (if !why3syntax then "/\\" else "and")
+	fprintf_assertion a2
+  | LOr(a1,a2) ->
+      fprintf form "@[(%a@ %s %a)@]"
+	fprintf_assertion a1
+        (if !why3syntax then "\\/" else "or")
+	fprintf_assertion a2
+  | LIff(a1,a2) ->
+      fprintf form "@[(%a@ <-> %a)@]"
+	fprintf_assertion a1
+	fprintf_assertion a2
+  | LNot(a1) ->
+      fprintf form "@[(not %a)@]"
+	fprintf_assertion a1
+  | LImpl(a1,a2) ->
+      fprintf form "@[<hov 1>(%a ->@ %a)@]"
 	fprintf_assertion a1 fprintf_assertion a2
-  | LIf(t,a1,a2) -> 
-      fprintf form "@[<hov 1>(if %a@ then %a@ else %a)@]" 
+  | LIf(t,a1,a2) when !why3syntax ->
+      fprintf form "@[<hov 1>(if %a@ = True@ then %a@ else %a)@]"
 	fprintf_term t fprintf_assertion a1 fprintf_assertion a2
-  | LLet(id,t,a) -> 
+  | LIf(t,a1,a2) ->
+      fprintf form "@[<hov 1>(if %a@ then %a@ else %a)@]"
+	fprintf_term t fprintf_assertion a1 fprintf_assertion a2
+  | LLet(id,t,a) ->
       fprintf form "@[<hov 1>(let @[<hov 1>%s =@ %a in@]@ %a)@]" id
 	fprintf_term t fprintf_assertion a
-  | LForall(id,t,trigs,a) -> 
-      fprintf form "@[<hov 1>(forall@ %s:@,%a@,%a@,.@ %a)@]" 
+  | LForall(id,t,trigs,a) when !why3syntax ->
+      fprintf form "@[<hov 1>(forall@ %s:@,%a@,%a@,.@ %a)@]"
+	(why3ident id) fprintf_logic_type t
+        fprintf_triggers trigs fprintf_assertion a
+  | LForall(id,t,trigs,a) ->
+      fprintf form "@[<hov 1>(forall@ %s:@,%a@,%a@,.@ %a)@]"
 	id fprintf_logic_type t fprintf_triggers trigs fprintf_assertion a
-  | LExists(id,t,trigs,a) -> 
-      fprintf form "@[<hov 1>(exists %s:%a%a.@ %a)@]" 
+  | LExists(id,t,trigs,a) ->
+      fprintf form "@[<hov 1>(exists %s:%a%a.@ %a)@]"
 	id fprintf_logic_type t fprintf_triggers trigs fprintf_assertion a
+(*
+  | LPred(id,[t1;t2]) when is_eq id->
+      fprintf form "@[(%a = %a)@]"
+	fprintf_term t1
+	fprintf_term t2
+*)
   | LPred("le",[t1;t2]) ->
-      fprintf form "@[(%a <= %a)@]" 
+      fprintf form "@[(%a <= %a)@]"
 	fprintf_term t1
 	fprintf_term t2
   | LPred("ge",[t1;t2]) ->
-      fprintf form "@[(%a >= %a)@]" 
+      fprintf form "@[(%a >= %a)@]"
 	fprintf_term t1
 	fprintf_term t2
-  | LPred("eq",[t1;t2]) ->
-      fprintf form "@[(%a = %a)@]" 
+  | LPred(id,[t1;t2]) when id = "eq" || !why3syntax && id = "eq_int" ->
+      fprintf form "@[(%a = %a)@]"
 	fprintf_term t1
 	fprintf_term t2
   | LPred("neq",[t1;t2]) ->
-      fprintf form "@[(%a <> %a)@]" 
+      fprintf form "@[(%a <> %a)@]"
 	fprintf_term t1
 	fprintf_term t2
   | LPred(id,t::tl) ->
-      fprintf form "@[%s(%a" id fprintf_term t;
-      List.iter (fun t -> fprintf form ",@ %a" fprintf_term t) tl;
-      fprintf form ")@]"
-  | LPred (id, []) -> 
-      fprintf form "%s" id
+      if !why3syntax then
+        begin
+          fprintf form "@[(%s@ %a" (why3ident id) fprintf_term t;
+          List.iter (fun t -> fprintf form "@ %a" fprintf_term t) tl;
+          fprintf form ")@]"
+        end
+      else
+        begin
+          fprintf form "@[%s(%a" id fprintf_term t;
+          List.iter (fun t -> fprintf form ",@ %a" fprintf_term t) tl;
+          fprintf form ")@]"
+        end
+  | LPred (id, []) ->
+      fprintf form "%s" (why3ident_if id)
   | LNamed (n, a) ->
-      fprintf form "@[(%s:@ %a)@]" n fprintf_assertion a 
+      if !why3syntax then
+        fprintf form "@[(%a@ %a)@]" (why3loc ~prog:false) n fprintf_assertion a
+      else
+        fprintf form "@[(%s:@ %a)@]" n fprintf_assertion a
 
-and fprintf_triggers fmt trigs = 
+and fprintf_triggers fmt trigs =
   let pat fmt = function
     | LPatT t -> fprintf_term fmt t
     | LPatP p -> fprintf_assertion fmt p in
-  print_list_delim lsquare rsquare alt (print_list comma pat) fmt trigs	
+  print_list_delim lsquare rsquare alt (print_list comma pat) fmt trigs
 
 (*s types *)
 
 
-type why_type = 
+type why_type =
   | Prod_type of string * why_type * why_type      (*r (x:t1)->t2 *)
   | Base_type of logic_type
   | Ref_type of why_type
-  | Annot_type of 
-      assertion * why_type * 
+  | Annot_type of
+      assertion * why_type *
       string list * string list * assertion * ((string * assertion) list)
 	(*r { P } t reads r writes w { Q | E => R } *)
 ;;
@@ -347,7 +748,7 @@ let rec iter_why_type f t =
     | Prod_type(_,t1,t2) ->
 	iter_why_type f t1; iter_why_type f t2
     | Base_type b -> iter_logic_type f b
-    | Ref_type(t) -> iter_why_type f t 
+    | Ref_type(t) -> iter_why_type f t
     | Annot_type (pre,t,reads,writes,post,signals) ->
 	iter_assertion f pre;
 	iter_why_type f t;
@@ -361,58 +762,94 @@ let rec iter_why_type f t =
 let rec fprint_comma_string_list form l =
   match l with
     | [] -> ()
-    | x::l -> 
+    | x::l ->
 	fprintf form ",%s" x;
 	fprint_comma_string_list form l
 ;;
 
-let rec fprintf_type anon form t = 
+let rec fprintf_type ~need_colon anon form t =
   match t with
     | Prod_type(id,t1,t2) ->
-	if id="" or anon then
-	  fprintf form "@[<hov 1>%a ->@ %a@]" 
-	    (fprintf_type anon) t1 (fprintf_type anon) t2
-	else
-	  fprintf form "@[<hov 1>%s:%a ->@ %a@]" id
-	    (fprintf_type anon) t1 (fprintf_type anon) t2
-    | Base_type t  -> 
+	  if !why3syntax then
+            let id = if id="" or anon then "_anonymous" else id in
+            fprintf form "@[<hov 1>(%s:%a)@ %a@]" (why3ident id)
+	    (fprintf_type ~need_colon:false anon) t1
+              (fprintf_type ~need_colon anon) t2
+          else
+	    if id="" or anon then
+	      fprintf form "@[<hov 1>%a ->@ %a@]"
+	        (fprintf_type ~need_colon:false anon) t1
+                (fprintf_type ~need_colon anon) t2
+	    else
+	      fprintf form "@[<hov 1>%s:%a ->@ %a@]" id
+	        (fprintf_type ~need_colon:false anon) t1
+                (fprintf_type ~need_colon anon) t2
+    | Base_type t  ->
+        if need_colon then fprintf form ": ";
 	fprintf_logic_type form t
-    | Ref_type(t) -> 
-	fprintf form "%a ref" (fprintf_type anon) t
+    | Ref_type(t) ->
+        if need_colon then fprintf form ": ";
+	if !why3syntax then
+          fprintf form "ref %a" (fprintf_type ~need_colon:false anon) t
+        else
+          fprintf form "%a ref" (fprintf_type ~need_colon:false anon) t
     | Annot_type(p,t,reads,writes,q,signals) ->
 	begin
-	  fprintf form "@[@[<hov 2>{ "; 
-	  if is_not_true p  
+          if need_colon then fprintf form ": ";
+	  fprintf form "@[@[<hov 2>{ ";
+	  if is_not_true p
 	  then fprintf_assertion form p;
-	  fprintf form "}@]@ %a@ " (fprintf_type anon) t;
+	  fprintf form "}@]@ %a@ " (fprintf_type ~need_colon:false anon) t;
 	  begin
 	    match List.sort compare reads with
 	      | [] -> ()
-	      | r::l -> 
+	      | r::l as reads ->
+                  if !why3syntax then
+		    fprintf form "reads@ %a@ "
+                      (print_list space
+                         (fun form r -> fprintf form "%s" (why3ident r))) reads
+                  else
 		  fprintf form "reads %s%a@ " r fprint_comma_string_list l
 	  end;
 	  begin
 	    match List.sort compare writes with
 	      | [] -> ()
-	      | r::l -> 
-		  fprintf form "writes %s%a@ " r fprint_comma_string_list l
+	      | r::l as writes ->
+                  if !why3syntax then
+		    fprintf form "writes@ %a@ "
+                      (print_list space
+                         (fun form r -> fprintf form "%s" (why3ident r))) writes
+                  else
+		    fprintf form "writes %s%a@ " r fprint_comma_string_list l
 	  end;
 	  begin
 	    match signals with
-	      | [] -> 
+	      | [] ->
 		  fprintf form "@[<hov 2>{ %a }@]@]" fprintf_assertion q
 	      | l ->
-		  fprintf form 
-		    "raises%a@ @[<hov 2>{ %a@ | %a }@]@]" 
-		    (print_list comma (fun fmt (e,_r) -> fprintf fmt " %s" e))
-		    l
-		    fprintf_assertion q
-		    (print_list alt (fun fmt (e,r) -> 
-				       fprintf fmt "@[<hov 2>%s =>@ %a@]" e
-					 fprintf_assertion r))
-		    l
-	  end		    
-	  
+                  if !why3syntax then
+		    fprintf form
+		      "raises%a@ @[<hov 2>{ %a@ } | %a @]@]"
+		      (print_list comma (fun fmt (e,_r) -> fprintf fmt " %s" e))
+		      l
+		      fprintf_assertion q
+		      (print_list alt
+                         (fun fmt (e,r) ->
+			    fprintf fmt "@[<hov 2>%s ->@ { %a }@]" e
+			      fprintf_assertion r))
+		      l
+                  else
+		    fprintf form
+		      "raises%a@ @[<hov 2>{ %a@ | %a }@]@]"
+		      (print_list comma (fun fmt (e,_r) -> fprintf fmt " %s" e))
+		      l
+		      fprintf_assertion q
+		      (print_list alt (fun fmt (e,r) ->
+				         fprintf fmt "@[<hov 2>%s =>@ %a@]" e
+					   fprintf_assertion r))
+		      l
+	  end
+
 	end
 ;;
 
@@ -434,34 +871,31 @@ type expr_node =
   | Void
   | Deref of string
   | If of expr * expr * expr
-  | While of 
+  | While of
       expr (* loop condition *)
-      * assertion (* invariant *) 
-      * variant option (* variant *) 
+      * assertion (* invariant *)
+      * variant option (* variant *)
       * expr list (* loop body *)
   | Block of expr list
   | Assign of string * expr
-  | MultiAssign of string * Loc.position * (string * expr) list * 
-      bool * term * expr * string * expr * string * 
+  | MultiAssign of string * Loc.position * (string * expr) list *
+      bool * term * expr * string * expr * string *
       (int * bool * bool * string) list
   | Let of string * expr * expr
   | Let_ref of string * expr * expr
   | App of expr * expr
   | Raise of string * expr option
   | Try of expr * string * string option * expr
-  | Fun of (string * why_type) list * 
+  | Fun of (string * why_type) list *
       assertion * expr * assertion * ((string * assertion) list)
-  | Triple of opaque * 
+  | Triple of opaque *
       assertion * expr * assertion * ((string * assertion) list)
   | Assert of assert_kind * assertion * expr
-(*
-  | Label of string * expr
-*)
   | BlackBox of why_type
   | Absurd
   | Loc of Lexing.position * expr
 
-and expr = 
+and expr =
     { expr_labels : string list;
       expr_node : expr_node;
     }
@@ -483,19 +917,19 @@ let rec iter_expr f e =
     | If(e1,e2,e3) ->
 	iter_expr f e1; iter_expr f e2; iter_expr f e3
     | While(e1,inv,var,e2) ->
-	iter_expr f e1; 
-	iter_assertion f inv; 
+	iter_expr f e1;
+	iter_assertion f inv;
 	option_iter (fun (var,r) -> iter_term f var;
                        match r with
                          | None -> ()
                          | Some id -> f id
-                    ) var;  
+                    ) var;
 	List.iter (iter_expr f) e2
     | Block(el) -> List.iter (iter_expr f) el
     | Assign(id,e) -> f id; iter_expr f e
-    | MultiAssign _ -> 
-        eprintf "Fatal error: Output.iter_expr called on MultiAssign@.";
-        assert false 
+    | MultiAssign _ ->
+        eprintf "Fatal error: Output.iter_expr should not be called on MultiAssign@.";
+        assert false
     | Let(_id,e1,e2) -> iter_expr f e1; iter_expr f e2
     | Let_ref(_id,e1,e2) -> iter_expr f e1; iter_expr f e2
     | App(e1,e2) -> iter_expr f e1; iter_expr f e2
@@ -513,9 +947,6 @@ let rec iter_expr f e =
 	iter_assertion f post;
 	List.iter (fun (_,a) -> iter_assertion f a) exceps
     | Assert(_,p, e) -> iter_assertion f p; iter_expr f e
-(*
-    | Label (_,e) 
-*)
     | Loc (_,e) -> iter_expr f e
     | BlackBox(ty) -> iter_why_type f ty
     | Absurd -> ()
@@ -523,32 +954,59 @@ let rec iter_expr f e =
 
 let fprintf_variant form = function
   | None -> ()
-  | Some (t, None) -> fprintf form "variant %a" fprintf_term t
-  | Some (t, Some r) -> fprintf form "variant %a for %s" fprintf_term t r
-	  
+  | Some (t, None) ->
+      if !why3syntax then
+        fprintf form "variant { %a }" fprintf_term t
+      else
+        fprintf form "variant %a" fprintf_term t
+  | Some (t, Some r) ->
+      if !why3syntax then
+        fprintf form "variant { %a } with %s" fprintf_term t r
+      else
+        fprintf form "variant %a for %s" fprintf_term t r
+
 let rec fprintf_expr_node form e =
   match e with
     | Cte(c) -> fprintf_constant form c
-    | Var(id) -> fprintf form "%s" id
+    | Var(id) ->
+        fprintf form "%s" (if !why3syntax then why3param id else id)
     | And(e1,e2) ->
-	fprintf form "@[(%a && %a)@]" 
+	fprintf form "@[(%a && %a)@]"
 	  fprintf_expr e1 fprintf_expr e2
     | Or(e1,e2) ->
-	fprintf form "@[(%a || %a)@]" 
+	fprintf form "@[(%a || %a)@]"
 	  fprintf_expr e1 fprintf_expr e2
     | Not(e1) ->
-	fprintf form "@[(not %a)@]" 
-	  fprintf_expr e1 
-    | Void -> fprintf form "void"
-    | Deref(id) -> fprintf form "!%s" id
+	fprintf form "@[(not %a)@]"
+	  fprintf_expr e1
+    | Void ->
+        if !why3syntax then
+          fprintf form "()"
+        else
+          fprintf form "void"
+    | Deref(id) ->
+        fprintf form "!%s" (why3id_if id)
     | If(e1,e2,e3) ->
-	fprintf form 
-	  "@[<hov 0>(if %a@ @[<hov 1>then@ %a@]@ @[<hov 1>else@ %a@])@]" 
+	fprintf form
+	  "@[<hov 0>(if %a@ @[<hov 1>then@ %a@]@ @[<hov 1>else@ %a@])@]"
 	  fprintf_expr e1 fprintf_expr e2 fprintf_expr e3
+    | While(e1,inv,var,e2) when !why3syntax && e1.expr_node = Cte (Prim_bool true) ->
+	fprintf form
+	  "@[<hov 0>loop@ @[<hov 1>@[<hov 2>@[<hov 2>invariant@ { %a }@]@ @[<hov 2>%a@]@]@ %a@]@ end@]"
+	  fprintf_assertion inv
+	  fprintf_variant var
+	  fprintf_expr_list e2
+    | While(e1,inv,var,e2) when !why3syntax ->
+	fprintf form
+	  "@[<hov 0>while %a do@ @[<hov 1>@[<hov 2>@[<hov 2>invariant@ { %a }@]@ @[<hov 2>%a@]@]@ %a@]@ done@]"
+	  fprintf_expr e1
+	  fprintf_assertion inv
+	  fprintf_variant var
+	  fprintf_expr_list e2
     | While(e1,inv,var,e2) ->
-	fprintf form 
-	  "@[<hov 0>while %a do@ @[<hov 1>@[<hov 2>{ @[<hov 2>invariant@ %a@]@ @[<hov 2>%a@] }@]@ %a@]@ done@]" 
-	  fprintf_expr e1 
+	fprintf form
+	  "@[<hov 0>while %a do@ @[<hov 1>@[<hov 2>{ @[<hov 2>invariant@ %a@]@ @[<hov 2>%a@] }@]@ %a@]@ done@]"
+	  fprintf_expr e1
 	  fprintf_assertion inv
 	  fprintf_variant var
 	  fprintf_expr_list e2
@@ -557,16 +1015,21 @@ let rec fprintf_expr_node form e =
     | Block(el) ->
 	fprintf form "@[<hov 0>begin@ @[<hov 1>  %a@]@ end@]" fprintf_expr_list el
     | Assign(id,e) ->
-	fprintf form "@[<hov 1>(%s := %a)@]" 
-	  id fprintf_expr e
-    | MultiAssign _ -> 
-	fprintf form "@[<hov 1>(MultiAssign ...)@]" 
+        fprintf form "@[<hov 1>(%s := %a)@]" (why3id_if id) fprintf_expr e
+    | MultiAssign _ ->
+	fprintf form "@[<hov 1>(MultiAssign ...)@]"
     | Let(id,e1,e2) ->
-	fprintf form "@[<hov 0>(let %s =@ %a in@ %a)@]" id
+        fprintf form "@[<hov 0>(let %s =@ %a in@ %a)@]" (why3id_if id)
 	  fprintf_expr e1 fprintf_expr e2
     | Let_ref(id,e1,e2) ->
-	fprintf form "@[<hov 0>(let %s =@ ref %a in@ %a)@]" id
+        fprintf form "@[<hov 0>(let %s =@ ref %a in@ %a)@]" (why3id_if id)
 	  fprintf_expr e1 fprintf_expr e2
+    | App({expr_node = App({expr_node = Var id},e1)},e2)
+        when !why3syntax && id="eq_int_" ->
+	fprintf form "@[<hov 1>(%a = %a)@]" fprintf_expr e1 fprintf_expr e2
+    | App({expr_node = App({expr_node = Var id},e1)},e2)
+        when !why3syntax && id="neq_int_" ->
+	fprintf form "@[<hov 1>(%a <> %a)@]" fprintf_expr e1 fprintf_expr e2
     | App(e1,e2) ->
 	fprintf form "@[<hov 1>(%a %a)@]" fprintf_expr e1 fprintf_expr e2
     | Raise(id,None) ->
@@ -574,92 +1037,115 @@ let rec fprintf_expr_node form e =
     | Raise(id,Some e) ->
 	fprintf form "@[<hov 1>(raise@ (%s@ %a))@]" id fprintf_expr e
     | Try(e1,exc,None,e2) ->
-	fprintf form "@[<hov 1>try@ %a@ with@ %s ->@ %a end@]" 
+	fprintf form "@[<hov 1>try@ %a@ with@ %s ->@ %a end@]"
 	  fprintf_expr e1 exc fprintf_expr e2
     | Try(e1,exc,Some id,e2) ->
-	fprintf form "@[<hov 1>try@ %a@ with@ %s %s ->@ %a end@]" 
+	fprintf form "@[<hov 1>try@ %a@ with@ %s %s ->@ %a end@]"
 	  fprintf_expr e1 exc id fprintf_expr e2
     | Fun(params,pre,body,post,signals) ->
 	fprintf form "@[<hov 1>fun @[";
-	List.iter 
-	  (fun (x,t) -> fprintf form "(%s : %a) " x (fprintf_type false) t) 
+	List.iter
+	  (fun (x,t) ->
+             (match t with
+               | Ref_type _ -> ()
+               | _ -> add_why3_local x);
+             fprintf form "(%s : %a) " (why3id_if x)
+               (fprintf_type ~need_colon:false false) t)
 	  params;
-	fprintf form "@]->@ @[<hov 0>{ "; 
-	if pre <> LTrue 
+	fprintf form "@]->@ @[<hov 0>{ ";
+	if pre <> LTrue
 	then fprintf_assertion form pre;
 	fprintf form " }@ %a@]@ " fprintf_expr body;
 	begin
 	  match signals with
-	    | [] -> 
+	    | [] ->
 		fprintf form "@[<hov 2>{ %a }@]@]" fprintf_assertion post
 	     | l ->
-		 fprintf form "@[<hov 2>{ %a@ | %a }@]"
-		   fprintf_assertion post
-		   (print_list alt
-		      (fun fmt (e,r) -> 
-			 fprintf fmt "@[<hov 2>%s =>@ %a@]" e
-			   fprintf_assertion r))
-		  l
-	end		    
+                 if !why3syntax then
+		   fprintf form "@[<hov 2>{ %a@ } | %a @]"
+		     fprintf_assertion post
+		     (print_list alt
+		        (fun fmt (e,r) ->
+			   fprintf fmt "@[<hov 2>%s ->@ { %a }@]" e
+			     fprintf_assertion r))
+		     l
+                 else
+		   fprintf form "@[<hov 2>{ %a@ | %a }@]"
+		     fprintf_assertion post
+		     (print_list alt
+		        (fun fmt (e,r) ->
+			   fprintf fmt "@[<hov 2>%s =>@ %a@]" e
+			     fprintf_assertion r))
+		     l
+	end;
+        List.iter
+	  (fun (x,t) ->
+             (match t with
+               | Ref_type _ -> ()
+               | _ -> remove_why3_local x))
+	  params;
 
     | Triple(_,pre,e,LTrue,[]) ->
-	fprintf form "@[<hov 0>(assert { %a };@ (%a))@]" 
+	fprintf form "@[<hov 0>(assert { %a };@ (%a))@]"
 	  fprintf_assertion pre
 	  fprintf_expr e
     | Triple(o,pre,e,post,exceps) ->
-	fprintf form "@[<hov 0>(assert { %a };@ ((%a)@ " 
+	fprintf form "@[<hov 0>(assert { %a };@ ((%a)@ "
 	  fprintf_assertion pre
 	  fprintf_expr e;
 	begin
 	  match exceps with
-	    | [] -> 
+	    | [] ->
 		(if o then fprintf form "{{ %a }}" else fprintf form "{ %a }")
 		  fprintf_assertion post
 	    | l ->
-		(if o then 
-		   fprintf form "@[<hov 2>{{ %a@ | %a }}@]" 
+		(if o then
+		   fprintf form "@[<hov 2>{{ %a@ | %a }}@]"
 		 else
 		   fprintf form "@[<hov 2>{ %a@ | %a }@]")
 		  fprintf_assertion post
 		  (print_list alt
-		  (fun fmt (e,r) -> 
+		  (fun fmt (e,r) ->
 		     fprintf fmt "@[<hov 2>%s =>@ %a@]" e
 		       fprintf_assertion r))
 		  l
 	end;
 	fprintf form "))@]"
     | Assert(k,p, e) ->
-	fprintf form "@[<hov 0>(%s@ { %a };@ %a)@]" 
+	fprintf form "@[<hov 0>(%s@ { %a };@ %a)@]"
           (match k with `ASSERT -> "assert" | `CHECK -> "check")
 	  fprintf_assertion p fprintf_expr e
-(*
-    | Label (s, e) ->
-	fprintf form "@[<hov 0>(%s:@ %a)@]" s fprintf_expr e
-*)
     | BlackBox(t) ->
-	fprintf form "@[<hov 0>[ %a ]@]" 
-	  (fprintf_type false) t
+	if !why3syntax then
+          fprintf form "@[<hov 0>any %a @]"
+	    (fprintf_type ~need_colon:false false) t
+        else
+	  fprintf form "@[<hov 0>[ %a ]@]"
+	    (fprintf_type ~need_colon:false false) t
     | Absurd ->
-	fprintf form "@[<hov 0>absurd@ @]" 
+	fprintf form "@[<hov 0>absurd@ @]"
     | Loc (_l, e) ->
 	fprintf_expr form e
 	(*
-	fprintf form "@[#%S %d %d#%a@]" l.pos_fname l.pos_lnum 
+	fprintf form "@[#%S %d %d#%a@]" l.pos_fname l.pos_lnum
 	  (l.pos_cnum - l.pos_bol) fprintf_expr e
 	*)
 
 and fprintf_expr form e =
   let rec aux l =
-    match l with 
+    match l with
       | [] -> fprintf_expr_node form e.expr_node
       | s::l ->
 (*
           if s="L2" then Format.eprintf "Output.fprintf_expr: printing label %s for expression %a@." s fprintf_expr_node e.expr_node;
 *)
-          fprintf form "@[<hov 0>(%s:@ " s;
+          if !why3syntax then
+            fprintf form "@[<hov 0>(%a@ " (why3loc ~prog:true) s
+          else
+            fprintf form "@[<hov 0>(%s:@ " s;
           aux l;
           fprintf form ")@]"
-  in aux e.expr_labels 
+  in aux e.expr_labels
 
 and fprintf_expr_list form l =
   match l with
@@ -693,7 +1179,7 @@ let make_and_expr a1 a2 =
     | (_,_) -> mk_expr (And(a1,a2))
 
 
-let make_app_rec ~logic f l = 
+let make_app_rec ~logic f l =
   let rec make_rec accu = function
     | [] -> accu
     | e::r -> make_rec (mk_expr (App(accu,e))) r
@@ -710,13 +1196,13 @@ let make_logic_app id l = make_app_rec ~logic:true (mk_var id) l
 let make_app_e = make_app_rec ~logic:false
 
 let make_while cond inv var e =
-  let body = 
+  let body =
     match e.expr_node with
       | Block(l) -> l
       | _ -> [e]
   in mk_expr (While(cond,inv,var,body))
 
-let make_label label e = 
+let make_label label e =
 (*
   if label = "L2" then Format.eprintf "Output.make_label: adding label %s@." label;
 *)
@@ -740,12 +1226,12 @@ let append_list e l =
     | [] -> [e]
     | e'::rem ->
         match e.expr_node,e'.expr_node with
-          | MultiAssign(mark1,pos1,lets1,isrefa1,ta1,a1,tmpe1,e1,f1,l1), 
+          | MultiAssign(mark1,pos1,lets1,isrefa1,ta1,a1,tmpe1,e1,f1,l1),
             MultiAssign(_,_,lets2,_isrefa2,_ta2,a2,_tmpe2,e2,f2,l2) ->
               (*
-                Format.eprintf 
+                Format.eprintf
                 "Found multi-assigns: a1=%a, a2=%a, e1=%a, e2=%a, f1=%s,f2=%s@."
-                fprintf_expr a1 fprintf_expr a2 
+                fprintf_expr a1 fprintf_expr a2
                 fprintf_expr e1 fprintf_expr e2 f1 f2;
               *)
               if a1 = a2 && e1 = e2 && f1 = f2 then
@@ -753,15 +1239,15 @@ let append_list e l =
                   try
                     let l = List.merge compare_parallel_assign l1 l2 in
                     (*
-                      Format.eprintf "append_list, merge successful!@.";             
+                      Format.eprintf "append_list, merge successful!@.";
                     *)
                     { expr_labels = e.expr_labels @ e'.expr_labels ;
-                      expr_node = 
+                      expr_node =
                         MultiAssign(mark1,pos1,lets1@lets2,isrefa1,ta1,a1,tmpe1,e1,f1,l) }
                     ::rem
                   with Exit ->
                     (*
-                      Format.eprintf "append_list, merge failed...@.";             
+                      Format.eprintf "append_list, merge failed...@.";
                     *)
                     e::l
                 end
@@ -783,30 +1269,30 @@ let append_list e l =
                 Format.eprintf "MultiAssign not preceeded by MultiAssign@.";
               *)
               e::l
-          | _ -> 
+          | _ ->
               (*
                 Format.eprintf "no MultiAssign at all@.";
               *)
               e::l
-        
+
 
 let make_block labels l =
   match l with
       | [] -> assert false
       | [e] -> {e with expr_labels = labels @ e.expr_labels }
       | _ -> { expr_labels = labels ; expr_node = Block l }
- 
+
 
 let append e1 e2 =
   match e1.expr_node,e2.expr_node with
     | Void,_ -> (* assert (e1.expr_labels = []);*) e2
     | _,Void -> assert (e2.expr_labels = []); e1
-    | Block(l1),Block(l2) -> 
-        make_block (e1.expr_labels@e2.expr_labels) 
+    | Block(l1),Block(l2) ->
+        make_block (e1.expr_labels@e2.expr_labels)
           (List.fold_right append_list l1 l2)
-    | Block(l1),_ -> 
+    | Block(l1),_ ->
         make_block e1.expr_labels (List.fold_right append_list l1 [e2])
-    | _,Block(l2) -> 
+    | _,Block(l2) ->
         make_block e2 .expr_labels (append_list e1 l2)
     | _ -> make_block [] (append_list e1 [e2])
 
@@ -821,8 +1307,8 @@ type why_decl =
   | Param of bool * why_id * why_type         (*r parameter in why *)
   | Def of why_id * expr               (*r global let in why *)
   | Logic of bool * why_id * (string * logic_type) list * logic_type    (*r logic decl in why *)
-  | Predicate of bool * why_id * (string * logic_type) list * assertion  
-  | Inductive of bool * why_id * (string * logic_type) list *  
+  | Predicate of bool * why_id * (string * logic_type) list * assertion
+  | Inductive of bool * why_id * (string * logic_type) list *
       (string * assertion) list (*r inductive definition *)
   | Goal of goal_kind * why_id * assertion         (*r Goal *)
   | Function of bool * why_id * (string * logic_type) list * logic_type * term
@@ -833,31 +1319,31 @@ type why_decl =
 
 let get_why_id d =
   match d with
-    | Param(_,id,_) 
+    | Param(_,id,_)
     | Logic(_,id,_,_)
-    | Def(id,_) 
-    | Goal(_,id,_) 
-    | Predicate(_,id,_,_) 
-    | Function(_,id,_,_,_) 
+    | Def(id,_)
+    | Goal(_,id,_)
+    | Predicate(_,id,_,_)
+    | Function(_,id,_,_,_)
     | Inductive(_,id,_,_)
-    | Type (id,_) 
+    | Type (id,_)
     | Exception(id,_) -> id
 
 let iter_why_decl f d =
   match d with
     | Param(_,_,t) -> iter_why_type f t
     | Def(_id,t) -> iter_expr f t
-    | Logic(_,_id,args,t) -> 
+    | Logic(_,_id,args,t) ->
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	iter_logic_type f t
     | Inductive(_,_id,args,cases) ->
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	List.iter (fun (_,a) -> iter_assertion f a) cases
-    | Predicate(_,_id,args,p) -> 
+    | Predicate(_,_id,args,p) ->
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	iter_assertion f p
     | Goal(_,_id,t) -> iter_assertion f t
-    | Function(_,_id,args,t,p) -> 
+    | Function(_,_id,args,t,p) ->
 	List.iter (fun (_,t) -> iter_logic_type f t) args;
 	iter_logic_type f t;
 	iter_term f p
@@ -879,24 +1365,24 @@ exception Recursion;;
 let rec do_topo decl_map iter_fun output_fun id d =
   match d.state with
     | `DONE -> ()
-    | `RUNNING -> 
+    | `RUNNING ->
 	eprintf "Warning: recursive definition of %s in generated file@." id
     | `TODO ->
 	d.state <- `RUNNING;
 	iter_fun
 	  (fun id ->
-	     try 
+	     try
 	       let s = StringMap.find id decl_map in
 	       do_topo decl_map iter_fun output_fun id s
 	     with
 		 Not_found -> ())
-	  d.decl;	
+	  d.decl;
 	output_fun d.decl;
 	d.state <- `DONE
 ;;
 
-let compare_ids 
-    { name = id1; loc = (_,l1,_,_)} 
+let compare_ids
+    { name = id1; loc = (_,l1,_,_)}
     { name = id2; loc = (_,l2,_,_)} =
   let c = Pervasives.compare l1 l2 in
   if c = 0 then Pervasives.compare id1 id2 else c
@@ -921,7 +1407,10 @@ let build_map get_id decl_list =
 ;;
 
 let fprint_logic_arg form (id,t) =
-  fprintf form "%s:%a" id fprintf_logic_type t
+  if !why3syntax then
+    fprintf form "(%s:%a)" (why3ident id) fprintf_logic_type t
+  else
+    fprintf form "%s:%a" id fprintf_logic_type t
 
 let str_of_goal_kind = function
   | KAxiom -> "axiom"
@@ -930,39 +1419,87 @@ let str_of_goal_kind = function
 
 let fprintf_why_decl form d =
   match d with
+    | Param(b,id,t) when !why3syntax ->
+	fprintf form "@[<hov 1>%sval %s@ %a@]@.@."
+	(if b then "external " else "") (why3ident id.name)
+	  (fprintf_type ~need_colon:true false) t
     | Param(b,id,t) ->
-	fprintf form "@[<hov 1>%sparameter %s :@ %a@]@.@." 
-	(if b then "external " else "") id.name 
-	  (fprintf_type false) t
+	fprintf form "@[<hov 1>%sparameter %s :@ %a@]@.@."
+	(if b then "external " else "") id.name
+	  (fprintf_type ~need_colon:false false) t
+    | Logic(b,id,args,t) when !why3syntax ->
+	fprintf form "@[<hov 1>%s%s %s %a : %a@.@."
+	  (if b then "external " else "")
+          (if is_prop t then "predicate" else "function")
+          (why3ident id.name)
+	  (print_list space (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
+	  fprintf_logic_type t
     | Logic(b,id,args,t) ->
 	fprintf form "@[<hov 1>%slogic %s: %a -> %a@.@."
-	  (if b then "external " else "") id.name 
+	  (if b then "external " else "") id.name
 	  (print_list comma (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
-	  fprintf_logic_type t 
-    | Inductive(b,id,args,cases) ->
-	fprintf form "@[<hov 1>%sinductive %s: @[%a -> prop@] =@\n@[<v 0>%a@]@\n@."
-	  (if b then "external " else "") id.name 
-	  (print_list comma (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
-	  (print_list newline 
+	  fprintf_logic_type t
+    | Inductive(b,id,args,cases) when !why3syntax ->
+	fprintf form "@[<hov 1>%sinductive %s @[%a@] =@\n@[<v 0>%a@]@\n@."
+	  (if b then "external " else "") (why3ident id.name)
+	  (print_list space (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
+	  (print_list newline
 	     (fun _fmt (id,a) ->
 		fprintf form "| %s: @[%a@]" id fprintf_assertion a))
 	  cases
-    | Goal(k,id,p) ->
-	fprintf form "@[<hov 1>%s %s :@ %a@]@.@." (str_of_goal_kind k) id.name 
+    | Inductive(b,id,args,cases) ->
+	fprintf form "@[<hov 1>%sinductive %s: @[%a -> prop@] =@\n@[<v 0>%a@]@\n@."
+	  (if b then "external " else "") id.name
+	  (print_list comma (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
+	  (print_list newline
+	     (fun _fmt (id,a) ->
+		fprintf form "| %s: @[%a@]" id fprintf_assertion a))
+	  cases
+    | Goal(k,id,p) when !why3syntax ->
+	fprintf form "@[<hov 1>%s %s %a:@ %a@]@.@." (str_of_goal_kind k)
+          (why3id id.name)
+          (why3loc ~prog:false) id.name
 	  fprintf_assertion p
+    | Goal(k,id,p) ->
+	fprintf form "@[<hov 1>%s %s :@ %a@]@.@." (str_of_goal_kind k)
+          id.name
+	  fprintf_assertion p
+    | Def(id,e) when !why3syntax ->
+        fprintf form "@[<hov 1>let %s %a=@ %a@]@.@."
+          (why3id id.name)
+          (why3loc ~prog:false) id.name
+          fprintf_expr e
     | Def(id,e) ->
-	fprintf form "@[<hov 1>let %s =@ %a@]@.@." id.name fprintf_expr e
+        fprintf form "@[<hov 1>let %s =@ %a@]@.@." (why3id_if id.name)
+          fprintf_expr e
+    | Predicate (b, id, args, p) when !why3syntax ->
+        List.iter (fun (id,_) -> add_why3_local id) args;
+	fprintf form "@[<hov 1>%spredicate %s%a =@ %a@]@.@."
+	  (if b then "external " else "") (why3ident id.name)
+	  (print_list space fprint_logic_arg) args
+	  fprintf_assertion p;
+        List.iter (fun (id,_) -> remove_why3_local id) args
     | Predicate (b, id, args, p) ->
 	fprintf form "@[<hov 1>%spredicate %s(%a) =@ %a@]@.@."
-	  (if b then "external " else "") id.name 
+	  (if b then "external " else "") id.name
 	  (print_list comma fprint_logic_arg) args
 	  fprintf_assertion p
+    | Function(b,id,args,t,e) when !why3syntax ->
+        List.iter (fun (id,_) -> add_why3_local id) args;
+	fprintf form "@[<hov 1>%sfunction %s%a : %a =@ %a@]@.@."
+	  (if b then "external " else "") (why3ident id.name)
+	  (print_list space fprint_logic_arg) args
+	  fprintf_logic_type t
+	  fprintf_term e;
+        List.iter (fun (id,_) -> remove_why3_local id) args
     | Function(b,id,args,t,e) ->
 	fprintf form "@[<hov 1>%sfunction %s(%a) : %a =@ %a@]@.@."
-	  (if b then "external " else "") id.name 
+	  (if b then "external " else "") id.name
 	  (print_list comma fprint_logic_arg) args
-	  fprintf_logic_type t 
+	  fprintf_logic_type t
 	  fprintf_term e
+    | Type (id, []) when !why3syntax ->
+	fprintf form "@[type %s@]@.@." (why3ident id.name)
     | Type (id, []) ->
 	fprintf form "@[type %s@]@.@." id.name
     | Type (id, [t]) ->
@@ -974,8 +1511,12 @@ let fprintf_why_decl form d =
     | Exception(id, None) ->
 	fprintf form "@[exception %s@]@.@." id.name
     | Exception(id, Some t) ->
-	fprintf form "@[exception %s of %a@]@.@." id.name fprintf_logic_type t 
-	
+        if !why3syntax then
+	  fprintf form "@[exception %s %a@]@.@." id.name
+            fprintf_logic_type t
+        else
+          fprintf form "@[exception %s of %a@]@.@." id.name fprintf_logic_type t
+
 
 let output_decls get_id iter_decl output_decl decls =
   let map, l = build_map get_id decls in
@@ -983,20 +1524,61 @@ let output_decls get_id iter_decl output_decl decls =
     (fun (id,decl) ->
        do_topo map iter_decl output_decl id.name decl)
     l
-;;
 
-let fprintf_why_decls form decls =
+let output_why3_imports form use_floats full_floats =
+  fprintf form "use import int.Int@\n@\n";
+  fprintf form "use import bool.Bool@\n@\n";
+  if !why3_IntMinMax then
+    fprintf form "use import int.MinMax as IntMinMax@\n@\n";
+  if !why3_ComputerDivision then
+    fprintf form "use import int.ComputerDivision@\n@\n";
+  if !why3_reals then
+    fprintf form "use import real.RealInfix@\n@\n";
+  if !why3_FromInt then
+    fprintf form "use import real.FromInt@\n@\n";
+  if !why3_Truncate then
+    fprintf form "use import real.Truncate@\n@\n";
+  if !why3_Square then
+    fprintf form "use import real.Square@\n@\n";
+  if !why3_Power then
+    fprintf form "use import real.Power@\n@\n";
+  if !why3_RealMinMax then
+    fprintf form "use import real.MinMax as RealMinMax@\n@\n";
+  if !why3_AbsReal then
+    fprintf form "use import real.Abs as AbsReal@\n@\n";
+  if !why3_Trigonometry then
+    fprintf form "use import real.Trigonometry@\n@\n";
+  if use_floats then
+    begin
+      if full_floats then
+        begin
+          fprintf form "use import floating_point.SingleFull@\n";
+          fprintf form "use import floating_point.DoubleFull@\n@\n";
+        end
+      else
+        begin
+          fprintf form "use import floating_point.Single@\n";
+          fprintf form "use import floating_point.Double@\n@\n";
+        end
+    end;
+  fprintf form "use import jessie3.Jessie_memory_model@\n@\n"
+
+
+let fprintf_why_decls ?(why3=false) ?(use_floats=false)
+    ?(full_floats=false)
+    form decls =
+  why3syntax := why3;
   (* Why do we need a partition ?
-     because one may have a type and a logic/parameter with the same name, 
+     because one may have a type and a logic/parameter with the same name,
      and the computation of dependencies is confused in that case
-     
-     Type may depend on nothing 
+
+     Type may depend on nothing
      Logic may depend on Type, Logic and Predicate
      Predicate may depend on Type, Predicate and Logic
      Axiom may depend on Type, Predicate and Logic
      Parameter may depend on Type, Predicate and Logic
      Def may depend on Type, Parameter, Predicate, Logic, and Def
-     
+
      - Claude, 16 nov 2006
 
   *)
@@ -1016,14 +1598,16 @@ let fprintf_why_decls form decls =
     output_decls get_why_id iter_why_decl (fprintf_why_decl form) defs
 *)
 
+  if why3 then List.iter (iter_why_decl compute_why3_dependencies) decls;
+
   (*
     Additional rules :
-    
+
     Exception may depend on Type
     Parameter may depend on Exception
-    
+
     - Nicolas R., 8 nov 2007
-    
+
   *)
 
   let (types, params, defs, others) =
@@ -1031,90 +1615,44 @@ let fprintf_why_decls form decls =
       (fun (t, p, d, o) decl ->
 	 match decl with
 	   | Type _ -> (decl::t, p, d, o)
-	   | Param _ -> (t, decl::p, d, o)
+	   | Exception _ | Param _ -> (t, decl::p, d, o)
 	   | Def _ -> (t, p, decl::d, o)
 	   | _ -> (t, p, d, decl::o))
       ([], [], [], []) decls
   in
+  if why3 then
+    begin
+      fprintf form "theory Jessie_model@\n@\n";
+      output_why3_imports form use_floats full_floats
+    end;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) types;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) others;
+  if why3 then 
+    begin
+      fprintf form "end@\n@\n";
+      fprintf form "module Jessie_program@\n@\n";
+      output_why3_imports form use_floats full_floats;
+      fprintf form "use import Jessie_model@\n@\n";
+      fprintf form "use import module ref.Ref@\n@\n";
+      fprintf form "use import module jessie3.JessieDivision@\n@\n";
+      if use_floats then
+        begin
+          fprintf form "use import floating_point.Rounding@\n@\n";
+          if full_floats then
+            fprintf form "use import module jessie3.JessieFloatsFull@\n@\n"
+          else
+            fprintf form "use import module jessie3.JessieFloats@\n@\n";
+        end;
+      fprintf form "use import module jessie3.Jessie_memory_model_parameters@\n@\n";
+    end;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) params;
-  output_decls get_why_id iter_why_decl (fprintf_why_decl form) defs
+  output_decls get_why_id iter_why_decl (fprintf_why_decl form) defs;
+  if why3 then fprintf form "end@\n@\n"
 
 
-(*s locs table *)
-
-type kind =
-  | VarDecr
-  | ArithOverflow
-  | DownCast
-  | IndexBounds
-  | PointerDeref
-  | UserCall
-  | DivByZero
-  | AllocSize
-  | Pack
-  | Unpack
-  | FPoverflow
-
-
-let pos_table : 
-    (string, (kind option * string option * string option * Loc.position)) 
-    Hashtbl.t 
-    = Hashtbl.create 97
-let name_counter = ref 0
-let reg_pos prefix ?id ?kind ?name ?formula pos =
-  let id = match id with
-    | None ->  
-	incr name_counter;
-	prefix ^ "_" ^ string_of_int !name_counter
-    | Some n -> n
-  in
-  Hashtbl.add pos_table id (kind,name,formula,pos);
-  id
-
-let print_kind fmt k =
-  fprintf fmt "%s"
-    (match k with
-       | VarDecr -> "VarDecr"
-       | Pack -> "Pack"
-       | Unpack -> "Unpack"
-       | DivByZero -> "DivByZero"
-       | AllocSize -> "AllocSize"
-       | UserCall -> "UserCall"
-       | PointerDeref -> "PointerDeref"
-       | IndexBounds -> "IndexBounds"
-       | DownCast -> "DownCast"
-       | ArithOverflow -> "ArithOverflow"
-       | FPoverflow -> "FPOverflow")
-
-let abs_fname f =
-  if Filename.is_relative f then
-    Filename.concat (Unix.getcwd ()) f 
-  else f
-
-let print_pos fmt =
-  Hashtbl.iter 
-    (fun id (kind,name,formula,(b,e)) ->
-       fprintf fmt "[%s]@\n" id;
-       Option_misc.iter
-	 (fun k -> fprintf fmt "kind = %a@\n" print_kind k) kind;
-       Option_misc.iter
-	 (fun n -> fprintf fmt "name = \"%s\"@\n" n) name;
-       Option_misc.iter
-	 (fun n -> fprintf fmt "formula = \"%s\"@\n" n) formula;
-       fprintf fmt "file = \"%s\"@\n" 
-         (String.escaped (abs_fname b.Lexing.pos_fname));
-       let l = b.Lexing.pos_lnum in
-       let fc = b.Lexing.pos_cnum - b.Lexing.pos_bol in
-       let lc = e.Lexing.pos_cnum - b.Lexing.pos_bol in
-       fprintf fmt "line = %d@\n" l;
-       fprintf fmt "begin = %d@\n" fc;
-       fprintf fmt "end = %d@\n@\n" lc)
-    pos_table
 
 (*
-  Local Variables: 
+  Local Variables:
   compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
-  End: 
+  End:
 *)

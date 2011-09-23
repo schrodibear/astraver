@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -190,7 +190,7 @@ let run () =
 
     (* locname is 'file.cloc' *)
     let locname = basename ^ ".cloc" in
-    Pp.print_in_file Output.print_pos (Filename.concat jessie_subdir locname);
+    Pp.print_in_file Output.old_print_pos (Filename.concat jessie_subdir locname);
     Jessie_options.feedback "File %s/%s written." jessie_subdir locname;
 
     if Jessie_options.GenOnly.get () then () else
@@ -256,6 +256,7 @@ let run () =
       let jessie_opt =
 	match atp with
 	  | "why3" | "why3ide" -> ""
+          | "why3ml" -> "-why3ml"
 	  | _ -> "-why-opt -split-user-conj"
       in
       let cmd =

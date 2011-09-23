@@ -2,29 +2,31 @@
 /**************************************************************************/
 /*                                                                        */
 /*  The Why platform for program certification                            */
-/*  Copyright (C) 2002-2008                                               */
-/*    Romain BARDOU                                                       */
-/*    Jean-François COUCHOT                                               */
-/*    Mehdi DOGGUY                                                        */
-/*    Jean-Christophe FILLIÂTRE                                           */
-/*    Thierry HUBERT                                                      */
-/*    Claude MARCHÉ                                                       */
-/*    Yannick MOY                                                         */
-/*    Christine PAULIN                                                    */
-/*    Yann RÉGIS-GIANAS                                                   */
-/*    Nicolas ROUSSET                                                     */
-/*    Xavier URBAIN                                                       */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
 /*                                                                        */
 /*  This software is free software; you can redistribute it and/or        */
-/*  modify it under the terms of the GNU General Public                   */
-/*  License version 2, as published by the Free Software Foundation.      */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
 /*                                                                        */
 /*  This software is distributed in the hope that it will be useful,      */
 /*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
 /*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
-/*                                                                        */
-/*  See the GNU General Public License version 2 for more details         */
-/*  (enclosed in the file GPL).                                           */
 /*                                                                        */
 /**************************************************************************/
 
@@ -78,6 +80,15 @@ public class Purse {
     }
 
 }
+
+
+
+/*
+Local Variables:
+compile-command: "make Purse.why3ml"
+End:
+*/
+
 
 ========== krakatoa execution ==========
 Parsing OK.
@@ -300,62 +311,62 @@ End:
 ========== file tests/java/Purse.jloc ==========
 [K_10]
 file = "HOME/tests/java/Purse.java"
-line = 65
+line = 67
 begin = 38
 end = 55
 
 [K_11]
 file = "HOME/tests/java/Purse.java"
-line = 60
+line = 62
 begin = 17
 end = 23
 
 [K_12]
 file = "HOME/tests/java/Purse.java"
-line = 69
+line = 71
 begin = 22
 end = 29
 
 [Purse_withdraw]
 name = "Method withdraw"
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 69
 begin = 16
 end = 24
 
 [K_13]
 file = "HOME/tests/java/Purse.java"
-line = 69
+line = 71
 begin = 22
 end = 33
 
 [K_14]
 file = "HOME/tests/java/Purse.java"
-line = 69
+line = 71
 begin = 12
 end = 33
 
 [K_15]
 file = "HOME/tests/java/Purse.java"
-line = 68
+line = 70
 begin = 12
 end = 19
 
 [K_16]
 file = "HOME/tests/java/Purse.java"
-line = 68
+line = 70
 begin = 12
 end = 24
 
 [K_17]
 file = "HOME/tests/java/Purse.java"
-line = 74
+line = 76
 begin = 16
 end = 34
 
 [K_18]
 file = "HOME/tests/java/Purse.java"
-line = 76
+line = 78
 begin = 15
 end = 22
 
@@ -376,7 +387,7 @@ end = 41
 [cons_NoCreditException]
 name = "Constructor of class NoCreditException"
 file = "HOME/tests/java/Purse.java"
-line = 35
+line = 37
 begin = 11
 end = 28
 
@@ -390,19 +401,19 @@ end = 20
 [Purse_getBalance]
 name = "Method getBalance"
 file = "HOME/tests/java/Purse.java"
-line = 75
+line = 77
 begin = 15
 end = 25
 
 [K_1]
 file = "HOME/tests/java/Purse.java"
-line = 44
+line = 46
 begin = 17
 end = 21
 
 [K_2]
 file = "HOME/tests/java/Purse.java"
-line = 46
+line = 48
 begin = 16
 end = 28
 
@@ -415,43 +426,43 @@ end = 31
 
 [K_3]
 file = "HOME/tests/java/Purse.java"
-line = 49
+line = 51
 begin = 8
 end = 19
 
 [K_4]
 file = "HOME/tests/java/Purse.java"
-line = 54
+line = 56
 begin = 16
 end = 44
 
 [K_5]
 file = "HOME/tests/java/Purse.java"
-line = 52
+line = 54
 begin = 17
 end = 23
 
 [K_6]
 file = "HOME/tests/java/Purse.java"
-line = 57
+line = 59
 begin = 8
 end = 20
 
 [K_7]
 file = "HOME/tests/java/Purse.java"
-line = 62
+line = 64
 begin = 38
 end = 66
 
 [K_8]
 file = "HOME/tests/java/Purse.java"
-line = 62
+line = 64
 begin = 16
 end = 34
 
 [K_9]
 file = "HOME/tests/java/Purse.java"
-line = 62
+line = 64
 begin = 16
 end = 66
 
@@ -514,7 +525,7 @@ end = 43
 [Purse_credit]
 name = "Method credit"
 file = "HOME/tests/java/Purse.java"
-line = 56
+line = 58
 begin = 16
 end = 22
 
@@ -535,7 +546,7 @@ end = 31
 [cons_Purse]
 name = "Constructor of class Purse"
 file = "HOME/tests/java/Purse.java"
-line = 48
+line = 50
 begin = 11
 end = 16
 
@@ -589,10 +600,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Purse
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Purse.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/Purse_why.sx
 
@@ -652,6 +664,13 @@ simplify: simplify/Purse_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/Purse_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/Purse_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -725,6 +744,9 @@ why/%_why3.why: why/%.why
 why3ide: why/Purse_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: Purse.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include Purse.depend
 
 depend: coq/Purse_why.v
@@ -750,7 +772,7 @@ end = -1
 name = "Constructor of class Purse"
 behavior = "Safety"
 file = "HOME/tests/java/Purse.java"
-line = 48
+line = 50
 begin = 11
 end = 16
 
@@ -861,7 +883,7 @@ end = 55
 
 [cons_Exception_Throwable_ensures_default]
 name = "Constructor of class Exception"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/java_api/java/lang/Exception.java"
 line = 76
 begin = 11
@@ -875,7 +897,7 @@ end = -1
 
 [JC_225]
 file = "HOME/tests/java/Purse.java"
-line = 75
+line = 77
 begin = 15
 end = 25
 
@@ -899,7 +921,7 @@ end = -1
 
 [JC_227]
 file = "HOME/tests/java/Purse.java"
-line = 75
+line = 77
 begin = 15
 end = 25
 
@@ -911,7 +933,7 @@ end = -1
 
 [JC_229]
 file = "HOME/tests/java/Purse.java"
-line = 74
+line = 76
 begin = 16
 end = 34
 
@@ -947,7 +969,7 @@ end = -1
 
 [cons_Exception_String_Throwable_ensures_default]
 name = "Constructor of class Exception"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/java_api/java/lang/Exception.java"
 line = 58
 begin = 11
@@ -997,7 +1019,7 @@ end = -1
 
 [JC_230]
 file = "HOME/tests/java/Purse.java"
-line = 74
+line = 76
 begin = 16
 end = 34
 
@@ -1015,7 +1037,7 @@ end = 28
 
 [JC_231]
 file = "HOME/tests/java/Purse.java"
-line = 75
+line = 77
 begin = 15
 end = 25
 
@@ -1027,7 +1049,7 @@ end = -1
 
 [JC_232]
 file = "HOME/tests/java/Purse.java"
-line = 75
+line = 77
 begin = 15
 end = 25
 
@@ -1045,9 +1067,9 @@ end = -1
 
 [Purse_credit_ensures_default]
 name = "Method credit"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/Purse.java"
-line = 56
+line = 58
 begin = 16
 end = 22
 
@@ -1061,7 +1083,7 @@ end = -1
 name = "Method withdraw"
 behavior = "Safety"
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 69
 begin = 16
 end = 24
 
@@ -1439,7 +1461,7 @@ end = 26
 
 [cons_Throwable_String_ensures_default]
 name = "Constructor of class Throwable"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/java_api/java/lang/Throwable.java"
 line = 194
 begin = 11
@@ -1447,9 +1469,9 @@ end = 20
 
 [Purse_getBalance_ensures_default]
 name = "Method getBalance"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/Purse.java"
-line = 75
+line = 77
 begin = 15
 end = 25
 
@@ -1491,7 +1513,7 @@ end = -1
 
 [cons_Exception_String_ensures_default]
 name = "Constructor of class Exception"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/java_api/java/lang/Exception.java"
 line = 40
 begin = 11
@@ -1541,9 +1563,9 @@ end = -1
 
 [Purse_withdraw_ensures_default]
 name = "Method withdraw"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 69
 begin = 16
 end = 24
 
@@ -1589,13 +1611,13 @@ end = -1
 name = "Constructor of class NoCreditException"
 behavior = "Safety"
 file = "HOME/tests/java/Purse.java"
-line = 35
+line = 37
 begin = 11
 end = 28
 
 [JC_155]
 file = "HOME/tests/java/Purse.java"
-line = 35
+line = 37
 begin = 11
 end = 28
 
@@ -1613,7 +1635,7 @@ end = -1
 
 [JC_157]
 file = "HOME/tests/java/Purse.java"
-line = 35
+line = 37
 begin = 11
 end = 28
 
@@ -1685,17 +1707,17 @@ end = 31
 
 [cons_Purse_ensures_default]
 name = "Constructor of class Purse"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/Purse.java"
-line = 48
+line = 50
 begin = 11
 end = 16
 
 [Purse_withdraw_exsures_amount_too_large]
 name = "Method withdraw"
-behavior = "Exceptional behavior `amount_too_large'"
+behavior = "Behavior `amount_too_large'"
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 69
 begin = 16
 end = 24
 
@@ -1719,7 +1741,7 @@ end = -1
 
 [JC_163]
 file = "HOME/tests/java/Purse.java"
-line = 48
+line = 50
 begin = 11
 end = 16
 
@@ -1731,7 +1753,7 @@ end = -1
 
 [JC_165]
 file = "HOME/tests/java/Purse.java"
-line = 48
+line = 50
 begin = 11
 end = 16
 
@@ -1751,7 +1773,7 @@ end = 20
 
 [cons_Throwable_String_Throwable_ensures_default]
 name = "Constructor of class Throwable"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/java_api/java/lang/Throwable.java"
 line = 216
 begin = 11
@@ -1759,13 +1781,13 @@ end = 20
 
 [JC_167]
 file = "HOME/tests/java/Purse.java"
-line = 46
+line = 48
 begin = 16
 end = 28
 
 [JC_168]
 file = "HOME/tests/java/Purse.java"
-line = 48
+line = 50
 begin = 11
 end = 16
 
@@ -1777,15 +1799,15 @@ end = 16
 
 [cons_NoCreditException_ensures_default]
 name = "Constructor of class NoCreditException"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/Purse.java"
-line = 35
+line = 37
 begin = 11
 end = 28
 
 [cons_Exception_ensures_default]
 name = "Constructor of class Exception"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/java_api/java/lang/Exception.java"
 line = 28
 begin = 11
@@ -1793,13 +1815,13 @@ end = 20
 
 [JC_170]
 file = "HOME/tests/java/Purse.java"
-line = 46
+line = 48
 begin = 16
 end = 28
 
 [JC_171]
 file = "HOME/tests/java/Purse.java"
-line = 48
+line = 50
 begin = 11
 end = 16
 
@@ -1811,25 +1833,25 @@ end = 16
 
 [JC_173]
 file = "HOME/tests/java/Purse.java"
-line = 48
+line = 50
 begin = 11
 end = 16
 
 [JC_174]
 file = "HOME/tests/java/Purse.java"
-line = 48
+line = 50
 begin = 11
 end = 16
 
 [JC_175]
 file = "HOME/tests/java/Purse.java"
-line = 52
+line = 54
 begin = 17
 end = 23
 
 [JC_176]
 file = "HOME/tests/java/Purse.java"
-line = 56
+line = 58
 begin = 16
 end = 22
 
@@ -1849,13 +1871,13 @@ end = 20
 
 [JC_178]
 file = "HOME/tests/java/Purse.java"
-line = 52
+line = 54
 begin = 17
 end = 23
 
 [JC_179]
 file = "HOME/tests/java/Purse.java"
-line = 56
+line = 58
 begin = 16
 end = 22
 
@@ -1911,7 +1933,7 @@ end = 65
 name = "Method credit"
 behavior = "Safety"
 file = "HOME/tests/java/Purse.java"
-line = 56
+line = 58
 begin = 16
 end = 22
 
@@ -1929,7 +1951,7 @@ end = 65
 
 [JC_181]
 file = "HOME/tests/java/Purse.java"
-line = 54
+line = 56
 begin = 16
 end = 44
 
@@ -1941,7 +1963,7 @@ end = 20
 
 [JC_182]
 file = "HOME/tests/java/Purse.java"
-line = 56
+line = 58
 begin = 16
 end = 22
 
@@ -1961,13 +1983,13 @@ end = 16
 
 [JC_184]
 file = "HOME/tests/java/Purse.java"
-line = 54
+line = 56
 begin = 16
 end = 44
 
 [JC_185]
 file = "HOME/tests/java/Purse.java"
-line = 56
+line = 58
 begin = 16
 end = 22
 
@@ -1979,13 +2001,13 @@ end = 16
 
 [JC_187]
 file = "HOME/tests/java/Purse.java"
-line = 56
+line = 58
 begin = 16
 end = 22
 
 [JC_188]
 file = "HOME/tests/java/Purse.java"
-line = 56
+line = 58
 begin = 16
 end = 22
 
@@ -1993,19 +2015,19 @@ end = 22
 name = "Method getBalance"
 behavior = "Safety"
 file = "HOME/tests/java/Purse.java"
-line = 75
+line = 77
 begin = 15
 end = 25
 
 [JC_189]
 file = "HOME/tests/java/Purse.java"
-line = 60
+line = 62
 begin = 17
 end = 23
 
 [cons_Throwable_ensures_default]
 name = "Constructor of class Throwable"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/java_api/java/lang/Throwable.java"
 line = 179
 begin = 11
@@ -2031,7 +2053,7 @@ end = -1
 
 [JC_200]
 file = "HOME/tests/java/Purse.java"
-line = 62
+line = 64
 begin = 16
 end = 34
 
@@ -2043,7 +2065,7 @@ end = -1
 
 [JC_201]
 file = "HOME/tests/java/Purse.java"
-line = 62
+line = 64
 begin = 38
 end = 66
 
@@ -2055,7 +2077,7 @@ end = -1
 
 [JC_202]
 file = "HOME/tests/java/Purse.java"
-line = 62
+line = 64
 begin = 16
 end = 66
 
@@ -2067,7 +2089,7 @@ end = -1
 
 [JC_203]
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 69
 begin = 16
 end = 24
 
@@ -2099,13 +2121,13 @@ end = 20
 
 [JC_205]
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 69
 begin = 16
 end = 24
 
 [JC_190]
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 69
 begin = 16
 end = 24
 
@@ -2117,7 +2139,7 @@ end = -1
 
 [JC_206]
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 69
 begin = 16
 end = 24
 
@@ -2135,31 +2157,31 @@ end = 20
 
 [JC_207]
 file = "HOME/tests/java/Purse.java"
-line = 65
+line = 67
 begin = 38
 end = 55
 
 [JC_192]
 file = "HOME/tests/java/Purse.java"
-line = 60
+line = 62
 begin = 17
 end = 23
 
 [JC_208]
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 69
 begin = 16
 end = 24
 
 [JC_193]
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 69
 begin = 16
 end = 24
 
 [JC_209]
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 69
 begin = 16
 end = 24
 
@@ -2171,25 +2193,25 @@ end = -1
 
 [JC_195]
 file = "HOME/tests/java/Purse.java"
-line = 62
+line = 64
 begin = 16
 end = 34
 
 [JC_196]
 file = "HOME/tests/java/Purse.java"
-line = 62
+line = 64
 begin = 38
 end = 66
 
 [JC_197]
 file = "HOME/tests/java/Purse.java"
-line = 62
+line = 64
 begin = 16
 end = 66
 
 [JC_198]
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 69
 begin = 16
 end = 24
 
@@ -2231,7 +2253,7 @@ end = -1
 
 [JC_211]
 file = "HOME/tests/java/Purse.java"
-line = 65
+line = 67
 begin = 38
 end = 55
 
@@ -2243,7 +2265,7 @@ end = -1
 
 [JC_212]
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 69
 begin = 16
 end = 24
 
@@ -2255,7 +2277,7 @@ end = 20
 
 [JC_213]
 file = "HOME/tests/java/Purse.java"
-line = 67
+line = 69
 begin = 16
 end = 24
 
@@ -2279,7 +2301,7 @@ end = 20
 
 [cons_Throwable_Throwable_ensures_default]
 name = "Constructor of class Throwable"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/java_api/java/lang/Throwable.java"
 line = 239
 begin = 11
@@ -2354,8 +2376,6 @@ type Object
 
 type interface
 
-exception Exception_exc of Object pointer
-
 logic Exception_tag:  -> Object tag_id
 
 logic Throwable_tag:  -> Object tag_id
@@ -2364,12 +2384,6 @@ axiom Exception_parenttag_Throwable : parenttag(Exception_tag, Throwable_tag)
 
 function Exception_serialVersionUID() : int = neg_int((3387516993124229948))
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception NoCreditException_exc of Object pointer
-
 logic NoCreditException_tag:  -> Object tag_id
 
 axiom NoCreditException_parenttag_Exception :
@@ -2377,7 +2391,7 @@ axiom NoCreditException_parenttag_Exception :
 
 predicate Non_null_Object(x_0:Object pointer,
  Object_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_alloc_table, x_0), (0))
+ (offset_max(Object_alloc_table, x_0) = (0))
 
 logic Object_tag:  -> Object tag_id
 
@@ -2404,13 +2418,9 @@ logic Purse_tag:  -> Object tag_id
 
 axiom Purse_parenttag_Object : parenttag(Purse_tag, Object_tag)
 
-exception Return_label_exc of unit
-
 logic String_tag:  -> Object tag_id
 
 axiom String_parenttag_Object : parenttag(String_tag, Object_tag)
-
-exception Throwable_exc of Object pointer
 
 axiom Throwable_parenttag_Object : parenttag(Throwable_tag, Object_tag)
 
@@ -2552,40 +2562,6 @@ predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Throwable(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_NoCreditException(p:unit pointer, a:int,
- b:int, bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Exception(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_PrintStream(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Purse(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
@@ -2630,6 +2606,14 @@ predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
+exception Exception_exc of Object pointer
+
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
+exception NoCreditException_exc of Object pointer
+
 parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_tag_table : Object tag_table ref
@@ -2643,11 +2627,12 @@ parameter Purse_credit :
    { ((JC_188: balance_non_negative(this_6, Purse_balance))
      and (JC_186:
          ((JC_184:
-          eq_int(select(Purse_balance, this_6),
-          add_int(select(Purse_balance@, this_6@), s_0_0)))
+          (select(Purse_balance, this_6) = add_int(select(Purse_balance@,
+                                                   this_6),
+                                           s_0_0)))
          and (JC_185:
              not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
-             pset_singleton(this_6@)))))) }
+             pset_singleton(this_6)))))) }
 
 parameter Purse_credit_requires :
  this_6:Object pointer ->
@@ -2659,24 +2644,25 @@ parameter Purse_credit_requires :
    { ((JC_188: balance_non_negative(this_6, Purse_balance))
      and (JC_186:
          ((JC_184:
-          eq_int(select(Purse_balance, this_6),
-          add_int(select(Purse_balance@, this_6@), s_0_0)))
+          (select(Purse_balance, this_6) = add_int(select(Purse_balance@,
+                                                   this_6),
+                                           s_0_0)))
          and (JC_185:
              not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
-             pset_singleton(this_6@)))))) }
+             pset_singleton(this_6)))))) }
 
 parameter Purse_getBalance :
  this_4:Object pointer ->
   { } int reads Object_alloc_table,Purse_balance
   { ((JC_232: balance_non_negative(this_4, Purse_balance))
-    and (JC_230: eq_int(result, select(Purse_balance, this_4)))) }
+    and (JC_230: (result = select(Purse_balance, this_4)))) }
 
 parameter Purse_getBalance_requires :
  this_4:Object pointer ->
   { (JC_225: balance_non_negative(this_4, Purse_balance))} int
   reads Object_alloc_table,Purse_balance
   { ((JC_232: balance_non_negative(this_4, Purse_balance))
-    and (JC_230: eq_int(result, select(Purse_balance, this_4)))) }
+    and (JC_230: (result = select(Purse_balance, this_4)))) }
 
 parameter Purse_withdraw :
  this_5:Object pointer ->
@@ -2687,17 +2673,18 @@ parameter Purse_withdraw :
    { ((JC_206: balance_non_negative(this_5, Purse_balance))
      and (JC_204:
          ((JC_202:
-          ((JC_200: le_int(s_1, select(Purse_balance@, this_5@)))
+          ((JC_200: le_int(s_1, select(Purse_balance@, this_5)))
           and (JC_201:
-              eq_int(select(Purse_balance, this_5),
-              sub_int(select(Purse_balance@, this_5@), s_1)))))
+              (select(Purse_balance, this_5) = sub_int(select(Purse_balance@,
+                                                       this_5),
+                                               s_1)))))
          and (JC_203:
              not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
-             pset_singleton(this_5@))))))
+             pset_singleton(this_5))))))
      | NoCreditException_exc =>
          (JC_214:
          ((JC_212:
-          ((JC_211: gt_int(s_1, select(Purse_balance@, this_5@)))
+          ((JC_211: gt_int(s_1, select(Purse_balance@, this_5)))
           and balance_non_negative(this_5, Purse_balance)))
          and (JC_213:
              not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
@@ -2715,27 +2702,32 @@ parameter Purse_withdraw_requires :
    { ((JC_206: balance_non_negative(this_5, Purse_balance))
      and (JC_204:
          ((JC_202:
-          ((JC_200: le_int(s_1, select(Purse_balance@, this_5@)))
+          ((JC_200: le_int(s_1, select(Purse_balance@, this_5)))
           and (JC_201:
-              eq_int(select(Purse_balance, this_5),
-              sub_int(select(Purse_balance@, this_5@), s_1)))))
+              (select(Purse_balance, this_5) = sub_int(select(Purse_balance@,
+                                                       this_5),
+                                               s_1)))))
          and (JC_203:
              not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
-             pset_singleton(this_5@))))))
+             pset_singleton(this_5))))))
      | NoCreditException_exc =>
          (JC_214:
          ((JC_212:
-          ((JC_211: gt_int(s_1, select(Purse_balance@, this_5@)))
+          ((JC_211: gt_int(s_1, select(Purse_balance@, this_5)))
           and balance_non_negative(this_5, Purse_balance)))
          and (JC_213:
              not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
              pset_empty)))) }
+
+exception Return_label_exc of unit
 
 parameter Throwable_backtrace : (Object, Object pointer) memory ref
 
 parameter Throwable_cause : (Object, Object pointer) memory ref
 
 parameter Throwable_detailMessage : (Object, Object pointer) memory ref
+
+exception Throwable_exc of Object pointer
 
 parameter Throwable_fillInStackTrace :
  this_15:Object pointer ->
@@ -2806,150 +2798,6 @@ parameter Throwable_toString :
 parameter Throwable_toString_requires :
  this_12:Object pointer ->
   { } Object pointer reads Object_alloc_table { true }
-
-parameter alloc_bitvector_struct_Exception :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Exception_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_NoCreditException :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_NoCreditException(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_NoCreditException_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_NoCreditException(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_PrintStream :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_PrintStream(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_PrintStream_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_PrintStream(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Purse :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Purse(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Purse_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Purse(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_String :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_String_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
 parameter alloc_struct_Exception :
  n:int ->
@@ -3186,20 +3034,20 @@ parameter cons_Purse :
   { } unit reads Object_alloc_table,Purse_balance writes Purse_balance
   { ((JC_174: balance_non_negative(this_7, Purse_balance))
     and (JC_172:
-        ((JC_170: eq_int(select(Purse_balance, this_7), (0)))
+        ((JC_170: (select(Purse_balance, this_7) = (0)))
         and (JC_171:
             not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
-            pset_singleton(this_7@)))))) }
+            pset_singleton(this_7)))))) }
 
 parameter cons_Purse_requires :
  this_7:Object pointer ->
   { } unit reads Object_alloc_table,Purse_balance writes Purse_balance
   { ((JC_174: balance_non_negative(this_7, Purse_balance))
     and (JC_172:
-        ((JC_170: eq_int(select(Purse_balance, this_7), (0)))
+        ((JC_170: (select(Purse_balance, this_7) = (0)))
         and (JC_171:
             not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
-            pset_singleton(this_7@)))))) }
+            pset_singleton(this_7)))))) }
 
 parameter cons_Throwable :
  this_17:Object pointer ->
@@ -3261,14 +3109,14 @@ parameter non_null_Object :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_18:
-    (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
+    (if result then (offset_max(Object_alloc_table, x_1) = (0))
      else (x_1 = null))) }
 
 parameter non_null_Object_requires :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_18:
-    (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
+    (if result then (offset_max(Object_alloc_table, x_1) = (0))
      else (x_1 = null))) }
 
 let Purse_credit_ensures_default =
@@ -3290,11 +3138,11 @@ let Purse_credit_ensures_default =
      void); (raise Return) end with Return -> void end)
   { (JC_183:
     ((JC_181:
-     eq_int(select(Purse_balance, this_6),
-     add_int(select(Purse_balance@, this_6@), s_0_0)))
+     (select(Purse_balance, this_6) = add_int(select(Purse_balance@, this_6),
+                                      s_0_0)))
     and (JC_182:
         not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
-        pset_singleton(this_6@))))) }
+        pset_singleton(this_6))))) }
 
 let Purse_credit_safety =
  fun (this_6 : Object pointer) (s_0_0 : int) ->
@@ -3325,7 +3173,7 @@ let Purse_getBalance_ensures_default =
    begin
      (return := (K_18: ((safe_acc_ !Purse_balance) this_4))); (raise Return);
     absurd  end with Return -> !return end))
-  { (JC_229: eq_int(result, select(Purse_balance, this_4))) }
+  { (JC_229: (result = select(Purse_balance, this_4))) }
 
 let Purse_getBalance_safety =
  fun (this_4 : Object pointer) ->
@@ -3355,7 +3203,6 @@ let Purse_withdraw_ensures_default =
       (let jessie_<num> = this_5 in
       (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)))
      else
-      (let jessie_<num> =
       (let java_thrown_exception =
       (let this =
       (JC_219:
@@ -3367,17 +3214,18 @@ let Purse_withdraw_ensures_default =
         (assert
         { (JC_221:
           Non_null_Object(java_thrown_exception, Object_alloc_table)) };
-        void); (raise (NoCreditException_exc java_thrown_exception)) end) in
-      void)); (raise Return) end with Return -> void end)
+        void); (raise (NoCreditException_exc java_thrown_exception)) end));
+    (raise Return) end with Return -> void end)
   { (JC_199:
     ((JC_197:
-     ((JC_195: le_int(s_1, select(Purse_balance@, this_5@)))
+     ((JC_195: le_int(s_1, select(Purse_balance@, this_5)))
      and (JC_196:
-         eq_int(select(Purse_balance, this_5),
-         sub_int(select(Purse_balance@, this_5@), s_1)))))
+         (select(Purse_balance, this_5) = sub_int(select(Purse_balance@,
+                                                  this_5),
+                                          s_1)))))
     and (JC_198:
         not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
-        pset_singleton(this_5@))))) | NoCreditException_exc => true }
+        pset_singleton(this_5))))) | NoCreditException_exc => true }
 
 let Purse_withdraw_exsures_amount_too_large =
  fun (this_5 : Object pointer) (s_1 : int) ->
@@ -3395,7 +3243,6 @@ let Purse_withdraw_exsures_amount_too_large =
       (let jessie_<num> = this_5 in
       (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)))
      else
-      (let jessie_<num> =
       (let java_thrown_exception =
       (let this =
       (JC_222:
@@ -3407,13 +3254,13 @@ let Purse_withdraw_exsures_amount_too_large =
         [ { } unit reads Object_alloc_table
           { (JC_224:
             Non_null_Object(java_thrown_exception, Object_alloc_table)) } ];
-       (raise (NoCreditException_exc java_thrown_exception)) end) in void));
+       (raise (NoCreditException_exc java_thrown_exception)) end));
     (raise Return) end with Return -> void end)
   { true
     | NoCreditException_exc =>
         (JC_210:
         ((JC_208:
-         ((JC_207: gt_int(s_1, select(Purse_balance@, this_5@)))
+         ((JC_207: gt_int(s_1, select(Purse_balance@, this_5)))
          and balance_non_negative(this_5, Purse_balance)))
         and (JC_209:
             not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
@@ -3435,7 +3282,6 @@ let Purse_withdraw_safety =
       (let jessie_<num> = this_5 in
       (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)))
      else
-      (let jessie_<num> =
       (let java_thrown_exception =
       (let this =
       (let jessie_<num> =
@@ -3451,7 +3297,7 @@ let Purse_withdraw_safety =
         [ { } unit reads Object_alloc_table
           { (JC_218:
             Non_null_Object(java_thrown_exception, Object_alloc_table)) } ];
-       (raise (NoCreditException_exc java_thrown_exception)) end) in void));
+       (raise (NoCreditException_exc java_thrown_exception)) end));
     (raise Return) end with Return -> void end)
   { (JC_205: balance_non_negative(this_5, Purse_balance))
     | NoCreditException_exc => true }
@@ -3542,10 +3388,10 @@ let cons_Purse_ensures_default =
         (((safe_upd_ Purse_balance) jessie_<num>) jessie_<num>)); jessie_<num> end))
      end in void); (raise Return) end with Return -> void end)
   { (JC_169:
-    ((JC_167: eq_int(select(Purse_balance, this_7), (0)))
+    ((JC_167: (select(Purse_balance, this_7) = (0)))
     and (JC_168:
         not_assigns(Object_alloc_table@, Purse_balance@, Purse_balance,
-        pset_singleton(this_7@))))) }
+        pset_singleton(this_7))))) }
 
 let cons_Purse_safety =
  fun (this_7 : Object pointer) ->
@@ -3746,9 +3592,27 @@ why --project [...] why/Purse.why
 <project name="Purse" context="why/Purse_ctx.why">
   <function name="Method withdraw">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/Purse_po5.why">
+      <location file = "HOME/tests/java/Purse.java" line = "64" begin = "16" end = "34"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/Purse_po6.why">
+      <location file = "HOME/tests/java/Purse.java" line = "64" begin = "38" end = "66"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/Purse_po7.why">
+      <location file = "HOME/tests/java/Purse.java" line = "69" begin = "16" end = "24"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/Purse_po8.why">
+      <location file = "HOME/tests/java/Purse.jc" line = "172" begin = "17" end = "55"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/Purse_po12.why">
-      <location file = "HOME/tests/java/Purse.java" line = "67" begin = "16" end = "24"/>
+      <location file = "HOME/tests/java/Purse.java" line = "69" begin = "16" end = "24"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po13.why">
@@ -3757,67 +3621,49 @@ why --project [...] why/Purse.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/Purse_po14.why">
-      <location file = "why/Purse.why" line = "1093" begin = "16" end = "71"/>
+      <location file = "why/Purse.why" line = "917" begin = "16" end = "71"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
-    <behavior name="Exceptional behavior `amount_too_large'">
+    <behavior name="Behavior `amount_too_large'">
     <goal why_file="why/Purse_po9.why">
-      <location file = "HOME/tests/java/Purse.java" line = "65" begin = "38" end = "55"/>
+      <location file = "HOME/tests/java/Purse.java" line = "67" begin = "38" end = "55"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po10.why">
-      <location file = "HOME/tests/java/Purse.java" line = "67" begin = "16" end = "24"/>
+      <location file = "HOME/tests/java/Purse.java" line = "69" begin = "16" end = "24"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po11.why">
-      <location file = "HOME/tests/java/Purse.java" line = "67" begin = "16" end = "24"/>
+      <location file = "HOME/tests/java/Purse.java" line = "69" begin = "16" end = "24"/>
       <explain kind = "Post"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/Purse_po5.why">
-      <location file = "HOME/tests/java/Purse.java" line = "62" begin = "16" end = "34"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/Purse_po6.why">
-      <location file = "HOME/tests/java/Purse.java" line = "62" begin = "38" end = "66"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/Purse_po7.why">
-      <location file = "HOME/tests/java/Purse.java" line = "67" begin = "16" end = "24"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/Purse_po8.why">
-      <location file = "HOME/tests/java/Purse.jc" line = "172" begin = "17" end = "55"/>
-      <explain kind = "Assert"/>
     </goal>
     </behavior>
   </function>
   <function name="Method getBalance">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/Purse_po4.why">
-      <location file = "HOME/tests/java/Purse.java" line = "74" begin = "16" end = "34"/>
+      <location file = "HOME/tests/java/Purse.java" line = "76" begin = "16" end = "34"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
   <function name="Method credit">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/Purse_po3.why">
-      <location file = "HOME/tests/java/Purse.java" line = "56" begin = "16" end = "22"/>
-      <explain kind = "Post"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/Purse_po1.why">
-      <location file = "HOME/tests/java/Purse.java" line = "54" begin = "16" end = "44"/>
+      <location file = "HOME/tests/java/Purse.java" line = "56" begin = "16" end = "44"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po2.why">
-      <location file = "HOME/tests/java/Purse.java" line = "56" begin = "16" end = "22"/>
+      <location file = "HOME/tests/java/Purse.java" line = "58" begin = "16" end = "22"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/Purse_po3.why">
+      <location file = "HOME/tests/java/Purse.java" line = "58" begin = "16" end = "22"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -3827,19 +3673,19 @@ text = "AllocSize"/>
   </function>
   <function name="Constructor of class Purse">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/Purse_po17.why">
-      <location file = "HOME/tests/java/Purse.java" line = "48" begin = "11" end = "16"/>
-      <explain kind = "Post"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/Purse_po15.why">
-      <location file = "HOME/tests/java/Purse.java" line = "46" begin = "16" end = "28"/>
+      <location file = "HOME/tests/java/Purse.java" line = "48" begin = "16" end = "28"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/Purse_po16.why">
-      <location file = "HOME/tests/java/Purse.java" line = "48" begin = "11" end = "16"/>
+      <location file = "HOME/tests/java/Purse.java" line = "50" begin = "11" end = "16"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/Purse_po17.why">
+      <location file = "HOME/tests/java/Purse.java" line = "50" begin = "11" end = "16"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -4971,40 +4817,6 @@ predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_Throwable(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_NoCreditException(p: unit pointer, a: int,
-  b: int, bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_Exception(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_PrintStream(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Purse(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
   ((offset_min(Object_alloc_table, p) <= a) and
@@ -5048,6 +4860,25 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
   ((offset_min(interface_alloc_table, p) <= a) and
    (offset_max(interface_alloc_table, p) >= b))
+
+========== file tests/java/why/Purse_po1.why ==========
+goal Purse_credit_ensures_default_po_1:
+  forall this_6:Object pointer.
+  forall s_0_0:int.
+  forall Object_alloc_table:Object alloc_table.
+  forall Purse_balance:(Object,
+  int) memory.
+  (valid_struct_Purse(this_6, 0, 0, Object_alloc_table) and
+   ("JC_179":
+   (("JC_178": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
+  forall result:int.
+  (result = select(Purse_balance, this_6)) ->
+  forall Purse_balance0:(Object,
+  int) memory.
+  (Purse_balance0 = store(Purse_balance, this_6, (result + s_0_0))) ->
+  ("JC_183":
+  ("JC_181": (select(Purse_balance0, this_6) = (select(Purse_balance,
+  this_6) + s_0_0))))
 
 ========== file tests/java/why/Purse_po10.why ==========
 goal Purse_withdraw_exsures_amount_too_large_po_2:
@@ -5204,25 +5035,6 @@ goal cons_Purse_safety_po_1:
   int) memory.
   (Purse_balance1 = store(Purse_balance0, this_7, 0)) ->
   ("JC_173": balance_non_negative(this_7, Purse_balance1))
-
-========== file tests/java/why/Purse_po1.why ==========
-goal Purse_credit_ensures_default_po_1:
-  forall this_6:Object pointer.
-  forall s_0_0:int.
-  forall Object_alloc_table:Object alloc_table.
-  forall Purse_balance:(Object,
-  int) memory.
-  (valid_struct_Purse(this_6, 0, 0, Object_alloc_table) and
-   ("JC_179":
-   (("JC_178": (s_0_0 >= 0)) and balance_non_negative(this_6, Purse_balance)))) ->
-  forall result:int.
-  (result = select(Purse_balance, this_6)) ->
-  forall Purse_balance0:(Object,
-  int) memory.
-  (Purse_balance0 = store(Purse_balance, this_6, (result + s_0_0))) ->
-  ("JC_183":
-  ("JC_181": (select(Purse_balance0, this_6) = (select(Purse_balance,
-  this_6) + s_0_0))))
 
 ========== file tests/java/why/Purse_po2.why ==========
 goal Purse_credit_ensures_default_po_2:
@@ -6364,32 +6176,6 @@ why -simplify [...] why/Purse.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-(DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_Throwable p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Exception p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Throwable p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_NoCreditException p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Exception p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_PrintStream p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Purse p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_String p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_interface p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
 (DEFPRED (valid_root_Object p a b Object_alloc_table)
   (AND (<= (offset_min Object_alloc_table p) a)
   (>= (offset_max Object_alloc_table p) b)))
@@ -6424,7 +6210,7 @@ why -simplify [...] why/Purse.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; Purse_credit_ensures_default_po_1, File "HOME/tests/java/Purse.java", line 54, characters 16-44
+;; Purse_credit_ensures_default_po_1, File "HOME/tests/java/Purse.java", line 56, characters 16-44
 (FORALL (this_6)
 (FORALL (s_0_0)
 (FORALL (Object_alloc_table)
@@ -6438,7 +6224,7 @@ why -simplify [...] why/Purse.why
          (|why__store| Purse_balance this_6 (+ result s_0_0)))
 (EQ (select Purse_balance0 this_6) (+ (select Purse_balance this_6) s_0_0)))))))))))
 
-;; Purse_credit_ensures_default_po_2, File "HOME/tests/java/Purse.java", line 56, characters 16-22
+;; Purse_credit_ensures_default_po_2, File "HOME/tests/java/Purse.java", line 58, characters 16-22
 (FORALL (this_6)
 (FORALL (s_0_0)
 (FORALL (Object_alloc_table)
@@ -6453,7 +6239,7 @@ why -simplify [...] why/Purse.why
 (not_assigns
 Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_6)))))))))))
 
-;; Purse_credit_safety_po_1, File "HOME/tests/java/Purse.java", line 56, characters 16-22
+;; Purse_credit_safety_po_1, File "HOME/tests/java/Purse.java", line 58, characters 16-22
 (FORALL (this_6)
 (FORALL (s_0_0)
 (FORALL (Object_alloc_table)
@@ -6467,7 +6253,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_6))))))))))
          (|why__store| Purse_balance this_6 (+ result s_0_0)))
 (balance_non_negative this_6 Purse_balance0))))))))))
 
-;; Purse_getBalance_ensures_default_po_1, File "HOME/tests/java/Purse.java", line 74, characters 16-34
+;; Purse_getBalance_ensures_default_po_1, File "HOME/tests/java/Purse.java", line 76, characters 16-34
 (FORALL (this_4)
 (FORALL (Object_alloc_table)
 (FORALL (Purse_balance)
@@ -6478,7 +6264,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_6))))))))))
 (FORALL (return)
 (IMPLIES (EQ return result) (EQ return (select Purse_balance this_4))))))))))
 
-;; Purse_withdraw_ensures_default_po_1, File "HOME/tests/java/Purse.java", line 62, characters 16-34
+;; Purse_withdraw_ensures_default_po_1, File "HOME/tests/java/Purse.java", line 64, characters 16-34
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6495,7 +6281,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_6))))))))))
          (|why__store| Purse_balance this_5 (- result0 s_1)))
 (<= s_1 (select Purse_balance this_5))))))))))))))
 
-;; Purse_withdraw_ensures_default_po_2, File "HOME/tests/java/Purse.java", line 62, characters 38-66
+;; Purse_withdraw_ensures_default_po_2, File "HOME/tests/java/Purse.java", line 64, characters 38-66
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6512,7 +6298,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_6))))))))))
          (|why__store| Purse_balance this_5 (- result0 s_1)))
 (EQ (select Purse_balance0 this_5) (- (select Purse_balance this_5) s_1))))))))))))))
 
-;; Purse_withdraw_ensures_default_po_3, File "HOME/tests/java/Purse.java", line 67, characters 16-24
+;; Purse_withdraw_ensures_default_po_3, File "HOME/tests/java/Purse.java", line 69, characters 16-24
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6552,7 +6338,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
          (instanceof Object_tag_table result0 NoCreditException_tag))))
 (Non_null_Object result0 Object_alloc_table0)))))))))))))
 
-;; Purse_withdraw_exsures_amount_too_large_po_1, File "HOME/tests/java/Purse.java", line 65, characters 38-55
+;; Purse_withdraw_exsures_amount_too_large_po_1, File "HOME/tests/java/Purse.java", line 67, characters 38-55
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6575,7 +6361,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
 (IMPLIES (Non_null_Object result0 Object_alloc_table0)
 (> s_1 (select Purse_balance this_5)))))))))))))))
 
-;; Purse_withdraw_exsures_amount_too_large_po_2, File "HOME/tests/java/Purse.java", line 67, characters 16-24
+;; Purse_withdraw_exsures_amount_too_large_po_2, File "HOME/tests/java/Purse.java", line 69, characters 16-24
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6598,7 +6384,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
 (IMPLIES (Non_null_Object result0 Object_alloc_table0)
 (balance_non_negative this_5 Purse_balance))))))))))))))
 
-;; Purse_withdraw_exsures_amount_too_large_po_3, File "HOME/tests/java/Purse.java", line 67, characters 16-24
+;; Purse_withdraw_exsures_amount_too_large_po_3, File "HOME/tests/java/Purse.java", line 69, characters 16-24
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6621,7 +6407,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
 (IMPLIES (Non_null_Object result0 Object_alloc_table0)
 (not_assigns Object_alloc_table Purse_balance Purse_balance pset_empty))))))))))))))
 
-;; Purse_withdraw_safety_po_1, File "HOME/tests/java/Purse.java", line 67, characters 16-24
+;; Purse_withdraw_safety_po_1, File "HOME/tests/java/Purse.java", line 69, characters 16-24
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6649,7 +6435,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
 (IMPLIES (EQ result (select Purse_balance this_5))
 (IMPLIES (< result s_1) (>= 1 0)))))))))
 
-;; Purse_withdraw_safety_po_3, File "why/Purse.why", line 1093, characters 16-71
+;; Purse_withdraw_safety_po_3, File "why/Purse.why", line 917, characters 16-71
 (FORALL (this_5)
 (FORALL (s_1)
 (FORALL (Object_alloc_table)
@@ -6672,7 +6458,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
          (instanceof Object_tag_table result0 NoCreditException_tag))))
 (>= (offset_max Object_alloc_table0 result0) 0))))))))))))))
 
-;; cons_Purse_ensures_default_po_1, File "HOME/tests/java/Purse.java", line 46, characters 16-28
+;; cons_Purse_ensures_default_po_1, File "HOME/tests/java/Purse.java", line 48, characters 16-28
 (FORALL (this_7)
 (FORALL (Object_alloc_table)
 (FORALL (Purse_balance)
@@ -6683,7 +6469,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
 (IMPLIES (EQ Purse_balance1 (|why__store| Purse_balance0 this_7 0))
 (EQ (select Purse_balance1 this_7) 0)))))))))
 
-;; cons_Purse_ensures_default_po_2, File "HOME/tests/java/Purse.java", line 48, characters 11-16
+;; cons_Purse_ensures_default_po_2, File "HOME/tests/java/Purse.java", line 50, characters 11-16
 (FORALL (this_7)
 (FORALL (Object_alloc_table)
 (FORALL (Purse_balance)
@@ -6695,7 +6481,7 @@ Object_alloc_table Purse_balance Purse_balance0 (pset_singleton this_5))))))))))
 (not_assigns
 Object_alloc_table Purse_balance Purse_balance1 (pset_singleton this_7))))))))))
 
-;; cons_Purse_safety_po_1, File "HOME/tests/java/Purse.java", line 48, characters 11-16
+;; cons_Purse_safety_po_1, File "HOME/tests/java/Purse.java", line 50, characters 11-16
 (FORALL (this_7)
 (FORALL (Object_alloc_table)
 (FORALL (Purse_balance)
@@ -7837,40 +7623,6 @@ predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_Throwable(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_NoCreditException(p: unit pointer, a: int,
-  b: int, bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_Exception(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_PrintStream(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Purse(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =

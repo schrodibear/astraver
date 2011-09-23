@@ -4,67 +4,179 @@
 
 Require Export Reals.
 Require Export Fcore.
-
-Definition radix2 := Build_radix 2 (refl_equal _).
+Require Export Fappli_IEEE.
 
 Inductive mode : Set := nearest_even | to_zero | up | down | nearest_away.
 
-Lemma r_to_sd_aux :
-  forall emin prec,
-  Zlt_bool 0 prec = true ->
-  forall rnd x,
-  FLT_format radix2 emin prec (round radix2 (FLT_exp emin prec) rnd x).
+Global Coercion B2R_coercion prec emax := @B2R prec emax.
+
+Section r_to_sd.
+
+Variable prec emax : Z.
+Hypothesis Hprec : Zlt_bool 0 prec = true.
+Hypothesis Hemax : Zlt_bool prec emax = true.
+Let emin := (3 - emax - prec)%Z.
+Let fexp := FLT_exp emin prec.
+Lemma Hprec': (0 < prec)%Z. revert Hprec. now case Zlt_bool_spec. Qed.
+Lemma Hemax': (prec < emax)%Z. revert Hemax. now case Zlt_bool_spec. Qed.
+Let binary_round_correct := binary_round_sign_shl_correct prec emax Hprec' Hemax'.
+
+Definition r_to_sd rnd x : binary_float prec emax :=
+  let r := round radix2 fexp (round_mode rnd) x in
+  let m := Ztrunc (scaled_mantissa radix2 fexp r) in
+  let e := canonic_exponent radix2 fexp r in
+  match m with
+  | Z0 => B754_zero prec emax false
+  | Zpos m => FF2B _ _ _ (proj1 (binary_round_correct rnd false m e))
+  | Zneg m => FF2B _ _ _ (proj1 (binary_round_correct rnd true m e))
+  end.
+
+Lemma is_finite_FF2B :
+  forall f H,
+  is_finite prec emax (FF2B prec emax f H) =
+    match f with
+    | F754_finite _ _ _ => true
+    | F754_zero _ => true
+    | _ => false
+    end.
 Proof.
-intros emin prec Hp rnd x.
-apply <- FLT_format_generic.
+now intros [| | |].
+Qed.
+
+Theorem r_to_sd_correct :
+  forall rnd x,
+  let r := round radix2 fexp (round_mode rnd) x in
+  (Rabs r < bpow radix2 emax)%R ->
+  is_finite prec emax (r_to_sd rnd x) = true /\
+  r_to_sd rnd x = r :>R.
+Proof.
+intros rnd x r Bx.
+unfold r_to_sd. fold r.
+assert (Gx: generic_format radix2 fexp r).
 apply generic_format_round.
 apply FLT_exp_correct.
-now apply <- Zlt_is_lt_bool.
-now apply <- Zlt_is_lt_bool.
+exact Hprec'.
+assert (Hr: Z2R (Ztrunc (scaled_mantissa radix2 fexp r)) = scaled_mantissa radix2 fexp r).
+apply sym_eq.
+now apply scaled_mantissa_generic.
+revert Hr.
+case_eq (Ztrunc (scaled_mantissa radix2 fexp r)).
+(* *)
+intros _ Hx.
+repeat split.
+apply Rmult_eq_reg_r with (bpow radix2 (- canonic_exponent radix2 fexp r)).
+now rewrite Rmult_0_l.
+apply Rgt_not_eq.
+apply bpow_gt_0.
+(* *)
+intros p Hp Hx.
+case binary_round_correct ; intros Hv.
+unfold F2R, Fnum, Fexp, cond_Zopp.
+rewrite Hx, scaled_mantissa_bpow.
+rewrite round_generic with (1 := Gx).
+rewrite Rlt_bool_true with (1 := Bx).
+intros H.
+split.
+rewrite is_finite_FF2B.
+revert H.
+assert (0 <> r)%R.
+intros H.
+rewrite <- H, scaled_mantissa_0 in Hx.
+now apply (Z2R_neq 0 (Zpos p)).
+now case binary_round_sign_shl.
+now rewrite B2R_FF2B.
+(* *)
+intros p Hp Hx.
+case binary_round_correct ; intros Hv.
+unfold F2R, Fnum, Fexp, cond_Zopp, Zopp.
+rewrite Hx, scaled_mantissa_bpow.
+rewrite round_generic with (1 := Gx).
+rewrite Rlt_bool_true with (1 := Bx).
+intros H.
+split.
+rewrite is_finite_FF2B.
+revert H.
+assert (0 <> r)%R.
+intros H.
+rewrite <- H, scaled_mantissa_0 in Hx.
+now apply (Z2R_neq 0 (Zneg p)).
+now case binary_round_sign_shl.
+now rewrite B2R_FF2B.
 Qed.
 
-Lemma neg_sd_aux :
-  forall emin prec,
-  Zlt_bool 0 prec = true ->
-  forall x, FLT_format radix2 emin prec x ->
-  FLT_format radix2 emin prec (-x)%R.
+Theorem r_to_sd_format :
+  forall rnd x,
+  FLT_format radix2 emin prec x ->
+  (Rabs x < bpow radix2 emax)%R ->
+  r_to_sd rnd x = x :>R.
 Proof.
-intros emin prec Hp.
-apply (FLT_format_satisfies_any radix2 emin prec).
-now apply <- Zlt_is_lt_bool.
-Qed.
-
-Lemma abs_sd_aux :
-  forall emin prec,
-  Zlt_bool 0 prec = true ->
-  forall x, FLT_format radix2 emin prec x ->
-  FLT_format radix2 emin prec (Rabs x)%R.
-Proof.
-intros emin prec Hp x Hx.
-apply <- FLT_format_generic.
-apply generic_format_abs.
+intros rnd x Fx Bx.
+assert (Gx: generic_format radix2 fexp x).
 apply -> FLT_format_generic.
-exact Hx.
-now apply <- Zlt_is_lt_bool.
-now apply <- Zlt_is_lt_bool.
+apply Fx.
+exact Hprec'.
+pattern x at 2 ; rewrite <- round_generic with (rnd := round_mode rnd) (1 := Gx).
+refine (proj2 (r_to_sd_correct _ _ _)).
+now rewrite round_generic with (1 := Gx).
+Qed.
+
+End r_to_sd.
+
+Theorem value_is_bounded :
+  forall prec emax (v : binary_float (Zpos prec) emax),
+  (Rabs v <= F2R (Float radix2 (Zpower_pos 2 prec - 1) (emax - Zpos  prec)))%R.
+Proof.
+intros prec emax v.
+assert (Rabs 0 <= F2R (Float radix2 (Zpower_pos 2 prec - 1) (emax - Zpos prec)))%R.
+rewrite Rabs_R0.
+rewrite <- (F2R_0 radix2 (emax - Zpos prec)).
+apply F2R_le_compat.
+apply Zlt_succ_le.
+change (0 < Zsucc (Zpred (Zpower_pos 2 prec)))%Z.
+rewrite <- Zsucc_pred.
+now apply Zpower_pos_gt_0.
+destruct v ; try exact H.
+clear H.
+unfold B2R_coercion, B2R, F2R. simpl.
+rewrite Rabs_mult, <- Z2R_abs, abs_cond_Zopp.
+rewrite Rabs_pos_eq.
+2: apply bpow_ge_0.
+destruct (andb_prop _ _ e0) as (H1, H2).
+apply Rmult_le_compat.
+now apply (Z2R_le 0).
+apply bpow_ge_0.
+apply Z2R_le.
+apply Zlt_succ_le.
+change (Zpos m < Zsucc (Zpred (Zpower_pos 2 prec)))%Z.
+rewrite <- Zsucc_pred.
+generalize (Zeq_bool_eq _ _ H1). clear.
+rewrite Fcalc_digits.Z_of_nat_S_digits2_Pnat.
+intros H.
+apply (Fcalc_digits.Zpower_gt_digits Fcalc_digits.radix2 (Zpos prec) (Zpos m)).
+revert H.
+unfold FLT_exp.
+generalize (Fcalc_digits.digits Fcalc_digits.radix2 (Zpos m)).
+intros ; zify ; omega.
+apply bpow_le.
+now apply Zle_bool_imp_le.
 Qed.
 
 Definition rnd_of_mode (m:mode) :=
   match m with
-  |  nearest_even => rndNE
-  |  to_zero      => rndZR
-  |  up           => rndUP
-  |  down         => rndDN
-  |  nearest_away => rndNA
+  |  nearest_even => mode_NE
+  |  to_zero      => mode_ZR
+  |  up           => mode_UP
+  |  down         => mode_DN
+  |  nearest_away => mode_NA
   end.
 
 (** Single precision *)
 
 Record single : Set := mk_single {
-  single_value : R;
+  single_float : binary32;
+  single_value := (single_float : R);
   single_exact : R;
-  single_model : R;
-  single_value_in_format : FLT_format radix2 (-149) 24 single_value
+  single_model : R
 }.
 
 Definition single_round_error (f:single) :=
@@ -74,41 +186,38 @@ Definition single_total_error (f:single) :=
   Rabs (single_model f - single_value f).
 
 Definition single_set_model (f:single) (r:R) :=
-  mk_single (single_value f) (single_exact f) r (single_value_in_format f).
+  mk_single (single_float f) (single_exact f) r.
 
 Definition r_to_s_aux (m:mode) (r r1 r2:R) :=
-  mk_single _ r1 r2 (r_to_sd_aux (-149) 24 (refl_equal _) (rnd_of_mode m) r).
+  mk_single (r_to_sd 24 128 (refl_equal true) (refl_equal true) (rnd_of_mode m) r) r1 r2.
 
 Definition round_single_logic (m:mode) (r:R) := r_to_s_aux m r r r.
 
-Definition round_single (m:mode) (r:R) := round radix2 (FLT_exp (-149) 24) (rnd_of_mode m) r.
+Definition round_single (m:mode) (r:R) := round radix2 (FLT_exp (-149) 24) (round_mode (rnd_of_mode m)) r.
 
 Definition add_single (m:mode) (f1 f2:single) :=
-  r_to_s_aux m (single_value f1 + single_value f2)
+  mk_single (b32_plus (rnd_of_mode m) (single_float f1) (single_float f2))
     (single_exact f1 + single_exact f2) (single_model f1 + single_model f2).
 
 Definition sub_single (m:mode) (f1 f2:single) :=
-  r_to_s_aux m (single_value f1 - single_value f2)
+  mk_single (b32_minus (rnd_of_mode m) (single_float f1) (single_float f2))
     (single_exact f1 - single_exact f2) (single_model f1 - single_model f2).
 
 Definition mul_single (m:mode) (f1 f2:single) :=
-  r_to_s_aux m (single_value f1 * single_value f2)
+  mk_single (b32_mult (rnd_of_mode m) (single_float f1) (single_float f2))
     (single_exact f1 * single_exact f2) (single_model f1 * single_model f2).
 
 Definition div_single (m:mode) (f1 f2:single) :=
-  r_to_s_aux m (single_value f1 / single_value f2)
+  mk_single (b32_div (rnd_of_mode m) (single_float f1) (single_float f2))
     (single_exact f1 / single_exact f2) (single_model f1 / single_model f2).
 
 Definition sqrt_single (m:mode) (f:single) :=
-  r_to_s_aux m (sqrt (single_value f)) (sqrt (single_exact f)) (sqrt (single_model f)).
+  mk_single (b32_sqrt (rnd_of_mode m) (single_float f))
+    (sqrt (single_exact f)) (sqrt (single_model f)).
 
-Definition neg_single (m:mode) (f:single) :=
-  mk_single _ (- single_exact f) (- single_model f)
-    (neg_sd_aux (-149) 24 (refl_equal _) (single_value f) (single_value_in_format f)).
-
-Definition abs_single (m:mode) (f:single) :=
-  mk_single _ (Rabs (single_exact f)) (Rabs (single_model f))
-    (abs_sd_aux (-149) 24 (refl_equal _) (single_value f) (single_value_in_format f)).
+Definition neg_single (f:single) :=
+  mk_single (b32_opp (single_float f))
+    (- single_exact f) (- single_model f).
 
 Definition any_single := round_single_logic nearest_even 0%R.
 
@@ -139,7 +248,7 @@ erewrite <- round_generic with (x := Ropp max_single).
 apply round_monotone with (2 := proj1 H0).
 now apply FLT_exp_correct.
 now apply generic_format_opp.
-rewrite <- round_generic with (rnd := rnd_of_mode m) (1 := H).
+rewrite <- round_generic with (rnd := round_mode (rnd_of_mode m)) (1 := H).
 apply round_monotone with (2 := proj2 H0).
 now apply FLT_exp_correct.
 Qed.
@@ -203,10 +312,10 @@ Qed.
 (** Double precision *)
 
 Record double : Set := mk_double {
-  double_value : R;
+  double_float : binary64;
+  double_value := (double_float : R);
   double_exact : R;
-  double_model : R;
-  double_value_in_format : FLT_format radix2 (-1074) 53 double_value
+  double_model : R
 }.
 
 Definition double_round_error (f:double) :=
@@ -216,41 +325,38 @@ Definition double_total_error (f:double) :=
   Rabs (double_model f - double_value f).
 
 Definition double_set_model (f:double) (r:R) :=
-  mk_double (double_value f) (double_exact f) r (double_value_in_format f).
+  mk_double (double_float f) (double_exact f) r.
 
 Definition r_to_d_aux (m:mode) (r r1 r2:R) :=
-  mk_double _ r1 r2 (r_to_sd_aux (-1074) 53 (refl_equal _) (rnd_of_mode m) r).
+  mk_double (r_to_sd 53 1024 (refl_equal true) (refl_equal true) (rnd_of_mode m) r) r1 r2.
 
 Definition round_double_logic (m:mode) (r:R) := r_to_d_aux m r r r.
 
-Definition round_double (m:mode) (r:R) := round radix2 (FLT_exp (-1074) 53) (rnd_of_mode m) r.
+Definition round_double (m:mode) (r:R) := round radix2 (FLT_exp (-1074) 53) (round_mode (rnd_of_mode m)) r.
 
 Definition add_double (m:mode) (f1 f2:double) :=
-  r_to_d_aux m (double_value f1 + double_value f2)
+  mk_double (b64_plus (rnd_of_mode m) (double_float f1) (double_float f2))
     (double_exact f1 + double_exact f2) (double_model f1 + double_model f2).
 
 Definition sub_double (m:mode) (f1 f2:double) :=
-  r_to_d_aux m (double_value f1 - double_value f2)
+  mk_double (b64_minus (rnd_of_mode m) (double_float f1) (double_float f2))
     (double_exact f1 - double_exact f2) (double_model f1 - double_model f2).
 
 Definition mul_double (m:mode) (f1 f2:double) :=
-  r_to_d_aux m (double_value f1 * double_value f2)
+  mk_double (b64_mult (rnd_of_mode m) (double_float f1) (double_float f2))
     (double_exact f1 * double_exact f2) (double_model f1 * double_model f2).
 
 Definition div_double (m:mode) (f1 f2:double) :=
-  r_to_d_aux m (double_value f1 / double_value f2)
+  mk_double (b64_div (rnd_of_mode m) (double_float f1) (double_float f2))
     (double_exact f1 / double_exact f2) (double_model f1 / double_model f2).
 
 Definition sqrt_double (m:mode) (f:double) :=
-  r_to_d_aux m (sqrt (double_value f)) (sqrt (double_exact f)) (sqrt (double_model f)).
+  mk_double (b64_sqrt (rnd_of_mode m) (double_float f))
+    (sqrt (double_exact f)) (sqrt (double_model f)).
 
-Definition neg_double (m:mode) (f:double) :=
-  mk_double _ (- double_exact f) (- double_model f)
-    (neg_sd_aux (-1074) 53 (refl_equal _) (double_value f) (double_value_in_format f)).
-
-Definition abs_double (m:mode) (f:double) :=
-  mk_double _ (Rabs (double_exact f)) (Rabs (double_model f))
-    (abs_sd_aux (-1074) 53 (refl_equal _) (double_value f) (double_value_in_format f)).
+Definition neg_double (f:double) :=
+  mk_double (b64_opp (double_float f))
+    (- double_exact f) (- double_model f).
 
 Definition any_double := round_double_logic nearest_even 0%R.
 
@@ -281,7 +387,7 @@ erewrite <- round_generic with (x := Ropp max_double).
 apply round_monotone with (2 := proj1 H0).
 now apply FLT_exp_correct.
 now apply generic_format_opp.
-rewrite <- round_generic with (rnd := rnd_of_mode m) (1 := H).
+rewrite <- round_generic with (rnd := round_mode (rnd_of_mode m)) (1 := H).
 apply round_monotone with (2 := proj2 H0).
 now apply FLT_exp_correct.
 Qed.
@@ -395,6 +501,7 @@ Admitted.
 
 (** Jumping from one format to another *)
 
+(*
 Lemma single_to_double_aux: forall f:single, 
   FLT_format radix2 (-1074) 53 (single_value f).
 Proof.
@@ -443,7 +550,7 @@ Admitted.
 
 Definition double_of_quad : mode -> quad -> double.
 Admitted.
-
+*)
 
 (** Small integers, like 1 or 2, do not suffer from rounding *)
 
@@ -451,49 +558,33 @@ Theorem small_int_no_round: forall (m:mode), forall (z:Z),
   (Zabs z <= Zpower_nat 2 53)%Z -> (double_value (round_double_logic m (Z2R z))= Z2R z)%R.
 Proof.
 intros m z Hz.
-simpl.
-destruct (Z_eq_dec z 0) as [Zz|Zz].
-rewrite Zz.
-apply round_0.
-apply round_generic.
-destruct (Zle_lt_or_eq _ _ Hz) as [Bz|Bz].
-rewrite <- (Rmult_1_r (Z2R z)).
-change (Z2R z * 1)%R with (F2R (Float radix2 z 0)).
-apply generic_format_canonic_exponent.
+unfold round_double_logic, r_to_d_aux, double_value.
+apply r_to_sd_format.
+destruct (Zle_lt_or_eq _ _ Hz) as [Bz|Bz] ; clear Hz.
+exists (Float radix2 z 0).
 unfold F2R. simpl.
-rewrite Rmult_1_r.
-unfold canonic_exponent.
-destruct (ln_beta radix2 (Z2R z)) as (ez,Ez). simpl.
-specialize (Ez (Z2R_neq _ _ Zz)).
-unfold FLT_exp.
-generalize (Zmax_spec (ez - 53) (-1074)).
-cut (1 <= ez <= 53)%Z. clear. omega.
 split.
-apply (bpow_lt_bpow radix2).
-apply Rle_lt_trans with (2 := proj2 Ez).
+now rewrite Rmult_1_r.
+now split.
+apply <- FLT_format_generic.
+2: easy.
+change 2%Z with (radix_val radix2) in Bz.
+destruct z as [|z|z] ; unfold Zabs in Bz.
+apply generic_format_0.
+rewrite Bz.
+rewrite Z2R_Zpower_nat.
+now apply generic_format_bpow.
+change (Zneg z) with (Zopp (Zpos z)).
+rewrite Bz, Z2R_opp.
+rewrite Z2R_Zpower_nat.
+apply generic_format_opp.
+now apply generic_format_bpow.
+apply Rle_lt_trans with (bpow radix2 53).
 rewrite <- Z2R_abs.
-apply (Z2R_le 1).
-clear -Zz.
-generalize (Zabs_spec z). omega.
-apply (bpow_lt_bpow radix2).
-apply Rle_lt_trans with (1 := proj1 Ez).
 change 53%Z with (Z_of_nat 53).
 rewrite <- Z2R_Zpower_nat.
-rewrite <- Z2R_abs.
-now apply Z2R_lt.
-destruct z.
-now elim Zz.
-simpl in Bz.
-rewrite Bz.
-rewrite (Z2R_Zpower_nat radix2).
-now apply generic_format_bpow.
-simpl in Bz.
-change (Zneg p) with (Zopp (Zpos p)).
-rewrite Bz.
-rewrite Z2R_opp.
-apply generic_format_opp.
-rewrite (Z2R_Zpower_nat radix2).
-now apply generic_format_bpow.
+now apply Z2R_le.
+now apply bpow_lt.
 Qed.
 
 Theorem zero_no_round: forall (m:mode), double_value (round_double_logic m (Z2R 0)) = 0%R.

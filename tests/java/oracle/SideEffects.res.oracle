@@ -1,4 +1,34 @@
 ========== file tests/java/SideEffects.java ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
 
 //@+ CheckArithOverflow = no
 
@@ -9,16 +39,24 @@ class SideEffects {
     void m1(int t[]) {
 	int i = 0;
 	t[i++] = 1;
-	//@ assert t[0] == 1 && i == 1;    
+	//@ assert t[0] == 1 && i == 1;
 	t[++i] = 2;
-	//@ assert t[0] == 1 && t[2] == 2 && i == 2;    
+	//@ assert t[0] == 1 && t[2] == 2 && i == 2;
 	t[--i] = 3;
-	//@ assert t[0] == 1 && t[2] == 2 && t[1] == 3 && i == 1;    
+	//@ assert t[0] == 1 && t[2] == 2 && t[1] == 3 && i == 1;
 	t[i--] = 4;
-	//@ assert t[0] == 1 && t[2] == 2 && t[1] == 4 && i == 0;    
+	//@ assert t[0] == 1 && t[2] == 2 && t[1] == 4 && i == 0;
     }
 
 }
+
+
+/*
+Local Variables:
+compile-command: "make SideEffects.why3ml"
+End:
+*/
+
 
 ========== krakatoa execution ==========
 Parsing OK.
@@ -131,175 +169,175 @@ End:
 ========== file tests/java/SideEffects.jloc ==========
 [K_10]
 file = "HOME/tests/java/SideEffects.java"
-line = 13
+line = 43
 begin = 38
 end = 44
 
 [K_11]
 file = "HOME/tests/java/SideEffects.java"
-line = 13
+line = 43
 begin = 25
 end = 34
 
 [K_12]
 file = "HOME/tests/java/SideEffects.java"
-line = 13
+line = 43
 begin = 12
 end = 21
 
 [K_13]
 file = "HOME/tests/java/SideEffects.java"
-line = 13
+line = 43
 begin = 12
 end = 34
 
 [K_14]
 file = "HOME/tests/java/SideEffects.java"
-line = 13
+line = 43
 begin = 12
 end = 44
 
 [K_15]
 file = "HOME/tests/java/SideEffects.java"
-line = 13
+line = 43
 begin = 12
 end = 44
 
 [K_16]
 file = "HOME/tests/java/SideEffects.java"
-line = 14
+line = 44
 begin = 3
 end = 6
 
 [K_17]
 file = "HOME/tests/java/SideEffects.java"
-line = 14
+line = 44
 begin = 1
 end = 11
 
 [K_18]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 51
 end = 57
 
 [K_19]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 38
 end = 47
 
 [K_20]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 25
 end = 34
 
 [K_21]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 12
 end = 21
 
 [K_22]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 12
 end = 34
 
 [K_23]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 12
 end = 47
 
 [K_24]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 12
 end = 57
 
 [K_1]
 file = "HOME/tests/java/SideEffects.java"
-line = 6
+line = 36
 begin = 17
 end = 30
 
 [K_25]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 12
 end = 57
 
 [K_2]
 file = "HOME/tests/java/SideEffects.java"
-line = 10
+line = 40
 begin = 3
 end = 6
 
 [K_26]
 file = "HOME/tests/java/SideEffects.java"
-line = 16
+line = 46
 begin = 3
 end = 6
 
 [K_3]
 file = "HOME/tests/java/SideEffects.java"
-line = 10
+line = 40
 begin = 1
 end = 11
 
 [K_27]
 file = "HOME/tests/java/SideEffects.java"
-line = 16
+line = 46
 begin = 1
 end = 11
 
 [K_4]
 file = "HOME/tests/java/SideEffects.java"
-line = 11
+line = 41
 begin = 25
 end = 31
 
 [K_28]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 51
 end = 57
 
 [K_5]
 file = "HOME/tests/java/SideEffects.java"
-line = 11
+line = 41
 begin = 12
 end = 21
 
 [K_29]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 38
 end = 47
 
 [K_6]
 file = "HOME/tests/java/SideEffects.java"
-line = 11
+line = 41
 begin = 12
 end = 31
 
 [K_7]
 file = "HOME/tests/java/SideEffects.java"
-line = 11
+line = 41
 begin = 12
 end = 31
 
 [K_8]
 file = "HOME/tests/java/SideEffects.java"
-line = 12
+line = 42
 begin = 3
 end = 6
 
 [K_9]
 file = "HOME/tests/java/SideEffects.java"
-line = 12
+line = 42
 begin = 1
 end = 11
 
@@ -312,50 +350,50 @@ end = -1
 
 [K_30]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 25
 end = 34
 
 [K_31]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 12
 end = 21
 
 [K_32]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 12
 end = 34
 
 [K_33]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 12
 end = 47
 
 [K_34]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 12
 end = 57
 
 [K_35]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 12
 end = 57
 
 [K_36]
 file = "HOME/tests/java/SideEffects.java"
-line = 9
+line = 39
 begin = 9
 end = 10
 
 [SideEffects_m1]
 name = "Method m1"
 file = "HOME/tests/java/SideEffects.java"
-line = 8
+line = 38
 begin = 9
 end = 11
 
@@ -377,10 +415,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs SideE
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs SideEffects.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/SideEffects_why.sx
 
@@ -440,6 +479,13 @@ simplify: simplify/SideEffects_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/SideEffects_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/SideEffects_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -513,6 +559,9 @@ why/%_why3.why: why/%.why
 why3ide: why/SideEffects_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: SideEffects.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include SideEffects.depend
 
 depend: coq/SideEffects_why.v
@@ -548,7 +597,7 @@ end = -1
 
 [JC_41]
 file = "HOME/tests/java/SideEffects.java"
-line = 6
+line = 36
 begin = 17
 end = 30
 
@@ -590,7 +639,7 @@ end = 22
 
 [cons_SideEffects_ensures_default]
 name = "Constructor of class SideEffects"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/"
 line = 0
 begin = -1
@@ -611,7 +660,7 @@ end = -1
 
 [JC_48]
 file = "HOME/tests/java/SideEffects.java"
-line = 11
+line = 41
 begin = 12
 end = 21
 
@@ -623,7 +672,7 @@ end = 22
 
 [JC_49]
 file = "HOME/tests/java/SideEffects.java"
-line = 11
+line = 41
 begin = 25
 end = 31
 
@@ -665,7 +714,7 @@ end = 21
 
 [JC_50]
 file = "HOME/tests/java/SideEffects.java"
-line = 11
+line = 41
 begin = 12
 end = 31
 
@@ -678,25 +727,25 @@ end = 46
 
 [JC_52]
 file = "HOME/tests/java/SideEffects.java"
-line = 13
+line = 43
 begin = 12
 end = 21
 
 [JC_53]
 file = "HOME/tests/java/SideEffects.java"
-line = 13
+line = 43
 begin = 25
 end = 34
 
 [JC_54]
 file = "HOME/tests/java/SideEffects.java"
-line = 13
+line = 43
 begin = 38
 end = 44
 
 [JC_55]
 file = "HOME/tests/java/SideEffects.java"
-line = 13
+line = 43
 begin = 12
 end = 44
 
@@ -709,19 +758,19 @@ end = 48
 
 [JC_57]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 12
 end = 21
 
 [JC_58]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 25
 end = 34
 
 [JC_59]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 38
 end = 47
 
@@ -729,19 +778,19 @@ end = 47
 name = "Method m1"
 behavior = "Safety"
 file = "HOME/tests/java/SideEffects.java"
-line = 8
+line = 38
 begin = 9
 end = 11
 
 [JC_60]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 51
 end = 57
 
 [JC_61]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 12
 end = 57
 
@@ -760,7 +809,7 @@ end = -1
 
 [JC_63]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 12
 end = 21
 
@@ -772,7 +821,7 @@ end = 21
 
 [JC_64]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 25
 end = 34
 
@@ -784,7 +833,7 @@ end = -1
 
 [JC_65]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 38
 end = 47
 
@@ -796,7 +845,7 @@ end = 66
 
 [JC_66]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 51
 end = 57
 
@@ -808,7 +857,7 @@ end = 18
 
 [JC_67]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 12
 end = 57
 
@@ -820,7 +869,7 @@ end = 66
 
 [JC_68]
 file = "HOME/tests/java/SideEffects.java"
-line = 11
+line = 41
 begin = 12
 end = 21
 
@@ -832,7 +881,7 @@ end = 18
 
 [JC_69]
 file = "HOME/tests/java/SideEffects.java"
-line = 11
+line = 41
 begin = 25
 end = 31
 
@@ -856,19 +905,19 @@ end = 30
 
 [JC_70]
 file = "HOME/tests/java/SideEffects.java"
-line = 11
+line = 41
 begin = 12
 end = 31
 
 [JC_71]
 file = "HOME/tests/java/SideEffects.java"
-line = 13
+line = 43
 begin = 12
 end = 21
 
 [JC_72]
 file = "HOME/tests/java/SideEffects.java"
-line = 13
+line = 43
 begin = 25
 end = 34
 
@@ -880,7 +929,7 @@ end = -1
 
 [JC_73]
 file = "HOME/tests/java/SideEffects.java"
-line = 13
+line = 43
 begin = 38
 end = 44
 
@@ -892,7 +941,7 @@ end = 30
 
 [JC_74]
 file = "HOME/tests/java/SideEffects.java"
-line = 13
+line = 43
 begin = 12
 end = 44
 
@@ -904,7 +953,7 @@ end = -1
 
 [JC_75]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 12
 end = 21
 
@@ -916,7 +965,7 @@ end = 103
 
 [JC_76]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 25
 end = 34
 
@@ -928,7 +977,7 @@ end = 18
 
 [JC_77]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 38
 end = 47
 
@@ -940,7 +989,7 @@ end = 103
 
 [JC_78]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 51
 end = 57
 
@@ -952,7 +1001,7 @@ end = 18
 
 [JC_79]
 file = "HOME/tests/java/SideEffects.java"
-line = 15
+line = 45
 begin = 12
 end = 57
 
@@ -976,27 +1025,27 @@ end = 23
 
 [SideEffects_m1_ensures_default]
 name = "Method m1"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/SideEffects.java"
-line = 8
+line = 38
 begin = 9
 end = 11
 
 [JC_80]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 12
 end = 21
 
 [JC_81]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 25
 end = 34
 
 [JC_82]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 38
 end = 47
 
@@ -1008,7 +1057,7 @@ end = -1
 
 [JC_83]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 51
 end = 57
 
@@ -1020,7 +1069,7 @@ end = 23
 
 [JC_84]
 file = "HOME/tests/java/SideEffects.java"
-line = 17
+line = 47
 begin = 12
 end = 57
 
@@ -1106,7 +1155,7 @@ end = 65
 
 [JC_39]
 file = "HOME/tests/java/SideEffects.java"
-line = 6
+line = 36
 begin = 17
 end = 30
 
@@ -1115,21 +1164,15 @@ type Object
 
 type interface
 
-exception Exception_exc of Object pointer
-
 logic Exception_tag:  -> Object tag_id
 
 logic Object_tag:  -> Object tag_id
 
 axiom Exception_parenttag_Object : parenttag(Exception_tag, Object_tag)
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
 predicate Non_null_Object(x_1:Object pointer,
  Object_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_alloc_table, x_1), (0))
+ (offset_max(Object_alloc_table, x_1) = (0))
 
 predicate Non_null_intM(x_0:Object pointer,
  Object_alloc_table:Object alloc_table) =
@@ -1150,8 +1193,6 @@ axiom Object_tags :
   (forall Object_tag_table:Object tag_table.
    instanceof(Object_tag_table, x, Object_tag)))
 
-exception Return_label_exc of unit
-
 logic SideEffects_tag:  -> Object tag_id
 
 axiom SideEffects_parenttag_Object : parenttag(SideEffects_tag, Object_tag)
@@ -1159,8 +1200,6 @@ axiom SideEffects_parenttag_Object : parenttag(SideEffects_tag, Object_tag)
 logic String_tag:  -> Object tag_id
 
 axiom String_parenttag_Object : parenttag(String_tag, Object_tag)
-
-exception Throwable_exc of Object pointer
 
 logic Throwable_tag:  -> Object tag_id
 
@@ -1290,36 +1329,6 @@ predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_SideEffects(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_intM(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
@@ -1360,9 +1369,17 @@ predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
+exception Exception_exc of Object pointer
+
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
 parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_tag_table : Object tag_table ref
+
+exception Return_label_exc of unit
 
 parameter intM_intP : (Object, int) memory ref
 
@@ -1377,131 +1394,7 @@ parameter SideEffects_m1_requires :
    { (JC_39: gt_int(add_int(offset_max(Object_alloc_table, t), (1)), (10)))}
    unit reads Object_alloc_table,intM_intP writes intM_intP { true }
 
-parameter alloc_bitvector_struct_Exception :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Exception_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_SideEffects :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_SideEffects(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_SideEffects_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_SideEffects(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_String :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_String_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intM :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intM(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intM_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intM(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Throwable_exc of Object pointer
 
 parameter alloc_struct_Exception :
  n:int ->
@@ -1684,7 +1577,7 @@ parameter java_array_length_intM :
   { (JC_25:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
-        and eq_int(result, add_int(offset_max(Object_alloc_table, x_3), (1)))))) }
+        and (result = add_int(offset_max(Object_alloc_table, x_3), (1)))))) }
 
 parameter java_array_length_intM_requires :
  x_3:Object pointer ->
@@ -1692,20 +1585,20 @@ parameter java_array_length_intM_requires :
   { (JC_25:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
-        and eq_int(result, add_int(offset_max(Object_alloc_table, x_3), (1)))))) }
+        and (result = add_int(offset_max(Object_alloc_table, x_3), (1)))))) }
 
 parameter non_null_Object :
  x_4:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_38:
-    (if result then eq_int(offset_max(Object_alloc_table, x_4), (0))
+    (if result then (offset_max(Object_alloc_table, x_4) = (0))
      else (x_4 = null))) }
 
 parameter non_null_Object_requires :
  x_4:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_38:
-    (if result then eq_int(offset_max(Object_alloc_table, x_4), (0))
+    (if result then (offset_max(Object_alloc_table, x_4) = (0))
      else (x_4 = null))) }
 
 parameter non_null_intM :
@@ -1753,8 +1646,8 @@ let SideEffects_m1_ensures_default =
        (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
       (assert
       { (JC_70:
-        ((JC_68: eq_int(select(intM_intP, shift(t, (0))), (1)))
-        and (JC_69: eq_int(i, (1))))) }; void);
+        ((JC_68: (select(intM_intP, shift(t, (0))) = (1)))
+        and (JC_69: (i = (1))))) }; void);
       (let jessie_<num> =
       (let jessie_<num> = (2) in
       (let jessie_<num> = t in
@@ -1763,9 +1656,9 @@ let SideEffects_m1_ensures_default =
       (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
       (assert
       { (JC_74:
-        ((JC_71: eq_int(select(intM_intP, shift(t, (0))), (1)))
-        and ((JC_72: eq_int(select(intM_intP, shift(t, (2))), (2)))
-            and (JC_73: eq_int(i, (2)))))) }; void);
+        ((JC_71: (select(intM_intP, shift(t, (0))) = (1)))
+        and ((JC_72: (select(intM_intP, shift(t, (2))) = (2)))
+            and (JC_73: (i = (2)))))) }; void);
       (let jessie_<num> =
       (let jessie_<num> = (3) in
       (let jessie_<num> = t in
@@ -1774,10 +1667,10 @@ let SideEffects_m1_ensures_default =
       (((safe_upd_ intM_intP) jessie_<num>) jessie_<num>))))) in void);
       (assert
       { (JC_79:
-        ((JC_75: eq_int(select(intM_intP, shift(t, (0))), (1)))
-        and ((JC_76: eq_int(select(intM_intP, shift(t, (2))), (2)))
-            and ((JC_77: eq_int(select(intM_intP, shift(t, (1))), (3)))
-                and (JC_78: eq_int(i, (1))))))) }; void);
+        ((JC_75: (select(intM_intP, shift(t, (0))) = (1)))
+        and ((JC_76: (select(intM_intP, shift(t, (2))) = (2)))
+            and ((JC_77: (select(intM_intP, shift(t, (1))) = (3)))
+                and (JC_78: (i = (1))))))) }; void);
       (let jessie_<num> =
       (let jessie_<num> = (4) in
       (let jessie_<num> = t in
@@ -1792,10 +1685,10 @@ let SideEffects_m1_ensures_default =
       (K_35:
       (assert
       { (JC_84:
-        ((JC_80: eq_int(select(intM_intP, shift(t, (0))), (1)))
-        and ((JC_81: eq_int(select(intM_intP, shift(t, (2))), (2)))
-            and ((JC_82: eq_int(select(intM_intP, shift(t, (1))), (4)))
-                and (JC_83: eq_int(i, (0))))))) }; void)) end))))))));
+        ((JC_80: (select(intM_intP, shift(t, (0))) = (1)))
+        and ((JC_81: (select(intM_intP, shift(t, (2))) = (2)))
+            and ((JC_82: (select(intM_intP, shift(t, (1))) = (4)))
+                and (JC_83: (i = (0))))))) }; void)) end))))))));
     (raise Return) end with Return -> void end) { (JC_43: true) }
 
 let SideEffects_m1_safety =
@@ -1831,8 +1724,8 @@ let SideEffects_m1_safety =
        void);
       [ { } unit reads i,intM_intP
         { (JC_50:
-          ((JC_48: eq_int(select(intM_intP, shift(t, (0))), (1)))
-          and (JC_49: eq_int(i, (1))))) } ];
+          ((JC_48: (select(intM_intP, shift(t, (0))) = (1)))
+          and (JC_49: (i = (1))))) } ];
       (let jessie_<num> =
       (let jessie_<num> = (2) in
       (let jessie_<num> = t in
@@ -1843,9 +1736,9 @@ let SideEffects_m1_safety =
       void);
       [ { } unit reads i,intM_intP
         { (JC_55:
-          ((JC_52: eq_int(select(intM_intP, shift(t, (0))), (1)))
-          and ((JC_53: eq_int(select(intM_intP, shift(t, (2))), (2)))
-              and (JC_54: eq_int(i, (2)))))) } ];
+          ((JC_52: (select(intM_intP, shift(t, (0))) = (1)))
+          and ((JC_53: (select(intM_intP, shift(t, (2))) = (2)))
+              and (JC_54: (i = (2)))))) } ];
       (let jessie_<num> =
       (let jessie_<num> = (3) in
       (let jessie_<num> = t in
@@ -1856,10 +1749,10 @@ let SideEffects_m1_safety =
       void);
       [ { } unit reads i,intM_intP
         { (JC_61:
-          ((JC_57: eq_int(select(intM_intP, shift(t, (0))), (1)))
-          and ((JC_58: eq_int(select(intM_intP, shift(t, (2))), (2)))
-              and ((JC_59: eq_int(select(intM_intP, shift(t, (1))), (3)))
-                  and (JC_60: eq_int(i, (1))))))) } ];
+          ((JC_57: (select(intM_intP, shift(t, (0))) = (1)))
+          and ((JC_58: (select(intM_intP, shift(t, (2))) = (2)))
+              and ((JC_59: (select(intM_intP, shift(t, (1))) = (3)))
+                  and (JC_60: (i = (1))))))) } ];
       (let jessie_<num> =
       (let jessie_<num> = (4) in
       (let jessie_<num> = t in
@@ -1876,11 +1769,11 @@ let SideEffects_m1_safety =
       (K_35:
       [ { } unit reads i,intM_intP
         { (JC_67:
-          ((JC_63: eq_int(select(intM_intP, shift(t, (0))), (1)))
-          and ((JC_64: eq_int(select(intM_intP, shift(t, (2))), (2)))
-              and ((JC_65: eq_int(select(intM_intP, shift(t, (1))), (4)))
-                  and (JC_66: eq_int(i, (0))))))) } ]) end))))))));
-    (raise Return) end with Return -> void end) { true }
+          ((JC_63: (select(intM_intP, shift(t, (0))) = (1)))
+          and ((JC_64: (select(intM_intP, shift(t, (2))) = (2)))
+              and ((JC_65: (select(intM_intP, shift(t, (1))) = (4)))
+                  and (JC_66: (i = (0))))))) } ]) end)))))))); (raise Return)
+   end with Return -> void end) { true }
 
 let cons_SideEffects_ensures_default =
  fun (this_1 : Object pointer) ->
@@ -1901,6 +1794,60 @@ why --project [...] why/SideEffects.why
 <project name="SideEffects" context="why/SideEffects_ctx.why">
   <function name="Method m1">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/SideEffects_po1.why">
+      <location file = "HOME/tests/java/SideEffects.java" line = "41" begin = "12" end = "21"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/SideEffects_po2.why">
+      <location file = "HOME/tests/java/SideEffects.java" line = "41" begin = "25" end = "31"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/SideEffects_po3.why">
+      <location file = "HOME/tests/java/SideEffects.java" line = "43" begin = "12" end = "21"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/SideEffects_po4.why">
+      <location file = "HOME/tests/java/SideEffects.java" line = "43" begin = "25" end = "34"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/SideEffects_po5.why">
+      <location file = "HOME/tests/java/SideEffects.java" line = "43" begin = "38" end = "44"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/SideEffects_po6.why">
+      <location file = "HOME/tests/java/SideEffects.java" line = "45" begin = "12" end = "21"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/SideEffects_po7.why">
+      <location file = "HOME/tests/java/SideEffects.java" line = "45" begin = "25" end = "34"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/SideEffects_po8.why">
+      <location file = "HOME/tests/java/SideEffects.java" line = "45" begin = "38" end = "47"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/SideEffects_po9.why">
+      <location file = "HOME/tests/java/SideEffects.java" line = "45" begin = "51" end = "57"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/SideEffects_po10.why">
+      <location file = "HOME/tests/java/SideEffects.java" line = "47" begin = "12" end = "21"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/SideEffects_po11.why">
+      <location file = "HOME/tests/java/SideEffects.java" line = "47" begin = "25" end = "34"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/SideEffects_po12.why">
+      <location file = "HOME/tests/java/SideEffects.java" line = "47" begin = "38" end = "47"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/SideEffects_po13.why">
+      <location file = "HOME/tests/java/SideEffects.java" line = "47" begin = "51" end = "57"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/SideEffects_po14.why">
       <location file = "HOME/tests/java/SideEffects.jc" line = "70" begin = "17" end = "46"/>
@@ -1931,60 +1878,6 @@ text = "PointerDeref"/>
       <location file = "HOME/tests/java/SideEffects.jc" line = "78" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/SideEffects_po1.why">
-      <location file = "HOME/tests/java/SideEffects.java" line = "11" begin = "12" end = "21"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/SideEffects_po2.why">
-      <location file = "HOME/tests/java/SideEffects.java" line = "11" begin = "25" end = "31"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/SideEffects_po3.why">
-      <location file = "HOME/tests/java/SideEffects.java" line = "13" begin = "12" end = "21"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/SideEffects_po4.why">
-      <location file = "HOME/tests/java/SideEffects.java" line = "13" begin = "25" end = "34"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/SideEffects_po5.why">
-      <location file = "HOME/tests/java/SideEffects.java" line = "13" begin = "38" end = "44"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/SideEffects_po6.why">
-      <location file = "HOME/tests/java/SideEffects.java" line = "15" begin = "12" end = "21"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/SideEffects_po7.why">
-      <location file = "HOME/tests/java/SideEffects.java" line = "15" begin = "25" end = "34"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/SideEffects_po8.why">
-      <location file = "HOME/tests/java/SideEffects.java" line = "15" begin = "38" end = "47"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/SideEffects_po9.why">
-      <location file = "HOME/tests/java/SideEffects.java" line = "15" begin = "51" end = "57"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/SideEffects_po10.why">
-      <location file = "HOME/tests/java/SideEffects.java" line = "17" begin = "12" end = "21"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/SideEffects_po11.why">
-      <location file = "HOME/tests/java/SideEffects.java" line = "17" begin = "25" end = "34"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/SideEffects_po12.why">
-      <location file = "HOME/tests/java/SideEffects.java" line = "17" begin = "38" end = "47"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/SideEffects_po13.why">
-      <location file = "HOME/tests/java/SideEffects.java" line = "17" begin = "51" end = "57"/>
-      <explain kind = "Assert"/>
     </goal>
     </behavior>
   </function>
@@ -3092,36 +2985,6 @@ predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_SideEffects(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_intM(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
   ((offset_min(Object_alloc_table, p) <= a) and
@@ -3161,6 +3024,23 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
   ((offset_min(interface_alloc_table, p) <= a) and
    (offset_max(interface_alloc_table, p) >= b))
+
+========== file tests/java/why/SideEffects_po1.why ==========
+goal SideEffects_m1_ensures_default_po_1:
+  forall this_0:Object pointer.
+  forall t:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  forall intM_intP:(Object,
+  int) memory.
+  (left_valid_struct_intM(t, 0, Object_alloc_table) and
+   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
+    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
+  forall i:int.
+  (i = (0 + 1)) ->
+  forall intM_intP0:(Object,
+  int) memory.
+  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
+  ("JC_70": ("JC_68": (select(intM_intP0, shift(t, 0)) = 1)))
 
 ========== file tests/java/why/SideEffects_po10.why ==========
 goal SideEffects_m1_ensures_default_po_10:
@@ -3461,23 +3341,6 @@ goal SideEffects_m1_safety_po_6:
   forall i1:int.
   (i1 = (i0 - 1)) ->
   (i1 <= offset_max(Object_alloc_table, t))
-
-========== file tests/java/why/SideEffects_po1.why ==========
-goal SideEffects_m1_ensures_default_po_1:
-  forall this_0:Object pointer.
-  forall t:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  forall intM_intP:(Object,
-  int) memory.
-  (left_valid_struct_intM(t, 0, Object_alloc_table) and
-   (valid_struct_SideEffects(this_0, 0, 0, Object_alloc_table) and
-    ("JC_41": ((offset_max(Object_alloc_table, t) + 1) > 10)))) ->
-  forall i:int.
-  (i = (0 + 1)) ->
-  forall intM_intP0:(Object,
-  int) memory.
-  (intM_intP0 = store(intM_intP, shift(t, 0), 1)) ->
-  ("JC_70": ("JC_68": (select(intM_intP0, shift(t, 0)) = 1)))
 
 ========== file tests/java/why/SideEffects_po2.why ==========
 goal SideEffects_m1_ensures_default_po_2:
@@ -4653,29 +4516,6 @@ why -simplify [...] why/SideEffects.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-(DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_Exception p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_SideEffects p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_String p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Throwable p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_intM p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_interface p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
 (DEFPRED (valid_root_Object p a b Object_alloc_table)
   (AND (<= (offset_min Object_alloc_table p) a)
   (>= (offset_max Object_alloc_table p) b)))
@@ -4707,7 +4547,7 @@ why -simplify [...] why/SideEffects.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; SideEffects_m1_ensures_default_po_1, File "HOME/tests/java/SideEffects.java", line 11, characters 12-21
+;; SideEffects_m1_ensures_default_po_1, File "HOME/tests/java/SideEffects.java", line 41, characters 12-21
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4721,7 +4561,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1))
 (EQ (select intM_intP0 (shift t 0)) 1))))))))))
 
-;; SideEffects_m1_ensures_default_po_2, File "HOME/tests/java/SideEffects.java", line 11, characters 25-31
+;; SideEffects_m1_ensures_default_po_2, File "HOME/tests/java/SideEffects.java", line 41, characters 25-31
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4734,7 +4574,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (intM_intP0)
 (IMPLIES (EQ intM_intP0 (|why__store| intM_intP (shift t 0) 1)) (EQ i 1))))))))))
 
-;; SideEffects_m1_ensures_default_po_3, File "HOME/tests/java/SideEffects.java", line 13, characters 12-21
+;; SideEffects_m1_ensures_default_po_3, File "HOME/tests/java/SideEffects.java", line 43, characters 12-21
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4753,7 +4593,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
 (EQ (select intM_intP1 (shift t 0)) 1)))))))))))))))
 
-;; SideEffects_m1_ensures_default_po_4, File "HOME/tests/java/SideEffects.java", line 13, characters 25-34
+;; SideEffects_m1_ensures_default_po_4, File "HOME/tests/java/SideEffects.java", line 43, characters 25-34
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4772,7 +4612,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2))
 (EQ (select intM_intP1 (shift t 2)) 2)))))))))))))))
 
-;; SideEffects_m1_ensures_default_po_5, File "HOME/tests/java/SideEffects.java", line 13, characters 38-44
+;; SideEffects_m1_ensures_default_po_5, File "HOME/tests/java/SideEffects.java", line 43, characters 38-44
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4790,7 +4630,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (intM_intP1)
 (IMPLIES (EQ intM_intP1 (|why__store| intM_intP0 (shift t i0) 2)) (EQ i0 2)))))))))))))))
 
-;; SideEffects_m1_ensures_default_po_6, File "HOME/tests/java/SideEffects.java", line 15, characters 12-21
+;; SideEffects_m1_ensures_default_po_6, File "HOME/tests/java/SideEffects.java", line 45, characters 12-21
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4815,7 +4655,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3))
 (EQ (select intM_intP2 (shift t 0)) 1))))))))))))))))))))
 
-;; SideEffects_m1_ensures_default_po_7, File "HOME/tests/java/SideEffects.java", line 15, characters 25-34
+;; SideEffects_m1_ensures_default_po_7, File "HOME/tests/java/SideEffects.java", line 45, characters 25-34
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4840,7 +4680,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3))
 (EQ (select intM_intP2 (shift t 2)) 2))))))))))))))))))))
 
-;; SideEffects_m1_ensures_default_po_8, File "HOME/tests/java/SideEffects.java", line 15, characters 38-47
+;; SideEffects_m1_ensures_default_po_8, File "HOME/tests/java/SideEffects.java", line 45, characters 38-47
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4865,7 +4705,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3))
 (EQ (select intM_intP2 (shift t 1)) 3))))))))))))))))))))
 
-;; SideEffects_m1_ensures_default_po_9, File "HOME/tests/java/SideEffects.java", line 15, characters 51-57
+;; SideEffects_m1_ensures_default_po_9, File "HOME/tests/java/SideEffects.java", line 45, characters 51-57
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4889,7 +4729,7 @@ why -simplify [...] why/SideEffects.why
 (FORALL (intM_intP2)
 (IMPLIES (EQ intM_intP2 (|why__store| intM_intP1 (shift t i1) 3)) (EQ i1 1))))))))))))))))))))
 
-;; SideEffects_m1_ensures_default_po_10, File "HOME/tests/java/SideEffects.java", line 17, characters 12-21
+;; SideEffects_m1_ensures_default_po_10, File "HOME/tests/java/SideEffects.java", line 47, characters 12-21
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4921,7 +4761,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP3 (|why__store| intM_intP2 (shift t i1) 4))
 (EQ (select intM_intP3 (shift t 0)) 1)))))))))))))))))))))))))
 
-;; SideEffects_m1_ensures_default_po_11, File "HOME/tests/java/SideEffects.java", line 17, characters 25-34
+;; SideEffects_m1_ensures_default_po_11, File "HOME/tests/java/SideEffects.java", line 47, characters 25-34
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4953,7 +4793,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP3 (|why__store| intM_intP2 (shift t i1) 4))
 (EQ (select intM_intP3 (shift t 2)) 2)))))))))))))))))))))))))
 
-;; SideEffects_m1_ensures_default_po_12, File "HOME/tests/java/SideEffects.java", line 17, characters 38-47
+;; SideEffects_m1_ensures_default_po_12, File "HOME/tests/java/SideEffects.java", line 47, characters 38-47
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -4985,7 +4825,7 @@ why -simplify [...] why/SideEffects.why
 (IMPLIES (EQ intM_intP3 (|why__store| intM_intP2 (shift t i1) 4))
 (EQ (select intM_intP3 (shift t 1)) 4)))))))))))))))))))))))))
 
-;; SideEffects_m1_ensures_default_po_13, File "HOME/tests/java/SideEffects.java", line 17, characters 51-57
+;; SideEffects_m1_ensures_default_po_13, File "HOME/tests/java/SideEffects.java", line 47, characters 51-57
 (FORALL (this_0)
 (FORALL (t)
 (FORALL (Object_alloc_table)
@@ -6235,36 +6075,6 @@ predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_SideEffects(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_intM(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =

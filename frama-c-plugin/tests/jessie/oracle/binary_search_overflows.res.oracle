@@ -137,14 +137,6 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -178,6 +170,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -189,6 +186,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -273,21 +275,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -339,59 +326,13 @@ lemma mean_1 :
     (le_int(x_0, add_int(x_0, computer_div(sub_int(y, x_0), (2))))
     and le_int(add_int(x_0, computer_div(sub_int(y, x_0), (2))), y)))))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -484,15 +425,14 @@ parameter binary_search :
       { } int32
       { (JC_<somenum>:
         ((ge_int(integer_of_int32(result), (0))
-         and eq_int(integer_of_int32(select(intP_intM_t_1,
-                                     shift(t@, integer_of_int32(result)))),
-             integer_of_int32(v@)))
-        or (eq_int(integer_of_int32(result), neg_int((1)))
+         and (integer_of_int32(select(intP_intM_t_1,
+                               shift(t, integer_of_int32(result)))) = 
+             integer_of_int32(v)))
+        or ((integer_of_int32(result) = neg_int((1)))
            and (forall k_0:int.
-                ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n@))) ->
-                 neq_int(integer_of_int32(select(intP_intM_t_1,
-                                          shift(t@, k_0))),
-                 integer_of_int32(v@))))))) }
+                ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
+                 (integer_of_int32(select(intP_intM_t_1, shift(t, k_0))) <> 
+                 integer_of_int32(v))))))) }
 
 parameter binary_search_requires :
  t:intP pointer ->
@@ -518,15 +458,14 @@ parameter binary_search_requires :
       int32
       { (JC_<somenum>:
         ((ge_int(integer_of_int32(result), (0))
-         and eq_int(integer_of_int32(select(intP_intM_t_1,
-                                     shift(t@, integer_of_int32(result)))),
-             integer_of_int32(v@)))
-        or (eq_int(integer_of_int32(result), neg_int((1)))
+         and (integer_of_int32(select(intP_intM_t_1,
+                               shift(t, integer_of_int32(result)))) = 
+             integer_of_int32(v)))
+        or ((integer_of_int32(result) = neg_int((1)))
            and (forall k_0:int.
-                ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n@))) ->
-                 neq_int(integer_of_int32(select(intP_intM_t_1,
-                                          shift(t@, k_0))),
-                 integer_of_int32(v@))))))) }
+                ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
+                 (integer_of_int32(select(intP_intM_t_1, shift(t, k_0))) <> 
+                 integer_of_int32(v))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -570,7 +509,6 @@ let binary_search_ensures_default =
      (let p = ref (any_int32 void) in
      (let m = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       (C_4:
       (C_5:
@@ -596,31 +534,27 @@ let binary_search_ensures_default =
                         le_int(integer_of_int32(p),
                         sub_int(integer_of_int32(n), (1))))
                        and ((JC_<somenum>:
-                            (eq_int(integer_of_int32(p), neg_int((1))) ->
+                            ((integer_of_int32(p) = neg_int((1))) ->
                              (forall k:int.
                               ((le_int((0), k)
                                and lt_int(k, integer_of_int32(n))) ->
-                               (eq_int(integer_of_int32(select(intP_intM_t_1,
-                                                        shift(t, k))),
-                                integer_of_int32(v)) ->
+                               ((integer_of_int32(select(intP_intM_t_1,
+                                                  shift(t, k))) = integer_of_int32(v)) ->
                                 (le_int(integer_of_int32(l), k)
                                 and le_int(k, integer_of_int32(u))))))))
                            and (JC_<somenum>:
                                (ge_int(integer_of_int32(p), (0)) ->
-                                eq_int(integer_of_int32(select(intP_intM_t_1,
-                                                        shift(t,
-                                                        integer_of_int32(p)))),
+                                (integer_of_int32(select(intP_intM_t_1,
+                                                  shift(t,
+                                                  integer_of_int32(p)))) = 
                                 integer_of_int32(v))))))))))  }
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           (C_24:
           begin
             (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
-            then void
-            else
-             (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
+            then void else (raise (Goto_while_0_break_exc void)));
            (let jessie_<somenum> =
            (m := (C_23:
                  (safe_int32_of_integer_ (C_22:
@@ -669,27 +603,25 @@ let binary_search_ensures_default =
                                            ((sub_int (integer_of_int32 !m)) (1))))))) in
              void)
             else
-             (let jessie_<somenum> =
              (C_28:
              begin
                (let jessie_<somenum> = (p := !m) in void);
-              (raise (Goto_while_0_break_exc void)) end) in void)));
-           (raise (Loop_continue_exc void)) end) in void) with
+              (raise (Goto_while_0_break_exc void)) end)));
+           (raise (Loop_continue_exc void)) end) with
           Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end))) in void) with
+       (raise (Goto_while_0_break_exc void)) end))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (return := !p); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((ge_int(integer_of_int32(result), (0))
-     and eq_int(integer_of_int32(select(intP_intM_t_1,
-                                 shift(t@, integer_of_int32(result)))),
-         integer_of_int32(v@)))
-    or (eq_int(integer_of_int32(result), neg_int((1)))
+     and (integer_of_int32(select(intP_intM_t_1,
+                           shift(t, integer_of_int32(result)))) = integer_of_int32(v)))
+    or ((integer_of_int32(result) = neg_int((1)))
        and (forall k_0:int.
-            ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n@))) ->
-             neq_int(integer_of_int32(select(intP_intM_t_1, shift(t@, k_0))),
-             integer_of_int32(v@))))))) }
+            ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
+             (integer_of_int32(select(intP_intM_t_1, shift(t, k_0))) <> 
+             integer_of_int32(v))))))) }
 
 let binary_search_safety =
  fun (t : intP pointer) (n : int32) (v : int32) (intP_t_1_alloc_table : intP alloc_table) (intP_intM_t_1 : (intP, int32) memory) ->
@@ -717,7 +649,6 @@ let binary_search_safety =
      (let p = ref (any_int32 void) in
      (let m = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       (C_4:
       (C_5:
@@ -745,29 +676,26 @@ let binary_search_safety =
                            le_int(integer_of_int32(p),
                            sub_int(integer_of_int32(n), (1))))
                           and ((JC_<somenum>:
-                               (eq_int(integer_of_int32(p), neg_int((1))) ->
+                               ((integer_of_int32(p) = neg_int((1))) ->
                                 (forall k:int.
                                  ((le_int((0), k)
                                   and lt_int(k, integer_of_int32(n))) ->
-                                  (eq_int(integer_of_int32(select(intP_intM_t_1,
-                                                           shift(t, k))),
+                                  ((integer_of_int32(select(intP_intM_t_1,
+                                                     shift(t, k))) = 
                                    integer_of_int32(v)) ->
                                    (le_int(integer_of_int32(l), k)
                                    and le_int(k, integer_of_int32(u))))))))
                               and (JC_<somenum>:
                                   (ge_int(integer_of_int32(p), (0)) ->
-                                   eq_int(integer_of_int32(select(intP_intM_t_1,
-                                                           shift(t,
-                                                           integer_of_int32(p)))),
+                                   (integer_of_int32(select(intP_intM_t_1,
+                                                     shift(t,
+                                                     integer_of_int32(p)))) = 
                                    integer_of_int32(v)))))))))) } ];
          try
-          (let jessie_<somenum> =
           (C_24:
           begin
             (if ((le_int_ (integer_of_int32 !l)) (integer_of_int32 !u))
-            then void
-            else
-             (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
+            then void else (raise (Goto_while_0_break_exc void)));
            (let jessie_<somenum> =
            (m := (C_23:
                  (JC_<somenum>:
@@ -821,14 +749,13 @@ let binary_search_safety =
                                       ((sub_int (integer_of_int32 !m)) (1)))))))) in
              void)
             else
-             (let jessie_<somenum> =
              (C_28:
              begin
                (let jessie_<somenum> = (p := !m) in void);
-              (raise (Goto_while_0_break_exc void)) end) in void)));
-           (raise (Loop_continue_exc void)) end) in void) with
+              (raise (Goto_while_0_break_exc void)) end)));
+           (raise (Loop_continue_exc void)) end) with
           Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end))) in void) with
+       (raise (Goto_while_0_break_exc void)) end))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (return := !p); (raise Return) end) end))));
     absurd  end with Return -> !return end)) { true }
@@ -840,15 +767,85 @@ why --project [...] why/binary_search_overflows.why
   <lemma name="mean_1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/binary_search_overflows_po1.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.jessie/binary_search_overflows.jc" line = "34" begin = "0" end = "136"/>
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "5" begin = "4" end = "72"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <function name="mean_1">
-    <location file = "PPCHOME/tests/jessie/binary_search_overflows.jessie/binary_search_overflows.jc" line = "34" begin = "0" end = "136"/>
+  <function name="Lemma mean_1">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
   <function name="Function binary_search">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/binary_search_overflows_po2.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "8" end = "14"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po3.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "18" end = "26"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po4.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "30" end = "37"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po5.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "36" end = "44"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po6.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "18" begin = "11" end = "97"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po7.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "18" begin = "11" end = "97"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po8.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "20" begin = "11" end = "31"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po9.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "25" begin = "15" end = "21"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po10.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "25" begin = "20" end = "26"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po11.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "8" end = "14"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po12.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "18" end = "26"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po13.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "30" end = "37"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po14.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "36" end = "44"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po15.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "18" begin = "11" end = "97"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po16.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "18" begin = "11" end = "97"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po17.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "20" begin = "11" end = "31"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/binary_search_overflows_po18.why">
+      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "11" begin = "6" end = "111"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/binary_search_overflows_po19.why">
       <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "15" begin = "17" end = "20"/>
@@ -942,76 +939,6 @@ text = "ArithOverflow"/>
     <goal why_file="why/binary_search_overflows_po37.why">
       <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "21" begin = "19" end = "22"/>
       <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/binary_search_overflows_po2.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "8" end = "14"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po3.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "18" end = "26"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po4.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "30" end = "37"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po5.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "36" end = "44"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po6.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "18" begin = "11" end = "97"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po7.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "18" begin = "11" end = "97"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po8.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "20" begin = "11" end = "31"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po9.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "25" begin = "15" end = "21"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po10.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "25" begin = "20" end = "26"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po11.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "8" end = "14"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po12.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "18" end = "26"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po13.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "30" end = "37"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po14.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "17" begin = "36" end = "44"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po15.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "18" begin = "11" end = "97"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po16.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "18" begin = "11" end = "97"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po17.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "20" begin = "11" end = "31"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/binary_search_overflows_po18.why">
-      <location file = "PPCHOME/tests/jessie/binary_search_overflows.c" line = "11" begin = "6" end = "111"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1991,6 +1918,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -2002,6 +1934,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2087,21 +2023,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

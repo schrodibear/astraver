@@ -1,0 +1,8 @@
+jessie.log
+*.makefile
+*.loc
+*.mlw
+*.cloc
+why
+simplify
+*.jc

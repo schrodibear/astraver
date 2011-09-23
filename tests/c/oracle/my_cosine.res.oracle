@@ -1,4 +1,35 @@
 ========== file tests/c/my_cosine.c ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
+
 // does not work: RUN GAPPA: will ask regtests to run Gappa on this program
 // RUNCOQ: for the first VC
 
@@ -15,11 +46,11 @@ float my_cos1(float x) {
   return 1.0f - x * x * 0.5f;
 }
 
-/*@ requires \abs(x) <= 0x1p-5
-  @     && \round_error(x) == 0.0;
+/*@ requires \abs(x) <= 0x1p-5 && \round_error(x) == 0.0;
   @ ensures \abs(\result - \cos(x)) <= 0x1p-23;
   @*/
 float my_cos2(float x) {
+  //@ assert \exact(x) == x;
   float r = 1.0f - x * x * 0.5f;
   //@ assert \abs(\exact(r) - \cos(x)) <= 0x1p-24;
   return r;
@@ -48,7 +79,7 @@ float my_cos4(float x) {
 
 /*
 Local Variables:
-compile-command: "frama-c -jessie my_cosine.c"
+compile-command: "make my_cosine.why3ml"
 End:
 */
 
@@ -116,20 +147,28 @@ behavior default:
 }
 
 float my_cos2(float x_0)
-  requires (C_14 : ((C_15 : (\real_abs((x_0 :> real)) <= 0x1p-5)) &&
-                     (C_16 : (\single_round_error(x_0) == 0.0))));
+  requires (C_15 : ((C_16 : (\real_abs((x_0 :> real)) <= 0x1p-5)) &&
+                     (C_17 : (\single_round_error(x_0) == 0.0))));
 behavior default:
-  ensures (C_13 : (\real_abs(((\result :> real) -
+  ensures (C_14 : (\real_abs(((\result :> real) -
                                \cos((\at(x_0,Old) :> real)))) <=
                     0x1p-23));
 {  
    (var float r);
    
-   {  (C_11 : (r = (C_10 : ((1.0 :> float) -
-                             (C_9 : ((C_8 : (x_0 * x_0)) * (0.5 :> float)))))));
+   {  
+      {  
+         (assert for default: (C_8 : (\single_exact(x_0) == (x_0 :> real))));
+         ()
+      };
+      
+      {  (C_12 : (r = (C_11 : ((1.0 :> float) -
+                                (C_10 : ((C_9 : (x_0 * x_0)) *
+                                          (0.5 :> float)))))))
+      };
       
       {  
-         (assert for default: (C_12 : (\real_abs((\single_exact(r) -
+         (assert for default: (C_13 : (\real_abs((\single_exact(r) -
                                                    \cos((x_0 :> real)))) <=
                                         0x1p-24)));
          ()
@@ -140,23 +179,23 @@ behavior default:
 }
 
 float my_cos3(float x_1)
-  requires (C_25 : ((C_26 : (\real_abs(\single_exact(x_1)) <= 0x1p-5)) &&
-                     (C_27 : (\single_round_error(x_1) <= 0x1p-20))));
+  requires (C_26 : ((C_27 : (\real_abs(\single_exact(x_1)) <= 0x1p-5)) &&
+                     (C_28 : (\single_round_error(x_1) <= 0x1p-20))));
 behavior default:
-  ensures (C_22 : ((C_23 : (\real_abs((\single_exact(\result) -
+  ensures (C_23 : ((C_24 : (\real_abs((\single_exact(\result) -
                                         \cos(\single_exact(\at(x_1,Old))))) <=
                              0x1p-24)) &&
-                    (C_24 : (\single_round_error(\result) <=
+                    (C_25 : (\single_round_error(\result) <=
                               (\single_round_error(\at(x_1,Old)) + 0x3p-24)))));
 {  
    (var float r_0);
    
-   {  (C_20 : (r_0 = (C_19 : ((1.0 :> float) -
-                               (C_18 : ((C_17 : (x_1 * x_1)) *
+   {  (C_21 : (r_0 = (C_20 : ((1.0 :> float) -
+                               (C_19 : ((C_18 : (x_1 * x_1)) *
                                          (0.5 :> float)))))));
       
       {  
-         (assert for default: (C_21 : (\real_abs((\single_exact(r_0) -
+         (assert for default: (C_22 : (\real_abs((\single_exact(r_0) -
                                                    \cos(\single_exact(x_1)))) <=
                                         0x1p-24)));
          ()
@@ -167,9 +206,9 @@ behavior default:
 }
 
 float my_cos4(float x_2)
-  requires (C_34 : (\real_abs((x_2 :> real)) <= 0.07));
+  requires (C_35 : (\real_abs((x_2 :> real)) <= 0.07));
 behavior default:
-  ensures (C_33 : (\real_abs(((\result :> real) -
+  ensures (C_34 : (\real_abs(((\result :> real) -
                                \cos((\at(x_2,Old) :> real)))) <=
                     0x1p-20));
 {  
@@ -177,7 +216,7 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_28 : (\real_abs(((1.0 -
+         (assert for default: (C_29 : (\real_abs(((1.0 -
                                                     (((x_2 :> real) *
                                                        (x_2 :> real)) *
                                                       0.5)) -
@@ -185,8 +224,8 @@ behavior default:
                                         0x0.Fp-20)));
          ()
       };
-      (C_32 : (__retres_0 = (C_31 : ((1.0 :> float) -
-                                      (C_30 : ((C_29 : (x_2 * x_2)) *
+      (C_33 : (__retres_0 = (C_32 : ((1.0 :> float) -
+                                      (C_31 : ((C_30 : (x_2 * x_2)) *
                                                 (0.5 :> float)))))));
       
       (return __retres_0)
@@ -195,233 +234,246 @@ behavior default:
 ========== file tests/c/my_cosine.jessie/my_cosine.cloc ==========
 [C_10]
 file = "HOME/tests/c/my_cosine.c"
-line = 22
-begin = 12
+line = 53
+begin = 19
 end = 31
 
 [C_11]
 file = "HOME/tests/c/my_cosine.c"
-line = 22
-begin = 2
-end = 7
+line = 53
+begin = 12
+end = 31
 
 [C_12]
 file = "HOME/tests/c/my_cosine.c"
-line = 23
-begin = 13
-end = 49
+line = 53
+begin = 2
+end = 7
 
 [C_13]
 file = "HOME/tests/c/my_cosine.c"
-line = 19
-begin = 12
-end = 46
+line = 54
+begin = 13
+end = 49
 
 [C_14]
 file = "HOME/tests/c/my_cosine.c"
-line = 17
-begin = 13
-end = 64
+line = 49
+begin = 12
+end = 46
 
 [C_15]
 file = "HOME/tests/c/my_cosine.c"
-line = 17
+line = 48
 begin = 13
-end = 30
+end = 56
 
 [C_16]
 file = "HOME/tests/c/my_cosine.c"
-line = 18
-begin = 11
-end = 33
+line = 48
+begin = 13
+end = 30
 
 [C_17]
 file = "HOME/tests/c/my_cosine.c"
-line = 34
-begin = 19
-end = 24
+line = 48
+begin = 34
+end = 56
 
 [C_18]
 file = "HOME/tests/c/my_cosine.c"
-line = 34
+line = 65
 begin = 19
-end = 31
+end = 24
 
 [C_19]
 file = "HOME/tests/c/my_cosine.c"
-line = 34
-begin = 12
+line = 65
+begin = 19
 end = 31
 
 [C_1]
 file = "HOME/tests/c/my_cosine.c"
-line = 13
+line = 44
 begin = 13
 end = 53
 
 [C_2]
 file = "HOME/tests/c/my_cosine.c"
-line = 14
+line = 45
 begin = 16
 end = 21
 
 [C_3]
 file = "HOME/tests/c/my_cosine.c"
-line = 14
+line = 45
 begin = 16
 end = 28
 
 [C_4]
 file = "HOME/tests/c/my_cosine.c"
-line = 14
+line = 45
 begin = 9
 end = 28
 
 [C_20]
 file = "HOME/tests/c/my_cosine.c"
-line = 34
-begin = 2
-end = 7
+line = 65
+begin = 12
+end = 31
 
 [C_5]
 file = "HOME/tests/c/my_cosine.c"
-line = 14
+line = 45
 begin = 2
 end = 29
 
 [C_21]
 file = "HOME/tests/c/my_cosine.c"
-line = 35
-begin = 13
-end = 57
+line = 65
+begin = 2
+end = 7
 
 [C_6]
 file = "HOME/tests/c/my_cosine.c"
-line = 10
+line = 41
 begin = 12
 end = 46
 
 [C_22]
 file = "HOME/tests/c/my_cosine.c"
-line = 30
-begin = 12
-end = 124
+line = 66
+begin = 13
+end = 57
 
 [C_7]
 file = "HOME/tests/c/my_cosine.c"
-line = 9
+line = 40
 begin = 13
 end = 30
 
 [C_23]
 file = "HOME/tests/c/my_cosine.c"
-line = 30
+line = 61
 begin = 12
-end = 62
+end = 124
 
 [C_8]
 file = "HOME/tests/c/my_cosine.c"
-line = 22
-begin = 19
-end = 24
+line = 52
+begin = 13
+end = 27
 
 [C_24]
 file = "HOME/tests/c/my_cosine.c"
-line = 31
-begin = 11
-end = 61
+line = 61
+begin = 12
+end = 62
 
 [C_9]
 file = "HOME/tests/c/my_cosine.c"
-line = 22
+line = 53
 begin = 19
-end = 31
+end = 24
 
 [C_25]
 file = "HOME/tests/c/my_cosine.c"
-line = 28
-begin = 13
-end = 76
+line = 62
+begin = 11
+end = 61
 
 [C_26]
 file = "HOME/tests/c/my_cosine.c"
-line = 28
+line = 59
 begin = 13
-end = 38
+end = 76
 
 [C_27]
 file = "HOME/tests/c/my_cosine.c"
-line = 29
-begin = 11
-end = 37
+line = 59
+begin = 13
+end = 38
 
 [C_28]
 file = "HOME/tests/c/my_cosine.c"
-line = 43
-begin = 13
-end = 55
+line = 60
+begin = 11
+end = 37
 
 [C_29]
 file = "HOME/tests/c/my_cosine.c"
-line = 44
-begin = 16
-end = 21
+line = 74
+begin = 13
+end = 55
+
+[method_error]
+name = "Lemma method_error"
+file = "HOME/tests/c/my_cosine.c"
+line = 36
+begin = 4
+end = 111
 
 [C_30]
 file = "HOME/tests/c/my_cosine.c"
-line = 44
+line = 75
 begin = 16
-end = 28
+end = 21
 
 [C_31]
 file = "HOME/tests/c/my_cosine.c"
-line = 44
-begin = 9
+line = 75
+begin = 16
 end = 28
 
 [C_32]
 file = "HOME/tests/c/my_cosine.c"
-line = 44
-begin = 2
-end = 29
+line = 75
+begin = 9
+end = 28
 
 [C_33]
 file = "HOME/tests/c/my_cosine.c"
-line = 40
-begin = 12
-end = 46
+line = 75
+begin = 2
+end = 29
 
 [C_34]
 file = "HOME/tests/c/my_cosine.c"
-line = 39
+line = 71
+begin = 12
+end = 46
+
+[C_35]
+file = "HOME/tests/c/my_cosine.c"
+line = 70
 begin = 13
 end = 28
 
 [my_cos1]
 name = "Function my_cos1"
 file = "HOME/tests/c/my_cosine.c"
-line = 12
+line = 43
 begin = 6
 end = 13
 
 [my_cos2]
 name = "Function my_cos2"
 file = "HOME/tests/c/my_cosine.c"
-line = 21
+line = 51
 begin = 6
 end = 13
 
 [my_cos3]
 name = "Function my_cos3"
 file = "HOME/tests/c/my_cosine.c"
-line = 33
+line = 64
 begin = 6
 end = 13
 
 [my_cos4]
 name = "Function my_cos4"
 file = "HOME/tests/c/my_cosine.c"
-line = 42
+line = 73
 begin = 6
 end = 13
 
@@ -445,10 +497,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs my_co
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs my_cosine.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/my_cosine_why.sx
 
@@ -508,6 +561,13 @@ simplify: simplify/my_cosine_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/my_cosine_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/my_cosine_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -581,6 +641,9 @@ why/%_why3.why: why/%.why
 why3ide: why/my_cosine_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: my_cosine.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include my_cosine.depend
 
 depend: coq/my_cosine_why.v
@@ -592,73 +655,73 @@ clean:
 ========== file tests/c/my_cosine.jessie/my_cosine.loc ==========
 [my_cos4_ensures_default]
 name = "Function my_cos4"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/my_cosine.c"
-line = 42
+line = 73
 begin = 6
 end = 13
 
 [JC_40]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/my_cosine.c"
+line = 60
+begin = 11
+end = 37
 
 [my_cos3_safety]
 name = "Function my_cos3"
 behavior = "Safety"
 file = "HOME/tests/c/my_cosine.c"
-line = 33
+line = 64
 begin = 6
 end = 13
 
 [JC_41]
 file = "HOME/tests/c/my_cosine.c"
-line = 28
-begin = 13
-end = 38
-
-[JC_42]
-file = "HOME/tests/c/my_cosine.c"
-line = 29
-begin = 11
-end = 37
-
-[JC_43]
-file = "HOME/tests/c/my_cosine.c"
-line = 28
+line = 59
 begin = 13
 end = 76
 
-[JC_44]
+[JC_42]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
+[JC_43]
+file = "HOME/tests/c/my_cosine.c"
+line = 59
+begin = 13
+end = 38
+
+[JC_44]
+file = "HOME/tests/c/my_cosine.c"
+line = 60
+begin = 11
+end = 37
+
 [JC_45]
 file = "HOME/tests/c/my_cosine.c"
-line = 30
-begin = 12
-end = 62
+line = 59
+begin = 13
+end = 76
 
 [JC_46]
-file = "HOME/tests/c/my_cosine.c"
-line = 31
-begin = 11
-end = 61
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_1]
 file = "HOME/tests/c/my_cosine.c"
-line = 9
+line = 40
 begin = 13
 end = 30
 
 [JC_47]
 file = "HOME/tests/c/my_cosine.c"
-line = 30
+line = 61
 begin = 12
-end = 124
+end = 62
 
 [JC_2]
 file = "HOME/"
@@ -668,21 +731,21 @@ end = -1
 
 [JC_48]
 file = "HOME/tests/c/my_cosine.c"
-line = 30
-begin = 12
-end = 62
+line = 62
+begin = 11
+end = 61
 
 [JC_3]
 file = "HOME/tests/c/my_cosine.c"
-line = 9
+line = 40
 begin = 13
 end = 30
 
 [JC_49]
 file = "HOME/tests/c/my_cosine.c"
-line = 31
-begin = 11
-end = 61
+line = 61
+begin = 12
+end = 124
 
 [JC_4]
 file = "HOME/"
@@ -692,13 +755,13 @@ end = -1
 
 [JC_5]
 file = "HOME/tests/c/my_cosine.c"
-line = 10
+line = 41
 begin = 12
 end = 46
 
 [JC_6]
 file = "HOME/tests/c/my_cosine.c"
-line = 10
+line = 41
 begin = 12
 end = 46
 
@@ -716,119 +779,119 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/c/my_cosine.c"
-line = 13
+line = 44
 begin = 13
 end = 53
 
 [JC_50]
 file = "HOME/tests/c/my_cosine.c"
-line = 30
+line = 61
+begin = 12
+end = 62
+
+[JC_51]
+file = "HOME/tests/c/my_cosine.c"
+line = 62
+begin = 11
+end = 61
+
+[JC_52]
+file = "HOME/tests/c/my_cosine.c"
+line = 61
 begin = 12
 end = 124
 
-[JC_51]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
-[JC_52]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
-
 [JC_53]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 34
-begin = 19
-end = 24
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [my_cos4_safety]
 name = "Function my_cos4"
 behavior = "Safety"
 file = "HOME/tests/c/my_cosine.c"
-line = 42
+line = 73
 begin = 6
 end = 13
 
 [JC_54]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 34
-begin = 19
-end = 31
-
-[JC_55]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 34
-begin = 12
-end = 31
-
-[JC_56]
-file = "HOME/tests/c/my_cosine.c"
-line = 35
-begin = 13
-end = 57
-
-[JC_57]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 34
-begin = 19
-end = 24
-
-[JC_58]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 34
-begin = 19
-end = 31
-
-[JC_59]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 34
-begin = 12
-end = 31
-
-[JC_60]
-file = "HOME/tests/c/my_cosine.c"
-line = 35
-begin = 13
-end = 57
-
-[JC_61]
-file = "HOME/tests/c/my_cosine.c"
-line = 39
-begin = 13
-end = 28
-
-[JC_62]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
+[JC_55]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 65
+begin = 19
+end = 24
+
+[JC_56]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 65
+begin = 19
+end = 31
+
+[JC_57]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 65
+begin = 12
+end = 31
+
+[JC_58]
+file = "HOME/tests/c/my_cosine.c"
+line = 66
+begin = 13
+end = 57
+
+[JC_59]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 65
+begin = 19
+end = 24
+
+[JC_60]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 65
+begin = 19
+end = 31
+
+[JC_61]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 65
+begin = 12
+end = 31
+
+[JC_62]
+file = "HOME/tests/c/my_cosine.c"
+line = 66
+begin = 13
+end = 57
+
 [JC_10]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 14
+line = 45
 begin = 16
 end = 21
 
 [JC_63]
 file = "HOME/tests/c/my_cosine.c"
-line = 39
+line = 70
 begin = 13
 end = 28
 
 [JC_11]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 14
+line = 45
 begin = 16
 end = 28
 
@@ -841,90 +904,90 @@ end = -1
 [JC_12]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 14
+line = 45
 begin = 9
 end = 28
 
 [JC_65]
 file = "HOME/tests/c/my_cosine.c"
-line = 40
-begin = 12
-end = 46
+line = 70
+begin = 13
+end = 28
 
 [JC_13]
 file = "HOME/tests/c/my_cosine.c"
-line = 13
+line = 44
 begin = 13
 end = 53
 
 [JC_66]
-file = "HOME/tests/c/my_cosine.c"
-line = 40
-begin = 12
-end = 46
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [JC_14]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 14
+line = 45
 begin = 16
 end = 21
 
 [JC_67]
-file = "HOME/"
-line = 0
-begin = -1
-end = -1
+file = "HOME/tests/c/my_cosine.c"
+line = 71
+begin = 12
+end = 46
 
 [JC_15]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 14
+line = 45
 begin = 16
 end = 28
 
 [JC_68]
+file = "HOME/tests/c/my_cosine.c"
+line = 71
+begin = 12
+end = 46
+
+[JC_16]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 45
+begin = 9
+end = 28
+
+[JC_69]
 file = "HOME/"
 line = 0
 begin = -1
 end = -1
 
-[JC_16]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 14
-begin = 9
-end = 28
-
-[JC_69]
-file = "HOME/tests/c/my_cosine.c"
-line = 43
-begin = 13
-end = 55
-
 [JC_17]
 file = "HOME/tests/c/my_cosine.c"
-line = 17
+line = 48
 begin = 13
 end = 30
 
 [JC_18]
 file = "HOME/tests/c/my_cosine.c"
-line = 18
-begin = 11
-end = 33
+line = 48
+begin = 34
+end = 56
 
 [JC_19]
 file = "HOME/tests/c/my_cosine.c"
-line = 17
+line = 48
 begin = 13
-end = 64
+end = 56
 
 [my_cos1_ensures_default]
 name = "Function my_cos1"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/my_cosine.c"
-line = 12
+line = 43
 begin = 6
 end = 13
 
@@ -932,38 +995,36 @@ end = 13
 name = "Function my_cos1"
 behavior = "Safety"
 file = "HOME/tests/c/my_cosine.c"
-line = 12
+line = 43
 begin = 6
 end = 13
 
 [JC_70]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 44
-begin = 16
-end = 21
+file = "HOME/"
+line = 0
+begin = -1
+end = -1
 
 [my_cos3_ensures_default]
 name = "Function my_cos3"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/my_cosine.c"
-line = 33
+line = 64
 begin = 6
 end = 13
 
 [JC_71]
-kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 44
-begin = 16
-end = 28
+line = 74
+begin = 13
+end = 55
 
 [JC_72]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 44
-begin = 9
-end = 28
+line = 75
+begin = 16
+end = 21
 
 [JC_20]
 file = "HOME/"
@@ -972,57 +1033,57 @@ begin = -1
 end = -1
 
 [JC_73]
+kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 43
-begin = 13
-end = 55
+line = 75
+begin = 16
+end = 28
 
 [JC_21]
 file = "HOME/tests/c/my_cosine.c"
-line = 17
+line = 48
 begin = 13
 end = 30
 
 [JC_74]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 44
-begin = 16
-end = 21
+line = 75
+begin = 9
+end = 28
 
 [JC_22]
 file = "HOME/tests/c/my_cosine.c"
-line = 18
-begin = 11
-end = 33
+line = 48
+begin = 34
+end = 56
 
 [method_error]
-name = "method_error"
+name = "Lemma method_error"
 behavior = "lemma"
-file = "HOME/tests/c/my_cosine.jessie/my_cosine.jc"
-line = 26
-begin = 0
-end = 135
+file = "HOME/tests/c/my_cosine.c"
+line = 36
+begin = 4
+end = 111
 
 [JC_75]
-kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 44
-begin = 16
-end = 28
+line = 74
+begin = 13
+end = 55
 
 [JC_23]
 file = "HOME/tests/c/my_cosine.c"
-line = 17
+line = 48
 begin = 13
-end = 64
+end = 56
 
 [JC_76]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 44
-begin = 9
-end = 28
+line = 75
+begin = 16
+end = 21
 
 [JC_24]
 file = "HOME/"
@@ -1030,15 +1091,29 @@ line = 0
 begin = -1
 end = -1
 
+[JC_77]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 75
+begin = 16
+end = 28
+
 [JC_25]
 file = "HOME/tests/c/my_cosine.c"
-line = 19
+line = 49
 begin = 12
 end = 46
 
+[JC_78]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 75
+begin = 9
+end = 28
+
 [JC_26]
 file = "HOME/tests/c/my_cosine.c"
-line = 19
+line = 49
 begin = 12
 end = 46
 
@@ -1055,92 +1130,92 @@ begin = -1
 end = -1
 
 [JC_29]
-kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 22
-begin = 19
-end = 24
+line = 52
+begin = 13
+end = 27
 
 [my_cos2_safety]
 name = "Function my_cos2"
 behavior = "Safety"
 file = "HOME/tests/c/my_cosine.c"
-line = 21
+line = 51
 begin = 6
 end = 13
 
 [JC_30]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 22
+line = 53
 begin = 19
-end = 31
+end = 24
 
 [JC_31]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 22
-begin = 12
+line = 53
+begin = 19
 end = 31
 
 [JC_32]
+kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 23
+line = 53
+begin = 12
+end = 31
+
+[JC_33]
+file = "HOME/tests/c/my_cosine.c"
+line = 54
 begin = 13
 end = 49
 
-[JC_33]
-kind = FPOverflow
-file = "HOME/tests/c/my_cosine.c"
-line = 22
-begin = 19
-end = 24
-
 [JC_34]
-kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 22
-begin = 19
-end = 31
+line = 52
+begin = 13
+end = 27
 
 [JC_35]
 kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 22
-begin = 12
-end = 31
+line = 53
+begin = 19
+end = 24
 
 [JC_36]
+kind = FPOverflow
 file = "HOME/tests/c/my_cosine.c"
-line = 23
-begin = 13
-end = 49
-
-[JC_37]
-file = "HOME/tests/c/my_cosine.c"
-line = 28
-begin = 13
-end = 38
+line = 53
+begin = 19
+end = 31
 
 [my_cos2_ensures_default]
 name = "Function my_cos2"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/my_cosine.c"
-line = 21
+line = 51
 begin = 6
 end = 13
 
+[JC_37]
+kind = FPOverflow
+file = "HOME/tests/c/my_cosine.c"
+line = 53
+begin = 12
+end = 31
+
 [JC_38]
 file = "HOME/tests/c/my_cosine.c"
-line = 29
-begin = 11
-end = 37
+line = 54
+begin = 13
+end = 49
 
 [JC_39]
 file = "HOME/tests/c/my_cosine.c"
-line = 28
+line = 59
 begin = 13
-end = 76
+end = 38
 
 ========== file tests/c/my_cosine.jessie/why/my_cosine.why ==========
 type charP
@@ -1150,12 +1225,6 @@ type int8
 type padding
 
 type voidP
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
 
 logic charP_tag:  -> charP tag_id
 
@@ -1184,6 +1253,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -1233,16 +1307,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -1284,41 +1348,11 @@ lemma method_error :
                     cos(x_3))),
    0x1p-24)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -1383,72 +1417,70 @@ parameter my_cos1 :
  x_0:single ->
   { } single
   { (JC_6:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0@)))),
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0)))),
     0x1p-23)) }
 
 parameter my_cos1_requires :
  x_0:single ->
   { (JC_1: le_real(abs_real(single_value(x_0)), 0x1p-5))} single
   { (JC_6:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0@)))),
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0)))),
     0x1p-23)) }
 
 parameter my_cos2 :
  x_0_0:single ->
   { } single
   { (JC_26:
-    le_real(abs_real(sub_real(single_value(result),
-                     cos(single_value(x_0_0@)))),
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0_0)))),
     0x1p-23)) }
 
 parameter my_cos2_requires :
  x_0_0:single ->
   { (JC_19:
     ((JC_17: le_real(abs_real(single_value(x_0_0)), 0x1p-5))
-    and (JC_18: eq_real(single_round_error(x_0_0), 0.0))))}
+    and (JC_18: (single_round_error(x_0_0) = 0.0))))}
   single
   { (JC_26:
-    le_real(abs_real(sub_real(single_value(result),
-                     cos(single_value(x_0_0@)))),
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0_0)))),
     0x1p-23)) }
 
 parameter my_cos3 :
  x_1:single ->
   { } single
-  { (JC_50:
-    ((JC_48:
-     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_1@)))),
+  { (JC_52:
+    ((JC_50:
+     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_1)))),
      0x1p-24))
-    and (JC_49:
+    and (JC_51:
         le_real(single_round_error(result),
-        add_real(single_round_error(x_1@), 0x3p-24))))) }
+        add_real(single_round_error(x_1), 0x3p-24))))) }
 
 parameter my_cos3_requires :
  x_1:single ->
-  { (JC_39:
-    ((JC_37: le_real(abs_real(single_exact(x_1)), 0x1p-5))
-    and (JC_38: le_real(single_round_error(x_1), 0x1p-20))))}
+  { (JC_41:
+    ((JC_39: le_real(abs_real(single_exact(x_1)), 0x1p-5))
+    and (JC_40: le_real(single_round_error(x_1), 0x1p-20))))}
   single
-  { (JC_50:
-    ((JC_48:
-     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_1@)))),
+  { (JC_52:
+    ((JC_50:
+     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_1)))),
      0x1p-24))
-    and (JC_49:
+    and (JC_51:
         le_real(single_round_error(result),
-        add_real(single_round_error(x_1@), 0x3p-24))))) }
+        add_real(single_round_error(x_1), 0x3p-24))))) }
 
 parameter my_cos4 :
  x_2:single ->
   { } single
-  { (JC_66:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2@)))),
+  { (JC_68:
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2)))),
     0x1p-20)) }
 
 parameter my_cos4_requires :
  x_2:single ->
-  { (JC_61: le_real(abs_real(single_value(x_2)), 0.07))} single
-  { (JC_66:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2@)))),
+  { (JC_63: le_real(abs_real(single_value(x_2)), 0.07))} single
+  { (JC_68:
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2)))),
     0x1p-20)) }
 
 parameter safe_int8_of_integer_ :
@@ -1485,7 +1517,7 @@ let my_cos1_ensures_default =
       (return := !__retres); (raise Return) end)); absurd  end with Return ->
    !return end))
   { (JC_5:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0@)))),
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0)))),
     0x1p-23)) }
 
 let my_cos1_safety =
@@ -1523,122 +1555,127 @@ let my_cos2_ensures_default =
  fun (x_0_0 : single) ->
   { (JC_23:
     ((JC_21: le_real(abs_real(single_value(x_0_0)), 0x1p-5))
-    and (JC_22: eq_real(single_round_error(x_0_0), 0.0)))) }
+    and (JC_22: (single_round_error(x_0_0) = 0.0)))) }
   (init:
   (let return = ref (any_single void) in
   try
    begin
      (let r = ref (any_single void) in
-     (C_11:
      begin
-       (let jessie_<num> =
-       (r := (C_10:
-             (JC_35:
-             (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-              (C_9:
-              (JC_34:
-              (((mul_single_safe nearest_even) (C_8:
-                                               (JC_33:
-                                               (((mul_single_safe nearest_even) x_0_0) x_0_0)))) 
-               (single_of_real_exact 0.5)))))))) in void);
+       (assert { (JC_34: (single_exact(x_0_0) = single_value(x_0_0))) };
+       void); void;
+      (let jessie_<num> =
+      (C_12:
+      begin
+        (r := (C_11:
+              (JC_37:
+              (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
+               (C_10:
+               (JC_36:
+               (((mul_single_safe nearest_even) (C_9:
+                                                (JC_35:
+                                                (((mul_single_safe nearest_even) x_0_0) x_0_0)))) 
+                (single_of_real_exact 0.5)))))))); !r end) in void);
       (assert
-      { (JC_36:
+      { (JC_38:
         le_real(abs_real(sub_real(single_exact(r), cos(single_value(x_0_0)))),
-        0x1p-24)) }; void); void; (return := !r); (raise Return) end));
+        0x1p-24)) }; void); void; (return := !r); (raise Return) end); 
     absurd  end with Return -> !return end))
   { (JC_25:
-    le_real(abs_real(sub_real(single_value(result),
-                     cos(single_value(x_0_0@)))),
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_0_0)))),
     0x1p-23)) }
 
 let my_cos2_safety =
  fun (x_0_0 : single) ->
   { (JC_23:
     ((JC_21: le_real(abs_real(single_value(x_0_0)), 0x1p-5))
-    and (JC_22: eq_real(single_round_error(x_0_0), 0.0)))) }
+    and (JC_22: (single_round_error(x_0_0) = 0.0)))) }
   (init:
   (let return = ref (any_single void) in
   try
    begin
      (let r = ref (any_single void) in
-     (C_11:
      begin
-       (let jessie_<num> =
-       (r := (C_10:
-             (JC_31:
-             (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-              (C_9:
-              (JC_30:
-              (((mul_single nearest_even) (C_8:
-                                          (JC_29:
-                                          (((mul_single nearest_even) x_0_0) x_0_0)))) 
-               (single_of_real_exact 0.5)))))))) in void);
+       [ { } unit { (JC_29: (single_exact(x_0_0) = single_value(x_0_0))) } ];
+      void;
+      (let jessie_<num> =
+      (C_12:
+      begin
+        (r := (C_11:
+              (JC_32:
+              (((sub_single nearest_even) (single_of_real_exact 1.0)) 
+               (C_10:
+               (JC_31:
+               (((mul_single nearest_even) (C_9:
+                                           (JC_30:
+                                           (((mul_single nearest_even) x_0_0) x_0_0)))) 
+                (single_of_real_exact 0.5)))))))); !r end) in void);
       [ { } unit reads r
-        { (JC_32:
+        { (JC_33:
           le_real(abs_real(sub_real(single_exact(r),
                            cos(single_value(x_0_0)))),
-          0x1p-24)) } ]; void; (return := !r); (raise Return) end)); 
-    absurd  end with Return -> !return end)) { true }
+          0x1p-24)) } ]; void; (return := !r); (raise Return) end); absurd 
+   end with Return -> !return end)) { true }
 
 let my_cos3_ensures_default =
  fun (x_1 : single) ->
-  { (JC_43:
-    ((JC_41: le_real(abs_real(single_exact(x_1)), 0x1p-5))
-    and (JC_42: le_real(single_round_error(x_1), 0x1p-20)))) }
+  { (JC_45:
+    ((JC_43: le_real(abs_real(single_exact(x_1)), 0x1p-5))
+    and (JC_44: le_real(single_round_error(x_1), 0x1p-20)))) }
   (init:
   (let return = ref (any_single void) in
   try
    begin
      (let r_0 = ref (any_single void) in
-     (C_20:
+     (C_21:
      begin
        (let jessie_<num> =
-       (r_0 := (C_19:
-               (JC_59:
+       (r_0 := (C_20:
+               (JC_61:
                (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-                (C_18:
-                (JC_58:
-                (((mul_single_safe nearest_even) (C_17:
-                                                 (JC_57:
+                (C_19:
+                (JC_60:
+                (((mul_single_safe nearest_even) (C_18:
+                                                 (JC_59:
                                                  (((mul_single_safe nearest_even) x_1) x_1)))) 
                  (single_of_real_exact 0.5)))))))) in void);
       (assert
-      { (JC_60:
+      { (JC_62:
         le_real(abs_real(sub_real(single_exact(r_0), cos(single_exact(x_1)))),
         0x1p-24)) }; void); void; (return := !r_0); (raise Return) end));
     absurd  end with Return -> !return end))
-  { (JC_47:
-    ((JC_45:
-     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_1@)))),
+  { (JC_49:
+    ((JC_47:
+     le_real(abs_real(sub_real(single_exact(result), cos(single_exact(x_1)))),
      0x1p-24))
-    and (JC_46:
+    and (JC_48:
         le_real(single_round_error(result),
-        add_real(single_round_error(x_1@), 0x3p-24))))) }
+        add_real(single_round_error(x_1), 0x3p-24))))) }
 
 let my_cos3_safety =
  fun (x_1 : single) ->
-  { (JC_43:
-    ((JC_41: le_real(abs_real(single_exact(x_1)), 0x1p-5))
-    and (JC_42: le_real(single_round_error(x_1), 0x1p-20)))) }
+  { (JC_45:
+    ((JC_43: le_real(abs_real(single_exact(x_1)), 0x1p-5))
+    and (JC_44: le_real(single_round_error(x_1), 0x1p-20)))) }
   (init:
   (let return = ref (any_single void) in
   try
    begin
      (let r_0 = ref (any_single void) in
-     (C_20:
+     (C_21:
      begin
        (let jessie_<num> =
-       (r_0 := (C_19:
-               (JC_55:
+       (r_0 := (C_20:
+               (JC_57:
                (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-                (C_18:
-                (JC_54:
-                (((mul_single nearest_even) (C_17:
-                                            (JC_53:
+                (C_19:
+                (JC_56:
+                (((mul_single nearest_even) (C_18:
+                                            (JC_55:
                                             (((mul_single nearest_even) x_1) x_1)))) 
                  (single_of_real_exact 0.5)))))))) in void);
       [ { } unit reads r_0
-        { (JC_56:
+        { (JC_58:
           le_real(abs_real(sub_real(single_exact(r_0),
                            cos(single_exact(x_1)))),
           0x1p-24)) } ]; void; (return := !r_0); (raise Return) end)); 
@@ -1646,16 +1683,16 @@ let my_cos3_safety =
 
 let my_cos4_ensures_default =
  fun (x_2 : single) ->
-  { (JC_63: le_real(abs_real(single_value(x_2)), 0.07)) }
+  { (JC_65: le_real(abs_real(single_value(x_2)), 0.07)) }
   (init:
   (let return = ref (any_single void) in
   try
    begin
      (let __retres_0 = ref (any_single void) in
-     (C_32:
+     (C_33:
      begin
        (assert
-       { (JC_73:
+       { (JC_75:
          le_real(abs_real(sub_real(sub_real(1.0,
                                    mul_real(mul_real(single_value(x_2),
                                             single_value(x_2)),
@@ -1663,33 +1700,33 @@ let my_cos4_ensures_default =
                           cos(single_value(x_2)))),
          0x0.Fp-20)) }; void); void;
       (let jessie_<num> =
-      (__retres_0 := (C_31:
-                     (JC_76:
+      (__retres_0 := (C_32:
+                     (JC_78:
                      (((sub_single_safe nearest_even) (single_of_real_exact 1.0)) 
-                      (C_30:
-                      (JC_75:
-                      (((mul_single_safe nearest_even) (C_29:
-                                                       (JC_74:
+                      (C_31:
+                      (JC_77:
+                      (((mul_single_safe nearest_even) (C_30:
+                                                       (JC_76:
                                                        (((mul_single_safe nearest_even) x_2) x_2)))) 
                        (single_of_real_exact 0.5)))))))) in void);
       (return := !__retres_0); (raise Return) end)); absurd  end with
    Return -> !return end))
-  { (JC_65:
-    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2@)))),
+  { (JC_67:
+    le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2)))),
     0x1p-20)) }
 
 let my_cos4_safety =
  fun (x_2 : single) ->
-  { (JC_63: le_real(abs_real(single_value(x_2)), 0.07)) }
+  { (JC_65: le_real(abs_real(single_value(x_2)), 0.07)) }
   (init:
   (let return = ref (any_single void) in
   try
    begin
      (let __retres_0 = ref (any_single void) in
-     (C_32:
+     (C_33:
      begin
        [ { } unit
-         { (JC_69:
+         { (JC_71:
            le_real(abs_real(sub_real(sub_real(1.0,
                                      mul_real(mul_real(single_value(x_2),
                                               single_value(x_2)),
@@ -1697,13 +1734,13 @@ let my_cos4_safety =
                             cos(single_value(x_2)))),
            0x0.Fp-20)) } ]; void;
       (let jessie_<num> =
-      (__retres_0 := (C_31:
-                     (JC_72:
+      (__retres_0 := (C_32:
+                     (JC_74:
                      (((sub_single nearest_even) (single_of_real_exact 1.0)) 
-                      (C_30:
-                      (JC_71:
-                      (((mul_single nearest_even) (C_29:
-                                                  (JC_70:
+                      (C_31:
+                      (JC_73:
+                      (((mul_single nearest_even) (C_30:
+                                                  (JC_72:
                                                   (((mul_single nearest_even) x_2) x_2)))) 
                        (single_of_real_exact 0.5)))))))) in void);
       (return := !__retres_0); (raise Return) end)); absurd  end with
@@ -2839,21 +2876,20 @@ axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
 
 axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
 
-logic single_to_double : single -> double
+axiom single_value_is_bounded:
+  (forall x:single. (abs_real(single_value(x)) <= max_single))
 
-logic double_to_single : mode, double -> single
-
-axiom single_to_double_val:
-  (forall s:single. (double_value(single_to_double(s)) = single_value(s)))
-
-axiom double_to_single_val:
-  (forall m:mode.
-    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
-      double_value(d)))))
+axiom double_value_is_bounded:
+  (forall x:double. (abs_real(double_value(x)) <= max_double))
 
 predicate single_of_real_post(m: mode, x: real, res: single) =
   ((single_value(res) = round_single(m, x)) and
    ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate single_of_double_post(m: mode, x: double, res: single) =
+  ((single_value(res) = round_single(m, double_value(x))) and
+   ((single_exact(res) = double_exact(x)) and
+    (single_model(res) = double_model(x))))
 
 predicate add_single_post(m: mode, x: single, y: single, res: single) =
   ((single_value(res) = round_single(m,
@@ -2897,6 +2933,11 @@ predicate abs_single_post(x: single, res: single) =
 predicate double_of_real_post(m: mode, x: real, res: double) =
   ((double_value(res) = round_double(m, x)) and
    ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate double_of_single_post(x: single, res: double) =
+  ((double_value(res) = single_value(x)) and
+   ((double_exact(res) = single_exact(x)) and
+    (double_model(res) = single_model(x))))
 
 predicate add_double_post(m: mode, x: double, y: double, res: double) =
   ((double_value(res) = round_double(m,
@@ -2974,6 +3015,10 @@ axiom int8_coerce:
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
 
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
+
 axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
@@ -3021,16 +3066,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -3092,20 +3127,14 @@ goal my_cos1_ensures_default_po_2:
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
   forall result0:single.
-  (no_overflow_single(nearest_even,
-   (single_value(x_0) * single_value(x_0))) and mul_single_post(nearest_even,
-   x_0, x_0, result0)) ->
+  mul_single_post(nearest_even, x_0, x_0, result0) ->
   forall result1:single.
   ((single_value(result1) = 0.5) and
    ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
   forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result0) * single_value(result1))) and
-   mul_single_post(nearest_even, result0, result1, result2)) ->
+  mul_single_post(nearest_even, result0, result1, result2) ->
   forall result3:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result) - single_value(result2))) and
-   sub_single_post(nearest_even, result, result2, result3)) ->
+  sub_single_post(nearest_even, result, result2, result3) ->
   forall __retres:single.
   (__retres = result3) ->
   forall return:single.
@@ -3168,55 +3197,52 @@ goal my_cos2_ensures_default_po_1:
   ("JC_23":
   (("JC_21": (abs_real(single_value(x_0_0)) <= 0x1.p-5)) and
    ("JC_22": (single_round_error(x_0_0) = 0.0)))) ->
-  forall result:single.
-  ((single_value(result) = 1.0) and
-   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
-  forall result0:single.
-  (no_overflow_single(nearest_even,
-   (single_value(x_0_0) * single_value(x_0_0))) and
-   mul_single_post(nearest_even, x_0_0, x_0_0, result0)) ->
-  forall result1:single.
-  ((single_value(result1) = 0.5) and
-   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
-  forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result0) * single_value(result1))) and
-   mul_single_post(nearest_even, result0, result1, result2)) ->
-  forall result3:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result) - single_value(result2))) and
-   sub_single_post(nearest_even, result, result2, result3)) ->
-  forall r:single.
-  (r = result3) ->
-  ("JC_36":
-  (abs_real((single_exact(r) - cos(single_value(x_0_0)))) <= 0x1.p-24))
+  ("JC_34": (single_exact(x_0_0) = single_value(x_0_0)))
 
 goal my_cos2_ensures_default_po_2:
   forall x_0_0:single.
   ("JC_23":
   (("JC_21": (abs_real(single_value(x_0_0)) <= 0x1.p-5)) and
    ("JC_22": (single_round_error(x_0_0) = 0.0)))) ->
+  ("JC_34": (single_exact(x_0_0) = single_value(x_0_0))) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
   forall result0:single.
-  (no_overflow_single(nearest_even,
-   (single_value(x_0_0) * single_value(x_0_0))) and
-   mul_single_post(nearest_even, x_0_0, x_0_0, result0)) ->
+  mul_single_post(nearest_even, x_0_0, x_0_0, result0) ->
   forall result1:single.
   ((single_value(result1) = 0.5) and
    ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
   forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result0) * single_value(result1))) and
-   mul_single_post(nearest_even, result0, result1, result2)) ->
+  mul_single_post(nearest_even, result0, result1, result2) ->
   forall result3:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result) - single_value(result2))) and
-   sub_single_post(nearest_even, result, result2, result3)) ->
+  sub_single_post(nearest_even, result, result2, result3) ->
   forall r:single.
   (r = result3) ->
-  ("JC_36":
+  ("JC_38":
+  (abs_real((single_exact(r) - cos(single_value(x_0_0)))) <= 0x1.p-24))
+
+goal my_cos2_ensures_default_po_3:
+  forall x_0_0:single.
+  ("JC_23":
+  (("JC_21": (abs_real(single_value(x_0_0)) <= 0x1.p-5)) and
+   ("JC_22": (single_round_error(x_0_0) = 0.0)))) ->
+  ("JC_34": (single_exact(x_0_0) = single_value(x_0_0))) ->
+  forall result:single.
+  ((single_value(result) = 1.0) and
+   ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
+  forall result0:single.
+  mul_single_post(nearest_even, x_0_0, x_0_0, result0) ->
+  forall result1:single.
+  ((single_value(result1) = 0.5) and
+   ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
+  forall result2:single.
+  mul_single_post(nearest_even, result0, result1, result2) ->
+  forall result3:single.
+  sub_single_post(nearest_even, result, result2, result3) ->
+  forall r:single.
+  (r = result3) ->
+  ("JC_38":
   (abs_real((single_exact(r) - cos(single_value(x_0_0)))) <= 0x1.p-24)) ->
   forall return:single.
   (return = r) ->
@@ -3228,6 +3254,7 @@ goal my_cos2_safety_po_1:
   ("JC_23":
   (("JC_21": (abs_real(single_value(x_0_0)) <= 0x1.p-5)) and
    ("JC_22": (single_round_error(x_0_0) = 0.0)))) ->
+  ("JC_29": (single_exact(x_0_0) = single_value(x_0_0))) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
@@ -3239,6 +3266,7 @@ goal my_cos2_safety_po_2:
   ("JC_23":
   (("JC_21": (abs_real(single_value(x_0_0)) <= 0x1.p-5)) and
    ("JC_22": (single_round_error(x_0_0) = 0.0)))) ->
+  ("JC_29": (single_exact(x_0_0) = single_value(x_0_0))) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
@@ -3257,6 +3285,7 @@ goal my_cos2_safety_po_3:
   ("JC_23":
   (("JC_21": (abs_real(single_value(x_0_0)) <= 0x1.p-5)) and
    ("JC_22": (single_round_error(x_0_0) = 0.0)))) ->
+  ("JC_29": (single_exact(x_0_0) = single_value(x_0_0))) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
@@ -3276,103 +3305,85 @@ goal my_cos2_safety_po_3:
 
 goal my_cos3_ensures_default_po_1:
   forall x_1:single.
-  ("JC_43":
-  (("JC_41": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
-   ("JC_42": (single_round_error(x_1) <= 0x1.p-20)))) ->
+  ("JC_45":
+  (("JC_43": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
+   ("JC_44": (single_round_error(x_1) <= 0x1.p-20)))) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
   forall result0:single.
-  (no_overflow_single(nearest_even,
-   (single_value(x_1) * single_value(x_1))) and mul_single_post(nearest_even,
-   x_1, x_1, result0)) ->
+  mul_single_post(nearest_even, x_1, x_1, result0) ->
   forall result1:single.
   ((single_value(result1) = 0.5) and
    ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
   forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result0) * single_value(result1))) and
-   mul_single_post(nearest_even, result0, result1, result2)) ->
+  mul_single_post(nearest_even, result0, result1, result2) ->
   forall result3:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result) - single_value(result2))) and
-   sub_single_post(nearest_even, result, result2, result3)) ->
+  sub_single_post(nearest_even, result, result2, result3) ->
   forall r_0:single.
   (r_0 = result3) ->
-  ("JC_60":
+  ("JC_62":
   (abs_real((single_exact(r_0) - cos(single_exact(x_1)))) <= 0x1.p-24))
 
 goal my_cos3_ensures_default_po_2:
   forall x_1:single.
-  ("JC_43":
-  (("JC_41": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
-   ("JC_42": (single_round_error(x_1) <= 0x1.p-20)))) ->
+  ("JC_45":
+  (("JC_43": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
+   ("JC_44": (single_round_error(x_1) <= 0x1.p-20)))) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
   forall result0:single.
-  (no_overflow_single(nearest_even,
-   (single_value(x_1) * single_value(x_1))) and mul_single_post(nearest_even,
-   x_1, x_1, result0)) ->
+  mul_single_post(nearest_even, x_1, x_1, result0) ->
   forall result1:single.
   ((single_value(result1) = 0.5) and
    ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
   forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result0) * single_value(result1))) and
-   mul_single_post(nearest_even, result0, result1, result2)) ->
+  mul_single_post(nearest_even, result0, result1, result2) ->
   forall result3:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result) - single_value(result2))) and
-   sub_single_post(nearest_even, result, result2, result3)) ->
+  sub_single_post(nearest_even, result, result2, result3) ->
   forall r_0:single.
   (r_0 = result3) ->
-  ("JC_60":
+  ("JC_62":
   (abs_real((single_exact(r_0) - cos(single_exact(x_1)))) <= 0x1.p-24)) ->
   forall return:single.
   (return = r_0) ->
+  ("JC_49":
   ("JC_47":
-  ("JC_45":
   (abs_real((single_exact(return) - cos(single_exact(x_1)))) <= 0x1.p-24)))
 
 goal my_cos3_ensures_default_po_3:
   forall x_1:single.
-  ("JC_43":
-  (("JC_41": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
-   ("JC_42": (single_round_error(x_1) <= 0x1.p-20)))) ->
+  ("JC_45":
+  (("JC_43": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
+   ("JC_44": (single_round_error(x_1) <= 0x1.p-20)))) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
   forall result0:single.
-  (no_overflow_single(nearest_even,
-   (single_value(x_1) * single_value(x_1))) and mul_single_post(nearest_even,
-   x_1, x_1, result0)) ->
+  mul_single_post(nearest_even, x_1, x_1, result0) ->
   forall result1:single.
   ((single_value(result1) = 0.5) and
    ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
   forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result0) * single_value(result1))) and
-   mul_single_post(nearest_even, result0, result1, result2)) ->
+  mul_single_post(nearest_even, result0, result1, result2) ->
   forall result3:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result) - single_value(result2))) and
-   sub_single_post(nearest_even, result, result2, result3)) ->
+  sub_single_post(nearest_even, result, result2, result3) ->
   forall r_0:single.
   (r_0 = result3) ->
-  ("JC_60":
+  ("JC_62":
   (abs_real((single_exact(r_0) - cos(single_exact(x_1)))) <= 0x1.p-24)) ->
   forall return:single.
   (return = r_0) ->
-  ("JC_47":
-  ("JC_46":
+  ("JC_49":
+  ("JC_48":
   (single_round_error(return) <= (single_round_error(x_1) + 0x3.p-24))))
 
 goal my_cos3_safety_po_1:
   forall x_1:single.
-  ("JC_43":
-  (("JC_41": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
-   ("JC_42": (single_round_error(x_1) <= 0x1.p-20)))) ->
+  ("JC_45":
+  (("JC_43": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
+   ("JC_44": (single_round_error(x_1) <= 0x1.p-20)))) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
@@ -3380,9 +3391,9 @@ goal my_cos3_safety_po_1:
 
 goal my_cos3_safety_po_2:
   forall x_1:single.
-  ("JC_43":
-  (("JC_41": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
-   ("JC_42": (single_round_error(x_1) <= 0x1.p-20)))) ->
+  ("JC_45":
+  (("JC_43": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
+   ("JC_44": (single_round_error(x_1) <= 0x1.p-20)))) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
@@ -3398,9 +3409,9 @@ goal my_cos3_safety_po_2:
 
 goal my_cos3_safety_po_3:
   forall x_1:single.
-  ("JC_43":
-  (("JC_41": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
-   ("JC_42": (single_round_error(x_1) <= 0x1.p-20)))) ->
+  ("JC_45":
+  (("JC_43": (abs_real(single_exact(x_1)) <= 0x1.p-5)) and
+   ("JC_44": (single_round_error(x_1) <= 0x1.p-20)))) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
@@ -3420,44 +3431,38 @@ goal my_cos3_safety_po_3:
 
 goal my_cos4_ensures_default_po_1:
   forall x_2:single.
-  ("JC_63": (abs_real(single_value(x_2)) <= 0.07)) ->
-  ("JC_73":
+  ("JC_65": (abs_real(single_value(x_2)) <= 0.07)) ->
+  ("JC_75":
   (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20))
 
 goal my_cos4_ensures_default_po_2:
   forall x_2:single.
-  ("JC_63": (abs_real(single_value(x_2)) <= 0.07)) ->
-  ("JC_73":
+  ("JC_65": (abs_real(single_value(x_2)) <= 0.07)) ->
+  ("JC_75":
   (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20)) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
   forall result0:single.
-  (no_overflow_single(nearest_even,
-   (single_value(x_2) * single_value(x_2))) and mul_single_post(nearest_even,
-   x_2, x_2, result0)) ->
+  mul_single_post(nearest_even, x_2, x_2, result0) ->
   forall result1:single.
   ((single_value(result1) = 0.5) and
    ((single_exact(result1) = 0.5) and (single_model(result1) = 0.5))) ->
   forall result2:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result0) * single_value(result1))) and
-   mul_single_post(nearest_even, result0, result1, result2)) ->
+  mul_single_post(nearest_even, result0, result1, result2) ->
   forall result3:single.
-  (no_overflow_single(nearest_even,
-   (single_value(result) - single_value(result2))) and
-   sub_single_post(nearest_even, result, result2, result3)) ->
+  sub_single_post(nearest_even, result, result2, result3) ->
   forall __retres_0:single.
   (__retres_0 = result3) ->
   forall return:single.
   (return = __retres_0) ->
-  ("JC_65":
+  ("JC_67":
   (abs_real((single_value(return) - cos(single_value(x_2)))) <= 0x1.p-20))
 
 goal my_cos4_safety_po_1:
   forall x_2:single.
-  ("JC_63": (abs_real(single_value(x_2)) <= 0.07)) ->
-  ("JC_69":
+  ("JC_65": (abs_real(single_value(x_2)) <= 0.07)) ->
+  ("JC_71":
   (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20)) ->
   forall result:single.
   ((single_value(result) = 1.0) and
@@ -3466,8 +3471,8 @@ goal my_cos4_safety_po_1:
 
 goal my_cos4_safety_po_2:
   forall x_2:single.
-  ("JC_63": (abs_real(single_value(x_2)) <= 0.07)) ->
-  ("JC_69":
+  ("JC_65": (abs_real(single_value(x_2)) <= 0.07)) ->
+  ("JC_71":
   (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20)) ->
   forall result:single.
   ((single_value(result) = 1.0) and
@@ -3484,8 +3489,8 @@ goal my_cos4_safety_po_2:
 
 goal my_cos4_safety_po_3:
   forall x_2:single.
-  ("JC_63": (abs_real(single_value(x_2)) <= 0.07)) ->
-  ("JC_69":
+  ("JC_65": (abs_real(single_value(x_2)) <= 0.07)) ->
+  ("JC_71":
   (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20)) ->
   forall result:single.
   ((single_value(result) = 1.0) and
@@ -3507,23 +3512,27 @@ goal my_cos4_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/my_cosine_why.why         : ?.??.###?.#..#?.#?#?.# (7/0/7/8/0)
-total   :  22
-valid   :   7 ( 32%)
+why/my_cosine_why.why         : ?.#?##..#..#..#?.#?#?## (8/0/5/10/0)
+total   :  23
+valid   :   8 ( 35%)
 invalid :   0 (  0%)
-unknown :   7 ( 32%)
-timeout :   8 ( 36%)
+unknown :   5 ( 22%)
+timeout :  10 ( 43%)
 failure :   0 (  0%)
 // RUNCOQ: for the first VC
 ========== generation of Coq VC output ==========
 why -coq [...] why/my_cosine.why
+File "/home/cmarche/why2-trunk/tests/c/my_cosine.jessie/coq/my_cosine_why.v",
+line 3, characters 0-26:
+Error: File /usr/lib/coq/user-contrib/jessie_why.vo has bad magic number.
+It is corrupted or was compiled with another version of Coq.
 ========== file tests/c/my_cosine.jessie/coq/my_cosine_why.v ==========
 (* This file was originally generated by why.
    It can be modified; only the generated parts will be overwritten. *)
 Require Export jessie_why. 
-Require Import floats_strict.
-Require Import tactics.
-
+Require Import WhyFloatsStrict.
+Require Import Interval_tactic.
+Require Import Rtrigo_def.
 
 (*Why type*) Definition charP: Set.
 Admitted.
@@ -3580,6 +3589,12 @@ Admitted.
    ((-128) <= x /\ x <= 127 -> (integer_of_int8 (int8_of_integer x)) = x)).
 Admitted.
 
+(*Why axiom*) Lemma int8_extensionality :
+  (forall (x:int8),
+   (forall (y:int8), ((integer_of_int8 x) = (integer_of_int8 y) -> x = y))).
+Admitted.
+Dp_hint int8_extensionality.
+
 (*Why axiom*) Lemma int8_range :
   (forall (x:int8), (-128) <= (integer_of_int8 x) /\ (integer_of_int8 x) <=
    127).
@@ -3629,14 +3644,6 @@ Dp_hint pointer_addr_of_voidP_of_pointer_address.
   := (offset_min voidP_alloc_table p) = a /\
      (offset_max voidP_alloc_table p) = b.
 
-(*Why predicate*) Definition valid_bitvector_struct_charP  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
-  := (offset_min bitvector_alloc_table p) = a /\
-     (offset_max bitvector_alloc_table p) = b.
-
-(*Why predicate*) Definition valid_bitvector_struct_voidP  (p:(pointer unit)) (a:Z) (b:Z) (bitvector_alloc_table:(alloc_table unit))
-  := (offset_min bitvector_alloc_table p) = a /\
-     (offset_max bitvector_alloc_table p) = b.
-
 (*Why predicate*) Definition valid_root_charP  (p:(pointer charP)) (a:Z) (b:Z) (charP_alloc_table:(alloc_table charP))
   := (offset_min charP_alloc_table p) <= a /\
      (offset_max charP_alloc_table p) >= b.
@@ -3678,7 +3685,7 @@ Dp_hint voidP_parenttag_bottom.
 Admitted.
 Dp_hint voidP_tags.
 
-(* Why obligation from file "my_cosine.jc", line 26, characters 0-135: *)
+(* Why obligation from file "my_cosine.c", line 36, characters 4-111: *)
 (*Why goal*) Lemma method_error : 
   (forall (x_3:R),
    ((Rle (Rabs x_3) (1 / 32)%R) ->
@@ -3688,12 +3695,13 @@ Dp_hint voidP_tags.
      (1 / 16777216)%R))).
 Proof.
 intros x H.
-interval with (i_bisect_diff x,i_nocheck).
+
+interval with (i_bisect_diff x).
 Save.
 
 Dp_hint method_error.
 
-(* Why obligation from file "my_cosine.c", line 13, characters 13-53: *)
+(* Why obligation from file "my_cosine.c", line 44, characters 13-53: *)
 (*Why goal*) Lemma my_cos1_ensures_default_po_1 : 
   forall (x_0: single),
   forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x_0)) (1 / 32)%R)),
@@ -3707,10 +3715,10 @@ Dp_hint method_error.
    (1 / 16777216)%R).
 Proof.
 intros x H.
-interval with (i_bisect_diff (single_value x),i_nocheck).
+interval with (i_bisect_diff (single_value x)).
 Save.
 
-(* Why obligation from file "my_cosine.c", line 10, characters 12-46: *)
+(* Why obligation from file "my_cosine.c", line 41, characters 12-46: *)
 (*Why goal*) Lemma my_cos1_ensures_default_po_2 : 
   forall (x_0: single),
   forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x_0)) (1 / 32)%R)),
@@ -3728,23 +3736,15 @@ Save.
                 (eq (single_exact result) (1)%R) /\
                 (eq (single_model result) (1)%R)),
   forall (result0: single),
-  forall (HW_6: (no_overflow_single
-                 nearest_even (Rmult (single_value x_0) (single_value x_0))) /\
-                (mul_single_post nearest_even x_0 x_0 result0)),
+  forall (HW_6: (mul_single_post nearest_even x_0 x_0 result0)),
   forall (result1: single),
   forall (HW_7: (eq (single_value result1) (05 / 10)%R) /\
                 (eq (single_exact result1) (05 / 10)%R) /\
                 (eq (single_model result1) (05 / 10)%R)),
   forall (result2: single),
-  forall (HW_8: (no_overflow_single
-                 nearest_even (Rmult
-                               (single_value result0) (single_value result1))) /\
-                (mul_single_post nearest_even result0 result1 result2)),
+  forall (HW_8: (mul_single_post nearest_even result0 result1 result2)),
   forall (result3: single),
-  forall (HW_9: (no_overflow_single
-                 nearest_even (Rminus
-                               (single_value result) (single_value result2))) /\
-                (sub_single_post nearest_even result result2 result3)),
+  forall (HW_9: (sub_single_post nearest_even result result2 result3)),
   forall (__retres: single),
   forall (HW_10: __retres = result3),
   forall (why__return: single),
@@ -3757,7 +3757,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 14, characters 16-21: *)
+(* Why obligation from file "my_cosine.c", line 45, characters 16-21: *)
 (*Why goal*) Lemma my_cos1_safety_po_1 : 
   forall (x_0: single),
   forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x_0)) (1 / 32)%R)),
@@ -3780,7 +3780,7 @@ Proof.
 admit.
 Save.
 
-(* Why obligation from file "my_cosine.c", line 14, characters 16-28: *)
+(* Why obligation from file "my_cosine.c", line 45, characters 16-28: *)
 (*Why goal*) Lemma my_cos1_safety_po_2 : 
   forall (x_0: single),
   forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x_0)) (1 / 32)%R)),
@@ -3812,7 +3812,7 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 14, characters 9-28: *)
+(* Why obligation from file "my_cosine.c", line 45, characters 9-28: *)
 (*Why goal*) Lemma my_cos1_safety_po_3 : 
   forall (x_0: single),
   forall (HW_1: (* JC_3 *) (Rle (Rabs (single_value x_0)) (1 / 32)%R)),
@@ -3848,47 +3848,50 @@ Proof.
 admit.
 Save.
 
-(* Why obligation from file "my_cosine.c", line 23, characters 13-49: *)
+(* Why obligation from file "my_cosine.c", line 52, characters 13-27: *)
 (*Why goal*) Lemma my_cos2_ensures_default_po_1 : 
   forall (x_0_0: single),
   forall (HW_1: (* JC_23 *)
                 ((* JC_21 *) (Rle (Rabs (single_value x_0_0)) (1 / 32)%R) /\
                 (* JC_22 *) (eq (single_round_error x_0_0) (0)%R))),
+  (* JC_34 *) (eq (single_exact x_0_0) (single_value x_0_0)).
+Proof.
+admit.
+Save.
+
+(* Why obligation from file "my_cosine.c", line 54, characters 13-49: *)
+(*Why goal*) Lemma my_cos2_ensures_default_po_2 : 
+  forall (x_0_0: single),
+  forall (HW_1: (* JC_23 *)
+                ((* JC_21 *) (Rle (Rabs (single_value x_0_0)) (1 / 32)%R) /\
+                (* JC_22 *) (eq (single_round_error x_0_0) (0)%R))),
+  forall (HW_4: (* JC_34 *) (eq (single_exact x_0_0) (single_value x_0_0))),
   forall (result: single),
-  forall (HW_4: (eq (single_value result) (1)%R) /\
+  forall (HW_5: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
                 (eq (single_model result) (1)%R)),
   forall (result0: single),
-  forall (HW_5: (no_overflow_single
-                 nearest_even (Rmult
-                               (single_value x_0_0) (single_value x_0_0))) /\
-                (mul_single_post nearest_even x_0_0 x_0_0 result0)),
+  forall (HW_6: (mul_single_post nearest_even x_0_0 x_0_0 result0)),
   forall (result1: single),
-  forall (HW_6: (eq (single_value result1) (05 / 10)%R) /\
+  forall (HW_7: (eq (single_value result1) (05 / 10)%R) /\
                 (eq (single_exact result1) (05 / 10)%R) /\
                 (eq (single_model result1) (05 / 10)%R)),
   forall (result2: single),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult
-                               (single_value result0) (single_value result1))) /\
-                (mul_single_post nearest_even result0 result1 result2)),
+  forall (HW_8: (mul_single_post nearest_even result0 result1 result2)),
   forall (result3: single),
-  forall (HW_8: (no_overflow_single
-                 nearest_even (Rminus
-                               (single_value result) (single_value result2))) /\
-                (sub_single_post nearest_even result result2 result3)),
+  forall (HW_9: (sub_single_post nearest_even result result2 result3)),
   forall (r: single),
-  forall (HW_9: r = result3),
-  (* JC_36 *)
+  forall (HW_10: r = result3),
+  (* JC_38 *)
   (Rle (Rabs (Rminus (single_exact r) (cos (single_value x_0_0))))
    (1 / 16777216)%R).
 Proof.
-intros x (H1,H2).
+intros x (H1,H2) Heq.
 intros r (_,(exa_r,_)).
-intros r0 (_,(_,(exa_r0,_))).
+intros r0 (_,(exa_r0,_)).
 intros r1 (_,(exa_r1,_)).
-intros r2 (_,(_,(exa_r2,_))).
-intros r3 (_,(_,(exa_r3,_))).
+intros r2 (_,(exa_r2,_)).
+intros r3 (_,(exa_r3,_)).
 intros r4 r4_eq.
 subst r4.
 rewrite exa_r3; clear exa_r3 r3.
@@ -3897,49 +3900,39 @@ rewrite exa_r1; clear exa_r1 r1.
 rewrite exa_r0; clear exa_r0 r0.
 rewrite exa_r; clear exa_r r.
 unfold single_round_error in H2.
-assert (h:single_exact x = single_value x).
-  admit. (* TODO *)
-rewrite h.
-interval with (i_bisect_diff (single_value x),i_nocheck).
+rewrite Heq.
+interval with (i_bisect_diff (single_value x)).
 Save.
 
-(* Why obligation from file "my_cosine.c", line 19, characters 12-46: *)
-(*Why goal*) Lemma my_cos2_ensures_default_po_2 : 
+(* Why obligation from file "my_cosine.c", line 49, characters 12-46: *)
+(*Why goal*) Lemma my_cos2_ensures_default_po_3 : 
   forall (x_0_0: single),
   forall (HW_1: (* JC_23 *)
                 ((* JC_21 *) (Rle (Rabs (single_value x_0_0)) (1 / 32)%R) /\
                 (* JC_22 *) (eq (single_round_error x_0_0) (0)%R))),
+  forall (HW_4: (* JC_34 *) (eq (single_exact x_0_0) (single_value x_0_0))),
   forall (result: single),
-  forall (HW_4: (eq (single_value result) (1)%R) /\
+  forall (HW_5: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
                 (eq (single_model result) (1)%R)),
   forall (result0: single),
-  forall (HW_5: (no_overflow_single
-                 nearest_even (Rmult
-                               (single_value x_0_0) (single_value x_0_0))) /\
-                (mul_single_post nearest_even x_0_0 x_0_0 result0)),
+  forall (HW_6: (mul_single_post nearest_even x_0_0 x_0_0 result0)),
   forall (result1: single),
-  forall (HW_6: (eq (single_value result1) (05 / 10)%R) /\
+  forall (HW_7: (eq (single_value result1) (05 / 10)%R) /\
                 (eq (single_exact result1) (05 / 10)%R) /\
                 (eq (single_model result1) (05 / 10)%R)),
   forall (result2: single),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult
-                               (single_value result0) (single_value result1))) /\
-                (mul_single_post nearest_even result0 result1 result2)),
+  forall (HW_8: (mul_single_post nearest_even result0 result1 result2)),
   forall (result3: single),
-  forall (HW_8: (no_overflow_single
-                 nearest_even (Rminus
-                               (single_value result) (single_value result2))) /\
-                (sub_single_post nearest_even result result2 result3)),
+  forall (HW_9: (sub_single_post nearest_even result result2 result3)),
   forall (r: single),
-  forall (HW_9: r = result3),
-  forall (HW_10: (* JC_36 *)
+  forall (HW_10: r = result3),
+  forall (HW_11: (* JC_38 *)
                  (Rle
                   (Rabs (Rminus (single_exact r) (cos (single_value x_0_0))))
                   (1 / 16777216)%R)),
   forall (why__return: single),
-  forall (HW_11: why__return = r),
+  forall (HW_12: why__return = r),
   (* JC_25 *)
   (Rle (Rabs (Rminus (single_value why__return) (cos (single_value x_0_0))))
    (1 / 8388608)%R).
@@ -3948,14 +3941,15 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 22, characters 19-24: *)
+(* Why obligation from file "my_cosine.c", line 53, characters 19-24: *)
 (*Why goal*) Lemma my_cos2_safety_po_1 : 
   forall (x_0_0: single),
   forall (HW_1: (* JC_23 *)
                 ((* JC_21 *) (Rle (Rabs (single_value x_0_0)) (1 / 32)%R) /\
                 (* JC_22 *) (eq (single_round_error x_0_0) (0)%R))),
+  forall (HW_4: (* JC_29 *) (eq (single_exact x_0_0) (single_value x_0_0))),
   forall (result: single),
-  forall (HW_4: (eq (single_value result) (1)%R) /\
+  forall (HW_5: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
                 (eq (single_model result) (1)%R)),
   (no_overflow_single
@@ -3965,23 +3959,24 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 22, characters 19-31: *)
+(* Why obligation from file "my_cosine.c", line 53, characters 19-31: *)
 (*Why goal*) Lemma my_cos2_safety_po_2 : 
   forall (x_0_0: single),
   forall (HW_1: (* JC_23 *)
                 ((* JC_21 *) (Rle (Rabs (single_value x_0_0)) (1 / 32)%R) /\
                 (* JC_22 *) (eq (single_round_error x_0_0) (0)%R))),
+  forall (HW_4: (* JC_29 *) (eq (single_exact x_0_0) (single_value x_0_0))),
   forall (result: single),
-  forall (HW_4: (eq (single_value result) (1)%R) /\
+  forall (HW_5: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
                 (eq (single_model result) (1)%R)),
-  forall (HW_5: (no_overflow_single
+  forall (HW_6: (no_overflow_single
                  nearest_even (Rmult
                                (single_value x_0_0) (single_value x_0_0)))),
   forall (result0: single),
-  forall (HW_6: (mul_single_post nearest_even x_0_0 x_0_0 result0)),
+  forall (HW_7: (mul_single_post nearest_even x_0_0 x_0_0 result0)),
   forall (result1: single),
-  forall (HW_7: (eq (single_value result1) (05 / 10)%R) /\
+  forall (HW_8: (eq (single_value result1) (05 / 10)%R) /\
                 (eq (single_exact result1) (05 / 10)%R) /\
                 (eq (single_model result1) (05 / 10)%R)),
   (no_overflow_single
@@ -3991,30 +3986,31 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 22, characters 12-31: *)
+(* Why obligation from file "my_cosine.c", line 53, characters 12-31: *)
 (*Why goal*) Lemma my_cos2_safety_po_3 : 
   forall (x_0_0: single),
   forall (HW_1: (* JC_23 *)
                 ((* JC_21 *) (Rle (Rabs (single_value x_0_0)) (1 / 32)%R) /\
                 (* JC_22 *) (eq (single_round_error x_0_0) (0)%R))),
+  forall (HW_4: (* JC_29 *) (eq (single_exact x_0_0) (single_value x_0_0))),
   forall (result: single),
-  forall (HW_4: (eq (single_value result) (1)%R) /\
+  forall (HW_5: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
                 (eq (single_model result) (1)%R)),
-  forall (HW_5: (no_overflow_single
+  forall (HW_6: (no_overflow_single
                  nearest_even (Rmult
                                (single_value x_0_0) (single_value x_0_0)))),
   forall (result0: single),
-  forall (HW_6: (mul_single_post nearest_even x_0_0 x_0_0 result0)),
+  forall (HW_7: (mul_single_post nearest_even x_0_0 x_0_0 result0)),
   forall (result1: single),
-  forall (HW_7: (eq (single_value result1) (05 / 10)%R) /\
+  forall (HW_8: (eq (single_value result1) (05 / 10)%R) /\
                 (eq (single_exact result1) (05 / 10)%R) /\
                 (eq (single_model result1) (05 / 10)%R)),
-  forall (HW_8: (no_overflow_single
+  forall (HW_9: (no_overflow_single
                  nearest_even (Rmult
                                (single_value result0) (single_value result1)))),
   forall (result2: single),
-  forall (HW_9: (mul_single_post nearest_even result0 result1 result2)),
+  forall (HW_10: (mul_single_post nearest_even result0 result1 result2)),
   (no_overflow_single
    nearest_even (Rminus (single_value result) (single_value result2))).
 Proof.
@@ -4022,37 +4018,29 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 35, characters 13-57: *)
+(* Why obligation from file "my_cosine.c", line 66, characters 13-57: *)
 (*Why goal*) Lemma my_cos3_ensures_default_po_1 : 
   forall (x_1: single),
-  forall (HW_1: (* JC_43 *)
-                ((* JC_41 *) (Rle (Rabs (single_exact x_1)) (1 / 32)%R) /\
-                (* JC_42 *) (Rle (single_round_error x_1) (1 / 1048576)%R))),
+  forall (HW_1: (* JC_45 *)
+                ((* JC_43 *) (Rle (Rabs (single_exact x_1)) (1 / 32)%R) /\
+                (* JC_44 *) (Rle (single_round_error x_1) (1 / 1048576)%R))),
   forall (result: single),
   forall (HW_4: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
                 (eq (single_model result) (1)%R)),
   forall (result0: single),
-  forall (HW_5: (no_overflow_single
-                 nearest_even (Rmult (single_value x_1) (single_value x_1))) /\
-                (mul_single_post nearest_even x_1 x_1 result0)),
+  forall (HW_5: (mul_single_post nearest_even x_1 x_1 result0)),
   forall (result1: single),
   forall (HW_6: (eq (single_value result1) (05 / 10)%R) /\
                 (eq (single_exact result1) (05 / 10)%R) /\
                 (eq (single_model result1) (05 / 10)%R)),
   forall (result2: single),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult
-                               (single_value result0) (single_value result1))) /\
-                (mul_single_post nearest_even result0 result1 result2)),
+  forall (HW_7: (mul_single_post nearest_even result0 result1 result2)),
   forall (result3: single),
-  forall (HW_8: (no_overflow_single
-                 nearest_even (Rminus
-                               (single_value result) (single_value result2))) /\
-                (sub_single_post nearest_even result result2 result3)),
+  forall (HW_8: (sub_single_post nearest_even result result2 result3)),
   forall (r_0: single),
   forall (HW_9: r_0 = result3),
-  (* JC_60 *)
+  (* JC_62 *)
   (Rle (Rabs (Rminus (single_exact r_0) (cos (single_exact x_1))))
    (1 / 16777216)%R).
 Proof.
@@ -4060,44 +4048,36 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 30, characters 12-62: *)
+(* Why obligation from file "my_cosine.c", line 61, characters 12-62: *)
 (*Why goal*) Lemma my_cos3_ensures_default_po_2 : 
   forall (x_1: single),
-  forall (HW_1: (* JC_43 *)
-                ((* JC_41 *) (Rle (Rabs (single_exact x_1)) (1 / 32)%R) /\
-                (* JC_42 *) (Rle (single_round_error x_1) (1 / 1048576)%R))),
+  forall (HW_1: (* JC_45 *)
+                ((* JC_43 *) (Rle (Rabs (single_exact x_1)) (1 / 32)%R) /\
+                (* JC_44 *) (Rle (single_round_error x_1) (1 / 1048576)%R))),
   forall (result: single),
   forall (HW_4: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
                 (eq (single_model result) (1)%R)),
   forall (result0: single),
-  forall (HW_5: (no_overflow_single
-                 nearest_even (Rmult (single_value x_1) (single_value x_1))) /\
-                (mul_single_post nearest_even x_1 x_1 result0)),
+  forall (HW_5: (mul_single_post nearest_even x_1 x_1 result0)),
   forall (result1: single),
   forall (HW_6: (eq (single_value result1) (05 / 10)%R) /\
                 (eq (single_exact result1) (05 / 10)%R) /\
                 (eq (single_model result1) (05 / 10)%R)),
   forall (result2: single),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult
-                               (single_value result0) (single_value result1))) /\
-                (mul_single_post nearest_even result0 result1 result2)),
+  forall (HW_7: (mul_single_post nearest_even result0 result1 result2)),
   forall (result3: single),
-  forall (HW_8: (no_overflow_single
-                 nearest_even (Rminus
-                               (single_value result) (single_value result2))) /\
-                (sub_single_post nearest_even result result2 result3)),
+  forall (HW_8: (sub_single_post nearest_even result result2 result3)),
   forall (r_0: single),
   forall (HW_9: r_0 = result3),
-  forall (HW_10: (* JC_60 *)
+  forall (HW_10: (* JC_62 *)
                  (Rle
                   (Rabs (Rminus (single_exact r_0) (cos (single_exact x_1))))
                   (1 / 16777216)%R)),
   forall (why__return: single),
   forall (HW_11: why__return = r_0),
+  (* JC_49 *)
   (* JC_47 *)
-  (* JC_45 *)
   (Rle (Rabs (Rminus (single_exact why__return) (cos (single_exact x_1))))
    (1 / 16777216)%R).
 Proof.
@@ -4105,44 +4085,36 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 31, characters 11-61: *)
+(* Why obligation from file "my_cosine.c", line 62, characters 11-61: *)
 (*Why goal*) Lemma my_cos3_ensures_default_po_3 : 
   forall (x_1: single),
-  forall (HW_1: (* JC_43 *)
-                ((* JC_41 *) (Rle (Rabs (single_exact x_1)) (1 / 32)%R) /\
-                (* JC_42 *) (Rle (single_round_error x_1) (1 / 1048576)%R))),
+  forall (HW_1: (* JC_45 *)
+                ((* JC_43 *) (Rle (Rabs (single_exact x_1)) (1 / 32)%R) /\
+                (* JC_44 *) (Rle (single_round_error x_1) (1 / 1048576)%R))),
   forall (result: single),
   forall (HW_4: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
                 (eq (single_model result) (1)%R)),
   forall (result0: single),
-  forall (HW_5: (no_overflow_single
-                 nearest_even (Rmult (single_value x_1) (single_value x_1))) /\
-                (mul_single_post nearest_even x_1 x_1 result0)),
+  forall (HW_5: (mul_single_post nearest_even x_1 x_1 result0)),
   forall (result1: single),
   forall (HW_6: (eq (single_value result1) (05 / 10)%R) /\
                 (eq (single_exact result1) (05 / 10)%R) /\
                 (eq (single_model result1) (05 / 10)%R)),
   forall (result2: single),
-  forall (HW_7: (no_overflow_single
-                 nearest_even (Rmult
-                               (single_value result0) (single_value result1))) /\
-                (mul_single_post nearest_even result0 result1 result2)),
+  forall (HW_7: (mul_single_post nearest_even result0 result1 result2)),
   forall (result3: single),
-  forall (HW_8: (no_overflow_single
-                 nearest_even (Rminus
-                               (single_value result) (single_value result2))) /\
-                (sub_single_post nearest_even result result2 result3)),
+  forall (HW_8: (sub_single_post nearest_even result result2 result3)),
   forall (r_0: single),
   forall (HW_9: r_0 = result3),
-  forall (HW_10: (* JC_60 *)
+  forall (HW_10: (* JC_62 *)
                  (Rle
                   (Rabs (Rminus (single_exact r_0) (cos (single_exact x_1))))
                   (1 / 16777216)%R)),
   forall (why__return: single),
   forall (HW_11: why__return = r_0),
-  (* JC_47 *)
-  (* JC_46 *)
+  (* JC_49 *)
+  (* JC_48 *)
   (Rle (single_round_error why__return)
    (Rplus (single_round_error x_1) (3 / 16777216)%R)).
 Proof.
@@ -4150,12 +4122,12 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 34, characters 19-24: *)
+(* Why obligation from file "my_cosine.c", line 65, characters 19-24: *)
 (*Why goal*) Lemma my_cos3_safety_po_1 : 
   forall (x_1: single),
-  forall (HW_1: (* JC_43 *)
-                ((* JC_41 *) (Rle (Rabs (single_exact x_1)) (1 / 32)%R) /\
-                (* JC_42 *) (Rle (single_round_error x_1) (1 / 1048576)%R))),
+  forall (HW_1: (* JC_45 *)
+                ((* JC_43 *) (Rle (Rabs (single_exact x_1)) (1 / 32)%R) /\
+                (* JC_44 *) (Rle (single_round_error x_1) (1 / 1048576)%R))),
   forall (result: single),
   forall (HW_4: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
@@ -4167,12 +4139,12 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 34, characters 19-31: *)
+(* Why obligation from file "my_cosine.c", line 65, characters 19-31: *)
 (*Why goal*) Lemma my_cos3_safety_po_2 : 
   forall (x_1: single),
-  forall (HW_1: (* JC_43 *)
-                ((* JC_41 *) (Rle (Rabs (single_exact x_1)) (1 / 32)%R) /\
-                (* JC_42 *) (Rle (single_round_error x_1) (1 / 1048576)%R))),
+  forall (HW_1: (* JC_45 *)
+                ((* JC_43 *) (Rle (Rabs (single_exact x_1)) (1 / 32)%R) /\
+                (* JC_44 *) (Rle (single_round_error x_1) (1 / 1048576)%R))),
   forall (result: single),
   forall (HW_4: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
@@ -4192,12 +4164,12 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 34, characters 12-31: *)
+(* Why obligation from file "my_cosine.c", line 65, characters 12-31: *)
 (*Why goal*) Lemma my_cos3_safety_po_3 : 
   forall (x_1: single),
-  forall (HW_1: (* JC_43 *)
-                ((* JC_41 *) (Rle (Rabs (single_exact x_1)) (1 / 32)%R) /\
-                (* JC_42 *) (Rle (single_round_error x_1) (1 / 1048576)%R))),
+  forall (HW_1: (* JC_45 *)
+                ((* JC_43 *) (Rle (Rabs (single_exact x_1)) (1 / 32)%R) /\
+                (* JC_44 *) (Rle (single_round_error x_1) (1 / 1048576)%R))),
   forall (result: single),
   forall (HW_4: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
@@ -4222,11 +4194,11 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 43, characters 13-55: *)
+(* Why obligation from file "my_cosine.c", line 74, characters 13-55: *)
 (*Why goal*) Lemma my_cos4_ensures_default_po_1 : 
   forall (x_2: single),
-  forall (HW_1: (* JC_63 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
-  (* JC_73 *)
+  forall (HW_1: (* JC_65 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
+  (* JC_75 *)
   (Rle
    (Rabs
     (Rminus
@@ -4239,11 +4211,11 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 40, characters 12-46: *)
+(* Why obligation from file "my_cosine.c", line 71, characters 12-46: *)
 (*Why goal*) Lemma my_cos4_ensures_default_po_2 : 
   forall (x_2: single),
-  forall (HW_1: (* JC_63 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
-  forall (HW_4: (* JC_73 *)
+  forall (HW_1: (* JC_65 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
+  forall (HW_4: (* JC_75 *)
                 (Rle
                  (Rabs
                   (Rminus
@@ -4257,28 +4229,20 @@ Save.
                 (eq (single_exact result) (1)%R) /\
                 (eq (single_model result) (1)%R)),
   forall (result0: single),
-  forall (HW_6: (no_overflow_single
-                 nearest_even (Rmult (single_value x_2) (single_value x_2))) /\
-                (mul_single_post nearest_even x_2 x_2 result0)),
+  forall (HW_6: (mul_single_post nearest_even x_2 x_2 result0)),
   forall (result1: single),
   forall (HW_7: (eq (single_value result1) (05 / 10)%R) /\
                 (eq (single_exact result1) (05 / 10)%R) /\
                 (eq (single_model result1) (05 / 10)%R)),
   forall (result2: single),
-  forall (HW_8: (no_overflow_single
-                 nearest_even (Rmult
-                               (single_value result0) (single_value result1))) /\
-                (mul_single_post nearest_even result0 result1 result2)),
+  forall (HW_8: (mul_single_post nearest_even result0 result1 result2)),
   forall (result3: single),
-  forall (HW_9: (no_overflow_single
-                 nearest_even (Rminus
-                               (single_value result) (single_value result2))) /\
-                (sub_single_post nearest_even result result2 result3)),
+  forall (HW_9: (sub_single_post nearest_even result result2 result3)),
   forall (__retres_0: single),
   forall (HW_10: __retres_0 = result3),
   forall (why__return: single),
   forall (HW_11: why__return = __retres_0),
-  (* JC_65 *)
+  (* JC_67 *)
   (Rle (Rabs (Rminus (single_value why__return) (cos (single_value x_2))))
    (1 / 1048576)%R).
 Proof.
@@ -4286,11 +4250,11 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 44, characters 16-21: *)
+(* Why obligation from file "my_cosine.c", line 75, characters 16-21: *)
 (*Why goal*) Lemma my_cos4_safety_po_1 : 
   forall (x_2: single),
-  forall (HW_1: (* JC_63 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
-  forall (HW_4: (* JC_69 *)
+  forall (HW_1: (* JC_65 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
+  forall (HW_4: (* JC_71 *)
                 (Rle
                  (Rabs
                   (Rminus
@@ -4310,11 +4274,11 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 44, characters 16-28: *)
+(* Why obligation from file "my_cosine.c", line 75, characters 16-28: *)
 (*Why goal*) Lemma my_cos4_safety_po_2 : 
   forall (x_2: single),
-  forall (HW_1: (* JC_63 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
-  forall (HW_4: (* JC_69 *)
+  forall (HW_1: (* JC_65 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
+  forall (HW_4: (* JC_71 *)
                 (Rle
                  (Rabs
                   (Rminus
@@ -4342,11 +4306,11 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 44, characters 9-28: *)
+(* Why obligation from file "my_cosine.c", line 75, characters 9-28: *)
 (*Why goal*) Lemma my_cos4_safety_po_3 : 
   forall (x_2: single),
-  forall (HW_1: (* JC_63 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
-  forall (HW_4: (* JC_69 *)
+  forall (HW_1: (* JC_65 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
+  forall (HW_4: (* JC_71 *)
                 (Rle
                  (Rabs
                   (Rminus
@@ -4379,4 +4343,9 @@ admit.
 (* FILL PROOF HERE *)
 Save.
 
+
 ========== running Coq ==========
+File "/home/cmarche/why2-trunk/tests/c/my_cosine.jessie/coq/my_cosine_why.v",
+line 3, characters 0-26:
+Error: File /usr/lib/coq/user-contrib/jessie_why.vo has bad magic number.
+It is corrupted or was compiled with another version of Coq.

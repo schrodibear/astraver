@@ -80,12 +80,6 @@ type padding
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic __anonstruct_las_1_tag:  -> __anonstruct_las_1 tag_id
 
 axiom __anonstruct_las_1_int : (int_of_tag(__anonstruct_las_1_tag) = (1))
@@ -243,26 +237,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct___anonstruct_las_1(p:unit pointer, a:int,
- b:int, bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root___anonstruct_las_1(p:__anonstruct_las_1 pointer, a:int,
  b:int, __anonstruct_las_1_alloc_table:__anonstruct_las_1 alloc_table) =
  ((offset_min(__anonstruct_las_1_alloc_table, p) <= a)
@@ -324,81 +298,15 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
+exception Return_label_exc of unit
+
 parameter __anonstruct_las_1_alloc_table : __anonstruct_las_1 alloc_table ref
 
 parameter __anonstruct_las_1_tag_table : __anonstruct_las_1 tag_table ref
-
-parameter alloc_bitvector_struct___anonstruct_las_1 :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct___anonstruct_las_1(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct___anonstruct_las_1_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct___anonstruct_las_1(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
 parameter intP_alloc_table : intP alloc_table ref
 
@@ -523,9 +431,9 @@ parameter f :
       __anonstruct_las_1_i_p_3:(__anonstruct_las_1, intP pointer) memory ->
        { } unit writes intP_intM_p_3
        { (JC_<somenum>:
-         not_assigns(intP_p_3_alloc_table@, intP_intM_p_3@, intP_intM_p_3,
-         pset_union(pset_deref(__anonstruct_las_1_j_p_3@, pset_singleton(p@)),
-         pset_deref(__anonstruct_las_1_i_p_3@, pset_singleton(p@))))) }
+         not_assigns(intP_p_3_alloc_table, intP_intM_p_3@, intP_intM_p_3,
+         pset_union(pset_deref(__anonstruct_las_1_j_p_3, pset_singleton(p)),
+         pset_deref(__anonstruct_las_1_i_p_3, pset_singleton(p))))) }
 
 parameter f_requires :
  p:__anonstruct_las_1 pointer ->
@@ -541,9 +449,9 @@ parameter f_requires :
              ge_int(offset_max(__anonstruct_las_1_p_3_alloc_table, p), (0)))))}
        unit writes intP_intM_p_3
        { (JC_<somenum>:
-         not_assigns(intP_p_3_alloc_table@, intP_intM_p_3@, intP_intM_p_3,
-         pset_union(pset_deref(__anonstruct_las_1_j_p_3@, pset_singleton(p@)),
-         pset_deref(__anonstruct_las_1_i_p_3@, pset_singleton(p@))))) }
+         not_assigns(intP_p_3_alloc_table, intP_intM_p_3@, intP_intM_p_3,
+         pset_union(pset_deref(__anonstruct_las_1_j_p_3, pset_singleton(p)),
+         pset_deref(__anonstruct_las_1_i_p_3, pset_singleton(p))))) }
 
 parameter g :
  a:intP pointer ->
@@ -555,11 +463,11 @@ parameter g :
        { } unit writes intP_intM_a_1,intP_intM_b_2
        { (JC_<somenum>:
          ((JC_<somenum>:
-          not_assigns(intP_a_1_alloc_table@, intP_intM_a_1@, intP_intM_a_1,
-          pset_singleton(a@)))
+          not_assigns(intP_a_1_alloc_table, intP_intM_a_1@, intP_intM_a_1,
+          pset_singleton(a)))
          and (JC_<somenum>:
-             not_assigns(intP_b_2_alloc_table@, intP_intM_b_2@,
-             intP_intM_b_2, pset_singleton(b@))))) }
+             not_assigns(intP_b_2_alloc_table, intP_intM_b_2@, intP_intM_b_2,
+             pset_singleton(b))))) }
 
 parameter g_requires :
  a:intP pointer ->
@@ -576,11 +484,11 @@ parameter g_requires :
        unit writes intP_intM_a_1,intP_intM_b_2
        { (JC_<somenum>:
          ((JC_<somenum>:
-          not_assigns(intP_a_1_alloc_table@, intP_intM_a_1@, intP_intM_a_1,
-          pset_singleton(a@)))
+          not_assigns(intP_a_1_alloc_table, intP_intM_a_1@, intP_intM_a_1,
+          pset_singleton(a)))
          and (JC_<somenum>:
-             not_assigns(intP_b_2_alloc_table@, intP_intM_b_2@,
-             intP_intM_b_2, pset_singleton(b@))))) }
+             not_assigns(intP_b_2_alloc_table, intP_intM_b_2@, intP_intM_b_2,
+             pset_singleton(b))))) }
 
 let f_ensures_default =
  fun (p : __anonstruct_las_1 pointer) (intP_intM_p_3 : (intP, int) memory ref) (__anonstruct_las_1_p_3_alloc_table : __anonstruct_las_1 alloc_table) (intP_p_3_alloc_table : intP alloc_table) (__anonstruct_las_1_i_p_3 : (__anonstruct_las_1, intP pointer) memory) (__anonstruct_las_1_j_p_3 : (__anonstruct_las_1, intP pointer) memory) ->
@@ -598,9 +506,9 @@ let f_ensures_default =
      ((((((g jessie_<somenum>) jessie_<somenum>) intP_intM_p_3) intP_intM_p_3) intP_p_3_alloc_table) intP_p_3_alloc_table))));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
-    not_assigns(intP_p_3_alloc_table@, intP_intM_p_3@, intP_intM_p_3,
-    pset_union(pset_deref(__anonstruct_las_1_j_p_3@, pset_singleton(p@)),
-    pset_deref(__anonstruct_las_1_i_p_3@, pset_singleton(p@))))) }
+    not_assigns(intP_p_3_alloc_table, intP_intM_p_3@, intP_intM_p_3,
+    pset_union(pset_deref(__anonstruct_las_1_j_p_3, pset_singleton(p)),
+    pset_deref(__anonstruct_las_1_i_p_3, pset_singleton(p))))) }
 
 let f_safety =
  fun (p : __anonstruct_las_1 pointer) (intP_intM_p_3 : (intP, int) memory ref) (__anonstruct_las_1_p_3_alloc_table : __anonstruct_las_1 alloc_table) (intP_p_3_alloc_table : intP alloc_table) (__anonstruct_las_1_i_p_3 : (__anonstruct_las_1, intP pointer) memory) (__anonstruct_las_1_j_p_3 : (__anonstruct_las_1, intP pointer) memory) ->
@@ -643,11 +551,11 @@ let g_ensures_default =
     (raise Return); (raise Return) end)) with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
-     not_assigns(intP_a_1_alloc_table@, intP_intM_a_1@, intP_intM_a_1,
-     pset_singleton(a@)))
+     not_assigns(intP_a_1_alloc_table, intP_intM_a_1@, intP_intM_a_1,
+     pset_singleton(a)))
     and (JC_<somenum>:
-        not_assigns(intP_b_2_alloc_table@, intP_intM_b_2@, intP_intM_b_2,
-        pset_singleton(b@))))) }
+        not_assigns(intP_b_2_alloc_table, intP_intM_b_2@, intP_intM_b_2,
+        pset_singleton(b))))) }
 
 let g_safety =
  fun (a : intP pointer) (b : intP pointer) (intP_intM_a_1 : (intP, int) memory ref) (intP_intM_b_2 : (intP, int) memory ref) (intP_a_1_alloc_table : intP alloc_table) (intP_b_2_alloc_table : intP alloc_table) ->

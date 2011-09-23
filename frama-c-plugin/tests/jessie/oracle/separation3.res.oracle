@@ -140,12 +140,6 @@ axiom L_tags :
  (forall x:L pointer.
   (forall L_tag_table:L tag_table. instanceof(L_tag_table, x, L_tag)))
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic S_tag:  -> S tag_id
 
 axiom S_int : (int_of_tag(S_tag) = (1))
@@ -194,6 +188,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -205,6 +204,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -363,31 +367,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_L(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_S(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_l(L_l_2_alloc_table:L alloc_table) =
  (le_int(offset_min(L_l_2_alloc_table, l), (0))
  and ge_int(offset_max(L_l_2_alloc_table, l), (0)))
@@ -479,6 +458,12 @@ parameter L_q_l_2 : (L, S pointer) memory ref
 
 parameter L_tag_table : L tag_table ref
 
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
+exception Return_label_exc of unit
+
 parameter S_a_l_2 : (S, int32) memory ref
 
 parameter S_a_s0_1 : (S, int32) memory ref
@@ -494,96 +479,6 @@ parameter S_l_2_alloc_table : S alloc_table ref
 parameter S_s0_1_alloc_table : S alloc_table ref
 
 parameter S_tag_table : S tag_table ref
-
-parameter alloc_bitvector_struct_L :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_L(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_L_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_L(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_S :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_S(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_S_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_S(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
 parameter intP_alloc_table : intP alloc_table ref
 
@@ -742,7 +637,7 @@ parameter f :
   { ((JC_<somenum>:
      ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
      and (JC_<somenum>: valid_l(L_l_2_alloc_table))))
-    and (JC_<somenum>: eq_int(integer_of_int32(result), (1)))) }
+    and (JC_<somenum>: (integer_of_int32(result) = (1)))) }
 
 parameter intP_s0_1_alloc_table : intP alloc_table ref
 
@@ -756,7 +651,7 @@ parameter f2 :
   { ((JC_<somenum>:
      ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
      and (JC_<somenum>: valid_l(L_l_2_alloc_table))))
-    and (JC_<somenum>: eq_int(integer_of_int32(result), (1)))) }
+    and (JC_<somenum>: (integer_of_int32(result) = (1)))) }
 
 parameter f2_requires :
  tt:unit ->
@@ -769,7 +664,7 @@ parameter f2_requires :
   { ((JC_<somenum>:
      ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
      and (JC_<somenum>: valid_l(L_l_2_alloc_table))))
-    and (JC_<somenum>: eq_int(integer_of_int32(result), (1)))) }
+    and (JC_<somenum>: (integer_of_int32(result) = (1)))) }
 
 parameter f3 :
  tt:unit ->
@@ -779,7 +674,7 @@ parameter f3 :
   { ((JC_<somenum>:
      ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
      and (JC_<somenum>: valid_l(L_l_2_alloc_table))))
-    and (JC_<somenum>: eq_int(integer_of_int32(result), (1)))) }
+    and (JC_<somenum>: (integer_of_int32(result) = (1)))) }
 
 parameter f3_requires :
  tt:unit ->
@@ -792,7 +687,7 @@ parameter f3_requires :
   { ((JC_<somenum>:
      ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
      and (JC_<somenum>: valid_l(L_l_2_alloc_table))))
-    and (JC_<somenum>: eq_int(integer_of_int32(result), (1)))) }
+    and (JC_<somenum>: (integer_of_int32(result) = (1)))) }
 
 parameter f_requires :
  tt:unit ->
@@ -805,7 +700,7 @@ parameter f_requires :
   { ((JC_<somenum>:
      ((JC_<somenum>: valid_s0(S_s0_1_alloc_table))
      and (JC_<somenum>: valid_l(L_l_2_alloc_table))))
-    and (JC_<somenum>: eq_int(integer_of_int32(result), (1)))) }
+    and (JC_<somenum>: (integer_of_int32(result) = (1)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -852,8 +747,7 @@ let f2_ensures_default =
                                                            (C_14:
                                                            ((safe_acc_ !L_p_l_2) l))))) (2))))) in
       void); (return := !__retres_0); (raise Return) end)))); absurd  end
-   with Return -> !return end))
-  { (JC_<somenum>: eq_int(integer_of_int32(result), (1))) }
+   with Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (1))) }
 
 let f2_safety =
  fun (tt : unit) ->
@@ -921,8 +815,7 @@ let f3_ensures_default =
                      ((safe_acc_ !intP_intM_s0_1) ((shift (C_25:
                                                           ((safe_acc_ !S_b_s0_1) s0))) (2))))) in
       void); (return := !__retres_1); (raise Return) end)))); absurd  end
-   with Return -> !return end))
-  { (JC_<somenum>: eq_int(integer_of_int32(result), (1))) }
+   with Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (1))) }
 
 let f3_safety =
  fun (tt : unit) ->
@@ -981,7 +874,7 @@ let f_ensures_default =
       (((safe_upd_ S_a_l_2) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> = (__retres := (C_6: ((safe_acc_ !S_a_s0_1) s0))) in
       void); (return := !__retres); (raise Return) end)))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: eq_int(integer_of_int32(result), (1))) }
+   Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (1))) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -1015,7 +908,7 @@ why --project [...] why/separation3.why
 <project name="separation3" context="why/separation3_ctx.why">
   <function name="Function f3">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/separation3_po4.why">
       <location file = "PPCHOME/tests/jessie/separation3.c" line = "49" begin = "12" end = "24"/>
       <explain kind = "Post"/>
@@ -1024,6 +917,12 @@ why --project [...] why/separation3.why
   </function>
   <function name="Function f2">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/separation3_po1.why">
+      <location file = "PPCHOME/tests/jessie/separation3.c" line = "41" begin = "12" end = "24"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/separation3_po2.why">
       <location file = "PPCHOME/tests/jessie/separation3.c" line = "45" begin = "9" end = "18"/>
@@ -1036,16 +935,10 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/separation3_po1.why">
-      <location file = "PPCHOME/tests/jessie/separation3.c" line = "41" begin = "12" end = "24"/>
-      <explain kind = "Post"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function f">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/separation3_po5.why">
       <location file = "PPCHOME/tests/jessie/separation3.c" line = "33" begin = "12" end = "24"/>
       <explain kind = "Post"/>
@@ -2066,6 +1959,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -2077,6 +1975,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2232,31 +2134,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_L(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_S(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_l(L_l_2_alloc_table: L alloc_table) =
   ((offset_min(L_l_2_alloc_table, l) <= 0) and (offset_max(L_l_2_alloc_table,

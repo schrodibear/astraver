@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -64,7 +64,8 @@ let reset () =
     | Hol4 -> Hol4.reset ()
     | SmtLib ->  ()
     | Harvey | Simplify | Zenon | Z3 | CVCLite  | Gappa | Vampire
-    | Ergo | Why | MultiWhy | Why3 | Dispatcher | WhyProject -> ()
+    | Ergo | Why | MultiWhy | MultiAltergo | Why3 | Dispatcher 
+    | WhyProject -> ()
 
 let add_loc = function
   | Dtype (loc, s, _)
@@ -101,7 +102,7 @@ let push_decl _vloc d =
 			-> Pretty.push_or_output_decl *)
 	  | Why | WhyProject -> Pretty.push_decl ~ergo:false
           | Why3 -> Why3.push_decl
-	  | Ergo -> Pretty.push_decl ~ergo:true
+	  | Ergo | MultiAltergo -> Pretty.push_decl ~ergo:true
 	  | Dispatcher -> 
 (*
 	      (fun d ->
@@ -165,7 +166,8 @@ let push_parameter id _v tv = match prover () with
       if valid then Coq.push_parameter id tv
   | Pvs | HolLight | Isabelle | Hol4 | Mizar
   | Harvey | Simplify | Vampire | Zenon | Z3 | SmtLib | Gappa 
-  | CVCLite | Ergo | Why | MultiWhy | Dispatcher | WhyProject | Why3 -> 
+  | CVCLite | Ergo | Why | MultiWhy | MultiAltergo
+  | Dispatcher | WhyProject | Why3 ->
       ()
 
 let output is_last fwe =
@@ -199,7 +201,7 @@ let output is_last fwe =
     | Ergo -> Pretty.output_file ~ergo:true (fwe ^ "_why.why")  
     | Why -> Pretty.output_file ~ergo:false (fwe ^ "_why.why") 
     | Why3 -> Why3.output_file fwe
-    | MultiWhy -> Pretty.output_files fwe
+    | MultiWhy | MultiAltergo -> Pretty.output_files fwe
     | WhyProject -> ignore(Pretty.output_project fwe)
   end
 
@@ -219,7 +221,7 @@ let encode q =
     | Hol4 -> Hol4.push_decl d
     | Gappa -> Gappa.push_decl d  
     | Why | MultiWhy | WhyProject -> Pretty.push_decl d
-    | Ergo -> Pretty.push_decl ~ergo:true d
+    | Ergo | MultiAltergo -> Pretty.push_decl ~ergo:true d
     | Dispatcher -> Dispatcher.push_decl d      
     | Harvey -> Harvey.push_decl d
     | Simplify -> Simplify.push_decl d
@@ -681,7 +683,7 @@ let deal_channel parsef cin =
 
 let single_file () = match prover () with
   | Simplify | Vampire | Harvey | Zenon | Z3 | CVCLite | Gappa | Dispatcher 
-  | SmtLib | Ergo | Why | MultiWhy | WhyProject | Why3 -> true
+  | SmtLib | Ergo | Why | MultiWhy | MultiAltergo | WhyProject | Why3 -> true
   | Coq _ | Pvs | Mizar | Hol4 | HolLight | Isabelle -> false
 
 let deal_file is_last f =
@@ -697,7 +699,20 @@ let rec iter_with_last f = function
   | [] -> ()
   | [x] -> f true x
   | x::l -> f false x; iter_with_last f l
-  
+
+let delete_old_vcs files =
+   let base_name = Filename.chop_extension (last files) in
+   let cnt = ref 1 in
+   try
+      while true do
+         let po_name = base_name ^ "_po" ^ string_of_int !cnt ^ ".why" in
+         if Sys.file_exists po_name then Sys.remove po_name
+         else raise Exit;
+         incr cnt;
+      done;
+   with Exit -> ()
+
+
 let main () =
   let t0 = Unix.times () in
   load_prelude ();
@@ -708,6 +723,7 @@ let main () =
     end 
   else 
     begin
+      if Options.delete_old_vcs then delete_old_vcs files;
       iter_with_last deal_file files;
       if type_only then exit 0;
       if (pruning) or (Options.pruning_hyp_v != -1) then

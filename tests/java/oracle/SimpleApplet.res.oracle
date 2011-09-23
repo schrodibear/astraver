@@ -1,4 +1,35 @@
 ========== file tests/java/SimpleApplet.java ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
+
 // JAVACARD: will ask regtests to use Java Card API for this program
 
 /*****************************
@@ -89,6 +120,13 @@ public class Card extends Applet {
 	return;
     }
 }
+
+
+/*
+Local Variables:
+compile-command: "make SimpleApplet.why3ml"
+End:
+*/
 
 ========== krakatoa execution ==========
 // JAVACARD: will ask regtests to use Java Card API for this program
@@ -779,19 +817,19 @@ end = 36
 
 [K_10]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 86
+line = 117
 begin = 5
 end = 55
 
 [K_11]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 74
+line = 105
 begin = 9
 end = 32
 
 [K_12]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 67
+line = 98
 begin = 14
 end = 30
 
@@ -826,7 +864,7 @@ end = 43
 [cons_Card]
 name = "Constructor of class Card"
 file = "HOME/tests/java/SimpleApplet.java"
-line = 46
+line = 77
 begin = 4
 end = 8
 
@@ -896,7 +934,7 @@ end = 20
 [Card_process]
 name = "Method process"
 file = "HOME/tests/java/SimpleApplet.java"
-line = 61
+line = 92
 begin = 16
 end = 23
 
@@ -923,19 +961,19 @@ end = 6
 
 [K_1]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 55
+line = 86
 begin = 38
 end = 49
 
 [K_2]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 55
+line = 86
 begin = 29
 end = 50
 
 [K_3]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 55
+line = 86
 begin = 52
 end = 67
 
@@ -948,7 +986,7 @@ end = 37
 
 [K_4]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 55
+line = 86
 begin = 1
 end = 68
 
@@ -968,7 +1006,7 @@ end = 35
 [Card_install]
 name = "Method install"
 file = "HOME/tests/java/SimpleApplet.java"
-line = 53
+line = 84
 begin = 23
 end = 30
 
@@ -981,13 +1019,13 @@ end = 39
 
 [K_6]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 63
+line = 94
 begin = 5
 end = 22
 
 [K_7]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 71
+line = 102
 begin = 5
 end = 55
 
@@ -1007,13 +1045,13 @@ end = 39
 
 [K_8]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 70
+line = 101
 begin = 4
 end = 27
 
 [K_9]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 70
+line = 101
 begin = 4
 end = 40
 
@@ -1387,10 +1425,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Simpl
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs SimpleApplet.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/SimpleApplet_why.sx
 
@@ -1450,6 +1489,13 @@ simplify: simplify/SimpleApplet_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/SimpleApplet_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/SimpleApplet_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -1522,6 +1568,9 @@ why/%_why3.why: why/%.why
 	@echo 'why -why3 [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 why3ide: why/SimpleApplet_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
+
+why3ml: SimpleApplet.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
 
 -include SimpleApplet.depend
 
@@ -1656,7 +1705,7 @@ end = -1
 name = "Constructor of class Card"
 behavior = "Safety"
 file = "HOME/tests/java/SimpleApplet.java"
-line = 46
+line = 77
 begin = 4
 end = 8
 
@@ -1734,7 +1783,7 @@ end = -1
 
 [cons_APDU_ensures_default]
 name = "Constructor of class APDU"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/javacard_api/javacard/framework/APDU.java"
 line = 239
 begin = 2
@@ -1820,7 +1869,7 @@ end = 27
 
 [cons_RuntimeException_ensures_default]
 name = "Constructor of class RuntimeException"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/javacard_api/java/lang/RuntimeException.java"
 line = 47
 begin = 9
@@ -1834,7 +1883,7 @@ end = -1
 
 [JC_169]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 61
+line = 92
 begin = 16
 end = 23
 
@@ -1930,7 +1979,7 @@ end = -1
 
 [JC_171]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 61
+line = 92
 begin = 16
 end = 23
 
@@ -1978,20 +2027,20 @@ end = 30
 
 [JC_175]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 61
+line = 92
 begin = 16
 end = 23
 
 [JC_176]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 61
+line = 92
 begin = 16
 end = 23
 
 [JC_177]
 kind = UserCall
 file = "HOME/tests/java/SimpleApplet.java"
-line = 63
+line = 94
 begin = 5
 end = 22
 
@@ -2004,7 +2053,7 @@ end = 32
 [JC_178]
 kind = UserCall
 file = "HOME/tests/java/SimpleApplet.java"
-line = 67
+line = 98
 begin = 14
 end = 30
 
@@ -2017,7 +2066,7 @@ end = 32
 [JC_179]
 kind = IndexBounds
 file = "HOME/tests/java/SimpleApplet.java"
-line = 67
+line = 98
 begin = 14
 end = 30
 
@@ -2102,7 +2151,7 @@ end = -1
 [JC_180]
 kind = IndexBounds
 file = "HOME/tests/java/SimpleApplet.java"
-line = 70
+line = 101
 begin = 4
 end = 27
 
@@ -2115,7 +2164,7 @@ end = -1
 [JC_181]
 kind = UserCall
 file = "HOME/tests/java/SimpleApplet.java"
-line = 71
+line = 102
 begin = 5
 end = 55
 
@@ -2128,7 +2177,7 @@ end = -1
 [JC_182]
 kind = IndexBounds
 file = "HOME/tests/java/SimpleApplet.java"
-line = 74
+line = 105
 begin = 9
 end = 32
 
@@ -2154,7 +2203,7 @@ end = -1
 [JC_184]
 kind = UserCall
 file = "HOME/tests/java/SimpleApplet.java"
-line = 63
+line = 94
 begin = 5
 end = 22
 
@@ -2167,14 +2216,14 @@ end = 32
 [JC_185]
 kind = UserCall
 file = "HOME/tests/java/SimpleApplet.java"
-line = 67
+line = 98
 begin = 14
 end = 30
 
 [JC_186]
 kind = UserCall
 file = "HOME/tests/java/SimpleApplet.java"
-line = 71
+line = 102
 begin = 5
 end = 55
 
@@ -2199,7 +2248,7 @@ end = -1
 
 [cons_Throwable_ensures_default]
 name = "Constructor of class Throwable"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/javacard_api/java/lang/Throwable.java"
 line = 48
 begin = 9
@@ -2447,7 +2496,7 @@ end = 33
 
 [cons_ISOException_short_ensures_default]
 name = "Constructor of class ISOException"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/javacard_api/javacard/framework/ISOException.java"
 line = 59
 begin = 9
@@ -2479,7 +2528,7 @@ end = -1
 
 [cons_Object_ensures_default]
 name = "Constructor of class Object"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/javacard_api/java/lang/Object.java"
 line = 47
 begin = 9
@@ -2523,9 +2572,9 @@ end = -1
 
 [Card_install_ensures_default]
 name = "Method install"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/SimpleApplet.java"
-line = 53
+line = 84
 begin = 23
 end = 30
 
@@ -2609,7 +2658,7 @@ end = 26
 
 [cons_Exception_ensures_default]
 name = "Constructor of class Exception"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/javacard_api/java/lang/Exception.java"
 line = 49
 begin = 9
@@ -2987,7 +3036,7 @@ end = -1
 
 [cons_Applet_ensures_default]
 name = "Constructor of class Applet"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/javacard_api/javacard/framework/Applet.java"
 line = 97
 begin = 14
@@ -3311,7 +3360,7 @@ end = -1
 name = "Method process"
 behavior = "Safety"
 file = "HOME/tests/java/SimpleApplet.java"
-line = 61
+line = 92
 begin = 16
 end = 23
 
@@ -3621,9 +3670,9 @@ end = 21
 
 [Card_process_ensures_default]
 name = "Method process"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/SimpleApplet.java"
-line = 61
+line = 92
 begin = 16
 end = 23
 
@@ -4139,7 +4188,7 @@ end = -1
 
 [cons_CardRuntimeException_short_ensures_default]
 name = "Constructor of class CardRuntimeException"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/lib/javacard_api/javacard/framework/CardRuntimeException.java"
 line = 56
 begin = 9
@@ -4701,7 +4750,7 @@ end = 38
 
 [JC_123]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 46
+line = 77
 begin = 4
 end = 8
 
@@ -4731,7 +4780,7 @@ end = 38
 
 [JC_125]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 46
+line = 77
 begin = 4
 end = 8
 
@@ -5015,7 +5064,7 @@ end = 32
 
 [JC_131]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 53
+line = 84
 begin = 23
 end = 30
 
@@ -5063,7 +5112,7 @@ end = 32
 
 [JC_133]
 file = "HOME/tests/java/SimpleApplet.java"
-line = 53
+line = 84
 begin = 23
 end = 30
 
@@ -5071,7 +5120,7 @@ end = 30
 name = "Method install"
 behavior = "Safety"
 file = "HOME/tests/java/SimpleApplet.java"
-line = 53
+line = 84
 begin = 23
 end = 30
 
@@ -5174,7 +5223,7 @@ end = 20
 [JC_139]
 kind = PointerDeref
 file = "HOME/tests/java/SimpleApplet.java"
-line = 55
+line = 86
 begin = 52
 end = 67
 
@@ -5319,7 +5368,7 @@ end = -1
 [JC_140]
 kind = ArithOverflow
 file = "HOME/tests/java/SimpleApplet.java"
-line = 55
+line = 86
 begin = 38
 end = 49
 
@@ -5338,7 +5387,7 @@ end = 29
 [JC_141]
 kind = ArithOverflow
 file = "HOME/tests/java/SimpleApplet.java"
-line = 55
+line = 86
 begin = 29
 end = 50
 
@@ -5719,9 +5768,9 @@ end = 27
 
 [cons_Card_ensures_default]
 name = "Constructor of class Card"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/SimpleApplet.java"
-line = 46
+line = 77
 begin = 4
 end = 8
 
@@ -5803,8 +5852,6 @@ logic Applet_tag:  -> Object tag_id
 
 axiom Applet_parenttag_Object : parenttag(Applet_tag, Object_tag)
 
-exception CardRuntimeException_exc of Object pointer
-
 logic CardRuntimeException_tag:  -> Object tag_id
 
 logic RuntimeException_tag:  -> Object tag_id
@@ -5839,8 +5886,6 @@ function Card_Term_Function_Writer() : byte = byte_of_integer(neg_int((86)))
 logic Card_tag:  -> Object tag_id
 
 axiom Card_parenttag_Applet : parenttag(Card_tag, Applet_tag)
-
-exception Exception_exc of Object pointer
 
 logic Exception_tag:  -> Object tag_id
 
@@ -5910,8 +5955,6 @@ function ISO7816_SW_WRONG_LENGTH() : short = short_of_integer((26368))
 
 function ISO7816_SW_WRONG_P1P2() : short = short_of_integer((27392))
 
-exception ISOException_exc of Object pointer
-
 logic ISOException_tag:  -> Object tag_id
 
 axiom ISOException_parenttag_CardRuntimeException :
@@ -5923,10 +5966,6 @@ logic JCSystem_tag:  -> Object tag_id
 
 axiom JCSystem_parenttag_Object : parenttag(JCSystem_tag, Object_tag)
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
 logic NativeMethods_tag:  -> Object tag_id
 
 axiom NativeMethods_parenttag_Object :
@@ -5934,7 +5973,7 @@ axiom NativeMethods_parenttag_Object :
 
 predicate Non_null_Object(x_2:Object pointer,
  Object_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_alloc_table, x_2), (0))
+ (offset_max(Object_alloc_table, x_2) = (0))
 
 predicate Non_null_byteM(x_0:Object pointer,
  Object_alloc_table:Object alloc_table) =
@@ -5972,14 +6011,8 @@ logic PrivAccess_tag:  -> Object tag_id
 
 axiom PrivAccess_parenttag_Object : parenttag(PrivAccess_tag, Object_tag)
 
-exception Return_label_exc of unit
-
-exception RuntimeException_exc of Object pointer
-
 axiom RuntimeException_parenttag_Exception :
  parenttag(RuntimeException_tag, Exception_tag)
-
-exception Throwable_exc of Object pointer
 
 axiom Throwable_parenttag_Object : parenttag(Throwable_tag, Object_tag)
 
@@ -6001,6 +6034,11 @@ axiom byte_coerce :
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_byte(byte_of_integer(x)), x)))
 
+axiom byte_extensionality :
+ (forall x:byte.
+  (forall y:byte.
+   (eq_int(integer_of_byte(x), integer_of_byte(y)) -> (x = y))))
+
 axiom byte_range :
  (forall x:byte.
   (le_int((-128), integer_of_byte(x)) and le_int(integer_of_byte(x), (127))))
@@ -6013,6 +6051,11 @@ axiom char_coerce :
  (forall x:int.
   ((le_int((0), x) and le_int(x, (65535))) ->
    eq_int(integer_of_char(char_of_integer(x)), x)))
+
+axiom char_extensionality :
+ (forall x:char.
+  (forall y:char.
+   (eq_int(integer_of_char(x), integer_of_char(y)) -> (x = y))))
 
 axiom char_range :
  (forall x:char.
@@ -6045,6 +6088,11 @@ axiom int32_coerce :
  (forall x:int.
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
+
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range :
  (forall x:int32.
@@ -6147,6 +6195,11 @@ axiom long_coerce :
   ((le_int((-9223372036854775808), x) and le_int(x, (9223372036854775807))) ->
    eq_int(integer_of_long(long_of_integer(x)), x)))
 
+axiom long_extensionality :
+ (forall x:long.
+  (forall y:long.
+   (eq_int(integer_of_long(x), integer_of_long(y)) -> (x = y))))
+
 axiom long_range :
  (forall x:long.
   (le_int((-9223372036854775808), integer_of_long(x))
@@ -6240,6 +6293,11 @@ axiom short_coerce :
   ((le_int((-32768), x) and le_int(x, (32767))) ->
    eq_int(integer_of_short(short_of_integer(x)), x)))
 
+axiom short_extensionality :
+ (forall x:short.
+  (forall y:short.
+   (eq_int(integer_of_short(x), integer_of_short(y)) -> (x = y))))
+
 axiom short_range :
  (forall x:short.
   (le_int((-32768), integer_of_short(x))
@@ -6328,80 +6386,6 @@ predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
 predicate strict_valid_struct_shortM(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  strict_valid_struct_Object(p, a, b, Object_alloc_table)
-
-predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_AID(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_APDU(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Applet(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Card(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Applet(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Throwable(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_RuntimeException(p:unit pointer, a:int,
- b:int, bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Exception(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_CardRuntimeException(p:unit pointer, a:int,
- b:int, bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_RuntimeException(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_ISOException(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_CardRuntimeException(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_JCSystem(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_NativeMethods(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_OwnerPIN(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_PackedBoolean(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_PrivAccess(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_byteM(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_shortM(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
 
 predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
@@ -7110,6 +7094,8 @@ parameter Applet_selectingApplet_requires :
 
 parameter Applet_thePrivAccess : (Object, Object pointer) memory ref
 
+exception CardRuntimeException_exc of Object pointer
+
 parameter CardRuntimeException_getReason :
  this_62:Object pointer -> { } short reads Object_alloc_table { true }
 
@@ -7162,6 +7148,10 @@ parameter Card_process_requires :
    reads APDU_buffer,Object_alloc_table,byteM_byteP
    { (JC_176: buffer_inv(apdu_0, Object_alloc_table, APDU_buffer)) }
 
+exception Exception_exc of Object pointer
+
+exception ISOException_exc of Object pointer
+
 parameter ISOException_getReason :
  this_64:Object pointer -> { } short reads Object_alloc_table { true }
 
@@ -7182,6 +7172,10 @@ parameter ISOException_throwIt : sw_0:short -> { } unit { true }
 
 parameter ISOException_throwIt_requires : sw_0:short -> { } unit { true }
 
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
 parameter Object_equals :
  this_17:Object pointer ->
   obj:Object pointer -> { } bool reads Object_alloc_table { true }
@@ -7190,329 +7184,11 @@ parameter Object_equals_requires :
  this_17:Object pointer ->
   obj:Object pointer -> { } bool reads Object_alloc_table { true }
 
-parameter alloc_bitvector_struct_AID :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_AID(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
-parameter alloc_bitvector_struct_AID_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_AID(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception RuntimeException_exc of Object pointer
 
-parameter alloc_bitvector_struct_APDU :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_APDU(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_APDU_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_APDU(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Applet :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Applet(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Applet_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Applet(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Card :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Card(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_CardRuntimeException :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_CardRuntimeException(result, (0),
-      sub_int(n, (1)), bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_CardRuntimeException_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_CardRuntimeException(result, (0),
-      sub_int(n, (1)), bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Card_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Card(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Exception :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Exception_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_ISOException :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_ISOException(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_ISOException_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_ISOException(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_JCSystem :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_JCSystem(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_JCSystem_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_JCSystem(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_NativeMethods :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_NativeMethods(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_NativeMethods_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_NativeMethods(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_OwnerPIN :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_OwnerPIN(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_OwnerPIN_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_OwnerPIN(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_PackedBoolean :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_PackedBoolean(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_PackedBoolean_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_PackedBoolean(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_PrivAccess :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_PrivAccess(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_PrivAccess_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_PrivAccess(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_RuntimeException :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_RuntimeException(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_RuntimeException_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_RuntimeException(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_byteM :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_byteM(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_byteM_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_byteM(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_shortM :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_shortM(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_shortM_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_shortM(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Throwable_exc of Object pointer
 
 parameter alloc_struct_AID :
  n:int ->
@@ -8037,7 +7713,7 @@ parameter java_array_length_byteM :
   { (JC_17:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
-        and eq_int(result, add_int(offset_max(Object_alloc_table, x_4), (1)))))) }
+        and (result = add_int(offset_max(Object_alloc_table, x_4), (1)))))) }
 
 parameter java_array_length_byteM_requires :
  x_4:Object pointer ->
@@ -8045,7 +7721,7 @@ parameter java_array_length_byteM_requires :
   { (JC_17:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
-        and eq_int(result, add_int(offset_max(Object_alloc_table, x_4), (1)))))) }
+        and (result = add_int(offset_max(Object_alloc_table, x_4), (1)))))) }
 
 parameter java_array_length_shortM :
  x_6:Object pointer ->
@@ -8053,7 +7729,7 @@ parameter java_array_length_shortM :
   { (JC_37:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
-        and eq_int(result, add_int(offset_max(Object_alloc_table, x_6), (1)))))) }
+        and (result = add_int(offset_max(Object_alloc_table, x_6), (1)))))) }
 
 parameter java_array_length_shortM_requires :
  x_6:Object pointer ->
@@ -8061,7 +7737,7 @@ parameter java_array_length_shortM_requires :
   { (JC_37:
     (le_int(result, (2147483647))
     and (ge_int(result, (0))
-        and eq_int(result, add_int(offset_max(Object_alloc_table, x_6), (1)))))) }
+        and (result = add_int(offset_max(Object_alloc_table, x_6), (1)))))) }
 
 parameter long_of_integer_ :
  x:int ->
@@ -8072,14 +7748,14 @@ parameter non_null_Object :
  x_7:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_50:
-    (if result then eq_int(offset_max(Object_alloc_table, x_7), (0))
+    (if result then (offset_max(Object_alloc_table, x_7) = (0))
      else (x_7 = null))) }
 
 parameter non_null_Object_requires :
  x_7:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_50:
-    (if result then eq_int(offset_max(Object_alloc_table, x_7), (0))
+    (if result then (offset_max(Object_alloc_table, x_7) = (0))
      else (x_7 = null))) }
 
 parameter non_null_byteM :
@@ -8221,7 +7897,7 @@ let Card_process_ensures_default =
      ((safe_acc_ !byteM_byteP) ((shift buf) (integer_of_byte ISO7816_OFFSET_INS)))) in
      try
       (if ((eq_int_ (integer_of_byte jessie_<num>)) (integer_of_byte Card_Card_Ins_Read))
-      then (let jessie_<num> = (raise (Loop_exit_exc void)) in void)
+      then (raise (Loop_exit_exc void))
       else
        (if true
        then
@@ -8265,7 +7941,7 @@ let Card_process_safety =
      ((((lsafe_lbound_acc_ !Object_alloc_table) !byteM_byteP) buf) (1)))) in
      try
       (if ((eq_int_ (integer_of_byte jessie_<num>)) (integer_of_byte Card_Card_Ins_Read))
-      then (let jessie_<num> = (raise (Loop_exit_exc void)) in void)
+      then (raise (Loop_exit_exc void))
       else
        (if true
        then
@@ -8504,15 +8180,15 @@ why --project [...] why/SimpleApplet.why
 <project name="SimpleApplet" context="why/SimpleApplet_ctx.why">
   <function name="Method process">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/SimpleApplet_po10.why">
+    <behavior name="default behavior">
+    <goal why_file="why/SimpleApplet_po9.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/SimpleApplet_po9.why">
+    <behavior name="Safety">
+    <goal why_file="why/SimpleApplet_po10.why">
       <location file = "" line = "0" begin = "0" end = "0"/>
       <explain kind = "Other"
 text = "unexplained assertion"/>
@@ -8528,36 +8204,36 @@ text = "unexplained assertion"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/SimpleApplet_po2.why">
-      <location file = "why/SimpleApplet.why" line = "2440" begin = "15" end = "69"/>
+      <location file = "why/SimpleApplet.why" line = "2067" begin = "15" end = "69"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/SimpleApplet_po3.why">
-      <location file = "HOME/tests/java/SimpleApplet.java" line = "55" begin = "38" end = "49"/>
+      <location file = "HOME/tests/java/SimpleApplet.java" line = "86" begin = "38" end = "49"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/SimpleApplet_po4.why">
-      <location file = "HOME/tests/java/SimpleApplet.java" line = "55" begin = "38" end = "49"/>
+      <location file = "HOME/tests/java/SimpleApplet.java" line = "86" begin = "38" end = "49"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/SimpleApplet_po5.why">
-      <location file = "HOME/tests/java/SimpleApplet.java" line = "55" begin = "29" end = "50"/>
+      <location file = "HOME/tests/java/SimpleApplet.java" line = "86" begin = "29" end = "50"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/SimpleApplet_po6.why">
-      <location file = "HOME/tests/java/SimpleApplet.java" line = "55" begin = "29" end = "50"/>
+      <location file = "HOME/tests/java/SimpleApplet.java" line = "86" begin = "29" end = "50"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/SimpleApplet_po7.why">
-      <location file = "HOME/tests/java/SimpleApplet.java" line = "55" begin = "52" end = "67"/>
+      <location file = "HOME/tests/java/SimpleApplet.java" line = "86" begin = "52" end = "67"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/SimpleApplet_po8.why">
-      <location file = "HOME/tests/java/SimpleApplet.java" line = "55" begin = "52" end = "67"/>
+      <location file = "HOME/tests/java/SimpleApplet.java" line = "86" begin = "52" end = "67"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -9775,6 +9451,10 @@ axiom byte_coerce:
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_byte(byte_of_integer(x)) = x)))
 
+axiom byte_extensionality:
+  (forall x:byte.
+    (forall y:byte. ((integer_of_byte(x) = integer_of_byte(y)) -> (x = y))))
+
 axiom byte_range:
   (forall x:byte.
     (((-128) <= integer_of_byte(x)) and (integer_of_byte(x) <= 127)))
@@ -9786,6 +9466,10 @@ logic char_of_integer : int -> char
 axiom char_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 65535)) -> (integer_of_char(char_of_integer(x)) = x)))
+
+axiom char_extensionality:
+  (forall x:char.
+    (forall y:char. ((integer_of_char(x) = integer_of_char(y)) -> (x = y))))
 
 axiom char_range:
   (forall x:char.
@@ -9818,6 +9502,11 @@ axiom int32_coerce:
   (forall x:int.
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
+
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range:
   (forall x:int32.
@@ -9920,6 +9609,10 @@ axiom long_coerce:
     ((((-9223372036854775808) <= x) and (x <= 9223372036854775807)) ->
      (integer_of_long(long_of_integer(x)) = x)))
 
+axiom long_extensionality:
+  (forall x:long.
+    (forall y:long. ((integer_of_long(x) = integer_of_long(y)) -> (x = y))))
+
 axiom long_range:
   (forall x:long.
     (((-9223372036854775808) <= integer_of_long(x)) and
@@ -10014,6 +9707,11 @@ axiom short_coerce:
     ((((-32768) <= x) and (x <= 32767)) ->
      (integer_of_short(short_of_integer(x)) = x)))
 
+axiom short_extensionality:
+  (forall x:short.
+    (forall y:short.
+      ((integer_of_short(x) = integer_of_short(y)) -> (x = y))))
+
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
@@ -10102,80 +9800,6 @@ predicate strict_valid_struct_shortM(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
   b, Object_alloc_table)
 
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_AID(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_APDU(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Applet(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Card(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Applet(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_Throwable(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_RuntimeException(p: unit pointer, a: int,
-  b: int, bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_Exception(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_CardRuntimeException(p: unit pointer,
-  a: int, b: int, bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_RuntimeException(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_ISOException(p: unit pointer, a: int,
-  b: int, bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_CardRuntimeException(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_JCSystem(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_NativeMethods(p: unit pointer, a: int,
-  b: int, bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_OwnerPIN(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_PackedBoolean(p: unit pointer, a: int,
-  b: int, bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_PrivAccess(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_byteM(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_shortM(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
   ((offset_min(Object_alloc_table, p) <= a) and
@@ -10259,6 +9883,13 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
 predicate valid_struct_shortM(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = valid_struct_Object(p, a, b,
   Object_alloc_table)
+
+========== file tests/java/why/SimpleApplet_po1.why ==========
+goal Card_install_safety_po_1:
+  forall bArray_1:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  left_valid_struct_byteM(bArray_1, 0, Object_alloc_table) ->
+  (1 >= 0)
 
 ========== file tests/java/why/SimpleApplet_po10.why ==========
 goal Card_process_safety_po_1:
@@ -10377,13 +10008,6 @@ goal cons_APDU_safety_po_1:
   (APDU_noGetResponseFlag0 = store(APDU_noGetResponseFlag, this_68,
   result5)) ->
   ("JC_442": buffer_inv(this_68, Object_alloc_table, APDU_buffer0))
-
-========== file tests/java/why/SimpleApplet_po1.why ==========
-goal Card_install_safety_po_1:
-  forall bArray_1:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  left_valid_struct_byteM(bArray_1, 0, Object_alloc_table) ->
-  (1 >= 0)
 
 ========== file tests/java/why/SimpleApplet_po2.why ==========
 goal Card_install_safety_po_2:
@@ -11702,6 +11326,11 @@ why -simplify [...] why/SimpleApplet.why
  (EQ (integer_of_byte (byte_of_integer x)) x))))
 
 (BG_PUSH
+ ;; Why axiom byte_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_byte x) (integer_of_byte y)) (EQ x y))))
+
+(BG_PUSH
  ;; Why axiom byte_range
  (FORALL (x)
  (AND (<= (- 0 128) (integer_of_byte x)) (<= (integer_of_byte x) 127))))
@@ -11711,6 +11340,11 @@ why -simplify [...] why/SimpleApplet.why
  (FORALL (x)
  (IMPLIES (AND (<= 0 x) (<= x 65535))
  (EQ (integer_of_char (char_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom char_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_char x) (integer_of_char y)) (EQ x y))))
 
 (BG_PUSH
  ;; Why axiom char_range
@@ -11733,6 +11367,11 @@ why -simplify [...] why/SimpleApplet.why
  (AND (<= (- 0 constant_too_large_2147483648) x)
  (<= x constant_too_large_2147483647))
  (EQ (integer_of_int32 (int32_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom int32_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_int32 x) (integer_of_int32 y)) (EQ x y))))
 
 (BG_PUSH
  ;; Why axiom int32_range
@@ -11820,6 +11459,11 @@ why -simplify [...] why/SimpleApplet.why
  (EQ (integer_of_long (long_of_integer x)) x))))
 
 (BG_PUSH
+ ;; Why axiom long_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_long x) (integer_of_long y)) (EQ x y))))
+
+(BG_PUSH
  ;; Why axiom long_range
  (FORALL (x)
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
@@ -11898,6 +11542,11 @@ why -simplify [...] why/SimpleApplet.why
  (EQ (integer_of_short (short_of_integer x)) x))))
 
 (BG_PUSH
+ ;; Why axiom short_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_short x) (integer_of_short y)) (EQ x y))))
+
+(BG_PUSH
  ;; Why axiom short_range
  (FORALL (x)
  (AND (<= (- 0 32768) (integer_of_short x)) (<= (integer_of_short x) 32767))))
@@ -11965,62 +11614,6 @@ why -simplify [...] why/SimpleApplet.why
 
 (DEFPRED (strict_valid_struct_shortM p a b Object_alloc_table)
   (strict_valid_struct_Object p a b Object_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_AID p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_APDU p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Applet p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Card p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Applet p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Throwable p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Exception p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Throwable p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_RuntimeException p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Exception p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_CardRuntimeException p a b bitvector_alloc_table)
-  (valid_bitvector_struct_RuntimeException p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_ISOException p a b bitvector_alloc_table)
-  (valid_bitvector_struct_CardRuntimeException p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_JCSystem p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_NativeMethods p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_OwnerPIN p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_PackedBoolean p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_PrivAccess p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_byteM p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_interface p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_shortM p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
 
 (DEFPRED (valid_root_Object p a b Object_alloc_table)
   (AND (<= (offset_min Object_alloc_table p) a)
@@ -12091,7 +11684,7 @@ why -simplify [...] why/SimpleApplet.why
 (FORALL (Object_alloc_table)
 (IMPLIES (left_valid_struct_byteM bArray_1 0 Object_alloc_table) (>= 1 0))))
 
-;; Card_install_safety_po_2, File "why/SimpleApplet.why", line 2440, characters 15-69
+;; Card_install_safety_po_2, File "why/SimpleApplet.why", line 2067, characters 15-69
 (FORALL (bArray_1)
 (FORALL (Object_alloc_table)
 (IMPLIES (left_valid_struct_byteM bArray_1 0 Object_alloc_table)
@@ -12106,7 +11699,7 @@ why -simplify [...] why/SimpleApplet.why
          (instanceof Object_tag_table result Card_tag))))
 (>= (offset_max Object_alloc_table0 result) 0)))))))))
 
-;; Card_install_safety_po_3, File "HOME/tests/java/SimpleApplet.java", line 55, characters 38-49
+;; Card_install_safety_po_3, File "HOME/tests/java/SimpleApplet.java", line 86, characters 38-49
 (FORALL (bArray_1)
 (FORALL (bOffset_1)
 (FORALL (Object_alloc_table)
@@ -12123,7 +11716,7 @@ why -simplify [...] why/SimpleApplet.why
 (IMPLIES (>= (offset_max Object_alloc_table0 result) 0)
 (<= (- 0 constant_too_large_2147483648) (+ (integer_of_short bOffset_1) 1))))))))))))
 
-;; Card_install_safety_po_4, File "HOME/tests/java/SimpleApplet.java", line 55, characters 38-49
+;; Card_install_safety_po_4, File "HOME/tests/java/SimpleApplet.java", line 86, characters 38-49
 (FORALL (bArray_1)
 (FORALL (bOffset_1)
 (FORALL (Object_alloc_table)
@@ -12140,7 +11733,7 @@ why -simplify [...] why/SimpleApplet.why
 (IMPLIES (>= (offset_max Object_alloc_table0 result) 0)
 (<= (+ (integer_of_short bOffset_1) 1) constant_too_large_2147483647)))))))))))
 
-;; Card_install_safety_po_5, File "HOME/tests/java/SimpleApplet.java", line 55, characters 29-50
+;; Card_install_safety_po_5, File "HOME/tests/java/SimpleApplet.java", line 86, characters 29-50
 (FORALL (bArray_1)
 (FORALL (bOffset_1)
 (FORALL (Object_alloc_table)
@@ -12163,7 +11756,7 @@ why -simplify [...] why/SimpleApplet.why
 (IMPLIES (EQ (integer_of_int32 result0) (+ (integer_of_short bOffset_1) 1))
 (<= (- 0 32768) (integer_of_int32 result0)))))))))))))))
 
-;; Card_install_safety_po_6, File "HOME/tests/java/SimpleApplet.java", line 55, characters 29-50
+;; Card_install_safety_po_6, File "HOME/tests/java/SimpleApplet.java", line 86, characters 29-50
 (FORALL (bArray_1)
 (FORALL (bOffset_1)
 (FORALL (Object_alloc_table)
@@ -12186,7 +11779,7 @@ why -simplify [...] why/SimpleApplet.why
 (IMPLIES (EQ (integer_of_int32 result0) (+ (integer_of_short bOffset_1) 1))
 (<= (integer_of_int32 result0) 32767))))))))))))))
 
-;; Card_install_safety_po_7, File "HOME/tests/java/SimpleApplet.java", line 55, characters 52-67
+;; Card_install_safety_po_7, File "HOME/tests/java/SimpleApplet.java", line 86, characters 52-67
 (FORALL (bArray_1)
 (FORALL (bOffset_1)
 (FORALL (Object_alloc_table)
@@ -12213,7 +11806,7 @@ why -simplify [...] why/SimpleApplet.why
 (IMPLIES (EQ (integer_of_short result1) (integer_of_int32 result0))
 (<= (offset_min Object_alloc_table0 bArray_1) (integer_of_short bOffset_1))))))))))))))))))
 
-;; Card_install_safety_po_8, File "HOME/tests/java/SimpleApplet.java", line 55, characters 52-67
+;; Card_install_safety_po_8, File "HOME/tests/java/SimpleApplet.java", line 86, characters 52-67
 (FORALL (bArray_1)
 (FORALL (bOffset_1)
 (FORALL (Object_alloc_table)
@@ -13627,6 +13220,10 @@ axiom byte_coerce:
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_byte(byte_of_integer(x)) = x)))
 
+axiom byte_extensionality:
+  (forall x:byte.
+    (forall y:byte. ((integer_of_byte(x) = integer_of_byte(y)) -> (x = y))))
+
 axiom byte_range:
   (forall x:byte.
     (((-128) <= integer_of_byte(x)) and (integer_of_byte(x) <= 127)))
@@ -13638,6 +13235,10 @@ logic char_of_integer : int -> char
 axiom char_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 65535)) -> (integer_of_char(char_of_integer(x)) = x)))
+
+axiom char_extensionality:
+  (forall x:char.
+    (forall y:char. ((integer_of_char(x) = integer_of_char(y)) -> (x = y))))
 
 axiom char_range:
   (forall x:char.
@@ -13670,6 +13271,11 @@ axiom int32_coerce:
   (forall x:int.
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
+
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range:
   (forall x:int32.
@@ -13772,6 +13378,10 @@ axiom long_coerce:
     ((((-9223372036854775808) <= x) and (x <= 9223372036854775807)) ->
      (integer_of_long(long_of_integer(x)) = x)))
 
+axiom long_extensionality:
+  (forall x:long.
+    (forall y:long. ((integer_of_long(x) = integer_of_long(y)) -> (x = y))))
+
 axiom long_range:
   (forall x:long.
     (((-9223372036854775808) <= integer_of_long(x)) and
@@ -13866,6 +13476,11 @@ axiom short_coerce:
     ((((-32768) <= x) and (x <= 32767)) ->
      (integer_of_short(short_of_integer(x)) = x)))
 
+axiom short_extensionality:
+  (forall x:short.
+    (forall y:short.
+      ((integer_of_short(x) = integer_of_short(y)) -> (x = y))))
+
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
@@ -13953,80 +13568,6 @@ predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
 predicate strict_valid_struct_shortM(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) = strict_valid_struct_Object(p, a,
   b, Object_alloc_table)
-
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_AID(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_APDU(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Applet(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Card(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Applet(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_Throwable(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_RuntimeException(p: unit pointer, a: int,
-  b: int, bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_Exception(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_CardRuntimeException(p: unit pointer,
-  a: int, b: int, bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_RuntimeException(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_ISOException(p: unit pointer, a: int,
-  b: int, bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_CardRuntimeException(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_JCSystem(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_NativeMethods(p: unit pointer, a: int,
-  b: int, bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_OwnerPIN(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_PackedBoolean(p: unit pointer, a: int,
-  b: int, bitvector_alloc_table: unit alloc_table) =
-  valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_PrivAccess(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_byteM(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_shortM(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =

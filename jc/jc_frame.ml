@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -1396,7 +1396,7 @@ struct
 
   let rec term_extract_application acc e =
     match e with
-      | LConst _ | LVar _ | LVarAtLabel _ -> acc
+      | LConst _ | LVar _ | LDeref _ | LDerefAtLabel _ -> acc
       | Tnamed (_,t) -> term_extract_application acc t
       | LApp (s,lt) -> (trad_app s lt)::
           (List.fold_left term_extract_application acc lt)
@@ -1443,7 +1443,7 @@ struct
         (interp s lt) lt
       | LVar _ -> LFalse
       | Tnamed (_,t) -> term_interp_or interp t
-      | LVarAtLabel _ -> 
+      | LDerefAtLabel _ -> 
         failwith "Not implemented, how to do that? Show me the example!!! thx"
       | _ -> failwith "Not implemented"
 
@@ -1458,7 +1458,7 @@ struct
         (interp s lt) lt
       | LVar _ -> LTrue
       | Tnamed (_,t) -> term_interp_and interp t
-      | LVarAtLabel _ -> 
+      | LDerefAtLabel _ -> 
         failwith "Not implemented, how to do that? Show me the example!!! thx"
       | _ -> failwith "Not implemented"
 

@@ -1,4 +1,35 @@
 ========== file tests/java/Literals.java ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
+
 class Literals {
 
     public static final int x = 0xbad;
@@ -11,6 +42,15 @@ class Literals {
     }
 
 }
+
+
+/*
+Local Variables:
+compile-command: "make Literals.why3ml"
+End:
+*/
+
+
 ========== krakatoa execution ==========
 Parsing OK.
 Typing OK.
@@ -97,7 +137,7 @@ End:
 [Literals_f]
 name = "Method f"
 file = "HOME/tests/java/Literals.java"
-line = 7
+line = 38
 begin = 8
 end = 9
 
@@ -110,13 +150,13 @@ end = -1
 
 [K_1]
 file = "HOME/tests/java/Literals.java"
-line = 5
+line = 36
 begin = 16
 end = 30
 
 [K_2]
 file = "HOME/tests/java/Literals.java"
-line = 8
+line = 39
 begin = 9
 end = 14
 
@@ -138,10 +178,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Liter
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Literals.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/Literals_why.sx
 
@@ -201,6 +242,13 @@ simplify: simplify/Literals_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/Literals_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/Literals_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -274,6 +322,9 @@ why/%_why3.why: why/%.why
 why3ide: why/Literals_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: Literals.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include Literals.depend
 
 depend: coq/Literals_why.v
@@ -335,7 +386,7 @@ end = -1
 
 [cons_Literals_ensures_default]
 name = "Constructor of class Literals"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/"
 line = 0
 begin = -1
@@ -355,9 +406,9 @@ end = 23
 
 [Literals_f_ensures_default]
 name = "Method f"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/Literals.java"
-line = 7
+line = 38
 begin = 8
 end = 9
 
@@ -389,7 +440,7 @@ end = -1
 name = "Method f"
 behavior = "Safety"
 file = "HOME/tests/java/Literals.java"
-line = 7
+line = 38
 begin = 8
 end = 9
 
@@ -425,7 +476,7 @@ end = 65
 
 [JC_19]
 file = "HOME/tests/java/Literals.java"
-line = 7
+line = 38
 begin = 8
 end = 9
 
@@ -437,7 +488,7 @@ end = -1
 
 [JC_21]
 file = "HOME/tests/java/Literals.java"
-line = 7
+line = 38
 begin = 8
 end = 9
 
@@ -449,13 +500,13 @@ end = -1
 
 [JC_23]
 file = "HOME/tests/java/Literals.java"
-line = 5
+line = 36
 begin = 16
 end = 30
 
 [JC_24]
 file = "HOME/tests/java/Literals.java"
-line = 5
+line = 36
 begin = 16
 end = 30
 
@@ -534,8 +585,6 @@ type long
 
 type short
 
-exception Exception_exc of Object pointer
-
 logic Exception_tag:  -> Object tag_id
 
 logic Object_tag:  -> Object tag_id
@@ -550,13 +599,9 @@ logic int32_of_integer: int -> int32
 
 function Literals_x() : int32 = int32_of_integer((2989))
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
 predicate Non_null_Object(x_0:Object pointer,
  Object_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_alloc_table, x_0), (0))
+ (offset_max(Object_alloc_table, x_0) = (0))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
@@ -573,13 +618,9 @@ axiom Object_tags :
   (forall Object_tag_table:Object tag_table.
    instanceof(Object_tag_table, x, Object_tag)))
 
-exception Return_label_exc of unit
-
 logic String_tag:  -> Object tag_id
 
 axiom String_parenttag_Object : parenttag(String_tag, Object_tag)
-
-exception Throwable_exc of Object pointer
 
 logic Throwable_tag:  -> Object tag_id
 
@@ -594,6 +635,11 @@ axiom byte_coerce :
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_byte(byte_of_integer(x)), x)))
 
+axiom byte_extensionality :
+ (forall x:byte.
+  (forall y:byte.
+   (eq_int(integer_of_byte(x), integer_of_byte(y)) -> (x = y))))
+
 axiom byte_range :
  (forall x:byte.
   (le_int((-128), integer_of_byte(x)) and le_int(integer_of_byte(x), (127))))
@@ -606,6 +652,11 @@ axiom char_coerce :
  (forall x:int.
   ((le_int((0), x) and le_int(x, (65535))) ->
    eq_int(integer_of_char(char_of_integer(x)), x)))
+
+axiom char_extensionality :
+ (forall x:char.
+  (forall y:char.
+   (eq_int(integer_of_char(x), integer_of_char(y)) -> (x = y))))
 
 axiom char_range :
  (forall x:char.
@@ -636,6 +687,11 @@ axiom int32_coerce :
  (forall x:int.
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
+
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range :
  (forall x:int32.
@@ -690,6 +746,11 @@ axiom long_coerce :
   ((le_int((-9223372036854775808), x) and le_int(x, (9223372036854775807))) ->
    eq_int(integer_of_long(long_of_integer(x)), x)))
 
+axiom long_extensionality :
+ (forall x:long.
+  (forall y:long.
+   (eq_int(integer_of_long(x), integer_of_long(y)) -> (x = y))))
+
 axiom long_range :
  (forall x:long.
   (le_int((-9223372036854775808), integer_of_long(x))
@@ -733,6 +794,11 @@ axiom short_coerce :
   ((le_int((-32768), x) and le_int(x, (32767))) ->
    eq_int(integer_of_short(short_of_integer(x)), x)))
 
+axiom short_extensionality :
+ (forall x:short.
+  (forall y:short.
+   (eq_int(integer_of_short(x), integer_of_short(y)) -> (x = y))))
+
 axiom short_range :
  (forall x:short.
   (le_int((-32768), integer_of_short(x))
@@ -774,32 +840,6 @@ predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Literals(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
@@ -836,127 +876,29 @@ predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
+exception Exception_exc of Object pointer
+
 parameter Object_alloc_table : Object alloc_table ref
 
 parameter Literals_f :
  this_0:Object pointer ->
   { } int32 reads Object_alloc_table
-  { (JC_24: eq_int(integer_of_int32(result), (13))) }
+  { (JC_24: (integer_of_int32(result) = (13))) }
 
 parameter Literals_f_requires :
  this_0:Object pointer ->
   { } int32 reads Object_alloc_table
-  { (JC_24: eq_int(integer_of_int32(result), (13))) }
+  { (JC_24: (integer_of_int32(result) = (13))) }
+
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
 
 parameter Object_tag_table : Object tag_table ref
 
-parameter alloc_bitvector_struct_Exception :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
-parameter alloc_bitvector_struct_Exception_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Literals :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Literals(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Literals_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Literals(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_String :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_String_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Throwable_exc of Object pointer
 
 parameter alloc_struct_Exception :
  n:int ->
@@ -1144,14 +1086,14 @@ parameter non_null_Object :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_18:
-    (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
+    (if result then (offset_max(Object_alloc_table, x_1) = (0))
      else (x_1 = null))) }
 
 parameter non_null_Object_requires :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_18:
-    (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
+    (if result then (offset_max(Object_alloc_table, x_1) = (0))
      else (x_1 = null))) }
 
 parameter safe_byte_of_integer_ :
@@ -1184,7 +1126,7 @@ let Literals_f_ensures_default =
      (let x_2 = (safe_int32_of_integer_ (K_2: (2989))) in
      begin   (return := (safe_int32_of_integer_ (13))); (raise Return) end);
     absurd  end with Return -> !return end))
-  { (JC_23: eq_int(integer_of_int32(result), (13))) }
+  { (JC_23: (integer_of_int32(result) = (13))) }
 
 let Literals_f_safety =
  fun (this_0 : Object pointer) ->
@@ -1216,9 +1158,9 @@ why --project [...] why/Literals.why
 <project name="Literals" context="why/Literals_ctx.why">
   <function name="Method f">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/Literals_po1.why">
-      <location file = "HOME/tests/java/Literals.java" line = "5" begin = "16" end = "30"/>
+      <location file = "HOME/tests/java/Literals.java" line = "36" begin = "16" end = "30"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -2221,6 +2163,10 @@ axiom byte_coerce:
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_byte(byte_of_integer(x)) = x)))
 
+axiom byte_extensionality:
+  (forall x:byte.
+    (forall y:byte. ((integer_of_byte(x) = integer_of_byte(y)) -> (x = y))))
+
 axiom byte_range:
   (forall x:byte.
     (((-128) <= integer_of_byte(x)) and (integer_of_byte(x) <= 127)))
@@ -2232,6 +2178,10 @@ logic char_of_integer : int -> char
 axiom char_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 65535)) -> (integer_of_char(char_of_integer(x)) = x)))
+
+axiom char_extensionality:
+  (forall x:char.
+    (forall y:char. ((integer_of_char(x) = integer_of_char(y)) -> (x = y))))
 
 axiom char_range:
   (forall x:char.
@@ -2262,6 +2212,11 @@ axiom int32_coerce:
   (forall x:int.
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
+
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range:
   (forall x:int32.
@@ -2316,6 +2271,10 @@ axiom long_coerce:
     ((((-9223372036854775808) <= x) and (x <= 9223372036854775807)) ->
      (integer_of_long(long_of_integer(x)) = x)))
 
+axiom long_extensionality:
+  (forall x:long.
+    (forall y:long. ((integer_of_long(x) = integer_of_long(y)) -> (x = y))))
+
 axiom long_range:
   (forall x:long.
     (((-9223372036854775808) <= integer_of_long(x)) and
@@ -2360,6 +2319,11 @@ axiom short_coerce:
     ((((-32768) <= x) and (x <= 32767)) ->
      (integer_of_short(short_of_integer(x)) = x)))
 
+axiom short_extensionality:
+  (forall x:short.
+    (forall y:short.
+      ((integer_of_short(x) = integer_of_short(y)) -> (x = y))))
+
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
@@ -2399,32 +2363,6 @@ predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Literals(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
@@ -3338,6 +3276,11 @@ why -simplify [...] why/Literals.why
  (EQ (integer_of_byte (byte_of_integer x)) x))))
 
 (BG_PUSH
+ ;; Why axiom byte_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_byte x) (integer_of_byte y)) (EQ x y))))
+
+(BG_PUSH
  ;; Why axiom byte_range
  (FORALL (x)
  (AND (<= (- 0 128) (integer_of_byte x)) (<= (integer_of_byte x) 127))))
@@ -3347,6 +3290,11 @@ why -simplify [...] why/Literals.why
  (FORALL (x)
  (IMPLIES (AND (<= 0 x) (<= x 65535))
  (EQ (integer_of_char (char_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom char_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_char x) (integer_of_char y)) (EQ x y))))
 
 (BG_PUSH
  ;; Why axiom char_range
@@ -3369,6 +3317,11 @@ why -simplify [...] why/Literals.why
  (AND (<= (- 0 constant_too_large_2147483648) x)
  (<= x constant_too_large_2147483647))
  (EQ (integer_of_int32 (int32_of_integer x)) x))))
+
+(BG_PUSH
+ ;; Why axiom int32_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_int32 x) (integer_of_int32 y)) (EQ x y))))
 
 (BG_PUSH
  ;; Why axiom int32_range
@@ -3420,6 +3373,11 @@ why -simplify [...] why/Literals.why
  (EQ (integer_of_long (long_of_integer x)) x))))
 
 (BG_PUSH
+ ;; Why axiom long_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_long x) (integer_of_long y)) (EQ x y))))
+
+(BG_PUSH
  ;; Why axiom long_range
  (FORALL (x)
  (AND (<= (- 0 constant_too_large_9223372036854775808) (integer_of_long x))
@@ -3458,6 +3416,11 @@ why -simplify [...] why/Literals.why
  (EQ (integer_of_short (short_of_integer x)) x))))
 
 (BG_PUSH
+ ;; Why axiom short_extensionality
+ (FORALL (x y)
+ (IMPLIES (EQ (integer_of_short x) (integer_of_short y)) (EQ x y))))
+
+(BG_PUSH
  ;; Why axiom short_range
  (FORALL (x)
  (AND (<= (- 0 32768) (integer_of_short x)) (<= (integer_of_short x) 32767))))
@@ -3490,26 +3453,6 @@ why -simplify [...] why/Literals.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-(DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_Exception p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Literals p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_String p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Throwable p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_interface p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
 (DEFPRED (valid_root_Object p a b Object_alloc_table)
   (AND (<= (offset_min Object_alloc_table p) a)
   (>= (offset_max Object_alloc_table p) b)))
@@ -3538,7 +3481,7 @@ why -simplify [...] why/Literals.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; Literals_f_ensures_default_po_1, File "HOME/tests/java/Literals.java", line 5, characters 16-30
+;; Literals_f_ensures_default_po_1, File "HOME/tests/java/Literals.java", line 36, characters 16-30
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Literals this_0 0 0 Object_alloc_table)
@@ -4555,6 +4498,10 @@ axiom byte_coerce:
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_byte(byte_of_integer(x)) = x)))
 
+axiom byte_extensionality:
+  (forall x:byte.
+    (forall y:byte. ((integer_of_byte(x) = integer_of_byte(y)) -> (x = y))))
+
 axiom byte_range:
   (forall x:byte.
     (((-128) <= integer_of_byte(x)) and (integer_of_byte(x) <= 127)))
@@ -4566,6 +4513,10 @@ logic char_of_integer : int -> char
 axiom char_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 65535)) -> (integer_of_char(char_of_integer(x)) = x)))
+
+axiom char_extensionality:
+  (forall x:char.
+    (forall y:char. ((integer_of_char(x) = integer_of_char(y)) -> (x = y))))
 
 axiom char_range:
   (forall x:char.
@@ -4596,6 +4547,11 @@ axiom int32_coerce:
   (forall x:int.
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
+
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range:
   (forall x:int32.
@@ -4650,6 +4606,10 @@ axiom long_coerce:
     ((((-9223372036854775808) <= x) and (x <= 9223372036854775807)) ->
      (integer_of_long(long_of_integer(x)) = x)))
 
+axiom long_extensionality:
+  (forall x:long.
+    (forall y:long. ((integer_of_long(x) = integer_of_long(y)) -> (x = y))))
+
 axiom long_range:
   (forall x:long.
     (((-9223372036854775808) <= integer_of_long(x)) and
@@ -4694,6 +4654,11 @@ axiom short_coerce:
     ((((-32768) <= x) and (x <= 32767)) ->
      (integer_of_short(short_of_integer(x)) = x)))
 
+axiom short_extensionality:
+  (forall x:short.
+    (forall y:short.
+      ((integer_of_short(x) = integer_of_short(y)) -> (x = y))))
+
 axiom short_range:
   (forall x:short.
     (((-32768) <= integer_of_short(x)) and (integer_of_short(x) <= 32767)))
@@ -4733,32 +4698,6 @@ predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Literals(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =

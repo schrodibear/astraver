@@ -82,12 +82,6 @@ type padding
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -121,6 +115,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -132,6 +131,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -181,16 +185,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -225,41 +219,11 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -320,48 +284,48 @@ parameter any_int8 : unit -> { } int8 { true }
 parameter double2int :
  f:double ->
   { } int32
-  { (((le_real(0.0, double_value(f@)) and lt_real(double_value(f@), 65535.0)) ->
+  { (((le_real(0.0, double_value(f)) and lt_real(double_value(f), 65535.0)) ->
       (JC_<somenum>:
       ((JC_<somenum>:
-       lt_real(sub_real(double_value(f@), 1.0),
+       lt_real(sub_real(double_value(f), 1.0),
        real_of_int(integer_of_int32(result))))
       and (JC_<somenum>:
-          le_real(real_of_int(integer_of_int32(result)), double_value(f@))))))
-    and (((lt_real(neg_real(65536.0), double_value(f@))
-          and lt_real(double_value(f@), 0.0)) ->
+          le_real(real_of_int(integer_of_int32(result)), double_value(f))))))
+    and (((lt_real(neg_real(65536.0), double_value(f))
+          and lt_real(double_value(f), 0.0)) ->
           (JC_<somenum>:
           ((JC_<somenum>:
-           le_real(double_value(f@), real_of_int(integer_of_int32(result))))
+           le_real(double_value(f), real_of_int(integer_of_int32(result))))
           and (JC_<somenum>:
               lt_real(real_of_int(integer_of_int32(result)),
-              add_real(double_value(f@), 1.0))))))
-        and ((ge_real(double_value(f@), 65535.0) ->
-              (JC_<somenum>: eq_int(integer_of_int32(result), (65535))))
-            and (le_real(double_value(f@), neg_real(65536.0)) ->
-                 (JC_<somenum>: eq_int(integer_of_int32(result), neg_int((65536)))))))) }
+              add_real(double_value(f), 1.0))))))
+        and ((ge_real(double_value(f), 65535.0) ->
+              (JC_<somenum>: (integer_of_int32(result) = (65535))))
+            and (le_real(double_value(f), neg_real(65536.0)) ->
+                 (JC_<somenum>: (integer_of_int32(result) = neg_int((65536)))))))) }
 
 parameter double2int_requires :
  f:double ->
   { } int32
-  { (((le_real(0.0, double_value(f@)) and lt_real(double_value(f@), 65535.0)) ->
+  { (((le_real(0.0, double_value(f)) and lt_real(double_value(f), 65535.0)) ->
       (JC_<somenum>:
       ((JC_<somenum>:
-       lt_real(sub_real(double_value(f@), 1.0),
+       lt_real(sub_real(double_value(f), 1.0),
        real_of_int(integer_of_int32(result))))
       and (JC_<somenum>:
-          le_real(real_of_int(integer_of_int32(result)), double_value(f@))))))
-    and (((lt_real(neg_real(65536.0), double_value(f@))
-          and lt_real(double_value(f@), 0.0)) ->
+          le_real(real_of_int(integer_of_int32(result)), double_value(f))))))
+    and (((lt_real(neg_real(65536.0), double_value(f))
+          and lt_real(double_value(f), 0.0)) ->
           (JC_<somenum>:
           ((JC_<somenum>:
-           le_real(double_value(f@), real_of_int(integer_of_int32(result))))
+           le_real(double_value(f), real_of_int(integer_of_int32(result))))
           and (JC_<somenum>:
               lt_real(real_of_int(integer_of_int32(result)),
-              add_real(double_value(f@), 1.0))))))
-        and ((ge_real(double_value(f@), 65535.0) ->
-              (JC_<somenum>: eq_int(integer_of_int32(result), (65535))))
-            and (le_real(double_value(f@), neg_real(65536.0)) ->
-                 (JC_<somenum>: eq_int(integer_of_int32(result), neg_int((65536)))))))) }
+              add_real(double_value(f), 1.0))))))
+        and ((ge_real(double_value(f), 65535.0) ->
+              (JC_<somenum>: (integer_of_int32(result) = (65535))))
+            and (le_real(double_value(f), neg_real(65536.0)) ->
+                 (JC_<somenum>: (integer_of_int32(result) = neg_int((65536)))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -380,10 +344,10 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 parameter test :
- tt:unit -> { } double { (JC_<somenum>: eq_real(double_value(result), 65536.0)) }
+ tt:unit -> { } double { (JC_<somenum>: (double_value(result) = 65536.0)) }
 
 parameter test_requires :
- tt:unit -> { } double { (JC_<somenum>: eq_real(double_value(result), 65536.0)) }
+ tt:unit -> { } double { (JC_<somenum>: (double_value(result) = 65536.0)) }
 
 let double2int_ensures_big =
  fun (f : double) ->
@@ -394,15 +358,15 @@ let double2int_ensures_big =
    begin
      (let i = ref (any_int32 void) in
      begin
-       (if ((le_double f) (C_9:
-                          (JC_<somenum>:
-                          (neg_double (double_of_real_exact 65536.0)))))
+       (let jessie_<somenum> =
+       (if ((le_double_ f) (C_9:
+                           (JC_<somenum>:
+                           (neg_double (double_of_real_exact 65536.0)))))
        then
-        (let jessie_<somenum> =
-        (C_8: (i := (safe_int32_of_integer_ (neg_int (65536))))) in void)
+        (C_8:
+        begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end)
        else
-        (let jessie_<somenum> =
-        (if ((ge_double f) (double_of_real_exact 65535.0))
+        (if ((ge_double_ f) (double_of_real_exact 65535.0))
         then (C_7: begin   (i := (safe_int32_of_integer_ (65535))); !i end)
         else
          (C_6:
@@ -411,9 +375,9 @@ let double2int_ensures_big =
                                          (let jessie_<somenum> =
                                          (C_4: (double_value f)) in
                                          (truncate_real_to_int jessie_<somenum>)))));
-          !i end)) in void)); (return := !i); (raise Return) end); absurd 
+          !i end))) in void); (return := !i); (raise Return) end); absurd 
    end with Return -> !return end))
-  { (JC_<somenum>: eq_int(integer_of_int32(result), (65535))) }
+  { (JC_<somenum>: (integer_of_int32(result) = (65535))) }
 
 let double2int_ensures_default =
  fun (f : double) ->
@@ -424,15 +388,15 @@ let double2int_ensures_default =
    begin
      (let i = ref (any_int32 void) in
      begin
-       (if ((le_double f) (C_9:
-                          (JC_<somenum>:
-                          (neg_double (double_of_real_exact 65536.0)))))
+       (let jessie_<somenum> =
+       (if ((le_double_ f) (C_9:
+                           (JC_<somenum>:
+                           (neg_double (double_of_real_exact 65536.0)))))
        then
-        (let jessie_<somenum> =
-        (C_8: (i := (safe_int32_of_integer_ (neg_int (65536))))) in void)
+        (C_8:
+        begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end)
        else
-        (let jessie_<somenum> =
-        (if ((ge_double f) (double_of_real_exact 65535.0))
+        (if ((ge_double_ f) (double_of_real_exact 65535.0))
         then (C_7: begin   (i := (safe_int32_of_integer_ (65535))); !i end)
         else
          (C_6:
@@ -441,7 +405,7 @@ let double2int_ensures_default =
                                          (let jessie_<somenum> =
                                          (C_4: (double_value f)) in
                                          (truncate_real_to_int jessie_<somenum>)))));
-          !i end)) in void)); (return := !i); (raise Return) end); absurd 
+          !i end))) in void); (return := !i); (raise Return) end); absurd 
    end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let double2int_ensures_negative_fits =
@@ -454,15 +418,15 @@ let double2int_ensures_negative_fits =
    begin
      (let i = ref (any_int32 void) in
      begin
-       (if ((le_double f) (C_9:
-                          (JC_<somenum>:
-                          (neg_double (double_of_real_exact 65536.0)))))
+       (let jessie_<somenum> =
+       (if ((le_double_ f) (C_9:
+                           (JC_<somenum>:
+                           (neg_double (double_of_real_exact 65536.0)))))
        then
-        (let jessie_<somenum> =
-        (C_8: (i := (safe_int32_of_integer_ (neg_int (65536))))) in void)
+        (C_8:
+        begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end)
        else
-        (let jessie_<somenum> =
-        (if ((ge_double f) (double_of_real_exact 65535.0))
+        (if ((ge_double_ f) (double_of_real_exact 65535.0))
         then (C_7: begin   (i := (safe_int32_of_integer_ (65535))); !i end)
         else
          (C_6:
@@ -471,14 +435,13 @@ let double2int_ensures_negative_fits =
                                          (let jessie_<somenum> =
                                          (C_4: (double_value f)) in
                                          (truncate_real_to_int jessie_<somenum>)))));
-          !i end)) in void)); (return := !i); (raise Return) end); absurd 
+          !i end))) in void); (return := !i); (raise Return) end); absurd 
    end with Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     le_real(double_value(f@), real_of_int(integer_of_int32(result))))
+    ((JC_<somenum>: le_real(double_value(f), real_of_int(integer_of_int32(result))))
     and (JC_<somenum>:
         lt_real(real_of_int(integer_of_int32(result)),
-        add_real(double_value(f@), 1.0))))) }
+        add_real(double_value(f), 1.0))))) }
 
 let double2int_ensures_positive_fits =
  fun (f : double) ->
@@ -489,15 +452,15 @@ let double2int_ensures_positive_fits =
    begin
      (let i = ref (any_int32 void) in
      begin
-       (if ((le_double f) (C_9:
-                          (JC_<somenum>:
-                          (neg_double (double_of_real_exact 65536.0)))))
+       (let jessie_<somenum> =
+       (if ((le_double_ f) (C_9:
+                           (JC_<somenum>:
+                           (neg_double (double_of_real_exact 65536.0)))))
        then
-        (let jessie_<somenum> =
-        (C_8: (i := (safe_int32_of_integer_ (neg_int (65536))))) in void)
+        (C_8:
+        begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end)
        else
-        (let jessie_<somenum> =
-        (if ((ge_double f) (double_of_real_exact 65535.0))
+        (if ((ge_double_ f) (double_of_real_exact 65535.0))
         then (C_7: begin   (i := (safe_int32_of_integer_ (65535))); !i end)
         else
          (C_6:
@@ -506,14 +469,14 @@ let double2int_ensures_positive_fits =
                                          (let jessie_<somenum> =
                                          (C_4: (double_value f)) in
                                          (truncate_real_to_int jessie_<somenum>)))));
-          !i end)) in void)); (return := !i); (raise Return) end); absurd 
+          !i end))) in void); (return := !i); (raise Return) end); absurd 
    end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>:
-     lt_real(sub_real(double_value(f@), 1.0),
+     lt_real(sub_real(double_value(f), 1.0),
      real_of_int(integer_of_int32(result))))
     and (JC_<somenum>:
-        le_real(real_of_int(integer_of_int32(result)), double_value(f@))))) }
+        le_real(real_of_int(integer_of_int32(result)), double_value(f))))) }
 
 let double2int_ensures_small =
  fun (f : double) ->
@@ -524,15 +487,15 @@ let double2int_ensures_small =
    begin
      (let i = ref (any_int32 void) in
      begin
-       (if ((le_double f) (C_9:
-                          (JC_<somenum>:
-                          (neg_double (double_of_real_exact 65536.0)))))
+       (let jessie_<somenum> =
+       (if ((le_double_ f) (C_9:
+                           (JC_<somenum>:
+                           (neg_double (double_of_real_exact 65536.0)))))
        then
-        (let jessie_<somenum> =
-        (C_8: (i := (safe_int32_of_integer_ (neg_int (65536))))) in void)
+        (C_8:
+        begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end)
        else
-        (let jessie_<somenum> =
-        (if ((ge_double f) (double_of_real_exact 65535.0))
+        (if ((ge_double_ f) (double_of_real_exact 65535.0))
         then (C_7: begin   (i := (safe_int32_of_integer_ (65535))); !i end)
         else
          (C_6:
@@ -541,9 +504,9 @@ let double2int_ensures_small =
                                          (let jessie_<somenum> =
                                          (C_4: (double_value f)) in
                                          (truncate_real_to_int jessie_<somenum>)))));
-          !i end)) in void)); (return := !i); (raise Return) end); absurd 
+          !i end))) in void); (return := !i); (raise Return) end); absurd 
    end with Return -> !return end))
-  { (JC_<somenum>: eq_int(integer_of_int32(result), neg_int((65536)))) }
+  { (JC_<somenum>: (integer_of_int32(result) = neg_int((65536)))) }
 
 let double2int_safety =
  fun (f : double) ->
@@ -554,15 +517,15 @@ let double2int_safety =
    begin
      (let i = ref (any_int32 void) in
      begin
-       (if ((le_double f) (C_9:
-                          (JC_<somenum>:
-                          (neg_double (double_of_real_exact 65536.0)))))
+       (let jessie_<somenum> =
+       (if ((le_double_ f) (C_9:
+                           (JC_<somenum>:
+                           (neg_double (double_of_real_exact 65536.0)))))
        then
-        (let jessie_<somenum> =
-        (C_8: (i := (safe_int32_of_integer_ (neg_int (65536))))) in void)
+        (C_8:
+        begin   (i := (safe_int32_of_integer_ (neg_int (65536)))); !i end)
        else
-        (let jessie_<somenum> =
-        (if ((ge_double f) (double_of_real_exact 65535.0))
+        (if ((ge_double_ f) (double_of_real_exact 65535.0))
         then (C_7: begin   (i := (safe_int32_of_integer_ (65535))); !i end)
         else
          (C_6:
@@ -572,7 +535,7 @@ let double2int_safety =
                                     (let jessie_<somenum> =
                                     (C_4: (double_value f)) in
                                     (truncate_real_to_int jessie_<somenum>)))))); !i
-         end)) in void)); (return := !i); (raise Return) end); absurd  end
+         end))) in void); (return := !i); (raise Return) end); absurd  end
    with Return -> !return end)) { true }
 
 let test_ensures_default =
@@ -587,7 +550,7 @@ let test_ensures_default =
      begin
        (let jessie_<somenum> = (__retres := (C_1: (double_of_real_exact 65536.0))) in
        void); (return := !__retres); (raise Return) end)); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: eq_real(double_value(result), 65536.0)) }
+   Return -> !return end)) { (JC_<somenum>: (double_value(result) = 65536.0)) }
 
 let test_safety =
  fun (tt : unit) ->
@@ -609,7 +572,7 @@ why --project [...] why/double2int.why
 <project name="double2int" context="why/double2int_ctx.why">
   <function name="Function test">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/double2int_po9.why">
       <location file = "PPCHOME/tests/jessie/double2int.c" line = "3" begin = "12" end = "30"/>
       <explain kind = "Post"/>
@@ -630,13 +593,13 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `small'">
+    <behavior name="Behavior `small'">
     <goal why_file="why/double2int_po6.why">
       <location file = "PPCHOME/tests/jessie/double2int.c" line = "12" begin = "12" end = "29"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `positive_fits'">
+    <behavior name="Behavior `positive_fits'">
     <goal why_file="why/double2int_po4.why">
       <location file = "PPCHOME/tests/jessie/double2int.c" line = "24" begin = "12" end = "25"/>
       <explain kind = "Post"/>
@@ -646,7 +609,7 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `negative_fits'">
+    <behavior name="Behavior `negative_fits'">
     <goal why_file="why/double2int_po2.why">
       <location file = "PPCHOME/tests/jessie/double2int.c" line = "20" begin = "12" end = "24"/>
       <explain kind = "Post"/>
@@ -656,7 +619,7 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `big'">
+    <behavior name="Behavior `big'">
     <goal why_file="why/double2int_po1.why">
       <location file = "PPCHOME/tests/jessie/double2int.c" line = "16" begin = "12" end = "28"/>
       <explain kind = "Post"/>
@@ -1720,21 +1683,20 @@ axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
 
 axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
 
-logic single_to_double : single -> double
+axiom single_value_is_bounded:
+  (forall x:single. (abs_real(single_value(x)) <= max_single))
 
-logic double_to_single : mode, double -> single
-
-axiom single_to_double_val:
-  (forall s:single. (double_value(single_to_double(s)) = single_value(s)))
-
-axiom double_to_single_val:
-  (forall m:mode.
-    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
-      double_value(d)))))
+axiom double_value_is_bounded:
+  (forall x:double. (abs_real(double_value(x)) <= max_double))
 
 predicate single_of_real_post(m: mode, x: real, res: single) =
   ((single_value(res) = round_single(m, x)) and
    ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate single_of_double_post(m: mode, x: double, res: single) =
+  ((single_value(res) = round_single(m, double_value(x))) and
+   ((single_exact(res) = double_exact(x)) and
+    (single_model(res) = double_model(x))))
 
 predicate add_single_post(m: mode, x: single, y: single, res: single) =
   ((single_value(res) = round_single(m,
@@ -1778,6 +1740,11 @@ predicate abs_single_post(x: single, res: single) =
 predicate double_of_real_post(m: mode, x: real, res: double) =
   ((double_value(res) = round_double(m, x)) and
    ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate double_of_single_post(x: single, res: double) =
+  ((double_value(res) = single_value(x)) and
+   ((double_exact(res) = single_exact(x)) and
+    (double_model(res) = single_model(x))))
 
 predicate add_double_post(m: mode, x: double, y: double, res: double) =
   ((double_value(res) = round_double(m,
@@ -1862,6 +1829,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -1873,6 +1845,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -1921,16 +1897,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

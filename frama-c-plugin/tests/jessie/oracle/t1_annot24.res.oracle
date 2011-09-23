@@ -483,10 +483,11 @@ predicate Buch_Arrays_Coherence(intP_intM_buch_CurTrans_tmp_4:(intP, int32) memo
  intP_intM_buch_CurTrans_2:(intP, int32) memory) =
  (forall _buch_i:int.
   ((le_int((0), _buch_i) and lt_int(_buch_i, (3))) ->
-   eq_int(integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                           shift(buch_CurTrans, _buch_i))),
-   integer_of_int32(select(intP_intM_buch_CurTrans_tmp_4,
-                    shift(buch_CurTrans_tmp, _buch_i))))))
+   (integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                     shift(buch_CurTrans, _buch_i))) = integer_of_int32(
+                                                       select(intP_intM_buch_CurTrans_tmp_4,
+                                                       shift(buch_CurTrans_tmp,
+                                                       _buch_i))))))
 
 logic integer_of_Buch_OpStatusList: Buch_OpStatusList -> int
 
@@ -496,6 +497,12 @@ axiom Buch_OpStatusList_coerce :
  (forall x:int.
   ((le_int((0), x) and le_int(x, (1))) ->
    eq_int(integer_of_Buch_OpStatusList(Buch_OpStatusList_of_integer(x)), x)))
+
+axiom Buch_OpStatusList_extensionality :
+ (forall x:Buch_OpStatusList.
+  (forall y:Buch_OpStatusList.
+   (eq_int(integer_of_Buch_OpStatusList(x), integer_of_Buch_OpStatusList(y)) ->
+    (x = y))))
 
 axiom Buch_OpStatusList_range :
  (forall x:Buch_OpStatusList.
@@ -541,12 +548,6 @@ predicate Buch_acc_Ranges_Validity(intP_buch_AcceptStates_5_alloc_table:intP all
             buch_AcceptStates),
      (1)))
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic buch_Trans_Stop: int -> int
 
 logic integer_of_buch_ListOper: buch_ListOper -> int
@@ -555,12 +556,10 @@ logic buch_ListOper_of_integer: int -> buch_ListOper
 
 predicate buch_Trans_Cond_param(_buch_numTrans:int, _buch_op:int,
  _buch_status:int, status_at_L:int32) =
- ((eq_int(_buch_numTrans, (0)) -> eq_int(integer_of_int32(status_at_L), (0)))
- and (eq_int(_buch_numTrans, (1)) ->
-      (eq_int(_buch_op,
-       integer_of_buch_ListOper(buch_ListOper_of_integer((2))))
-      and eq_int(_buch_status,
-          integer_of_Buch_OpStatusList(Buch_OpStatusList_of_integer((1)))))))
+ (((_buch_numTrans = (0)) -> (integer_of_int32(status_at_L) = (0)))
+ and ((_buch_numTrans = (1)) ->
+      ((_buch_op = integer_of_buch_ListOper(buch_ListOper_of_integer((2))))
+      and (_buch_status = integer_of_Buch_OpStatusList(Buch_OpStatusList_of_integer((1)))))))
 
 predicate buch_Trans_Cond(_buch_numTrans_0:int,
  buch_CurOpStatus_at_L:Buch_OpStatusList,
@@ -581,19 +580,16 @@ predicate _Buch_st_reach_1(intP_intM_buch_CurStates_old_3:(intP, int32) memory,
    and (lt_int(_buch_st, (2))
        and (forall _buch_tr:int.
             ((le_int((0), _buch_tr) and lt_int(_buch_tr, (3))) ->
-             (eq_int(integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                                      shift(buch_CurTrans, _buch_tr))),
-              (0))
-             or (neq_int(buch_Trans_Stop(_buch_tr), _buch_st)
+             ((integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                shift(buch_CurTrans, _buch_tr))) = (0))
+             or ((buch_Trans_Stop(_buch_tr) <> _buch_st)
                 or ((not buch_Trans_Cond(_buch_tr, buch_CurOpStatus,
                          buch_CurOperation, status))
-                   or eq_int(integer_of_int32(select(intP_intM_buch_CurStates_old_3,
-                                              shift(buch_CurStates_old,
-                                              buch_Trans_Start(_buch_tr)))),
-                      (0))))))))) ->
-   eq_int(integer_of_int32(select(intP_intM_buch_CurStates_1,
-                           shift(buch_CurStates, _buch_st))),
-   (0))))
+                   or (integer_of_int32(select(intP_intM_buch_CurStates_old_3,
+                                        shift(buch_CurStates_old,
+                                        buch_Trans_Start(_buch_tr)))) = (0))))))))) ->
+   (integer_of_int32(select(intP_intM_buch_CurStates_1,
+                     shift(buch_CurStates, _buch_st))) = (0))))
 
 predicate _Buch_st_reach_2(intP_intM_buch_CurStates_old_3:(intP, int32) memory,
  intP_intM_buch_CurTrans_2:(intP, int32) memory,
@@ -603,21 +599,18 @@ predicate _Buch_st_reach_2(intP_intM_buch_CurStates_old_3:(intP, int32) memory,
  (forall _buch_st_0:int.
   ((le_int((0), _buch_st_0)
    and (lt_int(_buch_st_0, (2))
-       and eq_int(integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                   shift(buch_CurStates, _buch_st_0))),
-           (0)))) ->
+       and (integer_of_int32(select(intP_intM_buch_CurStates_1,
+                             shift(buch_CurStates, _buch_st_0))) = (0)))) ->
    (forall _buch_tr_0:int.
     ((le_int((0), _buch_tr_0) and lt_int(_buch_tr_0, (3))) ->
-     (eq_int(integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, _buch_tr_0))),
-      (0))
-     or (neq_int(buch_Trans_Stop(_buch_tr_0), _buch_st_0)
+     ((integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                        shift(buch_CurTrans, _buch_tr_0))) = (0))
+     or ((buch_Trans_Stop(_buch_tr_0) <> _buch_st_0)
         or ((not buch_Trans_Cond(_buch_tr_0, buch_CurOpStatus,
                  buch_CurOperation, status))
-           or eq_int(integer_of_int32(select(intP_intM_buch_CurStates_old_3,
-                                      shift(buch_CurStates_old,
-                                      buch_Trans_Start(_buch_tr_0)))),
-              (0)))))))))
+           or (integer_of_int32(select(intP_intM_buch_CurStates_old_3,
+                                shift(buch_CurStates_old,
+                                buch_Trans_Start(_buch_tr_0)))) = (0)))))))))
 
 predicate _Buch_st_reach_3(intP_intM_buch_CurStates_old_3:(intP, int32) memory,
  intP_intM_buch_CurTrans_2:(intP, int32) memory,
@@ -627,22 +620,19 @@ predicate _Buch_st_reach_3(intP_intM_buch_CurStates_old_3:(intP, int32) memory,
  (forall _buch_st_1:int.
   ((le_int((0), _buch_st_1)
    and (lt_int(_buch_st_1, (2))
-       and neq_int(integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                    shift(buch_CurStates, _buch_st_1))),
-           (0)))) ->
+       and (integer_of_int32(select(intP_intM_buch_CurStates_1,
+                             shift(buch_CurStates, _buch_st_1))) <> (0)))) ->
    (exists _buch_tr_1:int.
     (le_int((0), _buch_tr_1)
     and (lt_int(_buch_tr_1, (3))
-        and (neq_int(integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                                      shift(buch_CurTrans, _buch_tr_1))),
-             (0))
+        and ((integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                               shift(buch_CurTrans, _buch_tr_1))) <> (0))
             and (buch_Trans_Cond(_buch_tr_1, buch_CurOpStatus,
                  buch_CurOperation, status)
-                and (eq_int(buch_Trans_Stop(_buch_tr_1), _buch_st_1)
-                    and neq_int(integer_of_int32(select(intP_intM_buch_CurStates_old_3,
-                                                 shift(buch_CurStates_old,
-                                                 buch_Trans_Start(_buch_tr_1)))),
-                        (0))))))))))
+                and ((buch_Trans_Stop(_buch_tr_1) = _buch_st_1)
+                    and (integer_of_int32(select(intP_intM_buch_CurStates_old_3,
+                                          shift(buch_CurStates_old,
+                                          buch_Trans_Start(_buch_tr_1)))) <> (0))))))))))
 
 predicate _Buch_tr_cross_1(intP_intM_buch_CurStates_old_3:(intP, int32) memory,
  intP_intM_buch_CurTrans_2:(intP, int32) memory,
@@ -652,18 +642,15 @@ predicate _Buch_tr_cross_1(intP_intM_buch_CurStates_old_3:(intP, int32) memory,
  (forall _buch_tr_2:int.
   ((le_int((0), _buch_tr_2)
    and (lt_int(_buch_tr_2, (3))
-       and neq_int(integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                                    shift(buch_CurTrans, _buch_tr_2))),
-           (0)))) ->
+       and (integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                             shift(buch_CurTrans, _buch_tr_2))) <> (0)))) ->
    (buch_Trans_Cond(_buch_tr_2, buch_CurOpStatus, buch_CurOperation, status)
-   and (neq_int(integer_of_int32(select(intP_intM_buch_CurStates_old_3,
-                                 shift(buch_CurStates_old,
-                                 buch_Trans_Start(_buch_tr_2)))),
-        (0))
-       and neq_int(integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                    shift(buch_CurStates,
-                                    buch_Trans_Stop(_buch_tr_2)))),
-           (0))))))
+   and ((integer_of_int32(select(intP_intM_buch_CurStates_old_3,
+                          shift(buch_CurStates_old,
+                          buch_Trans_Start(_buch_tr_2)))) <> (0))
+       and (integer_of_int32(select(intP_intM_buch_CurStates_1,
+                             shift(buch_CurStates,
+                             buch_Trans_Stop(_buch_tr_2)))) <> (0))))))
 
 predicate _Buch_tr_cross_2(intP_intM_buch_CurStates_old_3:(intP, int32) memory,
  intP_intM_buch_CurTrans_2:(intP, int32) memory,
@@ -673,19 +660,15 @@ predicate _Buch_tr_cross_2(intP_intM_buch_CurStates_old_3:(intP, int32) memory,
  (forall _buch_tr_3:int.
   ((le_int((0), _buch_tr_3)
    and (lt_int(_buch_tr_3, (3))
-       and (neq_int(integer_of_int32(select(intP_intM_buch_CurStates_old_3,
-                                     shift(buch_CurStates_old,
-                                     buch_Trans_Start(_buch_tr_3)))),
-            (0))
+       and ((integer_of_int32(select(intP_intM_buch_CurStates_old_3,
+                              shift(buch_CurStates_old,
+                              buch_Trans_Start(_buch_tr_3)))) <> (0))
            and buch_Trans_Cond(_buch_tr_3, buch_CurOpStatus,
                buch_CurOperation, status)))) ->
-   (neq_int(integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                             shift(buch_CurTrans, _buch_tr_3))),
-    (0))
-   and neq_int(integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                shift(buch_CurStates,
-                                buch_Trans_Stop(_buch_tr_3)))),
-       (0)))))
+   ((integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                      shift(buch_CurTrans, _buch_tr_3))) <> (0))
+   and (integer_of_int32(select(intP_intM_buch_CurStates_1,
+                         shift(buch_CurStates, buch_Trans_Stop(_buch_tr_3)))) <> (0)))))
 
 predicate _Buch_tr_cross_3(intP_intM_buch_CurStates_old_3:(intP, int32) memory,
  intP_intM_buch_CurTrans_2:(intP, int32) memory,
@@ -694,20 +677,24 @@ predicate _Buch_tr_cross_3(intP_intM_buch_CurStates_old_3:(intP, int32) memory,
  (forall _buch_tr_4:int.
   ((le_int((0), _buch_tr_4)
    and (lt_int(_buch_tr_4, (3))
-       and (neq_int(integer_of_int32(select(intP_intM_buch_CurStates_old_3,
-                                     shift(buch_CurStates_old,
-                                     buch_Trans_Start(_buch_tr_4)))),
-            (0))
+       and ((integer_of_int32(select(intP_intM_buch_CurStates_old_3,
+                              shift(buch_CurStates_old,
+                              buch_Trans_Start(_buch_tr_4)))) <> (0))
            or (not buch_Trans_Cond(_buch_tr_4, buch_CurOpStatus,
                    buch_CurOperation, status))))) ->
-   neq_int(integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, _buch_tr_4))),
-   (0))))
+   (integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                     shift(buch_CurTrans, _buch_tr_4))) <> (0))))
 
 axiom buch_ListOper_coerce :
  (forall x:int.
   ((le_int((0), x) and le_int(x, (2))) ->
    eq_int(integer_of_buch_ListOper(buch_ListOper_of_integer(x)), x)))
+
+axiom buch_ListOper_extensionality :
+ (forall x:buch_ListOper.
+  (forall y:buch_ListOper.
+   (eq_int(integer_of_buch_ListOper(x), integer_of_buch_ListOper(y)) ->
+    (x = y))))
 
 axiom buch_ListOper_range :
  (forall x:buch_ListOper.
@@ -751,6 +738,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -762,6 +754,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -849,21 +846,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_buch_AcceptStates(intP_buch_AcceptStates_5_alloc_table:intP alloc_table) =
  (le_int(offset_min(intP_buch_AcceptStates_5_alloc_table, buch_AcceptStates),
   (0))
@@ -939,76 +921,28 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-axiom buch_Trans_Start0 : eq_int(buch_Trans_Start((0)), (0))
+axiom buch_Trans_Start0 : (buch_Trans_Start((0)) = (0))
 
-axiom buch_Trans_Start1 : eq_int(buch_Trans_Start((1)), (0))
+axiom buch_Trans_Start1 : (buch_Trans_Start((1)) = (0))
 
-axiom buch_Trans_Start2 : eq_int(buch_Trans_Start((2)), (1))
+axiom buch_Trans_Start2 : (buch_Trans_Start((2)) = (1))
 
-axiom buch_Trans_Stop0 : eq_int(buch_Trans_Stop((0)), (0))
+axiom buch_Trans_Stop0 : (buch_Trans_Stop((0)) = (0))
 
-axiom buch_Trans_Stop1 : eq_int(buch_Trans_Stop((1)), (1))
+axiom buch_Trans_Stop1 : (buch_Trans_Stop((1)) = (1))
 
-axiom buch_Trans_Stop2 : eq_int(buch_Trans_Stop((2)), (1))
+axiom buch_Trans_Stop2 : (buch_Trans_Stop((2)) = (1))
 
 parameter Buch_OpStatusList_of_integer_ :
  x:int ->
   { (le_int((0), x) and le_int(x, (1)))} Buch_OpStatusList
   { eq_int(integer_of_Buch_OpStatusList(result), x) }
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -1257,24 +1191,20 @@ parameter fake :
         and (JC_<somenum>:
             ((JC_<somenum>:
              ((JC_<somenum>:
-              eq_int((0),
-              integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                               shift(buch_CurTrans, (1))))))
+              ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (1))))))
              and ((JC_<somenum>:
-                  (neq_int((0),
-                   integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                                    shift(buch_CurTrans, (0)))))
-                  or neq_int((0),
-                     integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                                      shift(buch_CurTrans, (2)))))))
+                  (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                            shift(buch_CurTrans, (0)))))
+                  or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                              shift(buch_CurTrans, (2)))))))
                  and ((JC_<somenum>: (true = true))
                      and (JC_<somenum>:
-                         (neq_int((0),
-                          integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                           shift(buch_CurStates, (0)))))
-                         or neq_int((0),
-                            integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                             shift(buch_CurStates, (1)))))))))))
+                         (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                                   shift(buch_CurStates, (0)))))
+                         or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                                     shift(buch_CurStates,
+                                                     (1)))))))))))
             and ((JC_<somenum>: inv(rr))
                 and ((JC_<somenum>:
                      valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -1344,24 +1274,19 @@ parameter fake_requires :
  tt:unit ->
   { (JC_<somenum>:
     (((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and ((JC_<somenum>:
-                  (neq_int((0),
-                   integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                    shift(buch_CurStates, (0)))))
-                  or neq_int((0),
-                     integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                      shift(buch_CurStates, (1)))))))
+                  (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                            shift(buch_CurStates, (0)))))
+                  or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                              shift(buch_CurStates, (1)))))))
                  and (JC_<somenum>: lt_int(integer_of_int32(rr), (5000)))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>: valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -1550,24 +1475,20 @@ parameter fake_requires :
         and (JC_<somenum>:
             ((JC_<somenum>:
              ((JC_<somenum>:
-              eq_int((0),
-              integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                               shift(buch_CurTrans, (1))))))
+              ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (1))))))
              and ((JC_<somenum>:
-                  (neq_int((0),
-                   integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                                    shift(buch_CurTrans, (0)))))
-                  or neq_int((0),
-                     integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                                      shift(buch_CurTrans, (2)))))))
+                  (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                            shift(buch_CurTrans, (0)))))
+                  or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                              shift(buch_CurTrans, (2)))))))
                  and ((JC_<somenum>: (true = true))
                      and (JC_<somenum>:
-                         (neq_int((0),
-                          integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                           shift(buch_CurStates, (0)))))
-                         or neq_int((0),
-                            integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                             shift(buch_CurStates, (1)))))))))))
+                         (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                                   shift(buch_CurStates, (0)))))
+                         or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                                     shift(buch_CurStates,
+                                                     (1)))))))))))
             and ((JC_<somenum>: inv(rr))
                 and ((JC_<somenum>:
                      valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -1709,24 +1630,19 @@ parameter main :
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>:
-          eq_int((0),
-          integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                           shift(buch_CurTrans, (1))))))
+          ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                  shift(buch_CurTrans, (1))))))
          and ((JC_<somenum>:
-              (neq_int((0),
-               integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                                shift(buch_CurTrans, (0)))))
-              or neq_int((0),
-                 integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                                  shift(buch_CurTrans, (2)))))))
+              (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                        shift(buch_CurTrans, (0)))))
+              or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                          shift(buch_CurTrans, (2)))))))
              and ((JC_<somenum>: (true = true))
                  and (JC_<somenum>:
-                     (neq_int((0),
-                      integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                       shift(buch_CurStates, (0)))))
-                     or neq_int((0),
-                        integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                         shift(buch_CurStates, (1)))))))))))
+                     (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                               shift(buch_CurStates, (0)))))
+                     or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                                 shift(buch_CurStates, (1)))))))))))
         and ((JC_<somenum>: inv(rr))
             and ((JC_<somenum>:
                  valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -1793,24 +1709,19 @@ parameter main_requires :
  tt:unit ->
   { (JC_<somenum>:
     (((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and (JC_<somenum>:
-                 (neq_int((0),
-                  integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                   shift(buch_CurStates, (0)))))
-                 or neq_int((0),
-                    integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                     shift(buch_CurStates, (1))))))))))
+                 (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                           shift(buch_CurStates, (0)))))
+                 or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                             shift(buch_CurStates, (1))))))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>:
              valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -1935,24 +1846,19 @@ parameter main_requires :
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>:
-          eq_int((0),
-          integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                           shift(buch_CurTrans, (1))))))
+          ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                  shift(buch_CurTrans, (1))))))
          and ((JC_<somenum>:
-              (neq_int((0),
-               integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                                shift(buch_CurTrans, (0)))))
-              or neq_int((0),
-                 integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                                  shift(buch_CurTrans, (2)))))))
+              (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                        shift(buch_CurTrans, (0)))))
+              or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                          shift(buch_CurTrans, (2)))))))
              and ((JC_<somenum>: (true = true))
                  and (JC_<somenum>:
-                     (neq_int((0),
-                      integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                       shift(buch_CurStates, (0)))))
-                     or neq_int((0),
-                        integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                         shift(buch_CurStates, (1)))))))))))
+                     (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                               shift(buch_CurStates, (0)))))
+                     or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                                 shift(buch_CurStates, (1)))))))))))
         and ((JC_<somenum>: inv(rr))
             and ((JC_<somenum>:
                  valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -2081,24 +1987,19 @@ parameter op :
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>:
-          eq_int((0),
-          integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                           shift(buch_CurTrans, (1))))))
+          ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                  shift(buch_CurTrans, (1))))))
          and ((JC_<somenum>:
-              (neq_int((0),
-               integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                                shift(buch_CurTrans, (0)))))
-              or neq_int((0),
-                 integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                                  shift(buch_CurTrans, (2)))))))
+              (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                        shift(buch_CurTrans, (0)))))
+              or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                          shift(buch_CurTrans, (2)))))))
              and ((JC_<somenum>: (true = true))
                  and (JC_<somenum>:
-                     (neq_int((0),
-                      integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                       shift(buch_CurStates, (0)))))
-                     or neq_int((0),
-                        integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                         shift(buch_CurStates, (1)))))))))))
+                     (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                               shift(buch_CurStates, (0)))))
+                     or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                                 shift(buch_CurStates, (1)))))))))))
         and ((JC_<somenum>: inv(rr))
             and ((JC_<somenum>:
                  valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -2165,24 +2066,19 @@ parameter op_requires :
  tt:unit ->
   { (JC_<somenum>:
     (((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and (JC_<somenum>:
-                 (neq_int((0),
-                  integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                   shift(buch_CurStates, (0)))))
-                 or neq_int((0),
-                    integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                     shift(buch_CurStates, (1))))))))))
+                 (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                           shift(buch_CurStates, (0)))))
+                 or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                             shift(buch_CurStates, (1))))))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>:
              valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -2307,24 +2203,19 @@ parameter op_requires :
     and (JC_<somenum>:
         ((JC_<somenum>:
          ((JC_<somenum>:
-          eq_int((0),
-          integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                           shift(buch_CurTrans, (1))))))
+          ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                  shift(buch_CurTrans, (1))))))
          and ((JC_<somenum>:
-              (neq_int((0),
-               integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                                shift(buch_CurTrans, (0)))))
-              or neq_int((0),
-                 integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                                  shift(buch_CurTrans, (2)))))))
+              (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                        shift(buch_CurTrans, (0)))))
+              or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                          shift(buch_CurTrans, (2)))))))
              and ((JC_<somenum>: (true = true))
                  and (JC_<somenum>:
-                     (neq_int((0),
-                      integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                       shift(buch_CurStates, (0)))))
-                     or neq_int((0),
-                        integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                         shift(buch_CurStates, (1)))))))))))
+                     (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                               shift(buch_CurStates, (0)))))
+                     or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                                 shift(buch_CurStates, (1)))))))))))
         and ((JC_<somenum>: inv(rr))
             and ((JC_<somenum>:
                  valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -2404,24 +2295,19 @@ let fake_ensures_Buchi_property_behavior =
  fun (tt : unit) ->
   { (JC_<somenum>:
     (((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and ((JC_<somenum>:
-                  (neq_int((0),
-                   integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                    shift(buch_CurStates, (0)))))
-                  or neq_int((0),
-                     integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                      shift(buch_CurStates, (1)))))))
+                  (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                            shift(buch_CurStates, (0)))))
+                  or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                              shift(buch_CurStates, (1)))))))
                  and (JC_<somenum>: lt_int(integer_of_int32(rr), (5000)))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>: valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -2558,18 +2444,16 @@ let fake_ensures_Buchi_property_behavior =
                     shift(jessie_<somenum>, (1))) = jessie_<somenum>)
                   and (select(intP_intM_buch_CurTrans_tmp_4,
                        shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_24:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
        then (C_23: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-       else (C_22: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-       void)
-      else
-       (let jessie_<somenum> = (C_21: (tmp := (safe_int32_of_integer_ (0)))) in
-       void));
+       else (C_22: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
+      else (C_21: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
+      void);
       (let jessie_<somenum> = !tmp in
       (let jessie_<somenum> = buch_CurStates in
       (let jessie_<somenum> =
@@ -2589,27 +2473,25 @@ let fake_ensures_Buchi_property_behavior =
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
           and ((select(intP_intM_buch_CurStates_1, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_buch_CurStates_1, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
        (if ((neq_int_ (integer_of_int32 (C_36:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
        then
-        (let jessie_<somenum> =
         (if ((neq_int_ (integer_of_int32 (C_35:
                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                           ((shift buch_CurStates) (0)))))) (0))
         then
          (C_34: begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
         else
-         (C_33: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
-        void)
+         (C_33: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
        else
-        (let jessie_<somenum> = (C_32: (tmp_0 := (safe_int32_of_integer_ (0)))) in
-        void))
+        (C_32: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
       else
-       (let jessie_<somenum> = (C_31: (tmp_0 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_31: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
+      void);
       (let jessie_<somenum> = !tmp_0 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
@@ -2624,22 +2506,21 @@ let fake_ensures_Buchi_property_behavior =
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
           and ((select(intP_intM_buch_CurTrans_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_buch_CurTrans_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_45:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (1)))))) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_44:
                                         ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                          ((shift buch_CurStates) (1)))))) (0))
        then
         (C_43: begin   (tmp_1 := (safe_int32_of_integer_ (1))); !tmp_1 end)
        else
-        (C_42: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
-       void)
+        (C_42: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end))
       else
-       (let jessie_<somenum> = (C_41: (tmp_1 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_41: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
+      void);
       (let jessie_<somenum> = !tmp_1 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (2) in
@@ -2651,24 +2532,19 @@ let fake_ensures_Buchi_property_behavior =
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and (JC_<somenum>:
-                 (neq_int((0),
-                  integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                   shift(buch_CurStates, (0)))))
-                 or neq_int((0),
-                    integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                     shift(buch_CurStates, (1)))))))))))
+                 (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                           shift(buch_CurStates, (0)))))
+                 or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                             shift(buch_CurStates, (1)))))))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>:
              valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -2734,24 +2610,19 @@ let fake_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
     (((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and ((JC_<somenum>:
-                  (neq_int((0),
-                   integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                    shift(buch_CurStates, (0)))))
-                  or neq_int((0),
-                     integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                      shift(buch_CurStates, (1)))))))
+                  (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                            shift(buch_CurStates, (0)))))
+                  or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                              shift(buch_CurStates, (1)))))))
                  and (JC_<somenum>: lt_int(integer_of_int32(rr), (5000)))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>: valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -2887,18 +2758,16 @@ let fake_ensures_default =
                     shift(jessie_<somenum>, (1))) = jessie_<somenum>)
                   and (select(intP_intM_buch_CurTrans_tmp_4,
                        shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_24:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
        then (C_23: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-       else (C_22: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-       void)
-      else
-       (let jessie_<somenum> = (C_21: (tmp := (safe_int32_of_integer_ (0)))) in
-       void));
+       else (C_22: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
+      else (C_21: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
+      void);
       (let jessie_<somenum> = !tmp in
       (let jessie_<somenum> = buch_CurStates in
       (let jessie_<somenum> =
@@ -2918,27 +2787,25 @@ let fake_ensures_default =
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
           and ((select(intP_intM_buch_CurStates_1, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_buch_CurStates_1, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
        (if ((neq_int_ (integer_of_int32 (C_36:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
        then
-        (let jessie_<somenum> =
         (if ((neq_int_ (integer_of_int32 (C_35:
                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                           ((shift buch_CurStates) (0)))))) (0))
         then
          (C_34: begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
         else
-         (C_33: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
-        void)
+         (C_33: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
        else
-        (let jessie_<somenum> = (C_32: (tmp_0 := (safe_int32_of_integer_ (0)))) in
-        void))
+        (C_32: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
       else
-       (let jessie_<somenum> = (C_31: (tmp_0 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_31: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
+      void);
       (let jessie_<somenum> = !tmp_0 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
@@ -2953,22 +2820,21 @@ let fake_ensures_default =
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
           and ((select(intP_intM_buch_CurTrans_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_buch_CurTrans_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_45:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (1)))))) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_44:
                                         ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                          ((shift buch_CurStates) (1)))))) (0))
        then
         (C_43: begin   (tmp_1 := (safe_int32_of_integer_ (1))); !tmp_1 end)
        else
-        (C_42: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
-       void)
+        (C_42: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end))
       else
-       (let jessie_<somenum> = (C_41: (tmp_1 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_41: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
+      void);
       (let jessie_<somenum> = !tmp_1 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (2) in
@@ -2982,24 +2848,19 @@ let fake_ensures_j =
  fun (tt : unit) ->
   { (JC_<somenum>:
     (((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and ((JC_<somenum>:
-                  (neq_int((0),
-                   integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                    shift(buch_CurStates, (0)))))
-                  or neq_int((0),
-                     integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                      shift(buch_CurStates, (1)))))))
+                  (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                            shift(buch_CurStates, (0)))))
+                  or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                              shift(buch_CurStates, (1)))))))
                  and (JC_<somenum>: lt_int(integer_of_int32(rr), (5000)))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>: valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -3136,18 +2997,16 @@ let fake_ensures_j =
                     shift(jessie_<somenum>, (1))) = jessie_<somenum>)
                   and (select(intP_intM_buch_CurTrans_tmp_4,
                        shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_24:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
        then (C_23: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-       else (C_22: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-       void)
-      else
-       (let jessie_<somenum> = (C_21: (tmp := (safe_int32_of_integer_ (0)))) in
-       void));
+       else (C_22: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
+      else (C_21: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
+      void);
       (let jessie_<somenum> = !tmp in
       (let jessie_<somenum> = buch_CurStates in
       (let jessie_<somenum> =
@@ -3167,27 +3026,25 @@ let fake_ensures_j =
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
           and ((select(intP_intM_buch_CurStates_1, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_buch_CurStates_1, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
        (if ((neq_int_ (integer_of_int32 (C_36:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
        then
-        (let jessie_<somenum> =
         (if ((neq_int_ (integer_of_int32 (C_35:
                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                           ((shift buch_CurStates) (0)))))) (0))
         then
          (C_34: begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
         else
-         (C_33: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
-        void)
+         (C_33: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
        else
-        (let jessie_<somenum> = (C_32: (tmp_0 := (safe_int32_of_integer_ (0)))) in
-        void))
+        (C_32: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
       else
-       (let jessie_<somenum> = (C_31: (tmp_0 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_31: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
+      void);
       (let jessie_<somenum> = !tmp_0 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
@@ -3202,22 +3059,21 @@ let fake_ensures_j =
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
           and ((select(intP_intM_buch_CurTrans_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_buch_CurTrans_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_45:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (1)))))) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_44:
                                         ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                          ((shift buch_CurStates) (1)))))) (0))
        then
         (C_43: begin   (tmp_1 := (safe_int32_of_integer_ (1))); !tmp_1 end)
        else
-        (C_42: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
-       void)
+        (C_42: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end))
       else
-       (let jessie_<somenum> = (C_41: (tmp_1 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_41: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
+      void);
       (let jessie_<somenum> = !tmp_1 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (2) in
@@ -3293,24 +3149,19 @@ let fake_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
     (((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and ((JC_<somenum>:
-                  (neq_int((0),
-                   integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                    shift(buch_CurStates, (0)))))
-                  or neq_int((0),
-                     integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                      shift(buch_CurStates, (1)))))))
+                  (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                            shift(buch_CurStates, (0)))))
+                  or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                              shift(buch_CurStates, (1)))))))
                  and (JC_<somenum>: lt_int(integer_of_int32(rr), (5000)))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>: valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -3447,18 +3298,16 @@ let fake_safety =
                     shift(jessie_<somenum>, (1))) = jessie_<somenum>)
                   and (select(intP_intM_buch_CurTrans_tmp_4,
                        shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_24:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
        then (C_23: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
-       else (C_22: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
-       void)
-      else
-       (let jessie_<somenum> = (C_21: (tmp := (safe_int32_of_integer_ (0)))) in
-       void));
+       else (C_22: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
+      else (C_21: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
+      void);
       (let jessie_<somenum> = !tmp in
       (let jessie_<somenum> = buch_CurStates in
       (let jessie_<somenum> =
@@ -3479,27 +3328,25 @@ let fake_safety =
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
           and ((select(intP_intM_buch_CurStates_1, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_buch_CurStates_1, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
        (if ((neq_int_ (integer_of_int32 (C_36:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
        then
-        (let jessie_<somenum> =
         (if ((neq_int_ (integer_of_int32 (C_35:
                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                           ((shift buch_CurStates) (0)))))) (0))
         then
          (C_34: begin   (tmp_0 := (safe_int32_of_integer_ (1))); !tmp_0 end)
         else
-         (C_33: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
-        void)
+         (C_33: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
        else
-        (let jessie_<somenum> = (C_32: (tmp_0 := (safe_int32_of_integer_ (0)))) in
-        void))
+        (C_32: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end))
       else
-       (let jessie_<somenum> = (C_31: (tmp_0 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_31: begin   (tmp_0 := (safe_int32_of_integer_ (0))); !tmp_0 end)) in
+      void);
       (let jessie_<somenum> = !tmp_0 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
@@ -3514,22 +3361,21 @@ let fake_safety =
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
           and ((select(intP_intM_buch_CurTrans_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_buch_CurTrans_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_45:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (1)))))) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_44:
                                         ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                          ((shift buch_CurStates) (1)))))) (0))
        then
         (C_43: begin   (tmp_1 := (safe_int32_of_integer_ (1))); !tmp_1 end)
        else
-        (C_42: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
-       void)
+        (C_42: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end))
       else
-       (let jessie_<somenum> = (C_41: (tmp_1 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_41: begin   (tmp_1 := (safe_int32_of_integer_ (0))); !tmp_1 end)) in
+      void);
       (let jessie_<somenum> = !tmp_1 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (2) in
@@ -3601,24 +3447,19 @@ let main_ensures_Buchi_property_behavior =
  fun (tt : unit) ->
   { (JC_<somenum>:
     (((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and (JC_<somenum>:
-                 (neq_int((0),
-                  integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                   shift(buch_CurStates, (0)))))
-                 or neq_int((0),
-                    integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                     shift(buch_CurStates, (1))))))))))
+                 (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                           shift(buch_CurStates, (0)))))
+                 or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                             shift(buch_CurStates, (1))))))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>:
              valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -3771,9 +3612,9 @@ let main_ensures_Buchi_property_behavior =
                     shift(jessie_<somenum>, (1))) = jessie_<somenum>)
                   and (select(intP_intM_buch_CurTrans_tmp_4,
                        shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_154:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
@@ -3782,11 +3623,11 @@ let main_ensures_Buchi_property_behavior =
         begin   (tmp_0_2 := (safe_int32_of_integer_ (1))); !tmp_0_2 end)
        else
         (C_152:
-        begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end)) in
-       void)
+        begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end))
       else
-       (let jessie_<somenum> =
-       (C_151: (tmp_0_2 := (safe_int32_of_integer_ (0)))) in void));
+       (C_151:
+       begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end)) in
+      void);
       (let jessie_<somenum> = !tmp_0_2 in
       (let jessie_<somenum> = buch_CurStates in
       (let jessie_<somenum> =
@@ -3806,13 +3647,13 @@ let main_ensures_Buchi_property_behavior =
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
           and ((select(intP_intM_buch_CurStates_1, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_buch_CurStates_1, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
        (if ((neq_int_ (integer_of_int32 (C_166:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
        then
-        (let jessie_<somenum> =
         (if ((neq_int_ (integer_of_int32 (C_165:
                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                           ((shift buch_CurStates) (0)))))) (0))
@@ -3821,14 +3662,14 @@ let main_ensures_Buchi_property_behavior =
          begin   (tmp_0_3 := (safe_int32_of_integer_ (1))); !tmp_0_3 end)
         else
          (C_163:
-         begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end)) in
-        void)
+         begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end))
        else
-        (let jessie_<somenum> =
-        (C_162: (tmp_0_3 := (safe_int32_of_integer_ (0)))) in void))
+        (C_162:
+        begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end))
       else
-       (let jessie_<somenum> =
-       (C_161: (tmp_0_3 := (safe_int32_of_integer_ (0)))) in void));
+       (C_161:
+       begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end)) in
+      void);
       (let jessie_<somenum> = !tmp_0_3 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
@@ -3843,11 +3684,11 @@ let main_ensures_Buchi_property_behavior =
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
           and ((select(intP_intM_buch_CurTrans_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_buch_CurTrans_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_175:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (1)))))) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_174:
                                         ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                          ((shift buch_CurStates) (1)))))) (0))
@@ -3856,11 +3697,11 @@ let main_ensures_Buchi_property_behavior =
         begin   (tmp_1_1 := (safe_int32_of_integer_ (1))); !tmp_1_1 end)
        else
         (C_172:
-        begin   (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end)) in
-       void)
+        begin   (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end))
       else
-       (let jessie_<somenum> =
-       (C_171: (tmp_1_1 := (safe_int32_of_integer_ (0)))) in void));
+       (C_171:
+       begin   (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end)) in
+      void);
       (let jessie_<somenum> = !tmp_1_1 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (2) in
@@ -3872,24 +3713,19 @@ let main_ensures_Buchi_property_behavior =
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and (JC_<somenum>:
-                 (neq_int((0),
-                  integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                   shift(buch_CurStates, (0)))))
-                 or neq_int((0),
-                    integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                     shift(buch_CurStates, (1)))))))))))
+                 (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                           shift(buch_CurStates, (0)))))
+                 or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                             shift(buch_CurStates, (1)))))))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>:
              valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -3955,24 +3791,19 @@ let main_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
     (((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and (JC_<somenum>:
-                 (neq_int((0),
-                  integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                   shift(buch_CurStates, (0)))))
-                 or neq_int((0),
-                    integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                     shift(buch_CurStates, (1))))))))))
+                 (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                           shift(buch_CurStates, (0)))))
+                 or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                             shift(buch_CurStates, (1))))))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>:
              valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -4125,9 +3956,9 @@ let main_ensures_default =
                     shift(jessie_<somenum>, (1))) = jessie_<somenum>)
                   and (select(intP_intM_buch_CurTrans_tmp_4,
                        shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_154:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
@@ -4136,11 +3967,11 @@ let main_ensures_default =
         begin   (tmp_0_2 := (safe_int32_of_integer_ (1))); !tmp_0_2 end)
        else
         (C_152:
-        begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end)) in
-       void)
+        begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end))
       else
-       (let jessie_<somenum> =
-       (C_151: (tmp_0_2 := (safe_int32_of_integer_ (0)))) in void));
+       (C_151:
+       begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end)) in
+      void);
       (let jessie_<somenum> = !tmp_0_2 in
       (let jessie_<somenum> = buch_CurStates in
       (let jessie_<somenum> =
@@ -4160,13 +3991,13 @@ let main_ensures_default =
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
           and ((select(intP_intM_buch_CurStates_1, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_buch_CurStates_1, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
        (if ((neq_int_ (integer_of_int32 (C_166:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
        then
-        (let jessie_<somenum> =
         (if ((neq_int_ (integer_of_int32 (C_165:
                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                           ((shift buch_CurStates) (0)))))) (0))
@@ -4175,14 +4006,14 @@ let main_ensures_default =
          begin   (tmp_0_3 := (safe_int32_of_integer_ (1))); !tmp_0_3 end)
         else
          (C_163:
-         begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end)) in
-        void)
+         begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end))
        else
-        (let jessie_<somenum> =
-        (C_162: (tmp_0_3 := (safe_int32_of_integer_ (0)))) in void))
+        (C_162:
+        begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end))
       else
-       (let jessie_<somenum> =
-       (C_161: (tmp_0_3 := (safe_int32_of_integer_ (0)))) in void));
+       (C_161:
+       begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end)) in
+      void);
       (let jessie_<somenum> = !tmp_0_3 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
@@ -4197,11 +4028,11 @@ let main_ensures_default =
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
           and ((select(intP_intM_buch_CurTrans_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_buch_CurTrans_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_175:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (1)))))) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_174:
                                         ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                          ((shift buch_CurStates) (1)))))) (0))
@@ -4210,11 +4041,11 @@ let main_ensures_default =
         begin   (tmp_1_1 := (safe_int32_of_integer_ (1))); !tmp_1_1 end)
        else
         (C_172:
-        begin   (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end)) in
-       void)
+        begin   (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end))
       else
-       (let jessie_<somenum> =
-       (C_171: (tmp_1_1 := (safe_int32_of_integer_ (0)))) in void));
+       (C_171:
+       begin   (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end)) in
+      void);
       (let jessie_<somenum> = !tmp_1_1 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (2) in
@@ -4228,24 +4059,19 @@ let main_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
     (((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and (JC_<somenum>:
-                 (neq_int((0),
-                  integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                   shift(buch_CurStates, (0)))))
-                 or neq_int((0),
-                    integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                     shift(buch_CurStates, (1))))))))))
+                 (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                           shift(buch_CurStates, (0)))))
+                 or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                             shift(buch_CurStates, (1))))))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>:
              valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -4398,9 +4224,9 @@ let main_safety =
                     shift(jessie_<somenum>, (1))) = jessie_<somenum>)
                   and (select(intP_intM_buch_CurTrans_tmp_4,
                        shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_154:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
@@ -4409,11 +4235,11 @@ let main_safety =
         begin   (tmp_0_2 := (safe_int32_of_integer_ (1))); !tmp_0_2 end)
        else
         (C_152:
-        begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end)) in
-       void)
+        begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end))
       else
-       (let jessie_<somenum> =
-       (C_151: (tmp_0_2 := (safe_int32_of_integer_ (0)))) in void));
+       (C_151:
+       begin   (tmp_0_2 := (safe_int32_of_integer_ (0))); !tmp_0_2 end)) in
+      void);
       (let jessie_<somenum> = !tmp_0_2 in
       (let jessie_<somenum> = buch_CurStates in
       (let jessie_<somenum> =
@@ -4434,13 +4260,13 @@ let main_safety =
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
           and ((select(intP_intM_buch_CurStates_1, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_buch_CurStates_1, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
        (if ((neq_int_ (integer_of_int32 (C_166:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
        then
-        (let jessie_<somenum> =
         (if ((neq_int_ (integer_of_int32 (C_165:
                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                           ((shift buch_CurStates) (0)))))) (0))
@@ -4449,14 +4275,14 @@ let main_safety =
          begin   (tmp_0_3 := (safe_int32_of_integer_ (1))); !tmp_0_3 end)
         else
          (C_163:
-         begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end)) in
-        void)
+         begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end))
        else
-        (let jessie_<somenum> =
-        (C_162: (tmp_0_3 := (safe_int32_of_integer_ (0)))) in void))
+        (C_162:
+        begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end))
       else
-       (let jessie_<somenum> =
-       (C_161: (tmp_0_3 := (safe_int32_of_integer_ (0)))) in void));
+       (C_161:
+       begin   (tmp_0_3 := (safe_int32_of_integer_ (0))); !tmp_0_3 end)) in
+      void);
       (let jessie_<somenum> = !tmp_0_3 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
@@ -4471,11 +4297,11 @@ let main_safety =
            pset_range(pset_singleton(jessie_<somenum>), (0), (1)))
           and ((select(intP_intM_buch_CurTrans_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_buch_CurTrans_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_175:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (1)))))) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_174:
                                         ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                          ((shift buch_CurStates) (1)))))) (0))
@@ -4484,11 +4310,11 @@ let main_safety =
         begin   (tmp_1_1 := (safe_int32_of_integer_ (1))); !tmp_1_1 end)
        else
         (C_172:
-        begin   (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end)) in
-       void)
+        begin   (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end))
       else
-       (let jessie_<somenum> =
-       (C_171: (tmp_1_1 := (safe_int32_of_integer_ (0)))) in void));
+       (C_171:
+       begin   (tmp_1_1 := (safe_int32_of_integer_ (0))); !tmp_1_1 end)) in
+      void);
       (let jessie_<somenum> = !tmp_1_1 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (2) in
@@ -4560,24 +4386,19 @@ let op_ensures_Buchi_property_behavior =
  fun (tt : unit) ->
   { (JC_<somenum>:
     (((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and (JC_<somenum>:
-                 (neq_int((0),
-                  integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                   shift(buch_CurStates, (0)))))
-                 or neq_int((0),
-                    integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                     shift(buch_CurStates, (1))))))))))
+                 (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                           shift(buch_CurStates, (0)))))
+                 or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                             shift(buch_CurStates, (1))))))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>:
              valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -4712,9 +4533,9 @@ let op_ensures_Buchi_property_behavior =
                     shift(jessie_<somenum>, (1))) = jessie_<somenum>)
                   and (select(intP_intM_buch_CurTrans_tmp_4,
                        shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_83:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
@@ -4723,22 +4544,22 @@ let op_ensures_Buchi_property_behavior =
         begin   (tmp_0_0 := (safe_int32_of_integer_ (1))); !tmp_0_0 end)
        else
         (C_81:
-        begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0 end)) in
-       void)
+        begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0 end))
       else
-       (let jessie_<somenum> = (C_80: (tmp_0_0 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_80:
+       begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0 end)) in
+      void);
       (let jessie_<somenum> = !tmp_0_0 in
       (let jessie_<somenum> = buch_CurStates in
       (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_90:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (0)))))) (0))
       then
-       (let jessie_<somenum> = (C_89: (tmp_0_1 := (safe_int32_of_integer_ (1)))) in
-       void)
+       (C_89:
+       begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1 end)
       else
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_88:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (1)))))) (0))
@@ -4747,21 +4568,21 @@ let op_ensures_Buchi_property_behavior =
         begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1 end)
        else
         (C_86:
-        begin   (tmp_0_1 := (safe_int32_of_integer_ (0))); !tmp_0_1 end)) in
-       void));
+        begin   (tmp_0_1 := (safe_int32_of_integer_ (0))); !tmp_0_1 end))) in
+      void);
       (let jessie_<somenum> = !tmp_0_1 in
       (let jessie_<somenum> = buch_CurStates in
       (let jessie_<somenum> = (1) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
       (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
        (if ((neq_int_ (integer_of_int32 (C_98:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
        then
-        (let jessie_<somenum> =
         (if ((neq_int_ (integer_of_int32 (C_97:
                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                           ((shift buch_CurStates) (0)))))) (0))
@@ -4770,55 +4591,53 @@ let op_ensures_Buchi_property_behavior =
          begin   (tmp_1_0 := (safe_int32_of_integer_ (1))); !tmp_1_0 end)
         else
          (C_95:
-         begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end)) in
-        void)
+         begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end))
        else
-        (let jessie_<somenum> =
-        (C_94: (tmp_1_0 := (safe_int32_of_integer_ (0)))) in void))
+        (C_94:
+        begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end))
       else
-       (let jessie_<somenum> = (C_93: (tmp_1_0 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_93:
+       begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end)) in
+      void);
       (let jessie_<somenum> = !tmp_1_0 in
       (let jessie_<somenum> = buch_CurTrans in
       (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_105:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (0)))))) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_104:
                                         ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                          ((shift buch_CurStates) (1)))))) (0))
        then
         (C_103: begin   (tmp_2 := (safe_int32_of_integer_ (1))); !tmp_2 end)
        else
-        (C_102: begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end)) in
-       void)
+        (C_102: begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end))
       else
-       (let jessie_<somenum> = (C_101: (tmp_2 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_101: begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end)) in
+      void);
       (let jessie_<somenum> = !tmp_2 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (1) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
       (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_112:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (1)))))) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_111:
                                         ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                          ((shift buch_CurStates) (1)))))) (0))
        then
         (C_110: begin   (tmp_3 := (safe_int32_of_integer_ (1))); !tmp_3 end)
        else
-        (C_109: begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end)) in
-       void)
+        (C_109: begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end))
       else
-       (let jessie_<somenum> = (C_108: (tmp_3 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_108: begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end)) in
+      void);
       (let jessie_<somenum> = !tmp_3 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (2) in
@@ -4830,24 +4649,19 @@ let op_ensures_Buchi_property_behavior =
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and (JC_<somenum>:
-                 (neq_int((0),
-                  integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                   shift(buch_CurStates, (0)))))
-                 or neq_int((0),
-                    integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                     shift(buch_CurStates, (1)))))))))))
+                 (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                           shift(buch_CurStates, (0)))))
+                 or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                             shift(buch_CurStates, (1)))))))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>:
              valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -4913,24 +4727,19 @@ let op_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
     (((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and (JC_<somenum>:
-                 (neq_int((0),
-                  integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                   shift(buch_CurStates, (0)))))
-                 or neq_int((0),
-                    integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                     shift(buch_CurStates, (1))))))))))
+                 (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                           shift(buch_CurStates, (0)))))
+                 or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                             shift(buch_CurStates, (1))))))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>:
              valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -5065,9 +4874,9 @@ let op_ensures_default =
                     shift(jessie_<somenum>, (1))) = jessie_<somenum>)
                   and (select(intP_intM_buch_CurTrans_tmp_4,
                        shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_83:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
@@ -5076,22 +4885,22 @@ let op_ensures_default =
         begin   (tmp_0_0 := (safe_int32_of_integer_ (1))); !tmp_0_0 end)
        else
         (C_81:
-        begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0 end)) in
-       void)
+        begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0 end))
       else
-       (let jessie_<somenum> = (C_80: (tmp_0_0 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_80:
+       begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0 end)) in
+      void);
       (let jessie_<somenum> = !tmp_0_0 in
       (let jessie_<somenum> = buch_CurStates in
       (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_90:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (0)))))) (0))
       then
-       (let jessie_<somenum> = (C_89: (tmp_0_1 := (safe_int32_of_integer_ (1)))) in
-       void)
+       (C_89:
+       begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1 end)
       else
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_88:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (1)))))) (0))
@@ -5100,21 +4909,21 @@ let op_ensures_default =
         begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1 end)
        else
         (C_86:
-        begin   (tmp_0_1 := (safe_int32_of_integer_ (0))); !tmp_0_1 end)) in
-       void));
+        begin   (tmp_0_1 := (safe_int32_of_integer_ (0))); !tmp_0_1 end))) in
+      void);
       (let jessie_<somenum> = !tmp_0_1 in
       (let jessie_<somenum> = buch_CurStates in
       (let jessie_<somenum> = (1) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
       (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
        (if ((neq_int_ (integer_of_int32 (C_98:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
        then
-        (let jessie_<somenum> =
         (if ((neq_int_ (integer_of_int32 (C_97:
                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                           ((shift buch_CurStates) (0)))))) (0))
@@ -5123,55 +4932,53 @@ let op_ensures_default =
          begin   (tmp_1_0 := (safe_int32_of_integer_ (1))); !tmp_1_0 end)
         else
          (C_95:
-         begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end)) in
-        void)
+         begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end))
        else
-        (let jessie_<somenum> =
-        (C_94: (tmp_1_0 := (safe_int32_of_integer_ (0)))) in void))
+        (C_94:
+        begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end))
       else
-       (let jessie_<somenum> = (C_93: (tmp_1_0 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_93:
+       begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end)) in
+      void);
       (let jessie_<somenum> = !tmp_1_0 in
       (let jessie_<somenum> = buch_CurTrans in
       (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_105:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (0)))))) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_104:
                                         ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                          ((shift buch_CurStates) (1)))))) (0))
        then
         (C_103: begin   (tmp_2 := (safe_int32_of_integer_ (1))); !tmp_2 end)
        else
-        (C_102: begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end)) in
-       void)
+        (C_102: begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end))
       else
-       (let jessie_<somenum> = (C_101: (tmp_2 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_101: begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end)) in
+      void);
       (let jessie_<somenum> = !tmp_2 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (1) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
       (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_112:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (1)))))) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_111:
                                         ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                          ((shift buch_CurStates) (1)))))) (0))
        then
         (C_110: begin   (tmp_3 := (safe_int32_of_integer_ (1))); !tmp_3 end)
        else
-        (C_109: begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end)) in
-       void)
+        (C_109: begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end))
       else
-       (let jessie_<somenum> = (C_108: (tmp_3 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_108: begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end)) in
+      void);
       (let jessie_<somenum> = !tmp_3 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (2) in
@@ -5185,24 +4992,19 @@ let op_safety =
  fun (tt : unit) ->
   { (JC_<somenum>:
     (((JC_<somenum>:
-      eq_int((0),
-      integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                       shift(buch_CurTrans, (1))))))
+      ((0) = integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                              shift(buch_CurTrans, (1))))))
      and ((JC_<somenum>:
-          (neq_int((0),
-           integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                            shift(buch_CurTrans, (0)))))
-          or neq_int((0),
-             integer_of_int32(select(intP_intM_buch_CurTrans_2,
-                              shift(buch_CurTrans, (2)))))))
+          (((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                    shift(buch_CurTrans, (0)))))
+          or ((0) <> integer_of_int32(select(intP_intM_buch_CurTrans_2,
+                                      shift(buch_CurTrans, (2)))))))
          and ((JC_<somenum>: (true = true))
              and (JC_<somenum>:
-                 (neq_int((0),
-                  integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                   shift(buch_CurStates, (0)))))
-                 or neq_int((0),
-                    integer_of_int32(select(intP_intM_buch_CurStates_1,
-                                     shift(buch_CurStates, (1))))))))))
+                 (((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                           shift(buch_CurStates, (0)))))
+                 or ((0) <> integer_of_int32(select(intP_intM_buch_CurStates_1,
+                                             shift(buch_CurStates, (1))))))))))
     and ((JC_<somenum>: inv(rr))
         and ((JC_<somenum>:
              valid_buch_CurStates(intP_buch_CurStates_1_alloc_table))
@@ -5337,9 +5139,9 @@ let op_safety =
                     shift(jessie_<somenum>, (1))) = jessie_<somenum>)
                   and (select(intP_intM_buch_CurTrans_tmp_4,
                        shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_83:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
@@ -5348,22 +5150,22 @@ let op_safety =
         begin   (tmp_0_0 := (safe_int32_of_integer_ (1))); !tmp_0_0 end)
        else
         (C_81:
-        begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0 end)) in
-       void)
+        begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0 end))
       else
-       (let jessie_<somenum> = (C_80: (tmp_0_0 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_80:
+       begin   (tmp_0_0 := (safe_int32_of_integer_ (0))); !tmp_0_0 end)) in
+      void);
       (let jessie_<somenum> = !tmp_0_0 in
       (let jessie_<somenum> = buch_CurStates in
       (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_90:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (0)))))) (0))
       then
-       (let jessie_<somenum> = (C_89: (tmp_0_1 := (safe_int32_of_integer_ (1)))) in
-       void)
+       (C_89:
+       begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1 end)
       else
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_88:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (1)))))) (0))
@@ -5372,21 +5174,21 @@ let op_safety =
         begin   (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1 end)
        else
         (C_86:
-        begin   (tmp_0_1 := (safe_int32_of_integer_ (0))); !tmp_0_1 end)) in
-       void));
+        begin   (tmp_0_1 := (safe_int32_of_integer_ (0))); !tmp_0_1 end))) in
+      void);
       (let jessie_<somenum> = !tmp_0_1 in
       (let jessie_<somenum> = buch_CurStates in
       (let jessie_<somenum> = (1) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
       (((safe_upd_ intP_intM_buch_CurStates_1) jessie_<somenum>) jessie_<somenum>))))));
+      (let jessie_<somenum> =
       (if ((eq_int_ (integer_of_int32 !status)) (0))
       then
        (if ((neq_int_ (integer_of_int32 (C_98:
                                         ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                          ((shift buch_CurStates_old) (0)))))) (0))
        then
-        (let jessie_<somenum> =
         (if ((neq_int_ (integer_of_int32 (C_97:
                                          ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                           ((shift buch_CurStates) (0)))))) (0))
@@ -5395,55 +5197,53 @@ let op_safety =
          begin   (tmp_1_0 := (safe_int32_of_integer_ (1))); !tmp_1_0 end)
         else
          (C_95:
-         begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end)) in
-        void)
+         begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end))
        else
-        (let jessie_<somenum> =
-        (C_94: (tmp_1_0 := (safe_int32_of_integer_ (0)))) in void))
+        (C_94:
+        begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end))
       else
-       (let jessie_<somenum> = (C_93: (tmp_1_0 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_93:
+       begin   (tmp_1_0 := (safe_int32_of_integer_ (0))); !tmp_1_0 end)) in
+      void);
       (let jessie_<somenum> = !tmp_1_0 in
       (let jessie_<somenum> = buch_CurTrans in
       (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>)));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_105:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (0)))))) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_104:
                                         ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                          ((shift buch_CurStates) (1)))))) (0))
        then
         (C_103: begin   (tmp_2 := (safe_int32_of_integer_ (1))); !tmp_2 end)
        else
-        (C_102: begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end)) in
-       void)
+        (C_102: begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end))
       else
-       (let jessie_<somenum> = (C_101: (tmp_2 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_101: begin   (tmp_2 := (safe_int32_of_integer_ (0))); !tmp_2 end)) in
+      void);
       (let jessie_<somenum> = !tmp_2 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (1) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
       (((safe_upd_ intP_intM_buch_CurTrans_2) jessie_<somenum>) jessie_<somenum>))))));
+      (let jessie_<somenum> =
       (if ((neq_int_ (integer_of_int32 (C_112:
                                        ((safe_acc_ !intP_intM_buch_CurStates_old_3) 
                                         ((shift buch_CurStates_old) (1)))))) (0))
       then
-       (let jessie_<somenum> =
        (if ((neq_int_ (integer_of_int32 (C_111:
                                         ((safe_acc_ !intP_intM_buch_CurStates_1) 
                                          ((shift buch_CurStates) (1)))))) (0))
        then
         (C_110: begin   (tmp_3 := (safe_int32_of_integer_ (1))); !tmp_3 end)
        else
-        (C_109: begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end)) in
-       void)
+        (C_109: begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end))
       else
-       (let jessie_<somenum> = (C_108: (tmp_3 := (safe_int32_of_integer_ (0)))) in
-       void));
+       (C_108: begin   (tmp_3 := (safe_int32_of_integer_ (0))); !tmp_3 end)) in
+      void);
       (let jessie_<somenum> = !tmp_3 in
       (let jessie_<somenum> = buch_CurTrans in
       (let jessie_<somenum> = (2) in
@@ -5579,7 +5379,7 @@ why --project [...] why/t1_annot24.why
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `Buchi_property_behavior'">
+    <behavior name="Behavior `Buchi_property_behavior'">
     <goal why_file="why/t1_annot24_po126.why">
       <location file = "PPCHOME/tests/jessie/t1_annot24.c" line = "220" begin = "15" end = "36"/>
       <explain kind = "Post"/>
@@ -5913,7 +5713,7 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `Buchi_property_behavior'">
+    <behavior name="Behavior `Buchi_property_behavior'">
     <goal why_file="why/t1_annot24_po54.why">
       <location file = "PPCHOME/tests/jessie/t1_annot24.c" line = "250" begin = "15" end = "36"/>
       <explain kind = "Post"/>
@@ -6072,7 +5872,7 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `j'">
+    <behavior name="Behavior `j'">
     <goal why_file="why/t1_annot24_po19.why">
       <location file = "PPCHOME/tests/jessie/t1_annot24.c" line = "193" begin = "15" end = "24"/>
       <explain kind = "Post"/>
@@ -6138,7 +5938,7 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `Buchi_property_behavior'">
+    <behavior name="Behavior `Buchi_property_behavior'">
     <goal why_file="why/t1_annot24_po1.why">
       <location file = "PPCHOME/tests/jessie/t1_annot24.c" line = "187" begin = "15" end = "36"/>
       <explain kind = "Post"/>
@@ -7192,6 +6992,12 @@ axiom Buch_OpStatusList_coerce:
     (((0 <= x) and (x <= 1)) ->
      (integer_of_Buch_OpStatusList(Buch_OpStatusList_of_integer(x)) = x)))
 
+axiom Buch_OpStatusList_extensionality:
+  (forall x:Buch_OpStatusList.
+    (forall y:Buch_OpStatusList.
+      ((integer_of_Buch_OpStatusList(x) = integer_of_Buch_OpStatusList(y)) ->
+       (x = y))))
+
 axiom Buch_OpStatusList_range:
   (forall x:Buch_OpStatusList.
     ((0 <= integer_of_Buch_OpStatusList(x)) and
@@ -7363,6 +7169,11 @@ axiom buch_ListOper_coerce:
     (((0 <= x) and (x <= 2)) ->
      (integer_of_buch_ListOper(buch_ListOper_of_integer(x)) = x)))
 
+axiom buch_ListOper_extensionality:
+  (forall x:buch_ListOper.
+    (forall y:buch_ListOper.
+      ((integer_of_buch_ListOper(x) = integer_of_buch_ListOper(y)) -> (x = y))))
+
 axiom buch_ListOper_range:
   (forall x:buch_ListOper.
     ((0 <= integer_of_buch_ListOper(x)) and
@@ -7406,6 +7217,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -7417,6 +7233,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -7505,21 +7325,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_buch_AcceptStates(intP_buch_AcceptStates_5_alloc_table: intP alloc_table) =
   ((offset_min(intP_buch_AcceptStates_5_alloc_table,

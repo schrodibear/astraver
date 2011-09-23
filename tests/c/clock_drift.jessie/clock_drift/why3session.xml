@@ -1,0 +1,298 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<why3session
+ name="clock_drift.jessie/clock_drift/why3session.xml">
+ <prover
+  id="alt-ergo"
+  name="Alt-Ergo"
+  version="0.93"/>
+ <prover
+  id="coq"
+  name="Coq"
+  version="8.2pl1"/>
+ <prover
+  id="cvc3"
+  name="CVC3"
+  version="2.2"/>
+ <prover
+  id="gappa"
+  name="Gappa"
+  version="0.14.0"/>
+ <prover
+  id="simplify"
+  name="Simplify"
+  version="1.5.4"/>
+ <prover
+  id="vampire"
+  name="Vampire"
+  version="0.6"/>
+ <prover
+  id="yices"
+  name="Yices"
+  version="1.0.25"/>
+ <prover
+  id="z3"
+  name="Z3"
+  version="2.19"/>
+ <file
+  name="../clock_drift.mlw"
+  verified="true"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   verified="true"
+   expanded="true">
+   <goal
+    name="real_of_int_inf_NMAX"
+    expl="Lemma real_of_int_inf_NMAX, lemma"
+    sum="d45f5df3db88f7fdaf16b431a451cf79"
+    proved="true"
+    expanded="false"
+    shape="ainfix <=afrom_intV0c1000000.0Iainfix <=V0c1000000F">
+    <proof
+     prover="gappa"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="real_of_int_succ"
+    expl="Lemma real_of_int_succ, lemma"
+    sum="af918a7dbdd5d221e366076fbcb3d043"
+    proved="true"
+    expanded="false"
+    shape="ainfix =afrom_intainfix +V0c1ainfix +afrom_intV0c1.0F">
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="gappa"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.17"/>
+    </proof>
+   </goal>
+  </theory>
+  <theory
+   name="WP Jessie_program"
+   verified="true"
+   expanded="true">
+   <goal
+    name="WP_parameter f_single_ensures_default"
+    expl="Function f_single, default behavior"
+    sum="7162c1d549ac7ccd3b53ce4c193c39e3"
+    proved="true"
+    expanded="true"
+    shape="iainfix <ainteger_of_int32V5ainteger_of_int32V0ainfix <=ainteger_of_int32V11ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsainfix -avalueV9ainfix *afrom_intainteger_of_int32V11c0.1ainfix *afrom_intainteger_of_int32V11ainfix +c0x1.p-8c1.49012e-09Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FAainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FAainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6ainfix <=aabsainfix -avalueV12ainfix *afrom_intainteger_of_int32V0c0.1ainfix *afrom_intainteger_of_int32V0ainfix +c0x1.p-8c1.49012e-09Iainfix =V12V6FIainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFAainfix <=ainteger_of_int32V4ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V4Aainfix <=aabsainfix -avalueV2ainfix *afrom_intainteger_of_int32V4c0.1ainfix *afrom_intainteger_of_int32V4ainfix +c0x1.p-8c1.49012e-09Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
+    <transf
+     name="split_goal"
+     proved="true"
+     expanded="true">
+     <goal
+      name="WP_parameter f_single_ensures_default.1"
+      expl="loop invariant init"
+      sum="76950cc261b5d3c2841a5e0f4720de52"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=ainteger_of_int32V4ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V4Aainfix <=aabsainfix -avalueV2ainfix *afrom_intainteger_of_int32V4c0.1ainfix *afrom_intainteger_of_int32V4ainfix +c0x1.p-8c1.49012e-09Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.12"/>
+      </proof>
+      <proof
+       prover="gappa"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.15"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter f_single_ensures_default.2"
+      expl="assertion"
+      sum="7938f8d25742875604cabf288836d0ad"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.14"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.17"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter f_single_ensures_default.3"
+      expl="assertion"
+      sum="111ce552343fe2b40c68a78412d06361"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
+      <proof
+       prover="gappa"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter f_single_ensures_default.4"
+      expl="loop invariant preservation"
+      sum="f1055a90a8368dc400c7b65338f5a1f3"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=ainteger_of_int32V11ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsainfix -avalueV9ainfix *afrom_intainteger_of_int32V11c0.1ainfix *afrom_intainteger_of_int32V11ainfix +c0x1.p-8c1.49012e-09Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.21"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter f_single_ensures_default.5"
+      expl="normal postcondition"
+      sum="35eb42e3576324d8e859258119d8ebe9"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=aabsainfix -avalueV7ainfix *afrom_intainteger_of_int32V0c0.1ainfix *afrom_intainteger_of_int32V0ainfix +c0x1.p-8c1.49012e-09Iainfix =V7V6FIainfix <ainteger_of_int32V5ainteger_of_int32V0NIainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.13"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+   <goal
+    name="WP_parameter f_single_safety"
+    expl="Function f_single, Safety"
+    sum="421a0ce54524b5821f01d7d48c84cc1e"
+    proved="true"
+    expanded="true"
+    shape="ainfix <ainfix -ainteger_of_int32V0ainteger_of_int32V11ainfix -ainteger_of_int32V0ainteger_of_int32V5Aainfix <=c0ainfix -ainteger_of_int32V0ainteger_of_int32V5Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FAainfix <=ainfix +ainteger_of_int32V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FAainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
+    <transf
+     name="split_goal"
+     proved="true"
+     expanded="true">
+     <goal
+      name="WP_parameter f_single_safety.1"
+      expl="floating-point overflow"
+      sum="62c7fa4ed59b68197f9c7a54784c96c7"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
+      <proof
+       prover="gappa"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter f_single_safety.2"
+      expl="arithmetic overflow"
+      sum="5477336c5d8e2d4cd070ae81f70e13b7"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=ainfix +ainteger_of_int32V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.14"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.10"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.14"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter f_single_safety.3"
+      expl="loop variant decreases"
+      sum="e46185832ddacbbdd312d4f2e2352f2d"
+      proved="true"
+      expanded="false"
+      shape="ainfix <ainfix -ainteger_of_int32V0ainteger_of_int32V11ainfix -ainteger_of_int32V0ainteger_of_int32V5Aainfix <=c0ainfix -ainteger_of_int32V0ainteger_of_int32V5Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix <=ainfix +ainteger_of_int32V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.15"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.10"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.15"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+  </theory>
+ </file>
+</why3session>

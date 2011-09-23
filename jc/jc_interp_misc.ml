@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -368,9 +368,9 @@ let tr_var_base_type v =
 let tr_var_type v =
   tr_type ~region:v.jc_var_info_region v.jc_var_info_type
 
-let any_value t = 
-  match t with 
-    | JCTnative ty -> 
+let any_value t =
+  match t with
+    | JCTnative ty ->
         begin match ty with
 	  | Tunit -> void
 	  | Tboolean -> make_app "any_bool" [void]
@@ -379,16 +379,16 @@ let any_value t =
 	  | Tgenfloat _ -> make_app ("any_"^(native_name ty)) [void]
 	  | Tstring -> make_app "any_string" [void]
         end
-    | JCTnull 
+    | JCTnull
     | JCTpointer _ -> make_app "any_pointer" [void]
     | JCTenum ri -> make_app (fun_any_enum ri) [void]
-    | JCTlogic _ as ty -> 
-        let t = 
+    | JCTlogic _ as ty ->
+        let t =
           Annot_type(LTrue, Base_type (tr_base_type ty), [], [], LTrue, [])
         in mk_expr (BlackBox t)
     | JCTany -> assert false
     | JCTtype_var _ -> assert false (* TODO: need environment *)
-     
+
 (* model types *)
 
 let pset_type ac = raw_pset_type (alloc_class_type ac)
@@ -437,9 +437,9 @@ let transpose_label ~label_assoc lab =
     | None -> lab
     | Some l ->  try List.assoc lab l with Not_found -> lab
 
-let lvar_name ~constant ~label_in_name ?label_assoc lab n =
+let lvar_name ~label_in_name ?label_assoc lab n =
   let lab = transpose_label ~label_assoc lab in
-  if label_in_name && not constant then
+  if label_in_name then
     match lab with
       | LabelHere -> n
       | LabelOld -> assert false
@@ -449,15 +449,17 @@ let lvar_name ~constant ~label_in_name ?label_assoc lab n =
   else n
 
 let lvar ~constant ~label_in_name lab n =
-  let n = lvar_name ~constant ~label_in_name lab n in
-  if label_in_name then
+  let n = lvar_name ~label_in_name lab n in
+  if constant then
     LVar n
+  else if label_in_name then
+    LDeref n
   else match lab with
-    | LabelHere -> LVar n
-    | LabelOld -> LVarAtLabel(n,"")
-    | LabelPre -> LVarAtLabel(n,"init")
-    | LabelPost -> LVar n
-    | LabelName lab -> LVarAtLabel(n,lab.label_info_final_name)
+    | LabelHere -> LDeref n
+    | LabelOld -> LDerefAtLabel(n,"")
+    | LabelPre -> LDerefAtLabel(n,"init")
+    | LabelPost -> LDeref n
+    | LabelName lab -> LDerefAtLabel(n,lab.label_info_final_name)
 
 (* simple variables *)
 
@@ -481,11 +483,14 @@ let param ~type_safe v =
     tr_base_type ~region:v.jc_var_info_region v.jc_var_info_type
 
 let tvar_name ~label_in_name lab v =
-  lvar_name ~constant:(not v.jc_var_info_assigned) ~label_in_name
+  let constant = not v.jc_var_info_assigned in
+  lvar_name ~label_in_name:(label_in_name && not constant)
     lab v.jc_var_info_final_name
 
+
 let tvar ~label_in_name lab v =
-  lvar ~constant:(not v.jc_var_info_assigned) ~label_in_name
+  let constant = not v.jc_var_info_assigned in
+  lvar ~constant ~label_in_name:(label_in_name && not constant)
     lab v.jc_var_info_final_name
 
 let tparam ~label_in_name lab v =
@@ -543,7 +548,7 @@ let memory_var ?(test_current_function=false) (mc,r) =
 let tmemory_var ~label_in_name lab (mc,r) =
   let mem = memory_name (mc,r) in
   let constant = match !current_function with
-    | None -> false (* Variables at different labels should be different *)
+    | None -> true
     | Some infunction -> not (mutable_memory infunction (mc,r))
   in
   lvar ~constant ~label_in_name lab mem
@@ -551,10 +556,10 @@ let tmemory_var ~label_in_name lab (mc,r) =
 let tmemory_param ~label_in_name lab (mc,r) =
   let mem = memory_name (mc,r) in
   let constant = match !current_function with
-    | None -> false (* Variables at different labels should be different *)
+    | None -> true
     | Some infunction -> not (mutable_memory infunction (mc,r))
   in
-  let n = lvar_name ~constant ~label_in_name lab mem in
+  let n = lvar_name (* ~constant *) ~label_in_name lab mem in
   let v = lvar ~constant ~label_in_name lab mem in
   let ty' = memory_type mc in
   n, v, ty'
@@ -572,18 +577,19 @@ let alloc_table_var ?(test_current_function=false) (ac,r) =
 let talloc_table_var ~label_in_name lab (ac,r) =
   let alloc = alloc_table_name (ac,r) in
   let constant = match !current_function with
-    | None -> false (* Variables at different labels should be different *)
+    | None -> true
     | Some infunction -> not (mutable_alloc_table infunction (ac,r))
   in
   not constant,lvar ~constant ~label_in_name lab alloc
 
+
 let talloc_table_param ~label_in_name lab (ac,r) =
   let alloc = alloc_table_name (ac,r) in
   let constant = match !current_function with
-    | None -> false (* Variables at different labels should be different *)
+    | None -> true
     | Some infunction -> not (mutable_alloc_table infunction (ac,r))
   in
-  let n = lvar_name ~constant ~label_in_name lab alloc in
+  let n = lvar_name (* ~constant *) ~label_in_name lab alloc in
   let v = lvar ~constant ~label_in_name lab alloc in
   let ty' = alloc_table_type ac in
   n, v, ty'
@@ -599,7 +605,7 @@ let tag_table_var (vi,r) =
 let ttag_table_var ~label_in_name lab (vi,r) =
   let tag = tag_table_name (vi,r) in
   let constant = match !current_function with
-    | None -> false (* Variables at different labels should be different *)
+    | None -> true
     | Some infunction -> not (mutable_tag_table infunction (vi,r))
   in
   lvar ~constant ~label_in_name lab tag
@@ -607,10 +613,10 @@ let ttag_table_var ~label_in_name lab (vi,r) =
 let ttag_table_param ~label_in_name lab (vi,r) =
   let tag = tag_table_name (vi,r) in
   let constant = match !current_function with
-    | None -> false (* Variables at different labels should be different *)
+    | None -> true
     | Some infunction -> not (mutable_tag_table infunction (vi,r))
   in
-  let n = lvar_name ~constant ~label_in_name lab tag in
+  let n = lvar_name (* ~constant *) ~label_in_name lab tag in
   let v = lvar ~constant ~label_in_name lab tag in
   let ty' = tag_table_type vi in
   n, v, ty'
@@ -941,12 +947,12 @@ let const_of_num n = LConst(Prim_int(Num.string_of_num n))
 
 let define_locals ?(reads=[]) ?(writes=[]) e' =
   let e' =
-    List.fold_left 
+    List.fold_left
       (fun acc (n,ty') -> mk_expr (Let(n,any_value' ty',acc)))
       e' reads
   in
   let e' =
-    List.fold_left 
+    List.fold_left
       (fun acc (n,ty') -> mk_expr (Let_ref(n,any_value' ty',acc)))
       e' writes
   in
@@ -954,7 +960,8 @@ let define_locals ?(reads=[]) ?(writes=[]) e' =
 
 (* Validity *)
 
-let make_valid_pred_app ~equal (ac, r) pc p ao bo =
+let make_valid_pred_app ~in_param ~equal (ac, r) pc p ao bo =
+  assert (in_param = in_param);
   let all_allocs = match ac with
     | JCalloc_bitvector -> [ ac ]
     | JCalloc_root rt ->
@@ -964,7 +971,25 @@ let make_valid_pred_app ~equal (ac, r) pc p ao bo =
 	  | RplainUnion -> [ ac ]
   in
   let allocs =
-    List.map (fun ac -> LVar(alloc_table_name (ac,r))) all_allocs
+    List.map (fun ac ->
+                (*
+                  let v = alloc_table_name(ac,r) in
+                  if in_param then LDeref v else LVar v
+                *)
+                let is_not_cte,v =
+                  talloc_table_var ~label_in_name:false LabelHere (ac,r)
+                in
+                match v with
+                  | LDeref x ->
+                      assert is_not_cte;
+                      assert in_param;
+                      if is_not_cte then v else LVar x
+                  | LVar x ->
+                      assert (not is_not_cte);
+                     (*  assert (not in_param); *)
+                      (* if in_param then *) LDeref x (* else v *)
+                  | _ -> assert false
+             ) all_allocs
   in
   let all_mems = match ac with
     | JCalloc_bitvector -> []
@@ -974,7 +999,11 @@ let make_valid_pred_app ~equal (ac, r) pc p ao bo =
 	  | RdiscrUnion -> all_memories ~select:fully_allocated pc
 	  | RplainUnion -> []
   in
-  let mems = List.map (fun mc -> LVar(memory_name (mc,r))) all_mems in
+  let mems =
+    List.map (fun mc ->
+                tmemory_var ~label_in_name:false LabelHere (mc,r))
+      all_mems
+  in
   let params = allocs @ mems in
   let f x acc = x :: acc in
   let params = Option_misc.fold f bo params in
@@ -993,7 +1022,7 @@ If T is a structure:
        valid_T'(p.f, a', b', allocs ...)
 If T is a variant, then we only have the condition on offset_min and max.
 *)
-let make_valid_pred ~equal ?(left=true) ?(right=true) ac pc =
+let make_valid_pred ~in_param ~equal ?(left=true) ?(right=true) ac pc =
   let p = "p" in
   let a = "a" in
   let b = "b" in
@@ -1034,7 +1063,7 @@ let make_valid_pred ~equal ?(left=true) ?(right=true) ac pc =
       | JCtag ({ jc_struct_info_parent = Some(st, pp) }, _) ->
           LTrue,
           LTrue,
-          make_valid_pred_app ~equal
+          make_valid_pred_app ~in_param ~equal
 	    (ac,dummy_region) (JCtag(st, pp)) (LVar p)
 	    (if left then Some (LVar a) else None)
 	    (if right then Some (LVar b) else None)
@@ -1055,7 +1084,7 @@ let make_valid_pred ~equal ?(left=true) ?(right=true) ac pc =
 			(function
 			   | { jc_field_info_type =
 				 JCTpointer(fpc, Some fa, Some fb) } as fi ->
-			       make_valid_pred_app ~equal (ac,dummy_region) fpc
+			       make_valid_pred_app ~in_param ~equal (ac,dummy_region) fpc
 				 (make_select_fi fi (LVar p))
 				 (if left then Some (const_of_num fa) else None)
 				 (if right then Some (const_of_num fb) else None)
@@ -1072,7 +1101,7 @@ let make_valid_pred ~equal ?(left=true) ?(right=true) ac pc =
     let validity = if left then omin :: validity else validity in
       make_and_list validity
   in
-  Predicate(false, id_no_loc (valid_pred_name ~equal ~left ~right ac pc), 
+  Predicate(false, id_no_loc (valid_pred_name ~equal ~left ~right ac pc),
 	    params, validity)
 
 (* Allocation *)
@@ -1162,7 +1191,7 @@ let make_alloc_param ~check_size ac pc =
 		    let tag = generic_tag_table_name (struct_root st) in
 		    (* [instanceof(tagtab,result,tag_st)] *)
 		    [ LPred("instanceof",
-			    [LVar tag;LVar "result";LVar(tag_name st)]) ]
+			    [LDeref tag;LVar "result";LVar(tag_name st)]) ]
 		| JCroot _ -> []
 	      end
 	  | RdiscrUnion
@@ -1180,14 +1209,14 @@ let make_alloc_param ~check_size ac pc =
       make_and_list (
 	[
           (* [valid_st(result,0,n-1,alloc...)] *)
-          make_valid_pred_app ~equal:true (ac,dummy_region) pc
+          make_valid_pred_app ~in_param:true ~equal:true (ac,dummy_region) pc
             (LVar "result")
             (Some (LConst(Prim_int "0")))
             (Some (LApp("sub_int",[LVar n; LConst(Prim_int "1")])));
           (* [alloc_extends(old(alloc),alloc)] *)
-          LPred("alloc_extends",[LVarAtLabel(alloc,"");LVar alloc]);
+          LPred("alloc_extends",[LDerefAtLabel(alloc,"");LDeref alloc]);
           (* [alloc_fresh(old(alloc),result,n)] *)
-          LPred("alloc_fresh",[LVarAtLabel(alloc,"");LVar "result";LVar n])
+          LPred("alloc_fresh",[LDerefAtLabel(alloc,"");LVar "result";LVar n])
 	]
 	@ instanceof_post ),
       (* no exceptional post *)
@@ -2049,8 +2078,8 @@ let read_locals ~region_list ~callee_reads ~callee_writes ~params =
     read_model_parameters ~type_safe:false ~mode:`MLocal
       ~callee_reads ~callee_writes ~region_list ~params ~already_used:[] ()
   in
-  List.map (function ({expr_node = Var n},ty') -> (n,ty') 
-              | ({expr_node = Deref n},ty') -> 
+  List.map (function ({expr_node = Var n},ty') -> (n,ty')
+              | ({expr_node = Deref n},ty') ->
 	          printf "Deref %s with type %a@." n Output.fprintf_logic_type ty';
 	          assert false
 	      | _ -> assert false
@@ -2264,7 +2293,7 @@ let make_bitwise_arguments alloc_wpointers alloc_rpointers
 	 let ofapp = append alloc_ofapp mem_ofapp in
 	 let toapp = append alloc_toapp mem_toapp in
 	 locals @ acc, append ofapp pro, append toapp epi
-      ) ([],void,void) (PointerSet.to_list bw_pointers) 
+      ) ([],void,void) (PointerSet.to_list bw_pointers)
   in
   let locals =
     fst (List.fold_left

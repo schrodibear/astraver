@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -184,12 +184,12 @@ val any_value : Jc_env.jc_type -> Output.expr
 
 val eq_of_enum : Jc_env.enum_info -> string
 
-val make_valid_pred : equal:bool ->
+val make_valid_pred : in_param:bool -> equal:bool ->
            ?left:bool ->
            ?right:bool ->
            Jc_env.alloc_class -> Jc_env.pointer_class -> Output.why_decl
 
-val make_valid_pred_app : equal:bool ->
+val make_valid_pred_app : in_param:bool -> equal:bool ->
            Jc_env.alloc_class * Jc_region.RegionTable.key ->
            Jc_env.pointer_class ->
            Output.term ->

@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -40,7 +40,7 @@ type constant =
   | Prim_string of string
 *)
 
-type logic_type = 
+type logic_type =
     { logic_type_name : string;
       logic_type_args : logic_type list;
     }
@@ -50,11 +50,12 @@ val logic_type_var : string -> logic_type
 val fprintf_logic_type : Format.formatter -> logic_type -> unit
 
 
-type term = 
+type term =
   | LConst of constant
   | LApp of string * term list
-  | LVar of string
-  | LVarAtLabel of string * string     (*r x@L *)
+  | LVar of string                  (*r immutable logic var *)
+  | LDeref of string                     (*r !r *) 
+  | LDerefAtLabel of string * string     (*r x@L *)
   | Tnamed of string * term
   | TIf of term * term * term
   | TLet of string * term * term
@@ -63,7 +64,7 @@ val match_term : (string * term) list -> term -> term -> (string * term) list
 
 val fprintf_term : Format.formatter -> term -> unit
 
-type assertion = 
+type assertion =
   | LTrue | LFalse
   | LAnd of assertion * assertion
   | LOr of assertion * assertion
@@ -80,8 +81,8 @@ type assertion =
   | LNamed of string * assertion
 
 and trigger =
-  |LPatP of assertion
-  |LPatT of term
+  | LPatP of assertion
+  | LPatT of term
 
 val make_var : string -> term
 
@@ -90,7 +91,7 @@ val make_or : assertion -> assertion -> assertion
 val make_and : assertion -> assertion -> assertion
 val make_or_list : assertion list -> assertion
 val make_and_list : assertion list -> assertion
-val make_forall_list : (string * logic_type) list -> trigger list list 
+val make_forall_list : (string * logic_type) list -> trigger list list
   -> assertion -> assertion
 val make_impl : assertion -> assertion -> assertion
 val make_impl_list : assertion -> assertion list -> assertion
@@ -98,12 +99,12 @@ val make_equiv : assertion -> assertion -> assertion
 
 val fprintf_assertion : Format.formatter -> assertion -> unit
 
-type why_type = 
+type why_type =
   | Prod_type of string * why_type * why_type (*r (x:t1)->t2 *)
   | Base_type of logic_type
   | Ref_type of why_type
-  | Annot_type of 
-      assertion * why_type * 
+  | Annot_type of
+      assertion * why_type *
       string list * string list * assertion * ((string * assertion) list)
 	(*r { P } t reads r writes w raises E { Q | E => R } *)
 ;;
@@ -128,28 +129,28 @@ type expr_node =
   | Void
   | Deref of string
   | If of expr * expr * expr
-  | While of 
+  | While of
       expr (* loop condition *)
-      * assertion (* invariant *) 
-      * variant option (* variant *) 
+      * assertion (* invariant *)
+      * variant option (* variant *)
       * expr list (* loop body *)
   | Block of expr list
   | Assign of string * expr
-  | MultiAssign of string * Loc.position * (string * expr) list * 
-      bool * term * expr * string * expr * string *  
+  | MultiAssign of string * Loc.position * (string * expr) list *
+      bool * term * expr * string * expr * string *
       (int * bool * bool * string) list
-      (* 
+      (*
 
          this construction is not in Why, but a temporary construction
          used by jessie to denote "parallel updates"
-         
+
          [MultiAssign(mark,pos,lets,talloc,alloc,tmpe,e,f,l)] where [l]
          is a list of pair (i,b1,b2,e') for distincts i, denotes the
          parallel updates (lets) let tmpe = e in (tmpe+i).f = e'
 
          booleans [b1] and [b2] indicates whether it is safe to ignore
          bound checking on the left resp on the right
-         
+
          [alloc] is the allocation table for safety conditions
          [lets] is a sequence of local bindings for expressions e'
       *)
@@ -158,19 +159,19 @@ type expr_node =
   | App of expr * expr
   | Raise of string * expr option
   | Try of expr * string * string option * expr
-  | Fun of (string * why_type) list * 
+  | Fun of (string * why_type) list *
       assertion * expr * assertion * ((string * assertion) list)
-  | Triple of opaque * 
+  | Triple of opaque *
       assertion * expr * assertion * ((string * assertion) list)
   | Assert of assert_kind * assertion * expr
 (*
   | Label of string * expr
 *)
   | BlackBox of why_type
-  | Absurd 
+  | Absurd
   | Loc of Lexing.position * expr
 
-and expr = 
+and expr =
     { expr_labels : string list;
       expr_node : expr_node;
     }
@@ -234,8 +235,8 @@ type why_decl =
   | Param of bool * why_id * why_type         (*r parameter in why *)
   | Def of why_id * expr               (*r global let in why *)
   | Logic of bool * why_id * (string * logic_type) list * logic_type    (*r logic decl in why *)
-  | Predicate of bool * why_id * (string * logic_type) list * assertion  
-  | Inductive of bool * why_id * (string * logic_type) list *  
+  | Predicate of bool * why_id * (string * logic_type) list * assertion
+  | Inductive of bool * why_id * (string * logic_type) list *
       (string * assertion) list (*r inductive definition *)
   | Goal of goal_kind * why_id * assertion         (*r Goal *)
   | Function of bool * why_id * (string * logic_type) list * logic_type * term
@@ -244,7 +245,8 @@ type why_decl =
 
 val fprintf_why_decl : Format.formatter -> why_decl -> unit;;
 
-val fprintf_why_decls : Format.formatter -> why_decl list -> unit
+val fprintf_why_decls : ?why3:bool -> ?use_floats:bool -> 
+  ?full_floats:bool -> Format.formatter -> why_decl list -> unit
 
 type kind =
   | VarDecr
@@ -261,12 +263,31 @@ type kind =
 
 val print_kind : Format.formatter -> kind -> unit
 
-val pos_table : 
-    (string, (kind option * string option * string option * Loc.position)) 
-    Hashtbl.t 
+(*
+val pos_table :
+    (string, (kind option * string option * string option *
+                string * int * int * int))
+    Hashtbl.t
+*)
 
-val reg_pos : string -> ?id:string -> ?kind:kind -> ?name:string
-  -> ?formula:string -> Loc.position -> string
+(*
+val my_pos_table :
+    (string, (kind option * string option * string option *
+                string * int * int * int))
+    Hashtbl.t
+*)
 
-val print_pos : Format.formatter -> unit
+val my_add_pos :
+  string -> (kind option * string option * string option *
+               string * int * int * int) -> unit
+
+val my_print_locs : Format.formatter -> unit
+
+(* backward compatibility for Krakatoa and Jessie plugin *)
+
+val old_reg_pos : string -> ?id:string -> ?kind:kind -> ?name:string
+  -> ?formula:string -> Loc.floc -> string
+
+val old_print_pos : Format.formatter -> unit
+
 

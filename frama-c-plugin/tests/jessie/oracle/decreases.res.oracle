@@ -124,16 +124,8 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
 predicate R(x_0:real, y:real) =
  (le_real(0.0, y) and ge_real(sub_real(y, x_0), 1.0))
-
-exception Return_label_exc of unit
 
 logic charP_tag:  -> charP tag_id
 
@@ -195,16 +187,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -239,41 +221,13 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -350,17 +304,15 @@ let even_ensures_default =
      (let tmp_0 = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       (C_4:
       (C_7:
       begin
         (if ((eq_int_ n) (0))
         then
-         (let jessie_<somenum> =
          (C_1:
          begin
            (let jessie_<somenum> = (__retres := (1)) in void);
-          (raise (Return_label_exc void)) end) in void) else void);
+          (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> =
        (tmp := (C_3:
                (let jessie_<somenum> = (C_2: ((sub_int n) (1))) in
@@ -370,7 +322,7 @@ let even_ensures_default =
        then (C_6: begin   (tmp_0 := (0)); !tmp_0 end)
        else (C_5: begin   (tmp_0 := (1)); !tmp_0 end)) in void);
        (let jessie_<somenum> = (__retres := !tmp_0) in void);
-       (raise (Return_label_exc void)) end)) in void) with
+       (raise (Return_label_exc void)) end)) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
@@ -386,17 +338,15 @@ let even_safety =
      (let tmp_0 = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       (C_4:
       (C_7:
       begin
         (if ((eq_int_ n) (0))
         then
-         (let jessie_<somenum> =
          (C_1:
          begin
            (let jessie_<somenum> = (__retres := (1)) in void);
-          (raise (Return_label_exc void)) end) in void) else void);
+          (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> =
        (tmp := (C_3:
                (let jessie_<somenum> = (C_2: ((sub_int n) (1))) in
@@ -408,7 +358,7 @@ let even_safety =
        then (C_6: begin   (tmp_0 := (0)); !tmp_0 end)
        else (C_5: begin   (tmp_0 := (1)); !tmp_0 end)) in void);
        (let jessie_<somenum> = (__retres := !tmp_0) in void);
-       (raise (Return_label_exc void)) end)) in void) with
+       (raise (Return_label_exc void)) end)) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { true }
@@ -424,23 +374,20 @@ let f_ensures_default =
      (let x_1 = ref (any_double void) in
      (let __retres_1 = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       begin
         try
-         (let jessie_<somenum> =
          (C_21:
          (C_22:
          (C_26:
          begin
            (let jessie_<somenum> = (n_1 := (0)) in void);
           (let jessie_<somenum> = (x_1 := y_0) in void);
-          (if ((le_double !x_1) (double_of_real_exact 1.0))
+          (if ((le_double_ !x_1) (double_of_real_exact 1.0))
           then
-           (let jessie_<somenum> =
            (C_23:
            begin
              (let jessie_<somenum> = (__retres_1 := !n_1) in void);
-            (raise (Return_label_exc void)) end) in void) else void);
+            (raise (Return_label_exc void)) end) else void);
           (let jessie_<somenum> =
           (n_1 := (C_25:
                   (let jessie_<somenum> =
@@ -454,29 +401,26 @@ let f_ensures_default =
            begin
              [ { } unit { true } ];
             try
-             (let jessie_<somenum> =
              begin
                (let jessie_<somenum> =
                (C_29:
                (C_31:
                begin
-                 (if ((ge_double !x_1) (double_of_real_exact 10.0)) then void
-                 else
-                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                  void));
+                 (if ((ge_double_ !x_1) (double_of_real_exact 10.0))
+                 then void else (raise (Goto_while_0_break_exc void)));
                 (let jessie_<somenum> = (n_1 := (C_28: ((add_int !n_1) (1)))) in
                 void);
                 (x_1 := (C_30:
                         (JC_<somenum>:
                         (((sub_double_safe nearest_even) !x_1) (double_of_real_exact 1.0)))));
-                !x_1 end)) in void); (raise (Loop_continue_exc void)) end in
-             void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end))) in void) with
+                !x_1 end)) in void); (raise (Loop_continue_exc void)) end
+             with Loop_continue_exc jessie_<somenum> -> void end end done);
+          (raise (Goto_while_0_break_exc void)) end))) with
          Goto_while_0_break_exc jessie_<somenum> ->
          (let jessie_<somenum> =
          (while_0_break:
          (C_32: begin   void; (__retres_1 := !n_1); !__retres_1 end)) in
-         void) end; (raise (Return_label_exc void)) end in void) with
+         void) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_1); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
@@ -492,23 +436,20 @@ let f_safety =
      (let x_1 = ref (any_double void) in
      (let __retres_1 = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       begin
         try
-         (let jessie_<somenum> =
          (C_21:
          (C_22:
          (C_26:
          begin
            (let jessie_<somenum> = (n_1 := (0)) in void);
           (let jessie_<somenum> = (x_1 := y_0) in void);
-          (if ((le_double !x_1) (double_of_real_exact 1.0))
+          (if ((le_double_ !x_1) (double_of_real_exact 1.0))
           then
-           (let jessie_<somenum> =
            (C_23:
            begin
              (let jessie_<somenum> = (__retres_1 := !n_1) in void);
-            (raise (Return_label_exc void)) end) in void) else void);
+            (raise (Return_label_exc void)) end) else void);
           (let jessie_<somenum> =
           (n_1 := (C_25:
                   (let jessie_<somenum> =
@@ -526,29 +467,26 @@ let f_safety =
            begin
              [ { } unit { true } ];
             try
-             (let jessie_<somenum> =
              begin
                (let jessie_<somenum> =
                (C_29:
                (C_31:
                begin
-                 (if ((ge_double !x_1) (double_of_real_exact 10.0)) then void
-                 else
-                  (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                  void));
+                 (if ((ge_double_ !x_1) (double_of_real_exact 10.0))
+                 then void else (raise (Goto_while_0_break_exc void)));
                 (let jessie_<somenum> = (n_1 := (C_28: ((add_int !n_1) (1)))) in
                 void);
                 (x_1 := (C_30:
                         (JC_<somenum>:
                         (((sub_double nearest_even) !x_1) (double_of_real_exact 1.0)))));
-                !x_1 end)) in void); (raise (Loop_continue_exc void)) end in
-             void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end))) in void) with
+                !x_1 end)) in void); (raise (Loop_continue_exc void)) end
+             with Loop_continue_exc jessie_<somenum> -> void end end done);
+          (raise (Goto_while_0_break_exc void)) end))) with
          Goto_while_0_break_exc jessie_<somenum> ->
          (let jessie_<somenum> =
          (while_0_break:
          (C_32: begin   void; (__retres_1 := !n_1); !__retres_1 end)) in
-         void) end; (raise (Return_label_exc void)) end in void) with
+         void) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_1); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { true }
@@ -564,17 +502,15 @@ let odd_ensures_default =
      (let tmp_0_1 = ref (any_int void) in
      (let __retres_0 = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       (C_14:
       (C_17:
       begin
         (if ((eq_int_ n_0) (0))
         then
-         (let jessie_<somenum> =
          (C_11:
          begin
            (let jessie_<somenum> = (__retres_0 := (0)) in void);
-          (raise (Return_label_exc void)) end) in void) else void);
+          (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> =
        (tmp_0_0 := (C_13:
                    (let jessie_<somenum> = (C_12: ((sub_int n_0) (1))) in
@@ -584,7 +520,7 @@ let odd_ensures_default =
        then (C_16: begin   (tmp_0_1 := (0)); !tmp_0_1 end)
        else (C_15: begin   (tmp_0_1 := (1)); !tmp_0_1 end)) in void);
        (let jessie_<somenum> = (__retres_0 := !tmp_0_1) in void);
-       (raise (Return_label_exc void)) end)) in void) with
+       (raise (Return_label_exc void)) end)) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
@@ -600,17 +536,15 @@ let odd_safety =
      (let tmp_0_1 = ref (any_int void) in
      (let __retres_0 = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       (C_14:
       (C_17:
       begin
         (if ((eq_int_ n_0) (0))
         then
-         (let jessie_<somenum> =
          (C_11:
          begin
            (let jessie_<somenum> = (__retres_0 := (0)) in void);
-          (raise (Return_label_exc void)) end) in void) else void);
+          (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> =
        (tmp_0_0 := (C_13:
                    (let jessie_<somenum> = (C_12: ((sub_int n_0) (1))) in
@@ -622,7 +556,7 @@ let odd_safety =
        then (C_16: begin   (tmp_0_1 := (0)); !tmp_0_1 end)
        else (C_15: begin   (tmp_0_1 := (1)); !tmp_0_1 end)) in void);
        (let jessie_<somenum> = (__retres_0 := !tmp_0_1) in void);
-       (raise (Return_label_exc void)) end)) in void) with
+       (raise (Return_label_exc void)) end)) with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_0); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { true }
@@ -635,11 +569,11 @@ why --project [...] why/decreases.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/decreases_po9.why">
-      <location file = "why/decreases.why" line = "498" begin = "28" end = "72"/>
+      <location file = "why/decreases.why" line = "432" begin = "28" end = "72"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/decreases_po10.why">
-      <location file = "why/decreases.why" line = "498" begin = "28" end = "72"/>
+      <location file = "why/decreases.why" line = "432" begin = "28" end = "72"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/decreases_po11.why">
@@ -658,7 +592,7 @@ text = "UserCall"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/decreases_po5.why">
-      <location file = "why/decreases.why" line = "400" begin = "20" end = "105"/>
+      <location file = "why/decreases.why" line = "341" begin = "20" end = "105"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/decreases_po6.why">
@@ -681,11 +615,11 @@ text = "FPOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/decreases_po1.why">
-      <location file = "why/decreases.why" line = "284" begin = "24" end = "66"/>
+      <location file = "why/decreases.why" line = "234" begin = "24" end = "66"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/decreases_po2.why">
-      <location file = "why/decreases.why" line = "284" begin = "24" end = "66"/>
+      <location file = "why/decreases.why" line = "234" begin = "24" end = "66"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/decreases_po3.why">
@@ -1752,21 +1686,20 @@ axiom round_single_down_le: (forall x:real. (round_single(down, x) <= x))
 
 axiom round_up_single_ge: (forall x:real. (round_single(up, x) >= x))
 
-logic single_to_double : single -> double
+axiom single_value_is_bounded:
+  (forall x:single. (abs_real(single_value(x)) <= max_single))
 
-logic double_to_single : mode, double -> single
-
-axiom single_to_double_val:
-  (forall s:single. (double_value(single_to_double(s)) = single_value(s)))
-
-axiom double_to_single_val:
-  (forall m:mode.
-    (forall d:double. (single_value(double_to_single(m, d)) = round_single(m,
-      double_value(d)))))
+axiom double_value_is_bounded:
+  (forall x:double. (abs_real(double_value(x)) <= max_double))
 
 predicate single_of_real_post(m: mode, x: real, res: single) =
   ((single_value(res) = round_single(m, x)) and
    ((single_exact(res) = x) and (single_model(res) = x)))
+
+predicate single_of_double_post(m: mode, x: double, res: single) =
+  ((single_value(res) = round_single(m, double_value(x))) and
+   ((single_exact(res) = double_exact(x)) and
+    (single_model(res) = double_model(x))))
 
 predicate add_single_post(m: mode, x: single, y: single, res: single) =
   ((single_value(res) = round_single(m,
@@ -1810,6 +1743,11 @@ predicate abs_single_post(x: single, res: single) =
 predicate double_of_real_post(m: mode, x: real, res: double) =
   ((double_value(res) = round_double(m, x)) and
    ((double_exact(res) = x) and (double_model(res) = x)))
+
+predicate double_of_single_post(x: single, res: double) =
+  ((double_value(res) = single_value(x)) and
+   ((double_exact(res) = single_exact(x)) and
+    (double_model(res) = single_model(x))))
 
 predicate add_double_post(m: mode, x: double, y: double, res: double) =
   ((double_value(res) = round_double(m,
@@ -1918,16 +1856,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

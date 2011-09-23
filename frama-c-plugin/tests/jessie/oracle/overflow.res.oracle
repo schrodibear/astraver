@@ -137,6 +137,10 @@ axiom E1_coerce :
   ((le_int((0), x) and le_int(x, (1))) ->
    eq_int(integer_of_E1(E1_of_integer(x)), x)))
 
+axiom E1_extensionality :
+ (forall x:E1.
+  (forall y:E1. (eq_int(integer_of_E1(x), integer_of_E1(y)) -> (x = y))))
+
 axiom E1_range :
  (forall x:E1.
   (le_int((0), integer_of_E1(x)) and le_int(integer_of_E1(x), (1))))
@@ -150,15 +154,13 @@ axiom E2_coerce :
   ((le_int((0), x) and le_int(x, (2))) ->
    eq_int(integer_of_E2(E2_of_integer(x)), x)))
 
+axiom E2_extensionality :
+ (forall x:E2.
+  (forall y:E2. (eq_int(integer_of_E2(x), integer_of_E2(y)) -> (x = y))))
+
 axiom E2_range :
  (forall x:E2.
   (le_int((0), integer_of_E2(x)) and le_int(integer_of_E2(x), (2))))
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
 
 logic c1:  -> int8
 
@@ -216,6 +218,11 @@ axiom int16_coerce :
   ((le_int((-32768), x) and le_int(x, (32767))) ->
    eq_int(integer_of_int16(int16_of_integer(x)), x)))
 
+axiom int16_extensionality :
+ (forall x:int16.
+  (forall y:int16.
+   (eq_int(integer_of_int16(x), integer_of_int16(y)) -> (x = y))))
+
 axiom int16_range :
  (forall x:int16.
   (le_int((-32768), integer_of_int16(x))
@@ -227,6 +234,11 @@ axiom int32_coerce :
  (forall x:int.
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
+
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range :
  (forall x:int32.
@@ -240,6 +252,11 @@ axiom int64_coerce :
   ((le_int((-9223372036854775808), x) and le_int(x, (9223372036854775807))) ->
    eq_int(integer_of_int64(int64_of_integer(x)), x)))
 
+axiom int64_extensionality :
+ (forall x:int64.
+  (forall y:int64.
+   (eq_int(integer_of_int64(x), integer_of_int64(y)) -> (x = y))))
+
 axiom int64_range :
  (forall x:int64.
   (le_int((-9223372036854775808), integer_of_int64(x))
@@ -251,6 +268,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -307,19 +329,14 @@ axiom uint8_coerce :
   ((le_int((0), x) and le_int(x, (255))) ->
    eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
 
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8.
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
 axiom uint8_range :
  (forall x:uint8.
   (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -365,41 +382,11 @@ parameter E2_of_integer_ :
   { (le_int((0), x) and le_int(x, (2)))} E2
   { eq_int(integer_of_E2(result), x) }
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -475,8 +462,8 @@ parameter f : tt:unit -> { } unit writes e1 { true }
 
 parameter f_requires :
  tt:unit ->
-  { (JC_<somenum>: neq_int(integer_of_E2(e2), integer_of_E2(E2_of_integer((2)))))}
-  unit writes e1 { true }
+  { (JC_<somenum>: (integer_of_E2(e2) <> integer_of_E2(E2_of_integer((2)))))} unit
+  writes e1 { true }
 
 parameter s_0 : int16 ref
 
@@ -556,7 +543,7 @@ parameter uint8_of_integer_ :
 
 let f_ensures_default =
  fun (tt : unit) ->
-  { (JC_<somenum>: neq_int(integer_of_E2(e2), integer_of_E2(E2_of_integer((2))))) }
+  { (JC_<somenum>: (integer_of_E2(e2) <> integer_of_E2(E2_of_integer((2))))) }
   (init:
   try
    (C_2:
@@ -568,7 +555,7 @@ let f_ensures_default =
 
 let f_safety =
  fun (tt : unit) ->
-  { (JC_<somenum>: neq_int(integer_of_E2(e2), integer_of_E2(E2_of_integer((2))))) }
+  { (JC_<somenum>: (integer_of_E2(e2) <> integer_of_E2(E2_of_integer((2))))) }
   (init:
   try
    (C_2:
@@ -1754,6 +1741,10 @@ axiom E1_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 1)) -> (integer_of_E1(E1_of_integer(x)) = x)))
 
+axiom E1_extensionality:
+  (forall x:E1.
+    (forall y:E1. ((integer_of_E1(x) = integer_of_E1(y)) -> (x = y))))
+
 axiom E1_range:
   (forall x:E1. ((0 <= integer_of_E1(x)) and (integer_of_E1(x) <= 1)))
 
@@ -1764,6 +1755,10 @@ logic E2_of_integer : int -> E2
 axiom E2_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 2)) -> (integer_of_E2(E2_of_integer(x)) = x)))
+
+axiom E2_extensionality:
+  (forall x:E2.
+    (forall y:E2. ((integer_of_E2(x) = integer_of_E2(y)) -> (x = y))))
 
 axiom E2_range:
   (forall x:E2. ((0 <= integer_of_E2(x)) and (integer_of_E2(x) <= 2)))
@@ -1825,6 +1820,11 @@ axiom int16_coerce:
     ((((-32768) <= x) and (x <= 32767)) ->
      (integer_of_int16(int16_of_integer(x)) = x)))
 
+axiom int16_extensionality:
+  (forall x:int16.
+    (forall y:int16.
+      ((integer_of_int16(x) = integer_of_int16(y)) -> (x = y))))
+
 axiom int16_range:
   (forall x:int16.
     (((-32768) <= integer_of_int16(x)) and (integer_of_int16(x) <= 32767)))
@@ -1835,6 +1835,11 @@ axiom int32_coerce:
   (forall x:int.
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
+
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range:
   (forall x:int32.
@@ -1848,6 +1853,11 @@ axiom int64_coerce:
     ((((-9223372036854775808) <= x) and (x <= 9223372036854775807)) ->
      (integer_of_int64(int64_of_integer(x)) = x)))
 
+axiom int64_extensionality:
+  (forall x:int64.
+    (forall y:int64.
+      ((integer_of_int64(x) = integer_of_int64(y)) -> (x = y))))
+
 axiom int64_range:
   (forall x:int64.
     (((-9223372036854775808) <= integer_of_int64(x)) and
@@ -1859,6 +1869,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -1914,19 +1928,14 @@ axiom uint8_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
 
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8.
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
 axiom uint8_range:
   (forall x:uint8.
     ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

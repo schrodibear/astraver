@@ -165,14 +165,6 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic integer_of_int32: int32 -> int
 
 predicate Sorted(a:intP pointer, l:int, r:int,
@@ -214,6 +206,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -225,6 +222,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -309,21 +311,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -368,59 +355,13 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -512,26 +453,22 @@ parameter binary_search :
      intP_intM_a_2:(intP, int32) memory ->
       { } int32
       { (((not (exists res_0:int.
-                (le_int((0), res_0@)
-                and (le_int(res_0@,
-                     sub_int(integer_of_int32(a_length@), (1)))
-                    and eq_int(integer_of_int32(select(intP_intM_a_2@,
-                                                shift(a_0@, res_0@))),
-                        integer_of_int32(val@)))))) ->
-          (JC_<somenum>: eq_int(integer_of_int32(result), neg_int((1)))))
+                (le_int((0), res_0)
+                and (le_int(res_0, sub_int(integer_of_int32(a_length), (1)))
+                    and (integer_of_int32(select(intP_intM_a_2,
+                                          shift(a_0, res_0))) = integer_of_int32(val)))))) ->
+          (JC_<somenum>: (integer_of_int32(result) = neg_int((1)))))
         and ((exists res:int.
-              (le_int((0), res@)
-              and (le_int(res@, sub_int(integer_of_int32(a_length@), (1)))
-                  and eq_int(integer_of_int32(select(intP_intM_a_2@,
-                                              shift(a_0@, res@))),
-                      integer_of_int32(val@))))) ->
+              (le_int((0), res)
+              and (le_int(res, sub_int(integer_of_int32(a_length), (1)))
+                  and (integer_of_int32(select(intP_intM_a_2,
+                                        shift(a_0, res))) = integer_of_int32(val))))) ->
              (JC_<somenum>:
              ((JC_<somenum>: ge_int(integer_of_int32(result), (0)))
              and (JC_<somenum>:
-                 eq_int(integer_of_int32(select(intP_intM_a_2,
-                                         shift(a_0@,
-                                         integer_of_int32(result)))),
-                 integer_of_int32(val@))))))) }
+                 (integer_of_int32(select(intP_intM_a_2,
+                                   shift(a_0, integer_of_int32(result)))) = 
+                 integer_of_int32(val))))))) }
 
 parameter binary_search_requires :
  val:int32 ->
@@ -550,26 +487,22 @@ parameter binary_search_requires :
                     sub_int(integer_of_int32(a_length), (1)), intP_intM_a_2))))))}
       int32
       { (((not (exists res_0:int.
-                (le_int((0), res_0@)
-                and (le_int(res_0@,
-                     sub_int(integer_of_int32(a_length@), (1)))
-                    and eq_int(integer_of_int32(select(intP_intM_a_2@,
-                                                shift(a_0@, res_0@))),
-                        integer_of_int32(val@)))))) ->
-          (JC_<somenum>: eq_int(integer_of_int32(result), neg_int((1)))))
+                (le_int((0), res_0)
+                and (le_int(res_0, sub_int(integer_of_int32(a_length), (1)))
+                    and (integer_of_int32(select(intP_intM_a_2,
+                                          shift(a_0, res_0))) = integer_of_int32(val)))))) ->
+          (JC_<somenum>: (integer_of_int32(result) = neg_int((1)))))
         and ((exists res:int.
-              (le_int((0), res@)
-              and (le_int(res@, sub_int(integer_of_int32(a_length@), (1)))
-                  and eq_int(integer_of_int32(select(intP_intM_a_2@,
-                                              shift(a_0@, res@))),
-                      integer_of_int32(val@))))) ->
+              (le_int((0), res)
+              and (le_int(res, sub_int(integer_of_int32(a_length), (1)))
+                  and (integer_of_int32(select(intP_intM_a_2,
+                                        shift(a_0, res))) = integer_of_int32(val))))) ->
              (JC_<somenum>:
              ((JC_<somenum>: ge_int(integer_of_int32(result), (0)))
              and (JC_<somenum>:
-                 eq_int(integer_of_int32(select(intP_intM_a_2,
-                                         shift(a_0@,
-                                         integer_of_int32(result)))),
-                 integer_of_int32(val@))))))) }
+                 (integer_of_int32(select(intP_intM_a_2,
+                                   shift(a_0, integer_of_int32(result)))) = 
+                 integer_of_int32(val))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -607,39 +540,34 @@ let binary_search_ensures_default =
        (not ((exists res_1:int.
               (le_int((0), res_1)
               and (le_int(res_1, sub_int(integer_of_int32(a_length), (1)))
-                  and eq_int(integer_of_int32(select(intP_intM_a_2,
-                                              shift(a_0, res_1))),
-                      integer_of_int32(val)))))
+                  and (integer_of_int32(select(intP_intM_a_2,
+                                        shift(a_0, res_1))) = integer_of_int32(val)))))
             and (not (exists res_0_0:int.
                       (le_int((0), res_0_0)
                       and (le_int(res_0_0,
                            sub_int(integer_of_int32(a_length), (1)))
-                          and eq_int(integer_of_int32(select(intP_intM_a_2,
-                                                      shift(a_0, res_0_0))),
+                          and (integer_of_int32(select(intP_intM_a_2,
+                                                shift(a_0, res_0_0))) = 
                               integer_of_int32(val))))))))) }; void);
     (check
     { (JC_<somenum>:
       ((not (exists res_0_1:int.
              (le_int((0), res_0_1)
              and (le_int(res_0_1, sub_int(integer_of_int32(a_length), (1)))
-                 and eq_int(integer_of_int32(select(intP_intM_a_2,
-                                             shift(a_0, res_0_1))),
-                     integer_of_int32(val))))))
+                 and (integer_of_int32(select(intP_intM_a_2,
+                                       shift(a_0, res_0_1))) = integer_of_int32(val))))))
       or (exists res_2:int.
           (le_int((0), res_2)
           and (le_int(res_2, sub_int(integer_of_int32(a_length), (1)))
-              and eq_int(integer_of_int32(select(intP_intM_a_2,
-                                          shift(a_0, res_2))),
+              and (integer_of_int32(select(intP_intM_a_2, shift(a_0, res_2))) = 
                   integer_of_int32(val))))))) }; void);
     (let low = ref (any_int32 void) in
     (let mid = ref (any_int32 void) in
     (let high = ref (any_int32 void) in
     (let __retres = ref (any_int32 void) in
     try
-     (let jessie_<somenum> =
      begin
        try
-        (let jessie_<somenum> =
         (C_1:
         (C_4:
         begin
@@ -674,13 +602,9 @@ let binary_search_ensures_default =
           begin
             [ { } unit { true } ];
            try
-            (let jessie_<somenum> =
             begin
               (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
-              then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              then void else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (assert { true };
              (((C_15:
@@ -728,15 +652,14 @@ let binary_search_ensures_default =
                                                 ((sub_int (integer_of_int32 !mid)) (1))))))) in
                void)
               else
-               (let jessie_<somenum> =
                (C_20:
                begin
                  (assert { (JC_<somenum>: (false = true)) }; void); void;
                 (let jessie_<somenum> = (__retres := !mid) in void);
-                (raise (Return_label_exc void)) end) in void)));
-             (raise (Loop_continue_exc void)) end in void) with
+                (raise (Return_label_exc void)) end)));
+             (raise (Loop_continue_exc void)) end with
             Loop_continue_exc jessie_<somenum> -> void end end done);
-         (raise (Goto_while_0_break_exc void)) end)) in void) with
+         (raise (Goto_while_0_break_exc void)) end)) with
         Goto_while_0_break_exc jessie_<somenum> ->
         (let jessie_<somenum> =
         (while_0_break:
@@ -744,7 +667,7 @@ let binary_search_ensures_default =
         begin
           void; (assert { (JC_<somenum>: (false = true)) }; void); void;
          (__retres := (safe_int32_of_integer_ (neg_int (1)))); !__retres end)) in
-        void) end; (raise (Return_label_exc void)) end in void) with
+        void) end; (raise (Return_label_exc void)) end with
      Return_label_exc jessie_<somenum> ->
      (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
@@ -754,8 +677,7 @@ let binary_search_ensures_failure =
   { ((not (exists res_0:int.
            (le_int((0), res_0)
            and (le_int(res_0, sub_int(integer_of_int32(a_length), (1)))
-               and eq_int(integer_of_int32(select(intP_intM_a_2,
-                                           shift(a_0, res_0))),
+               and (integer_of_int32(select(intP_intM_a_2, shift(a_0, res_0))) = 
                    integer_of_int32(val))))))
     and (JC_<somenum>:
         ((JC_<somenum>: le_int(offset_min(intP_a_2_alloc_table, a_0), (0)))
@@ -775,10 +697,8 @@ let binary_search_ensures_failure =
      (let high = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         try
-         (let jessie_<somenum> =
          (C_1:
          (C_4:
          begin
@@ -813,13 +733,9 @@ let binary_search_ensures_failure =
                              le_int(integer_of_int32(high),
                              sub_int(integer_of_int32(a_length), (1)))))))) } ];
             try
-             (let jessie_<somenum> =
              begin
                (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
-               then void
-               else
-                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<somenum> =
               begin
                 [ { } unit { true } ];
@@ -871,15 +787,14 @@ let binary_search_ensures_failure =
                                                  ((sub_int (integer_of_int32 !mid)) (1))))))) in
                 void)
                else
-                (let jessie_<somenum> =
                 (C_20:
                 begin
                   [ { } unit { (JC_<somenum>: (false = true)) } ]; void;
                  (let jessie_<somenum> = (__retres := !mid) in void);
-                 (raise (Return_label_exc void)) end) in void)));
-              (raise (Loop_continue_exc void)) end in void) with
+                 (raise (Return_label_exc void)) end)));
+              (raise (Loop_continue_exc void)) end with
              Loop_continue_exc jessie_<somenum> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end)) in void) with
+          (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<somenum> ->
          (let jessie_<somenum> =
          (while_0_break:
@@ -887,18 +802,18 @@ let binary_search_ensures_failure =
          begin
            void; [ { } unit { (JC_<somenum>: (false = true)) } ]; void;
           (__retres := (safe_int32_of_integer_ (neg_int (1)))); !__retres end)) in
-         void) end; (raise (Return_label_exc void)) end in void) with
+         void) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
-  { (JC_<somenum>: eq_int(integer_of_int32(result), neg_int((1)))) }
+  { (JC_<somenum>: (integer_of_int32(result) = neg_int((1)))) }
 
 let binary_search_ensures_success =
  fun (val : int32) (a_0 : intP pointer) (a_length : int32) (intP_a_2_alloc_table : intP alloc_table) (intP_intM_a_2 : (intP, int32) memory) ->
   { ((exists res:int.
       (le_int((0), res)
       and (le_int(res, sub_int(integer_of_int32(a_length), (1)))
-          and eq_int(integer_of_int32(select(intP_intM_a_2, shift(a_0, res))),
+          and (integer_of_int32(select(intP_intM_a_2, shift(a_0, res))) = 
               integer_of_int32(val)))))
     and (JC_<somenum>:
         ((JC_<somenum>: le_int(offset_min(intP_a_2_alloc_table, a_0), (0)))
@@ -918,10 +833,8 @@ let binary_search_ensures_success =
      (let high = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         try
-         (let jessie_<somenum> =
          (C_1:
          (C_4:
          begin
@@ -956,13 +869,9 @@ let binary_search_ensures_success =
                              le_int(integer_of_int32(high),
                              sub_int(integer_of_int32(a_length), (1)))))))) } ];
             try
-             (let jessie_<somenum> =
              begin
                (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
-               then void
-               else
-                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<somenum> =
               begin
                 [ { } unit { true } ];
@@ -1014,15 +923,14 @@ let binary_search_ensures_success =
                                                  ((sub_int (integer_of_int32 !mid)) (1))))))) in
                 void)
                else
-                (let jessie_<somenum> =
                 (C_20:
                 begin
                   [ { } unit { (JC_<somenum>: (false = true)) } ]; void;
                  (let jessie_<somenum> = (__retres := !mid) in void);
-                 (raise (Return_label_exc void)) end) in void)));
-              (raise (Loop_continue_exc void)) end in void) with
+                 (raise (Return_label_exc void)) end)));
+              (raise (Loop_continue_exc void)) end with
              Loop_continue_exc jessie_<somenum> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end)) in void) with
+          (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<somenum> ->
          (let jessie_<somenum> =
          (while_0_break:
@@ -1030,16 +938,15 @@ let binary_search_ensures_success =
          begin
            void; [ { } unit { (JC_<somenum>: (false = true)) } ]; void;
           (__retres := (safe_int32_of_integer_ (neg_int (1)))); !__retres end)) in
-         void) end; (raise (Return_label_exc void)) end in void) with
+         void) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int(integer_of_int32(result), (0)))
     and (JC_<somenum>:
-        eq_int(integer_of_int32(select(intP_intM_a_2,
-                                shift(a_0@, integer_of_int32(result)))),
-        integer_of_int32(val@))))) }
+        (integer_of_int32(select(intP_intM_a_2,
+                          shift(a_0, integer_of_int32(result)))) = integer_of_int32(val))))) }
 
 let binary_search_safety =
  fun (val : int32) (a_0 : intP pointer) (a_length : int32) (intP_a_2_alloc_table : intP alloc_table) (intP_intM_a_2 : (intP, int32) memory) ->
@@ -1061,10 +968,8 @@ let binary_search_safety =
      (let high = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       begin
         try
-         (let jessie_<somenum> =
          (C_1:
          (C_4:
          begin
@@ -1102,13 +1007,9 @@ let binary_search_safety =
                              le_int(integer_of_int32(high),
                              sub_int(integer_of_int32(a_length), (1)))))))) } ];
             try
-             (let jessie_<somenum> =
              begin
                (if ((le_int_ (integer_of_int32 !low)) (integer_of_int32 !high))
-               then void
-               else
-                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               then void else (raise (Goto_while_0_break_exc void)));
               (let jessie_<somenum> =
               (let jessie_<somenum> =
               (assert { true };
@@ -1163,15 +1064,14 @@ let binary_search_safety =
                                             ((sub_int (integer_of_int32 !mid)) (1)))))))) in
                 void)
                else
-                (let jessie_<somenum> =
                 (C_20:
                 begin
                   [ { } unit { (JC_<somenum>: (false = true)) } ]; void;
                  (let jessie_<somenum> = (__retres := !mid) in void);
-                 (raise (Return_label_exc void)) end) in void)));
-              (raise (Loop_continue_exc void)) end in void) with
+                 (raise (Return_label_exc void)) end)));
+              (raise (Loop_continue_exc void)) end with
              Loop_continue_exc jessie_<somenum> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end)) in void) with
+          (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<somenum> ->
          (let jessie_<somenum> =
          (while_0_break:
@@ -1179,7 +1079,7 @@ let binary_search_safety =
          begin
            void; [ { } unit { (JC_<somenum>: (false = true)) } ]; void;
           (__retres := (safe_int32_of_integer_ (neg_int (1)))); !__retres end)) in
-         void) end; (raise (Return_label_exc void)) end in void) with
+         void) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end))));
     absurd  end with Return -> !return end)) { true }
@@ -1190,6 +1090,64 @@ why --project [...] why/binary-search-hollas.why
 <project name="binary-search-hollas" context="why/binary-search-hollas_ctx.why">
   <function name="Function binary_search">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/binary-search-hollas_po1.why">
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.jessie/binary-search-hollas.jc" line = "59" begin = "10" end = "524"/>
+      <explain kind = "Check"/>
+    </goal>
+    <goal why_file="why/binary-search-hollas_po2.why">
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.jessie/binary-search-hollas.jc" line = "68" begin = "10" end = "460"/>
+      <explain kind = "Check"/>
+    </goal>
+    <goal why_file="why/binary-search-hollas_po3.why">
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "24" begin = "21" end = "77"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/binary-search-hollas_po4.why">
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "23" begin = "21" end = "67"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/binary-search-hollas_po5.why">
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "22" begin = "21" end = "29"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/binary-search-hollas_po6.why">
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "22" begin = "33" end = "51"/>
+      <explain kind = "LoopInvInit"/>
+    </goal>
+    <goal why_file="why/binary-search-hollas_po7.why">
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "28" begin = "29" end = "39"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/binary-search-hollas_po8.why">
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "28" begin = "36" end = "47"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/binary-search-hollas_po9.why">
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "33" begin = "20" end = "26"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/binary-search-hollas_po10.why">
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "24" begin = "21" end = "77"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/binary-search-hollas_po11.why">
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "23" begin = "21" end = "67"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/binary-search-hollas_po12.why">
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "22" begin = "21" end = "29"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/binary-search-hollas_po13.why">
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "22" begin = "33" end = "51"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/binary-search-hollas_po14.why">
+      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "36" begin = "13" end = "19"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/binary-search-hollas_po18.why">
       <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "21" begin = "18" end = "28"/>
@@ -1275,7 +1233,7 @@ text = "ArithOverflow"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `success'">
+    <behavior name="Behavior `success'">
     <goal why_file="why/binary-search-hollas_po16.why">
       <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "11" begin = "14" end = "26"/>
       <explain kind = "Post"/>
@@ -1285,68 +1243,10 @@ text = "ArithOverflow"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `failure'">
+    <behavior name="Behavior `failure'">
     <goal why_file="why/binary-search-hollas_po15.why">
       <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "14" begin = "14" end = "27"/>
       <explain kind = "Post"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/binary-search-hollas_po1.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.jessie/binary-search-hollas.jc" line = "59" begin = "10" end = "524"/>
-      <explain kind = "Check"/>
-    </goal>
-    <goal why_file="why/binary-search-hollas_po2.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.jessie/binary-search-hollas.jc" line = "68" begin = "10" end = "460"/>
-      <explain kind = "Check"/>
-    </goal>
-    <goal why_file="why/binary-search-hollas_po3.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "24" begin = "21" end = "77"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/binary-search-hollas_po4.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "23" begin = "21" end = "67"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/binary-search-hollas_po5.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "22" begin = "21" end = "29"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/binary-search-hollas_po6.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "22" begin = "33" end = "51"/>
-      <explain kind = "LoopInvInit"/>
-    </goal>
-    <goal why_file="why/binary-search-hollas_po7.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "28" begin = "29" end = "39"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/binary-search-hollas_po8.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "28" begin = "36" end = "47"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/binary-search-hollas_po9.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "33" begin = "20" end = "26"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/binary-search-hollas_po10.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "24" begin = "21" end = "77"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/binary-search-hollas_po11.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "23" begin = "21" end = "67"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/binary-search-hollas_po12.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "22" begin = "21" end = "29"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/binary-search-hollas_po13.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "22" begin = "33" end = "51"/>
-      <explain kind = "LoopInvPreserv"/>
-    </goal>
-    <goal why_file="why/binary-search-hollas_po14.why">
-      <location file = "PPCHOME/tests/jessie/binary-search-hollas.c" line = "36" begin = "13" end = "19"/>
-      <explain kind = "Assert"/>
     </goal>
     </behavior>
   </function>
@@ -2334,6 +2234,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -2345,6 +2250,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2430,21 +2339,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

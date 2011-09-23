@@ -2,29 +2,31 @@
 /**************************************************************************/
 /*                                                                        */
 /*  The Why platform for program certification                            */
-/*  Copyright (C) 2002-2008                                               */
-/*    Romain BARDOU                                                       */
-/*    Jean-François COUCHOT                                               */
-/*    Mehdi DOGGUY                                                        */
-/*    Jean-Christophe FILLIÂTRE                                           */
-/*    Thierry HUBERT                                                      */
-/*    Claude MARCHÉ                                                       */
-/*    Yannick MOY                                                         */
-/*    Christine PAULIN                                                    */
-/*    Yann RÉGIS-GIANAS                                                   */
-/*    Nicolas ROUSSET                                                     */
-/*    Xavier URBAIN                                                       */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
 /*                                                                        */
 /*  This software is free software; you can redistribute it and/or        */
-/*  modify it under the terms of the GNU General Public                   */
-/*  License version 2, as published by the Free Software Foundation.      */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
 /*                                                                        */
 /*  This software is distributed in the hope that it will be useful,      */
 /*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
 /*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
-/*                                                                        */
-/*  See the GNU General Public License version 2 for more details         */
-/*  (enclosed in the file GPL).                                           */
 /*                                                                        */
 /**************************************************************************/
 
@@ -53,6 +55,14 @@ class Termination {
     }
 
 }
+
+
+/*
+Local Variables:
+compile-command: "make Termination.why3ml"
+End:
+*/
+
 
 ========== krakatoa execution ==========
 Parsing OK.
@@ -160,43 +170,43 @@ End:
 ========== file tests/java/Termination.jloc ==========
 [K_10]
 file = "HOME/tests/java/Termination.java"
-line = 47
+line = 49
 begin = 25
 end = 33
 
 [K_11]
 file = "HOME/tests/java/Termination.java"
-line = 47
+line = 49
 begin = 20
 end = 26
 
 [K_12]
 file = "HOME/tests/java/Termination.java"
-line = 47
+line = 49
 begin = 20
 end = 33
 
 [K_13]
 file = "HOME/tests/java/Termination.java"
-line = 48
+line = 50
 begin = 18
 end = 19
 
 [K_14]
 file = "HOME/tests/java/Termination.java"
-line = 50
+line = 52
 begin = 15
 end = 18
 
 [K_15]
 file = "HOME/tests/java/Termination.java"
-line = 50
+line = 52
 begin = 8
 end = 13
 
 [K_16]
 file = "HOME/tests/java/Termination.java"
-line = 46
+line = 48
 begin = 9
 end = 12
 
@@ -209,76 +219,76 @@ end = -1
 
 [K_1]
 file = "HOME/tests/java/Termination.java"
-line = 35
+line = 37
 begin = 5
 end = 20
 
 [K_2]
 file = "HOME/tests/java/Termination.java"
-line = 35
+line = 37
 begin = 18
 end = 19
 
 [K_3]
 file = "HOME/tests/java/Termination.java"
-line = 36
+line = 38
 begin = 15
 end = 18
 
 [K_4]
 file = "HOME/tests/java/Termination.java"
-line = 36
+line = 38
 begin = 8
 end = 13
 
 [K_5]
 file = "HOME/tests/java/Termination.java"
-line = 40
+line = 42
 begin = 5
 end = 24
 
 [K_6]
 file = "HOME/tests/java/Termination.java"
-line = 40
+line = 42
 begin = 18
 end = 23
 
 [K_7]
 file = "HOME/tests/java/Termination.java"
-line = 41
+line = 43
 begin = 17
 end = 20
 
 [K_8]
 file = "HOME/tests/java/Termination.java"
-line = 41
+line = 43
 begin = 8
 end = 15
 
 [K_9]
 file = "HOME/tests/java/Termination.java"
-line = 44
+line = 46
 begin = 16
 end = 28
 
 [Termination_loop1]
 name = "Method loop1"
 file = "HOME/tests/java/Termination.java"
-line = 34
+line = 36
 begin = 9
 end = 14
 
 [Termination_loop2]
 name = "Method loop2"
 file = "HOME/tests/java/Termination.java"
-line = 39
+line = 41
 begin = 9
 end = 14
 
 [Termination_loop3]
 name = "Method loop3"
 file = "HOME/tests/java/Termination.java"
-line = 45
+line = 47
 begin = 8
 end = 13
 
@@ -302,10 +312,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Termi
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Termination.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/Termination_why.sx
 
@@ -365,6 +376,13 @@ simplify: simplify/Termination_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/Termination_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/Termination_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -438,6 +456,9 @@ why/%_why3.why: why/%.why
 why3ide: why/Termination_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: Termination.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include Termination.depend
 
 depend: coq/Termination_why.v
@@ -481,15 +502,15 @@ end = -1
 
 [JC_44]
 file = "HOME/tests/java/Termination.java"
-line = 40
+line = 42
 begin = 5
 end = 24
 
 [Termination_loop1_ensures_default]
 name = "Method loop1"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/Termination.java"
-line = 34
+line = 36
 begin = 9
 end = 14
 
@@ -497,7 +518,7 @@ end = 14
 name = "Method loop1"
 behavior = "Safety"
 file = "HOME/tests/java/Termination.java"
-line = 34
+line = 36
 begin = 9
 end = 14
 
@@ -533,7 +554,7 @@ end = -1
 
 [JC_48]
 file = "HOME/tests/java/Termination.java"
-line = 40
+line = 42
 begin = 18
 end = 23
 
@@ -545,7 +566,7 @@ end = 22
 
 [JC_49]
 file = "HOME/tests/java/Termination.java"
-line = 40
+line = 42
 begin = 5
 end = 24
 
@@ -569,9 +590,9 @@ end = -1
 
 [Termination_loop3_ensures_default]
 name = "Method loop3"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/Termination.java"
-line = 45
+line = 47
 begin = 8
 end = 13
 
@@ -613,7 +634,7 @@ end = 149
 
 [JC_53]
 file = "HOME/tests/java/Termination.java"
-line = 45
+line = 47
 begin = 8
 end = 13
 
@@ -625,7 +646,7 @@ end = -1
 
 [JC_55]
 file = "HOME/tests/java/Termination.java"
-line = 45
+line = 47
 begin = 8
 end = 13
 
@@ -637,7 +658,7 @@ end = -1
 
 [JC_57]
 file = "HOME/tests/java/Termination.java"
-line = 44
+line = 46
 begin = 16
 end = 28
 
@@ -645,13 +666,13 @@ end = 28
 name = "Method loop2"
 behavior = "Safety"
 file = "HOME/tests/java/Termination.java"
-line = 39
+line = 41
 begin = 9
 end = 14
 
 [JC_58]
 file = "HOME/tests/java/Termination.java"
-line = 44
+line = 46
 begin = 16
 end = 28
 
@@ -669,21 +690,21 @@ end = -1
 
 [JC_61]
 file = "HOME/tests/java/Termination.java"
-line = 47
+line = 49
 begin = 20
 end = 26
 
 [JC_62]
 file = "HOME/tests/java/Termination.java"
-line = 47
+line = 49
 begin = 25
 end = 33
 
 [Termination_loop2_ensures_default]
 name = "Method loop2"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/java/Termination.java"
-line = 39
+line = 41
 begin = 9
 end = 14
 
@@ -695,7 +716,7 @@ end = -1
 
 [JC_63]
 file = "HOME/tests/java/Termination.java"
-line = 47
+line = 49
 begin = 20
 end = 33
 
@@ -743,7 +764,7 @@ end = -1
 
 [JC_67]
 file = "HOME/tests/java/Termination.java"
-line = 48
+line = 50
 begin = 18
 end = 19
 
@@ -755,7 +776,7 @@ end = -1
 
 [JC_68]
 file = "HOME/tests/java/Termination.java"
-line = 47
+line = 49
 begin = 20
 end = 26
 
@@ -767,7 +788,7 @@ end = -1
 
 [JC_69]
 file = "HOME/tests/java/Termination.java"
-line = 47
+line = 49
 begin = 25
 end = 33
 
@@ -781,7 +802,7 @@ end = 65
 name = "Method loop3"
 behavior = "Safety"
 file = "HOME/tests/java/Termination.java"
-line = 45
+line = 47
 begin = 8
 end = 13
 
@@ -793,13 +814,13 @@ end = 65
 
 [JC_19]
 file = "HOME/tests/java/Termination.java"
-line = 34
+line = 36
 begin = 9
 end = 14
 
 [JC_70]
 file = "HOME/tests/java/Termination.java"
-line = 47
+line = 49
 begin = 20
 end = 33
 
@@ -829,7 +850,7 @@ end = 217
 
 [JC_21]
 file = "HOME/tests/java/Termination.java"
-line = 34
+line = 36
 begin = 9
 end = 14
 
@@ -901,7 +922,7 @@ end = -1
 
 [JC_27]
 file = "HOME/tests/java/Termination.java"
-line = 35
+line = 37
 begin = 5
 end = 20
 
@@ -937,13 +958,13 @@ end = 133
 
 [JC_31]
 file = "HOME/tests/java/Termination.java"
-line = 35
+line = 37
 begin = 18
 end = 19
 
 [JC_32]
 file = "HOME/tests/java/Termination.java"
-line = 35
+line = 37
 begin = 5
 end = 20
 
@@ -967,7 +988,7 @@ end = 133
 
 [JC_36]
 file = "HOME/tests/java/Termination.java"
-line = 39
+line = 41
 begin = 9
 end = 14
 
@@ -979,13 +1000,13 @@ end = -1
 
 [JC_38]
 file = "HOME/tests/java/Termination.java"
-line = 39
+line = 41
 begin = 9
 end = 14
 
 [cons_Termination_ensures_default]
 name = "Constructor of class Termination"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/"
 line = 0
 begin = -1
@@ -1002,21 +1023,15 @@ type Object
 
 type interface
 
-exception Exception_exc of Object pointer
-
 logic Exception_tag:  -> Object tag_id
 
 logic Object_tag:  -> Object tag_id
 
 axiom Exception_parenttag_Object : parenttag(Exception_tag, Object_tag)
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
 predicate Non_null_Object(x_0:Object pointer,
  Object_alloc_table:Object alloc_table) =
- eq_int(offset_max(Object_alloc_table, x_0), (0))
+ (offset_max(Object_alloc_table, x_0) = (0))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
@@ -1033,8 +1048,6 @@ axiom Object_tags :
   (forall Object_tag_table:Object tag_table.
    instanceof(Object_tag_table, x, Object_tag)))
 
-exception Return_label_exc of unit
-
 logic String_tag:  -> Object tag_id
 
 axiom String_parenttag_Object : parenttag(String_tag, Object_tag)
@@ -1042,8 +1055,6 @@ axiom String_parenttag_Object : parenttag(String_tag, Object_tag)
 logic Termination_tag:  -> Object tag_id
 
 axiom Termination_parenttag_Object : parenttag(Termination_tag, Object_tag)
-
-exception Throwable_exc of Object pointer
 
 logic Throwable_tag:  -> Object tag_id
 
@@ -1157,32 +1168,6 @@ predicate strict_valid_struct_interface(p:interface pointer, a:int, b:int,
  ((offset_min(interface_alloc_table, p) = a)
  and (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Termination(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- valid_bitvector_struct_Object(p, a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_Object(p:Object pointer, a:int, b:int,
  Object_alloc_table:Object alloc_table) =
  ((offset_min(Object_alloc_table, p) <= a)
@@ -1219,9 +1204,17 @@ predicate valid_struct_interface(p:interface pointer, a:int, b:int,
  ((offset_min(interface_alloc_table, p) <= a)
  and (offset_max(interface_alloc_table, p) >= b))
 
+exception Exception_exc of Object pointer
+
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
 parameter Object_alloc_table : Object alloc_table ref
 
 parameter Object_tag_table : Object tag_table ref
+
+exception Return_label_exc of unit
 
 parameter Termination_loop1 :
  this_2:Object pointer -> n:int -> { } unit reads Object_alloc_table { true }
@@ -1239,119 +1232,13 @@ parameter Termination_loop2_requires :
 
 parameter Termination_loop3 :
  this_0:Object pointer ->
-  { } int reads Object_alloc_table { (JC_58: eq_int(result, (0))) }
+  { } int reads Object_alloc_table { (JC_58: (result = (0))) }
 
 parameter Termination_loop3_requires :
  this_0:Object pointer ->
-  { } int reads Object_alloc_table { (JC_58: eq_int(result, (0))) }
+  { } int reads Object_alloc_table { (JC_58: (result = (0))) }
 
-parameter alloc_bitvector_struct_Exception :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Exception_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Exception(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Object_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Object(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_String :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_String_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_String(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Termination :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Termination(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Termination_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Termination(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_Throwable_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Throwable(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_interface_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_interface(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Throwable_exc of Object pointer
 
 parameter alloc_struct_Exception :
  n:int ->
@@ -1509,14 +1396,14 @@ parameter non_null_Object :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_18:
-    (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
+    (if result then (offset_max(Object_alloc_table, x_1) = (0))
      else (x_1 = null))) }
 
 parameter non_null_Object_requires :
  x_1:Object pointer ->
   { } bool reads Object_alloc_table
   { (JC_18:
-    (if result then eq_int(offset_max(Object_alloc_table, x_1), (0))
+    (if result then (offset_max(Object_alloc_table, x_1) = (0))
      else (x_1 = null))) }
 
 let Termination_loop1_ensures_default =
@@ -1533,7 +1420,6 @@ let Termination_loop1_ensures_default =
        begin
          [ { } unit { true } ];
         try
-         (let jessie_<num> =
          begin
            (if (K_4: ((gt_int_ !mutable_n) (0)))
            then
@@ -1543,8 +1429,8 @@ let Termination_loop1_ensures_default =
             begin
               (let jessie_<num> = (mutable_n := ((sub_int jessie_<num>) (1))) in
               void); jessie_<num> end)) in void)
-           else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
-          (raise (Loop_continue_exc void)) end in void) with
+           else (raise (Loop_exit_exc void)));
+          (raise (Loop_continue_exc void)) end with
          Loop_continue_exc jessie_<num> -> void end end done) with
       Loop_exit_exc jessie_<num> -> void end; (raise Return) end with Return ->
    void end)) { (JC_23: true) }
@@ -1563,7 +1449,6 @@ let Termination_loop1_safety =
        begin
          [ { } unit { (JC_27: (true = true)) } ];
         try
-         (let jessie_<num> =
          begin
            (if (K_4: ((gt_int_ !mutable_n) (0)))
            then
@@ -1573,8 +1458,8 @@ let Termination_loop1_safety =
             begin
               (let jessie_<num> = (mutable_n := ((sub_int jessie_<num>) (1))) in
               void); jessie_<num> end)) in void)
-           else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
-          (raise (Loop_continue_exc void)) end in void) with
+           else (raise (Loop_exit_exc void)));
+          (raise (Loop_continue_exc void)) end with
          Loop_continue_exc jessie_<num> -> void end end done) with
       Loop_exit_exc jessie_<num> -> void end; (raise Return) end with Return ->
    void end)) { true }
@@ -1593,7 +1478,6 @@ let Termination_loop2_ensures_default =
        begin
          [ { } unit { true } ];
         try
-         (let jessie_<num> =
          begin
            (if (K_8: ((lt_int_ !mutable_n_0) (100)))
            then
@@ -1603,8 +1487,8 @@ let Termination_loop2_ensures_default =
             begin
               (let jessie_<num> = (mutable_n_0 := ((add_int jessie_<num>) (1))) in
               void); jessie_<num> end)) in void)
-           else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
-          (raise (Loop_continue_exc void)) end in void) with
+           else (raise (Loop_exit_exc void)));
+          (raise (Loop_continue_exc void)) end with
          Loop_continue_exc jessie_<num> -> void end end done) with
       Loop_exit_exc jessie_<num> -> void end; (raise Return) end with Return ->
    void end)) { (JC_40: true) }
@@ -1624,7 +1508,6 @@ let Termination_loop2_safety =
        begin
          [ { } unit { (JC_44: (true = true)) } ];
         try
-         (let jessie_<num> =
          begin
            (if (K_8: ((lt_int_ !mutable_n_0) (100)))
            then
@@ -1634,8 +1517,8 @@ let Termination_loop2_safety =
             begin
               (let jessie_<num> = (mutable_n_0 := ((add_int jessie_<num>) (1))) in
               void); jessie_<num> end)) in void)
-           else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
-          (raise (Loop_continue_exc void)) end in void) with
+           else (raise (Loop_exit_exc void)));
+          (raise (Loop_continue_exc void)) end with
          Loop_continue_exc jessie_<num> -> void end end done) with
       Loop_exit_exc jessie_<num> -> void end; (raise Return) end with Return ->
    void end)) { true }
@@ -1658,7 +1541,6 @@ let Termination_loop3_ensures_default =
          begin
            [ { } unit { true } ];
           try
-           (let jessie_<num> =
            begin
              (if (K_15: ((gt_int_ !i) (0)))
              then
@@ -1667,13 +1549,12 @@ let Termination_loop3_ensures_default =
               (let jessie_<num> = !i in
               begin
                 (let jessie_<num> = (i := ((sub_int jessie_<num>) (1))) in void);
-               jessie_<num> end)) in void)
-             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
-            (raise (Loop_continue_exc void)) end in void) with
+               jessie_<num> end)) in void) else (raise (Loop_exit_exc void)));
+            (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<num> -> void end end done) with
         Loop_exit_exc jessie_<num> -> void end; (return := !i); (raise Return)
      end); absurd  end with Return -> !return end))
-  { (JC_57: eq_int(result, (0))) }
+  { (JC_57: (result = (0))) }
 
 let Termination_loop3_safety =
  fun (this_0 : Object pointer) ->
@@ -1693,7 +1574,6 @@ let Termination_loop3_safety =
              { (JC_63:
                ((JC_61: le_int((0), i)) and (JC_62: le_int(i, (100))))) } ];
           try
-           (let jessie_<num> =
            begin
              (if (K_15: ((gt_int_ !i) (0)))
              then
@@ -1702,9 +1582,8 @@ let Termination_loop3_safety =
               (let jessie_<num> = !i in
               begin
                 (let jessie_<num> = (i := ((sub_int jessie_<num>) (1))) in void);
-               jessie_<num> end)) in void)
-             else (let jessie_<num> = (raise (Loop_exit_exc void)) in void));
-            (raise (Loop_continue_exc void)) end in void) with
+               jessie_<num> end)) in void) else (raise (Loop_exit_exc void)));
+            (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<num> -> void end end done) with
         Loop_exit_exc jessie_<num> -> void end; (return := !i); (raise Return)
      end); absurd  end with Return -> !return end)) { true }
@@ -1728,36 +1607,36 @@ why --project [...] why/Termination.why
 <project name="Termination" context="why/Termination_ctx.why">
   <function name="Method loop3">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/Termination_po10.why">
-      <location file = "HOME/tests/java/Termination.java" line = "48" begin = "18" end = "19"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/Termination_po11.why">
-      <location file = "HOME/tests/java/Termination.java" line = "48" begin = "18" end = "19"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/Termination_po5.why">
-      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "26"/>
+      <location file = "HOME/tests/java/Termination.java" line = "49" begin = "20" end = "26"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Termination_po6.why">
-      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "25" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "49" begin = "25" end = "33"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/Termination_po7.why">
-      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "20" end = "26"/>
+      <location file = "HOME/tests/java/Termination.java" line = "49" begin = "20" end = "26"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Termination_po8.why">
-      <location file = "HOME/tests/java/Termination.java" line = "47" begin = "25" end = "33"/>
+      <location file = "HOME/tests/java/Termination.java" line = "49" begin = "25" end = "33"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/Termination_po9.why">
-      <location file = "HOME/tests/java/Termination.java" line = "44" begin = "16" end = "28"/>
+      <location file = "HOME/tests/java/Termination.java" line = "46" begin = "16" end = "28"/>
       <explain kind = "Post"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/Termination_po10.why">
+      <location file = "HOME/tests/java/Termination.java" line = "50" begin = "18" end = "19"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/Termination_po11.why">
+      <location file = "HOME/tests/java/Termination.java" line = "50" begin = "18" end = "19"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
   </function>
@@ -1765,11 +1644,11 @@ why --project [...] why/Termination.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Termination_po3.why">
-      <location file = "HOME/tests/java/Termination.java" line = "40" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/Termination.java" line = "42" begin = "18" end = "23"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Termination_po4.why">
-      <location file = "HOME/tests/java/Termination.java" line = "40" begin = "18" end = "23"/>
+      <location file = "HOME/tests/java/Termination.java" line = "42" begin = "18" end = "23"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1778,11 +1657,11 @@ why --project [...] why/Termination.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/Termination_po1.why">
-      <location file = "HOME/tests/java/Termination.java" line = "35" begin = "18" end = "19"/>
+      <location file = "HOME/tests/java/Termination.java" line = "37" begin = "18" end = "19"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/Termination_po2.why">
-      <location file = "HOME/tests/java/Termination.java" line = "35" begin = "18" end = "19"/>
+      <location file = "HOME/tests/java/Termination.java" line = "37" begin = "18" end = "19"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -2871,32 +2750,6 @@ predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Termination(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =
   ((offset_min(Object_alloc_table, p) <= a) and
@@ -2933,6 +2786,19 @@ predicate valid_struct_interface(p: interface pointer, a: int, b: int,
   ((offset_min(interface_alloc_table, p) <= a) and
    (offset_max(interface_alloc_table, p) >= b))
 
+========== file tests/java/why/Termination_po1.why ==========
+goal Termination_loop1_safety_po_1:
+  forall this_2:Object pointer.
+  forall Object_alloc_table:Object alloc_table.
+  valid_struct_Termination(this_2, 0, 0, Object_alloc_table) ->
+  forall mutable_n:int.
+  ("JC_29": true) ->
+  ("JC_27": (true = true)) ->
+  (mutable_n > 0) ->
+  forall mutable_n0:int.
+  (mutable_n0 = (mutable_n - 1)) ->
+  (0 <= ("JC_31": mutable_n))
+
 ========== file tests/java/why/Termination_po10.why ==========
 goal Termination_loop3_safety_po_1:
   forall this_0:Object pointer.
@@ -2958,19 +2824,6 @@ goal Termination_loop3_safety_po_2:
   forall i0:int.
   (i0 = (i - 1)) ->
   (("JC_67": i0) < ("JC_67": i))
-
-========== file tests/java/why/Termination_po1.why ==========
-goal Termination_loop1_safety_po_1:
-  forall this_2:Object pointer.
-  forall Object_alloc_table:Object alloc_table.
-  valid_struct_Termination(this_2, 0, 0, Object_alloc_table) ->
-  forall mutable_n:int.
-  ("JC_29": true) ->
-  ("JC_27": (true = true)) ->
-  (mutable_n > 0) ->
-  forall mutable_n0:int.
-  (mutable_n0 = (mutable_n - 1)) ->
-  (0 <= ("JC_31": mutable_n))
 
 ========== file tests/java/why/Termination_po2.why ==========
 goal Termination_loop1_safety_po_2:
@@ -4002,26 +3855,6 @@ why -simplify [...] why/Termination.why
   (AND (EQ (offset_min interface_alloc_table p) a)
   (EQ (offset_max interface_alloc_table p) b)))
 
-(DEFPRED (valid_bitvector_struct_Object p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_Exception p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_String p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Termination p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_Throwable p a b bitvector_alloc_table)
-  (valid_bitvector_struct_Object p a b bitvector_alloc_table))
-
-(DEFPRED (valid_bitvector_struct_interface p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
 (DEFPRED (valid_root_Object p a b Object_alloc_table)
   (AND (<= (offset_min Object_alloc_table p) a)
   (>= (offset_max Object_alloc_table p) b)))
@@ -4050,7 +3883,7 @@ why -simplify [...] why/Termination.why
   (AND (<= (offset_min interface_alloc_table p) a)
   (>= (offset_max interface_alloc_table p) b)))
 
-;; Termination_loop1_safety_po_1, File "HOME/tests/java/Termination.java", line 35, characters 18-19
+;; Termination_loop1_safety_po_1, File "HOME/tests/java/Termination.java", line 37, characters 18-19
 (FORALL (this_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_2 0 0 Object_alloc_table)
@@ -4061,7 +3894,7 @@ why -simplify [...] why/Termination.why
 (FORALL (mutable_n0)
 (IMPLIES (EQ mutable_n0 (- mutable_n 1)) (<= 0 mutable_n))))))))))
 
-;; Termination_loop1_safety_po_2, File "HOME/tests/java/Termination.java", line 35, characters 18-19
+;; Termination_loop1_safety_po_2, File "HOME/tests/java/Termination.java", line 37, characters 18-19
 (FORALL (this_2)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_2 0 0 Object_alloc_table)
@@ -4072,7 +3905,7 @@ why -simplify [...] why/Termination.why
 (FORALL (mutable_n0)
 (IMPLIES (EQ mutable_n0 (- mutable_n 1)) (< mutable_n0 mutable_n))))))))))
 
-;; Termination_loop2_safety_po_1, File "HOME/tests/java/Termination.java", line 40, characters 18-23
+;; Termination_loop2_safety_po_1, File "HOME/tests/java/Termination.java", line 42, characters 18-23
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_1 0 0 Object_alloc_table)
@@ -4083,7 +3916,7 @@ why -simplify [...] why/Termination.why
 (FORALL (mutable_n_0_0)
 (IMPLIES (EQ mutable_n_0_0 (+ mutable_n_0 1)) (<= 0 (- 100 mutable_n_0)))))))))))
 
-;; Termination_loop2_safety_po_2, File "HOME/tests/java/Termination.java", line 40, characters 18-23
+;; Termination_loop2_safety_po_2, File "HOME/tests/java/Termination.java", line 42, characters 18-23
 (FORALL (this_1)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_1 0 0 Object_alloc_table)
@@ -4095,18 +3928,18 @@ why -simplify [...] why/Termination.why
 (IMPLIES (EQ mutable_n_0_0 (+ mutable_n_0 1))
 (< (- 100 mutable_n_0_0) (- 100 mutable_n_0)))))))))))
 
-;; Termination_loop3_ensures_default_po_1, File "HOME/tests/java/Termination.java", line 47, characters 20-26
+;; Termination_loop3_ensures_default_po_1, File "HOME/tests/java/Termination.java", line 49, characters 20-26
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table) (<= 0 100))))
 
-;; Termination_loop3_ensures_default_po_2, File "HOME/tests/java/Termination.java", line 47, characters 25-33
+;; Termination_loop3_ensures_default_po_2, File "HOME/tests/java/Termination.java", line 49, characters 25-33
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
 (<= 100 100))))
 
-;; Termination_loop3_ensures_default_po_3, File "HOME/tests/java/Termination.java", line 47, characters 20-26
+;; Termination_loop3_ensures_default_po_3, File "HOME/tests/java/Termination.java", line 49, characters 20-26
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -4114,7 +3947,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= 0 i0)))))))))
 
-;; Termination_loop3_ensures_default_po_4, File "HOME/tests/java/Termination.java", line 47, characters 25-33
+;; Termination_loop3_ensures_default_po_4, File "HOME/tests/java/Termination.java", line 49, characters 25-33
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -4122,7 +3955,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= i0 100)))))))))
 
-;; Termination_loop3_ensures_default_po_5, File "HOME/tests/java/Termination.java", line 44, characters 16-28
+;; Termination_loop3_ensures_default_po_5, File "HOME/tests/java/Termination.java", line 46, characters 16-28
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -4130,7 +3963,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (<= i 0) (FORALL (return) (IMPLIES (EQ return i) (EQ return 0)))))))))
 
-;; Termination_loop3_safety_po_1, File "HOME/tests/java/Termination.java", line 48, characters 18-19
+;; Termination_loop3_safety_po_1, File "HOME/tests/java/Termination.java", line 50, characters 18-19
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -4139,7 +3972,7 @@ why -simplify [...] why/Termination.why
 (IMPLIES (AND (<= 0 i) (<= i 100))
 (IMPLIES (> i 0) (FORALL (i0) (IMPLIES (EQ i0 (- i 1)) (<= 0 i))))))))))
 
-;; Termination_loop3_safety_po_2, File "HOME/tests/java/Termination.java", line 48, characters 18-19
+;; Termination_loop3_safety_po_2, File "HOME/tests/java/Termination.java", line 50, characters 18-19
 (FORALL (this_0)
 (FORALL (Object_alloc_table)
 (IMPLIES (valid_struct_Termination this_0 0 0 Object_alloc_table)
@@ -5239,32 +5072,6 @@ predicate strict_valid_struct_interface(p: interface pointer, a: int, b: int,
   interface_alloc_table: interface alloc_table) =
   ((offset_min(interface_alloc_table, p) = a) and
    (offset_max(interface_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Object(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_Exception(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_String(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Termination(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_Throwable(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) = valid_bitvector_struct_Object(p,
-  a, b, bitvector_alloc_table)
-
-predicate valid_bitvector_struct_interface(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_Object(p: Object pointer, a: int, b: int,
   Object_alloc_table: Object alloc_table) =

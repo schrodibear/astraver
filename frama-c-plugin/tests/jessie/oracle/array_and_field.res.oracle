@@ -117,12 +117,6 @@ type sg_1
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic S_tag:  -> S tag_id
 
 axiom S_int : (int_of_tag(S_tag) = (1))
@@ -186,6 +180,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -197,6 +196,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -294,26 +298,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_S(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_T(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_S(p:S pointer, a:int, b:int,
  S_alloc_table:S alloc_table) =
  ((offset_min(S_alloc_table, p) <= a)
@@ -375,6 +359,12 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
+exception Return_label_exc of unit
+
 parameter S_alloc_table : S alloc_table ref
 
 parameter S_i_sg_1 : (S, int32) memory ref
@@ -394,78 +384,6 @@ parameter T_alloc_table : T alloc_table ref
 parameter T_sg_1_alloc_table : T alloc_table ref
 
 parameter T_tag_table : T tag_table ref
-
-parameter alloc_bitvector_struct_S :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_S(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_S_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_S(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_T :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_T(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_T_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_T(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
 parameter alloc_struct_S :
  n:int ->
@@ -580,17 +498,23 @@ parameter fg :
   { ((JC_<somenum>: valid_sg(T_sg_1_alloc_table))
     and (JC_<somenum>:
         ((JC_<somenum>:
-         eq_int(integer_of_int32(select(S_i_sg_1,
-                                 shift(select(T_aj_sg_1, sg), (0)))),
-         sub_int(integer_of_int32(select(S_j_sg_1,
-                                  shift(select(T_ai_sg_1, sg), (0)))),
-         (1))))
+         (integer_of_int32(select(S_i_sg_1,
+                           shift(select(T_aj_sg_1, sg), (0)))) = sub_int(
+                                                                 integer_of_int32(
+                                                                 select(S_j_sg_1,
+                                                                 shift(
+                                                                 select(T_ai_sg_1,
+                                                                 sg), (0)))),
+                                                                 (1))))
         and (JC_<somenum>:
-            eq_int(integer_of_int32(select(S_j_sg_1,
-                                    shift(select(T_aj_sg_1, sg), (1)))),
-            add_int(integer_of_int32(select(S_i_sg_1,
-                                     shift(select(T_ai_sg_1, sg), (0)))),
-            (1))))))) }
+            (integer_of_int32(select(S_j_sg_1,
+                              shift(select(T_aj_sg_1, sg), (1)))) = add_int(
+                                                                    integer_of_int32(
+                                                                    select(S_i_sg_1,
+                                                                    shift(
+                                                                    select(T_ai_sg_1,
+                                                                    sg), (0)))),
+                                                                    (1))))))) }
 
 parameter fg_requires :
  tt:unit ->
@@ -600,17 +524,23 @@ parameter fg_requires :
   { ((JC_<somenum>: valid_sg(T_sg_1_alloc_table))
     and (JC_<somenum>:
         ((JC_<somenum>:
-         eq_int(integer_of_int32(select(S_i_sg_1,
-                                 shift(select(T_aj_sg_1, sg), (0)))),
-         sub_int(integer_of_int32(select(S_j_sg_1,
-                                  shift(select(T_ai_sg_1, sg), (0)))),
-         (1))))
+         (integer_of_int32(select(S_i_sg_1,
+                           shift(select(T_aj_sg_1, sg), (0)))) = sub_int(
+                                                                 integer_of_int32(
+                                                                 select(S_j_sg_1,
+                                                                 shift(
+                                                                 select(T_ai_sg_1,
+                                                                 sg), (0)))),
+                                                                 (1))))
         and (JC_<somenum>:
-            eq_int(integer_of_int32(select(S_j_sg_1,
-                                    shift(select(T_aj_sg_1, sg), (1)))),
-            add_int(integer_of_int32(select(S_i_sg_1,
-                                     shift(select(T_ai_sg_1, sg), (0)))),
-            (1))))))) }
+            (integer_of_int32(select(S_j_sg_1,
+                              shift(select(T_aj_sg_1, sg), (1)))) = add_int(
+                                                                    integer_of_int32(
+                                                                    select(S_i_sg_1,
+                                                                    shift(
+                                                                    select(T_ai_sg_1,
+                                                                    sg), (0)))),
+                                                                    (1))))))) }
 
 parameter fl :
  tt:unit ->
@@ -669,14 +599,12 @@ let fg_ensures_default =
     (raise Return) end)) with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
-     eq_int(integer_of_int32(select(S_i_sg_1,
-                             shift(select(T_aj_sg_1, sg), (0)))),
+     (integer_of_int32(select(S_i_sg_1, shift(select(T_aj_sg_1, sg), (0)))) = 
      sub_int(integer_of_int32(select(S_j_sg_1,
                               shift(select(T_ai_sg_1, sg), (0)))),
      (1))))
     and (JC_<somenum>:
-        eq_int(integer_of_int32(select(S_j_sg_1,
-                                shift(select(T_aj_sg_1, sg), (1)))),
+        (integer_of_int32(select(S_j_sg_1, shift(select(T_aj_sg_1, sg), (1)))) = 
         add_int(integer_of_int32(select(S_i_sg_1,
                                  shift(select(T_ai_sg_1, sg), (0)))),
         (1)))))) }
@@ -763,15 +691,13 @@ let fl_ensures_default =
       (((safe_upd_ S_j_lg_2) jessie_<somenum>) jessie_<somenum>))))));
       (assert
       { (JC_<somenum>:
-        eq_int(integer_of_int32(select(S_i_lg_2,
-                                shift(select(T_aj_lg_2, lg), (0)))),
+        (integer_of_int32(select(S_i_lg_2, shift(select(T_aj_lg_2, lg), (0)))) = 
         sub_int(integer_of_int32(select(S_j_lg_2,
                                  shift(select(T_ai_lg_2, lg), (0)))),
         (1)))) }; void); void;
       (assert
       { (JC_<somenum>:
-        eq_int(integer_of_int32(select(S_j_lg_2,
-                                shift(select(T_aj_lg_2, lg), (1)))),
+        (integer_of_int32(select(S_j_lg_2, shift(select(T_aj_lg_2, lg), (1)))) = 
         add_int(integer_of_int32(select(S_i_lg_2,
                                  shift(select(T_ai_lg_2, lg), (0)))),
         (1)))) }; void); void;
@@ -832,20 +758,28 @@ let fl_safety =
       (((safe_upd_ S_j_lg_2) jessie_<somenum>) jessie_<somenum>))))));
       [ { } unit reads S_i_lg_2,S_j_lg_2,T_ai_lg_2,T_aj_lg_2,lg
         { (JC_<somenum>:
-          eq_int(integer_of_int32(select(S_i_lg_2,
-                                  shift(select(T_aj_lg_2, lg), (0)))),
-          sub_int(integer_of_int32(select(S_j_lg_2,
-                                   shift(select(T_ai_lg_2, lg), (0)))),
-          (1)))) } ]; void;
+          (integer_of_int32(select(S_i_lg_2,
+                            shift(select(T_aj_lg_2, lg), (0)))) = sub_int(
+                                                                  integer_of_int32(
+                                                                  select(S_j_lg_2,
+                                                                  shift(
+                                                                  select(T_ai_lg_2,
+                                                                  lg), (0)))),
+                                                                  (1)))) } ];
+      void;
       [ { } unit reads S_i_lg_2,S_j_lg_2,T_ai_lg_2,T_aj_lg_2,lg
         { (JC_<somenum>:
-          eq_int(integer_of_int32(select(S_j_lg_2,
-                                  shift(select(T_aj_lg_2, lg), (1)))),
-          add_int(integer_of_int32(select(S_i_lg_2,
-                                   shift(select(T_ai_lg_2, lg), (0)))),
-          (1)))) } ]; void; ((free_parameter T_lg_2_alloc_table) !lg);
-      (raise Return) end))))))))))))); (raise Return) end with Return ->
-   void end) { (JC_<somenum>: valid_sg(T_sg_1_alloc_table)) }
+          (integer_of_int32(select(S_j_lg_2,
+                            shift(select(T_aj_lg_2, lg), (1)))) = add_int(
+                                                                  integer_of_int32(
+                                                                  select(S_i_lg_2,
+                                                                  shift(
+                                                                  select(T_ai_lg_2,
+                                                                  lg), (0)))),
+                                                                  (1)))) } ];
+      void; ((free_parameter T_lg_2_alloc_table) !lg); (raise Return) end)))))))))))));
+    (raise Return) end with Return -> void end)
+  { (JC_<somenum>: valid_sg(T_sg_1_alloc_table)) }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C array_and_field.jessie --quiet -f array_and_field.makefile project
@@ -853,6 +787,16 @@ why --project [...] why/array_and_field.why
 <project name="array_and_field" context="why/array_and_field_ctx.why">
   <function name="Function fl">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/array_and_field_po7.why">
+      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "26" begin = "13" end = "41"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/array_and_field_po8.why">
+      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "27" begin = "13" end = "41"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/array_and_field_po9.why">
       <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "23" begin = "11" end = "13"/>
@@ -860,7 +804,7 @@ why --project [...] why/array_and_field.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/array_and_field_po10.why">
-      <location file = "why/array_and_field.why" line = "705" begin = "16" end = "70"/>
+      <location file = "why/array_and_field.why" line = "631" begin = "16" end = "70"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/array_and_field_po11.why">
@@ -884,24 +828,24 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/array_and_field_po15.why">
-      <location file = "why/array_and_field.why" line = "743" begin = "29" end = "68"/>
+      <location file = "why/array_and_field.why" line = "677" begin = "13" end = "52"/>
       <explain kind = "Pre"
 text = ""/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/array_and_field_po7.why">
-      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "26" begin = "13" end = "41"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/array_and_field_po8.why">
-      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "27" begin = "13" end = "41"/>
-      <explain kind = "Assert"/>
     </goal>
     </behavior>
   </function>
   <function name="Function fg">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/array_and_field_po1.why">
+      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "14" begin = "12" end = "40"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/array_and_field_po2.why">
+      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "15" begin = "12" end = "40"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/array_and_field_po3.why">
       <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "18" begin = "15" end = "29"/>
@@ -922,16 +866,6 @@ text = "ArithOverflow"/>
       <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "19" begin = "15" end = "29"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/array_and_field_po1.why">
-      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "14" begin = "12" end = "40"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/array_and_field_po2.why">
-      <location file = "PPCHOME/tests/jessie/array_and_field.c" line = "15" begin = "12" end = "40"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1945,6 +1879,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -1956,6 +1895,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2052,26 +1995,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_S(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_T(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_S(p: S pointer, a: int, b: int,
   S_alloc_table: S alloc_table) =

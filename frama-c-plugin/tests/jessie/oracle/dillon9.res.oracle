@@ -84,12 +84,6 @@ type padding
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic __anonstruct_S_1_tag:  -> __anonstruct_S_1 tag_id
 
 axiom __anonstruct_S_1_int : (int_of_tag(__anonstruct_S_1_tag) = (1))
@@ -141,6 +135,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -152,6 +151,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -258,26 +262,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct___anonstruct_S_1(p:unit pointer, a:int,
- b:int, bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root___anonstruct_S_1(p:__anonstruct_S_1 pointer, a:int,
  b:int, __anonstruct_S_1_alloc_table:__anonstruct_S_1 alloc_table) =
  ((offset_min(__anonstruct_S_1_alloc_table, p) <= a)
@@ -332,81 +316,15 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
+exception Return_label_exc of unit
+
 parameter __anonstruct_S_1_alloc_table : __anonstruct_S_1 alloc_table ref
 
 parameter __anonstruct_S_1_tag_table : __anonstruct_S_1 tag_table ref
-
-parameter alloc_bitvector_struct___anonstruct_S_1 :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct___anonstruct_S_1(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct___anonstruct_S_1_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct___anonstruct_S_1(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
 parameter alloc_struct___anonstruct_S_1 :
  n:int ->
@@ -544,9 +462,9 @@ parameter main1 :
             not_assigns(intP_rc_3_alloc_table@, intP_intM_rc_3@,
             intP_intM_rc_3, pset_empty))
            and (JC_<somenum>:
-               not_assigns(__anonstruct_S_1_p_1_alloc_table@,
+               not_assigns(__anonstruct_S_1_p_1_alloc_table,
                __anonstruct_S_1_rc_p_1@, __anonstruct_S_1_rc_p_1,
-               pset_singleton(p@))))) }
+               pset_singleton(p))))) }
 
 parameter main1_requires :
  p:__anonstruct_S_1 pointer ->
@@ -582,9 +500,9 @@ parameter main1_requires :
             not_assigns(intP_rc_3_alloc_table@, intP_intM_rc_3@,
             intP_intM_rc_3, pset_empty))
            and (JC_<somenum>:
-               not_assigns(__anonstruct_S_1_p_1_alloc_table@,
+               not_assigns(__anonstruct_S_1_p_1_alloc_table,
                __anonstruct_S_1_rc_p_1@, __anonstruct_S_1_rc_p_1,
-               pset_singleton(p@))))) }
+               pset_singleton(p))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -642,9 +560,8 @@ let main1_ensures_default =
      not_assigns(intP_rc_3_alloc_table@, intP_intM_rc_3@, intP_intM_rc_3,
      pset_empty))
     and (JC_<somenum>:
-        not_assigns(__anonstruct_S_1_p_1_alloc_table@,
-        __anonstruct_S_1_rc_p_1@, __anonstruct_S_1_rc_p_1,
-        pset_singleton(p@))))) }
+        not_assigns(__anonstruct_S_1_p_1_alloc_table,
+        __anonstruct_S_1_rc_p_1@, __anonstruct_S_1_rc_p_1, pset_singleton(p))))) }
 
 let main1_safety =
  fun (p : __anonstruct_S_1 pointer) (r : intP pointer) (intP_rc_3_alloc_table : intP alloc_table ref) (intP_rc_3_tag_table : intP tag_table ref) (intP_intM_rc_3 : (intP, int32) memory ref) (__anonstruct_S_1_rc_p_1 : (__anonstruct_S_1, intP pointer) memory ref) (__anonstruct_S_1_p_1_alloc_table : __anonstruct_S_1 alloc_table) (intP_r_2_alloc_table : intP alloc_table) ->
@@ -707,6 +624,16 @@ why --project [...] why/dillon9.why
 <project name="dillon9" context="why/dillon9_ctx.why">
   <function name="Function main1">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/dillon9_po1.why">
+      <location file = "PPCHOME/tests/jessie/dillon9.c" line = "9" begin = "4" end = "9"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/dillon9_po2.why">
+      <location file = "PPCHOME/tests/jessie/dillon9.c" line = "9" begin = "4" end = "9"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/dillon9_po3.why">
       <location file = "PPCHOME/tests/jessie/dillon9.c" line = "10" begin = "6" end = "7"/>
@@ -714,7 +641,7 @@ why --project [...] why/dillon9.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/dillon9_po4.why">
-      <location file = "why/dillon9.why" line = "614" begin = "17" end = "73"/>
+      <location file = "why/dillon9.why" line = "531" begin = "17" end = "73"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/dillon9_po5.why">
@@ -748,19 +675,9 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/dillon9_po11.why">
-      <location file = "why/dillon9.why" line = "628" begin = "7" end = "50"/>
+      <location file = "why/dillon9.why" line = "545" begin = "7" end = "50"/>
       <explain kind = "Pre"
 text = ""/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/dillon9_po1.why">
-      <location file = "PPCHOME/tests/jessie/dillon9.c" line = "9" begin = "4" end = "9"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/dillon9_po2.why">
-      <location file = "PPCHOME/tests/jessie/dillon9.c" line = "9" begin = "4" end = "9"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1760,6 +1677,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -1771,6 +1693,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -1880,26 +1806,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct___anonstruct_S_1(p: unit pointer, a: int,
-  b: int, bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root___anonstruct_S_1(p: __anonstruct_S_1 pointer, a: int,
   b: int, __anonstruct_S_1_alloc_table: __anonstruct_S_1 alloc_table) =

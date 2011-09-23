@@ -109,14 +109,6 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -150,6 +142,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -161,6 +158,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -245,21 +247,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -304,59 +291,13 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -459,15 +400,15 @@ parameter max_seq :
      { (JC_<somenum>:
        ((JC_<somenum>:
         (forall i:int.
-         ((le_int((0), i) and le_int(i, sub_int(integer_of_int32(n@), (1)))) ->
+         ((le_int((0), i) and le_int(i, sub_int(integer_of_int32(n), (1)))) ->
           ge_int(integer_of_int32(result),
-          integer_of_int32(select(intP_intM_p_1, shift(p@, i)))))))
+          integer_of_int32(select(intP_intM_p_1, shift(p, i)))))))
        and (JC_<somenum>:
            (exists e:int.
             (le_int((0), e)
-            and (le_int(e, sub_int(integer_of_int32(n@), (1)))
-                and eq_int(integer_of_int32(result),
-                    integer_of_int32(select(intP_intM_p_1, shift(p@, e)))))))))) }
+            and (le_int(e, sub_int(integer_of_int32(n), (1)))
+                and (integer_of_int32(result) = integer_of_int32(select(intP_intM_p_1,
+                                                                 shift(p, e)))))))))) }
 
 parameter max_seq_requires :
  p:intP pointer ->
@@ -484,15 +425,15 @@ parameter max_seq_requires :
      { (JC_<somenum>:
        ((JC_<somenum>:
         (forall i:int.
-         ((le_int((0), i) and le_int(i, sub_int(integer_of_int32(n@), (1)))) ->
+         ((le_int((0), i) and le_int(i, sub_int(integer_of_int32(n), (1)))) ->
           ge_int(integer_of_int32(result),
-          integer_of_int32(select(intP_intM_p_1, shift(p@, i)))))))
+          integer_of_int32(select(intP_intM_p_1, shift(p, i)))))))
        and (JC_<somenum>:
            (exists e:int.
             (le_int((0), e)
-            and (le_int(e, sub_int(integer_of_int32(n@), (1)))
-                and eq_int(integer_of_int32(result),
-                    integer_of_int32(select(intP_intM_p_1, shift(p@, e)))))))))) }
+            and (le_int(e, sub_int(integer_of_int32(n), (1)))
+                and (integer_of_int32(result) = integer_of_int32(select(intP_intM_p_1,
+                                                                 shift(p, e)))))))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -517,7 +458,6 @@ let max_seq_ensures_default =
      (let i_0 = ref (any_int32 void) in
      (let e_0 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_2:
       (C_3:
       (C_4:
@@ -539,10 +479,9 @@ let max_seq_ensures_default =
                  ge_int(offset_max(intP_p_1_alloc_table, mutable_p@init),
                  integer_of_int32(e_0)))
                 and (JC_<somenum>:
-                    eq_int(integer_of_int32(select(intP_intM_p_1,
-                                            shift(mutable_p@init,
-                                            integer_of_int32(e_0)))),
-                    integer_of_int32(res))))))
+                    (integer_of_int32(select(intP_intM_p_1,
+                                      shift(mutable_p@init,
+                                      integer_of_int32(e_0)))) = integer_of_int32(res))))))
            and ((JC_<somenum>:
                 (forall j:int.
                  ((le_int((0), j) and lt_int(j, integer_of_int32(i_0))) ->
@@ -564,16 +503,12 @@ let max_seq_ensures_default =
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_28:
             begin
               (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 n))
-              then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              then void else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (C_25:
              begin
@@ -593,24 +528,24 @@ let max_seq_ensures_default =
              (i_0 := (C_27:
                      (safe_int32_of_integer_ (C_26:
                                              ((add_int (integer_of_int32 !i_0)) (1))))));
-             !i_0 end) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))) in void) with
+             !i_0 end) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (return := !res); (raise Return) end) end)));
     absurd  end with Return -> !return end)))
   { (JC_<somenum>:
     ((JC_<somenum>:
      (forall i:int.
-      ((le_int((0), i) and le_int(i, sub_int(integer_of_int32(n@), (1)))) ->
+      ((le_int((0), i) and le_int(i, sub_int(integer_of_int32(n), (1)))) ->
        ge_int(integer_of_int32(result),
-       integer_of_int32(select(intP_intM_p_1, shift(p@, i)))))))
+       integer_of_int32(select(intP_intM_p_1, shift(p, i)))))))
     and (JC_<somenum>:
         (exists e:int.
          (le_int((0), e)
-         and (le_int(e, sub_int(integer_of_int32(n@), (1)))
-             and eq_int(integer_of_int32(result),
-                 integer_of_int32(select(intP_intM_p_1, shift(p@, e)))))))))) }
+         and (le_int(e, sub_int(integer_of_int32(n), (1)))
+             and (integer_of_int32(result) = integer_of_int32(select(intP_intM_p_1,
+                                                              shift(p, e)))))))))) }
 
 let max_seq_safety =
  fun (p : intP pointer) (n : int32) (intP_p_1_alloc_table : intP alloc_table) (intP_intM_p_1 : (intP, int32) memory) ->
@@ -629,7 +564,6 @@ let max_seq_safety =
      (let i_0 = ref (any_int32 void) in
      (let e_0 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_2:
       (C_3:
       (C_4:
@@ -657,10 +591,9 @@ let max_seq_safety =
                     ge_int(offset_max(intP_p_1_alloc_table, mutable_p@init),
                     integer_of_int32(e_0)))
                    and (JC_<somenum>:
-                       eq_int(integer_of_int32(select(intP_intM_p_1,
-                                               shift(mutable_p@init,
-                                               integer_of_int32(e_0)))),
-                       integer_of_int32(res))))))
+                       (integer_of_int32(select(intP_intM_p_1,
+                                         shift(mutable_p@init,
+                                         integer_of_int32(e_0)))) = integer_of_int32(res))))))
               and ((JC_<somenum>:
                    (forall j:int.
                     ((le_int((0), j) and lt_int(j, integer_of_int32(i_0))) ->
@@ -681,16 +614,12 @@ let max_seq_safety =
                                   le_int(integer_of_int32(i_0),
                                   integer_of_int32(n))))))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
             (C_28:
             begin
               (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 n))
-              then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              then void else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (C_25:
              begin
@@ -714,9 +643,9 @@ let max_seq_safety =
                      (JC_<somenum>:
                      (int32_of_integer_ (C_26:
                                         ((add_int (integer_of_int32 !i_0)) (1)))))));
-             !i_0 end) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end)))) in void) with
+             !i_0 end) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end)))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (return := !res); (raise Return) end) end)));
     absurd  end with Return -> !return end))) { true }
@@ -727,57 +656,7 @@ why --project [...] why/max_seq.why
 <project name="max_seq" context="why/max_seq_ctx.why">
   <function name="Function max_seq">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/max_seq_po21.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "9" begin = "12" end = "14"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/max_seq_po22.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "9" begin = "12" end = "14"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/max_seq_po23.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "21" begin = "14" end = "16"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/max_seq_po24.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "21" begin = "14" end = "16"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/max_seq_po25.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "22" begin = "13" end = "15"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/max_seq_po26.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "22" begin = "13" end = "15"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/max_seq_po27.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "20" begin = "20" end = "23"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/max_seq_po28.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "20" begin = "20" end = "23"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/max_seq_po29.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "18" begin = "19" end = "22"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/max_seq_po30.why">
-      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "18" begin = "19" end = "22"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/max_seq_po1.why">
       <location file = "PPCHOME/tests/jessie/max_seq.c" line = "17" begin = "21" end = "41"/>
       <explain kind = "LoopInvInit"/>
@@ -857,6 +736,56 @@ text = "ArithOverflow"/>
     <goal why_file="why/max_seq_po20.why">
       <location file = "PPCHOME/tests/jessie/max_seq.c" line = "5" begin = "12" end = "63"/>
       <explain kind = "Post"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/max_seq_po21.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "9" begin = "12" end = "14"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/max_seq_po22.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "9" begin = "12" end = "14"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/max_seq_po23.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "21" begin = "14" end = "16"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/max_seq_po24.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "21" begin = "14" end = "16"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/max_seq_po25.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "22" begin = "13" end = "15"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/max_seq_po26.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "22" begin = "13" end = "15"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/max_seq_po27.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "20" begin = "20" end = "23"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/max_seq_po28.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "20" begin = "20" end = "23"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/max_seq_po29.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "18" begin = "19" end = "22"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/max_seq_po30.why">
+      <location file = "PPCHOME/tests/jessie/max_seq.c" line = "18" begin = "19" end = "22"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
   </function>
@@ -1836,6 +1765,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -1847,6 +1781,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -1932,21 +1870,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

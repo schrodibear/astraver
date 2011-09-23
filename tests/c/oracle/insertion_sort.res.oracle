@@ -1,4 +1,35 @@
 ========== file tests/c/insertion_sort.c ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
+
 // RUNSIMPLIFY: will ask regtests to run Simplify on this program
 
 #pragma JessieIntegerModel(math)
@@ -37,7 +68,7 @@ void insert_sort(int t[], int n) {
 
 /*
 Local Variables:
-compile-command: "frama-c -jessie insertion_sort.c"
+compile-command: "make insertion_sort.why3ml"
 End:
 */
 ========== frama-c -jessie execution ==========
@@ -200,230 +231,230 @@ behavior default:
 ========== file tests/c/insertion_sort.jessie/insertion_sort.cloc ==========
 [C_10]
 file = "HOME/tests/c/insertion_sort.c"
-line = 28
+line = 59
 begin = 11
 end = 12
 
 [C_11]
 file = "HOME/tests/c/insertion_sort.c"
-line = 25
+line = 56
 begin = 21
 end = 22
 
 [C_12]
 file = "HOME/tests/c/insertion_sort.c"
-line = 24
+line = 55
 begin = 23
 end = 66
 
 [C_13]
 file = "HOME/tests/c/insertion_sort.c"
-line = 23
+line = 54
 begin = 23
 end = 48
 
 [C_14]
 file = "HOME/tests/c/insertion_sort.c"
-line = 22
+line = 53
 begin = 23
 end = 47
 
 [C_15]
 file = "HOME/tests/c/insertion_sort.c"
-line = 21
+line = 52
 begin = 23
 end = 34
 
 [C_16]
 file = "HOME/tests/c/insertion_sort.c"
-line = 21
+line = 52
 begin = 23
 end = 29
 
 [C_17]
 file = "HOME/tests/c/insertion_sort.c"
-line = 21
+line = 52
 begin = 28
 end = 34
 
 [C_18]
 file = "HOME/tests/c/insertion_sort.c"
-line = 29
+line = 60
 begin = 12
 end = 15
 
 [C_19]
 file = "HOME/tests/c/insertion_sort.c"
-line = 29
+line = 60
 begin = 10
 end = 11
 
 [C_1]
 file = "HOME/tests/c/insertion_sort.c"
-line = 18
+line = 49
 begin = 9
 end = 10
 
 [C_2]
 file = "HOME/tests/c/insertion_sort.c"
-line = 16
+line = 47
 begin = 19
 end = 22
 
 [C_3]
 file = "HOME/tests/c/insertion_sort.c"
-line = 15
+line = 46
 begin = 21
 end = 34
 
 [C_4]
 file = "HOME/tests/c/insertion_sort.c"
-line = 14
+line = 45
 begin = 21
 end = 32
 
 [C_20]
 file = "HOME/tests/c/insertion_sort.c"
-line = 29
+line = 60
 begin = 10
 end = 16
 
 [C_5]
 file = "HOME/tests/c/insertion_sort.c"
-line = 14
+line = 45
 begin = 21
 end = 27
 
 [C_21]
 file = "HOME/tests/c/insertion_sort.c"
-line = 30
+line = 61
 begin = 15
 end = 18
 
 [C_6]
 file = "HOME/tests/c/insertion_sort.c"
-line = 14
+line = 45
 begin = 26
 end = 32
 
 [C_22]
 file = "HOME/tests/c/insertion_sort.c"
-line = 30
+line = 61
 begin = 13
 end = 14
 
 [C_7]
 file = "HOME/tests/c/insertion_sort.c"
-line = 20
+line = 51
 begin = 9
 end = 10
 
 [C_23]
 file = "HOME/tests/c/insertion_sort.c"
-line = 30
+line = 61
 begin = 13
 end = 19
 
 [C_8]
 file = "HOME/tests/c/insertion_sort.c"
-line = 20
+line = 51
 begin = 9
 end = 13
 
 [C_24]
 file = "HOME/tests/c/insertion_sort.c"
-line = 30
+line = 61
 begin = 6
 end = 7
 
 [C_9]
 file = "HOME/tests/c/insertion_sort.c"
-line = 20
+line = 51
 begin = 9
 end = 13
 
 [C_25]
 file = "HOME/tests/c/insertion_sort.c"
-line = 30
+line = 61
 begin = 13
 end = 19
 
 [C_26]
 file = "HOME/tests/c/insertion_sort.c"
-line = 30
+line = 61
 begin = 13
 end = 19
 
 [C_27]
 file = "HOME/tests/c/insertion_sort.c"
-line = 28
+line = 59
 begin = 21
 end = 24
 
 [C_28]
 file = "HOME/tests/c/insertion_sort.c"
-line = 28
+line = 59
 begin = 21
 end = 24
 
 [C_29]
 file = "HOME/tests/c/insertion_sort.c"
-line = 32
+line = 63
 begin = 4
 end = 5
 
 [C_30]
 file = "HOME/tests/c/insertion_sort.c"
-line = 32
+line = 63
 begin = 11
 end = 13
 
 [C_31]
 file = "HOME/tests/c/insertion_sort.c"
-line = 32
+line = 63
 begin = 11
 end = 13
 
 [C_32]
 file = "HOME/tests/c/insertion_sort.c"
-line = 18
+line = 49
 begin = 17
 end = 20
 
 [C_33]
 file = "HOME/tests/c/insertion_sort.c"
-line = 18
+line = 49
 begin = 17
 end = 20
 
 [C_34]
 file = "HOME/tests/c/insertion_sort.c"
-line = 8
+line = 39
 begin = 12
 end = 27
 
 [C_35]
 file = "HOME/tests/c/insertion_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 34
 
 [C_36]
 file = "HOME/tests/c/insertion_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 34
 
 [insert_sort]
 name = "Function insert_sort"
 file = "HOME/tests/c/insertion_sort.c"
-line = 10
+line = 41
 begin = 5
 end = 16
 
 [C_37]
 file = "HOME/tests/c/insertion_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 34
 
@@ -444,10 +475,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs inser
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs insertion_sort.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/insertion_sort_why.sx
 
@@ -507,6 +539,13 @@ simplify: simplify/insertion_sort_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/insertion_sort_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/insertion_sort_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -580,6 +619,9 @@ why/%_why3.why: why/%.why
 why3ide: why/insertion_sort_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: insertion_sort.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include insertion_sort.depend
 
 depend: coq/insertion_sort_why.v
@@ -609,55 +651,55 @@ end = 2116
 
 [JC_43]
 file = "HOME/tests/c/insertion_sort.c"
-line = 24
+line = 55
 begin = 23
 end = 66
 
 [JC_44]
 file = "HOME/tests/c/insertion_sort.c"
-line = 23
+line = 54
 begin = 23
 end = 48
 
 [JC_45]
 file = "HOME/tests/c/insertion_sort.c"
-line = 22
+line = 53
 begin = 23
 end = 47
 
 [JC_46]
 file = "HOME/tests/c/insertion_sort.c"
-line = 21
+line = 52
 begin = 23
 end = 29
 
 [JC_1]
 file = "HOME/tests/c/insertion_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 34
 
 [JC_47]
 file = "HOME/tests/c/insertion_sort.c"
-line = 21
+line = 52
 begin = 28
 end = 34
 
 [JC_2]
 file = "HOME/tests/c/insertion_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 34
 
 [JC_48]
 file = "HOME/tests/c/insertion_sort.c"
-line = 21
+line = 52
 begin = 23
 end = 34
 
 [JC_3]
 file = "HOME/tests/c/insertion_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 34
 
@@ -675,19 +717,19 @@ end = -1
 
 [JC_5]
 file = "HOME/tests/c/insertion_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 34
 
 [JC_6]
 file = "HOME/tests/c/insertion_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 34
 
 [JC_7]
 file = "HOME/tests/c/insertion_sort.c"
-line = 7
+line = 38
 begin = 13
 end = 34
 
@@ -699,7 +741,7 @@ end = -1
 
 [JC_9]
 file = "HOME/tests/c/insertion_sort.c"
-line = 8
+line = 39
 begin = 12
 end = 27
 
@@ -711,9 +753,9 @@ end = 1508
 
 [insert_sort_ensures_default]
 name = "Function insert_sort"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/insertion_sort.c"
-line = 10
+line = 41
 begin = 5
 end = 16
 
@@ -725,7 +767,7 @@ end = 1508
 
 [JC_10]
 file = "HOME/tests/c/insertion_sort.c"
-line = 8
+line = 39
 begin = 12
 end = 27
 
@@ -743,25 +785,25 @@ end = -1
 
 [JC_13]
 file = "HOME/tests/c/insertion_sort.c"
-line = 15
+line = 46
 begin = 21
 end = 34
 
 [JC_14]
 file = "HOME/tests/c/insertion_sort.c"
-line = 14
+line = 45
 begin = 21
 end = 27
 
 [JC_15]
 file = "HOME/tests/c/insertion_sort.c"
-line = 14
+line = 45
 begin = 26
 end = 32
 
 [JC_16]
 file = "HOME/tests/c/insertion_sort.c"
-line = 14
+line = 45
 begin = 21
 end = 32
 
@@ -786,43 +828,43 @@ end = 2116
 [JC_20]
 kind = PointerDeref
 file = "HOME/tests/c/insertion_sort.c"
-line = 20
+line = 51
 begin = 9
 end = 13
 
 [JC_21]
 file = "HOME/tests/c/insertion_sort.c"
-line = 24
+line = 55
 begin = 23
 end = 66
 
 [JC_22]
 file = "HOME/tests/c/insertion_sort.c"
-line = 23
+line = 54
 begin = 23
 end = 48
 
 [JC_23]
 file = "HOME/tests/c/insertion_sort.c"
-line = 22
+line = 53
 begin = 23
 end = 47
 
 [JC_24]
 file = "HOME/tests/c/insertion_sort.c"
-line = 21
+line = 52
 begin = 23
 end = 29
 
 [JC_25]
 file = "HOME/tests/c/insertion_sort.c"
-line = 21
+line = 52
 begin = 28
 end = 34
 
 [JC_26]
 file = "HOME/tests/c/insertion_sort.c"
-line = 21
+line = 52
 begin = 23
 end = 34
 
@@ -848,21 +890,21 @@ end = 1508
 name = "Function insert_sort"
 behavior = "Safety"
 file = "HOME/tests/c/insertion_sort.c"
-line = 10
+line = 41
 begin = 5
 end = 16
 
 [JC_30]
 kind = PointerDeref
 file = "HOME/tests/c/insertion_sort.c"
-line = 29
+line = 60
 begin = 10
 end = 16
 
 [JC_31]
 kind = PointerDeref
 file = "HOME/tests/c/insertion_sort.c"
-line = 30
+line = 61
 begin = 13
 end = 19
 
@@ -875,7 +917,7 @@ end = 450
 
 [JC_33]
 file = "HOME/tests/c/insertion_sort.c"
-line = 25
+line = 56
 begin = 21
 end = 22
 
@@ -888,31 +930,31 @@ end = 59
 
 [JC_35]
 file = "HOME/tests/c/insertion_sort.c"
-line = 16
+line = 47
 begin = 19
 end = 22
 
 [JC_36]
 file = "HOME/tests/c/insertion_sort.c"
-line = 15
+line = 46
 begin = 21
 end = 34
 
 [JC_37]
 file = "HOME/tests/c/insertion_sort.c"
-line = 14
+line = 45
 begin = 21
 end = 27
 
 [JC_38]
 file = "HOME/tests/c/insertion_sort.c"
-line = 14
+line = 45
 begin = 26
 end = 32
 
 [JC_39]
 file = "HOME/tests/c/insertion_sort.c"
-line = 14
+line = 45
 begin = 21
 end = 32
 
@@ -925,25 +967,17 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Goto_while_1_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
 predicate Swap(a:intP pointer, i:int, j:int,
  intP_intM_a_1_at_L2:(intP, int) memory,
  intP_intM_a_1_at_L1:(intP, int) memory) =
- (eq_int(select(intP_intM_a_1_at_L1, shift(a, i)),
-  select(intP_intM_a_1_at_L2, shift(a, j)))
- and (eq_int(select(intP_intM_a_1_at_L1, shift(a, j)),
-      select(intP_intM_a_1_at_L2, shift(a, i)))
+ ((select(intP_intM_a_1_at_L1, shift(a, i)) = select(intP_intM_a_1_at_L2,
+                                              shift(a, j)))
+ and ((select(intP_intM_a_1_at_L1, shift(a, j)) = select(intP_intM_a_1_at_L2,
+                                                  shift(a, i)))
      and (forall k:int.
-          ((neq_int(k, i) and neq_int(k, j)) ->
-           eq_int(select(intP_intM_a_1_at_L1, shift(a, k)),
-           select(intP_intM_a_1_at_L2, shift(a, k)))))))
+          (((k <> i) and (k <> j)) ->
+           (select(intP_intM_a_1_at_L1, shift(a, k)) = select(intP_intM_a_1_at_L2,
+                                                       shift(a, k)))))))
 
 inductive Permut: intP pointer, int, int, (intP, int) memory,
                   (intP, int) memory -> prop =
@@ -991,8 +1025,6 @@ inductive Permut: intP pointer, int, int, (intP, int) memory,
                         Permut(a_4, l_3, h_3, intP_intM_a_0_2_at_L2,
                         intP_intM_a_0_2_at_L1)))))))))
  
-exception Return_label_exc of unit
-
 predicate Sorted(a_5:intP pointer, l_4:int, h_4:int,
  intP_intM_a_5_3_at_L:(intP, int) memory) =
  (forall i_1:int.
@@ -1096,21 +1128,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -1155,59 +1172,15 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_1_break_exc of unit
 
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -1293,7 +1266,7 @@ parameter insert_sort :
    intP_intM_t_4:(intP, int) memory ref ->
     intP_t_4_alloc_table:intP alloc_table ->
      { } unit reads intP_intM_t_4 writes intP_intM_t_4
-     { (JC_10: Sorted(t@, (0), sub_int(n@, (1)), intP_intM_t_4)) }
+     { (JC_10: Sorted(t, (0), sub_int(n, (1)), intP_intM_t_4)) }
 
 parameter insert_sort_requires :
  t:intP pointer ->
@@ -1305,7 +1278,7 @@ parameter insert_sort_requires :
        and (JC_2:
            ge_int(offset_max(intP_t_4_alloc_table, t), sub_int(n, (1))))))}
      unit reads intP_intM_t_4 writes intP_intM_t_4
-     { (JC_10: Sorted(t@, (0), sub_int(n@, (1)), intP_intM_t_4)) }
+     { (JC_10: Sorted(t, (0), sub_int(n, (1)), intP_intM_t_4)) }
 
 let insert_sort_ensures_default =
  fun (t : intP pointer) (n : int) (intP_intM_t_4 : (intP, int) memory ref) (intP_t_4_alloc_table : intP alloc_table) ->
@@ -1319,14 +1292,11 @@ let insert_sort_ensures_default =
      (let j_2 = ref (any_int void) in
      (let mv = ref (any_int void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_1:
          begin
-           (if ((le_int_ n) (1))
-           then (let jessie_<num> = (raise (Return_label_exc void)) in void)
+           (if ((le_int_ n) (1)) then (raise (Return_label_exc void))
            else void); (let jessie_<num> = (i_2 := (1)) in void);
           (loop_3:
           while true do
@@ -1338,17 +1308,13 @@ let insert_sort_ensures_default =
            begin
              [ { } unit { true } ];
             try
-             (let jessie_<num> =
              begin
                (let jessie_<num> =
                (C_33:
                begin
                  (if ((lt_int_ !i_2) n) then void
-                 else
-                  (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                  void));
+                 else (raise (Goto_while_0_break_exc void)));
                 try
-                 (let jessie_<num> =
                  (C_9:
                  (C_10:
                  begin
@@ -1367,7 +1333,7 @@ let insert_sort_ensures_default =
                            (lt_int(j_2, i_2) ->
                             Sorted(t, (0), add_int(i_2, (1)), intP_intM_t_4)))
                           and ((JC_45:
-                               (eq_int(j_2, i_2) ->
+                               ((j_2 = i_2) ->
                                 Sorted(t, (0), i_2, intP_intM_t_4)))
                               and (JC_48:
                                   ((JC_46: le_int((0), j_2))
@@ -1376,15 +1342,12 @@ let insert_sort_ensures_default =
                    begin
                      [ { } unit { true } ];
                     try
-                     (let jessie_<num> =
                      begin
                        (let jessie_<num> =
                        (C_28:
                        begin
                          (if ((gt_int_ !j_2) (0)) then void
-                         else
-                          (let jessie_<num> =
-                          (raise (Goto_while_1_break_exc void)) in void));
+                         else (raise (Goto_while_1_break_exc void)));
                         (let jessie_<num> =
                         begin
                           (if ((le_int_ (C_20:
@@ -1392,9 +1355,7 @@ let insert_sort_ensures_default =
                                                                     ((shift t) 
                                                                     (C_18:
                                                                     ((sub_int !j_2) (1)))))))) !mv)
-                          then
-                           (let jessie_<num> =
-                           (raise (Goto_while_1_break_exc void)) in void)
+                          then (raise (Goto_while_1_break_exc void))
                           else void);
                          (C_26:
                          (let jessie_<num> =
@@ -1409,9 +1370,9 @@ let insert_sort_ensures_default =
                            (((safe_upd_ intP_intM_t_4) jessie_<num>) jessie_<num>);
                           jessie_<num> end))))) end in void);
                         (j_2 := (C_27: ((sub_int !j_2) (1)))); !j_2 end) in
-                       void); (raise (Loop_continue_exc void)) end in void)
-                     with Loop_continue_exc jessie_<num> -> void end end done);
-                  (raise (Goto_while_1_break_exc void)) end)) in void) with
+                       void); (raise (Loop_continue_exc void)) end with
+                     Loop_continue_exc jessie_<num> -> void end end done);
+                  (raise (Goto_while_1_break_exc void)) end)) with
                  Goto_while_1_break_exc jessie_<num> ->
                  (let jessie_<num> =
                  (while_1_break:
@@ -1426,14 +1387,14 @@ let insert_sort_ensures_default =
                     (((safe_upd_ intP_intM_t_4) jessie_<num>) jessie_<num>);
                    jessie_<num> end))))) end) in void) end;
                 (i_2 := (C_32: ((add_int !i_2) (1)))); !i_2 end) in void);
-              (raise (Loop_continue_exc void)) end in void) with
+              (raise (Loop_continue_exc void)) end with
              Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end) in void) with
+          (raise (Goto_while_0_break_exc void)) end) with
          Goto_while_0_break_exc jessie_<num> -> (while_0_break: void) end;
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<num> -> (return_label: (raise Return)) end)));
-    (raise Return) end with Return -> void end)
-  { (JC_9: Sorted(t@, (0), sub_int(n@, (1)), intP_intM_t_4)) }
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
+      (return_label: (raise Return)) end))); (raise Return) end with
+   Return -> void end)
+  { (JC_9: Sorted(t, (0), sub_int(n, (1)), intP_intM_t_4)) }
 
 let insert_sort_safety =
  fun (t : intP pointer) (n : int) (intP_intM_t_4 : (intP, int) memory ref) (intP_t_4_alloc_table : intP alloc_table) ->
@@ -1447,14 +1408,11 @@ let insert_sort_safety =
      (let j_2 = ref (any_int void) in
      (let mv = ref (any_int void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_1:
          begin
-           (if ((le_int_ n) (1))
-           then (let jessie_<num> = (raise (Return_label_exc void)) in void)
+           (if ((le_int_ n) (1)) then (raise (Return_label_exc void))
            else void); (let jessie_<num> = (i_2 := (1)) in void);
           (loop_1:
           while true do
@@ -1465,17 +1423,13 @@ let insert_sort_safety =
                  and (JC_16:
                      ((JC_14: le_int((0), i_2)) and (JC_15: le_int(i_2, n))))) } ];
             try
-             (let jessie_<num> =
              begin
                (let jessie_<num> =
                (C_33:
                begin
                  (if ((lt_int_ !i_2) n) then void
-                 else
-                  (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                  void));
+                 else (raise (Goto_while_0_break_exc void)));
                 try
-                 (let jessie_<num> =
                  (C_9:
                  (C_10:
                  begin
@@ -1498,30 +1452,25 @@ let insert_sort_safety =
                                Sorted(t, (0), add_int(i_2, (1)),
                                intP_intM_t_4)))
                              and ((JC_23:
-                                  (eq_int(j_2, i_2) ->
+                                  ((j_2 = i_2) ->
                                    Sorted(t, (0), i_2, intP_intM_t_4)))
                                  and (JC_26:
                                      ((JC_24: le_int((0), j_2))
                                      and (JC_25: le_int(j_2, i_2))))))) } ];
                     try
-                     (let jessie_<num> =
                      begin
                        (let jessie_<num> =
                        (C_28:
                        begin
                          (if ((gt_int_ !j_2) (0)) then void
-                         else
-                          (let jessie_<num> =
-                          (raise (Goto_while_1_break_exc void)) in void));
+                         else (raise (Goto_while_1_break_exc void)));
                         (let jessie_<num> =
                         begin
                           (if ((le_int_ (C_20:
                                         (JC_30:
                                         ((((offset_acc_ intP_t_4_alloc_table) !intP_intM_t_4) t) 
                                          (C_18: ((sub_int !j_2) (1))))))) !mv)
-                          then
-                           (let jessie_<num> =
-                           (raise (Goto_while_1_break_exc void)) in void)
+                          then (raise (Goto_while_1_break_exc void))
                           else void);
                          (C_26:
                          (let jessie_<num> =
@@ -1537,9 +1486,9 @@ let insert_sort_safety =
                            (((((offset_upd_ intP_t_4_alloc_table) intP_intM_t_4) jessie_<num>) jessie_<num>) jessie_<num>));
                           jessie_<num> end))))) end in void);
                         (j_2 := (C_27: ((sub_int !j_2) (1)))); !j_2 end) in
-                       void); (raise (Loop_continue_exc void)) end in void)
-                     with Loop_continue_exc jessie_<num> -> void end end done);
-                  (raise (Goto_while_1_break_exc void)) end)) in void) with
+                       void); (raise (Loop_continue_exc void)) end with
+                     Loop_continue_exc jessie_<num> -> void end end done);
+                  (raise (Goto_while_1_break_exc void)) end)) with
                  Goto_while_1_break_exc jessie_<num> ->
                  (let jessie_<num> =
                  (while_1_break:
@@ -1555,13 +1504,13 @@ let insert_sort_safety =
                     (((((offset_upd_ intP_t_4_alloc_table) intP_intM_t_4) jessie_<num>) jessie_<num>) jessie_<num>));
                    jessie_<num> end))))) end) in void) end;
                 (i_2 := (C_32: ((add_int !i_2) (1)))); !i_2 end) in void);
-              (raise (Loop_continue_exc void)) end in void) with
+              (raise (Loop_continue_exc void)) end with
              Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end) in void) with
+          (raise (Goto_while_0_break_exc void)) end) with
          Goto_while_0_break_exc jessie_<num> -> (while_0_break: void) end;
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<num> -> (return_label: (raise Return)) end)));
-    (raise Return) end with Return -> void end) { true }
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<num> ->
+      (return_label: (raise Return)) end))); (raise Return) end with
+   Return -> void end) { true }
 
 
 ========== generation of alt-ergo VC output ==========
@@ -2731,21 +2680,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -5176,18 +5110,6 @@ why -simplify [...] why/insertion_sort.why
   (AND (EQ (offset_min voidP_alloc_table p) a)
   (EQ (offset_max voidP_alloc_table p) b)))
 
-(DEFPRED (valid_bitvector_struct_charP p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_intP p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
-(DEFPRED (valid_bitvector_struct_voidP p a b bitvector_alloc_table)
-  (AND (EQ (offset_min bitvector_alloc_table p) a)
-  (EQ (offset_max bitvector_alloc_table p) b)))
-
 (DEFPRED (valid_root_charP p a b charP_alloc_table)
   (AND (<= (offset_min charP_alloc_table p) a)
   (>= (offset_max charP_alloc_table p) b)))
@@ -5228,7 +5150,7 @@ why -simplify [...] why/insertion_sort.why
  ;; Why axiom voidP_tags
  (FORALL (x voidP_tag_table) (instanceof voidP_tag_table x voidP_tag)))
 
-;; insert_sort_ensures_default_po_1, File "HOME/tests/c/insertion_sort.c", line 8, characters 12-27
+;; insert_sort_ensures_default_po_1, File "HOME/tests/c/insertion_sort.c", line 39, characters 12-27
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5237,7 +5159,7 @@ why -simplify [...] why/insertion_sort.why
          (>= (offset_max intP_t_4_alloc_table t) (- n 1)))
 (IMPLIES (<= n 1) (Sorted t 0 (- n 1) intP_intM_t_4)))))))
 
-;; insert_sort_ensures_default_po_2, File "HOME/tests/c/insertion_sort.c", line 15, characters 21-34
+;; insert_sort_ensures_default_po_2, File "HOME/tests/c/insertion_sort.c", line 46, characters 21-34
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5247,7 +5169,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (> n 1)
 (FORALL (i_2) (IMPLIES (EQ i_2 1) (Sorted t 0 i_2 intP_intM_t_4)))))))))
 
-;; insert_sort_ensures_default_po_3, File "HOME/tests/c/insertion_sort.c", line 14, characters 21-27
+;; insert_sort_ensures_default_po_3, File "HOME/tests/c/insertion_sort.c", line 45, characters 21-27
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5255,7 +5177,7 @@ why -simplify [...] why/insertion_sort.why
          (>= (offset_max intP_t_4_alloc_table t) (- n 1)))
 (IMPLIES (> n 1) (FORALL (i_2) (IMPLIES (EQ i_2 1) (<= 0 i_2))))))))
 
-;; insert_sort_ensures_default_po_4, File "HOME/tests/c/insertion_sort.c", line 14, characters 26-32
+;; insert_sort_ensures_default_po_4, File "HOME/tests/c/insertion_sort.c", line 45, characters 26-32
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5263,7 +5185,7 @@ why -simplify [...] why/insertion_sort.why
          (>= (offset_max intP_t_4_alloc_table t) (- n 1)))
 (IMPLIES (> n 1) (FORALL (i_2) (IMPLIES (EQ i_2 1) (<= i_2 n))))))))
 
-;; insert_sort_ensures_default_po_5, File "HOME/tests/c/insertion_sort.c", line 24, characters 23-66
+;; insert_sort_ensures_default_po_5, File "HOME/tests/c/insertion_sort.c", line 55, characters 23-66
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5287,7 +5209,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (AND (<= j_2 k_0) (< k_0 i_2_0))
 (> (select intP_intM_t_4_0 (shift t k_0)) mv))))))))))))))))))))
 
-;; insert_sort_ensures_default_po_6, File "HOME/tests/c/insertion_sort.c", line 23, characters 23-48
+;; insert_sort_ensures_default_po_6, File "HOME/tests/c/insertion_sort.c", line 54, characters 23-48
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5309,7 +5231,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ j_2 i_2_0)
 (IMPLIES (< j_2 i_2_0) (Sorted t 0 (+ i_2_0 1) intP_intM_t_4_0)))))))))))))))))))
 
-;; insert_sort_ensures_default_po_7, File "HOME/tests/c/insertion_sort.c", line 21, characters 23-29
+;; insert_sort_ensures_default_po_7, File "HOME/tests/c/insertion_sort.c", line 52, characters 23-29
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5328,7 +5250,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (mv)
 (IMPLIES (EQ mv result) (FORALL (j_2) (IMPLIES (EQ j_2 i_2_0) (<= 0 j_2))))))))))))))))))
 
-;; insert_sort_ensures_default_po_8, File "HOME/tests/c/insertion_sort.c", line 21, characters 28-34
+;; insert_sort_ensures_default_po_8, File "HOME/tests/c/insertion_sort.c", line 52, characters 28-34
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5348,7 +5270,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ mv result)
 (FORALL (j_2) (IMPLIES (EQ j_2 i_2_0) (<= j_2 i_2_0))))))))))))))))))
 
-;; insert_sort_ensures_default_po_9, File "HOME/tests/c/insertion_sort.c", line 15, characters 21-34
+;; insert_sort_ensures_default_po_9, File "HOME/tests/c/insertion_sort.c", line 46, characters 21-34
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5388,7 +5310,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i_2_1)
 (IMPLIES (EQ i_2_1 (+ i_2_0 1)) (Sorted t 0 i_2_1 intP_intM_t_4_2)))))))))))))))))))))))))))))
 
-;; insert_sort_ensures_default_po_10, File "HOME/tests/c/insertion_sort.c", line 14, characters 21-27
+;; insert_sort_ensures_default_po_10, File "HOME/tests/c/insertion_sort.c", line 45, characters 21-27
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5427,7 +5349,7 @@ why -simplify [...] why/insertion_sort.why
          (|why__store| intP_intM_t_4_1 (shift t j_2_0) mv))
 (FORALL (i_2_1) (IMPLIES (EQ i_2_1 (+ i_2_0 1)) (<= 0 i_2_1)))))))))))))))))))))))))))))
 
-;; insert_sort_ensures_default_po_11, File "HOME/tests/c/insertion_sort.c", line 14, characters 26-32
+;; insert_sort_ensures_default_po_11, File "HOME/tests/c/insertion_sort.c", line 45, characters 26-32
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5466,7 +5388,7 @@ why -simplify [...] why/insertion_sort.why
          (|why__store| intP_intM_t_4_1 (shift t j_2_0) mv))
 (FORALL (i_2_1) (IMPLIES (EQ i_2_1 (+ i_2_0 1)) (<= i_2_1 n)))))))))))))))))))))))))))))
 
-;; insert_sort_ensures_default_po_12, File "HOME/tests/c/insertion_sort.c", line 24, characters 23-66
+;; insert_sort_ensures_default_po_12, File "HOME/tests/c/insertion_sort.c", line 55, characters 23-66
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5511,7 +5433,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (AND (<= j_2_1 k_0) (< k_0 i_2_0))
 (> (select intP_intM_t_4_2 (shift t k_0)) mv)))))))))))))))))))))))))))))))))
 
-;; insert_sort_ensures_default_po_13, File "HOME/tests/c/insertion_sort.c", line 23, characters 23-48
+;; insert_sort_ensures_default_po_13, File "HOME/tests/c/insertion_sort.c", line 54, characters 23-48
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5554,7 +5476,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ j_2_1 (- j_2_0 1))
 (IMPLIES (< j_2_1 i_2_0) (Sorted t 0 (+ i_2_0 1) intP_intM_t_4_2))))))))))))))))))))))))))))))))
 
-;; insert_sort_ensures_default_po_14, File "HOME/tests/c/insertion_sort.c", line 22, characters 23-47
+;; insert_sort_ensures_default_po_14, File "HOME/tests/c/insertion_sort.c", line 53, characters 23-47
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5597,7 +5519,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ j_2_1 (- j_2_0 1))
 (IMPLIES (EQ j_2_1 i_2_0) (Sorted t 0 i_2_0 intP_intM_t_4_2))))))))))))))))))))))))))))))))
 
-;; insert_sort_ensures_default_po_15, File "HOME/tests/c/insertion_sort.c", line 21, characters 23-29
+;; insert_sort_ensures_default_po_15, File "HOME/tests/c/insertion_sort.c", line 52, characters 23-29
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5638,7 +5560,7 @@ why -simplify [...] why/insertion_sort.why
          (|why__store| intP_intM_t_4_1 (shift t j_2_0) result1))
 (FORALL (j_2_1) (IMPLIES (EQ j_2_1 (- j_2_0 1)) (<= 0 j_2_1)))))))))))))))))))))))))))))))
 
-;; insert_sort_ensures_default_po_16, File "HOME/tests/c/insertion_sort.c", line 21, characters 28-34
+;; insert_sort_ensures_default_po_16, File "HOME/tests/c/insertion_sort.c", line 52, characters 28-34
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5679,7 +5601,7 @@ why -simplify [...] why/insertion_sort.why
          (|why__store| intP_intM_t_4_1 (shift t j_2_0) result1))
 (FORALL (j_2_1) (IMPLIES (EQ j_2_1 (- j_2_0 1)) (<= j_2_1 i_2_0)))))))))))))))))))))))))))))))
 
-;; insert_sort_ensures_default_po_17, File "HOME/tests/c/insertion_sort.c", line 15, characters 21-34
+;; insert_sort_ensures_default_po_17, File "HOME/tests/c/insertion_sort.c", line 46, characters 21-34
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5716,7 +5638,7 @@ why -simplify [...] why/insertion_sort.why
 (FORALL (i_2_1)
 (IMPLIES (EQ i_2_1 (+ i_2_0 1)) (Sorted t 0 i_2_1 intP_intM_t_4_2))))))))))))))))))))))))))
 
-;; insert_sort_ensures_default_po_18, File "HOME/tests/c/insertion_sort.c", line 14, characters 21-27
+;; insert_sort_ensures_default_po_18, File "HOME/tests/c/insertion_sort.c", line 45, characters 21-27
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5752,7 +5674,7 @@ why -simplify [...] why/insertion_sort.why
          (|why__store| intP_intM_t_4_1 (shift t j_2_0) mv))
 (FORALL (i_2_1) (IMPLIES (EQ i_2_1 (+ i_2_0 1)) (<= 0 i_2_1))))))))))))))))))))))))))
 
-;; insert_sort_ensures_default_po_19, File "HOME/tests/c/insertion_sort.c", line 14, characters 26-32
+;; insert_sort_ensures_default_po_19, File "HOME/tests/c/insertion_sort.c", line 45, characters 26-32
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5788,7 +5710,7 @@ why -simplify [...] why/insertion_sort.why
          (|why__store| intP_intM_t_4_1 (shift t j_2_0) mv))
 (FORALL (i_2_1) (IMPLIES (EQ i_2_1 (+ i_2_0 1)) (<= i_2_1 n))))))))))))))))))))))))))
 
-;; insert_sort_ensures_default_po_20, File "HOME/tests/c/insertion_sort.c", line 8, characters 12-27
+;; insert_sort_ensures_default_po_20, File "HOME/tests/c/insertion_sort.c", line 39, characters 12-27
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5803,7 +5725,7 @@ why -simplify [...] why/insertion_sort.why
          (AND (<= 0 i_2_0) (<= i_2_0 n)))
 (IMPLIES (>= i_2_0 n) (Sorted t 0 (- n 1) intP_intM_t_4_0))))))))))))
 
-;; insert_sort_safety_po_1, File "HOME/tests/c/insertion_sort.c", line 20, characters 9-13
+;; insert_sort_safety_po_1, File "HOME/tests/c/insertion_sort.c", line 51, characters 9-13
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5819,7 +5741,7 @@ why -simplify [...] why/insertion_sort.why
          (AND (<= 0 i_2_0) (<= i_2_0 n)))
 (IMPLIES (< i_2_0 n) (<= (offset_min intP_t_4_alloc_table t) i_2_0)))))))))))))
 
-;; insert_sort_safety_po_2, File "HOME/tests/c/insertion_sort.c", line 20, characters 9-13
+;; insert_sort_safety_po_2, File "HOME/tests/c/insertion_sort.c", line 51, characters 9-13
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5835,7 +5757,7 @@ why -simplify [...] why/insertion_sort.why
          (AND (<= 0 i_2_0) (<= i_2_0 n)))
 (IMPLIES (< i_2_0 n) (<= i_2_0 (offset_max intP_t_4_alloc_table t))))))))))))))
 
-;; insert_sort_safety_po_3, File "HOME/tests/c/insertion_sort.c", line 29, characters 10-16
+;; insert_sort_safety_po_3, File "HOME/tests/c/insertion_sort.c", line 60, characters 10-16
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5871,7 +5793,7 @@ why -simplify [...] why/insertion_sort.why
          (AND (<= 0 j_2_0) (<= j_2_0 i_2_0)))))
 (IMPLIES (> j_2_0 0) (<= (offset_min intP_t_4_alloc_table t) (- j_2_0 1))))))))))))))))))))))))))
 
-;; insert_sort_safety_po_4, File "HOME/tests/c/insertion_sort.c", line 29, characters 10-16
+;; insert_sort_safety_po_4, File "HOME/tests/c/insertion_sort.c", line 60, characters 10-16
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -5989,7 +5911,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ result0 (select intP_intM_t_4_0 (shift t (- j_2_0 1))))
 (IMPLIES (<= result0 mv) (<= j_2_0 (offset_max intP_t_4_alloc_table t))))))))))))))))))))))))))))))
 
-;; insert_sort_safety_po_7, File "HOME/tests/c/insertion_sort.c", line 16, characters 19-22
+;; insert_sort_safety_po_7, File "HOME/tests/c/insertion_sort.c", line 47, characters 19-22
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -6036,7 +5958,7 @@ why -simplify [...] why/insertion_sort.why
          (|why__store| intP_intM_t_4_0 (shift t j_2_0) mv))
 (FORALL (i_2_1) (IMPLIES (EQ i_2_1 (+ i_2_0 1)) (<= 0 (- n i_2_0)))))))))))))))))))))))))))))))))))
 
-;; insert_sort_safety_po_8, File "HOME/tests/c/insertion_sort.c", line 16, characters 19-22
+;; insert_sort_safety_po_8, File "HOME/tests/c/insertion_sort.c", line 47, characters 19-22
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -6175,7 +6097,7 @@ why -simplify [...] why/insertion_sort.why
 (IMPLIES (EQ result1 (select intP_intM_t_4_0 (shift t (- j_2_0 1))))
 (<= j_2_0 (offset_max intP_t_4_alloc_table t)))))))))))))))))))))))))))))))))
 
-;; insert_sort_safety_po_11, File "HOME/tests/c/insertion_sort.c", line 25, characters 21-22
+;; insert_sort_safety_po_11, File "HOME/tests/c/insertion_sort.c", line 56, characters 21-22
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -6226,7 +6148,7 @@ why -simplify [...] why/insertion_sort.why
          (|why__store| intP_intM_t_4_0 (shift t j_2_0) result1))
 (FORALL (j_2_1) (IMPLIES (EQ j_2_1 (- j_2_0 1)) (<= 0 j_2_0)))))))))))))))))))))))))))))))))))))
 
-;; insert_sort_safety_po_12, File "HOME/tests/c/insertion_sort.c", line 25, characters 21-22
+;; insert_sort_safety_po_12, File "HOME/tests/c/insertion_sort.c", line 56, characters 21-22
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -6349,7 +6271,7 @@ why -simplify [...] why/insertion_sort.why
          (AND (<= 0 j_2_0) (<= j_2_0 i_2_0)))))
 (IMPLIES (<= j_2_0 0) (<= j_2_0 (offset_max intP_t_4_alloc_table t))))))))))))))))))))))))))
 
-;; insert_sort_safety_po_15, File "HOME/tests/c/insertion_sort.c", line 16, characters 19-22
+;; insert_sort_safety_po_15, File "HOME/tests/c/insertion_sort.c", line 47, characters 19-22
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)
@@ -6391,7 +6313,7 @@ why -simplify [...] why/insertion_sort.why
          (|why__store| intP_intM_t_4_0 (shift t j_2_0) mv))
 (FORALL (i_2_1) (IMPLIES (EQ i_2_1 (+ i_2_0 1)) (<= 0 (- n i_2_0)))))))))))))))))))))))))))))))
 
-;; insert_sort_safety_po_16, File "HOME/tests/c/insertion_sort.c", line 16, characters 19-22
+;; insert_sort_safety_po_16, File "HOME/tests/c/insertion_sort.c", line 47, characters 19-22
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_4_alloc_table)

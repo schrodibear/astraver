@@ -77,14 +77,6 @@ type padding
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -118,6 +110,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -129,6 +126,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -178,16 +180,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -222,41 +214,13 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -319,14 +283,14 @@ parameter x_0 : int32 ref
 parameter f :
  z:int32 ->
   { } unit reads x_0 writes x_0
-  { (eq_int(integer_of_int32(x_0@), (1)) ->
-     (JC_<somenum>: eq_int(integer_of_int32(x_0), (10)))) }
+  { ((integer_of_int32(x_0@) = (1)) ->
+     (JC_<somenum>: (integer_of_int32(x_0) = (10)))) }
 
 parameter f_requires :
  z:int32 ->
   { } unit reads x_0 writes x_0
-  { (eq_int(integer_of_int32(x_0@), (1)) ->
-     (JC_<somenum>: eq_int(integer_of_int32(x_0), (10)))) }
+  { ((integer_of_int32(x_0@) = (1)) ->
+     (JC_<somenum>: (integer_of_int32(x_0) = (10)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -353,7 +317,6 @@ let f_ensures_default =
      (if ((neq_int_ (integer_of_int32 z)) (0))
      then
       try
-       (let jessie_<somenum> =
        begin
          (loop_2:
          while true do
@@ -361,21 +324,18 @@ let f_ensures_default =
           begin
             [ { } unit { true } ];
            try
-            (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
               (C_8:
               begin
                 (if ((lt_int_ (integer_of_int32 !x_0)) (10)) then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
+                else (raise (Goto_while_0_break_exc void)));
                (x_0 := (C_7:
                        (safe_int32_of_integer_ (C_6:
                                                ((add_int (integer_of_int32 !x_0)) (1))))));
-               !x_0 end) in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
+               !x_0 end) in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc jessie_<somenum> -> void end end done);
+        (raise (Goto_while_0_break_exc void)) end with
        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end
      else
       (let jessie_<somenum> =
@@ -385,14 +345,13 @@ let f_ensures_default =
 
 let f_ensures_one =
  fun (z : int32) ->
-  { eq_int(integer_of_int32(x_0), (1)) }
+  { (integer_of_int32(x_0) = (1)) }
   (init:
   try
    begin
      (if ((neq_int_ (integer_of_int32 z)) (0))
      then
       try
-       (let jessie_<somenum> =
        begin
          (loop_3:
          while true do
@@ -403,30 +362,27 @@ let f_ensures_one =
           begin
             [ { } unit { true } ];
            try
-            (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
               (C_8:
               begin
                 (if ((lt_int_ (integer_of_int32 !x_0)) (10)) then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
+                else (raise (Goto_while_0_break_exc void)));
                (x_0 := (C_7:
                        (safe_int32_of_integer_ (C_6:
                                                ((add_int (integer_of_int32 !x_0)) (1))))));
-               !x_0 end) in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
+               !x_0 end) in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc jessie_<somenum> -> void end end done);
+        (raise (Goto_while_0_break_exc void)) end with
        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end
      else
       (let jessie_<somenum> =
       (C_2:
       begin
-        (assert { (JC_<somenum>: eq_int(integer_of_int32(x_0), (1))) }; void); void;
+        (assert { (JC_<somenum>: (integer_of_int32(x_0) = (1))) }; void); void;
        (x_0 := (safe_int32_of_integer_ (10))); !x_0 end) in void));
     (raise Return); (raise Return) end with Return -> void end)
-  { (JC_<somenum>: eq_int(integer_of_int32(x_0), (10))) }
+  { (JC_<somenum>: (integer_of_int32(x_0) = (10))) }
 
 let f_safety =
  fun (z : int32) ->
@@ -437,7 +393,6 @@ let f_safety =
      (if ((neq_int_ (integer_of_int32 z)) (0))
      then
       try
-       (let jessie_<somenum> =
        begin
          (loop_1:
          while true do
@@ -445,22 +400,19 @@ let f_safety =
           begin
             [ { } unit { true } ];
            try
-            (let jessie_<somenum> =
             begin
               (let jessie_<somenum> =
               (C_8:
               begin
                 (if ((lt_int_ (integer_of_int32 !x_0)) (10)) then void
-                else
-                 (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                 void));
+                else (raise (Goto_while_0_break_exc void)));
                (x_0 := (C_7:
                        (JC_<somenum>:
                        (int32_of_integer_ (C_6:
                                           ((add_int (integer_of_int32 !x_0)) (1)))))));
-               !x_0 end) in void); (raise (Loop_continue_exc void)) end in
-            void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-        (raise (Goto_while_0_break_exc void)) end in void) with
+               !x_0 end) in void); (raise (Loop_continue_exc void)) end with
+            Loop_continue_exc jessie_<somenum> -> void end end done);
+        (raise (Goto_while_0_break_exc void)) end with
        Goto_while_0_break_exc jessie_<somenum> -> (while_0_break: void) end
      else
       (let jessie_<somenum> =
@@ -486,7 +438,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `one'">
+    <behavior name="Behavior `one'">
     <goal why_file="why/behavior_po1.why">
       <location file = "PPCHOME/tests/jessie/behavior.c" line = "13" begin = "32" end = "38"/>
       <explain kind = "LoopInvInit"/>
@@ -1483,6 +1435,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -1494,6 +1451,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -1542,16 +1503,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

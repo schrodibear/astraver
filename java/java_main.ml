@@ -2,16 +2,16 @@
 (*                                                                        *)
 (*  The Why platform for program certification                            *)
 (*                                                                        *)
-(*  Copyright (C) 2002-2010                                               *)
+(*  Copyright (C) 2002-2011                                               *)
 (*                                                                        *)
-(*    Jean-Christophe FILLIATRE, CNRS                                     *)
+(*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                *)
 (*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           *)
 (*    Yannick MOY, Univ. Paris-sud 11                                     *)
 (*    Romain BARDOU, Univ. Paris-sud 11                                   *)
-(*    Thierry HUBERT, Univ. Paris-sud 11                                  *)
 (*                                                                        *)
 (*  Secondary contributors:                                               *)
 (*                                                                        *)
+(*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     *)
 (*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          *)
 (*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        *)
 (*    Sylvie BOLDO, INRIA                 (floating-point support)        *)
@@ -218,9 +218,9 @@ let main () =
   let lemmas = List.sort compare_locs lemmas in
   let decls =
     List.fold_left
-      (fun acc (id,_,lab,p) ->
+      (fun acc (id,loc,lab,p) ->
 	 Java_options.lprintf "generating lemma `%s'@."  id;
-	 Java_interp.tr_axiom id false lab p acc)
+	 Java_interp.tr_axiom id false loc lab p acc)
       decls
       lemmas
   in
@@ -336,7 +336,7 @@ let main () =
   close_out cout;
 
   (* production phase 5.2 : produce locs file *)
-  Pp.print_in_file Output.print_pos (f ^ ".jloc");
+  Pp.print_in_file Output.old_print_pos (f ^ ".jloc");
 
   printf "Done.@."
 

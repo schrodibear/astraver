@@ -133,12 +133,6 @@ type uint32
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -177,6 +171,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -188,6 +187,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -244,20 +248,15 @@ axiom uint32_coerce :
   ((le_int((0), x) and le_int(x, (4294967295))) ->
    eq_int(integer_of_uint32(uint32_of_integer(x)), x)))
 
+axiom uint32_extensionality :
+ (forall x:uint32.
+  (forall y:uint32.
+   (eq_int(integer_of_uint32(x), integer_of_uint32(y)) -> (x = y))))
+
 axiom uint32_range :
  (forall x:uint32.
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -300,41 +299,11 @@ lemma mean_1 :
    and le_int(computer_div(integer_of_int32(x_2), (2)),
        integer_of_int32(x_2)))))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -409,20 +378,20 @@ parameter max_int :
   y:int32 ->
    { } int32
    { (JC_<somenum>:
-     ((eq_int(integer_of_int32(result), integer_of_int32(x_0@))
-      and ge_int(integer_of_int32(x_0@), integer_of_int32(y@)))
-     or (eq_int(integer_of_int32(result), integer_of_int32(y@))
-        and ge_int(integer_of_int32(y@), integer_of_int32(x_0@))))) }
+     (((integer_of_int32(result) = integer_of_int32(x_0))
+      and ge_int(integer_of_int32(x_0), integer_of_int32(y)))
+     or ((integer_of_int32(result) = integer_of_int32(y))
+        and ge_int(integer_of_int32(y), integer_of_int32(x_0))))) }
 
 parameter max_int_requires :
  x_0:int32 ->
   y:int32 ->
    { } int32
    { (JC_<somenum>:
-     ((eq_int(integer_of_int32(result), integer_of_int32(x_0@))
-      and ge_int(integer_of_int32(x_0@), integer_of_int32(y@)))
-     or (eq_int(integer_of_int32(result), integer_of_int32(y@))
-        and ge_int(integer_of_int32(y@), integer_of_int32(x_0@))))) }
+     (((integer_of_int32(result) = integer_of_int32(x_0))
+      and ge_int(integer_of_int32(x_0), integer_of_int32(y)))
+     or ((integer_of_int32(result) = integer_of_int32(y))
+        and ge_int(integer_of_int32(y), integer_of_int32(x_0))))) }
 
 parameter mean : l:int32 -> r:int32 -> { } int32 { true }
 
@@ -449,20 +418,20 @@ parameter min_int :
   y_1:int32 ->
    { } int32
    { (JC_<somenum>:
-     ((eq_int(integer_of_int32(result), integer_of_int32(x_1@))
-      and le_int(integer_of_int32(x_1@), integer_of_int32(y_1@)))
-     or (eq_int(integer_of_int32(result), integer_of_int32(y_1@))
-        and le_int(integer_of_int32(y_1@), integer_of_int32(x_1@))))) }
+     (((integer_of_int32(result) = integer_of_int32(x_1))
+      and le_int(integer_of_int32(x_1), integer_of_int32(y_1)))
+     or ((integer_of_int32(result) = integer_of_int32(y_1))
+        and le_int(integer_of_int32(y_1), integer_of_int32(x_1))))) }
 
 parameter min_int_requires :
  x_1:int32 ->
   y_1:int32 ->
    { } int32
    { (JC_<somenum>:
-     ((eq_int(integer_of_int32(result), integer_of_int32(x_1@))
-      and le_int(integer_of_int32(x_1@), integer_of_int32(y_1@)))
-     or (eq_int(integer_of_int32(result), integer_of_int32(y_1@))
-        and le_int(integer_of_int32(y_1@), integer_of_int32(x_1@))))) }
+     (((integer_of_int32(result) = integer_of_int32(x_1))
+      and le_int(integer_of_int32(x_1), integer_of_int32(y_1)))
+     or ((integer_of_int32(result) = integer_of_int32(y_1))
+        and le_int(integer_of_int32(y_1), integer_of_int32(x_1))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -738,15 +707,25 @@ why --project [...] why/mean.why
   <lemma name="mean_1">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/mean_po1.why">
-      <location file = "PPCHOME/tests/jessie/mean.jessie/mean.jc" line = "30" begin = "0" end = "85"/>
+      <location file = "PPCHOME/tests/jessie/mean.c" line = "5" begin = "4" end = "59"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
-  <function name="mean_1">
-    <location file = "PPCHOME/tests/jessie/mean.jessie/mean.jc" line = "30" begin = "0" end = "85"/>
+  <function name="Lemma mean_1">
+    <location file = "" line = "0" begin = "0" end = "0"/>
   </function>
   <function name="Function umean">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/mean_po16.why">
+      <location file = "PPCHOME/tests/jessie/mean.c" line = "14" begin = "13" end = "25"/>
+      <explain kind = "Assert"/>
+    </goal>
+    <goal why_file="why/mean_po17.why">
+      <location file = "PPCHOME/tests/jessie/mean.c" line = "14" begin = "18" end = "32"/>
+      <explain kind = "Assert"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/mean_po18.why">
       <location file = "PPCHOME/tests/jessie/mean.c" line = "15" begin = "14" end = "19"/>
@@ -782,16 +761,6 @@ text = "ArithOverflow"/>
       <location file = "PPCHOME/tests/jessie/mean.c" line = "15" begin = "9" end = "22"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/mean_po16.why">
-      <location file = "PPCHOME/tests/jessie/mean.c" line = "14" begin = "13" end = "25"/>
-      <explain kind = "Assert"/>
-    </goal>
-    <goal why_file="why/mean_po17.why">
-      <location file = "PPCHOME/tests/jessie/mean.c" line = "14" begin = "18" end = "32"/>
-      <explain kind = "Assert"/>
     </goal>
     </behavior>
   </function>
@@ -1856,6 +1825,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -1867,6 +1841,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -1923,19 +1901,14 @@ axiom uint32_coerce:
     (((0 <= x) and (x <= 4294967295)) ->
      (integer_of_uint32(uint32_of_integer(x)) = x)))
 
+axiom uint32_extensionality:
+  (forall x:uint32.
+    (forall y:uint32.
+      ((integer_of_uint32(x) = integer_of_uint32(y)) -> (x = y))))
+
 axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

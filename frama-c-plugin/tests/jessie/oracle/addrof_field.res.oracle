@@ -141,12 +141,6 @@ type struct_S_xP
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic S_tag:  -> S tag_id
 
 axiom S_int : (int_of_tag(S_tag) = (1))
@@ -195,6 +189,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -206,6 +205,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -356,31 +360,6 @@ axiom struct_S_xP_tags :
   (forall struct_S_xP_tag_table:struct_S_xP tag_table.
    instanceof(struct_S_xP_tag_table, x, struct_S_xP_tag)))
 
-predicate valid_bitvector_struct_S(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_struct_S_xP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_S(p:S pointer, a:int, b:int,
  S_alloc_table:S alloc_table) =
  ((offset_min(S_alloc_table, p) <= a)
@@ -447,99 +426,15 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
+exception Return_label_exc of unit
+
 parameter S_alloc_table : S alloc_table ref
 
 parameter S_tag_table : S tag_table ref
-
-parameter alloc_bitvector_struct_S :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_S(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_S_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_S(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_struct_S_xP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_struct_S_xP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_struct_S_xP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_struct_S_xP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
 parameter intP_alloc_table : intP alloc_table ref
 
@@ -679,16 +574,16 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter fps :
- tt:unit -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (0))) }
+ tt:unit -> { } int32 { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
 parameter fps_requires :
- tt:unit -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (0))) }
+ tt:unit -> { } int32 { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
 parameter fs :
- tt:unit -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (0))) }
+ tt:unit -> { } int32 { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
 parameter fs_requires :
- tt:unit -> { } int32 { (JC_<somenum>: eq_int(integer_of_int32(result), (0))) }
+ tt:unit -> { } int32 { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
 parameter gps :
  s_1:struct_S_xP pointer ->
@@ -701,10 +596,10 @@ parameter gps :
         struct_S_xP_struct_S_xM_s_2:(struct_S_xP, S pointer) memory ->
          { } unit reads intP_intM_p_8 writes intP_intM_p_8
          { (JC_<somenum>:
-           eq_int(integer_of_int32(select(intP_intM_p_8,
-                                   select(S_p_struct_S_xM_7,
-                                   select(struct_S_xP_struct_S_xM_s_2, s_1@)))),
-           integer_of_int32(i@))) }
+           (integer_of_int32(select(intP_intM_p_8,
+                             select(S_p_struct_S_xM_7,
+                             select(struct_S_xP_struct_S_xM_s_2, s_1)))) = 
+           integer_of_int32(i))) }
 
 parameter gps_requires :
  s_1:struct_S_xP pointer ->
@@ -730,10 +625,10 @@ parameter gps_requires :
                        (0)))))))}
          unit reads intP_intM_p_8 writes intP_intM_p_8
          { (JC_<somenum>:
-           eq_int(integer_of_int32(select(intP_intM_p_8,
-                                   select(S_p_struct_S_xM_7,
-                                   select(struct_S_xP_struct_S_xM_s_2, s_1@)))),
-           integer_of_int32(i@))) }
+           (integer_of_int32(select(intP_intM_p_8,
+                             select(S_p_struct_S_xM_7,
+                             select(struct_S_xP_struct_S_xM_s_2, s_1)))) = 
+           integer_of_int32(i))) }
 
 parameter gs :
  s_0:S pointer ->
@@ -744,9 +639,8 @@ parameter gs :
       S_p_s_0_1:(S, intP pointer) memory ->
        { } unit reads intP_intM_p_3 writes intP_intM_p_3
        { (JC_<somenum>:
-         eq_int(integer_of_int32(select(intP_intM_p_3,
-                                 select(S_p_s_0_1, s_0@))),
-         integer_of_int32(i_0@))) }
+         (integer_of_int32(select(intP_intM_p_3, select(S_p_s_0_1, s_0))) = 
+         integer_of_int32(i_0))) }
 
 parameter gs_requires :
  s_0:S pointer ->
@@ -760,9 +654,8 @@ parameter gs_requires :
          and (JC_<somenum>: ge_int(offset_max(S_s_0_1_alloc_table, s_0), (0)))))}
        unit reads intP_intM_p_3 writes intP_intM_p_3
        { (JC_<somenum>:
-         eq_int(integer_of_int32(select(intP_intM_p_3,
-                                 select(S_p_s_0_1, s_0@))),
-         integer_of_int32(i_0@))) }
+         (integer_of_int32(select(intP_intM_p_3, select(S_p_s_0_1, s_0))) = 
+         integer_of_int32(i_0))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -842,7 +735,7 @@ let fps_ensures_default =
       ((safe_free_parameter S_s_2_9_alloc_table) !s_2);
       (return := !__retres_0); (raise Return) end))))))))))))))))))))));
     absurd  end with Return -> !return end))
-  { (JC_<somenum>: eq_int(integer_of_int32(result), (0))) }
+  { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
 let fps_safety =
  fun (tt : unit) ->
@@ -961,8 +854,7 @@ let fs_ensures_default =
                                                  ((safe_acc_ !S_i_1_s_1_4) !s_1_0))))) in
       void); ((safe_free_parameter S_s_1_4_alloc_table) !s_1_0);
       (return := !__retres); (raise Return) end))))))))))))))); absurd  end
-   with Return -> !return end))
-  { (JC_<somenum>: eq_int(integer_of_int32(result), (0))) }
+   with Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
 let fs_safety =
  fun (tt : unit) ->
@@ -1041,10 +933,9 @@ let gps_ensures_default =
      (((safe_upd_ intP_intM_p_8) jessie_<somenum>) jessie_<somenum>))); (raise Return);
     (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
-    eq_int(integer_of_int32(select(intP_intM_p_8,
-                            select(S_p_struct_S_xM_7,
-                            select(struct_S_xP_struct_S_xM_s_2, s_1@)))),
-    integer_of_int32(i@))) }
+    (integer_of_int32(select(intP_intM_p_8,
+                      select(S_p_struct_S_xM_7,
+                      select(struct_S_xP_struct_S_xM_s_2, s_1)))) = integer_of_int32(i))) }
 
 let gps_safety =
  fun (s_1 : struct_S_xP pointer) (i : int32) (intP_intM_p_8 : (intP, int32) memory ref) (S_struct_S_xM_7_alloc_table : S alloc_table) (intP_p_8_alloc_table : intP alloc_table) (struct_S_xP_s_2_alloc_table : struct_S_xP alloc_table) (struct_S_xP_struct_S_xM_s_2 : (struct_S_xP, S pointer) memory) (S_p_struct_S_xM_7 : (S, intP pointer) memory) ->
@@ -1088,8 +979,8 @@ let gs_ensures_default =
      (((safe_upd_ intP_intM_p_3) jessie_<somenum>) jessie_<somenum>))); (raise Return);
     (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
-    eq_int(integer_of_int32(select(intP_intM_p_3, select(S_p_s_0_1, s_0@))),
-    integer_of_int32(i_0@))) }
+    (integer_of_int32(select(intP_intM_p_3, select(S_p_s_0_1, s_0))) = 
+    integer_of_int32(i_0))) }
 
 let gs_safety =
  fun (s_0 : S pointer) (i_0 : int32) (intP_intM_p_3 : (intP, int32) memory ref) (S_s_0_1_alloc_table : S alloc_table) (intP_p_3_alloc_table : intP alloc_table) (S_p_s_0_1 : (S, intP pointer) memory) ->
@@ -1113,6 +1004,12 @@ why --project [...] why/addrof_field.why
 <project name="addrof_field" context="why/addrof_field_ctx.why">
   <function name="Function gs">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/addrof_field_po25.why">
+      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "8" begin = "12" end = "30"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/addrof_field_po26.why">
       <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "11" begin = "4" end = "8"/>
@@ -1135,15 +1032,15 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/addrof_field_po25.why">
-      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "8" begin = "12" end = "30"/>
-      <explain kind = "Post"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function gps">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/addrof_field_po18.why">
+      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "25" begin = "12" end = "33"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/addrof_field_po19.why">
       <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "28" begin = "5" end = "7"/>
@@ -1176,15 +1073,15 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/addrof_field_po18.why">
-      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "25" begin = "12" end = "33"/>
-      <explain kind = "Post"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function fs">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/addrof_field_po12.why">
+      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "14" begin = "12" end = "24"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/addrof_field_po13.why">
       <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "17" begin = "11" end = "12"/>
@@ -1192,7 +1089,7 @@ text = "PointerDeref"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/addrof_field_po14.why">
-      <location file = "why/addrof_field.why" line = "870" begin = "19" end = "74"/>
+      <location file = "why/addrof_field.why" line = "762" begin = "19" end = "74"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/addrof_field_po15.why">
@@ -1206,20 +1103,20 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_field_po17.why">
-      <location file = "why/addrof_field.why" line = "888" begin = "14" end = "57"/>
+      <location file = "why/addrof_field.why" line = "780" begin = "14" end = "57"/>
       <explain kind = "Pre"
 text = ""/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/addrof_field_po12.why">
-      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "14" begin = "12" end = "24"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
   <function name="Function fps">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/addrof_field_po1.why">
+      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "31" begin = "12" end = "24"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/addrof_field_po2.why">
       <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "34" begin = "14" end = "15"/>
@@ -1227,7 +1124,7 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/addrof_field_po3.why">
-      <location file = "why/addrof_field.why" line = "757" begin = "16" end = "97"/>
+      <location file = "why/addrof_field.why" line = "650" begin = "16" end = "97"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/addrof_field_po4.why">
@@ -1236,7 +1133,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/addrof_field_po5.why">
-      <location file = "why/addrof_field.why" line = "766" begin = "16" end = "71"/>
+      <location file = "why/addrof_field.why" line = "659" begin = "16" end = "71"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/addrof_field_po6.why">
@@ -1260,20 +1157,14 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/addrof_field_po10.why">
-      <location file = "why/addrof_field.why" line = "786" begin = "14" end = "64"/>
+      <location file = "why/addrof_field.why" line = "679" begin = "14" end = "64"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/addrof_field_po11.why">
-      <location file = "why/addrof_field.why" line = "787" begin = "7" end = "48"/>
+      <location file = "why/addrof_field.why" line = "680" begin = "7" end = "48"/>
       <explain kind = "Pre"
 text = ""/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/addrof_field_po1.why">
-      <location file = "PPCHOME/tests/jessie/addrof_field.c" line = "31" begin = "12" end = "24"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -2272,6 +2163,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -2283,6 +2179,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2433,31 +2333,6 @@ axiom struct_S_xP_tags:
   (forall x:struct_S_xP pointer.
     (forall struct_S_xP_tag_table:struct_S_xP tag_table.
       instanceof(struct_S_xP_tag_table, x, struct_S_xP_tag)))
-
-predicate valid_bitvector_struct_S(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_struct_S_xP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_S(p: S pointer, a: int, b: int,
   S_alloc_table: S alloc_table) =

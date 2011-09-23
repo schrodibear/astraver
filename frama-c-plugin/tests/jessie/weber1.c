@@ -14,6 +14,7 @@ void array_cpy(int* a, int n, int* b)
    /*@ loop invariant 0 <= i <= n;
      @ loop invariant \forall int m; 0 <= m < n  ==> b[m] == \at(b[m],Pre);
      @ loop invariant \forall int m; 0 <= m < i  ==> a[m] == b[m];
+     @ loop variant n-i;
      @*/
    for (int i = 0; i < n; i++)
      a[i] = b[i];

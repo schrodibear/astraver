@@ -129,6 +129,10 @@ axiom E_coerce :
   ((le_int((1), x) and le_int(x, (4))) ->
    eq_int(integer_of_E(E_of_integer(x)), x)))
 
+axiom E_extensionality :
+ (forall x:E.
+  (forall y:E. (eq_int(integer_of_E(x), integer_of_E(y)) -> (x = y))))
+
 axiom E_range :
  (forall x:E.
   (le_int((1), integer_of_E(x)) and le_int(integer_of_E(x), (4))))
@@ -142,15 +146,13 @@ axiom I_coerce :
   ((le_int((0), x) and le_int(x, (2))) ->
    eq_int(integer_of_I(I_of_integer(x)), x)))
 
+axiom I_extensionality :
+ (forall x:I.
+  (forall y:I. (eq_int(integer_of_I(x), integer_of_I(y)) -> (x = y))))
+
 axiom I_range :
  (forall x:I.
   (le_int((0), integer_of_I(x)) and le_int(integer_of_I(x), (2))))
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
 
 logic integer_of___anonenum_color_1: __anonenum_color_1 -> int
 
@@ -160,6 +162,12 @@ axiom __anonenum_color_1_coerce :
  (forall x:int.
   ((le_int((0), x) and le_int(x, (2))) ->
    eq_int(integer_of___anonenum_color_1(__anonenum_color_1_of_integer(x)), x)))
+
+axiom __anonenum_color_1_extensionality :
+ (forall x:__anonenum_color_1.
+  (forall y:__anonenum_color_1.
+   (eq_int(integer_of___anonenum_color_1(x),
+    integer_of___anonenum_color_1(y)) -> (x = y))))
 
 axiom __anonenum_color_1_range :
  (forall x:__anonenum_color_1.
@@ -227,6 +235,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -238,6 +251,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -348,26 +366,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_enum___anonenum_color_1P(p:unit pointer,
- a:int, b:int, bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -434,82 +432,16 @@ parameter I_of_integer_ :
   { (le_int((0), x) and le_int(x, (2)))} I
   { eq_int(integer_of_I(result), x) }
 
+exception Loop_continue_exc of unit
+
+exception Loop_exit_exc of unit
+
+exception Return_label_exc of unit
+
 parameter __anonenum_color_1_of_integer_ :
  x:int ->
   { (le_int((0), x) and le_int(x, (2)))} __anonenum_color_1
   { eq_int(integer_of___anonenum_color_1(result), x) }
-
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_enum___anonenum_color_1P :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_enum___anonenum_color_1P(result, (0),
-      sub_int(n, (1)), bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_enum___anonenum_color_1P_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_enum___anonenum_color_1P(result, (0),
-      sub_int(n, (1)), bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -639,9 +571,8 @@ parameter enum_as_array_index :
    intP_t_2_alloc_table:intP alloc_table ->
     { } unit reads intP_intM_t_2 writes intP_intM_t_2
     { (JC_<somenum>:
-      eq_int(integer_of_int32(select(intP_intM_t_2,
-                              shift(t@, integer_of_I(I_of_integer((1)))))),
-      (0))) }
+      (integer_of_int32(select(intP_intM_t_2,
+                        shift(t, integer_of_I(I_of_integer((1)))))) = (0))) }
 
 parameter enum_as_array_index_requires :
  t:intP pointer ->
@@ -656,15 +587,14 @@ parameter enum_as_array_index_requires :
           integer_of_I(I_of_integer((2)))))))}
     unit reads intP_intM_t_2 writes intP_intM_t_2
     { (JC_<somenum>:
-      eq_int(integer_of_int32(select(intP_intM_t_2,
-                              shift(t@, integer_of_I(I_of_integer((1)))))),
-      (0))) }
+      (integer_of_int32(select(intP_intM_t_2,
+                        shift(t, integer_of_I(I_of_integer((1)))))) = (0))) }
 
 parameter f :
- tt:unit -> { } unit { (JC_<somenum>: eq_int(integer_of_E(E_of_integer((4))), (4))) }
+ tt:unit -> { } unit { (JC_<somenum>: (integer_of_E(E_of_integer((4))) = (4))) }
 
 parameter f_requires :
- tt:unit -> { } unit { (JC_<somenum>: eq_int(integer_of_E(E_of_integer((4))), (4))) }
+ tt:unit -> { } unit { (JC_<somenum>: (integer_of_E(E_of_integer((4))) = (4))) }
 
 parameter g :
  e:E ->
@@ -687,15 +617,15 @@ parameter h :
     { } unit reads enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1
     writes enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1
     { (JC_<somenum>:
-      (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
-                                            shift(t_0@, (2)))),
-       integer_of___anonenum_color_1(__anonenum_color_1_of_integer((0))))
-      or (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
-                                               shift(t_0@, (2)))),
-          integer_of___anonenum_color_1(__anonenum_color_1_of_integer((1))))
-         or eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
-                                                 shift(t_0@, (2)))),
-            integer_of___anonenum_color_1(__anonenum_color_1_of_integer((2))))))) }
+      ((integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
+                                      shift(t_0, (2)))) = integer_of___anonenum_color_1(
+                                                          __anonenum_color_1_of_integer((0))))
+      or ((integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
+                                         shift(t_0, (2)))) = integer_of___anonenum_color_1(
+                                                             __anonenum_color_1_of_integer((1))))
+         or (integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
+                                           shift(t_0, (2)))) = integer_of___anonenum_color_1(
+                                                               __anonenum_color_1_of_integer((2))))))) }
 
 parameter h_requires :
  t_0:enum___anonenum_color_1P pointer ->
@@ -711,15 +641,15 @@ parameter h_requires :
     unit reads enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1
     writes enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1
     { (JC_<somenum>:
-      (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
-                                            shift(t_0@, (2)))),
-       integer_of___anonenum_color_1(__anonenum_color_1_of_integer((0))))
-      or (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
-                                               shift(t_0@, (2)))),
-          integer_of___anonenum_color_1(__anonenum_color_1_of_integer((1))))
-         or eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
-                                                 shift(t_0@, (2)))),
-            integer_of___anonenum_color_1(__anonenum_color_1_of_integer((2))))))) }
+      ((integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
+                                      shift(t_0, (2)))) = integer_of___anonenum_color_1(
+                                                          __anonenum_color_1_of_integer((0))))
+      or ((integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
+                                         shift(t_0, (2)))) = integer_of___anonenum_color_1(
+                                                             __anonenum_color_1_of_integer((1))))
+         or (integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
+                                           shift(t_0, (2)))) = integer_of___anonenum_color_1(
+                                                               __anonenum_color_1_of_integer((2))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -768,9 +698,8 @@ let enum_as_array_index_ensures_default =
      (((safe_upd_ intP_intM_t_2) jessie_<somenum>) jessie_<somenum>)))))); (raise Return);
     (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
-    eq_int(integer_of_int32(select(intP_intM_t_2,
-                            shift(t@, integer_of_I(I_of_integer((1)))))),
-    (0))) }
+    (integer_of_int32(select(intP_intM_t_2,
+                      shift(t, integer_of_I(I_of_integer((1)))))) = (0))) }
 
 let enum_as_array_index_safety =
  fun (t : intP pointer) (intP_intM_t_2 : (intP, int32) memory ref) (intP_t_2_alloc_table : intP alloc_table) ->
@@ -799,7 +728,7 @@ let f_ensures_default =
   { (JC_<somenum>: true) }
   (init:
   try begin   (raise Return); (raise Return) end with Return -> void end)
-  { (JC_<somenum>: eq_int(integer_of_E(E_of_integer((4))), (4))) }
+  { (JC_<somenum>: (integer_of_E(E_of_integer((4))) = (4))) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -864,15 +793,15 @@ let h_ensures_default =
      (((safe_upd_ enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1) jessie_<somenum>) jessie_<somenum>))))));
     (raise Return); (raise Return) end) with Return -> void end)
   { (JC_<somenum>:
-    (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
-                                          shift(t_0@, (2)))),
-     integer_of___anonenum_color_1(__anonenum_color_1_of_integer((0))))
-    or (eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
-                                             shift(t_0@, (2)))),
-        integer_of___anonenum_color_1(__anonenum_color_1_of_integer((1))))
-       or eq_int(integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
-                                               shift(t_0@, (2)))),
-          integer_of___anonenum_color_1(__anonenum_color_1_of_integer((2))))))) }
+    ((integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
+                                    shift(t_0, (2)))) = integer_of___anonenum_color_1(
+                                                        __anonenum_color_1_of_integer((0))))
+    or ((integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
+                                       shift(t_0, (2)))) = integer_of___anonenum_color_1(
+                                                           __anonenum_color_1_of_integer((1))))
+       or (integer_of___anonenum_color_1(select(enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1,
+                                         shift(t_0, (2)))) = integer_of___anonenum_color_1(
+                                                             __anonenum_color_1_of_integer((2))))))) }
 
 let h_safety =
  fun (t_0 : enum___anonenum_color_1P pointer) (enum___anonenum_color_1P_enum___anonenum_color_1M_t_0_1 : (enum___anonenum_color_1P, __anonenum_color_1) memory ref) (enum___anonenum_color_1P_t_0_1_alloc_table : enum___anonenum_color_1P alloc_table) ->
@@ -904,6 +833,12 @@ why --project [...] why/enum.why
 <project name="enum" context="why/enum_ctx.why">
   <function name="Function h">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/enum_po9.why">
+      <location file = "PPCHOME/tests/jessie/enum.c" line = "36" begin = "12" end = "56"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/enum_po10.why">
       <location file = "PPCHOME/tests/jessie/enum.c" line = "39" begin = "9" end = "13"/>
@@ -926,15 +861,19 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/enum_po9.why">
-      <location file = "PPCHOME/tests/jessie/enum.c" line = "36" begin = "12" end = "56"/>
-      <explain kind = "Post"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function g">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/enum_po5.why">
+      <location file = "PPCHOME/tests/jessie/enum.c" line = "30" begin = "12" end = "24"/>
+      <explain kind = "Post"/>
+    </goal>
+    <goal why_file="why/enum_po6.why">
+      <location file = "PPCHOME/tests/jessie/enum.c" line = "30" begin = "17" end = "29"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/enum_po7.why">
       <location file = "PPCHOME/tests/jessie/enum.c" line = "31" begin = "25" end = "26"/>
@@ -947,20 +886,10 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/enum_po5.why">
-      <location file = "PPCHOME/tests/jessie/enum.c" line = "30" begin = "12" end = "24"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/enum_po6.why">
-      <location file = "PPCHOME/tests/jessie/enum.c" line = "30" begin = "17" end = "29"/>
-      <explain kind = "Post"/>
-    </goal>
-    </behavior>
   </function>
   <function name="Function f">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/enum_po4.why">
       <location file = "PPCHOME/tests/jessie/enum.c" line = "27" begin = "12" end = "18"/>
       <explain kind = "Post"/>
@@ -969,6 +898,12 @@ text = "ArithOverflow"/>
   </function>
   <function name="Function enum_as_array_index">
     <location file = "" line = "0" begin = "0" end = "0"/>
+    <behavior name="default behavior">
+    <goal why_file="why/enum_po1.why">
+      <location file = "PPCHOME/tests/jessie/enum.c" line = "47" begin = "12" end = "21"/>
+      <explain kind = "Post"/>
+    </goal>
+    </behavior>
     <behavior name="Safety">
     <goal why_file="why/enum_po2.why">
       <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "91" begin = "15" end = "49"/>
@@ -979,12 +914,6 @@ text = "PointerDeref"/>
       <location file = "PPCHOME/tests/jessie/enum.jessie/enum.jc" line = "91" begin = "15" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
-    <goal why_file="why/enum_po1.why">
-      <location file = "PPCHOME/tests/jessie/enum.c" line = "47" begin = "12" end = "21"/>
-      <explain kind = "Post"/>
     </goal>
     </behavior>
   </function>
@@ -1946,6 +1875,10 @@ axiom E_coerce:
   (forall x:int.
     (((1 <= x) and (x <= 4)) -> (integer_of_E(E_of_integer(x)) = x)))
 
+axiom E_extensionality:
+  (forall x:E.
+    (forall y:E. ((integer_of_E(x) = integer_of_E(y)) -> (x = y))))
+
 axiom E_range:
   (forall x:E. ((1 <= integer_of_E(x)) and (integer_of_E(x) <= 4)))
 
@@ -1956,6 +1889,10 @@ logic I_of_integer : int -> I
 axiom I_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 2)) -> (integer_of_I(I_of_integer(x)) = x)))
+
+axiom I_extensionality:
+  (forall x:I.
+    (forall y:I. ((integer_of_I(x) = integer_of_I(y)) -> (x = y))))
 
 axiom I_range:
   (forall x:I. ((0 <= integer_of_I(x)) and (integer_of_I(x) <= 2)))
@@ -1968,6 +1905,12 @@ axiom __anonenum_color_1_coerce:
   (forall x:int.
     (((0 <= x) and (x <= 2)) ->
      (integer_of___anonenum_color_1(__anonenum_color_1_of_integer(x)) = x)))
+
+axiom __anonenum_color_1_extensionality:
+  (forall x:__anonenum_color_1.
+    (forall y:__anonenum_color_1.
+      ((integer_of___anonenum_color_1(x) = integer_of___anonenum_color_1(y)) ->
+       (x = y))))
 
 axiom __anonenum_color_1_range:
   (forall x:__anonenum_color_1.
@@ -2036,6 +1979,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -2047,6 +1995,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2158,26 +2110,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_enum___anonenum_color_1P(p: unit pointer,
-  a: int, b: int, bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

@@ -150,14 +150,6 @@ type pair_type
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -237,16 +229,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -283,54 +265,26 @@ axiom voidP_tags :
 
 axiom f_def1 :
  (forall x_0_0:int.
-  (ge_int(x_0_0, (101)) -> eq_int(f(x_0_0), sub_int(x_0_0, (10)))))
+  (ge_int(x_0_0, (101)) -> (f(x_0_0) = sub_int(x_0_0, (10)))))
 
 axiom f_def2 :
- (forall x_1_0:int. (le_int(x_1_0, (101)) -> eq_int(f(x_1_0), (91))))
+ (forall x_1_0:int. (le_int(x_1_0, (101)) -> (f(x_1_0) = (91))))
 
-axiom iter_f_def1 : (forall x_3:int. eq_int(iter_f((0), x_3), x_3))
+axiom iter_f_def1 : (forall x_3:int. (iter_f((0), x_3) = x_3))
 
 axiom iter_f_def2 :
  (forall n_0_1:int.
   (forall x_4:int.
    (gt_int(n_0_1, (0)) ->
-    eq_int(iter_f(n_0_1, x_4), iter_f(sub_int(n_0_1, (1)), f(x_4))))))
+    (iter_f(n_0_1, x_4) = iter_f(sub_int(n_0_1, (1)), f(x_4))))))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -387,24 +341,23 @@ parameter alloc_struct_voidP_requires :
 parameter f91 :
  n:int ->
   { } int
-  { ((ge_int(n@, (101)) -> (JC_<somenum>: eq_int(result, sub_int(n@, (10)))))
-    and (le_int(n@, (100)) -> (JC_<somenum>: eq_int(result, (91))))) }
+  { ((ge_int(n, (101)) -> (JC_<somenum>: (result = sub_int(n, (10)))))
+    and (le_int(n, (100)) -> (JC_<somenum>: (result = (91))))) }
 
 parameter f91_nonrec :
- n_0_0:int ->
-  x_1:int -> { } int { (JC_<somenum>: eq_int(result, iter_f(n_0_0@, x_1@))) }
+ n_0_0:int -> x_1:int -> { } int { (JC_<somenum>: (result = iter_f(n_0_0, x_1))) }
 
 parameter f91_nonrec_requires :
  n_0_0:int ->
   x_1:int ->
    { (JC_<somenum>: ge_int(n_0_0, (1)))} int
-   { (JC_<somenum>: eq_int(result, iter_f(n_0_0@, x_1@))) }
+   { (JC_<somenum>: (result = iter_f(n_0_0, x_1))) }
 
 parameter f91_requires :
  n:int ->
   { } int
-  { ((ge_int(n@, (101)) -> (JC_<somenum>: eq_int(result, sub_int(n@, (10)))))
-    and (le_int(n@, (100)) -> (JC_<somenum>: eq_int(result, (91))))) }
+  { ((ge_int(n, (101)) -> (JC_<somenum>: (result = sub_int(n, (10)))))
+    and (le_int(n, (100)) -> (JC_<somenum>: (result = (91))))) }
 
 let f91_ensures_default =
  fun (n : int) ->
@@ -417,11 +370,9 @@ let f91_ensures_default =
      (let tmp_0 = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((le_int_ n) (100))
         then
-         (let jessie_<somenum> =
          (C_8:
          begin
            (let jessie_<somenum> =
@@ -436,15 +387,13 @@ let f91_ensures_default =
                       (let jessie_<somenum> = !tmp in (JC_<somenum>: (f91 jessie_<somenum>)))));
             !tmp_0 end)) in void);
           (let jessie_<somenum> = (__retres := !tmp_0) in void);
-          (raise (Return_label_exc void)) end) in void)
+          (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_2:
          begin
            (let jessie_<somenum> = (__retres := (C_1: ((sub_int n) (10)))) in void);
-          (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+          (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
@@ -459,11 +408,9 @@ let f91_ensures_greater_than_100 =
      (let tmp_0 = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((le_int_ n) (100))
         then
-         (let jessie_<somenum> =
          (C_8:
          begin
            (let jessie_<somenum> =
@@ -478,18 +425,16 @@ let f91_ensures_greater_than_100 =
                       (let jessie_<somenum> = !tmp in (JC_<somenum>: (f91 jessie_<somenum>)))));
             !tmp_0 end)) in void);
           (let jessie_<somenum> = (__retres := !tmp_0) in void);
-          (raise (Return_label_exc void)) end) in void)
+          (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_2:
          begin
            (let jessie_<somenum> = (__retres := (C_1: ((sub_int n) (10)))) in void);
-          (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+          (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
     absurd  end with Return -> !return end))
-  { (JC_<somenum>: eq_int(result, sub_int(n@, (10)))) }
+  { (JC_<somenum>: (result = sub_int(n, (10)))) }
 
 let f91_ensures_less_than_101 =
  fun (n : int) ->
@@ -502,11 +447,9 @@ let f91_ensures_less_than_101 =
      (let tmp_0 = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((le_int_ n) (100))
         then
-         (let jessie_<somenum> =
          (C_8:
          begin
            (let jessie_<somenum> =
@@ -521,17 +464,15 @@ let f91_ensures_less_than_101 =
                       (let jessie_<somenum> = !tmp in (JC_<somenum>: (f91 jessie_<somenum>)))));
             !tmp_0 end)) in void);
           (let jessie_<somenum> = (__retres := !tmp_0) in void);
-          (raise (Return_label_exc void)) end) in void)
+          (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_2:
          begin
            (let jessie_<somenum> = (__retres := (C_1: ((sub_int n) (10)))) in void);
-          (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+          (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
-    absurd  end with Return -> !return end)) { (JC_<somenum>: eq_int(result, (91))) }
+    absurd  end with Return -> !return end)) { (JC_<somenum>: (result = (91))) }
 
 let f91_nonrec_ensures_default =
  fun (n_0_0 : int) (x_1 : int) ->
@@ -543,26 +484,22 @@ let f91_nonrec_ensures_default =
   try
    begin
      try
-      (let jessie_<somenum> =
       begin
         (loop_2:
         while true do
         { invariant
             ((JC_<somenum>:
-             eq_int(iter_f(mutable_n_0_0, mutable_x_1),
-             iter_f(mutable_n_0_0@init, mutable_x_1@init)))
+             (iter_f(mutable_n_0_0, mutable_x_1) = iter_f(mutable_n_0_0@init,
+                                                   mutable_x_1@init)))
             and (JC_<somenum>: ge_int(mutable_n_0_0, (0))))  }
          begin
            [ { } unit { true } ];
           try
-           (let jessie_<somenum> =
            begin
              (let jessie_<somenum> =
              begin
                (if ((gt_int_ !mutable_n_0_0) (0)) then void
-               else
-                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               else (raise (Goto_while_0_break_exc void)));
               (if ((gt_int_ !mutable_x_1) (100))
               then
                (C_20:
@@ -582,14 +519,14 @@ let f91_nonrec_ensures_default =
                  void);
                 (mutable_n_0_0 := (C_17: ((add_int !mutable_n_0_0) (1))));
                 !mutable_n_0_0 end))) end in void);
-            (raise (Loop_continue_exc void)) end in void) with
+            (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end in void) with
+       (raise (Goto_while_0_break_exc void)) end with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       begin   void; (return := !mutable_x_1); (raise Return) end) end; 
     absurd  end with Return -> !return end))))
-  { (JC_<somenum>: eq_int(result, iter_f(n_0_0@, x_1@))) }
+  { (JC_<somenum>: (result = iter_f(n_0_0, x_1))) }
 
 let f91_nonrec_safety =
  fun (n_0_0 : int) (x_1 : int) ->
@@ -601,7 +538,6 @@ let f91_nonrec_safety =
   try
    begin
      try
-      (let jessie_<somenum> =
       begin
         (loop_1:
         while true do
@@ -609,18 +545,15 @@ let f91_nonrec_safety =
          begin
            [ { } unit reads mutable_n_0_0,mutable_x_1
              { ((JC_<somenum>:
-                eq_int(iter_f(mutable_n_0_0, mutable_x_1),
-                iter_f(mutable_n_0_0@init, mutable_x_1@init)))
+                (iter_f(mutable_n_0_0, mutable_x_1) = iter_f(mutable_n_0_0@init,
+                                                      mutable_x_1@init)))
                and (JC_<somenum>: ge_int(mutable_n_0_0, (0)))) } ];
           try
-           (let jessie_<somenum> =
            begin
              (let jessie_<somenum> =
              begin
                (if ((gt_int_ !mutable_n_0_0) (0)) then void
-               else
-                (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-                void));
+               else (raise (Goto_while_0_break_exc void)));
               (if ((gt_int_ !mutable_x_1) (100))
               then
                (C_20:
@@ -640,9 +573,9 @@ let f91_nonrec_safety =
                  void);
                 (mutable_n_0_0 := (C_17: ((add_int !mutable_n_0_0) (1))));
                 !mutable_n_0_0 end))) end in void);
-            (raise (Loop_continue_exc void)) end in void) with
+            (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end in void) with
+       (raise (Goto_while_0_break_exc void)) end with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
       begin   void; (return := !mutable_x_1); (raise Return) end) end; 
@@ -659,11 +592,9 @@ let f91_safety =
      (let tmp_0 = ref (any_int void) in
      (let __retres = ref (any_int void) in
      try
-      (let jessie_<somenum> =
       begin
         (if ((le_int_ n) (100))
         then
-         (let jessie_<somenum> =
          (C_8:
          begin
            (let jessie_<somenum> =
@@ -686,15 +617,13 @@ let f91_safety =
                         (JC_<somenum> : sub_int((101), n))) };
                       (JC_<somenum>: (f91_requires jessie_<somenum>))))))); !tmp_0 end)) in
            void); (let jessie_<somenum> = (__retres := !tmp_0) in void);
-          (raise (Return_label_exc void)) end) in void)
+          (raise (Return_label_exc void)) end)
         else
-         (let jessie_<somenum> =
          (C_2:
          begin
            (let jessie_<somenum> = (__retres := (C_1: ((sub_int n) (10)))) in void);
-          (raise (Return_label_exc void)) end) in void));
-       (raise (Return_label_exc void)) end in void) with
-      Return_label_exc jessie_<somenum> ->
+          (raise (Return_label_exc void)) end));
+       (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { true }
 
@@ -704,17 +633,7 @@ why --project [...] why/mac_carthy.why
 <project name="mac_carthy" context="why/mac_carthy_ctx.why">
   <function name="Function f91_nonrec">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/mac_carthy_po7.why">
-      <location file = "why/mac_carthy.why" line = "464" begin = "43" end = "44"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/mac_carthy_po8.why">
-      <location file = "why/mac_carthy.why" line = "464" begin = "43" end = "44"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/mac_carthy_po3.why">
       <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "56" begin = "21" end = "27"/>
       <explain kind = "LoopInvInit"/>
@@ -732,34 +651,44 @@ why --project [...] why/mac_carthy.why
       <explain kind = "Post"/>
     </goal>
     </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/mac_carthy_po7.why">
+      <location file = "why/mac_carthy.why" line = "400" begin = "43" end = "44"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/mac_carthy_po8.why">
+      <location file = "why/mac_carthy.why" line = "400" begin = "43" end = "44"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    </behavior>
   </function>
   <function name="Function f91">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/mac_carthy_po9.why">
-      <location file = "why/mac_carthy.why" line = "534" begin = "23" end = "119"/>
+      <location file = "why/mac_carthy.why" line = "465" begin = "23" end = "119"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/mac_carthy_po10.why">
-      <location file = "why/mac_carthy.why" line = "534" begin = "23" end = "119"/>
+      <location file = "why/mac_carthy.why" line = "465" begin = "23" end = "119"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/mac_carthy_po11.why">
-      <location file = "why/mac_carthy.why" line = "541" begin = "24" end = "121"/>
+      <location file = "why/mac_carthy.why" line = "472" begin = "24" end = "121"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/mac_carthy_po12.why">
-      <location file = "why/mac_carthy.why" line = "541" begin = "24" end = "121"/>
+      <location file = "why/mac_carthy.why" line = "472" begin = "24" end = "121"/>
       <explain kind = "Check"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `less_than_101'">
+    <behavior name="Behavior `less_than_101'">
     <goal why_file="why/mac_carthy_po2.why">
       <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "9" begin = "14" end = "27"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
-    <behavior name="Normal behavior `greater_than_100'">
+    <behavior name="Behavior `greater_than_100'">
     <goal why_file="why/mac_carthy_po1.why">
       <location file = "PPCHOME/tests/jessie/mac_carthy.c" line = "12" begin = "14" end = "31"/>
       <explain kind = "Post"/>
@@ -1785,16 +1714,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

@@ -1,4 +1,34 @@
 ========== file tests/c/heap_sort.c ==========
+/**************************************************************************/
+/*                                                                        */
+/*  The Why platform for program certification                            */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
+/*                                                                        */
+/*  This software is free software; you can redistribute it and/or        */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
+/*  described in file LICENSE.                                            */
+/*                                                                        */
+/*  This software is distributed in the hope that it will be useful,      */
+/*  but WITHOUT ANY WARRANTY; without even the implied warranty of        */
+/*  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  */
+/*                                                                        */
+/**************************************************************************/
 
 #include "binary_heap.h"
 
@@ -29,7 +59,7 @@ void main() {
   //@ assert arr[0] <= arr[1] && arr[1] <= arr[2];
   //@ assert arr[0] == 13 && arr[1] == 42 && arr[2] == 42;
 }
-  
+
 ========== frama-c -jessie execution ==========
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/heap_sort.c"
 [jessie] Starting Jessie translation
@@ -183,13 +213,13 @@ behavior default:
 ========== file tests/c/heap_sort.jessie/heap_sort.cloc ==========
 [C_50]
 file = "HOME/tests/c/heap_sort.c"
-line = 29
+line = 59
 begin = 45
 end = 57
 
 [C_51]
 file = "HOME/tests/c/heap_sort.c"
-line = 26
+line = 56
 begin = 6
 end = 9
 
@@ -202,74 +232,74 @@ end = -1
 [main]
 name = "Function main"
 file = "HOME/tests/c/heap_sort.c"
-line = 25
+line = 55
 begin = 5
 end = 9
 
 [C_10]
 file = "HOME/tests/c/heap_sort.c"
-line = 13
+line = 43
 begin = 26
 end = 34
 
 [C_11]
 file = "HOME/tests/c/heap_sort.c"
-line = 16
+line = 46
 begin = 37
 end = 40
 
 [C_12]
 file = "HOME/tests/c/heap_sort.c"
-line = 16
+line = 46
 begin = 37
 end = 43
 
 [C_13]
 file = "HOME/tests/c/heap_sort.c"
-line = 16
+line = 46
 begin = 28
 end = 44
 
 [C_14]
 file = "HOME/tests/c/heap_sort.c"
-line = 16
+line = 46
 begin = 23
 end = 26
 
 [C_15]
 file = "HOME/tests/c/heap_sort.c"
-line = 16
+line = 46
 begin = 23
 end = 26
 
 [C_16]
 file = "HOME/tests/c/heap_sort.c"
-line = 16
+line = 46
 begin = 23
 end = 26
 
 [C_17]
 file = "HOME/tests/c/heap_sort.c"
-line = 20
+line = 50
 begin = 11
 end = 12
 
 [C_18]
 file = "HOME/tests/c/heap_sort.c"
-line = 18
+line = 48
 begin = 19
 end = 26
 
 [C_19]
 file = "HOME/tests/c/heap_sort.c"
-line = 17
+line = 47
 begin = 21
 end = 34
 
 [heap_sort]
 name = "Function heap_sort"
 file = "HOME/tests/c/heap_sort.c"
-line = 10
+line = 40
 begin = 5
 end = 14
 
@@ -293,217 +323,217 @@ end = -1
 
 [C_4]
 file = "HOME/tests/c/heap_sort.c"
-line = 12
+line = 42
 begin = 11
 end = 22
 
 [C_20]
 file = "HOME/tests/c/heap_sort.c"
-line = 17
+line = 47
 begin = 21
 end = 27
 
 [C_5]
 file = "HOME/tests/c/heap_sort.c"
-line = 12
+line = 42
 begin = 11
 end = 22
 
 [C_21]
 file = "HOME/tests/c/heap_sort.c"
-line = 17
+line = 47
 begin = 26
 end = 34
 
 [C_6]
 file = "HOME/tests/c/heap_sort.c"
-line = 16
+line = 46
 begin = 11
 end = 12
 
 [C_22]
 file = "HOME/tests/c/heap_sort.c"
-line = 20
+line = 50
 begin = 37
 end = 51
 
 [C_7]
 file = "HOME/tests/c/heap_sort.c"
-line = 14
+line = 44
 begin = 19
 end = 26
 
 [C_23]
 file = "HOME/tests/c/heap_sort.c"
-line = 20
+line = 50
 begin = 28
 end = 31
 
 [C_8]
 file = "HOME/tests/c/heap_sort.c"
-line = 13
+line = 43
 begin = 21
 end = 34
 
 [C_24]
 file = "HOME/tests/c/heap_sort.c"
-line = 20
+line = 50
 begin = 37
 end = 51
 
 [C_9]
 file = "HOME/tests/c/heap_sort.c"
-line = 13
+line = 43
 begin = 21
 end = 27
 
 [C_25]
 file = "HOME/tests/c/heap_sort.c"
-line = 20
+line = 50
 begin = 37
 end = 51
 
 [C_26]
 file = "HOME/tests/c/heap_sort.c"
-line = 20
+line = 50
 begin = 23
 end = 26
 
 [C_27]
 file = "HOME/tests/c/heap_sort.c"
-line = 20
+line = 50
 begin = 23
 end = 26
 
 [C_28]
 file = "HOME/tests/c/heap_sort.c"
-line = 20
+line = 50
 begin = 23
 end = 26
 
 [C_29]
 file = "HOME/tests/c/heap_sort.c"
-line = 8
+line = 38
 begin = 12
 end = 71
 
 [C_30]
 file = "HOME/tests/c/heap_sort.c"
-line = 6
+line = 36
 begin = 13
 end = 38
 
 [C_31]
 file = "HOME/tests/c/heap_sort.c"
-line = 6
+line = 36
 begin = 13
 end = 38
 
 [C_32]
 file = "HOME/tests/c/heap_sort.c"
-line = 6
+line = 36
 begin = 13
 end = 38
 
 [C_33]
 file = "HOME/tests/c/heap_sort.c"
-line = 5
+line = 35
 begin = 13
 end = 21
 
 [C_34]
 file = "HOME/tests/c/heap_sort.c"
-line = 26
+line = 56
 begin = 6
 end = 9
 
 [C_35]
 file = "HOME/tests/c/heap_sort.c"
-line = 26
+line = 56
 begin = 6
 end = 9
 
 [C_36]
 file = "HOME/tests/c/heap_sort.c"
-line = 26
+line = 56
 begin = 2
 end = 5
 
 [C_37]
 file = "HOME/tests/c/heap_sort.c"
-line = 26
+line = 56
 begin = 2
 end = 5
 
 [C_38]
 file = "HOME/tests/c/heap_sort.c"
-line = 26
+line = 56
 begin = 2
 end = 5
 
 [C_39]
 file = "HOME/tests/c/heap_sort.c"
-line = 26
+line = 56
 begin = 2
 end = 5
 
 [C_40]
 file = "HOME/tests/c/heap_sort.c"
-line = 26
+line = 56
 begin = 2
 end = 5
 
 [C_41]
 file = "HOME/tests/c/heap_sort.c"
-line = 26
+line = 56
 begin = 2
 end = 5
 
 [C_42]
 file = "HOME/tests/c/heap_sort.c"
-line = 27
+line = 57
 begin = 2
 end = 18
 
 [C_43]
 file = "HOME/tests/c/heap_sort.c"
-line = 28
+line = 58
 begin = 13
 end = 49
 
 [C_44]
 file = "HOME/tests/c/heap_sort.c"
-line = 28
+line = 58
 begin = 13
 end = 29
 
 [C_45]
 file = "HOME/tests/c/heap_sort.c"
-line = 28
+line = 58
 begin = 33
 end = 49
 
 [C_46]
 file = "HOME/tests/c/heap_sort.c"
-line = 29
+line = 59
 begin = 13
 end = 57
 
 [C_47]
 file = "HOME/tests/c/heap_sort.c"
-line = 29
+line = 59
 begin = 13
 end = 41
 
 [C_48]
 file = "HOME/tests/c/heap_sort.c"
-line = 29
+line = 59
 begin = 13
 end = 25
 
 [C_49]
 file = "HOME/tests/c/heap_sort.c"
-line = 29
+line = 59
 begin = 29
 end = 41
 
@@ -525,10 +555,11 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs heap_
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs heap_sort.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
+JESSIE3LIB ?=$(WHYLIB)/why3
 
 COQDEP = coqdep
 
-.PHONY: all coq pvs simplify cvcl harvey smtlib zenon
+.PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon
 
 all: simplify/heap_sort_why.sx
 
@@ -588,6 +619,13 @@ simplify: simplify/heap_sort_why.sx
 simplify/%_why.sx: WHYOPT=-simplify -dir simplify
 simplify/%_why.sx: why/%.why
 	@echo 'why -simplify [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
+
+vampire: vampire/heap_sort_why.vp
+	@echo 'Running Vampire on proof obligations' && ($(DP) $^)
+
+vampire/%_why.vp: WHYOPT=-vampire -dir vampire
+vampire/%_why.vp: why/%.why
+	@echo 'why -vampire [...] why/$*.why' && $(WHY) $(JESSIELIBFILES) why/$*.why
 
 alt-ergo ergo: why/heap_sort_why.why
 	@echo 'Running Alt-Ergo on proof obligations' && ($(DP) $^)
@@ -661,6 +699,9 @@ why/%_why3.why: why/%.why
 why3ide: why/heap_sort_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
+why3ml: heap_sort.mlw
+	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+
 -include heap_sort.depend
 
 depend: coq/heap_sort_why.v
@@ -679,9 +720,9 @@ end = 45
 
 [main_ensures_default]
 name = "Function main"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/heap_sort.c"
-line = 25
+line = 55
 begin = 5
 end = 9
 
@@ -694,7 +735,7 @@ end = 33
 
 [JC_92]
 file = "HOME/tests/c/heap_sort.c"
-line = 28
+line = 58
 begin = 13
 end = 29
 
@@ -706,31 +747,31 @@ end = -1
 
 [JC_93]
 file = "HOME/tests/c/heap_sort.c"
-line = 28
+line = 58
 begin = 33
 end = 49
 
 [JC_41]
 file = "HOME/tests/c/heap_sort.c"
-line = 8
+line = 38
 begin = 12
 end = 71
 
 [JC_94]
 file = "HOME/tests/c/heap_sort.c"
-line = 28
+line = 58
 begin = 13
 end = 49
 
 [JC_42]
 file = "HOME/tests/c/heap_sort.c"
-line = 8
+line = 38
 begin = 12
 end = 71
 
 [JC_95]
 file = "HOME/tests/c/heap_sort.c"
-line = 29
+line = 59
 begin = 13
 end = 25
 
@@ -742,7 +783,7 @@ end = -1
 
 [JC_96]
 file = "HOME/tests/c/heap_sort.c"
-line = 29
+line = 59
 begin = 29
 end = 41
 
@@ -754,26 +795,26 @@ end = -1
 
 [JC_97]
 file = "HOME/tests/c/heap_sort.c"
-line = 29
+line = 59
 begin = 45
 end = 57
 
 [JC_45]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.c"
-line = 12
+line = 42
 begin = 11
 end = 22
 
 [JC_98]
 file = "HOME/tests/c/heap_sort.c"
-line = 29
+line = 59
 begin = 13
 end = 57
 
 [JC_46]
 file = "HOME/tests/c/heap_sort.c"
-line = 13
+line = 43
 begin = 21
 end = 27
 
@@ -793,13 +834,13 @@ end = 33
 [JC_99]
 kind = AllocSize
 file = "HOME/tests/c/heap_sort.c"
-line = 26
+line = 56
 begin = 6
 end = 9
 
 [JC_47]
 file = "HOME/tests/c/heap_sort.c"
-line = 13
+line = 43
 begin = 26
 end = 34
 
@@ -811,13 +852,13 @@ end = -1
 
 [JC_101]
 file = "HOME/tests/c/heap_sort.c"
-line = 28
+line = 58
 begin = 13
 end = 29
 
 [JC_48]
 file = "HOME/tests/c/heap_sort.c"
-line = 13
+line = 43
 begin = 21
 end = 34
 
@@ -829,7 +870,7 @@ end = 15
 
 [JC_102]
 file = "HOME/tests/c/heap_sort.c"
-line = 28
+line = 58
 begin = 33
 end = 49
 
@@ -847,7 +888,7 @@ end = -1
 
 [JC_103]
 file = "HOME/tests/c/heap_sort.c"
-line = 28
+line = 58
 begin = 13
 end = 49
 
@@ -859,7 +900,7 @@ end = -1
 
 [JC_104]
 file = "HOME/tests/c/heap_sort.c"
-line = 29
+line = 59
 begin = 13
 end = 25
 
@@ -871,15 +912,15 @@ end = 18
 
 [JC_105]
 file = "HOME/tests/c/heap_sort.c"
-line = 29
+line = 59
 begin = 29
 end = 41
 
 [heap_sort_ensures_default]
 name = "Function heap_sort"
-behavior = "Default behavior"
+behavior = "default behavior"
 file = "HOME/tests/c/heap_sort.c"
-line = 10
+line = 40
 begin = 5
 end = 14
 
@@ -891,7 +932,7 @@ end = -1
 
 [JC_106]
 file = "HOME/tests/c/heap_sort.c"
-line = 29
+line = 59
 begin = 45
 end = 57
 
@@ -903,7 +944,7 @@ end = 18
 
 [JC_107]
 file = "HOME/tests/c/heap_sort.c"
-line = 29
+line = 59
 begin = 13
 end = 57
 
@@ -917,7 +958,7 @@ end = -1
 name = "Function heap_sort"
 behavior = "Safety"
 file = "HOME/tests/c/heap_sort.c"
-line = 10
+line = 40
 begin = 5
 end = 14
 
@@ -936,7 +977,7 @@ end = 391
 [JC_52]
 kind = PointerDeref
 file = "HOME/tests/c/heap_sort.c"
-line = 16
+line = 46
 begin = 37
 end = 43
 
@@ -950,31 +991,31 @@ end = 63
 [JC_54]
 kind = ArithOverflow
 file = "HOME/tests/c/heap_sort.c"
-line = 16
+line = 46
 begin = 23
 end = 26
 
 [JC_55]
 file = "HOME/tests/c/heap_sort.c"
-line = 14
+line = 44
 begin = 19
 end = 26
 
 [JC_56]
 file = "HOME/tests/c/heap_sort.c"
-line = 17
+line = 47
 begin = 21
 end = 27
 
 [JC_57]
 file = "HOME/tests/c/heap_sort.c"
-line = 17
+line = 47
 begin = 26
 end = 34
 
 [JC_58]
 file = "HOME/tests/c/heap_sort.c"
-line = 17
+line = 47
 begin = 21
 end = 34
 
@@ -999,7 +1040,7 @@ end = 468
 [JC_62]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.c"
-line = 20
+line = 50
 begin = 37
 end = 51
 
@@ -1025,7 +1066,7 @@ end = 11
 [JC_64]
 kind = ArithOverflow
 file = "HOME/tests/c/heap_sort.c"
-line = 20
+line = 50
 begin = 23
 end = 26
 
@@ -1037,7 +1078,7 @@ end = -1
 
 [JC_65]
 file = "HOME/tests/c/heap_sort.c"
-line = 18
+line = 48
 begin = 19
 end = 26
 
@@ -1050,7 +1091,7 @@ end = 11
 [JC_66]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.c"
-line = 12
+line = 42
 begin = 11
 end = 22
 
@@ -1062,7 +1103,7 @@ end = -1
 
 [JC_67]
 file = "HOME/tests/c/heap_sort.c"
-line = 13
+line = 43
 begin = 21
 end = 27
 
@@ -1074,7 +1115,7 @@ end = -1
 
 [JC_68]
 file = "HOME/tests/c/heap_sort.c"
-line = 13
+line = 43
 begin = 26
 end = 34
 
@@ -1086,7 +1127,7 @@ end = 11
 
 [JC_69]
 file = "HOME/tests/c/heap_sort.c"
-line = 13
+line = 43
 begin = 21
 end = 34
 
@@ -1147,7 +1188,7 @@ end = 17
 
 [JC_74]
 file = "HOME/tests/c/heap_sort.c"
-line = 17
+line = 47
 begin = 21
 end = 27
 
@@ -1159,7 +1200,7 @@ end = -1
 
 [JC_75]
 file = "HOME/tests/c/heap_sort.c"
-line = 17
+line = 47
 begin = 26
 end = 34
 
@@ -1171,7 +1212,7 @@ end = 17
 
 [JC_76]
 file = "HOME/tests/c/heap_sort.c"
-line = 17
+line = 47
 begin = 21
 end = 34
 
@@ -1232,13 +1273,13 @@ end = -1
 [JC_80]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.c"
-line = 20
+line = 50
 begin = 37
 end = 51
 
 [JC_81]
 file = "HOME/tests/c/heap_sort.c"
-line = 25
+line = 55
 begin = 5
 end = 9
 
@@ -1256,13 +1297,13 @@ end = -1
 
 [JC_83]
 file = "HOME/tests/c/heap_sort.c"
-line = 25
+line = 55
 begin = 5
 end = 9
 
 [JC_31]
 file = "HOME/tests/c/heap_sort.c"
-line = 5
+line = 35
 begin = 13
 end = 21
 
@@ -1274,7 +1315,7 @@ end = -1
 
 [JC_32]
 file = "HOME/tests/c/heap_sort.c"
-line = 6
+line = 36
 begin = 13
 end = 38
 
@@ -1286,7 +1327,7 @@ end = -1
 
 [JC_33]
 file = "HOME/tests/c/heap_sort.c"
-line = 6
+line = 36
 begin = 13
 end = 38
 
@@ -1306,7 +1347,7 @@ end = -1
 name = "Function main"
 behavior = "Safety"
 file = "HOME/tests/c/heap_sort.c"
-line = 25
+line = 55
 begin = 5
 end = 9
 
@@ -1330,26 +1371,26 @@ end = -1
 
 [JC_36]
 file = "HOME/tests/c/heap_sort.c"
-line = 5
+line = 35
 begin = 13
 end = 21
 
 [JC_89]
 kind = AllocSize
 file = "HOME/tests/c/heap_sort.c"
-line = 26
+line = 56
 begin = 6
 end = 9
 
 [JC_37]
 file = "HOME/tests/c/heap_sort.c"
-line = 6
+line = 36
 begin = 13
 end = 38
 
 [JC_38]
 file = "HOME/tests/c/heap_sort.c"
-line = 6
+line = 36
 begin = 13
 end = 38
 
@@ -1376,10 +1417,6 @@ type uint32
 
 type voidP
 
-exception Goto_while_0_break_exc of unit
-
-exception Goto_while_1_break_exc of unit
-
 logic Heap_tag:  -> Heap tag_id
 
 axiom Heap_int : (int_of_tag(Heap_tag) = (1))
@@ -1395,12 +1432,6 @@ axiom Heap_tags :
  (forall x:Heap pointer.
   (forall Heap_tag_table:Heap tag_table.
    instanceof(Heap_tag_table, x, Heap_tag)))
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
 
 logic charP_tag:  -> charP tag_id
 
@@ -1440,6 +1471,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -1451,6 +1487,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -1561,30 +1602,15 @@ axiom uint32_coerce :
   ((le_int((0), x) and le_int(x, (4294967295))) ->
    eq_int(integer_of_uint32(uint32_of_integer(x)), x)))
 
+axiom uint32_extensionality :
+ (forall x:uint32.
+  (forall y:uint32.
+   (eq_int(integer_of_uint32(x), integer_of_uint32(y)) -> (x = y))))
+
 axiom uint32_range :
  (forall x:uint32.
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
-
-predicate valid_bitvector_struct_Heap(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_Heap(p:Heap pointer, a:int, b:int,
  Heap_alloc_table:Heap alloc_table) =
@@ -1640,81 +1666,19 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
+exception Goto_while_0_break_exc of unit
+
+exception Goto_while_1_break_exc of unit
+
 parameter Heap_alloc_table : Heap alloc_table ref
 
 parameter Heap_tag_table : Heap tag_table ref
 
-parameter alloc_bitvector_struct_Heap :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Heap(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_Heap_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_Heap(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter alloc_struct_Heap :
  n:int ->
@@ -1840,9 +1804,9 @@ parameter heap_sort :
        (forall i:int.
         (forall j:int.
          ((le_int((0), i)
-          and (le_int(i, j) and lt_int(j, integer_of_uint32(len@)))) ->
-          le_int(integer_of_int32(select(intP_intM_arr_5, shift(arr@, i))),
-          integer_of_int32(select(intP_intM_arr_5, shift(arr@, j)))))))) }
+          and (le_int(i, j) and lt_int(j, integer_of_uint32(len)))) ->
+          le_int(integer_of_int32(select(intP_intM_arr_5, shift(arr, i))),
+          integer_of_int32(select(intP_intM_arr_5, shift(arr, j)))))))) }
 
 parameter heap_sort_requires :
  arr:intP pointer ->
@@ -1860,9 +1824,9 @@ parameter heap_sort_requires :
        (forall i:int.
         (forall j:int.
          ((le_int((0), i)
-          and (le_int(i, j) and lt_int(j, integer_of_uint32(len@)))) ->
-          le_int(integer_of_int32(select(intP_intM_arr_5, shift(arr@, i))),
-          integer_of_int32(select(intP_intM_arr_5, shift(arr@, j)))))))) }
+          and (le_int(i, j) and lt_int(j, integer_of_uint32(len)))) ->
+          le_int(integer_of_int32(select(intP_intM_arr_5, shift(arr, i))),
+          integer_of_int32(select(intP_intM_arr_5, shift(arr, j)))))))) }
 
 parameter insert :
  u_0:Heap pointer ->
@@ -1871,8 +1835,8 @@ parameter insert :
     Heap_u_0_3_alloc_table:Heap alloc_table ->
      { } unit writes Heap_x_u_0_3
      { (JC_18:
-       not_assigns(Heap_u_0_3_alloc_table@, Heap_x_u_0_3@, Heap_x_u_0_3,
-       pset_singleton(u_0@))) }
+       not_assigns(Heap_u_0_3_alloc_table, Heap_x_u_0_3@, Heap_x_u_0_3,
+       pset_singleton(u_0))) }
 
 parameter insert_requires :
  u_0:Heap pointer ->
@@ -1881,8 +1845,8 @@ parameter insert_requires :
     Heap_u_0_3_alloc_table:Heap alloc_table ->
      { } unit writes Heap_x_u_0_3
      { (JC_18:
-       not_assigns(Heap_u_0_3_alloc_table@, Heap_x_u_0_3@, Heap_x_u_0_3,
-       pset_singleton(u_0@))) }
+       not_assigns(Heap_u_0_3_alloc_table, Heap_x_u_0_3@, Heap_x_u_0_3,
+       pset_singleton(u_0))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1928,10 +1892,8 @@ let heap_sort_ensures_default =
      (let i_0 = ref (any_uint32 void) in
      (let h = ref (any_pointer void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_5:
          (C_6:
          begin
@@ -1950,17 +1912,13 @@ let heap_sort_ensures_default =
            begin
              [ { } unit { true } ];
             try
-             (let jessie_<num> =
              begin
                (let jessie_<num> =
                (C_13:
                (C_16:
                begin
                  (if ((lt_int_ (integer_of_uint32 !i_0)) (integer_of_uint32 len))
-                 then void
-                 else
-                  (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                  void));
+                 then void else (raise (Goto_while_0_break_exc void)));
                 (let jessie_<num> = !h in
                 (let jessie_<num> =
                 (C_12:
@@ -1971,9 +1929,9 @@ let heap_sort_ensures_default =
                 (i_0 := (C_15:
                         (safe_uint32_of_integer_ (C_14:
                                                  ((add_int (integer_of_uint32 !i_0)) (1))))));
-                !i_0 end)) in void); (raise (Loop_continue_exc void)) end in
-             void) with Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end)) in void) with
+                !i_0 end)) in void); (raise (Loop_continue_exc void)) end
+             with Loop_continue_exc jessie_<num> -> void end end done);
+          (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<num> ->
          (while_0_break:
          (C_17:
@@ -1991,17 +1949,13 @@ let heap_sort_ensures_default =
            begin
              [ { } unit { true } ];
             try
-             (let jessie_<num> =
              begin
                (let jessie_<num> =
                (C_25:
                (C_28:
                begin
                  (if ((lt_int_ (integer_of_uint32 !i_0)) (integer_of_uint32 len))
-                 then void
-                 else
-                  (let jessie_<num> = (raise (Goto_while_1_break_exc void)) in
-                  void));
+                 then void else (raise (Goto_while_1_break_exc void)));
                 (let jessie_<num> =
                 (let jessie_<num> =
                 (C_22:
@@ -2014,9 +1968,9 @@ let heap_sort_ensures_default =
                 (i_0 := (C_27:
                         (safe_uint32_of_integer_ (C_26:
                                                  ((add_int (integer_of_uint32 !i_0)) (1))))));
-                !i_0 end)) in void); (raise (Loop_continue_exc void)) end in
-             void) with Loop_continue_exc jessie_<num> -> void end end done) end)) end;
-       (raise (Goto_while_1_break_exc void)) end in void) with
+                !i_0 end)) in void); (raise (Loop_continue_exc void)) end
+             with Loop_continue_exc jessie_<num> -> void end end done) end)) end;
+       (raise (Goto_while_1_break_exc void)) end with
       Goto_while_1_break_exc jessie_<num> ->
       (while_1_break: begin   void; (raise Return) end) end))));
     (raise Return) end with Return -> void end)
@@ -2024,9 +1978,9 @@ let heap_sort_ensures_default =
     (forall i:int.
      (forall j:int.
       ((le_int((0), i)
-       and (le_int(i, j) and lt_int(j, integer_of_uint32(len@)))) ->
-       le_int(integer_of_int32(select(intP_intM_arr_5, shift(arr@, i))),
-       integer_of_int32(select(intP_intM_arr_5, shift(arr@, j)))))))) }
+       and (le_int(i, j) and lt_int(j, integer_of_uint32(len)))) ->
+       le_int(integer_of_int32(select(intP_intM_arr_5, shift(arr, i))),
+       integer_of_int32(select(intP_intM_arr_5, shift(arr, j)))))))) }
 
 let heap_sort_safety =
  fun (arr : intP pointer) (len : uint32) (intP_intM_arr_5 : (intP, int32) memory ref) (intP_arr_5_alloc_table : intP alloc_table) ->
@@ -2044,10 +1998,8 @@ let heap_sort_safety =
      (let i_0 = ref (any_uint32 void) in
      (let h = ref (any_pointer void) in
      try
-      (let jessie_<num> =
       begin
         try
-         (let jessie_<num> =
          (C_5:
          (C_6:
          begin
@@ -2068,17 +2020,13 @@ let heap_sort_safety =
                  and (JC_47:
                      le_int(integer_of_uint32(i_0), integer_of_uint32(len))))) } ];
             try
-             (let jessie_<num> =
              begin
                (let jessie_<num> =
                (C_13:
                (C_16:
                begin
                  (if ((lt_int_ (integer_of_uint32 !i_0)) (integer_of_uint32 len))
-                 then void
-                 else
-                  (let jessie_<num> = (raise (Goto_while_0_break_exc void)) in
-                  void));
+                 then void else (raise (Goto_while_0_break_exc void)));
                 (let jessie_<num> = !h in
                 (let jessie_<num> =
                 (C_12:
@@ -2091,9 +2039,9 @@ let heap_sort_safety =
                         (JC_54:
                         (uint32_of_integer_ (C_14:
                                             ((add_int (integer_of_uint32 !i_0)) (1)))))));
-                !i_0 end)) in void); (raise (Loop_continue_exc void)) end in
-             void) with Loop_continue_exc jessie_<num> -> void end end done);
-          (raise (Goto_while_0_break_exc void)) end)) in void) with
+                !i_0 end)) in void); (raise (Loop_continue_exc void)) end
+             with Loop_continue_exc jessie_<num> -> void end end done);
+          (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<num> ->
          (while_0_break:
          (C_17:
@@ -2112,17 +2060,13 @@ let heap_sort_safety =
                  and (JC_57:
                      le_int(integer_of_uint32(i_0), integer_of_uint32(len))))) } ];
             try
-             (let jessie_<num> =
              begin
                (let jessie_<num> =
                (C_25:
                (C_28:
                begin
                  (if ((lt_int_ (integer_of_uint32 !i_0)) (integer_of_uint32 len))
-                 then void
-                 else
-                  (let jessie_<num> = (raise (Goto_while_1_break_exc void)) in
-                  void));
+                 then void else (raise (Goto_while_1_break_exc void)));
                 (let jessie_<num> =
                 (let jessie_<num> =
                 (C_22:
@@ -2138,9 +2082,9 @@ let heap_sort_safety =
                         (JC_64:
                         (uint32_of_integer_ (C_26:
                                             ((add_int (integer_of_uint32 !i_0)) (1)))))));
-                !i_0 end)) in void); (raise (Loop_continue_exc void)) end in
-             void) with Loop_continue_exc jessie_<num> -> void end end done) end)) end;
-       (raise (Goto_while_1_break_exc void)) end in void) with
+                !i_0 end)) in void); (raise (Loop_continue_exc void)) end
+             with Loop_continue_exc jessie_<num> -> void end end done) end)) end;
+       (raise (Goto_while_1_break_exc void)) end with
       Goto_while_1_break_exc jessie_<num> ->
       (while_1_break: begin   void; (raise Return) end) end))));
     (raise Return) end with Return -> void end) { true }
@@ -2202,19 +2146,15 @@ let main_ensures_default =
       (assert
       { (JC_107:
         ((JC_104:
-         eq_int(integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (0)))),
-         (13)))
+         (integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (0)))) = (13)))
         and ((JC_105:
-             eq_int(integer_of_int32(select(intP_intM_arr_0_8,
-                                     shift(arr_0, (1)))),
-             (42)))
+             (integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (1)))) = (42)))
             and (JC_106:
-                eq_int(integer_of_int32(select(intP_intM_arr_0_8,
-                                        shift(arr_0, (2)))),
-                (42)))))) }; void); void;
-      ((safe_free_parameter intP_arr_0_8_alloc_table) !arr_0); (raise Return)
-     end)))))))))); (raise Return) end with Return -> void end)
-  { (JC_85: true) }
+                (integer_of_int32(select(intP_intM_arr_0_8,
+                                  shift(arr_0, (2)))) = (42)))))) }; void);
+      void; ((safe_free_parameter intP_arr_0_8_alloc_table) !arr_0);
+      (raise Return) end)))))))))); (raise Return) end with Return ->
+   void end) { (JC_85: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -2278,19 +2218,15 @@ let main_safety =
       [ { } unit reads arr_0,intP_intM_arr_0_8
         { (JC_98:
           ((JC_95:
-           eq_int(integer_of_int32(select(intP_intM_arr_0_8,
-                                   shift(arr_0, (0)))),
-           (13)))
+           (integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (0)))) = (13)))
           and ((JC_96:
-               eq_int(integer_of_int32(select(intP_intM_arr_0_8,
-                                       shift(arr_0, (1)))),
-               (42)))
+               (integer_of_int32(select(intP_intM_arr_0_8, shift(arr_0, (1)))) = (42)))
               and (JC_97:
-                  eq_int(integer_of_int32(select(intP_intM_arr_0_8,
-                                          shift(arr_0, (2)))),
-                  (42)))))) } ]; void;
-      ((free_parameter intP_arr_0_8_alloc_table) !arr_0); (raise Return) end))))))))));
-    (raise Return) end with Return -> void end) { true }
+                  (integer_of_int32(select(intP_intM_arr_0_8,
+                                    shift(arr_0, (2)))) = (42)))))) } ];
+      void; ((free_parameter intP_arr_0_8_alloc_table) !arr_0);
+      (raise Return) end)))))))))); (raise Return) end with Return ->
+   void end) { true }
 
 
 ========== generation of alt-ergo VC output ==========
@@ -3296,6 +3232,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -3307,6 +3248,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -3421,29 +3366,14 @@ axiom uint32_coerce:
     (((0 <= x) and (x <= 4294967295)) ->
      (integer_of_uint32(uint32_of_integer(x)) = x)))
 
+axiom uint32_extensionality:
+  (forall x:uint32.
+    (forall y:uint32.
+      ((integer_of_uint32(x) = integer_of_uint32(y)) -> (x = y))))
+
 axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
-
-predicate valid_bitvector_struct_Heap(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_Heap(p: Heap pointer, a: int, b: int,
   Heap_alloc_table: Heap alloc_table) =

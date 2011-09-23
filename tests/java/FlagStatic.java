@@ -1,22 +1,26 @@
 /**************************************************************************/
 /*                                                                        */
 /*  The Why platform for program certification                            */
-/*  Copyright (C) 2002-2008                                               */
-/*    Romain BARDOU                                                       */
-/*    Jean-François COUCHOT                                               */
-/*    Mehdi DOGGUY                                                        */
-/*    Jean-Christophe FILLIÂTRE                                           */
-/*    Thierry HUBERT                                                      */
-/*    Claude MARCHÉ                                                       */
-/*    Yannick MOY                                                         */
-/*    Christine PAULIN                                                    */
-/*    Yann RÉGIS-GIANAS                                                   */
-/*    Nicolas ROUSSET                                                     */
-/*    Xavier URBAIN                                                       */
+/*                                                                        */
+/*  Copyright (C) 2002-2011                                               */
+/*                                                                        */
+/*    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                */
+/*    Claude MARCHE, INRIA & Univ. Paris-sud 11                           */
+/*    Yannick MOY, Univ. Paris-sud 11                                     */
+/*    Romain BARDOU, Univ. Paris-sud 11                                   */
+/*                                                                        */
+/*  Secondary contributors:                                               */
+/*                                                                        */
+/*    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     */
+/*    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          */
+/*    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        */
+/*    Sylvie BOLDO, INRIA                 (floating-point support)        */
+/*    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  */
+/*    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       */
 /*                                                                        */
 /*  This software is free software; you can redistribute it and/or        */
-/*  modify it under the terms of the GNU Library General Public           */
-/*  License version 2, with the special exception on linking              */
+/*  modify it under the terms of the GNU Lesser General Public            */
+/*  License version 2.1, with the special exception on linking            */
 /*  described in file LICENSE.                                            */
 /*                                                                        */
 /*  This software is distributed in the hope that it will be useful,      */
@@ -34,7 +38,7 @@
   @*/
 
 /*@ predicate is_color_array{L}(int t[]) =
-  @   t != null && 
+  @   t != null &&
   @   \forall integer i; 0 <= i < t.length ==> is_color(t[i]) ;
   @*/
 
@@ -44,15 +48,15 @@
 
 
 class FlagStatic {
-    
+
     public static final int BLUE = 1, WHITE = 2, RED = 3;
-    
+
     /*@ requires t != null && 0 <= i <= j <= t.length ;
       @ behavior decides_monochromatic:
       @   ensures \result <==> is_monochrome(t,i,j,c);
       @*/
     public static boolean isMonochrome(int t[], int i, int j, int c) {
-    	/*@ loop_invariant i <= k && 
+    	/*@ loop_invariant i <= k &&
 	  @   (\forall integer l; i <= l < k ==> t[l]==c);
     	  @ loop_variant j - k;
 	  @*/
@@ -72,9 +76,9 @@ class FlagStatic {
     }
 
     /*@ requires
-      @   is_color_array(t); 
+      @   is_color_array(t);
       @ behavior sorts:
-      @   ensures 
+      @   ensures
       @     (\exists integer b r;
       @        is_monochrome(t,0,b,BLUE) &&
       @        is_monochrome(t,b,r,WHITE) &&
@@ -90,17 +94,17 @@ class FlagStatic {
 	  @   is_monochrome(t,0,b,BLUE) &&
 	  @   is_monochrome(t,b,i,WHITE) &&
           @   is_monochrome(t,r,t.length,RED);
-	  @ loop_variant r - i; 
+	  @ loop_variant r - i;
 	  @*/
 	while (i < r) {
 	    switch (t[i]) {
-	    case BLUE:  
+	    case BLUE:
 		swap(t,b++, i++);
-		break;	    
-	    case WHITE: 
-		i++; 
 		break;
-	    case RED: 
+	    case WHITE:
+		i++;
+		break;
+	    case RED:
 		swap(t,--r, i);
 		break;
 	    }
@@ -111,7 +115,7 @@ class FlagStatic {
 
 
 /*
-Local Variables: 
-compile-command: "make FlagStatic"
-End: 
+Local Variables:
+compile-command: "make FlagStatic.why3ml"
+End:
 */

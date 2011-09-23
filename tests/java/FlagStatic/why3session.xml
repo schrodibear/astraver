@@ -1,0 +1,908 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<why3session
+ name="FlagStatic/why3session.xml">
+ <prover
+  id="alt-ergo"
+  name="Alt-Ergo"
+  version="0.93"/>
+ <prover
+  id="coq"
+  name="Coq"
+  version="8.3pl2"/>
+ <prover
+  id="cvc3"
+  name="CVC3"
+  version="2.2"/>
+ <prover
+  id="gappa"
+  name="Gappa"
+  version="0.15.0"/>
+ <prover
+  id="simplify"
+  name="Simplify"
+  version="1.5.4"/>
+ <prover
+  id="spass"
+  name="Spass"
+  version="3.7"/>
+ <prover
+  id="vampire"
+  name="Vampire"
+  version="0.6"/>
+ <prover
+  id="yices"
+  name="Yices"
+  version="1.0.25"/>
+ <prover
+  id="z3"
+  name="Z3"
+  version="2.19"/>
+ <file
+  name="../FlagStatic.mlw"
+  verified="true"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="WP Jessie_program"
+   verified="true"
+   expanded="true">
+   <goal
+    name="WP_parameter _FlagStatic_flag_ensures_default"
+    expl="Method flag, default behavior"
+    sum="6e33aa1016d3b106b8c07d3da0641927"
+    proved="true"
+    expanded="true"
+    shape="LaselectV7ashiftV0V5iainfix =V8a_FlagStatic_BLUEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V10V4Aainfix <=V9V10Aainfix <=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V12a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V12V4Aainfix <=V6V12Aainfix <=c0V6Aais_color_arrayV0V2V7Iainfix =V12ainfix +V5c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDais_monochromeV0V13ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV14Aais_monochromeV0V6V5a_FlagStatic_WHITEV14Aais_monochromeV0c0V6a_FlagStatic_BLUEV14Aainfix <=V13ainfix +aoffset_maxV2V0c1Aainfix <=V5V13Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V14Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V13V13Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V13Aainfix =aselectV14ashiftV0V13aselectV7ashiftV0V5FIainfix =V13ainfix -V4c1Fais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7Iainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFAais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix <=V3ainfix +aoffset_maxV2V0c1Aainfix <=c0V3Aainfix <=c0c0Aainfix <=c0c0Aais_color_arrayV0V2V1Iainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+    <transf
+     name="split_goal"
+     proved="true"
+     expanded="true">
+     <goal
+      name="WP_parameter _FlagStatic_flag_ensures_default.1"
+      expl="loop invariant init"
+      sum="8878ec88d90b645624a5027600f4bd44"
+      proved="true"
+      expanded="false"
+      shape="ais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix <=V3ainfix +aoffset_maxV2V0c1Aainfix <=c0V3Aainfix <=c0c0Aainfix <=c0c0Aais_color_arrayV0V2V1Iainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _FlagStatic_flag_ensures_default.2"
+      expl="loop invariant preservation"
+      sum="61359465f33ec322cb59852c593c4f56"
+      proved="true"
+      expanded="true"
+      shape="LaselectV7ashiftV0V5ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V10V4Aainfix <=V9V10Aainfix <=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+      <transf
+       name="split_goal"
+       proved="true"
+       expanded="true">
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.2.1"
+        expl="Method flag, default behavior"
+        sum="c0a07ee152bd3f1dc8cbedfce14cceaf"
+        proved="true"
+        expanded="true"
+        shape="LaselectV7ashiftV0V5ais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <transf
+         name="inline_goal"
+         proved="true"
+         expanded="true">
+         <goal
+          name="WP_parameter _FlagStatic_flag_ensures_default.2.1.1"
+          expl="Method flag, default behavior"
+          sum="84144c0d1e6588d012ecece15be1cae7"
+          proved="true"
+          expanded="true"
+          shape="LaselectV7ashiftV0V5ais_coloraselectV11ashiftV0V12Iainfix <V12ainfix +aoffset_maxV2V0c1Aainfix <=c0V12FAa_Non_null_intMV0V2Iainfix =aselectV11V13aselectV7V13Iain_psetV13apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6NAavalidV2V13FAainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8c1Iainfix <V5V4Iainfix =aselectV7ashiftV0V14a_FlagStatic_REDIainfix <V14ainfix +aoffset_maxV2V0c1Aainfix <=V4V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_WHITEIainfix <V15V5Aainfix <=V6V15FAainfix =aselectV7ashiftV0V16a_FlagStatic_BLUEIainfix <V16V6Aainfix <=c0V16FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix <V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix <V5V4Aainfix =V6V5Oainfix <V6V5Aainfix =c0V6Oainfix <c0V6Aais_coloraselectV7ashiftV0V17Iainfix <V17ainfix +aoffset_maxV2V0c1Aainfix <=c0V17FAa_Non_null_intMV0V2FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix <=c0V3Aainfix =V3c2147483647Oainfix <V3c2147483647FIais_coloraselectV1ashiftV0V18Iainfix <V18ainfix +aoffset_maxV2V0c1Aainfix <=c0V18FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FFF">
+          <proof
+           prover="z3"
+           timelimit="5"
+           edited=""
+           obsolete="false">
+           <result status="valid" time="0.77"/>
+          </proof>
+         </goal>
+        </transf>
+       </goal>
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.2.2"
+        expl="Method flag, default behavior"
+        sum="783d09090f785f03c9ae6870e742a267"
+        proved="true"
+        expanded="false"
+        shape="LaselectV7ashiftV0V5ainfix <=c0V9Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <proof
+         prover="cvc3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.2.3"
+        expl="Method flag, default behavior"
+        sum="0274600dfc867efc9c00742494238c6c"
+        proved="true"
+        expanded="false"
+        shape="LaselectV7ashiftV0V5ainfix <=V9V10Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <proof
+         prover="cvc3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.2.4"
+        expl="Method flag, default behavior"
+        sum="bfbd2ba90bb48d8ac430536d96d406ae"
+        proved="true"
+        expanded="false"
+        shape="LaselectV7ashiftV0V5ainfix <=V10V4Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <proof
+         prover="cvc3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.02"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.2.5"
+        expl="Method flag, default behavior"
+        sum="17071c06bd96aff03be0d4906ac22f73"
+        proved="true"
+        expanded="false"
+        shape="LaselectV7ashiftV0V5ainfix <=V4ainfix +aoffset_maxV2V0c1Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <proof
+         prover="cvc3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.02"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.2.6"
+        expl="Method flag, default behavior"
+        sum="08480583b294fc801a04a3a6aa308b0c"
+        proved="true"
+        expanded="false"
+        shape="LaselectV7ashiftV0V5ais_monochromeV0c0V9a_FlagStatic_BLUEV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="1.29"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.2.7"
+        expl="Method flag, default behavior"
+        sum="087d01f73cba89e553ac30afcce46eb7"
+        proved="true"
+        expanded="false"
+        shape="LaselectV7ashiftV0V5ais_monochromeV0V9V10a_FlagStatic_WHITEV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="1.24"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.2.8"
+        expl="Method flag, default behavior"
+        sum="2f49e0cc5f0f6f5d3c4f309e6ea17d6c"
+        proved="true"
+        expanded="false"
+        shape="LaselectV7ashiftV0V5ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="1.32"/>
+        </proof>
+       </goal>
+      </transf>
+     </goal>
+     <goal
+      name="WP_parameter _FlagStatic_flag_ensures_default.3"
+      expl="loop invariant preservation"
+      sum="ff0cc81bf9cfbb98eac0858cd2581df0"
+      proved="true"
+      expanded="false"
+      shape="LaselectV7ashiftV0V5ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V9V4Aainfix <=V6V9Aainfix <=c0V6Aais_color_arrayV0V2V7Iainfix =V9ainfix +V5c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.16"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _FlagStatic_flag_ensures_default.4"
+      expl="loop invariant preservation"
+      sum="b031621abb2cd1fc71573cd1a1b0dea3"
+      proved="true"
+      expanded="true"
+      shape="LaselectV7ashiftV0V5ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Aais_monochromeV0V6V5a_FlagStatic_WHITEV10Aais_monochromeV0c0V6a_FlagStatic_BLUEV10Aainfix <=V9ainfix +aoffset_maxV2V0c1Aainfix <=V5V9Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+      <transf
+       name="split_goal"
+       proved="true"
+       expanded="true">
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.4.1"
+        expl="Method flag, default behavior"
+        sum="cf573bab9c0be7bfa6500f24ec180f4f"
+        proved="true"
+        expanded="true"
+        shape="LaselectV7ashiftV0V5ais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <transf
+         name="inline_goal"
+         proved="true"
+         expanded="true">
+         <goal
+          name="WP_parameter _FlagStatic_flag_ensures_default.4.1.1"
+          expl="Method flag, default behavior"
+          sum="65c8eb32f69baafc26524039ffda8023"
+          proved="true"
+          expanded="true"
+          shape="LaselectV7ashiftV0V5ais_coloraselectV10ashiftV0V11Iainfix <V11ainfix +aoffset_maxV2V0c1Aainfix <=c0V11FAa_Non_null_intMV0V2Iainfix =aselectV10V12aselectV7V12Iain_psetV12apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9NAavalidV2V12FAainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix +V4aprefix -c1FIainfix =V8c1Oainfix =V8c2Oainfix =V8c3Iainfix =V8c1Oainfix =V8c2NIainfix =V8c1NIainfix <V5V4Iainfix =aselectV7ashiftV0V13a_FlagStatic_REDIainfix <V13ainfix +aoffset_maxV2V0c1Aainfix <=V4V13FAainfix =aselectV7ashiftV0V14a_FlagStatic_WHITEIainfix <V14V5Aainfix <=V6V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_BLUEIainfix <V15V6Aainfix <=c0V15FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix <V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix <V5V4Aainfix =V6V5Oainfix <V6V5Aainfix =c0V6Oainfix <c0V6Aais_coloraselectV7ashiftV0V16Iainfix <V16ainfix +aoffset_maxV2V0c1Aainfix <=c0V16FAa_Non_null_intMV0V2FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix <=c0V3Aainfix =V3c2147483647Oainfix <V3c2147483647FIais_coloraselectV1ashiftV0V17Iainfix <V17ainfix +aoffset_maxV2V0c1Aainfix <=c0V17FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FFF">
+          <proof
+           prover="z3"
+           timelimit="5"
+           edited=""
+           obsolete="false">
+           <result status="valid" time="1.22"/>
+          </proof>
+         </goal>
+        </transf>
+       </goal>
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.4.2"
+        expl="Method flag, default behavior"
+        sum="2d9e2f14218010cb28890db3331b9b91"
+        proved="true"
+        expanded="false"
+        shape="LaselectV7ashiftV0V5ainfix <=c0V6Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <proof
+         prover="cvc3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.4.3"
+        expl="Method flag, default behavior"
+        sum="862bf43073d5c61c68508f7da5a1fcd9"
+        proved="true"
+        expanded="false"
+        shape="LaselectV7ashiftV0V5ainfix <=V6V5Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <proof
+         prover="cvc3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.4.4"
+        expl="Method flag, default behavior"
+        sum="e8cdb951eeb0aa27ced3ffa73ddba86d"
+        proved="true"
+        expanded="false"
+        shape="LaselectV7ashiftV0V5ainfix <=V5V9Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <proof
+         prover="cvc3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.4.5"
+        expl="Method flag, default behavior"
+        sum="d099ec81f4de38eb22e26a41fdc48654"
+        proved="true"
+        expanded="false"
+        shape="LaselectV7ashiftV0V5ainfix <=V9ainfix +aoffset_maxV2V0c1Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <proof
+         prover="cvc3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.4.6"
+        expl="Method flag, default behavior"
+        sum="13b3d798589262470147d2921691c42a"
+        proved="true"
+        expanded="false"
+        shape="LaselectV7ashiftV0V5ais_monochromeV0c0V6a_FlagStatic_BLUEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="1.11"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.4.7"
+        expl="Method flag, default behavior"
+        sum="a456bc6eded00e9d2274b8a3da302d80"
+        proved="true"
+        expanded="false"
+        shape="LaselectV7ashiftV0V5ais_monochromeV0V6V5a_FlagStatic_WHITEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="1.39"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.4.8"
+        expl="Method flag, default behavior"
+        sum="86e3dab8deadca8169f05fe2d8f28a40"
+        proved="true"
+        expanded="false"
+        shape="LaselectV7ashiftV0V5ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="1.45"/>
+        </proof>
+       </goal>
+      </transf>
+     </goal>
+     <goal
+      name="WP_parameter _FlagStatic_flag_ensures_default.5"
+      expl="loop invariant preservation"
+      sum="9e24277fb1a0b2923301ffec24dc073f"
+      proved="true"
+      expanded="false"
+      shape="LaselectV7ashiftV0V5ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7Iainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDNIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+   <goal
+    name="WP_parameter _FlagStatic_flag_ensures_sorts"
+    expl="normal postcondition"
+    sum="8690ed5bf17396145df92ca0c6fbe0e5"
+    proved="true"
+    expanded="false"
+    shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V8V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V8a_FlagStatic_BLUEV7EEIainfix <V5V4NIais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _FlagStatic_flag_safety"
+    expl="index bounds"
+    sum="37dc13e129358622a0265dd554bb72bb"
+    proved="true"
+    expanded="false"
+    shape="LaselectV7ashiftV0V5iainfix =V8a_FlagStatic_BLUEainfix <ainfix -V4V10ainfix -V4V5Aainfix <=c0ainfix -V4V5Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FAainfix <V5ainfix +aoffset_maxV2V0c1Aainfix <=c0V5Aainfix <V6ainfix +aoffset_maxV2V0c1Aainfix <=c0V6Iainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEainfix <ainfix -V4V12ainfix -V4V5Aainfix <=c0ainfix -V4V5Iainfix =V12ainfix +V5c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDainfix <ainfix -V13V5ainfix -V4V5Aainfix <=c0ainfix -V4V5Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V13V13Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V13Aainfix =aselectV14ashiftV0V13aselectV7ashiftV0V5FAainfix <V5ainfix +aoffset_maxV2V0c1Aainfix <=c0V5Aainfix <V13ainfix +aoffset_maxV2V0c1Aainfix <=c0V13Iainfix =V13ainfix -V4c1Fainfix <ainfix -V4V5ainfix -V4V5Aainfix <=c0ainfix -V4V5Aainfix <=V5aoffset_maxV2V0Aainfix <=aoffset_minV2V0V5Iainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FAainfix >=aoffset_maxV2V0aprefix -c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.18"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _FlagStatic_isMonochrome_ensures_decides_monochromatic"
+    expl="Method isMonochrome, Behavior `decides_monochromatic'"
+    sum="6296fe1c3c09481a771eba46db8f70e9"
+    proved="true"
+    expanded="false"
+    shape="iainfix <V6V2ais_monochromeV0V1V2V3V4qainfix =V7aTrueIainfix =V7aTrueNFIainfix =aselectV4ashiftV0V6V3Nais_monochromeV0V1V2V3V4qainfix =V8aTrueIainfix =V8aTrueFIainfix =aselectV4ashiftV0V9V3Iainfix <V9V6Aainfix <=V1V9FAainfix <=V1V6FIainfix <=V2ainfix +aoffset_maxV5V0c1Aainfix <=V1V2Aainfix <=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FFFFFF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.13"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _FlagStatic_isMonochrome_ensures_default"
+    expl="Method isMonochrome, default behavior"
+    sum="70b8fdd5b290753041cb52ac98407221"
+    proved="true"
+    expanded="false"
+    shape="ainfix =aselectV4ashiftV0V8V3Iainfix <V8V7Aainfix <=V1V8FAainfix <=V1V7Iainfix =V7ainfix +V6c1FIainfix =aselectV4ashiftV0V6V3Iainfix <V6V2Iainfix =aselectV4ashiftV0V9V3Iainfix <V9V6Aainfix <=V1V9FAainfix <=V1V6FAainfix =aselectV4ashiftV0V10V3Iainfix <V10V1Aainfix <=V1V10FAainfix <=V1V1Iainfix <=V2ainfix +aoffset_maxV5V0c1Aainfix <=V1V2Aainfix <=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FFFFFF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _FlagStatic_isMonochrome_safety"
+    expl="Method isMonochrome, Safety"
+    sum="a00472aeee99e6b18821e5623850df75"
+    proved="true"
+    expanded="false"
+    shape="ainfix <ainfix -V2V7ainfix -V2V6Aainfix <=c0ainfix -V2V6Iainfix =V7ainfix +V6c1FIainfix =aselectV4ashiftV0V6V3Aainfix <=V6aoffset_maxV5V0Aainfix <=aoffset_minV5V0V6Iainfix <V6V2Iainfix =aselectV4ashiftV0V8V3Iainfix <V8V6Aainfix <=V1V8FAainfix <=V1V6FIainfix <=V2ainfix +aoffset_maxV5V0c1Aainfix <=V1V2Aainfix <=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FFFFFF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _FlagStatic_swap_ensures_default"
+    expl="Method swap, default behavior"
+    sum="333ed301067cb86ee2b63020a670781c"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _FlagStatic_swap_ensures_i_j_swapped"
+    expl="normal postcondition"
+    sum="76368626eea3d898a1a1c34093c25f26"
+    proved="true"
+    expanded="false"
+    shape="anot_assignsV4V3V6apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV6ashiftV0V2aselectV3ashiftV0V1Aainfix =aselectV6ashiftV0V1aselectV3ashiftV0V2Iainfix =V6astoreV5ashiftV0V2aselectV3ashiftV0V1FIainfix =V5astoreV3ashiftV0V1aselectV3ashiftV0V2FIainfix <V2ainfix +aoffset_maxV4V0c1Aainfix <=c0V2Aainfix <V1ainfix +aoffset_maxV4V0c1Aainfix <=c0V1Aaleft_valid_struct_intMV0c0V4FFFFF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="2.19"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.41"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.22"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _FlagStatic_swap_safety"
+    expl="Method swap, Safety"
+    sum="17b86fa7246aeb6b758b24ea3c5d5ccf"
+    proved="true"
+    expanded="false"
+    shape="ainfix <=V2aoffset_maxV4V0Aainfix <=aoffset_minV4V0V2Iainfix =V5astoreV3ashiftV0V1aselectV3ashiftV0V2FAainfix <=V1aoffset_maxV4V0Aainfix <=aoffset_minV4V0V1Aainfix <=V2aoffset_maxV4V0Aainfix <=aoffset_minV4V0V2Aainfix <=V1aoffset_maxV4V0Aainfix <=aoffset_minV4V0V1Iainfix <V2ainfix +aoffset_maxV4V0c1Aainfix <=c0V2Aainfix <V1ainfix +aoffset_maxV4V0c1Aainfix <=c0V1Aaleft_valid_struct_intMV0c0V4FFFFF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_FlagStatic_ensures_default"
+    expl="Constructor of class FlagStatic, default behavior"
+    sum="9d92669293ef31d79ca9400e62f8c650"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_FlagStatic_safety"
+    expl="Constructor of class FlagStatic, Safety"
+    sum="7518ca00c34845a5773d073974c32579"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Object_ensures_default"
+    expl="Constructor of class Object, default behavior"
+    sum="9bbb5b4023a0bae8d8b77303e24a059f"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Object_safety"
+    expl="Constructor of class Object, Safety"
+    sum="6e3b64f1aeedae34255e39d87d0d79d4"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+  </theory>
+ </file>
+</why3session>

@@ -48,12 +48,6 @@ type padding
 
 type voidP
 
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
-
 logic charP_tag:  -> charP tag_id
 
 axiom charP_int : (int_of_tag(charP_tag) = (1))
@@ -81,6 +75,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -130,16 +129,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -174,41 +163,11 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -267,14 +226,13 @@ parameter any_int8 : unit -> { } int8 { true }
 parameter f :
  p:charP pointer ->
   charP_charM_p_1:(charP, int8) memory ->
-   { } unit
-   { (JC_<somenum>: neq_int(integer_of_int8(select(charP_charM_p_1, p@)), (0))) }
+   { } unit { (JC_<somenum>: (integer_of_int8(select(charP_charM_p_1, p)) <> (0))) }
 
 parameter f_requires :
  p:charP pointer ->
   charP_charM_p_1:(charP, int8) memory ->
-   { (JC_<somenum>: eq_int(integer_of_int8(select(charP_charM_p_1, p)), (1)))} unit
-   { (JC_<somenum>: neq_int(integer_of_int8(select(charP_charM_p_1, p@)), (0))) }
+   { (JC_<somenum>: (integer_of_int8(select(charP_charM_p_1, p)) = (1)))} unit
+   { (JC_<somenum>: (integer_of_int8(select(charP_charM_p_1, p)) <> (0))) }
 
 parameter int8_of_integer_ :
  x:int ->
@@ -286,7 +244,7 @@ parameter safe_int8_of_integer_ :
 
 let f_ensures_default =
  fun (p : charP pointer) (charP_charM_p_1 : (charP, int8) memory) ->
-  { (JC_<somenum>: eq_int(integer_of_int8(select(charP_charM_p_1, p)), (1))) }
+  { (JC_<somenum>: (integer_of_int8(select(charP_charM_p_1, p)) = (1))) }
   (let mutable_p = ref p in
   (init:
   try
@@ -295,11 +253,11 @@ let f_ensures_default =
      (let jessie_<somenum> =
      (mutable_p := (C_1: ((shift !mutable_p) (neg_int (1))))) in void);
     (raise Return); (raise Return) end) with Return -> void end))
-  { (JC_<somenum>: neq_int(integer_of_int8(select(charP_charM_p_1, p@)), (0))) }
+  { (JC_<somenum>: (integer_of_int8(select(charP_charM_p_1, p)) <> (0))) }
 
 let f_safety =
  fun (p : charP pointer) (charP_charM_p_1 : (charP, int8) memory) ->
-  { (JC_<somenum>: eq_int(integer_of_int8(select(charP_charM_p_1, p)), (1))) }
+  { (JC_<somenum>: (integer_of_int8(select(charP_charM_p_1, p)) = (1))) }
   (let mutable_p = ref p in
   (init:
   try
@@ -315,7 +273,7 @@ why --project [...] why/minusminus.why
 <project name="minusminus" context="why/minusminus_ctx.why">
   <function name="Function f">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/minusminus_po1.why">
       <location file = "PPCHOME/tests/jessie/minusminus.c" line = "26" begin = "12" end = "19"/>
       <explain kind = "Post"/>
@@ -1289,6 +1247,10 @@ axiom int8_coerce:
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
 
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
+
 axiom int8_range:
   (forall x:int8.
     (((-128) <= integer_of_int8(x)) and (integer_of_int8(x) <= 127)))
@@ -1336,16 +1298,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

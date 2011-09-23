@@ -44,14 +44,14 @@ predicate disjoint_arrays(intP[..] a, intP[..] b, integer i) =
       ((a + k1) != (b + k2)))))
 
 unit array_cpy(intP[..] a, int32 n, intP[..] b)
-  requires (C_24 : (0 < n));
-  requires (C_17 : (((C_19 : (\offset_min(a) <= 0)) &&
-                      (C_20 : (\offset_max(a) >= (n - 1)))) &&
-                     ((C_22 : (\offset_min(b) <= 0)) &&
-                       (C_23 : (\offset_max(b) >= (n - 1))))));
-  requires (C_16 : disjoint_arrays(a, b, n));
+  requires (C_25 : (0 < n));
+  requires (C_18 : (((C_20 : (\offset_min(a) <= 0)) &&
+                      (C_21 : (\offset_max(a) >= (n - 1)))) &&
+                     ((C_23 : (\offset_min(b) <= 0)) &&
+                       (C_24 : (\offset_max(b) >= (n - 1))))));
+  requires (C_17 : disjoint_arrays(a, b, n));
 behavior default:
-  ensures (C_15 : (\forall int32 k;
+  ensures (C_16 : (\forall int32 k;
                     (((0 <= k) && (k < \at(n,Old))) ==>
                       ((\at(a,Old) + k).intM == \at((b + k).intM,Old)))));
 {  
@@ -61,21 +61,22 @@ behavior default:
       
       loop 
       behavior default:
-        invariant (C_4 : ((C_5 : (0 <= i)) && (C_6 : (i <= n))));
+        invariant (C_5 : ((C_6 : (0 <= i)) && (C_7 : (i <= n))));
       behavior default:
-        invariant (C_3 : (\forall int32 m;
+        invariant (C_4 : (\forall int32 m;
                            (((0 <= m) && (m < n)) ==>
                              ((b + m).intM == \at((b + m).intM,Pre)))));
       behavior default:
-        invariant (C_2 : (\forall int32 m_0;
+        invariant (C_3 : (\forall int32 m_0;
                            (((0 <= m_0) && (m_0 < i)) ==>
                              ((a + m_0).intM == (b + m_0).intM))));
+      variant (C_2 : (n - i));
       while (true)
       {  
          {  (if (i < n) then () else 
             (goto while_0_break));
-            (C_11 : ((C_10 : (C_9 : (a + i)).intM) = (C_8 : (C_7 : (b + i)).intM)));
-            (C_14 : (i = (C_13 : ((C_12 : (i + 1)) :> int32))))
+            (C_12 : ((C_11 : (C_10 : (a + i)).intM) = (C_9 : (C_8 : (b + i)).intM)));
+            (C_15 : (i = (C_14 : ((C_13 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
@@ -95,14 +96,6 @@ type intP
 type padding
 
 type voidP
-
-exception Goto_while_0_break_exc of unit
-
-exception Loop_continue_exc of unit
-
-exception Loop_exit_exc of unit
-
-exception Return_label_exc of unit
 
 logic charP_tag:  -> charP tag_id
 
@@ -144,6 +137,11 @@ axiom int32_coerce :
   ((le_int((-2147483648), x) and le_int(x, (2147483647))) ->
    eq_int(integer_of_int32(int32_of_integer(x)), x)))
 
+axiom int32_extensionality :
+ (forall x:int32.
+  (forall y:int32.
+   (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range :
  (forall x:int32.
   (le_int((-2147483648), integer_of_int32(x))
@@ -155,6 +153,11 @@ axiom int8_coerce :
  (forall x:int.
   ((le_int((-128), x) and le_int(x, (127))) ->
    eq_int(integer_of_int8(int8_of_integer(x)), x)))
+
+axiom int8_extensionality :
+ (forall x:int8.
+  (forall y:int8.
+   (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
  (forall x:int8.
@@ -239,21 +242,6 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
-predicate valid_bitvector_struct_charP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p:unit pointer, a:int, b:int,
- bitvector_alloc_table:unit alloc_table) =
- ((offset_min(bitvector_alloc_table, p) = a)
- and (offset_max(bitvector_alloc_table, p) = b))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -298,59 +286,13 @@ axiom voidP_tags :
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
 
-parameter alloc_bitvector_struct_charP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Goto_while_0_break_exc of unit
 
-parameter alloc_bitvector_struct_charP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_charP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_continue_exc of unit
 
-parameter alloc_bitvector_struct_intP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Loop_exit_exc of unit
 
-parameter alloc_bitvector_struct_intP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_intP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { } unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
-
-parameter alloc_bitvector_struct_voidP_requires :
- n:int ->
-  bitvector_alloc_table:unit alloc_table ref ->
-   { ge_int(n, (0))} unit pointer writes bitvector_alloc_table
-   { (valid_bitvector_struct_voidP(result, (0), sub_int(n, (1)),
-      bitvector_alloc_table)
-     and (alloc_extends(bitvector_alloc_table@, bitvector_alloc_table)
-         and alloc_fresh(bitvector_alloc_table@, result, n))) }
+exception Return_label_exc of unit
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -439,49 +381,47 @@ parameter array_cpy :
   n:int32 ->
    b_0:intP pointer ->
     intP_intM_a_3:(intP, int32) memory ref ->
-     intP_b_4_alloc_table:intP alloc_table ->
-      intP_a_3_alloc_table:intP alloc_table ->
-       intP_intM_b_4:(intP, int32) memory ->
-        { } unit reads intP_intM_a_3 writes intP_intM_a_3
-        { (JC_<somenum>:
-          (forall k:int32.
-           ((le_int((0), integer_of_int32(k))
-            and lt_int(integer_of_int32(k), integer_of_int32(n@))) ->
-            eq_int(integer_of_int32(select(intP_intM_a_3,
-                                    shift(a_0@, integer_of_int32(k)))),
-            integer_of_int32(select(intP_intM_b_4@,
-                             shift(b_0@, integer_of_int32(k@)))))))) }
+     intP_a_3_alloc_table:intP alloc_table ->
+      { } unit reads intP_intM_a_3 writes intP_intM_a_3
+      { (JC_<somenum>:
+        (forall k:int32.
+         ((le_int((0), integer_of_int32(k))
+          and lt_int(integer_of_int32(k), integer_of_int32(n))) ->
+          (integer_of_int32(select(intP_intM_a_3,
+                            shift(a_0, integer_of_int32(k)))) = integer_of_int32(
+                                                                select(intP_intM_a_3@,
+                                                                shift(b_0,
+                                                                integer_of_int32(k)))))))) }
 
 parameter array_cpy_requires :
  a_0:intP pointer ->
   n:int32 ->
    b_0:intP pointer ->
     intP_intM_a_3:(intP, int32) memory ref ->
-     intP_b_4_alloc_table:intP alloc_table ->
-      intP_a_3_alloc_table:intP alloc_table ->
-       intP_intM_b_4:(intP, int32) memory ->
-        { (JC_<somenum>:
-          ((JC_<somenum>: lt_int((0), integer_of_int32(n)))
-          and ((JC_<somenum>: le_int(offset_min(intP_a_3_alloc_table, a_0), (0)))
-              and ((JC_<somenum>:
-                   ge_int(offset_max(intP_a_3_alloc_table, a_0),
-                   sub_int(integer_of_int32(n), (1))))
-                  and ((JC_<somenum>:
-                       le_int(offset_min(intP_b_4_alloc_table, b_0), (0)))
-                      and ((JC_<somenum>:
-                           ge_int(offset_max(intP_b_4_alloc_table, b_0),
-                           sub_int(integer_of_int32(n), (1))))
-                          and (JC_<somenum>:
-                              disjoint_arrays(a_0, b_0, integer_of_int32(n)))))))))}
-        unit reads intP_intM_a_3 writes intP_intM_a_3
-        { (JC_<somenum>:
-          (forall k:int32.
-           ((le_int((0), integer_of_int32(k))
-            and lt_int(integer_of_int32(k), integer_of_int32(n@))) ->
-            eq_int(integer_of_int32(select(intP_intM_a_3,
-                                    shift(a_0@, integer_of_int32(k)))),
-            integer_of_int32(select(intP_intM_b_4@,
-                             shift(b_0@, integer_of_int32(k@)))))))) }
+     intP_a_3_alloc_table:intP alloc_table ->
+      { (JC_<somenum>:
+        ((JC_<somenum>: lt_int((0), integer_of_int32(n)))
+        and ((JC_<somenum>: le_int(offset_min(intP_a_3_alloc_table, a_0), (0)))
+            and ((JC_<somenum>:
+                 ge_int(offset_max(intP_a_3_alloc_table, a_0),
+                 sub_int(integer_of_int32(n), (1))))
+                and ((JC_<somenum>:
+                     le_int(offset_min(intP_a_3_alloc_table, b_0), (0)))
+                    and ((JC_<somenum>:
+                         ge_int(offset_max(intP_a_3_alloc_table, b_0),
+                         sub_int(integer_of_int32(n), (1))))
+                        and (JC_<somenum>:
+                            disjoint_arrays(a_0, b_0, integer_of_int32(n)))))))))}
+      unit reads intP_intM_a_3 writes intP_intM_a_3
+      { (JC_<somenum>:
+        (forall k:int32.
+         ((le_int((0), integer_of_int32(k))
+          and lt_int(integer_of_int32(k), integer_of_int32(n))) ->
+          (integer_of_int32(select(intP_intM_a_3,
+                            shift(a_0, integer_of_int32(k)))) = integer_of_int32(
+                                                                select(intP_intM_a_3@,
+                                                                shift(b_0,
+                                                                integer_of_int32(k)))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -500,16 +440,16 @@ parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
 let array_cpy_ensures_default =
- fun (a_0 : intP pointer) (n : int32) (b_0 : intP pointer) (intP_intM_a_3 : (intP, int32) memory ref) (intP_a_3_alloc_table : intP alloc_table) (intP_b_4_alloc_table : intP alloc_table) (intP_intM_b_4 : (intP, int32) memory) ->
+ fun (a_0 : intP pointer) (n : int32) (b_0 : intP pointer) (intP_intM_a_3 : (intP, int32) memory ref) (intP_a_3_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
     ((JC_<somenum>: lt_int((0), integer_of_int32(n)))
     and ((JC_<somenum>: le_int(offset_min(intP_a_3_alloc_table, a_0), (0)))
         and ((JC_<somenum>:
              ge_int(offset_max(intP_a_3_alloc_table, a_0),
              sub_int(integer_of_int32(n), (1))))
-            and ((JC_<somenum>: le_int(offset_min(intP_b_4_alloc_table, b_0), (0)))
+            and ((JC_<somenum>: le_int(offset_min(intP_a_3_alloc_table, b_0), (0)))
                 and ((JC_<somenum>:
-                     ge_int(offset_max(intP_b_4_alloc_table, b_0),
+                     ge_int(offset_max(intP_a_3_alloc_table, b_0),
                      sub_int(integer_of_int32(n), (1))))
                     and (JC_<somenum>:
                         disjoint_arrays(a_0, b_0, integer_of_int32(n))))))))) }
@@ -518,7 +458,6 @@ let array_cpy_ensures_default =
    begin
      (let i_0 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       begin
         (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
@@ -529,18 +468,18 @@ let array_cpy_ensures_default =
             (forall m_0:int32.
              ((le_int((0), integer_of_int32(m_0))
               and lt_int(integer_of_int32(m_0), integer_of_int32(i_0))) ->
-              eq_int(integer_of_int32(select(intP_intM_a_3,
-                                      shift(a_0, integer_of_int32(m_0)))),
-              integer_of_int32(select(intP_intM_b_4,
+              (integer_of_int32(select(intP_intM_a_3,
+                                shift(a_0, integer_of_int32(m_0)))) = 
+              integer_of_int32(select(intP_intM_a_3,
                                shift(b_0, integer_of_int32(m_0))))))))
            and ((JC_<somenum>:
                 (forall m:int32.
                  ((le_int((0), integer_of_int32(m))
                   and lt_int(integer_of_int32(m), integer_of_int32(n))) ->
-                  eq_int(integer_of_int32(select(intP_intM_b_4,
-                                          shift(b_0, integer_of_int32(m)))),
-                  integer_of_int32(select(intP_intM_b_4@init,
-                                   shift(b_0@init, integer_of_int32(m@init))))))))
+                  (integer_of_int32(select(intP_intM_a_3,
+                                    shift(b_0, integer_of_int32(m)))) = 
+                  integer_of_int32(select(intP_intM_a_3@init,
+                                   shift(b_0, integer_of_int32(m))))))))
                and (JC_<somenum>:
                    ((JC_<somenum>: le_int((0), integer_of_int32(i_0)))
                    and (JC_<somenum>:
@@ -549,55 +488,52 @@ let array_cpy_ensures_default =
         begin
           [ { } unit { true } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
-            (C_11:
-            (C_14:
+            (C_12:
+            (C_15:
             begin
               (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 n))
-              then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in
-               void));
+              then void else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (let jessie_<somenum> =
-             (C_8:
-             ((safe_acc_ intP_intM_b_4) (C_7:
-                                        ((shift b_0) (integer_of_int32 !i_0))))) in
+             (C_9:
+             ((safe_acc_ !intP_intM_a_3) (C_8:
+                                         ((shift b_0) (integer_of_int32 !i_0))))) in
              (let jessie_<somenum> = a_0 in
              (let jessie_<somenum> = (integer_of_int32 !i_0) in
              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
              (((safe_upd_ intP_intM_a_3) jessie_<somenum>) jessie_<somenum>))))) in void);
-             (i_0 := (C_13:
-                     (safe_int32_of_integer_ (C_12:
+             (i_0 := (C_14:
+                     (safe_int32_of_integer_ (C_13:
                                              ((add_int (integer_of_int32 !i_0)) (1))))));
-             !i_0 end)) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+             !i_0 end)) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end)
   { (JC_<somenum>:
     (forall k:int32.
      ((le_int((0), integer_of_int32(k))
-      and lt_int(integer_of_int32(k), integer_of_int32(n@))) ->
-      eq_int(integer_of_int32(select(intP_intM_a_3,
-                              shift(a_0@, integer_of_int32(k)))),
-      integer_of_int32(select(intP_intM_b_4@,
-                       shift(b_0@, integer_of_int32(k@)))))))) }
+      and lt_int(integer_of_int32(k), integer_of_int32(n))) ->
+      (integer_of_int32(select(intP_intM_a_3,
+                        shift(a_0, integer_of_int32(k)))) = integer_of_int32(
+                                                            select(intP_intM_a_3@,
+                                                            shift(b_0,
+                                                            integer_of_int32(k)))))))) }
 
 let array_cpy_safety =
- fun (a_0 : intP pointer) (n : int32) (b_0 : intP pointer) (intP_intM_a_3 : (intP, int32) memory ref) (intP_a_3_alloc_table : intP alloc_table) (intP_b_4_alloc_table : intP alloc_table) (intP_intM_b_4 : (intP, int32) memory) ->
+ fun (a_0 : intP pointer) (n : int32) (b_0 : intP pointer) (intP_intM_a_3 : (intP, int32) memory ref) (intP_a_3_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
     ((JC_<somenum>: lt_int((0), integer_of_int32(n)))
     and ((JC_<somenum>: le_int(offset_min(intP_a_3_alloc_table, a_0), (0)))
         and ((JC_<somenum>:
              ge_int(offset_max(intP_a_3_alloc_table, a_0),
              sub_int(integer_of_int32(n), (1))))
-            and ((JC_<somenum>: le_int(offset_min(intP_b_4_alloc_table, b_0), (0)))
+            and ((JC_<somenum>: le_int(offset_min(intP_a_3_alloc_table, b_0), (0)))
                 and ((JC_<somenum>:
-                     ge_int(offset_max(intP_b_4_alloc_table, b_0),
+                     ge_int(offset_max(intP_a_3_alloc_table, b_0),
                      sub_int(integer_of_int32(n), (1))))
                     and (JC_<somenum>:
                         disjoint_arrays(a_0, b_0, integer_of_int32(n))))))))) }
@@ -606,52 +542,48 @@ let array_cpy_safety =
    begin
      (let i_0 = ref (any_int32 void) in
      try
-      (let jessie_<somenum> =
       (C_1:
       begin
         (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
        (loop_1:
        while true do
-       { invariant (JC_<somenum>: true) variant (0) }
+       { invariant (JC_<somenum>: true)
+         variant (JC_<somenum> : sub_int(integer_of_int32(n), integer_of_int32(i_0))) }
         begin
           [ { } unit reads i_0,intP_intM_a_3
             { ((JC_<somenum>:
                (forall m_0:int32.
                 ((le_int((0), integer_of_int32(m_0))
                  and lt_int(integer_of_int32(m_0), integer_of_int32(i_0))) ->
-                 eq_int(integer_of_int32(select(intP_intM_a_3,
-                                         shift(a_0, integer_of_int32(m_0)))),
-                 integer_of_int32(select(intP_intM_b_4,
+                 (integer_of_int32(select(intP_intM_a_3,
+                                   shift(a_0, integer_of_int32(m_0)))) = 
+                 integer_of_int32(select(intP_intM_a_3,
                                   shift(b_0, integer_of_int32(m_0))))))))
               and ((JC_<somenum>:
                    (forall m:int32.
                     ((le_int((0), integer_of_int32(m))
                      and lt_int(integer_of_int32(m), integer_of_int32(n))) ->
-                     eq_int(integer_of_int32(select(intP_intM_b_4,
-                                             shift(b_0, integer_of_int32(m)))),
-                     integer_of_int32(select(intP_intM_b_4@init,
-                                      shift(b_0@init,
-                                      integer_of_int32(m@init))))))))
+                     (integer_of_int32(select(intP_intM_a_3,
+                                       shift(b_0, integer_of_int32(m)))) = 
+                     integer_of_int32(select(intP_intM_a_3@init,
+                                      shift(b_0, integer_of_int32(m))))))))
                   and (JC_<somenum>:
                       ((JC_<somenum>: le_int((0), integer_of_int32(i_0)))
                       and (JC_<somenum>:
                           le_int(integer_of_int32(i_0), integer_of_int32(n))))))) } ];
          try
-          (let jessie_<somenum> =
           begin
             (let jessie_<somenum> =
-            (C_11:
-            (C_14:
+            (C_12:
+            (C_15:
             begin
               (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 n))
-              then void
-              else
-               (let jessie_<somenum> = (raise (Goto_while_0_break_exc void)) in void));
+              then void else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (let jessie_<somenum> =
-             (C_8:
+             (C_9:
              (JC_<somenum>:
-             ((((offset_acc_ intP_b_4_alloc_table) intP_intM_b_4) b_0) 
+             ((((offset_acc_ intP_a_3_alloc_table) !intP_intM_a_3) b_0) 
               (integer_of_int32 !i_0)))) in
              (let jessie_<somenum> = a_0 in
              (let jessie_<somenum> = (integer_of_int32 !i_0) in
@@ -659,13 +591,13 @@ let array_cpy_safety =
              (JC_<somenum>:
              (((((offset_upd_ intP_a_3_alloc_table) intP_intM_a_3) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
              void);
-             (i_0 := (C_13:
+             (i_0 := (C_14:
                      (JC_<somenum>:
-                     (int32_of_integer_ (C_12:
+                     (int32_of_integer_ (C_13:
                                         ((add_int (integer_of_int32 !i_0)) (1)))))));
-             !i_0 end)) in void); (raise (Loop_continue_exc void)) end in
-          void) with Loop_continue_exc jessie_<somenum> -> void end end done);
-       (raise (Goto_while_0_break_exc void)) end) in void) with
+             !i_0 end)) in void); (raise (Loop_continue_exc void)) end with
+          Loop_continue_exc jessie_<somenum> -> void end end done);
+       (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end) { true }
@@ -676,47 +608,7 @@ why --project [...] why/weber1.why
 <project name="weber1" context="why/weber1_ctx.why">
   <function name="Function array_cpy">
     <location file = "" line = "0" begin = "0" end = "0"/>
-    <behavior name="Safety">
-    <goal why_file="why/weber1_po8.why">
-      <location file = "PPCHOME/tests/jessie/weber1.c" line = "19" begin = "12" end = "16"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/weber1_po9.why">
-      <location file = "PPCHOME/tests/jessie/weber1.c" line = "19" begin = "12" end = "16"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/weber1_po10.why">
-      <location file = "PPCHOME/tests/jessie/weber1.jessie/weber1.jc" line = "71" begin = "21" end = "81"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/weber1_po11.why">
-      <location file = "PPCHOME/tests/jessie/weber1.jessie/weber1.jc" line = "71" begin = "21" end = "81"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/weber1_po12.why">
-      <location file = "PPCHOME/tests/jessie/weber1.c" line = "18" begin = "26" end = "29"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/weber1_po13.why">
-      <location file = "PPCHOME/tests/jessie/weber1.c" line = "18" begin = "26" end = "29"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/weber1_po14.why">
-      <location file = "why/weber1.why" line = "529" begin = "42" end = "43"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/weber1_po15.why">
-      <location file = "why/weber1.why" line = "529" begin = "42" end = "43"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    </behavior>
-    <behavior name="Default behavior">
+    <behavior name="default behavior">
     <goal why_file="why/weber1_po1.why">
       <location file = "PPCHOME/tests/jessie/weber1.c" line = "16" begin = "22" end = "64"/>
       <explain kind = "LoopInvInit"/>
@@ -734,16 +626,60 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/weber1_po5.why">
-      <location file = "PPCHOME/tests/jessie/weber1.c" line = "14" begin = "22" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "15" begin = "22" end = "73"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/weber1_po6.why">
-      <location file = "PPCHOME/tests/jessie/weber1.c" line = "14" begin = "27" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "14" begin = "22" end = "28"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/weber1_po7.why">
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "14" begin = "27" end = "33"/>
+      <explain kind = "LoopInvPreserv"/>
+    </goal>
+    <goal why_file="why/weber1_po8.why">
       <location file = "PPCHOME/tests/jessie/weber1.c" line = "10" begin = "12" end = "63"/>
       <explain kind = "Post"/>
+    </goal>
+    </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/weber1_po9.why">
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "20" begin = "12" end = "16"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/weber1_po10.why">
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "20" begin = "12" end = "16"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/weber1_po11.why">
+      <location file = "PPCHOME/tests/jessie/weber1.jessie/weber1.jc" line = "72" begin = "21" end = "82"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/weber1_po12.why">
+      <location file = "PPCHOME/tests/jessie/weber1.jessie/weber1.jc" line = "72" begin = "21" end = "82"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/weber1_po13.why">
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "19" begin = "26" end = "29"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/weber1_po14.why">
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "19" begin = "26" end = "29"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/weber1_po15.why">
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "17" begin = "20" end = "23"/>
+      <explain kind = "VarDecr"/>
+    </goal>
+    <goal why_file="why/weber1_po16.why">
+      <location file = "PPCHOME/tests/jessie/weber1.c" line = "17" begin = "20" end = "23"/>
+      <explain kind = "VarDecr"/>
     </goal>
     </behavior>
   </function>
@@ -1729,6 +1665,11 @@ axiom int32_coerce:
     ((((-2147483648) <= x) and (x <= 2147483647)) ->
      (integer_of_int32(int32_of_integer(x)) = x)))
 
+axiom int32_extensionality:
+  (forall x:int32.
+    (forall y:int32.
+      ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
+
 axiom int32_range:
   (forall x:int32.
     (((-2147483648) <= integer_of_int32(x)) and
@@ -1740,6 +1681,10 @@ axiom int8_coerce:
   (forall x:int.
     ((((-128) <= x) and (x <= 127)) ->
      (integer_of_int8(int8_of_integer(x)) = x)))
+
+axiom int8_extensionality:
+  (forall x:int8.
+    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -1825,21 +1770,6 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
-
-predicate valid_bitvector_struct_charP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_intP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
-
-predicate valid_bitvector_struct_voidP(p: unit pointer, a: int, b: int,
-  bitvector_alloc_table: unit alloc_table) =
-  ((offset_min(bitvector_alloc_table, p) = a) and
-   (offset_max(bitvector_alloc_table, p) = b))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
