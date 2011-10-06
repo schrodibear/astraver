@@ -1557,8 +1557,7 @@ end
 
 class debugVoid =
 object
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
   method vterm ts = match ts.term_node with
     | TLval(TResult _,_) -> DoChildren
     | _ ->
@@ -1570,6 +1569,21 @@ let rewrite_void_pointer file =
   let visitor = new rewriteVoidPointer in
   visitFramacFile visitor file
 
+(* Jessie/Why has trouble with Pre labels inside function contracts. *)
+class rewritePreOld =
+object(self)
+  inherit Visitor.frama_c_inplace
+  method vlogic_label l =
+    if Cil_datatype.Logic_label.equal l Logic_const.pre_label
+       && self#current_kinstr = Kglobal (* Do not rewrite Pre in stmt annot. *)
+    then
+      ChangeTo Logic_const.old_label
+    else DoChildren
+end
+
+let rewrite_pre_old file =
+  let visitor = new rewritePreOld in
+  visitFramacFile visitor file
 
 (*****************************************************************************)
 (* Rewrite the C file for Jessie translation.                                *)
@@ -1652,6 +1666,9 @@ let rewrite file =
   (* Rewrite type void* and (un)signed char* into char*. *)
   Jessie_options.debug "Rewrite type void* and (un)signed char* into char*";
   rewrite_void_pointer file;
+  if checking then check_types file;
+  Jessie_options.debug "Rewrite Pre as Old in funspec";
+  rewrite_pre_old file;
   if checking then check_types file;
   (* Rewrite cursor pointers into offsets from base pointers. *)
   (* order: after [rewrite_pointer_compare] *)

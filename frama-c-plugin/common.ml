@@ -608,6 +608,8 @@ object
   method get_filling_actions = visitor#get_filling_actions
   method fill_global_tables = visitor#fill_global_tables
 
+  method vlogic_label = visitor#vlogic_label
+
   (* Modify visitor on functions so that it prepends/postpends statements *)
   method vfunc f =
     adding_statement_mode := true;
