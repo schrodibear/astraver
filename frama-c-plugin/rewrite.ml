@@ -1570,14 +1570,47 @@ let rewrite_void_pointer file =
   visitFramacFile visitor file
 
 (* Jessie/Why has trouble with Pre labels inside function contracts. *)
-class rewritePreOld =
+class rewritePreOld : Visitor.frama_c_visitor =
 object(self)
   inherit Visitor.frama_c_inplace
+  val mutable rep_lab = Logic_const.pre_label
+  method vbehavior b =
+    rep_lab <- Logic_const.here_label;
+    let requires = 
+      Visitor.visitFramacPredicates 
+        (self:>Visitor.frama_c_visitor) b.b_requires 
+    in
+    let assumes =
+      Visitor.visitFramacPredicates 
+        (self:>Visitor.frama_c_visitor) b.b_assumes
+    in
+    rep_lab <- Logic_const.old_label;
+    let assigns =
+      Visitor.visitFramacAssigns 
+        (self:>Visitor.frama_c_visitor) b.b_assigns
+    in
+    let ensures = 
+      Cil.mapNoCopy 
+        (fun (k,p as e) -> 
+          let p' = 
+            Visitor.visitFramacIdPredicate 
+              (self:>Visitor.frama_c_visitor) p
+          in
+          if p != p' then (k,p') else e)
+        b.b_post_cond
+    in
+    b.b_requires <- requires;
+    b.b_assumes <- assumes;
+    b.b_assigns <- assigns;
+    b.b_post_cond <- ensures;
+    rep_lab <- Logic_const.pre_label;
+    SkipChildren
+                           
   method vlogic_label l =
     if Cil_datatype.Logic_label.equal l Logic_const.pre_label
        && self#current_kinstr = Kglobal (* Do not rewrite Pre in stmt annot. *)
     then
-      ChangeTo Logic_const.old_label
+      ChangeTo rep_lab
     else DoChildren
 end
 
