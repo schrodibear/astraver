@@ -1557,8 +1557,7 @@ end
 
 class debugVoid =
 object
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
   method vterm ts = match ts.term_node with
     | TLval(TResult _,_) -> DoChildren
     | _ ->
@@ -1570,6 +1569,54 @@ let rewrite_void_pointer file =
   let visitor = new rewriteVoidPointer in
   visitFramacFile visitor file
 
+(* Jessie/Why has trouble with Pre labels inside function contracts. *)
+class rewritePreOld : Visitor.frama_c_visitor =
+object(self)
+  inherit Visitor.frama_c_inplace
+  val mutable rep_lab = Logic_const.pre_label
+  method vbehavior b =
+    rep_lab <- Logic_const.here_label;
+    let requires = 
+      Visitor.visitFramacPredicates 
+        (self:>Visitor.frama_c_visitor) b.b_requires 
+    in
+    let assumes =
+      Visitor.visitFramacPredicates 
+        (self:>Visitor.frama_c_visitor) b.b_assumes
+    in
+    rep_lab <- Logic_const.old_label;
+    let assigns =
+      Visitor.visitFramacAssigns 
+        (self:>Visitor.frama_c_visitor) b.b_assigns
+    in
+    let ensures = 
+      Cil.mapNoCopy 
+        (fun (k,p as e) -> 
+          let p' = 
+            Visitor.visitFramacIdPredicate 
+              (self:>Visitor.frama_c_visitor) p
+          in
+          if p != p' then (k,p') else e)
+        b.b_post_cond
+    in
+    b.b_requires <- requires;
+    b.b_assumes <- assumes;
+    b.b_assigns <- assigns;
+    b.b_post_cond <- ensures;
+    rep_lab <- Logic_const.pre_label;
+    SkipChildren
+                           
+  method vlogic_label l =
+    if Cil_datatype.Logic_label.equal l Logic_const.pre_label
+       && self#current_kinstr = Kglobal (* Do not rewrite Pre in stmt annot. *)
+    then
+      ChangeTo rep_lab
+    else DoChildren
+end
+
+let rewrite_pre_old file =
+  let visitor = new rewritePreOld in
+  visitFramacFile visitor file
 
 (*****************************************************************************)
 (* Rewrite the C file for Jessie translation.                                *)
@@ -1652,6 +1699,9 @@ let rewrite file =
   (* Rewrite type void* and (un)signed char* into char*. *)
   Jessie_options.debug "Rewrite type void* and (un)signed char* into char*";
   rewrite_void_pointer file;
+  if checking then check_types file;
+  Jessie_options.debug "Rewrite Pre as Old in funspec";
+  rewrite_pre_old file;
   if checking then check_types file;
   (* Rewrite cursor pointers into offsets from base pointers. *)
   (* order: after [rewrite_pointer_compare] *)
