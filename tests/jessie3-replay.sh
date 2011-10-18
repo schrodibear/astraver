@@ -1,17 +1,18 @@
 #!/bin/bash
 
-JAVA="AllZeros Arrays BinarySearch Counter Creation Fibonacci
-      FlagStatic Gcd Hello \
+JAVA="AllZeros ArrayMax Arrays BinarySearch Counter Creation 
+      Fibonacci FlagStatic Gcd Hello \
       Isqrt Literals MacCarthy Muller NameConflicts Negate \
       PreAndOld Purse SelectionSort \
       SideEffects SimpleAlloc Switch \
-      Termination TestNonNull"
+      Termination TestNonNull TreeMax"
 
-JAVATODO="SimpleApplet Sort2 Sort"
+JAVATODO="Duplets SimpleApplet Sort2 Sort"
 
-C="binary_search clock_drift flag floats_bsearch float_sqrt \
+C="array_max binary_search clock_drift duplets \
+   flag floats_bsearch float_sqrt \
    insertion_sort isqrt minmax muller my_cosine quick_sort \
-   rec selection_sort sparse_array2 Sterbenz swap"
+   rec selection_sort sparse_array2 Sterbenz swap tree_max"
 
 CTODO="maze sparse_array heap_sort"
 
