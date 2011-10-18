@@ -15,9 +15,13 @@
   name="CVC3"
   version="2.2"/>
  <prover
+  id="eprover"
+  name="Eprover"
+  version="1.4 Namring"/>
+ <prover
   id="gappa"
   name="Gappa"
-  version="0.15.0"/>
+  version="0.15.1"/>
  <prover
   id="simplify"
   name="Simplify"
@@ -30,6 +34,10 @@
   id="vampire"
   name="Vampire"
   version="0.6"/>
+ <prover
+  id="verit"
+  name="veriT"
+  version="dev"/>
  <prover
   id="yices"
   name="Yices"
@@ -49,7 +57,7 @@
    <goal
     name="distr_right"
     expl="Lemma distr_right, lemma"
-    sum="819c92ae44ad3508a55977484651f5b9"
+    sum="c06b1d76174ba7d038b015f70e49192f"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *V0ainfix +V1V2ainfix +ainfix *V0V1ainfix *V0V2FFF">
@@ -65,7 +73,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
@@ -78,7 +86,7 @@
    <goal
     name="distr_left"
     expl="Lemma distr_left, lemma"
-    sum="bb62b505ec13424ee152d3ffd5cd0aa7"
+    sum="885965ae791a5becd4bfc9f402f8392f"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *ainfix +V0V1V2ainfix +ainfix *V0V2ainfix *V1V2FFF">
@@ -107,7 +115,7 @@
    <goal
     name="distr_right_minus"
     expl="Lemma distr_right_minus, lemma"
-    sum="47aa93eef150d838732e1e26844385af"
+    sum="83db45cfcd1cce1777aa2fe61fc65fc0"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *V0ainfix -V1V2ainfix -ainfix *V0V1ainfix *V0V2FFF">
@@ -136,7 +144,7 @@
    <goal
     name="distr_left_minus"
     expl="Lemma distr_left_minus, lemma"
-    sum="eb11f135d898a04805bf700cf18092b9"
+    sum="c7bb5aedc8bb245a1c6f99df00d389fc"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *ainfix -V0V1V2ainfix -ainfix *V0V2ainfix *V1V2FFF">
@@ -152,7 +160,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -165,7 +173,7 @@
    <goal
     name="mul_comm"
     expl="Lemma mul_comm, lemma"
-    sum="4bf42649bf52fe5fe9265fc769437b0c"
+    sum="d5245e69fd0f486eabe4ca8c8da6b5e2"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *V0V1ainfix *V1V0FF">
@@ -194,7 +202,7 @@
    <goal
     name="mul_assoc"
     expl="Lemma mul_assoc, lemma"
-    sum="85554534c5fb7552d436ef3066a6b9b5"
+    sum="a011ca0432852fc7007edf313da9f9aa"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *V0ainfix *V1V2ainfix *ainfix *V0V1V2FFF">
@@ -223,7 +231,7 @@
    <goal
     name="div_mod_property"
     expl="Lemma div_mod_property, lemma"
-    sum="4a93fa30b4633d6304b864dfeb675131"
+    sum="e3da5b60d78ba146bf0747eea6f042c3"
     proved="true"
     expanded="true"
     shape="ainfix =amodV0V1ainfix -V0ainfix *V1adivV0V1Iainfix >V1c0Aainfix >=V0c0FF">
@@ -239,20 +247,20 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="mod_property"
     expl="Lemma mod_property, lemma"
-    sum="8257e804ba21c12ff017ad814e7ea331"
+    sum="a1d5f76a022285c8ee66e07fa04ed1c3"
     proved="true"
     expanded="true"
     shape="ainfix <amodV0V1V1Aainfix <=c0amodV0V1Iainfix >V1c0Aainfix >=V0c0FF">
@@ -275,13 +283,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="gcd_zero"
     expl="Lemma gcd_zero, lemma"
-    sum="c31117eb19cad819da3defdad426b76d"
+    sum="9473d3e13147bbf5f7b83e8e422e26e1"
     proved="true"
     expanded="true"
     shape="aisGcdV0c0V0F">
@@ -290,13 +298,13 @@
      timelimit="5"
      edited="Gcd_Jessie_model_gcd_zero_1.v"
      obsolete="false">
-     <result status="valid" time="0.64"/>
+     <result status="valid" time="0.63"/>
     </proof>
    </goal>
    <goal
     name="gcd_property"
     expl="Lemma gcd_property, lemma"
-    sum="3c3971bb3f715a3a9f380d413ebcb388"
+    sum="2a7d8b7b3f47899bbc885b57184d3f7f"
     proved="true"
     expanded="true"
     shape="aisGcdV0V1V2IaisGcdV1amodV0V1V2Aainfix >V1c0Aainfix >=V0c0FFFF">
@@ -305,7 +313,7 @@
      timelimit="5"
      edited="Gcd_Jessie_model_gcd_property_1.v"
      obsolete="false">
-     <result status="valid" time="0.77"/>
+     <result status="valid" time="0.78"/>
     </proof>
    </goal>
   </theory>
@@ -316,7 +324,7 @@
    <goal
     name="WP_parameter _Gcd_gcd_ensures_bezoutProperty"
     expl="normal postcondition"
-    sum="f62c0862c6575a602644e9562752e9d8"
+    sum="56abcb3f768d8c5e9ae8308bf4f6d474"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix +ainfix *V9V0ainfix *V10V1V8EEIainfix =V8V7FIainfix >V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V11IaisGcdV7V6V11FAainfix >=V6c0Aainfix >=V7c0FFFFFFIainfix >=V1c0Aainfix >=V0c0FF">
@@ -325,13 +333,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Gcd_gcd_ensures_default"
     expl="Method gcd, default behavior"
-    sum="0e0be04db52fac1b3259eefa07de00fb"
+    sum="f723d4b1acdf4087ee101f805d78e222"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix +ainfix *V12V0ainfix *V13V1V9Aainfix =ainfix +ainfix *V10V0ainfix *V11V1V8AaisGcdV0V1V14IaisGcdV8V9V14FAainfix >=V9c0Aainfix >=V8c0Iainfix =V13ainfix -V4ainfix *V2adivV7V6FIainfix =V12ainfix -V5ainfix *V3adivV7V6FIainfix =V11V2FIainfix =V10V3FIainfix =V9amodV7V6FIainfix =V8V6FIainfix >V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix >=V6c0Aainfix >=V7c0FFFFFFAainfix =ainfix +ainfix *c0V0ainfix *c1V1V1Aainfix =ainfix +ainfix *c1V0ainfix *c0V1V0Aainfix >=V1c0Aainfix >=V0c0Iainfix >=V1c0Aainfix >=V0c0FF">
@@ -346,7 +354,7 @@
    <goal
     name="WP_parameter _Gcd_gcd_ensures_resultIsGcd"
     expl="normal postcondition"
-    sum="7366f45e1ed43bffb0c285fa966bd4f7"
+    sum="1671d4dfc3e18dfb82e70bf1cb857021"
     proved="true"
     expanded="true"
     shape="aisGcdV0V1V8Iainfix =V8V7FIainfix >V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V9IaisGcdV7V6V9FAainfix >=V6c0Aainfix >=V7c0FFFFFFIainfix >=V1c0Aainfix >=V0c0FF">
@@ -355,7 +363,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.23"/>
+     <result status="valid" time="0.24"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -368,7 +376,7 @@
    <goal
     name="WP_parameter _Gcd_gcd_safety"
     expl="Method gcd, Safety"
-    sum="e7d9c230c7b4024a4917e83fbb575301"
+    sum="82e1f0dc4c898fd0ffb41d01f5130883"
     proved="true"
     expanded="true"
     shape="LadivV7V6ainfix <V10V6Aainfix <=c0V6Iainfix =V14ainfix -V4ainfix *V2V8FIainfix =V13ainfix -V5ainfix *V3V8FIainfix =V12V2FIainfix =V11V3FIainfix =V10amodV7V6FIainfix =V9V6FAainfix =V6c0NAainfix =V6c0NIainfix >V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix >=V6c0Aainfix >=V7c0FFFFFFIainfix >=V1c0Aainfix >=V0c0FF">
@@ -397,7 +405,36 @@
    <goal
     name="WP_parameter cons_Gcd_ensures_default"
     expl="Constructor of class Gcd, default behavior"
-    sum="757484aa923a994fc857e6b658bbbcc5"
+    sum="761e0f2c5e464ae7b07a8c4529044859"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Gcd_safety"
+    expl="Constructor of class Gcd, Safety"
+    sum="8e538436d4b25b3e7e245ba5fd5024e5"
     proved="true"
     expanded="true"
     shape="t">
@@ -414,35 +451,6 @@
      edited=""
      obsolete="false">
      <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Gcd_safety"
-    expl="Constructor of class Gcd, Safety"
-    sum="297e036b17ebd68443f7fbba4420f554"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"

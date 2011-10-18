@@ -15,9 +15,13 @@
   name="CVC3"
   version="2.2"/>
  <prover
+  id="eprover"
+  name="Eprover"
+  version="1.4 Namring"/>
+ <prover
   id="gappa"
   name="Gappa"
-  version="0.15.0"/>
+  version="0.15.1"/>
  <prover
   id="simplify"
   name="Simplify"
@@ -30,6 +34,10 @@
   id="vampire"
   name="Vampire"
   version="0.6"/>
+ <prover
+  id="verit"
+  name="veriT"
+  version="dev"/>
  <prover
   id="yices"
   name="Yices"
@@ -54,7 +62,7 @@
    <goal
     name="WP_parameter _Creation_test1_ensures_default"
     expl="Method test1, default behavior"
-    sum="a61f967365941d05fbccf87cf40680ca"
+    sum="934b9cf629aea83b98d872bbc4f79b22"
     proved="true"
     expanded="false"
     shape="t">
@@ -83,10 +91,39 @@
    <goal
     name="WP_parameter _Creation_test1_ensures_normal"
     expl="normal postcondition"
-    sum="098181dc356b47b51b2db890cb0a0897"
+    sum="29c53d34924d4bc40db69f05246d3287"
     proved="true"
     expanded="false"
     shape="ainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c17FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFFF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Creation_test1_safety"
+    expl="Method test1, Safety"
+    sum="b40c5bd9ed7d1aae2a2485fa4a10b0cc"
+    proved="true"
+    expanded="false"
+    shape="ainfix <=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c17FAainfix >=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix >=c1c0FF">
     <proof
      prover="cvc3"
      timelimit="5"
@@ -110,38 +147,9 @@
     </proof>
    </goal>
    <goal
-    name="WP_parameter _Creation_test1_safety"
-    expl="Method test1, Safety"
-    sum="9ce641fe19f1ac1ac1a0f79b714043f2"
-    proved="true"
-    expanded="false"
-    shape="ainfix <=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c17FAainfix >=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix >=c1c0FF">
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-   </goal>
-   <goal
     name="WP_parameter _Creation_test2_ensures_default"
     expl="Method test2, default behavior"
-    sum="d9357d368e66abda5a4bfe494811333f"
+    sum="e7b482e9755648c73942aeb7a7b0f32a"
     proved="true"
     expanded="false"
     shape="t">
@@ -170,7 +178,7 @@
    <goal
     name="WP_parameter _Creation_test2_ensures_normal"
     expl="normal postcondition"
-    sum="15d4f4e338552e7408d8b6917adb1e43"
+    sum="72f1cdc97427e38a05c7b31c09304001"
     proved="true"
     expanded="false"
     shape="ainfix =V6c0Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c0FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFFF">
@@ -199,7 +207,7 @@
    <goal
     name="WP_parameter _Creation_test2_safety"
     expl="Method test2, Safety"
-    sum="06faaf2b1938db0c6a221507e000a125"
+    sum="4fe21fa2c640fcc13789bc450d42ca3c"
     proved="true"
     expanded="false"
     shape="ainfix <=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c0FAainfix >=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix >=c1c0FF">
@@ -215,7 +223,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -228,7 +236,7 @@
    <goal
     name="WP_parameter _Creation_test3_ensures_default"
     expl="Method test3, default behavior"
-    sum="2af6e98d00fe237561624a1bde082617"
+    sum="08c962d55e434a50dfb27b5de6abdfad"
     proved="true"
     expanded="false"
     shape="t">
@@ -244,7 +252,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -257,7 +265,7 @@
    <goal
     name="WP_parameter _Creation_test3_ensures_normal"
     expl="normal postcondition"
-    sum="c2027f33416b152da4e71f3cecad68cc"
+    sum="31b2586e4f1501c33d51d45f8a6a05f0"
     proved="true"
     expanded="false"
     shape="anot_assignsV0V1V5apset_emptyAainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFFF">
@@ -266,14 +274,14 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.46"/>
+     <result status="valid" time="0.60"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="unknown" time="0.07"/>
+     <result status="unknown" time="0.06"/>
     </proof>
     <proof
      prover="z3"
@@ -286,7 +294,7 @@
    <goal
     name="WP_parameter _Creation_test3_safety"
     expl="Method test3, Safety"
-    sum="45fd793fc00a6e0b121f47be746f00f3"
+    sum="a9ba662c1fca4bc72bc3eb42e1d1d1d5"
     proved="true"
     expanded="false"
     shape="ainfix <=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FAainfix >=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix >=c1c0FF">
@@ -295,7 +303,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -315,7 +323,7 @@
    <goal
     name="WP_parameter cons_Creation_ensures_default"
     expl="Constructor of class Creation, default behavior"
-    sum="f5054c2738a2f4f669085f7ec5fa0bef"
+    sum="b9212162fd41caec4d629fd4c6361dfb"
     proved="true"
     expanded="false"
     shape="t">
@@ -344,7 +352,7 @@
    <goal
     name="WP_parameter cons_Creation_ensures_normal"
     expl="normal postcondition"
-    sum="0087ac09856805cff58de5cfff80832f"
+    sum="beb9803b4150228e54150af4cc419ec4"
     proved="true"
     expanded="false"
     shape="anot_assignsV1V2V4apset_singletonV0Aainfix =aselectV4V0c0Ianot_assignsV1V3V4apset_singletonV0Aainfix =aselectV4V0c0FIainfix =V3astoreV2V0c0FIavalid_struct_CreationV0c0c0V1FFF">
@@ -353,7 +361,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.14"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -373,7 +381,7 @@
    <goal
     name="WP_parameter cons_Creation_int_ensures_default"
     expl="Constructor of class Creation, default behavior"
-    sum="e932afeda8dcbedbd0826aa44e4aa034"
+    sum="3f5164c658091e1e61c5b45bafe67387"
     proved="true"
     expanded="false"
     shape="t">
@@ -402,7 +410,7 @@
    <goal
     name="WP_parameter cons_Creation_int_ensures_normal"
     expl="normal postcondition"
-    sum="1ad68c6371a9255a0177094d891eb2d4"
+    sum="efafb3b3f646a36aabe9f96a952b6cb4"
     proved="true"
     expanded="false"
     shape="anot_assignsV2V3V5apset_singletonV0Aainfix =aselectV5V0V1Iainfix =V5astoreV4V0V1FIainfix =V4astoreV3V0c0FIavalid_struct_CreationV0c0c0V2FFFF">
@@ -411,14 +419,14 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.15"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -431,7 +439,7 @@
    <goal
     name="WP_parameter cons_Creation_int_int_ensures_default"
     expl="Constructor of class Creation, default behavior"
-    sum="168db710061a5300af8c4db499a36f3a"
+    sum="4a1480e2275123f2172a4547eaba1c34"
     proved="true"
     expanded="false"
     shape="t">
@@ -460,7 +468,7 @@
    <goal
     name="WP_parameter cons_Creation_int_int_ensures_normal"
     expl="normal postcondition"
-    sum="cb9924ca14a5c2237b0b78dce5624574"
+    sum="78b99b2271ced40fa6e6ace15eafcc06"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V4V6apset_singletonV0Aainfix =aselectV6V0ainfix +V1V2Ianot_assignsV3V5V6apset_singletonV0Aainfix =aselectV6V0ainfix +V1V2FIainfix =V5astoreV4V0c0FIavalid_struct_CreationV0c0c0V3FFFFF">
@@ -483,13 +491,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Creation_int_int_safety"
     expl="Constructor of class Creation, Safety"
-    sum="70dccbacf183a00d9d2e78c78bd9e894"
+    sum="f404e912caff65091cb2f2d0031df508"
     proved="true"
     expanded="false"
     shape="t">
@@ -518,7 +526,7 @@
    <goal
     name="WP_parameter cons_Creation_int_safety"
     expl="Constructor of class Creation, Safety"
-    sum="4d50d9d48b3206cfec96e6ef12603f78"
+    sum="d090f3e9e08a64c1f047bceacdd50719"
     proved="true"
     expanded="false"
     shape="t">
@@ -547,7 +555,7 @@
    <goal
     name="WP_parameter cons_Creation_safety"
     expl="Constructor of class Creation, Safety"
-    sum="c254895a74242d0bb29b16fce7017405"
+    sum="e47ac5cec47bc365311f4c3bc68c4de9"
     proved="true"
     expanded="false"
     shape="t">
@@ -576,7 +584,7 @@
    <goal
     name="WP_parameter cons_TestSuperConstructor_ensures_default"
     expl="Constructor of class TestSuperConstructor, default behavior"
-    sum="fb64356679223a1abf868f09b756cd08"
+    sum="c255325cf3a29792063fa08dfbb0a885"
     proved="true"
     expanded="false"
     shape="t">
@@ -605,7 +613,7 @@
    <goal
     name="WP_parameter cons_TestSuperConstructor_ensures_normal"
     expl="normal postcondition"
-    sum="a9be888dd4600df3dc164ec16a18a38d"
+    sum="6fcc39ca8dd052c0b8da59944404f0cb"
     proved="true"
     expanded="false"
     shape="anot_assignsV1V2V3apset_singletonV0Aainfix =aselectV3V0c12Ianot_assignsV1V2V3apset_singletonV0Aainfix =aselectV3V0c12FIavalid_struct_TestSuperConstructorV0c0c0V1FFF">
@@ -634,7 +642,7 @@
    <goal
     name="WP_parameter cons_TestSuperConstructor_safety"
     expl="Constructor of class TestSuperConstructor, Safety"
-    sum="a18d50ce73cd000c3f62abc6aad06b0e"
+    sum="7232ef7859440313c34e4dcea73f7411"
     proved="true"
     expanded="false"
     shape="t">

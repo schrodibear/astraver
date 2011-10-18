@@ -612,6 +612,33 @@ let rec term t =
             ~op:(lbin_op t op)
             ~expr2:(term e2)
             ()
+      | JTbin_obj (e1, op, e2) -> (* case e1 != null *)
+	  if op = Bne && e2.java_term_node = JTlit Null then
+	    let t1 = term e1 in
+	      match e1.java_term_type with
+		| JTYbase _ | JTYnull | JTYlogic _ -> assert false
+		| JTYclass (_, _ci) ->
+                    mkapp
+                      ~fun_name: (non_null_pred "Object").jc_logic_info_name
+                      ~args: [t1]
+                      ()
+		| JTYinterface _ii ->
+                    mkeq
+                      ~expr1: (mkoffset_max ~expr:t1 ())
+                      ~expr2: zero
+                      ()
+		| JTYarray (_, t) ->
+		    let si = get_array_struct Loc.dummy_position t in
+                    let li = non_null_pred si.jc_struct_info_name in
+                    mkapp
+                      ~fun_name: li.jc_logic_info_name
+                      ~args: [t1]
+                      ()
+	  else mkbinary
+            ~expr1: (term e1)
+            ~op: (lobj_op op)
+            ~expr2: (term e2)
+            ()
       | JTapp (fi, labels, el) ->
           mkapp
             ~fun_name: (get_logic_fun fi).jc_logic_info_name
@@ -1011,6 +1038,7 @@ let rec location_set logic_label t =
       | JTlit _l -> assert false (* TODO *)
       | JTun(_t,_op,_e1) -> assert false (* TODO *)
       | JTbin(_e1,_t,_op,_e2) -> assert false (* TODO *)
+      | JTbin_obj(_e1,_op,_e2) -> assert false (* TODO *)
       | JTapp (_, _, _) -> assert false (* TODO *)
       | JTvar vi ->
           mkvar ~name:(var_name (get_var vi)) ()
@@ -1077,6 +1105,7 @@ let location logic_label t =
       | JTlit _l -> assert false (* TODO *)
       | JTun(_t,_op,_e1) -> assert false (* TODO *)
       | JTbin(_e1,_t,_op,_e2) -> assert false (* TODO *)
+      | JTbin_obj(_e1,_op,_e2) -> assert false (* TODO *)
       | JTapp (_, _, _) -> assert false (* TODO *)
       | JTvar vi ->
           mkvar ~name:(var_name (get_var vi)) ()
@@ -2033,7 +2062,7 @@ let tr_non_null_logic_fun () =
     (JCTpointer (JCtag(si, []), Some num_zero, None)) "x" in
   let vit = mkvar ~name:(var_name vi) () in
   let offset_maxt = mkoffset_max ~expr:vit () in
-  let offset_maxa = mkeq ~expr1:offset_maxt ~expr2:zero () in
+  let offset_maxa = mkbinary ~op:`Bge ~expr1:offset_maxt ~expr2:zero () in
   let non_null_pred = create_non_null_pred si in
   mklogic_def
     ~name: non_null_pred.jc_logic_info_name

@@ -15,9 +15,13 @@
   name="CVC3"
   version="2.2"/>
  <prover
+  id="eprover"
+  name="Eprover"
+  version="1.4 Namring"/>
+ <prover
   id="gappa"
   name="Gappa"
-  version="0.15.0"/>
+  version="0.15.1"/>
  <prover
   id="simplify"
   name="Simplify"
@@ -30,6 +34,10 @@
   id="vampire"
   name="Vampire"
   version="0.6"/>
+ <prover
+  id="verit"
+  name="veriT"
+  version="dev"/>
  <prover
   id="yices"
   name="Yices"
@@ -49,7 +57,7 @@
    <goal
     name="isfib_2_1"
     expl="Lemma isfib_2_1, lemma"
-    sum="2470216b9a45f0fef5725a8b590c9c69"
+    sum="e5aee431502f2575fd2647540ef5c089"
     proved="true"
     expanded="true"
     shape="aisfibc2c1">
@@ -71,7 +79,7 @@
    <goal
     name="isfib_6_8"
     expl="Lemma isfib_6_8, lemma"
-    sum="04012c24c96146c683c72d72c6a89794"
+    sum="ea431f50602c7d75b9f6a8f454d3c916"
     proved="true"
     expanded="true"
     shape="aisfibc6c8">
@@ -80,13 +88,13 @@
      timelimit="5"
      edited="Fibonacci_Jessie_model_isfib_6_8_1.v"
      obsolete="false">
-     <result status="valid" time="0.60"/>
+     <result status="valid" time="0.59"/>
     </proof>
    </goal>
    <goal
     name="not_isfib_2_2"
     expl="Lemma not_isfib_2_2, lemma"
-    sum="4c3c03b0c3aa7acb5cf121efd1f95733"
+    sum="a722826ca3b14dfc25c20903a7ee4b38"
     proved="true"
     expanded="true"
     shape="aisfibc2c2N">
@@ -102,7 +110,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -120,7 +128,7 @@
    <goal
     name="WP_parameter _Fibonacci_Fib_ensures_default"
     expl="Method Fib, default behavior"
-    sum="ba4e1521045911e6949db3725cb50840"
+    sum="f7db49236cac06d3e122fcd5b88bc98f"
     proved="true"
     expanded="true"
     shape="iainfix <V1V0aisfibV7V5Aaisfibainfix +V7c1V6Aainfix <=V7V0Aainfix <=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FaisfibV0V8Iainfix =V8V3FIaisfibV1V3Aaisfibainfix +V1c1V2Aainfix <=V1V0Aainfix <=c0V1FFFAaisfibc0c0Aaisfibainfix +c0c1c1Aainfix <=c0V0Aainfix <=c0c0Iainfix >=V0c0F">
@@ -135,7 +143,7 @@
    <goal
     name="WP_parameter _Fibonacci_Fib_safety"
     expl="loop variant decreases"
-    sum="1941970033cf8ee50f902bff0dfbf3e3"
+    sum="8d2d8265b07227c4d9ca20d269c3b3eb"
     proved="true"
     expanded="true"
     shape="ainfix <ainfix -V0V7ainfix -V0V1Aainfix <=c0ainfix -V0V1Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix <V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix <=V1V0Aainfix <=c0V1FFFIainfix >=V0c0F">
@@ -151,20 +159,20 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Fibonacci_ensures_default"
     expl="Constructor of class Fibonacci, default behavior"
-    sum="1d19b2d0a9d742c3f6a17bb752141f9f"
+    sum="44bcd4576f5fd82fcc82a844d2f959f3"
     proved="true"
     expanded="true"
     shape="t">
@@ -193,7 +201,7 @@
    <goal
     name="WP_parameter cons_Fibonacci_safety"
     expl="Constructor of class Fibonacci, Safety"
-    sum="a27a649c5eced299fdd2b6bf9793ffe0"
+    sum="7e7a8ed1874393e2ba4e7cda8b5f6bb4"
     proved="true"
     expanded="true"
     shape="t">

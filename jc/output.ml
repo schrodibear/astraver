@@ -1428,12 +1428,18 @@ let fprintf_why_decl form d =
 	(if b then "external " else "") id.name
 	  (fprintf_type ~need_colon:false false) t
     | Logic(b,id,args,t) when !why3syntax ->
-	fprintf form "@[<hov 1>%s%s %s %a : %a@.@."
-	  (if b then "external " else "")
-          (if is_prop t then "predicate" else "function")
-          (why3ident id.name)
-	  (print_list space (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
-	  fprintf_logic_type t
+        if is_prop t then
+	  fprintf form "@[<hov 1>%spredicate %s %a @.@."
+	    (if b then "external " else "")
+            (why3ident id.name)
+	    (print_list space (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
+        else
+	  fprintf form "@[<hov 1>%sfunction %s %a : %a@.@."
+	    (if b then "external " else "")
+            (why3ident id.name)
+	    (print_list space (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
+	    fprintf_logic_type t
+
     | Logic(b,id,args,t) ->
 	fprintf form "@[<hov 1>%slogic %s: %a -> %a@.@."
 	  (if b then "external " else "") id.name

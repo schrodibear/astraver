@@ -15,9 +15,13 @@
   name="CVC3"
   version="2.2"/>
  <prover
+  id="eprover"
+  name="Eprover"
+  version="1.4 Namring"/>
+ <prover
   id="gappa"
   name="Gappa"
-  version="0.15.0"/>
+  version="0.15.1"/>
  <prover
   id="simplify"
   name="Simplify"
@@ -30,6 +34,10 @@
   id="vampire"
   name="Vampire"
   version="0.6"/>
+ <prover
+  id="verit"
+  name="veriT"
+  version="dev"/>
  <prover
   id="yices"
   name="Yices"
@@ -54,7 +62,7 @@
    <goal
     name="WP_parameter _Literals_f_ensures_default"
     expl="normal postcondition"
-    sum="96de62bf2eef8fd6f31fd6cd1e95f7c9"
+    sum="77ba358df9d072adbde1d7112e510ae4"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c13Iainfix =V4V3FIainfix =ainteger_of_int32V3c13FIainfix =ainteger_of_int32V2c2989FIavalid_struct_LiteralsV0c0c0V1FF">
@@ -83,7 +91,7 @@
    <goal
     name="WP_parameter _Literals_f_safety"
     expl="Method f, Safety"
-    sum="ec2cca69973b6e0413aaf0a55c5a6323"
+    sum="d44fe8ebaeb4b6cfd192a6d19823e417"
     proved="true"
     expanded="true"
     shape="t">
@@ -112,7 +120,7 @@
    <goal
     name="WP_parameter cons_Literals_ensures_default"
     expl="Constructor of class Literals, default behavior"
-    sum="5983ba222a8cdd14b1674bc8448eef40"
+    sum="b79b243ed299c927f3c404516a0272a8"
     proved="true"
     expanded="true"
     shape="t">
@@ -141,7 +149,7 @@
    <goal
     name="WP_parameter cons_Literals_safety"
     expl="Constructor of class Literals, Safety"
-    sum="ecb3c474d458bac35b827e1af6ad0300"
+    sum="f6deeaff0c447e5ebc84ae495bbe4716"
     proved="true"
     expanded="true"
     shape="t">
@@ -157,7 +165,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"

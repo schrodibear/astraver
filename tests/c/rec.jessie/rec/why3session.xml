@@ -45,7 +45,7 @@
    <goal
     name="sum_rec"
     expl="Lemma sum_rec, lemma"
-    sum="256f9969cdc1a221a09036ced0404ae0"
+    sum="6b2bb9e06ffd45a978b8b3d5455c6134"
     proved="true"
     expanded="true"
     shape="ainfix =asum_uptoainfix +V0c1ainfix +ainfix +asum_uptoV0V0c1Iainfix >=V0c0F">
@@ -54,14 +54,14 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.13"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.52"/>
+     <result status="valid" time="0.53"/>
     </proof>
     <proof
      prover="z3"
@@ -79,7 +79,7 @@
    <goal
     name="WP_parameter f91_ensures_default"
     expl="Function f91, default behavior"
-    sum="4f3fbea2c755c3fdabda258479867753"
+    sum="f7b2f88d1abe3557051d11a990c70c27"
     proved="true"
     expanded="true"
     shape="t">
@@ -88,7 +88,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -108,7 +108,7 @@
    <goal
     name="WP_parameter f91_ensures_greater_than_100"
     expl="Function f91, Behavior `greater_than_100'"
-    sum="a6b769509c116a312ea53ed7febc2c38"
+    sum="416342019b30c72708d6f829e6c2c25d"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V0c100ainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V0c10Iainfix =V7V6FIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c91Iainfix <=ainteger_of_int32V3c100Aainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V3c10Iainfix >=ainteger_of_int32V3c101FIainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V10ainfix -ainteger_of_int32V0c10Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V0c10FIainfix >=ainteger_of_int32V0c101F">
@@ -118,122 +118,6 @@
      edited=""
      obsolete="false">
      <result status="valid" time="0.08"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.11"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter f91_ensures_less_than_101"
-    expl="Function f91, Behavior `less_than_101'"
-    sum="ed7be6afa5f025144e581d5e9f5c769f"
-    proved="true"
-    expanded="true"
-    shape="iainfix <=ainteger_of_int32V0c100ainfix =ainteger_of_int32V7c91Iainfix =V7V6FIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c91Iainfix <=ainteger_of_int32V3c100Aainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V3c10Iainfix >=ainteger_of_int32V3c101FIainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V10c91Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V0c10FIainfix <=ainteger_of_int32V0c100F">
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.11"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.09"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.11"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter f91_safety"
-    expl="Function f91, Safety"
-    sum="801c1bd758774424fab838daf991e446"
-    proved="true"
-    expanded="true"
-    shape="iainfix <=ainteger_of_int32V0c100azwf_zeroainfix -c101ainteger_of_int32V3ainfix -c101ainteger_of_int32V0Iainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FAazwf_zeroainfix -c101ainteger_of_int32V1ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11FAainfix <=ainfix +ainteger_of_int32V0c11c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V0c11ainfix <=ainfix -ainteger_of_int32V0c10c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V0c10F">
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.09"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.09"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.11"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter main_ensures_default"
-    expl="normal postcondition"
-    sum="8665ffeaee1743196eb947cadefbe66e"
-    proved="true"
-    expanded="true"
-    shape="ainfix =ainteger_of_int32V3c36Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1asum_uptoainteger_of_int32V0FIainfix =ainteger_of_int32V0c8F">
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.47"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.28"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.11"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter main_safety"
-    expl="precondition for call"
-    sum="35af9e82b6364ceca9a85aa26b52f5c6"
-    proved="true"
-    expanded="true"
-    shape="ainfix <=ainteger_of_int32V0c1000Aainfix >=ainteger_of_int32V0c0Iainfix =ainteger_of_int32V0c8F">
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -251,9 +135,125 @@
     </proof>
    </goal>
    <goal
+    name="WP_parameter f91_ensures_less_than_101"
+    expl="Function f91, Behavior `less_than_101'"
+    sum="0c7fc9e41cfdd1c3ccc6b8eba3a11c93"
+    proved="true"
+    expanded="true"
+    shape="iainfix <=ainteger_of_int32V0c100ainfix =ainteger_of_int32V7c91Iainfix =V7V6FIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c91Iainfix <=ainteger_of_int32V3c100Aainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V3c10Iainfix >=ainteger_of_int32V3c101FIainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V10c91Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V0c10FIainfix <=ainteger_of_int32V0c100F">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.10"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.10"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.11"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter f91_safety"
+    expl="Function f91, Safety"
+    sum="c4b29c9b68c7be3bdf28aa2bd0ae45e0"
+    proved="true"
+    expanded="true"
+    shape="iainfix <=ainteger_of_int32V0c100azwf_zeroainfix -c101ainteger_of_int32V3ainfix -c101ainteger_of_int32V0Iainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FAazwf_zeroainfix -c101ainteger_of_int32V1ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11FAainfix <=ainfix +ainteger_of_int32V0c11c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V0c11ainfix <=ainfix -ainteger_of_int32V0c10c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V0c10F">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.09"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.10"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.11"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter main_ensures_default"
+    expl="normal postcondition"
+    sum="cc3b3f6c51df40c4fbd6a555c95b49e4"
+    proved="true"
+    expanded="true"
+    shape="ainfix =ainteger_of_int32V3c36Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1asum_uptoainteger_of_int32V0FIainfix =ainteger_of_int32V0c8F">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.50"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.30"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.11"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter main_safety"
+    expl="precondition for call"
+    sum="664e3983ff5499eeea80a6177a29e456"
+    proved="true"
+    expanded="true"
+    shape="ainfix <=ainteger_of_int32V0c1000Aainfix >=ainteger_of_int32V0c0Iainfix =ainteger_of_int32V0c8F">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.11"/>
+    </proof>
+   </goal>
+   <goal
     name="WP_parameter sum_ensures_default"
     expl="Function sum, default behavior"
-    sum="b511a72200fdd387192bddf9a1b939c6"
+    sum="3a9ab0cc674b1c31d063e056a1be0347"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V0c0ainfix =ainteger_of_int32V3asum_uptoainteger_of_int32V0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fainfix =ainteger_of_int32V9asum_uptoainteger_of_int32V0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix +ainteger_of_int32V0ainteger_of_int32V6FIainfix =V6V5FIainfix =ainteger_of_int32V5asum_uptoainteger_of_int32V4FIainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V0c1FIainfix <=ainteger_of_int32V0c1000Aainfix >=ainteger_of_int32V0c0F">
@@ -269,13 +269,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="1.09"/>
+     <result status="valid" time="1.10"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter sum_safety"
     expl="Function sum, Safety"
-    sum="a9f89b05bb57618a4f05e6b172b11793"
+    sum="35969f8ce11a1f70414ccc55888c1997"
     proved="true"
     expanded="true"
     shape="ainfix <=ainfix +ainteger_of_int32V0ainteger_of_int32V3c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V0ainteger_of_int32V3Iainfix =V3V2FIainfix =ainteger_of_int32V2asum_uptoainteger_of_int32V1FAainfix <=ainteger_of_int32V1c1000Aainfix >=ainteger_of_int32V1c0Aazwf_zeroainteger_of_int32V1ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix -ainteger_of_int32V0c1FAainfix <=ainfix -ainteger_of_int32V0c1c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V0c1Iainfix =ainteger_of_int32V0c0NIainfix <=ainteger_of_int32V0c1000Aainfix >=ainteger_of_int32V0c0F">

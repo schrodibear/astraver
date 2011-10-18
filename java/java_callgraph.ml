@@ -39,6 +39,7 @@ let rec term acc t =
     | JTapp (f,_labs,lt) -> f::(List.fold_left term acc lt)
     | JTat(t,_) -> term acc t
     | JTbin (t1,_,_,t2) -> term (term acc t1) t2
+    | JTbin_obj (t1,_,t2) -> term (term acc t1) t2
     | JTun (_,_,t1) -> term acc t1
     | JTif(t1,t2,t3) -> term (term (term acc t1) t2) t3
 (*

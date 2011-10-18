@@ -658,7 +658,7 @@ let logic_binary_numeric_promotion t1 t2 =
 let make_logic_bin_op loc op t1 e1 t2 e2 =
   match op with
     | Bconcat -> assert false
-    | Bgt | Blt | Bge | Ble | Beq | Bne ->
+    | Bgt | Blt | Bge | Ble ->
         begin
           try 
             let t = logic_binary_numeric_promotion t1 t2 in
@@ -666,6 +666,21 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
           with Not_found ->
             typing_error loc "numeric types expected for >,<,>= and <="
         end
+    | Beq | Bne ->
+        begin
+          try
+            let t = logic_binary_numeric_promotion t1 t2 in
+            boolean_type,JTbin(e1,t,op,e2)
+          with Not_found -> 
+            if is_boolean t1 && is_boolean t2 then
+              boolean_type,JTbin(e1,Tboolean,op,e2)
+            else
+              if is_reference_type t1 && is_reference_type t2 then
+                boolean_type,JTbin_obj(e1,op,e2)
+              else
+                typing_error loc "numeric, boolean or object types expected for == and !="
+        end
+
     | Basr | Blsr | Blsl ->
         begin
           try
@@ -748,7 +763,7 @@ let make_predicate_bin_op loc op t1 e1 t2 e2 =
             let t = logic_binary_numeric_promotion t1 t2 in
             JAbin(e1,t,op,e2)
           with Not_found ->
-            typing_error loc "numeric types expected for >,<,>= and <="
+            typing_error loc "numeric types expected for >, <, >= and <="
         end
     | Beq | Bne ->
         begin
@@ -2273,7 +2288,7 @@ and cast_convertible tfrom tto =
           is_subclass cfrom cto || is_subclass cto cfrom
       | JTYclass (_, ci), JTYinterface ii ->
 	  if ci.class_info_is_final then implements ci ii else 
-	    true (* JLS 2.0: OK, JLS 3.0: TO COMPLTE *)
+	    true (* JLS 2.0: OK, JLS 3.0: TO COMPLETE *)
       | JTYclass(_,c), JTYarray _ -> 
           c == !object_class
       | JTYinterface _,JTYclass _ -> assert false (* TODO *)
@@ -2282,7 +2297,9 @@ and cast_convertible tfrom tto =
             (* TODO: check this: JLS p73 appears to be incomplete *)
       | JTYinterface _,JTYarray _ -> assert false (* TODO *)
       | JTYarray _,_ -> assert false (* TODO *)
-      | JTYnull,_ | _, JTYnull -> assert false
+      | JTYnull, JTYclass _ -> true
+      | JTYnull,_ -> assert false
+      | _,JTYnull -> assert false
   
 (**********************)
 
@@ -2431,6 +2448,7 @@ and expr_of_term t =
       | JTarray_range _  -> assert false (* TODO *)
       | JTapp (_, _, _) -> assert false (* TODO *)
       | JTbin (_, _, _, _) -> assert false (* TODO *)
+      | JTbin_obj (_, _, _) -> assert false (* TODO *)
       | JTun (_t, _op, _e1) -> assert false (* TODO *)
       | JTlit _ -> assert false (* TODO *)
       | JTcast(ty,t) -> JEcast(ty,expr_of_term t)

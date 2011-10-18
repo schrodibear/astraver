@@ -15,9 +15,13 @@
   name="CVC3"
   version="2.2"/>
  <prover
+  id="eprover"
+  name="Eprover"
+  version="1.4 Namring"/>
+ <prover
   id="gappa"
   name="Gappa"
-  version="0.15.0"/>
+  version="0.15.1"/>
  <prover
   id="simplify"
   name="Simplify"
@@ -30,6 +34,10 @@
   id="vampire"
   name="Vampire"
   version="0.6"/>
+ <prover
+  id="verit"
+  name="veriT"
+  version="dev"/>
  <prover
   id="yices"
   name="Yices"
@@ -54,7 +62,7 @@
    <goal
     name="WP_parameter _BinarySearch_binary_search_ensures_default"
     expl="Method binary_search, default behavior"
-    sum="9611d918c4a9507a0dad6b26a40776c6"
+    sum="65504f2ee1b3b795025bb82b26fe9d26"
     proved="true"
     expanded="false"
     shape="iainfix <=ainteger_of_int32V8ainteger_of_int32V7iainfix <ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1ainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V13Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V11c1Fiainfix >ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1ainfix <=ainteger_of_int32V15ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8Iainfix =V15V14FIainfix =ainteger_of_int32V14ainfix -ainteger_of_int32V11c1Fainfix <ainteger_of_int32V16ainfix +aoffset_maxV3V0c1Aainfix <=aprefix -c1ainteger_of_int32V16Iainfix =V16V11FAainfix <=ainteger_of_int32V11ainteger_of_int32V7Aainfix <=ainteger_of_int32V8ainteger_of_int32V11Iainfix =V11V10FIainfix =ainteger_of_int32V10adivainteger_of_int32V9c2FIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8Fainfix <ainteger_of_int32V18ainfix +aoffset_maxV3V0c1Aainfix <=aprefix -c1ainteger_of_int32V18Iainfix =V18V17FIainfix =ainteger_of_int32V17aprefix -c1FIainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8FFAainfix <=ainteger_of_int32V6ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V4Iainfix =ainteger_of_int32V6ainfix -V5c1FIainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
@@ -63,27 +71,27 @@
      timelimit="10"
      edited=""
      obsolete="false">
-     <result status="valid" time="1.41"/>
+     <result status="valid" time="1.35"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="10"
      edited=""
      obsolete="false">
-     <result status="valid" time="1.41"/>
+     <result status="valid" time="1.24"/>
     </proof>
     <proof
      prover="z3"
      timelimit="10"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _BinarySearch_binary_search_ensures_failure"
     expl="Method binary_search, Behavior `failure'"
-    sum="19a346ab534cec5c2cfd1adc3d8f216f"
+    sum="16306be98ba8202f5ba31c9c363fa4ee"
     proved="true"
     expanded="false"
     shape="iainfix <=ainteger_of_int32V8ainteger_of_int32V7iainfix <ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1ainfix <=V14ainteger_of_int32V7Aainfix <=ainteger_of_int32V13V14Iainfix =ainteger_of_int32aselectV2ashiftV0V14ainteger_of_int32V1Iainfix <V14ainfix +aoffset_maxV3V0c1Aainfix <=c0V14FIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V11c1Fiainfix >ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1ainfix <=V17ainteger_of_int32V16Aainfix <=ainteger_of_int32V8V17Iainfix =ainteger_of_int32aselectV2ashiftV0V17ainteger_of_int32V1Iainfix <V17ainfix +aoffset_maxV3V0c1Aainfix <=c0V17FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V11c1Fainfix =ainteger_of_int32aselectV2ashiftV0V19ainteger_of_int32V1NIainfix <V19ainfix +aoffset_maxV3V0c1Aainfix <=c0V19FIainfix =ainteger_of_int32V18aprefix -c1Iainfix =V18V11FIainfix <=ainteger_of_int32V11ainteger_of_int32V7Aainfix <=ainteger_of_int32V8ainteger_of_int32V11Iainfix =V11V10FIainfix =ainteger_of_int32V10adivainteger_of_int32V9c2FIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8Fainfix =ainteger_of_int32aselectV2ashiftV0V22ainteger_of_int32V1NIainfix <V22ainfix +aoffset_maxV3V0c1Aainfix <=c0V22FIainfix =ainteger_of_int32V21aprefix -c1Iainfix =V21V20FIainfix =ainteger_of_int32V20aprefix -c1FIainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8Iainfix <=V23ainteger_of_int32V7Aainfix <=ainteger_of_int32V8V23Iainfix =ainteger_of_int32aselectV2ashiftV0V23ainteger_of_int32V1Iainfix <V23ainfix +aoffset_maxV3V0c1Aainfix <=c0V23FFFAainfix <=V24ainteger_of_int32V6Aainfix <=ainteger_of_int32V4V24Iainfix =ainteger_of_int32aselectV2ashiftV0V24ainteger_of_int32V1Iainfix <V24ainfix +aoffset_maxV3V0c1Aainfix <=c0V24FIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3Aais_sortedV0V3V2FFFF">
@@ -105,7 +113,7 @@
    <goal
     name="WP_parameter _BinarySearch_binary_search_ensures_success"
     expl="Method binary_search, Behavior `success'"
-    sum="c389448b7e4779abf09548465f1a7640"
+    sum="1ffa088549270d24a290904b0b37a5da"
     proved="true"
     expanded="false"
     shape="iainfix <=ainteger_of_int32V8ainteger_of_int32V7ainfix =ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix >=ainteger_of_int32V12c0Iainfix =V12V11FIainfix >ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1NIainfix <ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V11ainteger_of_int32V1NIainfix <=ainteger_of_int32V11ainteger_of_int32V7Aainfix <=ainteger_of_int32V8ainteger_of_int32V11Iainfix =V11V10FIainfix =ainteger_of_int32V10adivainteger_of_int32V9c2FIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8Fainfix =ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V14ainteger_of_int32V1Iainfix >=ainteger_of_int32V14c0Iainfix =V14V13FIainfix =ainteger_of_int32V13aprefix -c1FIainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8FFIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
@@ -134,7 +142,7 @@
    <goal
     name="WP_parameter _BinarySearch_binary_search_safety"
     expl="index bounds"
-    sum="69b3fd4318249c6d13e95567b363f5b6"
+    sum="c7e41ff605ddef4644b0b1c2d28abc75"
     proved="false"
     expanded="true"
     shape="Ladivainteger_of_int32V9c2iainfix <ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1ainfix <ainfix -ainteger_of_int32V7ainteger_of_int32V14ainfix -ainteger_of_int32V7ainteger_of_int32V8Aainfix <=c0ainfix -ainteger_of_int32V7ainteger_of_int32V8Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V12c1FAainfix <=ainfix +ainteger_of_int32V12c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V12c1ainfix <ainfix -ainteger_of_int32V16ainteger_of_int32V8ainfix -ainteger_of_int32V7ainteger_of_int32V8Aainfix <=c0ainfix -ainteger_of_int32V7ainteger_of_int32V8Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V12c1FAainfix <=ainfix -ainteger_of_int32V12c1c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V12c1Iainfix >ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Aainfix <=ainteger_of_int32V12aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V12Aainfix <=ainteger_of_int32V12aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V12Iainfix <=ainteger_of_int32V12ainteger_of_int32V7Aainfix <=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FAainfix <=V10c2147483647Aainfix <=aprefix -c2147483648V10Aainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FAainfix <=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix <=ainteger_of_int32V8ainteger_of_int32V7Iainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8FFIainfix =ainteger_of_int32V6ainfix -V5c1FAainfix <=ainfix -V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V5c1Iainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FAainfix >=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
@@ -143,7 +151,7 @@
      timelimit="10"
      edited=""
      obsolete="false">
-     <result status="unknown" time="1.41"/>
+     <result status="unknown" time="1.42"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -159,10 +167,39 @@
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.1"
       expl="assertion"
-      sum="71129ae3c8b45f2e46ecfccc9a381360"
+      sum="a6a1a2e7fb8d84ba040b240879c004d7"
       proved="true"
       expanded="false"
       shape="ainfix >=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
+      <proof
+       prover="cvc3"
+       timelimit="10"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="10"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="10"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter _BinarySearch_binary_search_safety.2"
+      expl="arithmetic overflow"
+      sum="5759d7956734f9d2b7b0b8c91dfde82e"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=ainfix -V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V5c1Iainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix >=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
       <proof
        prover="cvc3"
        timelimit="10"
@@ -186,38 +223,9 @@
       </proof>
      </goal>
      <goal
-      name="WP_parameter _BinarySearch_binary_search_safety.2"
-      expl="arithmetic overflow"
-      sum="88f6b9a6883772eb9590f654f5565f75"
-      proved="true"
-      expanded="false"
-      shape="ainfix <=ainfix -V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V5c1Iainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix >=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
-      <proof
-       prover="cvc3"
-       timelimit="10"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="alt-ergo"
-       timelimit="10"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="10"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-     </goal>
-     <goal
       name="WP_parameter _BinarySearch_binary_search_safety.3"
       expl="arithmetic overflow"
-      sum="37354714e172e5079eb21a99b6d80e14"
+      sum="1e50e3216df7b3040b11c4599806bad4"
       proved="false"
       expanded="true"
       shape="ainfix <=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix <=ainteger_of_int32V8ainteger_of_int32V7Iainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8FFIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix <=ainfix -V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V5c1Iainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix >=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
@@ -226,7 +234,7 @@
        timelimit="10"
        edited=""
        obsolete="false">
-       <result status="unknown" time="1.47"/>
+       <result status="unknown" time="1.63"/>
       </proof>
       <proof
        prover="alt-ergo"
@@ -242,7 +250,7 @@
        <goal
         name="WP_parameter _BinarySearch_binary_search_safety.3.1"
         expl="Method binary_search, Safety"
-        sum="cf333c544ba0855df21a121ba80ec7cb"
+        sum="c6c6512df2fe3e799baa89eb77ddf9ff"
         proved="true"
         expanded="false"
         shape="ainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix <=ainteger_of_int32V8ainteger_of_int32V7Iainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8FFIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix <=ainfix -V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V5c1Iainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix >=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
@@ -251,14 +259,14 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="alt-ergo"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.02"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="z3"
@@ -271,7 +279,7 @@
        <goal
         name="WP_parameter _BinarySearch_binary_search_safety.3.2"
         expl="Method binary_search, Safety"
-        sum="e18e5f7b2ce0ad7e8087e9ec9fa64830"
+        sum="209a44c992cfb959f1c88a8b39535bb1"
         proved="false"
         expanded="true"
         shape="ainfix <=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Iainfix <=ainteger_of_int32V8ainteger_of_int32V7Iainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8FFIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix <=ainfix -V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V5c1Iainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix >=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
@@ -280,7 +288,7 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="unknown" time="1.54"/>
+         <result status="unknown" time="1.45"/>
         </proof>
         <proof
          prover="alt-ergo"
@@ -294,7 +302,7 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="timeout" time="5.07"/>
+         <result status="timeout" time="5.08"/>
         </proof>
        </goal>
       </transf>
@@ -302,7 +310,7 @@
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.4"
       expl="division by zero"
-      sum="8baf352688cfdc70b2a0f46ae2d1c182"
+      sum="7ff95cb9911a902d943a82ad94c501c8"
       proved="true"
       expanded="false"
       shape="ainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix <=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix <=ainteger_of_int32V8ainteger_of_int32V7Iainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8FFIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix <=ainfix -V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V5c1Iainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix >=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
@@ -311,14 +319,14 @@
        timelimit="10"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="alt-ergo"
        timelimit="10"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.02"/>
       </proof>
       <proof
        prover="z3"
@@ -331,7 +339,7 @@
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.5"
       expl="arithmetic overflow"
-      sum="2c1858e61665e9e23a7e4270c8e2e4fb"
+      sum="123f04098c589d69caa573ca22ce02cf"
       proved="true"
       expanded="false"
       shape="Ladivainteger_of_int32V9c2ainfix <=V10c2147483647Aainfix <=aprefix -c2147483648V10Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix <=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix <=ainteger_of_int32V8ainteger_of_int32V7Iainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8FFIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix <=ainfix -V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V5c1Iainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix >=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
@@ -340,14 +348,14 @@
        timelimit="10"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="alt-ergo"
        timelimit="10"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="z3"
@@ -360,7 +368,7 @@
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.6"
       expl="pointer dereference"
-      sum="b34cd3fc813ad7d8d13386c17a090c0a"
+      sum="1c6747d541e401bf7ed1819359f71df9"
       proved="true"
       expanded="false"
       shape="Ladivainteger_of_int32V9c2ainfix <=ainteger_of_int32V12aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V12Iainfix <=ainteger_of_int32V12ainteger_of_int32V7Aainfix <=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix <=V10c2147483647Aainfix <=aprefix -c2147483648V10Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix <=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix <=ainteger_of_int32V8ainteger_of_int32V7Iainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8FFIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix <=ainfix -V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V5c1Iainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix >=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
@@ -376,7 +384,7 @@
        timelimit="10"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="z3"
@@ -389,7 +397,7 @@
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.7"
       expl="arithmetic overflow"
-      sum="6794bc23a03c32c9914d057a03d7724f"
+      sum="4061c6376395da8d92882bccd9b9399a"
       proved="true"
       expanded="false"
       shape="Ladivainteger_of_int32V9c2ainfix <=ainfix +ainteger_of_int32V12c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V12c1Iainfix <ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix <=ainteger_of_int32V12aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V12Iainfix <=ainteger_of_int32V12ainteger_of_int32V7Aainfix <=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix <=V10c2147483647Aainfix <=aprefix -c2147483648V10Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix <=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix <=ainteger_of_int32V8ainteger_of_int32V7Iainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8FFIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix <=ainfix -V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V5c1Iainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix >=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
@@ -418,7 +426,7 @@
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.8"
       expl="loop variant decreases"
-      sum="a7a1802dd0f441b5edb822f79f760880"
+      sum="785890fcd00b687629d26e4fc059d3d3"
       proved="true"
       expanded="false"
       shape="Ladivainteger_of_int32V9c2ainfix <ainfix -ainteger_of_int32V7ainteger_of_int32V14ainfix -ainteger_of_int32V7ainteger_of_int32V8Aainfix <=c0ainfix -ainteger_of_int32V7ainteger_of_int32V8Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V12c1FIainfix <=ainfix +ainteger_of_int32V12c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V12c1Iainfix <ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix <=ainteger_of_int32V12aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V12Iainfix <=ainteger_of_int32V12ainteger_of_int32V7Aainfix <=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix <=V10c2147483647Aainfix <=aprefix -c2147483648V10Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix <=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix <=ainteger_of_int32V8ainteger_of_int32V7Iainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8FFIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix <=ainfix -V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V5c1Iainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix >=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
@@ -434,7 +442,7 @@
        timelimit="10"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="z3"
@@ -447,7 +455,7 @@
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.9"
       expl="pointer dereference"
-      sum="70e7b815bfd743712c19af47fe73323c"
+      sum="814315056f9fc4bcf85a73c5db44f79d"
       proved="true"
       expanded="false"
       shape="Ladivainteger_of_int32V9c2ainfix <=ainteger_of_int32V12aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V12Iainfix <ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1NIainfix <=ainteger_of_int32V12aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V12Iainfix <=ainteger_of_int32V12ainteger_of_int32V7Aainfix <=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix <=V10c2147483647Aainfix <=aprefix -c2147483648V10Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix <=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix <=ainteger_of_int32V8ainteger_of_int32V7Iainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8FFIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix <=ainfix -V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V5c1Iainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix >=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
@@ -476,7 +484,7 @@
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.10"
       expl="arithmetic overflow"
-      sum="7b248420da98845148e392067fe7859c"
+      sum="75ec8a0aa0206f9d769f706404bf0af9"
       proved="true"
       expanded="false"
       shape="Ladivainteger_of_int32V9c2ainfix <=ainfix -ainteger_of_int32V12c1c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V12c1Iainfix >ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix <=ainteger_of_int32V12aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V12Iainfix <ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1NIainfix <=ainteger_of_int32V12aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V12Iainfix <=ainteger_of_int32V12ainteger_of_int32V7Aainfix <=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix <=V10c2147483647Aainfix <=aprefix -c2147483648V10Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix <=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix <=ainteger_of_int32V8ainteger_of_int32V7Iainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8FFIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix <=ainfix -V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V5c1Iainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix >=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
@@ -505,7 +513,7 @@
      <goal
       name="WP_parameter _BinarySearch_binary_search_safety.11"
       expl="loop variant decreases"
-      sum="dfff117e7b909a7257b4c501d3a2ac4e"
+      sum="4d87e60e4a2ee62f9f50a3a54bbaefff"
       proved="true"
       expanded="false"
       shape="Ladivainteger_of_int32V9c2ainfix <ainfix -ainteger_of_int32V14ainteger_of_int32V8ainfix -ainteger_of_int32V7ainteger_of_int32V8Aainfix <=c0ainfix -ainteger_of_int32V7ainteger_of_int32V8Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix -ainteger_of_int32V12c1FIainfix <=ainfix -ainteger_of_int32V12c1c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V12c1Iainfix >ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1Iainfix <=ainteger_of_int32V12aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V12Iainfix <ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V12ainteger_of_int32V1NIainfix <=ainteger_of_int32V12aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V12Iainfix <=ainteger_of_int32V12ainteger_of_int32V7Aainfix <=ainteger_of_int32V8ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11V10FIainfix <=V10c2147483647Aainfix <=aprefix -c2147483648V10Iainfix =c2c0NIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7ainteger_of_int32V8FIainfix <=ainfix +ainteger_of_int32V7ainteger_of_int32V8c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V7ainteger_of_int32V8Iainfix <=ainteger_of_int32V8ainteger_of_int32V7Iainfix <=ainteger_of_int32V7ainfix -ainfix +aoffset_maxV3V0c1c1Aainfix <=c0ainteger_of_int32V8FFIainfix =ainteger_of_int32V6ainfix -V5c1FIainfix <=ainfix -V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V5c1Iainfix =V5ainfix +aoffset_maxV3V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix >=aoffset_maxV3V0aprefix -c1Iainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V3Aaleft_valid_struct_intMV0c0V3FFFF">
@@ -514,14 +522,14 @@
        timelimit="10"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="alt-ergo"
        timelimit="10"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="z3"
@@ -536,7 +544,7 @@
    <goal
     name="WP_parameter cons_BinarySearch_ensures_default"
     expl="Constructor of class BinarySearch, default behavior"
-    sum="fe30de14cec8cb6c925f52c3a70bd6eb"
+    sum="92de75d89154d7d215d737fb2e1c052c"
     proved="true"
     expanded="false"
     shape="t">
@@ -565,7 +573,7 @@
    <goal
     name="WP_parameter cons_BinarySearch_safety"
     expl="Constructor of class BinarySearch, Safety"
-    sum="a95f28957763bbd11e72e4086077860b"
+    sum="f6360d5a7dc906694c3970db437828de"
     proved="true"
     expanded="false"
     shape="t">
@@ -581,7 +589,7 @@
      timelimit="10"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"

@@ -857,7 +857,7 @@ let field_bounds fi =
 
 let pointer_struct = function
   | JCTpointer(JCtag(st, []), _, _) -> st
-  | ty -> 
+  | ty ->
       Format.printf "%a@." print_type ty;
       assert false
 

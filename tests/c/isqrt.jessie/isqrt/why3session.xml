@@ -50,7 +50,7 @@
    <goal
     name="WP_parameter isqrt_ensures_default"
     expl="Function isqrt, default behavior"
-    sum="d3ad2221809f72ced0cb56c66649a21f"
+    sum="b71a36b4c7cdeb81220558980e95794d"
     proved="true"
     expanded="true"
     shape="iainfix <=V3V0ainfix =V6asqrainfix +V5c1Aainfix >=V0asqrV5Aainfix >=V5c0Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1Fainfix <V0asqrainfix +V7c1Aainfix <=asqrV7V0Aainfix >=V7c0Iainfix =V7V4FIainfix =V3asqrainfix +V4c1Aainfix >=V0asqrV4Aainfix >=V4c0FFAainfix =V2asqrainfix +V1c1Aainfix >=V0asqrV1Aainfix >=V1c0Iainfix =V2c1FIainfix =V1c0FIainfix >=V0c0F">
@@ -72,7 +72,7 @@
    <goal
     name="WP_parameter isqrt_safety"
     expl="loop variant decreases"
-    sum="c6a0b806a76bb543660ef7cfc7e99b66"
+    sum="668802ccde7b69fe416a171e398c1dc0"
     proved="true"
     expanded="true"
     shape="ainfix <ainfix -V0V5ainfix -V0V4Aainfix <=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix <=V3V0Iainfix =V3asqrainfix +V4c1Aainfix >=V0asqrV4Aainfix >=V4c0FFIainfix =V2c1FIainfix =V1c0FIainfix >=V0c0F">
@@ -83,7 +83,7 @@
      <goal
       name="WP_parameter isqrt_safety.1"
       expl="loop variant decreases"
-      sum="c6a0b806a76bb543660ef7cfc7e99b66"
+      sum="668802ccde7b69fe416a171e398c1dc0"
       proved="true"
       expanded="true"
       shape="ainfix <ainfix -V0V5ainfix -V0V4Aainfix <=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix <=V3V0Iainfix =V3asqrainfix +V4c1Aainfix >=V0asqrV4Aainfix >=V4c0FFIainfix =V2c1FIainfix =V1c0FIainfix >=V0c0F">
@@ -99,7 +99,7 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="z3"
@@ -114,7 +114,7 @@
    <goal
     name="WP_parameter main_ensures_default"
     expl="Function main, default behavior"
-    sum="72b1a31f0555c9588d4156eea5183ad8"
+    sum="7e43cb02cbf8ecb39246f4c56af56e48"
     proved="true"
     expanded="true"
     shape="ainfix =V2c4Iainfix =V2V1FAainfix >V1c4NAainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -132,7 +132,7 @@
      <goal
       name="WP_parameter main_ensures_default.1"
       expl="assertion"
-      sum="3a19e3f4f2d36e8fcf201edd2ef8bf80"
+      sum="9c8fd8cced1ac355bb2bcff30ea777d3"
       proved="false"
       expanded="true"
       shape="ainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -140,7 +140,7 @@
      <goal
       name="WP_parameter main_ensures_default.2"
       expl="assertion"
-      sum="d2bdabf495fe101e16a6d963c8ecaf88"
+      sum="2a8675209b53bf1c4ea395b5b3e2397a"
       proved="false"
       expanded="true"
       shape="ainfix >V1c4NIainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -148,7 +148,7 @@
      <goal
       name="WP_parameter main_ensures_default.3"
       expl="normal postcondition"
-      sum="1780d22b341301b3dd4914260208ff35"
+      sum="1af6189b71e79f1ad6e852a7278ee0ec"
       proved="false"
       expanded="true"
       shape="ainfix =V2c4Iainfix =V2V1FIainfix >V1c4NIainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -158,7 +158,7 @@
    <goal
     name="WP_parameter main_safety"
     expl="precondition for call"
-    sum="94ce8553fea2bfdf0a41cce6b1abead4"
+    sum="4f6c854f26d281be6a312e07fa48306c"
     proved="true"
     expanded="true"
     shape="ainfix >=c17c0">

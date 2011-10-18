@@ -45,7 +45,7 @@
    <goal
     name="newton"
     expl="Lemma newton, lemma"
-    sum="c06d5b5ce4ccc8dedbf40954b4978dd1"
+    sum="87336c79c1a85c5ad262d7226569d1df"
     proved="true"
     expanded="true"
     shape="anewton_relV0V1Iainfix >V1c0.FF">
@@ -54,7 +54,7 @@
      timelimit="10"
      edited="float_sqrt_Jessie_model_newton_1.v"
      obsolete="false">
-     <result status="valid" time="2.11"/>
+     <result status="valid" time="2.12"/>
     </proof>
    </goal>
   </theory>
@@ -65,7 +65,7 @@
    <goal
     name="WP_parameter sqrt_ensures_default"
     expl="Function sqrt, default behavior"
-    sum="3c8d8425136faf640b2edbbd4b0eef2d"
+    sum="3153e1c54cde22bcdb30396e5b3d8435"
     proved="true"
     expanded="true"
     shape="ainfix <=aabsainfix -avalueV32asqrtavalueV0ainfix *c0x1.p-43aabsasqrtavalueV0Iainfix =V32V31FIainfix =V31V30FIamul_double_postaNearestTiesToEvenV0V29V30FAainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FAaclosenessavalueV28avalueV20avalueV0Aanewton_relavalueV20avalueV0Iainfix =V28V27FIamul_double_postaNearestTiesToEvenV22V26V27FIasub_double_postaNearestTiesToEvenV23V25V26FIamul_double_postaNearestTiesToEvenV24V0V25FIamul_double_postaNearestTiesToEvenV20V20V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FAaclosenessavalueV19avalueV11avalueV0Aanewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIasub_double_postaNearestTiesToEvenV14V16V17FIamul_double_postaNearestTiesToEvenV15V0V16FIamul_double_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FAaclosenessavalueV10avalueV2avalueV0Aanewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -76,7 +76,7 @@
      <goal
       name="WP_parameter sqrt_ensures_default.1"
       expl="assertion"
-      sum="cd832b839354a1fe4bbd8a44514b71fa"
+      sum="600dc88af906591999c80570aa1b6e6a"
       proved="true"
       expanded="true"
       shape="anewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -85,13 +85,13 @@
        timelimit="10"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.23"/>
+       <result status="valid" time="0.24"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter sqrt_ensures_default.2"
       expl="assertion"
-      sum="d5c12a68384e9b46de08c0b69bae5549"
+      sum="159a8c306343ea593b0606e25c55fa9f"
       proved="true"
       expanded="true"
       shape="aclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -106,7 +106,7 @@
      <goal
       name="WP_parameter sqrt_ensures_default.3"
       expl="assertion"
-      sum="11e1c26692dfc371d55b2d669b8e6cc1"
+      sum="cd77e70f4319cdc9f20ae25e7c3bbc39"
       proved="true"
       expanded="true"
       shape="anewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIasub_double_postaNearestTiesToEvenV14V16V17FIamul_double_postaNearestTiesToEvenV15V0V16FIamul_double_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -115,13 +115,13 @@
        timelimit="10"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.58"/>
+       <result status="valid" time="0.60"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter sqrt_ensures_default.4"
       expl="assertion"
-      sum="ec964ab93f0eba98a69ab9cf673356a4"
+      sum="7eed7e255f6ef41079ca16fbcf58ac62"
       proved="true"
       expanded="true"
       shape="aclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIasub_double_postaNearestTiesToEvenV14V16V17FIamul_double_postaNearestTiesToEvenV15V0V16FIamul_double_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -136,7 +136,7 @@
      <goal
       name="WP_parameter sqrt_ensures_default.5"
       expl="assertion"
-      sum="d24edf3ae9b439555b68ca7e61c3ccd1"
+      sum="3404d641b6561a0f3bc8965ffef6d879"
       proved="true"
       expanded="true"
       shape="anewton_relavalueV20avalueV0Iainfix =V28V27FIamul_double_postaNearestTiesToEvenV22V26V27FIasub_double_postaNearestTiesToEvenV23V25V26FIamul_double_postaNearestTiesToEvenV24V0V25FIamul_double_postaNearestTiesToEvenV20V20V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIasub_double_postaNearestTiesToEvenV14V16V17FIamul_double_postaNearestTiesToEvenV15V0V16FIamul_double_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -145,13 +145,13 @@
        timelimit="10"
        edited=""
        obsolete="false">
-       <result status="valid" time="1.42"/>
+       <result status="valid" time="1.43"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter sqrt_ensures_default.6"
       expl="assertion"
-      sum="9eb97408a35f8bc3d731ff11668e178c"
+      sum="92c6f0df15542e0844aaef442d225e0b"
       proved="true"
       expanded="true"
       shape="aclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_double_postaNearestTiesToEvenV22V26V27FIasub_double_postaNearestTiesToEvenV23V25V26FIamul_double_postaNearestTiesToEvenV24V0V25FIamul_double_postaNearestTiesToEvenV20V20V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIasub_double_postaNearestTiesToEvenV14V16V17FIamul_double_postaNearestTiesToEvenV15V0V16FIamul_double_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -160,13 +160,13 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.46"/>
+       <result status="valid" time="0.50"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter sqrt_ensures_default.7"
       expl="assertion"
-      sum="e61c412f1fe795fade7cb6ad5a236e57"
+      sum="77196b794bda8fc8d395c4150101ccb2"
       proved="true"
       expanded="true"
       shape="ainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_double_postaNearestTiesToEvenV22V26V27FIasub_double_postaNearestTiesToEvenV23V25V26FIamul_double_postaNearestTiesToEvenV24V0V25FIamul_double_postaNearestTiesToEvenV20V20V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIasub_double_postaNearestTiesToEvenV14V16V17FIamul_double_postaNearestTiesToEvenV15V0V16FIamul_double_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -175,13 +175,13 @@
        timelimit="10"
        edited="float_sqrt_WP_Jessie_program_WP_parameter_sqrt_ensures_default_3.v"
        obsolete="false">
-       <result status="valid" time="2.15"/>
+       <result status="valid" time="2.11"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter sqrt_ensures_default.8"
       expl="normal postcondition"
-      sum="0a82883dbb0d4f0d7081def01564b349"
+      sum="58d995da4fac1ca49e8dd6cbbca55da6"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsainfix -avalueV32asqrtavalueV0ainfix *c0x1.p-43aabsasqrtavalueV0Iainfix =V32V31FIainfix =V31V30FIamul_double_postaNearestTiesToEvenV0V29V30FIainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_double_postaNearestTiesToEvenV22V26V27FIasub_double_postaNearestTiesToEvenV23V25V26FIamul_double_postaNearestTiesToEvenV24V0V25FIamul_double_postaNearestTiesToEvenV20V20V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIasub_double_postaNearestTiesToEvenV14V16V17FIamul_double_postaNearestTiesToEvenV15V0V16FIamul_double_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -190,7 +190,7 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.75"/>
+       <result status="valid" time="0.84"/>
       </proof>
      </goal>
     </transf>
@@ -198,7 +198,7 @@
    <goal
     name="WP_parameter sqrt_safety"
     expl="Function sqrt, Safety"
-    sum="197da4968ed555fec80e95597fb55259"
+    sum="8304fede028223b9d63766ec272b8c8c"
     proved="true"
     expanded="true"
     shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV29amax_doubleIainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_double_postaNearestTiesToEvenV22V26V27FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV22avalueV26amax_doubleIasub_double_postaNearestTiesToEvenV23V25V26FAainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV25amax_doubleIamul_double_postaNearestTiesToEvenV24V0V25FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV24avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV20V20V24FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FAainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FAainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FAainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -209,7 +209,7 @@
      <goal
       name="WP_parameter sqrt_safety.1"
       expl="precondition for call"
-      sum="a31ce139a049557e2807fbcb2c521a60"
+      sum="bceb27395fa8cd8852393eccb6cf9ed3"
       proved="true"
       expanded="true"
       shape="ainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -224,7 +224,7 @@
      <goal
       name="WP_parameter sqrt_safety.2"
       expl="floating-point overflow"
-      sum="1bbc4933c6454bae3bbc0c63528e3ecd"
+      sum="9411cfed0129be9b44d3d3cbc82847d0"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -239,7 +239,7 @@
      <goal
       name="WP_parameter sqrt_safety.3"
       expl="floating-point overflow"
-      sum="0009a5cc4a125ee1e6510ed88054e2c0"
+      sum="ea91e3d21bc906f7c9bb9c9cbeecd030"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -254,7 +254,7 @@
      <goal
       name="WP_parameter sqrt_safety.4"
       expl="floating-point overflow"
-      sum="51be2f7124db644affacc77bbf577b1b"
+      sum="ca499a8786b0d039ae6719672cd9a77d"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -269,7 +269,7 @@
      <goal
       name="WP_parameter sqrt_safety.5"
       expl="floating-point overflow"
-      sum="5ede0c3916146e9911939768ac3a2b1a"
+      sum="72cbbf27b8ea874026ea02a313c4ed59"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -284,7 +284,7 @@
      <goal
       name="WP_parameter sqrt_safety.6"
       expl="floating-point overflow"
-      sum="d028caa70ef4fee6bb7855d00240548a"
+      sum="f1811e50ba4bd4431ab907d4352ef469"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -299,7 +299,7 @@
      <goal
       name="WP_parameter sqrt_safety.7"
       expl="floating-point overflow"
-      sum="b8417982231269bc0c95b1d2e49d5a7c"
+      sum="dfc28a2a6d5f80d15dc39d49998dc08c"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -314,7 +314,7 @@
      <goal
       name="WP_parameter sqrt_safety.8"
       expl="floating-point overflow"
-      sum="4927de49684828962391f7f962ce573c"
+      sum="910aa28812ee3af2d3a95bda3f4262e9"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -329,7 +329,7 @@
      <goal
       name="WP_parameter sqrt_safety.9"
       expl="floating-point overflow"
-      sum="fee5004275e2d5ec6491e7c06e666a47"
+      sum="90dc14e143fe05713ed2f33eb719a271"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -344,7 +344,7 @@
      <goal
       name="WP_parameter sqrt_safety.10"
       expl="floating-point overflow"
-      sum="059e987a4ad2361d6823f593d5e854ad"
+      sum="08d0e9cbe6cb4237886b1d0e357adf6b"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -359,7 +359,7 @@
      <goal
       name="WP_parameter sqrt_safety.11"
       expl="floating-point overflow"
-      sum="1f667d4cc69b24b7774749004149bef4"
+      sum="c27556806f10875fe21564f2ac990bd0"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -374,7 +374,7 @@
      <goal
       name="WP_parameter sqrt_safety.12"
       expl="floating-point overflow"
-      sum="732198b21f8c07a366e0787a5bf1fb57"
+      sum="f9ca4eb2fe1d5eb128fa81f6e5d8742a"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -389,7 +389,7 @@
      <goal
       name="WP_parameter sqrt_safety.13"
       expl="floating-point overflow"
-      sum="39ceb05c64a4075bbb8b6cf5a48746d6"
+      sum="786163dd10e04917f6c7e6bc8fe16672"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -404,7 +404,7 @@
      <goal
       name="WP_parameter sqrt_safety.14"
       expl="floating-point overflow"
-      sum="d175b38db979c6cc77212e44adfc9449"
+      sum="a4262754406a847409db71a3fef450c8"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV24avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV20V20V24FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -419,7 +419,7 @@
      <goal
       name="WP_parameter sqrt_safety.15"
       expl="floating-point overflow"
-      sum="4152c6904085c04f0426d18a951190bf"
+      sum="2a5460f93bd2da82f81362eb8e024b11"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV25amax_doubleIamul_double_postaNearestTiesToEvenV24V0V25FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV24avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV20V20V24FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -434,7 +434,7 @@
      <goal
       name="WP_parameter sqrt_safety.16"
       expl="floating-point overflow"
-      sum="78322cac46e41e6e42ade41f1cadfaf9"
+      sum="0acd85ac5398f0cffd5ff27dfc7543d4"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV22avalueV26amax_doubleIasub_double_postaNearestTiesToEvenV23V25V26FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV25amax_doubleIamul_double_postaNearestTiesToEvenV24V0V25FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV24avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV20V20V24FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
@@ -449,7 +449,7 @@
      <goal
       name="WP_parameter sqrt_safety.17"
       expl="floating-point overflow"
-      sum="bf3f0947602f16944de0f539ca95bb10"
+      sum="8e81684a2e2502d8d507e75888928ebb"
       proved="true"
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV29amax_doubleIainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_double_postaNearestTiesToEvenV22V26V27FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV22avalueV26amax_doubleIasub_double_postaNearestTiesToEvenV23V25V26FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV25amax_doubleIamul_double_postaNearestTiesToEvenV24V0V25FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV24avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV20V20V24FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">

@@ -15,9 +15,13 @@
   name="CVC3"
   version="2.2"/>
  <prover
+  id="eprover"
+  name="Eprover"
+  version="1.4 Namring"/>
+ <prover
   id="gappa"
   name="Gappa"
-  version="0.15.0"/>
+  version="0.15.1"/>
  <prover
   id="simplify"
   name="Simplify"
@@ -30,6 +34,10 @@
   id="vampire"
   name="Vampire"
   version="0.6"/>
+ <prover
+  id="verit"
+  name="veriT"
+  version="dev"/>
  <prover
   id="yices"
   name="Yices"
@@ -54,7 +62,7 @@
    <goal
     name="WP_parameter _Termination_loop1_ensures_default"
     expl="loop invariant preservation"
-    sum="90eda8c0746dbb950d2de02400e9d806"
+    sum="7d20a468e683c9d7f993dfb30f4da8b0"
     proved="true"
     expanded="false"
     shape="t">
@@ -70,7 +78,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
@@ -83,7 +91,7 @@
    <goal
     name="WP_parameter _Termination_loop1_safety"
     expl="loop variant decreases"
-    sum="87748bebd0811b4c371f330504a56a7d"
+    sum="23521ab31d31256e9201c8f42585eaa7"
     proved="true"
     expanded="false"
     shape="ainfix <V3V2Aainfix <=c0V2Iainfix =V3ainfix -V2c1FIainfix >V2c0FIavalid_struct_TerminationV0c0c0V1FF">
@@ -112,7 +120,7 @@
    <goal
     name="WP_parameter _Termination_loop2_ensures_default"
     expl="loop invariant preservation"
-    sum="a7ac5f6146f9b16a7de86ca539c27f3d"
+    sum="24e5cd45fca222d2d6d7c1787ddad9ec"
     proved="true"
     expanded="false"
     shape="t">
@@ -128,7 +136,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -141,7 +149,7 @@
    <goal
     name="WP_parameter _Termination_loop2_safety"
     expl="loop variant decreases"
-    sum="6f8cefdd6a8bc3b4b59c394267194353"
+    sum="1c8457bf3b5682e20e07e20d556738d7"
     proved="true"
     expanded="false"
     shape="ainfix <ainfix -c100V3ainfix -c100V2Aainfix <=c0ainfix -c100V2Iainfix =V3ainfix +V2c1FIainfix <V2c100FIavalid_struct_TerminationV0c0c0V1FF">
@@ -157,7 +165,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
@@ -170,7 +178,7 @@
    <goal
     name="WP_parameter _Termination_loop3_ensures_default"
     expl="Method loop3, default behavior"
-    sum="cab50e9ff570ffd6412fc55cd5d4436c"
+    sum="5e2c503e299e3a1b96cc9cce9e96c380"
     proved="true"
     expanded="false"
     shape="iainfix >V2c0ainfix <=V3c100Aainfix <=c0V3Iainfix =V3ainfix -V2c1Fainfix =V4c0Iainfix =V4V2FIainfix <=V2c100Aainfix <=c0V2FAainfix <=c100c100Aainfix <=c0c100Iavalid_struct_TerminationV0c0c0V1FF">
@@ -199,7 +207,7 @@
    <goal
     name="WP_parameter _Termination_loop3_safety"
     expl="loop variant decreases"
-    sum="033d09ae3ec8e494f1dbbfe795ae2c27"
+    sum="53343b5eccab3dc966afcecc7612c28b"
     proved="true"
     expanded="false"
     shape="ainfix <V3V2Aainfix <=c0V2Iainfix =V3ainfix -V2c1FIainfix >V2c0Iainfix <=V2c100Aainfix <=c0V2FIavalid_struct_TerminationV0c0c0V1FF">
@@ -222,13 +230,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Termination_ensures_default"
     expl="Constructor of class Termination, default behavior"
-    sum="7ed00b119aa0b2d20445f1e00b6c7220"
+    sum="912d65845bdf9f4591e4adeff5cbffd9"
     proved="true"
     expanded="false"
     shape="t">
@@ -257,7 +265,7 @@
    <goal
     name="WP_parameter cons_Termination_safety"
     expl="Constructor of class Termination, Safety"
-    sum="7772b2977d15ee664740c7fb93982337"
+    sum="436d4c8bdef7dbe0bf3883daddbf7c27"
     proved="true"
     expanded="false"
     shape="t">

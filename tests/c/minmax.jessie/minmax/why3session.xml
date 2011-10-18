@@ -50,7 +50,7 @@
    <goal
     name="WP_parameter dmax_ensures_default"
     expl="Function dmax, default behavior"
-    sum="d16233e3b2e6167e104e2f961ab6abff"
+    sum="8ca59c1df50721d52849adfa669b624c"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
@@ -72,7 +72,7 @@
    <goal
     name="WP_parameter dmax_safety"
     expl="Function dmax, Safety"
-    sum="ebc3a9dcd6455467ae3c4c1a34be9578"
+    sum="a31ac0dc62828430a718fd7fed5b898b"
     proved="true"
     expanded="true"
     shape="t">
@@ -88,7 +88,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.09"/>
+     <result status="valid" time="0.11"/>
     </proof>
     <proof
      prover="z3"
@@ -101,7 +101,7 @@
    <goal
     name="WP_parameter dmin_ensures_default"
     expl="Function dmin, default behavior"
-    sum="6389494a2b5ce0559be1b7bc5704fa28"
+    sum="da2e85aa6e094cd4467642e79cdb3f3c"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
@@ -117,13 +117,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.09"/>
+     <result status="valid" time="0.11"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter dmin_safety"
     expl="Function dmin, Safety"
-    sum="305c3c2864d60ef1c2582b5978c34e3c"
+    sum="1cb7c2cb16fa5eb4a48120b9b0b079f3"
     proved="true"
     expanded="true"
     shape="t">
@@ -152,7 +152,7 @@
    <goal
     name="WP_parameter fmax_ensures_default"
     expl="Function fmax, default behavior"
-    sum="0bd2f205ee2aab78738537688622c14f"
+    sum="d5380a480846148aaf7cd17417766993"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
@@ -168,64 +168,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.09"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter fmax_safety"
     expl="Function fmax, Safety"
-    sum="95d0d1820af1d2175ba3aeee2ef4a475"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.10"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.10"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter fmin_ensures_default"
-    expl="Function fmin, default behavior"
-    sum="b7271fb72967e161f64cb545a2159de3"
-    proved="true"
-    expanded="true"
-    shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.12"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.10"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter fmin_safety"
-    expl="Function fmin, Safety"
-    sum="a99a1fa184e94ff97527bf1e9be8d584"
+    sum="c9682b25383d7593fd50ef8d6efd0906"
     proved="true"
     expanded="true"
     shape="t">
@@ -252,12 +201,12 @@
     </proof>
    </goal>
    <goal
-    name="WP_parameter max_ensures_default"
-    expl="Function max, default behavior"
-    sum="795ef28a7ab6f61e44e633b318faa95d"
+    name="WP_parameter fmin_ensures_default"
+    expl="Function fmin, default behavior"
+    sum="4f5701581a1138ba5e195594dd48623b"
     proved="true"
     expanded="true"
-    shape="iainfix <=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V1Fainfix =ainteger_of_int32V5amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V0FFF">
+    shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
     <proof
      prover="cvc3"
      timelimit="5"
@@ -270,13 +219,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.13"/>
+     <result status="valid" time="0.10"/>
     </proof>
    </goal>
    <goal
-    name="WP_parameter max_safety"
-    expl="Function max, Safety"
-    sum="edc40597464835e7c8dd19d140ccc59e"
+    name="WP_parameter fmin_safety"
+    expl="Function fmin, Safety"
+    sum="0beb01e5e2d164316101a19f3f30bf4b"
     proved="true"
     expanded="true"
     shape="t">
@@ -303,12 +252,12 @@
     </proof>
    </goal>
    <goal
-    name="WP_parameter min_ensures_default"
-    expl="Function min, default behavior"
-    sum="de34e4be0ae8d75e792696b5c1a6f748"
+    name="WP_parameter max_ensures_default"
+    expl="Function max, default behavior"
+    sum="e28eef780ef25c5b632a48decca1b8bf"
     proved="true"
     expanded="true"
-    shape="iainfix <=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V0Fainfix =ainteger_of_int32V5aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V1FFF">
+    shape="iainfix <=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V1Fainfix =ainteger_of_int32V5amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V0FFF">
     <proof
      prover="cvc3"
      timelimit="5"
@@ -321,13 +270,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.13"/>
+     <result status="valid" time="0.12"/>
     </proof>
    </goal>
    <goal
-    name="WP_parameter min_safety"
-    expl="Function min, Safety"
-    sum="33b19ab39f5b66343b0572b6ab7cbbed"
+    name="WP_parameter max_safety"
+    expl="Function max, Safety"
+    sum="9ba787554068c859229286d68d953003"
     proved="true"
     expanded="true"
     shape="t">
@@ -343,7 +292,58 @@
      timelimit="5"
      edited=""
      obsolete="false">
+     <result status="valid" time="0.09"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter min_ensures_default"
+    expl="Function min, default behavior"
+    sum="21f8ad177612029d99a8a4337e40bdc4"
+    proved="true"
+    expanded="true"
+    shape="iainfix <=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V0Fainfix =ainteger_of_int32V5aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V1FFF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.12"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.12"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter min_safety"
+    expl="Function min, Safety"
+    sum="da1f883b388de5036bab3bb9b58f2584"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
      <result status="valid" time="0.10"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
      prover="z3"

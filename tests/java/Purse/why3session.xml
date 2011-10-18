@@ -15,9 +15,13 @@
   name="CVC3"
   version="2.2"/>
  <prover
+  id="eprover"
+  name="Eprover"
+  version="1.4 Namring"/>
+ <prover
   id="gappa"
   name="Gappa"
-  version="0.15.0"/>
+  version="0.15.1"/>
  <prover
   id="simplify"
   name="Simplify"
@@ -30,6 +34,10 @@
   id="vampire"
   name="Vampire"
   version="0.6"/>
+ <prover
+  id="verit"
+  name="veriT"
+  version="dev"/>
  <prover
   id="yices"
   name="Yices"
@@ -54,7 +62,7 @@
    <goal
     name="WP_parameter _Purse_credit_ensures_default"
     expl="normal postcondition"
-    sum="11e4667e0a73d8275cb3e900ed60e203"
+    sum="5c77e65ac82bb431cd3bb36d534bdc40"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix +aselectV2V0V1Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
@@ -83,7 +91,7 @@
    <goal
     name="WP_parameter _Purse_credit_safety"
     expl="normal postcondition"
-    sum="ed7baac151c06f62bbf6451fe6e891a9"
+    sum="2995ae4e28d6e53defd136db81e5eca4"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V4Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
@@ -92,14 +100,14 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.17"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
@@ -112,7 +120,7 @@
    <goal
     name="WP_parameter _Purse_getBalance_ensures_default"
     expl="normal postcondition"
-    sum="c001b570c1f7186e6b98f1662bd22905"
+    sum="488eace820251aac715280275c7b38fe"
     proved="true"
     expanded="false"
     shape="ainfix =V3aselectV1V0Iainfix =V3aselectV1V0FIabalance_non_negativeV0V1Aavalid_struct_PurseV0c0c0V2FFF">
@@ -141,7 +149,7 @@
    <goal
     name="WP_parameter _Purse_getBalance_safety"
     expl="normal postcondition"
-    sum="aae8fc2861668c08759296583a2ca35d"
+    sum="6bc51a03253a68b273652a6aba530d75"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V1Iainfix =V3aselectV1V0FIabalance_non_negativeV0V1Aavalid_struct_PurseV0c0c0V2FFF">
@@ -170,7 +178,7 @@
    <goal
     name="WP_parameter _Purse_withdraw_ensures_default"
     expl="Method withdraw, default behavior"
-    sum="62f9a88c7001758b7b6773f75f13b112"
+    sum="ca85229fad83230f5db0a05170a74e92"
     proved="true"
     expanded="false"
     shape="iainfix >=aselectV2V0V1anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix -aselectV2V0V1Aainfix <=V1aselectV2V0Iainfix =V4astoreV2V0ainfix -aselectV2V0V1Fa_Non_null_ObjectV7V6IainstanceofV5V7a_NoCreditException_tagAaalloc_freshV3V7c1Aaalloc_extendsV3V6Aastrict_valid_struct_NoCreditExceptionV7c0ainfix -c1c1V6FFFIabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
@@ -180,35 +188,6 @@
      edited=""
      obsolete="false">
      <result status="valid" time="0.18"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter _Purse_withdraw_exsures_amount_too_large"
-    expl="exceptional postcondition"
-    sum="dd6cfbfd5a931a03e1d1977d9b3c2756"
-    proved="true"
-    expanded="false"
-    shape="anot_assignsV3V2V2apset_emptyAabalance_non_negativeV0V2Aainfix >V1aselectV2V0Ia_Non_null_ObjectV6V5IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFFIainfix >=aselectV2V0V1NIabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -226,9 +205,38 @@
     </proof>
    </goal>
    <goal
+    name="WP_parameter _Purse_withdraw_exsures_amount_too_large"
+    expl="exceptional postcondition"
+    sum="d955006bc972b8646368aa05801542fe"
+    proved="true"
+    expanded="false"
+    shape="anot_assignsV3V2V2apset_emptyAabalance_non_negativeV0V2Aainfix >V1aselectV2V0Ia_Non_null_ObjectV6V5IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFFIainfix >=aselectV2V0V1NIabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
     name="WP_parameter _Purse_withdraw_safety"
     expl="Method withdraw, Safety"
-    sum="d2c7bd844e08edb1d7c9dc51f073f303"
+    sum="ccb4cde5a04541a075d03813a3510b5d"
     proved="true"
     expanded="false"
     shape="iainfix >=aselectV2V0V1abalance_non_negativeV0V4Iainfix =V4astoreV2V0ainfix -aselectV2V0V1Fainfix >=aoffset_maxV6V7c0IainstanceofV5V7a_NoCreditException_tagAaalloc_freshV3V7c1Aaalloc_extendsV3V6Aastrict_valid_struct_NoCreditExceptionV7c0ainfix -c1c1V6FFFAainfix >=c1c0Iabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
@@ -237,7 +245,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.17"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -257,7 +265,7 @@
    <goal
     name="WP_parameter cons_Exception_String_Throwable_ensures_default"
     expl="Constructor of class Exception, default behavior"
-    sum="3f5a4ca39ccb2bd9e6f9611cef93090b"
+    sum="c0203608e63d57ad4af72282198aa624"
     proved="true"
     expanded="false"
     shape="t">
@@ -273,7 +281,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -286,7 +294,7 @@
    <goal
     name="WP_parameter cons_Exception_String_Throwable_safety"
     expl="Constructor of class Exception, Safety"
-    sum="3efffbfdd6708d16d18a4e413a7e710c"
+    sum="5b4e85004f009b5dc5b099c20c82e00d"
     proved="true"
     expanded="false"
     shape="t">
@@ -302,7 +310,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
@@ -315,7 +323,7 @@
    <goal
     name="WP_parameter cons_Exception_String_ensures_default"
     expl="Constructor of class Exception, default behavior"
-    sum="bac60f24fbff9a0433ed37107d914b46"
+    sum="114bcd7bb7e0873190ca7c3a733a68bb"
     proved="true"
     expanded="false"
     shape="t">
@@ -331,7 +339,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
@@ -344,7 +352,7 @@
    <goal
     name="WP_parameter cons_Exception_String_safety"
     expl="Constructor of class Exception, Safety"
-    sum="abfba15df0c4a8aa4e5e2801aa26281c"
+    sum="4ba365bd1a737c564b44f0ce34ba65a4"
     proved="true"
     expanded="false"
     shape="t">
@@ -373,7 +381,7 @@
    <goal
     name="WP_parameter cons_Exception_Throwable_ensures_default"
     expl="Constructor of class Exception, default behavior"
-    sum="d4011d1fa2a845b0368eaf46892cbe70"
+    sum="3321e4f66a41b766b3011be3c7a2deb2"
     proved="true"
     expanded="false"
     shape="t">
@@ -402,7 +410,7 @@
    <goal
     name="WP_parameter cons_Exception_Throwable_safety"
     expl="Constructor of class Exception, Safety"
-    sum="0e5d1ac0df5c2b1a3f18e4409ae6d0fc"
+    sum="87700801ebbdc1e6ab09718335dcb0c2"
     proved="true"
     expanded="false"
     shape="t">
@@ -431,36 +439,7 @@
    <goal
     name="WP_parameter cons_Exception_ensures_default"
     expl="Constructor of class Exception, default behavior"
-    sum="aa64d925394b60a435a475605ea0d311"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Exception_safety"
-    expl="Constructor of class Exception, Safety"
-    sum="d81ab9d4dc51e80a1b7529da651b0157"
+    sum="b354ab9926e8758b027290cc9fce2f41"
     proved="true"
     expanded="false"
     shape="t">
@@ -487,9 +466,38 @@
     </proof>
    </goal>
    <goal
+    name="WP_parameter cons_Exception_safety"
+    expl="Constructor of class Exception, Safety"
+    sum="2f96df98904010033b0ad9d5e7ea9d93"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
     name="WP_parameter cons_NoCreditException_ensures_default"
     expl="Constructor of class NoCreditException, default behavior"
-    sum="86dcbac0a33b2a3a7cce0272c06a2889"
+    sum="f5e9bb9858d6dbfc2446a7f6c8250ab4"
     proved="true"
     expanded="false"
     shape="t">
@@ -518,7 +526,7 @@
    <goal
     name="WP_parameter cons_NoCreditException_safety"
     expl="Constructor of class NoCreditException, Safety"
-    sum="ada3319f8e81b7d18873a588d17d1d4a"
+    sum="3d1930525b1347eb74f0fc6206c848e4"
     proved="true"
     expanded="false"
     shape="t">
@@ -547,7 +555,7 @@
    <goal
     name="WP_parameter cons_Purse_ensures_default"
     expl="normal postcondition"
-    sum="83bda05f7b7ae403b6a79964c98c4421"
+    sum="70c9c2af0ded2a16cade134b81d97bb5"
     proved="true"
     expanded="false"
     shape="anot_assignsV2V1V4apset_singletonV0Aainfix =aselectV4V0c0Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FFF">
@@ -556,7 +564,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.19"/>
+     <result status="valid" time="0.20"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -576,7 +584,7 @@
    <goal
     name="WP_parameter cons_Purse_safety"
     expl="normal postcondition"
-    sum="637e3eb6e86791974f1258e98d60bdca"
+    sum="1c8ecc6344ad90f5cc210b3f3f9e491d"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V4Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FFF">
@@ -592,20 +600,20 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Throwable_String_Throwable_ensures_default"
     expl="Constructor of class Throwable, default behavior"
-    sum="2b553a07c4e4b8fcc7bb4d51a616a0e1"
+    sum="fcf29b08bc4100e53c89de0050927313"
     proved="true"
     expanded="false"
     shape="t">
@@ -634,7 +642,7 @@
    <goal
     name="WP_parameter cons_Throwable_String_Throwable_safety"
     expl="Constructor of class Throwable, Safety"
-    sum="00ac1b2ad9229c4a345b55804a06f13a"
+    sum="8213b2418098d2f69e601a6719bd17b1"
     proved="true"
     expanded="false"
     shape="t">
@@ -663,7 +671,7 @@
    <goal
     name="WP_parameter cons_Throwable_String_ensures_default"
     expl="Constructor of class Throwable, default behavior"
-    sum="9e06c86c3c41f75168e5c4fd07701c9b"
+    sum="77d7bdbc4e516cc94b760aae3ff3d331"
     proved="true"
     expanded="false"
     shape="t">
@@ -692,7 +700,7 @@
    <goal
     name="WP_parameter cons_Throwable_String_safety"
     expl="Constructor of class Throwable, Safety"
-    sum="d2fed2a8a6c1127b2c9e8953f78f4d18"
+    sum="13ca361aeddd578d41762e8e202e3fd0"
     proved="true"
     expanded="false"
     shape="t">
@@ -721,7 +729,7 @@
    <goal
     name="WP_parameter cons_Throwable_Throwable_ensures_default"
     expl="Constructor of class Throwable, default behavior"
-    sum="f44a39bdfcf4399c157c3e738c88ce3a"
+    sum="f27ef219231fd1253031419eb6741cf2"
     proved="true"
     expanded="false"
     shape="t">
@@ -750,7 +758,7 @@
    <goal
     name="WP_parameter cons_Throwable_Throwable_safety"
     expl="Constructor of class Throwable, Safety"
-    sum="8d30aef4c1e3a8bd31521d0546cded31"
+    sum="7fef1931b4cbac212bad7a7ae7201706"
     proved="true"
     expanded="false"
     shape="t">
@@ -779,7 +787,7 @@
    <goal
     name="WP_parameter cons_Throwable_ensures_default"
     expl="Constructor of class Throwable, default behavior"
-    sum="d6b7daba22a89c24de0ca7f4e424d320"
+    sum="729637e51f090736836425e3154cc3d2"
     proved="true"
     expanded="false"
     shape="t">
@@ -808,7 +816,7 @@
    <goal
     name="WP_parameter cons_Throwable_safety"
     expl="Constructor of class Throwable, Safety"
-    sum="65357f8ed9bb59b6965aec340dd420d7"
+    sum="38077d52a489fdc83956cec19072c51c"
     proved="true"
     expanded="false"
     shape="t">

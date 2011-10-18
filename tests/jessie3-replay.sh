@@ -4,7 +4,7 @@ JAVA="AllZeros Arrays BinarySearch Counter Creation Fibonacci
       FlagStatic Gcd Hello \
       Isqrt Literals MacCarthy Muller NameConflicts Negate \
       PreAndOld Purse SelectionSort \
-      SideEffects SimplAlloc Switch \
+      SideEffects SimpleAlloc Switch \
       Termination TestNonNull"
 
 JAVATODO="SimpleApplet Sort2 Sort"
@@ -36,6 +36,15 @@ export KRAKATOALIB=$DIR/lib
 
 res=0
 
+report_error () {
+    printf "$2 FAILED (ret code=$1)\n"
+    printf "standard error:\n"
+    cat $TMPERR
+    printf "standard output:\n"
+    cat $TMP
+    res=1
+}
+
 cd tests
 
 printf "\n-------- Java examples --------\n"
@@ -45,12 +54,14 @@ cd java
 for i in $JAVA; do
     printf "$i.java... "
     ../../bin/krakatoa.opt $i.java 2> $TMPERR > $TMP
-    if test "$?" != "0"  ; then
-	printf "krakatoa FAILED\n"
+    ret=$?
+    if test "$ret" != "0"  ; then
+	report_error $ret "krakatoa"
     else
         ../../bin/jessie.opt -why3ml -locs $i.jloc $i.jc 2> $TMPERR > $TMP
-        if test "$?" != "0"  ; then
-	    printf "jessie FAILED\n"
+        ret=$?
+        if test "$ret" != "0"  ; then
+	    report_error $ret "jessie"
         else
             why3replayer $REPLAYOPT -I $WHYLIB/why3 $i 2> $TMPERR > $TMP
             ret=$?
@@ -81,12 +92,14 @@ cd c
 for i in $C; do
     printf "$i.c... "
     frama-c -load-module ../../frama-c-plugin/Jessie.cmxs -jessie -jessie-gen-only $i.c 2> $TMPERR > $TMP
-    if test "$?" != "0"  ; then
-	printf "frama-c -jessie FAILED\n"
+    ret=$?
+    if test "$ret" != "0"; then
+	report_error $ret "frama-c -jessie"
     else
        ../../bin/jessie.opt -why3ml -locs $i.jessie/$i.cloc $i.jessie/$i.jc 2> $TMPERR > $TMP
-        if test "$?" != "0"  ; then
-	    printf "jessie FAILED\n"
+       ret=$?
+       if test "$ret" != "0"; then
+	   report_error $ret "jessie"
         else
             why3replayer $REPLAYOPT -I $WHYLIB/why3 $i.jessie/$i 2> $TMPERR > $TMP
             ret=$?

@@ -15,9 +15,13 @@
   name="CVC3"
   version="2.2"/>
  <prover
+  id="eprover"
+  name="Eprover"
+  version="1.4 Namring"/>
+ <prover
   id="gappa"
   name="Gappa"
-  version="0.15.0"/>
+  version="0.15.1"/>
  <prover
   id="simplify"
   name="Simplify"
@@ -30,6 +34,10 @@
   id="vampire"
   name="Vampire"
   version="0.6"/>
+ <prover
+  id="verit"
+  name="veriT"
+  version="dev"/>
  <prover
   id="yices"
   name="Yices"
@@ -54,7 +62,7 @@
    <goal
     name="WP_parameter _PreAndOld_g_ensures_default"
     expl="normal postcondition"
-    sum="07b635ec468f1346db24ff95d5b7fa2d"
+    sum="81f4a4b27bd34ed54f9041e0cccc88be"
     proved="true"
     expanded="true"
     shape="ainfix =V5afV1V2Aainfix =V5afV1V2Aainfix =V5afV1V2Iainfix =V5ainfix +V1V2FIainfix =V4c12FIavalid_struct_PreAndOldV0c0c0V3FFFF">
@@ -70,7 +78,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
@@ -83,7 +91,7 @@
    <goal
     name="WP_parameter _PreAndOld_g_safety"
     expl="Method g, Safety"
-    sum="84d968d6413089de5ea18641f04015e6"
+    sum="6bcfb567760f242c0c9eb4e6ab77ff2d"
     proved="true"
     expanded="true"
     shape="t">
@@ -112,7 +120,7 @@
    <goal
     name="WP_parameter cons_PreAndOld_ensures_default"
     expl="Constructor of class PreAndOld, default behavior"
-    sum="8a9563e997c0fdffb5f552f24e06a3a6"
+    sum="989896dc5faa6577e7668fdadcb73938"
     proved="true"
     expanded="true"
     shape="t">
@@ -141,7 +149,7 @@
    <goal
     name="WP_parameter cons_PreAndOld_safety"
     expl="Constructor of class PreAndOld, Safety"
-    sum="03fca73e39b57d01b0779e21b6534008"
+    sum="e0598854d993090487974b58a2652491"
     proved="true"
     expanded="true"
     shape="t">

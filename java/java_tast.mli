@@ -43,12 +43,13 @@ type term_node =
     | JTlit of literal
     | JTvar of java_var_info
     | JTat of term * logic_label
-    | JTbin of term * base_type * bin_op * term   
+    | JTbin of term * base_type * bin_op * term
+    | JTbin_obj of term * bin_op * term
     | JTun of base_type * un_op * term
     | JTapp of java_logic_info * label_assoc * term list
     | JTfield_access of term * java_field_info
     | JTstatic_field_access of java_type_info * java_field_info
-    | JTarray_length of term 
+    | JTarray_length of term
     | JTarray_access of term * term
     | JTarray_range of term * term option * term option
     | JTcast of java_type * term
@@ -67,15 +68,15 @@ type assertion_node =
   | JAtrue
   | JAfalse
   | JAat of assertion * logic_label
-  | JAnot of assertion 
+  | JAnot of assertion
   | JAand of assertion * assertion
   | JAor of assertion * assertion
   | JAimpl of assertion * assertion
   | JAiff of assertion * assertion
   | JAquantifier of quantifier * java_var_info * assertion
   | JAbool_expr of term
-  | JAbin of term * base_type * bin_op * term   
-  | JAbin_obj of term * bin_op * term   
+  | JAbin of term * base_type * bin_op * term
+  | JAbin_obj of term * bin_op * term
   | JAapp of java_logic_info * label_assoc * term list
   | JAinstanceof of term * logic_label * java_type
   | JAif of term * assertion * assertion
@@ -100,14 +101,14 @@ and expr_node =
   | JEif of expr * expr * expr
       (*r pre-post incr/decr operations *)
   | JEincr_local_var of incr_decr_op * java_var_info
-  | JEincr_field of incr_decr_op * expr * java_field_info 
+  | JEincr_field of incr_decr_op * expr * java_field_info
   | JEincr_array of incr_decr_op * expr * expr
   | JEstatic_field_access of java_type_info * java_field_info
   | JEfield_access of expr * java_field_info
-  | JEarray_length of expr 
+  | JEarray_length of expr
   | JEarray_access of expr * expr
-  | JEassign_local_var of java_var_info * expr  
-  | JEassign_local_var_op of java_var_info * bin_op * expr  
+  | JEassign_local_var of java_var_info * expr
+  | JEassign_local_var_op of java_var_info * bin_op * expr
   | JEassign_field of expr * java_field_info * expr
   | JEassign_field_op of expr * java_field_info * bin_op * expr
   | JEassign_static_field of java_field_info * expr
@@ -129,8 +130,8 @@ and expr_node =
   | Super_method_call of identifier * pexpr list
   | Instanceof of pexpr * type_expr
       (* in annotations only *)
-  | Type of type_expr 
-  | Typeof of expr 
+  | Type of type_expr
+  | Typeof of expr
 *)
 
 (* statements *)
@@ -161,18 +162,18 @@ type statement =
 and statement_node =
   | JSskip                  (*r empty statement *)
   | JSif of expr * statement * statement
-  | JSreturn_void 
-  | JSreturn of expr 
+  | JSreturn_void
+  | JSreturn of expr
   | JSvar_decl of java_var_info * initialiser option * statement
   | JSblock of block
-  | JSdo of statement * loop_annot * expr  
+  | JSdo of statement * loop_annot * expr
       (*r loop body, annot, condition *)
-  | JSwhile of expr * loop_annot * statement  
+  | JSwhile of expr * loop_annot * statement
       (*r condition, annot, loop body *)
-  | JSfor of expr list * expr * loop_annot * expr list * statement  
+  | JSfor of expr list * expr * loop_annot * expr list * statement
       (*r init, condition, annot, steps, loop body *)
-  | JSfor_decl of (java_var_info * initialiser option) list * 
-      expr * loop_annot * expr list * statement  
+  | JSfor_decl of (java_var_info * initialiser option) list *
+      expr * loop_annot * expr list * statement
       (*r decls, condition, annot, steps, loop body *)
   | JSexpr of expr
   | JSassert of string option * string option * assertion
@@ -181,8 +182,8 @@ and statement_node =
   | JScontinue of string option
   | JSthrow of expr
   | JStry of block * (java_var_info * block) list * block option
-  | JSstatement_spec of 
-      assertion option * (term * java_logic_info option) option 
+  | JSstatement_spec of
+      assertion option * (term * java_logic_info option) option
       * behavior list * statement
 	(*r requires, decreases, behaviors, statement *)
   | JSlabel of string * statement
@@ -199,7 +200,7 @@ and block = statement list
 ;;
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "make -C .. bin/krakatoa.byte"
-End: 
+End:
 *)
