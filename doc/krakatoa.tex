@@ -107,6 +107,22 @@ In the appendix you will find various additional informations,
 including the requirements, a summary of known limitations, and how to
 get help. 
 
+\section{Important note for version 2.30}
+
+The use of the Why2 VC generator is now obsolete, and it is
+recommended to switch to the Why3 system for specification and VC
+generation. Why3 must be installed independently of Why2, please
+instructions given at \url{http://why3.lri.fr}.
+
+The version of Why3 that is compatible with this version 2.30 of Why2
+is the version 0.71. Please see \url{http://krakatoa.lri.fr/} for more
+details on compatibility between Why2 and Why3.
+
+In this manual, it is assumed that the Why3 VC generator and IDE is in
+use.  The old behavior using the Why2 VC generator and GUI remains
+possible, using the \texttt{gwhy} command just as in version 2.29.
+
+
 
 \chapter{Tutorial}
 \label{chap:tutorial}
@@ -143,10 +159,10 @@ given. Indeed, we intentionally made a mistake: the second
 Running the verification process can be done by executing the
 following command, in the directory \verb|tutorial|: 
 \begin{verbatim}
-gwhy Lesson1.java
+krakatoa Lesson1.java
 \end{verbatim}
-\index{GWhy}
-\index{gwhy command@\texttt{gwhy} command}
+\index{Krakatoa}
+\index{krakatoa command@\texttt{krakatoa} command}
 The command will read the given file, and generate a set of logic
 formulas call \emph{verification conditions} (abbreviated as VC),
 which express the validity of the program. The generated formulas are
