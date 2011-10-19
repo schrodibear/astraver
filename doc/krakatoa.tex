@@ -166,36 +166,96 @@ krakatoa Lesson1.java
 The command will read the given file, and generate a set of logic
 formulas call \emph{verification conditions} (abbreviated as VC),
 which express the validity of the program. The generated formulas are
-then displayed into the common graphical VC viewer of the Why
+then displayed into the graphical interface of the Why3
 platform, as shown in Figure~\ref{fig:gwhy}
 
 \begin{figure}[t]
   \begin{center}
-    \includegraphics[width=\textwidth]{Lesson1_max.png}
+    \hspace*{-0.1\textwidth}
+    \includegraphics[width=1.2\textwidth]{Lesson1_max_why3_1.png}
   \end{center}
-  \caption{Verification conditions displayed in GWhy}
+  \caption{Verification conditions displayed in Why3 IDE}
 \label{fig:gwhy}
 \hrulefill
 \end{figure}
 
-The left sub-window displays a table where each row corresponds to a
-VC for method \texttt{max}. Each column corresponds to a theorem
-prover. Running a given prover on the VCs can be achieved by clicking
-in its name in the first row. On the figure, the first three provers
-have been run: Alt-Ergo, Simplify and Z3. Their answers are exactly the
-same: all VCs are valid except the fifth. On the figure, the user has
-clicked on the corresponding fifth row, which is then highlighted in
-blue. On the upper right part of the window, the VC is displayed, and
-in the lower right part, the source code is displayed, with a block
-highlighted in orange: this block is where the VC originates. On that
-example, it means that the system is unable to verify that the result
-of the method is necessarily greater than or equal to
-\texttt{y}. Indeed, this comes from our intentional mistake. If you
-modify the source code, replacing the last \texttt{x} by \texttt{y},
-then rerun the \texttt{gwhy command}, you can run all provers and
-check that all VCs are true. This means that the method implementation
-now satisfies its specification.
+  Please refer to Why3's user manual for details on the use of this
+  interface. We only remind here the main features. 
 
+  The column on the left is a tool bar.  The large window in the
+  middle is the tree view of all generated VCs. There are 4 VCs
+  generated from this program, given as sub-rows of the row called
+  ``WP Jessie program''. Generally speaking, there is one VCs for each
+  behavior of each method or constructor. Safety is one of these
+  behaviors, which includes checking absence of null dereferencing,
+  absence of out-of-bounds array acces, absence of division by zero,
+  and other kind of possible runtime errors like that.  In this tree
+  view, the first VC has been selected was selected, by clicking on
+  the corresponding row. The corresponding specification frim the
+  source code is shown on the bottom right part: it is here the
+  post-condition we gave to method max. The top right part of the
+  window displays the logical formula associated to the VC.
+
+  The left toolbar contains a series of buttons for each prover that
+  was detected when you run ``why3config --detect''. A given prover
+  can be run on a given goal, or a set of goals by selecting the
+  wanted part of the tree. In our example, we can select the row ``WP
+  Jessie program'' and click e.g on Alt-Ergo. Clicking further on
+  other provers like Z3 or CVC3, will run these on the VCs that are
+  not yet proved (see Why3 manual for details). The result is
+  displayed on Figure~\ref{fig:why3b}.
+
+\begin{figure}[t]
+  \begin{center}
+    \includegraphics[width=1.0\textwidth]{Lesson1_max_why3_2.png}
+  \end{center}
+  \caption{Provers run on verification conditions}
+\label{fig:why3b}
+\hrulefill
+\end{figure}
+
+The VC for the post-condition of max is not proved. To investigate
+further, and since it is a conjunction of several propositions, it is
+a good idea to split it in parts. This is done by selecting the VC and
+clicking on the ``split'' button. This results into two subgoals for
+that VC. Again, we can click on provers Alt-Ergo, Z3 and CVC3 to check
+these subgoals. The second remains unproved. It can be splitted in
+parts again, which this time results into 3 subgoals, and provers can
+be run again on them. The result is displayed on
+Figure~\ref{fig:why3c}.
+
+\clearpage
+
+\begin{figure}[tp]
+  \begin{center}
+    \hspace*{-0.1\textwidth}
+    \includegraphics[width=1.2\textwidth]{Lesson1_max_why3_3.png}
+  \end{center}
+  \caption{Splitting verification condition in parts}
+\label{fig:why3c}
+\hrulefill
+\end{figure}
+
+The subgoal that remains unproved was selected, and the corresponging
+spec is shown on the bottom left: it is the part \verb|\result >= y|
+which is not valid. Indeed, this comes from our intentional mistake;
+the result s not necessarily greater or equal to y in the second
+branch.  It is time to fix the source code. You can quit the graphical
+interface, and replace with your favorite editor the last \texttt{x}
+by \texttt{y}.  If you rerun the \texttt{krakatoa} command as above,
+you will see that the state of your proof session was recorded and
+thus see all the splitting you made earlier. You notice also that most
+of the goals are marked as ``obsolete'' meaning that the results
+recorded in your proof sessions are not accurate any more. It is the
+right time to use the ``replay'' button of the interface to rerun
+prover on all obsolete proofs. Then click on the remaining VC and on a
+prover like Alt-ergo, to see that this time the proof is OK. Indeed,
+the splittings that you made to reach this state are not necessary
+anymore; select the first split and the ``remove'' button, then
+restart provers on the first VC, it should be proved. This means that
+the method implementation now satisfies its specification.
+
+\clearpage
 
 \section{Loop invariants}
 \index{loop invariant}
@@ -235,16 +295,15 @@ Now, add the following to your class \texttt{Lesson1}.
 \input{Lesson1_sqrtbody.pp}
 If you generate the VCs now, using
 \begin{verbatim}
-gwhy Lesson1.java
+krakatoa Lesson1.java
 \end{verbatim}
-you will see that almost nothing is provable, as shown on
-Figure~\ref{fig:sqrt}: the three parts of the postcondition are
-unproved. (Please ignore the third section ``Safety of Method sqrt''
+you will see the VC for the post-condition, as shown on
+Figure~\ref{fig:sqrt} is unproved. (Please ignore the VC ``Safety''
 for the moment.)
 
 \begin{figure}[t]
   \begin{center}
-    \includegraphics[width=\textwidth]{Lesson1_sqrt.png}
+    \includegraphics[width=\textwidth]{Lesson1_isqrt_why3_1.png}
   \end{center}
   \caption{Verification conditions for \texttt{sqrt}}
 \label{fig:sqrt}
@@ -268,8 +327,7 @@ between \texttt{1} and \texttt{2*count+1}, that is
 \texttt{(count+1)*(count+1)}. So we suggest the following
 \input{Lesson1_sqrtloopinv.pp}
 
-If you rerun the GWhy tool and the provers, you will see that the
-sixth VC, which amounts to show that the property \texttt{sum == count
+If you rerun the krakatoa tool, run the provers and split the unproved VCs as much as possible, you will see that the subgoal which amounts to show that the property \texttt{sum == count
   * count} is preserved by the loop, is not proved by any provers. It
 does not mean it is not true: in that case, it illustrates the
 incompleteness of the method, since checking validity of first-order
@@ -296,7 +354,7 @@ as follows:
 \hrulefill
 \end{figure}
 
-Rerunning again GWhy and the provers results in
+Rerunning again krakatoa and the provers results in
 Figure~\ref{fig:sqrt2}. No prover is able to prove every VCs, but
 combining results of the three provers, each VCs is proved.
 
