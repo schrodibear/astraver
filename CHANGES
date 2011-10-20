@@ -1,4 +1,7 @@
 
+  o [Krakatoa] new option -gen-only whichs stops after generation of
+    jessie file. The default is now to start jessie and then Why3 IDE.
+    the old usage "gwhy file.java" continues to use the Why2 backend.
   o [Krakatoa/Jessie/Frama-C plugin] fixed traceability issues
   o [Krakatoa/Jessie/Frama-C plugin] new backend using Why3 VC generator
   o [Jessie] add extensionality axiom to integer range type. allows to

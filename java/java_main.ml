@@ -338,7 +338,23 @@ let main () =
   (* production phase 5.2 : produce locs file *)
   Pp.print_in_file Output.old_print_pos (f ^ ".jloc");
 
-  printf "Done.@."
+  printf "Done.@.";
+  if not !Java_options.gen_only then
+    begin
+      printf "Calling Jessie...@.";
+      let ret = Sys.command ("jessie -why3ml -locs " ^ f ^ ".jloc " ^ f ^ ".jc") in
+      if ret <> 0 then
+        printf "Jessie failed, abort.@."
+      else
+        begin
+          let d = Filename.dirname f in
+          let b = Filename.basename f in
+          printf "Calling Why3...@.";
+          let _ret = Sys.command ("make -C " ^ d ^" -f " ^ b ^ ".makefile why3ml") in
+          ()
+        end
+    end
+
 
 (*   with *)
 (*     | Java_typing.Typing_error(l,s) -> *)
