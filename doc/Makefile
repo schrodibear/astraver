@@ -33,6 +33,17 @@ EXAMPLESPP=texpp/sorting.hpp texpp/minimum_sort.cpp
 
 sourcepp: $(SNIPPETPP) $(EXAMPLESPP)
 
+why_frama_c1.mps: why_frama_c.ml
+	mlpost -pdf -latex jessie.tex why_frama_c.ml
+
+why_frama_c1-mps.pdf: why_frama_c1.mps
+	mptopdf why_frama_c1.mps 
+
+why_frama_c2.mps: why_frama_c.ml
+	mlpost -pdf -latex jessie.tex why_frama_c.ml
+
+why_frama_c2-mps.pdf: why_frama_c2.mps
+	mptopdf why_frama_c2.mps 
 
 dep.ps:
 	(cd ../src; ocamldep *.ml* | ocamldot | dot -Tps) > dep.ps

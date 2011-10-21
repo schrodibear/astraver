@@ -116,7 +116,7 @@ In this manual, it is assumed that the Why3 VC generator and IDE is in
 use.  The old behavior using the Why2 VC generator and GUI remains
 possible, using option \texttt{-jessie-atp=gui}.
 
-\section{Batch Mode vs. GUI Mode}
+\section{Basic Use}
 
 The Jessie plug-in allows to perform deductive verification of C
 programs inside Frama-C. The C file possibly annotated in ACSL is
@@ -133,20 +133,6 @@ mode on a file \verb|ex.c|, just type
 > frama-c -jessie ex.c
 \end{verbatim}
 
-The GUI of the Why Plaform (a.k.a. GWhy) is called. It displays each VC in a row, with available provers arranged as columns.
-
-To invoke Jessie in batch mode, use option \verb|-jessie-atp| with the prover name as argument, e.g.
-\begin{verbatim}
-> frama-c -jessie -jessie-atp simplify ex.c
-\end{verbatim}
-runs prover Simplify on generated VCs. Valid identifiers for
-provers are documented in Why. The list includes \verb|alt-ergo|,
-\verb|cvc3|, \verb|yices|, \verb|z3|. See also the prover tricks page
-\url{http://why.lri.fr/provers.html}.
-
-Finally, you can use the generic name \verb|goals| to just ask for
-generation of VCs without running any prover.
-
 \begin{figure}[t]
   \begin{center}
     \includegraphics[width=0.8\linewidth]{why_frama_c-mps3.png}
@@ -157,52 +143,10 @@ generation of VCs without running any prover.
 \end{figure}
 
 
-\section{Basic Use}
-
 A program does not need to be complete nor annotated to be analyzed
 with the Jessie plug-in. As a first example, take program \verb|max|:
 
 \input{texpp/max.cpp}
-
-Calling the Jessie plug-in in batch mode generates the following output:
-
-\begin{verbatim}
-frama-c -jessie -jessie-atp simplify max.c
-Parsing
-[preprocessing] running gcc -C -E -I. -include
-/usr/local/share/frama-c/jessie/jessie_prolog.h -dD max.c
-Cleaning unused parts
-Symbolic link
-Starting semantical analysis
-Starting Jessie translation
-Producing Jessie files in subdir max.jessie
-File max.jessie/max.jc written.
-File max.jessie/max.cloc written.
-Calling Jessie tool in subdir max.jessie
-Generating Why function f
-Calling VCs generator.
-why -simplify [...] why/max.why
-Running Simplify on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-simplify/max_why.sx           :  (0/0/0/0/0)
-\end{verbatim}
-
-Simplify is an automatic theorem prover distributed separately from Why
-and Jessie. Among available automatic provers, it is one that
-produces good results for software verification. Another automatic
-prover that produces good results is Alt-Ergo.
-
-The result of calling prover Simplify is succinctly reported as a
-sequence of symbols \verb|.|, \verb|*|, \verb|?|, \verb|#| and
-\verb|!| which denote respectively that the corresponding VC is valid,
-invalid or unknown, or else that a timeout or a failure occured. By
-default, timeout is set to 10 s for each VC. This result is summarized
-as a tuple (v,i,u,t,f) reporting the total number of each outcome.
-
-Here, the summary \verb|(0/0/0/0/0)| means that there were no VCs to prove
-(calling Jessie in GUI mode similarly displays no VC to
-prove). Indeed, function \verb|max| is safe and we did not ask for the
-verification of any functional property.
 
 Consider now adding a postcondition to function \verb|max|:
 
@@ -210,31 +154,7 @@ Consider now adding a postcondition to function \verb|max|:
 
 This ACSL annotation expresses the fact function \verb|max| returns
 the maximum of its parameters \verb|i| and \verb|j|. Now, running the
-Jessie plug-in in batch mode outputs:
-
-\begin{verbatim}
-...
-Running Simplify on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-simplify/max_why.sx           : .? (1/0/1/0/0)
-total   :   2
-valid   :   1 ( 50%)
-invalid :   0 (  0%)
-unknown :   1 ( 50%)
-timeout :   0 (  0%)
-failure :   0 (  0%)
-total wallclock time : 0.19 sec
-total CPU time       : 0.16 sec
-valid VCs:
-    average CPU time : 0.08
-    max CPU time     : 0.08
-invalid VCs:
-    average CPU time : nan
-    max CPU time     : 0.00
-unknown VCs:
-    average CPU time : 0.08
-    max CPU time     : 0.08
-\end{verbatim}
+Jessie plug-in outputs:
 
 This means that Simplify could prove one of the two VCs. To see
 what each VC represents, let us now invoke Jessie in GUI
@@ -263,34 +183,6 @@ Simplify. However, it is proved by prover Alt-Ergo.
 \begin{center}
   \includegraphics[width=\linewidth]{jessie/max_post_proof_small.png}
 \end{center}
-
-The Jessie plug-in can also be run in batch mode with prover Alt-Ergo
-instead of Simplify, with option \verb|-jessie-atp alt-ergo|. This
-results in the following output:
-
-\begin{verbatim}
-...
-Running Alt-Ergo on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/max_why.why               : .. (2/0/0/0/0)
-total   :   2
-valid   :   2 (100%)
-invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   0 (  0%)
-failure :   0 (  0%)
-total wallclock time : 0.35 sec
-total CPU time       : 0.14 sec
-valid VCs:
-    average CPU time : 0.07
-    max CPU time     : 0.08
-invalid VCs:
-    average CPU time : nan
-    max CPU time     : 0.00
-unknown VCs:
-    average CPU time : nan
-    max CPU time     : 0.00
-\end{verbatim}
 
 \section{Safety Checking vs. Functional Verification}
 
