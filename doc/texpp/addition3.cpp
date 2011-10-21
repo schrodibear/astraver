@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 and~~\\
 is\_{}finite(x)~and~is\_{}finite(y)~~\\
 and~no\_{}overflow(f,m,float\_{}value(x)+float\_{}value(y))~$-$>~\\

@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 ~\\
 and~~\\
 m~=~to\_{}zero~$-$>~is\_{}finite(x)~and~~\\

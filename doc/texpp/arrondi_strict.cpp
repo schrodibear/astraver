@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 parameter~gen\_{}float\_{}of\_{}real~:~\\
 f:float\_{}format~$-$>~m:mode~$-$>~x:real~$-$>~\\
 \{~no\_{}overflow(f,m,x)~~\\

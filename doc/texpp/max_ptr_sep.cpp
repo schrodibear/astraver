@@ -1,6 +1,9 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 \begin{slshape}/*@~\textbf{requires}~\textbf{\char'134 valid}(i)~\&{}\&{}~\textbf{\char'134 valid}(j);~\\
-~~@~\textbf{requires}~r~==~\null~||~\textbf{\char'134 valid}(r);~\\
+~~@~\textbf{requires}~r~==~\textbf{\char'134 null}~||~\textbf{\char'134 valid}(r);~\\
 ~~@~\textbf{ensures}~*i~==~\textbf{\char'134 old}(*i)~\&{}\&{}~*j~==~\textbf{\char'134 old}(*j);~\\
 ~~@*/\end{slshape}~\\
 int~max(int~*r,~int*~i,~int*~j)~\{~\\

@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 and~\\
 is\_{}finite(x)~and~is\_{}infinite(y)~$-$>~~\\
 ~~~is\_{}infinite(result)~and~same\_{}sign(result,y)~\\

@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 \verb|#|pragma~JessieIntegerModel(math)~\\
 ~\\
 \verb|#|include~"sorting.h"~\\
@@ -14,9 +17,9 @@ void~swap(int~t[],~int~i,~int~j)~\{~\\
 \}~\\
 ~~~~~\\
 \begin{slshape}/*@~\textbf{requires}~\textbf{\char'134 valid\_{}range}(t,0,n$-$1);~\\
-~~@~behavior~sorted:~\\
+~~@~\textbf{behavior}~sorted:~\\
 ~~@~~~\textbf{ensures}~Sorted(t,0,n$-$1);~\\
-~~@~behavior~permutation:~\\
+~~@~\textbf{behavior}~permutation:~\\
 ~~@~~~\textbf{ensures}~Permut\{Old,Here\}(t,0,n$-$1);~\\
 ~~@*/\end{slshape}~\\
 void~min\_{}sort(int~t[],~int~n)~\{~\\

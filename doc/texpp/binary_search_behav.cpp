@@ -1,16 +1,19 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 ~\\
-\begin{slshape}//@~lemma~mean~:~\textbf{\char'134 forall}~integer~x,~y;~x~<=~y~==>~x~<=~(x+y)/2~<=~y;~\end{slshape}~\\
+\begin{slshape}//@~\textbf{lemma}~mean~:~\textbf{\char'134 forall}~integer~x,~y;~x~<=~y~==>~x~<=~(x+y)/2~<=~y;~\end{slshape}~\\
 ~\\
 \begin{slshape}/*@~\textbf{requires}~n~>=~0~\&{}\&{}~\textbf{\char'134 valid\_{}range}(t,0,n$-$1);~\\
-~~@~behavior~success:~\\
-~~@~~~assumes~\begin{slshape}\rmfamily\color{darkgreen}//~array~t~is~sorted~in~increasing~order\end{slshape}~\\
+~~@~\textbf{behavior}~success:~\\
+~~@~~~\textbf{assumes}~\begin{slshape}\rmfamily\color{darkgreen}//~array~t~is~sorted~in~increasing~order\end{slshape}~\\
 ~~@~~~~~\textbf{\char'134 forall}~integer~k1,~k2;~0~<=~k1~<=~k2~<=~n$-$1~==>~t[k1]~<=~t[k2];~\\
-~~@~~~assumes~\begin{slshape}\rmfamily\color{darkgreen}//~v~appears~somewhere~in~the~array~t\end{slshape}~\\
+~~@~~~\textbf{assumes}~\begin{slshape}\rmfamily\color{darkgreen}//~v~appears~somewhere~in~the~array~t\end{slshape}~\\
 ~~@~~~~~\textbf{\char'134 exists}~integer~k;~0~<=~k~<=~n$-$1~\&{}\&{}~t[k]~==~v;~\\
 ~~@~~~\textbf{ensures}~0~<=~\textbf{\char'134 result}~<=~n$-$1;~\\
-~~@~behavior~failure:~\\
-~~@~~~assumes~\begin{slshape}\rmfamily\color{darkgreen}//~v~does~not~appear~anywhere~in~the~array~t\end{slshape}~\\
+~~@~\textbf{behavior}~failure:~\\
+~~@~~~\textbf{assumes}~\begin{slshape}\rmfamily\color{darkgreen}//~v~does~not~appear~anywhere~in~the~array~t\end{slshape}~\\
 ~~@~~~~~\textbf{\char'134 forall}~integer~k;~0~<=~k~<=~n$-$1~==>~t[k]~!=~v;~\\
 ~~@~~~\textbf{ensures}~\textbf{\char'134 result}~==~$-$1;~\\
 ~~@*/\end{slshape}~\\

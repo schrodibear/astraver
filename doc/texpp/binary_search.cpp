@@ -1,6 +1,9 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 ~\\
-\begin{slshape}/*@~lemma~mean\_{}1~:~\textbf{\char'134 forall}~integer~x,~int~y;~x~<=~y~==>~x~<=~(x+y)/2~<=~y;~*/\end{slshape}~\\
+\begin{slshape}/*@~\textbf{lemma}~mean\_{}1~:~\textbf{\char'134 forall}~integer~x,~int~y;~x~<=~y~==>~x~<=~(x+y)/2~<=~y;~*/\end{slshape}~\\
 ~\\
 \begin{slshape}/*@~\textbf{requires}~\\
 ~~@~~~n~>=~0~\&{}\&{}~\textbf{\char'134 valid\_{}range}(t,0,n$-$1)~\&{}\&{}~\\

@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 \textbf{predicate}~~\\
 overflow\_{}value(f:float\_{}format,m:mode,x:gen\_{}float)=~~\\
 m~=~down~$-$>~~\\

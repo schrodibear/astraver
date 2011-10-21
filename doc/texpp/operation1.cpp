@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 \begin{slshape}\rmfamily\color{darkgreen}//~opérations~unaires~dans~les~programmes\end{slshape}~\\
 gen\_{}float\_{}of\_{}real~\begin{slshape}\rmfamily\color{darkgreen}//~arrondi~d'une~constante~réelle\end{slshape}~\\
 cast\_{}gen\_{}float~\begin{slshape}\rmfamily\color{darkgreen}//~conversions~\end{slshape}~\\

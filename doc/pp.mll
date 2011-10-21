@@ -70,8 +70,8 @@
 	"reads" ;
 	"requires"; "invariant"; 
 	"loop" ; "variant" ;
-	"ensures" ; "assigns"; 
-	"logic" ; "type" ; "predicate" ; "axiom";
+	"ensures" ; "assigns"; "assumes"; "behavior";
+	"logic" ; "type" ; "predicate" ; "axiom"; "lemma"; "inductive";
       ];
     h
 
@@ -95,7 +95,7 @@
     let h = Hashtbl.create 97 in
     List.iter (fun s -> Hashtbl.add h s ())
       [ 
-	"valid"; "forall"; "exists" ; "old" ; "at" ; "fresh" ; "nothing" ; "result"; "valid_range"
+	"valid"; "forall"; "exists" ; "old" ; "at" ; "fresh" ; "nothing" ; "result"; "valid_range" ; "null" ;
       ];
     h
 
@@ -124,7 +124,10 @@
     String.iter print_ident_char
 
   let begin_tt () =
-    print_string "\\begin{flushleft}\\ttfamily\\upshape\\parindent 0pt\n"
+    print_string "\\begin{flushleft}\\ttfamily\\upshape\n";
+    print_string "%BEGIN LATEX\n";
+    print_string "\\parindent 0pt\n";
+    print_string "%END LATEX\n"
 
   let end_tt () = print_string "\\end{flushleft}"
 

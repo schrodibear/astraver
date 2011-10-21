@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 \begin{slshape}//@~\textbf{requires}~\textbf{\char'134 valid}(x);\end{slshape}~\\
 void~zero(int*~x)~\{~\\
 ~~char~*c~=~(char*)x;~\\

@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 \begin{slshape}\rmfamily\color{darkgreen}//~opérations~unaires~et~binaires~de~la~norme~IEEE$-$754\end{slshape}~\\
 ~\\
 remainder\_{}gen\_{}float~\\

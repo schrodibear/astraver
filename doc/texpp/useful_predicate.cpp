@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 ~\\
 \textbf{predicate}~is\_{}finite(x:gen\_{}float)~=~~\\
 ~~~~~~~~~~float\_{}class(x)~=~Finite~\\

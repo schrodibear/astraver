@@ -1,5 +1,8 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
-\begin{slshape}/*@~lemma~mean~:~~\\
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
+\begin{slshape}/*@~\textbf{lemma}~mean~:~~\\
 ~~@~~~\textbf{\char'134 forall}~integer~x,~y;~x~<=~y~==>~x~<=~(x+y)/2~<=~y;~~\\
 ~~@*/\end{slshape}~\\
 ~\\

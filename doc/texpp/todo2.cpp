@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 \verb|#|pragma~FloatModel(strict)~\\
 \verb|#|pragma~FloatModel(full)~\\
 \verb|#|pragma~JessieFloatRoundingMode(downward)~\\

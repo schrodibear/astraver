@@ -30,6 +30,7 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[a4paper,11pt,twoside,openright]{report}
+\usepackage{hevea}
 
 \usepackage[a4paper=true,pdftex,colorlinks=true,urlcolor=blue,pdfstartview=FitH]{hyperref}
 
@@ -79,14 +80,38 @@
 
 
 \begin{document}
+\ifhevea%
+This document is also available in \ahref{jessie.pdf}{PDF format}.
+\else
 \sloppy
 \hbadness=9999
+\fi
 
 \whytitlepage{The Jessie plugin\\~\\ for Deduction Verification in Frama-C}{Tutorial and Reference Manual}{\whyversion}{Claude March\'e, Yannick Moy}
 
 \tableofcontents
 
 \chapter{Introduction}
+
+Jessie is a plugin for the Frama-C environment, aimed at performing
+deductive verification of C programs, annotated using the ACSL
+language~\cite{baudin09acsl}, using the \Why{}~\cite{why} tool for
+generating proof obligations.
+
+\section{Important note for version 2.30}
+
+The use of the Why2 VC generator is now obsolete, and it is
+recommended to switch to the Why3 system for specification and VC
+generation. Why3 must be installed independently of Why2, please
+instructions given at \url{http://why3.lri.fr}.
+
+The version of Why3 that is compatible with this version 2.30 of Jessie
+is the version 0.71. Please see \url{http://krakatoa.lri.fr/} for more
+details on compatibility between Frama-C, Why2/Jessie and Why3.
+
+In this manual, it is assumed that the Why3 VC generator and IDE is in
+use.  The old behavior using the Why2 VC generator and GUI remains
+possible, using the appropriate \texttt{-jessie-atp} option.
 
 \section{Batch Mode vs. GUI Mode}
 
@@ -106,7 +131,6 @@ mode on a file \verb|ex.c|, just type
 \end{verbatim}
 
 The GUI of the Why Plaform (a.k.a. GWhy) is called. It displays each VC in a row, with available provers arranged as columns.
-
 
 To invoke Jessie in batch mode, use option \verb|-jessie-atp| with the prover name as argument, e.g.
 \begin{verbatim}
@@ -1213,4 +1237,7 @@ $^3$ LRI, Univ Paris-Sud, CNRS, Orsay, F-91405
 %%% TeX-PDF-mode: t
 %%% TeX-master: t
 %%% End:
+
+
+
 

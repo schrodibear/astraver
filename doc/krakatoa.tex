@@ -30,6 +30,8 @@
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 \documentclass[a4paper,11pt,twoside,openright]{report}
+\usepackage{hevea}
+
 
 \usepackage[a4paper=true,pdftex,colorlinks=true,urlcolor=blue,pdfstartview=FitH]{hyperref}
 
@@ -77,8 +79,12 @@
 
 
 \begin{document}
+\ifhevea%
+This document is also available in \ahref{krakatoa.pdf}{PDF format}.
+\else
 \sloppy
 \hbadness=9999
+\fi
 
 \whytitlepage{The Krakatoa Verification Tool\\~\\for \Java{} programs}{Tutorial and Reference Manual}{\whyversion}{Claude March\'e}
 
@@ -114,14 +120,13 @@ recommended to switch to the Why3 system for specification and VC
 generation. Why3 must be installed independently of Why2, please
 instructions given at \url{http://why3.lri.fr}.
 
-The version of Why3 that is compatible with this version 2.30 of Why2
+The version of Why3 that is compatible with this version 2.30 of Krakatoa
 is the version 0.71. Please see \url{http://krakatoa.lri.fr/} for more
-details on compatibility between Why2 and Why3.
+details on compatibility between Why2/Krakatoa and Why3.
 
 In this manual, it is assumed that the Why3 VC generator and IDE is in
 use.  The old behavior using the Why2 VC generator and GUI remains
 possible, using the \texttt{gwhy} command just as in version 2.29.
-
 
 
 \chapter{Tutorial}

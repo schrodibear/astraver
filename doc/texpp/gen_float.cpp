@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 ~~\begin{slshape}\rmfamily\color{darkgreen}//~2~autres~types~~~~\end{slshape}~\\
 ~\\
 \textbf{type}~sign~=~Positive~|~Negative~\\

@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 parameter~lt\_{}gen\_{}float~:~\\
 x:gen\_{}float~$-$>~y:gen\_{}float~$-$>~~\\
 \{~\}~\\

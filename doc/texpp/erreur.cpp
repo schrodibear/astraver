@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 ~\\
 function~gen\_{}round\_{}error(x:gen\_{}float)~:~real~=~~\\
 ~~~~~~~~~abs\_{}real(float\_{}value(x)~$-$~exact\_{}value(x))~\\

@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 \begin{slshape}\rmfamily\color{darkgreen}//~3~formats~possibles\end{slshape}~\\
 \textbf{type}~float\_{}format~=~Single~|~Double~|~Quad~\\
 ~\\

@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 \begin{slshape}\rmfamily\color{darkgreen}//~infinis~signés~:~+/$-$~infini~\end{slshape}~\\
 \textbf{predicate}~is\_{}minus\_{}infinity(x:gen\_{}float)~=~~\\
 ~~~is\_{}infinite(x)~and~float\_{}sign(x)~=~Negative~\\

@@ -1,8 +1,11 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 \verb|#|pragma~JessieIntegerModel(math)~\\
 \verb|#|pragma~JessieTerminationPolicy(user)~\\
 ~\\
-\begin{slshape}/*@~lemma~mean~:~~\\
+\begin{slshape}/*@~\textbf{lemma}~mean~:~~\\
 ~~@~~~\textbf{\char'134 forall}~integer~x,~y;~x~<=~y~==>~x~<=~(x+y)/2~<=~y;~~\\
 ~~@*/\end{slshape}~\\
 ~\\

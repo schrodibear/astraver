@@ -80,6 +80,10 @@ krakatoa.html: krakatoa.tex version.tex
 	rm -f krakatoa.aux
 	$(HEVEA) krakatoa.tex
 
+jessie.html: jessie.tex version.tex
+	rm -f jessie.aux
+	$(HEVEA) jessie.tex
+
 main.html: main.tex version.tex
 	rm -f main.aux
 	$(HEVEA) main.tex

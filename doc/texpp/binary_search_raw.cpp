@@ -1,4 +1,7 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 \verb|#|pragma~JessieIntegerModel(math)~\\
 \verb|#|pragma~JessieTerminationPolicy(user)~\\
 ~\\

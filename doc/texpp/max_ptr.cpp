@@ -1,13 +1,16 @@
-\begin{flushleft}\ttfamily\upshape\parindent 0pt
+\begin{flushleft}\ttfamily\upshape
+%BEGIN LATEX
+\parindent 0pt
+%END LATEX
 \begin{slshape}/*@~\textbf{requires}~\textbf{\char'134 valid}(i)~\&{}\&{}~\textbf{\char'134 valid}(j);~\\
-~~@~\textbf{requires}~r~==~\null~||~\textbf{\char'134 valid}(r);~\\
+~~@~\textbf{requires}~r~==~\textbf{\char'134 null}~||~\textbf{\char'134 valid}(r);~\\
 ~~@~\textbf{assigns}~*r;~\\
-~~@~behavior~zero:~\\
-~~@~~~assumes~r~==~\null;~\\
+~~@~\textbf{behavior}~zero:~\\
+~~@~~~\textbf{assumes}~r~==~\textbf{\char'134 null};~\\
 ~~@~~~\textbf{assigns}~\textbf{\char'134 nothing};~\\
 ~~@~~~\textbf{ensures}~\textbf{\char'134 result}~==~$-$1;~\\
-~~@~behavior~normal:~\\
-~~@~~~assumes~\textbf{\char'134 valid}(r);~\\
+~~@~\textbf{behavior}~normal:~\\
+~~@~~~\textbf{assumes}~\textbf{\char'134 valid}(r);~\\
 ~~@~~~\textbf{assigns}~*r;~\\
 ~~@~~~\textbf{ensures}~*r~==~((*i~<~*j)~?~*j~:~*i);~\\
 ~~@~~~\textbf{ensures}~\textbf{\char'134 result}~==~0;~\\
