@@ -1,110 +1,89 @@
-\documentclass[a4paper]{report}
-\usepackage{hevea}
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%                                                                        %
+%  The Why platform for program certification                            %
+%                                                                        %
+%  Copyright (C) 2002-2011                                               %
+%                                                                        %
+%    Jean-Christophe FILLIATRE, CNRS & Univ. Paris-sud 11                %
+%    Claude MARCHE, INRIA & Univ. Paris-sud 11                           %
+%    Yannick MOY, Univ. Paris-sud 11                                     %
+%    Romain BARDOU, Univ. Paris-sud 11                                   %
+%                                                                        %
+%  Secondary contributors:                                               %
+%                                                                        %
+%    Thierry HUBERT, Univ. Paris-sud 11  (former Caduceus front-end)     %
+%    Nicolas ROUSSET, Univ. Paris-sud 11 (on Jessie & Krakatoa)          %
+%    Ali AYAD, CNRS & CEA Saclay         (floating-point support)        %
+%    Sylvie BOLDO, INRIA                 (floating-point support)        %
+%    Jean-Francois COUCHOT, INRIA        (sort encodings, hyps pruning)  %
+%    Mehdi DOGGUY, Univ. Paris-sud 11    (Why GUI)                       %
+%                                                                        %
+%  This software is free software; you can redistribute it and/or        %
+%  modify it under the terms of the GNU Lesser General Public            %
+%  License version 2.1, with the special exception on linking            %
+%  described in file LICENSE.                                            %
+%                                                                        %
+%  This software is distributed in the hope that it will be useful,      %
+%  but WITHOUT ANY WARRANTY; without even the implied warranty of        %
+%  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.                  %
+%                                                                        %
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
-\usepackage{hyperref}
+\documentclass[a4paper,11pt,twoside,openright]{report}
+
+\usepackage[a4paper=true,pdftex,colorlinks=true,urlcolor=blue,pdfstartview=FitH]{hyperref}
+
+\usepackage[latin1]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{times}
+\usepackage{amssymb}
+%BEGIN LATEX
+\usepackage{graphicx}
+\newcommand{\negtenthspace}{\hspace*{-0.1\linewidth}}
+%END LATEX
+%HEVEA \newcommand{\includegraphics}[2][2]{\imgsrc{#2}}
+%HEVEA \newcommand{\negtenthspace}{\relax}
+
+\usepackage{color}
+%\usepackage{mathptm}
+%\usepackage{xspace}
+\usepackage{makeidx}
+\makeindex
+\input{./version.tex}
+\input{./macros.tex}
+\definecolor{darkgreen}{rgb}{0, 0.5, 0}
 
 \setlength{\textheight}{240mm}
 \setlength{\topmargin}{-10mm}
 \setlength{\textwidth}{160mm}
 \setlength{\oddsidemargin}{0mm}
 \setlength{\evensidemargin}{0mm}
-\newcommand{\version}{1.4}
 
-%BEGIN LATEX
 \renewcommand{\textfraction}{0.01}
 \renewcommand{\topfraction}{0.99}
 \renewcommand{\bottomfraction}{0.99}
-%END LATEX
 
-\usepackage[T1]{fontenc}
-\usepackage{times}
-%HEVEA \newcommand{\includegraphics}[2][2]{\imgsrc{#2}}
-%HEVEA \newcommand{\hrulefill}{\relax}
-%HEVEA \newcommand{\negtenthspace}{\relax}
-%BEGIN LATEX
-\usepackage{graphicx}
-\newcommand{\negtenthspace}{\hspace*{-0.1\linewidth}}
-%END LATEX
+\usepackage{fancyhdr}
+\pagestyle{fancyplain}
+\renewcommand{\footrulewidth}{0.4pt}
+\addtolength{\headheight}{2pt}
+\addtolength{\headwidth}{1cm}
+\renewcommand{\chaptermark}[1]{\markboth{#1}{}}
+\renewcommand{\sectionmark}[1]{\markright{\thesection\ #1}}
+\lhead[\fancyplain{}{\bfseries\thepage}]{\fancyplain{}{\bfseries\rightmark}}
+\chead{}
+\rhead[\fancyplain{}{\bfseries\leftmark}]{\fancyplain{}{\bfseries\thepage}}
+\lfoot{\fancyplain{}{C. March\'e, Y. Moy}}
+\cfoot{\fancyplain{}{Why platform, Jessie plugin for Frama-C}}
+\rfoot{\fancyplain{}{ProVal, \today}}
 
-\newcommand{\Eg}{\mbox{\it E.g.}, }
-%OLDHEVEA \newcommand{\land}{\wedge}
-%OLDHEVEA \newcommand{\lor}{\vee}
-
-\usepackage{xcolor}
-\definecolor{darkgreen}{rgb}{0, 0.5, 0}
-
-\ifhevea%
-\makeatletter%
-\renewenvironment{document}{%
-\@end{document}%
-\@atbegindocument%
-\@restartoutput\unskip%
-\@print{<#def title>Jessie Plug-in Tutorial</#def>
-<#def meta><meta name="GENERATOR" content="hevea }%
-\@getprint{\usebox{\@heveaversion}}\@print{"></#def>
-<#head>
-}%
-\usebox{\@toplinks}\usebox{\@linkstext}%
-\cutdef*[\thecuttingdepth]{\cuttingunit}%
-\renewcommand{\addstyle}[1]{\hva@warn{\addstyle{} must be used in document preamble}}%
-\@open@par%Open first paragraph
-}{%
-\@clearstyle\@footnoteflush{\@footnotelevel}\cutend*\title@flush@hook%
-\@atenddocument%
-\@final@footer%
-\@clearstyle%
-\@print{<#foot>}%
-\@raise@enddocument}%
-\makeatother%
-\fi
 
 \begin{document}
-
-\ifhevea%
-This document is also available in
-\ahref{jessie/jessie-tutorial.pdf}{pdf format}.
-\else
 \sloppy
-\hbadness=10000
-\begin{titlepage}
-\includegraphics[height=14mm]{inriasaclaylogo.png}
-\vfill
-\begin{center} \Large
-{\Huge\bfseries    Jessie Plug-In Tutorial}
+\hbadness=9999
 
-\Large Frama-C version: \emph{Nitrogen}
+\whytitlepage{The Jessie plugin\\~\\ for Deduction Verification in Frama-C}{Tutorial and Reference Manual}{\whyversion}{Claude March\'e, Yannick Moy}
 
-Jessie plug-in version: 2.30
-
-\vfill
-
-\large  Claude March\'e$^{1,3}$, Yannick Moy$^{2,3}$, 
-
-\vfill
-
-\today
-\end{center}
-\vfill
-
-\vfill
-\begin{flushleft}
-$^1$ INRIA Saclay - \^Ile-de-France, ProVal, Orsay, F-91893 \\
-$^2$ France T\'el\'ecom, Lannion, F-22307 \\
-$^3$ LRI, Univ Paris-Sud, CNRS, Orsay, F-91405
-\end{flushleft}
-  \textcopyright 2009-2011 INRIA
-
-  This work was supported by the `CAT' ANR project
-  (ANR-05-RNTL-0030x), the ANRT CIFRE contract 2005/973, and the `U3CAT'
-  ANR project.
-\end{titlepage}
-\fi
-
-
-
-
-\cleardoublepage
-\label{chap:contents}
 \tableofcontents
 
 \chapter{Introduction}
@@ -1120,8 +1099,118 @@ Here is a set of common error messages and possible fix or workaround.
 
 \end{document}
 
+\documentclass[a4paper]{report}
+\usepackage{hevea}
+
+\usepackage{hyperref}
+
+\setlength{\textheight}{240mm}
+\setlength{\topmargin}{-10mm}
+\setlength{\textwidth}{160mm}
+\setlength{\oddsidemargin}{0mm}
+\setlength{\evensidemargin}{0mm}
+\newcommand{\version}{1.4}
+
+%BEGIN LATEX
+\renewcommand{\textfraction}{0.01}
+\renewcommand{\topfraction}{0.99}
+\renewcommand{\bottomfraction}{0.99}
+%END LATEX
+
+\usepackage[T1]{fontenc}
+\usepackage{times}
+%HEVEA \newcommand{\includegraphics}[2][2]{\imgsrc{#2}}
+%HEVEA \newcommand{\hrulefill}{\relax}
+%HEVEA \newcommand{\negtenthspace}{\relax}
+%BEGIN LATEX
+\usepackage{graphicx}
+\newcommand{\negtenthspace}{\hspace*{-0.1\linewidth}}
+%END LATEX
+
+\newcommand{\Eg}{\mbox{\it E.g.}, }
+%OLDHEVEA \newcommand{\land}{\wedge}
+%OLDHEVEA \newcommand{\lor}{\vee}
+
+\usepackage{xcolor}
+\definecolor{darkgreen}{rgb}{0, 0.5, 0}
+
+\ifhevea%
+\makeatletter%
+\renewenvironment{document}{%
+\@end{document}%
+\@atbegindocument%
+\@restartoutput\unskip%
+\@print{<#def title>Jessie Plug-in Tutorial</#def>
+<#def meta><meta name="GENERATOR" content="hevea }%
+\@getprint{\usebox{\@heveaversion}}\@print{"></#def>
+<#head>
+}%
+\usebox{\@toplinks}\usebox{\@linkstext}%
+\cutdef*[\thecuttingdepth]{\cuttingunit}%
+\renewcommand{\addstyle}[1]{\hva@warn{\addstyle{} must be used in document preamble}}%
+\@open@par%Open first paragraph
+}{%
+\@clearstyle\@footnoteflush{\@footnotelevel}\cutend*\title@flush@hook%
+\@atenddocument%
+\@final@footer%
+\@clearstyle%
+\@print{<#foot>}%
+\@raise@enddocument}%
+\makeatother%
+\fi
+
+\begin{document}
+
+\ifhevea%
+This document is also available in
+\ahref{jessie/jessie-tutorial.pdf}{pdf format}.
+\else
+\sloppy
+\hbadness=10000
+\begin{titlepage}
+\includegraphics[height=14mm]{inriasaclaylogo.png}
+\vfill
+\begin{center} \Large
+{\Huge\bfseries    Jessie Plug-In Tutorial}
+
+\Large Frama-C version: \emph{Nitrogen}
+
+Jessie plug-in version: 2.30
+
+\vfill
+
+\large  Claude March\'e$^{1,3}$, Yannick Moy$^{2,3}$, 
+
+\vfill
+
+\today
+\end{center}
+\vfill
+
+\vfill
+\begin{flushleft}
+$^1$ INRIA Saclay - \^Ile-de-France, ProVal, Orsay, F-91893 \\
+$^2$ France T\'el\'ecom, Lannion, F-22307 \\
+$^3$ LRI, Univ Paris-Sud, CNRS, Orsay, F-91405
+\end{flushleft}
+  \textcopyright 2009-2011 INRIA
+
+  This work was supported by the `CAT' ANR project
+  (ANR-05-RNTL-0030x), the ANRT CIFRE contract 2005/973, and the `U3CAT'
+  ANR project.
+\end{titlepage}
+\fi
+
+
+
+
+\cleardoublepage
+\label{chap:contents}
+\tableofcontents
+
 %%% Local Variables:
 %%% mode: latex
 %%% TeX-PDF-mode: t
 %%% TeX-master: t
 %%% End:
+
