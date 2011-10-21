@@ -133,7 +133,7 @@ predicate Non_null_intM{Here}(intM[0..] x) =
 (\offset_max(x) >= -1)
 
 predicate Non_null_Object{Here}(Object[0..] x) =
-(\offset_max(x) == 0)
+(\offset_max(x) >= 0)
 
 String[0..] any_string()
 ;
@@ -1582,7 +1582,7 @@ axiom Muller_parenttag_Object : parenttag(Muller_tag, Object_tag)
 
 predicate Non_null_Object(x_1:Object pointer,
  Object_x_2_alloc_table:Object alloc_table) =
- (offset_max(Object_x_2_alloc_table, x_1) = (0))
+ ge_int(offset_max(Object_x_2_alloc_table, x_1), (0))
 
 predicate Non_null_intM(x_0:Object pointer,
  Object_x_1_alloc_table:Object alloc_table) =
@@ -3848,7 +3848,7 @@ axiom Muller_parenttag_Object: parenttag(Muller_tag, Object_tag)
 
 predicate Non_null_Object(x_1: Object pointer,
   Object_x_2_alloc_table: Object alloc_table) =
-  (offset_max(Object_x_2_alloc_table, x_1) = 0)
+  (offset_max(Object_x_2_alloc_table, x_1) >= 0)
 
 predicate Non_null_intM(x_0: Object pointer,
   Object_x_1_alloc_table: Object alloc_table) =
@@ -8224,7 +8224,7 @@ why -simplify [...] why/Muller.why
  (EQ (parenttag Muller_tag Object_tag) |@true|))
 
 (DEFPRED (Non_null_Object x_1 Object_x_2_alloc_table)
-  (EQ (offset_max Object_x_2_alloc_table x_1) 0))
+  (>= (offset_max Object_x_2_alloc_table x_1) 0))
 
 (DEFPRED (Non_null_intM x_0 Object_x_1_alloc_table)
   (>= (offset_max Object_x_1_alloc_table x_0) (- 0 1)))
@@ -12688,7 +12688,7 @@ axiom Muller_parenttag_Object: parenttag(Muller_tag, Object_tag)
 
 predicate Non_null_Object(x_1: Object pointer,
   Object_x_2_alloc_table: Object alloc_table) =
-  (offset_max(Object_x_2_alloc_table, x_1) = 0)
+  (offset_max(Object_x_2_alloc_table, x_1) >= 0)
 
 predicate Non_null_intM(x_0: Object pointer,
   Object_x_1_alloc_table: Object alloc_table) =
@@ -16218,10 +16218,10 @@ goal Muller_m_safety_po_28:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Muller_why.why            : ?###.......................................................... (58/0/1/3/0)
+why/Muller_why.why            : ?#?#.......................................................... (58/0/2/2/0)
 total   :  62
 valid   :  58 ( 94%)
 invalid :   0 (  0%)
-unknown :   1 (  2%)
-timeout :   3 (  5%)
+unknown :   2 (  3%)
+timeout :   2 (  3%)
 failure :   0 (  0%)

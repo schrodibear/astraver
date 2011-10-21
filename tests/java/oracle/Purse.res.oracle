@@ -124,7 +124,7 @@ Done.
 # AbstractDomain = None
 
 predicate Non_null_Object{Here}(Object[0..] x) =
-(\offset_max(x) == 0)
+(\offset_max(x) >= 0)
 
 logic integer Throwable_serialVersionUID =
 -3042686055658047285
@@ -2391,7 +2391,7 @@ axiom NoCreditException_parenttag_Exception :
 
 predicate Non_null_Object(x_0:Object pointer,
  Object_alloc_table:Object alloc_table) =
- (offset_max(Object_alloc_table, x_0) = (0))
+ ge_int(offset_max(Object_alloc_table, x_0), (0))
 
 logic Object_tag:  -> Object tag_id
 
@@ -4646,7 +4646,7 @@ axiom NoCreditException_parenttag_Exception: parenttag(NoCreditException_tag,
 
 predicate Non_null_Object(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_0) = 0)
+  x_0) >= 0)
 
 logic Object_tag : Object tag_id
 
@@ -6028,7 +6028,7 @@ why -simplify [...] why/Purse.why
  (EQ (parenttag NoCreditException_tag Exception_tag) |@true|))
 
 (DEFPRED (Non_null_Object x_0 Object_alloc_table)
-  (EQ (offset_max Object_alloc_table x_0) 0))
+  (>= (offset_max Object_alloc_table x_0) 0))
 
 (BG_PUSH
  ;; Why axiom Object_int
@@ -7453,7 +7453,7 @@ axiom NoCreditException_parenttag_Exception: parenttag(NoCreditException_tag,
 
 predicate Non_null_Object(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_0) = 0)
+  x_0) >= 0)
 
 logic Object_tag : Object tag_id
 

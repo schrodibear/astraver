@@ -231,7 +231,7 @@ predicate Non_null_shortM{Here}(shortM[0..] x) =
 (\offset_max(x) >= -1)
 
 predicate Non_null_Object{Here}(Object[0..] x) =
-(\offset_max(x) == 0)
+(\offset_max(x) >= 0)
 
 axiomatic BUFFERSIZE_theory {
 
@@ -5973,7 +5973,7 @@ axiom NativeMethods_parenttag_Object :
 
 predicate Non_null_Object(x_2:Object pointer,
  Object_alloc_table:Object alloc_table) =
- (offset_max(Object_alloc_table, x_2) = (0))
+ ge_int(offset_max(Object_alloc_table, x_2), (0))
 
 predicate Non_null_byteM(x_0:Object pointer,
  Object_alloc_table:Object alloc_table) =
@@ -9392,7 +9392,7 @@ axiom NativeMethods_parenttag_Object: parenttag(NativeMethods_tag,
 
 predicate Non_null_Object(x_2: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_2) = 0)
+  x_2) >= 0)
 
 predicate Non_null_byteM(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
@@ -11268,7 +11268,7 @@ why -simplify [...] why/SimpleApplet.why
  (EQ (parenttag NativeMethods_tag Object_tag) |@true|))
 
 (DEFPRED (Non_null_Object x_2 Object_alloc_table)
-  (EQ (offset_max Object_alloc_table x_2) 0))
+  (>= (offset_max Object_alloc_table x_2) 0))
 
 (DEFPRED (Non_null_byteM x_0 Object_alloc_table)
   (>= (offset_max Object_alloc_table x_0) (- 0 1)))
@@ -13161,7 +13161,7 @@ axiom NativeMethods_parenttag_Object: parenttag(NativeMethods_tag,
 
 predicate Non_null_Object(x_2: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_2) = 0)
+  x_2) >= 0)
 
 predicate Non_null_byteM(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,

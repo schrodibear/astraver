@@ -86,7 +86,7 @@ predicate Non_null_NodeM{Here}(NodeM[0..] x) =
 (\offset_max(x) >= -1)
 
 predicate Non_null_Object{Here}(Object[0..] x) =
-(\offset_max(x) == 0)
+(\offset_max(x) >= 0)
 
 String[0..] any_string()
 ;
@@ -998,7 +998,7 @@ predicate Non_null_NodeM(x_0:Object pointer,
 
 predicate Non_null_Object(x_1:Object pointer,
  Object_alloc_table:Object alloc_table) =
- (offset_max(Object_alloc_table, x_1) = (0))
+ ge_int(offset_max(Object_alloc_table, x_1), (0))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
@@ -2800,7 +2800,7 @@ predicate Non_null_NodeM(x_0: Object pointer,
 
 predicate Non_null_Object(x_1: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_1) = 0)
+  x_1) >= 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -4123,7 +4123,7 @@ why -simplify [...] why/SimpleAlloc.why
   (>= (offset_max Object_alloc_table x_0) (- 0 1)))
 
 (DEFPRED (Non_null_Object x_1 Object_alloc_table)
-  (EQ (offset_max Object_alloc_table x_1) 0))
+  (>= (offset_max Object_alloc_table x_1) 0))
 
 (BG_PUSH
  ;; Why axiom Object_int
@@ -5509,7 +5509,7 @@ predicate Non_null_NodeM(x_0: Object pointer,
 
 predicate Non_null_Object(x_1: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_1) = 0)
+  x_1) >= 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 

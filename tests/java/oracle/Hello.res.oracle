@@ -235,7 +235,7 @@ predicate Non_null_StringM{Here}(StringM[0..] x) =
 (\offset_max(x) >= -1)
 
 predicate Non_null_Object{Here}(Object[0..] x) =
-(\offset_max(x) == 0)
+(\offset_max(x) >= 0)
 
 logic long String_serialVersionUID =
 -6849794470754667710
@@ -10690,7 +10690,7 @@ axiom InputStream_parenttag_Object : parenttag(InputStream_tag, Object_tag)
 
 predicate Non_null_Object(x_3:Object pointer,
  Object_alloc_table:Object alloc_table) =
- (offset_max(Object_alloc_table, x_3) = (0))
+ ge_int(offset_max(Object_alloc_table, x_3), (0))
 
 predicate Non_null_StringM(x_2:Object pointer,
  Object_alloc_table:Object alloc_table) =
@@ -14918,7 +14918,7 @@ axiom InputStream_parenttag_Object: parenttag(InputStream_tag, Object_tag)
 
 predicate Non_null_Object(x_3: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_3) = 0)
+  x_3) >= 0)
 
 predicate Non_null_StringM(x_2: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
@@ -16245,7 +16245,7 @@ why -simplify [...] why/Hello.why
  (EQ (parenttag InputStream_tag Object_tag) |@true|))
 
 (DEFPRED (Non_null_Object x_3 Object_alloc_table)
-  (EQ (offset_max Object_alloc_table x_3) 0))
+  (>= (offset_max Object_alloc_table x_3) 0))
 
 (DEFPRED (Non_null_StringM x_2 Object_alloc_table)
   (>= (offset_max Object_alloc_table x_2) (- 0 1)))
@@ -17634,7 +17634,7 @@ axiom InputStream_parenttag_Object: parenttag(InputStream_tag, Object_tag)
 
 predicate Non_null_Object(x_3: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_3) = 0)
+  x_3) >= 0)
 
 predicate Non_null_StringM(x_2: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,

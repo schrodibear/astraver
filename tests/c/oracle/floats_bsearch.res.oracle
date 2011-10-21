@@ -5869,10 +5869,10 @@ goal binary_search_safety_po_19:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/floats_bsearch_why.why    : ..##.............##.........#.......... (34/0/0/5/0)
+why/floats_bsearch_why.why    : .................##.................... (37/0/0/2/0)
 total   :  39
-valid   :  34 ( 87%)
+valid   :  37 ( 95%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   5 ( 13%)
+timeout :   2 (  5%)
 failure :   0 (  0%)

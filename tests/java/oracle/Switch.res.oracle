@@ -106,7 +106,7 @@ type long = -9223372036854775808..9223372036854775807
 type char = 0..65535
 
 predicate Non_null_Object{Here}(Object[0..] x) =
-(\offset_max(x) == 0)
+(\offset_max(x) >= 0)
 
 String[0..] any_string()
 ;
@@ -843,7 +843,7 @@ axiom Exception_parenttag_Object : parenttag(Exception_tag, Object_tag)
 
 predicate Non_null_Object(x_0:Object pointer,
  Object_alloc_table:Object alloc_table) =
- (offset_max(Object_alloc_table, x_0) = (0))
+ ge_int(offset_max(Object_alloc_table, x_0), (0))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
@@ -2646,7 +2646,7 @@ axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
 predicate Non_null_Object(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_0) = 0)
+  x_0) >= 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -4063,7 +4063,7 @@ why -simplify [...] why/Switch.why
  (EQ (parenttag Exception_tag Object_tag) |@true|))
 
 (DEFPRED (Non_null_Object x_0 Object_alloc_table)
-  (EQ (offset_max Object_alloc_table x_0) 0))
+  (>= (offset_max Object_alloc_table x_0) 0))
 
 (BG_PUSH
  ;; Why axiom Object_int
@@ -5563,7 +5563,7 @@ axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
 predicate Non_null_Object(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_0) = 0)
+  x_0) >= 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 

@@ -94,7 +94,7 @@ predicate Non_null_intM{Here}(intM[0..] x) =
 (\offset_max(x) >= -1)
 
 predicate Non_null_Object{Here}(Object[0..] x) =
-(\offset_max(x) == 0)
+(\offset_max(x) >= 0)
 
 String[0..] any_string()
 ;
@@ -1440,7 +1440,7 @@ axiom MullerTheory_parenttag_Object : parenttag(MullerTheory_tag, Object_tag)
 
 predicate Non_null_Object(x_1:Object pointer,
  Object_x_2_alloc_table:Object alloc_table) =
- (offset_max(Object_x_2_alloc_table, x_1) = (0))
+ ge_int(offset_max(Object_x_2_alloc_table, x_1), (0))
 
 predicate Non_null_intM(x_0:Object pointer,
  Object_x_1_alloc_table:Object alloc_table) =
@@ -3377,7 +3377,7 @@ axiom MullerTheory_parenttag_Object: parenttag(MullerTheory_tag, Object_tag)
 
 predicate Non_null_Object(x_1: Object pointer,
   Object_x_2_alloc_table: Object alloc_table) =
-  (offset_max(Object_x_2_alloc_table, x_1) = 0)
+  (offset_max(Object_x_2_alloc_table, x_1) >= 0)
 
 predicate Non_null_intM(x_0: Object pointer,
   Object_x_1_alloc_table: Object alloc_table) =
@@ -6332,7 +6332,7 @@ why -simplify [...] why/MullerTheory.why
  (EQ (parenttag MullerTheory_tag Object_tag) |@true|))
 
 (DEFPRED (Non_null_Object x_1 Object_x_2_alloc_table)
-  (EQ (offset_max Object_x_2_alloc_table x_1) 0))
+  (>= (offset_max Object_x_2_alloc_table x_1) 0))
 
 (DEFPRED (Non_null_intM x_0 Object_x_1_alloc_table)
   (>= (offset_max Object_x_1_alloc_table x_0) (- 0 1)))
@@ -9212,7 +9212,7 @@ axiom MullerTheory_parenttag_Object: parenttag(MullerTheory_tag, Object_tag)
 
 predicate Non_null_Object(x_1: Object pointer,
   Object_x_2_alloc_table: Object alloc_table) =
-  (offset_max(Object_x_2_alloc_table, x_1) = 0)
+  (offset_max(Object_x_2_alloc_table, x_1) >= 0)
 
 predicate Non_null_intM(x_0: Object pointer,
   Object_x_1_alloc_table: Object alloc_table) =
