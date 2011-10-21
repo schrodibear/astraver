@@ -92,11 +92,11 @@ the Java Modeling Language~\cite{leavens00preliminary} (JML for
 short), using the \Why{}~\cite{why} tool for generating proof
 obligations.
 
-This version \whyversion{} of Krakatoa is a major rewriting of  
+This version \whyversion{} of Krakatoa is a major rewriting of
 the version 0.x family. Major changes have occurred including changes in the syntax of annotations.
 
 Chapter~\ref{chap:tutorial} is a tutorial to introduce the user step
-by step to the use of Krakatoa. 
+by step to the use of Krakatoa.
 
 Chapter~\ref{chap:reference} is a reference manual where all options
 of the tool are described, and also the modeling of Java objects and
@@ -105,7 +105,7 @@ interactively, e.g. using Coq.
 
 In the appendix you will find various additional informations,
 including the requirements, a summary of known limitations, and how to
-get help. 
+get help.
 
 \section{Important note for version 2.30}
 
@@ -127,15 +127,21 @@ possible, using the \texttt{gwhy} command just as in version 2.29.
 \chapter{Tutorial}
 \label{chap:tutorial}
 
+This chapter provides the basic techniques for specifying a Java
+source code and prove it correct with Krakatoa. We also recommend to
+look at the collection of verified programs at URL
+\url{http://proval.lri.fr/gallery/krakatoa.en.html} to get more hints
+on how to specify and prove programs with Krakatoa.
+
 Before going to the first lesson, we recommend to start by creating a new
-directory \verb|tutorial|, and code each example in that directory. 
+directory \verb|tutorial|, and code each example in that directory.
 
 \section{The basics of the methodology}
 
 We start by a very simple static method, that computes the maximum of
 two integers. In the \verb|tutorial| sub-directory, write the
-following \Java{} program 
-%of Figure~\ref{java:max} 
+following \Java{} program
+%of Figure~\ref{java:max}
 into a new file \verb|Lesson1.java|.
 \input{Lesson1_max.pp}
 The comment starting with \verb|/*@| just before the method
@@ -157,7 +163,7 @@ given. Indeed, we intentionally made a mistake: the second
 \texttt{return} should return \texttt{y} instead of \texttt{x}.
 
 Running the verification process can be done by executing the
-following command, in the directory \verb|tutorial|: 
+following command, in the directory \verb|tutorial|:
 \begin{verbatim}
 krakatoa Lesson1.java
 \end{verbatim}
@@ -180,7 +186,7 @@ platform, as shown in Figure~\ref{fig:gwhy}
 \end{figure}
 
   Please refer to Why3's user manual for details on the use of this
-  interface. We only remind here the main features. 
+  interface. We only remind here the main features.
 
   The column on the left is a tool bar.  The large window in the
   middle is the tree view of all generated VCs. There are 4 VCs
@@ -262,7 +268,7 @@ the method implementation now satisfies its specification.
 \index{loop invariant clause@\texttt{loop\_invariant} clause}
 
 Methods get a bit harder to prove in presence of loops. Below is a
-contract of a method for computing the square root of an 
+contract of a method for computing the square root of an
 integer (rounded towards zero).
 \input{Lesson1_sqrt.pp}
 \index{precondition}
@@ -287,7 +293,7 @@ following remark: we know that
 \]
 so the square root of $n$ is the smallest integer $k$ such that
 \[
-\sum_{i=0}^{k} 2i+1  
+\sum_{i=0}^{k} 2i+1
 \]
 is greater than $n$.
 
@@ -313,7 +319,7 @@ for the moment.)
 
 Indeed, as usual in Floyd-Hoare logic, to prove a program with a loop
 it is required to add a loop invariant to have enough
-information. 
+information.
 %More specifically to \Krakatoa{}, you also need to add a
 %loop \emph{variant}\index{variant}, an integer expression whose value
 %decreases at each loop.
@@ -327,40 +333,50 @@ between \texttt{1} and \texttt{2*count+1}, that is
 \texttt{(count+1)*(count+1)}. So we suggest the following
 \input{Lesson1_sqrtloopinv.pp}
 
-If you rerun the krakatoa tool, run the provers and split the unproved VCs as much as possible, you will see that the subgoal which amounts to show that the property \texttt{sum == count
-  * count} is preserved by the loop, is not proved by any provers. It
-does not mean it is not true: in that case, it illustrates the
-incompleteness of the method, since checking validity of first-order
-formulas is undecidable. Showing that \texttt{sum == count * count} is
-preserver by a loop iteration means to prove that assuming \texttt{sum
-  == count * count} then \texttt{sum'
-  == count' * count'} if  \texttt{count' == count+1}  (instruction
-\texttt{count++}) and \texttt{sum' == sum + 2*count' + 1}. Proving this
-requires to simplify the formulas by applying property of
-distributivity of multiplication over addition. It appears that
-automatic provers are usually quite dumb with multiplication. To help
-them, it is possible to introduce \emph{lemmas} as hints. This is done
-as follows:
-\input{Lesson1_lemmas.pp}
-\index{lemmas}
-\index{lemma declaration@\texttt{lemma} declaration}
+If you rerun the krakatoa tool, you should now see that CVC3 and Z3 are able to prove the normal behevior of the method.
+% If you rerun the krakatoa tool, run the provers and split the unproved VCs as much as possible, you will see that the subgoal which amounts to show that the property \texttt{sum == count
+%   * count} is preserved by the loop, is not proved by any provers. It
+% does not mean it is not true: in that case, it illustrates the
+% incompleteness of the method, since checking validity of first-order
+% formulas is undecidable. Showing that \texttt{sum == count * count} is
+% preserver by a loop iteration means to prove that assuming \texttt{sum
+%   == count * count} then \texttt{sum'
+%   == count' * count'} if  \texttt{count' == count+1}  (instruction
+% \texttt{count++}) and \texttt{sum' == sum + 2*count' + 1}. Proving this
+% requires to simplify the formulas by applying property of
+% distributivity of multiplication over addition. It appears that
+% automatic provers are usually quite dumb with multiplication. To help
+% them, it is possible to introduce \emph{lemmas} as hints. This is done
+% as follows:
+% \input{Lesson1_lemmas.pp}
+% \index{lemmas}
+% \index{lemma declaration@\texttt{lemma} declaration}
 
-\begin{figure}[t]
-  \begin{center}
-    \includegraphics[width=\textwidth]{Lesson1_sqrt2.png}
-  \end{center}
-  \caption{Loop invariant VCs for \texttt{sqrt}}
-\label{fig:sqrt2}
-\hrulefill
-\end{figure}
+% \begin{figure}[t]
+%   \begin{center}
+%     \includegraphics[width=\textwidth]{Lesson1_sqrt2.png}
+%   \end{center}
+%   \caption{Loop invariant VCs for \texttt{sqrt}}
+% \label{fig:sqrt2}
+% \hrulefill
+% \end{figure}
 
-Rerunning again krakatoa and the provers results in
-Figure~\ref{fig:sqrt2}. No prover is able to prove every VCs, but
-combining results of the three provers, each VCs is proved.
+% Rerunning again krakatoa and the provers results in
+% Figure~\ref{fig:sqrt2}. No prover is able to prove every VCs, but
+% combining results of the three provers, each VCs is proved.
 
 \subsection*{Safety}
 \index{safety}
 \index{arithmetic overflow}
+
+\begin{figure}[t]
+  \begin{center}
+    \includegraphics[width=\textwidth]{Lesson1_isqrt_why3_2.png}
+  \end{center}
+  \caption{Safety VCs for \texttt{sqrt}}
+\label{fig:sqrt2}
+\hrulefill
+\end{figure}
 
 Let's now look at the ``Safety'' section of VCs. This section contains
 VCs for checking that no runtime error may occur during
@@ -369,19 +385,23 @@ execution. These includes:
 \item Division by zero
 \item Arithmetic Overflow
 \item Null pointer dereferencing
-\item Out-of-bounds arry access
+\item Out-of-bounds array access
 \end{itemize}
 
-On this example, arithmetic overflow is the concern. On
-Figure~\ref{fig:sqrt2}, the focus is put on VCs 7, located at
-expression \texttt{2*count} in the source code. Looking at the upper
-right, below the red line is the goal to prove, which is \texttt{ 2 *
-  integer\_of\_int32(count1) <= 2147483647}. The last constant is
-$2^{31}-1$, which is the maximal integer representable in the
-\texttt{int} type. So this goal amounts to prove that \texttt{count},
-since as a mathematical integer, multiplied by 2, does not exceed
-$2^{31}-1$. Indeed it is not provable, because it is not always true:
-if the value of $x$ is too large, arithmetic overflow may occur.
+To understand why safety is not proved, let's first split the goal and
+try provers on sub-goals. On this example, arithmetic overflow is the
+concern. On Figure~\ref{fig:sqrt2}, the focus is put on the VC
+corresponding to expression \texttt{sum+2*count} in the source code
+(bottom right windows). Looking at the top right window, the goal to prove, which is
+\begin{verbatim}
+(- 2147483648) <= (integer_of_int32 sum + integer_of_int32 result3)
+               <= 2147483647
+\end{verbatim}
+The constant 2147483648 is $2^{31}$. This goal
+amounts to prove that the mathematical result of \texttt{sum + 2*count} fits
+into the \texttt{int} type. Indeed it is not
+provable, because it is not always true: if the value of $x$ is too
+large, arithmetic overflow may occur.
 
 It is possible to find a bound for \texttt{x}, to be added in the
 precondition, together with appropriate bounds for \texttt{sum} and
@@ -392,28 +412,28 @@ done by added the following \emph{pragma} at the beginning of the
 file:
 \input{Lesson1_pragma.pp}
 
-You may try this now, and checks that all remaining VCs are proved.
+You may try this now, and checks that the ``arithmetic overflow'' VCs disappear.
 
 \subsection*{Termination}
 \index{termination}
 \index{loopvariant clause@\texttt{loop\_variant} clause}
 
-Since the \texttt{sqrt} method body contains a \texttt{while} loop, it
-is possible that the method execution does not terminate for some of
-the input. This is not check by default, but if you want to check
-termination, you can add another clause to the loop annotation: a
-\texttt{loop\_variant} clause. An integer expression must follow, which is
-supposed to decreases at each loop iteration, and remaining
-nonnegative. On the \texttt{sqrt} example, that \texttt{x-sum} is
-decreasing, so you can add:
-\input{Lesson1_sqrtdecr.pp}
+There is another VC that remains to prove, named ``loop variant
+decreases''. Indded, since the \texttt{sqrt} method body contains a
+\texttt{while} loop, it is possible that the method execution does not
+terminate for some of the input. To prove termination, you can add
+another clause to the loop annotation: a \texttt{loop\_variant}
+clause. An integer expression must follow, which is supposed to
+decreases at each loop iteration, and remaining non-negative. On the
+\texttt{sqrt} example, that \texttt{x-sum} is decreasing, so you can
+add: \input{Lesson1_sqrtdecr.pp}
 
 You can check again that this is proved automatically.
 
 \section{Array accesses}
 
 In this lesson, we now consider arrays. You should now create a new
-file \verb|Arrays.java|. Here is the specification of a method for computing 
+file \verb|Arrays.java|. Here is the specification of a method for computing
 the maximum element of an array of ints, given as argument:
 \input{Arrays_findMax.pp}
 The precondition is necessary to ensure that \verb|t| is a non-empty
@@ -428,7 +448,7 @@ We propose the following code for that method:
 The loop invariant ensures that \verb|r| is always the index of the maximum
 element of \verb|t| between \verb|0| and \verb|i-1|. We put also as
 invariant the facts that \verb|r| and \verb|i| remain in the bounds of
-\verb|t|. 
+\verb|t|.
 
 
 \section{Logic predicates}
@@ -438,7 +458,8 @@ invariant the facts that \verb|r| and \verb|i| remain in the bounds of
 
 The following example is the same is the previous one. We just
 introduce a logic predicate to avoid the writing of similar formulas.
- 
+See also \url{http://proval.lri.fr/gallery/krakatoa.en.html}.
+
 \input{Arrays_findMax2.pp}
 
 
@@ -450,16 +471,21 @@ introduce a logic predicate to avoid the writing of similar formulas.
 The following method shifts for one cell to the right the contents of
 an array. It illustrates the \verb|\old| and the \verb|\at|
 constructs.
+See also \url{http://proval.lri.fr/gallery/krakatoa.en.html}.
+
 \input{Arrays_shift.pp}
 
 \section{Objects and constructors}
 
 It is time to consider true \Java{} objects. Let's consider the
 following class that implements a very simple electronic purse.
+See also \url{http://proval.lri.fr/gallery/krakatoa.en.html}.
 \input{Purse0.pp}
 
 
 \section{Calling subprograms, \texttt{assigns} clauses}
+
+See also \url{http://proval.lri.fr/gallery/krakatoa.en.html}.
 
 \index{assigns clause@\texttt{assigns} clause}
 
@@ -468,10 +494,12 @@ following class that implements a very simple electronic purse.
 
 These tests cannot be proved, the \texttt{credit} and
 \texttt{withdraw} methods must be given \texttt{assigns} clauses as
-follows: 
+follows:
 \input{Purse2.pp}
 
 \section{Programs with exceptions}
+
+See also \url{http://proval.lri.fr/gallery/krakatoa.en.html}.
 
 \index{behavior}
 \index{behavior declaration@\texttt{behavior} declaration}
@@ -480,6 +508,8 @@ follows:
 \input{Purse_withdraw2.pp}
 
 \section{The Dutch National Flag problem}
+
+See also \url{http://proval.lri.fr/gallery/krakatoa.en.html}.
 
 \input{Flag.pp}
 
@@ -490,11 +520,12 @@ follows:
 
 The following example illustrates code instrumentation using ghost
 variables.
+See also \url{http://proval.lri.fr/gallery/krakatoa.en.html}.
 
 \input{Gcd.pp}
 
 \chapter{Specification Language: Reference}
-\label{chap:reference} 
+\label{chap:reference}
 
 This chapter is the reference for the specification language. It is
 unfortunately largely incomplete, but for missing parts and
@@ -506,12 +537,12 @@ Manual~\cite{baudin09acsl}, which is very close.
 \label{sec:expressions}
 
 We present the language of expressions one can use in
-annotations. These are called \emph{logic expressions}. 
+annotations. These are called \emph{logic expressions}.
 
 This language is essentially the standard multi-sorted first-order
 logic. It is a two-valued logic language, made of \emph{propositions}
 with standard first-order connectives, built upon a language
-of atoms called \emph{terms}. 
+of atoms called \emph{terms}.
 
 As far as possible, the syntax of Java expressions is reused:
 conjunction is denoted as \verb|&&|, disjunction as \verb+||+ and
@@ -520,7 +551,7 @@ implication, \verb|<==>| for equivalence. Universal quantification is
 denoted by $\bskw{forall} \tau~x_1,\ldots,\tau~x_n; e$ and existential
 quantification by $\bskw{exists} \tau~x_1,\ldots,\tau~x_n; e$.
 
-Terms are built on 
+Terms are built on
 \begin{itemize}
 \item integer and real arithmetic
 \item Java array access and field access
@@ -533,7 +564,7 @@ constructs that we will introduce progressively, except that method
 and constructor calls are not allowed.
 
 Figure~\ref{fig:gram:lexpr} presents the grammar for the basic
-construction of logic expressions.  
+construction of logic expressions.
 
 \begin{figure}[p]
   \fbox{\begin{minipage}{0.97\textwidth} \input{lexpr.bnf}
@@ -601,7 +632,7 @@ of same priority are presented on the same line.
       connective implies & right & \verb|==>| \\
       connective equiv & left & \verb|<==>| \\
       ternary connective & right & $\cdots\verb|?|\cdots\verb|:|\cdots$ \\
-      binding & left & \bskw{forall} \bskw{exists} %\bskw{let} 
+      binding & left & \bskw{forall} \bskw{exists} %\bskw{let}
       \\
 %      naming & right & \verb|:| \\
       \hline
@@ -614,7 +645,7 @@ of same priority are presented on the same line.
 % There is an additional ambiguity between the connective
 % \verb|..?..:..| and the naming with \verb|:|. For example, in the
 % expression \verb|x?y:z:t|, the precedence table does not enforce
-% whether this should be seen as \verb|x?(y:z):t| or \verb|x?y:(z:t)|. 
+% whether this should be seen as \verb|x?(y:z):t| or \verb|x?y:(z:t)|.
 % Such a case must considered as a syntax error, and should be fixed
 % by explicitly using parentheses.
 
@@ -644,7 +675,7 @@ are true, since they are instances of the general axiom $\forall x,
 x\verb|==|x$ of first-order logic.
 
 So, it is up to the writer of specification to take care of writing
-consistent assertions. 
+consistent assertions.
 
 \subsection{Typing}
 
@@ -713,7 +744,7 @@ $n$ divided by $d$ then:
 
 \subsubsection{Hexadecimal and octal constants}
 
-Hexadecimal and octal constants always denote non-negative integers. 
+Hexadecimal and octal constants always denote non-negative integers.
 
 \subsubsection{Casts and overflow}
 
@@ -862,7 +893,7 @@ a precondition and a postcondition:
   \end{itemize}
 \end{itemize}
 Additionally, a contract can be completed with a \emph{frame clause}
-which describes side-effects, and acts as a postcondition. 
+which describes side-effects, and acts as a postcondition.
 
 Note that post-conditions of simple contracts only concern normal
 exit: exiting with exceptions can be specified using additional
@@ -983,7 +1014,7 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
     specify that
     \begin{itemize}
     \item the given property is an inductive loop invariant for the
-      loop: 
+      loop:
       \begin{itemize}
       \item true at loop entrance
       \item preserved by loop body
@@ -994,11 +1025,11 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
   \end{itemize}
 
 % \subsection{Statement contracts}
-  
+
 %   \begin{itemize}
 %   \item Same as function contracts, associated to statements
 %   \item Acts as embedding the corresponding statement in a black box,
-%     as if it was a function call 
+%     as if it was a function call
 %   \item May have additional clauses in behaviors, to be used in place
 %     of the throws clause:
 %     \begin{flushleft}\ttfamily\color{blue}
@@ -1008,7 +1039,7 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
 %       ~~@*/
 %     \end{flushleft}
 %     to deal with corresponding abrupt termination
-      
+
 %   \item Can be associated to behaviors too
 %   \end{itemize}
 
@@ -1016,7 +1047,7 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
 % \subsection{Code Invariants}
 
 %   \begin{itemize}
-%   \item Purpose: support for arbitrary \texttt{goto}s    
+%   \item Purpose: support for arbitrary \texttt{goto}s
 %   \item Similar to assertions, but acts as inductive properties like
 %     loop invariants.
 %   \item Inductive scheme is guided by the control flow graph
@@ -1052,10 +1083,10 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
 \subsection{Logic definitions}
 
   \begin{itemize}
-  \item New logic functions and predicates can be defined 
+  \item New logic functions and predicates can be defined
 %  input{.pp}
 %  \item Arbitrary recursion is allowed
-%  input{fib.c.pp} 
+%  input{fib.c.pp}
   \end{itemize}
 
 \subsection{Hybrid predicates}
@@ -1076,7 +1107,7 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
   \begin{itemize}
   \item a type name
   \item the profile of logic functions and predicates operating on it
-  \item a set of axioms 
+  \item a set of axioms
   \end{itemize}
 
 
@@ -1117,7 +1148,7 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
 % && \hspace*{20mm} f(k) ? 1 : 0)
 %   \end{eqnarray*}
 %   \end{itemize}
-  
+
 \section{Termination}
 
 \subsection{Loop variants}
@@ -1138,7 +1169,7 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
 
 %     input{fact.c.pp}
 
-%   \item Mutual recursion supported too 
+%   \item Mutual recursion supported too
 %   \end{itemize}
 
 % \subsection{Arbitrary termination order}
@@ -1195,7 +1226,7 @@ Notice that in $E$, \bskw{result} is bound to the exception object thrown.
 
 
 Compiling from sources requires Objective Caml
-compiler, version 3.09 or higher. 
+compiler, version 3.09 or higher.
 
 External theorem provers must be installed. See the page~\url{http://why.lri.fr/provers.html}
 
@@ -1206,7 +1237,7 @@ higher.
 
 \subsection{From the sources}
 
-Get a copy of sources at the web page \url{http://why.lri.fr/}. 
+Get a copy of sources at the web page \url{http://why.lri.fr/}.
 
 Decompress the archive in a directory of your choice.
 
@@ -1223,7 +1254,7 @@ Please look at the web page \url{http://why.lri.fr/} for binaries for
 popular architectures. Krakatoa is distributed as part of the Why
 debian package, available on standard repositories of debian-based
 distributions.
- 
+
 \section{Summary of features and known limitations}
 \label{sec:features}
 
@@ -1297,16 +1328,16 @@ the authors directly at the following address: \url{mailto:Claude dot
 \index{invariant clause@\texttt{invariant} clause}
 
 Methods get a bit harder to prove in presence of loops. Below is the
-specification of a method for computing the square root of an 
+specification of a method for computing the square root of an
 integer (rounded down).
 \input{Lesson1_sqrt.pp}
-We propose an algorithm based on the following remark: we know that 
+We propose an algorithm based on the following remark: we know that
 \[
 \sum_{i=0}^{k-1} 2i+1 = k^2
 \]
 so the square root of $n$ is the smallest integer $k$ such that
 \[
-\sum_{i=0}^{k} 2i+1  
+\sum_{i=0}^{k} 2i+1
 \]
 is greater than $n$.
 
@@ -1337,10 +1368,10 @@ Now let's go to the proof of obligations, for example by running
 \begin{verbatim}
 coqide Lesson1_sqrt_why.v
 \end{verbatim}
-The first proof obligation is 
+The first proof obligation is
 required to prove that the loop invariant is true when
 entering the loop. It is is automatically solved by the
-the \verb|intuition| tactic. 
+the \verb|intuition| tactic.
 The second proof obligation, after running
 the \verb|intuition| tactic, results in two subgoals:
 \begin{small}
@@ -1366,17 +1397,17 @@ sum0 = (count0 + 1) * (count0 + 1)
 These goals are required to prove that the loop invariant remains true
 in any execution of the loop body. Think of variables \verb!count! and
 \verb!sum! as the values of the corresponding memory cells before the
-execution, and 
+execution, and
 the ones indexed by 1 as the value after the execution.  Notice that
 the proof of decrease of the variant has been solved automatically.
 
 Let's solve the first goal: if you replace \verb|count0| by its value
-\verb|count+1| given by \verb|HW_4|, you have to prove 
+\verb|count+1| given by \verb|HW_4|, you have to prove
 \verb|x >= (count+1)*(count+1)|, something that follows immediately from
 \verb|HW_3| and \verb|H0| by linear arithmetic. So the tactic
 \verb|subst count0; omega.| solves the goal. For the second one, if
 you replace \verb|sum0|, \verb|sum| and \verb|count0| by there values
-in hypotheses, then the goal becomes a trivial ring equality, so the tactic 
+in hypotheses, then the goal becomes a trivial ring equality, so the tactic
 \verb|subst sum0 sum count0; ring.| is enough.
 
 % \begin{small}
@@ -1407,24 +1438,24 @@ in hypotheses, then the goal becomes a trivial ring equality, so the tactic
 The third and last proof obligation is required to show that the
 post-condition of the method is satisfied, provided that the invariant
 is true after the loop, and also that the while condition is
-false. These are automatically done by the \verb|intuition| tactic. 
+false. These are automatically done by the \verb|intuition| tactic.
 
 \section{Array accesses}
 
 In this lesson, we now consider arrays. You should now create a new
-file \verb|Arrays.java|. Here is the specification of a method for computing 
+file \verb|Arrays.java|. Here is the specification of a method for computing
 the maximum element of an array of ints, given as argument:
 \input{Arrays_findMax.pp}
 The precondition is necessary to ensure that \verb|t| is a non-empty
 array, so that the maximum exists. An alternative would have been to
 raise an exception in that case, but exceptions will be considered
-later. 
+later.
 
 We propose the following code for that method:
 The loop invariant ensures that \verb|r| is always the index of the maximum
 element of \verb|t| between \verb|0| and \verb|i-1|. We put also as
 invariant the facts that \verb|r| and \verb|i| remain in the bounds of
-\verb|t|. 
+\verb|t|.
 
 On this method, \Krakatoa{} and then \Why{} produce six proof
 obligations. Let's see them in details. The first one is
@@ -1459,15 +1490,15 @@ elements of \verb|Z| or \verb|bool| (floats are not supported yet).
 \multicolumn{2}{r}{\texttt{alloc:alloc\_table}} & \multicolumn{1}{r}{} &
 \multicolumn{9}{l}{\texttt{intA : int memarray}} \\
 \multicolumn{2}{r}{\qquad\qquad} & & \footnotesize 0 & \footnotesize 1 &
-\footnotesize 2 & \footnotesize 3 & \multicolumn{4}{l}{$\cdots$} \\ 
+\footnotesize 2 & \footnotesize 3 & \multicolumn{4}{l}{$\cdots$} \\
 \cline{2-2}\cline{4-8}
 $a_1$  & int[5]     & & \case & \case &\case&\case&\case\\
 \cline{2-2}\cline{4-11}
-$a_2$  & int[8]    & &\case & \case &\case&\case&\case&\case&\case&\case\\ 
+$a_2$  & int[8]    & &\case & \case &\case&\case&\case&\case&\case&\case\\
 \cline{2-2}\cline{4-11}
 $a_3$  & int[3]    & &\case& \case &\case \\
 \cline{2-2}\cline{4-6}
-$\vdots$  & $\vdots$    & & \multicolumn{2}{l}{$\vdots$} 
+$\vdots$  & $\vdots$    & & \multicolumn{2}{l}{$\vdots$}
 \end{tabular}
 \end{center}
 \caption{Modeling of Java memory heap: allocation table and an array
@@ -1488,7 +1519,7 @@ for references that are not allocated as arrays in the given store).
 The predicate \verb|is_valid_index|, of type \texttt{alloc\_table -> value ->
   Z -> Prop}, tells if a given index $i$ is valid for a value, i.e.
 the value is allocated, as an array of length $n$, such that $0\leq
-i<n$. 
+i<n$.
 
 \index{ArrayOutOfBoundsException}
 This proof obligation is required for validation of the first
@@ -1535,7 +1566,7 @@ smart enough to discharge this proof automatically.
 The fourth proof obligation is even larger than the previous ones. It
 is in fact the preservation of the loop invariant, and decrease of the
 loop variant.  If you execute the default \verb|intuition|
-tactic, you end up with two subgoals to solve. The first of them is 
+tactic, you end up with two subgoals to solve. The first of them is
 \begin{small}
 \begin{verbatim}
 ...
@@ -1595,7 +1626,7 @@ intA : t [j] <= m0
 \end{verbatim}
 \end{small}
 that is to prove that \verb|t[j]<=m| for any \verb|j| between $0$ and
-$\verb|i0|-1$.  This is of course to show that the new value of \verb|m| is 
+$\verb|i0|-1$.  This is of course to show that the new value of \verb|m| is
 indeed the maximum of the array between those bounds. To prove that,
 you have two cases, depending whether \verb|j| is equal to
 $\verb|i0|-1$ or less. You should perform this case reasoning in
@@ -1641,14 +1672,14 @@ intA : t [j] <= m0
 \end{verbatim}
 \end{small}
 which should be proved using the hypothesis \verb|H5| that states that the
- invariant was true at the beginning of the loop. You can do 
+ invariant was true at the beginning of the loop. You can do
 \begin{small}
 \begin{verbatim}
 generalize (H5 j).
 omega.
 \end{verbatim}
 \end{small}
-to solve it, or even better, to avoid relying on hypothesis name: 
+to solve it, or even better, to avoid relying on hypothesis name:
 \begin{small}
 \begin{verbatim}
 assert ((intA:t[j]) <= m); auto with *.
@@ -1704,7 +1735,7 @@ In the previous lessons, we wrote twice an assertion stating that some
 integer is the maximum of some part of the array: in the
 post-condition and in the loop invariant. Indeed, it is a frequent
 case, where one would want to have some sort of abbreviation. In JML,
-one way to do it is to use an auxiliary \emph{pure} method. 
+one way to do it is to use an auxiliary \emph{pure} method.
 Here is what can be done on the \verb|findMax| example:
 
 \input{Arrays_findMax2.pp}
@@ -1713,10 +1744,10 @@ by a call to \verb|isMax|. In JML, this is allowed because the
 \verb|isMax| method is \emph{pure}, and declared as this, meaning that
 it does not modify the global state of the program.
 
-The effect of such a declaration is to introduce in the file 
-\verb!Krak_spec.why! a new logical function 
-\verb|Arrays_isMax| in \Why{} with an axiom which states that if 
-the pre-condition is true, then the post-condition is satisfied by 
+The effect of such a declaration is to introduce in the file
+\verb!Krak_spec.why! a new logical function
+\verb|Arrays_isMax| in \Why{} with an axiom which states that if
+the pre-condition is true, then the post-condition is satisfied by
 the result of this function.
 \begin{small}
 \begin{verbatim}
@@ -1731,16 +1762,16 @@ Arrays_isMax_axiom
 \end{small}
 % \verb|Arrays_isMax| in \Coq{}, that has been added in file
 %\verb|Krak_model.v|, which is automatically imported at the beginning of file
-% \verb|Arrays_findMax2_why.v|: 
+% \verb|Arrays_findMax2_why.v|:
 %
 % The effect of such a declaration is to introduce a new predicate
 % \verb|Arrays_isMax| in \Coq{}, that has been added in file
 % \verb|Krak_model.v|, which is automatically imported at the beginning of file
-% \verb|Arrays_findMax2_why.v|: 
+% \verb|Arrays_findMax2_why.v|:
 % \begin{small}
 % \begin{verbatim}
 % Print Arrays_isMax.
-% Arrays_isMax = 
+% Arrays_isMax =
 % fun (heap:store) (intA:memarray_int) (t:value) (i l:Z) =>
 %   (t != Null /\ 0 <= i /\ i < l /\ l <= arraylength heap t) /\
 %   (forall j:Z, 0 <= j < l -> intA : t [j] <= intA : t [i])
@@ -1752,7 +1783,7 @@ For the proof the only thing that changes with
 respect to the previous lesson, is that some time to time, you will
 need to use the axiom for \verb|Arrays_isMax|. The easiest way to do
 it is using the \verb!Rewrite Arrays_isMax_axiom! tactic. Proofs are left
-as exercise. 
+as exercise.
 %Some times, it may be a good idea to start a proof as
 % \begin{small}
 % \begin{verbatim}
@@ -1774,7 +1805,7 @@ done by \verb|intuition|.
 
 The forth obligation is the hard one: the preservation of the loop
 invariant. After \verb|intuition|, two subgoals remain, the first one
-is 
+is
 \begin{small}
 \begin{verbatim}
 ...
@@ -1792,7 +1823,7 @@ ______________________________________(1/2)
 intA1 : t [i] = intA : t [i]
 \end{verbatim}
 \end{small}
-that corresponds to the part 
+that corresponds to the part
 \begin{verbatim}
 (\forall int i; 0 <= i && i <= j ; t[i] == \old(t[i]))
 \end{verbatim}
@@ -1810,7 +1841,7 @@ intA1 = array_update intA0 t j result
 %{\Huge plus de syntax pour les updates}
 %the syntax \verb|heap/v#c<-r| denotes the new heap obtained from the
 %heap \verb|heap| by putting at cell \verb|c| of reference \verb|v|
-%the new value \verb|r|. 
+%the new value \verb|r|.
 
 We first substitute \verb|intA1| and \verb!result0! by their values to get the goal
 \begin{small}
@@ -1819,7 +1850,7 @@ ______________________________________(1/2)
 array_upd intA0 t j result : t [i] = intA : t [i]
 \end{verbatim}
 \end{small}
-Now, we have an occurrence of the general scheme 
+Now, we have an occurrence of the general scheme
 \begin{verbatim}
 (array_upd m t1 i1 r) : t2 [i2]
 \end{verbatim}
@@ -1830,7 +1861,7 @@ if \verb|t1=t2| and \verb|i1=i2| then this is equal to \verb|r|, and
 otherwise it is equal to \verb|m : t2 [i2]|. There is a tactic that
 will do that simplification for you, named \verb|krakatoa|. If you run
 it on that example, it will find automatically that \verb|j| is
-different from \verb|i|, and moreover will solve the resulting goal 
+different from \verb|i|, and moreover will solve the resulting goal
 \begin{small}
 \begin{verbatim}
 intA0 : t[i] = intA : t[i]
@@ -1893,14 +1924,14 @@ ______________________________________(1/1)
 result = intA : t [j - 1]
 \end{verbatim}
 \end{small}
-that is provable by 
+that is provable by
 \begin{small}
 \begin{verbatim}
 subst i result.
 auto with *.
 \end{verbatim}
 \end{small}
-and the forth proof obligation is proved. The last proof obligation, after \verb|intuition|, is 
+and the forth proof obligation is proved. The last proof obligation, after \verb|intuition|, is
 \begin{small}
 \begin{verbatim}
 ...
@@ -1947,7 +1978,7 @@ $a_2$  & Purse    & & & \case \\
 \cline{2-2}\cline{5-5}
 $a_3$  & Purse    & & & \case \\
 \cline{2-2}\cline{5-5}
-$\vdots$  & $\vdots$    & & & \multicolumn{1}{|c|}{$\vdots$} 
+$\vdots$  & $\vdots$    & & & \multicolumn{1}{|c|}{$\vdots$}
 \end{tabular}
 \end{center}
 \caption{Modeling of Java memory heap: memory heaps for object fields}
@@ -1989,7 +2020,7 @@ $f$ of object $v$, that is $t.v$ in Java. In the \Coq{} modeling, such
 a field name is represented by a logical variable of the same name,
 which as the structure shown on Figure~\ref{fig:fields}: it is a map
 from references to primitive or references values, that we call a
-\emph{memory}. In that example, \verb|Purse_balance| has type % 
+\emph{memory}. In that example, \verb|Purse_balance| has type %
 \verb|memory Z|, a memory which contains integer values.  So the goal
 above is to prove the post-condition of the method, where
 \verb|Purse_balance| and \verb|Purse_balance0| represent the values of the
@@ -2035,7 +2066,7 @@ subst Purse_balance0 result0; krakatoa.
 \end{small}
 
 The proof obligation of \verb|withdraw| is very similar and left as
-exercise. 
+exercise.
 
 In our \verb|Purse| class, let's add a constructor for an empty purse:
 \begin{java}
@@ -2054,9 +2085,9 @@ obligation:
 \end{verbatim}
 \end{small}
 to prove that the newly
-allocated value satisfies the post-condition of that constructor, 
+allocated value satisfies the post-condition of that constructor,
 the class invariant, and additionally is fresh and not null, and has
-type \verb|Purse| in the new allocation table \verb|heap0|. 
+type \verb|Purse| in the new allocation table \verb|heap0|.
 These last two facts are proved by \verb|intuition|, thanks to
 automatic tactics added in the \Krakatoa{} model. To perform the
 proof, start with
@@ -2066,7 +2097,7 @@ unfold Purse_invariant; intuition.
 \end{verbatim}
 \end{small}
 then, as for heap updates as before, substitute \verb|balance0| by its
-value and use the \verb|krakatoa| tactics. 
+value and use the \verb|krakatoa| tactics.
 
 \section{Calling subprograms}
 \label{sec:subprograms}
@@ -2089,11 +2120,11 @@ third are to check the pre-conditions of the calls
 respectively. They are solved by \verb|intuition|.
 The fourth obligation is a precondition for the access
 \verb|p.balance|, that is \verb|p| is not \verb|null|, which is again
-solved by \verb|intuition|. 
+solved by \verb|intuition|.
 
 The last proof obligation is the post-condition of
 \verb|test1|. You may notice is also solved automatically by
-\verb|intuition|. 
+\verb|intuition|.
 % It is however interesting to see more details, if
 % you simply use \verb|intuition auto.|, the following subgoal remains:
 % \begin{small}
@@ -2115,7 +2146,7 @@ The last proof obligation is the post-condition of
 % in memory \verb|balance3|. Looking at hypotheses above,
 % you understand that \verb|balance3| is the value of the
 % \verb|balance| field at the end of the body of \verb|test1|,
-% \verb|balance2| is before the last \verb|p.credit(100)|, 
+% \verb|balance2| is before the last \verb|p.credit(100)|,
 % \verb|balance1| before \verb|p.withdraw(50)|, and
 % \verb|balance0| before the first \verb|p.credit(100)|. So to
 % prove that we need to apply all these equalities:
@@ -2139,7 +2170,7 @@ Let us consider now a slightly more complicated method, that involves
 two purses.
 \input{Purse_test2.pp}
 The first obligation, after \verb|unfold Purse_invariant, Object_invariant; intuition|,
-results in: 
+results in:
 \begin{small}
 \begin{verbatim}
 alloc : alloc_table
@@ -2190,7 +2221,7 @@ of these methods. The \verb|Purse| class now looks like
 Of course, since we have strengthen the specifications of these
 methods, we need to prove them again, but fortunately, in that case,
 the lemmas added to the \Coq{} \verb|Hint| base are enough to prove
-the additional requirements. 
+the additional requirements.
 
 Now, we can go back to our method \verb|test2|. Seven obligations are
 generated. The first one, after %
@@ -2222,7 +2253,7 @@ result # Purse_balance0 >= 0
 \end{small}
 This is in fact a precondition to the call \verb|p1.credit(100)|: we
 need to show that \verb|p1| satisfies its class invariant. What
-we need now is to use hypothesis \verb|H10| which tells what has 
+we need now is to use hypothesis \verb|H10| which tells what has
 been modified by the previous statement %
 \verb|Purse p2 = new Purse()|: indeed, nothing has been modified in
 the memory heap, only a new object has been allocated. To use \verb|H10| you
@@ -2230,9 +2261,9 @@ need to know that the \verb|modifiable| predicate
 \index{modifiable@\texttt{modifiable}} of the Coq
 model concludes to an equality:
 \begin{verbatim}
-(modifiable h m m' mod_spec) := 
+(modifiable h m m' mod_spec) :=
    (v:value)
-    (alive h v) -> 
+    (alive h v) ->
     (mod_spec v) -> (m#v)=(m'#v).
 \end{verbatim}
 So \verb|H10| may be used to rewrite the goal:
@@ -2262,7 +2293,7 @@ that \verb|p1| was already allocated in the previous state, and
 finally the third goal is to show that
 \verb|p1| is not a location specified by \verb|\nothing|, which
 is trivial. In fact, all three goals are
-solved by \verb|auto|, so in fact you should get 
+solved by \verb|auto|, so in fact you should get
 back one step and finish the proof by
 \begin{small}
 \begin{verbatim}
@@ -2290,9 +2321,9 @@ p2 # balance2 >= 0
 that is to show that \verb|p2| satisfies
 its class invariant, provided it satisfied it before
 \verb|p1.credit(100)| (hypothesis \verb|H17|). A rewrite using
-\verb|H18| will do the job as 
+\verb|H18| will do the job as
 before, but there is a small difficulty here: we need to know
-that \verb|p2| is not a location specified by \verb|(value_loc p1)|, 
+that \verb|p2| is not a location specified by \verb|(value_loc p1)|,
 that is \verb|p2| and \verb|p1| are different, in other word that
 \verb|p2| is not an \emph{alias} for
 \verb|p1|\index{alias}\index{variable alias}. Such difficulties with
@@ -2337,7 +2368,7 @@ assert (p1 != p2); intuition; rewrite <- H11; auto with *.
 The fourth obligation is the pre-condition to \verb|p2.withdraw(100)|,
 and is solved very similarly to the third. The fifth and sixth
 obligations are to show that accesses to \verb|balance| in the
-\verb|return| are valid, and are solved by \verb|intuition|. 
+\verb|return| are valid, and are solved by \verb|intuition|.
 
 The seventh and last obligation is the hard one, to show the
 post-condition of \verb|test2|. However, we already have the necessary
@@ -2382,7 +2413,7 @@ We now consider the famous Dutch National Flag
 problem~\cite{Dijkstra76,bitner82}: given an array of
 colored (blue/white/red) elements, rearrange them so that blue
 elements occur first, then white ones, then red ones.  To keep things
-short, we consider we have an array of such colors. 
+short, we consider we have an array of such colors.
 
 We create a new class \verb|Flag| where we first define the colors:
 \input{Flag1.pp}
@@ -2418,7 +2449,7 @@ krak_access != Null
 \end{verbatim}
 \end{small}
 that is the validity of access to \verb|t.length|, solved by
-\verb|subst; auto|. 
+\verb|subst; auto|.
 
 
 The second obligation is to show that the loop invariant is true
@@ -2429,7 +2460,7 @@ small point here. After
 unfold Flag_invariant; intuition.
 \end{verbatim}
 \end{small}
-we get 
+we get
 \begin{small}
 \begin{verbatim}
 ...
@@ -2476,11 +2507,11 @@ The third obligation is the validity of access to \verb|t[i]|, solved
 by \verb|intuition|.
 
 The fourth obligation is the pre-condition to the call %
-\verb|swap(b,i)|, solved by \verb|unfold Flag_invariant; intuition|. 
+\verb|swap(b,i)|, solved by \verb|unfold Flag_invariant; intuition|.
 
-The fifth obligation, after % 
+The fifth obligation, after %
 \verb|unfold Flag_invariant, Flag_isMonochrome; intuition|, results in
-three subgoals: 
+three subgoals:
 \begin{small}
 \begin{verbatim}
 ...
@@ -2508,7 +2539,7 @@ It is to show the preservation of the loop invariant, in the case
 body, and \verb|intA1| at the end (i.e. after \verb|swap(b,i)|).  Similarly,
 \verb|b1| (resp. \verb|i1|) is the value of \verb|b| (resp. \verb|i|)
 at the beginning of the loop body and \verb|b2| (resp. \verb|i2|) at
-the end. 
+the end.
 
 To prove these goals, you will soon notice you should have unfolded
 \verb|Flag_isMonochrome| so you should go back and start with
@@ -2545,7 +2576,7 @@ the fact that it was true at the beginning of the loop (\verb|H13|,
 and \verb|b2=b1+1|) and for \verb|t[b2-1]|=\verb|t[b1]|, it is true
 because it is equal to \verb|t[i1]| before the loop (\verb|H29|),
 which was blue because of the switch (\verb|Post6| and
-\verb|Test7|). First we need 
+\verb|Test7|). First we need
 to split in the two cases by
 \begin{small}
 \begin{verbatim}
@@ -2586,10 +2617,10 @@ The sixth obligation is the preservation of the loop invariant when
 exercise.
 
 The seventh obligation is the precondition to the call
-\verb|swap(r,i)|. It can be done in a similar manner as obligation 3. 
+\verb|swap(r,i)|. It can be done in a similar manner as obligation 3.
 
 The eighth obligation is the preservation of the loop invariant when
-\verb|t[i]| is \verb|RED|. It can be done in a similar manner as obligation 5. 
+\verb|t[i]| is \verb|RED|. It can be done in a similar manner as obligation 5.
 
 The ninth obligation is the preservation of the loop invariant when
 no switch case apply, i.e. if \verb|t[i]| is not a color. This case
@@ -2615,7 +2646,7 @@ TODO
 (*
 Of course, there is another
 possibility to solves this problem, that is manually insert in the
-loop invariant the needed property, that would be in that case 
+loop invariant the needed property, that would be in that case
 \begin{small}
 \begin{verbatim}
   @  t == \old(t)
@@ -2670,7 +2701,7 @@ definition of \verb|allcells_loc| by
 Red.
 \end{verbatim}
 \end{small}
-to get 
+to get
 \begin{small}
 \begin{verbatim}
 ...
@@ -2681,10 +2712,10 @@ ______________________________________(1/1)
 and then apply a lemma of the \Coq{} model which ensures that values of
 uncomparable types are different. This lemma expects the types of
 these values as argument, so you need to use here:
-\index{not_comparable_type_diff@\texttt{not\_comparable\_type\_diff}}   
+\index{not_comparable_type_diff@\texttt{not\_comparable\_type\_diff}}
 \begin{small}
 \begin{verbatim}
-Apply not_comparable_type_diff 
+Apply not_comparable_type_diff
   with (ArrayType IntType) (ClassType Flag);
 \end{verbatim}
 \end{small}
@@ -2714,16 +2745,16 @@ which are all provable by \verb|intuition|, so in fact we should go
 back and finish the proof by
 \begin{small}
 \begin{verbatim}
-Apply not_comparable_type_diff 
+Apply not_comparable_type_diff
   with (ArrayType IntType) (ClassType Flag); intuition.
 \end{verbatim}
 \end{small}
 
 *)
-%%% Local Variables: 
+%%% Local Variables:
 %%% mode: latex
 %%% TeX-master: "manual"
-%%% End: 
+%%% End:
 
 
 \chapter{Reference Manual}
@@ -2733,14 +2764,14 @@ Apply not_comparable_type_diff
 
 The general form of use of the command \texttt{krakatoa} is:
 \begin{flushleft}
-\texttt{krakatoa} [\textsl{options}] \textsl{method name specs} 
+\texttt{krakatoa} [\textsl{options}] \textsl{method name specs}
 \end{flushleft}
 
 \textsl{method name specs} is a sequence of expressions of the form
 \texttt{Classname.methodname}, to specify which methods you want to
 certify. For constructors, use \texttt{Classname.Classname}. There is
 a shortcut to ask for every methods in a class, using
-\texttt{Classname.*}. 
+\texttt{Classname.*}.
 
 Notice there is no way to distinguish between overloaded methods: you
 need either to certify all of them, or none.
@@ -2788,11 +2819,11 @@ need either to certify all of them, or none.
 \begin{itemize}
 \item \texttt{-simplify}
 
-  Produce output for the \textsc{Simplify} prover~\cite{nelson81}. 
+  Produce output for the \textsc{Simplify} prover~\cite{nelson81}.
 
 \item \texttt{-harvey}
 
-  Produce output for the \textsc{haRVey} prover~\cite{ranise03harvey}. 
+  Produce output for the \textsc{haRVey} prover~\cite{ranise03harvey}.
 
 \item \texttt{-pvs}
 
@@ -2804,14 +2835,14 @@ need either to certify all of them, or none.
 
 \item \texttt{-valid}
 
-  Ask for generation of the so-called \emph{Why validations}. 
+  Ask for generation of the so-called \emph{Why validations}.
 
 \item \texttt{-coqdir}
 
   Additional input path to pass to \texttt{coqc} using \texttt{-I}.
 
 \item \texttt{-coqopt}
-  
+
   Additional option to give to \texttt{coqc}.
 
 \end{itemize}
@@ -2832,11 +2863,11 @@ need either to certify all of them, or none.
 \item \texttt{-dump}
 
   Dumps all the environments in the \texttt{krakatoa.log} log
-  file. For debugging purposes only. 
+  file. For debugging purposes only.
 
 \item \texttt{-parse-only}
 
-  Perform only parsing. For debugging purposes only. 
+  Perform only parsing. For debugging purposes only.
 
 \end{itemize}
 
@@ -2867,7 +2898,7 @@ need either to certify all of them, or none.
 \begin{tabular}{c|c|rlclrrrrrrrrrrrrr}
 \multicolumn{3}{r}{} \\
 \multicolumn{2}{r}{\texttt{heap}} & \multicolumn{1}{r}{} &
-$f_1$ & & $f_2$ & $\cdots$ & 
+$f_1$ & & $f_2$ & $\cdots$ &
 \multicolumn{6}{l}{\texttt{intA}} &
 \multicolumn{3}{l}{\texttt{objA}} &
 \multicolumn{1}{l}{\texttt{boolA}} \\
@@ -2884,7 +2915,7 @@ $a_4$  & $C_3[3]$    & & \case & & \case & & \nocase &&&&&&
 \case & \case & \case\\
 \cline{2-2}\cline{4-4}\cline{6-6}\cline{14-16}
 $\vdots$  & $\vdots$    & & \multicolumn{1}{|c|}{$\vdots$} & &
-\multicolumn{1}{|c|}{$\vdots$}  
+\multicolumn{1}{|c|}{$\vdots$}
 \end{tabular}
 \end{center}
 \caption{Modeling of Java memory heap}
@@ -2894,7 +2925,7 @@ $\vdots$  & $\vdots$    & & \multicolumn{1}{|c|}{$\vdots$} & &
 The main purpose of this section is to document the definitions
 and lemmas generated in the modeling of each application: definitions
 that may appear in proof obligations, and lemmas that may be used in
-proofs. 
+proofs.
 
 \subsection{Modeling of \Java{} types and values}
 
@@ -2915,7 +2946,7 @@ Null
 arraylength
 
 
-%\index{not_comparable_type_diff@\texttt{not\_comparable\_type\_diff}}   
+%\index{not_comparable_type_diff@\texttt{not\_comparable\_type\_diff}}
 
 \subsection{Model of the memory heap, access and update}
 
