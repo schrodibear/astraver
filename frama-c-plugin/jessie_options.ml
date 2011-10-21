@@ -175,7 +175,7 @@ module Atp =
     (struct
        let option_name = "-jessie-atp"
        let module_name = "-jessie-atp"
-       let default = "gui"
+       let default = "why3ml"
        let arg_name = ""
        let help = "use given automated theorem prover, among `alt-ergo', `cvc3', `simplify', `vampire', `yices' and `z3'. Use `goals' to simply generate goals in Why syntax."
        let kind = `Tuning

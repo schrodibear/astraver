@@ -1,0 +1,214 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
+<html>
+
+<!-- This document was automatically generated with yamlpp
+     (see http://www.lri.fr/~filliatr/yamlpp.en.html),
+     with the following command:
+yamlpp index.prehtml -o index.html  -->
+
+
+
+
+
+
+
+
+<html>
+
+<head>
+<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<link rel="stylesheet" type="text/css" href="http://www.lri.fr/~filliatr/style.css">
+<title>Krakatoa and Jessie: verification tools for Java and C programs</title>
+<meta name="Keywords" content="Java C program verification formal proof obligations">
+</head>
+
+<body>
+
+<h1>Krakatoa and Jessie</h1>
+
+<ul>
+<li><a href="#overview">Overview</a>
+<li><a href="#jessie">Jessie</a>
+<li><a href="#krakatoa">Krakatoa</a>
+</ul>
+
+<a name="overview"><h2>Overview</h2></a>
+
+<img width=60% src="why_frama_c-mps3.png" align="right" style="margin-left:2em"/>
+
+Krakatoa and Jessie are two front-ends of the <a href="http://why.lri.fr/"><i>Why</i></a> platform for
+deductive program verification. Krakatoa deals with Java programs
+annotated in a variant of the Java Modeling Language. Jessie deals
+with C programs annotated in the ANSI/ISO C Specification Language
+(<a href="http://frama-c.com/acsl.html">ACSL</a>).
+
+Technically, Jessie denotes two things: an intermediate language
+common to C and Java, and a plugin of the Frama-C environment which
+compiles ACSL-annotated C code into the Jessie intermediate
+language. The relationship between these tools are illustrated by the
+picture on the right.
+
+
+
+
+<dl> <dt><strong>Downloading</strong> <dd> Krakatoa and Jessie,
+including the Frama-C plugin, are distributed together with <a
+href="http://why.lri.fr/download/why-2.30.tar.gz">Why version
+2.30</a>. Follow <a href="http://why.lri.fr/download">this
+one</a> for older versions.
+
+<dt><strong>Relationship with <a href="http://why3.lri.fr/"><i>Why3</i></a></strong> <dd>The development of Why
+is now frozen, meaning that future releases might be provided e.g. for
+compatibility with newer versions of Frama-C, but no new feature will
+appear anymore. The development of Why continues in the context of a
+completely new system <a href="http://why3.lri.fr/"><i>Why3</i></a>. However, <a href="http://why3.lri.fr/"><i>Why3</i></a> does not have its own
+front-ends for C or Java yet. For the moment, to smoothly encourage
+users to move to <a href="http://why3.lri.fr/"><i>Why3</i></a>, Krakatoa and Jessie have been given the
+option to generate intermediate code for the <a href="http://why3.lri.fr/"><i>Why3</i></a> VC generator. It
+is thus recommended to install <a href="http://why3.lri.fr/"><i>Why3</i></a> conjointly with <a href="http://why.lri.fr/"><i>Why</i></a> version
+2.30. See the respective manuals of Krakatoa and Jessie for
+details. The table below summarizes the compatibility between Frama-C, Why2 and Why3 versions
+
+<p align=center>
+<table border=1>
+<tr> <td>Frama-C <td> Why2 <td> Why3 <td> remarks
+<tr> <td>Carbon <td> 2.29 <td> 0.70 <td> only <tt>-jessie-atp=why3ide</tt>
+<tr> <td>Nitrogen <td> 2.30 <td> 0.71 <td> <tt>-jessie-atp=why3ml</tt> is the default
+</table>
+</p>
+
+<dt><strong>Contact</strong> <dd> There is a <a
+href="http://lists.gforge.inria.fr/mailman/listinfo/why-discuss">mailing
+list for the Why plaform</a> (to ask questions about Krakatoa or Jessie, to get
+announces of new releases, etc.).
+
+There is also a <a href="https://gforge.inria.fr/tracker/?atid=4012&group_id=999&func=browse">bug tracking system</a>. For
+security reasons, you need to register before submitting a new
+bug. Please create an account there, where you can put "ProVal" for
+the required field "INRIA Research Project you work with or work in".
+
+For specific matters to Why3, please register to the <a
+href="http://lists.gforge.inria.fr/mailman/listinfo/why3-club">Why3-Club
+mailing list</a>. Bugs specific to Why3 should be report on <a
+href="https://gforge.inria.fr/tracker/?group_id=2990">Why3 bug
+tracker</a>.
+
+</dl>
+
+<a name="jessie"><h2>Jessie plugin of Frama-C</h2></a>
+
+<p>Jessie is a plugin of the Frama-C environment for static analysis of C code. It aims at deductive verification of behavioral properties of the code, specified using the ACSL language.
+
+<p>Documentation, including a tutorial and a reference manual, is
+available in <a href="jessie.pdf">PDF format</a> or in <a
+href="jessie.html">online HTML</a>.
+
+<p>Other resources:
+<ul>
+
+<li>A set of examples of annotated C programs verified with Jessie
+is available on the <a
+href="http://proval.lri.fr/gallery/jessieplugin.en.html">ProVal
+Gallery</a>
+
+<li>See also the examples provided in the directory <tt>tests/c</tt> of the source distribution.
+
+<li> The <a href="http://www.frama-c.com">Frama-C</a> home page, describing Frama-C in the large, and its other plugins.
+
+<li> The foundations of Jessie are described in part in <a
+href="http://www.lri.fr/~marche/moy09phd.pdf">Yannick Moy. Automatic
+Modular Static Safety Checking for C Programs. PhD thesis, Universit&eacute;
+Paris-Sud, January 2009.</a>
+
+<li> An extensive list of examples is proposed in <a
+href="http://www.first.fraunhofer.de/fileadmin/FIRST/ACSL-by-Example.pdf">Jochen
+Burghardt, Jens Gerlach, Liangliang Gu, Kerstin Hartig, Hans Pohl,
+Juan Soto, Kim V&ouml;llinger. ACSL By Example Towards a Verified C
+Standard Library.</a> </ul>
+
+</ul>
+
+<a name="krakatoa"><h2>Krakatoa</h2></a>
+
+<p>Krakatoa is a verification tool for Java programs. It is a tool from
+the <a href="http://why.lri.fr/"><i>Why</i></a> platform for deductive program verification.
+
+<p>Documentation, including a tutorial and a reference manual, is
+available in <a href="krakatoa.pdf">PDF format</a> or in <a
+href="krakatoa.html">online HTML</a>.
+
+<p>Other resources:
+<ul>
+
+<li>A set of examples of annotated Java programs verified with Krakatoa
+is available on the <a
+href="http://proval.lri.fr/gallery/krakatoa.en.html">ProVal
+Gallery</a>
+
+<li>See also the examples provided in the directory <tt>tests/java</tt> of the source distribution.
+
+<li> Lecture notes, slides, and exercises of the <a
+href="http://viinistu.cost-ic0701.org/">Winter School on Verification
+of Object-Oriented Programs</a> are available <a href="ws/">on this page</a>
+
+<li> The foundations of Krakatoa are described in ``The Krakatoa
+tool for certification of Java/JavaCard programs annotated in
+JML''. Journal of Logic and Algebraic Programming, 58(1-2):89-106,
+2004
+
+<li> More technical details on the memory modeling is given in
+``Reasoning about Java programs with aliasing and frame conditions''. In
+J. Hurd and T. Melham, editors, 18th International Conference on
+Theorem Proving in Higher Order Logics, volume 3603 of Lecture Notes
+in Computer Science. Springer, August 2005.
+
+<li> A specific paper about handling JavaCard transaction mechanism is
+``Verification of Java Card applets behavior with respect to
+transactions and card tears''. In Dang Van Hung and Paritosh Pandya,
+editors, 4th IEEE International Conference on Software Engineering and
+Formal Methods (SEFM'06), Pune, India, September 2006. IEEE
+Comp. Soc. Press.
+
+<li> See also the tool presentation at
+<a href="http://cav2007.org/">CAV 2007</a>: 
+<a href="http://www.lri.fr/~filliatr/ftp/publis/cav07.pdf">The
+Why/Krakatoa/Caduceus platform for deductive program verification</a> 
+
+</ul>
+
+
+<!--
+
+<h4>Contact</h4>
+1
+There is a
+<a href="http://lists.gforge.inria.fr/mailman/listinfo/why-discuss">mailing
+list for the Why plaform</a> (to ask questions about Krakatoa, to get
+announces of new releases, etc.).
+
+There is also a <a href="https://gforge.inria.fr/tracker/?atid=4012&group_id=999&func=browse">bug tracking system</a>. For
+security reasons, you need to register before submitting a new
+bug. Please create an account there, where you can put "ProVal" for
+the required field "INRIA Research Project you work with or work in".
+
+<h4>Related tools</h4>
+
+
+<ul>
+<li><a href="http://caduceus.lri.fr/">Caduceus</a>, a similar tool in the Why platform for C program verification
+<li><a href="http://www.eecs.ucf.edu/~leavens/JML/">The Java Modeling Language</a>
+<li><a href="http://kind.ucd.ie/products/opensource/ESCJava2/">ESC/Java2</a>
+<li>The <a href="http://www.key-project.org/">Key</a> tool
+<li>The <a href="http://www-sop.inria.fr/everest/soft/Jack/jack.html">Jack tool</a>
+</ul>
+
+<p>
+
+-->
+
+<hr>
+
+21/10/2011
+
+</body>
+</html>

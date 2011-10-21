@@ -98,20 +98,23 @@ deductive verification of C programs, annotated using the ACSL
 language~\cite{baudin09acsl}, using the \Why{}~\cite{why} tool for
 generating proof obligations.
 
+This version \whyversion{} of Jessie is compatible with Frama-C version
+Nitrogen (and no other).
+
 \section{Important note for version 2.30}
 
 The use of the Why2 VC generator is now obsolete, and it is
 recommended to switch to the Why3 system for specification and VC
-generation. Why3 must be installed independently of Why2, please
+generation. Why3 must be installed independently of Why2, please see the
 instructions given at \url{http://why3.lri.fr}.
 
-The version of Why3 that is compatible with this version 2.30 of Jessie
+The version of Why3 that is compatible with this version \whyversion{} of Jessie
 is the version 0.71. Please see \url{http://krakatoa.lri.fr/} for more
 details on compatibility between Frama-C, Why2/Jessie and Why3.
 
 In this manual, it is assumed that the Why3 VC generator and IDE is in
 use.  The old behavior using the Why2 VC generator and GUI remains
-possible, using the appropriate \texttt{-jessie-atp} option.
+possible, using option \texttt{-jessie-atp=gui}.
 
 \section{Batch Mode vs. GUI Mode}
 
@@ -146,8 +149,7 @@ generation of VCs without running any prover.
 
 \begin{figure}[t]
   \begin{center}
-  \verb|[why_frama_c.png]|
-  %\includegraphics[width=\linewidth]{why_frama_c.png}
+    \includegraphics[width=0.8\linewidth]{why_frama_c-mps3.png}
   \end{center}
   \caption{Frama-C and the Why Platform}
   \label{fig:platform}
@@ -825,6 +827,7 @@ which is obviously false.
 \chapter{Reference Manual}
 
 \section{General usage}
+\label{sec:general}
 
 The Jessie plug-in is activated by passing option
 \verb|-jessie| to \verb|frama-c|. Running the Jessie plug-in
@@ -838,9 +841,16 @@ on a file f.jc produces the following files:
 
 The plug-in will then automatically call the Jessie tool of the Why
 platform to analyze the generated file f.jc above. By default, VCs are
-generated and displayed in the GWhy interface. The
-\verb|-jessie-atp=<p>| option allows to run VCs in batch, using the
-given theorem prover \texttt{<p>}.
+generated using Why3 VC generator and displayed in the Why3IDE
+interface. Using \verb|-jessie-atp=gui| option will use the Why2 VC
+generator and display in the Why GUI interface, as it was the default
+in version 2.29 and before (deprecated).
+
+The \verb|-jessie-atp=<p>| option allows to run VCs in batch, using
+the given theorem prover \texttt{<p>}. It uses the Why2 VC
+generator only, and is thus deprecated. Running prover in batch mode
+after using the Why3 VC generator can be done using Why3 tools
+\verb|why3bench| or \verb|why3replayer|, see Why3 manual for details.
 
 
 \section{Unsupported features}
@@ -929,13 +939,14 @@ given theorem prover \texttt{<p>}.
 \item[-jessie-project-name=<s>]
   specify project name for Jessie analysis
 
-\item[-jessie-atp=<s>] do not launch the GUI but run specified
-  automated theorem prover in batch (among \verb|alt-ergo|,
-  \verb|cvc3|, \verb|simplify|, \verb|yices|, \verb|z3|), or just
-  generate the verification conditions (\verb|goals|)
+\item[-jessie-atp=<s>] See Section~\ref{sec:general}. Deprecated.
+% do not launch the GUI but run specified
+%   automated theorem prover in batch (among \verb|alt-ergo|,
+%   \verb|cvc3|, \verb|simplify|, \verb|yices|, \verb|z3|), or just
+%   generate the verification conditions (\verb|goals|)
 
 \item[-jessie-cpu-limit=<i>] set the time limit in sec. for proving
-  each VC. Only works when \verb|-jessie-atp| is set.
+  each VC. Only works when \verb|-jessie-atp| is set. Deprecated.
 
 \item[-jessie-behavior=<s>] restrict verification to the given
   behavior (\texttt{safety}, \texttt{default} or a user-defined

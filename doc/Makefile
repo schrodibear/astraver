@@ -1,6 +1,11 @@
 HEVEA=hevea -noiso -entities -exec xxdate.exe -fix
 
-all: main.pdf manual.ps caduceus.ps $(KFILES) krakatoa.pdf
+all: main.pdf manual.ps $(KFILES) krakatoa.pdf \
+	sourcepp jessie.pdf krakatoa.html jessie.html \
+	index.html
+
+%.html: %.prehtml
+	yamlpp  $< -o $@
 
 doc.dvi: doc.tex rules.tex macros.tex code.tex dep.ps
 
@@ -72,6 +77,13 @@ krakatoa.pdf: $(KFILES) krakatoa.tex version.tex
 	makeindex krakatoa
 	pdflatex krakatoa.tex
 	pdflatex krakatoa.tex
+
+jessie.pdf: sourcepp jessie.tex version.tex
+	pdflatex jessie.tex
+	bibtex jessie
+	makeindex jessie
+	pdflatex jessie.tex
+	pdflatex jessie.tex
 
 february2008.pdf: $(KFILES) version.tex
 	pdflatex february2008.tex
