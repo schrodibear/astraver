@@ -1,4 +1,4 @@
-HEVEA=hevea -fix
+HEVEA=hevea -noiso -entities -exec xxdate.exe -fix
 
 all: main.pdf manual.ps caduceus.ps $(KFILES) krakatoa.pdf
 
@@ -20,6 +20,14 @@ KFILES=Lesson1_max.pp \
 	Flag_swap.pp Flag_body.pp \
 	contracts.bnf lexpr.bnf \
 	Gcd-nospec.pp Gcd-spec.pp Gcd.pp Gcd-lemmas.pp
+
+# for jessie
+SNIPPET=$(wildcard codes/*.c) 
+SNIPPETPP:=$(patsubst codes/%.c, texpp/%.cpp, $(SNIPPET))
+EXAMPLESPP=texpp/sorting.hpp texpp/minimum_sort.cpp 
+
+sourcepp: $(SNIPPETPP) $(EXAMPLESPP)
+
 
 dep.ps:
 	(cd ../src; ocamldep *.ml* | ocamldot | dot -Tps) > dep.ps
@@ -89,6 +97,19 @@ main.pdf: main.tex version.tex
 
 %.pp: %.java pp
 	./pp -java $< > $@
+
+texpp/%.cpp: codes/%.c pp  Makefile
+	mkdir -p texpp
+	./pp -c $< > $@
+
+texpp/%.cpp: ../frama-c-plugin/tests/jessie/%.c pp  Makefile
+	mkdir -p texpp
+	./pp -c $< > $@
+
+texpp/%.hpp: ../frama-c-plugin/tests/jessie/%.h pp  Makefile
+	mkdir -p texpp
+	./pp -c $< > $@
+
 
 %.dvi: %.tex
 	latex $< && latex $<
