@@ -8,7 +8,7 @@
 <html>
 
 <head>
-<META http-equiv="Content-Type" content="text/html; charset=ISO-8859-1">
+<META http-equiv="Content-Type" content="text/html; charset=UTF8">
 <link rel="stylesheet" type="text/css" href="http://www.lri.fr/~filliatr/style.css">
 <title>Krakatoa and Jessie: verification tools for Java and C programs</title>
 <meta name="Keywords" content="Java C program verification formal proof obligations">
@@ -16,23 +16,26 @@
 
 <body>
 
-<h1>Krakatoa and Jessie</h1>
+<h1>Krakatoa and Jessie: verification tools for Java and C programs</h1>
 
 <ul>
 <li><a href="#overview">Overview</a>
 <li><a href="#jessie">Jessie</a>
 <li><a href="#krakatoa">Krakatoa</a>
+<li><a href="#provers">Installing external provers</a>
 </ul>
 
 <a name="overview"><h2>Overview</h2></a>
 
-<img width=60% src="why_frama_c-mps3.png" align="right" style="margin-left:2em"/>
+<img width=60% src="why_frama_c2-mps.png" align="right" style="margin-left:2em"/>
 
 Krakatoa and Jessie are two front-ends of the <#why> platform for
 deductive program verification. Krakatoa deals with Java programs
-annotated in a variant of the Java Modeling Language. Jessie deals
-with C programs annotated in the ANSI/ISO C Specification Language
-(<a href="http://frama-c.com/acsl.html">ACSL</a>).
+annotated in a variant of the <a
+href="http://www.eecs.ucf.edu/~leavens/JML/">The Java Modeling
+Language</a>. Jessie deals with C programs annotated in the ANSI/ISO C
+Specification Language (<a
+href="http://frama-c.com/acsl.html">ACSL</a>).
 
 Technically, Jessie denotes two things: an intermediate language
 common to C and Java, and a plugin of the Frama-C environment which
@@ -47,13 +50,23 @@ picture on the right.
 including the Frama-C plugin, are distributed together with <a
 href="http://why.lri.fr/download/why-<#version>.tar.gz">Why version
 <#version></a>. Follow <a href="http://why.lri.fr/download">this
-one</a> for older versions.
+link</a> for older versions. To install external provers, please see
+the <a href="#provers">specific section below</a>
 
-<dt><strong>Relationship with <#why3></strong> <dd>The development of Why
-is now frozen, meaning that future releases might be provided e.g. for
-compatibility with newer versions of Frama-C, but no new feature will
-appear anymore. The development of Why continues in the context of a
-completely new system <#why3>. However, <#why3> does not have its own
+<dt><strong>Relationship with <#why3></strong> <dd>The development of
+Why is now frozen, meaning that future releases might be provided
+e.g. for compatibility with newer versions of Frama-C, but no new
+feature will appear anymore. The development of Why continues in the
+context of a completely new system <#why3>. The foundations of
+<#why3>, including new features, are presented in <a
+href="http://proval.lri.fr/submissions/boogie11.pdf">Fran&ccedil;ois
+Bobot, Jean-Christophe Filli&acirc;tre, Claude March&eacute; and
+Andrei Paskevich. Why3: Shepherd your herd of provers. In Boogie 2011:
+First International Workshop on Intermediate Verification Languages,
+Wroclaw, Poland, August 2011</a>.
+
+<p>
+However, <#why3> does not have its own
 front-ends for C or Java yet. For the moment, to smoothly encourage
 users to move to <#why3>, Krakatoa and Jessie have been given the
 option to generate intermediate code for the <#why3> VC generator. It
@@ -64,27 +77,40 @@ details. The table below summarizes the compatibility between Frama-C, Why2 and 
 <p align=center>
 <table border=1>
 <tr> <td>Frama-C <td> Why2 <td> Why3 <td> remarks
-<tr> <td>Carbon <td> 2.29 <td> 0.70 <td> only <tt>-jessie-atp=why3ide</tt>
-<tr> <td>Nitrogen <td> 2.30 <td> 0.71 <td> <tt>-jessie-atp=why3ml</tt> is the default
+<tr> <td>Carbon-20110201 <td> 2.29 <td> 0.64 <td> very preliminary support for Why3 output, i.e. only <tt>-jessie-atp=why3ide</tt> or <tt>why3</tt>
+<tr> <td>Nitrogen-20111001 <td> 2.30 <td> 0.71 <td> Output through Why3 VC gen and IDe is now the default, use option <tt>-jessie-atp=gui</tt> to obtain the former behavior calling Why2 VC gen
 </table>
 </p>
 
-<dt><strong>Contact</strong> <dd> There is a <a
+<dt><strong>Other resources</strong> 
+<dd> 
+<ul>
+<li>There is a <a
 href="http://lists.gforge.inria.fr/mailman/listinfo/why-discuss">mailing
 list for the Why plaform</a> (to ask questions about Krakatoa or Jessie, to get
 announces of new releases, etc.).
 
-There is also a <a href="https://gforge.inria.fr/tracker/?atid=4012&group_id=999&func=browse">bug tracking system</a>. For
+<li>
+There is a <a href="https://gforge.inria.fr/tracker/?atid=4012&group_id=999&func=browse">bug tracking system</a>. For
 security reasons, you need to register before submitting a new
 bug. Please create an account there, where you can put "ProVal" for
 the required field "INRIA Research Project you work with or work in".
 
+<li> For more details on Why3, see <a href="http://why3.lri.fr/">its web page</a>. See also the <a href="http://why.lri.fr/why3.html">quick migration guide from Why2 to Why3</a>
+
+<li>
 For specific matters to Why3, please register to the <a
 href="http://lists.gforge.inria.fr/mailman/listinfo/why3-club">Why3-Club
-mailing list</a>. Bugs specific to Why3 should be report on <a
+mailing list</a>. Bugs specific to Why3 should be reported on <a
 href="https://gforge.inria.fr/tracker/?group_id=2990">Why3 bug
 tracker</a>.
 
+<li> See also the tool presentation at
+<a href="http://cav2007.org/">CAV 2007</a>: 
+<a href="http://www.lri.fr/~filliatr/ftp/publis/cav07.pdf">The
+Why/Krakatoa/Caduceus platform for deductive program verification</a> 
+
+</ul>
 </dl>
 
 <a name="jessie"><h2>Jessie plugin of Frama-C</h2></a>
@@ -161,43 +187,103 @@ editors, 4th IEEE International Conference on Software Engineering and
 Formal Methods (SEFM'06), Pune, India, September 2006. IEEE
 Comp. Soc. Press.
 
-<li> See also the tool presentation at
-<a href="http://cav2007.org/">CAV 2007</a>: 
-<a href="http://www.lri.fr/~filliatr/ftp/publis/cav07.pdf">The
-Why/Krakatoa/Caduceus platform for deductive program verification</a> 
-
-</ul>
-
-
-<!--
-
-<h4>Contact</h4>
-1
-There is a
-<a href="http://lists.gforge.inria.fr/mailman/listinfo/why-discuss">mailing
-list for the Why plaform</a> (to ask questions about Krakatoa, to get
-announces of new releases, etc.).
-
-There is also a <a href="https://gforge.inria.fr/tracker/?atid=4012&group_id=999&func=browse">bug tracking system</a>. For
-security reasons, you need to register before submitting a new
-bug. Please create an account there, where you can put "ProVal" for
-the required field "INRIA Research Project you work with or work in".
-
-<h4>Related tools</h4>
-
-
+<li>Related tools:
 <ul>
-<li><a href="http://caduceus.lri.fr/">Caduceus</a>, a similar tool in the Why platform for C program verification
-<li><a href="http://www.eecs.ucf.edu/~leavens/JML/">The Java Modeling Language</a>
 <li><a href="http://kind.ucd.ie/products/opensource/ESCJava2/">ESC/Java2</a>
 <li>The <a href="http://www.key-project.org/">Key</a> tool
-<li>The <a href="http://www-sop.inria.fr/everest/soft/Jack/jack.html">Jack tool</a>
+<li>The <a href="http://www-sop.inria.fr/everest/soft/Jack/jack.html">Jack tool<
+</ul>
 </ul>
 
-<p>
+<a name="provers"><h2>Installing external provers</h2></a>
 
+This page gives a few tips to download, install and/or configure
+external provers. Each time a new prover is installed, you must rerun
+the command <tt>why-config</tt> (in Why 2.xx) and/or <tt>why3config
+--detect</tt> (in Why3).
+
+<dl>
+<dt><strong>Automatic provers</strong>
+<dt>
+<ul>
+<li> Alt-Ergo : is available under binary form for Unix,
+or under source form to be compiled using the OCaml compiler, from <a
+href="http://alt-ergo.lri.fr/">this page</a>. A Microsoft Windows
+installer is also available.
+
+<li> CVC3 : available under source form and as a Linux binary from <a href="http://www.cs.nyu.edu/acsys/cvc3/">this page</a>
+
+<li> E-prover
+
+<li> Gappa: a prover specialized on verification of numeric formulas,
+including floating-point numbers, available under source form at <a
+href="http://lipforge.ens-lyon.fr/www/gappa/">this page</a>
+
+<li> Simplify: is available under binary form for various
+architectures from <a
+href="http://kind.ucd.ie/products/opensource/archives/">this page</a>
+or directly <a
+href="http://krakatoa.lri.fr/ws/Simplify-1.5.5-13-06-07-binary.zip">here</a>
+
+<li> SPASS
+
+<li> Vampire
+
+<li> veriT
+
+<li> Yices (at least version 1.0.17): available under binary form for various
+platform from <a href="http://yices.csl.sri.com/">this page</a>.
+(Note that Yices version 2 which participated to the SMT-COMP 2009 has
+  no support for quantifiers; thus you should not use it with Why.)
+
+<li> Z3 (at least version 1.3):
+
+<ul>
+
+<li> Microsoft Windows version: is available from <a
+href="http://research.microsoft.com/en-us/um/redmond/projects/z3/download.html">this
+page</a>. 
+
+<li> Native Linux/x86 version. 
+<!--Microsoft Research does not distribute Unix version, but 
+a binary version of Z3 for linux is available from <a href="http://www.smtexec.org/exec/downloadSolver.php?solverid=398">SMT-COMP-08 site</a>. Call the binary executable <pre>z3-bin</pre> and use <a href="z3.sh">this wrapper</a>
 -->
 
+<!-- By courtesy of authors of Z3, we provide --> <p> A <a
+href="z3-2.2.tar.gz">linux version of Z3</a> (version 2.2)
+is provided by courtesy of the authors. It is distributed here as is,
+under the same license as the Windows Version which can be found <a
+href="http://research.microsoft.com/en-us/downloads/0a7db466-c2d7-4c51-8246-07e25900c7e7/Z%203%20MSR-LA%20(2007-07-07).txt">here</a>
+
+<li> Running Windows version under Wine layer
+
+<p>Running the MS Windows version of Z3 under Unix is also possible via the <a
+href="http://www.winehq.org/">wine layer</a>: install z3 using the
+
+<tt>msiexec</tt> command and then run it using <a href="z3">this
+script</a> where you have to modify the full path to z3.exe
+
+<p>
+See also <a href="http://www4.in.tum.de/~boehmes/z3.html">this page</a> for hints on running Z3 under Unix or Mac OS X
+
+</ul>
+
+</ul>
+
+<dt><strong>Interactive provers, Proof assistants</strong>
+<dd>
+<ul>
+<li> The <A HREF="http://coq.inria.fr/">Coq</A> proof assistant</a>
+
+<li> The <A HREF="http://pvs.csl.sri.com/">PVS</A> specification and verification system
+<li><a href="http://isabelle.in.tum.de/">Isabelle/HOL</a>
+<li><a href="http://hol.sourceforge.net/">HOL 4</a>
+<li><a
+href="http://www.cl.cam.ac.uk/users/jrh/hol-light/">HOL Light</a>
+<li><a href="http://mizar.uwb.edu.pl/">Mizar</a>
+</ul>
+
+</dl>
 <hr>
 
 <#date>

@@ -45,6 +45,9 @@ why_frama_c2.mps: why_frama_c.ml
 why_frama_c2-mps.pdf: why_frama_c2.mps
 	mptopdf why_frama_c2.mps 
 
+why_frama_c2-mps.png: why_frama_c2-mps.pdf
+	pdftoppm -r 300 why_frama_c2-mps.pdf | pnmtopng -transparent white > why_frama_c2-mps.png
+
 dep.ps:
 	(cd ../src; ocamldep *.ml* | ocamldot | dot -Tps) > dep.ps
 

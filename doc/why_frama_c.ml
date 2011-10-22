@@ -25,10 +25,17 @@ let green ?(color=Color.lightgreen) n s =
 let why_platform n =
   let emptyn x y = if x=n then y else empty () in
   let interactive = tex ~name:"interactive"
-    (tabular ["Interactive provers"; "(Coq, PVS,"; "Isabelle/HOL, etc.)"]) in
+    (tabular ["Interactive provers";
+              "(Coq, PVS,";
+              "Isabelle/HOL, etc.)"]) in
   let automatic = tex ~name:"automatic"
     (tabular ["Automatic provers";
-	      "(Alt-Ergo, CVC3, Gappa,"; "Simplify,Yices, Z3, etc.)"]) in
+	      "(Alt-Ergo, CVC3, Gappa,";
+              "Simplify,Yices, Z3, etc.)"]) in
+  let tptp = tex ~name:"TPTP"
+    (tabular ["More automatic provers";
+	      "(Eprover, SPASS, Vampire,";
+              "veriT, etc.)"]) in
   let b =
     tabularl ~hpadding:(bp 20.) ~vpadding:(bp 15.)
       [[ green "JMLJava" ["KML-annotated" ;"Java program"] ; empty ();
@@ -36,16 +43,18 @@ let why_platform n =
        [ pink "Krakatoa" ; empty (); pink ~color:Color.magenta "Frama-C";
          empty () ];
        [ empty ();  pink "Jessie" ; empty (); empty ()];
-       [tex "\\LARGE\\sf Why 2.30" ; pink ~name:"VCG" "VC generator" ; 
-        emptyn 2 (pink ~color:light_blue ~name:"VCG3" "VC generator");tex "\\LARGE\\sf Why3 0.71"];
-       [empty () ; green "VC" ["verification";"conditions"]; 
-        emptyn 2 (green "VC3" ["verification";"conditions"]) ; 
-        pink ~color:light_blue ~name:"Tr" "Transformations"];
-       [empty () ; pink ~name:"Enc" "Encodings" ; 
-        emptyn 2 (pink ~color:light_blue ~name:"Enc3" "Encodings");empty ()];
-       [empty (); tex "~"; empty ();empty ()] ;
-       [empty (); tex "~"; empty ();empty ()] ;
-       [empty (); interactive; automatic;empty ()]
+       [ empty () ; pink ~name:"VCG" "VC generator" ;
+         emptyn 2 (pink ~color:light_blue ~name:"VCG3" "VC generator");
+         green "Theories" ["Theories"]];
+       [ empty () ; green "VC" ["verification";"conditions"];
+         emptyn 2 (green "VC3" ["verification";"conditions"]) ;
+         pink ~color:light_blue ~name:"Tr" "Transformations"];
+       [ tex "\\LARGE\\sf Why 2.30" ; pink ~name:"Enc" "Encodings" ;
+         emptyn 2 (pink ~color:light_blue ~name:"Enc3" "Encodings") ;
+         tex "\\LARGE\\sf Why3 0.71" ];
+       [ empty (); tex "~"; empty ();empty ()] ;
+       [ empty (); tex "~"; empty ();empty ()] ;
+       [ empty (); interactive; automatic;tptp]
 ]
   in
   let why = round_rect ~fill:(Color.color "yellow") ~dx:(bp 114.0) ~dy:(bp 140.0)
@@ -55,7 +64,7 @@ let why_platform n =
   let why3 = round_rect ~fill:(Color.color "cyan") ~dx:(bp 140.0) ~dy:(bp 90.0)
     (tex "")
   in
-  let why3 = shift (Point.pt (bp 384.0, bp (-.215.0))) why3 in
+  let why3 = shift (Point.pt (bp 390.0, bp (-.215.0))) why3 in
   let arrow ?(shifty=0.0) x y =
     let s b = shift (Point.pt (bp 0.0, bp shifty)) b in
     let p = Box.cpath (s (get x b)) (s (get y b)) in
@@ -86,6 +95,8 @@ let why_platform n =
       arrown ~shifty:(-10.0) 2 "Tr" "VC3";
       arrown 2 "Enc3" "interactive";
       arrown 2 "Enc3" "automatic";
+      arrown 2 "Enc3" "TPTP";
+      arrown 2 "Theories" "VC3";
     ]
 
 let () = Metapost.emit "why_frama_c1" (why_platform 1)
