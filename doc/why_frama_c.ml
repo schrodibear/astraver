@@ -31,11 +31,12 @@ let why_platform n =
   let automatic = tex ~name:"automatic"
     (tabular ["Automatic provers";
 	      "(Alt-Ergo, CVC3, Gappa,";
-              "Simplify,Yices, Z3, etc.)"]) in
+              "Simplify, veriT, Yices,";
+              "Z3, etc.)"]) in
   let tptp = tex ~name:"TPTP"
     (tabular ["More automatic provers";
-	      "(Eprover, SPASS, Vampire,";
-              "veriT, etc.)"]) in
+	      "(Eprover, SPASS, ";
+              "Vampire, etc.)"]) in
   let b =
     tabularl ~hpadding:(bp 20.) ~vpadding:(bp 15.)
       [[ green "JMLJava" ["KML-annotated" ;"Java program"] ; empty ();

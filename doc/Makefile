@@ -10,6 +10,8 @@ install: all
 		/users/www-perso/projets/krakatoa
 	cp index.html /users/www-perso/projets/krakatoa/jessie.html
 
+index.html: why_frama_c2-mps.png
+
 %.html: %.prehtml
 	yamlpp  $< -o $@
 
