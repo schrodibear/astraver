@@ -4,6 +4,12 @@ all: main.pdf manual.ps $(KFILES) krakatoa.pdf \
 	sourcepp jessie.pdf krakatoa.html jessie.html \
 	index.html
 
+install: all
+	cp krakatoa.pdf jessie.pdf krakatoa.html jessie.html \
+		why_frama_c2-mps.png \
+		/users/www-perso/projets/krakatoa
+	cp index.html /users/www-perso/projets/krakatoa/jessie.html
+
 %.html: %.prehtml
 	yamlpp  $< -o $@
 
