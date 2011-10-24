@@ -35,9 +35,8 @@ KFILES=Lesson1_max.pp \
 	Gcd-nospec.pp Gcd-spec.pp Gcd.pp Gcd-lemmas.pp
 
 # for jessie
-SNIPPET=$(wildcard codes/*.c) 
+SNIPPET=$(wildcard codes/*.c)
 SNIPPETPP:=$(patsubst codes/%.c, texpp/%.cpp, $(SNIPPET))
-EXAMPLESPP=texpp/sorting.hpp texpp/minimum_sort.cpp 
 
 sourcepp: $(SNIPPETPP) $(EXAMPLESPP)
 
@@ -139,15 +138,6 @@ main.pdf: main.tex version.tex
 texpp/%.cpp: codes/%.c pp  Makefile
 	mkdir -p texpp
 	./pp -c $< > $@
-
-texpp/%.cpp: ../frama-c-plugin/tests/jessie/%.c pp  Makefile
-	mkdir -p texpp
-	./pp -c $< > $@
-
-texpp/%.hpp: ../frama-c-plugin/tests/jessie/%.h pp  Makefile
-	mkdir -p texpp
-	./pp -c $< > $@
-
 
 %.dvi: %.tex
 	latex $< && latex $<

@@ -1,6 +1,3 @@
-
-//@ lemma mean : \forall integer x, y; x <= y ==> x <= (x+y)/2 <= y; 
-
 /*@ requires n >= 0 && \valid_range(t,0,n-1);
   @ behavior success:
   @   assumes // array t is sorted in increasing order
@@ -17,7 +14,7 @@ int binary_search(long t[], int n, long v) {
   int l = 0, u = n-1;
   /*@ loop invariant 0 <= l && u <= n-1;
     @ for success:
-    @   loop invariant 
+    @   loop invariant
     @     \forall integer k; 0 <= k < n && t[k] == v ==> l <= k <= u;
     @ loop variant u-l;
     @*/

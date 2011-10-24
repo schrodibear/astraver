@@ -12,7 +12,7 @@
 ~~@~\textbf{behavior}~normal:~\\
 ~~@~~~\textbf{assumes}~\textbf{\char'134 valid}(r);~\\
 ~~@~~~\textbf{assigns}~*r;~\\
-~~@~~~\textbf{ensures}~*r~==~((*i~<~*j)~?~*j~:~*i);~\\
+~~@~~~\textbf{ensures}~*r~==~\textbf{\char'134 max}(*i,*j);~\\
 ~~@~~~\textbf{ensures}~\textbf{\char'134 result}~==~0;~\\
 ~~@*/\end{slshape}~\\
 int~max(int~*r,~int*~i,~int*~j)~\{~\\

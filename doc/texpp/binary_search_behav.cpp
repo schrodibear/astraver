@@ -2,9 +2,6 @@
 %BEGIN LATEX
 \parindent 0pt
 %END LATEX
-~\\
-\begin{slshape}//@~\textbf{lemma}~mean~:~\textbf{\char'134 forall}~integer~x,~y;~x~<=~y~==>~x~<=~(x+y)/2~<=~y;~\end{slshape}~\\
-~\\
 \begin{slshape}/*@~\textbf{requires}~n~>=~0~\&{}\&{}~\textbf{\char'134 valid\_{}range}(t,0,n$-$1);~\\
 ~~@~\textbf{behavior}~success:~\\
 ~~@~~~\textbf{assumes}~\begin{slshape}\rmfamily\color{darkgreen}//~array~t~is~sorted~in~increasing~order\end{slshape}~\\
@@ -21,7 +18,7 @@ int~binary\_{}search(long~t[],~int~n,~long~v)~\{~\\
 ~~int~l~=~0,~u~=~n$-$1;~\\
 ~~\begin{slshape}/*@~\textbf{loop}~\textbf{invariant}~0~<=~l~\&{}\&{}~u~<=~n$-$1;~\\
 ~~~~@~\textbf{for}~success:~\\
-~~~~@~~~\textbf{loop}~\textbf{invariant}~~\\
+~~~~@~~~\textbf{loop}~\textbf{invariant}~\\
 ~~~~@~~~~~\textbf{\char'134 forall}~integer~k;~0~<=~k~<~n~\&{}\&{}~t[k]~==~v~==>~l~<=~k~<=~u;~\\
 ~~~~@~\textbf{loop}~\textbf{variant}~u$-$l;~\\
 ~~~~@*/\end{slshape}~\\

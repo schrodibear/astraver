@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="selection_sort.jessie/selection_sort/why3session.xml">
+ name="selection_sort/why3session.xml">
  <prover
   id="alt-ergo"
   name="Alt-Ergo"
@@ -15,17 +15,29 @@
   name="CVC3"
   version="2.2"/>
  <prover
+  id="eprover"
+  name="Eprover"
+  version="1.4 Namring"/>
+ <prover
   id="gappa"
   name="Gappa"
-  version="0.14.0"/>
+  version="0.15.1"/>
  <prover
   id="simplify"
   name="Simplify"
   version="1.5.4"/>
  <prover
+  id="spass"
+  name="Spass"
+  version="3.7"/>
+ <prover
   id="vampire"
   name="Vampire"
   version="0.6"/>
+ <prover
+  id="verit"
+  name="veriT"
+  version="dev"/>
  <prover
   id="yices"
   name="Yices"
@@ -48,82 +60,304 @@
    verified="true"
    expanded="true">
    <goal
-    name="WP_parameter min_sort_ensures_default"
-    expl="Function min_sort, default behavior"
-    sum="759e966c2c27d25b142cf61868945a84"
+    name="WP_parameter sel_sort_ensures_default"
+    expl="Function sel_sort, default behavior"
+    sum="fda7b5d5ad4051249bdad368926c4a0b"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="iainfix <V11V1iainfix <aselectV5ashiftV0V11V9ainfix <V12V1Aainfix <=V4V12Aainfix <V4V14Iainfix =V14ainfix +V11c1FIainfix =V13aselectV5ashiftV0V11FIainfix =V12V11Fainfix <V10V1Aainfix <=V4V10Aainfix <V4V15Iainfix =V15ainfix +V11c1Fainfix <V17V1Aainfix <=c0V17Iainfix =V17ainfix +V4c1FAa_PermutV0c0ainfix -V1c1V16V5Ianot_assignsV2V5V16apset_unionapset_rangeapset_singletonV0V10V10apset_rangeapset_singletonV0V4V4Aa_SwapV0V4V10V16V5FIainfix <V10V1Aainfix <=V4V10Aainfix <V4V11FFFAainfix <V7V1Aainfix <=V4V7Aainfix <V4V8Iainfix =V8ainfix +V4c1FIainfix =V7V4FIainfix =V6aselectV5ashiftV0V4FIainfix <V4ainfix -V1c1Iainfix <V4V1Aainfix <=c0V4FFAainfix <V3V1Aainfix <=c0V3Iainfix =V3c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFF">
     <proof
      prover="cvc3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.14"/>
+     <result status="valid" time="0.09"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.14"/>
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.43"/>
+     <result status="valid" time="0.28"/>
     </proof>
    </goal>
    <goal
-    name="WP_parameter min_sort_ensures_permutation"
-    expl="Function min_sort, Behavior `permutation'"
-    sum="f6f3fa88bd7b5c496f65b3e024f0c58b"
+    name="WP_parameter sel_sort_ensures_permutation"
+    expl="Function sel_sort, Behavior `permutation'"
+    sum="d797bde770b5b1a471bb5300f9b53ab1"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="iainfix <=V1c0a_PermutV0c0ainfix -V1c1V3V3iainfix <V5ainfix -V1c1iainfix <V12V1iainfix <aselectV6ashiftV0V12V10a_PermutV0c0ainfix -V1c1V6V3Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12Fa_PermutV0c0ainfix -V1c1V6V3Iainfix =V16ainfix +V12c1Fa_PermutV0c0ainfix -V1c1V17V3Iainfix =V18ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V17V6Ianot_assignsV2V6V17apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V17V6FIainfix <V11V1Aainfix <=V5V11Aainfix <V5V12Ia_PermutV0c0ainfix -V1c1V6V3FFFAa_PermutV0c0ainfix -V1c1V6V3Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fa_PermutV0c0ainfix -V1c1V6V3Iainfix <V5V1Aainfix <=c0V5Ia_PermutV0c0ainfix -V1c1V6V3FFAa_PermutV0c0ainfix -V1c1V3V3Iainfix =V4c0FIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
     <proof
      prover="cvc3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.17"/>
+     <result status="valid" time="0.10"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.10"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.10"/>
     </proof>
    </goal>
    <goal
-    name="WP_parameter min_sort_ensures_sorted"
-    expl="Function min_sort, Behavior `sorted'"
-    sum="525dfbf4badc33ba5915096baf3135f0"
+    name="WP_parameter sel_sort_ensures_sorted"
+    expl="Function sel_sort, Behavior `sorted'"
+    sum="c8a032e0f47e51da5d5d92d74a8a6800"
     proved="true"
     expanded="true"
     shape="iainfix <=V1c0a_SortedV0c0V1V3iainfix <V5ainfix -V1c1iainfix <V12V1iainfix <aselectV6ashiftV0V12V10ainfix >=aselectV6ashiftV0V16V14Iainfix <V16V15Aainfix <=V5V16FAainfix =V14aselectV6ashiftV0V13Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12Fainfix >=aselectV6ashiftV0V18V10Iainfix <V18V17Aainfix <=V5V18FAainfix =V10aselectV6ashiftV0V11Iainfix =V17ainfix +V12c1Fainfix <=aselectV19ashiftV0V21aselectV19ashiftV0V22Iainfix <V22V1Aainfix <=V20V22Aainfix <V21V20Aainfix <=c0V21FFAa_SortedV0c0V20V19Iainfix =V20ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V19V6Ianot_assignsV2V6V19apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V19V6FIainfix <V11V1Aainfix <=V5V11Aainfix <V5V12Iainfix >=aselectV6ashiftV0V23V10Iainfix <V23V12Aainfix <=V5V23FAainfix =V10aselectV6ashiftV0V11FFFAainfix >=aselectV6ashiftV0V24V7Iainfix <V24V9Aainfix <=V5V24FAainfix =V7aselectV6ashiftV0V8Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fa_SortedV0c0V1V6Iainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V25aselectV6ashiftV0V26Iainfix <V26V1Aainfix <=V5V26Aainfix <V25V5Aainfix <=c0V25FFAa_SortedV0c0V5V6FFAainfix <=aselectV3ashiftV0V27aselectV3ashiftV0V28Iainfix <V28V1Aainfix <=V4V28Aainfix <V27V4Aainfix <=c0V27FFAa_SortedV0c0V4V3Iainfix =V4c0FIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
     <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="timeout" time="5.01"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="timeout" time="5.11"/>
+    </proof>
+    <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.51"/>
+     <result status="valid" time="0.32"/>
     </proof>
+    <transf
+     name="split_goal"
+     proved="true"
+     expanded="true">
+     <goal
+      name="WP_parameter sel_sort_ensures_sorted.1"
+      expl="normal postcondition"
+      sum="48c99fa1189cb7f20a43d1193713dea6"
+      proved="true"
+      expanded="true"
+      shape="a_SortedV0c0V1V3Iainfix <=V1c0Iainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter sel_sort_ensures_sorted.2"
+      expl="loop invariant init"
+      sum="8ffc0098cb2884368c474d8583539fcd"
+      proved="true"
+      expanded="true"
+      shape="ainfix <=aselectV3ashiftV0V5aselectV3ashiftV0V6Iainfix <V6V1Aainfix <=V4V6Aainfix <V5V4Aainfix <=c0V5FFAa_SortedV0c0V4V3Iainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter sel_sort_ensures_sorted.3"
+      expl="loop invariant init"
+      sum="710b499b2b29ade2120e1460bc389d38"
+      proved="true"
+      expanded="true"
+      shape="ainfix >=aselectV6ashiftV0V10V7Iainfix <V10V9Aainfix <=V5V10FAainfix =V7aselectV6ashiftV0V8Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix <V5ainfix -V1c1Iainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V11aselectV6ashiftV0V12Iainfix <V12V1Aainfix <=V5V12Aainfix <V11V5Aainfix <=c0V11FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter sel_sort_ensures_sorted.4"
+      expl="loop invariant preservation"
+      sum="8c57310f4efcabd223f41526b28cee65"
+      proved="true"
+      expanded="true"
+      shape="ainfix >=aselectV6ashiftV0V16V14Iainfix <V16V15Aainfix <=V5V16FAainfix =V14aselectV6ashiftV0V13Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12FIainfix <aselectV6ashiftV0V12V10Iainfix <V12V1Iainfix <V11V1Aainfix <=V5V11Aainfix <V5V12Iainfix >=aselectV6ashiftV0V17V10Iainfix <V17V12Aainfix <=V5V17FAainfix =V10aselectV6ashiftV0V11FFFIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix <V5ainfix -V1c1Iainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V18aselectV6ashiftV0V19Iainfix <V19V1Aainfix <=V5V19Aainfix <V18V5Aainfix <=c0V18FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.23"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.10"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter sel_sort_ensures_sorted.5"
+      expl="loop invariant preservation"
+      sum="0ec776e803c4ab5fd94cba0f36c8e94c"
+      proved="true"
+      expanded="true"
+      shape="ainfix >=aselectV6ashiftV0V14V10Iainfix <V14V13Aainfix <=V5V14FAainfix =V10aselectV6ashiftV0V11Iainfix =V13ainfix +V12c1FIainfix <aselectV6ashiftV0V12V10NIainfix <V12V1Iainfix <V11V1Aainfix <=V5V11Aainfix <V5V12Iainfix >=aselectV6ashiftV0V15V10Iainfix <V15V12Aainfix <=V5V15FAainfix =V10aselectV6ashiftV0V11FFFIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix <V5ainfix -V1c1Iainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V16aselectV6ashiftV0V17Iainfix <V17V1Aainfix <=V5V17Aainfix <V16V5Aainfix <=c0V16FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter sel_sort_ensures_sorted.6"
+      expl="loop invariant preservation"
+      sum="c2b487e65bcd752a04510b81320f3d8a"
+      proved="true"
+      expanded="true"
+      shape="ainfix <=aselectV13ashiftV0V15aselectV13ashiftV0V16Iainfix <V16V1Aainfix <=V14V16Aainfix <V15V14Aainfix <=c0V15FFAa_SortedV0c0V14V13Iainfix =V14ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V13V6Ianot_assignsV2V6V13apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V13V6FIainfix <V12V1NIainfix <V11V1Aainfix <=V5V11Aainfix <V5V12Iainfix >=aselectV6ashiftV0V17V10Iainfix <V17V12Aainfix <=V5V17FAainfix =V10aselectV6ashiftV0V11FFFIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix <V5ainfix -V1c1Iainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V18aselectV6ashiftV0V19Iainfix <V19V1Aainfix <=V5V19Aainfix <V18V5Aainfix <=c0V18FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="timeout" time="5.09"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="2.96"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.61"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter sel_sort_ensures_sorted.7"
+      expl="normal postcondition"
+      sum="c458e5fbfddb5cf8c2dd5a1c41807db6"
+      proved="true"
+      expanded="true"
+      shape="a_SortedV0c0V1V6Iainfix <V5ainfix -V1c1NIainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V7aselectV6ashiftV0V8Iainfix <V8V1Aainfix <=V5V8Aainfix <V7V5Aainfix <=c0V7FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.09"/>
+      </proof>
+     </goal>
+    </transf>
    </goal>
    <goal
-    name="WP_parameter min_sort_safety"
-    expl="Function min_sort, Safety"
-    sum="db1d99cf8dafd247b710cd685c37f39c"
+    name="WP_parameter sel_sort_safety"
+    expl="Function sel_sort, Safety"
+    sum="6dcb35a8cc3e2350f7a895202170befb"
     proved="true"
     expanded="true"
     shape="iainfix <V11V1iainfix <aselectV5ashiftV0V11V9ainfix <ainfix -V1V14ainfix -V1V11Aainfix <=c0ainfix -V1V11Iainfix =V14ainfix +V11c1FIainfix =V13aselectV5ashiftV0V11FAainfix <=V11aoffset_maxV2V0Aainfix <=aoffset_minV2V0V11Iainfix =V12V11Fainfix <ainfix -V1V15ainfix -V1V11Aainfix <=c0ainfix -V1V11Iainfix =V15ainfix +V11c1FAainfix <=V11aoffset_maxV2V0Aainfix <=aoffset_minV2V0V11ainfix <ainfix -V1V17ainfix -V1V4Aainfix <=c0ainfix -V1V4Iainfix =V17ainfix +V4c1FIa_PermutV0c0ainfix -V1c1V16V5Ianot_assignsV2V5V16apset_unionapset_rangeapset_singletonV0V10V10apset_rangeapset_singletonV0V4V4Aa_SwapV0V4V10V16V5FAainfix >=aoffset_maxV2V0V10Aainfix <=aoffset_minV2V0V10Aainfix >=aoffset_maxV2V0V4Aainfix <=aoffset_minV2V0V4Iainfix <V10V1Aainfix <=V4V10Aainfix <V4V11FFFIainfix =V8ainfix +V4c1FIainfix =V7V4FIainfix =V6aselectV5ashiftV0V4FAainfix <=V4aoffset_maxV2V0Aainfix <=aoffset_minV2V0V4Iainfix <V4ainfix -V1c1Iainfix <V4V1Aainfix <=c0V4FFIainfix =V3c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFF">
@@ -132,21 +366,21 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.15"/>
+     <result status="valid" time="0.09"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.09"/>
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.10"/>
     </proof>
    </goal>
    <goal
@@ -161,21 +395,21 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="4.38"/>
+     <result status="valid" time="2.42"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="2.75"/>
+     <result status="valid" time="1.67"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.49"/>
+     <result status="valid" time="0.32"/>
     </proof>
    </goal>
    <goal
@@ -190,21 +424,21 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.11"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
   </theory>

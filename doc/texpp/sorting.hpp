@@ -29,6 +29,6 @@
 ~~@*/\end{slshape}~\\
 ~\\
 \begin{slshape}/*@~\textbf{predicate}~Sorted\{L\}(int~*a,~integer~l,~integer~h)~=~\\
-~~@~~~\textbf{\char'134 forall}~integer~i;~l~<=~i~<~h~==>~a[i]~<=~a[i+1]~;~\\
+~~@~~~\textbf{\char'134 forall}~integer~i,j;~l~<=~i~<=~j~<~h~==>~a[i]~<=~a[j]~;~\\
 ~~@*/\end{slshape}~\\
 \end{flushleft}

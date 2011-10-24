@@ -229,7 +229,11 @@ Safety, default behavior, normal behavior `normal` and normal behavior
 %   in both \textit{Safety} and \textit{Default behavior}.
 % \end{itemize}
 
-Next, we detail how to prove each VC.
+In the next chapters, we detail how to prove each kind of VC.
+We also recommend to
+look at the collection of verified programs at URL
+\url{http://proval.lri.fr/gallery/jessieplugin.en.html} to get more hints
+on how to specify and prove programs with Jessie.
 
 \chapter{Safety Checking}
 
@@ -262,92 +266,56 @@ Let's call Frama-C with the Jessie plug-in on this program:
 > frama-c -jessie binary-search.c
 \end{verbatim}
 
-As seen on Figure~\ref{fig:raw}, we get 3 VCs, an obvious one that
-states the divisor \verb|2| is not null, and two more that state the
-array access \verb|t[m]| should be within bounds. This is due to the
-memory model used, that decomposes any access check into two: one that
-states the access is above the minimal bound allowed, and one that
-states the access is below the maximal bound allowed.
+Figure~\ref{fig:raw} shows the result after
+\begin{itemize}
+\item clicking on Alt-Ergo button to launch Alt-Ergo on both Safety
+  and Normal behavior. The normal behavior is proved valid but not the safety.
+\item selecting the raw ``safety'' and clicking on the button
+  ``split'' to split the VC in parts. 3 sub-goals are obtained: one that states the divisor \verb|2| is not null, and two more that state the
+array access \verb|t[m]| should be within bounds. 
+\item clicking again on Alt-Ergo, then CVC3 then Z3
+\end{itemize}
 
 \begin{figure}[t]
   \begin{center}
-  \includegraphics[width=0.8\linewidth]{jessie/binary-search-raw.png}
+  \includegraphics[width=1.0\linewidth]{jessie/binary_search_raw.png}
   \end{center}
   \caption{Memory safety with no annotations}
   \label{fig:raw}
   \hrulefill
 \end{figure}
 
-The obvious VC is trivially proved by all provers, while the two VCs
-for memory safety cannot be proved. Indeed, it is false that, in any
+The remaing VC cannot be proved. Indeed, it is false that, in any
 context, function \verb|binary_search| is memory safe. To ensure
-memory safety, \verb|binary_search| must be called in a context 
-where \verb|n| is positive and array \verb|t| is valid
-between indices \verb|0| and \verb|n-1| included. Since function
-\verb|binary_search| accesses array \verb|t| inside a loop, 
-providing a precondition is not
-enough to make the generated VC provable.
-One must also provide a {\em loop invariant}. A loop invariant
-is a property that remains true at each iteration of the loop.
-It is often necessary for the user to provide these properties
-to help Jessie reason about loops. Assuming that the right property
-has been provided, Jessie is then left with the easier task of
-generating and verifying VCs that ensure that the property indeed
-holds at the beginning of each iteration.
+memory safety, \verb|binary_search| must be called in a context where
+\verb|n| is positive and array \verb|t| is valid between indices
+\verb|0| and \verb|n-1| included. Since function \verb|binary_search|
+accesses array \verb|t| inside a loop, providing a precondition is not
+enough to make the generated VC provable.  One must also provide a
+\emph{loop invariant}. A loop invariant is a property that remains
+true at each iteration of the loop.  It is often necessary for the
+user to provide these properties to help Jessie reason about
+loops. Assuming that the right property has been provided, Jessie is
+then left with the easier task of generating and verifying VCs that
+ensure that the property indeed holds at the beginning of each
+iteration.
 
-In this example, it is necessary to provide an invariant 
-that states the guarantees provided on the array 
-index, despite its changing value. It
-states that the value of index \verb|l| stays within the bounds of the
-array \verb|t|.
+In this example, it is necessary to provide an invariant that states
+the guarantees provided on the array index, despite its changing
+value. It states that the value of index \verb|l| stays within the
+bounds of the array \verb|t|.
 
 \input{texpp/binary_search_rawmem.cpp}
 
-Seven VCs are now generated: 2 to guarantee the loop invariant is
-initially established (because the conjunction is split), 2 to guarantee
-the same loop invariant is preserved throughout the loop, and the 3 VCs
-seen previously. Not all generated VCs are proved automatically with
-these annotations. Of the 3 VCs seen previously, the maximal bound
-check is still not proved. And the preservation of the loop invariant
-that deals with an upper bound on \verb|u| is not proved either. It
-comes from the non-linear expression assigned to \verb|m|in the loop,
-that is difficult to take into account automatically. 
-
-We solve this problem by adding an assertion to help automatic
-provers, providing some form of hint in the proof. This can be done by
-inserting assertions in the code, or by adding a global\emph{lemma}, that
-should be proved using available axioms, and used as an axiom in
-proving the VC for safety. This works for our example.
-
-\input{texpp/binary_search_mem.cpp}
-
-\begin{figure}[t]
-  \begin{center}
-    \includegraphics[width=0.8\linewidth]{jessie/binary-search-mem.png}
-  \end{center}
-  \caption{Memory safety with precondition and loop invariant}
-  \label{fig:mem}
-  \hrulefill
-\end{figure}
-
-The results are shown on Figure~\ref{fig:mem}, where all VCs, are
-proved by some prover. This guarantees the memory safety of function
-\verb|binary_search|. The lemma itself is proved by Alt-Ergo, which
-has a little knowledge of the division operator. Given the lemma,
-other VCs are fully proved by Simplify and Z3, and partly by Yices and
-CVC3.
-
-%Notice the assertion adds 2 VC, which totals 9
-%VC for function \verb|binary_search|, plus the lemma.
-% In the following, we remove the assertion, which is not useful.
-
+Launching again the IDE after adding these annotations, you should
+obtain that all VCs are now proved.
 
 \section{Integer Overflow Safety}
 
 Let us now consider machine integers instead of idealized mathematical
 integers. This is obtained by removing the pragma
 \texttt{JessieIntegerModel}.  Without this pragma, integer types are
-now intepreted as bounded machine integers. However, the default is a
+now interpreted as bounded machine integers. However, the default is a
 \emph{defensive} interpretation, which forbids the arithmetic
 operations to overflow.\footnote{In a context where it is intended for
   the operations to overflows, and thus operations are intentionnally
@@ -355,19 +323,16 @@ operations to overflow.\footnote{In a context where it is intended for
   \texttt{modulo}, see Jessie manual.}
 
 \begin{figure}[t]
-  \begin{center}
-    \negtenthspace\includegraphics[width=1.2\linewidth]{jessie/binary-search-ovfl.png}
-  \end{center}
+  \includegraphics[width=\linewidth]{jessie/binary_search_ovfl.png}
   \caption{Memory safety + integer overflow safety}
   \label{fig:ovfl}
   \hrulefill
 \end{figure}
 
-The result can be seen in Figure~\ref{fig:ovfl}. There are ten more VCs
-to check that integer operations return a result within bounds, only one of
-which is not proved. With this exception, the results are nearly the same
-as with exact integers (proving the lemma takes more time, due
-to the additional encoding for bounded integers).
+The result can be seen in Figure~\ref{fig:ovfl}. There are more
+subgoals to Safety VC, to check that integer operations return a
+result within bounds, only one of which is not proved. With this
+exception, the results are nearly the same as with exact integers
 
 The only unproved VC expresses that \verb|l+u| does not overflow. 
 Nothing prevents this from happening with our current
@@ -388,31 +353,8 @@ into
     int m = l + (u - l) / 2;
 \end{verbatim}
 
-This is our choice here. As shown in Figure~\ref{fig:ovfl-ok}, all VCs
+This is our choice here. All VCs
 are now proved automatically.
-
-\begin{figure}[t]
-  \begin{center}
-    \includegraphics[width=\linewidth]{jessie/binary-search-ovfl-ok.png}
-  \end{center}
-  \caption{Safety for patched program}
-  \label{fig:ovfl-ok}
-  \hrulefill
-\end{figure}
-
-% Another choice is to set the integer mode to modulo, which means
-% overflows are allowed, with modulo semantics. To reach that result, we
-% call Frama-C with options:
-
-% \begin{verbatim}
-% > framac -jessie -jessie-int-model modulo binary-search.c
-% \end{verbatim}
-
-% This leads to the same choices as above to guarantee this time that
-% the memory access \verb|t[m]| is within bounds. Otherwise, \verb|m|
-% might become strictly negative, very likely accessing beyond \verb|t|
-% bounds.
-
 
 \section{Checking Termination}
 
@@ -460,18 +402,16 @@ strengthening the loop invariant is necessary.
 
 \input{texpp/binary_search_post.cpp}
 
-As shown in Figure~\ref{fig:post}, all VCs are proved automatically here.
-
-\begin{figure}[t]
-  \begin{center}
-    \negtenthspace\includegraphics[width=1.2\linewidth]{jessie/binary-search-post.png}
-  \end{center}
-  \caption{General postcondition}
-  \label{fig:post}
-  \hrulefill
-\end{figure}
+All VCs are proved automatically here.
 
 \subsection{More advanced functional properties}
+
+\begin{figure}[t]
+  \includegraphics[width=\linewidth]{jessie/binary_search_behav.png}
+  \caption{Postconditions in behaviors}
+  \label{fig:behav}
+  \hrulefill
+\end{figure}
 
 One can be more precise and separate the postcondition according to
 different behaviors. The \emph{assumes} clause of a behavior gives
@@ -491,15 +431,6 @@ necessary to strengthen the loop invariant to prove the VC generated.
 Figure~\ref{fig:behav} summarizes the results obtained in that case,
 for each behavior.
 
-\begin{figure}[t]
-  \begin{center}
-    \negtenthspace\includegraphics[width=1.2\linewidth]{jessie/binary-search-behav.png}
-  \end{center}
-  \caption{Postconditions in behaviors}
-  \label{fig:behav}
-  \hrulefill
-\end{figure}
-
 \section{Advanced Algebraic Modeling}
 
 The following example introduces use of algebraic specification. The
@@ -515,111 +446,11 @@ say \texttt{sorting.h}
 
 The code is then annotated using these predicates as follows
 
-\input{texpp/minimum_sort.cpp}
+\input{texpp/selection_sort.cpp}
 
-Each VC is proved by at least one prover. Figure~\ref{fig:sorting}
-displays the results in GWhy, with emphasis on the VC for preservation
-of the loop invariant for permutation behavior, the most
-difficult one, only proved by Alt-Ergo.
-
-\begin{figure}[t]
-  \begin{center}
-    \negtenthspace\includegraphics[width=1.2\linewidth]{jessie/sorting.png}
-  \end{center}
-  \caption{VCs for minimum sort}
-  \label{fig:sorting}
-  \hrulefill
-\end{figure}
-
-
-% \chapter{Inference of Annotations}
-
-% Inference of annotations is an experimental feature of the Jessie
-% plug-in, whose theoretical bases are described
-% in~\cite{moy09phd,moy10jsc}.
-
-% \section{Postconditions and Loop Invariants}
-
-% To alleviate the annotation burden, it is possible to ask the Jessie
-% plug-in to infer some of them, through a combination of abstract
-% interpretation and weakest preconditions. This requires that APRON
-% library for abstract interpretation is installed and Frama-C
-% configuration recognized it. Then, one can call
-% \begin{verbatim}
-%  > framac -jessie -jessie-atp=simplify -jessie-infer-annot inv max.c
-% \end{verbatim}
-% to perform abstract interpretation on program \verb|max.c|, which
-% computes necessary loop invariants and postconditions (meaning an
-% overapproximation of the real ones).
-
-% \input{texpp/max_ptr_noannot.cpp}
-
-% On our unannotated \verb|max.c| program, this produces postcondition
-% \verb|true| for the first return and
-% \verb|\valid(r) && \valid(i) && \valid(j)| for the second return.
-
-% Various domains from APRON library are available with option
-% \verb|-jessie-abstract-domain|:
-
-% \begin{itemize}
-% \item \textit{box} - domain of intervals, where an integer variables
-%   is bounded by constants.
-% \item \textit{oct} - domain of octagons, where the sum and difference
-%   of two integer variables are bounded by constants.
-% \item \textit{poly} - domain of polyhedrons, computing linear
-%   relations over integer variables.
-% \end{itemize}
-
-% \section{Preconditions and Loop Invariants}
-
-% Preconditions can also be computed by calling
-% \begin{verbatim}
-% > framac -jessie -jessie-atp=simplify -jessie-infer-annot pre max.c
-% \end{verbatim}
-% which attempts to compute a sufficient precondition to guard against
-% safety violations and prove functional properties. In case it computes
-% \verb|false| as sufficient precondition, which occurs e.g. each time
-% the property is beyond the capabilities of our method, it simply
-% ignores it. Still, our method can compute a stronger precondition than
-% necessary. E.g., on function \verb|max|, it computes precondition
-% \verb|\valid(r) && \valid(i) && \valid(j)|, while a more precise
-% precondition would allow \verb|r| to be null. Still, the generated
-% precondition is indeed sufficient to prove the safety of function
-% \verb|max|:
-
-% \begin{verbatim}
-%  Running Simplify on proof obligations
-%  (. = valid * = invalid ? = unknown # = timeout ! = failure)
-%  simplify/max_why.sx           : ......... (9/0/0/0/0)
-% \end{verbatim}
-
-% To improve on the precision of the generated precondition, various
-% methods have been implemented:
-
-% \begin{itemize}
-% \item \textit{Quantifier elimination} - This method computes an
-%   invariant \verb|I| at the program point where check \verb|C| should
-%   hold, forms the quantified formula \verb|\forall x,y... ; I ==> C|
-%   over local variables \verb|x,y...|, and eliminates quantifiers from
-%   this formula, resulting in a sufficient precondition.
-%   This is the method called with option \verb|-jessie-infer-annot pre|.
-% \item \textit{Weakest preconditions with quantifier elimination} - This
-%   method improves on direct quantifier elimination by propagating
-%   formula \verb|I ==> C| backward in the control-flow graph of the
-%   function before quantifying over local variables and eliminating
-%   quantifiers.
-%   This is the method called with option \verb|-jessie-infer-annot wpre|.
-% \item \textit{Modified weakest preconditions with quantifier
-%     elimination} - This method strengthens the formula obtained by
-%   weakest preconditions with quantifier elimination, by only
-%   considering tests and assignments which deal with variables in the
-%   formula being propagated. Thus, it may result in a stronger
-%   precondition (i.e. a precondition less precise) but at a smaller
-%   computational cost. In particular, it may be applicable to programs
-%   where weakest preconditions with quantifier elimination is too costly.
-%   This is the method called with option \verb|-jessie-infer-annot spre|.
-% \end{itemize}
-
+Each VC is proved by at least by Z3. The behavior ``sorted'' is the
+most diificult one. Indeed, if you split this one into subgolas, then
+all subgoals are proved by Alt-Ergo too.
 
 \chapter{Separation of Memory Regions}
 
@@ -635,14 +466,7 @@ To change this default behavior, add the following line at the top of the file:
 # pragma SeparationPolicy(none)
 \end{verbatim}
 
-In this setting, the postcondition cannot be proved:
-
-\begin{verbatim}
-Running Simplify on proof obligations
-(. = valid * = invalid ? = unknown # = timeout ! = failure)
-simplify/max_why.sx           : ?..?........ (10/0/2/0/0)
-\end{verbatim}
-
+In this setting, the postcondition cannot be proved anymore.
 Now, function \verb|max| should only be called in a context where
 parameters \verb|r|, \verb|i| and \verb|j| indeed point into
 different regions, like the following:
@@ -671,38 +495,6 @@ set of pointers \verb|{&a}| and \verb|{&a}| are disjoint (because
 function \verb|max| only writes and reads \verb|*r| and \verb|*i|),
 which is obviously false.
 
-\begin{center}
-  \includegraphics[width=\linewidth]{jessie/max_ptr_ctxt_small.png}
-\end{center}
-
-% \chapter{Treatment of Unions and Casts}
-
-% Unions without pointer fields are translated to bitvectors, so
-% that access in these unions are translated to low-level
-% accesses. Thus, the following code can be analyzed, but we do not yet
-% provide a way to prove the resulting assertions, by asserting that any
-% subset of bits from the bitvector representation of 0 is 0:
-
-% \input{texpp/union_plain.cpp}
-
-% Unions with pointer fields (either direct fields or sub-fields of
-% structure fields) are translated differently, because we treat
-% pointers differently than other types, to allow an automatic analysis
-% of separation of memory blocks. Thus, we treat unions with pointer
-% fields as discriminated unions, so that writing in a field erases all
-% information on other fields. This allows to verify the following
-% program:
-
-% \input{texpp/union_discr.cpp}
-
-% Finally, casts between pointer types are allowed, with the
-% corresponding accesses to memory treated as low-level accesses to some
-% bitvector. This allows to verify the safety of the following program:
-
-% \input{texpp/cast_ptr.cpp}
-
-% Notice that unions are allowed in logical annotations, but pointer
-% casts aren't yet.
 
 \chapter{Reference Manual}
 
