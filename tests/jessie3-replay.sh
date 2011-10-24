@@ -54,7 +54,7 @@ cd java
 
 for i in $JAVA; do
     printf "$i.java... "
-    ../../bin/krakatoa.opt $i.java 2> $TMPERR > $TMP
+    ../../bin/krakatoa.opt -gen-only $i.java 2> $TMPERR > $TMP
     ret=$?
     if test "$ret" != "0"  ; then
 	report_error $ret "krakatoa"
