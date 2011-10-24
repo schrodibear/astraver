@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="clock_drift.jessie/clock_drift/why3session.xml">
+ name="clock_drift/why3session.xml">
  <prover
   id="alt-ergo"
   name="Alt-Ergo"
@@ -15,17 +15,29 @@
   name="CVC3"
   version="2.2"/>
  <prover
+  id="eprover"
+  name="Eprover"
+  version="1.4 Namring"/>
+ <prover
   id="gappa"
   name="Gappa"
-  version="0.14.0"/>
+  version="0.15.1"/>
  <prover
   id="simplify"
   name="Simplify"
   version="1.5.4"/>
  <prover
+  id="spass"
+  name="Spass"
+  version="3.7"/>
+ <prover
   id="vampire"
   name="Vampire"
   version="0.6"/>
+ <prover
+  id="verit"
+  name="veriT"
+  version="dev"/>
  <prover
   id="yices"
   name="Yices"
@@ -47,7 +59,7 @@
     expl="Lemma real_of_int_inf_NMAX, lemma"
     sum="07350885524452a2672398bf48b2ca1c"
     proved="true"
-    expanded="false"
+    expanded="true"
     shape="ainfix <=afrom_intV0c1000000.0Iainfix <=V0c1000000F">
     <proof
      prover="gappa"
@@ -62,7 +74,7 @@
     expl="Lemma real_of_int_succ, lemma"
     sum="1a8591123741843ce24f169fdf5a37f1"
     proved="true"
-    expanded="false"
+    expanded="true"
     shape="ainfix =afrom_intainfix +V0c1ainfix +afrom_intV0c1.0F">
     <proof
      prover="alt-ergo"
@@ -107,7 +119,7 @@
       expl="loop invariant init"
       sum="9c3a96d9bd6a2588b03a62f18c196303"
       proved="true"
-      expanded="false"
+      expanded="true"
       shape="ainfix <=ainteger_of_int32V4ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V4Aainfix <=aabsainfix -avalueV2ainfix *afrom_intainteger_of_int32V4c0.1ainfix *afrom_intainteger_of_int32V4ainfix +c0x1.p-8c1.49012e-09Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
       <proof
        prover="alt-ergo"
@@ -136,7 +148,7 @@
       expl="assertion"
       sum="03ad636b2fe555480f00ddf21e99b7e8"
       proved="true"
-      expanded="false"
+      expanded="true"
       shape="ainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
       <proof
        prover="cvc3"
@@ -158,7 +170,7 @@
       expl="assertion"
       sum="54ff1dd314b5ee32959ec61722f50d2c"
       proved="true"
-      expanded="false"
+      expanded="true"
       shape="ainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
       <proof
        prover="gappa"
@@ -173,7 +185,7 @@
       expl="loop invariant preservation"
       sum="6efed94082823ab2b90dd8547e629e54"
       proved="true"
-      expanded="false"
+      expanded="true"
       shape="ainfix <=ainteger_of_int32V11ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsainfix -avalueV9ainfix *afrom_intainteger_of_int32V11c0.1ainfix *afrom_intainteger_of_int32V11ainfix +c0x1.p-8c1.49012e-09Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
       <proof
        prover="cvc3"
@@ -188,7 +200,7 @@
       expl="normal postcondition"
       sum="90df7b878b903637858ed9c69b1af2db"
       proved="true"
-      expanded="false"
+      expanded="true"
       shape="ainfix <=aabsainfix -avalueV7ainfix *afrom_intainteger_of_int32V0c0.1ainfix *afrom_intainteger_of_int32V0ainfix +c0x1.p-8c1.49012e-09Iainfix =V7V6FIainfix <ainteger_of_int32V5ainteger_of_int32V0NIainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
       <proof
        prover="cvc3"
@@ -223,7 +235,7 @@
       expl="floating-point overflow"
       sum="4a18062ae679289036592b8017fd0321"
       proved="true"
-      expanded="false"
+      expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
       <proof
        prover="gappa"
@@ -238,7 +250,7 @@
       expl="arithmetic overflow"
       sum="ae5489aeb22ab57528b5d8312bf2fcbc"
       proved="true"
-      expanded="false"
+      expanded="true"
       shape="ainfix <=ainfix +ainteger_of_int32V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
       <proof
        prover="cvc3"
@@ -267,7 +279,7 @@
       expl="loop variant decreases"
       sum="d1d81e6b95d535c851d547ca60cbd1b4"
       proved="true"
-      expanded="false"
+      expanded="true"
       shape="ainfix <ainfix -ainteger_of_int32V0ainteger_of_int32V11ainfix -ainteger_of_int32V0ainteger_of_int32V5Aainfix <=c0ainfix -ainteger_of_int32V0ainteger_of_int32V5Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix <=ainfix +ainteger_of_int32V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
       <proof
        prover="cvc3"
