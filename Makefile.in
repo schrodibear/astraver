@@ -1009,6 +1009,7 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 	lib/pvs/pvscontext.el lib/pvs/*.pvs lib/pvs/*.prf \
 	lib/mizar/why.miz lib/mizar/dict/why.voc \
 	lib/why/*.why lib/isabelle/*.thy lib/hol4/*.ml lib/harvey/*.rv \
+	lib/why3/*.why lib/why3/*.mlw \
 	lib/java_api/java/*/*.java \
 	lib/javacard_api/java/lang/*.java \
 	lib/javacard_api/javacard/*/*.java \
