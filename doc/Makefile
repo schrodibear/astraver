@@ -10,7 +10,7 @@ install: all
 		/users/www-perso/projets/krakatoa
 	cp index.html /users/www-perso/projets/krakatoa/jessie.html
 
-index.html: why_frama_c2-mps.png
+index.html:: why_frama_c2-mps.png
 
 %.html: %.prehtml
 	yamlpp  $< -o $@
@@ -54,7 +54,7 @@ why_frama_c2-mps.pdf: why_frama_c2.mps
 	mptopdf why_frama_c2.mps 
 
 why_frama_c2-mps.png: why_frama_c2-mps.pdf
-	pdftoppm -r 300 why_frama_c2-mps.pdf | pnmtopng -transparent white > why_frama_c2-mps.png
+	pdftoppm -r 150 why_frama_c2-mps.pdf | pnmtopng -transparent white > why_frama_c2-mps.png
 
 dep.ps:
 	(cd ../src; ocamldep *.ml* | ocamldot | dot -Tps) > dep.ps

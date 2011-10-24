@@ -9,11 +9,17 @@ let dx = bp 5. and dy = bp 5.
 
 let space ~name b = rect ~stroke:None ~name ~dx ~dy b
 
-let light_pink = Color.color "light pink"
+let color_tool_default = Color.color "light pink"
 
-let light_blue = Color.color "dark cyan"
+let color_why3_tool = color_tool_default (* Color.color "light pink" *)
 
-let pink ?(color=light_pink) ?name  s =
+let color_frama_c = Color.rgb8 255 128 255
+
+let color_why3_box = Color.color "light cyan"
+
+let color_why2_box = Color.color "light yellow"
+
+let tool ?(color=color_tool_default) ?name  s =
     space ~name:(match name with None -> s | Some s -> s)
       (shadow (rect  ~dx ~dy ~fill:color
                               (tex ("\\large\\sf " ^ s))))
@@ -41,28 +47,28 @@ let why_platform n =
     tabularl ~hpadding:(bp 20.) ~vpadding:(bp 15.)
       [[ green "JMLJava" ["KML-annotated" ;"Java program"] ; empty ();
 	 green "ACSLC" ["ACSL-annotated"; "C program"]; empty () ] ;
-       [ pink "Krakatoa" ; empty (); pink ~color:Color.magenta "Frama-C";
+       [ tool "Krakatoa" ; empty (); tool ~color:color_frama_c "Frama-C";
          empty () ];
-       [ empty ();  pink "Jessie" ; empty (); empty ()];
-       [ empty () ; pink ~name:"VCG" "VC generator" ;
-         emptyn 2 (pink ~color:light_blue ~name:"VCG3" "VC generator");
+       [ empty ();  tool "Jessie" ; empty (); empty ()];
+       [ empty () ; tool ~name:"VCG" "VC generator" ;
+         emptyn 2 (tool ~color:color_why3_tool ~name:"VCG3" "VC generator");
          green "Theories" ["Theories"]];
        [ empty () ; green "VC" ["verification";"conditions"];
          emptyn 2 (green "VC3" ["verification";"conditions"]) ;
-         pink ~color:light_blue ~name:"Tr" "Transformations"];
-       [ tex "\\LARGE\\sf Why 2.30" ; pink ~name:"Enc" "Encodings" ;
-         emptyn 2 (pink ~color:light_blue ~name:"Enc3" "Encodings") ;
+         tool ~color:color_why3_tool ~name:"Tr" "Transformations"];
+       [ tex "\\LARGE\\sf Why 2.30" ; tool ~name:"Enc" "Encodings" ;
+         emptyn 2 (tool ~color:color_why3_tool ~name:"Enc3" "Encodings") ;
          tex "\\LARGE\\sf Why3 0.71" ];
        [ empty (); tex "~"; empty ();empty ()] ;
        [ empty (); tex "~"; empty ();empty ()] ;
        [ empty (); interactive; automatic;tptp]
 ]
   in
-  let why = round_rect ~fill:(Color.color "yellow") ~dx:(bp 114.0) ~dy:(bp 140.0)
+  let why = round_rect ~fill:color_why2_box ~dx:(bp 114.0) ~dy:(bp 140.0)
     (tex "")
   in
   let why = shift (Point.pt (bp 114.0, bp (-.170.0))) why in
-  let why3 = round_rect ~fill:(Color.color "cyan") ~dx:(bp 140.0) ~dy:(bp 90.0)
+  let why3 = round_rect ~fill:color_why3_box ~dx:(bp 140.0) ~dy:(bp 90.0)
     (tex "")
   in
   let why3 = shift (Point.pt (bp 390.0, bp (-.215.0))) why3 in

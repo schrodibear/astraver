@@ -2,7 +2,7 @@
 %%BoundingBox: -7 -397 533 24 
 %%HiResBoundingBox: -7 -396.64514 532.25 23.2764 
 %%Creator: MetaPost 1.208
-%%CreationDate: 2011.10.22:0917
+%%CreationDate: 2011.10.24:1353
 %%Pages: 1
 %*Font: phvr8r 10.9091 9.96265 02:80000000033c400157f66981ff3ff9
 %*Font: phvr8r 11.95514 9.96265 2d:800002c601400beae7
@@ -10,7 +10,7 @@
 %%BeginProlog
 %%EndProlog
 %%Page: 1 1
- 1 1 0 setrgbcolor
+ 1 1 0.87843 setrgbcolor
 newpath 21.2 -28 moveto
 206.8 -28 lineto
 219.61317 -28 230 -38.38683 230 -51.2 curveto
@@ -31,7 +31,7 @@ newpath 21.2 -28 moveto
 8.38683 -312 -2 -301.61317 -2 -288.8 curveto
 -2 -51.2 lineto
 -2 -38.38683 8.38683 -28 21.2 -28 curveto closepath stroke
- 0 1 1 setrgbcolor
+ 0.87843 1 1 setrgbcolor
 newpath 266.4 -123 moveto
 513.6 -123 lineto
 523.76218 -123 532 -131.23782 532 -141.4 curveto
@@ -153,7 +153,7 @@ newpath 343.35855 -65.3599 moveto
 282.86514 -42.3219 lineto
 282.86514 -65.3599 lineto
  closepath fill
- 1 0 1 setrgbcolor
+ 1 0.50197 1 setrgbcolor
 newpath 342.85855 -65.8599 moveto
 342.85855 -42.8219 lineto
 282.36514 -42.8219 lineto
@@ -257,7 +257,7 @@ newpath 355.6003 -164.62401 moveto
 270.6234 -139.171 lineto
 270.6234 -164.62401 lineto
  closepath fill
- 0 0.5451 0.5451 setrgbcolor
+ 1 0.71373 0.75687 setrgbcolor
 newpath 355.1003 -165.12401 moveto
 355.1003 -139.671 lineto
 270.1234 -139.671 lineto
@@ -349,7 +349,7 @@ newpath 515.31471 -222.68648 moveto
 416.56529 -199.75606 lineto
 416.56529 -222.68648 lineto
  closepath fill
- 0 0.5451 0.5451 setrgbcolor
+ 1 0.71373 0.75687 setrgbcolor
 newpath 514.81471 -223.18648 moveto
 514.81471 -200.25606 lineto
 416.06529 -200.25606 lineto
@@ -427,7 +427,7 @@ newpath 348.0209 -281.94843 moveto
 278.20279 -256.77042 lineto
 278.20279 -281.94843 lineto
  closepath fill
- 0 0.5451 0.5451 setrgbcolor
+ 1 0.71373 0.75687 setrgbcolor
 newpath 347.5209 -282.44843 moveto
 347.5209 -257.27042 lineto
 277.70279 -257.27042 lineto
