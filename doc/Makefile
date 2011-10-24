@@ -8,7 +8,7 @@ install: all
 	cp krakatoa.pdf jessie.pdf krakatoa.html jessie.html \
 		why_frama_c2-mps.png \
 		/users/www-perso/projets/krakatoa
-	cp index.html /users/www-perso/projets/krakatoa/jessie.html
+	cp index.html /users/www-perso/projets/krakatoa/index.html
 
 index.html:: why_frama_c2-mps.png
 
