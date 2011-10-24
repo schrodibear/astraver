@@ -8,7 +8,7 @@
   @ behavior normal:
   @   assumes \valid(r);
   @   assigns *r;
-  @   ensures *r == ((*i < *j) ? *j : *i);
+  @   ensures *r == \max(*i,*j);
   @   ensures \result == 0;
   @*/
 int max(int *r, int* i, int* j) {

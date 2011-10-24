@@ -118,21 +118,6 @@ possible, using option \texttt{-jessie-atp=gui}.
 
 \section{Basic Use}
 
-The Jessie plug-in allows to perform deductive verification of C
-programs inside Frama-C. The C file possibly annotated in ACSL is
-first checked for syntax errors by Frama-C core, before it is
-translated to various intermediate languages inside the Why Platform
-embedded in Frama-C, and finally verification conditions (VCs) are
-generated and a prover is called on these, as sketched in
-Figure~\ref{fig:platform}.
-
-By default, the Jessie plug-in launches in its GUI mode. To invoke this
-mode on a file \verb|ex.c|, just type
-
-\begin{verbatim}
-> frama-c -jessie ex.c
-\end{verbatim}
-
 \begin{figure}[t]
   \begin{center}
     \includegraphics[width=0.8\linewidth]{why_frama_c2.mps}
@@ -142,62 +127,61 @@ mode on a file \verb|ex.c|, just type
 \hrulefill
 \end{figure}
 
+The Jessie plug-in allows to perform deductive verification of C
+programs inside Frama-C. The C file possibly annotated in ACSL is
+first checked for syntax errors by Frama-C core, before it is
+translated to various intermediate languages inside the Why Platform
+embedded in Frama-C, and finally verification conditions (VCs) are
+generated and a prover is called on these, as sketched in
+Figure~\ref{fig:platform}.
 
-A program does not need to be complete nor annotated to be analyzed
-with the Jessie plug-in. As a first example, take program \verb|max|:
+To prove the VCs generated, one needs to install external provers such
+as Alt-Ergo, CVC3 or Z3. Please see at URL
+\url{http://krakatoa.lri.fr/} how to get such provers. Once some of
+these are installed, you should run the auto-configuration tool by
+running command \texttt{why3config --detect} (equivalent to the
+former Why 2.xx  command \texttt{why-config})
 
-\input{texpp/max.cpp}
+By default, the Jessie plug-in launches in its GUI mode. To invoke this
+mode on a file \verb|ex.c|, just type
 
-Consider now adding a postcondition to function \verb|max|:
+\begin{verbatim}
+> frama-c -jessie ex.c
+\end{verbatim}
 
-\input{texpp/max_post.cpp}
+A program does not need to be complete to be analyzed with the Jessie
+plug-in. As a first example, take program \verb|max|:
+\input{texpp/max.cpp} The ACSL annotation expresses the fact function
+\verb|max| returns the maximum of its parameters \verb|i| and
+\verb|j|. Now, running the Jessie plug-in launches Why3 IDE produces
+the output shown on Figure~\ref{fig:max:ide}.
 
-This ACSL annotation expresses the fact function \verb|max| returns
-the maximum of its parameters \verb|i| and \verb|j|. Now, running the
-Jessie plug-in outputs:
+\begin{figure}[t]
+  \begin{center}
+    \includegraphics[width=\linewidth]{jessie/max_why3ide.png}
+  \end{center}
+  \caption{Why3 IDE for \texttt{max} function}
+  \label{fig:max:ide}
+\end{figure}
 
-This means that Simplify could prove one of the two VCs. To see
-what each VC represents, let us now invoke Jessie in GUI
-mode. Each VC represents verification of the postcondition in a
-different context. The first VC represents the context where
-\verb|i < j|:
-
-\begin{center}
-  \includegraphics[width=\linewidth]{jessie/max_post_po1_small.png}
-\end{center}
-
-The second VC represents the context where \verb|i >= j|.  Context can
-be seen in the upper right panel of GWhy, expressed in the
-intermediate language of Why. At this time, GWhy does not assist
-the user for linking the constructs found in the context to 
-original C expressions or statements, although this can be done
-by hand for very short functions.
-
-\begin{center}
-  \includegraphics[width=\linewidth]{jessie/max_post_po2_small.png}
-\end{center}
-
-Running Simplify inside GWhy shows that the second VC is not proved by
-Simplify. However, it is proved by prover Alt-Ergo.
-
-\begin{center}
-  \includegraphics[width=\linewidth]{jessie/max_post_proof_small.png}
-\end{center}
+On this figure, the user selected the row ``WP Jessie program'' and
+clicked on the buttons on the left, corresponding to provers Alt-Ergo,
+Z3 and CVC3. The two VCs are shown valid, meaning that for this small
+function, the code matches its specification.
 
 \section{Safety Checking vs. Functional Verification}
 
-In the simple \verb|max| example, VCs for the postcondition are grouped
-in the default behavior for function \verb|max|. In general, VCs for a
-function are grouped in more than one group:
-
+In the simple \verb|max| example, there are two VCs, one for the
+``default behavior'' and one for ``Safety'' of function \verb|max|. In
+general, each function leads to these VCs:
 \begin{itemize}
-\item \textit{Safety}: VCs in this group guard against safety violations
+\item \textit{Safety}: this VC guard against safety violations
   such as null-pointer dereferencing, buffer overflow, integer overflow, etc.
-\item \textit{Default behavior}: VCs in this group concern the
+\item \textit{Default behavior}: this VC concern the
   verification of a function's default behavior, which includes
   verification of its postcondition, frame condition, loop invariants
   and intermediate assertions.
-\item \textit{User-defined behavior}: VCs in this group concern the
+\item \textit{User-defined behavior}: these VCs concern the
   verification of a function's user-defined behavior, which includes
   verification of its postcondition, frame condition, loop invariants
   and intermediate assertions for this specific behavior.
@@ -214,45 +198,49 @@ syntax \verb|\null|. It would be possible to use also the C macro
 preprocessor phase to process the annotations too, since it does not
 by default. This is done by option \verb|-pp-annot| of
 Frama-C. However, this alternative is not recommended since it is
-depended of the proprecessor in use (see \url{http://bts.frama-c.com/dokuwiki/doku.php?id=mantis:frama-c:start#faq_tips_and_tricks})
+depended of the proprecessor in use (see
+\url{http://bts.frama-c.com/dokuwiki/doku.php?id=mantis:frama-c:start#faq_tips_and_tricks})
 
-Running the Jessie plug-in in GUI mode results in 4 groups of VCs:
-Safety, Default behavior, Normal behavior `normal` and Normal behavior
+Running the Jessie plug-in in GUI mode results in 4 VCs:
+Safety, default behavior, normal behavior `normal` and normal behavior
 `zero` for the two user-defined behaviors.
 
-\begin{center}
-  \includegraphics[width=1.0\linewidth]{jessie/max_ptr_proof_small.png}
-\end{center}
+\begin{figure}[t]
+  \begin{center}
+    \includegraphics[width=\linewidth]{jessie/max_ptr_why3ide.png}
+  \end{center}
+  \caption{Why3 IDE for \texttt{max\_ptr} function}
+  \label{fig:max_ptr:ide}
+\end{figure}
 
-VCs that are proved in one group can be available to prove VCs in other
-groups. No circularity paradox is possible here, since the proof of a
-VC can only rely on other VCs higher in the control-flow graph of the
-function. We made the following choices:
+% VCs that are proved in one group can be available to prove VCs in other
+% groups. No circularity paradox is possible here, since the proof of a
+% VC can only rely on other VCs higher in the control-flow graph of the
+% function. We made the following choices:
 
-\begin{itemize}
-\item To prove a VC in \textit{Safety}, one can rely on VCs in
-  \textit{Default behavior}. Typically, one can rely on preconditions
-  or loop invariants to prove safety.
-\item To prove a VC in \textit{Default behavior}, one can rely on VCs
-  in \textit{Safety}. Typically, one can rely on ranges of values
-  implied by safety to prove loop invariants and postconditions.
-\item To prove a VC in a \textit{Normal behavior}, one can rely on VCs
-  in both \textit{Safety} and \textit{Default behavior}.
-\end{itemize}
+% \begin{itemize}
+% \item To prove a VC in \textit{Safety}, one can rely on VCs in
+%   \textit{Default behavior}. Typically, one can rely on preconditions
+%   or loop invariants to prove safety.
+% \item To prove a VC in \textit{Default behavior}, one can rely on VCs
+%   in \textit{Safety}. Typically, one can rely on ranges of values
+%   implied by safety to prove loop invariants and postconditions.
+% \item To prove a VC in a \textit{Normal behavior}, one can rely on VCs
+%   in both \textit{Safety} and \textit{Default behavior}.
+% \end{itemize}
 
-Next, we detail how to prove each group of VCs.
+Next, we detail how to prove each VC.
 
 \chapter{Safety Checking}
 
-A preliminary to the verification of functional properties 
-using the Jessie plug-in is to
-verify the safety of functions. Safety has several components: memory
-safety, integer safety, termination. Memory safety deals with validity
-of memory accesses to allocated memory. Integer safety deals with
-absence of integer overflows and validity of operations on integers,
-such as the absence of division by zero. Termination amounts to check
-whether loops are always terminating, as well as recursive or
-mutually recursive functions.
+A preliminary to the verification of functional properties using the
+Jessie plug-in is to verify the safety of functions. Safety has
+several components: memory safety, integer safety, termination. Memory
+safety deals with validity of memory accesses to allocated
+memory. Integer safety deals with absence of integer overflows and
+validity of operations on integers, such as the absence of division by
+zero. Termination amounts to check whether loops are always
+terminating, as well as recursive or mutually recursive functions.
 
 \section{Memory Safety}
 
