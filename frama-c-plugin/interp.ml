@@ -123,7 +123,7 @@ let locate ?alarm ?pos e =
           reg_position ~kind:Output.DivByZero pos
       | Some Memory_alarm | Some Index_alarm ->
           reg_position ~kind:Output.PointerDeref pos
-      | Some (Shift_alarm|Signed_overflow_alarm) ->
+      | Some (Shift_alarm|Signed_overflow_alarm|Float_overflow_alarm) ->
           reg_position ~kind:Output.ArithOverflow pos
       | Some Pointer_compare_alarm
       | Some Using_nan_or_infinite_alarm
