@@ -96,7 +96,9 @@ let rec match_term acc t1 t2 =
 let why3id s =
   match s.[0] with
   | 'A'..'Z' -> "_" ^ s
-  | _ -> s
+  | _ ->
+      if Why3_kw.is_why3_keyword s then s ^ "_why3" else s
+
 
 let why3constr s =
   match s.[0] with
@@ -109,6 +111,9 @@ let why3id_if s =
 
 let why3ident s =
   match s with
+        (* booleans *)
+    | "not" -> "not"
+        (* integers *)
     | "le_int" -> "Int.(<=)"
     | "le_int_" -> "Int.(<=)"
     | "le_int_bool" -> "Int.(<=)"
