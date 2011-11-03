@@ -6,8 +6,10 @@ all: main.pdf manual.ps $(KFILES) krakatoa.pdf \
 
 install: all
 	cp krakatoa.pdf jessie.pdf krakatoa.html jessie.html \
-		why_frama_c2-mps.png \
+		why_frama_c2-mps.png why_frama_c2.mps \
 		/users/www-perso/projets/krakatoa
+	mkdir -p /users/www-perso/projets/krakatoa/jessie
+	cp jessie/*.png /users/www-perso/projets/krakatoa/jessie
 	cp index.html /users/www-perso/projets/krakatoa/index.html
 
 index.html:: why_frama_c2-mps.png
