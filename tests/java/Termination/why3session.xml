@@ -7,6 +7,10 @@
   name="Alt-Ergo"
   version="0.93"/>
  <prover
+  id="alt-ergo-0.93.1"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
   id="coq"
   name="Coq"
   version="8.3pl2"/>
@@ -14,6 +18,10 @@
   id="cvc3"
   name="CVC3"
   version="2.2"/>
+ <prover
+  id="cvc3-2.4"
+  name="CVC3"
+  version="2.4.1"/>
  <prover
   id="eprover"
   name="Eprover"
@@ -46,6 +54,10 @@
   id="z3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="z3-3"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../Termination.mlw"
   verified="true"
@@ -62,7 +74,7 @@
    <goal
     name="WP_parameter _Termination_loop1_ensures_default"
     expl="loop invariant preservation"
-    sum="7d20a468e683c9d7f993dfb30f4da8b0"
+    sum="b2dde98fff853475e6ac6fc78e3fae24"
     proved="true"
     expanded="false"
     shape="t">
@@ -91,7 +103,7 @@
    <goal
     name="WP_parameter _Termination_loop1_safety"
     expl="loop variant decreases"
-    sum="23521ab31d31256e9201c8f42585eaa7"
+    sum="63101ff568b877494eb2cc64734faf0d"
     proved="true"
     expanded="false"
     shape="ainfix <V3V2Aainfix <=c0V2Iainfix =V3ainfix -V2c1FIainfix >V2c0FIavalid_struct_TerminationV0c0c0V1FF">
@@ -107,20 +119,20 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Termination_loop2_ensures_default"
     expl="loop invariant preservation"
-    sum="24e5cd45fca222d2d6d7c1787ddad9ec"
+    sum="8c54b2ac5d526747910c437a327cf675"
     proved="true"
     expanded="false"
     shape="t">
@@ -149,7 +161,7 @@
    <goal
     name="WP_parameter _Termination_loop2_safety"
     expl="loop variant decreases"
-    sum="1c8457bf3b5682e20e07e20d556738d7"
+    sum="72291bc17fde79e737429cf7f38ab271"
     proved="true"
     expanded="false"
     shape="ainfix <ainfix -c100V3ainfix -c100V2Aainfix <=c0ainfix -c100V2Iainfix =V3ainfix +V2c1FIainfix <V2c100FIavalid_struct_TerminationV0c0c0V1FF">
@@ -165,7 +177,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -178,7 +190,7 @@
    <goal
     name="WP_parameter _Termination_loop3_ensures_default"
     expl="Method loop3, default behavior"
-    sum="5e2c503e299e3a1b96cc9cce9e96c380"
+    sum="2c0a6ccf5270d1e36a518c6e4e548641"
     proved="true"
     expanded="false"
     shape="iainfix >V2c0ainfix <=V3c100Aainfix <=c0V3Iainfix =V3ainfix -V2c1Fainfix =V4c0Iainfix =V4V2FIainfix <=V2c100Aainfix <=c0V2FAainfix <=c100c100Aainfix <=c0c100Iavalid_struct_TerminationV0c0c0V1FF">
@@ -194,7 +206,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
@@ -207,7 +219,7 @@
    <goal
     name="WP_parameter _Termination_loop3_safety"
     expl="loop variant decreases"
-    sum="53343b5eccab3dc966afcecc7612c28b"
+    sum="2df664ce7ae23ccea1d450ff64a2eb3f"
     proved="true"
     expanded="false"
     shape="ainfix <V3V2Aainfix <=c0V2Iainfix =V3ainfix -V2c1FIainfix >V2c0Iainfix <=V2c100Aainfix <=c0V2FIavalid_struct_TerminationV0c0c0V1FF">
@@ -223,7 +235,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -236,7 +248,7 @@
    <goal
     name="WP_parameter cons_Termination_ensures_default"
     expl="Constructor of class Termination, default behavior"
-    sum="912d65845bdf9f4591e4adeff5cbffd9"
+    sum="1d9563526a49dd8d30537b60d0606186"
     proved="true"
     expanded="false"
     shape="t">
@@ -265,7 +277,7 @@
    <goal
     name="WP_parameter cons_Termination_safety"
     expl="Constructor of class Termination, Safety"
-    sum="436d4c8bdef7dbe0bf3883daddbf7c27"
+    sum="028bdc2c25996c30fb0d6f3bae6cb52c"
     proved="true"
     expanded="false"
     shape="t">
@@ -274,7 +286,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="alt-ergo"

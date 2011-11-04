@@ -7,6 +7,10 @@
   name="Alt-Ergo"
   version="0.93"/>
  <prover
+  id="alt-ergo-0.93.1"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
   id="coq"
   name="Coq"
   version="8.3pl2"/>
@@ -14,6 +18,10 @@
   id="cvc3"
   name="CVC3"
   version="2.2"/>
+ <prover
+  id="cvc3-2.4"
+  name="CVC3"
+  version="2.4.1"/>
  <prover
   id="eprover"
   name="Eprover"
@@ -46,6 +54,10 @@
   id="z3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="z3-3"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../Counter.mlw"
   verified="true"
@@ -62,7 +74,7 @@
    <goal
     name="WP_parameter _Counter_decrement_ensures_default"
     expl="normal postcondition"
-    sum="22ee7fc145d5e758b4e71d1a77407b98"
+    sum="33a1f0fd4c857deb43813567c2a0d8c4"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV0V4V1ainfix -avalueV0V2V1c1Iainfix =V4astoreV2V0ainfix +aselectV2V0c1FIavalid_struct_CounterV0c0c0V3FFFF">
@@ -78,7 +90,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -91,7 +103,7 @@
    <goal
     name="WP_parameter _Counter_decrement_safety"
     expl="Method decrement, Safety"
-    sum="92ceb50fd740494e13fa0af5aa59b6e8"
+    sum="c24a7e71e000488c1b79a943e2eef808"
     proved="true"
     expanded="true"
     shape="t">
@@ -107,7 +119,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -120,7 +132,7 @@
    <goal
     name="WP_parameter _Counter_increment_ensures_default"
     expl="normal postcondition"
-    sum="4f55a89893e0786960edb599bcbcb3ca"
+    sum="8f71fd89a1974fb0357a267ef3d116fd"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV0V2V4ainfix +avalueV0V2V1c1Iainfix =V4astoreV1V0ainfix +aselectV1V0c1FIavalid_struct_CounterV0c0c0V3FFFF">
@@ -149,7 +161,7 @@
    <goal
     name="WP_parameter _Counter_increment_safety"
     expl="Method increment, Safety"
-    sum="358fcc0765ed671f88060a1b95f26568"
+    sum="30b6bd6c0ce63186b5c71be12850138d"
     proved="true"
     expanded="true"
     shape="t">
@@ -178,7 +190,7 @@
    <goal
     name="WP_parameter cons_Counter_ensures_default"
     expl="Constructor of class Counter, default behavior"
-    sum="0ea2ec56003f6fc75f54c084487c972c"
+    sum="6ee2d87951987d4f1757741677121534"
     proved="true"
     expanded="true"
     shape="t">
@@ -207,7 +219,7 @@
    <goal
     name="WP_parameter cons_Counter_safety"
     expl="Constructor of class Counter, Safety"
-    sum="398357a8cb36022d9f9028c4a7727594"
+    sum="d8f0df34836663d5a371ee2643ad8c29"
     proved="true"
     expanded="true"
     shape="t">
@@ -223,7 +235,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"

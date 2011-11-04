@@ -7,6 +7,10 @@
   name="Alt-Ergo"
   version="0.93"/>
  <prover
+  id="alt-ergo-0.93.1"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
   id="coq"
   name="Coq"
   version="8.3pl2"/>
@@ -14,6 +18,10 @@
   id="cvc3"
   name="CVC3"
   version="2.2"/>
+ <prover
+  id="cvc3-2.4"
+  name="CVC3"
+  version="2.4.1"/>
  <prover
   id="eprover"
   name="Eprover"
@@ -46,6 +54,10 @@
   id="z3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="z3-3"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../Isqrt.mlw"
   verified="true"
@@ -62,7 +74,7 @@
    <goal
     name="WP_parameter _Isqrt_isqrt_ensures_default"
     expl="Method isqrt, default behavior"
-    sum="27ad3e91e4209884f3c4bb242b80b9c7"
+    sum="636e56a231b00a6167044689f462980e"
     proved="true"
     expanded="false"
     shape="iainfix <=V1V0ainfix =V4asqrainfix +V3c1Aainfix >=V0asqrV3Aainfix >=V3c0Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1Fainfix <V0asqrainfix +V5c1Aainfix <=asqrV5V0Aainfix >=V5c0Iainfix =V5V2FIainfix =V1asqrainfix +V2c1Aainfix >=V0asqrV2Aainfix >=V2c0FFAainfix =c1asqrainfix +c0c1Aainfix >=V0asqrc0Aainfix >=c0c0Iainfix >=V0c0F">
@@ -84,7 +96,7 @@
    <goal
     name="WP_parameter _Isqrt_isqrt_safety"
     expl="loop variant decreases"
-    sum="5db6ffcd0956a044b0441aa03908d90a"
+    sum="3bfcadbc524f3d2b36d80a991bdc3366"
     proved="true"
     expanded="false"
     shape="ainfix <ainfix -V0V3ainfix -V0V2Aainfix <=c0ainfix -V0V2Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix <=V1V0Iainfix =V1asqrainfix +V2c1Aainfix >=V0asqrV2Aainfix >=V2c0FFIainfix >=V0c0F">
@@ -107,7 +119,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <transf
      name="split_goal"
@@ -116,7 +128,7 @@
      <goal
       name="WP_parameter _Isqrt_isqrt_safety.1"
       expl="loop variant decreases"
-      sum="5db6ffcd0956a044b0441aa03908d90a"
+      sum="3bfcadbc524f3d2b36d80a991bdc3366"
       proved="true"
       expanded="false"
       shape="ainfix <ainfix -V0V3ainfix -V0V2Aainfix <=c0ainfix -V0V2Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix <=V1V0Iainfix =V1asqrainfix +V2c1Aainfix >=V0asqrV2Aainfix >=V2c0FFIainfix >=V0c0F">
@@ -125,14 +137,14 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.02"/>
       </proof>
       <proof
        prover="alt-ergo"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.02"/>
       </proof>
       <proof
        prover="z3"
@@ -147,7 +159,7 @@
    <goal
     name="WP_parameter _Isqrt_main_ensures_default"
     expl="Method main, default behavior"
-    sum="fc8dd1674bcd721a357a9cf49da5a5bd"
+    sum="b752590f41d9a95399cdf6a07c68debc"
     proved="true"
     expanded="false"
     shape="ainfix =V2c4Iainfix =V2V1FAainfix >V1c4NAainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -156,13 +168,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Isqrt_main_safety"
     expl="precondition for call"
-    sum="c7070c22110dc527b0020a2cdbe5653f"
+    sum="d406b744a2a507b2cce6fe1104a0b9f1"
     proved="true"
     expanded="false"
     shape="ainfix >=c17c0">
@@ -178,7 +190,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -191,7 +203,7 @@
    <goal
     name="WP_parameter cons_Isqrt_ensures_default"
     expl="Constructor of class Isqrt, default behavior"
-    sum="85beec1c60163bf063612a925a4f853e"
+    sum="362c28bc02263aa3323c7c0bf974ae76"
     proved="true"
     expanded="false"
     shape="t">
@@ -220,7 +232,7 @@
    <goal
     name="WP_parameter cons_Isqrt_safety"
     expl="Constructor of class Isqrt, Safety"
-    sum="70e43fa8e510dd6864044ffa2f8063ee"
+    sum="ef552e5dca5eed8af8143562869fff1b"
     proved="true"
     expanded="false"
     shape="t">
@@ -229,7 +241,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -249,7 +261,7 @@
    <goal
     name="WP_parameter cons_Object_ensures_default"
     expl="Constructor of class Object, default behavior"
-    sum="597cdc9a1d727bc86bf78573c8a9d11f"
+    sum="8b6d547d2e210f63bc85959e01792680"
     proved="true"
     expanded="false"
     shape="t">
@@ -278,7 +290,7 @@
    <goal
     name="WP_parameter cons_Object_safety"
     expl="Constructor of class Object, Safety"
-    sum="0a80a9ee4d381fda0869af068799b109"
+    sum="1cb00e1362e51b1e09de608a579b6fce"
     proved="true"
     expanded="false"
     shape="t">

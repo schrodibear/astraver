@@ -7,13 +7,21 @@
   name="Alt-Ergo"
   version="0.93"/>
  <prover
+  id="alt-ergo-0.93.1"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
   id="coq"
   name="Coq"
-  version="8.2pl1"/>
+  version="8.3pl2"/>
  <prover
   id="cvc3"
   name="CVC3"
   version="2.2"/>
+ <prover
+  id="cvc3-2.4"
+  name="CVC3"
+  version="2.4.1"/>
  <prover
   id="eprover"
   name="Eprover"
@@ -46,6 +54,10 @@
   id="z3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="z3-3"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../FlagStatic.mlw"
   verified="true"
@@ -62,7 +74,7 @@
    <goal
     name="WP_parameter _FlagStatic_flag_ensures_default"
     expl="Method flag, default behavior"
-    sum="dcf90d38a4aa59aeb452dfd4e47fa754"
+    sum="c2748107f6449400b3b6749c6d56db26"
     proved="true"
     expanded="false"
     shape="LaselectV7ashiftV0V5iainfix =V8a_FlagStatic_BLUEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V10V4Aainfix <=V9V10Aainfix <=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V12a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V12V4Aainfix <=V6V12Aainfix <=c0V6Aais_color_arrayV0V2V7Iainfix =V12ainfix +V5c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDais_monochromeV0V13ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV14Aais_monochromeV0V6V5a_FlagStatic_WHITEV14Aais_monochromeV0c0V6a_FlagStatic_BLUEV14Aainfix <=V13ainfix +aoffset_maxV2V0c1Aainfix <=V5V13Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V14Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V13V13Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V13Aainfix =aselectV14ashiftV0V13aselectV7ashiftV0V5FIainfix =V13ainfix -V4c1Fais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7Iainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFAais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix <=V3ainfix +aoffset_maxV2V0c1Aainfix <=c0V3Aainfix <=c0c0Aainfix <=c0c0Aais_color_arrayV0V2V1Iainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -73,7 +85,7 @@
      <goal
       name="WP_parameter _FlagStatic_flag_ensures_default.1"
       expl="loop invariant init"
-      sum="b9a98107a19d437da77b0bf0418d5200"
+      sum="f144faa7343f723fd780802973ed0216"
       proved="true"
       expanded="false"
       shape="ais_monochromeV0V3ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV1Aais_monochromeV0c0c0a_FlagStatic_WHITEV1Aais_monochromeV0c0c0a_FlagStatic_BLUEV1Aainfix <=V3ainfix +aoffset_maxV2V0c1Aainfix <=c0V3Aainfix <=c0c0Aainfix <=c0c0Aais_color_arrayV0V2V1Iainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -82,27 +94,27 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="alt-ergo"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="z3"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter _FlagStatic_flag_ensures_default.2"
       expl="loop invariant preservation"
-      sum="34dc3b58d4ea63f1ec7658999107e82f"
+      sum="e64051e9c8443abab689db0e883d8343"
       proved="true"
       expanded="false"
       shape="LaselectV7ashiftV0V5ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Aais_monochromeV0V9V10a_FlagStatic_WHITEV11Aais_monochromeV0c0V9a_FlagStatic_BLUEV11Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V10V4Aainfix <=V9V10Aainfix <=c0V9Aais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -113,7 +125,7 @@
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.1"
         expl="Method flag, default behavior"
-        sum="bfe5b7ee8074404f1bdc7a6b4f62c16f"
+        sum="5587dcb90dd262471c1cecf97998e390"
         proved="true"
         expanded="false"
         shape="LaselectV7ashiftV0V5ais_color_arrayV0V2V11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -124,7 +136,7 @@
          <goal
           name="WP_parameter _FlagStatic_flag_ensures_default.2.1.1"
           expl="Method flag, default behavior"
-          sum="7f40c85a6fdccf9a276e1560a2e25f0f"
+          sum="819240781c2652e4f21253f47f2610e5"
           proved="true"
           expanded="false"
           shape="LaselectV7ashiftV0V5ais_coloraselectV11ashiftV0V12Iainfix <V12ainfix +aoffset_maxV2V0c1Aainfix <=c0V12FAa_Non_null_intMV0V2Iainfix =aselectV11V13aselectV7V13Iain_psetV13apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6NAavalidV2V13FAainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8c1Iainfix <V5V4Iainfix =aselectV7ashiftV0V14a_FlagStatic_REDIainfix <V14ainfix +aoffset_maxV2V0c1Aainfix <=V4V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_WHITEIainfix <V15V5Aainfix <=V6V15FAainfix =aselectV7ashiftV0V16a_FlagStatic_BLUEIainfix <V16V6Aainfix <=c0V16FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix <V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix <V5V4Aainfix =V6V5Oainfix <V6V5Aainfix =c0V6Oainfix <c0V6Aais_coloraselectV7ashiftV0V17Iainfix <V17ainfix +aoffset_maxV2V0c1Aainfix <=c0V17FAa_Non_null_intMV0V2FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix <=c0V3Aainfix =V3c2147483647Oainfix <V3c2147483647FIais_coloraselectV1ashiftV0V18Iainfix <V18ainfix +aoffset_maxV2V0c1Aainfix <=c0V18FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FFF">
@@ -133,7 +145,7 @@
            timelimit="5"
            edited=""
            obsolete="false">
-           <result status="valid" time="1.20"/>
+           <result status="valid" time="0.78"/>
           </proof>
          </goal>
         </transf>
@@ -141,7 +153,7 @@
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.2"
         expl="Method flag, default behavior"
-        sum="c15006d413e32dda9185d252ff97f42b"
+        sum="c9dce9cc6e4d1483f0c6d406ab768e8e"
         proved="true"
         expanded="false"
         shape="LaselectV7ashiftV0V5ainfix <=c0V9Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -150,7 +162,7 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.06"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="alt-ergo"
@@ -164,13 +176,13 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.3"
         expl="Method flag, default behavior"
-        sum="58221247f218e4208fb164d9e6e74eba"
+        sum="ab923ba7b6f85cc68d2b67cfb95f6920"
         proved="true"
         expanded="false"
         shape="LaselectV7ashiftV0V5ainfix <=V9V10Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -179,36 +191,7 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.09"/>
-        </proof>
-        <proof
-         prover="alt-ergo"
-         timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.06"/>
-        </proof>
-        <proof
-         prover="z3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.11"/>
-        </proof>
-       </goal>
-       <goal
-        name="WP_parameter _FlagStatic_flag_ensures_default.2.4"
-        expl="Method flag, default behavior"
-        sum="6f13ab40649154a581b648c32ced171b"
-        proved="true"
-        expanded="false"
-        shape="LaselectV7ashiftV0V5ainfix <=V10V4Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
-        <proof
-         prover="cvc3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.06"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="alt-ergo"
@@ -222,13 +205,42 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.05"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter _FlagStatic_flag_ensures_default.2.4"
+        expl="Method flag, default behavior"
+        sum="d7542e1ce2c48505be583272d2b7328b"
+        proved="true"
+        expanded="false"
+        shape="LaselectV7ashiftV0V5ainfix <=V10V4Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
+        <proof
+         prover="cvc3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.5"
         expl="Method flag, default behavior"
-        sum="ca7761cb2dc2cc3713704c74c8158be9"
+        sum="18b924883fe218467e78851739ec1335"
         proved="true"
         expanded="false"
         shape="LaselectV7ashiftV0V5ainfix <=V4ainfix +aoffset_maxV2V0c1Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -237,27 +249,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.06"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="alt-ergo"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.03"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.6"
         expl="Method flag, default behavior"
-        sum="5e0df0c8a70eb4cf4acc470430fae7da"
+        sum="cc02b6a2400693d09a97fdbaaa223cb9"
         proved="true"
         expanded="false"
         shape="LaselectV7ashiftV0V5ais_monochromeV0c0V9a_FlagStatic_BLUEV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -266,13 +278,13 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="1.82"/>
+         <result status="valid" time="1.00"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.7"
         expl="Method flag, default behavior"
-        sum="3445ea1a24c5f7f3df8da230f5db1481"
+        sum="445ca9e48586035cd0e8713673630d11"
         proved="true"
         expanded="false"
         shape="LaselectV7ashiftV0V5ais_monochromeV0V9V10a_FlagStatic_WHITEV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -281,13 +293,13 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="1.94"/>
+         <result status="valid" time="1.03"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.2.8"
         expl="Method flag, default behavior"
-        sum="abf2cd810e79e82063236cab2eccb643"
+        sum="8449ae86c1d08034b7499e8f63cb54c9"
         proved="true"
         expanded="false"
         shape="LaselectV7ashiftV0V5ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV11Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FIainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1FIainfix =V8a_FlagStatic_BLUEIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -296,7 +308,7 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="1.88"/>
+         <result status="valid" time="1.01"/>
         </proof>
        </goal>
       </transf>
@@ -304,7 +316,7 @@
      <goal
       name="WP_parameter _FlagStatic_flag_ensures_default.3"
       expl="loop invariant preservation"
-      sum="d7199f64b6a0b091bfa91f7815f09f5c"
+      sum="553e55cd87fb2e1af25a26f9a32ee252"
       proved="true"
       expanded="false"
       shape="LaselectV7ashiftV0V5ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V9V4Aainfix <=V6V9Aainfix <=c0V6Aais_color_arrayV0V2V7Iainfix =V9ainfix +V5c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -313,7 +325,7 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.29"/>
+       <result status="valid" time="0.16"/>
       </proof>
       <proof
        prover="alt-ergo"
@@ -327,13 +339,13 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.07"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter _FlagStatic_flag_ensures_default.4"
       expl="loop invariant preservation"
-      sum="5d615ccff84183fae45c41db8d0dcade"
+      sum="28367bf4b8472d7fcc40708c05d7b642"
       proved="true"
       expanded="false"
       shape="LaselectV7ashiftV0V5ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Aais_monochromeV0V6V5a_FlagStatic_WHITEV10Aais_monochromeV0c0V6a_FlagStatic_BLUEV10Aainfix <=V9ainfix +aoffset_maxV2V0c1Aainfix <=V5V9Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -344,7 +356,7 @@
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.1"
         expl="Method flag, default behavior"
-        sum="9336f8875555c0e38e6691fab0ca64c5"
+        sum="d171b9f680657209af97f886ef75cf97"
         proved="true"
         expanded="false"
         shape="LaselectV7ashiftV0V5ais_color_arrayV0V2V10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -355,7 +367,7 @@
          <goal
           name="WP_parameter _FlagStatic_flag_ensures_default.4.1.1"
           expl="Method flag, default behavior"
-          sum="71cf5272419142e8bdae2f85c950983c"
+          sum="1ea7f72c901923d50b198fa5691df14a"
           proved="true"
           expanded="false"
           shape="LaselectV7ashiftV0V5ais_coloraselectV10ashiftV0V11Iainfix <V11ainfix +aoffset_maxV2V0c1Aainfix <=c0V11FAa_Non_null_intMV0V2Iainfix =aselectV10V12aselectV7V12Iain_psetV12apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9NAavalidV2V12FAainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix +V4aprefix -c1FIainfix =V8c1Oainfix =V8c2Oainfix =V8c3Iainfix =V8c1Oainfix =V8c2NIainfix =V8c1NIainfix <V5V4Iainfix =aselectV7ashiftV0V13a_FlagStatic_REDIainfix <V13ainfix +aoffset_maxV2V0c1Aainfix <=V4V13FAainfix =aselectV7ashiftV0V14a_FlagStatic_WHITEIainfix <V14V5Aainfix <=V6V14FAainfix =aselectV7ashiftV0V15a_FlagStatic_BLUEIainfix <V15V6Aainfix <=c0V15FAainfix =V4ainfix +aoffset_maxV2V0c1Oainfix <V4ainfix +aoffset_maxV2V0c1Aainfix =V5V4Oainfix <V5V4Aainfix =V6V5Oainfix <V6V5Aainfix =c0V6Oainfix <c0V6Aais_coloraselectV7ashiftV0V16Iainfix <V16ainfix +aoffset_maxV2V0c1Aainfix <=c0V16FAa_Non_null_intMV0V2FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix <=c0V3Aainfix =V3c2147483647Oainfix <V3c2147483647FIais_coloraselectV1ashiftV0V17Iainfix <V17ainfix +aoffset_maxV2V0c1Aainfix <=c0V17FAa_Non_null_intMV0V2Aaleft_valid_struct_ObjectV0c0V2FFF">
@@ -364,7 +376,7 @@
            timelimit="5"
            edited=""
            obsolete="false">
-           <result status="valid" time="1.81"/>
+           <result status="valid" time="1.19"/>
           </proof>
          </goal>
         </transf>
@@ -372,7 +384,7 @@
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.2"
         expl="Method flag, default behavior"
-        sum="707689837704845c5652b486ae8e7cbb"
+        sum="948ba35ec04a3c25054c7e67c9ee9ac5"
         proved="true"
         expanded="false"
         shape="LaselectV7ashiftV0V5ainfix <=c0V6Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -381,27 +393,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="alt-ergo"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.07"/>
+         <result status="valid" time="0.02"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.3"
         expl="Method flag, default behavior"
-        sum="d6ae0e2f279ea4c378b2fa19eedaba67"
+        sum="5a17a7c5f275bd86c0d7cc9ae43ec61d"
         proved="true"
         expanded="false"
         shape="LaselectV7ashiftV0V5ainfix <=V6V5Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -410,27 +422,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="alt-ergo"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.07"/>
+         <result status="valid" time="0.02"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.4"
         expl="Method flag, default behavior"
-        sum="e88a3a8f54e696cedb93a3146d2274d2"
+        sum="57a58a9ffae330a044d8c72d49f389ec"
         proved="true"
         expanded="false"
         shape="LaselectV7ashiftV0V5ainfix <=V5V9Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -439,27 +451,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="alt-ergo"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.10"/>
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.5"
         expl="Method flag, default behavior"
-        sum="64bc85a41398e3730369cbc6c2ed6970"
+        sum="57505f2696a4f23df091de57e36946bf"
         proved="true"
         expanded="false"
         shape="LaselectV7ashiftV0V5ainfix <=V9ainfix +aoffset_maxV2V0c1Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -468,27 +480,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="alt-ergo"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.6"
         expl="Method flag, default behavior"
-        sum="1c81a7288a8380d1c5dd060a9804313a"
+        sum="f598761b9cce85e56e7a81caf97982ac"
         proved="true"
         expanded="false"
         shape="LaselectV7ashiftV0V5ais_monochromeV0c0V6a_FlagStatic_BLUEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -497,13 +509,13 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="1.81"/>
+         <result status="valid" time="0.92"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.7"
         expl="Method flag, default behavior"
-        sum="eb3b768f151d0b77437aac7235e27f4f"
+        sum="f3b222979037a3ace9013d243bf5897b"
         proved="true"
         expanded="false"
         shape="LaselectV7ashiftV0V5ais_monochromeV0V6V5a_FlagStatic_WHITEV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -512,13 +524,13 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="2.01"/>
+         <result status="valid" time="1.10"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter _FlagStatic_flag_ensures_default.4.8"
         expl="Method flag, default behavior"
-        sum="47f9060b7f0ad65b0b02e004af42bd44"
+        sum="f8d88670abfc37d91079bf31dd5c2227"
         proved="true"
         expanded="false"
         shape="LaselectV7ashiftV0V5ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV10Ianot_assignsV2V7V10apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V9V9Aainfix =aselectV10ashiftV0V5aselectV7ashiftV0V9Aainfix =aselectV10ashiftV0V9aselectV7ashiftV0V5FIainfix =V9ainfix -V4c1FIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -527,7 +539,7 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="2.21"/>
+         <result status="valid" time="1.20"/>
         </proof>
        </goal>
       </transf>
@@ -535,7 +547,7 @@
      <goal
       name="WP_parameter _FlagStatic_flag_ensures_default.5"
       expl="loop invariant preservation"
-      sum="6453d7a33cac3b33b7200d53eefd65a6"
+      sum="b4946c9c13268d198c61a95bca3b0096"
       proved="true"
       expanded="false"
       shape="LaselectV7ashiftV0V5ais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7Iainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDNIainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITENIainfix =V8a_FlagStatic_BLUENIainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -544,21 +556,21 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="alt-ergo"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="z3"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
     </transf>
@@ -566,7 +578,7 @@
    <goal
     name="WP_parameter _FlagStatic_flag_ensures_sorts"
     expl="normal postcondition"
-    sum="76658d57a8c1008d9767c92a92884df2"
+    sum="d3d254fcd3a10f4ca30a6c1b97ec373d"
     proved="true"
     expanded="false"
     shape="ais_monochromeV0V9ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V8V9a_FlagStatic_WHITEV7Aais_monochromeV0c0V8a_FlagStatic_BLUEV7EEIainfix <V5V4NIais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -575,27 +587,27 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_flag_safety"
     expl="index bounds"
-    sum="4f4a6a3a9fa2ebb2a0af5442175daead"
+    sum="c72259f061171941e8f966d3e88e9bf0"
     proved="true"
     expanded="false"
     shape="LaselectV7ashiftV0V5iainfix =V8a_FlagStatic_BLUEainfix <ainfix -V4V10ainfix -V4V5Aainfix <=c0ainfix -V4V5Ianot_assignsV2V7V11apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V6V6Aainfix =aselectV11ashiftV0V5aselectV7ashiftV0V6Aainfix =aselectV11ashiftV0V6aselectV7ashiftV0V5FAainfix <V5ainfix +aoffset_maxV2V0c1Aainfix <=c0V5Aainfix <V6ainfix +aoffset_maxV2V0c1Aainfix <=c0V6Iainfix =V10ainfix +V5c1FIainfix =V9ainfix +V6c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEainfix <ainfix -V4V12ainfix -V4V5Aainfix <=c0ainfix -V4V5Iainfix =V12ainfix +V5c1Fiainfix =V8a_FlagStatic_BLUEOainfix =V8a_FlagStatic_WHITEOainfix =V8a_FlagStatic_REDainfix <ainfix -V13V5ainfix -V4V5Aainfix <=c0ainfix -V4V5Ianot_assignsV2V7V14apset_unionapset_rangeapset_singletonV0V5V5apset_rangeapset_singletonV0V13V13Aainfix =aselectV14ashiftV0V5aselectV7ashiftV0V13Aainfix =aselectV14ashiftV0V13aselectV7ashiftV0V5FAainfix <V5ainfix +aoffset_maxV2V0c1Aainfix <=c0V5Aainfix <V13ainfix +aoffset_maxV2V0c1Aainfix <=c0V13Iainfix =V13ainfix -V4c1Fainfix <ainfix -V4V5ainfix -V4V5Aainfix <=c0ainfix -V4V5Aainfix <=V5aoffset_maxV2V0Aainfix <=aoffset_minV2V0V5Iainfix <V5V4Iais_monochromeV0V4ainfix +aoffset_maxV2V0c1a_FlagStatic_REDV7Aais_monochromeV0V6V5a_FlagStatic_WHITEV7Aais_monochromeV0c0V6a_FlagStatic_BLUEV7Aainfix <=V4ainfix +aoffset_maxV2V0c1Aainfix <=V5V4Aainfix <=V6V5Aainfix <=c0V6Aais_color_arrayV0V2V7FFFFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FAainfix >=aoffset_maxV2V0aprefix -c1Iais_color_arrayV0V2V1Aaleft_valid_struct_intMV0c0V2FFF">
@@ -604,27 +616,27 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.31"/>
+     <result status="valid" time="0.18"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_isMonochrome_ensures_decides_monochromatic"
     expl="Method isMonochrome, Behavior `decides_monochromatic'"
-    sum="3cb8ef72738842b4c974c6c0a04d2485"
+    sum="5e8ae76fa80b50817f91cd83f81dc25a"
     proved="true"
     expanded="false"
     shape="iainfix <V6V2ais_monochromeV0V1V2V3V4qainfix =V7aTrueIainfix =V7aTrueNFIainfix =aselectV4ashiftV0V6V3Nais_monochromeV0V1V2V3V4qainfix =V8aTrueIainfix =V8aTrueFIainfix =aselectV4ashiftV0V9V3Iainfix <V9V6Aainfix <=V1V9FAainfix <=V1V6FIainfix <=V2ainfix +aoffset_maxV5V0c1Aainfix <=V1V2Aainfix <=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FFFFFF">
@@ -633,27 +645,27 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.25"/>
+     <result status="valid" time="0.12"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_isMonochrome_ensures_default"
     expl="Method isMonochrome, default behavior"
-    sum="989eeb8deca9444ef4aee27f0b33976f"
+    sum="3f4edaf477a1ded248905c5410949fcd"
     proved="true"
     expanded="false"
     shape="ainfix =aselectV4ashiftV0V8V3Iainfix <V8V7Aainfix <=V1V8FAainfix <=V1V7Iainfix =V7ainfix +V6c1FIainfix =aselectV4ashiftV0V6V3Iainfix <V6V2Iainfix =aselectV4ashiftV0V9V3Iainfix <V9V6Aainfix <=V1V9FAainfix <=V1V6FAainfix =aselectV4ashiftV0V10V3Iainfix <V10V1Aainfix <=V1V10FAainfix <=V1V1Iainfix <=V2ainfix +aoffset_maxV5V0c1Aainfix <=V1V2Aainfix <=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FFFFFF">
@@ -662,27 +674,27 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_isMonochrome_safety"
     expl="Method isMonochrome, Safety"
-    sum="7befa4c07cfe077691ef9a3a660a5058"
+    sum="4228df861679e8ba21ada7f34aa0f0d0"
     proved="true"
     expanded="false"
     shape="ainfix <ainfix -V2V7ainfix -V2V6Aainfix <=c0ainfix -V2V6Iainfix =V7ainfix +V6c1FIainfix =aselectV4ashiftV0V6V3Aainfix <=V6aoffset_maxV5V0Aainfix <=aoffset_minV5V0V6Iainfix <V6V2Iainfix =aselectV4ashiftV0V8V3Iainfix <V8V6Aainfix <=V1V8FAainfix <=V1V6FIainfix <=V2ainfix +aoffset_maxV5V0c1Aainfix <=V1V2Aainfix <=c0V1Aa_Non_null_intMV0V5Aaleft_valid_struct_intMV0c0V5FFFFFF">
@@ -691,7 +703,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -705,13 +717,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_swap_ensures_default"
     expl="Method swap, default behavior"
-    sum="0d3d2085c49662effe8f8c6fe76040f3"
+    sum="7738d3e74c651bf68c02acafc8c8e412"
     proved="true"
     expanded="true"
     shape="t">
@@ -720,27 +732,27 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_swap_ensures_i_j_swapped"
     expl="normal postcondition"
-    sum="51541ba4325457603566441f4d8a57a8"
+    sum="ef3ab9abaaec4d3b50b9df0a5be68edf"
     proved="true"
     expanded="true"
     shape="anot_assignsV4V3V6apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV6ashiftV0V2aselectV3ashiftV0V1Aainfix =aselectV6ashiftV0V1aselectV3ashiftV0V2Iainfix =V6astoreV5ashiftV0V2aselectV3ashiftV0V1FIainfix =V5astoreV3ashiftV0V1aselectV3ashiftV0V2FIainfix <V2ainfix +aoffset_maxV4V0c1Aainfix <=c0V2Aainfix <V1ainfix +aoffset_maxV4V0c1Aainfix <=c0V1Aaleft_valid_struct_intMV0c0V4FFFFF">
@@ -749,20 +761,20 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.51"/>
+     <result status="valid" time="0.41"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.44"/>
+     <result status="valid" time="0.20"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _FlagStatic_swap_safety"
     expl="Method swap, Safety"
-    sum="912a51e547d7f5a8da12e3c89b1755c1"
+    sum="6a8741803448b27c44cf049504a6eb20"
     proved="true"
     expanded="true"
     shape="ainfix <=V2aoffset_maxV4V0Aainfix <=aoffset_minV4V0V2Iainfix =V5astoreV3ashiftV0V1aselectV3ashiftV0V2FAainfix <=V1aoffset_maxV4V0Aainfix <=aoffset_minV4V0V1Aainfix <=V2aoffset_maxV4V0Aainfix <=aoffset_minV4V0V2Aainfix <=V1aoffset_maxV4V0Aainfix <=aoffset_minV4V0V1Iainfix <V2ainfix +aoffset_maxV4V0c1Aainfix <=c0V2Aainfix <V1ainfix +aoffset_maxV4V0c1Aainfix <=c0V1Aaleft_valid_struct_intMV0c0V4FFFFF">
@@ -771,56 +783,56 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.06"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.10"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_FlagStatic_ensures_default"
-    expl="Constructor of class FlagStatic, default behavior"
-    sum="31c69a5899c7b5a55079b66d76b15931"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <proof
-     prover="cvc3"
      timelimit="5"
      edited=""
      obsolete="false">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_FlagStatic_ensures_default"
+    expl="Constructor of class FlagStatic, default behavior"
+    sum="7141d439d8900f56ee07aad49b3d9134"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_FlagStatic_safety"
     expl="Constructor of class FlagStatic, Safety"
-    sum="ac7451543d6b0401ddbc4e1797b4cc19"
+    sum="37f442e9fe6dbb7679aca1f12dfdced3"
     proved="true"
     expanded="true"
     shape="t">
@@ -829,27 +841,27 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
     expl="Constructor of class Object, default behavior"
-    sum="0b3888261540520edb76a7bf73b7c29f"
+    sum="4dedb1550f29989325695fd8aca75e8a"
     proved="true"
     expanded="true"
     shape="t">
@@ -858,7 +870,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -872,13 +884,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
     expl="Constructor of class Object, Safety"
-    sum="e33ae7adb67f3914f8c0cc04706527aa"
+    sum="7c6ad723b434368d18b86685bccedeef"
     proved="true"
     expanded="true"
     shape="t">
@@ -887,21 +899,21 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
   </theory>

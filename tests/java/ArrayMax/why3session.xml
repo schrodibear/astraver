@@ -7,6 +7,10 @@
   name="Alt-Ergo"
   version="0.93"/>
  <prover
+  id="alt-ergo-0.93.1"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
   id="coq"
   name="Coq"
   version="8.3pl2"/>
@@ -14,6 +18,10 @@
   id="cvc3"
   name="CVC3"
   version="2.2"/>
+ <prover
+  id="cvc3-2.4"
+  name="CVC3"
+  version="2.4.1"/>
  <prover
   id="eprover"
   name="Eprover"
@@ -46,6 +54,10 @@
   id="z3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="z3-3"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../ArrayMax.mlw"
   verified="true"
@@ -62,7 +74,7 @@
    <goal
     name="WP_parameter _ArrayMax_max_ensures_default"
     expl="Method max, default behavior"
-    sum="3c2e916c326b762f319c52da557969ad"
+    sum="302a26ce195109723b30df5c4212a021"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V7ainteger_of_int32V6Niainfix <=ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V7ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V6ainfix <=ainteger_of_int32aselectV1ashiftV0V10amaxainteger_of_int32aselectV1ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V6Iainfix <V10ainfix +aoffset_maxV2V0c1Aainfix <ainteger_of_int32V6V10Oainfix <V10ainteger_of_int32V9Aainfix <=c0V10FAainfix <ainteger_of_int32V6ainfix +aoffset_maxV2V0c1Aainfix <=ainteger_of_int32V9ainteger_of_int32V6Aainfix <=c0ainteger_of_int32V9Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix +ainteger_of_int32V7c1Fainfix <=ainteger_of_int32aselectV1ashiftV0V13amaxainteger_of_int32aselectV1ashiftV0ainteger_of_int32V7ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V12Iainfix <V13ainfix +aoffset_maxV2V0c1Aainfix <ainteger_of_int32V12V13Oainfix <V13ainteger_of_int32V7Aainfix <=c0V13FAainfix <ainteger_of_int32V12ainfix +aoffset_maxV2V0c1Aainfix <=ainteger_of_int32V7ainteger_of_int32V12Aainfix <=c0ainteger_of_int32V7Iainfix =V12V11FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V6c1Fainfix <=ainteger_of_int32aselectV1ashiftV0V15ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V14Iainfix <V15ainfix +aoffset_maxV2V0c1Aainfix <=c0V15FAainfix <ainteger_of_int32V14ainfix +aoffset_maxV2V0c1Aainfix <=c0ainteger_of_int32V14Iainfix =V14V7FIainfix <=ainteger_of_int32aselectV1ashiftV0V16amaxainteger_of_int32aselectV1ashiftV0ainteger_of_int32V7ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V6Iainfix <V16ainfix +aoffset_maxV2V0c1Aainfix <ainteger_of_int32V6V16Oainfix <V16ainteger_of_int32V7Aainfix <=c0V16FAainfix <ainteger_of_int32V6ainfix +aoffset_maxV2V0c1Aainfix <=ainteger_of_int32V7ainteger_of_int32V6Aainfix <=c0ainteger_of_int32V7FFAainfix <=ainteger_of_int32aselectV1ashiftV0V17amaxainteger_of_int32aselectV1ashiftV0ainteger_of_int32V3ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V5Iainfix <V17ainfix +aoffset_maxV2V0c1Aainfix <ainteger_of_int32V5V17Oainfix <V17ainteger_of_int32V3Aainfix <=c0V17FAainfix <ainteger_of_int32V5ainfix +aoffset_maxV2V0c1Aainfix <=ainteger_of_int32V3ainteger_of_int32V5Aainfix <=c0ainteger_of_int32V3Iainfix =ainteger_of_int32V5ainfix -V4c1FIainfix =V4ainfix +aoffset_maxV2V0c1Aainfix >=V4c0Aainfix <=V4c2147483647FIainfix =ainteger_of_int32V3c0FIainfix >ainfix +aoffset_maxV2V0c1c0Aaleft_valid_struct_intMV0c0V2FFF">
@@ -71,20 +83,20 @@
      timelimit="10"
      edited=""
      obsolete="false">
-     <result status="valid" time="2.20"/>
+     <result status="valid" time="2.02"/>
     </proof>
     <proof
      prover="z3"
      timelimit="10"
      edited=""
      obsolete="false">
-     <result status="valid" time="1.28"/>
+     <result status="valid" time="1.52"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _ArrayMax_max_safety"
     expl="index bounds"
-    sum="b7fad0971d08eaf77bbb7fb3d4eea856"
+    sum="9eb96dc1af9703a86ad27f6dc8068db9"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V7ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V6ainfix <ainfix -ainteger_of_int32V6ainteger_of_int32V9ainfix -ainteger_of_int32V6ainteger_of_int32V7Aainfix <=c0ainfix -ainteger_of_int32V6ainteger_of_int32V7Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix +ainteger_of_int32V7c1FAainfix <=ainfix +ainteger_of_int32V7c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V7c1ainfix <ainfix -ainteger_of_int32V11ainteger_of_int32V7ainfix -ainteger_of_int32V6ainteger_of_int32V7Aainfix <=c0ainfix -ainteger_of_int32V6ainteger_of_int32V7Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix -ainteger_of_int32V6c1FAainfix <=ainfix -ainteger_of_int32V6c1c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V6c1Aainfix <=ainteger_of_int32V6aoffset_maxV2V0Aainfix <=aoffset_minV2V0ainteger_of_int32V6Aainfix <=ainteger_of_int32V7aoffset_maxV2V0Aainfix <=aoffset_minV2V0ainteger_of_int32V7Iainfix =ainteger_of_int32V7ainteger_of_int32V6NIainfix <=ainteger_of_int32aselectV1ashiftV0V12amaxainteger_of_int32aselectV1ashiftV0ainteger_of_int32V7ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V6Iainfix <V12ainfix +aoffset_maxV2V0c1Aainfix <ainteger_of_int32V6V12Oainfix <V12ainteger_of_int32V7Aainfix <=c0V12FAainfix <ainteger_of_int32V6ainfix +aoffset_maxV2V0c1Aainfix <=ainteger_of_int32V7ainteger_of_int32V6Aainfix <=c0ainteger_of_int32V7FFIainfix =ainteger_of_int32V5ainfix -V4c1FAainfix <=ainfix -V4c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V4c1Iainfix =V4ainfix +aoffset_maxV2V0c1Aainfix >=V4c0Aainfix <=V4c2147483647FAainfix >=aoffset_maxV2V0aprefix -c1Iainfix =ainteger_of_int32V3c0FIainfix >ainfix +aoffset_maxV2V0c1c0Aaleft_valid_struct_intMV0c0V2FFF">
@@ -100,20 +112,20 @@
      timelimit="10"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="z3"
      timelimit="10"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_ArrayMax_ensures_default"
     expl="Constructor of class ArrayMax, default behavior"
-    sum="28ed1569e5db5d64617094605a96507d"
+    sum="7df4ff932736713d74a6b24f8c792160"
     proved="true"
     expanded="true"
     shape="t">
@@ -129,7 +141,7 @@
      timelimit="10"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
@@ -142,7 +154,7 @@
    <goal
     name="WP_parameter cons_ArrayMax_safety"
     expl="Constructor of class ArrayMax, Safety"
-    sum="728a3445de3cb53ff19a91a4b9c8d17f"
+    sum="10416f8a9dc45048b8371213b5a36070"
     proved="true"
     expanded="true"
     shape="t">
@@ -151,7 +163,7 @@
      timelimit="10"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="alt-ergo"

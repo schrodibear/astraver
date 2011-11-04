@@ -7,6 +7,10 @@
   name="Alt-Ergo"
   version="0.93"/>
  <prover
+  id="alt-ergo-0.93.1"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
   id="coq"
   name="Coq"
   version="8.3pl2"/>
@@ -14,6 +18,10 @@
   id="cvc3"
   name="CVC3"
   version="2.2"/>
+ <prover
+  id="cvc3-2.4"
+  name="CVC3"
+  version="2.4.1"/>
  <prover
   id="eprover"
   name="Eprover"
@@ -46,6 +54,10 @@
   id="z3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="z3-3"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../Negate.mlw"
   verified="true"
@@ -62,7 +74,7 @@
    <goal
     name="WP_parameter cons_negate_ensures_default"
     expl="Constructor of class negate, default behavior"
-    sum="2e48d0edff8525d5c0624f599e71ecd8"
+    sum="4bae67187757fddbe6a56fbe88d17dde"
     proved="true"
     expanded="true"
     shape="t">
@@ -78,7 +90,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -91,7 +103,7 @@
    <goal
     name="WP_parameter cons_negate_safety"
     expl="Constructor of class negate, Safety"
-    sum="2fc0127af3510336301d31ccc8805ba1"
+    sum="69508d5b7dd26736b12b2e6557874126"
     proved="true"
     expanded="true"
     shape="t">
@@ -120,7 +132,7 @@
    <goal
     name="WP_parameter negate_negate_ensures_default"
     expl="Method negate, default behavior"
-    sum="4ea61ad952ac8ce62f02eebb205ebb1d"
+    sum="621578e931c1f2dcd02f522371c2ca81"
     proved="true"
     expanded="true"
     shape="iainfix <V3V5anot_assignsV2V1V6apset_rangeapset_singletonV0c0ainfix -ainfix +aoffset_maxV2V0c1c1Aainfix =aselectV6ashiftV0V8aselectV1ashiftV0V8Iainfix <V8ainfix +aoffset_maxV2V0c1Aainfix <=V7V8FAainfix =aselectV6ashiftV0V9aprefix -aselectV1ashiftV0V9Iainfix <V9V7Aainfix <=c0V9FAainfix <=V7ainfix +aoffset_maxV2V0c1Aainfix <=c0V7Iainfix =V7ainfix +V3c1FIainfix =V6astoreV4ashiftV0V3aprefix -aselectV4ashiftV0V3Fanot_assignsV2V1V4apset_rangeapset_singletonV0c0ainfix -ainfix +aoffset_maxV2V0c1c1Aainfix =aselectV4ashiftV0V10aprefix -aselectV1ashiftV0V10Iainfix <V10ainfix +aoffset_maxV2V0c1Aainfix <=c0V10FIainfix =V5ainfix +aoffset_maxV2V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIanot_assignsV2V1V4apset_rangeapset_singletonV0c0ainfix -ainfix +aoffset_maxV2V0c1c1Aainfix =aselectV4ashiftV0V11aselectV1ashiftV0V11Iainfix <V11ainfix +aoffset_maxV2V0c1Aainfix <=V3V11FAainfix =aselectV4ashiftV0V12aprefix -aselectV1ashiftV0V12Iainfix <V12V3Aainfix <=c0V12FAainfix <=V3ainfix +aoffset_maxV2V0c1Aainfix <=c0V3FFAanot_assignsV2V1V1apset_rangeapset_singletonV0c0ainfix -ainfix +aoffset_maxV2V0c1c1Aainfix =aselectV1ashiftV0V13aprefix -aselectV1ashiftV0V13Iainfix <V13c0Aainfix <=c0V13FAainfix <=c0ainfix +aoffset_maxV2V0c1Aainfix <=c0c0Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
@@ -129,27 +141,27 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.86"/>
+     <result status="valid" time="0.83"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.45"/>
+     <result status="valid" time="0.46"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.18"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter negate_negate_safety"
     expl="index bounds"
-    sum="316153cc3b3017667cac024bb8018ff0"
+    sum="b0d0699ebefa7c09217dff786df3bded"
     proved="true"
     expanded="true"
     shape="ainfix <ainfix -ainfix +aoffset_maxV2V0c1V7ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix <=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V7ainfix +V3c1FIainfix =V6astoreV4ashiftV0V3aprefix -aselectV4ashiftV0V3FAainfix <=V3aoffset_maxV2V0Aainfix <=aoffset_minV2V0V3Aainfix <=V3aoffset_maxV2V0Aainfix <=aoffset_minV2V0V3Iainfix <V3V5Iainfix =V5ainfix +aoffset_maxV2V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FAainfix >=aoffset_maxV2V0aprefix -c1Iainfix =aselectV4ashiftV0V8aselectV1ashiftV0V8Iainfix <V8ainfix +aoffset_maxV2V0c1Aainfix <=V3V8FAainfix =aselectV4ashiftV0V9aprefix -aselectV1ashiftV0V9Iainfix <V9V3Aainfix <=c0V9FAainfix <=V3ainfix +aoffset_maxV2V0c1Aainfix <=c0V3FFIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
@@ -158,14 +170,14 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"

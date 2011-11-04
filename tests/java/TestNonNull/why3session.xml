@@ -7,6 +7,10 @@
   name="Alt-Ergo"
   version="0.93"/>
  <prover
+  id="alt-ergo-0.93.1"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
   id="coq"
   name="Coq"
   version="8.3pl2"/>
@@ -14,6 +18,10 @@
   id="cvc3"
   name="CVC3"
   version="2.2"/>
+ <prover
+  id="cvc3-2.4"
+  name="CVC3"
+  version="2.4.1"/>
  <prover
   id="eprover"
   name="Eprover"
@@ -46,6 +54,10 @@
   id="z3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="z3-3"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../TestNonNull.mlw"
   verified="false"
@@ -62,7 +74,7 @@
    <goal
     name="WP_parameter _TestNonNull_test_ensures_default"
     expl="Method test, default behavior"
-    sum="6229a44e7263e57a608fd9f623b72cc3"
+    sum="c8c646cb80c95d93fa0f8d478d412eba"
     proved="true"
     expanded="true"
     shape="t">
@@ -78,7 +90,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -91,7 +103,7 @@
    <goal
     name="WP_parameter _TestNonNull_test_safety"
     expl="Method test, Safety"
-    sum="8d7b724b56f10a6b1376fe4965e87a77"
+    sum="ded3bba65c420c92f16f3f07277ab208"
     proved="true"
     expanded="true"
     shape="at_lengthV0V4V3Aast_lengthV4Aainfix <=c3aoffset_maxV4a_TestNonNull_stIainfix =V8astoreV6ashiftV1c3V7FAainfix <=c3aoffset_maxV4V1Iainfix =ainteger_of_int32V7c1FAainfix <=c2aoffset_maxV4V1Iainfix =V6astoreV2ashiftV1c2V5FAainfix <=c2aoffset_maxV4V1Iainfix =ainteger_of_int32V5c1FAainfix <=c3aoffset_maxV4V1Iat_lengthV0V4V3Aast_lengthV4Aainfix >=ainfix +aoffset_maxV4V1c1c4Aavalid_struct_TestNonNullV0c0c0V4V3Aavalid_struct_intMV1c0aprefix -c1V4FFFFF">
@@ -120,7 +132,7 @@
    <goal
     name="WP_parameter cons_TestNonNull_ensures_default"
     expl="assertion"
-    sum="6c51568b50ffbf43b3bb10a0680fb49a"
+    sum="9ce61032f13e445d477e0979d26c5682"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
@@ -129,7 +141,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -143,13 +155,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_TestNonNull_safety"
     expl="Constructor of class TestNonNull, Safety"
-    sum="62b0f3046fe91dffc2c39d3b26ac1c19"
+    sum="3446ea4016dbacef57471681090cde54"
     proved="false"
     expanded="true"
     shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FAainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFAainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
@@ -160,7 +172,7 @@
      <goal
       name="WP_parameter cons_TestNonNull_safety.1"
       expl="allocation size"
-      sum="74e1d3a40e8b2b73f0e11d68626d9a91"
+      sum="c5804b69a13606db61a9664ebcf493a8"
       proved="true"
       expanded="true"
       shape="ainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
@@ -169,7 +181,7 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.02"/>
       </proof>
       <proof
        prover="alt-ergo"
@@ -189,7 +201,7 @@
      <goal
       name="WP_parameter cons_TestNonNull_safety.2"
       expl="assertion"
-      sum="68244adfd9447d7e725eee34ff6b3234"
+      sum="4867d053e1ac804f0e2d52ebf418602d"
       proved="true"
       expanded="true"
       shape="ainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
@@ -205,7 +217,7 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="z3"
@@ -218,7 +230,7 @@
      <goal
       name="WP_parameter cons_TestNonNull_safety.3"
       expl="normal postcondition"
-      sum="a39775ce0731519f090a9f79d3ff874d"
+      sum="98f4dd2ed6986e9eb7acd04ea1921094"
       proved="false"
       expanded="true"
       shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
@@ -229,7 +241,7 @@
        <goal
         name="WP_parameter cons_TestNonNull_safety.3.1"
         expl="Constructor of class TestNonNull, Safety"
-        sum="752192a1a7c9406b3686ee8cd6ba9463"
+        sum="33c2c88931ac4a39de5a4448b25e3e2e"
         proved="false"
         expanded="true"
         shape="ast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
@@ -258,7 +270,7 @@
        <goal
         name="WP_parameter cons_TestNonNull_safety.3.2"
         expl="Constructor of class TestNonNull, Safety"
-        sum="19c34cd4b6f32029173c2a4661bf9c07"
+        sum="1a5bbb23da36b045f7c08f63f715ba7b"
         proved="true"
         expanded="true"
         shape="at_lengthV0V5V7Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
@@ -267,14 +279,14 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="alt-ergo"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.03"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="z3"

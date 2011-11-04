@@ -7,25 +7,45 @@
   name="Alt-Ergo"
   version="0.93"/>
  <prover
+  id="alt-ergo-0.93.1"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
   id="coq"
   name="Coq"
-  version="8.2pl1"/>
+  version="8.3pl2"/>
  <prover
   id="cvc3"
   name="CVC3"
   version="2.2"/>
  <prover
+  id="cvc3-2.4"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="eprover"
+  name="Eprover"
+  version="1.4 Namring"/>
+ <prover
   id="gappa"
   name="Gappa"
-  version="0.14.0"/>
+  version="0.15.1"/>
  <prover
   id="simplify"
   name="Simplify"
   version="1.5.4"/>
  <prover
+  id="spass"
+  name="Spass"
+  version="3.7"/>
+ <prover
   id="vampire"
   name="Vampire"
   version="0.6"/>
+ <prover
+  id="verit"
+  name="veriT"
+  version="dev"/>
  <prover
   id="yices"
   name="Yices"
@@ -34,6 +54,10 @@
   id="z3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="z3-3"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../isqrt.mlw"
   verified="true"
@@ -50,7 +74,7 @@
    <goal
     name="WP_parameter isqrt_ensures_default"
     expl="Function isqrt, default behavior"
-    sum="b71a36b4c7cdeb81220558980e95794d"
+    sum="542ed8e1eb36edf0881c579e57d737d7"
     proved="true"
     expanded="true"
     shape="iainfix <=V3V0ainfix =V6asqrainfix +V5c1Aainfix >=V0asqrV5Aainfix >=V5c0Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1Fainfix <V0asqrainfix +V7c1Aainfix <=asqrV7V0Aainfix >=V7c0Iainfix =V7V4FIainfix =V3asqrainfix +V4c1Aainfix >=V0asqrV4Aainfix >=V4c0FFAainfix =V2asqrainfix +V1c1Aainfix >=V0asqrV1Aainfix >=V1c0Iainfix =V2c1FIainfix =V1c0FIainfix >=V0c0F">
@@ -59,20 +83,20 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter isqrt_safety"
     expl="loop variant decreases"
-    sum="668802ccde7b69fe416a171e398c1dc0"
+    sum="b2ef4482b2534043df276e661258adf8"
     proved="true"
     expanded="true"
     shape="ainfix <ainfix -V0V5ainfix -V0V4Aainfix <=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix <=V3V0Iainfix =V3asqrainfix +V4c1Aainfix >=V0asqrV4Aainfix >=V4c0FFIainfix =V2c1FIainfix =V1c0FIainfix >=V0c0F">
@@ -83,7 +107,7 @@
      <goal
       name="WP_parameter isqrt_safety.1"
       expl="loop variant decreases"
-      sum="668802ccde7b69fe416a171e398c1dc0"
+      sum="b2ef4482b2534043df276e661258adf8"
       proved="true"
       expanded="true"
       shape="ainfix <ainfix -V0V5ainfix -V0V4Aainfix <=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix <=V3V0Iainfix =V3asqrainfix +V4c1Aainfix >=V0asqrV4Aainfix >=V4c0FFIainfix =V2c1FIainfix =V1c0FIainfix >=V0c0F">
@@ -92,21 +116,21 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.09"/>
+       <result status="valid" time="0.02"/>
       </proof>
       <proof
        prover="alt-ergo"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="z3"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.11"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
     </transf>
@@ -114,7 +138,7 @@
    <goal
     name="WP_parameter main_ensures_default"
     expl="Function main, default behavior"
-    sum="7e43cb02cbf8ecb39246f4c56af56e48"
+    sum="1e475b2860920b6ad6a12657981fce95"
     proved="true"
     expanded="true"
     shape="ainfix =V2c4Iainfix =V2V1FAainfix >V1c4NAainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -123,7 +147,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <transf
      name="split_goal"
@@ -132,7 +156,7 @@
      <goal
       name="WP_parameter main_ensures_default.1"
       expl="assertion"
-      sum="9c8fd8cced1ac355bb2bcff30ea777d3"
+      sum="d663f2d23f33f5c8621944ec61570937"
       proved="false"
       expanded="true"
       shape="ainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -140,7 +164,7 @@
      <goal
       name="WP_parameter main_ensures_default.2"
       expl="assertion"
-      sum="2a8675209b53bf1c4ea395b5b3e2397a"
+      sum="daddfa143033bde919e12839bfd98a9e"
       proved="false"
       expanded="true"
       shape="ainfix >V1c4NIainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -148,7 +172,7 @@
      <goal
       name="WP_parameter main_ensures_default.3"
       expl="normal postcondition"
-      sum="1af6189b71e79f1ad6e852a7278ee0ec"
+      sum="88accdc8d6a2657b9d398333fb45e8f0"
       proved="false"
       expanded="true"
       shape="ainfix =V2c4Iainfix =V2V1FIainfix >V1c4NIainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -158,7 +182,7 @@
    <goal
     name="WP_parameter main_safety"
     expl="precondition for call"
-    sum="4f6c854f26d281be6a312e07fa48306c"
+    sum="1366364470e3da88da16cf508487c1ef"
     proved="true"
     expanded="true"
     shape="ainfix >=c17c0">
@@ -167,21 +191,21 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
   </theory>

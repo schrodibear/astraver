@@ -7,6 +7,10 @@
   name="Alt-Ergo"
   version="0.93"/>
  <prover
+  id="alt-ergo-0.93.1"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
   id="coq"
   name="Coq"
   version="8.3pl2"/>
@@ -14,6 +18,10 @@
   id="cvc3"
   name="CVC3"
   version="2.2"/>
+ <prover
+  id="cvc3-2.4"
+  name="CVC3"
+  version="2.4.1"/>
  <prover
   id="eprover"
   name="Eprover"
@@ -46,6 +54,10 @@
   id="z3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="z3-3"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../NameConflicts.mlw"
   verified="true"
@@ -62,7 +74,7 @@
    <goal
     name="WP_parameter _NameConflicts_field_ensures_default"
     expl="Method field, default behavior"
-    sum="3abe6a4a60ac1785c246475316029383"
+    sum="163137f2e4308a83acdf28c5d0127069"
     proved="true"
     expanded="true"
     shape="t">
@@ -91,7 +103,7 @@
    <goal
     name="WP_parameter _NameConflicts_field_safety"
     expl="Method field, Safety"
-    sum="572705a9052e41a98afc729342a035b4"
+    sum="00d53f140c0a9180af73daa9d99f2d64"
     proved="true"
     expanded="true"
     shape="t">
@@ -120,7 +132,7 @@
    <goal
     name="WP_parameter _NameConflicts_m_ensures_default"
     expl="Method m, default behavior"
-    sum="48a3ce6284782ffc9185178f2130e69b"
+    sum="6f927dc41d61e42aa895593412127679"
     proved="true"
     expanded="true"
     shape="t">
@@ -149,7 +161,7 @@
    <goal
     name="WP_parameter _NameConflicts_m_ensures_normal"
     expl="normal postcondition"
-    sum="9762c638f7f077f9ed1111f716a2d2f4"
+    sum="ff4a0c7ffd47cbc981e2788b13f0c48b"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c0Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =ainteger_of_int32V2c0FIavalid_struct_NameConflictsV0c0c0V1FF">
@@ -178,7 +190,7 @@
    <goal
     name="WP_parameter _NameConflicts_m_safety"
     expl="Method m, Safety"
-    sum="be6001c59d3999cf2c7d99c138e0a8f8"
+    sum="ed8f8866c5a1a65fd9235ccdda5881da"
     proved="true"
     expanded="true"
     shape="t">
@@ -207,7 +219,7 @@
    <goal
     name="WP_parameter _NameConflicts_setI_ensures_default"
     expl="Method setI, default behavior"
-    sum="f3a43bf3fb163f0ff1a91ea1bc7fe06e"
+    sum="6ae98924fc7a68ab5160ecf6fe3a4c39"
     proved="true"
     expanded="true"
     shape="t">
@@ -223,7 +235,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
@@ -236,7 +248,7 @@
    <goal
     name="WP_parameter _NameConflicts_setI_safety"
     expl="Method setI, Safety"
-    sum="e5f574a86817d60c2bccf53101858fc2"
+    sum="15778c1b8edbe44c05388b1b2d3d0fa7"
     proved="true"
     expanded="true"
     shape="t">
@@ -265,7 +277,7 @@
    <goal
     name="WP_parameter cons_NameConflicts_ensures_default"
     expl="Constructor of class NameConflicts, default behavior"
-    sum="92e1e2994028c740b54867cfaec9249d"
+    sum="d4715d510efa1012943130431c17b62e"
     proved="true"
     expanded="true"
     shape="t">
@@ -281,7 +293,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
@@ -294,7 +306,7 @@
    <goal
     name="WP_parameter cons_NameConflicts_safety"
     expl="Constructor of class NameConflicts, Safety"
-    sum="04095936366a618686e7a709440d8f24"
+    sum="f4f0b2407ac95a0916d67259452fb9be"
     proved="true"
     expanded="true"
     shape="t">

@@ -7,6 +7,10 @@
   name="Alt-Ergo"
   version="0.93"/>
  <prover
+  id="alt-ergo-0.93.1"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
   id="coq"
   name="Coq"
   version="8.3pl2"/>
@@ -14,6 +18,10 @@
   id="cvc3"
   name="CVC3"
   version="2.2"/>
+ <prover
+  id="cvc3-2.4"
+  name="CVC3"
+  version="2.4.1"/>
  <prover
   id="eprover"
   name="Eprover"
@@ -46,6 +54,10 @@
   id="z3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="z3-3"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../SideEffects.mlw"
   verified="true"
@@ -62,7 +74,7 @@
    <goal
     name="WP_parameter _SideEffects_m1_ensures_default"
     expl="Method m1, default behavior"
-    sum="e8aebc435e41e022e91208e3ec046cd5"
+    sum="2928592501f2d0ddf5e8c5969b47f504"
     proved="true"
     expanded="true"
     shape="ainfix =V10c0Aainfix =aselectV11ashiftV1c1c4Aainfix =aselectV11ashiftV1c2c2Aainfix =aselectV11ashiftV1c0c1Iainfix =V11astoreV9ashiftV1V8c4FIainfix =V10ainfix -V8c1FAainfix =V8c1Aainfix =aselectV9ashiftV1c1c3Aainfix =aselectV9ashiftV1c2c2Aainfix =aselectV9ashiftV1c0c1Iainfix =V9astoreV7ashiftV1V8c3FIainfix =V8ainfix -V6c1FAainfix =V6c2Aainfix =aselectV7ashiftV1c2c2Aainfix =aselectV7ashiftV1c0c1Iainfix =V7astoreV5ashiftV1V6c2FIainfix =V6ainfix +V4c1FAainfix =V4c1Aainfix =aselectV5ashiftV1c0c1Iainfix =V5astoreV2ashiftV1c0c1FIainfix =V4ainfix +c0c1FIainfix >ainfix +aoffset_maxV3V1c1c10Aavalid_struct_SideEffectsV0c0c0V3Aaleft_valid_struct_intMV1c0V3FFFF">
@@ -71,7 +83,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.38"/>
+     <result status="valid" time="0.39"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -91,7 +103,7 @@
    <goal
     name="WP_parameter _SideEffects_m1_safety"
     expl="Method m1, Safety"
-    sum="1db0fd3362937868cf4bc1f4c8239af7"
+    sum="0d339756f99649924cd8169dde9838b4"
     proved="true"
     expanded="true"
     shape="ainfix <=V8aoffset_maxV3V1Aainfix <=aoffset_minV3V1V8Iainfix =V10ainfix -V8c1FIainfix =V8c1Aainfix =aselectV9ashiftV1c1c3Aainfix =aselectV9ashiftV1c2c2Aainfix =aselectV9ashiftV1c0c1Iainfix =V9astoreV7ashiftV1V8c3FAainfix <=V8aoffset_maxV3V1Aainfix <=aoffset_minV3V1V8Iainfix =V8ainfix -V6c1FIainfix =V6c2Aainfix =aselectV7ashiftV1c2c2Aainfix =aselectV7ashiftV1c0c1Iainfix =V7astoreV5ashiftV1V6c2FAainfix <=V6aoffset_maxV3V1Aainfix <=aoffset_minV3V1V6Iainfix =V6ainfix +V4c1FIainfix =V4c1Aainfix =aselectV5ashiftV1c0c1Iainfix =V5astoreV2ashiftV1c0c1FAainfix <=c0aoffset_maxV3V1Aainfix <=aoffset_minV3V1c0Iainfix =V4ainfix +c0c1FIainfix >ainfix +aoffset_maxV3V1c1c10Aavalid_struct_SideEffectsV0c0c0V3Aaleft_valid_struct_intMV1c0V3FFFF">
@@ -100,14 +112,14 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="z3"
@@ -120,7 +132,7 @@
    <goal
     name="WP_parameter cons_SideEffects_ensures_default"
     expl="Constructor of class SideEffects, default behavior"
-    sum="004151f8e0ebf9c8d6d755f8368349e0"
+    sum="1cee7637585c71b4d2a7f15a597dddab"
     proved="true"
     expanded="true"
     shape="t">
@@ -149,7 +161,7 @@
    <goal
     name="WP_parameter cons_SideEffects_safety"
     expl="Constructor of class SideEffects, Safety"
-    sum="af9f06f9eb320a6e4bd3b275c9e5e57e"
+    sum="eaa0b7431ec0e9c59b8c25ab6b7025f1"
     proved="true"
     expanded="true"
     shape="t">

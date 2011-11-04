@@ -7,25 +7,45 @@
   name="Alt-Ergo"
   version="0.93"/>
  <prover
+  id="alt-ergo-0.93.1"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
   id="coq"
   name="Coq"
-  version="8.2pl1"/>
+  version="8.3pl2"/>
  <prover
   id="cvc3"
   name="CVC3"
   version="2.2"/>
  <prover
+  id="cvc3-2.4"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="eprover"
+  name="Eprover"
+  version="1.4 Namring"/>
+ <prover
   id="gappa"
   name="Gappa"
-  version="0.14.0"/>
+  version="0.15.1"/>
  <prover
   id="simplify"
   name="Simplify"
   version="1.5.4"/>
  <prover
+  id="spass"
+  name="Spass"
+  version="3.7"/>
+ <prover
   id="vampire"
   name="Vampire"
   version="0.6"/>
+ <prover
+  id="verit"
+  name="veriT"
+  version="dev"/>
  <prover
   id="yices"
   name="Yices"
@@ -34,6 +54,10 @@
   id="z3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="z3-3"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../Sterbenz.mlw"
   verified="false"
@@ -50,7 +74,7 @@
    <goal
     name="WP_parameter _Sterbenz_ensures_default"
     expl="Function Sterbenz, default behavior"
-    sum="eecc61f8c4166a852d94d1c832641978"
+    sum="842df54b7a1f022dae674d45306dcd42"
     proved="false"
     expanded="true"
     shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_single_postaNearestTiesToEvenV0V1V2FAainfix <=c0.0avalueV0Aainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
@@ -61,7 +85,7 @@
      <goal
       name="WP_parameter _Sterbenz_ensures_default.1"
       expl="assertion"
-      sum="b6535d06f07c5aae8c3773dd5d7774d8"
+      sum="9c41a40e6fb7e2f1d5515903f629b1c9"
       proved="true"
       expanded="true"
       shape="ainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
@@ -70,27 +94,27 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="alt-ergo"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="z3"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.13"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter _Sterbenz_ensures_default.2"
       expl="assertion"
-      sum="86da37f7c137ca9654ed608c38e1ce67"
+      sum="66471db82280a40dd1902070ce6198f6"
       proved="true"
       expanded="true"
       shape="ainfix <=c0.0avalueV0Iainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
@@ -99,27 +123,27 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="z3"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.13"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="gappa"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter _Sterbenz_ensures_default.3"
       expl="normal postcondition"
-      sum="506ea43e65a9be9cfb00dd7e73944085"
+      sum="c8f0a1b7e82e7edbcd1d45be04c1424e"
       proved="false"
       expanded="true"
       shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_single_postaNearestTiesToEvenV0V1V2FIainfix <=c0.0avalueV0Iainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
@@ -129,7 +153,7 @@
    <goal
     name="WP_parameter _Sterbenz_safety"
     expl="floating-point overflow"
-    sum="e01b54270ee6d2a020d832fcd4951e2f"
+    sum="9b84d6753627dbb6f3d19979fede2f39"
     proved="true"
     expanded="true"
     shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV0avalueV1amax_singleIainfix <=c0.0avalueV0Iainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
@@ -138,7 +162,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
   </theory>

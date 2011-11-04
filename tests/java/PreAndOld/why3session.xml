@@ -7,6 +7,10 @@
   name="Alt-Ergo"
   version="0.93"/>
  <prover
+  id="alt-ergo-0.93.1"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
   id="coq"
   name="Coq"
   version="8.3pl2"/>
@@ -14,6 +18,10 @@
   id="cvc3"
   name="CVC3"
   version="2.2"/>
+ <prover
+  id="cvc3-2.4"
+  name="CVC3"
+  version="2.4.1"/>
  <prover
   id="eprover"
   name="Eprover"
@@ -46,6 +54,10 @@
   id="z3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="z3-3"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../PreAndOld.mlw"
   verified="true"
@@ -62,7 +74,7 @@
    <goal
     name="WP_parameter _PreAndOld_g_ensures_default"
     expl="normal postcondition"
-    sum="81f4a4b27bd34ed54f9041e0cccc88be"
+    sum="bf780e5e0ec9fb9817e1bd9fdd03f35d"
     proved="true"
     expanded="true"
     shape="ainfix =V5afV1V2Aainfix =V5afV1V2Aainfix =V5afV1V2Iainfix =V5ainfix +V1V2FIainfix =V4c12FIavalid_struct_PreAndOldV0c0c0V3FFFF">
@@ -78,7 +90,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -91,7 +103,7 @@
    <goal
     name="WP_parameter _PreAndOld_g_safety"
     expl="Method g, Safety"
-    sum="6bcfb567760f242c0c9eb4e6ab77ff2d"
+    sum="8399adf226dfbabdd209f431cf5463e6"
     proved="true"
     expanded="true"
     shape="t">
@@ -107,7 +119,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -120,7 +132,7 @@
    <goal
     name="WP_parameter cons_PreAndOld_ensures_default"
     expl="Constructor of class PreAndOld, default behavior"
-    sum="989896dc5faa6577e7668fdadcb73938"
+    sum="bec7811a915c3f2e8e7c6b969b977d3e"
     proved="true"
     expanded="true"
     shape="t">
@@ -149,7 +161,7 @@
    <goal
     name="WP_parameter cons_PreAndOld_safety"
     expl="Constructor of class PreAndOld, Safety"
-    sum="e0598854d993090487974b58a2652491"
+    sum="0f8b032d5f090aed330bd3635cd5c25b"
     proved="true"
     expanded="true"
     shape="t">

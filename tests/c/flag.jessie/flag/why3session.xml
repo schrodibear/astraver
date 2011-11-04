@@ -7,25 +7,45 @@
   name="Alt-Ergo"
   version="0.93"/>
  <prover
+  id="alt-ergo-0.93.1"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
   id="coq"
   name="Coq"
-  version="8.2pl1"/>
+  version="8.3pl2"/>
  <prover
   id="cvc3"
   name="CVC3"
   version="2.2"/>
  <prover
+  id="cvc3-2.4"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="eprover"
+  name="Eprover"
+  version="1.4 Namring"/>
+ <prover
   id="gappa"
   name="Gappa"
-  version="0.14.0"/>
+  version="0.15.1"/>
  <prover
   id="simplify"
   name="Simplify"
   version="1.5.4"/>
  <prover
+  id="spass"
+  name="Spass"
+  version="3.7"/>
+ <prover
   id="vampire"
   name="Vampire"
   version="0.6"/>
+ <prover
+  id="verit"
+  name="veriT"
+  version="dev"/>
  <prover
   id="yices"
   name="Yices"
@@ -34,6 +54,10 @@
   id="z3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="z3-3"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../flag.mlw"
   verified="true"
@@ -50,7 +74,7 @@
    <goal
     name="WP_parameter flag_ensures_default"
     expl="Function flag, default behavior"
-    sum="6b844897ae7eacf0aa1b34851d4d410e"
+    sum="f0a92f09b9938a4c662f82c1334a5e2d"
     proved="true"
     expanded="true"
     shape="LaselectV10ashiftV0V8iainfix =V11c1ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix <=V7V1Aainfix <=V13V7Aainfix <=V15V13Aainfix <=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c2ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V17c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V17V7Aainfix <=V9V17Aainfix <=c0V9Aais_color_arrayV0V1V2V10Iainfix =V17ainfix +V8c1Fiainfix =V11c2Oainfix =V11c3ais_monochromeV0V18V1c3V19Aais_monochromeV0V9V8c2V19Aais_monochromeV0c0V9c1V19Aainfix <=V18V1Aainfix <=V8V18Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V19Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FIainfix =V18ainfix -V7c1Fais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFAais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix <=V6V1Aainfix <=V5V6Aainfix <=V4V5Aainfix <=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -61,7 +85,7 @@
      <goal
       name="WP_parameter flag_ensures_default.1"
       expl="loop invariant init"
-      sum="c52a4b4a5e5fe386712a11951ac0d22f"
+      sum="c4a5d678815531c78eef2570f977f8a1"
       proved="true"
       expanded="true"
       shape="ais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix <=V6V1Aainfix <=V5V6Aainfix <=V4V5Aainfix <=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -70,21 +94,21 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="cvc3"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.09"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="z3"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.11"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <transf
        name="split_goal"
@@ -93,7 +117,7 @@
        <goal
         name="WP_parameter flag_ensures_default.1.1"
         expl="Function flag, default behavior"
-        sum="8e4424fad6fb7b740d151dfb50a23c1a"
+        sum="b941c39cf3ca8188acec27299efb70e8"
         proved="true"
         expanded="false"
         shape="ais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -102,27 +126,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.06"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.03"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.1.2"
         expl="Function flag, default behavior"
-        sum="2c589e6ff74f198e0566f5790ffc1f4a"
+        sum="dad0518148863c5bbff26efa4ba4c85a"
         proved="true"
         expanded="false"
         shape="ainfix <=c0V4Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -131,27 +155,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.1.3"
         expl="Function flag, default behavior"
-        sum="c0c12e3fa6b394599958ef832fe4b43c"
+        sum="067ec55b7cb3b549c55068e3517e5915"
         proved="true"
         expanded="false"
         shape="ainfix <=V4V5Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -160,27 +184,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.06"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.1.4"
         expl="Function flag, default behavior"
-        sum="43a91581830020dc1df49360522ccc24"
+        sum="bcd6397cc7b20a3f2170225e2ba45fe2"
         proved="true"
         expanded="false"
         shape="ainfix <=V5V6Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -189,27 +213,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.06"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.1.5"
         expl="Function flag, default behavior"
-        sum="1868073bbc5c248103c7f53a12fba8fe"
+        sum="c8d6015730795c2d938b48580e7be53e"
         proved="true"
         expanded="false"
         shape="ainfix <=V6V1Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -218,27 +242,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.07"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.1.6"
         expl="Function flag, default behavior"
-        sum="833a9d6a7493590314dc7feff4998e42"
+        sum="ed4f7b71acd84b2e5cee939e6eb7ff03"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0c0V4c1V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -247,27 +271,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.06"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.1.7"
         expl="Function flag, default behavior"
-        sum="de022423fa0238c7232ed547031de4ad"
+        sum="7cf80cfa09b3d0d37e525bb2dfbcca0f"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0V4V5c2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -276,27 +300,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.06"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.1.8"
         expl="Function flag, default behavior"
-        sum="dc4105eeb7f2f8c0f70fc3ddb519cbe7"
+        sum="cbac662d607d94c920c37f44d9c8a17f"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0V6V1c3V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -305,21 +329,21 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.07"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
       </transf>
@@ -327,7 +351,7 @@
      <goal
       name="WP_parameter flag_ensures_default.2"
       expl="loop invariant preservation"
-      sum="605b437845814fee848464de2505b9b7"
+      sum="55f9705be526be31791830e00d49ae33"
       proved="true"
       expanded="true"
       shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix <=V7V1Aainfix <=V13V7Aainfix <=V15V13Aainfix <=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -338,7 +362,7 @@
        <goal
         name="WP_parameter flag_ensures_default.2.1"
         expl="Function flag, default behavior"
-        sum="8d82b65b763b2a140d5c08090788fcc2"
+        sum="03eea975f1e328f0b8a85c8042448ebd"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -347,13 +371,13 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="1.23"/>
+         <result status="valid" time="0.52"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.2.2"
         expl="Function flag, default behavior"
-        sum="4f85049a7e10efa04fd1869112bed730"
+        sum="99fbfd9b058a39dfd24f8084f0bc8ff5"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=c0V15Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -362,27 +386,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.07"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.14"/>
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.2.3"
         expl="Function flag, default behavior"
-        sum="218251b211f5731ff2f6aa5e72516686"
+        sum="bdebe9aeed0b8e5b24f56fe00ade642e"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=V15V13Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -391,27 +415,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.06"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.14"/>
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.2.4"
         expl="Function flag, default behavior"
-        sum="c0858d0be91f2f22b09c949f9e0774a1"
+        sum="30ff8e459c0375728b619d8cb72138a1"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=V13V7Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -420,27 +444,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.14"/>
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.2.5"
         expl="Function flag, default behavior"
-        sum="bdc4b687bb742dc79e98cea40e9896c2"
+        sum="63b57fa25ab0ef47fbafc652ad158167"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=V7V1Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -449,27 +473,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.03"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.2.6"
         expl="Function flag, default behavior"
-        sum="93131f327992ee894755f45fef6badda"
+        sum="2e8f5821cc8fba894cc0de892860af2a"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_monochromeV0c0V15c1V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -478,13 +502,13 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="1.62"/>
+         <result status="valid" time="0.70"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.2.7"
         expl="Function flag, default behavior"
-        sum="6a54f81558ca562563681d82853ad058"
+        sum="d31c2b57e60abbf3109cfa2e2605fd9c"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_monochromeV0V15V13c2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -493,13 +517,13 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="1.51"/>
+         <result status="valid" time="0.68"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.2.8"
         expl="Function flag, default behavior"
-        sum="3229770531db66a65ad050a1812b2637"
+        sum="aaddec42d68033fbcc18bd2c82cfe25c"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -508,7 +532,7 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="1.56"/>
+         <result status="valid" time="0.69"/>
         </proof>
        </goal>
       </transf>
@@ -516,7 +540,7 @@
      <goal
       name="WP_parameter flag_ensures_default.3"
       expl="loop invariant preservation"
-      sum="31485f71166a5de49cbc6e31efac76f6"
+      sum="2facc2213d14488db87fd7a19622ab88"
       proved="true"
       expanded="true"
       shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V12c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V12V7Aainfix <=V9V12Aainfix <=c0V9Aais_color_arrayV0V1V2V10Iainfix =V12ainfix +V8c1FIainfix =V11c2Iainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -525,27 +549,27 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="cvc3"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.15"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="z3"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.16"/>
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter flag_ensures_default.4"
       expl="loop invariant preservation"
-      sum="d97a40485f689e5a70955d907652d78f"
+      sum="3f7f35cd5b19ca5ad79ccf0485233a93"
       proved="true"
       expanded="false"
       shape="LaselectV10ashiftV0V8ais_monochromeV0V12V1c3V13Aais_monochromeV0V9V8c2V13Aais_monochromeV0c0V9c1V13Aainfix <=V12V1Aainfix <=V8V12Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -556,7 +580,7 @@
        <goal
         name="WP_parameter flag_ensures_default.4.1"
         expl="Function flag, default behavior"
-        sum="a554df6fae2c6c12ea26fd2f1de9383f"
+        sum="85ea66270fbf9cd7e4dc3e80b3269183"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -565,13 +589,13 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="1.29"/>
+         <result status="valid" time="0.56"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.4.2"
         expl="Function flag, default behavior"
-        sum="d00cd44e5f8e04c6184e70d2cdcb8347"
+        sum="c9e63822244a3d4dd649909be32c3a65"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=c0V9Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -580,27 +604,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.02"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.4.3"
         expl="Function flag, default behavior"
-        sum="7ae1aaa0dbd91e800b99a10833fc4a1a"
+        sum="ad4b293a7f0f2f7bb357dbb3f9c507d8"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=V9V8Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -609,27 +633,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.06"/>
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.03"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.4.4"
         expl="Function flag, default behavior"
-        sum="90a40b8077cc83cbe5b1d93332c0603b"
+        sum="1c9b620826464aa681d1dafc5fbbc43c"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=V8V12Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -638,27 +662,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.14"/>
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.4.5"
         expl="Function flag, default behavior"
-        sum="e3c9f14a186c77bfbeabb38d0d47122d"
+        sum="c015842ccc2c0f4c88f230f1d58fc497"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=V12V1Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -667,27 +691,27 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.07"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="cvc3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="z3"
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.14"/>
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.4.6"
         expl="Function flag, default behavior"
-        sum="eba92eab58829daed87fd8882ba7b57a"
+        sum="e8f75e92fd9cbe8c90227fbdfcaf7a0b"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_monochromeV0c0V9c1V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -696,13 +720,13 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.87"/>
+         <result status="valid" time="0.38"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.4.7"
         expl="Function flag, default behavior"
-        sum="ff0f063e74a5f5b1d91dee69eb577607"
+        sum="e3e22a0a6400ecef1d4936403931b012"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_monochromeV0V9V8c2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -711,13 +735,13 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.95"/>
+         <result status="valid" time="0.41"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.4.8"
         expl="Function flag, default behavior"
-        sum="67554251dab0d5db4bd40fd4835cc532"
+        sum="e59bd98e1e1456cfc57ab6f66aee020d"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_monochromeV0V12V1c3V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -726,7 +750,7 @@
          timelimit="5"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.88"/>
+         <result status="valid" time="0.36"/>
         </proof>
        </goal>
       </transf>
@@ -734,7 +758,7 @@
      <goal
       name="WP_parameter flag_ensures_default.5"
       expl="loop invariant preservation"
-      sum="ed1b32ed4cd051f9d0de17c8907d5a4c"
+      sum="d979fa93725c1bbf81aca720554f61c6"
       proved="true"
       expanded="false"
       shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10Iainfix =V11c2Oainfix =V11c3NIainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -743,21 +767,21 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="cvc3"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="z3"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
     </transf>
@@ -765,7 +789,7 @@
    <goal
     name="WP_parameter flag_ensures_sorts"
     expl="normal postcondition"
-    sum="9c005d8be6c78a3876bb4e871ad5cfc7"
+    sum="730a58f0bee695e00376fc1f0ece6db3"
     proved="true"
     expanded="false"
     shape="ais_monochromeV0V12V1c3V10Aais_monochromeV0V11V12c2V10Aais_monochromeV0c0V11c1V10EEIainfix <V8V7NIais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -774,27 +798,27 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="cvc3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.09"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.11"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter flag_safety"
     expl="Function flag, Safety"
-    sum="fa8ef9fcfa78a8d12caf9ed145a21984"
+    sum="abd8f288bec5cd837dae2d2df54e4448"
     proved="true"
     expanded="false"
     shape="LaselectV10ashiftV0V8iainfix =V11c1ainfix <ainfix -V7V13ainfix -V7V8Aainfix <=c0ainfix -V7V8Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FAainfix >=aoffset_maxV2V0V12Aainfix <=aoffset_minV2V0V12Aainfix >=aoffset_maxV2V0V14Aainfix <=aoffset_minV2V0V14Iainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c2ainfix <ainfix -V7V17ainfix -V7V8Aainfix <=c0ainfix -V7V8Iainfix =V17ainfix +V8c1Fiainfix =V11c2Oainfix =V11c3ainfix <ainfix -V18V8ainfix -V7V8Aainfix <=c0ainfix -V7V8Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FAainfix >=aoffset_maxV2V0V8Aainfix <=aoffset_minV2V0V8Aainfix >=aoffset_maxV2V0V18Aainfix <=aoffset_minV2V0V18Iainfix =V18ainfix -V7c1Fainfix <ainfix -V7V8ainfix -V7V8Aainfix <=c0ainfix -V7V8Aainfix <=V8aoffset_maxV2V0Aainfix <=aoffset_minV2V0V8Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
@@ -803,27 +827,27 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="cvc3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.20"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter isMonochrome_ensures_decides_monochromatic"
     expl="Function isMonochrome, Behavior `decides_monochromatic'"
-    sum="2e31fa66a13446b910c68196153b34c0"
+    sum="50098681b848809eea8eda4cf4d6e0ee"
     proved="true"
     expanded="false"
     shape="iainfix <V7V2ais_monochromeV0V1V2V3V5qainfix =V9c0NIainfix =V9V8FIainfix =V8c0FIainfix =aselectV5ashiftV0V7V3Nais_monochromeV0V1V2V3V5qainfix =V11c0NIainfix =V11V10FIainfix =V10c1FIainfix =aselectV5ashiftV0V12V3Iainfix <V12V7Aainfix <=V1V12FAainfix <=V1V7FIainfix =V6V1FIainfix >=aoffset_maxV4V0V2Aainfix <=aoffset_minV4V0V1FFFFFF">
@@ -832,27 +856,27 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="cvc3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.14"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.13"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter isMonochrome_ensures_default"
     expl="Function isMonochrome, default behavior"
-    sum="5b2a54976580b85c225182862c73719c"
+    sum="fe7ca05edc1c31b8f28181ffefa17c97"
     proved="true"
     expanded="false"
     shape="ainfix =aselectV5ashiftV0V9V3Iainfix <V9V8Aainfix <=V1V9FAainfix <=V1V8Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Iainfix <V7V2Iainfix =aselectV5ashiftV0V10V3Iainfix <V10V7Aainfix <=V1V10FAainfix <=V1V7FAainfix =aselectV5ashiftV0V11V3Iainfix <V11V6Aainfix <=V1V11FAainfix <=V1V6Iainfix =V6V1FIainfix >=aoffset_maxV4V0V2Aainfix <=aoffset_minV4V0V1FFFFFF">
@@ -861,27 +885,27 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="cvc3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.11"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.15"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter isMonochrome_safety"
     expl="Function isMonochrome, Safety"
-    sum="89c0ad225f633eba059fbc3721be87b8"
+    sum="f3da493d136e5294e0cd7a3556f1b883"
     proved="true"
     expanded="false"
     shape="ainfix <ainfix -V2V8ainfix -V2V7Aainfix <=c0ainfix -V2V7Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Aainfix <=V7aoffset_maxV4V0Aainfix <=aoffset_minV4V0V7Iainfix <V7V2Iainfix =aselectV5ashiftV0V9V3Iainfix <V9V7Aainfix <=V1V9FAainfix <=V1V7FIainfix =V6V1FIainfix >=aoffset_maxV4V0V2Aainfix <=aoffset_minV4V0V1FFFFFF">
@@ -890,27 +914,27 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="cvc3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.13"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_ensures_default"
     expl="Function swap, default behavior"
-    sum="fee4c05d00b914a8cae80a6955daec8c"
+    sum="a21b044033c64285af5c6638965bef35"
     proved="true"
     expanded="false"
     shape="t">
@@ -919,27 +943,27 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="cvc3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_ensures_i_j_swapped"
     expl="normal postcondition"
-    sum="082e3605b0eecd0f0a3974db47ee804a"
+    sum="0f77fa373edea7a672ef5b429f2ff91c"
     proved="true"
     expanded="true"
     shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV7ashiftV0V2aselectV4ashiftV0V1Aainfix =aselectV7ashiftV0V1aselectV4ashiftV0V2Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V2Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -948,27 +972,27 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="1.42"/>
+     <result status="valid" time="0.58"/>
     </proof>
     <proof
      prover="cvc3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="3.76"/>
+     <result status="valid" time="1.30"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.52"/>
+     <result status="valid" time="0.24"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_safety"
     expl="Function swap, Safety"
-    sum="327776fb2cb6e9a7be9986f5fb09891d"
+    sum="d145dbb193f3ecc53e6fc294e1ce1272"
     proved="true"
     expanded="false"
     shape="ainfix <=V2aoffset_maxV3V0Aainfix <=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Aainfix <=V2aoffset_maxV3V0Aainfix <=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Iainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V2Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -977,21 +1001,21 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="cvc3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.11"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
   </theory>
