@@ -901,7 +901,7 @@ let checking = true
 let print_to_stdout file =
   (* Printer takes into account annotations *)
   let printer = new Printer.print () in
-  Log.print_on_output (Extlib.swap (Cil.d_file printer) file)
+  Log.print_on_output (Extlib.swap (Cil.printFile printer) file)
 
 class checkTypes =
   let preaction_expr e = ignore (typeOf e); e in
