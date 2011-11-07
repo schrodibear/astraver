@@ -113,7 +113,7 @@
 %token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES DECREASES THROWS READS
 
 /* \forall \exists \offset_max \offset_min \address \old \result \mutable \typeof \bottom \typeeq \absolute_address */
-%token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSADDRESS BSOLD BSAT 
+%token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSADDRESS BSOLD BSAT BSFRESH
 %token BSRESULT BSMUTABLE BSTYPEOF BSBOTTOM BSTYPEEQ BSABSOLUTE_ADDRESS
 %token BSBASE_BLOCK
 
@@ -580,6 +580,8 @@ postfix_expression:
     { locate (JCPEapp($1, $2, $4)) }
 | IDENTIFIER label_binders LPARRPAR 
     { locate (JCPEapp($1, $2, [])) }
+| BSFRESH LPAR expression RPAR 
+    { locate (JCPEfresh($3)) }
 | BSOLD LPAR expression RPAR 
     { locate (JCPEold($3)) }
 | BSAT LPAR expression COMMA IDENTIFIER RPAR 

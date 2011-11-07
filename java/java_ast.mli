@@ -46,11 +46,11 @@ type identifier = Loc.position * string
 type qualified_ident = identifier list
 
 (*s Modifiers *)
- 
+
 type modifier =
-  | Static | Final  | Public | Private | Protected | Native 
+  | Static | Final  | Public | Private | Protected | Native
   | Synchronized | Abstract | Transient (* "threadsafe" ? *) | Volatile
-  | Strictfp 
+  | Strictfp
   | Ghost | Model
   | Non_null | Nullable | Annot_modifier of Lexing.position * string
 
@@ -58,11 +58,11 @@ type modifiers = modifier list
 
 (*s type expressions *)
 
-type type_expr = 
+type type_expr =
     | Base_type of base_type
     | Type_name of qualified_ident
     | Array_type_expr of type_expr
- 
+
 (*s expressions *)
 
 type quantifier = Forall | Exists
@@ -70,12 +70,12 @@ type quantifier = Forall | Exists
 type variable_id =
   | Simple_id of identifier
   | Array_id of variable_id
-      
 
-type incr_decr_op = Preincr | Predecr | Postincr | Postdecr 
 
-type bin_op = 
-    | Badd | Bsub | Bmul | Bdiv | Bmod 
+type incr_decr_op = Preincr | Predecr | Postincr | Postdecr
+
+type bin_op =
+    | Badd | Bsub | Bmul | Bdiv | Bmod
     | Band | Bor | Bimpl | Biff
     | Bbwand | Bbwor | Bbwxor
     | Blsl | Blsr | Basr
@@ -100,10 +100,10 @@ and pexpr_node =
 (*
   | JPEvar of identifier
 *)
-  | JPEname of qualified_ident 
-  | JPEassign_name of qualified_ident * bin_op * pexpr  
-  | JPEassign_field of java_field_access * bin_op * pexpr  
-  | JPEassign_array of pexpr * pexpr * bin_op * pexpr  
+  | JPEname of qualified_ident
+  | JPEassign_name of qualified_ident * bin_op * pexpr
+  | JPEassign_field of java_field_access * bin_op * pexpr
+  | JPEassign_array of pexpr * pexpr * bin_op * pexpr
       (*r [Assign_array(e1,e2,op,e3)] is [e1[e2] op e3] *)
       (*r assignment op is =, +=, etc. *)
   | JPEif of pexpr * pexpr * pexpr
@@ -113,29 +113,29 @@ and pexpr_node =
   | JPEcall_expr of pexpr * identifier * pexpr list
   | JPEsuper_call of identifier * pexpr list
   | JPEnew of qualified_ident * pexpr list
-  | JPEnew_array of type_expr * pexpr list 
+  | JPEnew_array of type_expr * pexpr list
       (*r type, explicit dimensions *)
   | JPEarray_access of pexpr * pexpr
   | JPEarray_range of pexpr * pexpr option * pexpr option
   | JPEcast of type_expr * pexpr
   | JPEinstanceof of pexpr * type_expr
       (* in annotations only *)
-  | JPEresult  
-  | JPEold of pexpr 
-  | JPEat of pexpr * identifier 
+  | JPEresult
+  | JPEfresh of pexpr
+  | JPEold of pexpr
+  | JPEat of pexpr * identifier
 (*
-  | JPEfresh of expr 
-  | Type of type_expr 
-  | Typeof of expr 
+  | Type of type_expr
+  | Typeof of expr
 *)
-  | JPEquantifier of quantifier * (type_expr * variable_id list) list * pexpr   
+  | JPEquantifier of quantifier * (type_expr * variable_id list) list * pexpr
 
 
 (*
-and set_ref = 
-  | Set_array_index of expr  
+and set_ref =
+  | Set_array_index of expr
       (*r e[e] *)
-  | Set_array_interval of expr * expr  
+  | Set_array_interval of expr * expr
       (*r e[e..e] *)
   | Set_array
       (*r e[*] *)
@@ -145,16 +145,16 @@ and set_ref =
 *)
 
 (*s variable declarations *)
-      
+
 type variable_initializer =
   | Simple_initializer of pexpr
   | Array_initializer of variable_initializer list
 
-type variable_declarator = 
+type variable_declarator =
     { variable_id : variable_id ;
       variable_initializer : variable_initializer option }
- 
-      
+
+
 type variable_declaration =
     { variable_modifiers : modifiers ;
       variable_type : type_expr ;
@@ -167,11 +167,11 @@ type pbehavior =
     { java_pbehavior_assumes : pexpr option;
       java_pbehavior_assigns : (Loc.position * pexpr list) option;
       java_pbehavior_throws : (qualified_ident * identifier option) option;
-      java_pbehavior_ensures : pexpr 
+      java_pbehavior_ensures : pexpr
     }
 
 type 'a switch_label =
-  | Case of 'a 
+  | Case of 'a
   | Default
 
 type parameter =
@@ -194,22 +194,22 @@ and pstatement_node =
   | JPSif of pexpr * pstatement * pstatement
   | JPSwhile of pexpr * pstatement
   | JPSdo of pstatement * pexpr
-  | JPSfor of pexpr list * pexpr * pexpr list * pstatement  
+  | JPSfor of pexpr list * pexpr * pexpr list * pstatement
   | JPSfor_decl of variable_declaration * pexpr * pexpr list * pstatement
   | JPStry of block * (parameter * block) list * block option
   | JPSswitch of pexpr * (pexpr switch_label list * block) list
   | JPSblock of block
-  | JPSsynchronized of pexpr * block      
+  | JPSsynchronized of pexpr * block
   | JPSassert of identifier option * identifier option * pexpr
       (* for id1: assert id2 : e *)
   | JPSghost_local_decls of variable_declaration
   | JPSghost_statement of pexpr
   | JPSannot of Lexing.position * string
-  | JPSloop_annot of pexpr * (identifier * pexpr) list * 
+  | JPSloop_annot of pexpr * (identifier * pexpr) list *
       (pexpr * identifier option) option
       (* inv, beh invs, variant *)
-  | JPSstatement_spec of 
-      pexpr option * (pexpr * identifier option) option 
+  | JPSstatement_spec of
+      pexpr option * (pexpr * identifier option) option
       * (identifier * pbehavior) list
       (* requires, decreases, behaviors *)
 
@@ -247,9 +247,9 @@ type constructor_declaration =
       constr_throws : qualified_ident list }
 ;;
 
-      
-      
-      
+
+
+
 (*s class declarations *)
 
 type field_declaration =
@@ -261,15 +261,15 @@ type field_declaration =
   | JPFannot of Lexing.position * string
   | JPFinvariant of identifier * pexpr
   | JPFstatic_invariant of identifier * pexpr
-  | JPFmethod_spec of 
-      pexpr option * (pexpr * identifier option) option 
+  | JPFmethod_spec of
+      pexpr option * (pexpr * identifier option) option
       * (identifier * pbehavior) list
         (* requires, decreases, behaviors *)
   | JPFclass of class_declaration
   | JPFinterface of interface_declaration
 
 and class_declaration =
-    { 
+    {
       class_modifiers : modifiers;
       class_name : identifier;
       class_extends : qualified_ident option;
@@ -300,12 +300,12 @@ type type_declaration =
   | JPTinterface of interface_declaration
   | JPTannot of Lexing.position * string
   | JPTlemma of identifier * bool * identifier list * pexpr
-  | JPTlogic_type_decl of identifier 
+  | JPTlogic_type_decl of identifier
   | JPTlogic_reads of identifier * type_expr option * identifier list * parameter list * pexpr list option
-  | JPTlogic_def of identifier * type_expr option * identifier list * parameter list * pexpr 
+  | JPTlogic_def of identifier * type_expr option * identifier list * parameter list * pexpr
   | JPTinductive of identifier * identifier list * parameter list * (identifier * identifier list * pexpr) list
   | JPTaxiomatic of identifier * type_declaration list
-  | JPTimport of  poly_theory_id 
+  | JPTimport of  poly_theory_id
 
 
 type theory =
@@ -324,7 +324,7 @@ type compilation_unit =
     }
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "make -C .. bin/krakatoa.byte"
-End: 
+End:
 *)

@@ -178,7 +178,7 @@ $Id: java_lexer.mll,v 1.42 2009-12-08 16:38:49 marche Exp $
 	(fun (s,t) -> Hashtbl.add table s t)
 	[ "\\at", BSAT;
 	  "\\exists", BSEXISTS ;
-	  (* "fresh", BSFRESH ; *)
+	  "\\fresh", BSFRESH ; 
 	  "\\forall", BSFORALL ;
 	  "\\nothing", BSNOTHING;
 	  (*

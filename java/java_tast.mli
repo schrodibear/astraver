@@ -80,6 +80,7 @@ type assertion_node =
   | JAapp of java_logic_info * label_assoc * term list
   | JAinstanceof of term * logic_label * java_type
   | JAif of term * assertion * assertion
+  | JAfresh of term
 
 and assertion =
     { java_assertion_node : assertion_node;

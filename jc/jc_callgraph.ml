@@ -63,6 +63,7 @@ let rec assertion acc p =
       assertion acc p
   | JCAquantifier (_,_,trigs,p) -> triggers (assertion acc p) trigs
   | JCAinstanceof(t,_,_)
+  | JCAfresh(t)
   | JCAmutable(t,_,_)
   | JCAbool_term t -> term acc t
   | JCAeqtype(t1, t2, _) | JCAsubtype(t1, t2, _) ->

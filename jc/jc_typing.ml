@@ -731,7 +731,7 @@ let rec type_labels env ~result_label label e =
   match e#node with
     | JCNEconst _ | JCNEderef _ | JCNEbinary _
     | JCNEunary _ | JCNEassign _ | JCNEinstanceof _ | JCNEcast _
-    | JCNEif _ | JCNEoffset _ | JCNEaddress _ | JCNEbase_block _
+    | JCNEif _ | JCNEoffset _ | JCNEaddress _ | JCNEbase_block _ | JCNEfresh _
     | JCNEalloc _ | JCNEfree _ | JCNElet _
     | JCNEassert _ | JCNEloop _ | JCNEreturn _ | JCNEtry _
     | JCNEthrow _ | JCNEpack _ | JCNEunpack _ | JCNEmatch _ | JCNEquantifier _
@@ -1141,7 +1141,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
     | JCNErange(None, None) ->
         integer_type, dummy_region,JCTrange(None,None)
     (* Not terms: *)
-    | JCNEassign _ | JCNEalloc _ | JCNEfree _ | JCNEblock _ | JCNEassert _
+    | JCNEassign _ | JCNEalloc _ | JCNEfree _ | JCNEblock _ | JCNEassert _ | JCNEfresh _
     | JCNEloop _ | JCNEreturn _ | JCNEtry _ | JCNEthrow _ | JCNEpack _
     | JCNEunpack _ | JCNEquantifier _ | JCNEcontract _
     | JCNEeqtype _ | JCNEsubtype _ ->
@@ -1410,6 +1410,11 @@ let rec assertion env e =
           | JCTnative Tboolean -> JCAbool_term t
           | _ -> typing_error e#pos "non boolean expression"
         end
+    | JCNEfresh e1 -> 
+        let te1 = ft e1 in
+        if is_pointer_type te1#typ then JCAfresh(te1)
+	else
+          not_the_good_type te1#pos te1#typ "pointer expected"
     (* Not assertions: *)
     | JCNEoffset _ | JCNEaddress _ | JCNEbase_block _
     | JCNErange _ | JCNEassign _ | JCNEalloc _ | JCNEfree _
@@ -1531,7 +1536,7 @@ let rec location_set env e =
     | JCNEat(ls, lab) ->
 	let t,tr,tls = location_set env ls in
 	t,tr,JCLSat(tls,lab)
-
+    | JCNEfresh _ 
     | JCNErange _ | JCNEeqtype _ | JCNEmutable _ | JCNEold _
     | JCNEquantifier _ | JCNEmatch _ | JCNEunpack _ | JCNEpack _ | JCNEthrow _
     | JCNEtry _ |JCNEreturn _ | JCNEloop _ |JCNEblock _ | JCNEassert _
@@ -1585,7 +1590,7 @@ let rec location env e =
     | JCNElet _ | JCNEfree _ | JCNEalloc _ | JCNEoffset _ | JCNEaddress _
     | JCNEif _ | JCNEcast _ | JCNEbase_block _
     | JCNEinstanceof _ | JCNEassign _ | JCNEapp _ | JCNEunary _ | JCNEbinary _
-    | JCNEconst _ | JCNEcontract _ | JCNEsubtype _ ->
+    | JCNEconst _ | JCNEcontract _ | JCNEsubtype _ | JCNEfresh _ ->
         typing_error e#pos "invalid memory location"
   in
   let loc =
@@ -2368,7 +2373,7 @@ used as an assertion, not as a term" pi.jc_logic_info_name
         rty, targ#region, JCEmatch(targ, List.rev tpel)
     (* logic only *)
     | JCNEquantifier _ | JCNEold _ | JCNEat _ | JCNEmutable _
-    | JCNEeqtype _ | JCNErange _ | JCNEsubtype _ ->
+    | JCNEeqtype _ | JCNErange _ | JCNEsubtype _ | JCNEfresh _ ->
         typing_error e#pos "construction not allowed in expressions"
   in
 (*
@@ -2749,6 +2754,7 @@ match a#node with
   | JCAold _ -> assert false (* TODO *)
   | JCAlet (_, _,_) -> assert false (* TODO *)
   | JCAmatch (_, _) -> assert false (* TODO *)
+  | JCAfresh _ -> assert false (* TODO *)
 
 let check_positivity loc pi a =
   let (pos,_neg) = signed_occurrences pi a in
@@ -2834,6 +2840,7 @@ let rec occurrences table a =
   | JCAat (p, _) -> occurrences table p
   | JCAlet (_, _, _) -> assert false (* TODO *)
   | JCAmatch (_, _) -> assert false (* TODO *)
+  | JCAfresh _ -> assert false (* TODO *)
 
 let rec list_assoc_data lab l =
   match l with

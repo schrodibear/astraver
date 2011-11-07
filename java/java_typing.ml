@@ -52,7 +52,7 @@ let rec print_qualified_ident fmt id =
     | (_,id)::r ->
         print_qualified_ident fmt r;
         fprintf fmt ".%s" id
-        
+
 let print_type_name fmt t =
   match t with
     | TypeClass ci -> fprintf fmt "%s" ci.class_info_name
@@ -81,9 +81,9 @@ let rec print_type fmt t =
   match t with
     | JTYbase t -> fprintf fmt "%s" (string_of_base_type t)
     | JTYnull -> fprintf fmt "(nulltype)"
-    | JTYarray (non_null, t) -> 
+    | JTYarray (non_null, t) ->
         fprintf fmt "%s%a[]" (if non_null then "" else "!") print_type t
-    | JTYclass (non_null, c) -> 
+    | JTYclass (non_null, c) ->
         fprintf fmt "%s%s" (if non_null then "" else "!") c.class_info_name
     | JTYinterface ii -> fprintf fmt "%s" ii.interface_info_name
     | JTYlogic i ->fprintf fmt "%s" i
@@ -96,18 +96,18 @@ Typing error handling
 
 exception Typing_error of Loc.position * string
 
-let typing_error l = 
-  Format.kfprintf 
-    (fun _fmt -> raise (Typing_error(l, flush_str_formatter()))) 
+let typing_error l =
+  Format.kfprintf
+    (fun _fmt -> raise (Typing_error(l, flush_str_formatter())))
     str_formatter
 
-let integer_expected l t = 
+let integer_expected l t =
   typing_error l "integer type expected, got %a" print_type t
 
-let array_expected l t = 
+let array_expected l t =
   typing_error l "array type expected, got %a" print_type t
 
-let int_expected l t = 
+let int_expected l t =
   typing_error l "int expected, got %a" print_type t
 
 let class_or_interface_expected l t =
@@ -115,7 +115,7 @@ let class_or_interface_expected l t =
 
 
 
-let catch_typing_errors f a =    
+let catch_typing_errors f a =
  try
    f a
  with
@@ -125,17 +125,17 @@ let catch_typing_errors f a =
    | Java_options.Java_error(l,s) ->
        eprintf "%a: %s@." Loc.gen_report_position l s;
        exit 1
-   | Assert_failure(f,l,c) as exn -> 
+   | Assert_failure(f,l,c) as exn ->
        eprintf "%a:@." Loc.gen_report_line (f,l,c,c);
        raise exn
-   | Match_failure(f,l,c) as exn -> 
+   | Match_failure(f,l,c) as exn ->
        eprintf "%a:@." Loc.gen_report_line (f,l,c,c);
        raise exn
 
 
 (**********************
 
-Name classification 
+Name classification
 (JLS 2nd ed., pp. 93-104)
 
 ***********************)
@@ -152,7 +152,7 @@ let read_dir d =
     try
       Sys.readdir d
     with
-        Sys_error _ -> 
+        Sys_error _ ->
           eprintf "Cannot open directory %s@." d;
           exit 2
   in
@@ -173,7 +173,7 @@ let read_dir d =
                  | "java" ->
                      Java_options.lprintf "got Java file %s@." base;
                      (dirs,(base,fullname)::files)
-                 | _ -> 
+                 | _ ->
                    Java_options.lprintf "file %s ignored@." name;
                      (dirs,files)
              end
@@ -183,8 +183,8 @@ let read_dir d =
                (dirs,files)
              end)
     ([],[]) l
-             
-  
+
+
 let toplevel_packages_table = (Hashtbl.create 17 : (string, package_info) Hashtbl.t)
 
 let package_counter = ref 0
@@ -205,13 +205,13 @@ type package_member =
   | File of string
   | Type of java_type_info
 
-let package_contents = 
+let package_contents =
   (Hashtbl.create 17 : (int, (string, package_member) Hashtbl.t) Hashtbl.t)
 
 
 let anonymous_package = new_package_info "" "."
 
-let is_anonymous_package pi = 
+let is_anonymous_package pi =
   pi.package_info_tag = anonymous_package.package_info_tag
 
 let javalang_qid = [(Loc.dummy_position,"lang"); (Loc.dummy_position,"java")]
@@ -224,22 +224,22 @@ let rec read_dir_contents ~is_toplevel dir =
       (fun (name, fullname) ->
 	 begin
 	   if is_toplevel then
-	     try 
+	     try
 	       let pi = Hashtbl.find toplevel_packages_table name in
 		 pi.package_info_directories <- fullname :: pi.package_info_directories
 	     with Not_found ->
 	       let pi = new_package_info name fullname in
-		 Java_options.lprintf "adding subpackage %s@." name; 
+		 Java_options.lprintf "adding subpackage %s@." name;
 		 Hashtbl.add h name (Subpackage pi)
 	   else
 	     let pi = new_package_info name fullname in
-	       Java_options.lprintf "adding subpackage %s@." name; 
+	       Java_options.lprintf "adding subpackage %s@." name;
 	       Hashtbl.add h name (Subpackage pi)
 	 end)
       d;
     List.iter
       (fun (name, fullname) ->
-	 Java_options.lprintf "adding java file %s (fullname %s)@." name fullname; 
+	 Java_options.lprintf "adding java file %s (fullname %s)@." name fullname;
 	 Hashtbl.add h name (File fullname))
       f;
     h
@@ -251,12 +251,12 @@ let get_package_contents pi =
       Not_found ->
 	let h = Hashtbl.create 17 in
 	  List.iter
-	    (fun dir -> 
+	    (fun dir ->
 	       let is_top_level = is_anonymous_package pi in
 	       let h' = read_dir_contents ~is_toplevel:is_top_level dir in
-		 Hashtbl.iter 
+		 Hashtbl.iter
 		   (fun name x ->
-		      try 
+		      try
 			let x' = Hashtbl.find h name in
 			  match x, x' with
 			    | Subpackage pi, Subpackage pi' ->
@@ -270,57 +270,57 @@ let get_package_contents pi =
           Hashtbl.add package_contents pi.package_info_tag h;
           h
 
-let toplevel_packages = 
+let toplevel_packages =
   Java_options.lprintf "Reading toplevel packages@.";
   let h = Hashtbl.create 17 in
     List.iter
       (fun dir ->
 	 let h' = read_dir_contents ~is_toplevel:true dir in
-	   Hashtbl.iter 
-	     (fun name x -> 
+	   Hashtbl.iter
+	     (fun name x ->
 		begin
 		  Hashtbl.add h name x;
 		  match x with
-		    | Subpackage pi -> 
+		    | Subpackage pi ->
 			Hashtbl.add toplevel_packages_table name pi
-		    | _ -> 
+		    | _ ->
 			Format.eprintf "Warning: %s is not a subpackage of %s@." name dir;
 			()
 		end)
 	     h')
       Java_options.classpath;
     h
-      
+
 let type_table : (int, java_type_info) Hashtbl.t = Hashtbl.create 97
 
 (* A GROUPER *)
-let class_type_env_table : 
+let class_type_env_table :
     (int, (string * java_type_info) list) Hashtbl.t
     = Hashtbl.create 97
-and interface_type_env_table : 
+and interface_type_env_table :
     (int, (string * java_type_info) list) Hashtbl.t
     = Hashtbl.create 97
 
 
 
-let class_decl_table : 
-    (int, (package_info list * 
+let class_decl_table :
+    (int, (package_info list *
              Java_ast.class_declaration)) Hashtbl.t
     = Hashtbl.create 97
 
 
-let interface_decl_table : 
-    (int, (package_info list * 
+let interface_decl_table :
+    (int, (package_info list *
              Java_ast.interface_declaration)) Hashtbl.t
     = Hashtbl.create 97
 
-let invariants_env : 
-    (int, (* class tag *) 
+let invariants_env :
+    (int, (* class tag *)
      Java_env.java_type_info (* class or interface *)
      * (string * Java_env.java_var_info) list (* env [this,this_info]*)
      * Java_env.java_var_info (* this_info *)
      * (Java_ast.identifier * Java_ast.pexpr) list (* (inv_name,inv_pred) list *)
-    ) Hashtbl.t 
+    ) Hashtbl.t
     = Hashtbl.create 97
 let invariants_table :
     ( int, (* class tag *)
@@ -339,18 +339,18 @@ let static_invariants_table = Hashtbl.create 97
 let rec var_type_and_id non_null ty id =
   match id with
     | Simple_id id -> ty, id
-    | Array_id id -> 
+    | Array_id id ->
         let ty, id = var_type_and_id non_null ty id in
           JTYarray (non_null, ty), id
 
 
 (* fields *)
-            
-let field_prototypes_table : (int, variable_initializer option) Hashtbl.t 
+
+let field_prototypes_table : (int, variable_initializer option) Hashtbl.t
     = Hashtbl.create 97
 
 let field_tag_counter = ref 0
-  
+
 let new_field ~is_static ~is_final ~is_nullable ~is_model ~is_ghost ti ty id =
   incr field_tag_counter;
   let fi = {
@@ -364,7 +364,7 @@ let new_field ~is_static ~is_final ~is_nullable ~is_model ~is_ghost ti ty id =
     java_field_info_is_model = is_model;
     java_field_info_is_ghost = is_ghost;
   } in fi
-         
+
 
 let new_model_field ii ty id =
   new_field ~is_static:false ~is_final:false ~is_nullable:false
@@ -372,13 +372,13 @@ let new_model_field ii ty id =
 
 (* methods *)
 
-let methods_env = Hashtbl.create 97 
+let methods_env = Hashtbl.create 97
 
 let method_or_constr_tag_counter = ref 0
 
 let new_method_info ~is_static ~result_is_nullable loc id ti ty pars =
   incr method_or_constr_tag_counter;
-  let result = 
+  let result =
       Option_misc.map (fun t -> new_var Loc.dummy_position t "\\result") ty
   in
   {
@@ -409,11 +409,11 @@ let new_constructor_info ci loc pars =
     constr_info_parameters = pars;
     constr_info_calls = [];
   }
-    
+
 let rec list_assoc_name f id l =
   match l with
     | [] -> raise Not_found
-    | fi::r -> 
+    | fi::r ->
         if (f fi) = id then fi
         else list_assoc_name f id r
 
@@ -430,7 +430,7 @@ let type_counter = ref 0
 (* adds an interface named [id] in package [p] *)
 let new_interface_info (p:package_info) (id:string) i =
   incr type_counter;
-  let ii =    
+  let ii =
     { interface_info_tag = !type_counter;
       interface_info_name = id;
       interface_info_package_env = (fst i);
@@ -447,10 +447,10 @@ let new_interface_info (p:package_info) (id:string) i =
   let h = get_package_contents p in
   Hashtbl.replace h id (Type (TypeInterface ii));
   ii
-    
+
 let new_class_info ~is_final:_ (p:package_info) (id:string) c =
   incr type_counter;
-  let ci =    
+  let ci =
     { class_info_tag = !type_counter;
       class_info_name = id;
       class_info_package_env = (fst c);
@@ -467,7 +467,7 @@ let new_class_info ~is_final:_ (p:package_info) (id:string) c =
   in
     Hashtbl.add type_table !type_counter (TypeClass ci);
     Hashtbl.add class_decl_table !type_counter c;
-    Java_options.lprintf 
+    Java_options.lprintf
     "adding class %s in package %s@." id p.package_info_name;
     let h = get_package_contents p in
       Hashtbl.replace h id (Type (TypeClass ci));
@@ -480,9 +480,9 @@ let import_spec_table = Hashtbl.create 17
 
 let new_logic_type id = id
 
-let rec get_type_decl package package_env acc d = 
+let rec get_type_decl package package_env acc d =
     match d with
-    | JPTclass cd -> 
+    | JPTclass cd ->
         (*
           class_modifiers : modifiers;
           class_name : identifier;
@@ -492,11 +492,11 @@ let rec get_type_decl package package_env acc d =
         *)
         let _, id = cd.class_name in
 	let is_final = List.mem Final cd.class_modifiers in
-        let ci = new_class_info ~is_final:is_final package id (package_env, cd) in 
+        let ci = new_class_info ~is_final:is_final package id (package_env, cd) in
         (id, TypeClass ci) :: acc
-    | JPTinterface i -> 
+    | JPTinterface i ->
         let (_,id) = i.interface_name in
-        let ii = new_interface_info package id (package_env,i) in 
+        let ii = new_interface_info package id (package_env,i) in
         (id,TypeInterface ii)::acc
     | JPTannot(_loc,_s) -> assert false
     | JPTlemma((_loc,_id),_is_axiom, _labels,_e) -> acc
@@ -511,13 +511,13 @@ let rec get_type_decl package package_env acc d =
                 Hashtbl.add logic_types_table id i;
                 acc
         end
-    | JPTlogic_reads((_loc,_id),_ret_type,_labels,_params,_reads) -> acc 
+    | JPTlogic_reads((_loc,_id),_ret_type,_labels,_params,_reads) -> acc
     | JPTlogic_def((_loc,_id),_ret_type,_labels,_params,_body) -> acc
     | JPTinductive((_loc,_id),_labels,_params,_body) -> acc
-    | JPTaxiomatic(_,body) -> 
+    | JPTaxiomatic(_,body) ->
 	List.fold_left (get_type_decl package package_env) acc body
     | JPTimport(PolyTheoryId(qid,_params))  ->
-        let 
+        let
           id = Java_pervasives.qualified_ident2string
                  qid "."
         in
@@ -527,11 +527,11 @@ let rec get_type_decl package package_env acc d =
 	  Java_options.lprintf "importing %s: was already imported@." id;
 	  acc
 	with Not_found ->
-	  Java_options.lprintf "importing spec %s@." id;  
-	  let 
-            spec_body = Java_syntax.spec_file 
-              ((Java_pervasives.qualified_ident2string qid "/") 
-               ^ ".spec") 
+	  Java_options.lprintf "importing spec %s@." id;
+	  let
+            spec_body = Java_syntax.spec_file
+              ((Java_pervasives.qualified_ident2string qid "/")
+               ^ ".spec")
           in
 	  Hashtbl.add import_spec_table id spec_body;
 	  List.fold_left (get_type_decl package package_env) acc spec_body
@@ -564,8 +564,8 @@ let is_reference_type t =
 type logic_def_body =
   [ `Assertion of Java_tast.assertion
   | `Term of Java_tast.term
-  | `Inductive of 
-      (Java_ast.identifier * Java_env.logic_label list * Java_tast.assertion) 
+  | `Inductive of
+      (Java_ast.identifier * Java_env.logic_label list * Java_tast.assertion)
 	list
   | `Builtin ]
 
@@ -584,14 +584,14 @@ let axiomatics_table = Hashtbl.create 97
 let builtin_logic_symbols = ref []
 
 let () =
-  List.iter 
-    (fun (ty,id,pl) -> 
-       let l = 
+  List.iter
+    (fun (ty,id,pl) ->
+       let l =
 	 List.map
 	   (fun ty -> new_var Loc.dummy_position ty "_")
 	   pl
        in
-       let fi = logic_info id ty [] l in 
+       let fi = logic_info id ty [] l in
        builtin_logic_symbols := fi :: !builtin_logic_symbols;
        Hashtbl.add logics_env fi.java_logic_info_name fi;
        Hashtbl.add logic_defs_table fi.java_logic_info_tag (fi,`Builtin)
@@ -621,7 +621,7 @@ let is_widening_primitive_convertible tfrom tto =
 
 let is_logic_widening_primitive_convertible tfrom tto =
   match tfrom,tto with
-    | Tbyte, (Tshort | Tint | Tlong | Tinteger | Tfloat | Tdouble | Treal) 
+    | Tbyte, (Tshort | Tint | Tlong | Tinteger | Tfloat | Tdouble | Treal)
         -> true
     | Tshort, (Tint | Tlong | Tinteger | Tfloat | Tdouble | Treal) -> true
     | Tchar, (Tint | Tlong | Tinteger | Tfloat | Tdouble | Treal) -> true
@@ -631,27 +631,27 @@ let is_logic_widening_primitive_convertible tfrom tto =
     | Tinteger, Treal -> true
     | Tdouble, Treal -> true
     | _ -> false
-	
+
 let logic_unary_numeric_promotion ty =
   match ty with
-    | JTYbase t -> 
+    | JTYbase t ->
         begin
           match t with
             | Treal | Tdouble | Tfloat -> Treal
-            | _ -> Tinteger             
+            | _ -> Tinteger
         end
     | _ -> assert false
 
 let logic_binary_numeric_promotion t1 t2 =
   match t1,t2 with
-    | JTYbase t1,JTYbase t2 -> 
+    | JTYbase t1,JTYbase t2 ->
         begin
           match t1,t2 with
             | (Tboolean | Tunit),_
             | _, (Tboolean | Tunit) -> raise Not_found
-            | (Treal | Tdouble | Tfloat),_ 
+            | (Treal | Tdouble | Tfloat),_
             | _, (Treal | Tdouble | Tfloat) -> Treal
-            | _ -> Tinteger             
+            | _ -> Tinteger
         end
     | _ -> raise Not_found
 
@@ -660,7 +660,7 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
     | Bconcat -> assert false
     | Bgt | Blt | Bge | Ble ->
         begin
-          try 
+          try
             let t = logic_binary_numeric_promotion t1 t2 in
             boolean_type,JTbin(e1,t,op,e2)
           with Not_found ->
@@ -671,7 +671,7 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
           try
             let t = logic_binary_numeric_promotion t1 t2 in
             boolean_type,JTbin(e1,t,op,e2)
-          with Not_found -> 
+          with Not_found ->
             if is_boolean t1 && is_boolean t2 then
               boolean_type,JTbin(e1,Tboolean,op,e2)
             else
@@ -702,7 +702,7 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
           boolean_type, JTbin (e1, Tboolean, op, e2)
         else
           typing_error loc "booleans expected"
-    | Bbwxor | Bbwor | Bbwand ->        
+    | Bbwxor | Bbwor | Bbwand ->
         if is_boolean t1 && is_boolean t2 then
           boolean_type, JTbin (e1, Tboolean, op, e2)
         else
@@ -714,20 +714,20 @@ let make_logic_bin_op loc op t1 e1 t2 e2 =
                 JTYbase t1, JTbin (e1, t1, op, e2)
             with Not_found ->
               typing_error loc "booleans or integers expected"
-          end     
+          end
     | Bsub | Badd | Bmod | Bdiv | Bmul ->
         try
           let t = logic_binary_numeric_promotion t1 t2 in
             JTYbase t, JTbin (e1, t, op, e2)
         with Not_found ->
           typing_error loc "numeric types expected for +,-,*, / and %%"
-            
-let make_logic_un_op loc op e = 
+
+let make_logic_un_op loc op e =
   let ty = e.java_term_type in
     match op with
       | Uplus ->
           begin
-            try 
+            try
               let t = logic_unary_numeric_promotion ty in
 		JTYbase t, e.java_term_node
             with Not_found ->
@@ -753,13 +753,13 @@ let make_logic_un_op loc op e =
       | Unot ->
           if is_boolean ty then ty, JTun (Tboolean, op, e) else
 	    typing_error loc "boolean type expected for unary !"
-	      
+
 let make_predicate_bin_op loc op t1 e1 t2 e2 =
   match op with
     | Bconcat -> assert false
     | Bgt | Blt | Bge | Ble ->
         begin
-          try 
+          try
             let t = logic_binary_numeric_promotion t1 t2 in
             JAbin(e1,t,op,e2)
           with Not_found ->
@@ -770,7 +770,7 @@ let make_predicate_bin_op loc op t1 e1 t2 e2 =
           try
             let t = logic_binary_numeric_promotion t1 t2 in
             JAbin(e1,t,op,e2)
-          with Not_found -> 
+          with Not_found ->
             if is_boolean t1 && is_boolean t2 then
               JAbin(e1,Tboolean,op,e2)
             else
@@ -820,7 +820,7 @@ and is_subinterface i1 i2 =
   i1 == i2 ||
     (check_if_interface_complete i1;
      List.exists
-        (fun i' -> 
+        (fun i' ->
 (*
            eprintf "checking if interface '%s' is subinterface of '%s'@."
                 i'.interface_info_name i2.interface_info_name;
@@ -829,7 +829,7 @@ and is_subinterface i1 i2 =
     i1.interface_info_extends)
 
 and implements c i =
-  List.exists 
+  List.exists
     (fun i' -> is_subinterface i' i)
     c.class_info_implements ||
     match c.class_info_extends with
@@ -837,9 +837,9 @@ and implements c i =
       | Some c -> implements c i
 
 and get_this loc env =
-  try 
-    List.assoc "this" env 
-  with Not_found -> 
+  try
+    List.assoc "this" env
+  with Not_found ->
     typing_error loc "this undefined in this context"
 
 and get_import (packages, types) imp =
@@ -863,7 +863,7 @@ and get_import (packages, types) imp =
 
 and get_types package_env cus =
   let pil =
-    List.map 
+    List.map
       (fun cu ->
          match cu.cu_package with
            | [] -> anonymous_package
@@ -873,20 +873,20 @@ and get_types package_env cus =
                  | _ -> assert false)
       cus
   in
-  let package_env, type_env = 
+  let package_env, type_env =
     let imports = List.flatten (List.map (fun cu -> cu.cu_imports) cus) in
     List.fold_left get_import ([],[])
-      (Import_package javalang_qid::imports) 
+      (Import_package javalang_qid::imports)
   in
-  let package_env = 
-    List.fold_left (fun _acc pi -> add_in_package_list pi package_env) 
-      package_env pil 
+  let package_env =
+    List.fold_left (fun _acc pi -> add_in_package_list pi package_env)
+      package_env pil
   in
   let local_type_env =
     List.flatten
-    (List.map 
-      (fun (pi, cu) -> 
-         List.fold_left (get_type_decl pi package_env) 
+    (List.map
+      (fun (pi, cu) ->
+         List.fold_left (get_type_decl pi package_env)
            [] cu.cu_type_decls)
       (List.combine pil cus))
   in
@@ -901,17 +901,17 @@ and get_types package_env cus =
                (fun (id,_) -> eprintf "  %s@\n" id)
                full_type_env;
 *)
-             Hashtbl.add class_type_env_table ci.class_info_tag 
+             Hashtbl.add class_type_env_table ci.class_info_tag
                full_type_env
          | TypeInterface ii ->
-             Hashtbl.add interface_type_env_table ii.interface_info_tag 
+             Hashtbl.add interface_type_env_table ii.interface_info_tag
                full_type_env)
     local_type_env;
   package_env,local_type_env
 
 
 (* corresponds to JLS 2nd ed., par. 6.5.2, pp. 96--97 *)
-and classify_name 
+and classify_name
     (package_env : package_info list)
     (type_env : (string * java_type_info) list)
     (current_type : java_type_info option)
@@ -928,12 +928,12 @@ and classify_name
           (* look for a local var of that name *)
           try
             let vi = List.assoc id local_env in
-              TermName { 
-                java_term_node = JTvar vi; 
+              TermName {
+                java_term_node = JTvar vi;
                 java_term_type = vi.java_var_info_type;
-                java_term_loc = loc 
+                java_term_loc = loc
               }
-          with Not_found -> 
+          with Not_found ->
             (* look for a field of that name in current class *)
             try
               match current_type with
@@ -944,16 +944,16 @@ and classify_name
                       if fi.java_field_info_is_static then
                         JTstatic_field_access (ti, fi)
                       else
-                        let vi = 
+                        let vi =
                           try
-                            List.assoc "this" local_env 
+                            List.assoc "this" local_env
                           with Not_found -> assert false
                         in
                         let this =
                           { java_term_node = JTvar vi;
                             java_term_type = vi.java_var_info_type;
                             java_term_loc = loc }
-                        in              
+                        in
                         JTfield_access (this, fi)
                     in
                     TermName {
@@ -967,8 +967,8 @@ and classify_name
                 raise Not_found
               with
                   Not_found ->
-                    try 
-                      (* look for a type of that name 
+                    try
+                      (* look for a type of that name
                          in the current compilation unit, or
                          in another compilation unit of the current package *)
 (*
@@ -978,16 +978,16 @@ and classify_name
                         type_env;
 *)
                       let ti = List.assoc id type_env in
-                        TypeName ti 
+                        TypeName ti
                     with Not_found ->
-                      (* look for a type of that name 
-                         declared by a type-import-on-demand declaration 
+                      (* look for a type of that name
+                         declared by a type-import-on-demand declaration
                          (fail if two of them are visible) *)
                       let l =
                         List.fold_left
                           (fun acc pi ->
                              let h = get_package_contents pi in
-                               try 
+                               try
                                  (pi, h, (Hashtbl.find h id)) :: acc
                                with Not_found -> acc)
                           [] package_env
@@ -1001,68 +1001,68 @@ and classify_name
                               match x with
                                 | Subpackage pi -> PackageName pi
                                 | Type ti -> TypeName ti
-                                | File f -> 
+                                | File f ->
                                     let ast = Java_syntax.file f in
                                     let (_, t) = get_types package_env [ast] in
                                     try
                                       let ti = List.assoc id t in
                                       Hashtbl.replace h id (Type ti);
                                       TypeName ti
-                                    with Not_found -> 
-                                      eprintf "Anomaly: `%s' not found" id; 
+                                    with Not_found ->
+                                      eprintf "Anomaly: `%s' not found" id;
                                       assert false
                             end
                         | (pi1,_,_)::(pi2,_,_)::_ ->
-                            typing_error loc 
+                            typing_error loc
                               "ambiguous name from import-on-demand packages '%s' and '%s'"
-                              pi1.package_info_name 
+                              pi1.package_info_name
                               pi2.package_info_name
                         | [] ->
-                            (* otherwise look for a toplevel package 
+                            (* otherwise look for a toplevel package
                                of that name *)
                             try
                               match Hashtbl.find toplevel_packages id with
-                                | Subpackage pi -> PackageName pi 
-                                | Type _ti -> assert false 
-                                | File f -> 
+                                | Subpackage pi -> PackageName pi
+                                | Type _ti -> assert false
+                                | File f ->
                                     typing_error loc "Internal error: got file %s in place of a package@." f
                             with Not_found ->
-                              (* otherwise look for a logic type 
+                              (* otherwise look for a logic type
                                  of that name *)
                               try
                                 let i = Hashtbl.find logic_types_table id in
                                 LogicTypeName i
                               with Not_found ->
                                 typing_error loc "unknown identifier %s" id
-                                  
-        end             
-          
+
+        end
+
     | (loc,id)::n ->
         (* case of a qualified name (JLS p 97) *)
 (*
 	Format.eprintf "classify_name for %s...@." id;
 *)
         match classify_name package_env type_env current_type local_env n with
-          | PackageName pi -> 
+          | PackageName pi ->
               let contents = get_package_contents pi in
               begin
                 try
                   match Hashtbl.find contents id with
                     | Subpackage pi -> PackageName pi
                     | Type ti -> TypeName ti
-                    | File f -> 
+                    | File f ->
                         let ast = Java_syntax.file f in
                         let (_, t) = get_types package_env [ast] in
                         try
                           let ti = List.assoc id t in
                           Hashtbl.replace contents id (Type ti);
                           TypeName ti
-                        with Not_found -> 
+                        with Not_found ->
                           typing_error loc "type `%s' not found in file `%s'@."
                             id f
                 with
                     Not_found ->
-                      typing_error loc "unknown identifier %s in package %s" 
+                      typing_error loc "unknown identifier %s in package %s"
 			id pi.package_info_name
               end
           | TypeName ci ->
@@ -1070,44 +1070,44 @@ and classify_name
                 try
                   let fi = lookup_field ci id in
                   if fi.java_field_info_is_static then
-                    TermName { 
+                    TermName {
                       java_term_loc = loc;
                       java_term_type = fi.java_field_info_type ;
                       java_term_node = JTstatic_field_access(ci,fi)
                     }
                   else
-                    typing_error loc 
+                    typing_error loc
                       "field %s is not static" id
 
                 with Not_found ->
                   (* TODO: look for a method of that name ? *)
                   (* TODO: look for a member type of that name *)
-                  typing_error loc 
+                  typing_error loc
                     "no such field in %a" print_type_name ci
               end
-          | TermName t -> 
-              type_term_field_access t loc id 
-          | LogicTypeName _i -> 
+          | TermName t ->
+              type_term_field_access t loc id
+          | LogicTypeName _i ->
               typing_error loc "logic type unexpected"
 
-and type_term_field_access t loc id = 
+and type_term_field_access t loc id =
   match t.java_term_type with
     | JTYclass(_,c) ->
         begin
           try
             let fi = lookup_class_field c id in
-            TermName { 
+            TermName {
               java_term_loc = loc;
               java_term_type = fi.java_field_info_type ;
               java_term_node = JTfield_access(t,fi)
             }
           with Not_found ->
-            typing_error loc 
+            typing_error loc
               "no such field in class %s" c.class_info_name
         end
     | JTYinterface _ii ->
         assert false (* TODO *)
-    | JTYarray _ -> 
+    | JTYarray _ ->
         if id="length" then
           TermName {
             java_term_loc = loc;
@@ -1115,30 +1115,30 @@ and type_term_field_access t loc id =
             java_term_node = JTarray_length(t)
           }
         else
-          typing_error loc 
+          typing_error loc
             "no such field in array type"
     | JTYnull | JTYbase _ | JTYlogic _ ->
-        class_or_interface_expected t.java_term_loc 
+        class_or_interface_expected t.java_term_loc
           t.java_term_type
 
-and type_expr_field_access e loc id = 
+and type_expr_field_access e loc id =
   match e.java_expr_type with
     | JTYclass(_,c) ->
         begin
           try
             let fi = lookup_class_field c id in
-            { 
+            {
               java_expr_loc = loc;
               java_expr_type = fi.java_field_info_type ;
               java_expr_node = JEfield_access(e,fi)
             }
           with Not_found ->
-            typing_error loc 
+            typing_error loc
               "no such field in class %s" c.class_info_name
         end
     | JTYinterface _ii ->
         assert false (* TODO *)
-    | JTYarray _ -> 
+    | JTYarray _ ->
         if id="length" then
           {
             java_expr_loc = loc;
@@ -1146,16 +1146,16 @@ and type_expr_field_access e loc id =
             java_expr_node = JEarray_length(e)
           }
         else
-          typing_error loc 
+          typing_error loc
             "no such field in array type"
     | JTYnull | JTYbase _ | JTYlogic _ ->
-        class_or_interface_expected e.java_expr_loc 
+        class_or_interface_expected e.java_expr_loc
           e.java_expr_type
 
 and type_type package_env type_env non_null ty =
   match ty with
     | Base_type t -> JTYbase t
-    | Type_name qid -> 
+    | Type_name qid ->
         begin
           match classify_name package_env type_env None [] qid with
             | TypeName ti ->
@@ -1167,13 +1167,13 @@ and type_type package_env type_env non_null ty =
             | LogicTypeName i -> JTYlogic i
             | _ -> assert false (* TODO *)
         end
-    | Array_type_expr t -> 
+    | Array_type_expr t ->
         let ty = type_type package_env type_env non_null t in
         JTYarray (non_null, ty)
 
 and get_field_prototypes package_env type_env ci acc d =
   match d with
-    | JPFvariable vd -> 
+    | JPFvariable vd ->
         (*
           vd.variable_modifiers : modifiers ;
           vd.variable_type : type_expr ;
@@ -1181,7 +1181,7 @@ and get_field_prototypes package_env type_env ci acc d =
         *)
         let is_non_null = List.mem Non_null vd.variable_modifiers in
         let is_nullable = List.mem Nullable vd.variable_modifiers in
-        let non_null = 
+        let non_null =
           if !Java_options.nonnull_sem = NonNullNone then is_non_null else
             not is_nullable
         in
@@ -1191,17 +1191,17 @@ and get_field_prototypes package_env type_env ci acc d =
         let is_ghost = List.mem Ghost vd.variable_modifiers in
         let is_model = List.mem Model vd.variable_modifiers in
         List.fold_left
-          (fun acc vd -> 
+          (fun acc vd ->
              let ty', (loc, id) = var_type_and_id non_null ty vd.variable_id in
                if is_non_null && !Java_options.nonnull_sem <> NonNullNone then
-                 typing_error loc 
-                   "'non_null' modifier is not allowed in 'non_null by default' mode";      
+                 typing_error loc
+                   "'non_null' modifier is not allowed in 'non_null by default' mode";
                if is_nullable && !Java_options.nonnull_sem = NonNullNone then
-                 typing_error loc 
-                   "'nullable' modifier is only allowed in 'non_null by default' mode";     
-             let fi = new_field ~is_static ~is_final ~is_nullable 
-               ~is_model ~is_ghost ci ty' id in      
-             Hashtbl.add field_prototypes_table fi.java_field_info_tag 
+                 typing_error loc
+                   "'nullable' modifier is only allowed in 'non_null by default' mode";
+             let fi = new_field ~is_static ~is_final ~is_nullable
+               ~is_model ~is_ghost ci ty' id in
+             Hashtbl.add field_prototypes_table fi.java_field_info_tag
                vd.variable_initializer;
              fi::acc
           ) acc vd.variable_decls
@@ -1213,9 +1213,9 @@ and type_param package_env type_env p =
     match p with
       | Simple_parameter (mo, ty, (loc, id)) ->
           (match mo with
-             | None -> 
-                 nullable := 
-                   !Java_options.nonnull_sem <> NonNullAll && 
+             | None ->
+                 nullable :=
+                   !Java_options.nonnull_sem <> NonNullAll &&
                      !Java_options.nonnull_sem <> NonNullAllLocal;
              | Some Non_null ->
                  nullable := false;
@@ -1223,16 +1223,16 @@ and type_param package_env type_env p =
                    !Java_options.nonnull_sem = NonNullAllLocal then
                      typing_error loc
                        "'non_null' modifier is not allowed in 'non_null by default' mode";
-             | Some Nullable -> 
+             | Some Nullable ->
                  nullable := true;
                  if !Java_options.nonnull_sem <> NonNullAll &&
                    !Java_options.nonnull_sem <> NonNullAllLocal then
-                     typing_error loc 
+                     typing_error loc
                        "'nullable' modifier is only allowed in 'non_null by default' mode";
              | _ -> assert false);
           let non_null = not !nullable in
             (non_null, type_type package_env type_env non_null ty, loc, id)
-      | Array_parameter x -> 
+      | Array_parameter x ->
           let (non_null, t, loc, i) = get_type x in
             non_null, JTYarray (non_null, t), loc, i
   in
@@ -1247,143 +1247,143 @@ and method_header package_env type_env modifiers retty mdecl =
               !Java_options.nonnull_sem = NonNullAllLocal) &&
             not is_nullable
         in
-          non_null, id, (Option_misc.map (type_type package_env type_env non_null) retty), 
+          non_null, id, (Option_misc.map (type_type package_env type_env non_null) retty),
         List.map (type_param package_env type_env) l
-    | Array_method_declarator d -> 
-        let non_null, id, t, l = 
-          method_header package_env type_env modifiers retty d 
+    | Array_method_declarator d ->
+        let non_null, id, t, l =
+          method_header package_env type_env modifiers retty d
         in
           match t with
             | Some t -> non_null, id, Some (JTYarray (non_null, t)),l
             | None -> typing_error (fst id) "invalid type void array"
-                
-and get_constructor_prototype 
+
+and get_constructor_prototype
     package_env type_env current_type req decreases behs head eci body =
   match current_type with
     | TypeInterface _ -> assert false
     | TypeClass cur ->
         let loc, _id = head.constr_name in
-        let params = 
-          List.map (type_param package_env type_env) 
-            head.constr_parameters 
+        let params =
+          List.map (type_param package_env type_env)
+            head.constr_parameters
         in
         let ci = new_constructor_info cur loc params in
-          Hashtbl.add constructors_env ci.constr_info_tag 
+          Hashtbl.add constructors_env ci.constr_info_tag
             (ci,req,decreases,behs,eci,body);
           ci
 
 and get_method_prototypes package_env type_env current_type (mis,cis) env l =
   match l with
     | [] -> (mis,cis)
-    | JPFmethod(head,body) :: rem -> 
-        let non_null, (loc,id), ret_ty, params = 
-          method_header package_env type_env 
-            head.method_modifiers head.method_return_type head.method_declarator 
+    | JPFmethod(head,body) :: rem ->
+        let non_null, (loc,id), ret_ty, params =
+          method_header package_env type_env
+            head.method_modifiers head.method_return_type head.method_declarator
         in
         let is_static = List.mem Static head.method_modifiers in
         let result_is_nullable = not non_null in
-        let mi = new_method_info 
-          ~is_static ~result_is_nullable loc id current_type ret_ty params 
+        let mi = new_method_info
+          ~is_static ~result_is_nullable loc id current_type ret_ty params
         in
         Hashtbl.add methods_env mi.method_info_tag (mi,None,None,[],body);
-        get_method_prototypes package_env type_env 
-          current_type (mi::mis,cis) env rem 
+        get_method_prototypes package_env type_env
+          current_type (mi::mis,cis) env rem
     | JPFmethod_spec(req,decreases,behs) :: JPFmethod(head,body) :: rem ->
-        let non_null, (loc,id), ret_ty, params = 
-          method_header package_env type_env 
-            head.method_modifiers head.method_return_type head.method_declarator 
+        let non_null, (loc,id), ret_ty, params =
+          method_header package_env type_env
+            head.method_modifiers head.method_return_type head.method_declarator
         in
         let is_static = List.mem Static head.method_modifiers in
         let result_is_nullable = not non_null in
-        let mi = new_method_info 
-          ~is_static ~result_is_nullable loc id current_type ret_ty params 
+        let mi = new_method_info
+          ~is_static ~result_is_nullable loc id current_type ret_ty params
         in
-        Hashtbl.add methods_env mi.method_info_tag 
+        Hashtbl.add methods_env mi.method_info_tag
           (mi,req,decreases,behs,body);
-        get_method_prototypes package_env type_env 
-          current_type (mi::mis,cis) env rem 
-    | JPFconstructor(head,eci,body) :: rem -> 
+        get_method_prototypes package_env type_env
+          current_type (mi::mis,cis) env rem
+    | JPFconstructor(head,eci,body) :: rem ->
         let ci =
-          get_constructor_prototype package_env type_env current_type 
+          get_constructor_prototype package_env type_env current_type
             None None [] head eci body
         in
-        get_method_prototypes package_env type_env 
-          current_type (mis,ci::cis) env rem 
+        get_method_prototypes package_env type_env
+          current_type (mis,ci::cis) env rem
     | JPFmethod_spec(req,decreases,behs) :: JPFconstructor(head,eci,body) :: rem ->
         let ci =
-          get_constructor_prototype package_env type_env current_type 
+          get_constructor_prototype package_env type_env current_type
             req decreases behs head eci body
         in
-        get_method_prototypes package_env type_env 
-          current_type (mis,ci::cis) env rem 
+        get_method_prototypes package_env type_env
+          current_type (mis,ci::cis) env rem
     | JPFmethod_spec _ :: _ ->
         typing_error Loc.dummy_position "out of place method specification"
     | JPFinvariant (_id, _e) :: rem ->
         get_method_prototypes package_env type_env
-          current_type (mis, cis) env rem 
+          current_type (mis, cis) env rem
     | JPFstatic_invariant (_id, _e) :: rem ->
         get_method_prototypes package_env type_env
-          current_type (mis, cis) env rem 
+          current_type (mis, cis) env rem
     | JPFannot _ :: _ -> assert false (* not possible after 2nd parsing *)
-    | JPFstatic_initializer _ ::rem -> 
+    | JPFstatic_initializer _ ::rem ->
         (* TODO ? *)
-        get_method_prototypes package_env type_env 
-          current_type (mis,cis) env rem        
-    | JPFvariable _ :: rem -> 
-        get_method_prototypes package_env type_env 
-          current_type (mis,cis) env rem 
+        get_method_prototypes package_env type_env
+          current_type (mis,cis) env rem
+    | JPFvariable _ :: rem ->
+        get_method_prototypes package_env type_env
+          current_type (mis,cis) env rem
     | JPFclass _ :: rem -> (* TODO *)
-        get_method_prototypes package_env type_env 
-          current_type (mis,cis) env rem 
+        get_method_prototypes package_env type_env
+          current_type (mis,cis) env rem
     | JPFinterface _ :: rem -> (* TODO *)
-        get_method_prototypes package_env type_env 
-          current_type (mis,cis) env rem 
+        get_method_prototypes package_env type_env
+          current_type (mis,cis) env rem
 
 and get_class_prototypes package_env type_env ci d =
   (* extends *)
   ci.class_info_extends <-
-    Option_misc.map 
-    (fun id -> 
+    Option_misc.map
+    (fun id ->
        match classify_name package_env type_env None [] id with
-         | TypeName (TypeClass super) -> 
+         | TypeName (TypeClass super) ->
              check_if_class_complete super;
-             Java_options.lprintf "Class %s extends class %s@." 
+             Java_options.lprintf "Class %s extends class %s@."
                ci.class_info_name
                super.class_info_name;
              if super.class_info_is_exception then
                begin
-                 Java_options.lprintf "Class %s is an exception class@." 
+                 Java_options.lprintf "Class %s is an exception class@."
                    ci.class_info_name;
                  ci.class_info_is_exception <- true
                end;
              super
          | _ ->
-             typing_error (fst (List.hd id)) "class type expected") 
+             typing_error (fst (List.hd id)) "class type expected")
     d.class_extends;
   (* implements *)
   ci.class_info_implements <-
-    List.map 
-    (fun id -> 
+    List.map
+    (fun id ->
        match classify_name package_env type_env None [] id with
-         | TypeName (TypeInterface super) -> 
+         | TypeName (TypeInterface super) ->
              check_if_interface_complete super;
              super
          | _ ->
-             typing_error (fst (List.hd id)) "interface type expected") 
+             typing_error (fst (List.hd id)) "interface type expected")
     d.class_implements;
   (* fields *)
-  let fields = List.fold_left 
+  let fields = List.fold_left
     (get_field_prototypes package_env type_env (TypeClass ci)) [] d.class_fields in
     ci.class_info_fields <- List.rev fields;
     let methods, constructors =
-      get_method_prototypes package_env type_env (TypeClass ci) ([],[]) [] d.class_fields 
+      get_method_prototypes package_env type_env (TypeClass ci) ([],[]) [] d.class_fields
     in
-    let constructors = 
-      (* if no constructor explicitly declared, 
+    let constructors =
+      (* if no constructor explicitly declared,
          then there is always an implicit default constructor *)
       if constructors <> [] then constructors else
         let default_constructor = new_constructor_info ci Loc.dummy_position [] in
-          Hashtbl.add constructors_env default_constructor.constr_info_tag 
+          Hashtbl.add constructors_env default_constructor.constr_info_tag
             (default_constructor, None, None, [], Invoke_none, []);
         [default_constructor]
     in
@@ -1391,67 +1391,67 @@ and get_class_prototypes package_env type_env ci d =
       ci.class_info_constructors <- constructors;
       (* invariants *)
       let this_type = JTYclass (true, ci) (* i.e. [this] is always non-null *) in
-      let vi = new_var Loc.dummy_position this_type "this" in 
-      let invs, static_invs = 
+      let vi = new_var Loc.dummy_position this_type "this" in
+      let invs, static_invs =
         List.fold_left
-          (fun (acc1, acc2) d -> 
+          (fun (acc1, acc2) d ->
              match d with
                | JPFinvariant (id, e) -> (id, e) :: acc1, acc2
                | JPFstatic_invariant (id, e) -> acc1, (snd id, e) :: acc2
-               | _ -> acc1, acc2) ([], []) d.class_fields 
+               | _ -> acc1, acc2) ([], []) d.class_fields
       in
         Hashtbl.add invariants_env
           ci.class_info_tag (TypeClass ci, ["this", vi], vi, invs);
         Hashtbl.add static_invariants_env
           ci.class_info_tag (TypeClass ci, static_invs)
-          
+
 and get_interface_field_prototypes package_env type_env ii acc d =
   match d with
-    | JPFvariable vd -> 
+    | JPFvariable vd ->
         let is_model = List.mem Model vd.variable_modifiers in
         let ty = type_type package_env type_env true vd.variable_type in
           List.fold_left
-            (fun acc vd -> 
+            (fun acc vd ->
                let ty',(_loc,id) = var_type_and_id false ty vd.variable_id in
-               (* Note: no need to check if it is static and final, because 
+               (* Note: no need to check if it is static and final, because
                   it is implicitly the case (JLS,9.3, p 203) *)
-               let fi = 
+               let fi =
                  if is_model then
                    new_field ~is_static:false ~is_final:false ~is_nullable:true
                      ~is_model:true ~is_ghost:false
-                     (TypeInterface ii) ty' id 
+                     (TypeInterface ii) ty' id
                  else
-                   new_field ~is_static:true ~is_final:true ~is_nullable:true 
+                   new_field ~is_static:true ~is_final:true ~is_nullable:true
                      ~is_model:false ~is_ghost:false
-                     (TypeInterface ii) ty' id 
+                     (TypeInterface ii) ty' id
                in
-                 Hashtbl.add field_prototypes_table fi.java_field_info_tag 
+                 Hashtbl.add field_prototypes_table fi.java_field_info_tag
                    vd.variable_initializer;
                  fi::acc
             ) acc vd.variable_decls
     | _ -> acc
-        
+
 and get_interface_prototypes package_env type_env ii d =
   (* extends *)
   ii.interface_info_extends <-
-    List.map 
-    (fun id -> 
+    List.map
+    (fun id ->
        match classify_name package_env type_env None [] id with
-         | TypeName (TypeInterface super) -> 
+         | TypeName (TypeInterface super) ->
              super
          | _ ->
-             typing_error (fst (List.hd id)) "interface type expected") 
+             typing_error (fst (List.hd id)) "interface type expected")
     d.interface_extends;
   (* fields *)
-  let fields = 
-    List.fold_left (get_interface_field_prototypes package_env type_env ii) [] 
+  let fields =
+    List.fold_left (get_interface_field_prototypes package_env type_env ii) []
       d.interface_members
   in
   ii.interface_info_fields <- fields;
-  let methods,_constructors = 
+  let methods,_constructors =
     get_method_prototypes  package_env type_env (TypeInterface ii) ([],[]) [] d.interface_members
   in
-  ii.interface_info_methods <- methods 
+  ii.interface_info_methods <- methods
 
 and check_if_interface_complete ii =
   if ii.interface_info_incomplete then
@@ -1460,22 +1460,22 @@ and check_if_interface_complete ii =
       let (p, d) = Hashtbl.find interface_decl_table ii.interface_info_tag in
       let t = Hashtbl.find interface_type_env_table ii.interface_info_tag in
       get_interface_prototypes p t ii d;
-      ii.interface_info_incomplete <- false;    
+      ii.interface_info_incomplete <- false;
     end;
 
 and lookup_implemented_interfaces l id =
   match l with
     | [] -> raise Not_found
     | [ii] -> lookup_interface_field ii id
-    | ii::l -> 
+    | ii::l ->
 	try
 	  lookup_interface_field ii id
 	with Not_found -> lookup_implemented_interfaces l id
-  
+
 and lookup_interface_field ii id =
   check_if_interface_complete ii;
   try
-    list_assoc_name (fun fi -> fi.java_field_info_name) 
+    list_assoc_name (fun fi -> fi.java_field_info_name)
       id ii.interface_info_fields
   with
       Not_found -> lookup_implemented_interfaces ii.interface_info_extends id
@@ -1489,7 +1489,7 @@ and check_if_class_complete ci =
 	ci.class_info_incomplete <- false;
 	get_class_prototypes p t ci d;
     end;
-  
+
 and lookup_class_field ci id =
   check_if_class_complete ci;
   try
@@ -1502,18 +1502,18 @@ and lookup_class_field ci id =
             | Some ci -> lookup_class_field ci id
         with
             Not_found -> lookup_implemented_interfaces ci.class_info_implements id
-              
-              
+
+
 and lookup_field ti id =
   match ti with
     | TypeClass ci -> lookup_class_field ci id
     | TypeInterface ii -> lookup_interface_field ii id
 
-let () = 
+let () =
   object_class :=
     catch_typing_errors
       (fun () ->
-         match classify_name [] [] None [] 
+         match classify_name [] [] None []
            ((Loc.dummy_position,"Object") :: javalang_qid)
          with
            | TypeName (TypeClass ci) -> ci
@@ -1524,7 +1524,7 @@ let string_class =
   if !Java_options.javacard then dummy_class else
     catch_typing_errors
       (fun () ->
-         match classify_name [] [] None [] 
+         match classify_name [] [] None []
            ((Loc.dummy_position,"String") :: javalang_qid)
          with
            | TypeName (TypeClass ci) -> ci
@@ -1545,17 +1545,17 @@ type typing_env =
     }
 
 let find_label env (loc,id) =
-  try List.assoc id env.label_env 
+  try List.assoc id env.label_env
   with Not_found -> typing_error loc "unknown label %s" id
-  
+
 
 let label_assoc loc id env fun_labels effective_labels =
   match fun_labels, effective_labels with
-    | [lf], [] -> 
+    | [lf], [] ->
 	begin
 	  match env.current_label with
-	    | None -> 
-		typing_error loc 
+	    | None ->
+		typing_error loc
 		  "%s expect a label but there is no current label" id
 	    | Some l -> [lf,l]
 	end
@@ -1565,9 +1565,9 @@ let label_assoc loc id env fun_labels effective_labels =
 	    (fun l1 lab -> let l2 = find_label env lab in (l1,l2))
 	    fun_labels effective_labels
 	with Invalid_argument _ ->
-	  typing_error loc 
+	  typing_error loc
 	    "wrong number of labels for %s" id
-	  
+
 (* JLS 5.1.4: Widening Reference Conversion *)
 let rec is_widening_reference_convertible tfrom tto =
   match tfrom,tto with
@@ -1583,7 +1583,7 @@ let rec is_widening_reference_convertible tfrom tto =
     | JTYarray _ , JTYinterface i when i==cloneable_interface -> true
     | JTYarray _ , JTYinterface i when i==serializable_interface -> true
 *)
-    | JTYarray (_, t1), JTYarray (_, t2) -> 
+    | JTYarray (_, t1), JTYarray (_, t2) ->
         is_widening_reference_convertible t1 t2
     | _ -> false
 
@@ -1599,14 +1599,14 @@ and term env e =
   let loc = e.java_pexpr_loc in
   let ty, tt =
     match e.java_pexpr_node with
-      | JPElit l -> 
-          let ty,l = 
+      | JPElit l ->
+          let ty,l =
             match l with
               | Integer _s -> integer_type,l
               | Char _s -> assert false (* TODO *)
               | String _s -> logic_string_type,l
               | Bool _b -> boolean_type,l
-              | Float(_s,suf) -> 
+              | Float(_s,suf) ->
 		  begin
 		    match suf with
 		      | `Real -> real_type,l
@@ -1632,58 +1632,58 @@ and term env e =
                     "term expected, got a logic type"
           end
 
-      | JPEresult -> 
+      | JPEresult ->
           begin
             try
               let vi = List.assoc "\\result" env.env in
               vi.java_var_info_type,JTvar vi
-            with Not_found -> 
+            with Not_found ->
               typing_error loc "\\result undefined in this context"
           end
-      | JPEthis -> 
+      | JPEthis ->
           let vi = get_this loc env.env in
           vi.java_var_info_type, JTvar vi
-      | JPEbin (e1, op, e2) -> 
-          let te1 = termt e1 and te2 = termt e2 in 
-          make_logic_bin_op loc op 
+      | JPEbin (e1, op, e2) ->
+          let te1 = termt e1 and te2 = termt e2 in
+          make_logic_bin_op loc op
             te1.java_term_type te1 te2.java_term_type te2
-      | JPEquantifier _ -> 
+      | JPEquantifier _ ->
           typing_error loc
             "quantified formulas not allowed in term position"
-      | JPEold e1 -> 
+      | JPEold e1 ->
 	  let l = find_label env (loc,"Old") in
-          let te1 = term { env  with current_label = Some l} e1 in 
+          let te1 = term { env  with current_label = Some l} e1 in
           te1.java_term_type,JTat(te1,l)
-      | JPEat(e1,lab) -> 
+      | JPEat(e1,lab) ->
 	  let l = find_label env lab in
-          let te1 = term { env  with current_label = Some l} e1 in 
-          te1.java_term_type,JTat(te1,l)                  
+          let te1 = term { env  with current_label = Some l} e1 in
+          te1.java_term_type,JTat(te1,l)
       | JPEinstanceof (_, _)-> assert false (* TODO *)
-      | JPEcast (t, e1)-> 
+      | JPEcast (t, e1)->
           let te1 = termt e1 in
           let ty = type_type env.package_env env.type_env false t in
           (* TODO: check if cast allowed *)
           ty,JTcast(ty,te1)
-      | JPEarray_access (e1, e2)-> 
-          let te1 = termt e1 and te2 = termt e2 in 
+      | JPEarray_access (e1, e2)->
+          let te1 = termt e1 and te2 = termt e2 in
           begin
             match te1.java_term_type with
               | JTYarray (_, t) ->
                   begin
-                    try 
-                      match 
-                        logic_unary_numeric_promotion te2.java_term_type 
-                      with 
+                    try
+                      match
+                        logic_unary_numeric_promotion te2.java_term_type
+                      with
                         | Tinteger -> t, JTarray_access(te1,te2)
                         | _ -> raise Not_found
                     with Not_found ->
                       integer_expected e2.java_pexpr_loc te2.java_term_type
-                  end   
+                  end
               | _ ->
                   array_expected e1.java_pexpr_loc te1.java_term_type
           end
       | JPEarray_range (e1, e2, e3)->
-          let te1 = termt e1 in 
+          let te1 = termt e1 in
           begin
             match te1.java_term_type with
               | JTYarray (_, t) ->
@@ -1696,51 +1696,51 @@ and term env e =
       | JPEnew_array _-> assert false (* TODO *)
       | JPEnew (_, _)-> assert false (* TODO *)
       | JPEsuper_call (_, _)-> assert false (* TODO *)
-      | JPEcall_name (qid, labels, args)-> 
+      | JPEcall_name (qid, labels, args)->
           begin
             match qid with
-              | [(loc,id)] -> 
-                  begin 
-                    try 
+              | [(loc,id)] ->
+                  begin
+                    try
                       let fi = Hashtbl.find logics_env id in
-		      let lab_assoc = 
+		      let lab_assoc =
 			label_assoc loc id env fi.java_logic_info_labels labels
 		      in
-                      let args = 
+                      let args =
 			try
 			  List.map2
 			    (fun vi e ->
 			       let ty = vi.java_var_info_type in
 			       let te = termt e in
-			       if is_logic_call_convertible te.java_term_type ty 
+			       if is_logic_call_convertible te.java_term_type ty
 			       then te
 			       else
-				 typing_error e.java_pexpr_loc 
-				   "type %a expected instead of %a" 
-				   print_type ty print_type te.java_term_type) 
+				 typing_error e.java_pexpr_loc
+				   "type %a expected instead of %a"
+				   print_type ty print_type te.java_term_type)
 			    fi.java_logic_info_parameters args
 			with  Invalid_argument _ ->
-			  typing_error e.java_pexpr_loc 
+			  typing_error e.java_pexpr_loc
 			    "wrong number of arguments for %s" id
 		      in
                       match fi.java_logic_info_result_type with
                         | None ->
-                            typing_error loc 
+                            typing_error loc
                               "logic symbol `%s' is a predicate" id
                         | Some t -> t,JTapp(fi,lab_assoc,args)
                     with Not_found ->
                       typing_error loc "logic function `%s' not found" id
-                  end           
-              | _ -> 
+                  end
+              | _ ->
                   typing_error loc "method calls not allowed in annotations"
           end
-      | JPEcall_expr _ -> 
-          typing_error loc 
+      | JPEcall_expr _ ->
+          typing_error loc
             "method calls not allowed in annotations"
-      | JPEfield_access fa -> 
+      | JPEfield_access fa ->
           begin
             match fa with
-              | Primary_access (e1, f) -> 
+              | Primary_access (e1, f) ->
                   let te1 = termt e1 in
                     begin
                       match te1.java_term_type with
@@ -1774,12 +1774,12 @@ and term env e =
                             typing_error e1.java_pexpr_loc
                               "not a class"
                     end
-                      
+
               | Super_access _ -> assert false (* TODO *)
           end
       | JPEif (e1, e2, e3)->
           let te1 = termt e1 in
-          if is_boolean te1.java_term_type then     
+          if is_boolean te1.java_term_type then
             let te2 = termt e2 in
             let te3 = termt e3 in
             (* TODO: check if compatible types *)
@@ -1789,23 +1789,26 @@ and term env e =
       | JPEassign_array _
       | JPEassign_field _
       | JPEassign_name _ ->
-          typing_error loc 
-            "assignment not allowed in annotations"             
+          typing_error loc
+            "assignment not allowed in annotations"
+      | JPEfresh _ ->
+          typing_error loc
+            "fresh is a predicate not a term"
       | JPEincr (_, _) -> assert false (* TODO *)
-      | JPEun (op, e) ->         
-          let te = termt e in 
+      | JPEun (op, e) ->
+          let te = termt e in
             make_logic_un_op loc op te
-  in { java_term_node = tt; 
+  in { java_term_node = tt;
        java_term_type = ty;
        java_term_loc = e.java_pexpr_loc }
 
 and index env e =
   let te = term env e in
-  match  
-    logic_unary_numeric_promotion te.java_term_type 
+  match
+    logic_unary_numeric_promotion te.java_term_type
   with
     | Tinteger -> te
-    | _ -> 
+    | _ ->
         integer_expected e.java_pexpr_loc te.java_term_type
 
 and assertion env e =
@@ -1815,8 +1818,8 @@ and assertion env e =
   match e.java_pexpr_node with
     | JPElit (Bool true) -> JAtrue
     | JPElit (Bool false) -> JAfalse
-    | JPElit _ -> 
-        typing_error e.java_pexpr_loc 
+    | JPElit _ ->
+        typing_error e.java_pexpr_loc
           "this literal is not a boolean expression"
     | JPEun(Unot, e2) ->
         let te2 = assertiont e2 in JAnot(te2)
@@ -1826,7 +1829,7 @@ and assertion env e =
         and te2 = assertiont e2
         in connective te1 op te2
     | JPEbin
-        ({ java_pexpr_node = 
+        ({ java_pexpr_node =
              JPEbin (_, (Beq | Bne | Bgt | Blt | Ble | Bge), a) } as p,
          (Beq | Bne | Bgt | Blt | Ble | Bge as op), b) ->
         let q = { java_pexpr_loc = fst a.java_pexpr_loc, snd b.java_pexpr_loc ;
@@ -1834,28 +1837,39 @@ and assertion env e =
           JAand (assertiont p, assertiont q)
     | JPEbin
         (a, (Beq | Bne | Bgt | Blt | Ble | Bge as op),
-        ({ java_pexpr_node = 
+        ({ java_pexpr_node =
             JPEbin (b, (Beq | Bne | Bgt | Blt | Ble | Bge), _) } as p)) ->
         let q = { java_pexpr_loc = fst a.java_pexpr_loc, snd b.java_pexpr_loc ;
                   java_pexpr_node = JPEbin (a, op, b) } in
           JAand (assertiont q, assertiont p)
-    | JPEbin(e1, op, e2) -> 
-        let te1 = termt e1 and te2 = termt e2 in 
-          make_predicate_bin_op e.java_pexpr_loc op 
+    | JPEbin(e1, op, e2) ->
+        let te1 = termt e1 and te2 = termt e2 in
+          make_predicate_bin_op e.java_pexpr_loc op
             te1.java_term_type te1 te2.java_term_type te2
-    | JPEquantifier (q, idl, e)-> 
-        let a = make_quantified_formula 
-          e.java_pexpr_loc q idl env e 
-        in
-        a.java_assertion_node
-    | JPEold a -> 
+    | JPEquantifier (q, idl, e)->
+      let a = make_quantified_formula
+        e.java_pexpr_loc q idl env e
+      in
+      a.java_assertion_node
+    | JPEfresh e ->
+      let t = termt e in
+      begin
+        match t.java_term_type with
+          | JTYlogic _ | JTYbase _ ->
+            typing_error e.java_pexpr_loc "reference type expected for \\fresh"
+          | JTYarray (_, _)
+          | JTYinterface _
+          | JTYnull
+          | JTYclass _ -> JAfresh(t)
+      end
+    | JPEold a ->
         let l = find_label env (e.java_pexpr_loc,"Old") in
-        let ta = assertion { env  with current_label = Some l} a in 
+        let ta = assertion { env  with current_label = Some l} a in
         JAat(ta,l)
-    | JPEat(a,lab) -> 
+    | JPEat(a,lab) ->
         let l = find_label env lab in
-        let ta = assertion { env  with current_label = Some l} a in 
-        JAat(ta,l)    
+        let ta = assertion { env  with current_label = Some l} a in
+        JAat(ta,l)
     | JPEinstanceof (e, ty) ->
         begin
           match env.current_label with
@@ -1872,11 +1886,11 @@ and assertion env e =
     | JPEnew_array _-> assert false (* TODO *)
     | JPEnew (_, _)-> assert false (* TODO *)
     | JPEsuper_call (_, _)-> assert false (* TODO *)
-    | JPEcall_name([(loc,id)], labels, args)-> 
+    | JPEcall_name([(loc,id)], labels, args)->
         begin
           try
             let fi = Hashtbl.find logics_env id in
-	    let lab_assoc = 
+	    let lab_assoc =
 	      label_assoc loc id env fi.java_logic_info_labels labels
 	    in
             let tl =
@@ -1887,34 +1901,34 @@ and assertion env e =
                      let te = termt e in
                      if is_logic_call_convertible te.java_term_type ty then te
                      else
-                       typing_error e.java_pexpr_loc 
-                         "type %a expected, got %a" 
-                         print_type ty print_type te.java_term_type) 
+                       typing_error e.java_pexpr_loc
+                         "type %a expected, got %a"
+                         print_type ty print_type te.java_term_type)
                   fi.java_logic_info_parameters args
               with  Invalid_argument _ ->
-                typing_error e.java_pexpr_loc 
+                typing_error e.java_pexpr_loc
                   "wrong number of arguments for %s" id
             in
             match fi.java_logic_info_result_type with
-              | None -> JAapp(fi, lab_assoc, tl)                 
+              | None -> JAapp(fi, lab_assoc, tl)
               | Some _t ->
-                  typing_error loc 
+                  typing_error loc
                     "logic symbol `%s' is not a predicate" id
           with
               Not_found ->
-                typing_error e.java_pexpr_loc 
+                typing_error e.java_pexpr_loc
                   "unknown predicate `%s'" id
         end
-    | JPEcall_name _ | JPEcall_expr _ -> 
-        typing_error e.java_pexpr_loc 
-          "method call not allowed in assertion"       
-    | JPEfield_access _-> 
-        typing_error e.java_pexpr_loc 
-          "field access not allowed in assertion"       
+    | JPEcall_name _ | JPEcall_expr _ ->
+        typing_error e.java_pexpr_loc
+          "method call not allowed in assertion"
+    | JPEfield_access _->
+        typing_error e.java_pexpr_loc
+          "field access not allowed in assertion"
 	  (* TODO: boolean fields can be seen as predicates *)
-    | JPEif (e1, e2, e3)-> 
+    | JPEif (e1, e2, e3)->
         let te1 = termt e1 in
-        if is_boolean te1.java_term_type then       
+        if is_boolean te1.java_term_type then
           let te2 = assertiont e2 in
           let te3 = assertiont e3 in
             (* TODO: check if compatible types *)
@@ -1923,12 +1937,12 @@ and assertion env e =
             typing_error e1.java_pexpr_loc "boolean expected"
     | JPEassign_array (_, _, _, _)
     | JPEassign_field (_, _, _)
-    | JPEassign_name (_, _, _) -> 
-        typing_error e.java_pexpr_loc 
-          "assignment not allowed in annotations"               
+    | JPEassign_name (_, _, _) ->
+        typing_error e.java_pexpr_loc
+          "assignment not allowed in annotations"
     | JPEname _-> assert false (* TODO *)
     | JPEincr (_, _)-> assert false (* TODO *)
-    | JPEresult -> 
+    | JPEresult ->
         begin
           try
             let vi = List.assoc "\\result" env.env in
@@ -1942,12 +1956,12 @@ and assertion env e =
               | _ ->
                   typing_error e.java_pexpr_loc "\\result is not boolean"
 
-          with Not_found -> 
+          with Not_found ->
             typing_error e.java_pexpr_loc "\\result undefined in this context"
         end
 
-    | JPEthis -> 
-        typing_error e.java_pexpr_loc 
+    | JPEthis ->
+        typing_error e.java_pexpr_loc
           "'this' is not a boolean expression"
 
   in { java_assertion_node = ta;
@@ -1956,7 +1970,7 @@ and assertion env e =
 and make_quantified_formula loc q idl env e : assertion =
   match idl with
     | [] -> assertion env e
-    | (ty,idl)::r ->    
+    | (ty,idl)::r ->
         let tty = type_type env.package_env env.type_env true ty in
         let env_local =
           List.map
@@ -1966,17 +1980,17 @@ and make_quantified_formula loc q idl env e : assertion =
                (n,vi))
             idl
         in
-        let f = 
-          make_quantified_formula loc q r 
-	    { env with env = env_local@env.env } 
-            e 
+        let f =
+          make_quantified_formula loc q r
+	    { env with env = env_local@env.env }
+            e
         in
         List.fold_right
           (fun (_,vi) acc ->
-             { java_assertion_loc = loc ; 
+             { java_assertion_loc = loc ;
                java_assertion_node = JAquantifier(q,vi,acc) })
           env_local f
-        
+
 
 
 (*
@@ -1987,16 +2001,16 @@ and make_quantified_formula loc q idl env e : assertion =
 *)
 
 let () =
-  match classify_name [] [] None [] 
+  match classify_name [] [] None []
     ((Loc.dummy_position,"Throwable") :: javalang_qid)
   with
     | TypeName (TypeClass ci) -> ci.class_info_is_exception <- true
     | _ -> assert false
-        
-let () = 
+
+let () =
   catch_typing_errors
     (fun () ->
-       match classify_name [] [] None [] 
+       match classify_name [] [] None []
          ((Loc.dummy_position,"Exception") :: javalang_qid)
        with
          | TypeName (TypeClass ci) -> ci.class_info_is_exception <- true
@@ -2004,7 +2018,7 @@ let () =
     ()
 
 
-    
+
 
 (*******************************
 
@@ -2024,7 +2038,7 @@ let lemmas_table = Hashtbl.create 17
 (* JLS 5.6.1: Unary Numeric Promotion *)
 let unary_numeric_promotion t =
   match t with
-    | JTYbase t -> 
+    | JTYbase t ->
         begin
           match t with
             | Treal | Tinteger -> assert false
@@ -2036,31 +2050,31 @@ let unary_numeric_promotion t =
 (* JLS 5.6.2: Binary Numeric Promotion *)
 let binary_numeric_promotion ~ghost t1 t2 =
   match t1,t2 with
-    | JTYbase t1,JTYbase t2 -> 
+    | JTYbase t1,JTYbase t2 ->
         begin
           if ghost then
             match t1,t2 with
               | (Tboolean | Tunit| Tstring),_
               | _, (Tboolean | Tunit| Tstring) -> raise Not_found
-              | (Treal | Tdouble | Tfloat), _ 
+              | (Treal | Tdouble | Tfloat), _
               | _, (Treal | Tdouble | Tfloat) -> Treal
               | _ -> Tinteger
           else
             match t1,t2 with
               | (Tboolean | Tunit | Tstring),_
               | _, (Tboolean | Tunit | Tstring) -> raise Not_found
-              | (Treal | Tinteger), _ 
+              | (Treal | Tinteger), _
               | _, (Treal | Tinteger) -> assert false
               | Tdouble,_ | _, Tdouble -> Tdouble
               | Tfloat,_ | _, Tfloat -> Tfloat
               | Tlong,_ | _, Tlong -> Tlong
             | (Tshort | Tbyte | Tint | Tchar),
-                  (Tshort | Tbyte | Tint | Tchar) -> Tint               
+                  (Tshort | Tbyte | Tint | Tchar) -> Tint
           end
     | _ -> raise Not_found
 
 let lub_object_types _t1 _t2 = JTYnull
-  
+
 
 (* JLS 5.1.3: Narrowing Primitive Conversion *)
 let is_narrowing_primitive_convertible tfrom tto =
@@ -2102,7 +2116,7 @@ let narrowing_primitive_conversion n tfrom tto =
 
 (* JLS 5.2: Assignment conversion  *)
 
-let final_field_values_table : (int, Num.num list) Hashtbl.t 
+let final_field_values_table : (int, Num.num list) Hashtbl.t
     = Hashtbl.create 97
 
 let bwor_num n1 n2 =
@@ -2113,7 +2127,7 @@ let bwor_num n1 n2 =
   with
       _ -> assert false
 
-    
+
 let rec lsl_num n1 n2 =
   if n2 = 0 then n1 else lsl_num (Num.add_num n1 n1) (n2-1)
 
@@ -2141,7 +2155,7 @@ let rec eval_const_expression env const e =
             match ty with
               | JTYbase t ->
                   let te = match e.java_expr_type with
-                    | JTYbase t -> t | _ -> assert false 
+                    | JTYbase t -> t | _ -> assert false
                   in
                     begin
                       match t with
@@ -2149,7 +2163,7 @@ let rec eval_const_expression env const e =
                             if is_narrowing_primitive_convertible te t then
                               narrowing_primitive_conversion n te t
                             else
-                              typing_error e.java_expr_loc 
+                              typing_error e.java_expr_loc
                                 "outside the byte range: %s" (Num.string_of_num n)
                         | Tshort -> if in_short_range n then n else
                             if is_narrowing_primitive_convertible te t then
@@ -2157,14 +2171,14 @@ let rec eval_const_expression env const e =
                             else
                               typing_error e.java_expr_loc
                                 "outside the short range: %s" (Num.string_of_num n)
-                        | Tunit | Treal | Tinteger | Tdouble | Tlong 
+                        | Tunit | Treal | Tinteger | Tdouble | Tlong
                         | Tfloat | Tint | Tchar | Tboolean | Tstring -> assert false (* TODO *)
                     end
-              | JTYarray _ | JTYinterface _ | JTYclass (_, _) 
+              | JTYarray _ | JTYinterface _ | JTYclass (_, _)
               | JTYnull | JTYlogic _
                   -> raise Not_found
           end
-    | JEbin(e1,op,e2) -> 
+    | JEbin(e1,op,e2) ->
         let n1 = eval_const_expression env const e1 in
         let n2 = eval_const_expression env const e2 in
         begin
@@ -2173,14 +2187,14 @@ let rec eval_const_expression env const e =
             | Badd -> Num.add_num n1 n2
             | Bbwxor -> assert false (* TODO *)
             | Bbwor -> bwor_num n1 n2
-            | Bbwand -> assert false (* TODO *)         
-            | Blsl|Basr|Blsr -> 
+            | Bbwand -> assert false (* TODO *)
+            | Blsl|Basr|Blsr ->
                 let max =
                   match e1.java_expr_type with
                     | JTYbase Tint -> 31
                     | JTYbase Tlong -> 63
                     | _ -> assert false
-                in 
+                in
                 if Num.le_num Numconst.zero n1 && Num.le_num n1 (Num.num_of_int max) then
                   match op with
                     | Blsl -> lsl_num n1 (Num.int_of_num n2)
@@ -2190,7 +2204,7 @@ let rec eval_const_expression env const e =
                 else
                   typing_error e2.java_expr_loc "this expression is not in the rang 0-%d" max
             | Bge|Ble|Blt|Bgt|Bne|Beq
-            |Biff|Bimpl|Bor|Band|Bmod|Bdiv|Bmul|Bsub -> 
+            |Biff|Bimpl|Bor|Band|Bmod|Bdiv|Bmul|Bsub ->
                raise Not_found (* TODO *)
 
         end
@@ -2198,7 +2212,7 @@ let rec eval_const_expression env const e =
         begin
           try
             match fi.java_field_info_type with
-              | JTYarray _ -> raise Not_found 
+              | JTYarray _ -> raise Not_found
               | _ ->
                   List.hd (Hashtbl.find final_field_values_table fi.java_field_info_tag)
           with Not_found ->
@@ -2207,14 +2221,14 @@ let rec eval_const_expression env const e =
 	      | Some ci -> ci
 	    in
 	    type_field_initializer env.package_env env.type_env ci fi;
-            try 
+            try
 	      List.hd (Hashtbl.find final_field_values_table fi.java_field_info_tag)
-	    with Not_found -> 
+	    with Not_found ->
 	      raise Not_found
 	      (* was assert false (* should never happen *)*)
         end
     | JEif (_, _, _)-> raise Not_found  (* TODO *)
-    | JEun (op, e) -> 
+    | JEun (op, e) ->
         let _n = eval_const_expression env const e in
         begin
           match op with
@@ -2224,7 +2238,7 @@ let rec eval_const_expression env const e =
             | Ucompl -> raise Not_found (* TODO *)
         end
     | JEinstanceof _
-    | JEvar _ 
+    | JEvar _
     | JEnew_object (_, _)
     | JEnew_array (_, _)
     | JEstatic_call (_, _)
@@ -2248,13 +2262,13 @@ let rec eval_const_expression env const e =
 and is_assignment_convertible ?(const=false) ~ghost env tfrom efrom tto =
   is_identity_convertible tfrom tto ||
   match tfrom,tto with
-    | JTYbase t1, JTYbase t2 -> 
+    | JTYbase t1, JTYbase t2 ->
         if ghost then is_logic_widening_primitive_convertible t1 t2
         else
           is_widening_primitive_convertible t1 t2 ||
             begin
               match t2 with
-                | Tbyte | Tshort | Tchar ->               
+                | Tbyte | Tshort | Tchar ->
                     begin
                       try
                         let n = eval_const_expression env const efrom in
@@ -2263,7 +2277,7 @@ and is_assignment_convertible ?(const=false) ~ghost env tfrom efrom tto =
                           | Tshort -> in_short_range n
                           | Tchar -> in_char_range n
                           | _ -> assert false
-                      with Not_found -> 
+                      with Not_found ->
                         if const then raise Not_found else false
                     end
                 | _ -> false
@@ -2287,12 +2301,12 @@ and cast_convertible tfrom tto =
       | JTYclass(_,cfrom), JTYclass(_,cto) ->
           is_subclass cfrom cto || is_subclass cto cfrom
       | JTYclass (_, ci), JTYinterface ii ->
-	  if ci.class_info_is_final then implements ci ii else 
+	  if ci.class_info_is_final then implements ci ii else
 	    true (* JLS 2.0: OK, JLS 3.0: TO COMPLETE *)
-      | JTYclass(_,c), JTYarray _ -> 
+      | JTYclass(_,c), JTYarray _ ->
           c == !object_class
       | JTYinterface _,JTYclass _ -> assert false (* TODO *)
-      | JTYinterface ifrom, JTYinterface ito -> 
+      | JTYinterface ifrom, JTYinterface ito ->
           is_subinterface ifrom ito || is_subinterface ito ifrom
             (* TODO: check this: JLS p73 appears to be incomplete *)
       | JTYinterface _,JTYarray _ -> assert false (* TODO *)
@@ -2300,7 +2314,7 @@ and cast_convertible tfrom tto =
       | JTYnull, JTYclass _ -> true
       | JTYnull,_ -> assert false
       | _,JTYnull -> assert false
-  
+
 (**********************)
 
 (* expressions *)
@@ -2312,7 +2326,7 @@ and string_promotion e =
     | JTYbase Tinteger -> e (* TODO: coercion ? *)
     | JTYbase _ -> e  (* TODO: coercion ? *)
     | _ -> assert false
-          
+
 and make_bin_op ~ghost loc op t1 e1 t2 e2 =
   match op with
     | Bconcat -> assert false
@@ -2351,7 +2365,7 @@ and make_bin_op ~ghost loc op t1 e1 t2 e2 =
             JTYbase t,JEbin(e1, op, e2)
           with Not_found ->
             match t1,t2 with
-              | (_,JTYclass(_,c)) | (JTYclass(_,c),_) 
+              | (_,JTYclass(_,c)) | (JTYclass(_,c),_)
                     when c == string_class ->
                   (string_type ~valid:true),
                       JEbin(string_promotion e1,Bconcat,string_promotion e2)
@@ -2359,16 +2373,16 @@ and make_bin_op ~ghost loc op t1 e1 t2 e2 =
                   (string_type ~valid:true),
                   JEbin(string_promotion e1,Bconcat,string_promotion e2)
               | _ ->
-                  typing_error loc 
-                    "numeric types or String expected for +, got %a + %a" 
+                  typing_error loc
+                    "numeric types or String expected for +, got %a + %a"
                     print_type t1 print_type t2
         end
-    | Band | Bor -> 
+    | Band | Bor ->
         if is_boolean t1 && is_boolean t2 then
           boolean_type,JEbin(e1,op,e2)
         else
           typing_error loc "booleans expected"
-    | Basr | Blsr | Blsl -> 
+    | Basr | Blsr | Blsl ->
         (* JLS 15.19: Shift Operators *)
         begin
           try
@@ -2385,7 +2399,7 @@ and make_bin_op ~ghost loc op t1 e1 t2 e2 =
               | _ -> raise Not_found
           with Not_found -> int_expected loc t1
         end
-    | Bbwxor|Bbwor|Bbwand ->    
+    | Bbwxor|Bbwor|Bbwand ->
         if is_boolean t1 && is_boolean t2 then
           boolean_type,JEbin(e1,op,e2)
         else
@@ -2396,17 +2410,17 @@ and make_bin_op ~ghost loc op t1 e1 t2 e2 =
                 JTYbase t1, JEbin(e1, op, e2)
             with Not_found ->
               typing_error loc "booleans or integers expected"
-          end     
+          end
     | Bimpl | Biff -> assert false
-        
+
 and make_unary_op loc op t1 e1 =
   match op with
-    | Unot -> 
+    | Unot ->
         if is_boolean t1 then
           Tboolean,JEun(op,e1)
         else
           typing_error loc "boolean expected"
-    | Ucompl -> 
+    | Ucompl ->
         begin
           try
             match unary_numeric_promotion t1 with
@@ -2415,7 +2429,7 @@ and make_unary_op loc op t1 e1 =
           with Not_found ->
             typing_error loc "integer type expected for ~"
         end
-    | Uminus-> 
+    | Uminus->
         begin
           try
             let t = unary_numeric_promotion t1 in
@@ -2426,7 +2440,7 @@ and make_unary_op loc op t1 e1 =
     | Uplus -> assert false
 
 and expr_var loc vi =
-  { java_expr_node = JEvar vi; 
+  { java_expr_node = JEvar vi;
     java_expr_type = vi.java_var_info_type;
     java_expr_loc = loc }
 
@@ -2436,14 +2450,14 @@ and expr_of_term t =
     match t.java_term_node with
       | JTvar vi -> JEvar vi
       | JTat _ -> assert false (* TODO *)
-      | JTfield_access(t, fi) -> 
+      | JTfield_access(t, fi) ->
           JEfield_access(expr_of_term t,fi)
-      | JTstatic_field_access(ci, fi) -> 
+      | JTstatic_field_access(ci, fi) ->
           JEstatic_field_access(ci,fi)
-      | JTarray_length(t) -> 
+      | JTarray_length(t) ->
           ty := int_type;
           JEarray_length(expr_of_term t)
-      | JTarray_access(t1,t2) -> 
+      | JTarray_access(t1,t2) ->
           JEarray_access(expr_of_term t1, expr_of_term t2)
       | JTarray_range _  -> assert false (* TODO *)
       | JTapp (_, _, _) -> assert false (* TODO *)
@@ -2452,7 +2466,7 @@ and expr_of_term t =
       | JTun (_t, _op, _e1) -> assert false (* TODO *)
       | JTlit _ -> assert false (* TODO *)
       | JTcast(ty,t) -> JEcast(ty,expr_of_term t)
-      | JTif(t1,t2,t3) -> 
+      | JTif(t1,t2,t3) ->
           JEif(expr_of_term t1, expr_of_term t2, expr_of_term t3)
   in
   { java_expr_loc = t.java_term_loc;
@@ -2464,12 +2478,12 @@ and expr_of_term t =
   JLS 15.12.2: Compile-Time Step 2: Determine Method signature
 
   ti is the class or interface to search
-  
+
 *)
 
 and is_accessible_and_applicable_method mi id arg_types =
   mi.method_info_name = id &&
-  (* check args number *) 
+  (* check args number *)
   List.length arg_types = List.length mi.method_info_parameters &&
   (* check args types *)
 (
@@ -2479,30 +2493,30 @@ and is_accessible_and_applicable_method mi id arg_types =
     (Pp.print_list Pp.comma (fun fmt (vi,_) -> print_type fmt vi.java_var_info_type)) mi.method_info_parameters;
   *)
   List.for_all2
-   (fun vi t -> 
+   (fun vi t ->
       is_method_invocation_convertible t vi.java_var_info_type)
   (List.map fst mi.method_info_parameters) arg_types )
-  
+
 and is_accessible_and_applicable_constructor ci arg_types =
-  (* check args number *) 
+  (* check args number *)
   List.length arg_types = List.length ci.constr_info_parameters &&
   (* check args types *)
   List.for_all2
-  (fun vi t -> 
+  (fun vi t ->
      is_method_invocation_convertible t vi.java_var_info_type)
-  (List.map fst ci.constr_info_parameters) arg_types 
-  
+  (List.map fst ci.constr_info_parameters) arg_types
+
 and mci_signature mci =
   let ty, params =
     match mci with
-      | MethodInfo mi -> 
+      | MethodInfo mi ->
 	  begin match mi.method_info_class_or_interface with
-	    | TypeClass ci -> 
+	    | TypeClass ci ->
 		JTYclass (true (* i.e. [this] is always non-null *), ci)
 	    | TypeInterface ii -> JTYinterface ii
 	  end,
 	  mi.method_info_parameters
-      | ConstructorInfo ci -> 
+      | ConstructorInfo ci ->
 	  JTYclass (true (* i.e. [this] is always non-null *), ci.constr_info_class),
 	  ci.constr_info_parameters
   in
@@ -2524,7 +2538,7 @@ and compare_signatures acc s1 s2 =
               (* t2 convertible to t1 *)
               if acc <= 0 then -1 else raise Not_found
             else raise Not_found
-    
+
 and filter_maximally_specific_signature mci acc =
   match acc with
     | [] -> [mci]
@@ -2537,7 +2551,7 @@ and filter_maximally_specific_signature mci acc =
             if c > 0 then (* mci more specific than mci' *)
               filter_maximally_specific_signature mci rem
             else (* mci' more specific than mci *)
-              acc             
+              acc
         with Not_found -> (* incomparable signatures *)
           mci' :: (filter_maximally_specific_signature mci rem)
 
@@ -2548,14 +2562,14 @@ and get_maximally_specific_signatures acc mcis =
         let acc' = filter_maximally_specific_signature mci acc in
         get_maximally_specific_signatures acc' rem
 
-and lookup_method ti (loc,id) arg_types = 
+and lookup_method ti (loc,id) arg_types =
   let rec collect_methods_from_interface acc ii =
     check_if_interface_complete ii;
-    let acc = 
+    let acc =
       List.fold_left
-        (fun acc mi -> 
-           if is_accessible_and_applicable_method mi id arg_types then 
-             mi::acc 
+        (fun acc mi ->
+           if is_accessible_and_applicable_method mi id arg_types then
+             mi::acc
            else acc)
         acc ii.interface_info_methods
     in
@@ -2564,11 +2578,11 @@ and lookup_method ti (loc,id) arg_types =
   in
   let rec collect_methods_from_class acc ci =
     check_if_class_complete ci;
-    let acc = 
+    let acc =
       List.fold_left
-        (fun acc mi -> 
-           if is_accessible_and_applicable_method mi id arg_types then 
-             mi::acc 
+        (fun acc mi ->
+           if is_accessible_and_applicable_method mi id arg_types then
+             mi::acc
            else acc)
         acc ci.class_info_methods
     in
@@ -2581,27 +2595,27 @@ and lookup_method ti (loc,id) arg_types =
     List.fold_left
       collect_methods_from_interface acc ci.class_info_implements
   in
-  let meths = 
+  let meths =
     match ti with
-      | TypeClass ci -> collect_methods_from_class [] ci 
-      | TypeInterface ii -> 
+      | TypeClass ci -> collect_methods_from_class [] ci
+      | TypeInterface ii ->
           let acc = collect_methods_from_interface [] ii in
           collect_methods_from_class acc !object_class
   in
   match meths with
-    | [] -> 
+    | [] ->
         typing_error loc "Cannot find method @['%a.%s(%a)'@]" print_type_name ti id
           (Pp.print_list Pp.comma print_type) arg_types
 
     | [mi] -> mi
-    | _ -> 
+    | _ ->
 (*
         eprintf "possible calls:@.";
         List.iter (fun mi ->
-                     eprintf "%a.%s(%a)@." 
+                     eprintf "%a.%s(%a)@."
                        print_type_name mi.method_info_class_or_interface
                        mi.method_info_name
-                       (Pp.print_list Pp.comma (fun fmt (vi,_) -> print_type fmt vi.java_var_info_type)) 
+                       (Pp.print_list Pp.comma (fun fmt (vi,_) -> print_type fmt vi.java_var_info_type))
                        mi.method_info_parameters)
           meths;
 *)
@@ -2610,56 +2624,56 @@ and lookup_method ti (loc,id) arg_types =
 (*
         eprintf "maximally specific calls:@.";
         List.iter (fun mi ->
-                     eprintf "%a.%s(%a)@." 
+                     eprintf "%a.%s(%a)@."
                        print_type_name mi.method_info_class_or_interface
                        mi.method_info_name
-                       (Pp.print_list Pp.comma (fun fmt (vi,_) -> print_type fmt vi.java_var_info_type)) 
+                       (Pp.print_list Pp.comma (fun fmt (vi,_) -> print_type fmt vi.java_var_info_type))
                        mi.method_info_parameters)
           meths;
 *)
         match meths with
           | [] -> assert false
           | [MethodInfo mi] -> mi
-          | _ ->        
+          | _ ->
               typing_error loc "ambiguity in overloading/overriding"
 
-and lookup_constructor loc ci arg_types = 
+and lookup_constructor loc ci arg_types =
   let rec collect_constructors_from_class acc ci =
     check_if_class_complete ci;
     List.fold_left
-      (fun acc ci -> 
-         if is_accessible_and_applicable_constructor ci arg_types then 
-           ci::acc 
+      (fun acc ci ->
+         if is_accessible_and_applicable_constructor ci arg_types then
+           ci::acc
          else acc)
       acc ci.class_info_constructors
   in
   let constructors = collect_constructors_from_class [] ci in
   match constructors with
-    | [] -> 
-        typing_error loc "Cannot find constructor @['%a(%a)'@]" 
+    | [] ->
+        typing_error loc "Cannot find constructor @['%a(%a)'@]"
 	  print_type_name  (TypeClass ci)
           (Pp.print_list Pp.comma print_type) arg_types
     | [ci] -> ci
-    | _ -> 
+    | _ ->
 	let constrs = List.map (fun ci -> ConstructorInfo ci) constructors in
         let constrs = get_maximally_specific_signatures [] constrs in
         match constrs with
           | [] -> assert false
           | [ConstructorInfo ci] -> ci
-          | _ ->        
+          | _ ->
               typing_error loc "ambiguity in overloading/overriding"
-	         
+
 and expr ~ghost env e =
   let exprt = expr ~ghost env in
-  let ty, te = 
+  let ty, te =
     match e.java_pexpr_node with
-      | JPElit l -> 
-          let t, l = 
+      | JPElit l ->
+          let t, l =
             match l with
               | Integer _s | Char _s -> int_type, l
               | String _s -> logic_string_type, l
               | Bool _b -> boolean_type, l
-              | Float(_s,suf) -> 
+              | Float(_s,suf) ->
 		  begin
 		    match suf with
 		      | `Single -> float_type,l
@@ -2667,7 +2681,7 @@ and expr ~ghost env e =
 		  end
               | Null -> null_type, l
           in t, (JElit l)
-      | JPEname n -> 
+      | JPEname n ->
           begin
             match classify_name env.package_env env.type_env env.current_type env.env n with
               | TermName t ->
@@ -2683,33 +2697,33 @@ and expr ~ghost env e =
                   typing_error e.java_pexpr_loc
                     "expression expected, got a logic type"
           end
-      | JPEthis -> 
+      | JPEthis ->
           let vi = get_this e.java_pexpr_loc env.env in
           vi.java_var_info_type, JEvar vi
-      | JPEinstanceof (e1, t)-> 
+      | JPEinstanceof (e1, t)->
           let te1 = exprt e1 in
           let ty = type_type env.package_env env.type_env false t in
-          if is_reference_type ty && 
+          if is_reference_type ty &&
             cast_convertible te1.java_expr_type ty then
             boolean_type,JEinstanceof(te1,ty)
           else
             typing_error e.java_pexpr_loc "invalid instanceof"
-      | JPEcast (t, e1)-> 
+      | JPEcast (t, e1)->
           let te1 = exprt e1 in
           let ty = type_type env.package_env env.type_env false t in
           if cast_convertible te1.java_expr_type ty then
             ty,JEcast(ty,te1)
           else
             typing_error e.java_pexpr_loc "invalid cast"
-      | JPEarray_access (e1, e2)-> 
-          let te1 = exprt e1 and te2 = exprt e2 in 
+      | JPEarray_access (e1, e2)->
+          let te1 = exprt e1 and te2 = exprt e2 in
           begin
             match te1.java_expr_type with
               | JTYarray (_, t) ->
                   begin
                     try
                       match
-                        unary_numeric_promotion te2.java_expr_type 
+                        unary_numeric_promotion te2.java_expr_type
                       with
                         | Tint -> t, JEarray_access(te1,te2)
                         | _ -> raise Not_found
@@ -2721,7 +2735,7 @@ and expr ~ghost env e =
                   array_expected e1.java_pexpr_loc te1.java_expr_type
           end
       | JPEnew_array(t,dims) ->
-          let ty = type_type env.package_env env.type_env true t in 
+          let ty = type_type env.package_env env.type_env true t in
           let l =
             List.map (fun e ->
                         let te = exprt e in
@@ -2733,34 +2747,34 @@ and expr ~ghost env e =
               dims
           in
           JTYarray (true, ty), JEnew_array(ty,l)
-      | JPEnew (n, args) -> 
+      | JPEnew (n, args) ->
           let args = List.map exprt args in
-          let arg_types = List.map (fun e -> e.java_expr_type) args in      
+          let arg_types = List.map (fun e -> e.java_expr_type) args in
             begin
             match classify_name env.package_env env.type_env env.current_type env.env n with
               | TypeName (TypeClass ci) ->
 (*
                   eprintf "looking up constructor in class %s@." ci.class_info_name;
 *)
-		  
-                  let constr = lookup_constructor (fst (List.hd n)) 
+
+                  let constr = lookup_constructor (fst (List.hd n))
 		    ci arg_types in
                   JTYclass (true, ci), JEnew_object(constr,args)
               | _ ->
                   typing_error (fst (List.hd n))
-                    "class type expected"       
-          end     
-      | JPEsuper_call (id, el) -> 
+                    "class type expected"
+          end
+      | JPEsuper_call (id, el) ->
           (* JLS 15.12 *)
           let ci =
             match env.current_type with
               | Some (TypeClass ci) ->
-                  if ci == !object_class then 
+                  if ci == !object_class then
                     typing_error e.java_pexpr_loc "cannot resolve variable super"
                   else
                     begin
                       match ci.class_info_extends with
-                        | None -> 
+                        | None ->
                             typing_error e.java_pexpr_loc
                               "cannot resolve variable super"
                         | Some ci -> TypeClass ci
@@ -2771,7 +2785,7 @@ and expr ~ghost env e =
           let arg_types = List.map (fun e -> e.java_expr_type) args in
           begin
             let mi = lookup_method ci id arg_types in
-            let ty = 
+            let ty =
               match mi.method_info_result with
                 | None -> unit_type
                 | Some vi -> vi.java_var_info_type
@@ -2789,7 +2803,7 @@ and expr ~ghost env e =
                 in
                   ty,JEcall (te2, mi, args)
           end
-      | JPEcall_name (qid, labels, args)-> 
+      | JPEcall_name (qid, labels, args)->
 	  assert (labels = []);
           let args = List.map exprt args in
           let arg_types = List.map (fun e -> e.java_expr_type) args in
@@ -2804,20 +2818,20 @@ and expr ~ghost env e =
                   end
               | id::n ->
                   begin
-                    match 
+                    match
                       classify_name env.package_env env.type_env env.current_type env.env n
                     with
                       | TypeName ti -> ti, id, None
-                      | TermName te -> 
+                      | TermName te ->
                           let ti =
                             match te.java_term_type with
                               | JTYclass(_,ci) -> TypeClass ci
-                              | JTYinterface ii -> TypeInterface ii 
-                              | _ -> typing_error e.java_pexpr_loc 
+                              | JTYinterface ii -> TypeInterface ii
+                              | _ -> typing_error e.java_pexpr_loc
                                   "not a class or interface type"
                           in ti,id,Some (expr_of_term te)
                       | PackageName _ | LogicTypeName _ ->
-                          typing_error (fst (List.hd n)) 
+                          typing_error (fst (List.hd n))
                             "expr or class or interface expected"
                   end
           in
@@ -2825,7 +2839,7 @@ and expr ~ghost env e =
           eprintf "looking up method '%s' in class %a @." (snd id) print_type_name ti;
 *)
           let mi = lookup_method ti id arg_types in
-          let ty = 
+          let ty =
             match mi.method_info_result with
               | None -> unit_type
               | Some vi -> vi.java_var_info_type
@@ -2846,7 +2860,7 @@ and expr ~ghost env e =
             in
               ty,JEcall(te2,mi,args)
 
-      | JPEcall_expr (e1, id, args)-> 
+      | JPEcall_expr (e1, id, args)->
           let args = List.map exprt args in
           let arg_types = List.map (fun e -> e.java_expr_type) args in
           begin
@@ -2856,12 +2870,12 @@ and expr ~ghost env e =
                 match te.java_expr_type with
                   | JTYclass(_,ci) -> (TypeClass ci),Some te
                   | JTYinterface(ii) -> (TypeInterface ii),Some te
-                  | _ -> typing_error e.java_pexpr_loc 
+                  | _ -> typing_error e.java_pexpr_loc
                       "not a class or interface type"
               end
             in
             let mi = lookup_method ci id arg_types in
-            let ty = 
+            let ty =
               match mi.method_info_result with
                 | None -> unit_type
                 | Some vi -> vi.java_var_info_type
@@ -2883,12 +2897,12 @@ and expr ~ghost env e =
               ty,JEcall(te2,mi,args)
           end
       | JPEfield_access(Super_access _f) -> assert false (* TODO *)
-      | JPEfield_access(Primary_access(e1,(loc,id))) -> 
+      | JPEfield_access(Primary_access(e1,(loc,id))) ->
           let te = type_expr_field_access (exprt e1) loc id in
           te.java_expr_type,te.java_expr_node
-      | JPEif (e1, e2, e3)-> 
+      | JPEif (e1, e2, e3)->
           let te1 = exprt e1 in
-          if is_boolean te1.java_expr_type then     
+          if is_boolean te1.java_expr_type then
             let te2 = exprt e2 in
             let te3 = exprt e3 in
             (* TODO: check if compatible types *)
@@ -2896,35 +2910,35 @@ and expr ~ghost env e =
           else
             typing_error e1.java_pexpr_loc "boolean expected"
 
-      | JPEassign_array (e1, e2, op, e3)-> 
-          let te1 = exprt e1 
-          and te2 = exprt e2 
-          and te3 = exprt e3 
-          in 
+      | JPEassign_array (e1, e2, op, e3)->
+          let te1 = exprt e1
+          and te2 = exprt e2
+          and te3 = exprt e3
+          in
           begin
             match te1.java_expr_type with
               | JTYarray (_, t) ->
                   begin
-                    try 
+                    try
                       match unary_numeric_promotion te2.java_expr_type with
                         | Tint ->
                             if op = Beq then
                               if is_assignment_convertible ~ghost env
-                                te3.java_expr_type te3 t 
+                                te3.java_expr_type te3 t
                               then
                                 t, JEassign_array(te1,te2,te3)
                               else
                                 typing_error e3.java_pexpr_loc
-                                  "type `%a' expected" print_type t     
+                                  "type `%a' expected" print_type t
                             else
                               if cast_convertible te3.java_expr_type t then
                                 t, JEassign_array_op(te1,te2,op,te3)
                               else
-                                typing_error e.java_pexpr_loc 
-                                  "type %a expected, got %a" 
-                                  print_type t 
+                                typing_error e.java_pexpr_loc
+                                  "type %a expected, got %a"
+                                  print_type t
                                   print_type te3.java_expr_type
-                                
+
                         | _ -> raise Not_found
                     with
                         Not_found ->
@@ -2933,19 +2947,19 @@ and expr ~ghost env e =
               | _ ->
                   array_expected e1.java_pexpr_loc te1.java_expr_type
           end
-      | JPEassign_field (Super_access((_loc,_id)), _op, _e2) -> 
+      | JPEassign_field (Super_access((_loc,_id)), _op, _e2) ->
           assert false (* TODO *)
-      | JPEassign_field (Primary_access(e1,(loc,id)), op, e2)-> 
+      | JPEassign_field (Primary_access(e1,(loc,id)), op, e2)->
           let te2 = exprt e2 in
           begin
-            match 
-              (type_expr_field_access (exprt e1) loc id).java_expr_node 
+            match
+              (type_expr_field_access (exprt e1) loc id).java_expr_node
             with
               | JEfield_access(t,fi) ->
                   type_assign_field ~ghost env t fi op te2
               | _ -> assert false
           end
-      | JPEassign_name (n, op, e1)-> 
+      | JPEassign_name (n, op, e1)->
           begin
             let te = exprt e1 in
             match classify_name env.package_env env.type_env env.current_type env.env n with
@@ -2954,26 +2968,26 @@ and expr ~ghost env e =
                       match t.java_term_node with
                         | JTvar vi ->
                             if op = Beq then
-                              if is_assignment_convertible ~ghost env te.java_expr_type te 
+                              if is_assignment_convertible ~ghost env te.java_expr_type te
                                 vi.java_var_info_type
-                              then 
+                              then
                                 (vi.java_var_info_type,
                                  JEassign_local_var(vi,te))
                               else
-                                typing_error e.java_pexpr_loc 
-                                  "type %a expected, got %a" 
-                                  print_type vi.java_var_info_type 
+                                typing_error e.java_pexpr_loc
+                                  "type %a expected, got %a"
+                                  print_type vi.java_var_info_type
                                   print_type te.java_expr_type
-                            else 
-                              if cast_convertible te.java_expr_type 
+                            else
+                              if cast_convertible te.java_expr_type
                                 vi.java_var_info_type
-                              then 
+                              then
                                 (vi.java_var_info_type,
                                  JEassign_local_var_op(vi,op,te))
                               else
-                                typing_error e.java_pexpr_loc 
-                                  "type %a expected, got %a" 
-                                  print_type vi.java_var_info_type 
+                                typing_error e.java_pexpr_loc
+                                  "type %a expected, got %a"
+                                  print_type vi.java_var_info_type
                                   print_type te.java_expr_type
                         | JTfield_access (t, fi) ->
                             type_assign_field ~ghost env (expr_of_term t) fi op te
@@ -2991,35 +3005,36 @@ and expr ~ghost env e =
                     typing_error e.java_pexpr_loc
                       "lvalue expected, got a package name"
           end
-      | JPEincr (op, e)-> 
-          let te = exprt e in 
+      | JPEincr (op, e)->
+          let te = exprt e in
             begin
               match te.java_expr_node with
                 | JEvar vi ->
                     te.java_expr_type, JEincr_local_var (op, vi)
-                | JEfield_access (e1, fi) -> 
+                | JEfield_access (e1, fi) ->
                     fi.java_field_info_type, JEincr_field (op, e1, fi)
                 | JEarray_access (e1, e2) ->
                     te.java_expr_type, JEincr_array (op, e1, e2)
                 | _ -> assert false (* TODO ? *)
-            end   
-      | JPEun (op, e1)-> 
-          let te1 = exprt e1 in 
-          let t,e = make_unary_op e.java_pexpr_loc op 
+            end
+      | JPEun (op, e1)->
+          let te1 = exprt e1 in
+          let t,e = make_unary_op e.java_pexpr_loc op
                       te1.java_expr_type te1 in
           JTYbase t,e
 
-      | JPEbin (e1, op, e2) -> 
-          let te1 = exprt e1 and te2 = exprt e2 in 
+      | JPEbin (e1, op, e2) ->
+          let te1 = exprt e1 and te2 = exprt e2 in
           make_bin_op ~ghost e.java_pexpr_loc op
             te1.java_expr_type te1 te2.java_expr_type te2
 
               (* only in terms *)
-      | JPEarray_range _ 
+      | JPEarray_range _
       | JPEquantifier (_, _, _)
       | JPEat _
       | JPEold _
-      | JPEresult -> 
+      | JPEresult 
+      | JPEfresh _ ->
           typing_error e.java_pexpr_loc "not allowed in expressions"
 
   in { java_expr_loc = e.java_pexpr_loc;
@@ -3030,44 +3045,44 @@ and type_assign_field ~ghost env t fi op te =
   if op = Beq then
     if is_assignment_convertible ~ghost env te.java_expr_type te
       fi.java_field_info_type
-    then 
+    then
       (fi.java_field_info_type, JEassign_field (t, fi, te))
     else
-      typing_error te.java_expr_loc 
-        "type %a expected, got %a" 
-        print_type fi.java_field_info_type 
+      typing_error te.java_expr_loc
+        "type %a expected, got %a"
+        print_type fi.java_field_info_type
         print_type te.java_expr_type
-  else 
-    if cast_convertible te.java_expr_type 
+  else
+    if cast_convertible te.java_expr_type
       fi.java_field_info_type
-    then 
+    then
       (fi.java_field_info_type, JEassign_field_op (t, fi, op, te))
     else
-      typing_error te.java_expr_loc 
-        "type %a expected, got %a" 
-        print_type fi.java_field_info_type 
+      typing_error te.java_expr_loc
+        "type %a expected, got %a"
+        print_type fi.java_field_info_type
         print_type te.java_expr_type
-        
+
 and type_assign_static_field ~ghost env fi op te =
   if op = Beq then
     if is_assignment_convertible ~ghost env te.java_expr_type te
       fi.java_field_info_type
-    then 
+    then
       (fi.java_field_info_type, JEassign_static_field (fi, te))
     else
-      typing_error te.java_expr_loc 
-        "type %a expected, got %a" 
-        print_type fi.java_field_info_type 
+      typing_error te.java_expr_loc
+        "type %a expected, got %a"
+        print_type fi.java_field_info_type
         print_type te.java_expr_type
-  else 
-    if cast_convertible te.java_expr_type 
+  else
+    if cast_convertible te.java_expr_type
       fi.java_field_info_type
-    then 
+    then
       (fi.java_field_info_type, JEassign_static_field_op (fi, op, te))
     else
-      typing_error te.java_expr_loc 
-        "type %a expected, got %a" 
-        print_type fi.java_field_info_type 
+      typing_error te.java_expr_loc
+        "type %a expected, got %a"
+        print_type fi.java_field_info_type
         print_type te.java_expr_type
 
 and initializer_loc i =
@@ -3075,19 +3090,19 @@ and initializer_loc i =
     | Simple_initializer e -> e.java_pexpr_loc
     | Array_initializer (x::_) -> initializer_loc x
     | Array_initializer [] -> assert false (* TODO *)
-                           
+
 and type_initializer ~ghost env ty i =
   match ty, i with
     | _, Simple_initializer e ->
-        let te = expr ~ghost env e in   
+        let te = expr ~ghost env e in
         begin
 	  try
-	    if is_assignment_convertible ~const:true ~ghost env te.java_expr_type te ty 
+	    if is_assignment_convertible ~const:true ~ghost env te.java_expr_type te ty
             then JIexpr te
             else
               typing_error e.java_pexpr_loc "type %a expected, got %a"
 		print_type ty print_type te.java_expr_type
-	  with Not_found -> 
+	  with Not_found ->
               typing_error e.java_pexpr_loc "type %a expected, got %a"
 		print_type ty print_type te.java_expr_type
 	end
@@ -3099,16 +3114,16 @@ and type_initializer ~ghost env ty i =
                | Array_initializer _vil -> assert false (* TODO *))
             vil
         in JIlist il
-    | _, Array_initializer _l -> 
+    | _, Array_initializer _l ->
         typing_error (initializer_loc i) "wrong type for initializer"
 
 and type_field_initializer package_env type_env ci fi =
-  let init = 
+  let init =
     try
-      Hashtbl.find field_prototypes_table fi.java_field_info_tag 
+      Hashtbl.find field_prototypes_table fi.java_field_info_tag
     with Not_found -> assert false
   in
-  let env = 
+  let env =
     { package_env = package_env;
       type_env = type_env;
       current_type = Some ci;
@@ -3118,14 +3133,14 @@ and type_field_initializer package_env type_env ci fi =
       env = [];
     }
   in
-  let tinit = 
+  let tinit =
     match init with
       | None -> None
       | Some i ->
 (*
 	  eprintf "Calling type_initializer for %s@." fi.java_field_info_name;
 *)
-          let ti = 
+          let ti =
             type_initializer ~ghost:false env fi.java_field_info_type i
           in
           if fi.java_field_info_is_final then
@@ -3135,7 +3150,7 @@ and type_field_initializer package_env type_env ci fi =
                     begin
                       try
                         let v = eval_const_expression env false e in
-                        Hashtbl.add final_field_values_table 
+                        Hashtbl.add final_field_values_table
                           fi.java_field_info_tag [v]
                       with Not_found ->
                         (**)
@@ -3145,7 +3160,7 @@ and type_field_initializer package_env type_env ci fi =
                           (**)
                           (*
                             typing_error e.java_expr_loc "cannot evaluate this initializer"
-                          *)              
+                          *)
                     end
                 | JIlist vil ->
                     try
@@ -3155,9 +3170,9 @@ and type_field_initializer package_env type_env ci fi =
                            | JIlist _ -> assert false (* TODO *))
                         vil
                       in
-                      Hashtbl.add final_field_values_table 
+                      Hashtbl.add final_field_values_table
                         fi.java_field_info_tag vil
-                    with Not_found -> assert false 
+                    with Not_found -> assert false
             end;
           Some ti
   in
@@ -3166,55 +3181,55 @@ and type_field_initializer package_env type_env ci fi =
 
 (* statements *)
 
-let location env a = term env a 
-  
+let location env a = term env a
+
 
 let label_env_here = ["Here",LabelHere]
 
-let labels_env l = 
+let labels_env l =
   let env,l =
-    List.fold_right 
-      (fun (_loc,id) (acc1,acc2) -> 
+    List.fold_right
+      (fun (_loc,id) (acc1,acc2) ->
 	 let lab = LabelName id in
-	 ((id,lab)::acc1,lab::acc2)) 
+	 ((id,lab)::acc1,lab::acc2))
       l ([],[])
   in
   match l with
     | [lab] -> env,Some lab,l
     | _ -> env,None,l
 
-let add_Pre_Here e = 
-  { e with 
+let add_Pre_Here e =
+  { e with
       label_env = ("Pre",LabelPre)::("Here",LabelHere)::e.label_env;
       current_label = Some LabelHere;
   }
 
-let add_Old e = 
-  { e with 
+let add_Old e =
+  { e with
       label_env = ("Pre",LabelOld)::("Old",LabelOld)::e.label_env;
   }
 
-let behavior env pre_state_env post_state_env (id, b) = 
-  let throws, ensures_env = 
+let behavior env pre_state_env post_state_env (id, b) =
+  let throws, ensures_env =
     match b.java_pbehavior_throws with
       | None -> None,post_state_env
-      | Some (c, None) -> 
-          (* if [current_type] is an imported type, [c] may not be in [type_env] 
+      | Some (c, None) ->
+          (* if [current_type] is an imported type, [c] may not be in [type_env]
              so we need to add the package env of current type in [package_env]
              - Nicolas R. *)
-          let package_env = 
+          let package_env =
             match env.current_type with
               | None -> assert false
               | Some (TypeClass ci) ->
-                  let p = 
+                  let p =
                     List.filter
-                      (fun p -> not (List.mem p env.package_env)) 
+                      (fun p -> not (List.mem p env.package_env))
                       ci.class_info_package_env in
                     p @ env.package_env
-              | Some (TypeInterface ii) -> 
-                  let p = 
+              | Some (TypeInterface ii) ->
+                  let p =
                     List.filter
-                      (fun p -> not (List.mem p env.package_env)) 
+                      (fun p -> not (List.mem p env.package_env))
                       ii.interface_info_package_env in
                     p @ env.package_env
           in
@@ -3234,22 +3249,22 @@ let behavior env pre_state_env post_state_env (id, b) =
                   typing_error (fst (List.hd c))
                     "class type expected"
           end
-      | Some (_c, Some _id) -> 
+      | Some (_c, Some _id) ->
           assert false (* TODO *)
   in
   (id,
    Option_misc.map (assertion { env with env = pre_state_env}) b.java_pbehavior_assumes,
    throws,
-   (* Note: the `assigns' clause is typed in post-state environnement because \result is available, but where the default label is in Pre 
-      TODO: we should add a Post label 
+   (* Note: the `assigns' clause is typed in post-state environnement because \result is available, but where the default label is in Pre
+      TODO: we should add a Post label
    *)
-   Option_misc.map 
+   Option_misc.map
      (fun (loc,l) ->
-        (loc,List.map (location ((*add_Post*) { env with env = ensures_env })) l)) 
+        (loc,List.map (location ((*add_Post*) { env with env = ensures_env })) l))
      b.java_pbehavior_assigns,
-   assertion (add_Old {env with env = ensures_env})  
+   assertion (add_Old {env with env = ensures_env})
      b.java_pbehavior_ensures)
-    
+
 
 
 let variable_declaration ~ghost env vd =
@@ -3262,14 +3277,14 @@ let variable_declaration ~ghost env vd =
          let ty',id = var_type_and_id false ty vd.variable_id in
          match vd.variable_initializer with
            | None -> (id,ty',None)
-           | Some e -> 
+           | Some e ->
                let i = type_initializer ~ghost env ty' e in
                (id,ty',Some i))
       vd.variable_decls
   in
   List.fold_right
       (fun ((loc,id),ty,i) (env,decls)->
-         let vi = new_var loc ty id in               
+         let vi = new_var loc ty id in
          (id,vi)::env,(vi,i)::decls)
       l (env.env,[])
 
@@ -3285,7 +3300,7 @@ let rec statement env s =
           let te = exprt e in
           let ts1 = statementt s1 in
           let ts2 = statementt s2 in
-          if is_boolean te.java_expr_type then      
+          if is_boolean te.java_expr_type then
             JSif(te,ts1,ts2)
           else
             typing_error e.java_pexpr_loc "boolean expected"
@@ -3294,7 +3309,7 @@ let rec statement env s =
       | JPSghost_local_decls _d -> assert false (* TODO *)
       | JPSghost_statement e ->
           let te = expr ~ghost:true env e in JSexpr te
-      | JPSexpr e -> 
+      | JPSexpr e ->
           let te = exprt e in JSexpr te
       | JPSassert(forid,id,a) ->
           let ta = assertion (add_Pre_Here env) a in
@@ -3304,45 +3319,45 @@ let rec statement env s =
             "statement spec should appear before a statement"
       | JPSsynchronized (_, _)-> assert false (* TODO *)
       | JPSblock l -> (block env l).java_statement_node
-      | JPSswitch (e, l)-> 
+      | JPSswitch (e, l)->
           let te = exprt e in
           (* JSL, p289: switch expr must be char, byte, short or int *)
           begin
-            try 
+            try
               let t = unary_numeric_promotion te.java_expr_type in
               JSswitch(te,List.map (switch_case env t) l)
             with Not_found ->
               typing_error e.java_pexpr_loc "char, byte, short or int expected"
           end
-      | JPStry (s, catches, finally)-> 
+      | JPStry (s, catches, finally)->
           let ts = statements env s in
           let tl =
             List.map
               (fun (p,s) ->
                  let vi, _ = type_param env.package_env env.type_env p in
                  match vi.java_var_info_type with
-                   | JTYclass(_,ci) when 
-                       (check_if_class_complete ci; 
+                   | JTYclass(_,ci) when
+                       (check_if_class_complete ci;
                         ci.class_info_is_exception) ->
                        let e = (vi.java_var_info_name,vi)::env.env in
                        (vi,statements {env with env = e } s)
-                   | _ -> 
-                       typing_error vi.java_var_info_decl_loc 
+                   | _ ->
+                       typing_error vi.java_var_info_decl_loc
                          "throwable class expected")
               catches
           in
-          JStry(ts, tl, 
+          JStry(ts, tl,
                 Option_misc.map (statements env) finally)
       | JPSfor_decl _ -> assert false
       | JPSfor _ -> assert false
       | JPSdo (_, _)-> assert false (* TODO *)
       | JPSwhile _ -> assert false
-      | JPSlabel ((_loc,id), s)-> 
-	  JSlabel(id, statement 
+      | JPSlabel ((_loc,id), s)->
+	  JSlabel(id, statement
 		    {env with label_env = (id, LabelName id)::env.label_env} s)
       | JPSbreak l -> JSbreak (Option_misc.map snd l)
       | JPScontinue l -> JScontinue (Option_misc.map snd l)
-      | JPSreturn None -> 
+      | JPSreturn None ->
           begin
             try
               let _vi = List.assoc "\\result" env.env in
@@ -3351,13 +3366,13 @@ let rec statement env s =
                 Not_found ->
                   JSreturn_void
           end
-          
-      | JPSreturn (Some e) -> 
+
+      | JPSreturn (Some e) ->
           begin
             try
-              let te = exprt e in 
+              let te = exprt e in
               let vi = List.assoc "\\result" env.env in
-              if is_assignment_convertible ~ghost:false env 
+              if is_assignment_convertible ~ghost:false env
 		te.java_expr_type te vi.java_var_info_type then
                   JSreturn te
               else
@@ -3367,12 +3382,12 @@ let rec statement env s =
                 Not_found ->
                   typing_error e.java_pexpr_loc "no result expected"
           end
-      | JPSthrow e -> 
+      | JPSthrow e ->
           let te = exprt e in
           JSthrow te
       | JPSvar_decl _-> assert false (* TODO *)
-          
-  in 
+
+  in
   { java_statement_loc = s.java_pstatement_loc ;
     java_statement_node = s' }
 
@@ -3381,13 +3396,13 @@ and local_decl ~ghost env loc vd rem =
   let r = block { env with env = e } rem in
   let s =
     List.fold_right
-      (fun (vi, i) acc -> 
+      (fun (vi, i) acc ->
          { java_statement_loc = loc ;
            java_statement_node =
              JSvar_decl(vi,i,acc); })
       decls r in
     [s]
-      
+
 
 and statements env b =
   match b with
@@ -3395,15 +3410,15 @@ and statements env b =
     | s :: rem ->
         match s.java_pstatement_node with
           | JPSskip -> statements env rem
-          | JPSghost_local_decls vd -> 
+          | JPSghost_local_decls vd ->
               local_decl ~ghost:true env s.java_pstatement_loc vd rem
-          | JPSvar_decl vd -> 
+          | JPSvar_decl vd ->
               local_decl ~ghost:false env s.java_pstatement_loc vd rem
-	  | JPSlabel ((_loc,id), s)-> 
-	      [{ java_statement_node = 
-		  JSlabel(id, block  
-			    {env with label_env = 
-				(id, LabelName id)::env.label_env} 
+	  | JPSlabel ((_loc,id), s)->
+	      [{ java_statement_node =
+		  JSlabel(id, block
+			    {env with label_env =
+				(id, LabelName id)::env.label_env}
 			    (s :: rem)) ;
 		java_statement_loc = s.java_pstatement_loc }]
           | JPSloop_annot (inv,behs_inv,dec) ->
@@ -3411,67 +3426,67 @@ and statements env b =
               begin
                 match rem with
                   | { java_pstatement_node = JPSdo (s, e);
-                      java_pstatement_loc = _loc } :: rem -> 
+                      java_pstatement_loc = _loc } :: rem ->
                       let tdo =
                         type_do env s.java_pstatement_loc annot s e
                       in
                         tdo :: statements env rem
                   | { java_pstatement_node = JPSwhile(e,s) ;
-                      java_pstatement_loc = _loc } :: rem -> 
+                      java_pstatement_loc = _loc } :: rem ->
                       let twhile =
                         type_while env s.java_pstatement_loc annot e s
                       in
                         twhile :: statements env rem
                   | { java_pstatement_node = JPSfor (el1, e, el2, s);
-                      java_pstatement_loc = loc } :: rem -> 
+                      java_pstatement_loc = loc } :: rem ->
                       let tfor =
                         type_for env loc el1 annot e el2 s
                       in
                         tfor :: statements env rem
                   | { java_pstatement_node = JPSfor_decl(vd,e,sl,s) ;
-                      java_pstatement_loc = loc } :: rem -> 
+                      java_pstatement_loc = loc } :: rem ->
                       let tfor =
                         type_for_decl env loc vd annot e sl s
                       in
                         tfor :: statements env rem
                   | _ -> assert false
-              end      
+              end
           | JPSfor (el1, e, el2, s) ->
               let tfor =
-                type_for env 
+                type_for env
                   s.java_pstatement_loc el1 dummy_loop_annot e el2 s
               in
                 tfor :: statements env rem
           | JPSfor_decl(vd,e,sl,s) ->
               let tfor =
-                type_for_decl env 
+                type_for_decl env
                   s.java_pstatement_loc vd dummy_loop_annot e sl s
               in
                 tfor :: statements env rem
           | JPSdo (s, e) ->
               let tdo =
-                type_do env 
+                type_do env
                   s.java_pstatement_loc dummy_loop_annot s e
               in
                 tdo :: statements env rem
           | JPSwhile(e,s) ->
               let twhile =
-                type_while env 
+                type_while env
                   s.java_pstatement_loc dummy_loop_annot e s
               in
                 twhile :: statements env rem
           | JPSstatement_spec(requires,decreases,behaviors) ->
-              let req = 
-                Option_misc.map 
-		  (assertion { env  with current_label = Some LabelHere}) 
-		  requires 
+              let req =
+                Option_misc.map
+		  (assertion { env  with current_label = Some LabelHere})
+		  requires
               in
               let decreases = type_variant { env with current_label = Some LabelHere } decreases
               in
               let behs = List.map (behavior env env.env env.env) behaviors in
               begin
                 match rem with
-                  | [] -> 
+                  | [] ->
                       typing_error s.java_pstatement_loc
                         "statement spec should appear before a statement"
                   | stat :: rem ->
@@ -3480,43 +3495,43 @@ and statements env b =
 			  JSstatement_spec(req,decreases,behs,
 					   statement env stat)
 		      } :: statements env rem
-              end              
+              end
           | _ ->
               let s' = statement env s in
                 s' :: statements env rem
 
 and type_variant env v =
-  Option_misc.map 
+  Option_misc.map
     (fun (t,r) ->
-       let t = 
+       let t =
          term env t
        in
        match r with
          | None -> (t,None)
-         | Some(loc,id) -> 
+         | Some(loc,id) ->
              (try
                 let fi = Hashtbl.find logics_env id in
                 (t,Some fi)
               with Not_found ->
                 typing_error loc "relation `%s' not found" id)
-    ) 
-    v 
-                  
-        
-         
+    )
+    v
+
+
+
 and type_loop_annot env (inv,behs_inv,dec) =
   let inv = assertion (add_Pre_Here env) inv in
   let l = List.map
     (fun ((loc,id),a) ->
        let bid =
 	 try
-	   List.assoc id env.behavior_names 
+	   List.assoc id env.behavior_names
 	 with Not_found ->
 	   typing_error loc "undeclared behavior"
        in
        (bid,assertion (add_Pre_Here env) a))
-    behs_inv 
-  in	 
+    behs_inv
+  in
   let dec = type_variant (add_Pre_Here env) dec in
   { loop_inv = inv;
     behs_loop_inv = l;
@@ -3547,26 +3562,26 @@ and type_do env loc annot s e =
   let s = statement env s in
   let e = expr ~ghost:false env e in
     { java_statement_node = JSdo (s, a, e);
-      java_statement_loc = loc } 
-      
+      java_statement_loc = loc }
+
 and type_while env loc annot e s =
   let a = type_loop_annot env annot in
   let e = expr ~ghost:false env e in
   let s = statement env s in
   { java_statement_node = JSwhile(e,a,s);
-    java_statement_loc = loc } 
+    java_statement_loc = loc }
 
 and block env b =
   match statements env b with
-    | [] -> { java_statement_loc = Loc.dummy_position ; 
+    | [] -> { java_statement_loc = Loc.dummy_position ;
               java_statement_node = JSskip }
     | [s] -> s
-    | (s::_) as l -> 
-        { java_statement_loc = s.java_statement_loc ; 
+    | (s::_) as l ->
+        { java_statement_loc = s.java_statement_loc ;
           java_statement_node = JSblock l }
 
 and switch_case env t (labels,b) =
-  (List.map (switch_label env t) labels, 
+  (List.map (switch_label env t) labels,
    statements env b)
 
 and switch_label env t = function
@@ -3574,8 +3589,8 @@ and switch_label env t = function
   | Case e ->
       let te = expr ~ghost:false env e in
       match te.java_expr_type with
-        | JTYbase _ as t' when is_assignment_convertible ~ghost:false env t' te (JTYbase t) -> 
-	  Case te 
+        | JTYbase _ as t' when is_assignment_convertible ~ghost:false env t' te (JTYbase t) ->
+	  Case te
         | _ ->
              typing_error e.java_pexpr_loc "type `%s' expected, got `%a'"
                 (string_of_base_type t) print_type te.java_expr_type
@@ -3595,14 +3610,14 @@ type method_table_info =
     }
 
 
-  
+
 let methods_table = Hashtbl.create 97
 
 
 let type_method_spec_and_body ?(dobody=true) package_env ti mi =
   let type_env =
-    match ti with   
-      | TypeInterface ii -> 
+    match ti with
+      | TypeInterface ii ->
           check_if_interface_complete ii;
           (try Hashtbl.find interface_type_env_table ii.interface_info_tag
            with Not_found -> assert false)
@@ -3614,9 +3629,9 @@ let type_method_spec_and_body ?(dobody=true) package_env ti mi =
   try
     let _ = Hashtbl.find methods_table mi.method_info_tag in ()
   with Not_found ->
-    let (_,req,decreases,behs,body) = 
+    let (_,req,decreases,behs,body) =
       try
-        Hashtbl.find methods_env mi.method_info_tag 
+        Hashtbl.find methods_env mi.method_info_tag
       with Not_found -> assert false
     in
     let local_env =
@@ -3630,9 +3645,9 @@ let type_method_spec_and_body ?(dobody=true) package_env ti mi =
           mi.method_info_has_this <- Some vi;
           [("this",vi)]
     in
-    let local_env = 
+    let local_env =
       List.fold_left
-        (fun acc vi -> 
+        (fun acc vi ->
            (vi.java_var_info_name,vi)::acc)
         local_env (List.map fst mi.method_info_parameters)
     in
@@ -3652,45 +3667,45 @@ let type_method_spec_and_body ?(dobody=true) package_env ti mi =
         | Some vi -> (vi.java_var_info_name,vi)::local_env
     in
     let behs = List.map (behavior env local_env env_result) behs in
-    let env = 
+    let env =
       { env with
-	  behavior_names = 
+	  behavior_names =
 	  List.map (fun (id,_,_,_,_) -> snd id,id) behs }
     in
-    let body = 
+    let body =
       if dobody then
-        Option_misc.map (statements { env with env = env_result}) body 
+        Option_misc.map (statements { env with env = env_result}) body
       else None
     in
-    Hashtbl.add methods_table mi.method_info_tag 
+    Hashtbl.add methods_table mi.method_info_tag
       { mt_method_info = mi;
         mt_requires = req;
         mt_decreases = decreases;
         mt_behaviors = behs;
         mt_body = body }
-          
-          
+
+
 type constructor_table_info =
     { ct_constr_info : Java_env.constructor_info;
       ct_requires : Java_tast.assertion option;
       ct_decreases : (Java_tast.term * Java_env.java_logic_info option) option;
-      ct_behaviors : (Java_ast.identifier * 
-                        Java_tast.assertion option * 
+      ct_behaviors : (Java_ast.identifier *
+                        Java_tast.assertion option *
                         Java_env.java_class_info option *
-                        (Loc.position * Java_tast.term list) option * 
+                        (Loc.position * Java_tast.term list) option *
                         Java_tast.assertion) list ;
       ct_body : Java_tast.block;
     }
 
 let constructors_table = Hashtbl.create 97
-  
+
 let type_constr_spec_and_body ?(dobody=true) package_env current_type ci =
   try
     let _ = Hashtbl.find constructors_table ci.constr_info_tag in ()
   with Not_found ->
   let type_env =
-    match current_type with   
-      | TypeInterface ii -> 
+    match current_type with
+      | TypeInterface ii ->
           check_if_interface_complete ii;
           (try Hashtbl.find interface_type_env_table ii.interface_info_tag
            with Not_found -> assert false)
@@ -3699,14 +3714,14 @@ let type_constr_spec_and_body ?(dobody=true) package_env current_type ci =
           (try Hashtbl.find class_type_env_table ci.class_info_tag
            with Not_found -> assert false)
   in
-  let (_,req,decreases,behs,eci,body) = 
+  let (_,req,decreases,behs,eci,body) =
     try
-      Hashtbl.find constructors_env ci.constr_info_tag 
+      Hashtbl.find constructors_env ci.constr_info_tag
     with Not_found -> assert false
   in
-  let local_env = 
+  let local_env =
     List.fold_left
-      (fun acc (vi, _) -> 
+      (fun acc (vi, _) ->
          (vi.java_var_info_name,vi)::acc)
       [] ci.constr_info_parameters
   in
@@ -3737,43 +3752,43 @@ let type_constr_spec_and_body ?(dobody=true) package_env current_type ci =
 	      current_label = Some LabelHere;
               env = this_env }
   in
-  let req = 
-    Option_misc.map 
-      (assertion { env with env = local_env }) req 
+  let req =
+    Option_misc.map
+      (assertion { env with env = local_env }) req
   in
   let decreases = type_variant { env with env = local_env } decreases in
   let behs = List.map (behavior env local_env this_env) behs in
   if dobody then
-    let env = 
+    let env =
       { env with
-	  behavior_names = 
+	  behavior_names =
 	  List.map (fun (id,_,_,_,_) -> snd id,id) behs }
     in
     match eci with
-      | Invoke_none -> 
+      | Invoke_none ->
           let body = statements { env with env = this_env } body in
-          Hashtbl.add constructors_table ci.constr_info_tag 
+          Hashtbl.add constructors_table ci.constr_info_tag
             { ct_constr_info = ci;
               ct_requires = req;
               ct_decreases = decreases;
               ct_behaviors = behs;
-              ct_body = body } 
-      | Invoke_this el -> 
+              ct_body = body }
+      | Invoke_this el ->
           let tel = List.map (expr ~ghost:false env) el in
           let arg_types = List.map (fun te -> te.java_expr_type) tel in
           let this_ci = lookup_constructor Loc.dummy_position ci.constr_info_class arg_types in
           let this_call_s =
-            make_statement_no_loc 
+            make_statement_no_loc
               (JSexpr (
                  make_expr_no_loc unit_type
                    (JEconstr_call
                       (make_expr_no_loc
-                         this_vi.java_var_info_type                     
-                         (JEvar this_vi), 
+                         this_vi.java_var_info_type
+                         (JEvar this_vi),
                        this_ci, tel))))
           in
           let body = statements env body in
-          Hashtbl.add constructors_table ci.constr_info_tag 
+          Hashtbl.add constructors_table ci.constr_info_tag
             { ct_constr_info = ci;
               ct_requires = req;
               ct_decreases = decreases;
@@ -3781,7 +3796,7 @@ let type_constr_spec_and_body ?(dobody=true) package_env current_type ci =
               ct_body = this_call_s :: body }
       | Invoke_super el ->
           let tel = List.map (expr ~ghost:false env) el in
-          let super_class_info = 
+          let super_class_info =
             match ci.constr_info_class.class_info_extends with
               | None -> assert false
               | Some ci -> ci
@@ -3789,34 +3804,34 @@ let type_constr_spec_and_body ?(dobody=true) package_env current_type ci =
           let arg_types = List.map (fun te -> te.java_expr_type) tel in
           let super_ci = lookup_constructor Loc.dummy_position super_class_info arg_types in
           let super_call_s =
-            make_statement_no_loc 
+            make_statement_no_loc
               (JSexpr (
                  make_expr_no_loc unit_type
                    (JEconstr_call
                       (make_expr_no_loc
                          (JTYclass (true (* [this] is always non null *), super_class_info))
-                         (JEvar this_vi), 
+                         (JEvar this_vi),
                        super_ci, tel))))
           in
           let body = statements env body in
-          Hashtbl.add constructors_table ci.constr_info_tag 
+          Hashtbl.add constructors_table ci.constr_info_tag
             { ct_constr_info = ci;
               ct_requires = req;
               ct_decreases = decreases;
               ct_behaviors = behs;
               ct_body = super_call_s :: body }
   else
-    Hashtbl.add constructors_table ci.constr_info_tag 
+    Hashtbl.add constructors_table ci.constr_info_tag
       { ct_constr_info = ci;
         ct_requires = req;
         ct_decreases = decreases;
         ct_behaviors = behs;
         ct_body = [] }
-    
+
 module G = Imperative.Digraph.Concrete(
-  struct 
+  struct
     type t = java_field_info
-    let compare fi1 fi2 = 
+    let compare fi1 fi2 =
       compare fi1.java_field_info_tag fi2.java_field_info_tag
     let hash fi = fi.java_field_info_tag
     let equal fi1 fi2 = fi1.java_field_info_tag = fi2.java_field_info_tag
@@ -3826,32 +3841,32 @@ module T = Topological.Make(G)
 
 let rec compute_dependencies_expr env g fi e =
   match e.java_expr_node with
-    | JEstatic_field_access (_, fi') | JEfield_access (_, fi') -> 
+    | JEstatic_field_access (_, fi') | JEfield_access (_, fi') ->
 	let v1 = G.V.create fi' in
 	let v2 = G.V.create fi in
 	  G.add_edge g v1 v2
     | JEun (_, e) | JEcast (_, e) ->
 	compute_dependencies_expr env g fi e
-    | JEbin (e1, _, e2) -> 
+    | JEbin (e1, _, e2) ->
 	compute_dependencies_expr env g fi e1;
 	compute_dependencies_expr env g fi e2
-    | JEif (e1, e2, e3) -> 
-	compute_dependencies_expr env g fi e1; 
+    | JEif (e1, e2, e3) ->
+	compute_dependencies_expr env g fi e1;
 	compute_dependencies_expr env g fi e2;
 	compute_dependencies_expr env g fi e3
     | JElit _ -> ()
     | JEvar _ | JEincr_local_var _ | JEincr_field _
-    | JEincr_array _ | JEassign_local_var _ | JEassign_local_var_op _ 
-    | JEassign_field _ | JEassign_field_op _ | JEassign_static_field _ 
+    | JEincr_array _ | JEassign_local_var _ | JEassign_local_var_op _
+    | JEassign_field _ | JEassign_field_op _ | JEassign_static_field _
     | JEassign_static_field_op _ | JEassign_array _| JEassign_array_op _
-    | JEcall _ | JEconstr_call _ | JEstatic_call _ 
+    | JEcall _ | JEconstr_call _ | JEstatic_call _
     | JEnew_object _ | JEnew_array _ | JEinstanceof _ ->
 	() (* assert false (* should never happen -> it happens ! *) *)
     | JEarray_length _ | JEarray_access _ -> assert false (* TODO *)
-	
+
 and compute_dependencies_vi env g fi vi =
   match vi with
-    | Simple_initializer e -> 
+    | Simple_initializer e ->
 (*
 	eprintf "Calling expr in type_env:@\n";
         List.iter
@@ -3863,12 +3878,12 @@ and compute_dependencies_vi env g fi vi =
 	eprintf "Return from expr@.";
 *)
 	compute_dependencies_expr env g fi te
-    | Array_initializer vil -> 
+    | Array_initializer vil ->
 	List.iter (compute_dependencies_vi env g fi) vil
 
 and compute_dependencies env g fi =
-  let vio = 
-    try Hashtbl.find field_prototypes_table fi.java_field_info_tag 
+  let vio =
+    try Hashtbl.find field_prototypes_table fi.java_field_info_tag
     with Not_found -> assert false
   in
   let vi = match vio with
@@ -3886,8 +3901,8 @@ let type_final_fields package_env type_env ti fields =
     (fun (id,_) -> eprintf "  %s@\n" id)
     type_env;
 *)
-  let g = G.create () in 
-  let env = { 
+  let g = G.create () in
+  let env = {
     package_env = package_env;
     type_env = type_env;
     current_type = Some ti;
@@ -3912,14 +3927,14 @@ let type_final_fields package_env type_env ti fields =
 	  eprintf "Calling type_field_initializer for %s@."
 	    fi.java_field_info_name;
 *)
-	  type_field_initializer package_env type_env 
+	  type_field_initializer package_env type_env
 	    fi.java_field_info_class_or_interface fi;
 	  fi :: acc)
-       g []) 
-    
-let rec type_decl_aux ~in_axiomatic package_env type_env acc d = 
+       g [])
+
+let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
   match d with
-    | JPTclass c -> 
+    | JPTclass c ->
 	assert (not in_axiomatic);
         (*
           class_modifiers : modifiers;
@@ -3929,19 +3944,19 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
           class_fields : field_declaration list
         *)
         begin
-          let ty = 
+          let ty =
             try
               List.assoc (snd c.class_name) type_env
             with
-                Not_found -> 
-                  eprintf "Java_typing anomaly: class '%s' not found in type_env@."  
-                    (snd c.class_name);          
+                Not_found ->
+                  eprintf "Java_typing anomaly: class '%s' not found in type_env@."
+                    (snd c.class_name);
                   List.iter
                     (fun (id,_) -> eprintf "  '%s'@\n" id)
                     type_env;
                   assert false
           in
-          match ty with   
+          match ty with
             | TypeInterface _ -> assert false
             | TypeClass ci as ti ->
                 check_if_class_complete ci;
@@ -3954,12 +3969,12 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 		    (fun fi -> not fi.java_field_info_is_final)
 		    ci.class_info_fields
 		in
-		
-		let final_fields = 
+
+		let final_fields =
 (*
 		  Format.eprintf "Call(1) type_final_fields@.";
 *)
-		  let x = 
+		  let x =
 		    type_final_fields package_env type_env ti final_fields
 		  in
 (*
@@ -3968,30 +3983,30 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 		  x
 		in
 		ci.class_info_final_fields <- final_fields;
-                List.iter (type_field_initializer package_env type_env ti) 
+                List.iter (type_field_initializer package_env type_env ti)
                   non_final_fields;
-                List.iter (type_method_spec_and_body package_env ti) 
+                List.iter (type_method_spec_and_body package_env ti)
                   ci.class_info_methods;
-                List.iter (type_constr_spec_and_body package_env ti) 
+                List.iter (type_constr_spec_and_body package_env ti)
                   ci.class_info_constructors;
 		acc
         end
-    | JPTinterface i -> 
+    | JPTinterface i ->
 	assert (not in_axiomatic);
         begin
-          let ty = 
+          let ty =
             try
               List.assoc (snd i.interface_name) type_env
             with
-                Not_found -> 
-                  eprintf "Java_typing anomaly: interface '%s' not found in type_env@."  
-                    (snd i.interface_name);              
+                Not_found ->
+                  eprintf "Java_typing anomaly: interface '%s' not found in type_env@."
+                    (snd i.interface_name);
                   List.iter
                     (fun (id,_) -> eprintf "  '%s'@\n" id)
                     type_env;
                   assert false
           in
-          match ty with   
+          match ty with
             | TypeClass _ -> assert false
             | TypeInterface ii as ti ->
                 check_if_interface_complete ii;
@@ -3999,16 +4014,16 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
                   try Hashtbl.find interface_type_env_table ii.interface_info_tag
                   with Not_found -> assert false
                 in
-		let fields = 
+		let fields =
 		  type_final_fields package_env type_env ti ii.interface_info_fields
 		in
 		  ii.interface_info_final_fields <- fields;
-                  List.iter (type_method_spec_and_body package_env ti) 
+                  List.iter (type_method_spec_and_body package_env ti)
                     ii.interface_info_methods;
 		  acc
         end
     | JPTannot(_loc,_s) -> assert false
-    | JPTlemma((loc,id),is_axiom, labels,e) -> 
+    | JPTlemma((loc,id),is_axiom, labels,e) ->
 	let labels_env,current_label,tlabels = labels_env labels in
         let env =
           { package_env = package_env;
@@ -4026,26 +4041,26 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 	else
 	  begin
 	    if is_axiom then
-	      typing_error loc "axioms not allowed outside axiomatics"; 
+	      typing_error loc "axioms not allowed outside axiomatics";
 	    Hashtbl.add lemmas_table id (loc,tlabels,te);
 	    acc
 	  end
-    | JPTlogic_type_decl (loc,id) -> 
+    | JPTlogic_type_decl (loc,id) ->
 	if in_axiomatic then
 	  Atype id :: acc
 	else
 	  begin
-	    typing_error loc "logic types not allowed outside axiomatics"; 
+	    typing_error loc "logic types not allowed outside axiomatics";
 	  end
-	    
-    | JPTlogic_reads ((loc, id), ret_type, labels, params, reads) -> 
+
+    | JPTlogic_reads ((loc, id), ret_type, labels, params, reads) ->
 	if not in_axiomatic then
 	  typing_error loc "logics without def not allowed outside axiomatics";
 	let labels_env,current_label,tlabels = labels_env labels in
         let pl = List.map (fun p -> fst (type_param package_env type_env p)) params in
-        let env = 
+        let env =
           List.fold_left
-            (fun acc vi -> 
+            (fun acc vi ->
                (vi.java_var_info_name,vi)::acc)
             [] pl
         in
@@ -4062,10 +4077,10 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 	let fi =
 	  match ret_type with
             | None -> logic_info id None tlabels pl
-	    | Some ty -> 
-		logic_info id 
-                  (Some (type_type package_env type_env false ty)) 
-                  tlabels pl 
+	    | Some ty ->
+		logic_info id
+                  (Some (type_type package_env type_env false ty))
+                  tlabels pl
 	in
         Hashtbl.add logics_env id fi;
 	Java_options.lprintf "Adding logic function '%s' in the logic environment@." id;
@@ -4075,12 +4090,12 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
         in
 	Adecl(fi,body)::acc
 
-    | JPTlogic_def ((_loc, id), ret_type, labels, params, body) -> 
+    | JPTlogic_def ((_loc, id), ret_type, labels, params, body) ->
 	let labels_env,current_label,tlabels = labels_env labels in
         let pl = List.map (fun p -> fst (type_param package_env type_env p)) params in
-        let env = 
+        let env =
           List.fold_left
-            (fun acc vi -> 
+            (fun acc vi ->
                (vi.java_var_info_name,vi)::acc)
             [] pl
         in
@@ -4096,7 +4111,7 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
         in
 	begin
           match ret_type with
-            | None -> 
+            | None ->
 		let fi = logic_info id None tlabels pl in
 		let a = assertion env body in
 		Hashtbl.add logics_env id fi;
@@ -4104,14 +4119,14 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 		  Adecl(fi,`Assertion a)::acc
 		else
 		  begin
-		    Hashtbl.add logic_defs_table fi.java_logic_info_tag 
+		    Hashtbl.add logic_defs_table fi.java_logic_info_tag
 		      (fi,`Assertion a);
 		    acc
-		  end		
+		  end
 	    | Some ty ->
-                let fi = 
-		  logic_info id 
-                  (Some (type_type package_env type_env false ty)) tlabels pl 
+                let fi =
+		  logic_info id
+                  (Some (type_type package_env type_env false ty)) tlabels pl
 		in
                 let t = term env body in
                 Hashtbl.add logics_env id fi;
@@ -4119,19 +4134,19 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 		  Adecl(fi,`Term t)::acc
 		else
 		  begin
-		    Hashtbl.add logic_defs_table fi.java_logic_info_tag 
+		    Hashtbl.add logic_defs_table fi.java_logic_info_tag
 		      (fi,`Term t);
 		    acc
 		  end
         end
-    | JPTinductive((_loc, id), labels, params, body) -> 
-	let _labels_env,_current_label,tlabels = labels_env labels in	
-        let pl = 
-	  List.map (fun p -> fst (type_param package_env type_env p)) params 
+    | JPTinductive((_loc, id), labels, params, body) ->
+	let _labels_env,_current_label,tlabels = labels_env labels in
+        let pl =
+	  List.map (fun p -> fst (type_param package_env type_env p)) params
 	in
-        let env = 
+        let env =
           List.fold_left
-            (fun acc vi -> 
+            (fun acc vi ->
                (vi.java_var_info_name,vi)::acc)
             [] pl
         in
@@ -4164,39 +4179,39 @@ let rec type_decl_aux ~in_axiomatic package_env type_env acc d =
 	  Adecl(fi,`Inductive l)::acc
 	else
           begin
-	    Hashtbl.add logic_defs_table fi.java_logic_info_tag 
+	    Hashtbl.add logic_defs_table fi.java_logic_info_tag
 	      (fi,`Inductive l);
 	    acc;
 	  end
     | JPTaxiomatic((loc,id),l) ->
 	if in_axiomatic then
 	  typing_error loc "nested axiomatics not allowed";
-	let l = List.fold_left 
-	  (type_decl_aux ~in_axiomatic:true package_env type_env) [] l 
+	let l = List.fold_left
+	  (type_decl_aux ~in_axiomatic:true package_env type_env) [] l
 	in
 	Hashtbl.add axiomatics_table id l;
 	acc
-    | JPTimport(PolyTheoryId(id_list,_params)) -> 
+    | JPTimport(PolyTheoryId(id_list,_params)) ->
         let loc = fst (List.hd id_list) in
 	if in_axiomatic then
 	  typing_error loc "import not allowed in axiomatics";
-        
+
 
         let qid = Java_pervasives.qualified_ident2string id_list "." in
-	let body = 
+	let body =
 	  try
 	    Hashtbl.find import_spec_table qid
 	  with Not_found -> assert false
-	in	  
-	let l = List.fold_left 
+	in
+	let l = List.fold_left
 	  (type_decl_aux ~in_axiomatic:true package_env type_env) [] body
 	in
         let id = snd (List.hd id_list) in
 	Hashtbl.add axiomatics_table id l;
 	acc
-	
 
-let type_decl package_env type_env d = 
+
+let type_decl package_env type_env d =
   ignore (type_decl_aux ~in_axiomatic:false package_env type_env [] d)
 
 let get_bodies package_env type_env cu =
@@ -4204,10 +4219,10 @@ let get_bodies package_env type_env cu =
 
 let type_specs package_env _type_env =
   Hashtbl.iter
-    (fun _ ti -> 
+    (fun _ ti ->
        match ti with
 	 | TypeClass ci ->
-	     let final_fields = 
+	     let final_fields =
 	       List.filter
 		 (fun fi -> fi.java_field_info_is_final &&
 		    not (List.mem fi ci.class_info_final_fields))
@@ -4217,7 +4232,7 @@ let type_specs package_env _type_env =
                try Hashtbl.find class_type_env_table ci.class_info_tag
                with Not_found -> assert false
              in
-	     let final_fields = 
+	     let final_fields =
 (*
 	       Format.eprintf "Call(2) type_final_fields for %s@." ci.class_info_name;
 *)
@@ -4231,7 +4246,7 @@ let type_specs package_env _type_env =
 	       ci.class_info_final_fields <-
 		 final_fields @ ci.class_info_final_fields
 	 | TypeInterface ii ->
-	     let final_fields = 
+	     let final_fields =
 	       List.filter
 		 (fun fi -> not (List.mem fi ii.interface_info_final_fields))
 		 ii.interface_info_fields
@@ -4240,14 +4255,14 @@ let type_specs package_env _type_env =
                try Hashtbl.find interface_type_env_table ii.interface_info_tag
                with Not_found -> assert false
              in
-	     let final_fields = 
+	     let final_fields =
 	       type_final_fields package_env type_env ti final_fields
 	     in
 	       ii.interface_info_final_fields <-
 		 final_fields @ ii.interface_info_final_fields)
     type_table;
   Hashtbl.iter
-    (fun tag (current_type, env, vi, invs) -> 
+    (fun tag (current_type, env, vi, invs) ->
        match current_type with
          | TypeClass ci ->
              let type_env =
@@ -4265,13 +4280,13 @@ let type_specs package_env _type_env =
                }
              in
              Hashtbl.add invariants_table tag
-               (ci, vi, List.map 
+               (ci, vi, List.map
                   (fun (id, e) ->
                      (id, assertion env e))
                   invs)
          | _ -> assert false)
     invariants_env;
-  Hashtbl.iter 
+  Hashtbl.iter
     (fun tag (current_type, invs) ->
        match current_type with
          | TypeClass ci ->
@@ -4290,25 +4305,25 @@ let type_specs package_env _type_env =
                }
 	     in
 	     Hashtbl.add static_invariants_table tag
-               (List.map 
+               (List.map
 		  (fun (s, e) -> s, assertion env e)
 		  invs)
 	 | _ -> assert false)
     static_invariants_env;
-  Hashtbl.iter 
+  Hashtbl.iter
     (fun _ (mi, _, _, _,_)  ->
-       type_method_spec_and_body ~dobody:false 
-         package_env mi.method_info_class_or_interface mi) 
+       type_method_spec_and_body ~dobody:false
+         package_env mi.method_info_class_or_interface mi)
     methods_env;
-  Hashtbl.iter 
+  Hashtbl.iter
     (fun _ (ci, _, _, _, _, _)  ->
-       type_constr_spec_and_body ~dobody:false 
-         package_env (TypeClass ci.constr_info_class) ci) 
+       type_constr_spec_and_body ~dobody:false
+         package_env (TypeClass ci.constr_info_class) ci)
     constructors_env
 
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "make -C .. bin/krakatoa.byte"
-End: 
+End:
 *)

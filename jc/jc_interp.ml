@@ -674,7 +674,7 @@ let eval_integral_const e =
       | JCEaddress _
       | JCEalloc _ | JCEfree _ | JCEmatch _ |JCEunpack _ |JCEpack _
       | JCEthrow _ | JCEtry _ | JCEreturn _ | JCEloop _ | JCEblock _
-      | JCEcontract _ | JCEassert _
+      | JCEcontract _ | JCEassert _ | JCEfresh _ 
       | JCElet _ | JCEassign_heap _ | JCEassign_var _ | JCEapp _
       | JCEreturn_void -> raise Exit
 
@@ -1190,6 +1190,25 @@ let rec assertion ~type_safe ~global_assertion ~relocate lab oldlab a =
     | JCAat(a1,lab') ->
 	let lab = if relocate && lab' = LabelHere then lab else lab' in
 	assertion ~type_safe ~global_assertion ~relocate lab oldlab a1
+    | JCAfresh t1 ->
+	let ac = tderef_alloc_class ~type_safe t1 in
+	let lab = if relocate && oldlab = LabelHere then lab else oldlab in
+	let _,alloc =
+	  talloc_table_var ~label_in_name:global_assertion lab (ac,t1#region)
+	in
+        let valid =
+	  begin match ac with
+	    | JCalloc_root _ ->
+              let f = "valid" in
+              let t1' = ft t1 in
+              LPred(f,[alloc; t1' ])
+	    | JCalloc_bitvector ->
+              let f = "valid_bytes" in
+              let t1' = ft t1 in
+              LPred(f,[ alloc; t1'])
+	  end
+        in
+        LNot valid
     | JCAbool_term t1 ->
         let t1' = ft t1 in
         LPred("eq",[ t1'; LConst(Prim_bool true) ])
@@ -1583,7 +1602,7 @@ let rec const_int_expr e =
     | JCEreturn_void | JCEreturn _ | JCEtry _
     | JCEthrow _ | JCEpack _ | JCEunpack _
     | JCEcast _ | JCEmatch _ | JCEshift _
-    | JCEbitwise_cast _ ->
+    | JCEbitwise_cast _ | JCEfresh _ ->
 	assert false
 
 let destruct_pointer e =
@@ -2320,6 +2339,7 @@ and expr e =
         make_app "address" [ expr e1 ]
     | JCEbase_block(e1) ->
         make_app "base_block" [ expr e1 ]
+    | JCEfresh _ -> assert false
     | JCEinstanceof(e1,st) ->
         let e1' = expr e1 in
         let tag = tag_table_var (struct_root st,e1#region) in

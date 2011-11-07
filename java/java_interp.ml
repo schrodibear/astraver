@@ -815,6 +815,7 @@ let rec assertion ?(reg=false) a =
 	    ~expr_then: (assertion a1)
 	    ~expr_else: (assertion a2)
 	    ()
+      | JAfresh t -> mkfresh (term t) ()
   in
   let a' = new pexpr ~pos:a.java_assertion_loc a'#node in
   if reg then locate a.java_assertion_loc a' else a'

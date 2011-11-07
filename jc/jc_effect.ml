@@ -1111,6 +1111,10 @@ let single_assertion ef a =
     match a#label with None -> LabelHere | Some lab -> lab
   in
   match a#node with
+    | JCAfresh(t) ->
+        let ac = tderef_alloc_class ~type_safe:true t in
+	true,
+	add_alloc_effect lab ef (ac,t#region)
     | JCAinstanceof(t,lab,st) ->
 	true,
 	add_tag_effect lab ef (struct_root st,t#region)
@@ -1491,7 +1495,7 @@ let rec expr fef e =
        | JCEloop _ | JCElet _ | JCEassert _ | JCEcontract _ | JCEblock _
        | JCEconst _  | JCEshift _ | JCEif _ | JCErange_cast _
        | JCEreal_cast _ | JCEunary _ | JCEaddress _ | JCEbinary _
-       | JCEreturn_void  | JCEreturn _ | JCEbitwise_cast _ | JCEbase_block _ ->
+       | JCEreturn_void  | JCEreturn _ | JCEbitwise_cast _ | JCEbase_block _ | JCEfresh _ ->
 	   true, fef
     ) fef e
 

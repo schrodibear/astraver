@@ -39,7 +39,7 @@ Parser for Java source files
 
 
 %{
-  
+
   open Loc
   open Java_env
   open Java_ast
@@ -61,7 +61,7 @@ Parser for Java source files
 (*
   let rec build_array_creation_expr t (l,n) =
     match l with
-      | [] -> 
+      | [] ->
 	  Implicit_array_creation(build_array_type t n)
       | a::b ->
 	  Explicit_array_creation(a,(build_array_creation_expr t (b,n)))
@@ -78,7 +78,7 @@ Parser for Java source files
 	     java_pbehavior_assigns = a;
 	     java_pbehavior_throws = None;
 	     java_pbehavior_ensures = Java_pervasives.expr_true }) :: behs
-      | a, Some e -> 
+      | a, Some e ->
 	  ((Loc.dummy_position,default_behavior_name),
 	   { java_pbehavior_assumes = None;
 	     java_pbehavior_assigns = a;
@@ -126,36 +126,37 @@ Parser for Java source files
 
 /* Literals */
 
-%token <string> ID 
+%token <string> ID
 %token <string> INTCONSTANT
 %token <string * char option> REALCONSTANT
 %token <string> STRING
 %token <string> CHARACTER
-%token TRUE FALSE NULL THIS 
+%token TRUE FALSE NULL THIS
 
 /* Keywords */
 
 %token NEW SUPER
 %token ABSTRACT BOOLEAN BYTE CASE CATCH
 %token CHAR CLASS CONST DEFAULT DOUBLE ELSE EXTENDS
-%token FALSE FINAL FINALLY FLOAT GHOST GOTO 
+%token FALSE FINAL FINALLY FLOAT GHOST GOTO
 /* ??? %token FUTURE BYVALUE GENERIC INNER OPERATOR OUTER REST VAR */
 %token IMPLEMENTS IMPORT INSTANCEOF INT INTEGER INTERFACE LONG
 %token MODEL NATIVE PACKAGE PRIVATE PROTECTED
 %token PUBLIC REAL SHORT STATIC STRICTFP
 %token THROWS TRANSIENT TRUE VOID VOLATILE
-%token WHILE DO FOR IF SWITCH BREAK CONTINUE RETURN TRY SYNCHRONIZED THROW 
+%token WHILE DO FOR IF SWITCH BREAK CONTINUE RETURN TRY SYNCHRONIZED THROW
 
 %token REQUIRES DECREASES ENSURES SIGNALS ASSUMES ASSIGNS BEHAVIOR ASSERT
-%token INVARIANT LOOP_INVARIANT LOOP_VARIANT 
+%token INVARIANT LOOP_INVARIANT LOOP_VARIANT
 %token AXIOM LEMMA LOGIC TYPE PREDICATE INDUCTIVE AXIOMATIC READS
 %token THEORY
 %token BSFORALL BSEXISTS BSOLD BSAT BSRESULT BSNOTHING
+%token BSFRESH
 %token NON_NULL NULLABLE
 
 /* Others symbols */
 
-%token LEFTPAR 
+%token LEFTPAR
 %token RIGHTPAR LEFTBRACE RIGHTBRACE LEFTBRACKET RIGHTBRACKET
 %token SEMICOLON COLON COMMA QUESTIONMARK DOT DOTDOT
 %token <string> DOC_COMMENT
@@ -167,14 +168,14 @@ Parser for Java source files
 %token <Java_ast.bin_op> ASSIGNOP
 %token EQ EQEQGT LTEQEQGT
 %token VERTICALBARVERTICALBAR
-%token AMPERSANDAMPERSAND  
-%token VERTICALBAR         
-%token CARET               
-%token AMPERSAND           
+%token AMPERSANDAMPERSAND
+%token VERTICALBAR
+%token CARET
+%token AMPERSAND
 %token <Java_ast.bin_op> EQOP
 %token GT LT LE GE
 %token <Java_ast.bin_op> SHIFT
-%token PLUS MINUS 
+%token PLUS MINUS
 %token STAR SLASH PERCENT
 %token PLUSPLUS MINUSMINUS TILDA BANG
 
@@ -184,11 +185,11 @@ Parser for Java source files
 %nonassoc THEN
 %nonassoc ELSE
 %nonassoc BSFORALL
-%right LTEQEQGT 
-%right EQEQGT 
-%right EQ ASSIGNOP 
-  /*r ["="], ["*="],  ["/="], ["%="], ["+="], ["-="], ["<<="], [">>="], 
-  [">>>="], ["&="], ["^="] and ["|="], and ["==>"] ["<==>"] */ 
+%right LTEQEQGT
+%right EQEQGT
+%right EQ ASSIGNOP
+  /*r ["="], ["*="],  ["/="], ["%="], ["+="], ["-="], ["<<="], [">>="],
+  [">>>="], ["&="], ["^="] and ["|="], and ["==>"] ["<==>"] */
 %right IFEXPR QUESTIONMARK     /*r [" ? : "] */
 %left VERTICALBARVERTICALBAR  /*r conditional OR ["||"] */
 %left AMPERSANDAMPERSAND  /*r conditional AND ["&&"] */
@@ -225,15 +226,15 @@ package_declaration:
 import_declarations:
 | /* $\varepsilon$ */
     { [] }
-| IMPORT import_declaration SEMICOLON import_declarations 
+| IMPORT import_declaration SEMICOLON import_declarations
     { $2::$4 }
 ;
 
 
 import_declaration:
-| name DOT STAR 
+| name DOT STAR
     { Import_package($1) }
-| name 
+| name
     { Import_class_or_interface($1) }
 ;
 
@@ -249,12 +250,12 @@ type_declarations:
 ;
 
 type_declaration:
-| class_declaration 
+| class_declaration
     { JPTclass($1) }
 | interface_declaration
     { JPTinterface($1) }
 | ANNOT
-    { let (loc,s) = $1 in JPTannot(loc,s) } 
+    { let (loc,s) = $1 in JPTannot(loc,s) }
 ;
 
 /*s Class declarations */
@@ -275,14 +276,14 @@ class_body:
 extends_decl:
 | /* $\varepsilon$ */
     { None }
-| EXTENDS name 
+| EXTENDS name
     { Some $2 }
 ;
 
 implements_decl:
 | /* $\varepsilon$ */
     { [] }
-| IMPLEMENTS name_comma_list 
+| IMPLEMENTS name_comma_list
     { $2 }
 ;
 
@@ -294,13 +295,13 @@ field_declarations:
 ;
 
 field_declaration:
-| method_declaration 
+| method_declaration
     { $1 }
-| constructor_declaration 
+| constructor_declaration
     { $1 }
-| variable_declaration 
+| variable_declaration
     { JPFvariable($1) }
-| static_initializer 
+| static_initializer
     { JPFstatic_initializer($1) }
 | ANNOT
     { let(loc,s)=$1 in JPFannot(loc,s) }
@@ -320,17 +321,17 @@ variable_declaration:
 	  | Some b ->
 	      { variable_modifiers = a ;
 		variable_type = b ;
-		variable_decls = $2 } 
-	  | None -> raise Parse_error } 
+		variable_decls = $2 }
+	  | None -> raise Parse_error }
 | modifiers_type_expr ANNOT variable_declarators SEMICOLON
     { let a, b = $1 in
 	match b with
 	  | Some b ->
-	      let loc, s = $2 in 
+	      let loc, s = $2 in
 	      { variable_modifiers = Annot_modifier (loc, s) :: a ;
 		variable_type = b ;
-		variable_decls = $3 } 
-	  | None -> raise Parse_error } 
+		variable_decls = $3 }
+	  | None -> raise Parse_error }
 ;
 
 variable_declarators:
@@ -341,7 +342,7 @@ variable_declarators:
 ;
 
 variable_declarator:
-| variable_declarator_id 
+| variable_declarator_id
     { { variable_id = $1 ;
 	variable_initializer = None } }
 | variable_declarator_id EQ variable_initializer
@@ -353,7 +354,7 @@ variable_declarator_id:
 | ident
     { let (loc,id)=$1 in Simple_id(loc,id) }
 | variable_declarator_id LEFTBRACKET RIGHTBRACKET
-    { Array_id($1) } 
+    { Array_id($1) }
 
 variable_initializer:
 | expr
@@ -370,17 +371,17 @@ array_initializer:
 variable_initializers:
 | /* $\varepsilon$ */
     { [] }
-| variable_initializer 
+| variable_initializer
     { [$1] }
 | variable_initializer COMMA variable_initializers
     { $1::$3 }
-; 
+;
 
 
 /*s static initializers */
 
 static_initializer:
-| STATIC block 
+| STATIC block
     { $2 }
 ;
 
@@ -388,34 +389,34 @@ static_initializer:
 /*s method declarations */
 
 method_declaration:
-| method_header method_body 
+| method_header method_body
     { JPFmethod($1,$2) }
 ;
 
 method_header:
 | modifiers_type_expr method_declarator throws_decl
     { let (a, b) = $1 in
-      { 
+      {
 	method_modifiers = a ;
 	method_return_type = b ;
 	method_declarator = $2 ;
-	method_throws = $3 
-      } 
+	method_throws = $3
+      }
     }
 | modifiers_type_expr ANNOT method_declarator throws_decl
     { let (a, b) = $1 in
       let loc, s = $2 in
-	{ 
+	{
 	  method_modifiers = Annot_modifier (loc, s) :: a ;
 	  method_return_type = b ;
 	  method_declarator = $3 ;
-	  method_throws = $4 
-	} 
+	  method_throws = $4
+	}
     }
 ;
 
 method_declarator:
-| ident method_parameters 
+| ident method_parameters
     { Simple_method_declarator($1,$2) }
 | method_declarator LEFTBRACKET RIGHTBRACKET
     { Array_method_declarator($1) }
@@ -423,7 +424,7 @@ method_declarator:
 
 
 method_parameters:
-| LEFTPAR RIGHTPAR 
+| LEFTPAR RIGHTPAR
     { [] }
 | LEFTPAR parameter_comma_list RIGHTPAR
     { $2 }
@@ -438,11 +439,11 @@ parameter_comma_list:
 
 parameter:
 /* final modifier allowed since 1.4 (JLS 3.0) */
-| final_opt type_expr ident 
+| final_opt type_expr ident
     { Simple_parameter (None, $2, $3) }
 | final_opt type_expr ANNOT ident
-    { let loc, s = $3 in 
-      Simple_parameter (Some (Annot_modifier (loc, s)), $2, $4) } 
+    { let loc, s = $3 in
+      Simple_parameter (Some (Annot_modifier (loc, s)), $2, $4) }
 | parameter LEFTBRACKET RIGHTBRACKET
     { Array_parameter($1) }
 ;
@@ -461,8 +462,8 @@ throws_decl:
 ;
 
 method_body:
-| block 
-    { Some($1) } 
+| block
+    { Some($1) }
 | SEMICOLON
     { None }
 ;
@@ -475,21 +476,21 @@ constructor_declaration:
       match b with
 	| Some (Type_name [id]) ->
 	    let c =
-	      { 
+	      {
 	      constr_modifiers = a ;
 	      constr_name = id ;
 	      constr_parameters = $2 ;
 	      constr_throws = $3 }
 	    in
 	    let eci,b = $4 in
-	    JPFconstructor(c,eci,b) 
+	    JPFconstructor(c,eci,b)
 	| _ -> raise Parse_error}
 ;
 
 constructor_body:
-| LEFTBRACE explicit_constructor_invocation statements RIGHTBRACE   
+| LEFTBRACE explicit_constructor_invocation statements RIGHTBRACE
     { ($2,$3) }
-| LEFTBRACE statements RIGHTBRACE   
+| LEFTBRACE statements RIGHTBRACE
     { (Invoke_none,$2) }
 | SEMICOLON
     { (Invoke_none,[]) }
@@ -512,7 +513,7 @@ argument_list:
 /*s interface declarations */
 
 interface_declaration:
-| modifiers_interface ident extends_interfaces_decl 
+| modifiers_interface ident extends_interfaces_decl
     LEFTBRACE interface_member_declarations RIGHTBRACE
     { { interface_modifiers = $1;
 	interface_name = $2;
@@ -523,7 +524,7 @@ interface_declaration:
 extends_interfaces_decl:
 | /* $\varepsilon$ */
     { [] }
-| EXTENDS name_comma_list 
+| EXTENDS name_comma_list
     { $2 }
 ;
 
@@ -552,21 +553,21 @@ interface_member_declaration:
 /*s type expressions */
 
 base_type:
-| SHORT 
+| SHORT
     { Tshort }
-| BOOLEAN 
+| BOOLEAN
     { Tboolean }
-| BYTE 
+| BYTE
     { Tbyte }
-| CHAR 
+| CHAR
     { Tchar }
-| INT 
+| INT
     { Tint }
-| FLOAT 
+| FLOAT
     { Tfloat }
-| LONG 
+| LONG
     { Tlong }
-| DOUBLE 
+| DOUBLE
     { Tdouble }
 | INTEGER
     { Tinteger }
@@ -575,9 +576,9 @@ base_type:
 ;
 
 type_expr:
-| name 
+| name
     { Type_name($1) }
-| base_type  
+| base_type
     { Base_type($1) }
 | array_type_expr
     { Array_type_expr($1) }
@@ -596,7 +597,7 @@ array_type_expr:
 /*s modifiers */
 
 modifiers_class:
-| CLASS 
+| CLASS
     { [] }
 | modifier modifiers_class
     { $1::$2 }
@@ -617,7 +618,7 @@ modifier:
     { Final }
 | PUBLIC
     { Public }
-| PRIVATE 
+| PRIVATE
     { Private }
 | PROTECTED
     { Protected }
@@ -648,14 +649,14 @@ modifiers_type_expr:
 /*s Statements */
 
 block:
-| LEFTBRACE statements RIGHTBRACE   
+| LEFTBRACE statements RIGHTBRACE
     { $2 }
 
 statements:
 | statement statements
-    { $1::$2 } 
+    { $1::$2 }
 | /* $\varepsilon$ */
-    { [] } 
+    { [] }
 ;
 
 /*s Statements */
@@ -668,22 +669,22 @@ local_variable_declaration:
 	    { variable_modifiers = a ;
 	      variable_type = b ;
 	      variable_decls = $2 }
-	| None -> raise Parse_error } 
+	| None -> raise Parse_error }
 ;
 
 statement:
 | ANNOT
-    { let (loc, s) = $1 in 
+    { let (loc, s) = $1 in
 	locate_statement (JPSannot (loc, s)) }
 | WHILE LEFTPAR expr RIGHTPAR statement %prec WHILE
     { locate_statement (JPSwhile($3,$5)) }
-| DO statement WHILE LEFTPAR expr RIGHTPAR 
-    { locate_statement (JPSdo($2,$5)) } 
-| FOR LEFTPAR argument_list SEMICOLON for_cond SEMICOLON 
-  argument_list RIGHTPAR statement 
+| DO statement WHILE LEFTPAR expr RIGHTPAR
+    { locate_statement (JPSdo($2,$5)) }
+| FOR LEFTPAR argument_list SEMICOLON for_cond SEMICOLON
+  argument_list RIGHTPAR statement
     { locate_statement (JPSfor($3,$5,$7,$9)) }
-| FOR LEFTPAR local_variable_declaration SEMICOLON for_cond SEMICOLON 
-  argument_list RIGHTPAR statement 
+| FOR LEFTPAR local_variable_declaration SEMICOLON for_cond SEMICOLON
+  argument_list RIGHTPAR statement
     { locate_statement (JPSfor_decl($3,$5,$7,$9)) }
 | block
     { locate_statement (JPSblock $1) }
@@ -700,7 +701,7 @@ statement:
 | SWITCH LEFTPAR expr RIGHTPAR LEFTBRACE switch_block RIGHTBRACE
     { locate_statement (JPSswitch($3,$6)) }
 | ident COLON statement
-    { locate_statement (JPSlabel($1,$3)) } 
+    { locate_statement (JPSlabel($1,$3)) }
 | BREAK SEMICOLON
     { locate_statement (JPSbreak None) }
 | BREAK ident SEMICOLON
@@ -731,10 +732,10 @@ for_cond:
     { locate_expr Java_pervasives.expr_node_true }
 ;
 
-switch_block: 
+switch_block:
 | /* $\varepsilon$ */
     { [] }
-| switch_labels 
+| switch_labels
     { [($1,[])] }
 | switch_labels statement statements switch_block
     { ($1,$2::$3)::$4 }
@@ -783,36 +784,36 @@ primary_expr:
 ;
 
 primary_no_new_array:
-| INTCONSTANT                    
+| INTCONSTANT
     { locate_lit (Integer $1) }
-| REALCONSTANT                    
+| REALCONSTANT
     { let x,suf = $1 in locate_lit (Float(x,float_of_suf suf)) }
-| TRUE                       
+| TRUE
     { locate_lit (Bool true) }
-| FALSE                      
-    { locate_lit (Bool false) } 
-| STRING                     
+| FALSE
+    { locate_lit (Bool false) }
+| STRING
     { locate_lit (String $1) }
-| NULL                     
+| NULL
     { locate_lit Null }
-| CHARACTER                     
+| CHARACTER
     { locate_lit (Char $1) }
 | THIS
     { locate_expr JPEthis }
 | BSRESULT
     { locate_expr JPEresult }
-| LEFTPAR expr_no_name RIGHTPAR      
+| LEFTPAR expr_no_name RIGHTPAR
     { $2 }
 | LEFTPAR name RIGHTPAR
     { locate_expr (JPEname $2) }
 | field_access
     { locate_expr (JPEfield_access $1) }
 | name label_binders LEFTPAR argument_list RIGHTPAR
-    { locate_expr (JPEcall_name($1,$2,$4)) } 
+    { locate_expr (JPEcall_name($1,$2,$4)) }
 | SUPER DOT ident LEFTPAR argument_list RIGHTPAR
     { locate_expr (JPEsuper_call($3, $5)) }
 | primary_expr DOT ident LEFTPAR argument_list RIGHTPAR
-    { locate_expr (JPEcall_expr($1,$3,$5)) } 
+    { locate_expr (JPEcall_expr($1,$3,$5)) }
 | NEW name LEFTPAR argument_list RIGHTPAR
     { locate_expr (JPEnew($2,$4)) }
 /* new in java 1.4 (see JLS 3.0) */
@@ -823,6 +824,8 @@ primary_no_new_array:
     { let (a,b)=$1 in locate_expr (JPEarray_access(a,b)) }
 | array_range
     { let (a,b,c)=$1 in locate_expr (JPEarray_range(a,b,c)) }
+| BSFRESH LEFTPAR expr RIGHTPAR
+    { locate_expr (JPEfresh $3) }
 | BSOLD LEFTPAR expr RIGHTPAR
     { locate_expr (JPEold $3) }
 | BSAT LEFTPAR expr COMMA ident RIGHTPAR
@@ -851,21 +854,21 @@ expr_opt:
 ;
 
 array_creation_expression:
-| NEW base_type array_dims 
-    { let (a,b) = $3 in 
+| NEW base_type array_dims
+    { let (a,b) = $3 in
       let t = build_array_type (Base_type($2)) b in
       locate_expr (JPEnew_array(t,a)) }
-| NEW name array_dims 
-    { let (a,b) = $3 in 
+| NEW name array_dims
+    { let (a,b) = $3 in
       let t = build_array_type (Type_name($2)) b in
       locate_expr (JPEnew_array(t,a)) }
 /* array_initializer allowed in 1.4 (JLS 3.0) */
 | NEW base_type implicit_dims array_initializer
-    { let b = $3 in 
+    { let b = $3 in
       let t = build_array_type (Base_type($2)) b in
       locate_expr (JPEnew_array(t,[])) }
 | NEW name implicit_dims array_initializer
-    { let b = $3 in 
+    { let b = $3 in
       let t = build_array_type (Type_name($2)) b in
       locate_expr (JPEnew_array(t,[])) }
 ;
@@ -915,52 +918,52 @@ expr_no_name:
 | field_access assign_op expr %prec ASSIGNOP
     { locate_expr (JPEassign_field($1,$2,$3)) }
 | array_access assign_op expr %prec ASSIGNOP
-    { let (a,b)=$1 in 
+    { let (a,b)=$1 in
       locate_expr (JPEassign_array(a,b,$2,$3)) }
-| PLUSPLUS expr 
+| PLUSPLUS expr
     { locate_expr (JPEincr(Preincr,$2)) }
-| MINUSMINUS expr 
+| MINUSMINUS expr
     { locate_expr (JPEincr(Predecr,$2)) }
-| expr PLUSPLUS 
+| expr PLUSPLUS
     { locate_expr (JPEincr(Postincr,$1)) }
-| expr MINUSMINUS 
+| expr MINUSMINUS
     { locate_expr (JPEincr(Postdecr,$1)) }
 | expr QUESTIONMARK expr COLON expr %prec IFEXPR
     { locate_expr (JPEif($1,$3,$5)) }
-| expr VERTICALBARVERTICALBAR expr          
+| expr VERTICALBARVERTICALBAR expr
     { locate_expr (JPEbin($1,Bor,$3)) }
-| expr AMPERSANDAMPERSAND expr          
+| expr AMPERSANDAMPERSAND expr
     { locate_expr (JPEbin($1,Band,$3)) }
-| expr VERTICALBAR expr          
+| expr VERTICALBAR expr
     { locate_expr (JPEbin($1,Bbwor,$3)) }
-| expr CARET expr          
-    { locate_expr (JPEbin($1,Bbwxor,$3)) } 
-| expr AMPERSAND expr          
-    { locate_expr (JPEbin($1,Bbwand,$3)) } 
-| expr EQOP expr          
-    { locate_expr (JPEbin($1,$2,$3)) } 
+| expr CARET expr
+    { locate_expr (JPEbin($1,Bbwxor,$3)) }
+| expr AMPERSAND expr
+    { locate_expr (JPEbin($1,Bbwand,$3)) }
+| expr EQOP expr
+    { locate_expr (JPEbin($1,$2,$3)) }
 | expr comp expr %prec GT
-    { locate_expr (JPEbin($1,$2,$3)) } 
-| expr SHIFT expr         
-    { locate_expr (JPEbin($1,$2,$3)) } 
-| expr PLUS expr          
-    { locate_expr (JPEbin($1,Badd,$3)) }  
-| expr MINUS expr         
-    { locate_expr (JPEbin($1,Bsub,$3)) }  
-| expr STAR expr        
-    { locate_expr (JPEbin($1,Bmul,$3)) } 
-| expr SLASH expr       
-    { locate_expr (JPEbin($1,Bdiv,$3)) }  
-| expr PERCENT expr        
-    { locate_expr (JPEbin($1,Bmod,$3)) }  
-| PLUS expr %prec UPLUS 
-    { locate_expr (JPEun(Uplus,$2)) }  
-| MINUS expr %prec UMINUS 
-    { locate_expr (JPEun(Uminus,$2)) }  
+    { locate_expr (JPEbin($1,$2,$3)) }
+| expr SHIFT expr
+    { locate_expr (JPEbin($1,$2,$3)) }
+| expr PLUS expr
+    { locate_expr (JPEbin($1,Badd,$3)) }
+| expr MINUS expr
+    { locate_expr (JPEbin($1,Bsub,$3)) }
+| expr STAR expr
+    { locate_expr (JPEbin($1,Bmul,$3)) }
+| expr SLASH expr
+    { locate_expr (JPEbin($1,Bdiv,$3)) }
+| expr PERCENT expr
+    { locate_expr (JPEbin($1,Bmod,$3)) }
+| PLUS expr %prec UPLUS
+    { locate_expr (JPEun(Uplus,$2)) }
+| MINUS expr %prec UMINUS
+    { locate_expr (JPEun(Uminus,$2)) }
 | BANG expr
-    { locate_expr (JPEun(Unot,$2)) }  
+    { locate_expr (JPEun(Unot,$2)) }
 | TILDA expr
-    { locate_expr (JPEun(Ucompl,$2)) }  
+    { locate_expr (JPEun(Ucompl,$2)) }
 /*
 
   CAST expressions
@@ -969,21 +972,21 @@ expr_no_name:
   is (id1)-id2  a cast of a unary minus, or a binary - ?
 
   solution:
-       
-  if id1 is a base type, it is a cast else it is a binary operation. 
-  it is enough because result of unary - cannot be casted to something 
-  else than a base type.    
 
-  moreover, we distinguish between cast to a type identifier 
+  if id1 is a base type, it is a cast else it is a binary operation.
+  it is enough because result of unary - cannot be casted to something
+  else than a base type.
+
+  moreover, we distinguish between cast to a type identifier
   "(name) expr" and a complex type expr, because of LALR constraint:
-  (name) can be both an expr and a cast, so it is factorized. 
+  (name) can be both an expr and a cast, so it is factorized.
 
 */
 | LEFTPAR base_type RIGHTPAR expr %prec CAST
     { locate_expr (JPEcast(Base_type($2),$4)) }
 | non_basic_cast
     { $1 }
-/* 
+/*
   instanceof operator
 */
 | expr INSTANCEOF type_expr
@@ -1007,7 +1010,7 @@ quantified_variables_decl:
 ;
 
 quantified_variables:
-| quantified_variable 
+| quantified_variable
     { [$1] }
 | quantified_variable quantified_variables
     { $1::$2 }
@@ -1017,7 +1020,7 @@ quantified_variable:
 | ident
     { let (loc,id)=$1 in Simple_id(loc,id) }
 | quantified_variable LEFTBRACKET RIGHTBRACKET
-    { Array_id($1) } 
+    { Array_id($1) }
 
 
 expr_comma_list:
@@ -1036,7 +1039,7 @@ comp:
 ;
 
 assign_op:
-| EQ 
+| EQ
     { Beq }
 | ASSIGNOP
     { $1 }
@@ -1147,10 +1150,10 @@ reads_clause:
     { Some $2 }
 | READS BSNOTHING
     { Some [] }
-| /* epsilon */ 
+| /* epsilon */
     { None }
 ;
- 
+
 indcases:
 | /* epsilon */
     { [] }
@@ -1173,14 +1176,14 @@ kml_field_decl:
 | requires_opt decreases_opt assigns_opt ensures_opt behaviors EOF
     { JPFmethod_spec($1,$2,default_behavior $3 $4 $5) }
 | INVARIANT ident COLON expr SEMICOLON EOF
-    { JPFinvariant($2,$4) } 
+    { JPFinvariant($2,$4) }
 | STATIC INVARIANT ident COLON expr SEMICOLON EOF
-    { JPFstatic_invariant($3,$5) } 
+    { JPFstatic_invariant($3,$5) }
 | MODEL variable_declaration
-    { let vd = $2 in 
+    { let vd = $2 in
       JPFvariable {vd with variable_modifiers = Model::vd.variable_modifiers} }
 | GHOST variable_declaration
-    { let vd = $2 in 
+    { let vd = $2 in
       JPFvariable {vd with variable_modifiers = Ghost::vd.variable_modifiers} }
 ;
 
@@ -1233,7 +1236,7 @@ ident_option:
 | ident
     { Some $1 }
 ;
- 
+
 assumes_opt:
 | /* $\varepsilon$ */
     { None }
@@ -1254,9 +1257,9 @@ assigns_opt:
 decreases_opt:
 | /* $\varepsilon$ */
     { None }
-| DECREASES expr SEMICOLON 
+| DECREASES expr SEMICOLON
     { Some($2, None) }
-| DECREASES expr FOR ident SEMICOLON 
+| DECREASES expr FOR ident SEMICOLON
     { Some($2, Some $4) }
 ;
 
@@ -1264,7 +1267,7 @@ kml_statement_annot:
 | LOOP_INVARIANT expr SEMICOLON beh_loop_inv loop_variant_opt EOF
     { JPSloop_annot($2,$4,$5) }
 | beh_loop_inv loop_variant EOF
-    { JPSloop_annot({java_pexpr_node = JPElit (Bool true) ; 
+    { JPSloop_annot({java_pexpr_node = JPElit (Bool true) ;
 		     java_pexpr_loc = loc_i 2 },$1,$2) }
 | ASSERT expr SEMICOLON EOF
     { JPSassert(None,None,$2) }
@@ -1297,15 +1300,15 @@ loop_variant_opt:
 ;
 
 loop_variant:
-| LOOP_VARIANT expr SEMICOLON 
+| LOOP_VARIANT expr SEMICOLON
     { Some($2, None) }
-| LOOP_VARIANT expr FOR ident SEMICOLON 
+| LOOP_VARIANT expr FOR ident SEMICOLON
     { Some($2, Some $4) }
 ;
 
 
 /*
-Local Variables: 
+Local Variables:
 compile-command: "make -j -C .. bin/krakatoa.byte"
-End: 
+End:
 */
