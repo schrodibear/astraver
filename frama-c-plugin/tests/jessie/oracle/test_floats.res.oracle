@@ -1,5 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only test_floats.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD test_floats.c"
+test_floats.c:9:[kernel] warning: Floating-point constant 0.1f is not represented exactly. Will use 0x1.99999a0000000p-4. See documentation for option -warn-decimal-float
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir test_floats.jessie
 [jessie] File test_floats.jessie/test_floats.jc written.

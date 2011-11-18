@@ -15,6 +15,7 @@ void f(struct S s) {
   /*@ assert \forall int k; 0 <= k < s.i ==> s.a[k] == 0; */
 }
 
+#if 0
 struct S0 {
   int i0;
   int a0[0];
@@ -30,6 +31,7 @@ void f0(struct S0 s) {
   for (j = 0; j < s.i0; j++) s.a0[j] = 0;
   /*@ assert \forall int k; 0 <= k < s.i0 ==> s.a0[k] == 0; */
 }
+#endif
 
 struct S1 {
   int i1;
