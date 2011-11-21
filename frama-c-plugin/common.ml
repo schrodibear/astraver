@@ -688,6 +688,7 @@ object
   method vannotation = visitor#vannotation
 
   method behavior = visitor#behavior
+  method project = visitor#project
   method frama_c_plain_copy = visitor#frama_c_plain_copy
   method is_annot_before = visitor#is_annot_before
   method plain_copy_visitor = visitor#plain_copy_visitor
