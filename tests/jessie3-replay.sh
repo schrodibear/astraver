@@ -10,7 +10,7 @@ JAVA="AllZeros ArrayMax Arrays BinarySearch Counter Creation
 JAVATODO="Duplets SimpleApplet Sort2 Sort"
 
 C="array_max binary_search clock_drift duplets \
-   flag floats_bsearch float_sqrt \
+   find_array flag floats_bsearch float_sqrt \
    insertion_sort isqrt minmax muller my_cosine quick_sort \
    rec selection_sort sparse_array2 Sterbenz swap tree_max"
 
