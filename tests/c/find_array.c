@@ -1,5 +1,5 @@
-/*@ from Julien Signoles' tutorial
-  @*/
+/** from Julien Signoles' tutorial
+ **/
 
 /*@
   predicate sorted{L}(int* arr, integer length) =

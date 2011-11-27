@@ -13,7 +13,7 @@
  <prover
   id="cvc3"
   name="CVC3"
-  version="2.4.1"/>
+  version="2.2"/>
  <prover
   id="eprover"
   name="Eprover"
@@ -45,7 +45,7 @@
  <prover
   id="z3"
   name="Z3"
-  version="3.2"/>
+  version="2.19"/>
  <file
   name="../find_array.mlw"
   verified="true"
@@ -66,13 +66,6 @@
     proved="true"
     expanded="true"
     shape="iainfix <ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2ainfix <=c0ainteger_of_int32V16Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix <V17ainteger_of_int32V16Aainfix <=c0V17FAainfix >ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix <V18ainteger_of_int32V1Aainfix <ainteger_of_int32V9V18FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V14c1Fainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V20ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix <V21ainteger_of_int32V10Aainfix <=c0V21FAainfix >ainteger_of_int32aselectV4ashiftV0V22ainteger_of_int32V2Iainfix <V22ainteger_of_int32V1Aainfix <ainteger_of_int32V20V22FIainfix =V20V19FIainfix =ainteger_of_int32V19ainfix -ainteger_of_int32V14c1FIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V23ainteger_of_int32V2Iainfix <V23ainteger_of_int32V10Aainfix <=c0V23FAainfix >ainteger_of_int32aselectV4ashiftV0V24ainteger_of_int32V2Iainfix <V24ainteger_of_int32V1Aainfix <ainteger_of_int32V9V24FFFAainfix <=c0ainteger_of_int32V6Aainfix <ainteger_of_int32V8ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V25ainteger_of_int32V2Iainfix <V25ainteger_of_int32V6Aainfix <=c0V25FAainfix >ainteger_of_int32aselectV4ashiftV0V26ainteger_of_int32V2Iainfix <V26ainteger_of_int32V1Aainfix <ainteger_of_int32V8V26FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4FFFFF">
-    <proof
-     prover="alt-ergo"
-     timelimit="3"
-     edited=""
-     obsolete="false">
-     <result status="timeout" time="3.28"/>
-    </proof>
     <transf
      name="split_goal"
      proved="true"
@@ -89,7 +82,7 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.09"/>
+       <result status="valid" time="0.07"/>
       </proof>
       <proof
        prover="alt-ergo"
@@ -118,7 +111,7 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="timeout" time="4.74"/>
+       <result status="timeout" time="3.06"/>
       </proof>
       <proof
        prover="alt-ergo"
@@ -147,7 +140,7 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="timeout" time="4.55"/>
+       <result status="timeout" time="3.08"/>
       </proof>
       <proof
        prover="alt-ergo"
@@ -161,7 +154,7 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.09"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <transf
        name="split_goal"
@@ -179,7 +172,7 @@
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="timeout" time="3.47"/>
+         <result status="timeout" time="3.11"/>
         </proof>
         <proof
          prover="alt-ergo"
@@ -193,7 +186,7 @@
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.08"/>
         </proof>
        </goal>
        <goal
@@ -208,7 +201,7 @@
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.09"/>
         </proof>
         <proof
          prover="alt-ergo"
@@ -237,7 +230,7 @@
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.09"/>
         </proof>
         <proof
          prover="alt-ergo"
@@ -251,7 +244,7 @@
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.08"/>
         </proof>
        </goal>
        <goal
@@ -266,7 +259,7 @@
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.09"/>
         </proof>
         <proof
          prover="alt-ergo"
@@ -280,7 +273,7 @@
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.06"/>
+         <result status="valid" time="0.07"/>
         </proof>
        </goal>
       </transf>
@@ -299,7 +292,7 @@
      timelimit="3"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.22"/>
+     <result status="valid" time="0.09"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -313,7 +306,7 @@
      timelimit="3"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.09"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
@@ -323,13 +316,6 @@
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V10ainteger_of_int32V9ainfix =ainteger_of_int32V16aprefix -c1Iainfix =V16V15FIainfix =V15V14FIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10Fainfix =ainteger_of_int32V19aprefix -c1Iainfix =V19V18FIainfix =V18V17FIainfix =ainteger_of_int32V17aprefix -c1FIainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix <V20ainteger_of_int32V10Aainfix <=c0V20FAainfix >ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix <V21ainteger_of_int32V1Aainfix <ainteger_of_int32V9V21FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4AamemV2V0ainteger_of_int32V1V4NFFFFF">
-    <proof
-     prover="alt-ergo"
-     timelimit="3"
-     edited=""
-     obsolete="false">
-     <result status="timeout" time="4.58"/>
-    </proof>
     <transf
      name="split_goal"
      proved="true"
@@ -346,7 +332,7 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.16"/>
+       <result status="valid" time="0.09"/>
       </proof>
       <proof
        prover="alt-ergo"
@@ -360,7 +346,7 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.09"/>
+       <result status="valid" time="0.08"/>
       </proof>
      </goal>
      <goal
@@ -375,7 +361,7 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.09"/>
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="alt-ergo"
@@ -389,7 +375,7 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.07"/>
       </proof>
      </goal>
     </transf>
@@ -406,7 +392,7 @@
      timelimit="3"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.14"/>
+     <result status="valid" time="0.29"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -420,7 +406,7 @@
      timelimit="3"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.11"/>
     </proof>
    </goal>
   </theory>
