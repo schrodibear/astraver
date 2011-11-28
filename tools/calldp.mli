@@ -45,29 +45,30 @@ type prover_result =
 
 val cpulimit : string ref
 
-type prover = ?debug:bool -> ?timeout:int -> ?filename:string -> ?buffers:(Buffer.t list) -> unit ->
+type prover = ?debug:bool -> ?switch:string -> 
+    ?timeout:int -> ?filename:string -> ?buffers:(Buffer.t list) -> unit ->
   prover_result
 
-val gappa : ?debug:bool -> ?timeout:int -> filename:string -> unit ->
-  prover_result
+val gappa : ?debug:bool ->  ?switch:string ->
+  ?timeout:int -> filename:string -> unit -> prover_result
 
-val simplify : ?debug:bool -> ?timeout:int -> filename:string -> unit ->
-  prover_result
+val simplify : ?debug:bool ->  ?switch:string -> 
+  ?timeout:int -> filename:string -> unit ->prover_result
 
-val vampire : ?debug:bool -> ?timeout:int -> filename:string -> unit ->
-  prover_result
+val vampire : ?debug:bool ->  ?switch:string -> 
+  ?timeout:int -> filename:string -> unit -> prover_result
 
 val harvey :
-  ?debug:bool -> ?timeout:int -> filename:string -> unit ->
-  prover_result
+  ?debug:bool ->  ?switch:string -> ?timeout:int -> 
+  filename:string -> unit -> prover_result
 
 val zenon :
-  ?debug:bool -> ?timeout:int -> filename:string -> unit ->
-  prover_result
+  ?debug:bool ->  ?switch:string -> ?timeout:int -> 
+  filename:string -> unit -> prover_result
 
 val rvsat :
-  ?debug:bool -> ?timeout:int -> filename:string -> unit ->
-  prover_result
+  ?debug:bool ->  ?switch:string -> ?timeout:int -> 
+  filename:string -> unit -> prover_result
 
 val yices : prover
 
@@ -82,13 +83,13 @@ val verit: prover
 val ergo : select_hypotheses:bool -> prover
 
 val generic_hypotheses_selection :
-  ?debug:bool ->
+  ?debug:bool -> ?switch:string ->
   ?timeout:int -> filename:string -> DpConfig.prover_id -> unit -> prover_result
 
 val coq :
-  ?debug:bool ->
+  ?debug:bool -> ?switch:string ->
   ?timeout:int -> filename:string -> unit -> prover_result
 
 val pvs :
-  ?debug:bool ->
+  ?debug:bool -> ?switch:string ->
   ?timeout:int -> filename:string -> unit -> prover_result

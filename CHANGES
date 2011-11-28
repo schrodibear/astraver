@@ -1,4 +1,16 @@
 
+  o new option -extra-switch for why-dp (pass additional option to prover)
+
+version 2.30, Oct 24, 2011
+=========================
+  o [Jessie and Krakatoa] manuals have been extensively updated to
+    adopt the Why3 back-ends
+  o [Jessie/Frama-C plugin] the default back-end is now to call Why3
+    VC generator, and then the Why3 IDE. The former behavior can be
+    obtained using option -jessie-atp=gui
+  o [Krakatoa] new option -gen-only whichs stops after generation of
+    jessie file. The default is now to start jessie and then Why3 IDE.
+    the old usage "gwhy file.java" continues to use the Why2 backend.
   o [Krakatoa/Jessie/Frama-C plugin] fixed traceability issues
   o [Krakatoa/Jessie/Frama-C plugin] new backend using Why3 VC generator
   o [Jessie] add extensionality axiom to integer range type. allows to

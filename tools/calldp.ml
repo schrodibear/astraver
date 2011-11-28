@@ -41,8 +41,8 @@ type prover_result =
   | Timeout of float
   | ProverFailure of float * string
 
-type prover = ?debug:bool -> ?timeout:int -> ?filename:string -> ?buffers:(Buffer.t list) -> unit ->
-  prover_result
+type prover = ?debug:bool ->  ?switch:string -> ?timeout:int -> 
+    ?filename:string -> ?buffers:(Buffer.t list) -> unit -> prover_result
 
 let cpulimit = ref "why-cpulimit"
 
@@ -168,44 +168,45 @@ let gen_prover_call ?(debug=false) ?(timeout=10) ?(switch="")
           ProverFailure(t,"prover command " ^ cmd ^
                           " produced unrecognized answer: " ^ res)
 
-let gappa ?(debug=false) ?(timeout=10) ~filename () =
-  gen_prover_call ~debug ~timeout ~filename DpConfig.gappa
+let gappa ?(debug=false) ?(switch="") ?(timeout=10) ~filename () =
+  gen_prover_call ~debug ~switch ~timeout ~filename DpConfig.gappa
 
-let ergo ~select_hypotheses ?(debug=false) ?(timeout=10) ?filename ?buffers () =
+let ergo ~select_hypotheses ?(debug=false) ?(switch="") 
+        ?(timeout=10) ?filename ?buffers () =
   if select_hypotheses then
-    gen_prover_call ~debug ~timeout ~switch:"-select 1"
+    gen_prover_call ~debug ~timeout ~switch:("-select 1 " ^ switch)
       ?filename ?buffers DpConfig.alt_ergo
   else
-    gen_prover_call ~debug ~timeout
+    gen_prover_call ~debug ~timeout ~switch
       ?filename ?buffers DpConfig.alt_ergo
 
-let coq ?(debug=false) ?(timeout=10) ~filename () =
-  gen_prover_call ~debug ~timeout ~filename DpConfig.coq
+let coq ?(debug=false) ?(switch="") ?(timeout=10) ~filename () =
+  gen_prover_call ~debug ~switch ~timeout ~filename DpConfig.coq
 
-let pvs ?(debug=false) ?(timeout=10) ~filename () =
-  gen_prover_call ~debug ~timeout ~filename DpConfig.pvs
+let pvs ?(debug=false) ?(switch="") ?(timeout=10) ~filename () =
+  gen_prover_call ~debug ~switch ~timeout ~filename DpConfig.pvs
 
-let simplify ?(debug=false) ?(timeout=10) ~filename () =
-  gen_prover_call ~debug ~timeout ~filename DpConfig.simplify
+let simplify ?(debug=false) ?(switch="") ?(timeout=10) ~filename () =
+  gen_prover_call ~debug ~switch ~timeout ~filename DpConfig.simplify
 
-let vampire ?(debug=false) ?(timeout=10) ~filename () =
-  gen_prover_call ~debug ~timeout ~filename DpConfig.vampire
+let vampire ?(debug=false) ?(switch="") ?(timeout=10) ~filename () =
+  gen_prover_call ~debug ~switch ~timeout ~filename DpConfig.vampire
 
-let z3 ?(debug=false) ?(timeout=10) ?filename ?buffers () =
-  gen_prover_call ~debug ~timeout ?filename ?buffers DpConfig.z3
+let z3 ?(debug=false) ?(switch="") ?(timeout=10) ?filename ?buffers () =
+  gen_prover_call ~debug ~switch ~timeout ?filename ?buffers DpConfig.z3
 
-let yices ?(debug=false) ?(timeout=10) ?filename ?buffers () =
-  gen_prover_call ~debug ~timeout ?filename ?buffers DpConfig.yices
+let yices ?(debug=false) ?(switch="") ?(timeout=10) ?filename ?buffers () =
+  gen_prover_call ~debug ~switch ~timeout ?filename ?buffers DpConfig.yices
 
-let cvc3 ?(debug=false) ?(timeout=10) ?filename ?buffers () =
-  gen_prover_call ~debug ~timeout ?filename ?buffers DpConfig.cvc3
+let cvc3 ?(debug=false) ?(switch="") ?(timeout=10) ?filename ?buffers () =
+  gen_prover_call ~debug ~switch ~timeout ?filename ?buffers DpConfig.cvc3
 
 
-let cvcl ?(debug=false) ?(timeout=10) ?filename ?buffers () =
-  gen_prover_call ~debug ~timeout ?filename ?buffers DpConfig.cvcl
+let cvcl ?(debug=false) ?(switch="") ?(timeout=10) ?filename ?buffers () =
+  gen_prover_call ~debug ~switch ~timeout ?filename ?buffers DpConfig.cvcl
 
-let verit ?(debug=false) ?(timeout=10) ?filename ?buffers () =
-  gen_prover_call ~debug ~timeout ?filename ?buffers DpConfig.verit
+let verit ?(debug=false) ?(switch="") ?(timeout=10) ?filename ?buffers () =
+  gen_prover_call ~debug ~switch ~timeout ?filename ?buffers DpConfig.verit
 
 let error c t cmd =
   match c with
@@ -233,7 +234,8 @@ let error c t cmd =
    Face to a timeout result, the prover is called again with the same PO but
    with a longer timeout.
 **)
-let generic_hypotheses_selection  ?(debug=false) ?(timeout=10) ~filename:f p () =
+let generic_hypotheses_selection 
+    ?(debug=false) ?(switch="") ?(timeout=10) ~filename:f p () =
   let pruning_hyp = 3 in
   let last_dot_index = String.rindex f '.' in
   let option, prover, file_for_prover =
@@ -251,7 +253,7 @@ let generic_hypotheses_selection  ?(debug=false) ?(timeout=10) ~filename:f p () 
     (float_of_int timeout) /. (float_of_int (pruning_hyp +1)) in
   let t'',_c,_out = timed_sys_command ~debug (int_of_float t') cmd in
   let r =
-    gen_prover_call ~debug ~timeout:(int_of_float (t' -. t''))
+    gen_prover_call ~debug ~switch ~timeout:(int_of_float (t' -. t''))
       ~filename:file_for_prover prover
   in
 (*
@@ -284,7 +286,7 @@ let generic_hypotheses_selection  ?(debug=false) ?(timeout=10) ~filename:f p () 
       let t'',c',out = timed_sys_command ~debug (int_of_float (t' -. t'')) cmd in
 *)
       r :=
-	gen_prover_call ~debug ~timeout:(int_of_float (t' -. t''))
+	gen_prover_call ~debug ~switch ~timeout:(int_of_float (t' -. t''))
 	  ~filename:file_for_prover prover  ;
 (*
       t :=  !t +. t'';
@@ -322,9 +324,9 @@ let generic_hypotheses_selection  ?(debug=false) ?(timeout=10) ~filename:f p () 
 
 
 
-let rvsat ?(debug=false) ?(timeout=10) ~filename:f () =
+let rvsat ?(debug=false) ?(switch="") ?(timeout=10) ~filename:f () =
   (*let cmd = sprintf "rv-sat %s" f in*)
-  let cmd = sprintf "rv-sat %s" f in
+  let cmd = sprintf "rv-sat %s %s" switch f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
   if c <> Unix.WEXITED 0 then error c t cmd
   else
@@ -340,8 +342,8 @@ let rvsat ?(debug=false) ?(timeout=10) ~filename:f () =
     Lib.remove_file ~debug out;
     r
 
-let harvey ?(debug=false) ?(timeout=10) ~filename:f () =
-  let cmd = sprintf "rvc %s" f in
+let harvey ?(debug=false) ?(switch="") ?(timeout=10) ~filename:f () =
+  let cmd = sprintf "rvc %s %s" switch f in
   let t,c,_out = timed_sys_command ~debug timeout cmd in
   if c <> Unix.WEXITED 0 then (error c t cmd)
   else begin
@@ -375,8 +377,8 @@ let harvey ?(debug=false) ?(timeout=10) ~filename:f () =
 
 
 
-let zenon ?(debug=false) ?(timeout=10) ~filename:f () =
-  let cmd = sprintf "zenon %s" f in
+let zenon ?(debug=false) ?(switch="") ?(timeout=10) ~filename:f () =
+  let cmd = sprintf "zenon %s %s" switch f in
   let t,c,out = timed_sys_command ~debug timeout cmd in
   if c <> Unix.WEXITED 0 then error c t cmd
   else

@@ -48,6 +48,7 @@ let listing = ref false
 let select_hypotheses = ref false
 let files = Queue.create ()
 let prover = ref None
+let extra_switch = ref ""
 
 type smt_solver = Yices | CVC3 | Z3 | VeriT
 let smt_solver = ref Z3
@@ -71,6 +72,8 @@ let spec =
     "-listing", Arg.Set listing, "argument file only lists real argument files";
     "-select", Arg.Set select_hypotheses,
     "applies some selection of hypotheses (only Alt-Ergo)";
+    "-extra-switch", Arg.Set_string extra_switch,
+    "adds additional switches to selected prover";
     "-simple", Arg.Set simple, "Print only Valid, I don't know, Invalid, Fail, Timeout";
     "-split", Arg.Set split, "Create a directory wich contains all the goal splitted in different file";
     "-prover", Arg.Symbol (
@@ -100,6 +103,8 @@ let () =
 	 Queue.push s files) usage
 
 let () = if !split then simple := true
+
+let switch = !extra_switch
 
 (* stats *)
 
@@ -182,29 +187,33 @@ let wrapper =
 let debug = !debug
 
 let call_ergo f b =
-  wrapper (Calldp.ergo ~debug ~timeout:!timeout
+  wrapper (Calldp.ergo ~debug ~switch ~timeout:!timeout
 	     ~select_hypotheses:!select_hypotheses ~filename:f ~buffers:b ())
 let call_cvcl f b =
-  wrapper (Calldp.cvcl ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
+  wrapper (Calldp.cvcl ~debug ~switch 
+             ~timeout:!timeout ~filename:f ~buffers:b ())
 let call_simplify f _ =
-  wrapper (Calldp.simplify ~debug ~timeout:!timeout ~filename:f ())
+  wrapper (Calldp.simplify ~debug ~switch ~timeout:!timeout ~filename:f ())
 let call_vampire f _ =
-  wrapper (Calldp.vampire ~debug ~timeout:!timeout ~filename:f ())
+  wrapper (Calldp.vampire ~debug ~switch ~timeout:!timeout ~filename:f ())
 let call_yices f b =
-  wrapper (Calldp.yices ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
+  wrapper (Calldp.yices ~debug ~switch 
+             ~timeout:!timeout ~filename:f ~buffers:b ())
 let call_cvc3 f b =
-  wrapper (Calldp.cvc3 ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
+  wrapper (Calldp.cvc3 ~debug ~switch 
+             ~timeout:!timeout ~filename:f ~buffers:b ())
 let call_z3 f b =
-  wrapper (Calldp.z3 ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
+  wrapper (Calldp.z3 ~debug ~switch 
+             ~timeout:!timeout ~filename:f ~buffers:b ())
 let call_rvsat f _ =
-  wrapper (Calldp.rvsat ~debug ~timeout:!timeout ~filename:f ())
+  wrapper (Calldp.rvsat ~debug ~switch ~timeout:!timeout ~filename:f ())
 let call_zenon f _ =
-  wrapper (Calldp.zenon ~debug ~timeout:!timeout ~filename:f ())
+  wrapper (Calldp.zenon ~debug ~switch ~timeout:!timeout ~filename:f ())
 let call_harvey f _ =
-  wrapper (Calldp.harvey ~debug ~timeout:!timeout ~filename:f ())
+  wrapper (Calldp.harvey ~debug ~switch ~timeout:!timeout ~filename:f ())
 let call_verit f b =
-  wrapper (Calldp.verit ~debug ~timeout:!timeout ~filename:f ~buffers:b ())
-
+  wrapper (Calldp.verit ~debug ~switch 
+             ~timeout:!timeout ~filename:f ~buffers:b ())
 
 let new_num =
   let c = ref (-1) in
