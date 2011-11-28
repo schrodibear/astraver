@@ -12,7 +12,8 @@ JAVATODO="Duplets SimpleApplet Sort2 Sort"
 C="array_max binary_search clock_drift duplets \
    find_array flag floats_bsearch float_sqrt \
    insertion_sort isqrt minmax muller my_cosine quick_sort \
-   rec selection_sort sparse_array2 Sterbenz swap tree_max"
+   rec scalar_product selection_sort sparse_array2 \
+   Sterbenz swap tree_max"
 
 CTODO="maze sparse_array heap_sort"
 
