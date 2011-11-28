@@ -2,8 +2,7 @@
 
 
 
-/*@ assigns \nothing;
-  @ ensures \valid(\result) && \fresh(\result);
+/*@ ensures \valid(\result) && \fresh(\result);
   @*/
 int* f();
 
@@ -13,3 +12,9 @@ void g() {
    p = f();
    *p = 0;
 }
+
+/* 
+Local Variables:
+compile-command: "LC_ALL=C make fresh.why3ml"
+End:
+*/

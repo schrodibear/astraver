@@ -6,11 +6,12 @@ typedef struct Str {int x; } *str;
 
 /*@ ensures \fresh(\result);
   @*/
-str create();
+str create(void);
 
 //@ requires \valid(this);
 void test(str this) {
-  str f = create ();
+  str f;
+  f = create ();
   //@ assert this != f;
 }
 
@@ -19,3 +20,9 @@ void smoke_detector() {
   str s2 = create ();
   //@ assert \false;
 }
+
+/* 
+Local Variables:
+compile-command: "LC_ALL=C make fresh2.why3ml"
+End:
+*/
