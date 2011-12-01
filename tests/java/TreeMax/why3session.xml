@@ -74,7 +74,7 @@
    <goal
     name="WP_parameter _Tree_tree_max_ensures_default"
     expl="Method tree_max, default behavior"
-    sum="bb4b8600cd1cc88053e21950c435af26"
+    sum="58289fd961701762141387e3e211d9c7"
     proved="true"
     expanded="false"
     shape="LaselectV3V0iainfix =V6aTrueLaselectV3V0LaselectV2V0iainfix =V12aTrueLaselectV2V0ainfix >=ainteger_of_int32V17ainteger_of_int32V18IamemV18V0V4V2V3V1FAamemV17V0V4V2V3V1Iainfix =V17V16FIainfix =V16V15FIainfix =ainteger_of_int32V15amaxainteger_of_int32V10ainteger_of_int32V14FIainfix >=ainteger_of_int32V14ainteger_of_int32V19IamemV19V13V4V2V3V1FAamemV14V13V4V2V3V1Fainfix >=ainteger_of_int32V20ainteger_of_int32V21IamemV21V0V4V2V3V1FAamemV20V0V4V2V3V1Iainfix =V20V10FIiainfix =V12aTrueainfix =aoffset_maxV4V11c0ainfix =V11anullFIainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix >=ainteger_of_int32V8ainteger_of_int32V22IamemV22V7V4V2V3V1FAamemV8V7V4V2V3V1FLaselectV2V0iainfix =V24aTrueLaselectV2V0ainfix >=ainteger_of_int32V29ainteger_of_int32V30IamemV30V0V4V2V3V1FAamemV29V0V4V2V3V1Iainfix =V29V28FIainfix =V28V27FIainfix =ainteger_of_int32V27amaxainteger_of_int32aselectV1V0ainteger_of_int32V26FIainfix >=ainteger_of_int32V26ainteger_of_int32V31IamemV31V25V4V2V3V1FAamemV26V25V4V2V3V1Fainfix >=ainteger_of_int32V32ainteger_of_int32V33IamemV33V0V4V2V3V1FAamemV32V0V4V2V3V1Iainfix =V32aselectV1V0FIiainfix =V24aTrueainfix =aoffset_maxV4V23c0ainfix =V23anullFIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -85,7 +85,7 @@
      <goal
       name="WP_parameter _Tree_tree_max_ensures_default.1"
       expl="normal postcondition"
-      sum="879eb18f26cf3d0b37ea571ff62eb84d"
+      sum="10eace5bcb67c8cebd36e62d7739d116"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV3V0LaselectV2V0LaselectV2V0ainfix >=ainteger_of_int32V17ainteger_of_int32V18IamemV18V0V4V2V3V1FAamemV17V0V4V2V3V1Iainfix =V17V16FIainfix =V16V15FIainfix =ainteger_of_int32V15amaxainteger_of_int32V10ainteger_of_int32V14FIainfix >=ainteger_of_int32V14ainteger_of_int32V19IamemV19V13V4V2V3V1FAamemV14V13V4V2V3V1FIainfix =V12aTrueIiainfix =V12aTrueainfix =aoffset_maxV4V11c0ainfix =V11anullFIainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix >=ainteger_of_int32V8ainteger_of_int32V20IamemV20V7V4V2V3V1FAamemV8V7V4V2V3V1FIainfix =V6aTrueIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -94,7 +94,7 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.27"/>
+       <result status="valid" time="0.29"/>
       </proof>
       <proof
        prover="alt-ergo"
@@ -108,13 +108,13 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.07"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter _Tree_tree_max_ensures_default.2"
       expl="normal postcondition"
-      sum="9402ba65e254053906fc1022a46caa6f"
+      sum="81900d68116c9a116d7507682768e7dc"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV3V0LaselectV2V0ainfix >=ainteger_of_int32V13ainteger_of_int32V14IamemV14V0V4V2V3V1FAamemV13V0V4V2V3V1Iainfix =V13V10FIainfix =V12aTrueNIiainfix =V12aTrueainfix =aoffset_maxV4V11c0ainfix =V11anullFIainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix >=ainteger_of_int32V8ainteger_of_int32V15IamemV15V7V4V2V3V1FAamemV8V7V4V2V3V1FIainfix =V6aTrueIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -123,36 +123,7 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.29"/>
-      </proof>
-      <proof
-       prover="alt-ergo"
-       timelimit="3"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.23"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="3"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter _Tree_tree_max_ensures_default.3"
-      expl="normal postcondition"
-      sum="1f760c3d106c4d7c3235e093280a2585"
-      proved="true"
-      expanded="false"
-      shape="LaselectV3V0LaselectV2V0LaselectV2V0ainfix >=ainteger_of_int32V13ainteger_of_int32V14IamemV14V0V4V2V3V1FAamemV13V0V4V2V3V1Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32aselectV1V0ainteger_of_int32V10FIainfix >=ainteger_of_int32V10ainteger_of_int32V15IamemV15V9V4V2V3V1FAamemV10V9V4V2V3V1FIainfix =V8aTrueIiainfix =V8aTrueainfix =aoffset_maxV4V7c0ainfix =V7anullFIainfix =V6aTrueNIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
-      <proof
-       prover="cvc3"
-       timelimit="3"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.29"/>
+       <result status="valid" time="0.32"/>
       </proof>
       <proof
        prover="alt-ergo"
@@ -170,9 +141,38 @@
       </proof>
      </goal>
      <goal
+      name="WP_parameter _Tree_tree_max_ensures_default.3"
+      expl="normal postcondition"
+      sum="a50d4d2785bd88c9c034369ff907e552"
+      proved="true"
+      expanded="false"
+      shape="LaselectV3V0LaselectV2V0LaselectV2V0ainfix >=ainteger_of_int32V13ainteger_of_int32V14IamemV14V0V4V2V3V1FAamemV13V0V4V2V3V1Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32aselectV1V0ainteger_of_int32V10FIainfix >=ainteger_of_int32V10ainteger_of_int32V15IamemV15V9V4V2V3V1FAamemV10V9V4V2V3V1FIainfix =V8aTrueIiainfix =V8aTrueainfix =aoffset_maxV4V7c0ainfix =V7anullFIainfix =V6aTrueNIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
+      <proof
+       prover="cvc3"
+       timelimit="3"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.30"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="3"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.23"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="3"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+     </goal>
+     <goal
       name="WP_parameter _Tree_tree_max_ensures_default.4"
       expl="normal postcondition"
-      sum="25c537cb19ddade697af5b7555ce9dea"
+      sum="4d2c40233f23c935cf253d37f31e75fc"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV2V0ainfix >=ainteger_of_int32V9ainteger_of_int32V10IamemV10V0V4V2V3V1FAamemV9V0V4V2V3V1Iainfix =V9aselectV1V0FIainfix =V8aTrueNIiainfix =V8aTrueainfix =aoffset_maxV4V7c0ainfix =V7anullFIainfix =V6aTrueNIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -189,7 +189,7 @@
    <goal
     name="WP_parameter _Tree_tree_max_safety"
     expl="Method tree_max, Safety"
-    sum="46938380a2a1eaab8b265d6c8748e273"
+    sum="2701b86cea3e327e497b9c756f150c9a"
     proved="true"
     expanded="false"
     shape="LaselectV3V0iainfix =V6aTrueLaselectV3V0LaselectV2V0ainfix >=aoffset_maxV4aselectV2V0c0Iainfix =V12aTrueIiainfix =V12aTrueainfix =aoffset_maxV4V11c0ainfix =V11anullFIainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix >=ainteger_of_int32V8ainteger_of_int32V13IamemV13V7V4V2V3V1FAamemV8V7V4V2V3V1FAainfix >=aoffset_maxV4V7c0LaselectV2V0ainfix >=aoffset_maxV4aselectV2V0c0Iainfix =V15aTrueIiainfix =V15aTrueainfix =aoffset_maxV4V14c0ainfix =V14anullFIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -200,7 +200,7 @@
      <goal
       name="WP_parameter _Tree_tree_max_safety.1"
       expl="assertion"
-      sum="7566b3a060dd0cb8ae2d550a11c66c0e"
+      sum="14db414c2ce390862534670f0fa39de2"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV3V0ainfix >=aoffset_maxV4V7c0Iainfix =V6aTrueIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -215,7 +215,7 @@
      <goal
       name="WP_parameter _Tree_tree_max_safety.2"
       expl="assertion"
-      sum="24a8aa86a59b7751c4d5c317c16bb01d"
+      sum="b1f720c68e6732d6b223d87c4020da17"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV3V0LaselectV2V0ainfix >=aoffset_maxV4aselectV2V0c0Iainfix =V12aTrueIiainfix =V12aTrueainfix =aoffset_maxV4V11c0ainfix =V11anullFIainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix >=ainteger_of_int32V8ainteger_of_int32V13IamemV13V7V4V2V3V1FAamemV8V7V4V2V3V1FIainfix >=aoffset_maxV4V7c0Iainfix =V6aTrueIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -230,7 +230,7 @@
      <goal
       name="WP_parameter _Tree_tree_max_safety.3"
       expl="assertion"
-      sum="e0371b142e186eb873ea934e76046b35"
+      sum="7592049cd890ef1676172a3d36c2f7ef"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV2V0ainfix >=aoffset_maxV4aselectV2V0c0Iainfix =V8aTrueIiainfix =V8aTrueainfix =aoffset_maxV4V7c0ainfix =V7anullFIainfix =V6aTrueNIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -247,7 +247,7 @@
    <goal
     name="WP_parameter cons_Int_ensures_default"
     expl="Constructor of class Int, default behavior"
-    sum="b2a54b4fd66fa6fd38b6b6031b07449c"
+    sum="2cd565ebab8b5e0714373142c9d6472b"
     proved="true"
     expanded="false"
     shape="t">
@@ -262,7 +262,7 @@
    <goal
     name="WP_parameter cons_Int_safety"
     expl="Constructor of class Int, Safety"
-    sum="3df540f76c116db5aa1ff803aae8ca96"
+    sum="ac5b71a5e8a1c6180d02325fda0bf937"
     proved="true"
     expanded="false"
     shape="t">
@@ -277,7 +277,7 @@
    <goal
     name="WP_parameter cons_Object_ensures_default"
     expl="Constructor of class Object, default behavior"
-    sum="55482b5342ec20eb579b489ac51e3202"
+    sum="49fbc14408ef49a7ecedd6ae4587613e"
     proved="true"
     expanded="false"
     shape="t">
@@ -292,37 +292,7 @@
    <goal
     name="WP_parameter cons_Object_safety"
     expl="Constructor of class Object, Safety"
-    sum="9143caa09bc326dd04610f1a9660a760"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <proof
-     prover="alt-ergo"
-     timelimit="9"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Tree_ensures_default"
-    expl="Constructor of class Tree, default behavior"
-    sum="39c373efec2981083ff2185901663363"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <proof
-     prover="alt-ergo"
-     timelimit="9"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Tree_safety"
-    expl="Constructor of class Tree, Safety"
-    sum="8358d36f058949394fb1f131146e94c8"
+    sum="25dace820639c433b7455bfc8b6c3133"
     proved="true"
     expanded="false"
     shape="t">
@@ -332,6 +302,36 @@
      edited=""
      obsolete="false">
      <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Tree_ensures_default"
+    expl="Constructor of class Tree, default behavior"
+    sum="e8747ebfdfdb23206ce5ee775ffcac0f"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="9"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Tree_safety"
+    expl="Constructor of class Tree, Safety"
+    sum="eb7dbad37d1a2149f096f29c46466586"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <proof
+     prover="alt-ergo"
+     timelimit="9"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
   </theory>

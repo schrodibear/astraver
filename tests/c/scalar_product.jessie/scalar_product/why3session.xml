@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="scalar_product/why3session.xml">
+ name="scalar_product.jessie/scalar_product/why3session.xml">
  <prover
   id="alt-ergo"
   name="Alt-Ergo"
   version="0.93"/>
  <prover
+  id="alt-ergo-0.93.1"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
   id="coq"
   name="Coq"
-  version="8.2pl1"/>
+  version="8.3pl2"/>
  <prover
   id="cvc3"
   name="CVC3"
   version="2.2"/>
+ <prover
+  id="cvc3-2.4"
+  name="CVC3"
+  version="2.4.1"/>
  <prover
   id="eprover"
   name="Eprover"
@@ -46,6 +54,10 @@
   id="z3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="z3-3"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../scalar_product.mlw"
   verified="true"
@@ -57,7 +69,7 @@
    <goal
     name="bound_int_to_real"
     expl="Lemma bound_int_to_real, lemma"
-    sum="1fe69c2302c65f7afaf24034077ccf8c"
+    sum="e7f6865fbddc727845ea765f54b3720c"
     proved="true"
     expanded="false"
     shape="ainfix <=afrom_intV0c10.0Iainfix <=V0c10F">
@@ -66,7 +78,7 @@
      timelimit="3"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
   </theory>
@@ -77,7 +89,7 @@
    <goal
     name="WP_parameter scalar_product_ensures_default"
     expl="Function scalar_product, default behavior"
-    sum="974e52255a17eb9b117bf56ed8c8b7f2"
+    sum="3cd384ecc6fd03322701d6a3725b929e"
     proved="true"
     expanded="true"
     shape="iainfix <ainteger_of_int32V11ainteger_of_int32V2ainfix <=ainteger_of_int32V17ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V17Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V17V6V5afrom_intainteger_of_int32V17Aainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainteger_of_int32V17V6V5ainfix *afrom_intainteger_of_int32V17c0x1.1p-50Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FAainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Aainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Aainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Aainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FAainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Aainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Aainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0ainfix <=aabsainfix -avalueV18aexact_scalar_productV0V1ainteger_of_int32V2V6V5ainfix *afrom_intainteger_of_int32V2c0x1.1p-50Iainfix =V18V12FIainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFAainfix <=ainteger_of_int32V10ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V10Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V10V6V5afrom_intainteger_of_int32V10Aainfix <=aabsainfix -avalueV8aexact_scalar_productV0V1ainteger_of_int32V10V6V5ainfix *afrom_intainteger_of_int32V10c0x1.1p-50Iainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V19c1.0Aainfix <=aabsavalueaselectV5ashiftV0V19c1.0Iainfix <V19ainteger_of_int32V2Aainfix <=c0V19FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -88,7 +100,7 @@
      <goal
       name="WP_parameter scalar_product_ensures_default.1"
       expl="loop invariant init"
-      sum="8ddc4fe3599d4da36d356b5d991721ba"
+      sum="721516d7adb31cfd2d909df7d5483fee"
       proved="true"
       expanded="false"
       shape="ainfix <=ainteger_of_int32V10ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V10Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V10V6V5afrom_intainteger_of_int32V10Aainfix <=aabsainfix -avalueV8aexact_scalar_productV0V1ainteger_of_int32V10V6V5ainfix *afrom_intainteger_of_int32V10c0x1.1p-50Iainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V11c1.0Aainfix <=aabsavalueaselectV5ashiftV0V11c1.0Iainfix <V11ainteger_of_int32V2Aainfix <=c0V11FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -97,13 +109,13 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.22"/>
+       <result status="valid" time="0.16"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter scalar_product_ensures_default.2"
       expl="assertion"
-      sum="4dd7fddc733d9d185f2c431f30d91ed7"
+      sum="d9d41a561db70c21beecd93d033eb46e"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V13c1.0Aainfix <=aabsavalueaselectV5ashiftV0V13c1.0Iainfix <V13ainteger_of_int32V2Aainfix <=c0V13FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -112,13 +124,13 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter scalar_product_ensures_default.3"
       expl="assertion"
-      sum="7d8dcb1235a7346531179da4df8a6844"
+      sum="2b231c45d3fff6148011780bdd97ac0d"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V13c1.0Aainfix <=aabsavalueaselectV5ashiftV0V13c1.0Iainfix <V13ainteger_of_int32V2Aainfix <=c0V13FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -127,13 +139,13 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.09"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter scalar_product_ensures_default.4"
       expl="assertion"
-      sum="5e0994b015c7f48774a895de509320b6"
+      sum="e708c7c45436c893102d6a558928b62e"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V13c1.0Aainfix <=aabsavalueaselectV5ashiftV0V13c1.0Iainfix <V13ainteger_of_int32V2Aainfix <=c0V13FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -142,13 +154,13 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.53"/>
+       <result status="valid" time="0.47"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter scalar_product_ensures_default.5"
       expl="assertion"
-      sum="d4078b2a62bc4ec58d7fcee7dcc713b0"
+      sum="dc6108127c53b5247e7287ca648bbeb1"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V16c1.0Aainfix <=aabsavalueaselectV5ashiftV0V16c1.0Iainfix <V16ainteger_of_int32V2Aainfix <=c0V16FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -157,13 +169,13 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter scalar_product_ensures_default.6"
       expl="assertion"
-      sum="61d4ace4bb069ce8541bca1f3f159dde"
+      sum="599fe682289d620fe451b6fe3d3b6877"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V16c1.0Aainfix <=aabsavalueaselectV5ashiftV0V16c1.0Iainfix <V16ainteger_of_int32V2Aainfix <=c0V16FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -178,7 +190,7 @@
      <goal
       name="WP_parameter scalar_product_ensures_default.7"
       expl="assertion"
-      sum="d945d9a4f5aeee0f18e7a6febded983c"
+      sum="ca4f21529d03540284722137ee0adc86"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V16c1.0Aainfix <=aabsavalueaselectV5ashiftV0V16c1.0Iainfix <V16ainteger_of_int32V2Aainfix <=c0V16FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -187,13 +199,13 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="2.13"/>
+       <result status="valid" time="1.62"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter scalar_product_ensures_default.8"
       expl="assertion"
-      sum="0b87fc07281a92fa47bb864dfa708ffc"
+      sum="956bdc38b3875f1249e5ee9b88d659c7"
       proved="true"
       expanded="false"
       shape="ainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V16c1.0Aainfix <=aabsavalueaselectV5ashiftV0V16c1.0Iainfix <V16ainteger_of_int32V2Aainfix <=c0V16FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -202,13 +214,13 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="1.56"/>
+       <result status="valid" time="1.18"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter scalar_product_ensures_default.9"
       expl="loop invariant preservation"
-      sum="c7cf6acb888d3d13a25bf1f126610115"
+      sum="d233d66cb93193765cbe3f42b7f57c5e"
       proved="true"
       expanded="true"
       shape="ainfix <=ainteger_of_int32V17ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V17Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V17V6V5afrom_intainteger_of_int32V17Aainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainteger_of_int32V17V6V5ainfix *afrom_intainteger_of_int32V17c0x1.1p-50Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V18c1.0Aainfix <=aabsavalueaselectV5ashiftV0V18c1.0Iainfix <V18ainteger_of_int32V2Aainfix <=c0V18FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -219,7 +231,7 @@
        <goal
         name="WP_parameter scalar_product_ensures_default.9.1"
         expl="Function scalar_product, default behavior"
-        sum="195e460f447b872791736b5dbe29e694"
+        sum="5fc148cdf5010101a7d1df2fa85c5a34"
         proved="true"
         expanded="false"
         shape="ainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainteger_of_int32V17V6V5ainfix *afrom_intainteger_of_int32V17c0x1.1p-50Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V18c1.0Aainfix <=aabsavalueaselectV5ashiftV0V18c1.0Iainfix <V18ainteger_of_int32V2Aainfix <=c0V18FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -228,13 +240,13 @@
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.14"/>
+         <result status="valid" time="0.13"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter scalar_product_ensures_default.9.2"
         expl="Function scalar_product, default behavior"
-        sum="b8008a78a0432f54c88d77d06d2adefb"
+        sum="eb236a1aae810bda9aec7083363f6ff5"
         proved="true"
         expanded="false"
         shape="ainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V17V6V5afrom_intainteger_of_int32V17Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V18c1.0Aainfix <=aabsavalueaselectV5ashiftV0V18c1.0Iainfix <V18ainteger_of_int32V2Aainfix <=c0V18FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -243,13 +255,13 @@
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.20"/>
+         <result status="valid" time="0.09"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter scalar_product_ensures_default.9.3"
         expl="Function scalar_product, default behavior"
-        sum="07e6070e1012107d2920e9fba39006fc"
+        sum="df5f73e631204b20fb6b84cb725c84e1"
         proved="true"
         expanded="false"
         shape="ainfix <=c0ainteger_of_int32V17Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V18c1.0Aainfix <=aabsavalueaselectV5ashiftV0V18c1.0Iainfix <V18ainteger_of_int32V2Aainfix <=c0V18FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -258,13 +270,13 @@
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter scalar_product_ensures_default.9.4"
         expl="Function scalar_product, default behavior"
-        sum="75b0be133a8f0ed20dc32e26f9311189"
+        sum="83c90bdebf1cad3bfae0618fc7bacd3e"
         proved="true"
         expanded="false"
         shape="ainfix <=ainteger_of_int32V17ainteger_of_int32V2Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V18c1.0Aainfix <=aabsavalueaselectV5ashiftV0V18c1.0Iainfix <V18ainteger_of_int32V2Aainfix <=c0V18FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -273,7 +285,7 @@
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
       </transf>
@@ -281,7 +293,7 @@
      <goal
       name="WP_parameter scalar_product_ensures_default.10"
       expl="normal postcondition"
-      sum="02386bacfe82862a5cd3e2b59f0d86d2"
+      sum="efb64eed480710317c51ea4666cb7f96"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsainfix -avalueV13aexact_scalar_productV0V1ainteger_of_int32V2V6V5ainfix *afrom_intainteger_of_int32V2c0x1.1p-50Iainfix =V13V12FIainfix <ainteger_of_int32V11ainteger_of_int32V2NIainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V14c1.0Aainfix <=aabsavalueaselectV5ashiftV0V14c1.0Iainfix <V14ainteger_of_int32V2Aainfix <=c0V14FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -290,7 +302,7 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
     </transf>
@@ -298,7 +310,7 @@
    <goal
     name="WP_parameter scalar_product_safety"
     expl="Function scalar_product, Safety"
-    sum="92b1900c5001f0641d3dd6f59b9b81a8"
+    sum="5f6ef08b75ad694a40815b56d727a6cd"
     proved="true"
     expanded="true"
     shape="LaselectV5ashiftV0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11ainfix <ainfix -ainteger_of_int32V2ainteger_of_int32V19ainfix -ainteger_of_int32V2ainteger_of_int32V11Aainfix <=c0ainfix -ainteger_of_int32V2ainteger_of_int32V11Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix +ainteger_of_int32V11c1FAainfix <=ainfix +ainteger_of_int32V11c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V11c1Iainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV17aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V17V16FIaadd_double_postaNearestTiesToEvenV12V15V16FAainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV12avalueV15amax_doubleIamul_double_postaNearestTiesToEvenV13V14V15FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV14amax_doubleAainfix <=ainteger_of_int32V11aoffset_maxV4V1Aainfix <=aoffset_minV4V1ainteger_of_int32V11Aainfix <=ainteger_of_int32V11aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V11Iainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V20c1.0Aainfix <=aabsavalueaselectV5ashiftV0V20c1.0Iainfix <V20ainteger_of_int32V2Aainfix <=c0V20FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -309,7 +321,7 @@
      <goal
       name="WP_parameter scalar_product_safety.1"
       expl="pointer dereference"
-      sum="39f7e8a6b4cffbdcfeb95ef4dfe2b6d8"
+      sum="96886bff9db00d85a02088c917606440"
       proved="true"
       expanded="false"
       shape="ainfix <=ainteger_of_int32V11aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V11Iainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V13c1.0Aainfix <=aabsavalueaselectV5ashiftV0V13c1.0Iainfix <V13ainteger_of_int32V2Aainfix <=c0V13FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -318,13 +330,13 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter scalar_product_safety.2"
       expl="pointer dereference"
-      sum="3f44828f450be9e06c6f099a7feda5c3"
+      sum="60ae22125193e8e83655ebdedef14b99"
       proved="true"
       expanded="false"
       shape="LaselectV5ashiftV0ainteger_of_int32V11ainfix <=ainteger_of_int32V11aoffset_maxV4V1Aainfix <=aoffset_minV4V1ainteger_of_int32V11Iainfix <=ainteger_of_int32V11aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V11Iainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V14c1.0Aainfix <=aabsavalueaselectV5ashiftV0V14c1.0Iainfix <V14ainteger_of_int32V2Aainfix <=c0V14FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -333,13 +345,13 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter scalar_product_safety.3"
       expl="floating-point overflow"
-      sum="d814902c11e8545819c908a50a3d9726"
+      sum="34aacc61b051feca96c20d4e38574d7f"
       proved="true"
       expanded="false"
       shape="LaselectV5ashiftV0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV14amax_doubleIainfix <=ainteger_of_int32V11aoffset_maxV4V1Aainfix <=aoffset_minV4V1ainteger_of_int32V11Iainfix <=ainteger_of_int32V11aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V11Iainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V15c1.0Aainfix <=aabsavalueaselectV5ashiftV0V15c1.0Iainfix <V15ainteger_of_int32V2Aainfix <=c0V15FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -348,13 +360,13 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.02"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter scalar_product_safety.4"
       expl="floating-point overflow"
-      sum="96f386f8a19a52c1a2110d4122faacf6"
+      sum="5dab52f5f5cf1a92f5b141a229b257e6"
       proved="true"
       expanded="false"
       shape="LaselectV5ashiftV0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11ainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV12avalueV15amax_doubleIamul_double_postaNearestTiesToEvenV13V14V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV14amax_doubleIainfix <=ainteger_of_int32V11aoffset_maxV4V1Aainfix <=aoffset_minV4V1ainteger_of_int32V11Iainfix <=ainteger_of_int32V11aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V11Iainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V16c1.0Aainfix <=aabsavalueaselectV5ashiftV0V16c1.0Iainfix <V16ainteger_of_int32V2Aainfix <=c0V16FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -363,13 +375,13 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.02"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter scalar_product_safety.5"
       expl="arithmetic overflow"
-      sum="911d9f38bfdabce17511ae420e7ad715"
+      sum="0fe9cc183cebbdb66bae98f0b520aea5"
       proved="true"
       expanded="false"
       shape="LaselectV5ashiftV0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11ainfix <=ainfix +ainteger_of_int32V11c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V11c1Iainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV17aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V17V16FIaadd_double_postaNearestTiesToEvenV12V15V16FIainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV12avalueV15amax_doubleIamul_double_postaNearestTiesToEvenV13V14V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV14amax_doubleIainfix <=ainteger_of_int32V11aoffset_maxV4V1Aainfix <=aoffset_minV4V1ainteger_of_int32V11Iainfix <=ainteger_of_int32V11aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V11Iainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V18c1.0Aainfix <=aabsavalueaselectV5ashiftV0V18c1.0Iainfix <V18ainteger_of_int32V2Aainfix <=c0V18FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -378,13 +390,13 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.09"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter scalar_product_safety.6"
       expl="loop variant decreases"
-      sum="20654615cab493c18c4a6577b229ff51"
+      sum="57c851f3887ae0aaff934e5af4c11a07"
       proved="true"
       expanded="false"
       shape="LaselectV5ashiftV0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11ainfix <ainfix -ainteger_of_int32V2ainteger_of_int32V19ainfix -ainteger_of_int32V2ainteger_of_int32V11Aainfix <=c0ainfix -ainteger_of_int32V2ainteger_of_int32V11Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix +ainteger_of_int32V11c1FIainfix <=ainfix +ainteger_of_int32V11c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V11c1Iainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV17aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V17V16FIaadd_double_postaNearestTiesToEvenV12V15V16FIainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV12avalueV15amax_doubleIamul_double_postaNearestTiesToEvenV13V14V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV14amax_doubleIainfix <=ainteger_of_int32V11aoffset_maxV4V1Aainfix <=aoffset_minV4V1ainteger_of_int32V11Iainfix <=ainteger_of_int32V11aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V11Iainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V20c1.0Aainfix <=aabsavalueaselectV5ashiftV0V20c1.0Iainfix <V20ainteger_of_int32V2Aainfix <=c0V20FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
@@ -393,7 +405,7 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
     </transf>

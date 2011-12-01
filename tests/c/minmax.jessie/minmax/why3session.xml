@@ -74,7 +74,7 @@
    <goal
     name="WP_parameter dmax_ensures_default"
     expl="Function dmax, default behavior"
-    sum="327cc203aaa3116b44f6c77478bec478"
+    sum="ce661547e5cfd058dab06830e623d4a9"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
@@ -83,20 +83,20 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter dmax_safety"
     expl="Function dmax, Safety"
-    sum="21c6fc024513fe7b9e2f6a6f4fa57bf1"
+    sum="7788d6eb8211ec940d4d1284d186d840"
     proved="true"
     expanded="true"
     shape="t">
@@ -112,7 +112,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="z3"
@@ -125,7 +125,7 @@
    <goal
     name="WP_parameter dmin_ensures_default"
     expl="Function dmin, default behavior"
-    sum="d641410abea080266de0b2063795869e"
+    sum="3992a73f4f1805d2314b77f6cc5e31fe"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
@@ -147,7 +147,7 @@
    <goal
     name="WP_parameter dmin_safety"
     expl="Function dmin, Safety"
-    sum="7e44f1fd38b34e7add4d23e0a44ab665"
+    sum="8e52288f74a9d23171016a1efa030a37"
     proved="true"
     expanded="true"
     shape="t">
@@ -163,7 +163,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -176,7 +176,7 @@
    <goal
     name="WP_parameter fmax_ensures_default"
     expl="Function fmax, default behavior"
-    sum="a20e328f5ef5c390c75291faea7d51b2"
+    sum="412a021450d251cd97edf3eda6fad15a"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
@@ -192,13 +192,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter fmax_safety"
     expl="Function fmax, Safety"
-    sum="5266144628dd60926b28f2d81c0c5a58"
+    sum="305f26dab55d43271400c9dcf7eb2a7e"
     proved="true"
     expanded="true"
     shape="t">
@@ -227,7 +227,7 @@
    <goal
     name="WP_parameter fmin_ensures_default"
     expl="Function fmin, default behavior"
-    sum="966bb3e432aca3dcff1684efcafd8a38"
+    sum="2b5cf2d36ebbda30ed87bbe0d3c7c510"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
@@ -243,13 +243,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter fmin_safety"
     expl="Function fmin, Safety"
-    sum="1f8b8a0826219cb924c6a0cdc7f588da"
+    sum="ce10b06a9bc14659e61cf430c3c4ae18"
     proved="true"
     expanded="true"
     shape="t">
@@ -265,7 +265,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="z3"
@@ -278,7 +278,7 @@
    <goal
     name="WP_parameter max_ensures_default"
     expl="Function max, default behavior"
-    sum="fbed195e5c2dbbc3507724f3e06fa6d0"
+    sum="911fb0a91795467e7466babb55d8ffeb"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V1Fainfix =ainteger_of_int32V5amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V0FFF">
@@ -300,7 +300,7 @@
    <goal
     name="WP_parameter max_safety"
     expl="Function max, Safety"
-    sum="6e05460d77589c54e47ce793def59999"
+    sum="0e8a65aad4e11e1250299573cdef787c"
     proved="true"
     expanded="true"
     shape="t">
@@ -329,7 +329,7 @@
    <goal
     name="WP_parameter min_ensures_default"
     expl="Function min, default behavior"
-    sum="88af40c2076c6738a7688e3b5247c4ad"
+    sum="278d2cb020c2dd1f686dce25f912eb02"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V0Fainfix =ainteger_of_int32V5aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V1FFF">
@@ -351,7 +351,7 @@
    <goal
     name="WP_parameter min_safety"
     expl="Function min, Safety"
-    sum="e03244124bba3b366c6b80f61486dfc6"
+    sum="c76302f57badfad7f4487ece90747fac"
     proved="true"
     expanded="true"
     shape="t">

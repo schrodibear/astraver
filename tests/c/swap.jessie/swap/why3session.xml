@@ -74,7 +74,7 @@
    <goal
     name="WP_parameter swap_ensures_default"
     expl="normal postcondition"
-    sum="4686aaae89693407c47a8add3b6b3e23"
+    sum="4df3e0fa95c9bf264bfd4ba13ad656ca"
     proved="true"
     expanded="false"
     shape="ainfix =ainteger_of_int32V4ainteger_of_int32V1Aainfix =ainteger_of_int32V3ainteger_of_int32V0Iainfix =V4V2FIainfix =V3V0FIainfix =V2V1FFF">
@@ -103,7 +103,7 @@
    <goal
     name="WP_parameter swap_safety"
     expl="Function swap, Safety"
-    sum="fbd7ba4339cd829f7b2685e3fca20044"
+    sum="4416091f794ab0fcee2b5a479e88d95d"
     proved="true"
     expanded="false"
     shape="t">

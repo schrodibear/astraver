@@ -74,7 +74,7 @@
    <goal
     name="WP_parameter _NameConflicts_field_ensures_default"
     expl="Method field, default behavior"
-    sum="163137f2e4308a83acdf28c5d0127069"
+    sum="97b56342da7a3f7d1abb886f0d460306"
     proved="true"
     expanded="true"
     shape="t">
@@ -103,7 +103,7 @@
    <goal
     name="WP_parameter _NameConflicts_field_safety"
     expl="Method field, Safety"
-    sum="00d53f140c0a9180af73daa9d99f2d64"
+    sum="949f483779518ac265928bb84e1580a8"
     proved="true"
     expanded="true"
     shape="t">
@@ -132,7 +132,7 @@
    <goal
     name="WP_parameter _NameConflicts_m_ensures_default"
     expl="Method m, default behavior"
-    sum="6f927dc41d61e42aa895593412127679"
+    sum="5cf8ff2ef5be0170a47f7b3ad44fa44d"
     proved="true"
     expanded="true"
     shape="t">
@@ -161,7 +161,7 @@
    <goal
     name="WP_parameter _NameConflicts_m_ensures_normal"
     expl="normal postcondition"
-    sum="ff4a0c7ffd47cbc981e2788b13f0c48b"
+    sum="06d50118002bff04587ff9230110048f"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c0Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =ainteger_of_int32V2c0FIavalid_struct_NameConflictsV0c0c0V1FF">
@@ -170,7 +170,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -190,7 +190,7 @@
    <goal
     name="WP_parameter _NameConflicts_m_safety"
     expl="Method m, Safety"
-    sum="ed8f8866c5a1a65fd9235ccdda5881da"
+    sum="639a6aa610ba6238f9ab9b36bd0c4c1e"
     proved="true"
     expanded="true"
     shape="t">
@@ -219,7 +219,7 @@
    <goal
     name="WP_parameter _NameConflicts_setI_ensures_default"
     expl="Method setI, default behavior"
-    sum="6ae98924fc7a68ab5160ecf6fe3a4c39"
+    sum="8b14d6eb401fb99966e5366f8231eb49"
     proved="true"
     expanded="true"
     shape="t">
@@ -248,7 +248,36 @@
    <goal
     name="WP_parameter _NameConflicts_setI_safety"
     expl="Method setI, Safety"
-    sum="15778c1b8edbe44c05388b1b2d3d0fa7"
+    sum="42fe78499d94c36e1477457cd84423d7"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_NameConflicts_ensures_default"
+    expl="Constructor of class NameConflicts, default behavior"
+    sum="b58bb9658c57e896f10e3cbb7c904f7f"
     proved="true"
     expanded="true"
     shape="t">
@@ -275,38 +304,9 @@
     </proof>
    </goal>
    <goal
-    name="WP_parameter cons_NameConflicts_ensures_default"
-    expl="Constructor of class NameConflicts, default behavior"
-    sum="d4715d510efa1012943130431c17b62e"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-   </goal>
-   <goal
     name="WP_parameter cons_NameConflicts_safety"
     expl="Constructor of class NameConflicts, Safety"
-    sum="f4f0b2407ac95a0916d67259452fb9be"
+    sum="91561b74d71ba014d42f8002f7d6afc3"
     proved="true"
     expanded="true"
     shape="t">

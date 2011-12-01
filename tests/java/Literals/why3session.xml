@@ -74,7 +74,7 @@
    <goal
     name="WP_parameter _Literals_f_ensures_default"
     expl="normal postcondition"
-    sum="2071948bca235d6c76184e2975ab6a20"
+    sum="52764b8a1cd2cf3b1f9b91da4b94f196"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c13Iainfix =V4V3FIainfix =ainteger_of_int32V3c13FIainfix =ainteger_of_int32V2c2989FIavalid_struct_LiteralsV0c0c0V1FF">
@@ -83,14 +83,14 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -103,7 +103,7 @@
    <goal
     name="WP_parameter _Literals_f_safety"
     expl="Method f, Safety"
-    sum="1f5eac0905fde7fa2f99f64e86d599fc"
+    sum="c46379fccdecc9bc4b6dc984bafee9ea"
     proved="true"
     expanded="true"
     shape="t">
@@ -119,7 +119,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -132,7 +132,7 @@
    <goal
     name="WP_parameter cons_Literals_ensures_default"
     expl="Constructor of class Literals, default behavior"
-    sum="347fcf5a8e75ab275818ed4c9d321844"
+    sum="90b122616dcaa1e38d2e4d6ab5f0399a"
     proved="true"
     expanded="true"
     shape="t">
@@ -161,7 +161,7 @@
    <goal
     name="WP_parameter cons_Literals_safety"
     expl="Constructor of class Literals, Safety"
-    sum="7b9e5672789d7e26b4ba6a402befbfb1"
+    sum="e8ebb931f481966bd9d095a1187b7d89"
     proved="true"
     expanded="true"
     shape="t">

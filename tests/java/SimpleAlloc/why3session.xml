@@ -74,7 +74,7 @@
    <goal
     name="WP_parameter cons_Node_ensures_default"
     expl="normal postcondition"
-    sum="33cdca80577a3c3b493c1bfbae26cd5d"
+    sum="e4248a97d69161cc491eac19d28dfdcf"
     proved="true"
     expanded="true"
     shape="anot_assignsV1V2V4apset_singletonV0Iainfix =V4astoreV2V0V3FIainfix =ainteger_of_int32V3c0FIavalid_struct_NodeV0c0c0V1FFF">
@@ -83,7 +83,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.18"/>
+     <result status="valid" time="0.17"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -103,7 +103,7 @@
    <goal
     name="WP_parameter cons_Node_safety"
     expl="Constructor of class Node, Safety"
-    sum="63e162497cf9ef1ab72cf805739e005d"
+    sum="f0f394d544c8a70ae250221954a13896"
     proved="true"
     expanded="true"
     shape="t">
@@ -119,7 +119,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="z3"
@@ -132,7 +132,7 @@
    <goal
     name="WP_parameter cons_test_ensures_default"
     expl="Constructor of class test, default behavior"
-    sum="13cc577b9fc7b51c3e15cce481f81752"
+    sum="72ace0f2a851fe7fe1c40e8a0e107ea3"
     proved="true"
     expanded="true"
     shape="t">
@@ -161,7 +161,7 @@
    <goal
     name="WP_parameter cons_test_safety"
     expl="Constructor of class test, Safety"
-    sum="933a81a489c52a3854293b0496009a93"
+    sum="ad1b982885619f3acd3c245886ad56b4"
     proved="true"
     expanded="true"
     shape="t">
@@ -177,7 +177,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
@@ -190,7 +190,7 @@
    <goal
     name="WP_parameter test_test_ensures_default"
     expl="normal postcondition"
-    sum="86968069f14f0d060adf465da270431c"
+    sum="2b09ce57a341c289188069aed0977bb6"
     proved="false"
     expanded="true"
     shape="anot_assignsV2V4V9apset_rangeapset_derefV1apset_singletonV0c0c0Aanot_assignsV2V3V8apset_emptyAa_Non_null_NodeMaselectV1V0V6Iainfix =V9astoreV4aselectV1V0V7FIanot_assignsV6V3V8apset_singletonV7FIainstanceofV5V7a_Node_tagAaalloc_freshV2V7c1Aaalloc_extendsV2V6Aastrict_valid_struct_NodeV7c0ainfix -c1c1V6FFFIainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFFF">
@@ -198,7 +198,7 @@
    <goal
     name="WP_parameter test_test_safety"
     expl="Method test, Safety"
-    sum="bc4c9e36ba21b3fd91d1e586705719eb"
+    sum="75de8f898924c42a853fa7a0e2de50b2"
     proved="false"
     expanded="true"
     shape="ainfix <=c0aoffset_maxV5aselectV1V0Ianot_assignsV5V3V7apset_singletonV6FAainfix >=aoffset_maxV5V6c0IainstanceofV4V6a_Node_tagAaalloc_freshV2V6c1Aaalloc_extendsV2V5Aastrict_valid_struct_NodeV6c0ainfix -c1c1V5FFFAainfix >=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFF">
@@ -209,39 +209,10 @@
      <goal
       name="WP_parameter test_test_safety.1"
       expl="allocation size"
-      sum="dcbc6bcd8de73ae036545e56a0479d40"
+      sum="e26091f5f9979f6c5652018bf4bb3060"
       proved="true"
       expanded="false"
       shape="ainfix >=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFF">
-      <proof
-       prover="cvc3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
-       prover="alt-ergo"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.02"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-     </goal>
-     <goal
-      name="WP_parameter test_test_safety.2"
-      expl="assertion"
-      sum="acd8f3bb3cba46fe3e13c44c06c3905d"
-      proved="true"
-      expanded="false"
-      shape="ainfix >=aoffset_maxV5V6c0IainstanceofV4V6a_Node_tagAaalloc_freshV2V6c1Aaalloc_extendsV2V5Aastrict_valid_struct_NodeV6c0ainfix -c1c1V5FFFIainfix >=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFF">
       <proof
        prover="cvc3"
        timelimit="5"
@@ -261,13 +232,42 @@
        timelimit="5"
        edited=""
        obsolete="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter test_test_safety.2"
+      expl="assertion"
+      sum="19124c44e3107d3295c6cd105b095268"
+      proved="true"
+      expanded="false"
+      shape="ainfix >=aoffset_maxV5V6c0IainstanceofV4V6a_Node_tagAaalloc_freshV2V6c1Aaalloc_extendsV2V5Aastrict_valid_struct_NodeV6c0ainfix -c1c1V5FFFIainfix >=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFF">
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
        <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter test_test_safety.3"
       expl="index bounds"
-      sum="fc4a84f859771aea427207fc55e65941"
+      sum="d32b255e88ac591f0866656542ada524"
       proved="false"
       expanded="true"
       shape="ainfix <=c0aoffset_maxV5aselectV1V0Ianot_assignsV5V3V7apset_singletonV6FIainfix >=aoffset_maxV5V6c0IainstanceofV4V6a_Node_tagAaalloc_freshV2V6c1Aaalloc_extendsV2V5Aastrict_valid_struct_NodeV6c0ainfix -c1c1V5FFFIainfix >=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFF">

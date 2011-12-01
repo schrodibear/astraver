@@ -74,7 +74,7 @@
    <goal
     name="WP_parameter _AllZeros_all_zeros_ensures_default"
     expl="Method all_zeros, default behavior"
-    sum="cfca13ae99592c7a1b9a40b20b485ed1"
+    sum="e05f9d7d05e430326358bc24ebac9212"
     proved="true"
     expanded="true"
     shape="iainfix <ainteger_of_int32V4V5iainfix =ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V4c0Nainfix =ainteger_of_int32aselectV1ashiftV0V7c0Iainfix <V7ainfix +aoffset_maxV2V0c1Aainfix <=c0V7Fqainfix =V6aTrueIainfix =V6aTrueNFainfix =ainteger_of_int32aselectV1ashiftV0V10c0Iainfix <V10ainteger_of_int32V9Aainfix <=c0V10FAainfix <=ainteger_of_int32V9ainfix +aoffset_maxV2V0c1Aainfix <=c0ainteger_of_int32V9Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix +ainteger_of_int32V4c1Fainfix =ainteger_of_int32aselectV1ashiftV0V12c0Iainfix <V12ainfix +aoffset_maxV2V0c1Aainfix <=c0V12Fqainfix =V11aTrueIainfix =V11aTrueFIainfix =V5ainfix +aoffset_maxV2V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix =ainteger_of_int32aselectV1ashiftV0V13c0Iainfix <V13ainteger_of_int32V4Aainfix <=c0V13FAainfix <=ainteger_of_int32V4ainfix +aoffset_maxV2V0c1Aainfix <=c0ainteger_of_int32V4FAainfix =ainteger_of_int32aselectV1ashiftV0V14c0Iainfix <V14ainteger_of_int32V3Aainfix <=c0V14FAainfix <=ainteger_of_int32V3ainfix +aoffset_maxV2V0c1Aainfix <=c0ainteger_of_int32V3Iainfix =ainteger_of_int32V3c0FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
@@ -90,7 +90,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="z3"
@@ -103,7 +103,7 @@
    <goal
     name="WP_parameter _AllZeros_all_zeros_safety"
     expl="index bounds"
-    sum="85cd128011672d3a4c15f5560d86e8e3"
+    sum="8bf2ca30c8d790bf8659dcfc1c5deeb1"
     proved="true"
     expanded="true"
     shape="ainfix <ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V7ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V4Aainfix <=c0ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V4Iainfix =V7V6FIainfix =ainteger_of_int32V6ainfix +ainteger_of_int32V4c1FAainfix <=ainfix +ainteger_of_int32V4c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V4c1Iainfix =ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V4c0Aainfix <=ainteger_of_int32V4aoffset_maxV2V0Aainfix <=aoffset_minV2V0ainteger_of_int32V4Iainfix <ainteger_of_int32V4V5Iainfix =V5ainfix +aoffset_maxV2V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FAainfix >=aoffset_maxV2V0aprefix -c1Iainfix =ainteger_of_int32aselectV1ashiftV0V8c0Iainfix <V8ainteger_of_int32V4Aainfix <=c0V8FAainfix <=ainteger_of_int32V4ainfix +aoffset_maxV2V0c1Aainfix <=c0ainteger_of_int32V4FIainfix =ainteger_of_int32V3c0FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
@@ -132,7 +132,7 @@
    <goal
     name="WP_parameter _AllZeros_should_not_be_proved_ensures_default"
     expl="Method should_not_be_proved, default behavior"
-    sum="f87f117997218952eeee4ade887fcd8b"
+    sum="a2f4f5a43c41aeb6023fbe1712bcf25e"
     proved="true"
     expanded="true"
     shape="t">
@@ -161,7 +161,7 @@
    <goal
     name="WP_parameter _AllZeros_should_not_be_proved_safety"
     expl="index bounds"
-    sum="dd416b7844bff33787bfbd0764bdc4f0"
+    sum="a9f06605c55512ec8a987cd6ac1a4022"
     proved="false"
     expanded="true"
     shape="ainfix <=V2c2147483647Aainfix <=aprefix -c2147483648V2Iainfix =V2ainfix +aoffset_maxV1V0c1Aainfix >=V2c0Aainfix <=V2c2147483647FAainfix >=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
@@ -172,7 +172,7 @@
      <goal
       name="WP_parameter _AllZeros_should_not_be_proved_safety.1"
       expl="assertion"
-      sum="c2074b2ea1379891dc204e128f6e3766"
+      sum="bd0282654643b0d5fcab29570e03aee0"
       proved="false"
       expanded="true"
       shape="ainfix >=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
@@ -181,7 +181,7 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="unknown" time="1.26"/>
+       <result status="unknown" time="1.43"/>
       </proof>
       <proof
        prover="alt-ergo"
@@ -201,7 +201,7 @@
      <goal
       name="WP_parameter _AllZeros_should_not_be_proved_safety.2"
       expl="arithmetic overflow"
-      sum="2164607f3f2e713a956d3780534df999"
+      sum="c6f405bbff3e6424c3f7406b78e86f07"
       proved="true"
       expanded="true"
       shape="ainfix <=V2c2147483647Aainfix <=aprefix -c2147483648V2Iainfix =V2ainfix +aoffset_maxV1V0c1Aainfix >=V2c0Aainfix <=V2c2147483647FIainfix >=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
@@ -210,21 +210,21 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.02"/>
       </proof>
       <proof
        prover="alt-ergo"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="z3"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
     </transf>
@@ -232,7 +232,7 @@
    <goal
     name="WP_parameter cons_AllZeros_ensures_default"
     expl="Constructor of class AllZeros, default behavior"
-    sum="de4472723b02cbb10709eb7a9e39d6c2"
+    sum="bb73ab5af8d6630182db0e17e6015f00"
     proved="true"
     expanded="true"
     shape="t">
@@ -261,7 +261,7 @@
    <goal
     name="WP_parameter cons_AllZeros_safety"
     expl="Constructor of class AllZeros, Safety"
-    sum="273ff5f23ea8a8f6f60631ed14a867d5"
+    sum="aeb79946581ec50ec00e17d4434ec19f"
     proved="true"
     expanded="true"
     shape="t">

@@ -74,7 +74,7 @@
    <goal
     name="WP_parameter _SelectionSort_sort_ensures_default"
     expl="Method sort, default behavior"
-    sum="2b6f6c940fcb0fc6a75c18bfd0d09cb1"
+    sum="d7dd211f1a7ef5e6456332751a6d78dd"
     proved="true"
     expanded="true"
     shape="iainfix <ainteger_of_int32V15V16iainfix <ainteger_of_int32aselectV6ashiftV1ainteger_of_int32V15ainteger_of_int32V13ainfix <ainteger_of_int32V17ainfix +aoffset_maxV2V1c1Aainfix <=ainteger_of_int32V5ainteger_of_int32V17Aainfix <ainteger_of_int32V5ainteger_of_int32V20Iainfix =V20V19FIainfix =ainteger_of_int32V19ainfix +ainteger_of_int32V15c1FIainfix =V18aselectV6ashiftV1ainteger_of_int32V15FIainfix =V17V15Fainfix <ainteger_of_int32V14ainfix +aoffset_maxV2V1c1Aainfix <=ainteger_of_int32V5ainteger_of_int32V14Aainfix <ainteger_of_int32V5ainteger_of_int32V22Iainfix =V22V21FIainfix =ainteger_of_int32V21ainfix +ainteger_of_int32V15c1Fainfix <=c0ainteger_of_int32V25Iainfix =V25V24FIainfix =ainteger_of_int32V24ainfix +ainteger_of_int32V5c1FIanot_assignsV2V6V23apset_unionapset_rangeapset_singletonV1ainteger_of_int32V14ainteger_of_int32V14apset_rangeapset_singletonV1ainteger_of_int32V5ainteger_of_int32V5Aa_SwapV1ainteger_of_int32V5ainteger_of_int32V14V23V6FIainfix =V16ainfix +aoffset_maxV2V1c1Aainfix >=V16c0Aainfix <=V16c2147483647FIainfix <ainteger_of_int32V14ainfix +aoffset_maxV2V1c1Aainfix <=ainteger_of_int32V5ainteger_of_int32V14Aainfix <ainteger_of_int32V5ainteger_of_int32V15FFFAainfix <ainteger_of_int32V10ainfix +aoffset_maxV2V1c1Aainfix <=ainteger_of_int32V5ainteger_of_int32V10Aainfix <ainteger_of_int32V5ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V5c1FIainfix =V10V5FIainfix =V9aselectV6ashiftV1ainteger_of_int32V5FIainfix <ainteger_of_int32V5ainteger_of_int32V8Iainfix =ainteger_of_int32V8ainfix -V7c1FIainfix =V7ainfix +aoffset_maxV2V1c1Aainfix >=V7c0Aainfix <=V7c2147483647FIainfix <=c0ainteger_of_int32V5FFAainfix <=c0ainteger_of_int32V4Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIa_Non_null_intMV1V2Aavalid_struct_SelectionSortV0c0c0V2Aaleft_valid_struct_intMV1c0V2FFF">
@@ -83,13 +83,13 @@
      timelimit="10"
      edited=""
      obsolete="false">
-     <result status="valid" time="1.42"/>
+     <result status="valid" time="1.40"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _SelectionSort_sort_ensures_permutation"
     expl="Method sort, Behavior `permutation'"
-    sum="e747d9d3719d61f5c153bb488d20747b"
+    sum="be2f856d9ca9cf22bff39691a5df0f0b"
     proved="true"
     expanded="true"
     shape="iainfix <ainteger_of_int32V6ainteger_of_int32V9a_PermutV1c0ainfix -ainfix +aoffset_maxV3V1c1c1V17V2Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix +ainteger_of_int32V6c1FAa_PermutV1c0ainfix -ainfix +aoffset_maxV3V1c1c1V17V7Ianot_assignsV3V7V17apset_unionapset_rangeapset_singletonV1ainteger_of_int32V14ainteger_of_int32V14apset_rangeapset_singletonV1ainteger_of_int32V6ainteger_of_int32V6Aa_SwapV1ainteger_of_int32V6ainteger_of_int32V14V17V7FIainfix <ainteger_of_int32V15V16NIainfix =V16ainfix +aoffset_maxV3V1c1Aainfix >=V16c0Aainfix <=V16c2147483647FIainfix <ainteger_of_int32V14ainfix +aoffset_maxV3V1c1Aainfix <=ainteger_of_int32V6ainteger_of_int32V14Aainfix <ainteger_of_int32V6ainteger_of_int32V15FFIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6Fa_PermutV1c0ainfix -ainfix +aoffset_maxV3V1c1c1V7V2Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix =V8ainfix +aoffset_maxV3V1c1Aainfix >=V8c0Aainfix <=V8c2147483647FIainfix <=c0ainteger_of_int32V6Ia_PermutV1c0ainfix -ainfix +aoffset_maxV3V1c1c1V7V2FFAa_PermutV1c0ainfix -ainfix +aoffset_maxV3V1c1c1V2V2Iainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FFFF">
@@ -98,13 +98,13 @@
      timelimit="10"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.47"/>
+     <result status="valid" time="0.48"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _SelectionSort_sort_ensures_sorted"
     expl="Method sort, Behavior `sorted'"
-    sum="77078a5d364b59305fd7e6b354a43138"
+    sum="99b87c8bd6127a9beb04d7de87fec9ee"
     proved="true"
     expanded="true"
     shape="iainfix <ainteger_of_int32V6ainteger_of_int32V9iainfix <ainteger_of_int32V16V17iainfix <ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V16ainteger_of_int32V14ainfix >=ainteger_of_int32aselectV7ashiftV1V22ainteger_of_int32V19Iainfix <V22ainteger_of_int32V21Aainfix <=ainteger_of_int32V6V22FAainfix =ainteger_of_int32V19ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V18Iainfix =V21V20FIainfix =ainteger_of_int32V20ainfix +ainteger_of_int32V16c1FIainfix =V19aselectV7ashiftV1ainteger_of_int32V16FIainfix =V18V16Fainfix >=ainteger_of_int32aselectV7ashiftV1V25ainteger_of_int32V14Iainfix <V25ainteger_of_int32V24Aainfix <=ainteger_of_int32V6V25FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15Iainfix =V24V23FIainfix =ainteger_of_int32V23ainfix +ainteger_of_int32V16c1Fainfix <=ainteger_of_int32aselectV26ashiftV1V29ainteger_of_int32aselectV26ashiftV1V30Iainfix <V30ainfix +aoffset_maxV3V1c1Aainfix <=ainteger_of_int32V28V30Aainfix <V29ainteger_of_int32V28Aainfix <=c0V29FFAa_SortedV1c0ainteger_of_int32V28V26Iainfix =V28V27FIainfix =ainteger_of_int32V27ainfix +ainteger_of_int32V6c1FIanot_assignsV3V7V26apset_unionapset_rangeapset_singletonV1ainteger_of_int32V15ainteger_of_int32V15apset_rangeapset_singletonV1ainteger_of_int32V6ainteger_of_int32V6Aa_SwapV1ainteger_of_int32V6ainteger_of_int32V15V26V7FIainfix =V17ainfix +aoffset_maxV3V1c1Aainfix >=V17c0Aainfix <=V17c2147483647FIainfix <ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix <=ainteger_of_int32V6ainteger_of_int32V15Aainfix <ainteger_of_int32V6ainteger_of_int32V16Iainfix >=ainteger_of_int32aselectV7ashiftV1V31ainteger_of_int32V14Iainfix <V31ainteger_of_int32V16Aainfix <=ainteger_of_int32V6V31FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FFFAainfix >=ainteger_of_int32aselectV7ashiftV1V32ainteger_of_int32V10Iainfix <V32ainteger_of_int32V13Aainfix <=ainteger_of_int32V6V32FAainfix =ainteger_of_int32V10ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V11Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6Fa_SortedV1c0ainfix +aoffset_maxV3V1c1V7Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix =V8ainfix +aoffset_maxV3V1c1Aainfix >=V8c0Aainfix <=V8c2147483647FIainfix <=c0ainteger_of_int32V6Iainfix <=ainteger_of_int32aselectV7ashiftV1V33ainteger_of_int32aselectV7ashiftV1V34Iainfix <V34ainfix +aoffset_maxV3V1c1Aainfix <=ainteger_of_int32V6V34Aainfix <V33ainteger_of_int32V6Aainfix <=c0V33FFAa_SortedV1c0ainteger_of_int32V6V7FFAainfix <=ainteger_of_int32aselectV2ashiftV1V35ainteger_of_int32aselectV2ashiftV1V36Iainfix <V36ainfix +aoffset_maxV3V1c1Aainfix <=ainteger_of_int32V5V36Aainfix <V35ainteger_of_int32V5Aainfix <=c0V35FFAa_SortedV1c0ainteger_of_int32V5V2Iainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FFFF">
@@ -122,7 +122,7 @@
      <goal
       name="WP_parameter _SelectionSort_sort_ensures_sorted.1"
       expl="loop invariant init"
-      sum="965fd52521d174589583fb317971545c"
+      sum="bb9b6b0c84eeb8c740095e604d8d81f0"
       proved="true"
       expanded="true"
       shape="ainfix <=ainteger_of_int32aselectV2ashiftV1V6ainteger_of_int32aselectV2ashiftV1V7Iainfix <V7ainfix +aoffset_maxV3V1c1Aainfix <=ainteger_of_int32V5V7Aainfix <V6ainteger_of_int32V5Aainfix <=c0V6FFAa_SortedV1c0ainteger_of_int32V5V2Iainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FFFF">
@@ -131,13 +131,13 @@
        timelimit="10"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter _SelectionSort_sort_ensures_sorted.2"
       expl="loop invariant init"
-      sum="c6ecbb1ceaccc78c3f2b8bcdf12ad89b"
+      sum="6f311eecdadd2a8b9af5eb6016f1de02"
       proved="true"
       expanded="true"
       shape="ainfix >=ainteger_of_int32aselectV7ashiftV1V14ainteger_of_int32V10Iainfix <V14ainteger_of_int32V13Aainfix <=ainteger_of_int32V6V14FAainfix =ainteger_of_int32V10ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V11Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix <ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix =V8ainfix +aoffset_maxV3V1c1Aainfix >=V8c0Aainfix <=V8c2147483647FIainfix <=c0ainteger_of_int32V6Iainfix <=ainteger_of_int32aselectV7ashiftV1V15ainteger_of_int32aselectV7ashiftV1V16Iainfix <V16ainfix +aoffset_maxV3V1c1Aainfix <=ainteger_of_int32V6V16Aainfix <V15ainteger_of_int32V6Aainfix <=c0V15FFAa_SortedV1c0ainteger_of_int32V6V7FFIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FFFF">
@@ -152,7 +152,7 @@
      <goal
       name="WP_parameter _SelectionSort_sort_ensures_sorted.3"
       expl="loop invariant preservation"
-      sum="6450c29537a93a2e539f936691c36459"
+      sum="b343237041c5c56fc2ce72a90bafcca1"
       proved="true"
       expanded="true"
       shape="ainfix >=ainteger_of_int32aselectV7ashiftV1V22ainteger_of_int32V19Iainfix <V22ainteger_of_int32V21Aainfix <=ainteger_of_int32V6V22FAainfix =ainteger_of_int32V19ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V18Iainfix =V21V20FIainfix =ainteger_of_int32V20ainfix +ainteger_of_int32V16c1FIainfix =V19aselectV7ashiftV1ainteger_of_int32V16FIainfix =V18V16FIainfix <ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V16ainteger_of_int32V14Iainfix <ainteger_of_int32V16V17Iainfix =V17ainfix +aoffset_maxV3V1c1Aainfix >=V17c0Aainfix <=V17c2147483647FIainfix <ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix <=ainteger_of_int32V6ainteger_of_int32V15Aainfix <ainteger_of_int32V6ainteger_of_int32V16Iainfix >=ainteger_of_int32aselectV7ashiftV1V23ainteger_of_int32V14Iainfix <V23ainteger_of_int32V16Aainfix <=ainteger_of_int32V6V23FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FFFIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix <ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix =V8ainfix +aoffset_maxV3V1c1Aainfix >=V8c0Aainfix <=V8c2147483647FIainfix <=c0ainteger_of_int32V6Iainfix <=ainteger_of_int32aselectV7ashiftV1V24ainteger_of_int32aselectV7ashiftV1V25Iainfix <V25ainfix +aoffset_maxV3V1c1Aainfix <=ainteger_of_int32V6V25Aainfix <V24ainteger_of_int32V6Aainfix <=c0V24FFAa_SortedV1c0ainteger_of_int32V6V7FFIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FFFF">
@@ -167,7 +167,7 @@
      <goal
       name="WP_parameter _SelectionSort_sort_ensures_sorted.4"
       expl="loop invariant preservation"
-      sum="01788968623aca415c555d2f1bcbab96"
+      sum="b86a5ccaeb18f484fbc6f529dc725690"
       proved="true"
       expanded="true"
       shape="ainfix >=ainteger_of_int32aselectV7ashiftV1V20ainteger_of_int32V14Iainfix <V20ainteger_of_int32V19Aainfix <=ainteger_of_int32V6V20FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix +ainteger_of_int32V16c1FIainfix <ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V16ainteger_of_int32V14NIainfix <ainteger_of_int32V16V17Iainfix =V17ainfix +aoffset_maxV3V1c1Aainfix >=V17c0Aainfix <=V17c2147483647FIainfix <ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix <=ainteger_of_int32V6ainteger_of_int32V15Aainfix <ainteger_of_int32V6ainteger_of_int32V16Iainfix >=ainteger_of_int32aselectV7ashiftV1V21ainteger_of_int32V14Iainfix <V21ainteger_of_int32V16Aainfix <=ainteger_of_int32V6V21FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FFFIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix <ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix =V8ainfix +aoffset_maxV3V1c1Aainfix >=V8c0Aainfix <=V8c2147483647FIainfix <=c0ainteger_of_int32V6Iainfix <=ainteger_of_int32aselectV7ashiftV1V22ainteger_of_int32aselectV7ashiftV1V23Iainfix <V23ainfix +aoffset_maxV3V1c1Aainfix <=ainteger_of_int32V6V23Aainfix <V22ainteger_of_int32V6Aainfix <=c0V22FFAa_SortedV1c0ainteger_of_int32V6V7FFIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FFFF">
@@ -176,13 +176,13 @@
        timelimit="10"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter _SelectionSort_sort_ensures_sorted.5"
       expl="loop invariant preservation"
-      sum="d12696bfe0dfe21064d1f73402952c7b"
+      sum="4e2980cf065362995f550b9a166e49d9"
       proved="true"
       expanded="true"
       shape="ainfix <=ainteger_of_int32aselectV18ashiftV1V21ainteger_of_int32aselectV18ashiftV1V22Iainfix <V22ainfix +aoffset_maxV3V1c1Aainfix <=ainteger_of_int32V20V22Aainfix <V21ainteger_of_int32V20Aainfix <=c0V21FFAa_SortedV1c0ainteger_of_int32V20V18Iainfix =V20V19FIainfix =ainteger_of_int32V19ainfix +ainteger_of_int32V6c1FIanot_assignsV3V7V18apset_unionapset_rangeapset_singletonV1ainteger_of_int32V15ainteger_of_int32V15apset_rangeapset_singletonV1ainteger_of_int32V6ainteger_of_int32V6Aa_SwapV1ainteger_of_int32V6ainteger_of_int32V15V18V7FIainfix <ainteger_of_int32V16V17NIainfix =V17ainfix +aoffset_maxV3V1c1Aainfix >=V17c0Aainfix <=V17c2147483647FIainfix <ainteger_of_int32V15ainfix +aoffset_maxV3V1c1Aainfix <=ainteger_of_int32V6ainteger_of_int32V15Aainfix <ainteger_of_int32V6ainteger_of_int32V16Iainfix >=ainteger_of_int32aselectV7ashiftV1V23ainteger_of_int32V14Iainfix <V23ainteger_of_int32V16Aainfix <=ainteger_of_int32V6V23FAainfix =ainteger_of_int32V14ainteger_of_int32aselectV7ashiftV1ainteger_of_int32V15FFFIainfix =V13V12FIainfix =ainteger_of_int32V12ainfix +ainteger_of_int32V6c1FIainfix =V11V6FIainfix =V10aselectV7ashiftV1ainteger_of_int32V6FIainfix <ainteger_of_int32V6ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainfix -V8c1FIainfix =V8ainfix +aoffset_maxV3V1c1Aainfix >=V8c0Aainfix <=V8c2147483647FIainfix <=c0ainteger_of_int32V6Iainfix <=ainteger_of_int32aselectV7ashiftV1V24ainteger_of_int32aselectV7ashiftV1V25Iainfix <V25ainfix +aoffset_maxV3V1c1Aainfix <=ainteger_of_int32V6V25Aainfix <V24ainteger_of_int32V6Aainfix <=c0V24FFAa_SortedV1c0ainteger_of_int32V6V7FFIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FFFF">
@@ -191,13 +191,13 @@
        timelimit="10"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.54"/>
+       <result status="valid" time="0.56"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter _SelectionSort_sort_ensures_sorted.6"
       expl="normal postcondition"
-      sum="8ea7832b786f8eb968ae7dbec90aa4e9"
+      sum="496fda4184bb244be97707a60aa26adb"
       proved="true"
       expanded="true"
       shape="a_SortedV1c0ainfix +aoffset_maxV3V1c1V7Iainfix <ainteger_of_int32V6ainteger_of_int32V9NIainfix =ainteger_of_int32V9ainfix -V8c1FIainfix =V8ainfix +aoffset_maxV3V1c1Aainfix >=V8c0Aainfix <=V8c2147483647FIainfix <=c0ainteger_of_int32V6Iainfix <=ainteger_of_int32aselectV7ashiftV1V10ainteger_of_int32aselectV7ashiftV1V11Iainfix <V11ainfix +aoffset_maxV3V1c1Aainfix <=ainteger_of_int32V6V11Aainfix <V10ainteger_of_int32V6Aainfix <=c0V10FFAa_SortedV1c0ainteger_of_int32V6V7FFIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV1V3Aavalid_struct_SelectionSortV0c0c0V3Aaleft_valid_struct_intMV1c0V3FFFF">
@@ -214,7 +214,7 @@
    <goal
     name="WP_parameter _SelectionSort_sort_safety"
     expl="index bounds"
-    sum="282e75f66869b4233aa4471619702ece"
+    sum="0e7af3f7b08746dd3079d924584f68a8"
     proved="true"
     expanded="true"
     shape="iainfix <ainteger_of_int32V15V16iainfix <ainteger_of_int32aselectV6ashiftV1ainteger_of_int32V15ainteger_of_int32V13ainfix <ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V20ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V15Aainfix <=c0ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V15Iainfix =V20V19FIainfix =ainteger_of_int32V19ainfix +ainteger_of_int32V15c1FAainfix <=ainfix +ainteger_of_int32V15c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V15c1Iainfix =V18aselectV6ashiftV1ainteger_of_int32V15FAainfix <=ainteger_of_int32V15aoffset_maxV2V1Aainfix <=aoffset_minV2V1ainteger_of_int32V15Iainfix =V17V15Fainfix <ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V22ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V15Aainfix <=c0ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V15Iainfix =V22V21FIainfix =ainteger_of_int32V21ainfix +ainteger_of_int32V15c1FAainfix <=ainfix +ainteger_of_int32V15c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V15c1Aainfix <=ainteger_of_int32V15aoffset_maxV2V1Aainfix <=aoffset_minV2V1ainteger_of_int32V15ainfix <ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V25ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V5Aainfix <=c0ainfix -ainfix +aoffset_maxV2V1c1ainteger_of_int32V5Iainfix =V25V24FIainfix =ainteger_of_int32V24ainfix +ainteger_of_int32V5c1FAainfix <=ainfix +ainteger_of_int32V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Ianot_assignsV2V6V23apset_unionapset_rangeapset_singletonV1ainteger_of_int32V14ainteger_of_int32V14apset_rangeapset_singletonV1ainteger_of_int32V5ainteger_of_int32V5Aa_SwapV1ainteger_of_int32V5ainteger_of_int32V14V23V6FAainfix <ainteger_of_int32V14ainfix +aoffset_maxV2V1c1Aainfix <=c0ainteger_of_int32V14Aainfix <ainteger_of_int32V5ainfix +aoffset_maxV2V1c1Aainfix <=c0ainteger_of_int32V5Aa_Non_null_intMV1V2Iainfix =V16ainfix +aoffset_maxV2V1c1Aainfix >=V16c0Aainfix <=V16c2147483647FAainfix >=aoffset_maxV2V1aprefix -c1Iainfix <ainteger_of_int32V14ainfix +aoffset_maxV2V1c1Aainfix <=ainteger_of_int32V5ainteger_of_int32V14Aainfix <ainteger_of_int32V5ainteger_of_int32V15FFFIainfix =V12V11FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V5c1FAainfix <=ainfix +ainteger_of_int32V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix =V10V5FIainfix =V9aselectV6ashiftV1ainteger_of_int32V5FAainfix <=ainteger_of_int32V5aoffset_maxV2V1Aainfix <=aoffset_minV2V1ainteger_of_int32V5Iainfix <ainteger_of_int32V5ainteger_of_int32V8Iainfix =ainteger_of_int32V8ainfix -V7c1FAainfix <=ainfix -V7c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V7c1Iainfix =V7ainfix +aoffset_maxV2V1c1Aainfix >=V7c0Aainfix <=V7c2147483647FAainfix >=aoffset_maxV2V1aprefix -c1Iainfix <=c0ainteger_of_int32V5FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIa_Non_null_intMV1V2Aavalid_struct_SelectionSortV0c0c0V2Aaleft_valid_struct_intMV1c0V2FFF">
@@ -229,7 +229,7 @@
    <goal
     name="WP_parameter _SelectionSort_swap_ensures_default"
     expl="normal postcondition"
-    sum="e74b4131bd3788b675e9bde4ad57732a"
+    sum="d988be0f824404ce3d03b8bd29a69e47"
     proved="true"
     expanded="true"
     shape="anot_assignsV5V4V7apset_unionapset_rangeapset_singletonV1ainteger_of_int32V3ainteger_of_int32V3apset_rangeapset_singletonV1ainteger_of_int32V2ainteger_of_int32V2Aa_SwapV1ainteger_of_int32V2ainteger_of_int32V3V7V4Iainfix =V7astoreV6ashiftV1ainteger_of_int32V3aselectV4ashiftV1ainteger_of_int32V2FIainfix =V6astoreV4ashiftV1ainteger_of_int32V2aselectV4ashiftV1ainteger_of_int32V3FIainfix <ainteger_of_int32V3ainfix +aoffset_maxV5V1c1Aainfix <=c0ainteger_of_int32V3Aainfix <ainteger_of_int32V2ainfix +aoffset_maxV5V1c1Aainfix <=c0ainteger_of_int32V2Aa_Non_null_intMV1V5Aavalid_struct_SelectionSortV0c0c0V5Aaleft_valid_struct_intMV1c0V5FFFFFF">
@@ -244,7 +244,7 @@
    <goal
     name="WP_parameter _SelectionSort_swap_safety"
     expl="Method swap, Safety"
-    sum="c2ccc3ecef84b6d475af88a0f8ef7ca4"
+    sum="eb745dffea34b0bbb55afa47a55b02b8"
     proved="true"
     expanded="true"
     shape="ainfix <=ainteger_of_int32V3aoffset_maxV5V1Aainfix <=aoffset_minV5V1ainteger_of_int32V3Iainfix =V6astoreV4ashiftV1ainteger_of_int32V2aselectV4ashiftV1ainteger_of_int32V3FAainfix <=ainteger_of_int32V2aoffset_maxV5V1Aainfix <=aoffset_minV5V1ainteger_of_int32V2Aainfix <=ainteger_of_int32V3aoffset_maxV5V1Aainfix <=aoffset_minV5V1ainteger_of_int32V3Aainfix <=ainteger_of_int32V2aoffset_maxV5V1Aainfix <=aoffset_minV5V1ainteger_of_int32V2Iainfix <ainteger_of_int32V3ainfix +aoffset_maxV5V1c1Aainfix <=c0ainteger_of_int32V3Aainfix <ainteger_of_int32V2ainfix +aoffset_maxV5V1c1Aainfix <=c0ainteger_of_int32V2Aa_Non_null_intMV1V5Aavalid_struct_SelectionSortV0c0c0V5Aaleft_valid_struct_intMV1c0V5FFFFFF">
@@ -259,7 +259,7 @@
    <goal
     name="WP_parameter cons_Object_ensures_default"
     expl="Constructor of class Object, default behavior"
-    sum="a1d8c9781aa9c16cf656719fad85535d"
+    sum="155573528af889b62bbf5e1471766ae7"
     proved="true"
     expanded="true"
     shape="t">
@@ -274,7 +274,7 @@
    <goal
     name="WP_parameter cons_Object_safety"
     expl="Constructor of class Object, Safety"
-    sum="c1d15fecb4d043048756896ddb464bd0"
+    sum="305e468a0e9335368c53fa88eb2016cb"
     proved="true"
     expanded="true"
     shape="t">
@@ -289,7 +289,7 @@
    <goal
     name="WP_parameter cons_SelectionSort_ensures_default"
     expl="Constructor of class SelectionSort, default behavior"
-    sum="d7102004159218d69bdbd0435bd5ee44"
+    sum="0cf5cde152c79f37db52a6b1a5cc6712"
     proved="true"
     expanded="true"
     shape="t">
@@ -304,7 +304,7 @@
    <goal
     name="WP_parameter cons_SelectionSort_safety"
     expl="Constructor of class SelectionSort, Safety"
-    sum="e1061ec86af4faeb320bf648a05e5c6e"
+    sum="84645ee376fa48bbe6bfaeaea6e72d66"
     proved="true"
     expanded="true"
     shape="t">

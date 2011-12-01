@@ -74,7 +74,7 @@
    <goal
     name="WP_parameter _Sterbenz_ensures_default"
     expl="Function Sterbenz, default behavior"
-    sum="842df54b7a1f022dae674d45306dcd42"
+    sum="48aa4b7015549eace23fa714b13b3e36"
     proved="false"
     expanded="true"
     shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_single_postaNearestTiesToEvenV0V1V2FAainfix <=c0.0avalueV0Aainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
@@ -85,7 +85,7 @@
      <goal
       name="WP_parameter _Sterbenz_ensures_default.1"
       expl="assertion"
-      sum="9c41a40e6fb7e2f1d5515903f629b1c9"
+      sum="34ded3b59dbf5f78b0fe2e0fae9818b2"
       proved="true"
       expanded="true"
       shape="ainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
@@ -94,7 +94,7 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="alt-ergo"
@@ -108,13 +108,13 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter _Sterbenz_ensures_default.2"
       expl="assertion"
-      sum="66471db82280a40dd1902070ce6198f6"
+      sum="08aecf3e58d3d20ca40e6e867313b2b0"
       proved="true"
       expanded="true"
       shape="ainfix <=c0.0avalueV0Iainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
@@ -143,7 +143,7 @@
      <goal
       name="WP_parameter _Sterbenz_ensures_default.3"
       expl="normal postcondition"
-      sum="c8f0a1b7e82e7edbcd1d45be04c1424e"
+      sum="399d0ba74b9583510fa257d5e010118c"
       proved="false"
       expanded="true"
       shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_single_postaNearestTiesToEvenV0V1V2FIainfix <=c0.0avalueV0Iainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
@@ -153,7 +153,7 @@
    <goal
     name="WP_parameter _Sterbenz_safety"
     expl="floating-point overflow"
-    sum="9b84d6753627dbb6f3d19979fede2f39"
+    sum="cca6ff6d4e5a5c3b0d30b4e2ffd2c239"
     proved="true"
     expanded="true"
     shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV0avalueV1amax_singleIainfix <=c0.0avalueV0Iainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">

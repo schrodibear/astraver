@@ -74,7 +74,7 @@
    <goal
     name="WP_parameter _Switch_test1_ensures_default"
     expl="Method test1, default behavior"
-    sum="20e0e8f70e2010670fc386a4cb79a2a7"
+    sum="dc971f955f7b37378b3917044c313dc1"
     proved="true"
     expanded="true"
     shape="t">
@@ -90,7 +90,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
@@ -103,7 +103,7 @@
    <goal
     name="WP_parameter _Switch_test1_ensures_normal"
     expl="Method test1, Behavior `normal'"
-    sum="0d441f9428f172503587c0204b342492"
+    sum="33f74ea3f8a3afb91656898ee93827c7"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V0c0Oainfix =ainteger_of_int32V0c1ainfix =ainteger_of_int32V3c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fainfix =ainteger_of_int32V6c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c2FF">
@@ -132,7 +132,7 @@
    <goal
     name="WP_parameter _Switch_test1_safety"
     expl="Method test1, Safety"
-    sum="1608dbc61a841aad9ac401b626da920d"
+    sum="16b92e20723e80538c182fe8175bccb9"
     proved="true"
     expanded="true"
     shape="t">
@@ -161,7 +161,7 @@
    <goal
     name="WP_parameter _Switch_test2_ensures_default"
     expl="Method test2, default behavior"
-    sum="d7756ae4ee28921fb31ac1faebc10d76"
+    sum="8044267241f1fa0815d0fae688f11da1"
     proved="true"
     expanded="true"
     shape="t">
@@ -190,7 +190,7 @@
    <goal
     name="WP_parameter _Switch_test2_ensures_normal"
     expl="Method test2, Behavior `normal'"
-    sum="8e2afa3b7f90fa5c144e9283a036cf1a"
+    sum="3edfc47135eb66cd186c13aaaea70ca0"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V0c0Oainfix =ainteger_of_int32V0c1ainfix =ainteger_of_int32V3c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V3c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fiainfix =ainteger_of_int32V0c4Oainfix =ainteger_of_int32V0c7ainfix =ainteger_of_int32V6c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V6c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c1Fainfix =ainteger_of_int32V9c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V9c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7c2FF">
@@ -219,7 +219,7 @@
    <goal
     name="WP_parameter _Switch_test2_safety"
     expl="Method test2, Safety"
-    sum="43f6f9f207600e8a4dbac6e419c218f1"
+    sum="2c2f83afb1975255d838b2679054898d"
     proved="true"
     expanded="true"
     shape="t">
@@ -248,7 +248,7 @@
    <goal
     name="WP_parameter cons_Switch_ensures_default"
     expl="Constructor of class Switch, default behavior"
-    sum="db0c43a15019b9c80dfc5d4f21d3140c"
+    sum="e78153de6255c113cbf0ba292b28d5e0"
     proved="true"
     expanded="true"
     shape="t">
@@ -277,7 +277,7 @@
    <goal
     name="WP_parameter cons_Switch_safety"
     expl="Constructor of class Switch, Safety"
-    sum="ca884f5e06dae7ea6be95a7a6f0aa8be"
+    sum="5800c4225687f860f7a91d54e5ba4a45"
     proved="true"
     expanded="true"
     shape="t">
@@ -293,7 +293,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"

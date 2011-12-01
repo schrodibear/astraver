@@ -4229,9 +4229,9 @@ let tr_enum_type ri (* to_int of_int *) acc =
 *)
   :: Goal(KAxiom,id_no_loc (name^"_extensionality"),
            LForall("x",lt, [],
-           LForall("y",lt, [ (* [LPatP(LPred("eq_int",
+           LForall("y",lt, [ [LPatP(LPred("eq_int",
                                [LApp(logic_int_of_enum ri, [LVar "x"]);
-                                LApp(logic_int_of_enum ri, [LVar "y"])]))] *)],
+                                LApp(logic_int_of_enum ri, [LVar "y"])]))] ],
                    LImpl(LPred("eq_int",
                                [LApp(logic_int_of_enum ri, [LVar "x"]);
                                 LApp(logic_int_of_enum ri, [LVar "y"])]),

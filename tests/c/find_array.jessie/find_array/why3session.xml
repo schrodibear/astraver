@@ -1,19 +1,27 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="find_array/why3session.xml">
+ name="find_array.jessie/find_array/why3session.xml">
  <prover
   id="alt-ergo"
   name="Alt-Ergo"
   version="0.93"/>
  <prover
+  id="alt-ergo-0.93.1"
+  name="Alt-Ergo"
+  version="0.93.1"/>
+ <prover
   id="coq"
   name="Coq"
-  version="8.2pl1"/>
+  version="8.3pl2"/>
  <prover
   id="cvc3"
   name="CVC3"
   version="2.2"/>
+ <prover
+  id="cvc3-2.4"
+  name="CVC3"
+  version="2.4.1"/>
  <prover
   id="eprover"
   name="Eprover"
@@ -46,6 +54,10 @@
   id="z3"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="z3-3"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../find_array.mlw"
   verified="true"
@@ -62,7 +74,7 @@
    <goal
     name="WP_parameter find_array_ensures_default"
     expl="Function find_array, default behavior"
-    sum="034816590d2233217c55cd110e631324"
+    sum="6ba9c5342fb646927008eefd4868e288"
     proved="true"
     expanded="true"
     shape="iainfix <ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2ainfix <=c0ainteger_of_int32V16Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix <V17ainteger_of_int32V16Aainfix <=c0V17FAainfix >ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix <V18ainteger_of_int32V1Aainfix <ainteger_of_int32V9V18FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V14c1Fainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V20ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix <V21ainteger_of_int32V10Aainfix <=c0V21FAainfix >ainteger_of_int32aselectV4ashiftV0V22ainteger_of_int32V2Iainfix <V22ainteger_of_int32V1Aainfix <ainteger_of_int32V20V22FIainfix =V20V19FIainfix =ainteger_of_int32V19ainfix -ainteger_of_int32V14c1FIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V23ainteger_of_int32V2Iainfix <V23ainteger_of_int32V10Aainfix <=c0V23FAainfix >ainteger_of_int32aselectV4ashiftV0V24ainteger_of_int32V2Iainfix <V24ainteger_of_int32V1Aainfix <ainteger_of_int32V9V24FFFAainfix <=c0ainteger_of_int32V6Aainfix <ainteger_of_int32V8ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V25ainteger_of_int32V2Iainfix <V25ainteger_of_int32V6Aainfix <=c0V25FAainfix >ainteger_of_int32aselectV4ashiftV0V26ainteger_of_int32V2Iainfix <V26ainteger_of_int32V1Aainfix <ainteger_of_int32V8V26FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4FFFFF">
@@ -73,7 +85,7 @@
      <goal
       name="WP_parameter find_array_ensures_default.1"
       expl="loop invariant init"
-      sum="da84dbf7e4fcaf5ae70433e9a7c24595"
+      sum="1002a95836a328096a2f97e3278204c6"
       proved="true"
       expanded="true"
       shape="ainfix <=c0ainteger_of_int32V6Aainfix <ainteger_of_int32V8ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V9ainteger_of_int32V2Iainfix <V9ainteger_of_int32V6Aainfix <=c0V9FAainfix >ainteger_of_int32aselectV4ashiftV0V10ainteger_of_int32V2Iainfix <V10ainteger_of_int32V1Aainfix <ainteger_of_int32V8V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4FFFFF">
@@ -82,27 +94,27 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="alt-ergo"
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.14"/>
+       <result status="valid" time="0.10"/>
       </proof>
       <proof
        prover="z3"
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter find_array_ensures_default.2"
       expl="loop invariant preservation"
-      sum="310b6cd482e7d6e096c94e87ecfddf85"
+      sum="e21c89e91e758e8c9f97cdfb6ff17042"
       proved="true"
       expanded="true"
       shape="ainfix <=c0ainteger_of_int32V16Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix <V17ainteger_of_int32V16Aainfix <=c0V17FAainfix >ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix <V18ainteger_of_int32V1Aainfix <ainteger_of_int32V9V18FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix +ainteger_of_int32V14c1FIainfix <ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V19ainteger_of_int32V2Iainfix <V19ainteger_of_int32V10Aainfix <=c0V19FAainfix >ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix <V20ainteger_of_int32V1Aainfix <ainteger_of_int32V9V20FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4FFFFF">
@@ -118,20 +130,20 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.43"/>
+       <result status="valid" time="0.30"/>
       </proof>
       <proof
        prover="z3"
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.09"/>
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter find_array_ensures_default.3"
       expl="loop invariant preservation"
-      sum="1fdb6784c3d0f75a1ad5922c9a790bab"
+      sum="866c1add76de69615a596e672d60277c"
       proved="true"
       expanded="true"
       shape="ainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V16ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix <V17ainteger_of_int32V10Aainfix <=c0V17FAainfix >ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix <V18ainteger_of_int32V1Aainfix <ainteger_of_int32V16V18FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FIainfix <ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V19ainteger_of_int32V2Iainfix <V19ainteger_of_int32V10Aainfix <=c0V19FAainfix >ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix <V20ainteger_of_int32V1Aainfix <ainteger_of_int32V9V20FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4FFFFF">
@@ -147,14 +159,14 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="timeout" time="4.76"/>
+       <result status="timeout" time="3.07"/>
       </proof>
       <proof
        prover="z3"
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <transf
        name="split_goal"
@@ -163,7 +175,7 @@
        <goal
         name="WP_parameter find_array_ensures_default.3.1"
         expl="Function find_array, default behavior"
-        sum="3aa1d19572250b9514360c37c22bd04e"
+        sum="31ae0b1fdb979587b1da8a4709327d1f"
         proved="true"
         expanded="true"
         shape="ainfix >ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix <V17ainteger_of_int32V1Aainfix <ainteger_of_int32V16V17FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FIainfix <ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix <V18ainteger_of_int32V10Aainfix <=c0V18FAainfix >ainteger_of_int32aselectV4ashiftV0V19ainteger_of_int32V2Iainfix <V19ainteger_of_int32V1Aainfix <ainteger_of_int32V9V19FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4FFFFF">
@@ -172,27 +184,27 @@
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="timeout" time="3.11"/>
+         <result status="timeout" time="3.02"/>
         </proof>
         <proof
          prover="alt-ergo"
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.27"/>
+         <result status="valid" time="0.18"/>
         </proof>
         <proof
          prover="z3"
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.05"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter find_array_ensures_default.3.2"
         expl="Function find_array, default behavior"
-        sum="d703c0eb6ba2b68332c41ab236e22f82"
+        sum="ea1961735e64c05ddd8a2941fb107dad"
         proved="true"
         expanded="true"
         shape="ainfix <ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix <V17ainteger_of_int32V10Aainfix <=c0V17FIainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FIainfix <ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix <V18ainteger_of_int32V10Aainfix <=c0V18FAainfix >ainteger_of_int32aselectV4ashiftV0V19ainteger_of_int32V2Iainfix <V19ainteger_of_int32V1Aainfix <ainteger_of_int32V9V19FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4FFFFF">
@@ -201,65 +213,7 @@
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.09"/>
-        </proof>
-        <proof
-         prover="alt-ergo"
-         timelimit="3"
-         edited=""
-         obsolete="false">
          <result status="valid" time="0.06"/>
-        </proof>
-        <proof
-         prover="z3"
-         timelimit="3"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.08"/>
-        </proof>
-       </goal>
-       <goal
-        name="WP_parameter find_array_ensures_default.3.3"
-        expl="Function find_array, default behavior"
-        sum="d049733a1b904350026bedf8a1659ab4"
-        proved="true"
-        expanded="true"
-        shape="ainfix <ainteger_of_int32V16ainteger_of_int32V1Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FIainfix <ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix <V17ainteger_of_int32V10Aainfix <=c0V17FAainfix >ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix <V18ainteger_of_int32V1Aainfix <ainteger_of_int32V9V18FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4FFFFF">
-        <proof
-         prover="cvc3"
-         timelimit="3"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.09"/>
-        </proof>
-        <proof
-         prover="alt-ergo"
-         timelimit="3"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.10"/>
-        </proof>
-        <proof
-         prover="z3"
-         timelimit="3"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.08"/>
-        </proof>
-       </goal>
-       <goal
-        name="WP_parameter find_array_ensures_default.3.4"
-        expl="Function find_array, default behavior"
-        sum="6e5f52a09d4c0ba1752292f41feccbd4"
-        proved="true"
-        expanded="true"
-        shape="ainfix <=c0ainteger_of_int32V10Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FIainfix <ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix <V17ainteger_of_int32V10Aainfix <=c0V17FAainfix >ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix <V18ainteger_of_int32V1Aainfix <ainteger_of_int32V9V18FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4FFFFF">
-        <proof
-         prover="cvc3"
-         timelimit="3"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.09"/>
         </proof>
         <proof
          prover="alt-ergo"
@@ -273,7 +227,65 @@
          timelimit="3"
          edited=""
          obsolete="false">
-         <result status="valid" time="0.07"/>
+         <result status="valid" time="0.05"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter find_array_ensures_default.3.3"
+        expl="Function find_array, default behavior"
+        sum="f687352d06dd4dbbcdaa463895a5bc5e"
+        proved="true"
+        expanded="true"
+        shape="ainfix <ainteger_of_int32V16ainteger_of_int32V1Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FIainfix <ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix <V17ainteger_of_int32V10Aainfix <=c0V17FAainfix >ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix <V18ainteger_of_int32V1Aainfix <ainteger_of_int32V9V18FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4FFFFF">
+        <proof
+         prover="cvc3"
+         timelimit="3"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="3"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="3"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter find_array_ensures_default.3.4"
+        expl="Function find_array, default behavior"
+        sum="06a8ee21814d986117ae13815c967a0c"
+        proved="true"
+        expanded="true"
+        shape="ainfix <=c0ainteger_of_int32V10Iainfix =V16V15FIainfix =ainteger_of_int32V15ainfix -ainteger_of_int32V14c1FIainfix <ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2NIainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix <V17ainteger_of_int32V10Aainfix <=c0V17FAainfix >ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix <V18ainteger_of_int32V1Aainfix <ainteger_of_int32V9V18FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4FFFFF">
+        <proof
+         prover="cvc3"
+         timelimit="3"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="3"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="3"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
       </transf>
@@ -283,7 +295,7 @@
    <goal
     name="WP_parameter find_array_ensures_exists"
     expl="Function find_array, Behavior `exists'"
-    sum="7998bbee9a399a7ba26405ce717cd005"
+    sum="5d9dd72a0c13c4d8370261fc6d2343cf"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V10ainteger_of_int32V9ainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V16ainteger_of_int32V2Iainfix =V16V15FIainfix =V15V14FIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10Fainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V19ainteger_of_int32V2Iainfix =V19V18FIainfix =V18V17FIainfix =ainteger_of_int32V17aprefix -c1FIainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix <V20ainteger_of_int32V10Aainfix <=c0V20FAainfix >ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix <V21ainteger_of_int32V1Aainfix <ainteger_of_int32V9V21FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4AamemV2V0ainteger_of_int32V1V4FFFFF">
@@ -292,27 +304,27 @@
      timelimit="3"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.09"/>
+     <result status="valid" time="0.12"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="3"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="z3"
      timelimit="3"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter find_array_ensures_not_exists"
     expl="Function find_array, Behavior `not_exists'"
-    sum="6b632b0a59361325e1d658090c822037"
+    sum="48635052eabe7880a9397975eda340d0"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V10ainteger_of_int32V9ainfix =ainteger_of_int32V16aprefix -c1Iainfix =V16V15FIainfix =V15V14FIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10Fainfix =ainteger_of_int32V19aprefix -c1Iainfix =V19V18FIainfix =V18V17FIainfix =ainteger_of_int32V17aprefix -c1FIainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix <V20ainteger_of_int32V10Aainfix <=c0V20FAainfix >ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix <V21ainteger_of_int32V1Aainfix <ainteger_of_int32V9V21FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4AamemV2V0ainteger_of_int32V1V4NFFFFF">
@@ -323,7 +335,7 @@
      <goal
       name="WP_parameter find_array_ensures_not_exists.1"
       expl="normal postcondition"
-      sum="96518a2d7621b576ca478fedcc7578f4"
+      sum="1d5fe88ebca661fdbe44ce233a14417e"
       proved="true"
       expanded="true"
       shape="ainfix =ainteger_of_int32V16aprefix -c1Iainfix =V16V15FIainfix =V15V14FIainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V14ainteger_of_int32V2Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V17ainteger_of_int32V2Iainfix <V17ainteger_of_int32V10Aainfix <=c0V17FAainfix >ainteger_of_int32aselectV4ashiftV0V18ainteger_of_int32V2Iainfix <V18ainteger_of_int32V1Aainfix <ainteger_of_int32V9V18FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4AamemV2V0ainteger_of_int32V1V4NFFFFF">
@@ -332,27 +344,27 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.09"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="alt-ergo"
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="timeout" time="3.45"/>
+       <result status="timeout" time="3.02"/>
       </proof>
       <proof
        prover="z3"
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter find_array_ensures_not_exists.2"
       expl="normal postcondition"
-      sum="b774b2ff0b42f4024e46c95ede4f8624"
+      sum="52d24c0bd05e77ac4d571cb7afa71bcd"
       proved="true"
       expanded="true"
       shape="ainfix =ainteger_of_int32V13aprefix -c1Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1FIainfix <=ainteger_of_int32V10ainteger_of_int32V9NIainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V14ainteger_of_int32V2Iainfix <V14ainteger_of_int32V10Aainfix <=c0V14FAainfix >ainteger_of_int32aselectV4ashiftV0V15ainteger_of_int32V2Iainfix <V15ainteger_of_int32V1Aainfix <ainteger_of_int32V9V15FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4AamemV2V0ainteger_of_int32V1V4NFFFFF">
@@ -361,21 +373,21 @@
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="alt-ergo"
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="z3"
        timelimit="3"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
     </transf>
@@ -383,7 +395,7 @@
    <goal
     name="WP_parameter find_array_safety"
     expl="Function find_array, Safety"
-    sum="fe4b949523933a188bb0c07c9f4f9685"
+    sum="a1bbc5475e3460cdf7ff80cb1af4f3e0"
     proved="true"
     expanded="true"
     shape="Ladivainteger_of_int32V11c2iainfix <ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V15ainteger_of_int32V2ainfix <ainfix -ainteger_of_int32V9ainteger_of_int32V17ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix <=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V15c1FAainfix <=ainfix +ainteger_of_int32V15c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V15c1ainfix <ainfix -ainteger_of_int32V19ainteger_of_int32V10ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix <=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix -ainteger_of_int32V15c1FAainfix <=ainfix -ainteger_of_int32V15c1c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V15c1Aainfix <=ainteger_of_int32V15aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V15Iainfix =ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V15ainteger_of_int32V2NAainfix <=ainteger_of_int32V15aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V15Iainfix =V15V14FIainfix =ainteger_of_int32V14ainfix +ainteger_of_int32V10ainteger_of_int32V13FAainfix <=ainfix +ainteger_of_int32V10ainteger_of_int32V13c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V13Iainfix =ainteger_of_int32V13V12FAainfix <=V12c2147483647Aainfix <=aprefix -c2147483648V12Aainfix =c2c0NIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FAainfix <=ainfix -ainteger_of_int32V9ainteger_of_int32V10c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=c0ainteger_of_int32V10Aainfix <ainteger_of_int32V9ainteger_of_int32V1Aainfix <ainteger_of_int32aselectV4ashiftV0V20ainteger_of_int32V2Iainfix <V20ainteger_of_int32V10Aainfix <=c0V20FAainfix >ainteger_of_int32aselectV4ashiftV0V21ainteger_of_int32V2Iainfix <V21ainteger_of_int32V1Aainfix <ainteger_of_int32V9V21FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FAainfix <=ainfix -ainteger_of_int32V1c1c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0ainteger_of_int32V1V4FFFFF">
@@ -392,21 +404,21 @@
      timelimit="3"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.29"/>
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="3"
      edited=""
      obsolete="false">
-     <result status="valid" time="1.44"/>
+     <result status="valid" time="1.00"/>
     </proof>
     <proof
      prover="z3"
      timelimit="3"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.11"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
   </theory>

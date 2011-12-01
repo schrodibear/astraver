@@ -69,7 +69,7 @@
    <goal
     name="num_of_pos_non_negative"
     expl="Lemma num_of_pos_non_negative, lemma"
-    sum="b0122a3967fb9491d2e71d8f86eb8693"
+    sum="93ab18ae7f844592f4b94c1c58ac1d4c"
     proved="false"
     expanded="true"
     shape="ainfix <=c0anum_of_posV1V2V3V0FFFF">
@@ -78,27 +78,27 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="timeout" time="5.10"/>
+     <result status="timeout" time="5.11"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="unknown" time="0.72"/>
+     <result status="unknown" time="0.70"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="timeout" time="5.05"/>
+     <result status="timeout" time="5.07"/>
     </proof>
    </goal>
    <goal
     name="num_of_pos_additive"
     expl="Lemma num_of_pos_additive, lemma"
-    sum="40f7d1a58b87f025dfc172012469e015"
+    sum="e27a835d9d1008725df625a855274ce1"
     proved="false"
     expanded="true"
     shape="ainfix =anum_of_posV1V3V4V0ainfix +anum_of_posV1V2V4V0anum_of_posV2V3V4V0Iainfix <=V2V3Aainfix <=V1V2FFFFF">
@@ -107,7 +107,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="timeout" time="5.07"/>
+     <result status="timeout" time="5.08"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -127,7 +127,7 @@
    <goal
     name="num_of_pos_increasing"
     expl="Lemma num_of_pos_increasing, lemma"
-    sum="ddbc3aaf79a62bdc6fcd6505f01aec04"
+    sum="333a5a3b5ab524c28d1c48957c3149f3"
     proved="true"
     expanded="true"
     shape="ainfix <=anum_of_posV1V2V4V0anum_of_posV1V3V4V0Iainfix <=V2V3FFFFF">
@@ -156,7 +156,7 @@
    <goal
     name="num_of_pos_strictly_increasing"
     expl="Lemma num_of_pos_strictly_increasing, lemma"
-    sum="28ac0e5984720f9f9d1ba81a174ff330"
+    sum="7424e95736ba488a73db1cf5baab3c53"
     proved="false"
     expanded="true"
     shape="ainfix <anum_of_posc0V1V3V0anum_of_posc0V2V3V0Iainfix >ainteger_of_int32aselectV0ashiftV3V1c0Aainfix <V1V2Aainfix <=c0V1FFFF">
@@ -172,14 +172,14 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="timeout" time="5.02"/>
+     <result status="timeout" time="5.03"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="timeout" time="5.02"/>
+     <result status="timeout" time="5.03"/>
     </proof>
    </goal>
   </theory>
@@ -190,7 +190,7 @@
    <goal
     name="WP_parameter _Muller_m_ensures_default"
     expl="Method m, default behavior"
-    sum="37801bf1cfafa4732041aa3676f4b1dc"
+    sum="f4b1ea4a45bf010b652b601c694fcf71"
     proved="true"
     expanded="true"
     shape="iainfix <ainteger_of_int32V6V8iainfix >ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V6c0ainfix =ainteger_of_int32V10anum_of_posc0ainteger_of_int32V12V0V2Aainfix <=ainteger_of_int32V10ainteger_of_int32V12Aainfix <=c0ainteger_of_int32V10Aainfix <=ainteger_of_int32V12ainfix +aoffset_maxV1V0c1Aainfix <=c0ainteger_of_int32V12Iainfix =V12V11FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V6c1FIainfix =V10V9FIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7c1Fainfix =ainteger_of_int32V7anum_of_posc0ainteger_of_int32V14V0V2Aainfix <=ainteger_of_int32V7ainteger_of_int32V14Aainfix <=c0ainteger_of_int32V7Aainfix <=ainteger_of_int32V14ainfix +aoffset_maxV1V0c1Aainfix <=c0ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V6c1Fiainfix >ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V21c0ainfix =ainteger_of_int32V26anum_of_posc0ainteger_of_int32V29V0V2Aainfix <=ainteger_of_int32V26ainteger_of_int32V29Aainfix <=c0ainteger_of_int32V26Aainfix <=ainteger_of_int32V29ainfix +aoffset_maxV1V0c1Aainfix <=c0ainteger_of_int32V29Iainfix =V29V28FIainfix =ainteger_of_int32V28ainfix +ainteger_of_int32V21c1FIainfix =V27astoreV23ashiftV17ainteger_of_int32V22aselectV2ashiftV0ainteger_of_int32V21FIainfix =V26V25FIainfix =ainteger_of_int32V25ainfix +ainteger_of_int32V22c1Fainfix =ainteger_of_int32V22anum_of_posc0ainteger_of_int32V31V0V2Aainfix <=ainteger_of_int32V22ainteger_of_int32V31Aainfix <=c0ainteger_of_int32V22Aainfix <=ainteger_of_int32V31ainfix +aoffset_maxV1V0c1Aainfix <=c0ainteger_of_int32V31Iainfix =V31V30FIainfix =ainteger_of_int32V30ainfix +ainteger_of_int32V21c1FIainfix <ainteger_of_int32V21V24Iainfix =V24ainfix +aoffset_maxV1V0c1Aainfix >=V24c0Aainfix <=V24c2147483647FIainfix =ainteger_of_int32V22anum_of_posc0ainteger_of_int32V21V0V2Aainfix <=ainteger_of_int32V22ainteger_of_int32V21Aainfix <=c0ainteger_of_int32V22Aainfix <=ainteger_of_int32V21ainfix +aoffset_maxV1V0c1Aainfix <=c0ainteger_of_int32V21FFFAainfix =ainteger_of_int32V19anum_of_posc0ainteger_of_int32V20V0V2Aainfix <=ainteger_of_int32V19ainteger_of_int32V20Aainfix <=c0ainteger_of_int32V19Aainfix <=ainteger_of_int32V20ainfix +aoffset_maxV1V0c1Aainfix <=c0ainteger_of_int32V20Iainfix =ainteger_of_int32V20c0FIainfix =V19V18FIainfix =ainteger_of_int32V18c0FIainstanceofV15V17aintM_tagAaalloc_freshV3V17ainteger_of_int32V7Aaalloc_extendsV3V16Aastrict_valid_struct_intMV17c0ainfix -ainteger_of_int32V7c1V16FFFIainfix =V8ainfix +aoffset_maxV1V0c1Aainfix >=V8c0Aainfix <=V8c2147483647FIainfix =ainteger_of_int32V7anum_of_posc0ainteger_of_int32V6V0V2Aainfix <=ainteger_of_int32V7ainteger_of_int32V6Aainfix <=c0ainteger_of_int32V7Aainfix <=ainteger_of_int32V6ainfix +aoffset_maxV1V0c1Aainfix <=c0ainteger_of_int32V6FFAainfix =ainteger_of_int32V4anum_of_posc0ainteger_of_int32V5V0V2Aainfix <=ainteger_of_int32V4ainteger_of_int32V5Aainfix <=c0ainteger_of_int32V4Aainfix <=ainteger_of_int32V5ainfix +aoffset_maxV1V0c1Aainfix <=c0ainteger_of_int32V5Iainfix =ainteger_of_int32V5c0FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V1Aaleft_valid_struct_intMV0c0V1FFFF">
@@ -199,20 +199,20 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.09"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Muller_m_safety"
     expl="index bounds"
-    sum="c6d26478f902f0dffa7b745d7597bf32"
+    sum="a6f1e8739de2456434450dffdf296a3e"
     proved="true"
     expanded="true"
     shape="iainfix <ainteger_of_int32V6V8iainfix >ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V6c0ainfix <ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V12ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V6Aainfix <=c0ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V6Iainfix =V12V11FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V6c1FAainfix <=ainfix +ainteger_of_int32V6c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V6c1Iainfix =V10V9FIainfix =ainteger_of_int32V9ainfix +ainteger_of_int32V7c1FAainfix <=ainfix +ainteger_of_int32V7c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V7c1ainfix <ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V14ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V6Aainfix <=c0ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V6Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V6c1FAainfix <=ainfix +ainteger_of_int32V6c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V6c1Aainfix <=ainteger_of_int32V6aoffset_maxV1V0Aainfix <=aoffset_minV1V0ainteger_of_int32V6iainfix >ainteger_of_int32aselectV2ashiftV0ainteger_of_int32V21c0ainfix <ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V29ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V21Aainfix <=c0ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V21Iainfix =V29V28FIainfix =ainteger_of_int32V28ainfix +ainteger_of_int32V21c1FAainfix <=ainfix +ainteger_of_int32V21c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V21c1Iainfix =V27astoreV23ashiftV17ainteger_of_int32V22aselectV2ashiftV0ainteger_of_int32V21FAainfix <=ainteger_of_int32V22aoffset_maxV16V17Aainfix <=aoffset_minV16V17ainteger_of_int32V22Iainfix =V26V25FIainfix =ainteger_of_int32V25ainfix +ainteger_of_int32V22c1FAainfix <=ainfix +ainteger_of_int32V22c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V22c1Aainfix <=ainteger_of_int32V21aoffset_maxV1V0Aainfix <=aoffset_minV1V0ainteger_of_int32V21ainfix <ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V31ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V21Aainfix <=c0ainfix -ainfix +aoffset_maxV1V0c1ainteger_of_int32V21Iainfix =V31V30FIainfix =ainteger_of_int32V30ainfix +ainteger_of_int32V21c1FAainfix <=ainfix +ainteger_of_int32V21c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V21c1Aainfix <=ainteger_of_int32V21aoffset_maxV1V0Aainfix <=aoffset_minV1V0ainteger_of_int32V21Iainfix <ainteger_of_int32V21V24Iainfix =V24ainfix +aoffset_maxV1V0c1Aainfix >=V24c0Aainfix <=V24c2147483647FAainfix >=aoffset_maxV1V0aprefix -c1Iainfix =ainteger_of_int32V22anum_of_posc0ainteger_of_int32V21V0V2Aainfix <=ainteger_of_int32V22ainteger_of_int32V21Aainfix <=c0ainteger_of_int32V22Aainfix <=ainteger_of_int32V21ainfix +aoffset_maxV1V0c1Aainfix <=c0ainteger_of_int32V21FFFIainfix =ainteger_of_int32V20c0FIainfix =V19V18FIainfix =ainteger_of_int32V18c0FIainstanceofV15V17aintM_tagAaalloc_freshV3V17ainteger_of_int32V7Aaalloc_extendsV3V16Aastrict_valid_struct_intMV17c0ainfix -ainteger_of_int32V7c1V16FFFAainfix >=ainteger_of_int32V7c0Iainfix =V8ainfix +aoffset_maxV1V0c1Aainfix >=V8c0Aainfix <=V8c2147483647FAainfix >=aoffset_maxV1V0aprefix -c1Iainfix =ainteger_of_int32V7anum_of_posc0ainteger_of_int32V6V0V2Aainfix <=ainteger_of_int32V7ainteger_of_int32V6Aainfix <=c0ainteger_of_int32V7Aainfix <=ainteger_of_int32V6ainfix +aoffset_maxV1V0c1Aainfix <=c0ainteger_of_int32V6FFIainfix =ainteger_of_int32V5c0FIainfix =ainteger_of_int32V4c0FIa_Non_null_intMV0V1Aaleft_valid_struct_intMV0c0V1FFFF">
@@ -234,7 +234,7 @@
    <goal
     name="WP_parameter cons_Muller_ensures_default"
     expl="Constructor of class Muller, default behavior"
-    sum="1583b48f2cc771abac7d7abf7a1d15a9"
+    sum="ac4ad0d4e0e5487cbe1b05e9cdc26f90"
     proved="true"
     expanded="true"
     shape="t">
@@ -243,7 +243,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -263,7 +263,7 @@
    <goal
     name="WP_parameter cons_Muller_safety"
     expl="Constructor of class Muller, Safety"
-    sum="bf62e3f315c6cf8d78c162108eef4fbc"
+    sum="a6b8ae776efde666eb52cb7e3d2cbc8f"
     proved="true"
     expanded="true"
     shape="t">
@@ -279,7 +279,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="z3"
