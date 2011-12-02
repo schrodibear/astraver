@@ -30,7 +30,7 @@ void AffectDoubleDansX(double d) {
 void AffectDoubleDansTab(double d, double X[]) {
         X[1]=d+1.0;
         X[2]=d+1.0;
-        //@ assert X[1] == \round_double(\NearestEven,d+1.0);
+        // assert X[1] == \round_double(\NearestEven,d+1.0);
 }
 
 /*@

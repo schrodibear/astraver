@@ -81,3 +81,13 @@ double scalar_product(double x[], double y[], int n) {
   }
   return p;
 }
+
+
+
+/*
+Local Variables:
+compile-command: "make clock_drift.why3ml"
+End:
+*/
+
+

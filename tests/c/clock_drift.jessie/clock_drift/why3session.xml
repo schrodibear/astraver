@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="clock_drift.jessie/clock_drift/why3session.xml">
+ name="clock_drift/why3session.xml">
  <prover
   id="alt-ergo"
   name="Alt-Ergo"
@@ -89,6 +89,20 @@
     expanded="true"
     shape="ainfix =afrom_intainfix +V0c1ainfix +afrom_intV0c1.0F">
     <proof
+     prover="z3-3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="2.65"/>
+    </proof>
+    <proof
+     prover="alt-ergo-0.93.1"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
@@ -134,6 +148,27 @@
       expanded="true"
       shape="ainfix <=ainteger_of_int32V4ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V4Aainfix <=aabsainfix -avalueV2ainfix *afrom_intainteger_of_int32V4c0.1ainfix *afrom_intainteger_of_int32V4ainfix +c0x1.p-8c1.49012e-09Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
       <proof
+       prover="z3-3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.10"/>
+      </proof>
+      <proof
+       prover="alt-ergo-0.93.1"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.12"/>
+      </proof>
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
        prover="alt-ergo"
        timelimit="5"
        edited=""
@@ -154,6 +189,13 @@
        obsolete="false">
        <result status="valid" time="0.10"/>
       </proof>
+      <proof
+       prover="cvc3-2.4"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.05"/>
+      </proof>
      </goal>
      <goal
       name="WP_parameter f_single_ensures_default.2"
@@ -163,6 +205,20 @@
       expanded="true"
       shape="ainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
       <proof
+       prover="z3-3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="timeout" time="5.02"/>
+      </proof>
+      <proof
+       prover="alt-ergo-0.93.1"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.48"/>
+      </proof>
+      <proof
        prover="cvc3"
        timelimit="5"
        edited=""
@@ -171,6 +227,20 @@
       </proof>
       <proof
        prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="timeout" time="5.09"/>
+      </proof>
+      <proof
+       prover="cvc3-2.4"
        timelimit="5"
        edited=""
        obsolete="false">
@@ -200,12 +270,188 @@
       expanded="true"
       shape="ainfix <=ainteger_of_int32V11ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsainfix -avalueV9ainfix *afrom_intainteger_of_int32V11c0.1ainfix *afrom_intainteger_of_int32V11ainfix +c0x1.p-8c1.49012e-09Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
       <proof
+       prover="alt-ergo-0.93.1"
+       timelimit="30"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="18.68"/>
+      </proof>
+      <proof
+       prover="alt-ergo"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="1.54"/>
+      </proof>
+      <proof
        prover="cvc3"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.09"/>
+       <result status="valid" time="0.10"/>
       </proof>
+      <proof
+       prover="cvc3-2.4"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.08"/>
+      </proof>
+      <transf
+       name="split_goal"
+       proved="true"
+       expanded="true">
+       <goal
+        name="WP_parameter f_single_ensures_default.4.1"
+        expl="Function f_single, default behavior"
+        sum="3ee014750c1394376a5049c818674722"
+        proved="true"
+        expanded="true"
+        shape="ainfix <=aabsainfix -avalueV9ainfix *afrom_intainteger_of_int32V11c0.1ainfix *afrom_intainteger_of_int32V11ainfix +c0x1.p-8c1.49012e-09Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
+        <proof
+         prover="z3-3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="timeout" time="5.04"/>
+        </proof>
+        <proof
+         prover="alt-ergo-0.93.1"
+         timelimit="30"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="20.38"/>
+        </proof>
+        <proof
+         prover="cvc3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.09"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="1.04"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="timeout" time="5.04"/>
+        </proof>
+        <proof
+         prover="cvc3-2.4"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.10"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter f_single_ensures_default.4.2"
+        expl="Function f_single, default behavior"
+        sum="29ae76e491e0636a378d9d34c8145a10"
+        proved="true"
+        expanded="true"
+        shape="ainfix <=c0ainteger_of_int32V11Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
+        <proof
+         prover="z3-3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="alt-ergo-0.93.1"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="cvc3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="cvc3-2.4"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter f_single_ensures_default.4.3"
+        expl="Function f_single, default behavior"
+        sum="286d06cd2eec78d3bca5b4932f6addb4"
+        proved="true"
+        expanded="true"
+        shape="ainfix <=ainteger_of_int32V11ainteger_of_int32V0Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
+        <proof
+         prover="z3-3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="alt-ergo-0.93.1"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="cvc3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="alt-ergo"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="z3"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="cvc3-2.4"
+         timelimit="5"
+         edited=""
+         obsolete="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+       </goal>
+      </transf>
      </goal>
      <goal
       name="WP_parameter f_single_ensures_default.5"
@@ -215,11 +461,25 @@
       expanded="true"
       shape="ainfix <=aabsainfix -avalueV7ainfix *afrom_intainteger_of_int32V0c0.1ainfix *afrom_intainteger_of_int32V0ainfix +c0x1.p-8c1.49012e-09Iainfix =V7V6FIainfix <ainteger_of_int32V5ainteger_of_int32V0NIainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
       <proof
-       prover="cvc3"
+       prover="z3-3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="timeout" time="5.04"/>
+      </proof>
+      <proof
+       prover="alt-ergo-0.93.1"
        timelimit="5"
        edited=""
        obsolete="false">
        <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="alt-ergo"
@@ -227,6 +487,20 @@
        edited=""
        obsolete="false">
        <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="timeout" time="5.03"/>
+      </proof>
+      <proof
+       prover="cvc3-2.4"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
     </transf>
@@ -250,11 +524,39 @@
       expanded="true"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
       <proof
+       prover="z3-3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="timeout" time="5.12"/>
+      </proof>
+      <proof
+       prover="cvc3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.21"/>
+      </proof>
+      <proof
+       prover="z3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="timeout" time="5.03"/>
+      </proof>
+      <proof
        prover="gappa"
        timelimit="5"
        edited=""
        obsolete="false">
        <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="cvc3-2.4"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.55"/>
       </proof>
      </goal>
      <goal
@@ -265,6 +567,20 @@
       expanded="true"
       shape="ainfix <=ainfix +ainteger_of_int32V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
       <proof
+       prover="z3-3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="alt-ergo-0.93.1"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
        prover="cvc3"
        timelimit="5"
        edited=""
@@ -283,7 +599,14 @@
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="cvc3-2.4"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
@@ -294,11 +617,25 @@
       expanded="true"
       shape="ainfix <ainfix -ainteger_of_int32V0ainteger_of_int32V11ainfix -ainteger_of_int32V0ainteger_of_int32V5Aainfix <=c0ainfix -ainteger_of_int32V0ainteger_of_int32V5Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V5c1FIainfix <=ainfix +ainteger_of_int32V5c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V5c1Iainfix <=aabsainfix -avalueV9ainfix +avalueV6c0x1.99999ap-4c0x1.p-8Iainfix =V9V8FIaadd_single_postaNearestTiesToEvenV6V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_singleIainfix =amodelV7c0x1.99999ap-4Aainfix =aexactV7c0x1.99999ap-4Aainfix =avalueV7c0x1.99999ap-4FIainfix <=avalueV6ainfix *c1000000.0ainfix +c0.1ainfix +c0x1.p-8c1.49012e-09Aainfix <=c0.0avalueV6Iainfix <ainteger_of_int32V5ainteger_of_int32V0Iainfix <=ainteger_of_int32V5ainteger_of_int32V0Aainfix <=c0ainteger_of_int32V5Aainfix <=aabsainfix -avalueV6ainfix *afrom_intainteger_of_int32V5c0.1ainfix *afrom_intainteger_of_int32V5ainfix +c0x1.p-8c1.49012e-09FFIainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =V2V1FIainfix =amodelV1c0.0Aainfix =aexactV1c0.0Aainfix =avalueV1c0.0FIainfix <=ainteger_of_int32V0c1000000Aainfix <=c0ainteger_of_int32V0F">
       <proof
+       prover="z3-3"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="alt-ergo-0.93.1"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
        prover="cvc3"
        timelimit="5"
        edited=""
        obsolete="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="alt-ergo"
@@ -313,6 +650,13 @@
        edited=""
        obsolete="false">
        <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="cvc3-2.4"
+       timelimit="5"
+       edited=""
+       obsolete="false">
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
     </transf>
