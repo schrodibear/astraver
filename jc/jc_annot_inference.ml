@@ -491,7 +491,7 @@ let reg_annot ?id ?kind ?name ~pos ~anchor a =
   in
   Format.fprintf Format.str_formatter "%a" Jc_output.assertion a;
   let formula = Format.flush_str_formatter () in
-  let lab = Output.reg_pos "G" ?id ?kind ?name ~formula loc in
+  let lab = Output.old_reg_pos "G" ?id ?kind ?name ~formula (Loc.extract loc) in
   new assertion_with ~mark:lab a
 
 
