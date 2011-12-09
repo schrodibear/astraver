@@ -4,9 +4,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 [kernel] warning: ignoring status of global invariant `ev'
 [kernel] warning: ignoring status of global invariant `eev'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global invariant `eev'
-[kernel] warning: ignoring status of global invariant `ev'
-[kernel] warning: ignoring status of global invariant `tev'
 [jessie] Producing Jessie files in subdir band.jessie
 [jessie] File band.jessie/band.jc written.
 [jessie] File band.jessie/band.cloc written.

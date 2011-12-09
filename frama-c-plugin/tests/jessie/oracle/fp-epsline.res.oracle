@@ -3,7 +3,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 fp-epsline.c:20:[kernel] warning: Floating-point constant 2.22044604925031308085e-16L is not represented exactly. Will use 0x1.0000000000000p-52. See documentation for option -warn-decimal-float
 [kernel] warning: ignoring status of global invariant `M22_value'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global invariant `M22_value'
 [jessie] Producing Jessie files in subdir fp-epsline.jessie
 [jessie] File fp-epsline.jessie/fp-epsline.jc written.
 [jessie] File fp-epsline.jessie/fp-epsline.cloc written.

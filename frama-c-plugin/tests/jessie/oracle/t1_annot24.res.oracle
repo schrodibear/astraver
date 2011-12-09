@@ -11,16 +11,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 [kernel] warning: ignoring status of global invariant `_Buch_tr_cross_2'
 [kernel] warning: ignoring status of global invariant `_Buch_tr_cross_3'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global invariant `_Buch_tr_cross_3'
-[kernel] warning: ignoring status of global invariant `_Buch_tr_cross_2'
-[kernel] warning: ignoring status of global invariant `_Buch_tr_cross_1'
-[kernel] warning: ignoring status of global invariant `_Buch_st_reach_3'
-[kernel] warning: ignoring status of global invariant `_Buch_st_reach_2'
-[kernel] warning: ignoring status of global invariant `_Buch_st_reach_1'
-[kernel] warning: ignoring status of global invariant `Buch_acc_Ranges_Validity'
-[kernel] warning: ignoring status of global invariant `Buch_Arrays_Coherence'
-[kernel] warning: ignoring status of global invariant `Buch_Ranges_Validity'
-[kernel] warning: ignoring status of global invariant `inv'
 [jessie] Producing Jessie files in subdir t1_annot24.jessie
 [jessie] File t1_annot24.jessie/t1_annot24.jc written.
 [jessie] File t1_annot24.jessie/t1_annot24.cloc written.

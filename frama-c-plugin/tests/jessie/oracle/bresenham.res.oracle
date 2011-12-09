@@ -2,7 +2,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bresenham.c"
 [kernel] warning: ignoring status of global invariant `first_octant'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global invariant `first_octant'
 [jessie] Producing Jessie files in subdir bresenham.jessie
 [jessie] File bresenham.jessie/bresenham.jc written.
 [jessie] File bresenham.jessie/bresenham.cloc written.

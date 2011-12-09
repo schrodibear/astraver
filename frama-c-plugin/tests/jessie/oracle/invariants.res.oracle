@@ -3,8 +3,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 [kernel] warning: ignoring status of global invariant `i'
 [kernel] warning: ignoring status of global invariant `const_c'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of global invariant `const_c'
-[kernel] warning: ignoring status of global invariant `i'
 [jessie] Producing Jessie files in subdir invariants.jessie
 [jessie] File invariants.jessie/invariants.jc written.
 [jessie] File invariants.jessie/invariants.cloc written.

@@ -2,7 +2,6 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -j
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD forum_cifre.c"
 [kernel] warning: ignoring status of type invariant `paquet_bien_forme'
 [jessie] Starting Jessie translation
-[kernel] warning: ignoring status of type invariant `paquet_bien_forme'
 [jessie] Producing Jessie files in subdir forum_cifre.jessie
 [jessie] File forum_cifre.jessie/forum_cifre.jc written.
 [jessie] File forum_cifre.jessie/forum_cifre.cloc written.
