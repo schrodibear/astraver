@@ -5,6 +5,7 @@
 Require Export Reals.
 Require Export Fcore.
 Require Export Fappli_IEEE.
+Require Export Fappli_IEEE_bits.
 
 Inductive mode : Set := nearest_even | to_zero | up | down | nearest_away.
 
@@ -16,20 +17,18 @@ Variable prec emax : Z.
 Hypothesis Hprec : Zlt_bool 0 prec = true.
 Hypothesis Hemax : Zlt_bool prec emax = true.
 Let emin := (3 - emax - prec)%Z.
-Let fexp := FLT_exp emin prec.
+Notation fexp := (FLT_exp emin prec).
+
 Lemma Hprec': (0 < prec)%Z. revert Hprec. now case Zlt_bool_spec. Qed.
 Lemma Hemax': (prec < emax)%Z. revert Hemax. now case Zlt_bool_spec. Qed.
-Let binary_round_correct := binary_round_sign_shl_correct prec emax Hprec' Hemax'.
+
+Instance Hprec'' : Prec_gt_0 prec := Hprec'.
 
 Definition r_to_sd rnd x : binary_float prec emax :=
   let r := round radix2 fexp (round_mode rnd) x in
   let m := Ztrunc (scaled_mantissa radix2 fexp r) in
-  let e := canonic_exponent radix2 fexp r in
-  match m with
-  | Z0 => B754_zero prec emax false
-  | Zpos m => FF2B _ _ _ (proj1 (binary_round_correct rnd false m e))
-  | Zneg m => FF2B _ _ _ (proj1 (binary_round_correct rnd true m e))
-  end.
+  let e := canonic_exp radix2 fexp r in
+  binary_normalize prec emax Hprec' Hemax' rnd m e false.
 
 Lemma is_finite_FF2B :
   forall f H,
@@ -49,59 +48,17 @@ Theorem r_to_sd_correct :
   (Rabs r < bpow radix2 emax)%R ->
   is_finite prec emax (r_to_sd rnd x) = true /\
   r_to_sd rnd x = r :>R.
-Proof.
+Proof with auto with typeclass_instances.
 intros rnd x r Bx.
 unfold r_to_sd. fold r.
-assert (Gx: generic_format radix2 fexp r).
-apply generic_format_round.
-apply FLT_exp_correct.
-exact Hprec'.
-assert (Hr: Z2R (Ztrunc (scaled_mantissa radix2 fexp r)) = scaled_mantissa radix2 fexp r).
-apply sym_eq.
-now apply scaled_mantissa_generic.
-revert Hr.
-case_eq (Ztrunc (scaled_mantissa radix2 fexp r)).
-(* *)
-intros _ Hx.
-repeat split.
-apply Rmult_eq_reg_r with (bpow radix2 (- canonic_exponent radix2 fexp r)).
-now rewrite Rmult_0_l.
-apply Rgt_not_eq.
-apply bpow_gt_0.
-(* *)
-intros p Hp Hx.
-case binary_round_correct ; intros Hv.
-unfold F2R, Fnum, Fexp, cond_Zopp.
-rewrite Hx, scaled_mantissa_bpow.
-rewrite round_generic with (1 := Gx).
+generalize (binary_normalize_correct prec emax Hprec' Hemax' rnd (Ztrunc (scaled_mantissa radix2 fexp r)) (canonic_exp radix2 fexp r) false).
+unfold r.
+elim generic_format_round...
+fold emin r.
+rewrite round_generic...
 rewrite Rlt_bool_true with (1 := Bx).
-intros H.
-split.
-rewrite is_finite_FF2B.
-revert H.
-assert (0 <> r)%R.
-intros H.
-rewrite <- H, scaled_mantissa_0 in Hx.
-now apply (Z2R_neq 0 (Zpos p)).
-now case binary_round_sign_shl.
-now rewrite B2R_FF2B.
-(* *)
-intros p Hp Hx.
-case binary_round_correct ; intros Hv.
-unfold F2R, Fnum, Fexp, cond_Zopp, Zopp.
-rewrite Hx, scaled_mantissa_bpow.
-rewrite round_generic with (1 := Gx).
-rewrite Rlt_bool_true with (1 := Bx).
-intros H.
-split.
-rewrite is_finite_FF2B.
-revert H.
-assert (0 <> r)%R.
-intros H.
-rewrite <- H, scaled_mantissa_0 in Hx.
-now apply (Z2R_neq 0 (Zneg p)).
-now case binary_round_sign_shl.
-now rewrite B2R_FF2B.
+now split.
+apply generic_format_round...
 Qed.
 
 Theorem r_to_sd_format :
@@ -109,15 +66,14 @@ Theorem r_to_sd_format :
   FLT_format radix2 emin prec x ->
   (Rabs x < bpow radix2 emax)%R ->
   r_to_sd rnd x = x :>R.
-Proof.
+Proof with auto with typeclass_instances.
 intros rnd x Fx Bx.
 assert (Gx: generic_format radix2 fexp x).
-apply -> FLT_format_generic.
+apply generic_format_FLT.
 apply Fx.
-exact Hprec'.
-pattern x at 2 ; rewrite <- round_generic with (rnd := round_mode rnd) (1 := Gx).
+pattern x at 2 ; rewrite <- round_generic with (rnd := round_mode rnd) (2 := Gx)...
 refine (proj2 (r_to_sd_correct _ _ _)).
-now rewrite round_generic with (1 := Gx).
+rewrite round_generic...
 Qed.
 
 End r_to_sd.
@@ -152,10 +108,10 @@ rewrite <- Zsucc_pred.
 generalize (Zeq_bool_eq _ _ H1). clear.
 rewrite Fcalc_digits.Z_of_nat_S_digits2_Pnat.
 intros H.
-apply (Fcalc_digits.Zpower_gt_digits Fcalc_digits.radix2 (Zpos prec) (Zpos m)).
+apply (Fcalc_digits.Zpower_gt_Zdigits Fcalc_digits.radix2 (Zpos prec) (Zpos m)).
 revert H.
 unfold FLT_exp.
-generalize (Fcalc_digits.digits Fcalc_digits.radix2 (Zpos m)).
+generalize (Fcore_digits.Zdigits radix2 (Zpos m)).
 intros ; zify ; omega.
 apply bpow_le.
 now apply Zle_bool_imp_le.
@@ -225,16 +181,19 @@ Definition max_single := F2R (Float radix2 16777215 104).
 
 Definition no_overflow_single (m:mode) (x:R) := (Rabs (round_single m x) <= max_single)%R.
 
+Instance single_prec_gt_0 : Prec_gt_0 24. easy. Qed.
+
 Theorem bounded_real_no_overflow_single :
   forall m x,
   (Rabs x <= max_single)%R ->
   no_overflow_single m x.
-Proof.
+Proof with auto with typeclass_instances.
 intros m x Hx.
 apply Rabs_le.
 assert (generic_format radix2 (FLT_exp (-149) 24) max_single).
-apply generic_format_canonic_exponent.
-unfold canonic_exponent.
+apply generic_format_F2R.
+intros _.
+unfold canonic_exp.
 rewrite ln_beta_F2R. 2: easy.
 rewrite (ln_beta_unique _ _ 24).
 easy.
@@ -244,32 +203,28 @@ now apply Z2R_le.
 now apply Z2R_lt.
 generalize (Rabs_le_inv _ _ Hx).
 split.
-erewrite <- round_generic with (x := Ropp max_single).
-apply round_monotone with (2 := proj1 H0).
-now apply FLT_exp_correct.
+apply round_ge_generic...
 now apply generic_format_opp.
-rewrite <- round_generic with (rnd := round_mode (rnd_of_mode m)) (1 := H).
-apply round_monotone with (2 := proj2 H0).
-now apply FLT_exp_correct.
+apply H0.
+apply round_le_generic...
+apply H0.
 Qed.
 
 Theorem round_single_monotonic :
   forall m x y, (x <= y)%R ->
   (round_single m x <= round_single m y)%R.
-Proof.
+Proof with auto with typeclass_instances.
 intros m x y Hxy.
-apply round_monotone with (2 := Hxy).
-now apply FLT_exp_correct.
+apply round_le...
 Qed.
 
 Theorem round_single_idempotent :
   forall m1 m2 x,
   round_single m1 (round_single m2 x) = round_single m2 x.
-Proof.
+Proof with auto with typeclass_instances.
 intros m1 m2 x.
-apply round_generic.
-apply generic_format_round.
-now apply FLT_exp_correct.
+apply round_generic...
+apply generic_format_round...
 Qed.
 
 Theorem round_down_single_neg :
@@ -293,20 +248,18 @@ Qed.
 Theorem round_single_down_le :
   forall x,
   (round_single down x <= x)%R.
-Proof.
+Proof with auto with typeclass_instances.
 intros x.
-eapply round_DN_pt.
-now apply FLT_exp_correct.
+apply round_DN_pt...
 Qed.
 
 Theorem round_up_single_ge :
   forall x,
   (round_single up x >= x)%R.
-Proof.
+Proof with auto with typeclass_instances.
 intros x.
 apply Rle_ge.
-eapply round_UP_pt.
-now apply FLT_exp_correct.
+apply round_UP_pt...
 Qed.
 
 (** Double precision *)
@@ -364,16 +317,19 @@ Definition max_double := F2R (Float radix2 9007199254740991 971).
 
 Definition no_overflow_double (m:mode) (x:R) := (Rabs (round_double m x) <= max_double)%R.
 
+Instance double_prec_gt_0 : Prec_gt_0 53. easy. Qed.
+
 Theorem bounded_real_no_overflow_double :
   forall m x,
   (Rabs x <= max_double)%R ->
   no_overflow_double m x.
-Proof.
+Proof with auto with typeclass_instances.
 intros m x Hx.
 apply Rabs_le.
 assert (generic_format radix2 (FLT_exp (-1074) 53) max_double).
-apply generic_format_canonic_exponent.
-unfold canonic_exponent.
+apply generic_format_F2R.
+intros _.
+unfold canonic_exp.
 rewrite ln_beta_F2R. 2: easy.
 rewrite (ln_beta_unique _ _ 53).
 easy.
@@ -383,32 +339,28 @@ now apply Z2R_le.
 now apply Z2R_lt.
 generalize (Rabs_le_inv _ _ Hx).
 split.
-erewrite <- round_generic with (x := Ropp max_double).
-apply round_monotone with (2 := proj1 H0).
-now apply FLT_exp_correct.
+apply round_ge_generic...
 now apply generic_format_opp.
-rewrite <- round_generic with (rnd := round_mode (rnd_of_mode m)) (1 := H).
-apply round_monotone with (2 := proj2 H0).
-now apply FLT_exp_correct.
+apply H0.
+apply round_le_generic...
+apply H0.
 Qed.
 
 Theorem round_double_monotonic :
   forall m x y, (x <= y)%R ->
   (round_double m x <= round_double m y)%R.
-Proof.
+Proof with auto with typeclass_instances.
 intros m x y Hxy.
-apply round_monotone with (2 := Hxy).
-now apply FLT_exp_correct.
+apply round_le...
 Qed.
 
 Theorem round_double_idempotent :
   forall m1 m2 x,
   round_double m1 (round_double m2 x) = round_double m2 x.
-Proof.
+Proof with auto with typeclass_instances.
 intros m1 m2 x.
-apply round_generic.
-apply generic_format_round.
-now apply FLT_exp_correct.
+apply round_generic...
+apply generic_format_round...
 Qed.
 
 Theorem round_down_double_neg :
@@ -432,20 +384,18 @@ Qed.
 Theorem round_double_down_le :
   forall x,
   (round_double down x <= x)%R.
-Proof.
+Proof with auto with typeclass_instances.
 intros x.
-eapply round_DN_pt.
-now apply FLT_exp_correct.
+apply round_DN_pt...
 Qed.
 
 Theorem round_up_double_ge :
   forall x,
   (round_double up x >= x)%R.
-Proof.
+Proof with auto with typeclass_instances.
 intros x.
 apply Rle_ge.
-eapply round_UP_pt.
-now apply FLT_exp_correct.
+apply round_UP_pt...
 Qed.
 
 (** Quad precision *)
@@ -556,7 +506,7 @@ Admitted.
 
 Theorem small_int_no_round: forall (m:mode), forall (z:Z), 
   (Zabs z <= Zpower_nat 2 53)%Z -> (double_value (round_double_logic m (Z2R z))= Z2R z)%R.
-Proof.
+Proof with auto with typeclass_instances.
 intros m z Hz.
 unfold round_double_logic, r_to_d_aux, double_value.
 apply r_to_sd_format.
@@ -566,18 +516,11 @@ unfold F2R. simpl.
 split.
 now rewrite Rmult_1_r.
 now split.
-apply <- FLT_format_generic.
-2: easy.
-change 2%Z with (radix_val radix2) in Bz.
-destruct z as [|z|z] ; unfold Zabs in Bz.
-apply generic_format_0.
-rewrite Bz.
-rewrite Z2R_Zpower_nat.
-now apply generic_format_bpow.
-change (Zneg z) with (Zopp (Zpos z)).
-rewrite Bz, Z2R_opp.
-rewrite Z2R_Zpower_nat.
-apply generic_format_opp.
+apply FLT_format_generic...
+apply generic_format_abs_inv.
+rewrite <- Z2R_abs, Bz.
+change (Zpower_nat 2 53) with (Zpower_nat radix2 (Zabs_nat 53)).
+rewrite <- Zpower_Zpower_nat, Z2R_Zpower by easy.
 now apply generic_format_bpow.
 apply Rle_lt_trans with (bpow radix2 53).
 rewrite <- Z2R_abs.
