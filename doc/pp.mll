@@ -37,6 +37,19 @@
   let in_comment = ref false
   let in_slashshash = ref false
 
+  let why_keywords =
+    let h  = Hashtbl.create 97 in
+    List.iter (fun s -> Hashtbl.add h s ())
+      [ "absurd"; "and"; "array"; "as"; "assert"; "axiom"; "begin"; "bool";
+        "do"; "done"; "else"; "end"; "exception"; "exists"; "external";
+        "false"; "for"; "forall"; "fun"; "function"; "goal"; "if"; "in";
+        "int"; "invariant"; "let"; "logic"; "not"; "of"; "or"; "parameter";
+        "predicate"; "prop"; "raise"; "raises"; "reads"; "real"; "rec"; "ref";
+        "returns"; "then"; "true"; "try"; "type"; "unit"; "variant"; "void";
+        "while"; "with"; "writes";
+      ];
+    h
+
   let ocaml_keywords =
     let h = Hashtbl.create 97 in
     List.iter (fun s -> Hashtbl.add h s ())
@@ -95,7 +108,7 @@
     let h = Hashtbl.create 97 in
     List.iter (fun s -> Hashtbl.add h s ())
       [
-	"valid"; "forall"; "exists" ; "old" ; "at" ; "fresh" ; "nothing" ; "result"; "valid_range" ; "null" ; "max"; "abs";
+	"valid"; "forall"; "exists" ; "old" ; "at" ; "fresh" ; "nothing" ; "result"; "valid_range" ; "null" ; "max"; "abs"; "cos";
       ];
     h
 
@@ -116,6 +129,7 @@
   let is_c_keytype s = Hashtbl.mem c_types s
   let is_java_keyword s = Hashtbl.mem java_keywords s
   let is_bs_keyword s = Hashtbl.mem bs_keywords s
+  let is_why_keyword s = Hashtbl.mem why_keywords s
 
   let print_ident =
     let print_ident_char c =
@@ -364,6 +378,41 @@ and coqtt = parse
       }
   | _   { print_string (lexeme lexbuf); coqtt lexbuf }
 
+and whytt = parse
+  | '{'  { print_string "\\{"; whytt lexbuf }
+  | '}'  { print_string "\\}"; whytt lexbuf }
+(*
+  | '\\' { print_string "\\ensuremath{\\backslash}"; whytt lexbuf }
+*)
+  | '#' { print_string "\\diese{}"; whytt lexbuf }
+  | '_'  { print_string "\\_{}"; whytt lexbuf }
+  | '%'  { print_string "\\%{}"; whytt lexbuf }
+  | '&'  { print_string "\\&{}"; whytt lexbuf }
+  | '%'  { print_string "\\%{}"; whytt lexbuf }
+  | '\n' { print_string "\\linebreak\n\\hspace*{0pt}"; whytt lexbuf }
+  | "->" { print_string "\\ensuremath{\\rightarrow}"; whytt lexbuf }
+  | "=>" { print_string "\\ensuremath{\\Rightarrow}"; whytt lexbuf }
+  | "<->" { print_string "\\ensuremath{\\leftrightarrow}"; whytt lexbuf }
+  | '\n' "\\end{" "why" "}\n" { print_newline () }
+  | "\\emph{" [^'}']* '}' { print_string (lexeme lexbuf); whytt lexbuf }
+  | eof  { () }
+  | "'a" { print_string "\\ensuremath{\\alpha}"; whytt lexbuf }
+  | "'t" { print_string "\\ensuremath{\\tau}"; whytt lexbuf }
+  | "*"  { print_string "\\ensuremath{\\times}"; whytt lexbuf }
+  | "."  { print_string "\\ensuremath{.\\!\\!}"; whytt lexbuf }
+  | ":"  { print_string "\\ensuremath{:}"; whytt lexbuf }
+  | "forall" { print_string "\\ensuremath{\\forall\\!\\!\\!}"; whytt lexbuf }
+  | ident as s
+	{ if is_why_keyword s then
+	      begin
+		print_string "\\textbf{"; print_ident s;
+		print_string "}"
+	      end
+	  else print_ident s;
+	  whytt lexbuf
+	}
+  | _   { print_string (lexeme lexbuf); whytt lexbuf }
+
 and pp = parse
   | "\\begin{krakatoa}" space* "\n"
       { begin_tt();
@@ -397,6 +446,7 @@ and pp = parse
   let tex_files = ref []
   let c_files = ref []
   let java_files = ref []
+  let why_files = ref []
 
   let () = Arg.parse
     [
@@ -405,6 +455,8 @@ and pp = parse
 			      c_files := f :: !c_files), "read C file <f>" ;
       "-java", Arg.String (fun f ->
 			      java_files := f :: !java_files), "read Java file <f>" ;
+      "-why", Arg.String (fun f ->
+			      why_files := f :: !why_files), "read Why file <f>" ;
     ]
     (fun f -> tex_files := f :: !tex_files)
     "pp [options] file..."
@@ -421,6 +473,7 @@ and pp = parse
 	      close_in cin)
 	   l)
       [!tex_files, pp;
+       !why_files, (fun lb -> begin_tt (); whytt lb; end_tt ());
        !c_files, (fun lb -> begin_tt (); ctt lb; end_tt ());
        !java_files, (fun lb -> begin_tt (); ktt lb; end_tt ()) ]
 
