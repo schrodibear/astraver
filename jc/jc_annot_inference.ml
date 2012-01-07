@@ -148,7 +148,7 @@ let rec destruct_pointer t =
 	      Some(tptr,offt)
 	end
     | JCTvar _ | JCTderef _ | JCTapp _ | JCTold _ | JCTat _ | JCTif _ 
-    | JCTrange _ | JCTmatch _ | JCTaddress _ | JCTbase_block _
+    | JCTrange _ | JCTmatch _ | JCTaddress _ | JCTbase_block _ | JCTlet _
     | JCTconst _ | JCTbinary _ | JCTunary _ | JCToffset _ | JCTinstanceof _ 
     | JCTreal_cast _ | JCTrange_cast _ | JCTbitwise_cast _ | JCTcast _ ->
 	None
@@ -609,7 +609,7 @@ let rec atp_of_term t =
     | JCTvar _ | JCTderef _ | JCTapp _ | JCToffset _ ->
 	Atp.Var (Vwp.variable_for_term t)
     | JCTshift _ | JCTold _ | JCTat _ | JCTmatch _ | JCTinstanceof _ 
-    | JCTcast _ | JCTrange_cast _ | JCTbitwise_cast _ | JCTreal_cast _ 
+    | JCTcast _ | JCTrange_cast _ | JCTbitwise_cast _ | JCTreal_cast _ | JCTlet _
     | JCTaddress _ | JCTif _ | JCTrange _ | JCTunary _ | JCTbase_block _ ->
 	err ()
 
@@ -1198,7 +1198,7 @@ let linearize t =
       | JCTunary _ | JCTshift _ | JCTinstanceof _ | JCTmatch _ 
       | JCTold _ | JCTat _ | JCTcast _ | JCTbitwise_cast _ 
       | JCTrange_cast _ | JCTreal_cast _ | JCTaddress _ | JCTbase_block _
-      | JCTrange _ | JCTif _ -> 
+      | JCTrange _ | JCTif _ | JCTlet _ ->
 	  err ()
     with Failure "linearize" -> 
       (TermMap.add t (Int 1) TermMap.empty, Int 0)
