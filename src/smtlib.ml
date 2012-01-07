@@ -311,7 +311,7 @@ let print_obligation fmt loc _is_lemma _o s =
   fprintf fmt "@]@\n@\n"
 (* 
 
-   useless since goals are splitted
+   useless since goals are split
    (moreover, may trigger a bug with Z3: proves the lemma using the aussmption given after)
 
   if is_lemma then begin

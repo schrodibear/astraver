@@ -75,7 +75,7 @@ let spec =
     "-extra-switch", Arg.Set_string extra_switch,
     "adds additional switches to selected prover";
     "-simple", Arg.Set simple, "Print only Valid, I don't know, Invalid, Fail, Timeout";
-    "-split", Arg.Set split, "Create a directory wich contains all the goal splitted in different file";
+    "-split", Arg.Set split, "Create a directory wich contains all the goal split in different file";
     "-prover", Arg.Symbol (
       ["Alt-Ergo";"CVC3";"CVCL";"Z3";"Yices";"Simplify";"Vampire"; "VeriT"],(fun s -> prover := Some s)), "Select the prover to use"
   ]
