@@ -2169,7 +2169,7 @@ and block bl =
 let drop_on_unsupported_feature = false
 
 let logic_variable v =
-  let name = opt_app (fun v -> v.vname) v.lv_name v.lv_origin in
+  let name = Extlib.may_map (fun v -> v.vname) ~dft:v.lv_name v.lv_origin in
   ltype v.lv_type, name
 
 let rec annotation is_axiomatic annot =

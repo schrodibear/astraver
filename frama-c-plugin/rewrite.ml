@@ -118,7 +118,7 @@ object
   method vlogic_var_use v =
     let postaction v =
       (* Restore consistency between C variable name and logical name *)
-      opt_app (fun cv -> v.lv_name <- cv.vname) () v.lv_origin; v
+      Extlib.may (fun cv -> v.lv_name <- cv.vname) v.lv_origin; v
     in
     ChangeDoChildrenPost(v,postaction)
 end

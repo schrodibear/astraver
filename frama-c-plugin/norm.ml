@@ -900,12 +900,12 @@ class retypeStructVariables =
           if Cil_datatype.Logic_var.Set.mem v !lvarset then
             add_deref host v
           else
-            opt_app
+            Extlib.may_map
               (fun cv ->
                  if Cil_datatype.Varinfo.Set.mem cv !varset then
                    add_deref host v
                  else host
-              ) host v.lv_origin
+              ) ~dft:host v.lv_origin
       | TMem _ | TResult _ -> host
     in
     host, off
@@ -1132,12 +1132,12 @@ class retypeAddressTaken =
           if Cil_datatype.Logic_var.Set.mem v !lvarset then
             add_deref host v.lv_type
           else
-            opt_app
+            Extlib.may_map
               (fun cv ->
                  if Cil_datatype.Varinfo.Set.mem cv !varset then
                    add_deref host (Ctype cv.vtype)
                  else host
-              ) host v.lv_origin
+              ) ~dft:host v.lv_origin
       | TResult _ | TMem _ -> host
     in match lastTermOffset off with
       | TField (fi,_) ->
