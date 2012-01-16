@@ -13,9 +13,7 @@ case $1 in
 	make -f $b.makefile gui
 	;;
   *.c)
-	b=`basename $1 .c`
-	caduceus -why-opt -split-user-conj $1 || exit 1
-	make -f $b.makefile gui
+	frama-c -jessie -jessie-why-opt="-split-user-conj" $1 || exit 1
 	;;
   *.jc)
 	b=`basename $1 .jc`
