@@ -2162,6 +2162,32 @@ struct
     Goal(KAxiom,id_no_loc axiom_name,code)::acc 
 
 end
+
+let lemma_disjoint_cases ta_conv acc =
+  match ta_conv with
+    | [Inductive (_,f_name,params,l)] ->
+      let rec link_by_implication args cases = function
+        | LForall (s,ty,_,f) ->
+          LForall(s,ty,[],link_by_implication args cases f)
+        | LImpl(f1,f2) -> LImpl(f1,link_by_implication args cases f2)
+        | LPred(s,lt) when f_name.name = s ->
+          let equalities = List.map2 (fun (a1,_) a2 -> make_eq (LVar a1) a2)
+            args lt in
+          LImpl (make_and_list equalities,each_case args cases)
+        | _ -> failwith "Inductive must be forall x,.. Pn -> ... -> P1"
+      and each_case args = function
+        | [] -> LFalse
+        | (_,assertion)::cases -> link_by_implication args cases assertion in
+      let args = List.map (fun (s,ty) -> (s^tmp_suffix,ty)) params in
+      let condition = make_forall_list args [] (each_case args l) in
+      let goal_name = f_name.name^"_disjoint_case" in
+      Goal(KGoal,id_no_loc goal_name,condition)::acc
+    | _ -> Jc_options.lprintf "@[<hov 3>I can't translate that :@\n%a"
+      (Pp.print_list Pp.newline fprintf_why_decl) ta_conv;assert false
+
+
+        
+
     
 let tr_params_usual_model f =
   let usual_params,model_params = tr_params_usual_model_aux f in
@@ -2248,6 +2274,8 @@ let tr_logic_fun_aux f ta acc =
            | (`In,_) -> fprintf fmt "in" in
         Jc_options.lprintf "%s asks to generate : %a@." 
           f_name (Pp.print_list Pp.comma print_todo) todos;
+        let acc = if todos = [] then acc else
+            lemma_disjoint_cases fun_def acc in
         let make_todo acc (todo,notin) =
           match todo with
             | `In -> 
