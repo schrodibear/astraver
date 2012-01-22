@@ -754,7 +754,7 @@ install-lib: $(JCLIB)
 	mkdir -p $(LIBDIR)/why/why
 	cp -f $(PRELUDE) $(LIBDIR)/why/why
 	mkdir -p $(LIBDIR)/why/why3
-	cp -f lib/why3/jessie3.why lib/why3/jessie3.mlw $(LIBDIR)/why/why3
+	cp -f lib/why3/jessie3.why lib/why3/jessie3.mlw lib/why3/jessie3_integer.why $(LIBDIR)/why/why3
 	mkdir -p $(LIBDIR)/jessie
 	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)/jessie
 	mkdir -p $(LIBDIR)/coq
