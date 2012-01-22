@@ -113,7 +113,8 @@ val pragma_gen_sep :  (int,
 
 val pragma_gen_frame : 
   (int, Jc_fenv.logic_info * Jc_fenv.logic_info 
-    * Jc_env.var_info list * Jc_env.var_info list) Jc_stdlib.Hashtbl.t
+    * Jc_env.var_info list * Jc_env.var_info list *
+      [ `Frame | `Sub ]) Jc_stdlib.Hashtbl.t
 
 val comparable_types : jc_type -> jc_type -> bool
 

@@ -237,7 +237,7 @@ let frame_between ftin notin labels =
 
 
 let compute_predicate_framed () =
-  let aux tag (pi, info,params1,params2) =
+  let aux tag (pi, info,params1,params2,kind) =
       test_correct_logic info;
       let params1 = List.map mk_tvar params1 in
       let params2 = List.map mk_tvar params2 in
@@ -250,10 +250,14 @@ let compute_predicate_framed () =
           let lab = Jc_envset.LogicLabelSet.choose labs in
           let notin = NotIn.from_memory false (mem,lab) in
           let app = app_in_logic info params1 label1 notin in
-          let app1 = frame_between app notin pi.jc_logic_info_labels in
           let app2 = app_in_logic info params2 label2 notin in
           let app2 = MyBag.make_jc_sub [app2;app] in
-          app2::app1::acc) mems [] in
+          match kind with
+            | `Frame ->
+              let app1 = frame_between app notin pi.jc_logic_info_labels in
+              app2::app1::acc
+            | `Sub   -> app2::acc
+        ) mems [] in
       let ass = new assertion (JCAand apps) in
       Hashtbl.replace Jc_typing.logic_functions_table tag
         (pi,JCAssertion ass) in

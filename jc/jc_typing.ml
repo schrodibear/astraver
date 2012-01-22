@@ -2464,7 +2464,7 @@ let rec type_labels_in_decl d = match d#node with
   | JCDtermination_policy _ | JCDlogic_var _ ->
       ()
   | JCDaxiomatic(_id,l) -> List.iter type_labels_in_decl l
-  | JCDpragma_gen_sep _ | JCDpragma_gen_frame _ -> ()
+  | JCDpragma_gen_sep _ | JCDpragma_gen_frame _ |JCDpragma_gen_sub _ -> ()
 
 
 (* <====== A partir d'ici, c'est pas encore fait *)
@@ -2890,7 +2890,7 @@ let update_axiomatic axiomatic pi =
 
 exception Identifier_Not_found of string
 
-let create_pragma_gen_frame loc id logic =
+let create_pragma_gen_frame_sub frame_or_sub loc id logic =
   let info = 
     try 
       find_logic_info logic
@@ -2941,7 +2941,8 @@ let create_pragma_gen_frame loc id logic =
     end in
   let def = JCAssertion def in
   Hashtbl.add logic_functions_table pi.jc_logic_info_tag (pi, def);
-  Hashtbl.add pragma_gen_frame pi.jc_logic_info_tag (pi,info,params1,params2)
+  Hashtbl.add pragma_gen_frame pi.jc_logic_info_tag
+    (pi,info,params1,params2,frame_or_sub)
 
 
 let create_pragma_gen_sep_logic_aux loc kind id li =
@@ -3379,7 +3380,13 @@ of an invariant policy";
     | JCDpragma_gen_frame(name,logic) -> 
         if Jc_options.gen_frame_rule_with_ft && not only_types then
 	  begin
-            create_pragma_gen_frame loc name logic
+            create_pragma_gen_frame_sub `Frame loc name logic
+          end;
+      acc
+    | JCDpragma_gen_sub(name,logic) -> 
+        if Jc_options.gen_frame_rule_with_ft && not only_types then
+	  begin
+            create_pragma_gen_frame_sub `Sub loc name logic
           end;
       acc
     | JCDaxiomatic(id,l) ->
