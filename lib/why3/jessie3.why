@@ -583,13 +583,16 @@ axiom sub_refl :
 axiom sub_disj : forall s1 s2 s3 : (mybag 'a)
       [disj_mybag s1 s2, sub_mybag s2 s3 |
        disj_mybag s1 s3, sub_mybag s2 s3].
-      disj_mybag s1 s2 -> sub_mybag s2 s3 -> disj_mybag s1 s3
+      disj_mybag s1 s3 -> sub_mybag s2 s3 -> disj_mybag s1 s2
 
 axiom sub_in : forall s1 s2 : (mybag 'a). forall p : 'a
       [in_mybag p s1, sub_mybag s1 s2|
        in_mybag p s2, sub_mybag s1 s2].
       (not in_mybag p s2) -> sub_mybag s1 s2 -> not (in_mybag p s1)
 
+axiom sub_sub : forall s1 s2 s3: (mybag 'a)
+  [sub_mybag s1 s3, sub_mybag s2 s3 | sub_mybag s1 s3, sub_mybag s1 s2].
+      sub_mybag s1 s2 -> sub_mybag s2 s3 -> sub_mybag s1 s3
 
 (* for the frame_rule *)
 
