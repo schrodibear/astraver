@@ -1,380 +1,436 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="minmax.jessie/minmax/why3session.xml">
+ name="tests/c/minmax.jessie/minmax/why3session.xml">
  <prover
-  id="alt-ergo"
+  id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
-  id="alt-ergo-0.93.1"
-  name="Alt-Ergo"
-  version="0.93.1"/>
- <prover
-  id="coq"
-  name="Coq"
-  version="8.3pl2"/>
- <prover
-  id="cvc3"
+  id="1"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="cvc3-2.4"
-  name="CVC3"
-  version="2.4.1"/>
- <prover
-  id="eprover"
-  name="Eprover"
-  version="1.4 Namring"/>
- <prover
-  id="gappa"
-  name="Gappa"
-  version="0.15.1"/>
- <prover
-  id="simplify"
-  name="Simplify"
-  version="1.5.4"/>
- <prover
-  id="spass"
-  name="Spass"
-  version="3.7"/>
- <prover
-  id="vampire"
-  name="Vampire"
-  version="0.6"/>
- <prover
-  id="verit"
-  name="veriT"
-  version="dev"/>
- <prover
-  id="yices"
-  name="Yices"
-  version="1.0.25"/>
- <prover
-  id="z3"
+  id="2"
   name="Z3"
   version="2.19"/>
- <prover
-  id="z3-3"
-  name="Z3"
-  version="3.2"/>
  <file
   name="../minmax.mlw"
   verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
+   locfile="tests/c/minmax.jessie/minmax/../minmax.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
+   locfile="tests/c/minmax.jessie/minmax/../minmax.mlw"
+   loclnum="160" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter dmax_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    loclnum="58" loccnumb="7" loccnume="11"
     expl="Function dmax, default behavior"
-    sum="ce661547e5cfd058dab06830e623d4a9"
+    sum="f2735a8f783fec7fc63e295d849fc684"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
+    <label
+     name="expl:parameter dmax_ensures_default">
+     </label>
+    <label
+     name="expl:Function dmax, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter dmax_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    loclnum="58" loccnumb="7" loccnume="11"
     expl="Function dmax, Safety"
-    sum="7788d6eb8211ec940d4d1284d186d840"
+    sum="d215d4c605d695978231d0d729379f39"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter dmax_safety">
+     </label>
+    <label
+     name="expl:Function dmax, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter dmin_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    loclnum="64" loccnumb="7" loccnume="11"
     expl="Function dmin, default behavior"
-    sum="3992a73f4f1805d2314b77f6cc5e31fe"
+    sum="762b82da20fb866ac8c22d4b3041e248"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
+    <label
+     name="expl:parameter dmin_ensures_default">
+     </label>
+    <label
+     name="expl:Function dmin, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter dmin_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    loclnum="64" loccnumb="7" loccnume="11"
     expl="Function dmin, Safety"
-    sum="8e52288f74a9d23171016a1efa030a37"
+    sum="040550b29a2839bd06cb428cd49960ed"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter dmin_safety">
+     </label>
+    <label
+     name="expl:Function dmin, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="z3"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.00"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter fmax_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    loclnum="46" loccnumb="6" loccnume="10"
     expl="Function fmax, default behavior"
-    sum="412a021450d251cd97edf3eda6fad15a"
+    sum="bda85a598bac80f675a5b98b8b7a1f98"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
+    <label
+     name="expl:parameter fmax_ensures_default">
+     </label>
+    <label
+     name="expl:Function fmax, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter fmax_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    loclnum="46" loccnumb="6" loccnume="10"
     expl="Function fmax, Safety"
-    sum="305f26dab55d43271400c9dcf7eb2a7e"
+    sum="631acad7a0dd00a19e83ef350e383b96"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter fmax_safety">
+     </label>
+    <label
+     name="expl:Function fmax, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter fmin_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    loclnum="52" loccnumb="6" loccnume="10"
     expl="Function fmin, default behavior"
-    sum="2b5cf2d36ebbda30ed87bbe0d3c7c510"
+    sum="a77f2de6242d2ca0ba0a00f2d481481a"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
+    <label
+     name="expl:parameter fmin_ensures_default">
+     </label>
+    <label
+     name="expl:Function fmin, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter fmin_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    loclnum="52" loccnumb="6" loccnume="10"
     expl="Function fmin, Safety"
-    sum="ce10b06a9bc14659e61cf430c3c4ae18"
+    sum="2ba5f9dfa69a4af24d2534c1c7592b81"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter fmin_safety">
+     </label>
+    <label
+     name="expl:Function fmin, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter max_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    loclnum="34" loccnumb="4" loccnume="7"
     expl="Function max, default behavior"
-    sum="911fb0a91795467e7466babb55d8ffeb"
+    sum="317853f9c8793d5a06f88f6ae55186a4"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V1Fainfix =ainteger_of_int32V5amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V0FFF">
+    <label
+     name="expl:parameter max_ensures_default">
+     </label>
+    <label
+     name="expl:Function max, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.05"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter max_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    loclnum="34" loccnumb="4" loccnume="7"
     expl="Function max, Safety"
-    sum="0e8a65aad4e11e1250299573cdef787c"
+    sum="9d86d54ab488895625ad83eed028c70d"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter max_safety">
+     </label>
+    <label
+     name="expl:Function max, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter min_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    loclnum="40" loccnumb="4" loccnume="7"
     expl="Function min, default behavior"
-    sum="278d2cb020c2dd1f686dce25f912eb02"
+    sum="8444a4069225ca57ed4a2b6220dfcffe"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V0Fainfix =ainteger_of_int32V5aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V1FFF">
+    <label
+     name="expl:parameter min_ensures_default">
+     </label>
+    <label
+     name="expl:Function min, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.05"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter min_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    loclnum="40" loccnumb="4" loccnume="7"
     expl="Function min, Safety"
-    sum="c76302f57badfad7f4487ece90747fac"
+    sum="e091fd36f7478a2bf5894cd8613552b8"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter min_safety">
+     </label>
+    <label
+     name="expl:Function min, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
   </theory>

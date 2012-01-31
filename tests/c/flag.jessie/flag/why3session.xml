@@ -1,114 +1,90 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="flag.jessie/flag/why3session.xml">
+ name="tests/c/flag.jessie/flag/why3session.xml">
  <prover
-  id="alt-ergo"
+  id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
-  id="alt-ergo-0.93.1"
-  name="Alt-Ergo"
-  version="0.93.1"/>
- <prover
-  id="coq"
-  name="Coq"
-  version="8.3pl2"/>
- <prover
-  id="cvc3"
+  id="1"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="cvc3-2.4"
-  name="CVC3"
-  version="2.4.1"/>
- <prover
-  id="eprover"
-  name="Eprover"
-  version="1.4 Namring"/>
- <prover
-  id="gappa"
-  name="Gappa"
-  version="0.15.1"/>
- <prover
-  id="simplify"
-  name="Simplify"
-  version="1.5.4"/>
- <prover
-  id="spass"
-  name="Spass"
-  version="3.7"/>
- <prover
-  id="vampire"
-  name="Vampire"
-  version="0.6"/>
- <prover
-  id="verit"
-  name="veriT"
-  version="dev"/>
- <prover
-  id="yices"
-  name="Yices"
-  version="1.0.25"/>
- <prover
-  id="z3"
+  id="2"
   name="Z3"
   version="2.19"/>
- <prover
-  id="z3-3"
-  name="Z3"
-  version="3.2"/>
  <file
   name="../flag.mlw"
   verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
+   locfile="tests/c/flag.jessie/flag/../flag.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="WP Jessie_program"
+   locfile="tests/c/flag.jessie/flag/../flag.mlw"
+   loclnum="119" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter flag_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+    loclnum="89" loccnumb="5" loccnume="9"
     expl="Function flag, default behavior"
-    sum="f0a92f09b9938a4c662f82c1334a5e2d"
+    sum="59f01bcbdb58f077067076df8137db56"
     proved="true"
     expanded="true"
     shape="LaselectV10ashiftV0V8iainfix =V11c1ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix <=V7V1Aainfix <=V13V7Aainfix <=V15V13Aainfix <=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c2ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V17c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V17V7Aainfix <=V9V17Aainfix <=c0V9Aais_color_arrayV0V1V2V10Iainfix =V17ainfix +V8c1Fiainfix =V11c2Oainfix =V11c3ais_monochromeV0V18V1c3V19Aais_monochromeV0V9V8c2V19Aais_monochromeV0c0V9c1V19Aainfix <=V18V1Aainfix <=V8V18Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V19Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FIainfix =V18ainfix -V7c1Fais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFAais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix <=V6V1Aainfix <=V5V6Aainfix <=V4V5Aainfix <=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+    <label
+     name="expl:parameter flag_ensures_default">
+     </label>
+    <label
+     name="expl:Function flag, default behavior">
+     </label>
     <transf
      name="split_goal"
      proved="true"
      expanded="true">
      <goal
       name="WP_parameter flag_ensures_default.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+      loclnum="89" loccnumb="5" loccnume="9"
       expl="loop invariant init"
-      sum="c4a5d678815531c78eef2570f977f8a1"
+      sum="aebe6357d243dee43f430a3aa90294e3"
       proved="true"
       expanded="true"
       shape="ais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix <=V6V1Aainfix <=V5V6Aainfix <=V4V5Aainfix <=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+      <label
+       name="expl:parameter flag_ensures_default">
+       </label>
+      <label
+       name="expl:Function flag, default behavior">
+       </label>
       <proof
-       prover="alt-ergo"
+       prover="2"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="cvc3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
       </proof>
       <transf
        name="split_goal"
@@ -116,905 +92,1193 @@
        expanded="true">
        <goal
         name="WP_parameter flag_ensures_default.1.1"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="b941c39cf3ca8188acec27299efb70e8"
+        sum="3789589fbaebda64c28bcfc7694d1af5"
         proved="true"
         expanded="false"
         shape="ais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="0"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.02"/>
         </proof>
         <proof
-         prover="cvc3"
+         prover="1"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.02"/>
-        </proof>
-        <proof
-         prover="z3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.03"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.1.2"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="dad0518148863c5bbff26efa4ba4c85a"
+        sum="1f47ff9bc085fc6c25a848707e18e755"
         proved="true"
         expanded="false"
         shape="ainfix <=c0V4Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.03"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
-         prover="cvc3"
+         prover="0"
          timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.02"/>
         </proof>
         <proof
-         prover="z3"
+         prover="1"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.04"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.02"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.1.3"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="067ec55b7cb3b549c55068e3517e5915"
+        sum="10f43a032e9844f56d012023e21c01ad"
         proved="true"
         expanded="false"
         shape="ainfix <=V4V5Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.02"/>
-        </proof>
-        <proof
-         prover="cvc3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.02"/>
-        </proof>
-        <proof
-         prover="z3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="0"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.01"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.03"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.1.4"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="bcd6397cc7b20a3f2170225e2ba45fe2"
+        sum="3527284f47d6eb5946a344090d733100"
         proved="true"
         expanded="false"
         shape="ainfix <=V5V6Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.03"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
-         prover="cvc3"
+         prover="0"
          timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.02"/>
         </proof>
         <proof
-         prover="z3"
+         prover="1"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.04"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.03"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.1.5"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="c8d6015730795c2d938b48580e7be53e"
+        sum="e820a62838c87a3dde5cef78b82c2bbd"
         proved="true"
         expanded="false"
         shape="ainfix <=V6V1Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.03"/>
-        </proof>
-        <proof
-         prover="cvc3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.02"/>
-        </proof>
-        <proof
-         prover="z3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="0"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.00"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.02"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.1.6"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="ed4f7b71acd84b2e5cee939e6eb7ff03"
+        sum="c1a0a5b7658e2ef6dcda62e514f7855d"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0c0V4c1V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.03"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
-         prover="cvc3"
+         prover="0"
          timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.02"/>
         </proof>
         <proof
-         prover="z3"
+         prover="1"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.04"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.03"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.1.7"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="7cf80cfa09b3d0d37e525bb2dfbcca0f"
+        sum="d49761e0764e3919f993b4ea5429dbd0"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0V4V5c2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.02"/>
-        </proof>
-        <proof
-         prover="cvc3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.02"/>
-        </proof>
-        <proof
-         prover="z3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="0"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.02"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.03"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.1.8"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="cbac662d607d94c920c37f44d9c8a17f"
+        sum="c5b733c7b8f9a6b5a598bdb990aadd94"
         proved="true"
         expanded="false"
         shape="ais_monochromeV0V6V1c3V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.03"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
-         prover="cvc3"
+         prover="0"
          timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.02"/>
         </proof>
         <proof
-         prover="z3"
+         prover="1"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.04"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.03"/>
         </proof>
        </goal>
       </transf>
      </goal>
      <goal
       name="WP_parameter flag_ensures_default.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+      loclnum="89" loccnumb="5" loccnume="9"
       expl="loop invariant preservation"
-      sum="55f9705be526be31791830e00d49ae33"
+      sum="b4e1c107a69b62840272e9b8834d3caa"
       proved="true"
       expanded="true"
       shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix <=V7V1Aainfix <=V13V7Aainfix <=V15V13Aainfix <=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+      <label
+       name="expl:parameter flag_ensures_default">
+       </label>
+      <label
+       name="expl:Function flag, default behavior">
+       </label>
       <transf
        name="split_goal"
        proved="true"
-       expanded="false">
+       expanded="true">
        <goal
         name="WP_parameter flag_ensures_default.2.1"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="03eea975f1e328f0b8a85c8042448ebd"
+        sum="9fe9191ad96f414b9178a37d4f80209b"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="0"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.52"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.61"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.2.2"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="99fbfd9b058a39dfd24f8084f0bc8ff5"
+        sum="7780931d1bf22f6d5cde43772d536149"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=c0V15Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.03"/>
-        </proof>
-        <proof
-         prover="cvc3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.04"/>
-        </proof>
-        <proof
-         prover="z3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="0"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.02"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.2.3"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="bdebe9aeed0b8e5b24f56fe00ade642e"
+        sum="f88350af017d7159944278115e57dd32"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=V15V13Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.03"/>
-        </proof>
-        <proof
-         prover="cvc3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.04"/>
-        </proof>
-        <proof
-         prover="z3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="0"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.02"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.2.4"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="30ff8e459c0375728b619d8cb72138a1"
+        sum="a12062d3e299e55efd30e0aadf53840b"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=V13V7Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.03"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
         </proof>
         <proof
-         prover="cvc3"
+         prover="0"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.03"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
-         prover="z3"
+         prover="1"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.05"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.2.5"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="63b57fa25ab0ef47fbafc652ad158167"
+        sum="3f11e8d2dc7e5ccb180826018eb3fe26"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=V7V1Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.03"/>
         </proof>
         <proof
-         prover="cvc3"
+         prover="0"
          timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.02"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.04"/>
-        </proof>
-        <proof
-         prover="z3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.03"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.2.6"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="2e8f5821cc8fba894cc0de892860af2a"
+        sum="809bca156bfda77f2d6e3e4c67d466c0"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_monochromeV0c0V15c1V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="0"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.70"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.78"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.2.7"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="d31c2b57e60abbf3109cfa2e2605fd9c"
+        sum="54c549e56c07c683b32e297fdaefe53a"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_monochromeV0V15V13c2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="0"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.68"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.72"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.2.8"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="aaddec42d68033fbcc18bd2c82cfe25c"
+        sum="05cacec6e624f241da49a1f3eb334f3f"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="0"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.69"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.79"/>
         </proof>
        </goal>
       </transf>
      </goal>
      <goal
       name="WP_parameter flag_ensures_default.3"
+      locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+      loclnum="89" loccnumb="5" loccnume="9"
       expl="loop invariant preservation"
-      sum="2facc2213d14488db87fd7a19622ab88"
+      sum="fcec38996d7e8abb4b72026fd9cc6f9e"
       proved="true"
       expanded="true"
       shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V12c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V12V7Aainfix <=V9V12Aainfix <=c0V9Aais_color_arrayV0V1V2V10Iainfix =V12ainfix +V8c1FIainfix =V11c2Iainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+      <label
+       name="expl:parameter flag_ensures_default">
+       </label>
+      <label
+       name="expl:Function flag, default behavior">
+       </label>
       <proof
-       prover="alt-ergo"
+       prover="2"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.03"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="cvc3"
+       prover="0"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.05"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="z3"
+       prover="1"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter flag_ensures_default.4"
+      locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+      loclnum="89" loccnumb="5" loccnume="9"
       expl="loop invariant preservation"
-      sum="3f7f35cd5b19ca5ad79ccf0485233a93"
+      sum="1e0cb5997f19b0d017b5fa5ce6562490"
       proved="true"
-      expanded="false"
+      expanded="true"
       shape="LaselectV10ashiftV0V8ais_monochromeV0V12V1c3V13Aais_monochromeV0V9V8c2V13Aais_monochromeV0c0V9c1V13Aainfix <=V12V1Aainfix <=V8V12Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+      <label
+       name="expl:parameter flag_ensures_default">
+       </label>
+      <label
+       name="expl:Function flag, default behavior">
+       </label>
       <transf
        name="split_goal"
        proved="true"
-       expanded="false">
+       expanded="true">
        <goal
         name="WP_parameter flag_ensures_default.4.1"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="85ea66270fbf9cd7e4dc3e80b3269183"
+        sum="4b963d32bc370a2721f8d88cbf1da224"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="0"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.56"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.60"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.4.2"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="c9e63822244a3d4dd649909be32c3a65"
+        sum="0e07a69233902dab7426d05b1b080767"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=c0V9Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.03"/>
-        </proof>
-        <proof
-         prover="cvc3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.04"/>
-        </proof>
-        <proof
-         prover="z3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.02"/>
+        </proof>
+        <proof
+         prover="0"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.02"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.4.3"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="ad4b293a7f0f2f7bb357dbb3f9c507d8"
+        sum="e9c3522d74d3472effd0aad68ac177b9"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=V9V8Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.03"/>
+        </proof>
+        <proof
+         prover="0"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.02"/>
         </proof>
         <proof
-         prover="cvc3"
+         prover="1"
          timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.04"/>
-        </proof>
-        <proof
-         prover="z3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.03"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.4.4"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="1c9b620826464aa681d1dafc5fbbc43c"
+        sum="9227e53d65bba102006e0cda0d94ec3e"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=V8V12Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.03"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.05"/>
         </proof>
         <proof
-         prover="cvc3"
+         prover="0"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.03"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.02"/>
         </proof>
         <proof
-         prover="z3"
+         prover="1"
          timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.4.5"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="c015842ccc2c0f4c88f230f1d58fc497"
+        sum="30122c444ec277aa15cfe0bf08dac39f"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ainfix <=V12V1Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="2"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.03"/>
-        </proof>
-        <proof
-         prover="cvc3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.04"/>
-        </proof>
-        <proof
-         prover="z3"
-         timelimit="5"
-         edited=""
-         obsolete="false">
+         obsolete="false"
+         archived="false">
          <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="0"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.02"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.4.6"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="e8f75e92fd9cbe8c90227fbdfcaf7a0b"
+        sum="ac266ea67b410e5d724d0f7e9ebda2af"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_monochromeV0c0V9c1V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="0"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.38"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.40"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.4.7"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="e3e22a0a6400ecef1d4936403931b012"
+        sum="a12f1af6a86d6c20eb82a8e54722f10a"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_monochromeV0V9V8c2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="0"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.41"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.42"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter flag_ensures_default.4.8"
+        locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
         expl="Function flag, default behavior"
-        sum="e59bd98e1e1456cfc57ab6f66aee020d"
+        sum="1f778cf39ee5c47298dd2e88a7cb75a9"
         proved="true"
         expanded="false"
         shape="LaselectV10ashiftV0V8ais_monochromeV0V12V1c3V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default">
+         </label>
+        <label
+         name="expl:Function flag, default behavior">
+         </label>
         <proof
-         prover="alt-ergo"
+         prover="0"
          timelimit="5"
-         edited=""
-         obsolete="false">
-         <result status="valid" time="0.36"/>
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.40"/>
         </proof>
        </goal>
       </transf>
      </goal>
      <goal
       name="WP_parameter flag_ensures_default.5"
+      locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+      loclnum="89" loccnumb="5" loccnume="9"
       expl="loop invariant preservation"
-      sum="d979fa93725c1bbf81aca720554f61c6"
+      sum="9f00d85d3658d7dbedcee90d80f444ab"
       proved="true"
       expanded="false"
       shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10Iainfix =V11c2Oainfix =V11c3NIainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+      <label
+       name="expl:parameter flag_ensures_default">
+       </label>
+      <label
+       name="expl:Function flag, default behavior">
+       </label>
       <proof
-       prover="alt-ergo"
+       prover="2"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="cvc3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.00"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter flag_ensures_sorts"
+    locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+    loclnum="89" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="730a58f0bee695e00376fc1f0ece6db3"
+    sum="e2fc8284d60d29af5b18d51424f945d8"
     proved="true"
     expanded="false"
     shape="ais_monochromeV0V12V1c3V10Aais_monochromeV0V11V12c2V10Aais_monochromeV0c0V11c1V10EEIainfix <V8V7NIais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+    <label
+     name="expl:parameter flag_ensures_sorts">
+     </label>
+    <label
+     name="expl:Function flag, Behavior `sorts'">
+     </label>
     <proof
-     prover="alt-ergo"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="cvc3"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter flag_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+    loclnum="89" loccnumb="5" loccnume="9"
     expl="Function flag, Safety"
-    sum="abd8f288bec5cd837dae2d2df54e4448"
+    sum="bf9410e2ef7053d4aff1982e7ed075cb"
     proved="true"
     expanded="false"
     shape="LaselectV10ashiftV0V8iainfix =V11c1ainfix <ainfix -V7V13ainfix -V7V8Aainfix <=c0ainfix -V7V8Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FAainfix >=aoffset_maxV2V0V12Aainfix <=aoffset_minV2V0V12Aainfix >=aoffset_maxV2V0V14Aainfix <=aoffset_minV2V0V14Iainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c2ainfix <ainfix -V7V17ainfix -V7V8Aainfix <=c0ainfix -V7V8Iainfix =V17ainfix +V8c1Fiainfix =V11c2Oainfix =V11c3ainfix <ainfix -V18V8ainfix -V7V8Aainfix <=c0ainfix -V7V8Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FAainfix >=aoffset_maxV2V0V8Aainfix <=aoffset_minV2V0V8Aainfix >=aoffset_maxV2V0V18Aainfix <=aoffset_minV2V0V18Iainfix =V18ainfix -V7c1Fainfix <ainfix -V7V8ainfix -V7V8Aainfix <=c0ainfix -V7V8Aainfix <=V8aoffset_maxV2V0Aainfix <=aoffset_minV2V0V8Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+    <label
+     name="expl:parameter flag_safety">
+     </label>
+    <label
+     name="expl:Function flag, Safety">
+     </label>
     <proof
-     prover="alt-ergo"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.07"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter isMonochrome_ensures_decides_monochromatic"
+    locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+    loclnum="60" loccnumb="4" loccnume="16"
     expl="Function isMonochrome, Behavior `decides_monochromatic'"
-    sum="50098681b848809eea8eda4cf4d6e0ee"
+    sum="727b97149be96fd8768f02c6d5ec6307"
     proved="true"
     expanded="false"
     shape="iainfix <V7V2ais_monochromeV0V1V2V3V5qainfix =V9c0NIainfix =V9V8FIainfix =V8c0FIainfix =aselectV5ashiftV0V7V3Nais_monochromeV0V1V2V3V5qainfix =V11c0NIainfix =V11V10FIainfix =V10c1FIainfix =aselectV5ashiftV0V12V3Iainfix <V12V7Aainfix <=V1V12FAainfix <=V1V7FIainfix =V6V1FIainfix >=aoffset_maxV4V0V2Aainfix <=aoffset_minV4V0V1FFFFFF">
+    <label
+     name="expl:parameter isMonochrome_ensures_decides_monochromatic">
+     </label>
+    <label
+     name="expl:Function isMonochrome, Behavior `decides_monochromatic'">
+     </label>
     <proof
-     prover="alt-ergo"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter isMonochrome_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+    loclnum="60" loccnumb="4" loccnume="16"
     expl="Function isMonochrome, default behavior"
-    sum="fe7ca05edc1c31b8f28181ffefa17c97"
+    sum="078287af489f470f9383b8be2dc655c1"
     proved="true"
     expanded="false"
     shape="ainfix =aselectV5ashiftV0V9V3Iainfix <V9V8Aainfix <=V1V9FAainfix <=V1V8Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Iainfix <V7V2Iainfix =aselectV5ashiftV0V10V3Iainfix <V10V7Aainfix <=V1V10FAainfix <=V1V7FAainfix =aselectV5ashiftV0V11V3Iainfix <V11V6Aainfix <=V1V11FAainfix <=V1V6Iainfix =V6V1FIainfix >=aoffset_maxV4V0V2Aainfix <=aoffset_minV4V0V1FFFFFF">
+    <label
+     name="expl:parameter isMonochrome_ensures_default">
+     </label>
+    <label
+     name="expl:Function isMonochrome, default behavior">
+     </label>
     <proof
-     prover="alt-ergo"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="cvc3"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter isMonochrome_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+    loclnum="60" loccnumb="4" loccnume="16"
     expl="Function isMonochrome, Safety"
-    sum="f3da493d136e5294e0cd7a3556f1b883"
+    sum="7886497b47dae2f6e9086ac1530bc2ed"
     proved="true"
     expanded="false"
     shape="ainfix <ainfix -V2V8ainfix -V2V7Aainfix <=c0ainfix -V2V7Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Aainfix <=V7aoffset_maxV4V0Aainfix <=aoffset_minV4V0V7Iainfix <V7V2Iainfix =aselectV5ashiftV0V9V3Iainfix <V9V7Aainfix <=V1V9FAainfix <=V1V7FIainfix =V6V1FIainfix >=aoffset_maxV4V0V2Aainfix <=aoffset_minV4V0V1FFFFFF">
+    <label
+     name="expl:parameter isMonochrome_safety">
+     </label>
+    <label
+     name="expl:Function isMonochrome, Safety">
+     </label>
     <proof
-     prover="alt-ergo"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="cvc3"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.05"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+    loclnum="75" loccnumb="5" loccnume="9"
     expl="Function swap, default behavior"
-    sum="a21b044033c64285af5c6638965bef35"
+    sum="a044e89ea4a0f638328869309754bb4d"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="expl:parameter swap_ensures_default">
+     </label>
+    <label
+     name="expl:Function swap, default behavior">
+     </label>
     <proof
-     prover="alt-ergo"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_ensures_i_j_swapped"
+    locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+    loclnum="75" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="0f77fa373edea7a672ef5b429f2ff91c"
+    sum="274494ea13e4b5c49bf1d61547d265cb"
     proved="true"
     expanded="true"
     shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV7ashiftV0V2aselectV4ashiftV0V1Aainfix =aselectV7ashiftV0V1aselectV4ashiftV0V2Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V2Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1FFFFF">
+    <label
+     name="expl:parameter swap_ensures_i_j_swapped">
+     </label>
+    <label
+     name="expl:Function swap, Behavior `i_j_swapped'">
+     </label>
     <proof
-     prover="alt-ergo"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.58"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.26"/>
     </proof>
     <proof
-     prover="cvc3"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="1.30"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.42"/>
     </proof>
     <proof
-     prover="z3"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.24"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="1.35"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/flag.c"
+    loclnum="75" loccnumb="5" loccnume="9"
     expl="Function swap, Safety"
-    sum="d145dbb193f3ecc53e6fc294e1ce1272"
+    sum="5af9423428d037d40b6b439ac17c6284"
     proved="true"
     expanded="false"
     shape="ainfix <=V2aoffset_maxV3V0Aainfix <=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Aainfix <=V2aoffset_maxV3V0Aainfix <=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Iainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V2Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1FFFFF">
+    <label
+     name="expl:parameter swap_safety">
+     </label>
+    <label
+     name="expl:Function swap, Safety">
+     </label>
     <proof
-     prover="alt-ergo"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="cvc3"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.04"/>
     </proof>
    </goal>

@@ -1,161 +1,131 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="selection_sort.jessie/selection_sort/why3session.xml">
+ name="tests/c/selection_sort.jessie/selection_sort/why3session.xml">
  <prover
-  id="alt-ergo"
+  id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
-  id="alt-ergo-0.93.1"
-  name="Alt-Ergo"
-  version="0.93.1"/>
- <prover
-  id="coq"
-  name="Coq"
-  version="8.3pl2"/>
- <prover
-  id="cvc3"
+  id="1"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="cvc3-2.4"
-  name="CVC3"
-  version="2.4.1"/>
- <prover
-  id="eprover"
-  name="Eprover"
-  version="1.4 Namring"/>
- <prover
-  id="gappa"
-  name="Gappa"
-  version="0.15.1"/>
- <prover
-  id="simplify"
-  name="Simplify"
-  version="1.5.4"/>
- <prover
-  id="spass"
-  name="Spass"
-  version="3.7"/>
- <prover
-  id="vampire"
-  name="Vampire"
-  version="0.6"/>
- <prover
-  id="verit"
-  name="veriT"
-  version="dev"/>
- <prover
-  id="yices"
-  name="Yices"
-  version="1.0.25"/>
- <prover
-  id="z3"
+  id="2"
   name="Z3"
   version="2.19"/>
- <prover
-  id="z3-3"
-  name="Z3"
-  version="3.2"/>
  <file
   name="../selection_sort.mlw"
   verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
+   locfile="tests/c/selection_sort.jessie/selection_sort/../selection_sort.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
+   locfile="tests/c/selection_sort.jessie/selection_sort/../selection_sort.mlw"
+   loclnum="213" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter sel_sort_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/selection_sort.c"
+    loclnum="54" loccnumb="5" loccnume="13"
     expl="Function sel_sort, default behavior"
-    sum="466409872c430eed397b3d514a395616"
+    sum="b9522014f99a96db245605f751431777"
     proved="true"
     expanded="false"
     shape="iainfix <V11V1iainfix <aselectV5ashiftV0V11V9ainfix <V12V1Aainfix <=V4V12Aainfix <V4V14Iainfix =V14ainfix +V11c1FIainfix =V13aselectV5ashiftV0V11FIainfix =V12V11Fainfix <V10V1Aainfix <=V4V10Aainfix <V4V15Iainfix =V15ainfix +V11c1Fainfix <V17V1Aainfix <=c0V17Iainfix =V17ainfix +V4c1FAa_PermutV0c0ainfix -V1c1V16V5Ianot_assignsV2V5V16apset_unionapset_rangeapset_singletonV0V10V10apset_rangeapset_singletonV0V4V4Aa_SwapV0V4V10V16V5FIainfix <V10V1Aainfix <=V4V10Aainfix <V4V11FFFAainfix <V7V1Aainfix <=V4V7Aainfix <V4V8Iainfix =V8ainfix +V4c1FIainfix =V7V4FIainfix =V6aselectV5ashiftV0V4FIainfix <V4ainfix -V1c1Iainfix <V4V1Aainfix <=c0V4FFAainfix <V3V1Aainfix <=c0V3Iainfix =V3c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFF">
+    <label
+     name="expl:parameter sel_sort_ensures_default">
+     </label>
+    <label
+     name="expl:Function sel_sort, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.18"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.06"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
-     prover="z3"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.17"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter sel_sort_ensures_permutation"
+    locfile="/home/marche/why2-nitrogen/tests/c/selection_sort.c"
+    loclnum="54" loccnumb="5" loccnume="13"
     expl="Function sel_sort, Behavior `permutation'"
-    sum="928a065ef9db03775a29678e6ea602a5"
+    sum="f0308ab544854bf180374c3d2abb3bfc"
     proved="true"
     expanded="false"
     shape="iainfix <=V1c0a_PermutV0c0ainfix -V1c1V3V3iainfix <V5ainfix -V1c1iainfix <V12V1iainfix <aselectV6ashiftV0V12V10a_PermutV0c0ainfix -V1c1V6V3Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12Fa_PermutV0c0ainfix -V1c1V6V3Iainfix =V16ainfix +V12c1Fa_PermutV0c0ainfix -V1c1V17V3Iainfix =V18ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V17V6Ianot_assignsV2V6V17apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V17V6FIainfix <V11V1Aainfix <=V5V11Aainfix <V5V12Ia_PermutV0c0ainfix -V1c1V6V3FFFAa_PermutV0c0ainfix -V1c1V6V3Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fa_PermutV0c0ainfix -V1c1V6V3Iainfix <V5V1Aainfix <=c0V5Ia_PermutV0c0ainfix -V1c1V6V3FFAa_PermutV0c0ainfix -V1c1V3V3Iainfix =V4c0FIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+    <label
+     name="expl:parameter sel_sort_ensures_permutation">
+     </label>
+    <label
+     name="expl:Function sel_sort, Behavior `permutation'">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.07"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter sel_sort_ensures_sorted"
+    locfile="/home/marche/why2-nitrogen/tests/c/selection_sort.c"
+    loclnum="54" loccnumb="5" loccnume="13"
     expl="Function sel_sort, Behavior `sorted'"
-    sum="63c18b3a4a098a37b4a6699783536428"
+    sum="19fbe673b464f72a95b25d2a9a0cd0c9"
     proved="true"
     expanded="true"
     shape="iainfix <=V1c0a_SortedV0c0V1V3iainfix <V5ainfix -V1c1iainfix <V12V1iainfix <aselectV6ashiftV0V12V10ainfix >=aselectV6ashiftV0V16V14Iainfix <V16V15Aainfix <=V5V16FAainfix =V14aselectV6ashiftV0V13Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12Fainfix >=aselectV6ashiftV0V18V10Iainfix <V18V17Aainfix <=V5V18FAainfix =V10aselectV6ashiftV0V11Iainfix =V17ainfix +V12c1Fainfix <=aselectV19ashiftV0V21aselectV19ashiftV0V22Iainfix <V22V1Aainfix <=V20V22Aainfix <V21V20Aainfix <=c0V21FFAa_SortedV0c0V20V19Iainfix =V20ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V19V6Ianot_assignsV2V6V19apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V19V6FIainfix <V11V1Aainfix <=V5V11Aainfix <V5V12Iainfix >=aselectV6ashiftV0V23V10Iainfix <V23V12Aainfix <=V5V23FAainfix =V10aselectV6ashiftV0V11FFFAainfix >=aselectV6ashiftV0V24V7Iainfix <V24V9Aainfix <=V5V24FAainfix =V7aselectV6ashiftV0V8Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fa_SortedV0c0V1V6Iainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V25aselectV6ashiftV0V26Iainfix <V26V1Aainfix <=V5V26Aainfix <V25V5Aainfix <=c0V25FFAa_SortedV0c0V5V6FFAainfix <=aselectV3ashiftV0V27aselectV3ashiftV0V28Iainfix <V28V1Aainfix <=V4V28Aainfix <V27V4Aainfix <=c0V27FFAa_SortedV0c0V4V3Iainfix =V4c0FIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+    <label
+     name="expl:parameter sel_sort_ensures_sorted">
+     </label>
+    <label
+     name="expl:Function sel_sort, Behavior `sorted'">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="timeout" time="5.10"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="timeout" time="5.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.21"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.20"/>
     </proof>
     <transf
      name="split_goal"
@@ -163,204 +133,253 @@
      expanded="true">
      <goal
       name="WP_parameter sel_sort_ensures_sorted.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/selection_sort.c"
+      loclnum="54" loccnumb="5" loccnume="13"
       expl="normal postcondition"
-      sum="1a03f8c00993580156c5cba26438064e"
+      sum="a7cb862fbde4b4e4674dc69897dc9f61"
       proved="true"
       expanded="true"
       shape="a_SortedV0c0V1V3Iainfix <=V1c0Iainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      <label
+       name="expl:parameter sel_sort_ensures_sorted">
+       </label>
+      <label
+       name="expl:Function sel_sort, Behavior `sorted'">
+       </label>
       <proof
-       prover="cvc3"
+       prover="2"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="alt-ergo"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter sel_sort_ensures_sorted.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/selection_sort.c"
+      loclnum="54" loccnumb="5" loccnume="13"
       expl="loop invariant init"
-      sum="6454f1205066e7ee76e1b81a070ce36f"
+      sum="46d824cec15ce93c595836078bcf21f1"
       proved="true"
       expanded="true"
       shape="ainfix <=aselectV3ashiftV0V5aselectV3ashiftV0V6Iainfix <V6V1Aainfix <=V4V6Aainfix <V5V4Aainfix <=c0V5FFAa_SortedV0c0V4V3Iainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      <label
+       name="expl:parameter sel_sort_ensures_sorted">
+       </label>
+      <label
+       name="expl:Function sel_sort, Behavior `sorted'">
+       </label>
       <proof
-       prover="cvc3"
+       prover="2"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.04"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
-       prover="alt-ergo"
+       prover="0"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="z3"
+       prover="1"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.05"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter sel_sort_ensures_sorted.3"
+      locfile="/home/marche/why2-nitrogen/tests/c/selection_sort.c"
+      loclnum="54" loccnumb="5" loccnume="13"
       expl="loop invariant init"
-      sum="4736f8071d8693cfc9921d94239d30ef"
+      sum="54d48150311134766808dce6b7300a6f"
       proved="true"
       expanded="true"
       shape="ainfix >=aselectV6ashiftV0V10V7Iainfix <V10V9Aainfix <=V5V10FAainfix =V7aselectV6ashiftV0V8Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix <V5ainfix -V1c1Iainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V11aselectV6ashiftV0V12Iainfix <V12V1Aainfix <=V5V12Aainfix <V11V5Aainfix <=c0V11FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      <label
+       name="expl:parameter sel_sort_ensures_sorted">
+       </label>
+      <label
+       name="expl:Function sel_sort, Behavior `sorted'">
+       </label>
       <proof
-       prover="cvc3"
+       prover="2"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="alt-ergo"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter sel_sort_ensures_sorted.4"
+      locfile="/home/marche/why2-nitrogen/tests/c/selection_sort.c"
+      loclnum="54" loccnumb="5" loccnume="13"
       expl="loop invariant preservation"
-      sum="e2860780ccf7dc494a25c0f8d8e47fb6"
+      sum="4335f41c3f8361ce1939962a13ec563d"
       proved="true"
       expanded="true"
       shape="ainfix >=aselectV6ashiftV0V16V14Iainfix <V16V15Aainfix <=V5V16FAainfix =V14aselectV6ashiftV0V13Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12FIainfix <aselectV6ashiftV0V12V10Iainfix <V12V1Iainfix <V11V1Aainfix <=V5V11Aainfix <V5V12Iainfix >=aselectV6ashiftV0V17V10Iainfix <V17V12Aainfix <=V5V17FAainfix =V10aselectV6ashiftV0V11FFFIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix <V5ainfix -V1c1Iainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V18aselectV6ashiftV0V19Iainfix <V19V1Aainfix <=V5V19Aainfix <V18V5Aainfix <=c0V18FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      <label
+       name="expl:parameter sel_sort_ensures_sorted">
+       </label>
+      <label
+       name="expl:Function sel_sort, Behavior `sorted'">
+       </label>
       <proof
-       prover="cvc3"
+       prover="2"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-      <proof
-       prover="alt-ergo"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.16"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.23"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter sel_sort_ensures_sorted.5"
+      locfile="/home/marche/why2-nitrogen/tests/c/selection_sort.c"
+      loclnum="54" loccnumb="5" loccnume="13"
       expl="loop invariant preservation"
-      sum="797f87f37203025796703cdba583d982"
+      sum="6ba9b4d0f3bb2b364ac9c98517e4894d"
       proved="true"
       expanded="true"
       shape="ainfix >=aselectV6ashiftV0V14V10Iainfix <V14V13Aainfix <=V5V14FAainfix =V10aselectV6ashiftV0V11Iainfix =V13ainfix +V12c1FIainfix <aselectV6ashiftV0V12V10NIainfix <V12V1Iainfix <V11V1Aainfix <=V5V11Aainfix <V5V12Iainfix >=aselectV6ashiftV0V15V10Iainfix <V15V12Aainfix <=V5V15FAainfix =V10aselectV6ashiftV0V11FFFIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix <V5ainfix -V1c1Iainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V16aselectV6ashiftV0V17Iainfix <V17V1Aainfix <=V5V17Aainfix <V16V5Aainfix <=c0V16FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      <label
+       name="expl:parameter sel_sort_ensures_sorted">
+       </label>
+      <label
+       name="expl:Function sel_sort, Behavior `sorted'">
+       </label>
       <proof
-       prover="cvc3"
+       prover="2"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.04"/>
       </proof>
       <proof
-       prover="alt-ergo"
+       prover="1"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter sel_sort_ensures_sorted.6"
+      locfile="/home/marche/why2-nitrogen/tests/c/selection_sort.c"
+      loclnum="54" loccnumb="5" loccnume="13"
       expl="loop invariant preservation"
-      sum="3bdd4c1024fb5aba397bcb9553dab583"
+      sum="517e7d9f74a9e6e8dcc47eae92044a68"
       proved="true"
       expanded="true"
       shape="ainfix <=aselectV13ashiftV0V15aselectV13ashiftV0V16Iainfix <V16V1Aainfix <=V14V16Aainfix <V15V14Aainfix <=c0V15FFAa_SortedV0c0V14V13Iainfix =V14ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V13V6Ianot_assignsV2V6V13apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V13V6FIainfix <V12V1NIainfix <V11V1Aainfix <=V5V11Aainfix <V5V12Iainfix >=aselectV6ashiftV0V17V10Iainfix <V17V12Aainfix <=V5V17FAainfix =V10aselectV6ashiftV0V11FFFIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix <V5ainfix -V1c1Iainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V18aselectV6ashiftV0V19Iainfix <V19V1Aainfix <=V5V19Aainfix <V18V5Aainfix <=c0V18FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      <label
+       name="expl:parameter sel_sort_ensures_sorted">
+       </label>
+      <label
+       name="expl:Function sel_sort, Behavior `sorted'">
+       </label>
       <proof
-       prover="cvc3"
+       prover="2"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="timeout" time="5.04"/>
-      </proof>
-      <proof
-       prover="alt-ergo"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="2.18"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.41"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="2.42"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter sel_sort_ensures_sorted.7"
+      locfile="/home/marche/why2-nitrogen/tests/c/selection_sort.c"
+      loclnum="54" loccnumb="5" loccnume="13"
       expl="normal postcondition"
-      sum="63ef28e165e541eeab93ac7b8592cd80"
+      sum="be74786f9877622b836167c6ec68b130"
       proved="true"
       expanded="true"
       shape="a_SortedV0c0V1V6Iainfix <V5ainfix -V1c1NIainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V7aselectV6ashiftV0V8Iainfix <V8V1Aainfix <=V5V8Aainfix <V7V5Aainfix <=c0V7FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      <label
+       name="expl:parameter sel_sort_ensures_sorted">
+       </label>
+      <label
+       name="expl:Function sel_sort, Behavior `sorted'">
+       </label>
       <proof
-       prover="cvc3"
+       prover="2"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.05"/>
       </proof>
       <proof
-       prover="alt-ergo"
+       prover="0"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.04"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="z3"
+       prover="1"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.06"/>
       </proof>
      </goal>
@@ -368,88 +387,112 @@
    </goal>
    <goal
     name="WP_parameter sel_sort_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/selection_sort.c"
+    loclnum="54" loccnumb="5" loccnume="13"
     expl="Function sel_sort, Safety"
-    sum="f41e418685a5c9c2a45b8dbb43703cf0"
+    sum="8773d25e7cbc44b6cf46dfbf36983f76"
     proved="true"
     expanded="true"
     shape="iainfix <V11V1iainfix <aselectV5ashiftV0V11V9ainfix <ainfix -V1V14ainfix -V1V11Aainfix <=c0ainfix -V1V11Iainfix =V14ainfix +V11c1FIainfix =V13aselectV5ashiftV0V11FAainfix <=V11aoffset_maxV2V0Aainfix <=aoffset_minV2V0V11Iainfix =V12V11Fainfix <ainfix -V1V15ainfix -V1V11Aainfix <=c0ainfix -V1V11Iainfix =V15ainfix +V11c1FAainfix <=V11aoffset_maxV2V0Aainfix <=aoffset_minV2V0V11ainfix <ainfix -V1V17ainfix -V1V4Aainfix <=c0ainfix -V1V4Iainfix =V17ainfix +V4c1FIa_PermutV0c0ainfix -V1c1V16V5Ianot_assignsV2V5V16apset_unionapset_rangeapset_singletonV0V10V10apset_rangeapset_singletonV0V4V4Aa_SwapV0V4V10V16V5FAainfix >=aoffset_maxV2V0V10Aainfix <=aoffset_minV2V0V10Aainfix >=aoffset_maxV2V0V4Aainfix <=aoffset_minV2V0V4Iainfix <V10V1Aainfix <=V4V10Aainfix <V4V11FFFIainfix =V8ainfix +V4c1FIainfix =V7V4FIainfix =V6aselectV5ashiftV0V4FAainfix <=V4aoffset_maxV2V0Aainfix <=aoffset_minV2V0V4Iainfix <V4ainfix -V1c1Iainfix <V4V1Aainfix <=c0V4FFIainfix =V3c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFF">
+    <label
+     name="expl:parameter sel_sort_safety">
+     </label>
+    <label
+     name="expl:Function sel_sort, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.05"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/selection_sort.c"
+    loclnum="42" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="7e8fef3e2bea7a6e97a0cc84df32cf84"
+    sum="0563aed05c56b47287a5e1fb807abbf4"
     proved="true"
     expanded="true"
     shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V2V7V4Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V2Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1FFFFF">
+    <label
+     name="expl:parameter swap_ensures_default">
+     </label>
+    <label
+     name="expl:Function swap, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="1.58"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="1.21"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.22"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.84"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="1.49"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/selection_sort.c"
+    loclnum="42" loccnumb="5" loccnume="9"
     expl="Function swap, Safety"
-    sum="bae4f81058bdebe83fe48de9c09c9c4c"
+    sum="d3e2ce8abacbab3563354d3763a4dc61"
     proved="true"
     expanded="true"
     shape="ainfix <=V2aoffset_maxV3V0Aainfix <=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Aainfix <=V2aoffset_maxV3V0Aainfix <=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Iainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V2Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1FFFFF">
+    <label
+     name="expl:parameter swap_safety">
+     </label>
+    <label
+     name="expl:Function swap, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="z3"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.04"/>
     </proof>
    </goal>

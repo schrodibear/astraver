@@ -1,61 +1,29 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="quick_sort.jessie/quick_sort/why3session.xml">
+ name="tests/c/quick_sort.jessie/quick_sort/why3session.xml">
  <prover
-  id="alt-ergo"
+  id="0"
   name="Alt-Ergo"
   version="0.93"/>
  <prover
-  id="alt-ergo-0.93.1"
+  id="1"
   name="Alt-Ergo"
-  version="0.93.1"/>
+  version="0.94"/>
  <prover
-  id="coq"
-  name="Coq"
-  version="8.3pl2"/>
- <prover
-  id="cvc3"
+  id="2"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="cvc3-2.4"
+  id="3"
   name="CVC3"
   version="2.4.1"/>
  <prover
-  id="eprover"
-  name="Eprover"
-  version="1.4 Namring"/>
- <prover
-  id="gappa"
-  name="Gappa"
-  version="0.15.1"/>
- <prover
-  id="simplify"
-  name="Simplify"
-  version="1.5.4"/>
- <prover
-  id="spass"
-  name="Spass"
-  version="3.7"/>
- <prover
-  id="vampire"
-  name="Vampire"
-  version="0.6"/>
- <prover
-  id="verit"
-  name="veriT"
-  version="dev"/>
- <prover
-  id="yices"
-  name="Yices"
-  version="1.0.25"/>
- <prover
-  id="z3"
+  id="4"
   name="Z3"
   version="2.19"/>
  <prover
-  id="z3-3"
+  id="5"
   name="Z3"
   version="3.2"/>
  <file
@@ -64,572 +32,885 @@
   expanded="true">
   <theory
    name="Jessie_model"
+   locfile="tests/c/quick_sort.jessie/quick_sort/../quick_sort.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
+   locfile="tests/c/quick_sort.jessie/quick_sort/../quick_sort.mlw"
+   loclnum="213" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
    <goal
     name="WP_parameter quick_rec_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    loclnum="57" loccnumb="5" loccnume="14"
     expl="Function quick_rec, default behavior"
-    sum="a1e675537762ebe62720f1a17230a492"
+    sum="e010febaad22ad0e4440322ecfda80f3"
     proved="true"
     expanded="false"
     shape="iainfix >=V1V2anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2iainfix <=V8V2iainfix <aselectV10ashiftV0V8V5anot_assignsV3V4V12apset_rangeapset_singletonV0V1V2Aainfix <aselectV12ashiftV0V14V5Iainfix <=V14V11Aainfix <V1V14FAainfix >=aselectV12ashiftV0V15V5Iainfix <V15V13Aainfix <V11V15FAa_PermutV0V1V2V12V4Aainfix <=V13ainfix +V2c1Aainfix <V11V13Aainfix <=V1V11Aainfix =aselectV12ashiftV0V1V5Iainfix =V13ainfix +V8c1FAa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1Fanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V17V5Iainfix <=V17V9Aainfix <V1V17FAainfix >=aselectV10ashiftV0V18V5Iainfix <V18V16Aainfix <V9V18FAa_PermutV0V1V2V10V4Aainfix <=V16ainfix +V2c1Aainfix <V9V16Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5Iainfix =V16ainfix +V8c1Fanot_assignsV3V4V21apset_rangeapset_singletonV0V1V2Ianot_assignsV3V20V21apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V21Aa_PermutV0ainfix +V9c1V2V21V20FIanot_assignsV3V19V20apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V20Aa_PermutV0V1ainfix -V9c1V20V19FAa_PermutV0V1V2V19V10Ianot_assignsV3V10V19apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V19V10FAainfix <=V9V2Aainfix <=V1V9Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V22V5Iainfix <=V22V9Aainfix <V1V22FAainfix >=aselectV10ashiftV0V23V5Iainfix <V23V8Aainfix <V9V23FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFAanot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Aainfix <aselectV4ashiftV0V24V5Iainfix <=V24V6Aainfix <V1V24FAainfix >=aselectV4ashiftV0V25V5Iainfix <V25V7Aainfix <V6V25FAa_PermutV0V1V2V4V4Aainfix <=V7ainfix +V2c1Aainfix <V6V7Aainfix <=V1V6Aainfix =aselectV4ashiftV0V1V5Iainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+    <label
+     name="expl:parameter quick_rec_ensures_default">
+     </label>
+    <label
+     name="expl:Function quick_rec, default behavior">
+     </label>
     <transf
      name="split_goal"
      proved="true"
      expanded="false">
      <goal
       name="WP_parameter quick_rec_ensures_default.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="ab5793dcd6ccaf6a5ac1c177651d7edf"
+      sum="ff615a0ded4b386831ac32b725854fad"
       proved="true"
       expanded="false"
       shape="anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Iainfix >=V1V2Iainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+      <label
+       name="expl:parameter quick_rec_ensures_default">
+       </label>
+      <label
+       name="expl:Function quick_rec, default behavior">
+       </label>
       <proof
-       prover="cvc3"
+       prover="4"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="alt-ergo"
-       timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="z3"
+       prover="1"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="true"
+       archived="false">
        <result status="valid" time="0.02"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_default.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      loclnum="57" loccnumb="5" loccnume="14"
       expl="loop invariant init"
-      sum="d8f68e5ec3303ff993636a11b5107f9b"
+      sum="d954fed425f32aed810e09b54b7c8dd8"
       proved="true"
       expanded="false"
       shape="anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Aainfix <aselectV4ashiftV0V8V5Iainfix <=V8V6Aainfix <V1V8FAainfix >=aselectV4ashiftV0V9V5Iainfix <V9V7Aainfix <V6V9FAa_PermutV0V1V2V4V4Aainfix <=V7ainfix +V2c1Aainfix <V6V7Aainfix <=V1V6Aainfix =aselectV4ashiftV0V1V5Iainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+      <label
+       name="expl:parameter quick_rec_ensures_default">
+       </label>
+      <label
+       name="expl:Function quick_rec, default behavior">
+       </label>
       <proof
-       prover="cvc3"
+       prover="4"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="alt-ergo"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="true"
+       archived="false">
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_default.3"
+      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      loclnum="57" loccnumb="5" loccnume="14"
       expl="assertion"
-      sum="f64bfa0befe15b3e4b2c1e300fdbe6cb"
+      sum="ba71e306d0372f5727b146ff5e29665e"
       proved="true"
       expanded="false"
       shape="a_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1FIainfix <aselectV10ashiftV0V8V5Iainfix <=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V13V5Iainfix <=V13V9Aainfix <V1V13FAainfix >=aselectV10ashiftV0V14V5Iainfix <V14V8Aainfix <V9V14FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+      <label
+       name="expl:parameter quick_rec_ensures_default">
+       </label>
+      <label
+       name="expl:Function quick_rec, default behavior">
+       </label>
       <proof
-       prover="cvc3"
+       prover="4"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.04"/>
       </proof>
       <proof
-       prover="alt-ergo"
+       prover="0"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="true"
+       archived="false">
        <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.07"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_default.4"
+      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      loclnum="57" loccnumb="5" loccnume="14"
       expl="loop invariant preservation"
-      sum="717dd3f1333fa5794e98c747b5ad93cf"
+      sum="565a47658b7c665f14e8cfacf463a5d3"
       proved="true"
       expanded="false"
       shape="anot_assignsV3V4V12apset_rangeapset_singletonV0V1V2Aainfix <aselectV12ashiftV0V14V5Iainfix <=V14V11Aainfix <V1V14FAainfix >=aselectV12ashiftV0V15V5Iainfix <V15V13Aainfix <V11V15FAa_PermutV0V1V2V12V4Aainfix <=V13ainfix +V2c1Aainfix <V11V13Aainfix <=V1V11Aainfix =aselectV12ashiftV0V1V5Iainfix =V13ainfix +V8c1FIa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1FIainfix <aselectV10ashiftV0V8V5Iainfix <=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V16V5Iainfix <=V16V9Aainfix <V1V16FAainfix >=aselectV10ashiftV0V17V5Iainfix <V17V8Aainfix <V9V17FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+      <label
+       name="expl:parameter quick_rec_ensures_default">
+       </label>
+      <label
+       name="expl:Function quick_rec, default behavior">
+       </label>
       <proof
-       prover="z3"
+       prover="4"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.97"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.96"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_default.5"
+      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      loclnum="57" loccnumb="5" loccnume="14"
       expl="loop invariant preservation"
-      sum="bec2dfc2eaa796ba7b702d8696a7d5d1"
+      sum="edd18744d3f1aec0d6c121a9bca8e170"
       proved="true"
       expanded="false"
       shape="anot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V12V5Iainfix <=V12V9Aainfix <V1V12FAainfix >=aselectV10ashiftV0V13V5Iainfix <V13V11Aainfix <V9V13FAa_PermutV0V1V2V10V4Aainfix <=V11ainfix +V2c1Aainfix <V9V11Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5Iainfix =V11ainfix +V8c1FIainfix <aselectV10ashiftV0V8V5NIainfix <=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V14V5Iainfix <=V14V9Aainfix <V1V14FAainfix >=aselectV10ashiftV0V15V5Iainfix <V15V8Aainfix <V9V15FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+      <label
+       name="expl:parameter quick_rec_ensures_default">
+       </label>
+      <label
+       name="expl:Function quick_rec, default behavior">
+       </label>
       <proof
-       prover="cvc3"
+       prover="4"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.29"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.05"/>
       </proof>
       <proof
-       prover="alt-ergo"
+       prover="0"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="true"
+       archived="false">
        <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.32"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_default.6"
+      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      loclnum="57" loccnumb="5" loccnume="14"
       expl="assertion"
-      sum="c7f1d7c79c27683a38247e4ac4ea3939"
+      sum="19bdfee221880790698699d5fb76ae2e"
       proved="true"
       expanded="false"
       shape="ainfix <=V9V2Aainfix <=V1V9Iainfix <=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V11V5Iainfix <=V11V9Aainfix <V1V11FAainfix >=aselectV10ashiftV0V12V5Iainfix <V12V8Aainfix <V9V12FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+      <label
+       name="expl:parameter quick_rec_ensures_default">
+       </label>
+      <label
+       name="expl:Function quick_rec, default behavior">
+       </label>
       <proof
-       prover="cvc3"
+       prover="4"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.04"/>
       </proof>
       <proof
-       prover="alt-ergo"
+       prover="0"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="true"
+       archived="false">
        <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_default.7"
+      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      loclnum="57" loccnumb="5" loccnume="14"
       expl="assertion"
-      sum="4b3d3babcc306c64e027f7072f1b0f96"
+      sum="820fb341ae42faed59cd810c5801469d"
       proved="true"
       expanded="false"
       shape="a_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix <=V9V2Aainfix <=V1V9Iainfix <=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V12V5Iainfix <=V12V9Aainfix <V1V12FAainfix >=aselectV10ashiftV0V13V5Iainfix <V13V8Aainfix <V9V13FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+      <label
+       name="expl:parameter quick_rec_ensures_default">
+       </label>
+      <label
+       name="expl:Function quick_rec, default behavior">
+       </label>
       <proof
-       prover="cvc3"
+       prover="4"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="alt-ergo"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.06"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="true"
+       archived="false">
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_default.8"
+      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="6b52480cbc6153892b8439e96dc6c4b9"
+      sum="8beede7b31e24b474e6d32176024d451"
       proved="true"
       expanded="false"
       shape="anot_assignsV3V4V13apset_rangeapset_singletonV0V1V2Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix <=V9V2Aainfix <=V1V9Iainfix <=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V14V5Iainfix <=V14V9Aainfix <V1V14FAainfix >=aselectV10ashiftV0V15V5Iainfix <V15V8Aainfix <V9V15FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+      <label
+       name="expl:parameter quick_rec_ensures_default">
+       </label>
+      <label
+       name="expl:Function quick_rec, default behavior">
+       </label>
       <proof
-       prover="z3"
+       prover="4"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.66"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.63"/>
       </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter quick_rec_ensures_permutation"
+    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    loclnum="57" loccnumb="5" loccnume="14"
     expl="Function quick_rec, Behavior `permutation'"
-    sum="c913a43c093f15a23297c349ca4ca5ab"
+    sum="459300968376938580f53a0182a4545c"
     proved="false"
     expanded="true"
     shape="iainfix >=V1V2a_PermutV0V1V2V4V4a_PermutV0V1V2V13V4Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix <=V9V2Aainfix <=V1V9Iainfix <=V8V2NIainfix <aselectV10ashiftV0V14V5Iainfix <=V14V9Aainfix <V1V14FAainfix >=aselectV10ashiftV0V15V5Iainfix <V15V8Aainfix <V9V15FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+    <label
+     name="expl:parameter quick_rec_ensures_permutation">
+     </label>
+    <label
+     name="expl:Function quick_rec, Behavior `permutation'">
+     </label>
     <transf
      name="split_goal"
      proved="false"
      expanded="true">
      <goal
       name="WP_parameter quick_rec_ensures_permutation.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="37174c3f2dc1edece3b98b9b10df7a0a"
+      sum="15c090fc36b436fe3d72e8fcb537fd62"
       proved="true"
       expanded="false"
       shape="a_PermutV0V1V2V4V4Iainfix >=V1V2Iainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+      <label
+       name="expl:parameter quick_rec_ensures_permutation">
+       </label>
+      <label
+       name="expl:Function quick_rec, Behavior `permutation'">
+       </label>
       <proof
-       prover="cvc3"
+       prover="4"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.03"/>
       </proof>
       <proof
-       prover="alt-ergo"
+       prover="0"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="true"
+       archived="false">
        <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_permutation.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="a00af6e4bfadb1c1fc7a2dac2f5c68a6"
+      sum="167c6761d04459dd608c3045af4e8519"
       proved="false"
       expanded="true"
       shape="a_PermutV0V1V2V13V4Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix <=V9V2Aainfix <=V1V9Iainfix <=V8V2NIainfix <aselectV10ashiftV0V14V5Iainfix <=V14V9Aainfix <V1V14FAainfix >=aselectV10ashiftV0V15V5Iainfix <V15V8Aainfix <V9V15FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+      <label
+       name="expl:parameter quick_rec_ensures_permutation">
+       </label>
+      <label
+       name="expl:Function quick_rec, Behavior `permutation'">
+       </label>
       <proof
-       prover="cvc3"
+       prover="4"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.03"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
        <result status="timeout" time="5.07"/>
       </proof>
       <proof
-       prover="alt-ergo"
+       prover="2"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.08"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
        <result status="timeout" time="5.09"/>
       </proof>
       <proof
-       prover="z3"
+       prover="5"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="timeout" time="5.07"/>
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.03"/>
       </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter quick_rec_ensures_sorted"
+    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    loclnum="57" loccnumb="5" loccnume="14"
     expl="Function quick_rec, Behavior `sorted'"
-    sum="ad9866c8579d261e167ffb3db8746cdd"
+    sum="6ab52dc915d1795ecc5c0e514d8f952c"
     proved="false"
     expanded="true"
     shape="iainfix >=V1V2a_SortedV0V1ainfix +V2c1V4a_SortedV0V1ainfix +V2c1V13Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix <=V9V2Aainfix <=V1V9Iainfix <=V8V2NIainfix <aselectV10ashiftV0V14V5Iainfix <=V14V9Aainfix <V1V14FAainfix >=aselectV10ashiftV0V15V5Iainfix <V15V8Aainfix <V9V15FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+    <label
+     name="expl:parameter quick_rec_ensures_sorted">
+     </label>
+    <label
+     name="expl:Function quick_rec, Behavior `sorted'">
+     </label>
     <transf
      name="split_goal"
      proved="false"
      expanded="true">
      <goal
       name="WP_parameter quick_rec_ensures_sorted.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="88d7be0ca268427837b5f4f0a24907cd"
+      sum="f71535e3a4ab9fbd99c4bc0be35691aa"
       proved="true"
       expanded="false"
       shape="a_SortedV0V1ainfix +V2c1V4Iainfix >=V1V2Iainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+      <label
+       name="expl:parameter quick_rec_ensures_sorted">
+       </label>
+      <label
+       name="expl:Function quick_rec, Behavior `sorted'">
+       </label>
       <proof
-       prover="cvc3"
+       prover="4"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.03"/>
       </proof>
       <proof
-       prover="alt-ergo"
+       prover="0"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="true"
+       archived="false">
        <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter quick_rec_ensures_sorted.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+      loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="db97523275499865596cb91fe5acd9a1"
+      sum="41a8594d05a784b3e05a6fb53a9f7120"
       proved="false"
       expanded="true"
       shape="a_SortedV0V1ainfix +V2c1V13Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix <=V9V2Aainfix <=V1V9Iainfix <=V8V2NIainfix <aselectV10ashiftV0V14V5Iainfix <=V14V9Aainfix <V1V14FAainfix >=aselectV10ashiftV0V15V5Iainfix <V15V8Aainfix <V9V15FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+      <label
+       name="expl:parameter quick_rec_ensures_sorted">
+       </label>
+      <label
+       name="expl:Function quick_rec, Behavior `sorted'">
+       </label>
       <proof
-       prover="cvc3"
+       prover="4"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="timeout" time="5.09"/>
-      </proof>
-      <proof
-       prover="alt-ergo"
-       timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="timeout" time="5.03"/>
       </proof>
       <proof
-       prover="z3"
+       prover="1"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="timeout" time="5.06"/>
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.10"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.01"/>
+      </proof>
+      <proof
+       prover="3"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.01"/>
+      </proof>
+      <proof
+       prover="5"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.02"/>
       </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter quick_rec_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    loclnum="57" loccnumb="5" loccnume="14"
     expl="Function quick_rec, Safety"
-    sum="5f59a2ab70d7dcb541583cab6bf18710"
+    sum="5bad7167a34b10ea56afaf8a3afbb3b8"
     proved="true"
     expanded="false"
     shape="iainfix <=V8V2iainfix <aselectV10ashiftV0V8V5ainfix <ainfix -V2V13ainfix -V2V8Aainfix <=c0ainfix -V2V8Iainfix =V13ainfix +V8c1FIa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FAainfix >=aoffset_maxV3V0V11Aainfix <=aoffset_minV3V0V11Aainfix >=aoffset_maxV3V0V8Aainfix <=aoffset_minV3V0V8Iainfix =V11ainfix +V9c1Fainfix <ainfix -V2V14ainfix -V2V8Aainfix <=c0ainfix -V2V8Iainfix =V14ainfix +V8c1FAainfix <=V8aoffset_maxV3V0Aainfix <=aoffset_minV3V0V8ainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0ainfix +V9c1Aazwf_zeroainfix -V2ainfix +V9c1ainfix -V2V1Ianot_assignsV3V15V16apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V16Aa_PermutV0V1ainfix -V9c1V16V15FAainfix >=aoffset_maxV3V0ainfix -V9c1Aainfix <=aoffset_minV3V0V1Aazwf_zeroainfix -ainfix -V9c1V1ainfix -V2V1Ia_PermutV0V1V2V15V10Ianot_assignsV3V10V15apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V15V10FAainfix >=aoffset_maxV3V0V9Aainfix <=aoffset_minV3V0V9Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1Iainfix <=V9V2Aainfix <=V1V9Iainfix <aselectV10ashiftV0V17V5Iainfix <=V17V9Aainfix <V1V17FAainfix >=aselectV10ashiftV0V18V5Iainfix <V18V8Aainfix <V9V18FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Iainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
+    <label
+     name="expl:parameter quick_rec_safety">
+     </label>
+    <label
+     name="expl:Function quick_rec, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="4"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.07"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.06"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
-     prover="z3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="true"
+     archived="false">
      <result status="valid" time="0.06"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter quick_sort_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    loclnum="91" loccnumb="5" loccnume="15"
     expl="Function quick_sort, default behavior"
-    sum="002adb584abf88f6b39270d936f90ae0"
+    sum="c05eb0ec9c019b12ec459af1b9c8d4da"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="expl:parameter quick_sort_ensures_default">
+     </label>
+    <label
+     name="expl:Function quick_sort, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="4"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter quick_sort_ensures_permutation"
+    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    loclnum="91" loccnumb="5" loccnume="15"
     expl="normal postcondition"
-    sum="482bd45a26356253f2a082cd71c37c2a"
+    sum="6fdab06f20cc0732f05bfebad2b1b071"
     proved="true"
     expanded="false"
     shape="a_PermutV0c0ainfix -V1c1V4V3Ianot_assignsV2V3V4apset_rangeapset_singletonV0c0ainfix -V1c1Aa_SortedV0c0ainfix +ainfix -V1c1c1V4Aa_PermutV0c0ainfix -V1c1V4V3FIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+    <label
+     name="expl:parameter quick_sort_ensures_permutation">
+     </label>
+    <label
+     name="expl:Function quick_sort, Behavior `permutation'">
+     </label>
     <proof
-     prover="cvc3"
+     prover="4"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter quick_sort_ensures_sorted"
+    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    loclnum="91" loccnumb="5" loccnume="15"
     expl="normal postcondition"
-    sum="50f68067793f0c91af35b707b5818fb5"
+    sum="e2ed67dacec0bf86647a37045afbbe01"
     proved="true"
     expanded="false"
     shape="a_SortedV0c0V1V4Ianot_assignsV2V3V4apset_rangeapset_singletonV0c0ainfix -V1c1Aa_SortedV0c0ainfix +ainfix -V1c1c1V4Aa_PermutV0c0ainfix -V1c1V4V3FIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+    <label
+     name="expl:parameter quick_sort_ensures_sorted">
+     </label>
+    <label
+     name="expl:Function quick_sort, Behavior `sorted'">
+     </label>
     <proof
-     prover="cvc3"
+     prover="4"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter quick_sort_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    loclnum="91" loccnumb="5" loccnume="15"
     expl="precondition for call"
-    sum="ed20e98eead7d3d3ebf949f7fa73cafb"
+    sum="97a7b50a438d261b45ff2d8f79af9001"
     proved="true"
     expanded="false"
     shape="ainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0Iainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFF">
+    <label
+     name="expl:parameter quick_sort_safety">
+     </label>
+    <label
+     name="expl:Function quick_sort, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="4"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="true"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    loclnum="42" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="7e8fef3e2bea7a6e97a0cc84df32cf84"
+    sum="0563aed05c56b47287a5e1fb807abbf4"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V2V7V4Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V2Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1FFFFF">
+    <label
+     name="expl:parameter swap_ensures_default">
+     </label>
+    <label
+     name="expl:Function swap, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="4"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="1.58"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.21"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.82"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="1.55"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="true"
+     archived="false">
      <result status="valid" time="1.18"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.23"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
+    loclnum="42" loccnumb="5" loccnume="9"
     expl="Function swap, Safety"
-    sum="bae4f81058bdebe83fe48de9c09c9c4c"
+    sum="d3e2ce8abacbab3563354d3763a4dc61"
     proved="true"
     expanded="false"
     shape="ainfix <=V2aoffset_maxV3V0Aainfix <=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Aainfix <=V2aoffset_maxV3V0Aainfix <=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Iainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V2Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1FFFFF">
+    <label
+     name="expl:parameter swap_safety">
+     </label>
+    <label
+     name="expl:Function swap, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="4"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="z3"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="true"
+     archived="false">
      <result status="valid" time="0.04"/>
     </proof>
    </goal>
