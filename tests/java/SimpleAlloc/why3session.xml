@@ -1,61 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="SimpleAlloc/why3session.xml">
+ name="tests/java/SimpleAlloc/why3session.xml">
  <prover
-  id="alt-ergo"
+  id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
-  id="alt-ergo-0.93.1"
-  name="Alt-Ergo"
-  version="0.93.1"/>
- <prover
-  id="coq"
-  name="Coq"
-  version="8.3pl2"/>
- <prover
-  id="cvc3"
+  id="1"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="cvc3-2.4"
+  id="2"
   name="CVC3"
   version="2.4.1"/>
  <prover
-  id="eprover"
-  name="Eprover"
-  version="1.4 Namring"/>
- <prover
-  id="gappa"
-  name="Gappa"
-  version="0.15.1"/>
- <prover
-  id="simplify"
-  name="Simplify"
-  version="1.5.4"/>
- <prover
-  id="spass"
-  name="Spass"
-  version="3.7"/>
- <prover
-  id="vampire"
-  name="Vampire"
-  version="0.6"/>
- <prover
-  id="verit"
-  name="veriT"
-  version="dev"/>
- <prover
-  id="yices"
-  name="Yices"
-  version="1.0.25"/>
- <prover
-  id="z3"
+  id="3"
   name="Z3"
   version="2.19"/>
  <prover
-  id="z3-3"
+  id="4"
   name="Z3"
   version="3.2"/>
  <file
@@ -64,213 +28,324 @@
   expanded="true">
   <theory
    name="Jessie_model"
+   locfile="tests/java/SimpleAlloc/../SimpleAlloc.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
+   locfile="tests/java/SimpleAlloc/../SimpleAlloc.mlw"
+   loclnum="332" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
    <goal
     name="WP_parameter cons_Node_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
+    loclnum="36" loccnumb="4" loccnume="8"
     expl="normal postcondition"
-    sum="e4248a97d69161cc491eac19d28dfdcf"
+    sum="ae8f23544c8e5d8eacae9510cd1c1f29"
     proved="true"
     expanded="true"
     shape="anot_assignsV1V2V4apset_singletonV0Iainfix =V4astoreV2V0V3FIainfix =ainteger_of_int32V3c0FIavalid_struct_NodeV0c0c0V1FFF">
+    <label
+     name="expl:parameter cons_Node_ensures_default">
+     </label>
+    <label
+     name="expl:Constructor of class Node, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.17"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Node_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
+    loclnum="36" loccnumb="4" loccnume="8"
     expl="Constructor of class Node, Safety"
-    sum="f0f394d544c8a70ae250221954a13896"
+    sum="abfcbfee10cd7da6cdb5e2d30cea674c"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter cons_Node_safety">
+     </label>
+    <label
+     name="expl:Constructor of class Node, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_test_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
     expl="Constructor of class test, default behavior"
-    sum="72ace0f2a851fe7fe1c40e8a0e107ea3"
+    sum="680da14d171bbf7742ae09058a4fcd97"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter cons_test_ensures_default">
+     </label>
+    <label
+     name="expl:Constructor of class test, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_test_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
     expl="Constructor of class test, Safety"
-    sum="ad1b982885619f3acd3c245886ad56b4"
+    sum="9248d581e65d51077440628b3d669f65"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter cons_test_safety">
+     </label>
+    <label
+     name="expl:Constructor of class test, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter test_test_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
+    loclnum="46" loccnumb="9" loccnume="13"
     expl="normal postcondition"
-    sum="2b09ce57a341c289188069aed0977bb6"
+    sum="dd1e8b87bc7194f619c2344a75c744e2"
     proved="false"
     expanded="true"
     shape="anot_assignsV2V4V9apset_rangeapset_derefV1apset_singletonV0c0c0Aanot_assignsV2V3V8apset_emptyAa_Non_null_NodeMaselectV1V0V6Iainfix =V9astoreV4aselectV1V0V7FIanot_assignsV6V3V8apset_singletonV7FIainstanceofV5V7a_Node_tagAaalloc_freshV2V7c1Aaalloc_extendsV2V6Aastrict_valid_struct_NodeV7c0ainfix -c1c1V6FFFIainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFFF">
+    <label
+     name="expl:parameter test_test_ensures_default">
+     </label>
+    <label
+     name="expl:Method test, default behavior">
+     </label>
    </goal>
    <goal
     name="WP_parameter test_test_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
+    loclnum="46" loccnumb="9" loccnume="13"
     expl="Method test, Safety"
-    sum="75de8f898924c42a853fa7a0e2de50b2"
+    sum="0d1bdf325aee6e3aa058eb86db746ba8"
     proved="false"
     expanded="true"
     shape="ainfix <=c0aoffset_maxV5aselectV1V0Ianot_assignsV5V3V7apset_singletonV6FAainfix >=aoffset_maxV5V6c0IainstanceofV4V6a_Node_tagAaalloc_freshV2V6c1Aaalloc_extendsV2V5Aastrict_valid_struct_NodeV6c0ainfix -c1c1V5FFFAainfix >=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFF">
+    <label
+     name="expl:parameter test_test_safety">
+     </label>
+    <label
+     name="expl:Method test, Safety">
+     </label>
     <transf
      name="split_goal"
      proved="false"
      expanded="true">
      <goal
       name="WP_parameter test_test_safety.1"
+      locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
+      loclnum="46" loccnumb="9" loccnume="13"
       expl="allocation size"
-      sum="e26091f5f9979f6c5652018bf4bb3060"
+      sum="2d99936ecf74548a65618a75e3fad0fe"
       proved="true"
       expanded="false"
       shape="ainfix >=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFF">
+      <label
+       name="expl:parameter test_test_safety">
+       </label>
+      <label
+       name="expl:Method test, Safety">
+       </label>
       <proof
-       prover="cvc3"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.03"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
       </proof>
       <proof
-       prover="alt-ergo"
+       prover="0"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="z3"
+       prover="1"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.00"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter test_test_safety.2"
+      locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
+      loclnum="46" loccnumb="9" loccnume="13"
       expl="assertion"
-      sum="19124c44e3107d3295c6cd105b095268"
+      sum="4553015ae236791957c9396462a668f6"
       proved="true"
       expanded="false"
       shape="ainfix >=aoffset_maxV5V6c0IainstanceofV4V6a_Node_tagAaalloc_freshV2V6c1Aaalloc_extendsV2V5Aastrict_valid_struct_NodeV6c0ainfix -c1c1V5FFFIainfix >=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFF">
+      <label
+       name="expl:parameter test_test_safety">
+       </label>
+      <label
+       name="expl:Method test, Safety">
+       </label>
       <proof
-       prover="cvc3"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="alt-ergo"
-       timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="z3"
-       timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.05"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter test_test_safety.3"
+      locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
+      loclnum="46" loccnumb="9" loccnume="13"
       expl="index bounds"
-      sum="d32b255e88ac591f0866656542ada524"
+      sum="d3c9f3c6dec2d0d1d0312c102db347a1"
       proved="false"
       expanded="true"
       shape="ainfix <=c0aoffset_maxV5aselectV1V0Ianot_assignsV5V3V7apset_singletonV6FIainfix >=aoffset_maxV5V6c0IainstanceofV4V6a_Node_tagAaalloc_freshV2V6c1Aaalloc_extendsV2V5Aastrict_valid_struct_NodeV6c0ainfix -c1c1V5FFFIainfix >=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFF">
+      <label
+       name="expl:parameter test_test_safety">
+       </label>
+      <label
+       name="expl:Method test, Safety">
+       </label>
+      <proof
+       prover="3"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.04"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.07"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="0.03"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.07"/>
+      </proof>
+      <proof
+       prover="4"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.05"/>
+      </proof>
      </goal>
     </transf>
    </goal>

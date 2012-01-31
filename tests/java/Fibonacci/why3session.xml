@@ -1,242 +1,255 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="Fibonacci/why3session.xml">
+ name="tests/java/Fibonacci/why3session.xml">
  <prover
-  id="alt-ergo"
+  id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
-  id="alt-ergo-0.93.1"
-  name="Alt-Ergo"
-  version="0.93.1"/>
- <prover
-  id="coq"
-  name="Coq"
-  version="8.3pl2"/>
- <prover
-  id="cvc3"
+  id="1"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="cvc3-2.4"
-  name="CVC3"
-  version="2.4.1"/>
+  id="2"
+  name="Coq"
+  version="8.3pl3"/>
  <prover
-  id="eprover"
-  name="Eprover"
-  version="1.4 Namring"/>
- <prover
-  id="gappa"
-  name="Gappa"
-  version="0.15.1"/>
- <prover
-  id="simplify"
-  name="Simplify"
-  version="1.5.4"/>
- <prover
-  id="spass"
-  name="Spass"
-  version="3.7"/>
- <prover
-  id="vampire"
-  name="Vampire"
-  version="0.6"/>
- <prover
-  id="verit"
-  name="veriT"
-  version="dev"/>
- <prover
-  id="yices"
-  name="Yices"
-  version="1.0.25"/>
- <prover
-  id="z3"
+  id="3"
   name="Z3"
   version="2.19"/>
- <prover
-  id="z3-3"
-  name="Z3"
-  version="3.2"/>
  <file
   name="../Fibonacci.mlw"
   verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
+   locfile="tests/java/Fibonacci/../Fibonacci.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
    <goal
     name="isfib_2_1"
+    locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
+    loclnum="46" loccnumb="10" loccnume="19"
     expl="Lemma isfib_2_1, lemma"
-    sum="4aab99f0d7839c1d23e3a69d79c03b76"
+    sum="21ae86d99339b04efb4e183fd58877e2"
     proved="true"
     expanded="true"
     shape="aisfibc2c1">
+    <label
+     name="expl:Lemma isfib_2_1, lemma">
+     </label>
     <proof
-     prover="coq"
+     prover="3"
      timelimit="5"
-     edited="Fibonacci_Jessie_model_isfib_2_1_1.v"
-     obsolete="false">
-     <result status="valid" time="0.58"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
-     prover="z3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.08"/>
+     edited="Fibonacci_Jessie_model_isfib_2_1_2.v"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.62"/>
     </proof>
    </goal>
    <goal
     name="isfib_6_8"
+    locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
+    loclnum="47" loccnumb="10" loccnume="19"
     expl="Lemma isfib_6_8, lemma"
-    sum="17b0bb8542a8b23e83bba860be39d6f5"
+    sum="6ffcd54462da30dbf569182c2c3e4085"
     proved="true"
     expanded="true"
     shape="aisfibc6c8">
+    <label
+     name="expl:Lemma isfib_6_8, lemma">
+     </label>
     <proof
-     prover="coq"
+     prover="2"
      timelimit="5"
-     edited="Fibonacci_Jessie_model_isfib_6_8_1.v"
-     obsolete="false">
-     <result status="valid" time="0.59"/>
+     edited="Fibonacci_Jessie_model_isfib_6_8_2.v"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.60"/>
     </proof>
    </goal>
    <goal
     name="not_isfib_2_2"
+    locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
+    loclnum="50" loccnumb="10" loccnume="23"
     expl="Lemma not_isfib_2_2, lemma"
-    sum="f17c32d5dde96a81c009ef08e162bd17"
+    sum="e4c6b835475ae4ea3f3b5f06aa638042"
     proved="true"
     expanded="true"
     shape="aisfibc2c2N">
+    <label
+     name="expl:Lemma not_isfib_2_2, lemma">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="z3"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
   </theory>
   <theory
    name="WP Jessie_program"
+   locfile="tests/java/Fibonacci/../Fibonacci.mlw"
+   loclnum="196" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _Fibonacci_Fib_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
+    loclnum="57" loccnumb="23" loccnume="26"
     expl="Method Fib, default behavior"
-    sum="904f02bde2b5a27dbfea0737ec27d7ed"
+    sum="61735adb441d5b2851c2304a39115778"
     proved="true"
     expanded="true"
     shape="iainfix <V1V0aisfibV7V5Aaisfibainfix +V7c1V6Aainfix <=V7V0Aainfix <=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FaisfibV0V8Iainfix =V8V3FIaisfibV1V3Aaisfibainfix +V1c1V2Aainfix <=V1V0Aainfix <=c0V1FFFAaisfibc0c0Aaisfibainfix +c0c1c1Aainfix <=c0V0Aainfix <=c0c0Iainfix >=V0c0F">
+    <label
+     name="expl:parameter _Fibonacci_Fib_ensures_default">
+     </label>
+    <label
+     name="expl:Method Fib, default behavior">
+     </label>
     <proof
-     prover="alt-ergo"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Fibonacci_Fib_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
+    loclnum="57" loccnumb="23" loccnume="26"
     expl="loop variant decreases"
-    sum="bb9956f2a538b3516aac11bcc7d458aa"
+    sum="d50ae183ee3a2d885d61ee0a239bffc7"
     proved="true"
     expanded="true"
     shape="ainfix <ainfix -V0V7ainfix -V0V1Aainfix <=c0ainfix -V0V1Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix <V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix <=V1V0Aainfix <=c0V1FFFIainfix >=V0c0F">
+    <label
+     name="expl:parameter _Fibonacci_Fib_safety">
+     </label>
+    <label
+     name="expl:Method Fib, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Fibonacci_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
     expl="Constructor of class Fibonacci, default behavior"
-    sum="1baf22dab081af9598b9df90a09b3e95"
+    sum="d55f1acb38c47d9ee8d60c4c4d2b336f"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter cons_Fibonacci_ensures_default">
+     </label>
+    <label
+     name="expl:Constructor of class Fibonacci, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Fibonacci_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
     expl="Constructor of class Fibonacci, Safety"
-    sum="93a66e6538f0dee68e028f3dcb34b53a"
+    sum="483d19a4c8f44825ca2d0516e7064d7a"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter cons_Fibonacci_safety">
+     </label>
+    <label
+     name="expl:Constructor of class Fibonacci, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
   </theory>

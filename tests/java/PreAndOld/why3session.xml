@@ -1,190 +1,182 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="PreAndOld/why3session.xml">
+ name="tests/java/PreAndOld/why3session.xml">
  <prover
-  id="alt-ergo"
+  id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
-  id="alt-ergo-0.93.1"
-  name="Alt-Ergo"
-  version="0.93.1"/>
- <prover
-  id="coq"
-  name="Coq"
-  version="8.3pl2"/>
- <prover
-  id="cvc3"
+  id="1"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="cvc3-2.4"
-  name="CVC3"
-  version="2.4.1"/>
- <prover
-  id="eprover"
-  name="Eprover"
-  version="1.4 Namring"/>
- <prover
-  id="gappa"
-  name="Gappa"
-  version="0.15.1"/>
- <prover
-  id="simplify"
-  name="Simplify"
-  version="1.5.4"/>
- <prover
-  id="spass"
-  name="Spass"
-  version="3.7"/>
- <prover
-  id="vampire"
-  name="Vampire"
-  version="0.6"/>
- <prover
-  id="verit"
-  name="veriT"
-  version="dev"/>
- <prover
-  id="yices"
-  name="Yices"
-  version="1.0.25"/>
- <prover
-  id="z3"
+  id="2"
   name="Z3"
   version="2.19"/>
- <prover
-  id="z3-3"
-  name="Z3"
-  version="3.2"/>
  <file
   name="../PreAndOld.mlw"
   verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
+   locfile="tests/java/PreAndOld/../PreAndOld.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
+   locfile="tests/java/PreAndOld/../PreAndOld.mlw"
+   loclnum="177" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _PreAndOld_g_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/PreAndOld.java"
+    loclnum="46" loccnumb="8" loccnume="9"
     expl="normal postcondition"
-    sum="bf780e5e0ec9fb9817e1bd9fdd03f35d"
+    sum="0d20a48f6c8579aeac0b4ae79d6bb559"
     proved="true"
     expanded="true"
     shape="ainfix =V5afV1V2Aainfix =V5afV1V2Aainfix =V5afV1V2Iainfix =V5ainfix +V1V2FIainfix =V4c12FIavalid_struct_PreAndOldV0c0c0V3FFFF">
+    <label
+     name="expl:parameter _PreAndOld_g_ensures_default">
+     </label>
+    <label
+     name="expl:Method g, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.00"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _PreAndOld_g_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/PreAndOld.java"
+    loclnum="46" loccnumb="8" loccnume="9"
     expl="Method g, Safety"
-    sum="8399adf226dfbabdd209f431cf5463e6"
+    sum="3aa70c56ecd84f566cae2042d79c229a"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter _PreAndOld_g_safety">
+     </label>
+    <label
+     name="expl:Method g, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.00"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_PreAndOld_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
     expl="Constructor of class PreAndOld, default behavior"
-    sum="bec7811a915c3f2e8e7c6b969b977d3e"
+    sum="aea30cb012c2c578f032d1f1a8bd34c2"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter cons_PreAndOld_ensures_default">
+     </label>
+    <label
+     name="expl:Constructor of class PreAndOld, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_PreAndOld_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
     expl="Constructor of class PreAndOld, Safety"
-    sum="0f8b032d5f090aed330bd3635cd5c25b"
+    sum="9b7df815fa4913257b57dca204752bc9"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter cons_PreAndOld_safety">
+     </label>
+    <label
+     name="expl:Constructor of class PreAndOld, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
   </theory>

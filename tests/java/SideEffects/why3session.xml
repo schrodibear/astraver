@@ -1,190 +1,182 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="SideEffects/why3session.xml">
+ name="tests/java/SideEffects/why3session.xml">
  <prover
-  id="alt-ergo"
+  id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
-  id="alt-ergo-0.93.1"
-  name="Alt-Ergo"
-  version="0.93.1"/>
- <prover
-  id="coq"
-  name="Coq"
-  version="8.3pl2"/>
- <prover
-  id="cvc3"
+  id="1"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="cvc3-2.4"
-  name="CVC3"
-  version="2.4.1"/>
- <prover
-  id="eprover"
-  name="Eprover"
-  version="1.4 Namring"/>
- <prover
-  id="gappa"
-  name="Gappa"
-  version="0.15.1"/>
- <prover
-  id="simplify"
-  name="Simplify"
-  version="1.5.4"/>
- <prover
-  id="spass"
-  name="Spass"
-  version="3.7"/>
- <prover
-  id="vampire"
-  name="Vampire"
-  version="0.6"/>
- <prover
-  id="verit"
-  name="veriT"
-  version="dev"/>
- <prover
-  id="yices"
-  name="Yices"
-  version="1.0.25"/>
- <prover
-  id="z3"
+  id="2"
   name="Z3"
   version="2.19"/>
- <prover
-  id="z3-3"
-  name="Z3"
-  version="3.2"/>
  <file
   name="../SideEffects.mlw"
   verified="true"
   expanded="true">
   <theory
    name="Jessie_model"
+   locfile="tests/java/SideEffects/../SideEffects.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
+   locfile="tests/java/SideEffects/../SideEffects.mlw"
+   loclnum="194" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _SideEffects_m1_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/SideEffects.java"
+    loclnum="38" loccnumb="9" loccnume="11"
     expl="Method m1, default behavior"
-    sum="2928592501f2d0ddf5e8c5969b47f504"
+    sum="6912441aabcc83240aba36dd95a25b11"
     proved="true"
     expanded="true"
     shape="ainfix =V10c0Aainfix =aselectV11ashiftV1c1c4Aainfix =aselectV11ashiftV1c2c2Aainfix =aselectV11ashiftV1c0c1Iainfix =V11astoreV9ashiftV1V8c4FIainfix =V10ainfix -V8c1FAainfix =V8c1Aainfix =aselectV9ashiftV1c1c3Aainfix =aselectV9ashiftV1c2c2Aainfix =aselectV9ashiftV1c0c1Iainfix =V9astoreV7ashiftV1V8c3FIainfix =V8ainfix -V6c1FAainfix =V6c2Aainfix =aselectV7ashiftV1c2c2Aainfix =aselectV7ashiftV1c0c1Iainfix =V7astoreV5ashiftV1V6c2FIainfix =V6ainfix +V4c1FAainfix =V4c1Aainfix =aselectV5ashiftV1c0c1Iainfix =V5astoreV2ashiftV1c0c1FIainfix =V4ainfix +c0c1FIainfix >ainfix +aoffset_maxV3V1c1c10Aavalid_struct_SideEffectsV0c0c0V3Aaleft_valid_struct_intMV1c0V3FFFF">
+    <label
+     name="expl:parameter _SideEffects_m1_ensures_default">
+     </label>
+    <label
+     name="expl:Method m1, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.39"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.06"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.22"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.14"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.39"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _SideEffects_m1_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/SideEffects.java"
+    loclnum="38" loccnumb="9" loccnume="11"
     expl="Method m1, Safety"
-    sum="0d339756f99649924cd8169dde9838b4"
+    sum="d1206eb9d8ccc6c42c082f3864bc4a14"
     proved="true"
     expanded="true"
     shape="ainfix <=V8aoffset_maxV3V1Aainfix <=aoffset_minV3V1V8Iainfix =V10ainfix -V8c1FIainfix =V8c1Aainfix =aselectV9ashiftV1c1c3Aainfix =aselectV9ashiftV1c2c2Aainfix =aselectV9ashiftV1c0c1Iainfix =V9astoreV7ashiftV1V8c3FAainfix <=V8aoffset_maxV3V1Aainfix <=aoffset_minV3V1V8Iainfix =V8ainfix -V6c1FIainfix =V6c2Aainfix =aselectV7ashiftV1c2c2Aainfix =aselectV7ashiftV1c0c1Iainfix =V7astoreV5ashiftV1V6c2FAainfix <=V6aoffset_maxV3V1Aainfix <=aoffset_minV3V1V6Iainfix =V6ainfix +V4c1FIainfix =V4c1Aainfix =aselectV5ashiftV1c0c1Iainfix =V5astoreV2ashiftV1c0c1FAainfix <=c0aoffset_maxV3V1Aainfix <=aoffset_minV3V1c0Iainfix =V4ainfix +c0c1FIainfix >ainfix +aoffset_maxV3V1c1c10Aavalid_struct_SideEffectsV0c0c0V3Aaleft_valid_struct_intMV1c0V3FFFF">
+    <label
+     name="expl:parameter _SideEffects_m1_safety">
+     </label>
+    <label
+     name="expl:Method m1, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.05"/>
     </proof>
     <proof
-     prover="z3"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.05"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_SideEffects_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
     expl="Constructor of class SideEffects, default behavior"
-    sum="1cee7637585c71b4d2a7f15a597dddab"
+    sum="0e326bb3f20c0056054d4d83c02cfcb8"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter cons_SideEffects_ensures_default">
+     </label>
+    <label
+     name="expl:Constructor of class SideEffects, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.00"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_SideEffects_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
     expl="Constructor of class SideEffects, Safety"
-    sum="eaa0b7431ec0e9c59b8c25ab6b7025f1"
+    sum="011c33f23dc498fdcbecd55a976c4329"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter cons_SideEffects_safety">
+     </label>
+    <label
+     name="expl:Constructor of class SideEffects, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
   </theory>
