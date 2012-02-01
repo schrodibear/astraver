@@ -1,21 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/java/Muller/why3session.xml">
+ name="Muller/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.93"/>
- <prover
-  id="1"
-  name="Alt-Ergo"
   version="0.94"/>
  <prover
-  id="2"
+  id="1"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="3"
+  id="2"
   name="Z3"
   version="2.19"/>
  <file
@@ -24,7 +20,7 @@
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="tests/java/Muller/../Muller.mlw"
+   locfile="Muller/../Muller.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="false"
    expanded="true">
@@ -41,32 +37,25 @@
      name="expl:Lemma num_of_pos_non_negative, lemma">
      </label>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="timeout" time="5.01"/>
     </proof>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="unknown" time="0.79"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="timeout" time="5.05"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     obsolete="true"
-     archived="false">
-     <result status="unknown" time="0.70"/>
     </proof>
    </goal>
    <goal
@@ -82,7 +71,14 @@
      name="expl:Lemma num_of_pos_additive, lemma">
      </label>
     <proof
-     prover="3"
+     prover="2"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.04"/>
+    </proof>
+    <proof
+     prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
@@ -94,20 +90,6 @@
      obsolete="false"
      archived="false">
      <result status="timeout" time="5.04"/>
-    </proof>
-    <proof
-     prover="2"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.04"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     obsolete="true"
-     archived="false">
-     <result status="timeout" time="5.02"/>
     </proof>
    </goal>
    <goal
@@ -123,7 +105,7 @@
      name="expl:Lemma num_of_pos_increasing, lemma">
      </label>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      obsolete="false"
      archived="false">
@@ -143,11 +125,18 @@
      name="expl:Lemma num_of_pos_strictly_increasing, lemma">
      </label>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="timeout" time="5.05"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.04"/>
     </proof>
     <proof
      prover="1"
@@ -156,25 +145,11 @@
      archived="false">
      <result status="timeout" time="5.04"/>
     </proof>
-    <proof
-     prover="2"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="timeout" time="5.04"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     obsolete="true"
-     archived="false">
-     <result status="timeout" time="5.03"/>
-    </proof>
    </goal>
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="tests/java/Muller/../Muller.mlw"
+   locfile="Muller/../Muller.mlw"
    loclnum="408" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
@@ -194,14 +169,14 @@
      name="expl:Method m, default behavior">
      </label>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.08"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
@@ -224,14 +199,14 @@
      name="expl:Method m, Safety">
      </label>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.07"/>
     </proof>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
@@ -254,21 +229,21 @@
      name="expl:Constructor of class Muller, default behavior">
      </label>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
@@ -291,21 +266,21 @@
      name="expl:Constructor of class Muller, Safety">
      </label>
     <proof
-     prover="3"
+     prover="2"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">

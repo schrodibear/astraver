@@ -1,29 +1,25 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/c/binary_search.jessie/binary_search/why3session.xml">
+ name="binary_search.jessie/binary_search/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.93"/>
- <prover
-  id="1"
-  name="Alt-Ergo"
   version="0.94"/>
  <prover
-  id="2"
+  id="1"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="3"
+  id="2"
   name="CVC3"
   version="2.4.1"/>
  <prover
-  id="4"
+  id="3"
   name="Z3"
   version="2.19"/>
  <prover
-  id="5"
+  id="4"
   name="Z3"
   version="3.2"/>
  <file
@@ -32,7 +28,7 @@
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="tests/c/binary_search.jessie/binary_search/../binary_search.mlw"
+   locfile="binary_search.jessie/binary_search/../binary_search.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
@@ -49,38 +45,31 @@
      name="expl:Lemma mean, lemma">
      </label>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.07"/>
     </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     obsolete="true"
-     archived="false">
-     <result status="valid" time="0.05"/>
-    </proof>
    </goal>
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="tests/c/binary_search.jessie/binary_search/../binary_search.mlw"
+   locfile="binary_search.jessie/binary_search/../binary_search.mlw"
    loclnum="216" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
@@ -91,7 +80,7 @@
     expl="Function binary_search, default behavior"
     sum="51c55a5a392d5a72e202e63cac3e0609"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="iainfix <=ainteger_of_int32V10ainteger_of_int32V9iainfix <ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V13ainteger_of_int32V2ainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V15Iainfix =V15V14FIainfix =ainteger_of_int32V14ainfix +ainteger_of_int32V13c1Fiainfix >ainteger_of_int32aselectV4ashiftV0ainteger_of_int32V13ainteger_of_int32V2ainfix <=ainteger_of_int32V17ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix -ainteger_of_int32V13c1Fainfix <ainteger_of_int32V19ainteger_of_int32V1Aainfix <=aprefix -c1ainteger_of_int32V19Iainfix =V19V18FIainfix =V18V13FAainfix <=ainteger_of_int32V13ainteger_of_int32V9Aainfix <=ainteger_of_int32V10ainteger_of_int32V13Iainfix =V13V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix +ainteger_of_int32V10ainteger_of_int32V9Fainfix <ainteger_of_int32V22ainteger_of_int32V1Aainfix <=aprefix -c1ainteger_of_int32V22Iainfix =V22V21FIainfix =V21V20FIainfix =ainteger_of_int32V20aprefix -c1FIainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10FFAainfix <=ainteger_of_int32V8ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V6Iainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0FFFFF">
     <label
      name="expl:parameter binary_search_ensures_default">
@@ -100,21 +89,21 @@
      name="expl:Function binary_search, default behavior">
      </label>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.06"/>
     </proof>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.39"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
@@ -137,25 +126,18 @@
      name="expl:Function binary_search, Behavior `failure'">
      </label>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.08"/>
     </proof>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="valid" time="1.88"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     obsolete="true"
-     archived="false">
-     <result status="valid" time="0.52"/>
     </proof>
    </goal>
    <goal
@@ -174,30 +156,23 @@
      name="expl:Function binary_search, Behavior `success'">
      </label>
     <proof
-     prover="4"
+     prover="3"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
     </proof>
     <proof
-     prover="1"
+     prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.09"/>
     </proof>
     <proof
-     prover="2"
+     prover="1"
      timelimit="5"
      obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     obsolete="true"
      archived="false">
      <result status="valid" time="0.06"/>
     </proof>
@@ -237,30 +212,23 @@
        name="expl:Function binary_search, Safety">
        </label>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.04"/>
       </proof>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="0"
-       timelimit="5"
-       obsolete="true"
        archived="false">
        <result status="valid" time="0.03"/>
       </proof>
@@ -300,21 +268,7 @@
          name="expl:Function binary_search, Safety">
          </label>
         <proof
-         prover="4"
-         timelimit="5"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.04"/>
-        </proof>
-        <proof
-         prover="1"
-         timelimit="5"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.02"/>
-        </proof>
-        <proof
-         prover="2"
+         prover="3"
          timelimit="5"
          obsolete="false"
          archived="false">
@@ -323,9 +277,16 @@
         <proof
          prover="0"
          timelimit="5"
-         obsolete="true"
+         obsolete="false"
          archived="false">
-         <result status="valid" time="0.03"/>
+         <result status="valid" time="0.02"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
         </proof>
        </goal>
        <goal
@@ -344,35 +305,35 @@
          name="expl:Function binary_search, Safety">
          </label>
         <proof
-         prover="4"
+         prover="3"
          timelimit="5"
          obsolete="false"
          archived="false">
          <result status="timeout" time="5.07"/>
         </proof>
         <proof
-         prover="1"
+         prover="0"
          timelimit="5"
          obsolete="false"
          archived="false">
          <result status="timeout" time="5.08"/>
         </proof>
         <proof
-         prover="2"
+         prover="1"
          timelimit="5"
          obsolete="false"
          archived="false">
          <result status="unknown" time="0.70"/>
         </proof>
         <proof
-         prover="3"
+         prover="2"
          timelimit="5"
          obsolete="false"
          archived="false">
          <result status="unknown" time="4.54"/>
         </proof>
         <proof
-         prover="5"
+         prover="4"
          timelimit="5"
          obsolete="false"
          archived="false">
@@ -397,30 +358,23 @@
        name="expl:Function binary_search, Safety">
        </label>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
       </proof>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        obsolete="false"
-       archived="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="0"
-       timelimit="5"
-       obsolete="true"
        archived="false">
        <result status="valid" time="0.04"/>
       </proof>
@@ -441,21 +395,7 @@
        name="expl:Function binary_search, Safety">
        </label>
       <proof
-       prover="4"
-       timelimit="5"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="2"
+       prover="3"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -464,7 +404,14 @@
       <proof
        prover="0"
        timelimit="5"
-       obsolete="true"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
@@ -485,32 +432,25 @@
        name="expl:Function binary_search, Safety">
        </label>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.04"/>
       </proof>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.03"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.06"/>
-      </proof>
-      <proof
-       prover="0"
-       timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
@@ -529,32 +469,25 @@
        name="expl:Function binary_search, Safety">
        </label>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.05"/>
       </proof>
       <proof
-       prover="1"
+       prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.14"/>
       </proof>
       <proof
-       prover="2"
+       prover="1"
        timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.07"/>
-      </proof>
-      <proof
-       prover="0"
-       timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.17"/>
       </proof>
      </goal>
      <goal
@@ -573,21 +506,7 @@
        name="expl:Function binary_search, Safety">
        </label>
       <proof
-       prover="4"
-       timelimit="5"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="2"
+       prover="3"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -596,9 +515,16 @@
       <proof
        prover="0"
        timelimit="5"
-       obsolete="true"
+       obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
@@ -617,32 +543,25 @@
        name="expl:Function binary_search, Safety">
        </label>
       <proof
-       prover="4"
+       prover="3"
        timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
       </proof>
       <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+      <proof
        prover="1"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="2"
-       timelimit="5"
-       obsolete="false"
-       archived="false">
        <result status="valid" time="0.05"/>
-      </proof>
-      <proof
-       prover="0"
-       timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.03"/>
       </proof>
      </goal>
      <goal
@@ -661,21 +580,7 @@
        name="expl:Function binary_search, Safety">
        </label>
       <proof
-       prover="4"
-       timelimit="5"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="2"
+       prover="3"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -684,9 +589,16 @@
       <proof
        prover="0"
        timelimit="5"
-       obsolete="true"
+       obsolete="false"
        archived="false">
        <result status="valid" time="0.03"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
@@ -705,21 +617,7 @@
        name="expl:Function binary_search, Safety">
        </label>
       <proof
-       prover="4"
-       timelimit="5"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.06"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="5"
-       obsolete="false"
-       archived="false">
-       <result status="valid" time="0.04"/>
-      </proof>
-      <proof
-       prover="2"
+       prover="3"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -728,9 +626,16 @@
       <proof
        prover="0"
        timelimit="5"
-       obsolete="true"
+       obsolete="false"
        archived="false">
        <result status="valid" time="0.04"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
     </transf>
