@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/c/Sterbenz.jessie/Sterbenz/why3session.xml">
+ name="Sterbenz/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -12,26 +12,34 @@
   version="2.2"/>
  <prover
   id="2"
-  name="Gappa"
-  version="0.15.1"/>
+  name="CVC3"
+  version="2.4.1"/>
  <prover
   id="3"
+  name="Gappa"
+  version="0.16.0"/>
+ <prover
+  id="4"
   name="Z3"
   version="2.19"/>
+ <prover
+  id="5"
+  name="Z3"
+  version="3.2"/>
  <file
   name="../Sterbenz.mlw"
   verified="false"
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="tests/c/Sterbenz.jessie/Sterbenz/../Sterbenz.mlw"
+   locfile="Sterbenz/../Sterbenz.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="tests/c/Sterbenz.jessie/Sterbenz/../Sterbenz.mlw"
+   locfile="Sterbenz/../Sterbenz.mlw"
    loclnum="134" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
@@ -70,11 +78,11 @@
        name="expl:Function Sterbenz, default behavior">
        </label>
       <proof
-       prover="3"
+       prover="4"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="0"
@@ -107,7 +115,7 @@
        name="expl:Function Sterbenz, default behavior">
        </label>
       <proof
-       prover="3"
+       prover="4"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -118,10 +126,10 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
-       prover="2"
+       prover="3"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -143,6 +151,41 @@
       <label
        name="expl:Function Sterbenz, default behavior">
        </label>
+      <proof
+       prover="4"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.04"/>
+      </proof>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="0.36"/>
+      </proof>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="unknown" time="0.04"/>
+      </proof>
+      <proof
+       prover="2"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.06"/>
+      </proof>
+      <proof
+       prover="5"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="timeout" time="5.04"/>
+      </proof>
      </goal>
     </transf>
    </goal>
@@ -162,7 +205,7 @@
      name="expl:Function Sterbenz, Safety">
      </label>
     <proof
-     prover="2"
+     prover="3"
      timelimit="5"
      obsolete="false"
      archived="false">

@@ -1,30 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/c/scalar_product.jessie/scalar_product/why3session.xml">
+ name="scalar_product/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
-  version="0.93"/>
- <prover
-  id="1"
-  name="Alt-Ergo"
-  version="0.93.1"/>
- <prover
-  id="2"
-  name="Alt-Ergo"
   version="0.94"/>
  <prover
-  id="3"
+  id="1"
   name="Gappa"
-  version="0.15.1"/>
+  version="0.16.0"/>
  <file
   name="../scalar_product.mlw"
   verified="true"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
-   locfile="tests/c/scalar_product.jessie/scalar_product/../scalar_product.mlw"
+   locfile="scalar_product/../scalar_product.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
@@ -41,7 +33,7 @@
      name="expl:Lemma bound_int_to_real, lemma">
      </label>
     <proof
-     prover="3"
+     prover="1"
      timelimit="3"
      obsolete="false"
      archived="false">
@@ -51,7 +43,7 @@
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="tests/c/scalar_product.jessie/scalar_product/../scalar_product.mlw"
+   locfile="scalar_product/../scalar_product.mlw"
    loclnum="308" loccnumb="7" loccnume="21"
    verified="true"
    expanded="false">
@@ -90,11 +82,11 @@
        name="expl:Function scalar_product, default behavior">
        </label>
       <proof
-       prover="2"
+       prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.20"/>
+       <result status="valid" time="0.21"/>
       </proof>
      </goal>
      <goal
@@ -113,11 +105,11 @@
        name="expl:Function scalar_product, default behavior">
        </label>
       <proof
-       prover="2"
+       prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.03"/>
       </proof>
      </goal>
      <goal
@@ -136,7 +128,7 @@
        name="expl:Function scalar_product, default behavior">
        </label>
       <proof
-       prover="2"
+       prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
@@ -159,7 +151,7 @@
        name="expl:Function scalar_product, default behavior">
        </label>
       <proof
-       prover="2"
+       prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
@@ -182,11 +174,11 @@
        name="expl:Function scalar_product, default behavior">
        </label>
       <proof
-       prover="3"
+       prover="1"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
@@ -205,7 +197,7 @@
        name="expl:Function scalar_product, default behavior">
        </label>
       <proof
-       prover="2"
+       prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
@@ -228,11 +220,11 @@
        name="expl:Function scalar_product, default behavior">
        </label>
       <proof
-       prover="2"
+       prover="0"
        timelimit="100"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.85"/>
+       <result status="valid" time="1.96"/>
       </proof>
      </goal>
      <goal
@@ -251,11 +243,11 @@
        name="expl:Function scalar_product, default behavior">
        </label>
       <proof
-       prover="2"
+       prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.34"/>
+       <result status="valid" time="1.36"/>
       </proof>
      </goal>
      <goal
@@ -293,7 +285,7 @@
          name="expl:Function scalar_product, default behavior">
          </label>
         <proof
-         prover="2"
+         prover="0"
          timelimit="5"
          obsolete="false"
          archived="false">
@@ -316,11 +308,11 @@
          name="expl:Function scalar_product, default behavior">
          </label>
         <proof
-         prover="2"
+         prover="0"
          timelimit="5"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.10"/>
         </proof>
        </goal>
        <goal
@@ -339,7 +331,7 @@
          name="expl:Function scalar_product, default behavior">
          </label>
         <proof
-         prover="2"
+         prover="0"
          timelimit="5"
          obsolete="false"
          archived="false">
@@ -362,7 +354,7 @@
          name="expl:Function scalar_product, default behavior">
          </label>
         <proof
-         prover="2"
+         prover="0"
          timelimit="5"
          obsolete="false"
          archived="false">
@@ -387,25 +379,11 @@
        name="expl:Function scalar_product, default behavior">
        </label>
       <proof
-       prover="2"
-       timelimit="5"
+       prover="0"
+       timelimit="3"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.03"/>
-      </proof>
-      <proof
-       prover="1"
-       timelimit="10"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.05"/>
-      </proof>
-      <proof
-       prover="0"
-       timelimit="3"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.04"/>
       </proof>
      </goal>
     </transf>
@@ -445,11 +423,11 @@
        name="expl:Function scalar_product, Safety">
        </label>
       <proof
-       prover="2"
+       prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.03"/>
       </proof>
      </goal>
      <goal
@@ -468,7 +446,7 @@
        name="expl:Function scalar_product, Safety">
        </label>
       <proof
-       prover="2"
+       prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -491,7 +469,7 @@
        name="expl:Function scalar_product, Safety">
        </label>
       <proof
-       prover="3"
+       prover="1"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -514,7 +492,7 @@
        name="expl:Function scalar_product, Safety">
        </label>
       <proof
-       prover="3"
+       prover="1"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -537,7 +515,7 @@
        name="expl:Function scalar_product, Safety">
        </label>
       <proof
-       prover="2"
+       prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -560,11 +538,11 @@
        name="expl:Function scalar_product, Safety">
        </label>
       <proof
-       prover="2"
+       prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
     </transf>
