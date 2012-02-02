@@ -17,13 +17,9 @@
  <prover
   id="3"
   name="Gappa"
-  version="0.15.1"/>
- <prover
-  id="4"
-  name="Gappa"
   version="0.16.0"/>
  <prover
-  id="5"
+  id="4"
   name="Z3"
   version="2.19"/>
  <file
@@ -99,7 +95,7 @@
        name="expl:Function my_cos1, default behavior">
        </label>
       <proof
-       prover="5"
+       prover="4"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -130,13 +126,6 @@
        </label>
       <proof
        prover="3"
-       timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -182,13 +171,6 @@
       <proof
        prover="3"
        timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -212,13 +194,6 @@
       <proof
        prover="3"
        timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -241,13 +216,6 @@
        </label>
       <proof
        prover="3"
-       timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -292,13 +260,6 @@
        </label>
       <proof
        prover="3"
-       timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -353,13 +314,6 @@
       <proof
        prover="3"
        timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.01"/>
@@ -404,13 +358,6 @@
       <proof
        prover="3"
        timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -434,13 +381,6 @@
       <proof
        prover="3"
        timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -463,13 +403,6 @@
        </label>
       <proof
        prover="3"
-       timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -545,13 +478,6 @@
       <proof
        prover="3"
        timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.01"/>
@@ -596,13 +522,6 @@
       <proof
        prover="3"
        timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -626,13 +545,6 @@
       <proof
        prover="3"
        timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -655,13 +567,6 @@
        </label>
       <proof
        prover="3"
-       timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        obsolete="false"
        archived="false">
@@ -731,13 +636,6 @@
       <proof
        prover="3"
        timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.01"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -782,13 +680,6 @@
       <proof
        prover="3"
        timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -812,13 +703,6 @@
       <proof
        prover="3"
        timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
-       timelimit="5"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -841,13 +725,6 @@
        </label>
       <proof
        prover="3"
-       timelimit="5"
-       obsolete="true"
-       archived="false">
-       <result status="valid" time="0.00"/>
-      </proof>
-      <proof
-       prover="4"
        timelimit="5"
        obsolete="false"
        archived="false">
