@@ -867,18 +867,23 @@ axiom disj_sym : forall s1,s2 : 'a mybag[disj_mybag(s1,s2)]. disj_mybag(s1,s2) -
 
 logic sub_mybag : 'a mybag, 'a mybag -> prop
 
+(* Ne doit plus servir en théorie *)
 axiom sub_refl :
       forall sa : 'a pointer mybag[sub_mybag(sa,sa)].
       sub_mybag(sa,sa)
 
 axiom sub_disj : forall s1,s2,s3 : 'a mybag
       [disj_mybag(s1,s2),sub_mybag(s2,s3)|disj_mybag(s1,s3),sub_mybag(s2,s3)].
-      disj_mybag(s1,s2) -> sub_mybag(s2,s3) -> disj_mybag(s1,s3)
+      disj_mybag(s1,s3) -> sub_mybag(s2,s3) -> disj_mybag(s1,s2)
 
 axiom sub_in : forall s1,s2 : 'a mybag. forall p : 'a
       [in_mybag(p,s1),sub_mybag(s1,s2)|in_mybag(p,s2),sub_mybag(s1,s2)].
       (not in_mybag(p,s2)) -> sub_mybag(s1,s2) -> (not in_mybag(p,s1))
 
+
+axiom sub_sub : forall s1,s2,s3: 'a mybag
+  [sub_mybag(s1,s3), sub_mybag(s2,s3)|sub_mybag(s1,s3), sub_mybag(s1,s2)].
+      sub_mybag(s1,s2) -> sub_mybag(s2,s3) -> sub_mybag(s1,s3)
 
 (* for the frame_rule *)
 

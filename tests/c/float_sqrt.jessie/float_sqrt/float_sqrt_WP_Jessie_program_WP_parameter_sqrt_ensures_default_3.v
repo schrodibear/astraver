@@ -2,16 +2,24 @@
 (* Beware! Only edit allowed sections below    *)
 Require Import ZArith.
 Require Import Rbase.
-Require Import ZOdiv.
-Require Import Rbasic_fun.
 Require Import R_sqrt.
-Require Import Rtrigo.
-Require Import AltSeries. (* for def of pi *)
+Require Import Rbasic_fun.
+Require Import ZOdiv.
+Require int.Int.
+Require int.Abs.
+Require int.ComputerDivision.
+Require real.Real.
+Require real.Abs.
+Require real.FromInt.
+Require real.Square.
+Require floating_point.Rounding.
+Require floating_point.Single.
+Require floating_point.Double.
 Definition unit  := unit.
 
-Parameter mark : Type.
+Parameter qtmark : Type.
 
-Parameter at1: forall (a:Type), a -> mark -> a.
+Parameter at1: forall (a:Type), a -> qtmark -> a.
 
 Implicit Arguments at1.
 
@@ -19,153 +27,11 @@ Parameter old: forall (a:Type), a -> a.
 
 Implicit Arguments old.
 
-Axiom Abs_le : forall (x:Z) (y:Z), ((Zabs x) <= y)%Z <-> (((-y)%Z <= x)%Z /\
-  (x <= y)%Z).
-
-Axiom Pi_interval : ((314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196 / 100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000)%R <  PI)%R /\
-  (PI <  (314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038197 / 100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000)%R)%R.
-
-Axiom Cos_plus_pi : forall (x:R),
-  ((Rtrigo_def.cos (x + PI)%R) = (-(Rtrigo_def.cos x))%R).
-
-Axiom Sin_plus_pi : forall (x:R),
-  ((Rtrigo_def.sin (x + PI)%R) = (-(Rtrigo_def.sin x))%R).
-
-Axiom Cos_plus_pi2 : forall (x:R),
-  ((Rtrigo_def.cos (x + ((05 / 10)%R * PI)%R)%R) = (-(Rtrigo_def.sin x))%R).
-
-Axiom Sin_plus_pi2 : forall (x:R),
-  ((Rtrigo_def.sin (x + ((05 / 10)%R * PI)%R)%R) = (Rtrigo_def.cos x)).
-
-Axiom Cos_neg : forall (x:R), ((Rtrigo_def.cos (-x)%R) = (Rtrigo_def.cos x)).
-
-Axiom Sin_neg : forall (x:R),
-  ((Rtrigo_def.sin (-x)%R) = (-(Rtrigo_def.sin x))%R).
-
-Axiom Cos_sum : forall (x:R) (y:R),
-  ((Rtrigo_def.cos (x + y)%R) = (((Rtrigo_def.cos x) * (Rtrigo_def.cos y))%R - ((Rtrigo_def.sin x) * (Rtrigo_def.sin y))%R)%R).
-
-Axiom Sin_sum : forall (x:R) (y:R),
-  ((Rtrigo_def.sin (x + y)%R) = (((Rtrigo_def.sin x) * (Rtrigo_def.cos y))%R + ((Rtrigo_def.cos x) * (Rtrigo_def.sin y))%R)%R).
-
-Parameter atan: R -> R.
-
-
-Axiom Tan_atan : forall (x:R), ((Rtrigo.tan (atan x)) = x).
-
-Parameter single : Type.
-
-Inductive mode  :=
-  | NearestTiesToEven : mode 
-  | ToZero : mode 
-  | Up : mode 
-  | Down : mode 
-  | NearTiesToAway : mode .
-
-Parameter round: mode -> R -> R.
-
-
-Parameter round_logic: mode -> R -> single.
-
-
-Parameter value: single -> R.
-
-
-Parameter exact: single -> R.
-
-
-Parameter model: single -> R.
-
-
-Definition round_error(x:single): R := (Rabs ((value x) - (exact x))%R).
-
-Definition total_error(x:single): R := (Rabs ((value x) - (model x))%R).
-
-Definition no_overflow(m:mode) (x:R): Prop := ((Rabs (round m
-  x)) <= (33554430 * 10141204801825835211973625643008)%R)%R.
-
-Axiom Bounded_real_no_overflow : forall (m:mode) (x:R),
-  ((Rabs x) <= (33554430 * 10141204801825835211973625643008)%R)%R ->
-  (no_overflow m x).
-
-Axiom Round_monotonic : forall (m:mode) (x:R) (y:R), (x <= y)%R -> ((round m
-  x) <= (round m y))%R.
-
-Axiom Round_idempotent : forall (m1:mode) (m2:mode) (x:R), ((round m1
-  (round m2 x)) = (round m2 x)).
-
-Axiom Round_value : forall (m:mode) (x:single), ((round m
-  (value x)) = (value x)).
-
-Axiom Bounded_value : forall (x:single),
-  ((Rabs (value x)) <= (33554430 * 10141204801825835211973625643008)%R)%R.
-
-Axiom Exact_rounding_for_integers : forall (m:mode) (i:Z),
-  (((-16777216%Z)%Z <= i)%Z /\ (i <= 16777216%Z)%Z) -> ((round m
-  (IZR i)) = (IZR i)).
-
-Axiom Round_down_le : forall (x:R), ((round Down x) <= x)%R.
-
-Axiom Round_up_ge : forall (x:R), (x <= (round Up x))%R.
-
-Axiom Round_down_neg : forall (x:R), ((round Down (-x)%R) = (-(round Up
-  x))%R).
-
-Axiom Round_up_neg : forall (x:R), ((round Up (-x)%R) = (-(round Down x))%R).
-
-Parameter double : Type.
-
-Parameter round1: mode -> R -> R.
-
-
-Parameter round_logic1: mode -> R -> double.
-
-
-Parameter value1: double -> R.
-
-
-Parameter exact1: double -> R.
-
-
-Parameter model1: double -> R.
-
-
-Definition round_error1(x:double): R := (Rabs ((value1 x) - (exact1 x))%R).
-
-Definition total_error1(x:double): R := (Rabs ((value1 x) - (model1 x))%R).
-
-Definition no_overflow1(m:mode) (x:R): Prop := ((Rabs (round1 m
-  x)) <= (9007199254740991 * 19958403095347198116563727130368385660674512604354575415025472424372118918689640657849579654926357010893424468441924952439724379883935936607391717982848314203200056729510856765175377214443629871826533567445439239933308104551208703888888552684480441575071209068757560416423584952303440099278848)%R)%R.
-
-Axiom Bounded_real_no_overflow1 : forall (m:mode) (x:R),
-  ((Rabs x) <= (9007199254740991 * 19958403095347198116563727130368385660674512604354575415025472424372118918689640657849579654926357010893424468441924952439724379883935936607391717982848314203200056729510856765175377214443629871826533567445439239933308104551208703888888552684480441575071209068757560416423584952303440099278848)%R)%R ->
-  (no_overflow1 m x).
-
-Axiom Round_monotonic1 : forall (m:mode) (x:R) (y:R), (x <= y)%R ->
-  ((round1 m x) <= (round1 m y))%R.
-
-Axiom Round_idempotent1 : forall (m1:mode) (m2:mode) (x:R), ((round1 m1
-  (round1 m2 x)) = (round1 m2 x)).
-
-Axiom Round_value1 : forall (m:mode) (x:double), ((round1 m
-  (value1 x)) = (value1 x)).
-
-Axiom Bounded_value1 : forall (x:double),
-  ((Rabs (value1 x)) <= (9007199254740991 * 19958403095347198116563727130368385660674512604354575415025472424372118918689640657849579654926357010893424468441924952439724379883935936607391717982848314203200056729510856765175377214443629871826533567445439239933308104551208703888888552684480441575071209068757560416423584952303440099278848)%R)%R.
-
-Axiom Exact_rounding_for_integers1 : forall (m:mode) (i:Z),
-  (((-9007199254740992%Z)%Z <= i)%Z /\ (i <= 9007199254740992%Z)%Z) ->
-  ((round1 m (IZR i)) = (IZR i)).
-
-Axiom Round_down_le1 : forall (x:R), ((round1 Down x) <= x)%R.
-
-Axiom Round_up_ge1 : forall (x:R), (x <= (round1 Up x))%R.
-
-Axiom Round_down_neg1 : forall (x:R), ((round1 Down (-x)%R) = (-(round1 Up
-  x))%R).
-
-Axiom Round_up_neg1 : forall (x:R), ((round1 Up (-x)%R) = (-(round1 Down
-  x))%R).
+Definition implb(x:bool) (y:bool): bool := match (x,
+  y) with
+  | (true, false) => false
+  | (_, _) => true
+  end.
 
 Definition zwf_zero(a:Z) (b:Z): Prop := (0%Z <= b)%Z /\ (a <  b)%Z.
 
@@ -698,35 +564,35 @@ Axiom frame_between_sub : forall (a:Type) (b:Type), forall (sa:(mybag
   (m2:(memory a b)), (frame_between sa m1 m2) -> ((sub_mybag sa sb) ->
   (frame_between sb m1 m2)).
 
-Parameter char_P : Type.
+Parameter charP : Type.
 
 Parameter int8 : Type.
 
 Parameter padding : Type.
 
-Parameter void_P : Type.
+Parameter voidP : Type.
 
-Parameter char_P_tag: (tag_id char_P).
-
-
-Axiom char_P_int : ((int_of_tag char_P_tag) = 1%Z).
-
-Parameter char_P_of_pointer_address: (pointer unit) -> (pointer char_P).
+Parameter charP_tag: (tag_id charP).
 
 
-Axiom char_P_of_pointer_address_of_pointer_addr : forall (p:(pointer
-  char_P)), (p = (char_P_of_pointer_address (pointer_address p))).
+Axiom charP_int : ((int_of_tag charP_tag) = 1%Z).
 
-Axiom char_P_parenttag_bottom : (parenttag char_P_tag (bottom_tag:(tag_id
-  char_P))).
+Parameter charP_of_pointer_address: (pointer unit) -> (pointer charP).
 
-Axiom char_P_tags : forall (x:(pointer char_P)),
-  forall (char_P_tag_table:(tag_table char_P)), (instanceof char_P_tag_table
-  x char_P_tag).
+
+Axiom charP_of_pointer_address_of_pointer_addr : forall (p:(pointer charP)),
+  (p = (charP_of_pointer_address (pointer_address p))).
+
+Axiom charP_parenttag_bottom : (parenttag charP_tag (bottom_tag:(tag_id
+  charP))).
+
+Axiom charP_tags : forall (x:(pointer charP)),
+  forall (charP_tag_table:(tag_table charP)), (instanceof charP_tag_table x
+  charP_tag).
 
 Definition closeness(u:R) (t_1:R) (x_1:R): Prop :=
   ((Rabs (u - (((05 / 10)%R * t_1)%R * (3%R - ((t_1 * t_1)%R * x_1)%R)%R)%R)%R) <= 1%R)%R /\
-  ((Rabs (u - (Rdiv 1%R (sqrt x_1))%R)%R) <= ((1 / 1024)%R * (Rabs (Rdiv 1%R (sqrt x_1))%R))%R)%R.
+  ((Rabs (u - (Rdiv 1%R (sqrt x_1))%R)%R) <= 1%R)%R.
 
 Parameter integer_of_int8: int8 -> Z.
 
@@ -746,98 +612,88 @@ Axiom int8_extensionality : forall (x:int8), forall (y:int8),
 Axiom int8_range : forall (x:int8), ((-128%Z)%Z <= (integer_of_int8 x))%Z /\
   ((integer_of_int8 x) <= 127%Z)%Z.
 
-Definition left_valid_struct_char_P(p:(pointer char_P)) (a:Z)
-  (char_P_alloc_table:(alloc_table char_P)): Prop :=
-  ((offset_min char_P_alloc_table p) <= a)%Z.
+Definition left_valid_struct_charP(p:(pointer charP)) (a:Z)
+  (charP_alloc_table:(alloc_table charP)): Prop :=
+  ((offset_min charP_alloc_table p) <= a)%Z.
 
-Definition left_valid_struct_void_P(p:(pointer void_P)) (a:Z)
-  (void_P_alloc_table:(alloc_table void_P)): Prop :=
-  ((offset_min void_P_alloc_table p) <= a)%Z.
+Definition left_valid_struct_voidP(p:(pointer voidP)) (a:Z)
+  (voidP_alloc_table:(alloc_table voidP)): Prop :=
+  ((offset_min voidP_alloc_table p) <= a)%Z.
 
 Definition newton_rel(t:R) (x_0:R): Prop :=
   ((Rdiv ((((05 / 10)%R * t)%R * (3%R - ((t * t)%R * x_0)%R)%R)%R - (Rdiv 1%R (sqrt x_0))%R)%R (Rdiv 1%R (sqrt x_0))%R)%R = ((-((15 / 10)%R + ((05 / 10)%R * (Rdiv (t - (Rdiv 1%R (sqrt x_0))%R)%R (Rdiv 1%R (sqrt x_0))%R)%R)%R)%R)%R * ((Rdiv (t - (Rdiv 1%R (sqrt x_0))%R)%R (Rdiv 1%R (sqrt x_0))%R)%R * (Rdiv (t - (Rdiv 1%R (sqrt x_0))%R)%R (Rdiv 1%R (sqrt x_0))%R)%R)%R)%R).
 
-Axiom pointer_addr_of_char_P_of_pointer_address : forall (p:(pointer unit)),
-  (p = (pointer_address (char_P_of_pointer_address p))).
+Axiom pointer_addr_of_charP_of_pointer_address : forall (p:(pointer unit)),
+  (p = (pointer_address (charP_of_pointer_address p))).
 
-Parameter void_P_of_pointer_address: (pointer unit) -> (pointer void_P).
+Parameter voidP_of_pointer_address: (pointer unit) -> (pointer voidP).
 
 
-Axiom pointer_addr_of_void_P_of_pointer_address : forall (p:(pointer unit)),
-  (p = (pointer_address (void_P_of_pointer_address p))).
+Axiom pointer_addr_of_voidP_of_pointer_address : forall (p:(pointer unit)),
+  (p = (pointer_address (voidP_of_pointer_address p))).
 
-Definition right_valid_struct_char_P(p:(pointer char_P)) (b:Z)
-  (char_P_alloc_table:(alloc_table char_P)): Prop :=
-  (b <= (offset_max char_P_alloc_table p))%Z.
+Definition right_valid_struct_charP(p:(pointer charP)) (b:Z)
+  (charP_alloc_table:(alloc_table charP)): Prop :=
+  (b <= (offset_max charP_alloc_table p))%Z.
 
-Definition right_valid_struct_void_P(p:(pointer void_P)) (b:Z)
-  (void_P_alloc_table:(alloc_table void_P)): Prop :=
-  (b <= (offset_max void_P_alloc_table p))%Z.
+Definition right_valid_struct_voidP(p:(pointer voidP)) (b:Z)
+  (voidP_alloc_table:(alloc_table voidP)): Prop :=
+  (b <= (offset_max voidP_alloc_table p))%Z.
 
-Definition strict_valid_root_char_P(p:(pointer char_P)) (a:Z) (b:Z)
-  (char_P_alloc_table:(alloc_table char_P)): Prop :=
-  ((offset_min char_P_alloc_table p) = a) /\ ((offset_max char_P_alloc_table
+Definition strict_valid_root_charP(p:(pointer charP)) (a:Z) (b:Z)
+  (charP_alloc_table:(alloc_table charP)): Prop :=
+  ((offset_min charP_alloc_table p) = a) /\ ((offset_max charP_alloc_table
   p) = b).
 
-Definition strict_valid_root_void_P(p:(pointer void_P)) (a:Z) (b:Z)
-  (void_P_alloc_table:(alloc_table void_P)): Prop :=
-  ((offset_min void_P_alloc_table p) = a) /\ ((offset_max void_P_alloc_table
+Definition strict_valid_root_voidP(p:(pointer voidP)) (a:Z) (b:Z)
+  (voidP_alloc_table:(alloc_table voidP)): Prop :=
+  ((offset_min voidP_alloc_table p) = a) /\ ((offset_max voidP_alloc_table
   p) = b).
 
-Definition strict_valid_struct_char_P(p:(pointer char_P)) (a:Z) (b:Z)
-  (char_P_alloc_table:(alloc_table char_P)): Prop :=
-  ((offset_min char_P_alloc_table p) = a) /\ ((offset_max char_P_alloc_table
+Definition strict_valid_struct_charP(p:(pointer charP)) (a:Z) (b:Z)
+  (charP_alloc_table:(alloc_table charP)): Prop :=
+  ((offset_min charP_alloc_table p) = a) /\ ((offset_max charP_alloc_table
   p) = b).
 
-Definition strict_valid_struct_void_P(p:(pointer void_P)) (a:Z) (b:Z)
-  (void_P_alloc_table:(alloc_table void_P)): Prop :=
-  ((offset_min void_P_alloc_table p) = a) /\ ((offset_max void_P_alloc_table
+Definition strict_valid_struct_voidP(p:(pointer voidP)) (a:Z) (b:Z)
+  (voidP_alloc_table:(alloc_table voidP)): Prop :=
+  ((offset_min voidP_alloc_table p) = a) /\ ((offset_max voidP_alloc_table
   p) = b).
 
-Definition valid_bitvector_struct_char_P(p:(pointer unit)) (a:Z) (b:Z)
-  (bitvector_alloc_table:(alloc_table unit)): Prop :=
-  ((offset_min bitvector_alloc_table p) = a) /\
-  ((offset_max bitvector_alloc_table p) = b).
+Definition valid_root_charP(p:(pointer charP)) (a:Z) (b:Z)
+  (charP_alloc_table:(alloc_table charP)): Prop :=
+  ((offset_min charP_alloc_table p) <= a)%Z /\
+  (b <= (offset_max charP_alloc_table p))%Z.
 
-Definition valid_bitvector_struct_void_P(p:(pointer unit)) (a:Z) (b:Z)
-  (bitvector_alloc_table:(alloc_table unit)): Prop :=
-  ((offset_min bitvector_alloc_table p) = a) /\
-  ((offset_max bitvector_alloc_table p) = b).
+Definition valid_root_voidP(p:(pointer voidP)) (a:Z) (b:Z)
+  (voidP_alloc_table:(alloc_table voidP)): Prop :=
+  ((offset_min voidP_alloc_table p) <= a)%Z /\
+  (b <= (offset_max voidP_alloc_table p))%Z.
 
-Definition valid_root_char_P(p:(pointer char_P)) (a:Z) (b:Z)
-  (char_P_alloc_table:(alloc_table char_P)): Prop :=
-  ((offset_min char_P_alloc_table p) <= a)%Z /\
-  (b <= (offset_max char_P_alloc_table p))%Z.
+Definition valid_struct_charP(p:(pointer charP)) (a:Z) (b:Z)
+  (charP_alloc_table:(alloc_table charP)): Prop :=
+  ((offset_min charP_alloc_table p) <= a)%Z /\
+  (b <= (offset_max charP_alloc_table p))%Z.
 
-Definition valid_root_void_P(p:(pointer void_P)) (a:Z) (b:Z)
-  (void_P_alloc_table:(alloc_table void_P)): Prop :=
-  ((offset_min void_P_alloc_table p) <= a)%Z /\
-  (b <= (offset_max void_P_alloc_table p))%Z.
+Definition valid_struct_voidP(p:(pointer voidP)) (a:Z) (b:Z)
+  (voidP_alloc_table:(alloc_table voidP)): Prop :=
+  ((offset_min voidP_alloc_table p) <= a)%Z /\
+  (b <= (offset_max voidP_alloc_table p))%Z.
 
-Definition valid_struct_char_P(p:(pointer char_P)) (a:Z) (b:Z)
-  (char_P_alloc_table:(alloc_table char_P)): Prop :=
-  ((offset_min char_P_alloc_table p) <= a)%Z /\
-  (b <= (offset_max char_P_alloc_table p))%Z.
-
-Definition valid_struct_void_P(p:(pointer void_P)) (a:Z) (b:Z)
-  (void_P_alloc_table:(alloc_table void_P)): Prop :=
-  ((offset_min void_P_alloc_table p) <= a)%Z /\
-  (b <= (offset_max void_P_alloc_table p))%Z.
-
-Parameter void_P_tag: (tag_id void_P).
+Parameter voidP_tag: (tag_id voidP).
 
 
-Axiom void_P_int : ((int_of_tag void_P_tag) = 1%Z).
+Axiom voidP_int : ((int_of_tag voidP_tag) = 1%Z).
 
-Axiom void_P_of_pointer_address_of_pointer_addr : forall (p:(pointer
-  void_P)), (p = (void_P_of_pointer_address (pointer_address p))).
+Axiom voidP_of_pointer_address_of_pointer_addr : forall (p:(pointer voidP)),
+  (p = (voidP_of_pointer_address (pointer_address p))).
 
-Axiom void_P_parenttag_bottom : (parenttag void_P_tag (bottom_tag:(tag_id
-  void_P))).
+Axiom voidP_parenttag_bottom : (parenttag voidP_tag (bottom_tag:(tag_id
+  voidP))).
 
-Axiom void_P_tags : forall (x:(pointer void_P)),
-  forall (void_P_tag_table:(tag_table void_P)), (instanceof void_P_tag_table
-  x void_P_tag).
+Axiom voidP_tags : forall (x:(pointer voidP)),
+  forall (voidP_tag_table:(tag_table voidP)), (instanceof voidP_tag_table x
+  voidP_tag).
 
 Axiom newton : forall (t_0:R), forall (x_0_1:R), (0%R <  x_0_1)%R ->
   (newton_rel t_0 x_0_1).
@@ -848,150 +704,211 @@ Implicit Arguments mk_ref.
 
 Definition contents (a:Type)(u:(ref a)): a :=
   match u with
-  | mk_ref contents1 => contents1
+  | (mk_ref contents1) => contents1
   end.
 Implicit Arguments contents.
 
-Definition single_of_double_post(m:mode) (x:double) (res:single): Prop :=
-  ((value res) = (round m (value1 x))) /\ (((exact res) = (exact1 x)) /\
-  ((model res) = (model1 x))).
+Definition single_of_double_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Double.double)
+  (res:floating_point.Single.single): Prop :=
+  ((floating_point.Single.value res) = (floating_point.Single.round m
+  (floating_point.Double.value x))) /\
+  (((floating_point.Single.exact res) = (floating_point.Double.exact x)) /\
+  ((floating_point.Single.model res) = (floating_point.Double.model x))).
 
-Definition neg_single_post(x:single) (res:single): Prop :=
-  ((value res) = (-(value x))%R) /\ (((exact res) = (-(exact x))%R) /\
-  ((model res) = (-(model x))%R)).
+Definition neg_single_post(x:floating_point.Single.single)
+  (res:floating_point.Single.single): Prop :=
+  ((floating_point.Single.value res) = (-(floating_point.Single.value x))%R) /\
+  (((floating_point.Single.exact res) = (-(floating_point.Single.exact x))%R) /\
+  ((floating_point.Single.model res) = (-(floating_point.Single.model x))%R)).
 
-Definition add_single_post(m:mode) (x:single) (y:single)
-  (res:single): Prop := ((value res) = (round m
-  ((value x) + (value y))%R)) /\
-  (((exact res) = ((exact x) + (exact y))%R) /\
-  ((model res) = ((model x) + (model y))%R)).
+Definition add_single_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Single.single) (y:floating_point.Single.single)
+  (res:floating_point.Single.single): Prop :=
+  ((floating_point.Single.value res) = (floating_point.Single.round m
+  ((floating_point.Single.value x) + (floating_point.Single.value y))%R)) /\
+  (((floating_point.Single.exact res) = ((floating_point.Single.exact x) + (floating_point.Single.exact y))%R) /\
+  ((floating_point.Single.model res) = ((floating_point.Single.model x) + (floating_point.Single.model y))%R)).
 
-Definition sub_single_post(m:mode) (x:single) (y:single)
-  (res:single): Prop := ((value res) = (round m
-  ((value x) - (value y))%R)) /\
-  (((exact res) = ((exact x) - (exact y))%R) /\
-  ((model res) = ((model x) - (model y))%R)).
+Definition sub_single_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Single.single) (y:floating_point.Single.single)
+  (res:floating_point.Single.single): Prop :=
+  ((floating_point.Single.value res) = (floating_point.Single.round m
+  ((floating_point.Single.value x) - (floating_point.Single.value y))%R)) /\
+  (((floating_point.Single.exact res) = ((floating_point.Single.exact x) - (floating_point.Single.exact y))%R) /\
+  ((floating_point.Single.model res) = ((floating_point.Single.model x) - (floating_point.Single.model y))%R)).
 
-Definition mul_single_post(m:mode) (x:single) (y:single)
-  (res:single): Prop := ((value res) = (round m
-  ((value x) * (value y))%R)) /\
-  (((exact res) = ((exact x) * (exact y))%R) /\
-  ((model res) = ((model x) * (model y))%R)).
+Definition mul_single_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Single.single) (y:floating_point.Single.single)
+  (res:floating_point.Single.single): Prop :=
+  ((floating_point.Single.value res) = (floating_point.Single.round m
+  ((floating_point.Single.value x) * (floating_point.Single.value y))%R)) /\
+  (((floating_point.Single.exact res) = ((floating_point.Single.exact x) * (floating_point.Single.exact y))%R) /\
+  ((floating_point.Single.model res) = ((floating_point.Single.model x) * (floating_point.Single.model y))%R)).
 
-Definition div_single_post(m:mode) (x:single) (y:single)
-  (res:single): Prop := ((value res) = (round m
-  (Rdiv (value x) (value y))%R)) /\
-  (((exact res) = (Rdiv (exact x) (exact y))%R) /\
-  ((model res) = (Rdiv (model x) (model y))%R)).
+Definition div_single_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Single.single) (y:floating_point.Single.single)
+  (res:floating_point.Single.single): Prop :=
+  ((floating_point.Single.value res) = (floating_point.Single.round m
+  (Rdiv (floating_point.Single.value x) (floating_point.Single.value y))%R)) /\
+  (((floating_point.Single.exact res) = (Rdiv (floating_point.Single.exact x) (floating_point.Single.exact y))%R) /\
+  ((floating_point.Single.model res) = (Rdiv (floating_point.Single.model x) (floating_point.Single.model y))%R)).
 
-Definition neg_double_post(x:double) (res:double): Prop :=
-  ((value1 res) = (-(value1 x))%R) /\ (((exact1 res) = (-(exact1 x))%R) /\
-  ((model1 res) = (-(model1 x))%R)).
+Definition neg_double_post(x:floating_point.Double.double)
+  (res:floating_point.Double.double): Prop :=
+  ((floating_point.Double.value res) = (-(floating_point.Double.value x))%R) /\
+  (((floating_point.Double.exact res) = (-(floating_point.Double.exact x))%R) /\
+  ((floating_point.Double.model res) = (-(floating_point.Double.model x))%R)).
 
-Definition add_double_post(m:mode) (x:double) (y:double)
-  (res:double): Prop := ((value1 res) = (round1 m
-  ((value1 x) + (value1 y))%R)) /\
-  (((exact1 res) = ((exact1 x) + (exact1 y))%R) /\
-  ((model1 res) = ((model1 x) + (model1 y))%R)).
+Definition add_double_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Double.double) (y:floating_point.Double.double)
+  (res:floating_point.Double.double): Prop :=
+  ((floating_point.Double.value res) = (floating_point.Double.round m
+  ((floating_point.Double.value x) + (floating_point.Double.value y))%R)) /\
+  (((floating_point.Double.exact res) = ((floating_point.Double.exact x) + (floating_point.Double.exact y))%R) /\
+  ((floating_point.Double.model res) = ((floating_point.Double.model x) + (floating_point.Double.model y))%R)).
 
-Definition sub_double_post(m:mode) (x:double) (y:double)
-  (res:double): Prop := ((value1 res) = (round1 m
-  ((value1 x) - (value1 y))%R)) /\
-  (((exact1 res) = ((exact1 x) - (exact1 y))%R) /\
-  ((model1 res) = ((model1 x) - (model1 y))%R)).
+Definition sub_double_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Double.double) (y:floating_point.Double.double)
+  (res:floating_point.Double.double): Prop :=
+  ((floating_point.Double.value res) = (floating_point.Double.round m
+  ((floating_point.Double.value x) - (floating_point.Double.value y))%R)) /\
+  (((floating_point.Double.exact res) = ((floating_point.Double.exact x) - (floating_point.Double.exact y))%R) /\
+  ((floating_point.Double.model res) = ((floating_point.Double.model x) - (floating_point.Double.model y))%R)).
 
-Definition mul_double_post(m:mode) (x:double) (y:double)
-  (res:double): Prop := ((value1 res) = (round1 m
-  ((value1 x) * (value1 y))%R)) /\
-  (((exact1 res) = ((exact1 x) * (exact1 y))%R) /\
-  ((model1 res) = ((model1 x) * (model1 y))%R)).
+Definition mul_double_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Double.double) (y:floating_point.Double.double)
+  (res:floating_point.Double.double): Prop :=
+  ((floating_point.Double.value res) = (floating_point.Double.round m
+  ((floating_point.Double.value x) * (floating_point.Double.value y))%R)) /\
+  (((floating_point.Double.exact res) = ((floating_point.Double.exact x) * (floating_point.Double.exact y))%R) /\
+  ((floating_point.Double.model res) = ((floating_point.Double.model x) * (floating_point.Double.model y))%R)).
 
-Definition div_double_post(m:mode) (x:double) (y:double)
-  (res:double): Prop := ((value1 res) = (round1 m
-  (Rdiv (value1 x) (value1 y))%R)) /\
-  (((exact1 res) = (Rdiv (exact1 x) (exact1 y))%R) /\
-  ((model1 res) = (Rdiv (model1 x) (model1 y))%R)).
+Definition div_double_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Double.double) (y:floating_point.Double.double)
+  (res:floating_point.Double.double): Prop :=
+  ((floating_point.Double.value res) = (floating_point.Double.round m
+  (Rdiv (floating_point.Double.value x) (floating_point.Double.value y))%R)) /\
+  (((floating_point.Double.exact res) = (Rdiv (floating_point.Double.exact x) (floating_point.Double.exact y))%R) /\
+  ((floating_point.Double.model res) = (Rdiv (floating_point.Double.model x) (floating_point.Double.model y))%R)).
 
-Definition double_of_real_post(m:mode) (x:R) (res:double): Prop :=
-  ((value1 res) = (round1 m x)) /\ (((exact1 res) = x) /\
-  ((model1 res) = x)).
+Definition double_of_real_post(m:floating_point.Rounding.mode) (x:R)
+  (res:floating_point.Double.double): Prop :=
+  ((floating_point.Double.value res) = (floating_point.Double.round m x)) /\
+  (((floating_point.Double.exact res) = x) /\
+  ((floating_point.Double.model res) = x)).
 
-Definition double_of_single_post(x:single) (res:double): Prop :=
-  ((value1 res) = (value x)) /\ (((exact1 res) = (exact x)) /\
-  ((model1 res) = (model x))).
+Definition double_of_single_post(x:floating_point.Single.single)
+  (res:floating_point.Double.double): Prop :=
+  ((floating_point.Double.value res) = (floating_point.Single.value x)) /\
+  (((floating_point.Double.exact res) = (floating_point.Single.exact x)) /\
+  ((floating_point.Double.model res) = (floating_point.Single.model x))).
 
-Parameter char_P_alloc_table: (ref (alloc_table char_P)).
-
-
-Parameter char_P_tag_table: (ref (tag_table char_P)).
-
-
-Parameter void_P_alloc_table: (ref (alloc_table void_P)).
+Parameter charP_alloc_table: (ref (alloc_table charP)).
 
 
-Parameter void_P_tag_table: (ref (tag_table void_P)).
+Parameter charP_tag_table: (ref (tag_table charP)).
+
+
+Parameter voidP_alloc_table: (ref (alloc_table voidP)).
+
+
+Parameter voidP_tag_table: (ref (tag_table voidP)).
 
 
 (* YOU MAY EDIT THE CONTEXT BELOW *)
 
 (* DO NOT EDIT BELOW *)
 
-Theorem WP_parameter_sqrt_ensures_default : forall (x_2:double),
-  (((05 / 10)%R <= (value1 x_2))%R /\ ((value1 x_2) <= 2%R)%R) ->
-  forall (result:double),
-  ((Rabs ((value1 result) - (Rdiv 1%R (sqrt (value1 x_2)))%R)%R) <= ((1 / 64)%R * (Rabs (Rdiv 1%R (sqrt (value1 x_2)))%R))%R)%R ->
-  forall (t_2:double), (t_2 = result) -> forall (result1:double),
-  (((value1 result1) = (05 / 10)%R) /\ (((exact1 result1) = (05 / 10)%R) /\
-  ((model1 result1) = (05 / 10)%R))) -> forall (result2:double),
-  (mul_double_post NearestTiesToEven result1 t_2 result2) ->
-  forall (result3:double), (((value1 result3) = 3%R) /\
-  (((exact1 result3) = 3%R) /\ ((model1 result3) = 3%R))) ->
-  forall (result4:double), (mul_double_post NearestTiesToEven t_2 t_2
-  result4) -> forall (result5:double), (mul_double_post NearestTiesToEven
-  result4 x_2 result5) -> forall (result6:double),
-  (sub_double_post NearestTiesToEven result3 result5 result6) ->
-  forall (result7:double), (mul_double_post NearestTiesToEven result2 result6
-  result7) -> forall (u_0:double), (u_0 = result7) ->
-  ((newton_rel (value1 t_2) (value1 x_2)) -> ((closeness (value1 u_0)
-  (value1 t_2) (value1 x_2)) -> forall (t_21:double), (t_21 = u_0) ->
-  forall (result8:double), (((value1 result8) = (05 / 10)%R) /\
-  (((exact1 result8) = (05 / 10)%R) /\ ((model1 result8) = (05 / 10)%R))) ->
-  forall (result9:double), (mul_double_post NearestTiesToEven result8 t_21
-  result9) -> forall (result10:double), (((value1 result10) = 3%R) /\
-  (((exact1 result10) = 3%R) /\ ((model1 result10) = 3%R))) ->
-  forall (result11:double), (mul_double_post NearestTiesToEven t_21 t_21
-  result11) -> forall (result12:double), (mul_double_post NearestTiesToEven
-  result11 x_2 result12) -> forall (result13:double),
-  (sub_double_post NearestTiesToEven result10 result12 result13) ->
-  forall (result14:double), (mul_double_post NearestTiesToEven result9
-  result13 result14) -> forall (u_01:double), (u_01 = result14) ->
-  ((newton_rel (value1 t_21) (value1 x_2)) -> ((closeness (value1 u_01)
-  (value1 t_21) (value1 x_2)) -> forall (t_22:double), (t_22 = u_01) ->
-  forall (result15:double), (((value1 result15) = (05 / 10)%R) /\
-  (((exact1 result15) = (05 / 10)%R) /\
-  ((model1 result15) = (05 / 10)%R))) -> forall (result16:double),
-  (mul_double_post NearestTiesToEven result15 t_22 result16) ->
-  forall (result17:double), (((value1 result17) = 3%R) /\
-  (((exact1 result17) = 3%R) /\ ((model1 result17) = 3%R))) ->
-  forall (result18:double), (mul_double_post NearestTiesToEven t_22 t_22
-  result18) -> forall (result19:double), (mul_double_post NearestTiesToEven
-  result18 x_2 result19) -> forall (result20:double),
-  (sub_double_post NearestTiesToEven result17 result19 result20) ->
-  forall (result21:double), (mul_double_post NearestTiesToEven result16
-  result20 result21) -> forall (u_02:double), (u_02 = result21) ->
-  ((newton_rel (value1 t_22) (value1 x_2)) -> ((closeness (value1 u_02)
-  (value1 t_22) (value1 x_2)) -> forall (t_23:double), (t_23 = u_02) ->
-  (((value1 x_2) * (Rdiv 1%R (sqrt (value1 x_2)))%R)%R = (sqrt (value1 x_2))))))))).
+Theorem WP_parameter_sqrt_ensures_default : forall (x_2:floating_point.Double.double),
+  (((05 / 10)%R <= (floating_point.Double.value x_2))%R /\
+  ((floating_point.Double.value x_2) <= 2%R)%R) ->
+  forall (result:floating_point.Double.double),
+  ((Rabs ((floating_point.Double.value result) - (Rdiv 1%R (sqrt (floating_point.Double.value x_2)))%R)%R) <= ((1 / 64)%R * (Rabs (Rdiv 1%R (sqrt (floating_point.Double.value x_2)))%R))%R)%R ->
+  forall (t_2:floating_point.Double.double), (t_2 = result) ->
+  forall (result1:floating_point.Double.double),
+  (((floating_point.Double.value result1) = (05 / 10)%R) /\
+  (((floating_point.Double.exact result1) = (05 / 10)%R) /\
+  ((floating_point.Double.model result1) = (05 / 10)%R))) ->
+  forall (result2:floating_point.Double.double),
+  (mul_double_post floating_point.Rounding.NearestTiesToEven result1 t_2
+  result2) -> forall (result3:floating_point.Double.double),
+  (((floating_point.Double.value result3) = 3%R) /\
+  (((floating_point.Double.exact result3) = 3%R) /\
+  ((floating_point.Double.model result3) = 3%R))) ->
+  forall (result4:floating_point.Double.double),
+  (mul_double_post floating_point.Rounding.NearestTiesToEven t_2 t_2
+  result4) -> forall (result5:floating_point.Double.double),
+  (mul_double_post floating_point.Rounding.NearestTiesToEven result4 x_2
+  result5) -> forall (result6:floating_point.Double.double),
+  (sub_double_post floating_point.Rounding.NearestTiesToEven result3 result5
+  result6) -> forall (result7:floating_point.Double.double),
+  (mul_double_post floating_point.Rounding.NearestTiesToEven result2 result6
+  result7) -> forall (u_0:floating_point.Double.double), (u_0 = result7) ->
+  ((newton_rel (floating_point.Double.value t_2)
+  (floating_point.Double.value x_2)) ->
+  ((closeness (floating_point.Double.value u_0)
+  (floating_point.Double.value t_2) (floating_point.Double.value x_2)) ->
+  forall (t_21:floating_point.Double.double), (t_21 = u_0) ->
+  forall (result8:floating_point.Double.double),
+  (((floating_point.Double.value result8) = (05 / 10)%R) /\
+  (((floating_point.Double.exact result8) = (05 / 10)%R) /\
+  ((floating_point.Double.model result8) = (05 / 10)%R))) ->
+  forall (result9:floating_point.Double.double),
+  (mul_double_post floating_point.Rounding.NearestTiesToEven result8 t_21
+  result9) -> forall (result10:floating_point.Double.double),
+  (((floating_point.Double.value result10) = 3%R) /\
+  (((floating_point.Double.exact result10) = 3%R) /\
+  ((floating_point.Double.model result10) = 3%R))) ->
+  forall (result11:floating_point.Double.double),
+  (mul_double_post floating_point.Rounding.NearestTiesToEven t_21 t_21
+  result11) -> forall (result12:floating_point.Double.double),
+  (mul_double_post floating_point.Rounding.NearestTiesToEven result11 x_2
+  result12) -> forall (result13:floating_point.Double.double),
+  (sub_double_post floating_point.Rounding.NearestTiesToEven result10
+  result12 result13) -> forall (result14:floating_point.Double.double),
+  (mul_double_post floating_point.Rounding.NearestTiesToEven result9 result13
+  result14) -> forall (u_01:floating_point.Double.double),
+  (u_01 = result14) -> ((newton_rel (floating_point.Double.value t_21)
+  (floating_point.Double.value x_2)) ->
+  ((closeness (floating_point.Double.value u_01)
+  (floating_point.Double.value t_21) (floating_point.Double.value x_2)) ->
+  forall (t_22:floating_point.Double.double), (t_22 = u_01) ->
+  forall (result15:floating_point.Double.double),
+  (((floating_point.Double.value result15) = (05 / 10)%R) /\
+  (((floating_point.Double.exact result15) = (05 / 10)%R) /\
+  ((floating_point.Double.model result15) = (05 / 10)%R))) ->
+  forall (result16:floating_point.Double.double),
+  (mul_double_post floating_point.Rounding.NearestTiesToEven result15 t_22
+  result16) -> forall (result17:floating_point.Double.double),
+  (((floating_point.Double.value result17) = 3%R) /\
+  (((floating_point.Double.exact result17) = 3%R) /\
+  ((floating_point.Double.model result17) = 3%R))) ->
+  forall (result18:floating_point.Double.double),
+  (mul_double_post floating_point.Rounding.NearestTiesToEven t_22 t_22
+  result18) -> forall (result19:floating_point.Double.double),
+  (mul_double_post floating_point.Rounding.NearestTiesToEven result18 x_2
+  result19) -> forall (result20:floating_point.Double.double),
+  (sub_double_post floating_point.Rounding.NearestTiesToEven result17
+  result19 result20) -> forall (result21:floating_point.Double.double),
+  (mul_double_post floating_point.Rounding.NearestTiesToEven result16
+  result20 result21) -> forall (u_02:floating_point.Double.double),
+  (u_02 = result21) -> ((newton_rel (floating_point.Double.value t_22)
+  (floating_point.Double.value x_2)) ->
+  ((closeness (floating_point.Double.value u_02)
+  (floating_point.Double.value t_22) (floating_point.Double.value x_2)) ->
+  forall (t_23:floating_point.Double.double), (t_23 = u_02) ->
+  (((floating_point.Double.value x_2) * (Rdiv 1%R (sqrt (floating_point.Double.value x_2)))%R)%R = (sqrt (floating_point.Double.value x_2))))))))).
 (* YOU MAY EDIT THE PROOF BELOW *)
 intros x. intros. clear -H.
-assert (0 < value1 x)%R.
+assert (0 < Double.value x)%R.
 apply Rlt_le_trans with (2 := proj1 H).
 apply Fourier_util.Rlt_mult_inv_pos.
 replace 5%R with (IZR 5) by (simpl ; ring).
 now apply (IZR_lt 0 5).
 replace 10%R with (IZR 10) by (simpl ; ring).
 now apply (IZR_lt 0 10).
-rewrite <- (sqrt_def (value1 x)) at 1.
+rewrite <- (sqrt_def (Double.value x)) at 1.
 field.
 apply Rgt_not_eq.
 now apply sqrt_lt_R0.

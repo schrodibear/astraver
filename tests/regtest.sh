@@ -34,7 +34,7 @@ case $1 in
 	if grep JAVACARD $f.java ; then
 	    opt=-javacard
 	fi
-	KRAKATOALIB=$DIR/lib bin/krakatoa.opt $opt $1 || exit 1
+	KRAKATOALIB=$DIR/lib bin/krakatoa.opt -gen-only $opt $1 || exit 1
 	mycat $f.jc
 	mycatfilterdir $f.jloc
 	echo "========== jessie execution =========="

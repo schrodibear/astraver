@@ -142,10 +142,11 @@ predicate Swap{L1, L2}(intP[..] a, integer i, integer j) =
       (\at((a + k).intM,L1) == \at((a + k).intM,L2)))))
 
 predicate Permut{L1, L2}(intP[..] a_0, integer l, integer h) {
-case Permut_refl{L}: (\forall intP[..] a_1;
-                       (\forall integer l_0;
-                         (\forall integer h_0;
-                           Permut{L, L}(a_1, l_0, h_0))));
+case Permut_refl{L}: \at((\forall intP[..] a_1;
+                           (\forall integer l_0;
+                             (\forall integer h_0;
+                               Permut{L,
+                               L}(a_1, l_0, h_0)))),L);
   
   case Permut_sym{L1, L2}: (\forall intP[..] a_2;
                              (\forall integer l_1;
@@ -911,14 +912,14 @@ clean:
 [JC_90]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 176
+line = 177
 begin = 14
 end = 47
 
 [JC_91]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 177
+line = 178
 begin = 14
 end = 47
 
@@ -994,7 +995,7 @@ end = 30
 [JC_150]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 193
+line = 194
 begin = 14
 end = 49
 
@@ -1013,7 +1014,7 @@ end = 40
 [JC_151]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 193
+line = 194
 begin = 14
 end = 49
 
@@ -1061,7 +1062,7 @@ end = 24
 
 [JC_101]
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 124
+line = 125
 begin = 6
 end = 1398
 
@@ -1079,7 +1080,7 @@ end = 39
 
 [JC_102]
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 124
+line = 125
 begin = 6
 end = 1398
 
@@ -1098,7 +1099,7 @@ end = 39
 [JC_103]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 151
+line = 152
 begin = 29
 end = 44
 
@@ -1205,13 +1206,13 @@ end = -1
 
 [JC_53]
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 124
+line = 125
 begin = 6
 end = 1398
 
 [JC_54]
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 124
+line = 125
 begin = 6
 end = 1398
 
@@ -1225,14 +1226,14 @@ end = 12
 [JC_56]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 151
+line = 152
 begin = 29
 end = 44
 
 [JC_110]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 176
+line = 177
 begin = 14
 end = 47
 
@@ -1245,7 +1246,7 @@ end = 39
 [JC_111]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 177
+line = 178
 begin = 14
 end = 47
 
@@ -1365,7 +1366,7 @@ end = 39
 [JC_64]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 176
+line = 177
 begin = 14
 end = 47
 
@@ -1408,19 +1409,19 @@ end = -1
 [JC_67]
 kind = VarDecr
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 176
+line = 177
 begin = 14
 end = 47
 
 [JC_15]
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 85
+line = 86
 begin = 9
 end = 16
 
 [JC_121]
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 124
+line = 125
 begin = 6
 end = 1398
 
@@ -1435,7 +1436,7 @@ end = 14
 [JC_68]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 177
+line = 178
 begin = 14
 end = 47
 
@@ -1447,7 +1448,7 @@ end = 33
 
 [JC_122]
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 124
+line = 125
 begin = 6
 end = 1398
 
@@ -1466,13 +1467,13 @@ end = 9
 [JC_123]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 151
+line = 152
 begin = 29
 end = 44
 
 [JC_18]
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 85
+line = 86
 begin = 9
 end = 16
 
@@ -1536,7 +1537,7 @@ end = 17
 [JC_71]
 kind = VarDecr
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 177
+line = 178
 begin = 14
 end = 47
 
@@ -1587,7 +1588,7 @@ end = 51
 [JC_23]
 kind = PointerDeref
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 93
+line = 94
 begin = 14
 end = 77
 
@@ -1608,14 +1609,14 @@ end = 9
 [JC_24]
 kind = PointerDeref
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 94
+line = 95
 begin = 15
 end = 52
 
 [JC_130]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 176
+line = 177
 begin = 14
 end = 47
 
@@ -1634,7 +1635,7 @@ end = 32
 [JC_131]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 177
+line = 178
 begin = 14
 end = 47
 
@@ -1730,13 +1731,13 @@ end = -1
 
 [JC_81]
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 124
+line = 125
 begin = 6
 end = 1398
 
 [JC_82]
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 124
+line = 125
 begin = 6
 end = 1398
 
@@ -1749,7 +1750,7 @@ end = 32
 [JC_83]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 151
+line = 152
 begin = 29
 end = 44
 
@@ -1911,14 +1912,14 @@ end = 39
 [JC_148]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 193
+line = 194
 begin = 14
 end = 49
 
 [JC_149]
 kind = UserCall
 file = "HOME/tests/c/quick_sort.jessie/quick_sort.jc"
-line = 193
+line = 194
 begin = 14
 end = 49
 
@@ -3767,7 +3768,7 @@ axiom sub_disj:
     (forall s2:'a1 mybag.
       (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
         disj_mybag(s1, s3), sub_mybag(s2, s3)].
-        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+        (disj_mybag(s1, s3) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s2))))))
 
 axiom sub_in:
   (forall s1:'a1 mybag.
@@ -3776,6 +3777,13 @@ axiom sub_in:
         sub_mybag(s1, s2)].
         ((not in_mybag(p, s2)) ->
          (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+axiom sub_sub:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [sub_mybag(s1, s3), sub_mybag(s2, s3)|
+        sub_mybag(s1, s3), sub_mybag(s1, s2)].
+        (sub_mybag(s1, s2) -> (sub_mybag(s2, s3) -> sub_mybag(s1, s3))))))
 
 logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
 'a2) memory -> prop
@@ -7295,13 +7303,13 @@ why -simplify [...] why/quick_sort.why
 (BG_PUSH
  ;; Why axiom sub_disj
  (FORALL (s1 s2 s3)
- (IMPLIES (EQ (disj_mybag s1 s2) |@true|)
- (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s3) |@true|))))
+ (IMPLIES (EQ (disj_mybag s1 s3) |@true|)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s2) |@true|))))
 
- (FORALL (s1 s2)
- (IMPLIES (EQ (disj_mybag s1 s2) |@true|)
- (FORALL (s3)
- (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s3) |@true|))))))
+ (FORALL (s1 s3)
+ (IMPLIES (EQ (disj_mybag s1 s3) |@true|)
+ (FORALL (s2)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s2) |@true|))))))
 
 (BG_PUSH
  ;; Why axiom sub_in
@@ -7313,6 +7321,17 @@ why -simplify [...] why/quick_sort.why
  (IMPLIES (NOT (EQ (in_mybag p s2) |@true|))
  (FORALL (s1)
  (IMPLIES (EQ (sub_mybag s1 s2) |@true|) (NOT (EQ (in_mybag p s1) |@true|)))))))
+
+(BG_PUSH
+ ;; Why axiom sub_sub
+ (FORALL (s1 s2 s3)
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (sub_mybag s1 s3) |@true|))))
+
+ (FORALL (s1 s2)
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|)
+ (FORALL (s3)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (sub_mybag s1 s3) |@true|))))))
 
 (BG_PUSH
  ;; Why axiom frame_between_refl
@@ -7790,7 +7809,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (IMPLIES (AND (< l_0 j_2) (<= j_2 m))
 (< (select intP_intM_t_5 (shift t j_2)) v))))))))))))))))))
 
-;; quick_rec_ensures_default_po_9, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 124, characters 6-1398
+;; quick_rec_ensures_default_po_9, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 125, characters 6-1398
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -8262,7 +8281,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5 (pset_range
 (IMPLIES (AND (< l_0 j_2) (<= j_2 m1))
 (< (select intP_intM_t_5_1 (shift t j_2)) v)))))))))))))))))))))))))))))))))
 
-;; quick_rec_ensures_default_po_18, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 124, characters 6-1398
+;; quick_rec_ensures_default_po_18, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 125, characters 6-1398
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9053,7 +9072,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
          (< (select intP_intM_t_5_0 (shift t j_2)) v))))))
 (IMPLIES (<= i_0_1_0 r) (<= i_0_1_0 (offset_max intP_t_5_alloc_table t))))))))))))))))))))))))
 
-;; quick_rec_safety_po_4, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 151, characters 29-44
+;; quick_rec_safety_po_4, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 152, characters 29-44
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9096,7 +9115,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (FORALL (m1)
 (IMPLIES (EQ m1 (+ m0 1)) (>= (offset_max intP_t_5_alloc_table t) i_0_1_0)))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_5, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 151, characters 29-44
+;; quick_rec_safety_po_5, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 152, characters 29-44
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9139,7 +9158,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (FORALL (m1)
 (IMPLIES (EQ m1 (+ m0 1)) (<= (offset_min intP_t_5_alloc_table t) m1)))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_6, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 151, characters 29-44
+;; quick_rec_safety_po_6, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 152, characters 29-44
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9606,7 +9625,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
 (IMPLIES (EQ (Permut t l_0 r intP_intM_t_5_1 intP_intM_t_5_0) |@true|)
 (< (- (- m0 1) l_0) (- r l_0)))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_16, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 176, characters 14-47
+;; quick_rec_safety_po_16, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 177, characters 14-47
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)
@@ -9787,7 +9806,7 @@ intP_t_5_alloc_table intP_intM_t_5 intP_intM_t_5_3 (pset_range
                                                               (- m0 1)))))
 (< (- r (+ m0 1)) (- r l_0))))))))))))))))))))))))))))))))
 
-;; quick_rec_safety_po_19, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 177, characters 14-47
+;; quick_rec_safety_po_19, File "HOME/tests/c/quick_sort.jessie/quick_sort.jc", line 178, characters 14-47
 (FORALL (t)
 (FORALL (l_0)
 (FORALL (r)

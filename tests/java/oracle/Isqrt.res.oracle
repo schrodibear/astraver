@@ -94,7 +94,7 @@ Done.
 # AbstractDomain = None
 
 predicate Non_null_Object{Here}(Object[0..] x) =
-(\offset_max(x) == 0)
+(\offset_max(x) >= 0)
 
 String[0..] any_string()
 ;
@@ -1730,7 +1730,7 @@ axiom Isqrt_parenttag_Object : parenttag(Isqrt_tag, Object_tag)
 
 predicate Non_null_Object(x_0:Object pointer,
  Object_alloc_table:Object alloc_table) =
- (offset_max(Object_alloc_table, x_0) = (0))
+ ge_int(offset_max(Object_alloc_table, x_0), (0))
 
 axiom Object_int : (int_of_tag(Object_tag) = (1))
 
@@ -3267,7 +3267,7 @@ axiom sub_disj:
     (forall s2:'a1 mybag.
       (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
         disj_mybag(s1, s3), sub_mybag(s2, s3)].
-        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+        (disj_mybag(s1, s3) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s2))))))
 
 axiom sub_in:
   (forall s1:'a1 mybag.
@@ -3276,6 +3276,13 @@ axiom sub_in:
         sub_mybag(s1, s2)].
         ((not in_mybag(p, s2)) ->
          (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+axiom sub_sub:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [sub_mybag(s1, s3), sub_mybag(s2, s3)|
+        sub_mybag(s1, s3), sub_mybag(s1, s2)].
+        (sub_mybag(s1, s2) -> (sub_mybag(s2, s3) -> sub_mybag(s1, s3))))))
 
 logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
 'a2) memory -> prop
@@ -3363,7 +3370,7 @@ axiom Isqrt_parenttag_Object: parenttag(Isqrt_tag, Object_tag)
 
 predicate Non_null_Object(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_0) = 0)
+  x_0) >= 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 
@@ -4432,13 +4439,13 @@ why -simplify [...] why/Isqrt.why
 (BG_PUSH
  ;; Why axiom sub_disj
  (FORALL (s1 s2 s3)
- (IMPLIES (EQ (disj_mybag s1 s2) |@true|)
- (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s3) |@true|))))
+ (IMPLIES (EQ (disj_mybag s1 s3) |@true|)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s2) |@true|))))
 
- (FORALL (s1 s2)
- (IMPLIES (EQ (disj_mybag s1 s2) |@true|)
- (FORALL (s3)
- (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s3) |@true|))))))
+ (FORALL (s1 s3)
+ (IMPLIES (EQ (disj_mybag s1 s3) |@true|)
+ (FORALL (s2)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s2) |@true|))))))
 
 (BG_PUSH
  ;; Why axiom sub_in
@@ -4450,6 +4457,17 @@ why -simplify [...] why/Isqrt.why
  (IMPLIES (NOT (EQ (in_mybag p s2) |@true|))
  (FORALL (s1)
  (IMPLIES (EQ (sub_mybag s1 s2) |@true|) (NOT (EQ (in_mybag p s1) |@true|)))))))
+
+(BG_PUSH
+ ;; Why axiom sub_sub
+ (FORALL (s1 s2 s3)
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (sub_mybag s1 s3) |@true|))))
+
+ (FORALL (s1 s2)
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|)
+ (FORALL (s3)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (sub_mybag s1 s3) |@true|))))))
 
 (BG_PUSH
  ;; Why axiom frame_between_refl
@@ -4548,7 +4566,7 @@ why -simplify [...] why/Isqrt.why
  (EQ (parenttag Isqrt_tag Object_tag) |@true|))
 
 (DEFPRED (Non_null_Object x_0 Object_alloc_table)
-  (EQ (offset_max Object_alloc_table x_0) 0))
+  (>= (offset_max Object_alloc_table x_0) 0))
 
 (BG_PUSH
  ;; Why axiom Object_int
@@ -5694,7 +5712,7 @@ axiom sub_disj:
     (forall s2:'a1 mybag.
       (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
         disj_mybag(s1, s3), sub_mybag(s2, s3)].
-        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+        (disj_mybag(s1, s3) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s2))))))
 
 axiom sub_in:
   (forall s1:'a1 mybag.
@@ -5703,6 +5721,13 @@ axiom sub_in:
         sub_mybag(s1, s2)].
         ((not in_mybag(p, s2)) ->
          (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+axiom sub_sub:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [sub_mybag(s1, s3), sub_mybag(s2, s3)|
+        sub_mybag(s1, s3), sub_mybag(s1, s2)].
+        (sub_mybag(s1, s2) -> (sub_mybag(s2, s3) -> sub_mybag(s1, s3))))))
 
 logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
 'a2) memory -> prop
@@ -5790,7 +5815,7 @@ axiom Isqrt_parenttag_Object: parenttag(Isqrt_tag, Object_tag)
 
 predicate Non_null_Object(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_0) = 0)
+  x_0) >= 0)
 
 axiom Object_int: (int_of_tag(Object_tag) = 1)
 

@@ -234,7 +234,8 @@ CMO = src/lib.cmo src/rc.cmo tools/dpConfig.cmo \
 	   src/holl.cmo src/harvey.cmo src/simplify.cmo  \
            src/regen.cmo src/mizar.cmo src/smtlib.cmo src/coq.cmo \
 	   src/zenon.cmo src/z3.cmo src/cvcl.cmo tools/calldp.cmo \
-	   src/xml.cmo src/project.cmo src/why3.cmo src/pretty.cmo  \
+	   src/xml.cmo src/project.cmo \
+	   src/why3_kw.cmo src/why3.cmo src/pretty.cmo  \
            src/unionfind.cmo src/theoryreducer.cmo \
            src/theory_filtering.cmo src/hypotheses_filtering.cmo \
            src/dispatcher.cmo src/isabelle.cmo src/ocaml.cmo  \
@@ -274,7 +275,7 @@ bin/top: $(CMO)
 
 
 # jessie
-JCCML_EXPORT = jc/output.ml \
+JCCML_EXPORT = src/why3_kw.ml jc/output.ml \
 	jc/jc_common_options.ml jc/jc_stdlib.ml \
 	jc/jc_envset.ml jc/jc_region.ml jc/jc_fenv.ml \
 	jc/jc_constructors.ml \
@@ -358,7 +359,7 @@ endif
 # CAUTION! NEVER ADD jc/jc_options.cmo INTO THIS LIST
 KCMO = src/lib.cmo src/version.cmo \
 	src/loc.cmo src/pp.cmo src/option_misc.cmo \
-	jc/output.cmo jc/jc_stdlib.cmo \
+	src/why3_kw.cmo jc/output.cmo jc/jc_stdlib.cmo \
 	jc/jc_envset.cmo jc/jc_common_options.cmo \
 	jc/jc_region.cmo jc/jc_fenv.cmo jc/numconst.cmo jc/jc_constructors.cmo \
 	jc/jc_pervasives.cmo jc/jc_name.cmo \
@@ -753,7 +754,7 @@ install-lib: $(JCLIB)
 	mkdir -p $(LIBDIR)/why/why
 	cp -f $(PRELUDE) $(LIBDIR)/why/why
 	mkdir -p $(LIBDIR)/why/why3
-	cp -f lib/why3/jessie3.why lib/why3/jessie3.mlw $(LIBDIR)/why/why3
+	cp -f lib/why3/jessie3.why lib/why3/jessie3.mlw lib/why3/jessie3_integer.why $(LIBDIR)/why/why3
 	mkdir -p $(LIBDIR)/jessie
 	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)/jessie
 	mkdir -p $(LIBDIR)/coq
@@ -1009,6 +1010,7 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 	lib/pvs/pvscontext.el lib/pvs/*.pvs lib/pvs/*.prf \
 	lib/mizar/why.miz lib/mizar/dict/why.voc \
 	lib/why/*.why lib/isabelle/*.thy lib/hol4/*.ml lib/harvey/*.rv \
+	lib/why3/*.why lib/why3/*.mlw \
 	lib/java_api/java/*/*.java \
 	lib/javacard_api/java/lang/*.java \
 	lib/javacard_api/javacard/*/*.java \
@@ -1024,7 +1026,7 @@ FILES =src/*.ml* c/*.ml* jc/*.ml* java/*.ml* ml/*.ml* ml/*/*.ml* intf/*.ml* tool
 
 # ne pas distribuer ces tests-la	frama-c-plugin/tests/jessie/*.c
 
-distrib export: source export-doc export-www export-examples export-examples-c linux
+distrib export: source export-doc export-www export-examples 
 
 export-www:
 	echo "<#def version>$(VERSION)</#def>" > /users/demons/filliatr/www/why/version.prehtml

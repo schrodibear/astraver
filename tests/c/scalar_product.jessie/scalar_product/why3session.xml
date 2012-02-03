@@ -1,0 +1,552 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<why3session
+ name="scalar_product/why3session.xml">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.94"/>
+ <prover
+  id="1"
+  name="Gappa"
+  version="0.16.0"/>
+ <file
+  name="../scalar_product.mlw"
+  verified="true"
+  expanded="false">
+  <theory
+   name="Jessie_model"
+   locfile="scalar_product/../scalar_product.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
+   verified="true"
+   expanded="false">
+   <goal
+    name="bound_int_to_real"
+    locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+    loclnum="33" loccnumb="4" loccnume="76"
+    expl="Lemma bound_int_to_real, lemma"
+    sum="1c021646f9f60cc8315aa2d08eeb18df"
+    proved="true"
+    expanded="false"
+    shape="ainfix <=afrom_intV0c10.0Iainfix <=V0c10F">
+    <label
+     name="expl:Lemma bound_int_to_real, lemma">
+     </label>
+    <proof
+     prover="1"
+     timelimit="3"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+  </theory>
+  <theory
+   name="WP Jessie_program"
+   locfile="scalar_product/../scalar_product.mlw"
+   loclnum="308" loccnumb="7" loccnume="21"
+   verified="true"
+   expanded="false">
+   <goal
+    name="WP_parameter scalar_product_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+    loclnum="45" loccnumb="7" loccnume="21"
+    expl="Function scalar_product, default behavior"
+    sum="8aab3dce8649e2ec69368191d6b7c103"
+    proved="true"
+    expanded="false"
+    shape="iainfix <ainteger_of_int32V11ainteger_of_int32V2ainfix <=ainteger_of_int32V17ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V17Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V17V6V5afrom_intainteger_of_int32V17Aainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainteger_of_int32V17V6V5ainfix *afrom_intainteger_of_int32V17c0x1.1p-50Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FAainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Aainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Aainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Aainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FAainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Aainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Aainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0ainfix <=aabsainfix -avalueV18aexact_scalar_productV0V1ainteger_of_int32V2V6V5ainfix *afrom_intainteger_of_int32V2c0x1.1p-50Iainfix =V18V12FIainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFAainfix <=ainteger_of_int32V10ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V10Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V10V6V5afrom_intainteger_of_int32V10Aainfix <=aabsainfix -avalueV8aexact_scalar_productV0V1ainteger_of_int32V10V6V5ainfix *afrom_intainteger_of_int32V10c0x1.1p-50Iainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V19c1.0Aainfix <=aabsavalueaselectV5ashiftV0V19c1.0Iainfix <V19ainteger_of_int32V2Aainfix <=c0V19FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+    <label
+     name="expl:parameter scalar_product_ensures_default">
+     </label>
+    <label
+     name="expl:Function scalar_product, default behavior">
+     </label>
+    <transf
+     name="split_goal"
+     proved="true"
+     expanded="false">
+     <goal
+      name="WP_parameter scalar_product_ensures_default.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="loop invariant init"
+      sum="29bb712acca4c87790fa57bbb3efa267"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=ainteger_of_int32V10ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V10Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V10V6V5afrom_intainteger_of_int32V10Aainfix <=aabsainfix -avalueV8aexact_scalar_productV0V1ainteger_of_int32V10V6V5ainfix *afrom_intainteger_of_int32V10c0x1.1p-50Iainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V11c1.0Aainfix <=aabsavalueaselectV5ashiftV0V11c1.0Iainfix <V11ainteger_of_int32V2Aainfix <=c0V11FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_ensures_default">
+       </label>
+      <label
+       name="expl:Function scalar_product, default behavior">
+       </label>
+      <proof
+       prover="0"
+       timelimit="3"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.21"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter scalar_product_ensures_default.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="assertion"
+      sum="59ca1dc8cbdf1a160fb2aacd194110d1"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V13c1.0Aainfix <=aabsavalueaselectV5ashiftV0V13c1.0Iainfix <V13ainteger_of_int32V2Aainfix <=c0V13FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_ensures_default">
+       </label>
+      <label
+       name="expl:Function scalar_product, default behavior">
+       </label>
+      <proof
+       prover="0"
+       timelimit="3"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter scalar_product_ensures_default.3"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="assertion"
+      sum="425f956c4ad90405a4bed0495a308865"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V13c1.0Aainfix <=aabsavalueaselectV5ashiftV0V13c1.0Iainfix <V13ainteger_of_int32V2Aainfix <=c0V13FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_ensures_default">
+       </label>
+      <label
+       name="expl:Function scalar_product, default behavior">
+       </label>
+      <proof
+       prover="0"
+       timelimit="3"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter scalar_product_ensures_default.4"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="assertion"
+      sum="848f8b9ac3107e0d2df2c99515a68250"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V13c1.0Aainfix <=aabsavalueaselectV5ashiftV0V13c1.0Iainfix <V13ainteger_of_int32V2Aainfix <=c0V13FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_ensures_default">
+       </label>
+      <label
+       name="expl:Function scalar_product, default behavior">
+       </label>
+      <proof
+       prover="0"
+       timelimit="3"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.53"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter scalar_product_ensures_default.5"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="assertion"
+      sum="fb54c99f7546788cb8e796672ded8c62"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V16c1.0Aainfix <=aabsavalueaselectV5ashiftV0V16c1.0Iainfix <V16ainteger_of_int32V2Aainfix <=c0V16FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_ensures_default">
+       </label>
+      <label
+       name="expl:Function scalar_product, default behavior">
+       </label>
+      <proof
+       prover="1"
+       timelimit="3"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter scalar_product_ensures_default.6"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="assertion"
+      sum="d35ed813081adbc3119d64b922c9d433"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V16c1.0Aainfix <=aabsavalueaselectV5ashiftV0V16c1.0Iainfix <V16ainteger_of_int32V2Aainfix <=c0V16FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_ensures_default">
+       </label>
+      <label
+       name="expl:Function scalar_product, default behavior">
+       </label>
+      <proof
+       prover="0"
+       timelimit="3"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter scalar_product_ensures_default.7"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="assertion"
+      sum="8a65444d12fdc9cc17a810a8ee55f5b6"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V16c1.0Aainfix <=aabsavalueaselectV5ashiftV0V16c1.0Iainfix <V16ainteger_of_int32V2Aainfix <=c0V16FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_ensures_default">
+       </label>
+      <label
+       name="expl:Function scalar_product, default behavior">
+       </label>
+      <proof
+       prover="0"
+       timelimit="100"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="1.96"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter scalar_product_ensures_default.8"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="assertion"
+      sum="cb7f2610d9b280cf6a81ac59b0026ef2"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V16c1.0Aainfix <=aabsavalueaselectV5ashiftV0V16c1.0Iainfix <V16ainteger_of_int32V2Aainfix <=c0V16FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_ensures_default">
+       </label>
+      <label
+       name="expl:Function scalar_product, default behavior">
+       </label>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="1.36"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter scalar_product_ensures_default.9"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="loop invariant preservation"
+      sum="b633fa0fa9fefa01b506ad059a3992e0"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=ainteger_of_int32V17ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V17Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V17V6V5afrom_intainteger_of_int32V17Aainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainteger_of_int32V17V6V5ainfix *afrom_intainteger_of_int32V17c0x1.1p-50Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V18c1.0Aainfix <=aabsavalueaselectV5ashiftV0V18c1.0Iainfix <V18ainteger_of_int32V2Aainfix <=c0V18FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_ensures_default">
+       </label>
+      <label
+       name="expl:Function scalar_product, default behavior">
+       </label>
+      <transf
+       name="split_goal"
+       proved="true"
+       expanded="false">
+       <goal
+        name="WP_parameter scalar_product_ensures_default.9.1"
+        locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+        loclnum="45" loccnumb="7" loccnume="21"
+        expl="Function scalar_product, default behavior"
+        sum="6ffb1632ed57263634bfb30b1141edc4"
+        proved="true"
+        expanded="false"
+        shape="ainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainteger_of_int32V17V6V5ainfix *afrom_intainteger_of_int32V17c0x1.1p-50Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V18c1.0Aainfix <=aabsavalueaselectV5ashiftV0V18c1.0Iainfix <V18ainteger_of_int32V2Aainfix <=c0V18FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+        <label
+         name="expl:parameter scalar_product_ensures_default">
+         </label>
+        <label
+         name="expl:Function scalar_product, default behavior">
+         </label>
+        <proof
+         prover="0"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.14"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter scalar_product_ensures_default.9.2"
+        locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+        loclnum="45" loccnumb="7" loccnume="21"
+        expl="Function scalar_product, default behavior"
+        sum="a76b19b6c98cae81da18fa83ec04c6bc"
+        proved="true"
+        expanded="false"
+        shape="ainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V17V6V5afrom_intainteger_of_int32V17Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V18c1.0Aainfix <=aabsavalueaselectV5ashiftV0V18c1.0Iainfix <V18ainteger_of_int32V2Aainfix <=c0V18FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+        <label
+         name="expl:parameter scalar_product_ensures_default">
+         </label>
+        <label
+         name="expl:Function scalar_product, default behavior">
+         </label>
+        <proof
+         prover="0"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.10"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter scalar_product_ensures_default.9.3"
+        locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+        loclnum="45" loccnumb="7" loccnume="21"
+        expl="Function scalar_product, default behavior"
+        sum="36c427810cb9bca10662e5b05ac4ab25"
+        proved="true"
+        expanded="false"
+        shape="ainfix <=c0ainteger_of_int32V17Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V18c1.0Aainfix <=aabsavalueaselectV5ashiftV0V18c1.0Iainfix <V18ainteger_of_int32V2Aainfix <=c0V18FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+        <label
+         name="expl:parameter scalar_product_ensures_default">
+         </label>
+        <label
+         name="expl:Function scalar_product, default behavior">
+         </label>
+        <proof
+         prover="0"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter scalar_product_ensures_default.9.4"
+        locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+        loclnum="45" loccnumb="7" loccnume="21"
+        expl="Function scalar_product, default behavior"
+        sum="4e8f122c19f07b0998cd8a91b2aab9e8"
+        proved="true"
+        expanded="false"
+        shape="ainfix <=ainteger_of_int32V17ainteger_of_int32V2Iainfix =V17V16FIainfix =ainteger_of_int32V16ainfix +ainteger_of_int32V11c1FIainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV15ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V15V14FIaadd_double_postaNearestTiesToEvenV12V13V14FIamul_double_postaNearestTiesToEvenaselectV5ashiftV0ainteger_of_int32V11aselectV6ashiftV1ainteger_of_int32V11V13FIainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V18c1.0Aainfix <=aabsavalueaselectV5ashiftV0V18c1.0Iainfix <V18ainteger_of_int32V2Aainfix <=c0V18FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+        <label
+         name="expl:parameter scalar_product_ensures_default">
+         </label>
+        <label
+         name="expl:Function scalar_product, default behavior">
+         </label>
+        <proof
+         prover="0"
+         timelimit="5"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+       </goal>
+      </transf>
+     </goal>
+     <goal
+      name="WP_parameter scalar_product_ensures_default.10"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="normal postcondition"
+      sum="f7431b2ef066b82caf339b2ca7dd2ea8"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=aabsainfix -avalueV13aexact_scalar_productV0V1ainteger_of_int32V2V6V5ainfix *afrom_intainteger_of_int32V2c0x1.1p-50Iainfix =V13V12FIainfix <ainteger_of_int32V11ainteger_of_int32V2NIainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V14c1.0Aainfix <=aabsavalueaselectV5ashiftV0V14c1.0Iainfix <V14ainteger_of_int32V2Aainfix <=c0V14FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_ensures_default">
+       </label>
+      <label
+       name="expl:Function scalar_product, default behavior">
+       </label>
+      <proof
+       prover="0"
+       timelimit="3"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+   <goal
+    name="WP_parameter scalar_product_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+    loclnum="45" loccnumb="7" loccnume="21"
+    expl="Function scalar_product, Safety"
+    sum="cf95a88aeb5180678bb29c365489039c"
+    proved="true"
+    expanded="false"
+    shape="LaselectV5ashiftV0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11ainfix <ainfix -ainteger_of_int32V2ainteger_of_int32V19ainfix -ainteger_of_int32V2ainteger_of_int32V11Aainfix <=c0ainfix -ainteger_of_int32V2ainteger_of_int32V11Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix +ainteger_of_int32V11c1FAainfix <=ainfix +ainteger_of_int32V11c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V11c1Iainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV17aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V17V16FIaadd_double_postaNearestTiesToEvenV12V15V16FAainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV12avalueV15amax_doubleIamul_double_postaNearestTiesToEvenV13V14V15FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV14amax_doubleAainfix <=ainteger_of_int32V11aoffset_maxV4V1Aainfix <=aoffset_minV4V1ainteger_of_int32V11Aainfix <=ainteger_of_int32V11aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V11Iainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V20c1.0Aainfix <=aabsavalueaselectV5ashiftV0V20c1.0Iainfix <V20ainteger_of_int32V2Aainfix <=c0V20FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+    <label
+     name="expl:parameter scalar_product_safety">
+     </label>
+    <label
+     name="expl:Function scalar_product, Safety">
+     </label>
+    <transf
+     name="split_goal"
+     proved="true"
+     expanded="false">
+     <goal
+      name="WP_parameter scalar_product_safety.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="pointer dereference"
+      sum="4bd575556ff54e824e159c6a73c5a8f6"
+      proved="true"
+      expanded="false"
+      shape="ainfix <=ainteger_of_int32V11aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V11Iainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V13c1.0Aainfix <=aabsavalueaselectV5ashiftV0V13c1.0Iainfix <V13ainteger_of_int32V2Aainfix <=c0V13FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_safety">
+       </label>
+      <label
+       name="expl:Function scalar_product, Safety">
+       </label>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter scalar_product_safety.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="pointer dereference"
+      sum="10a0d9c307090367e80cc4ad35381044"
+      proved="true"
+      expanded="false"
+      shape="LaselectV5ashiftV0ainteger_of_int32V11ainfix <=ainteger_of_int32V11aoffset_maxV4V1Aainfix <=aoffset_minV4V1ainteger_of_int32V11Iainfix <=ainteger_of_int32V11aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V11Iainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V14c1.0Aainfix <=aabsavalueaselectV5ashiftV0V14c1.0Iainfix <V14ainteger_of_int32V2Aainfix <=c0V14FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_safety">
+       </label>
+      <label
+       name="expl:Function scalar_product, Safety">
+       </label>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter scalar_product_safety.3"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="floating-point overflow"
+      sum="aaf75b6c5dd899a26bb59fddf24d77c5"
+      proved="true"
+      expanded="false"
+      shape="LaselectV5ashiftV0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV14amax_doubleIainfix <=ainteger_of_int32V11aoffset_maxV4V1Aainfix <=aoffset_minV4V1ainteger_of_int32V11Iainfix <=ainteger_of_int32V11aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V11Iainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V15c1.0Aainfix <=aabsavalueaselectV5ashiftV0V15c1.0Iainfix <V15ainteger_of_int32V2Aainfix <=c0V15FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_safety">
+       </label>
+      <label
+       name="expl:Function scalar_product, Safety">
+       </label>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter scalar_product_safety.4"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="floating-point overflow"
+      sum="64de8e756a2c7bb55a661a751088a5ec"
+      proved="true"
+      expanded="false"
+      shape="LaselectV5ashiftV0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11ainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV12avalueV15amax_doubleIamul_double_postaNearestTiesToEvenV13V14V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV14amax_doubleIainfix <=ainteger_of_int32V11aoffset_maxV4V1Aainfix <=aoffset_minV4V1ainteger_of_int32V11Iainfix <=ainteger_of_int32V11aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V11Iainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V16c1.0Aainfix <=aabsavalueaselectV5ashiftV0V16c1.0Iainfix <V16ainteger_of_int32V2Aainfix <=c0V16FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_safety">
+       </label>
+      <label
+       name="expl:Function scalar_product, Safety">
+       </label>
+      <proof
+       prover="1"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter scalar_product_safety.5"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="arithmetic overflow"
+      sum="0a1ea38bc1214d5a0bc1e85c9ceeb09c"
+      proved="true"
+      expanded="false"
+      shape="LaselectV5ashiftV0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11ainfix <=ainfix +ainteger_of_int32V11c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V11c1Iainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV17aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V17V16FIaadd_double_postaNearestTiesToEvenV12V15V16FIainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV12avalueV15amax_doubleIamul_double_postaNearestTiesToEvenV13V14V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV14amax_doubleIainfix <=ainteger_of_int32V11aoffset_maxV4V1Aainfix <=aoffset_minV4V1ainteger_of_int32V11Iainfix <=ainteger_of_int32V11aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V11Iainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V18c1.0Aainfix <=aabsavalueaselectV5ashiftV0V18c1.0Iainfix <V18ainteger_of_int32V2Aainfix <=c0V18FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_safety">
+       </label>
+      <label
+       name="expl:Function scalar_product, Safety">
+       </label>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter scalar_product_safety.6"
+      locfile="/home/marche/why2-nitrogen/tests/c/scalar_product.c"
+      loclnum="45" loccnumb="7" loccnume="21"
+      expl="loop variant decreases"
+      sum="1b01b37f49e9df556e88bfc0d7d3f102"
+      proved="true"
+      expanded="false"
+      shape="LaselectV5ashiftV0ainteger_of_int32V11LaselectV6ashiftV1ainteger_of_int32V11ainfix <ainfix -ainteger_of_int32V2ainteger_of_int32V19ainfix -ainteger_of_int32V2ainteger_of_int32V11Aainfix <=c0ainfix -ainteger_of_int32V2ainteger_of_int32V11Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix +ainteger_of_int32V11c1FIainfix <=ainfix +ainteger_of_int32V11c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V11c1Iainfix <=ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsaexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *aabsavalueaselectV5ashiftV0ainteger_of_int32V11aabsavalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV17aexact_scalar_productV0V1ainfix +ainteger_of_int32V11c1V6V5ainfix +aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11aabsainfix -ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11ainfix +aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11Iainfix <=aabsainfix -avalueV17ainfix +avalueV12ainfix *avalueaselectV5ashiftV0ainteger_of_int32V11avalueaselectV6ashiftV1ainteger_of_int32V11c0x1.1p-50Iainfix =V17V16FIaadd_double_postaNearestTiesToEvenV12V15V16FIainfix <=aabsaroundaNearestTiesToEvenainfix +avalueV12avalueV15amax_doubleIamul_double_postaNearestTiesToEvenV13V14V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV14amax_doubleIainfix <=ainteger_of_int32V11aoffset_maxV4V1Aainfix <=aoffset_minV4V1ainteger_of_int32V11Iainfix <=ainteger_of_int32V11aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V11Iainfix <=aabsavalueV12ainfix *c10.0ainfix +c1.0c0x1.1p-50Iainfix <=aabsavalueaselectV6ashiftV1ainteger_of_int32V11c1.0Iainfix <=aabsavalueaselectV5ashiftV0ainteger_of_int32V11c1.0Iainfix <ainteger_of_int32V11ainteger_of_int32V2Iainfix <=ainteger_of_int32V11ainteger_of_int32V2Aainfix <=c0ainteger_of_int32V11Aainfix <=aabsaexact_scalar_productV0V1ainteger_of_int32V11V6V5afrom_intainteger_of_int32V11Aainfix <=aabsainfix -avalueV12aexact_scalar_productV0V1ainteger_of_int32V11V6V5ainfix *afrom_intainteger_of_int32V11c0x1.1p-50FFIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8V7FIainfix =amodelV7c0.0Aainfix =aexactV7c0.0Aainfix =avalueV7c0.0FIainfix <=aabsavalueaselectV6ashiftV1V20c1.0Aainfix <=aabsavalueaselectV5ashiftV0V20c1.0Iainfix <V20ainteger_of_int32V2Aainfix <=c0V20FAainfix >=aoffset_maxV4V1ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV4V1c0Aainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V2c1Aainfix <=aoffset_minV3V0c0Aainfix <=ainteger_of_int32V2c10Aainfix <=c0ainteger_of_int32V2FFFFFFF">
+      <label
+       name="expl:parameter scalar_product_safety">
+       </label>
+      <label
+       name="expl:Function scalar_product, Safety">
+       </label>
+      <proof
+       prover="0"
+       timelimit="5"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.05"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+  </theory>
+ </file>
+</why3session>

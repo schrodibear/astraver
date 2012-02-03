@@ -3,7 +3,7 @@
 case $1 in
   *.java)
 	b=`basename $1 .java`
-	krakatoa $1 || exit 1
+	krakatoa -gen-only $1 || exit 1
 	echo "krakatoa on $b.java done"
         d=`dirname $1`
         echo "cd $d"
@@ -13,7 +13,7 @@ case $1 in
 	make -f $b.makefile gui
 	;;
   *.c)
-	frama-c -jessie -jessie-why-opt="-split-user-conj" $1 || exit 1
+	frama-c -jessie -jessie-atp=gui -jessie-why-opt="-split-user-conj" $1 || exit 1
 	;;
   *.jc)
 	b=`basename $1 .jc`

@@ -41,7 +41,7 @@ typedef struct SparseArray {
 } *sparse_array;
 
 /*@ requires sz <= MAXLEN;
-  @ // ensures \fresh(\result);
+  @ ensures \fresh(\result);
   @*/
 sparse_array create(uint sz) {
   sparse_array a = (sparse_array)malloc(sizeof(struct SparseArray));

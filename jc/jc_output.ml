@@ -238,6 +238,7 @@ let rec assertion fmt a =
     | JCAbool_term t -> term fmt t
     | JCAinstanceof (t, _lab, st) ->
 	fprintf fmt "(%a <: %s)" term t st.jc_struct_info_name
+    | JCAfresh t -> fprintf fmt "\\fresh(%a)" term t
     | JCAold a -> fprintf fmt "\\old(%a)" assertion a
     | JCAat(a,lab) -> fprintf fmt "\\at(%a,%a)" assertion a label lab
     | JCAquantifier (q,vi, trigs, a)-> 
@@ -388,6 +389,8 @@ let rec expr fmt e =
 	  fprintf fmt "\\%aaddress(%a)" address_kind absolute expr e
       | JCEbase_block(e) ->
 	  fprintf fmt "\\base_block(%a)" expr e
+      | JCEfresh(e) ->
+	  fprintf fmt "\\fresh(%a)" expr e
       | JCEalloc(e, si) ->
 	  fprintf fmt "(new %s[%a])" si.jc_struct_info_name expr e
       | JCEfree e ->

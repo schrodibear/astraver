@@ -2,16 +2,26 @@
 (* Beware! Only edit allowed sections below    *)
 Require Import ZArith.
 Require Import Rbase.
-Require Import ZOdiv.
 Require Import Rbasic_fun.
 Require Import R_sqrt.
 Require Import Rtrigo.
 Require Import AltSeries. (* for def of pi *)
+Require Import ZOdiv.
+Require int.Int.
+Require int.Abs.
+Require int.ComputerDivision.
+Require real.Real.
+Require real.Abs.
+Require real.FromInt.
+Require real.Square.
+Require floating_point.Rounding.
+Require floating_point.Single.
+Require floating_point.Double.
 Definition unit  := unit.
 
-Parameter mark : Type.
+Parameter qtmark : Type.
 
-Parameter at1: forall (a:Type), a -> mark -> a.
+Parameter at1: forall (a:Type), a -> qtmark -> a.
 
 Implicit Arguments at1.
 
@@ -19,18 +29,11 @@ Parameter old: forall (a:Type), a -> a.
 
 Implicit Arguments old.
 
-Axiom Inv_unit : forall (x:Z) (y:Z), ((x + (-y)%Z)%Z = 0%Z) -> (x = y).
-
-Axiom Abs_le : forall (x:Z) (y:Z), ((Zabs x) <= y)%Z <-> (((-y)%Z <= x)%Z /\
-  (x <= y)%Z).
-
-Axiom Abs_zero : forall (x:Z), ((Zabs x) = 0%Z) -> (x = 0%Z).
-
-Axiom Inv_unit1 : forall (x:R) (y:R), ((x + (-y)%R)%R = 0%R) -> (x = y).
-
-Axiom sub_zero : forall (x:R) (y:R), ((x - y)%R = 0%R) -> (x = y).
-
-Axiom Abs_zero1 : forall (x:R), ((Rabs x) = 0%R) -> (x = 0%R).
+Definition implb(x:bool) (y:bool): bool := match (x,
+  y) with
+  | (true, false) => false
+  | (_, _) => true
+  end.
 
 Axiom Pi_interval : ((314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038196 / 100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000)%R <  PI)%R /\
   (PI <  (314159265358979323846264338327950288419716939937510582097494459230781640628620899862803482534211706798214808651328230664709384460955058223172535940812848111745028410270193852110555964462294895493038197 / 100000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000000)%R)%R.
@@ -63,119 +66,7 @@ Parameter atan: R -> R.
 
 Axiom Tan_atan : forall (x:R), ((Rtrigo.tan (atan x)) = x).
 
-Parameter single : Type.
-
-Inductive mode  :=
-  | NearestTiesToEven : mode 
-  | ToZero : mode 
-  | Up : mode 
-  | Down : mode 
-  | NearTiesToAway : mode .
-
-Parameter round: mode -> R -> R.
-
-
-Parameter round_logic: mode -> R -> single.
-
-
-Parameter value: single -> R.
-
-
-Parameter exact: single -> R.
-
-
-Parameter model: single -> R.
-
-
-Definition round_error(x:single): R := (Rabs ((value x) - (exact x))%R).
-
-Definition total_error(x:single): R := (Rabs ((value x) - (model x))%R).
-
-Definition no_overflow(m:mode) (x:R): Prop := ((Rabs (round m
-  x)) <= (33554430 * 10141204801825835211973625643008)%R)%R.
-
-Axiom Bounded_real_no_overflow : forall (m:mode) (x:R),
-  ((Rabs x) <= (33554430 * 10141204801825835211973625643008)%R)%R ->
-  (no_overflow m x).
-
-Axiom Round_monotonic : forall (m:mode) (x:R) (y:R), (x <= y)%R -> ((round m
-  x) <= (round m y))%R.
-
-Axiom Round_idempotent : forall (m1:mode) (m2:mode) (x:R), ((round m1
-  (round m2 x)) = (round m2 x)).
-
-Axiom Round_value : forall (m:mode) (x:single), ((round m
-  (value x)) = (value x)).
-
-Axiom Bounded_value : forall (x:single),
-  ((Rabs (value x)) <= (33554430 * 10141204801825835211973625643008)%R)%R.
-
-Axiom Exact_rounding_for_integers : forall (m:mode) (i:Z),
-  (((-16777216%Z)%Z <= i)%Z /\ (i <= 16777216%Z)%Z) -> ((round m
-  (IZR i)) = (IZR i)).
-
-Axiom Round_down_le : forall (x:R), ((round Down x) <= x)%R.
-
-Axiom Round_up_ge : forall (x:R), (x <= (round Up x))%R.
-
-Axiom Round_down_neg : forall (x:R), ((round Down (-x)%R) = (-(round Up
-  x))%R).
-
-Axiom Round_up_neg : forall (x:R), ((round Up (-x)%R) = (-(round Down x))%R).
-
-Parameter double : Type.
-
-Parameter round1: mode -> R -> R.
-
-
-Parameter round_logic1: mode -> R -> double.
-
-
-Parameter value1: double -> R.
-
-
-Parameter exact1: double -> R.
-
-
-Parameter model1: double -> R.
-
-
-Definition round_error1(x:double): R := (Rabs ((value1 x) - (exact1 x))%R).
-
-Definition total_error1(x:double): R := (Rabs ((value1 x) - (model1 x))%R).
-
-Definition no_overflow1(m:mode) (x:R): Prop := ((Rabs (round1 m
-  x)) <= (9007199254740991 * 19958403095347198116563727130368385660674512604354575415025472424372118918689640657849579654926357010893424468441924952439724379883935936607391717982848314203200056729510856765175377214443629871826533567445439239933308104551208703888888552684480441575071209068757560416423584952303440099278848)%R)%R.
-
-Axiom Bounded_real_no_overflow1 : forall (m:mode) (x:R),
-  ((Rabs x) <= (9007199254740991 * 19958403095347198116563727130368385660674512604354575415025472424372118918689640657849579654926357010893424468441924952439724379883935936607391717982848314203200056729510856765175377214443629871826533567445439239933308104551208703888888552684480441575071209068757560416423584952303440099278848)%R)%R ->
-  (no_overflow1 m x).
-
-Axiom Round_monotonic1 : forall (m:mode) (x:R) (y:R), (x <= y)%R ->
-  ((round1 m x) <= (round1 m y))%R.
-
-Axiom Round_idempotent1 : forall (m1:mode) (m2:mode) (x:R), ((round1 m1
-  (round1 m2 x)) = (round1 m2 x)).
-
-Axiom Round_value1 : forall (m:mode) (x:double), ((round1 m
-  (value1 x)) = (value1 x)).
-
-Axiom Bounded_value1 : forall (x:double),
-  ((Rabs (value1 x)) <= (9007199254740991 * 19958403095347198116563727130368385660674512604354575415025472424372118918689640657849579654926357010893424468441924952439724379883935936607391717982848314203200056729510856765175377214443629871826533567445439239933308104551208703888888552684480441575071209068757560416423584952303440099278848)%R)%R.
-
-Axiom Exact_rounding_for_integers1 : forall (m:mode) (i:Z),
-  (((-9007199254740992%Z)%Z <= i)%Z /\ (i <= 9007199254740992%Z)%Z) ->
-  ((round1 m (IZR i)) = (IZR i)).
-
-Axiom Round_down_le1 : forall (x:R), ((round1 Down x) <= x)%R.
-
-Axiom Round_up_ge1 : forall (x:R), (x <= (round1 Up x))%R.
-
-Axiom Round_down_neg1 : forall (x:R), ((round1 Down (-x)%R) = (-(round1 Up
-  x))%R).
-
-Axiom Round_up_neg1 : forall (x:R), ((round1 Up (-x)%R) = (-(round1 Down
-  x))%R).
+Definition zwf_zero(a:Z) (b:Z): Prop := (0%Z <= b)%Z /\ (a <  b)%Z.
 
 Parameter alloc_table : forall (t:Type), Type.
 
@@ -706,31 +597,31 @@ Axiom frame_between_sub : forall (a:Type) (b:Type), forall (sa:(mybag
   (m2:(memory a b)), (frame_between sa m1 m2) -> ((sub_mybag sa sb) ->
   (frame_between sb m1 m2)).
 
-Parameter char_P : Type.
+Parameter charP : Type.
 
 Parameter int8 : Type.
 
 Parameter padding : Type.
 
-Parameter void_P : Type.
+Parameter voidP : Type.
 
-Parameter char_P_tag: (tag_id char_P).
-
-
-Axiom char_P_int : ((int_of_tag char_P_tag) = 1%Z).
-
-Parameter char_P_of_pointer_address: (pointer unit) -> (pointer char_P).
+Parameter charP_tag: (tag_id charP).
 
 
-Axiom char_P_of_pointer_address_of_pointer_addr : forall (p:(pointer
-  char_P)), (p = (char_P_of_pointer_address (pointer_address p))).
+Axiom charP_int : ((int_of_tag charP_tag) = 1%Z).
 
-Axiom char_P_parenttag_bottom : (parenttag char_P_tag (bottom_tag:(tag_id
-  char_P))).
+Parameter charP_of_pointer_address: (pointer unit) -> (pointer charP).
 
-Axiom char_P_tags : forall (x:(pointer char_P)),
-  forall (char_P_tag_table:(tag_table char_P)), (instanceof char_P_tag_table
-  x char_P_tag).
+
+Axiom charP_of_pointer_address_of_pointer_addr : forall (p:(pointer charP)),
+  (p = (charP_of_pointer_address (pointer_address p))).
+
+Axiom charP_parenttag_bottom : (parenttag charP_tag (bottom_tag:(tag_id
+  charP))).
+
+Axiom charP_tags : forall (x:(pointer charP)),
+  forall (charP_tag_table:(tag_table charP)), (instanceof charP_tag_table x
+  charP_tag).
 
 Parameter integer_of_int8: int8 -> Z.
 
@@ -750,95 +641,85 @@ Axiom int8_extensionality : forall (x:int8), forall (y:int8),
 Axiom int8_range : forall (x:int8), ((-128%Z)%Z <= (integer_of_int8 x))%Z /\
   ((integer_of_int8 x) <= 127%Z)%Z.
 
-Definition left_valid_struct_char_P(p:(pointer char_P)) (a:Z)
-  (char_P_alloc_table:(alloc_table char_P)): Prop :=
-  ((offset_min char_P_alloc_table p) <= a)%Z.
+Definition left_valid_struct_charP(p:(pointer charP)) (a:Z)
+  (charP_alloc_table:(alloc_table charP)): Prop :=
+  ((offset_min charP_alloc_table p) <= a)%Z.
 
-Definition left_valid_struct_void_P(p:(pointer void_P)) (a:Z)
-  (void_P_alloc_table:(alloc_table void_P)): Prop :=
-  ((offset_min void_P_alloc_table p) <= a)%Z.
+Definition left_valid_struct_voidP(p:(pointer voidP)) (a:Z)
+  (voidP_alloc_table:(alloc_table voidP)): Prop :=
+  ((offset_min voidP_alloc_table p) <= a)%Z.
 
-Axiom pointer_addr_of_char_P_of_pointer_address : forall (p:(pointer unit)),
-  (p = (pointer_address (char_P_of_pointer_address p))).
+Axiom pointer_addr_of_charP_of_pointer_address : forall (p:(pointer unit)),
+  (p = (pointer_address (charP_of_pointer_address p))).
 
-Parameter void_P_of_pointer_address: (pointer unit) -> (pointer void_P).
+Parameter voidP_of_pointer_address: (pointer unit) -> (pointer voidP).
 
 
-Axiom pointer_addr_of_void_P_of_pointer_address : forall (p:(pointer unit)),
-  (p = (pointer_address (void_P_of_pointer_address p))).
+Axiom pointer_addr_of_voidP_of_pointer_address : forall (p:(pointer unit)),
+  (p = (pointer_address (voidP_of_pointer_address p))).
 
-Definition right_valid_struct_char_P(p:(pointer char_P)) (b:Z)
-  (char_P_alloc_table:(alloc_table char_P)): Prop :=
-  (b <= (offset_max char_P_alloc_table p))%Z.
+Definition right_valid_struct_charP(p:(pointer charP)) (b:Z)
+  (charP_alloc_table:(alloc_table charP)): Prop :=
+  (b <= (offset_max charP_alloc_table p))%Z.
 
-Definition right_valid_struct_void_P(p:(pointer void_P)) (b:Z)
-  (void_P_alloc_table:(alloc_table void_P)): Prop :=
-  (b <= (offset_max void_P_alloc_table p))%Z.
+Definition right_valid_struct_voidP(p:(pointer voidP)) (b:Z)
+  (voidP_alloc_table:(alloc_table voidP)): Prop :=
+  (b <= (offset_max voidP_alloc_table p))%Z.
 
-Definition strict_valid_root_char_P(p:(pointer char_P)) (a:Z) (b:Z)
-  (char_P_alloc_table:(alloc_table char_P)): Prop :=
-  ((offset_min char_P_alloc_table p) = a) /\ ((offset_max char_P_alloc_table
+Definition strict_valid_root_charP(p:(pointer charP)) (a:Z) (b:Z)
+  (charP_alloc_table:(alloc_table charP)): Prop :=
+  ((offset_min charP_alloc_table p) = a) /\ ((offset_max charP_alloc_table
   p) = b).
 
-Definition strict_valid_root_void_P(p:(pointer void_P)) (a:Z) (b:Z)
-  (void_P_alloc_table:(alloc_table void_P)): Prop :=
-  ((offset_min void_P_alloc_table p) = a) /\ ((offset_max void_P_alloc_table
+Definition strict_valid_root_voidP(p:(pointer voidP)) (a:Z) (b:Z)
+  (voidP_alloc_table:(alloc_table voidP)): Prop :=
+  ((offset_min voidP_alloc_table p) = a) /\ ((offset_max voidP_alloc_table
   p) = b).
 
-Definition strict_valid_struct_char_P(p:(pointer char_P)) (a:Z) (b:Z)
-  (char_P_alloc_table:(alloc_table char_P)): Prop :=
-  ((offset_min char_P_alloc_table p) = a) /\ ((offset_max char_P_alloc_table
+Definition strict_valid_struct_charP(p:(pointer charP)) (a:Z) (b:Z)
+  (charP_alloc_table:(alloc_table charP)): Prop :=
+  ((offset_min charP_alloc_table p) = a) /\ ((offset_max charP_alloc_table
   p) = b).
 
-Definition strict_valid_struct_void_P(p:(pointer void_P)) (a:Z) (b:Z)
-  (void_P_alloc_table:(alloc_table void_P)): Prop :=
-  ((offset_min void_P_alloc_table p) = a) /\ ((offset_max void_P_alloc_table
+Definition strict_valid_struct_voidP(p:(pointer voidP)) (a:Z) (b:Z)
+  (voidP_alloc_table:(alloc_table voidP)): Prop :=
+  ((offset_min voidP_alloc_table p) = a) /\ ((offset_max voidP_alloc_table
   p) = b).
 
-Definition valid_bitvector_struct_char_P(p:(pointer unit)) (a:Z) (b:Z)
-  (bitvector_alloc_table:(alloc_table unit)): Prop :=
-  ((offset_min bitvector_alloc_table p) = a) /\
-  ((offset_max bitvector_alloc_table p) = b).
+Definition valid_root_charP(p:(pointer charP)) (a:Z) (b:Z)
+  (charP_alloc_table:(alloc_table charP)): Prop :=
+  ((offset_min charP_alloc_table p) <= a)%Z /\
+  (b <= (offset_max charP_alloc_table p))%Z.
 
-Definition valid_bitvector_struct_void_P(p:(pointer unit)) (a:Z) (b:Z)
-  (bitvector_alloc_table:(alloc_table unit)): Prop :=
-  ((offset_min bitvector_alloc_table p) = a) /\
-  ((offset_max bitvector_alloc_table p) = b).
+Definition valid_root_voidP(p:(pointer voidP)) (a:Z) (b:Z)
+  (voidP_alloc_table:(alloc_table voidP)): Prop :=
+  ((offset_min voidP_alloc_table p) <= a)%Z /\
+  (b <= (offset_max voidP_alloc_table p))%Z.
 
-Definition valid_root_char_P(p:(pointer char_P)) (a:Z) (b:Z)
-  (char_P_alloc_table:(alloc_table char_P)): Prop :=
-  ((offset_min char_P_alloc_table p) <= a)%Z /\
-  (b <= (offset_max char_P_alloc_table p))%Z.
+Definition valid_struct_charP(p:(pointer charP)) (a:Z) (b:Z)
+  (charP_alloc_table:(alloc_table charP)): Prop :=
+  ((offset_min charP_alloc_table p) <= a)%Z /\
+  (b <= (offset_max charP_alloc_table p))%Z.
 
-Definition valid_root_void_P(p:(pointer void_P)) (a:Z) (b:Z)
-  (void_P_alloc_table:(alloc_table void_P)): Prop :=
-  ((offset_min void_P_alloc_table p) <= a)%Z /\
-  (b <= (offset_max void_P_alloc_table p))%Z.
+Definition valid_struct_voidP(p:(pointer voidP)) (a:Z) (b:Z)
+  (voidP_alloc_table:(alloc_table voidP)): Prop :=
+  ((offset_min voidP_alloc_table p) <= a)%Z /\
+  (b <= (offset_max voidP_alloc_table p))%Z.
 
-Definition valid_struct_char_P(p:(pointer char_P)) (a:Z) (b:Z)
-  (char_P_alloc_table:(alloc_table char_P)): Prop :=
-  ((offset_min char_P_alloc_table p) <= a)%Z /\
-  (b <= (offset_max char_P_alloc_table p))%Z.
-
-Definition valid_struct_void_P(p:(pointer void_P)) (a:Z) (b:Z)
-  (void_P_alloc_table:(alloc_table void_P)): Prop :=
-  ((offset_min void_P_alloc_table p) <= a)%Z /\
-  (b <= (offset_max void_P_alloc_table p))%Z.
-
-Parameter void_P_tag: (tag_id void_P).
+Parameter voidP_tag: (tag_id voidP).
 
 
-Axiom void_P_int : ((int_of_tag void_P_tag) = 1%Z).
+Axiom voidP_int : ((int_of_tag voidP_tag) = 1%Z).
 
-Axiom void_P_of_pointer_address_of_pointer_addr : forall (p:(pointer
-  void_P)), (p = (void_P_of_pointer_address (pointer_address p))).
+Axiom voidP_of_pointer_address_of_pointer_addr : forall (p:(pointer voidP)),
+  (p = (voidP_of_pointer_address (pointer_address p))).
 
-Axiom void_P_parenttag_bottom : (parenttag void_P_tag (bottom_tag:(tag_id
-  void_P))).
+Axiom voidP_parenttag_bottom : (parenttag voidP_tag (bottom_tag:(tag_id
+  voidP))).
 
-Axiom void_P_tags : forall (x:(pointer void_P)),
-  forall (void_P_tag_table:(tag_table void_P)), (instanceof void_P_tag_table
-  x void_P_tag).
+Axiom voidP_tags : forall (x:(pointer voidP)),
+  forall (voidP_tag_table:(tag_table voidP)), (instanceof voidP_tag_table x
+  voidP_tag).
 
 Axiom method_error : forall (x_3:R), ((Rabs x_3) <= (1 / 32)%R)%R ->
   ((Rabs ((1%R - ((x_3 * x_3)%R * (05 / 10)%R)%R)%R - (Rtrigo_def.cos x_3))%R) <= (1 / 16777216)%R)%R.
@@ -849,47 +730,131 @@ Implicit Arguments mk_ref.
 
 Definition contents (a:Type)(u:(ref a)): a :=
   match u with
-  | mk_ref contents1 => contents1
+  | (mk_ref contents1) => contents1
   end.
 Implicit Arguments contents.
 
-Definition sub_single_post(m:mode) (x:single) (y:single)
-  (res:single): Prop := ((value res) = (round m
-  ((value x) - (value y))%R)) /\
-  (((exact res) = ((exact x) - (exact y))%R) /\
-  ((model res) = ((model x) - (model y))%R)).
+Definition single_of_double_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Double.double)
+  (res:floating_point.Single.single): Prop :=
+  ((floating_point.Single.value res) = (floating_point.Single.round m
+  (floating_point.Double.value x))) /\
+  (((floating_point.Single.exact res) = (floating_point.Double.exact x)) /\
+  ((floating_point.Single.model res) = (floating_point.Double.model x))).
 
-Definition mul_single_post(m:mode) (x:single) (y:single)
-  (res:single): Prop := ((value res) = (round m
-  ((value x) * (value y))%R)) /\
-  (((exact res) = ((exact x) * (exact y))%R) /\
-  ((model res) = ((model x) * (model y))%R)).
+Definition neg_single_post(x:floating_point.Single.single)
+  (res:floating_point.Single.single): Prop :=
+  ((floating_point.Single.value res) = (-(floating_point.Single.value x))%R) /\
+  (((floating_point.Single.exact res) = (-(floating_point.Single.exact x))%R) /\
+  ((floating_point.Single.model res) = (-(floating_point.Single.model x))%R)).
 
-Parameter char_P_alloc_table: (ref (alloc_table char_P)).
+Definition add_single_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Single.single) (y:floating_point.Single.single)
+  (res:floating_point.Single.single): Prop :=
+  ((floating_point.Single.value res) = (floating_point.Single.round m
+  ((floating_point.Single.value x) + (floating_point.Single.value y))%R)) /\
+  (((floating_point.Single.exact res) = ((floating_point.Single.exact x) + (floating_point.Single.exact y))%R) /\
+  ((floating_point.Single.model res) = ((floating_point.Single.model x) + (floating_point.Single.model y))%R)).
+
+Definition sub_single_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Single.single) (y:floating_point.Single.single)
+  (res:floating_point.Single.single): Prop :=
+  ((floating_point.Single.value res) = (floating_point.Single.round m
+  ((floating_point.Single.value x) - (floating_point.Single.value y))%R)) /\
+  (((floating_point.Single.exact res) = ((floating_point.Single.exact x) - (floating_point.Single.exact y))%R) /\
+  ((floating_point.Single.model res) = ((floating_point.Single.model x) - (floating_point.Single.model y))%R)).
+
+Definition mul_single_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Single.single) (y:floating_point.Single.single)
+  (res:floating_point.Single.single): Prop :=
+  ((floating_point.Single.value res) = (floating_point.Single.round m
+  ((floating_point.Single.value x) * (floating_point.Single.value y))%R)) /\
+  (((floating_point.Single.exact res) = ((floating_point.Single.exact x) * (floating_point.Single.exact y))%R) /\
+  ((floating_point.Single.model res) = ((floating_point.Single.model x) * (floating_point.Single.model y))%R)).
+
+Definition div_single_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Single.single) (y:floating_point.Single.single)
+  (res:floating_point.Single.single): Prop :=
+  ((floating_point.Single.value res) = (floating_point.Single.round m
+  (Rdiv (floating_point.Single.value x) (floating_point.Single.value y))%R)) /\
+  (((floating_point.Single.exact res) = (Rdiv (floating_point.Single.exact x) (floating_point.Single.exact y))%R) /\
+  ((floating_point.Single.model res) = (Rdiv (floating_point.Single.model x) (floating_point.Single.model y))%R)).
+
+Definition neg_double_post(x:floating_point.Double.double)
+  (res:floating_point.Double.double): Prop :=
+  ((floating_point.Double.value res) = (-(floating_point.Double.value x))%R) /\
+  (((floating_point.Double.exact res) = (-(floating_point.Double.exact x))%R) /\
+  ((floating_point.Double.model res) = (-(floating_point.Double.model x))%R)).
+
+Definition add_double_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Double.double) (y:floating_point.Double.double)
+  (res:floating_point.Double.double): Prop :=
+  ((floating_point.Double.value res) = (floating_point.Double.round m
+  ((floating_point.Double.value x) + (floating_point.Double.value y))%R)) /\
+  (((floating_point.Double.exact res) = ((floating_point.Double.exact x) + (floating_point.Double.exact y))%R) /\
+  ((floating_point.Double.model res) = ((floating_point.Double.model x) + (floating_point.Double.model y))%R)).
+
+Definition sub_double_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Double.double) (y:floating_point.Double.double)
+  (res:floating_point.Double.double): Prop :=
+  ((floating_point.Double.value res) = (floating_point.Double.round m
+  ((floating_point.Double.value x) - (floating_point.Double.value y))%R)) /\
+  (((floating_point.Double.exact res) = ((floating_point.Double.exact x) - (floating_point.Double.exact y))%R) /\
+  ((floating_point.Double.model res) = ((floating_point.Double.model x) - (floating_point.Double.model y))%R)).
+
+Definition mul_double_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Double.double) (y:floating_point.Double.double)
+  (res:floating_point.Double.double): Prop :=
+  ((floating_point.Double.value res) = (floating_point.Double.round m
+  ((floating_point.Double.value x) * (floating_point.Double.value y))%R)) /\
+  (((floating_point.Double.exact res) = ((floating_point.Double.exact x) * (floating_point.Double.exact y))%R) /\
+  ((floating_point.Double.model res) = ((floating_point.Double.model x) * (floating_point.Double.model y))%R)).
+
+Definition div_double_post(m:floating_point.Rounding.mode)
+  (x:floating_point.Double.double) (y:floating_point.Double.double)
+  (res:floating_point.Double.double): Prop :=
+  ((floating_point.Double.value res) = (floating_point.Double.round m
+  (Rdiv (floating_point.Double.value x) (floating_point.Double.value y))%R)) /\
+  (((floating_point.Double.exact res) = (Rdiv (floating_point.Double.exact x) (floating_point.Double.exact y))%R) /\
+  ((floating_point.Double.model res) = (Rdiv (floating_point.Double.model x) (floating_point.Double.model y))%R)).
+
+Definition double_of_real_post(m:floating_point.Rounding.mode) (x:R)
+  (res:floating_point.Double.double): Prop :=
+  ((floating_point.Double.value res) = (floating_point.Double.round m x)) /\
+  (((floating_point.Double.exact res) = x) /\
+  ((floating_point.Double.model res) = x)).
+
+Definition double_of_single_post(x:floating_point.Single.single)
+  (res:floating_point.Double.double): Prop :=
+  ((floating_point.Double.value res) = (floating_point.Single.value x)) /\
+  (((floating_point.Double.exact res) = (floating_point.Single.exact x)) /\
+  ((floating_point.Double.model res) = (floating_point.Single.model x))).
+
+Parameter charP_alloc_table: (ref (alloc_table charP)).
 
 
-Parameter char_P_tag_table: (ref (tag_table char_P)).
+Parameter charP_tag_table: (ref (tag_table charP)).
 
 
-Parameter void_P_alloc_table: (ref (alloc_table void_P)).
+Parameter voidP_alloc_table: (ref (alloc_table voidP)).
 
 
-Parameter void_P_tag_table: (ref (tag_table void_P)).
+Parameter voidP_tag_table: (ref (tag_table voidP)).
 
 
 (* YOU MAY EDIT THE CONTEXT BELOW *)
 Require Import Interval_tactic.
 (* DO NOT EDIT BELOW *)
 
-Theorem WP_parameter_my_cos4_ensures_default : forall (x_2:single),
-  ((Rabs (value x_2)) <= (007 / 100)%R)%R ->
-  ((Rabs ((1%R - (((value x_2) * (value x_2))%R * (05 / 10)%R)%R)%R - (Rtrigo_def.cos (value x_2)))%R) <= (15 / 16777216)%R)%R.
+Theorem WP_parameter_my_cos4_ensures_default : forall (x_2:floating_point.Single.single),
+  ((Rabs (floating_point.Single.value x_2)) <= (007 / 100)%R)%R ->
+  ((Rabs ((1%R - (((floating_point.Single.value x_2) * (floating_point.Single.value x_2))%R * (05 / 10)%R)%R)%R - (Rtrigo_def.cos (floating_point.Single.value x_2)))%R) <= (18 / 16777216)%R)%R.
 (* YOU MAY EDIT THE PROOF BELOW *)
 intros x H.
-assert (Rabs (value x) <= 1 / 16)%R.
+assert (Rabs (Single.value x) <= 18 / 256)%R.
   apply Rle_trans with (1:=H).
-  admit.
-interval with (i_bisect_diff (value x)).
+  interval.
+interval with (i_bisect_diff (Single.value x)).
 Qed.
 (* DO NOT EDIT BELOW *)
 

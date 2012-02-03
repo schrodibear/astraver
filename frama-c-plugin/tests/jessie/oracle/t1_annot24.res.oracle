@@ -490,7 +490,9 @@ axiom Buch_OpStatusList_coerce :
 
 axiom Buch_OpStatusList_extensionality :
  (forall x:Buch_OpStatusList.
-  (forall y:Buch_OpStatusList.
+  (forall y:Buch_OpStatusList
+   [eq_int(integer_of_Buch_OpStatusList(x), integer_of_Buch_OpStatusList(y))]
+   .
    (eq_int(integer_of_Buch_OpStatusList(x), integer_of_Buch_OpStatusList(y)) ->
     (x = y))))
 
@@ -682,7 +684,8 @@ axiom buch_ListOper_coerce :
 
 axiom buch_ListOper_extensionality :
  (forall x:buch_ListOper.
-  (forall y:buch_ListOper.
+  (forall y:buch_ListOper
+   [eq_int(integer_of_buch_ListOper(x), integer_of_buch_ListOper(y))].
    (eq_int(integer_of_buch_ListOper(x), integer_of_buch_ListOper(y)) ->
     (x = y))))
 
@@ -730,7 +733,7 @@ axiom int32_coerce :
 
 axiom int32_extensionality :
  (forall x:int32.
-  (forall y:int32.
+  (forall y:int32[eq_int(integer_of_int32(x), integer_of_int32(y))].
    (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range :
@@ -747,7 +750,7 @@ axiom int8_coerce :
 
 axiom int8_extensionality :
  (forall x:int8.
-  (forall y:int8.
+  (forall y:int8[eq_int(integer_of_int8(x), integer_of_int8(y))].
    (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
@@ -6853,7 +6856,7 @@ axiom sub_disj:
     (forall s2:'a1 mybag.
       (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
         disj_mybag(s1, s3), sub_mybag(s2, s3)].
-        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+        (disj_mybag(s1, s3) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s2))))))
 
 axiom sub_in:
   (forall s1:'a1 mybag.
@@ -6862,6 +6865,13 @@ axiom sub_in:
         sub_mybag(s1, s2)].
         ((not in_mybag(p, s2)) ->
          (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+axiom sub_sub:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [sub_mybag(s1, s3), sub_mybag(s2, s3)|
+        sub_mybag(s1, s3), sub_mybag(s1, s2)].
+        (sub_mybag(s1, s2) -> (sub_mybag(s2, s3) -> sub_mybag(s1, s3))))))
 
 logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
 'a2) memory -> prop
@@ -6984,7 +6994,7 @@ axiom Buch_OpStatusList_coerce:
 
 axiom Buch_OpStatusList_extensionality:
   (forall x:Buch_OpStatusList.
-    (forall y:Buch_OpStatusList.
+    (forall y:Buch_OpStatusList [(integer_of_Buch_OpStatusList(x) = integer_of_Buch_OpStatusList(y))].
       ((integer_of_Buch_OpStatusList(x) = integer_of_Buch_OpStatusList(y)) ->
        (x = y))))
 
@@ -7161,7 +7171,7 @@ axiom buch_ListOper_coerce:
 
 axiom buch_ListOper_extensionality:
   (forall x:buch_ListOper.
-    (forall y:buch_ListOper.
+    (forall y:buch_ListOper [(integer_of_buch_ListOper(x) = integer_of_buch_ListOper(y))].
       ((integer_of_buch_ListOper(x) = integer_of_buch_ListOper(y)) -> (x = y))))
 
 axiom buch_ListOper_range:
@@ -7209,7 +7219,7 @@ axiom int32_coerce:
 
 axiom int32_extensionality:
   (forall x:int32.
-    (forall y:int32.
+    (forall y:int32 [(integer_of_int32(x) = integer_of_int32(y))].
       ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range:
@@ -7226,7 +7236,8 @@ axiom int8_coerce:
 
 axiom int8_extensionality:
   (forall x:int8.
-    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
+    (forall y:int8 [(integer_of_int8(x) = integer_of_int8(y))].
+      ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.

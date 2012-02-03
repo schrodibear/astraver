@@ -407,6 +407,9 @@ module PExpr :
     val mkoffset_max :
       expr:pexpr -> ?pos:Loc.position -> unit -> pexpr
 
+    val mkfresh :
+      expr:pexpr -> ?pos:Loc.position -> unit -> pexpr
+
     val mkif :
       condition:pexpr ->
       expr_then:pexpr ->

@@ -133,7 +133,7 @@ axiom int8_coerce :
 
 axiom int8_extensionality :
  (forall x:int8.
-  (forall y:int8.
+  (forall y:int8[eq_int(integer_of_int8(x), integer_of_int8(y))].
    (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :

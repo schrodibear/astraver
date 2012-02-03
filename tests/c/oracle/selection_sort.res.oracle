@@ -52,7 +52,7 @@ void swap(int t[], int i, int j) {
   @ behavior permutation:
   @   ensures Permut{Old,Here}(t,0,n-1);
   @*/
-void min_sort(int t[], int n) {
+void sel_sort(int t[], int n) {
   int i,j;
   int mi,mv;
   if (n <= 0) return;
@@ -139,10 +139,11 @@ predicate Swap{L1, L2}(intP[..] a, integer i, integer j) =
       (\at((a + k).intM,L1) == \at((a + k).intM,L2)))))
 
 predicate Permut{L1, L2}(intP[..] a_0, integer l, integer h) {
-case Permut_refl{L}: (\forall intP[..] a_1;
-                       (\forall integer l_0;
-                         (\forall integer h_0;
-                           Permut{L, L}(a_1, l_0, h_0))));
+case Permut_refl{L}: \at((\forall intP[..] a_1;
+                           (\forall integer l_0;
+                             (\forall integer h_0;
+                               Permut{L,
+                               L}(a_1, l_0, h_0)))),L);
   
   case Permut_sym{L1, L2}: (\forall intP[..] a_2;
                              (\forall integer l_1;
@@ -202,7 +203,7 @@ behavior default:
    }
 }
 
-unit min_sort(intP[..] t, integer n)
+unit sel_sort(intP[..] t, integer n)
   requires (C_61 : ((C_62 : (\offset_min(t) <= 0)) &&
                      (C_63 : (\offset_max(t) >= (n - 1)))));
 behavior default:
@@ -549,6 +550,13 @@ line = 68
 begin = 14
 end = 17
 
+[sel_sort]
+name = "Function sel_sort"
+file = "HOME/tests/c/selection_sort.c"
+line = 54
+begin = 5
+end = 13
+
 [C_30]
 file = "HOME/tests/c/selection_sort.c"
 line = 70
@@ -616,13 +624,6 @@ line = 42
 begin = 5
 end = 9
 
-[min_sort]
-name = "Function min_sort"
-file = "HOME/tests/c/selection_sort.c"
-line = 54
-begin = 5
-end = 13
-
 [C_40]
 file = "HOME/tests/c/selection_sort.c"
 line = 75
@@ -685,7 +686,7 @@ end = 19
 
 ========== jessie execution ==========
 Generating Why function swap
-Generating Why function min_sort
+Generating Why function sel_sort
 ========== file tests/c/selection_sort.jessie/selection_sort.makefile ==========
 # this makefile was automatically generated; do not edit 
 
@@ -883,7 +884,7 @@ end = 39
 
 [JC_93]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 145
+line = 146
 begin = 15
 end = 1228
 
@@ -895,7 +896,7 @@ end = 27
 
 [JC_94]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 145
+line = 146
 begin = 15
 end = 1228
 
@@ -938,7 +939,7 @@ end = 47
 
 [JC_45]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 122
+line = 123
 begin = 6
 end = 2595
 
@@ -950,7 +951,7 @@ end = 27
 
 [JC_46]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 122
+line = 123
 begin = 6
 end = 2595
 
@@ -1005,7 +1006,7 @@ end = 39
 
 [JC_102]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 122
+line = 123
 begin = 6
 end = 2595
 
@@ -1023,7 +1024,7 @@ end = 39
 
 [JC_103]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 122
+line = 123
 begin = 6
 end = 2595
 
@@ -1056,6 +1057,14 @@ file = "HOME/tests/c/selection_sort.c"
 line = 38
 begin = 13
 end = 24
+
+[sel_sort_ensures_permutation]
+name = "Function sel_sort"
+behavior = "Behavior `permutation'"
+file = "HOME/tests/c/selection_sort.c"
+line = 54
+begin = 5
+end = 13
 
 [JC_106]
 file = "HOME/tests/c/selection_sort.c"
@@ -1111,15 +1120,23 @@ line = 0
 begin = -1
 end = -1
 
+[sel_sort_ensures_default]
+name = "Function sel_sort"
+behavior = "default behavior"
+file = "HOME/tests/c/selection_sort.c"
+line = 54
+begin = 5
+end = 13
+
 [JC_53]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 145
+line = 146
 begin = 15
 end = 1228
 
 [JC_54]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 145
+line = 146
 begin = 15
 end = 1228
 
@@ -1139,7 +1156,7 @@ end = 19
 
 [JC_110]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 145
+line = 146
 begin = 15
 end = 1228
 
@@ -1151,7 +1168,7 @@ end = 24
 
 [JC_111]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 145
+line = 146
 begin = 15
 end = 1228
 
@@ -1213,14 +1230,6 @@ line = 38
 begin = 28
 end = 39
 
-[min_sort_ensures_sorted]
-name = "Function min_sort"
-behavior = "Behavior `sorted'"
-file = "HOME/tests/c/selection_sort.c"
-line = 54
-begin = 5
-end = 13
-
 [JC_63]
 file = "HOME/tests/c/selection_sort.c"
 line = 58
@@ -1247,7 +1256,7 @@ end = -1
 
 [JC_65]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 122
+line = 123
 begin = 6
 end = 2595
 
@@ -1259,7 +1268,7 @@ end = 33
 
 [JC_66]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 122
+line = 123
 begin = 6
 end = 2595
 
@@ -1277,7 +1286,7 @@ end = 28
 
 [JC_15]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 85
+line = 86
 begin = 9
 end = 16
 
@@ -1307,7 +1316,7 @@ end = 9
 
 [JC_18]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 85
+line = 86
 begin = 9
 end = 16
 
@@ -1316,6 +1325,14 @@ file = "HOME/"
 line = 0
 begin = -1
 end = -1
+
+[sel_sort_safety]
+name = "Function sel_sort"
+behavior = "Safety"
+file = "HOME/tests/c/selection_sort.c"
+line = 54
+begin = 5
+end = 13
 
 [JC_70]
 file = "HOME/tests/c/selection_sort.c"
@@ -1331,7 +1348,7 @@ end = -1
 
 [JC_72]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 145
+line = 146
 begin = 15
 end = 1228
 
@@ -1341,9 +1358,17 @@ line = 0
 begin = -1
 end = -1
 
+[sel_sort_ensures_sorted]
+name = "Function sel_sort"
+behavior = "Behavior `sorted'"
+file = "HOME/tests/c/selection_sort.c"
+line = 54
+begin = 5
+end = 13
+
 [JC_73]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 145
+line = 146
 begin = 15
 end = 1228
 
@@ -1377,7 +1402,7 @@ end = 38
 [JC_23]
 kind = PointerDeref
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 93
+line = 94
 begin = 14
 end = 77
 
@@ -1398,7 +1423,7 @@ end = 9
 [JC_24]
 kind = PointerDeref
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 94
+line = 95
 begin = 15
 end = 52
 
@@ -1426,14 +1451,6 @@ line = 48
 begin = 13
 end = 34
 
-[min_sort_ensures_permutation]
-name = "Function min_sort"
-behavior = "Behavior `permutation'"
-file = "HOME/tests/c/selection_sort.c"
-line = 54
-begin = 5
-end = 13
-
 [JC_79]
 file = "HOME/tests/c/selection_sort.c"
 line = 58
@@ -1457,22 +1474,6 @@ file = "HOME/tests/c/selection_sort.c"
 line = 48
 begin = 13
 end = 34
-
-[min_sort_safety]
-name = "Function min_sort"
-behavior = "Safety"
-file = "HOME/tests/c/selection_sort.c"
-line = 54
-begin = 5
-end = 13
-
-[min_sort_ensures_default]
-name = "Function min_sort"
-behavior = "default behavior"
-file = "HOME/tests/c/selection_sort.c"
-line = 54
-begin = 5
-end = 13
 
 [JC_80]
 file = "HOME/tests/c/selection_sort.c"
@@ -1500,7 +1501,7 @@ end = 34
 
 [JC_83]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 122
+line = 123
 begin = 6
 end = 2595
 
@@ -1512,7 +1513,7 @@ end = 34
 
 [JC_84]
 file = "HOME/tests/c/selection_sort.jessie/selection_sort.jc"
-line = 122
+line = 123
 begin = 6
 end = 2595
 
@@ -1896,7 +1897,7 @@ parameter alloc_struct_voidP_requires :
           and (alloc_fresh(voidP_alloc_table@, result, n)
               and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
-parameter min_sort :
+parameter sel_sort :
  t:intP pointer ->
   n:int ->
    intP_intM_t_5:(intP, int) memory ref ->
@@ -1906,7 +1907,7 @@ parameter min_sort :
         Permut(t, (0), sub_int(n, (1)), intP_intM_t_5, intP_intM_t_5@))
        and (JC_38: Sorted(t, (0), n, intP_intM_t_5))) }
 
-parameter min_sort_requires :
+parameter sel_sort_requires :
  t:intP pointer ->
   n:int ->
    intP_intM_t_5:(intP, int) memory ref ->
@@ -1956,7 +1957,7 @@ parameter swap_requires :
             pset_union(pset_range(pset_singleton(t_0), j_0, j_0),
             pset_range(pset_singleton(t_0), i_0, i_0)))))) }
 
-let min_sort_ensures_default =
+let sel_sort_ensures_default =
  fun (t : intP pointer) (n : int) (intP_intM_t_5 : (intP, int) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
   { (JC_31:
     ((JC_29: le_int(offset_min(intP_t_5_alloc_table, t), (0)))
@@ -2059,7 +2060,7 @@ let min_sort_ensures_default =
       (return_label: (raise Return)) end)))); (raise Return) end with
    Return -> void end) { (JC_33: true) }
 
-let min_sort_ensures_permutation =
+let sel_sort_ensures_permutation =
  fun (t : intP pointer) (n : int) (intP_intM_t_5 : (intP, int) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
   { (JC_31:
     ((JC_29: le_int(offset_min(intP_t_5_alloc_table, t), (0)))
@@ -2168,7 +2169,7 @@ let min_sort_ensures_permutation =
    Return -> void end)
   { (JC_39: Permut(t, (0), sub_int(n, (1)), intP_intM_t_5, intP_intM_t_5@)) }
 
-let min_sort_ensures_sorted =
+let sel_sort_ensures_sorted =
  fun (t : intP pointer) (n : int) (intP_intM_t_5 : (intP, int) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
   { (JC_31:
     ((JC_29: le_int(offset_min(intP_t_5_alloc_table, t), (0)))
@@ -2287,7 +2288,7 @@ let min_sort_ensures_sorted =
       (return_label: (raise Return)) end)))); (raise Return) end with
    Return -> void end) { (JC_37: Sorted(t, (0), n, intP_intM_t_5)) }
 
-let min_sort_safety =
+let sel_sort_safety =
  fun (t : intP pointer) (n : int) (intP_intM_t_5 : (intP, int) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
   { (JC_31:
     ((JC_29: le_int(offset_min(intP_t_5_alloc_table, t), (0)))
@@ -3324,7 +3325,7 @@ axiom sub_disj:
     (forall s2:'a1 mybag.
       (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
         disj_mybag(s1, s3), sub_mybag(s2, s3)].
-        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+        (disj_mybag(s1, s3) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s2))))))
 
 axiom sub_in:
   (forall s1:'a1 mybag.
@@ -3333,6 +3334,13 @@ axiom sub_in:
         sub_mybag(s1, s2)].
         ((not in_mybag(p, s2)) ->
          (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+axiom sub_sub:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [sub_mybag(s1, s3), sub_mybag(s2, s3)|
+        sub_mybag(s1, s3), sub_mybag(s1, s2)].
+        (sub_mybag(s1, s2) -> (sub_mybag(s2, s3) -> sub_mybag(s1, s3))))))
 
 logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
 'a2) memory -> prop
@@ -3685,7 +3693,7 @@ axiom voidP_tags:
     (forall voidP_tag_table:voidP tag_table. instanceof(voidP_tag_table, x,
       voidP_tag)))
 
-goal min_sort_ensures_default_po_1:
+goal sel_sort_ensures_default_po_1:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -3697,7 +3705,7 @@ goal min_sort_ensures_default_po_1:
   (i_0_1 = 0) ->
   ("JC_63": ("JC_61": (0 <= i_0_1)))
 
-goal min_sort_ensures_default_po_2:
+goal sel_sort_ensures_default_po_2:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -3709,7 +3717,7 @@ goal min_sort_ensures_default_po_2:
   (i_0_1 = 0) ->
   ("JC_63": ("JC_62": (i_0_1 < n)))
 
-goal min_sort_ensures_default_po_3:
+goal sel_sort_ensures_default_po_3:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -3734,7 +3742,7 @@ goal min_sort_ensures_default_po_3:
   (j_0_1 = (i_0_1_0 + 1)) ->
   ("JC_70": ("JC_67": (i_0_1_0 < j_0_1)))
 
-goal min_sort_ensures_default_po_4:
+goal sel_sort_ensures_default_po_4:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -3759,7 +3767,7 @@ goal min_sort_ensures_default_po_4:
   (j_0_1 = (i_0_1_0 + 1)) ->
   ("JC_70": ("JC_68": (i_0_1_0 <= mi)))
 
-goal min_sort_ensures_default_po_5:
+goal sel_sort_ensures_default_po_5:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -3784,7 +3792,7 @@ goal min_sort_ensures_default_po_5:
   (j_0_1 = (i_0_1_0 + 1)) ->
   ("JC_70": ("JC_69": (mi < n)))
 
-goal min_sort_ensures_default_po_6:
+goal sel_sort_ensures_default_po_6:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -3827,7 +3835,7 @@ goal min_sort_ensures_default_po_6:
   (j_0_1_1 = (j_0_1_0 + 1)) ->
   ("JC_70": ("JC_67": (i_0_1_0 < j_0_1_1)))
 
-goal min_sort_ensures_default_po_7:
+goal sel_sort_ensures_default_po_7:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -3870,7 +3878,7 @@ goal min_sort_ensures_default_po_7:
   (j_0_1_1 = (j_0_1_0 + 1)) ->
   ("JC_70": ("JC_68": (i_0_1_0 <= mi1)))
 
-goal min_sort_ensures_default_po_8:
+goal sel_sort_ensures_default_po_8:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -3913,7 +3921,7 @@ goal min_sort_ensures_default_po_8:
   (j_0_1_1 = (j_0_1_0 + 1)) ->
   ("JC_70": ("JC_69": (mi1 < n)))
 
-goal min_sort_ensures_default_po_9:
+goal sel_sort_ensures_default_po_9:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -3950,7 +3958,7 @@ goal min_sort_ensures_default_po_9:
   (j_0_1_1 = (j_0_1_0 + 1)) ->
   ("JC_70": ("JC_67": (i_0_1_0 < j_0_1_1)))
 
-goal min_sort_ensures_default_po_10:
+goal sel_sort_ensures_default_po_10:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -3987,7 +3995,7 @@ goal min_sort_ensures_default_po_10:
   (j_0_1_1 = (j_0_1_0 + 1)) ->
   ("JC_70": ("JC_68": (i_0_1_0 <= mi0)))
 
-goal min_sort_ensures_default_po_11:
+goal sel_sort_ensures_default_po_11:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4024,7 +4032,7 @@ goal min_sort_ensures_default_po_11:
   (j_0_1_1 = (j_0_1_0 + 1)) ->
   ("JC_70": ("JC_69": (mi0 < n)))
 
-goal min_sort_ensures_default_po_12:
+goal sel_sort_ensures_default_po_12:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4062,7 +4070,7 @@ goal min_sort_ensures_default_po_12:
    pset_range(pset_singleton(t), i_0_1_0, i_0_1_0)))))) ->
   ("JC_75": Permut(t, 0, (n - 1), intP_intM_t_5_0, intP_intM_t_5))
 
-goal min_sort_ensures_default_po_13:
+goal sel_sort_ensures_default_po_13:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4103,7 +4111,7 @@ goal min_sort_ensures_default_po_13:
   (i_0_1_1 = (i_0_1_0 + 1)) ->
   ("JC_63": ("JC_61": (0 <= i_0_1_1)))
 
-goal min_sort_ensures_default_po_14:
+goal sel_sort_ensures_default_po_14:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4144,7 +4152,7 @@ goal min_sort_ensures_default_po_14:
   (i_0_1_1 = (i_0_1_0 + 1)) ->
   ("JC_63": ("JC_62": (i_0_1_1 < n)))
 
-goal min_sort_ensures_permutation_po_1:
+goal sel_sort_ensures_permutation_po_1:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4156,7 +4164,7 @@ goal min_sort_ensures_permutation_po_1:
   (n <= 0) ->
   ("JC_39": Permut(t, 0, (n - 1), intP_intM_t_5, intP_intM_t_5))
 
-goal min_sort_ensures_permutation_po_2:
+goal sel_sort_ensures_permutation_po_2:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4170,7 +4178,7 @@ goal min_sort_ensures_permutation_po_2:
   (i_0_1 = 0) ->
   ("JC_97": Permut(t, 0, (n - 1), intP_intM_t_5, intP_intM_t_5))
 
-goal min_sort_ensures_permutation_po_3:
+goal sel_sort_ensures_permutation_po_3:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4215,7 +4223,7 @@ goal min_sort_ensures_permutation_po_3:
   (i_0_1_1 = (i_0_1_0 + 1)) ->
   ("JC_97": Permut(t, 0, (n - 1), intP_intM_t_5_1, intP_intM_t_5))
 
-goal min_sort_ensures_sorted_po_1:
+goal sel_sort_ensures_sorted_po_1:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4227,7 +4235,7 @@ goal min_sort_ensures_sorted_po_1:
   (n <= 0) ->
   ("JC_37": Sorted(t, 0, n, intP_intM_t_5))
 
-goal min_sort_ensures_sorted_po_2:
+goal sel_sort_ensures_sorted_po_2:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4241,7 +4249,7 @@ goal min_sort_ensures_sorted_po_2:
   (i_0_1 = 0) ->
   ("JC_78": ("JC_76": Sorted(t, 0, i_0_1, intP_intM_t_5)))
 
-goal min_sort_ensures_sorted_po_3:
+goal sel_sort_ensures_sorted_po_3:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4260,7 +4268,7 @@ goal min_sort_ensures_sorted_po_3:
   ("JC_77": (select(intP_intM_t_5, shift(t, k1)) <= select(intP_intM_t_5,
   shift(t, k2)))))
 
-goal min_sort_ensures_sorted_po_4:
+goal sel_sort_ensures_sorted_po_4:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4293,7 +4301,7 @@ goal min_sort_ensures_sorted_po_4:
   (j_0_1 = (i_0_1_0 + 1)) ->
   ("JC_87": ("JC_85": (mv = select(intP_intM_t_5_0, shift(t, mi)))))
 
-goal min_sort_ensures_sorted_po_5:
+goal sel_sort_ensures_sorted_po_5:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4328,7 +4336,7 @@ goal min_sort_ensures_sorted_po_5:
   ((i_0_1_0 <= k_0) and (k_0 < j_0_1)) ->
   ("JC_87": ("JC_86": (select(intP_intM_t_5_0, shift(t, k_0)) >= mv)))
 
-goal min_sort_ensures_sorted_po_6:
+goal sel_sort_ensures_sorted_po_6:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4385,7 +4393,7 @@ goal min_sort_ensures_sorted_po_6:
   (j_0_1_1 = (j_0_1_0 + 1)) ->
   ("JC_87": ("JC_85": (mv1 = select(intP_intM_t_5_0, shift(t, mi1)))))
 
-goal min_sort_ensures_sorted_po_7:
+goal sel_sort_ensures_sorted_po_7:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4444,7 +4452,7 @@ goal min_sort_ensures_sorted_po_7:
   ((i_0_1_0 <= k_0) and (k_0 < j_0_1_1)) ->
   ("JC_87": ("JC_86": (select(intP_intM_t_5_0, shift(t, k_0)) >= mv1)))
 
-goal min_sort_ensures_sorted_po_8:
+goal sel_sort_ensures_sorted_po_8:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4497,7 +4505,7 @@ goal min_sort_ensures_sorted_po_8:
   ((i_0_1_0 <= k_0) and (k_0 < j_0_1_1)) ->
   ("JC_87": ("JC_86": (select(intP_intM_t_5_0, shift(t, k_0)) >= mv0)))
 
-goal min_sort_ensures_sorted_po_9:
+goal sel_sort_ensures_sorted_po_9:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4553,7 +4561,7 @@ goal min_sort_ensures_sorted_po_9:
   (i_0_1_1 = (i_0_1_0 + 1)) ->
   ("JC_78": ("JC_76": Sorted(t, 0, i_0_1_1, intP_intM_t_5_1)))
 
-goal min_sort_ensures_sorted_po_10:
+goal sel_sort_ensures_sorted_po_10:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4614,7 +4622,7 @@ goal min_sort_ensures_sorted_po_10:
   ("JC_77": (select(intP_intM_t_5_1, shift(t, k1)) <= select(intP_intM_t_5_1,
   shift(t, k2)))))
 
-goal min_sort_ensures_sorted_po_11:
+goal sel_sort_ensures_sorted_po_11:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4639,7 +4647,7 @@ goal min_sort_ensures_sorted_po_11:
   (i_0_1_0 >= (n - 1)) ->
   ("JC_37": Sorted(t, 0, n, intP_intM_t_5_0))
 
-goal min_sort_safety_po_1:
+goal sel_sort_safety_po_1:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4655,7 +4663,7 @@ goal min_sort_safety_po_1:
   (i_0_1_0 < (n - 1)) ->
   (offset_min(intP_t_5_alloc_table, t) <= i_0_1_0)
 
-goal min_sort_safety_po_2:
+goal sel_sort_safety_po_2:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4671,7 +4679,7 @@ goal min_sort_safety_po_2:
   (i_0_1_0 < (n - 1)) ->
   (i_0_1_0 <= offset_max(intP_t_5_alloc_table, t))
 
-goal min_sort_safety_po_3:
+goal sel_sort_safety_po_3:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4706,7 +4714,7 @@ goal min_sort_safety_po_3:
   (j_0_1_0 < n) ->
   (offset_min(intP_t_5_alloc_table, t) <= j_0_1_0)
 
-goal min_sort_safety_po_4:
+goal sel_sort_safety_po_4:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4741,7 +4749,7 @@ goal min_sort_safety_po_4:
   (j_0_1_0 < n) ->
   (j_0_1_0 <= offset_max(intP_t_5_alloc_table, t))
 
-goal min_sort_safety_po_5:
+goal sel_sort_safety_po_5:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4792,7 +4800,7 @@ goal min_sort_safety_po_5:
   (j_0_1_1 = (j_0_1_0 + 1)) ->
   (0 <= ("JC_57": (n - j_0_1_0)))
 
-goal min_sort_safety_po_6:
+goal sel_sort_safety_po_6:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4843,7 +4851,7 @@ goal min_sort_safety_po_6:
   (j_0_1_1 = (j_0_1_0 + 1)) ->
   (("JC_57": (n - j_0_1_1)) < ("JC_57": (n - j_0_1_0)))
 
-goal min_sort_safety_po_7:
+goal sel_sort_safety_po_7:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4886,7 +4894,7 @@ goal min_sort_safety_po_7:
   (j_0_1_1 = (j_0_1_0 + 1)) ->
   (0 <= ("JC_57": (n - j_0_1_0)))
 
-goal min_sort_safety_po_8:
+goal sel_sort_safety_po_8:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4929,7 +4937,7 @@ goal min_sort_safety_po_8:
   (j_0_1_1 = (j_0_1_0 + 1)) ->
   (("JC_57": (n - j_0_1_1)) < ("JC_57": (n - j_0_1_0)))
 
-goal min_sort_safety_po_9:
+goal sel_sort_safety_po_9:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4964,7 +4972,7 @@ goal min_sort_safety_po_9:
   (j_0_1_0 >= n) ->
   ("JC_5": ("JC_2": (offset_max(intP_t_5_alloc_table, t) >= i_0_1_0)))
 
-goal min_sort_safety_po_10:
+goal sel_sort_safety_po_10:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -4999,7 +5007,7 @@ goal min_sort_safety_po_10:
   (j_0_1_0 >= n) ->
   ("JC_5": ("JC_3": (offset_min(intP_t_5_alloc_table, t) <= mi0)))
 
-goal min_sort_safety_po_11:
+goal sel_sort_safety_po_11:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -5034,7 +5042,7 @@ goal min_sort_safety_po_11:
   (j_0_1_0 >= n) ->
   ("JC_5": ("JC_4": (offset_max(intP_t_5_alloc_table, t) >= mi0)))
 
-goal min_sort_safety_po_12:
+goal sel_sort_safety_po_12:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -5084,7 +5092,7 @@ goal min_sort_safety_po_12:
   (i_0_1_1 = (i_0_1_0 + 1)) ->
   (0 <= ("JC_60": (n - i_0_1_0)))
 
-goal min_sort_safety_po_13:
+goal sel_sort_safety_po_13:
   forall t:intP pointer.
   forall n:int.
   forall intP_t_5_alloc_table:intP alloc_table.
@@ -5963,13 +5971,13 @@ why -simplify [...] why/selection_sort.why
 (BG_PUSH
  ;; Why axiom sub_disj
  (FORALL (s1 s2 s3)
- (IMPLIES (EQ (disj_mybag s1 s2) |@true|)
- (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s3) |@true|))))
+ (IMPLIES (EQ (disj_mybag s1 s3) |@true|)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s2) |@true|))))
 
- (FORALL (s1 s2)
- (IMPLIES (EQ (disj_mybag s1 s2) |@true|)
- (FORALL (s3)
- (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s3) |@true|))))))
+ (FORALL (s1 s3)
+ (IMPLIES (EQ (disj_mybag s1 s3) |@true|)
+ (FORALL (s2)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s2) |@true|))))))
 
 (BG_PUSH
  ;; Why axiom sub_in
@@ -5981,6 +5989,17 @@ why -simplify [...] why/selection_sort.why
  (IMPLIES (NOT (EQ (in_mybag p s2) |@true|))
  (FORALL (s1)
  (IMPLIES (EQ (sub_mybag s1 s2) |@true|) (NOT (EQ (in_mybag p s1) |@true|)))))))
+
+(BG_PUSH
+ ;; Why axiom sub_sub
+ (FORALL (s1 s2 s3)
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (sub_mybag s1 s3) |@true|))))
+
+ (FORALL (s1 s2)
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|)
+ (FORALL (s3)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (sub_mybag s1 s3) |@true|))))))
 
 (BG_PUSH
  ;; Why axiom frame_between_refl
@@ -6314,7 +6333,7 @@ why -simplify [...] why/selection_sort.why
  ;; Why axiom voidP_tags
  (FORALL (x voidP_tag_table) (instanceof voidP_tag_table x voidP_tag)))
 
-;; min_sort_ensures_default_po_1, File "HOME/tests/c/selection_sort.c", line 58, characters 21-27
+;; sel_sort_ensures_default_po_1, File "HOME/tests/c/selection_sort.c", line 58, characters 21-27
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6322,7 +6341,7 @@ why -simplify [...] why/selection_sort.why
          (>= (offset_max intP_t_5_alloc_table t) (- n 1)))
 (IMPLIES (> n 0) (FORALL (i_0_1) (IMPLIES (EQ i_0_1 0) (<= 0 i_0_1))))))))
 
-;; min_sort_ensures_default_po_2, File "HOME/tests/c/selection_sort.c", line 58, characters 26-31
+;; sel_sort_ensures_default_po_2, File "HOME/tests/c/selection_sort.c", line 58, characters 26-31
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6330,7 +6349,7 @@ why -simplify [...] why/selection_sort.why
          (>= (offset_max intP_t_5_alloc_table t) (- n 1)))
 (IMPLIES (> n 0) (FORALL (i_0_1) (IMPLIES (EQ i_0_1 0) (< i_0_1 n))))))))
 
-;; min_sort_ensures_default_po_3, File "HOME/tests/c/selection_sort.c", line 71, characters 23-28
+;; sel_sort_ensures_default_po_3, File "HOME/tests/c/selection_sort.c", line 71, characters 23-28
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6351,7 +6370,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (EQ mi i_0_1_0)
 (FORALL (j_0_1) (IMPLIES (EQ j_0_1 (+ i_0_1_0 1)) (< i_0_1_0 j_0_1))))))))))))))))))))
 
-;; min_sort_ensures_default_po_4, File "HOME/tests/c/selection_sort.c", line 71, characters 32-39
+;; sel_sort_ensures_default_po_4, File "HOME/tests/c/selection_sort.c", line 71, characters 32-39
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6372,7 +6391,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (EQ mi i_0_1_0)
 (FORALL (j_0_1) (IMPLIES (EQ j_0_1 (+ i_0_1_0 1)) (<= i_0_1_0 mi))))))))))))))))))))
 
-;; min_sort_ensures_default_po_5, File "HOME/tests/c/selection_sort.c", line 71, characters 37-43
+;; sel_sort_ensures_default_po_5, File "HOME/tests/c/selection_sort.c", line 71, characters 37-43
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6393,7 +6412,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (EQ mi i_0_1_0)
 (FORALL (j_0_1) (IMPLIES (EQ j_0_1 (+ i_0_1_0 1)) (< mi n))))))))))))))))))))
 
-;; min_sort_ensures_default_po_6, File "HOME/tests/c/selection_sort.c", line 71, characters 23-28
+;; sel_sort_ensures_default_po_6, File "HOME/tests/c/selection_sort.c", line 71, characters 23-28
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6430,7 +6449,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (EQ mv1 result1)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< i_0_1_0 j_0_1_1))))))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_default_po_7, File "HOME/tests/c/selection_sort.c", line 71, characters 32-39
+;; sel_sort_ensures_default_po_7, File "HOME/tests/c/selection_sort.c", line 71, characters 32-39
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6467,7 +6486,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (EQ mv1 result1)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (<= i_0_1_0 mi1))))))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_default_po_8, File "HOME/tests/c/selection_sort.c", line 71, characters 37-43
+;; sel_sort_ensures_default_po_8, File "HOME/tests/c/selection_sort.c", line 71, characters 37-43
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6504,7 +6523,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (EQ mv1 result1)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< mi1 n))))))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_default_po_9, File "HOME/tests/c/selection_sort.c", line 71, characters 23-28
+;; sel_sort_ensures_default_po_9, File "HOME/tests/c/selection_sort.c", line 71, characters 23-28
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6535,7 +6554,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (>= result0 mv0)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< i_0_1_0 j_0_1_1))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_default_po_10, File "HOME/tests/c/selection_sort.c", line 71, characters 32-39
+;; sel_sort_ensures_default_po_10, File "HOME/tests/c/selection_sort.c", line 71, characters 32-39
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6566,7 +6585,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (>= result0 mv0)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (<= i_0_1_0 mi0))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_default_po_11, File "HOME/tests/c/selection_sort.c", line 71, characters 37-43
+;; sel_sort_ensures_default_po_11, File "HOME/tests/c/selection_sort.c", line 71, characters 37-43
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6597,7 +6616,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (>= result0 mv0)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< mi0 n))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_default_po_12, File "HOME/tests/c/selection_sort.c", line 88, characters 15-38
+;; sel_sort_ensures_default_po_12, File "HOME/tests/c/selection_sort.c", line 88, characters 15-38
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6634,7 +6653,7 @@ why -simplify [...] why/selection_sort.why
                                                             t) i_0_1_0 i_0_1_0))))
 (EQ (Permut t 0 (- n 1) intP_intM_t_5_0 intP_intM_t_5) |@true|))))))))))))))))))))))))))
 
-;; min_sort_ensures_default_po_13, File "HOME/tests/c/selection_sort.c", line 58, characters 21-27
+;; sel_sort_ensures_default_po_13, File "HOME/tests/c/selection_sort.c", line 58, characters 21-27
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6672,7 +6691,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (EQ (Permut t 0 (- n 1) intP_intM_t_5_0 intP_intM_t_5) |@true|)
 (FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (<= 0 i_0_1_1)))))))))))))))))))))))))))))
 
-;; min_sort_ensures_default_po_14, File "HOME/tests/c/selection_sort.c", line 58, characters 26-31
+;; sel_sort_ensures_default_po_14, File "HOME/tests/c/selection_sort.c", line 58, characters 26-31
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6710,7 +6729,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (EQ (Permut t 0 (- n 1) intP_intM_t_5_0 intP_intM_t_5) |@true|)
 (FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (< i_0_1_1 n)))))))))))))))))))))))))))))
 
-;; min_sort_ensures_permutation_po_1, File "HOME/tests/c/selection_sort.c", line 52, characters 14-39
+;; sel_sort_ensures_permutation_po_1, File "HOME/tests/c/selection_sort.c", line 52, characters 14-39
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6720,7 +6739,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (<= n 0)
 (EQ (Permut t 0 (- n 1) intP_intM_t_5 intP_intM_t_5) |@true|)))))))
 
-;; min_sort_ensures_permutation_po_2, File "HOME/tests/c/selection_sort.c", line 65, characters 22-47
+;; sel_sort_ensures_permutation_po_2, File "HOME/tests/c/selection_sort.c", line 65, characters 22-47
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6732,7 +6751,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (EQ i_0_1 0)
 (EQ (Permut t 0 (- n 1) intP_intM_t_5 intP_intM_t_5) |@true|)))))))))
 
-;; min_sort_ensures_permutation_po_3, File "HOME/tests/c/selection_sort.c", line 65, characters 22-47
+;; sel_sort_ensures_permutation_po_3, File "HOME/tests/c/selection_sort.c", line 65, characters 22-47
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6775,7 +6794,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1))
 (EQ (Permut t 0 (- n 1) intP_intM_t_5_1 intP_intM_t_5) |@true|))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_1, File "HOME/tests/c/selection_sort.c", line 50, characters 14-27
+;; sel_sort_ensures_sorted_po_1, File "HOME/tests/c/selection_sort.c", line 50, characters 14-27
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6784,7 +6803,7 @@ why -simplify [...] why/selection_sort.why
          (>= (offset_max intP_t_5_alloc_table t) (- n 1)))
 (IMPLIES (<= n 0) (Sorted t 0 n intP_intM_t_5)))))))
 
-;; min_sort_ensures_sorted_po_2, File "HOME/tests/c/selection_sort.c", line 61, characters 8-21
+;; sel_sort_ensures_sorted_po_2, File "HOME/tests/c/selection_sort.c", line 61, characters 8-21
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6794,7 +6813,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (> n 0)
 (FORALL (i_0_1) (IMPLIES (EQ i_0_1 0) (Sorted t 0 i_0_1 intP_intM_t_5)))))))))
 
-;; min_sort_ensures_sorted_po_3, File "HOME/tests/c/selection_sort.c", line 62, characters 8-86
+;; sel_sort_ensures_sorted_po_3, File "HOME/tests/c/selection_sort.c", line 62, characters 8-86
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6809,7 +6828,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (AND (<= 0 k1) (AND (< k1 i_0_1) (AND (<= i_0_1 k2) (< k2 n))))
 (<= (select intP_intM_t_5 (shift t k1)) (select intP_intM_t_5 (shift t k2))))))))))))))
 
-;; min_sort_ensures_sorted_po_4, File "HOME/tests/c/selection_sort.c", line 74, characters 11-22
+;; sel_sort_ensures_sorted_po_4, File "HOME/tests/c/selection_sort.c", line 74, characters 11-22
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6839,7 +6858,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (EQ j_0_1 (+ i_0_1_0 1))
 (EQ mv (select intP_intM_t_5_0 (shift t mi)))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_5, File "HOME/tests/c/selection_sort.c", line 75, characters 11-57
+;; sel_sort_ensures_sorted_po_5, File "HOME/tests/c/selection_sort.c", line 75, characters 11-57
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6871,7 +6890,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (AND (<= i_0_1_0 k_0) (< k_0 j_0_1))
 (>= (select intP_intM_t_5_0 (shift t k_0)) mv)))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_6, File "HOME/tests/c/selection_sort.c", line 74, characters 11-22
+;; sel_sort_ensures_sorted_po_6, File "HOME/tests/c/selection_sort.c", line 74, characters 11-22
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6921,7 +6940,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1))
 (EQ mv1 (select intP_intM_t_5_0 (shift t mi1))))))))))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_7, File "HOME/tests/c/selection_sort.c", line 75, characters 11-57
+;; sel_sort_ensures_sorted_po_7, File "HOME/tests/c/selection_sort.c", line 75, characters 11-57
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -6973,7 +6992,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (AND (<= i_0_1_0 k_0) (< k_0 j_0_1_1))
 (>= (select intP_intM_t_5_0 (shift t k_0)) mv1))))))))))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_8, File "HOME/tests/c/selection_sort.c", line 75, characters 11-57
+;; sel_sort_ensures_sorted_po_8, File "HOME/tests/c/selection_sort.c", line 75, characters 11-57
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7019,7 +7038,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (AND (<= i_0_1_0 k_0) (< k_0 j_0_1_1))
 (>= (select intP_intM_t_5_0 (shift t k_0)) mv0))))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_9, File "HOME/tests/c/selection_sort.c", line 61, characters 8-21
+;; sel_sort_ensures_sorted_po_9, File "HOME/tests/c/selection_sort.c", line 61, characters 8-21
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7070,7 +7089,7 @@ why -simplify [...] why/selection_sort.why
 (FORALL (i_0_1_1)
 (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (Sorted t 0 i_0_1_1 intP_intM_t_5_1))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_10, File "HOME/tests/c/selection_sort.c", line 62, characters 8-86
+;; sel_sort_ensures_sorted_po_10, File "HOME/tests/c/selection_sort.c", line 62, characters 8-86
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7126,7 +7145,7 @@ why -simplify [...] why/selection_sort.why
 (<= (select intP_intM_t_5_1 (shift t k1)) (select
                                           intP_intM_t_5_1 (shift t k2)))))))))))))))))))))))))))))))))))))
 
-;; min_sort_ensures_sorted_po_11, File "HOME/tests/c/selection_sort.c", line 50, characters 14-27
+;; sel_sort_ensures_sorted_po_11, File "HOME/tests/c/selection_sort.c", line 50, characters 14-27
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7147,7 +7166,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (AND (<= 0 i_0_1_0) (< i_0_1_0 n))
 (IMPLIES (>= i_0_1_0 (- n 1)) (Sorted t 0 n intP_intM_t_5_0)))))))))))))
 
-;; min_sort_safety_po_1, File "HOME/tests/c/selection_sort.c", line 70, characters 9-13
+;; sel_sort_safety_po_1, File "HOME/tests/c/selection_sort.c", line 70, characters 9-13
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7162,7 +7181,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (< i_0_1_0 (- n 1))
 (<= (offset_min intP_t_5_alloc_table t) i_0_1_0))))))))))))
 
-;; min_sort_safety_po_2, File "HOME/tests/c/selection_sort.c", line 70, characters 9-13
+;; sel_sort_safety_po_2, File "HOME/tests/c/selection_sort.c", line 70, characters 9-13
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7177,7 +7196,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (< i_0_1_0 (- n 1))
 (<= i_0_1_0 (offset_max intP_t_5_alloc_table t)))))))))))))
 
-;; min_sort_safety_po_3, File "HOME/tests/c/selection_sort.c", line 82, characters 10-14
+;; sel_sort_safety_po_3, File "HOME/tests/c/selection_sort.c", line 82, characters 10-14
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7207,7 +7226,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
 (IMPLIES (< j_0_1_0 n) (<= (offset_min intP_t_5_alloc_table t) j_0_1_0)))))))))))))))))))))))))))
 
-;; min_sort_safety_po_4, File "HOME/tests/c/selection_sort.c", line 82, characters 10-14
+;; sel_sort_safety_po_4, File "HOME/tests/c/selection_sort.c", line 82, characters 10-14
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7237,7 +7256,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
 (IMPLIES (< j_0_1_0 n) (<= j_0_1_0 (offset_max intP_t_5_alloc_table t))))))))))))))))))))))))))))
 
-;; min_sort_safety_po_5, File "HOME/tests/c/selection_sort.c", line 79, characters 21-24
+;; sel_sort_safety_po_5, File "HOME/tests/c/selection_sort.c", line 79, characters 21-24
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7282,7 +7301,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (EQ mv1 result1)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (<= 0 (- n j_0_1_0))))))))))))))))))))))))))))))))))))))))))
 
-;; min_sort_safety_po_6, File "HOME/tests/c/selection_sort.c", line 79, characters 21-24
+;; sel_sort_safety_po_6, File "HOME/tests/c/selection_sort.c", line 79, characters 21-24
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7328,7 +7347,7 @@ why -simplify [...] why/selection_sort.why
 (FORALL (j_0_1_1)
 (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< (- n j_0_1_1) (- n j_0_1_0))))))))))))))))))))))))))))))))))))))))))
 
-;; min_sort_safety_po_7, File "HOME/tests/c/selection_sort.c", line 79, characters 21-24
+;; sel_sort_safety_po_7, File "HOME/tests/c/selection_sort.c", line 79, characters 21-24
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7365,7 +7384,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (>= result0 mv0)
 (FORALL (j_0_1_1) (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (<= 0 (- n j_0_1_0)))))))))))))))))))))))))))))))))))
 
-;; min_sort_safety_po_8, File "HOME/tests/c/selection_sort.c", line 79, characters 21-24
+;; sel_sort_safety_po_8, File "HOME/tests/c/selection_sort.c", line 79, characters 21-24
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7403,7 +7422,7 @@ why -simplify [...] why/selection_sort.why
 (FORALL (j_0_1_1)
 (IMPLIES (EQ j_0_1_1 (+ j_0_1_0 1)) (< (- n j_0_1_1) (- n j_0_1_0)))))))))))))))))))))))))))))))))))
 
-;; min_sort_safety_po_9, File "HOME/tests/c/selection_sort.c", line 87, characters 4-16
+;; sel_sort_safety_po_9, File "HOME/tests/c/selection_sort.c", line 87, characters 4-16
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7433,7 +7452,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
 (IMPLIES (>= j_0_1_0 n) (>= (offset_max intP_t_5_alloc_table t) i_0_1_0)))))))))))))))))))))))))))
 
-;; min_sort_safety_po_10, File "HOME/tests/c/selection_sort.c", line 87, characters 4-16
+;; sel_sort_safety_po_10, File "HOME/tests/c/selection_sort.c", line 87, characters 4-16
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7463,7 +7482,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
 (IMPLIES (>= j_0_1_0 n) (<= (offset_min intP_t_5_alloc_table t) mi0)))))))))))))))))))))))))))
 
-;; min_sort_safety_po_11, File "HOME/tests/c/selection_sort.c", line 87, characters 4-16
+;; sel_sort_safety_po_11, File "HOME/tests/c/selection_sort.c", line 87, characters 4-16
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7493,7 +7512,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (AND (< i_0_1_0 j_0_1_0) (AND (<= i_0_1_0 mi0) (< mi0 n)))
 (IMPLIES (>= j_0_1_0 n) (>= (offset_max intP_t_5_alloc_table t) mi0)))))))))))))))))))))))))))
 
-;; min_sort_safety_po_12, File "HOME/tests/c/selection_sort.c", line 66, characters 19-22
+;; sel_sort_safety_po_12, File "HOME/tests/c/selection_sort.c", line 66, characters 19-22
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)
@@ -7539,7 +7558,7 @@ why -simplify [...] why/selection_sort.why
 (IMPLIES (EQ (Permut t 0 (- n 1) intP_intM_t_5_0 intP_intM_t_5) |@true|)
 (FORALL (i_0_1_1) (IMPLIES (EQ i_0_1_1 (+ i_0_1_0 1)) (<= 0 (- n i_0_1_0))))))))))))))))))))))))))))))))))
 
-;; min_sort_safety_po_13, File "HOME/tests/c/selection_sort.c", line 66, characters 19-22
+;; sel_sort_safety_po_13, File "HOME/tests/c/selection_sort.c", line 66, characters 19-22
 (FORALL (t)
 (FORALL (n)
 (FORALL (intP_t_5_alloc_table)

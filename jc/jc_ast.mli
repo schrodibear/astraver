@@ -67,16 +67,16 @@ type const =
   | JCCnull
   | JCCboolean of bool
   | JCCinteger of string
-  | JCCreal of string 
+  | JCCreal of string
   | JCCstring of string
 
-class type identifier = 
+class type identifier =
 object
   inherit positioned
   method name: string
 end
 
-class type ['a] node_positioned = 
+class type ['a] node_positioned =
 object
   inherit positioned
   method node: 'a
@@ -86,7 +86,7 @@ end
 (* parse trees *)
 (***************)
 
-type ptype_node = 
+type ptype_node =
   | JCPTnative of native_type
   | JCPTidentifier of string * ptype list
   | JCPTpointer of string * ptype list * Num.num option * Num.num option
@@ -96,14 +96,14 @@ and ptype = ptype_node node_positioned
 type comparison_op = [ `Blt | `Bgt | `Ble | `Bge | `Beq | `Bneq ]
 type arithmetic_op = [ `Badd | `Bsub | `Bmul | `Bdiv | `Bmod ]
 type logical_op = [ `Bland | `Blor | `Bimplies | `Biff ]
-type bitwise_op = 
-    [ `Bbw_and | `Bbw_or | `Bbw_xor 
+type bitwise_op =
+    [ `Bbw_and | `Bbw_or | `Bbw_xor
     | `Bshift_left | `Blogical_shift_right | `Barith_shift_right ]
 
 type basic_op = [ comparison_op | arithmetic_op ]
 type operational_op = [ basic_op | bitwise_op | `Bconcat | `Bland | `Blor ]
 type bin_op = [ operational_op | logical_op ]
-      
+
 type pre_unary_op = [ `Uprefix_inc | `Uprefix_dec ]
 type post_unary_op = [ `Upostfix_inc | `Upostfix_dec ]
 type pm_unary_op = [ pre_unary_op | post_unary_op | `Uplus ]
@@ -127,22 +127,22 @@ type address_kind = Addr_absolute | Addr_pointer
 
 type quantifier = Forall | Exists
 
-type asrt_kind = 
+type asrt_kind =
   | Aassert (* Assertion to prove *)
-  | Ahint   (* Assertion to help in proofs, 
+  | Ahint   (* Assertion to help in proofs,
 	       can be either discarded or both used and proved *)
   | Aassume (* Assertion that can be relied on without proof *)
   | Acheck  (* Assertion to prove but which is not used after *)
 
 type rounding_mode =
-  | Round_nearest_even | Round_to_zero | Round_up | Round_down 
+  | Round_nearest_even | Round_to_zero | Round_up | Round_down
   | Round_nearest_away
 
-type real_conversion = 
-  | Integer_to_real 
+type real_conversion =
+  | Integer_to_real
   | Double_to_real
   | Float_to_real
-  | Round of float_format * rounding_mode 
+  | Round of float_format * rounding_mode
 
 type ppattern_node =
   | JCPPstruct of identifier * (identifier * ppattern) list
@@ -154,16 +154,16 @@ type ppattern_node =
 
 and ppattern = ppattern_node node_positioned
 
-type 'expr pbehavior = 
-    Loc.position * string * identifier option * 'expr option 
+type 'expr pbehavior =
+    Loc.position * string * identifier option * 'expr option
     * 'expr option * (Loc.position * 'expr list) option * 'expr
       (*r loc, name, throws, assumes,requires,assigns,ensures *)
- 
+
 and 'expr loopbehavior =
-    identifier list 
-    * 'expr option * (Loc.position * 'expr list) option 
+    identifier list
+    * 'expr option * (Loc.position * 'expr list) option
       (*r idents, invariant, assigns *)
-    
+
 and pexpr_node =
   | JCPEconst of const
   | JCPElabel of string * pexpr
@@ -177,13 +177,14 @@ and pexpr_node =
   | JCPEinstanceof of pexpr * string
   | JCPEcast of pexpr * ptype
   | JCPEquantifier of quantifier * ptype * identifier list * pexpr list list * pexpr
+  | JCPEfresh of pexpr
   | JCPEold of pexpr
   | JCPEat of pexpr * label
-  | JCPEoffset of offset_kind * pexpr 
-  | JCPEaddress of address_kind * pexpr 
+  | JCPEoffset of offset_kind * pexpr
+  | JCPEaddress of address_kind * pexpr
       (* expression is of integer type for an absolute address, and of
 	 pointer type for a pointer address *)
-  | JCPEbase_block of pexpr 
+  | JCPEbase_block of pexpr
   | JCPEif of pexpr * pexpr * pexpr
   | JCPElet of ptype option * string * pexpr option * pexpr
   | JCPEdecl of ptype * string * pexpr option
@@ -196,16 +197,16 @@ and pexpr_node =
   | JCPEmatch of pexpr * (ppattern * pexpr) list
   | JCPEblock of pexpr list
   | JCPEassert of identifier list * asrt_kind * pexpr
-  | JCPEcontract of 
-      pexpr option * (pexpr * identifier option) option * 
-	pexpr pbehavior list * pexpr 
+  | JCPEcontract of
+      pexpr option * (pexpr * identifier option) option *
+	pexpr pbehavior list * pexpr
 	(* requires, decreases, behaviors, expression *)
-  | JCPEwhile of 
-      pexpr * pexpr loopbehavior list * 
+  | JCPEwhile of
+      pexpr * pexpr loopbehavior list *
 	(pexpr * identifier option) option * pexpr
 	(*r condition, behaviors, variant, body *)
-  | JCPEfor of 
-      pexpr list * pexpr * pexpr list * pexpr loopbehavior list 
+  | JCPEfor of
+      pexpr list * pexpr * pexpr list * pexpr loopbehavior list
       * (pexpr * identifier option) option * pexpr
 	(*r inits, condition, updates, behaviors, variant, body *)
   | JCPEreturn of pexpr
@@ -259,7 +260,7 @@ type 'expr decl_node =
       (* 2nd arg is true if it is an axiom *)
   | JCDexception of string * ptype option
   (* logic functions and predicates (return type: None if predicate) *)
-  | JCDlogic of ptype option * string * string list * label list * (ptype * string) list 
+  | JCDlogic of ptype option * string * string list * label list * (ptype * string) list
       * 'expr reads_or_expr
   | JCDlogic_var of ptype * string * 'expr option
   (* global invariant *)
@@ -269,10 +270,11 @@ type 'expr decl_node =
   | JCDseparation_policy of Jc_env.separation_sem
   | JCDtermination_policy of Jc_env.termination_policy
   | JCDannotation_policy of Jc_env.annotation_sem
-  | JCDabstract_domain of Jc_env.abstract_domain 
+  | JCDabstract_domain of Jc_env.abstract_domain
   | JCDint_model of Jc_env.int_model
   | JCDpragma_gen_sep of string * string * (ptype * string list) list
   | JCDpragma_gen_frame of string * string
+  | JCDpragma_gen_sub of string * string
   | JCDaxiomatic of string * 'expr decl list
 
 
@@ -299,19 +301,20 @@ type nexpr_node =
   | JCNEinstanceof of nexpr * string
   | JCNEcast of nexpr * ptype
   | JCNEif of nexpr * nexpr * nexpr
-  | JCNEoffset of offset_kind * nexpr 
-  | JCNEaddress of address_kind * nexpr 
-  | JCNEbase_block of nexpr 
+  | JCNEoffset of offset_kind * nexpr
+  | JCNEaddress of address_kind * nexpr
+  | JCNEfresh of nexpr
+  | JCNEbase_block of nexpr
   | JCNEalloc of nexpr * string
   | JCNEfree of nexpr
   | JCNElet of ptype option * string * nexpr option * nexpr
   | JCNEassert of identifier list * asrt_kind * nexpr
-  | JCNEcontract of 
-      nexpr option * (nexpr * identifier option) option * 
-	nexpr pbehavior list * nexpr 
+  | JCNEcontract of
+      nexpr option * (nexpr * identifier option) option *
+	nexpr pbehavior list * nexpr
 	(* requires, decreases, behaviors, expression *)
   | JCNEblock of nexpr list
-  | JCNEloop of nexpr loopbehavior list * 
+  | JCNEloop of nexpr loopbehavior list *
       (nexpr * identifier option) option * nexpr
       (*r behaviors, variant, body *)
   | JCNEreturn of nexpr option
@@ -332,7 +335,7 @@ type nexpr_node =
 
 and nexpr = nexpr_node c_nexpr
 
-     
+
 (*************)
 (* typed ast *)
 (*************)
@@ -362,7 +365,7 @@ object
   inherit ['node] node_positioned
 end
 
-type 'li app = 
+type 'li app =
     {
       jc_app_fun : 'li;
       jc_app_args : 'li term list;
@@ -380,7 +383,7 @@ and 'li term_node =
   | JCTapp of 'li app
   | JCTold of 'li term
   | JCTat of 'li term * label
-  | JCToffset of offset_kind * 'li term * struct_info 
+  | JCToffset of offset_kind * 'li term * struct_info
   | JCTaddress of address_kind * 'li term
   | JCTbase_block of 'li term
   | JCTinstanceof of 'li term * label * struct_info
@@ -409,11 +412,11 @@ object
   inherit ['node] node_positioned
 end
 
-type 'li location_set_node = 
+type 'li location_set_node =
   | JCLSvar of var_info
   | JCLSderef of 'li location_set * label * field_info * region
 (* TODO ?
-  | JCLSshift of location_set * term 
+  | JCLSshift of location_set * term
 *)
   | JCLSrange of 'li location_set * 'li term option * 'li term option
   | JCLSrange_term of 'li term * 'li term option * 'li term option
@@ -451,6 +454,7 @@ type 'li assertion_node =
   | JCAat of 'li assertion * label
   | JCAinstanceof of 'li term * label * struct_info
   | JCAbool_term of 'li term
+  | JCAfresh of 'li term
   | JCAif of 'li term * 'li assertion * 'li assertion
   | JCAmutable of 'li term * struct_info * 'li tag
   | JCAeqtype of 'li tag * 'li tag * struct_info option
@@ -473,9 +477,9 @@ type 'li term_or_assertion =
 type 'li loop_annot =
     {
       jc_loop_tag : int;
-      mutable jc_loop_behaviors : 
-	(identifier list * 
-	   'li assertion option * 
+      mutable jc_loop_behaviors :
+	(identifier list *
+	   'li assertion option *
 	   'li location list option) list;
       mutable jc_free_loop_invariant : 'li assertion;
       jc_loop_variant : ('li term * 'li option) option;
@@ -483,7 +487,7 @@ type 'li loop_annot =
 
 
 type 'li behavior =
-    { 
+    {
       jc_behavior_throws : exception_info option ;
       jc_behavior_assumes : 'li assertion option ;
       jc_behavior_assigns : (Loc.position * 'li location list) option ;
@@ -498,9 +502,9 @@ type 'li fun_spec =
     {
       mutable jc_fun_requires : 'li assertion;
       (* "free" precondition, proved by static analysis. It can be used
-	 to prove the function correctness without being checked at 
+	 to prove the function correctness without being checked at
 	 calls, if static analysis is trusted (option [-trust-ai]) *)
-      mutable jc_fun_free_requires : 'li assertion; 
+      mutable jc_fun_free_requires : 'li assertion;
       mutable jc_fun_decreases : ('li term * 'li option) option;
       (* special behavior without [assumes] clause, on which all annotations
 	 not specifically attached to a behavior are checked *)
@@ -545,30 +549,31 @@ type ('li,'fi) expr_node =
   | JCEbase_block of ('li,'fi) expr
   | JCEalloc of ('li,'fi) expr * struct_info
   | JCEfree of ('li,'fi) expr
+  | JCEfresh of ('li,'fi) expr
   | JCElet of var_info * ('li,'fi) expr option * ('li,'fi) expr
   | JCEassert of identifier list * asrt_kind * 'li assertion
-  | JCEcontract of 'li assertion option * 
-      ('li term * identifier option) option * var_info * 
+  | JCEcontract of 'li assertion option *
+      ('li term * identifier option) option * var_info *
       (Loc.position * string * 'li behavior) list * ('li,'fi) expr
       (* requires, decreases, vi of \result, behaviors, expression *)
   | JCEblock of ('li,'fi) expr list
   | JCEloop of 'li loop_annot * ('li,'fi) expr
-  | JCEreturn_void 
-  | JCEreturn of jc_type * ('li,'fi) expr (*r expected return type *) 
-  | JCEtry of ('li,'fi) expr 
+  | JCEreturn_void
+  | JCEreturn of jc_type * ('li,'fi) expr (*r expected return type *)
+  | JCEtry of ('li,'fi) expr
       * (exception_info * var_info option * ('li,'fi) expr) list * ('li,'fi) expr
   | JCEthrow of exception_info * ('li,'fi) expr option
   | JCEpack of struct_info * ('li,'fi) expr * struct_info
   | JCEunpack of struct_info * ('li,'fi) expr * struct_info
   | JCEmatch of ('li,'fi) expr * (pattern * ('li,'fi) expr) list
   | JCEshift of ('li,'fi) expr * ('li,'fi) expr
-      
+
 and ('li,'fi) expr = ('li,'fi) expr_node c_expr
 
-and ('li,'fi) callee = 
+and ('li,'fi) callee =
     JClogic_fun of 'li | JCfun of 'fi
 
-and ('li,'fi) call = 
+and ('li,'fi) call =
     {
       jc_call_fun : ('li,'fi) callee;
       jc_call_args : ('li,'fi) expr list;
@@ -579,7 +584,7 @@ and ('li,'fi) call =
 
 (*type incr_op = Stat_inc | Stat_dec*)
 
-(* application, increment and assignment are exprs. 
+(* application, increment and assignment are exprs.
    expressions (without any of the above) are not exprs anymore.
    break, continue, goto are translated with exceptions.
 *)
@@ -587,7 +592,7 @@ and ('li,'fi) call =
 
 (*
 type behavior =
-    {  
+    {
       jc_behavior_throws : exception_info option ;
       jc_behavior_assumes : assertion option ;
 (*
@@ -607,9 +612,9 @@ type fun_spec =
 *)
 
 
-    
+
 (*
-Local Variables: 
+Local Variables:
 compile-command: "LC_ALL=C make -j -C .. bin/jessie.byte"
-End: 
+End:
 *)

@@ -69,10 +69,10 @@ float my_cos3(float x) {
 }
 
 /*@ requires \abs(x) <= 0.07 ;
-  @ ensures \abs(\result - \cos(x)) <= 0x1p-20;
+  @ ensures \abs(\result - \cos(x)) <= 0x1.3p-20;
   @*/
 float my_cos4(float x) {
-  //@ assert \abs(1.0 - x*x*0.5 - \cos(x)) <= 0x0.Fp-20;
+  //@ assert \abs(1.0 - x*x*0.5 - \cos(x)) <= 0x1.2p-20;
   return 1.0f - x * x * 0.5f;
 }
 
@@ -210,7 +210,7 @@ float my_cos4(float x_2)
 behavior default:
   ensures (C_34 : (\real_abs(((\result :> real) -
                                \cos((\at(x_2,Old) :> real)))) <=
-                    0x1p-20));
+                    0x1.3p-20));
 {  
    (var float __retres_0);
    
@@ -221,7 +221,7 @@ behavior default:
                                                        (x_2 :> real)) *
                                                       0.5)) -
                                                    \cos((x_2 :> real)))) <=
-                                        0x0.Fp-20)));
+                                        0x1.2p-20)));
          ()
       };
       (C_33 : (__retres_0 = (C_32 : ((1.0 :> float) -
@@ -441,7 +441,7 @@ end = 29
 file = "HOME/tests/c/my_cosine.c"
 line = 71
 begin = 12
-end = 46
+end = 48
 
 [C_35]
 file = "HOME/tests/c/my_cosine.c"
@@ -937,7 +937,7 @@ end = 21
 file = "HOME/tests/c/my_cosine.c"
 line = 71
 begin = 12
-end = 46
+end = 48
 
 [JC_15]
 kind = FPOverflow
@@ -950,7 +950,7 @@ end = 28
 file = "HOME/tests/c/my_cosine.c"
 line = 71
 begin = 12
-end = 46
+end = 48
 
 [JC_16]
 kind = FPOverflow
@@ -1256,7 +1256,7 @@ axiom int8_coerce :
 
 axiom int8_extensionality :
  (forall x:int8.
-  (forall y:int8.
+  (forall y:int8[eq_int(integer_of_int8(x), integer_of_int8(y))].
    (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
@@ -1474,14 +1474,14 @@ parameter my_cos4 :
   { } single
   { (JC_68:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2)))),
-    0x1p-20)) }
+    0x1.3p-20)) }
 
 parameter my_cos4_requires :
  x_2:single ->
   { (JC_63: le_real(abs_real(single_value(x_2)), 0.07))} single
   { (JC_68:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2)))),
-    0x1p-20)) }
+    0x1.3p-20)) }
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
@@ -1698,7 +1698,7 @@ let my_cos4_ensures_default =
                                             single_value(x_2)),
                                    0.5)),
                           cos(single_value(x_2)))),
-         0x0.Fp-20)) }; void); void;
+         0x1.2p-20)) }; void); void;
       (let jessie_<num> =
       (__retres_0 := (C_32:
                      (JC_78:
@@ -1713,7 +1713,7 @@ let my_cos4_ensures_default =
    Return -> !return end))
   { (JC_67:
     le_real(abs_real(sub_real(single_value(result), cos(single_value(x_2)))),
-    0x1p-20)) }
+    0x1.3p-20)) }
 
 let my_cos4_safety =
  fun (x_2 : single) ->
@@ -1732,7 +1732,7 @@ let my_cos4_safety =
                                               single_value(x_2)),
                                      0.5)),
                             cos(single_value(x_2)))),
-           0x0.Fp-20)) } ]; void;
+           0x1.2p-20)) } ]; void;
       (let jessie_<num> =
       (__retres_0 := (C_32:
                      (JC_74:
@@ -2599,7 +2599,7 @@ axiom sub_disj:
     (forall s2:'a1 mybag.
       (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
         disj_mybag(s1, s3), sub_mybag(s2, s3)].
-        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+        (disj_mybag(s1, s3) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s2))))))
 
 axiom sub_in:
   (forall s1:'a1 mybag.
@@ -2608,6 +2608,13 @@ axiom sub_in:
         sub_mybag(s1, s2)].
         ((not in_mybag(p, s2)) ->
          (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+axiom sub_sub:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [sub_mybag(s1, s3), sub_mybag(s2, s3)|
+        sub_mybag(s1, s3), sub_mybag(s1, s2)].
+        (sub_mybag(s1, s2) -> (sub_mybag(s2, s3) -> sub_mybag(s1, s3))))))
 
 logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
 'a2) memory -> prop
@@ -3433,13 +3440,13 @@ goal my_cos4_ensures_default_po_1:
   forall x_2:single.
   ("JC_65": (abs_real(single_value(x_2)) <= 0.07)) ->
   ("JC_75":
-  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20))
+  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x1.2p-20))
 
 goal my_cos4_ensures_default_po_2:
   forall x_2:single.
   ("JC_65": (abs_real(single_value(x_2)) <= 0.07)) ->
   ("JC_75":
-  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20)) ->
+  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x1.2p-20)) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
@@ -3457,13 +3464,13 @@ goal my_cos4_ensures_default_po_2:
   forall return:single.
   (return = __retres_0) ->
   ("JC_67":
-  (abs_real((single_value(return) - cos(single_value(x_2)))) <= 0x1.p-20))
+  (abs_real((single_value(return) - cos(single_value(x_2)))) <= 0x1.3p-20))
 
 goal my_cos4_safety_po_1:
   forall x_2:single.
   ("JC_65": (abs_real(single_value(x_2)) <= 0.07)) ->
   ("JC_71":
-  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20)) ->
+  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x1.2p-20)) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
@@ -3473,7 +3480,7 @@ goal my_cos4_safety_po_2:
   forall x_2:single.
   ("JC_65": (abs_real(single_value(x_2)) <= 0.07)) ->
   ("JC_71":
-  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20)) ->
+  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x1.2p-20)) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
@@ -3491,7 +3498,7 @@ goal my_cos4_safety_po_3:
   forall x_2:single.
   ("JC_65": (abs_real(single_value(x_2)) <= 0.07)) ->
   ("JC_71":
-  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x0.Fp-20)) ->
+  (abs_real(((1.0 - ((single_value(x_2) * single_value(x_2)) * 0.5)) - cos(single_value(x_2)))) <= 0x1.2p-20)) ->
   forall result:single.
   ((single_value(result) = 1.0) and
    ((single_exact(result) = 1.0) and (single_model(result) = 1.0))) ->
@@ -3512,20 +3519,18 @@ goal my_cos4_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/my_cosine_why.why         : ?.#?##..#..#..#?.#?#?## (8/0/5/10/0)
+why/my_cosine_why.why         : ?.#?.#..#..#..#?.#?#?.# (10/0/5/8/0)
 total   :  23
-valid   :   8 ( 35%)
+valid   :  10 ( 43%)
 invalid :   0 (  0%)
 unknown :   5 ( 22%)
-timeout :  10 ( 43%)
+timeout :   8 ( 35%)
 failure :   0 (  0%)
 // RUNCOQ: for the first VC
 ========== generation of Coq VC output ==========
 why -coq [...] why/my_cosine.why
-File "/home/cmarche/why2-trunk/tests/c/my_cosine.jessie/coq/my_cosine_why.v",
-line 3, characters 0-26:
-Error: File /usr/lib/coq/user-contrib/jessie_why.vo has bad magic number.
-It is corrupted or was compiled with another version of Coq.
+File "/home/cmarche/why2-trunk/tests/c/my_cosine.jessie/coq/my_cosine_why.v", line 3, characters 0-26:
+Error: Cannot find library jessie_why in loadpath
 ========== file tests/c/my_cosine.jessie/coq/my_cosine_why.v ==========
 (* This file was originally generated by why.
    It can be modified; only the generated parts will be overwritten. *)
@@ -4205,13 +4210,13 @@ Save.
      (Rminus
       (1)%R (Rmult (Rmult (single_value x_2) (single_value x_2)) (05 / 10)%R)) (
      cos (single_value x_2))))
-   (15 / 16777216)%R).
+   (18 / 16777216)%R).
 Proof.
 admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 71, characters 12-46: *)
+(* Why obligation from file "my_cosine.c", line 71, characters 12-48: *)
 (*Why goal*) Lemma my_cos4_ensures_default_po_2 : 
   forall (x_2: single),
   forall (HW_1: (* JC_65 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
@@ -4223,7 +4228,7 @@ Save.
                     (1)%R (Rmult
                            (Rmult (single_value x_2) (single_value x_2)) (05 / 10)%R)) (
                    cos (single_value x_2))))
-                 (15 / 16777216)%R)),
+                 (18 / 16777216)%R)),
   forall (result: single),
   forall (HW_5: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
@@ -4244,7 +4249,7 @@ Save.
   forall (HW_11: why__return = __retres_0),
   (* JC_67 *)
   (Rle (Rabs (Rminus (single_value why__return) (cos (single_value x_2))))
-   (1 / 1048576)%R).
+   (19 / 16777216)%R).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -4262,7 +4267,7 @@ Save.
                     (1)%R (Rmult
                            (Rmult (single_value x_2) (single_value x_2)) (05 / 10)%R)) (
                    cos (single_value x_2))))
-                 (15 / 16777216)%R)),
+                 (18 / 16777216)%R)),
   forall (result: single),
   forall (HW_5: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
@@ -4286,7 +4291,7 @@ Save.
                     (1)%R (Rmult
                            (Rmult (single_value x_2) (single_value x_2)) (05 / 10)%R)) (
                    cos (single_value x_2))))
-                 (15 / 16777216)%R)),
+                 (18 / 16777216)%R)),
   forall (result: single),
   forall (HW_5: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
@@ -4318,7 +4323,7 @@ Save.
                     (1)%R (Rmult
                            (Rmult (single_value x_2) (single_value x_2)) (05 / 10)%R)) (
                    cos (single_value x_2))))
-                 (15 / 16777216)%R)),
+                 (18 / 16777216)%R)),
   forall (result: single),
   forall (HW_5: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
@@ -4345,7 +4350,5 @@ Save.
 
 
 ========== running Coq ==========
-File "/home/cmarche/why2-trunk/tests/c/my_cosine.jessie/coq/my_cosine_why.v",
-line 3, characters 0-26:
-Error: File /usr/lib/coq/user-contrib/jessie_why.vo has bad magic number.
-It is corrupted or was compiled with another version of Coq.
+File "/home/cmarche/why2-trunk/tests/c/my_cosine.jessie/coq/my_cosine_why.v", line 3, characters 0-26:
+Error: Cannot find library jessie_why in loadpath

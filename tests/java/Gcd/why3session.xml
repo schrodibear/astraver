@@ -1,41 +1,21 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="Gcd/why3session.xml">
+ name="tests/java/Gcd/why3session.xml">
  <prover
-  id="alt-ergo"
+  id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
-  id="coq"
-  name="Coq"
-  version="8.3pl2"/>
- <prover
-  id="cvc3"
+  id="1"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="gappa"
-  name="Gappa"
-  version="0.15.0"/>
+  id="2"
+  name="Coq"
+  version="8.3pl3"/>
  <prover
-  id="simplify"
-  name="Simplify"
-  version="1.5.4"/>
- <prover
-  id="spass"
-  name="Spass"
-  version="3.7"/>
- <prover
-  id="vampire"
-  name="Vampire"
-  version="0.6"/>
- <prover
-  id="yices"
-  name="Yices"
-  version="1.0.25"/>
- <prover
-  id="z3"
+  id="3"
   name="Z3"
   version="2.19"/>
  <file
@@ -44,412 +24,516 @@
   expanded="true">
   <theory
    name="Jessie_model"
+   locfile="tests/java/Gcd/../Gcd.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
    <goal
     name="distr_right"
+    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    loclnum="36" loccnumb="10" loccnume="21"
     expl="Lemma distr_right, lemma"
-    sum="819c92ae44ad3508a55977484651f5b9"
+    sum="bb0831924633ac70a121a3907f8e5527"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *V0ainfix +V1V2ainfix +ainfix *V0V1ainfix *V0V2FFF">
+    <label
+     name="expl:Lemma distr_right, lemma">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.00"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="distr_left"
+    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    loclnum="40" loccnumb="10" loccnume="20"
     expl="Lemma distr_left, lemma"
-    sum="bb62b505ec13424ee152d3ffd5cd0aa7"
+    sum="bf689e45bbee4cfb7bbdb94cfdb95382"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *ainfix +V0V1V2ainfix +ainfix *V0V2ainfix *V1V2FFF">
+    <label
+     name="expl:Lemma distr_left, lemma">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="distr_right_minus"
+    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    loclnum="44" loccnumb="10" loccnume="27"
     expl="Lemma distr_right_minus, lemma"
-    sum="47aa93eef150d838732e1e26844385af"
+    sum="c86dd5dc5049de24d2a11945a69e4468"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *V0ainfix -V1V2ainfix -ainfix *V0V1ainfix *V0V2FFF">
+    <label
+     name="expl:Lemma distr_right_minus, lemma">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.00"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="distr_left_minus"
+    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    loclnum="48" loccnumb="10" loccnume="26"
     expl="Lemma distr_left_minus, lemma"
-    sum="eb11f135d898a04805bf700cf18092b9"
+    sum="bbf7cfad8c6a53cd5df79223a624562e"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *ainfix -V0V1V2ainfix -ainfix *V0V2ainfix *V1V2FFF">
+    <label
+     name="expl:Lemma distr_left_minus, lemma">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="mul_comm"
+    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    loclnum="52" loccnumb="10" loccnume="18"
     expl="Lemma mul_comm, lemma"
-    sum="4bf42649bf52fe5fe9265fc769437b0c"
+    sum="0c056191127af0443fc78b9d8247bf2c"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *V0V1ainfix *V1V0FF">
+    <label
+     name="expl:Lemma mul_comm, lemma">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="mul_assoc"
+    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    loclnum="56" loccnumb="10" loccnume="19"
     expl="Lemma mul_assoc, lemma"
-    sum="85554534c5fb7552d436ef3066a6b9b5"
+    sum="df512aef4e77b76c78751fd0a4934ad7"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *V0ainfix *V1V2ainfix *ainfix *V0V1V2FFF">
+    <label
+     name="expl:Lemma mul_assoc, lemma">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="div_mod_property"
+    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    loclnum="64" loccnumb="10" loccnume="26"
     expl="Lemma div_mod_property, lemma"
-    sum="4a93fa30b4633d6304b864dfeb675131"
+    sum="77093159678394f300e17ede9e7a1b81"
     proved="true"
     expanded="true"
     shape="ainfix =amodV0V1ainfix -V0ainfix *V1adivV0V1Iainfix >V1c0Aainfix >=V0c0FF">
+    <label
+     name="expl:Lemma div_mod_property, lemma">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="mod_property"
+    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    loclnum="69" loccnumb="10" loccnume="22"
     expl="Lemma mod_property, lemma"
-    sum="8257e804ba21c12ff017ad814e7ea331"
+    sum="9df18f5c8bd604ee8440c912538cd458"
     proved="true"
     expanded="true"
     shape="ainfix <amodV0V1V1Aainfix <=c0amodV0V1Iainfix >V1c0Aainfix >=V0c0FF">
+    <label
+     name="expl:Lemma mod_property, lemma">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="z3"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="gcd_zero"
+    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    loclnum="80" loccnumb="10" loccnume="18"
     expl="Lemma gcd_zero, lemma"
-    sum="c31117eb19cad819da3defdad426b76d"
+    sum="3ed792c857e108bd80f0529bcb226847"
     proved="true"
     expanded="true"
     shape="aisGcdV0c0V0F">
+    <label
+     name="expl:Lemma gcd_zero, lemma">
+     </label>
     <proof
-     prover="coq"
+     prover="2"
      timelimit="5"
-     edited="Gcd_Jessie_model_gcd_zero_1.v"
-     obsolete="false">
-     <result status="valid" time="0.64"/>
+     edited="Gcd_Jessie_model_gcd_zero_2.v"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.65"/>
     </proof>
    </goal>
    <goal
     name="gcd_property"
+    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    loclnum="84" loccnumb="10" loccnume="22"
     expl="Lemma gcd_property, lemma"
-    sum="3c3971bb3f715a3a9f380d413ebcb388"
+    sum="755a7516021b4f123ff1ff0a402d8d6f"
     proved="true"
     expanded="true"
     shape="aisGcdV0V1V2IaisGcdV1amodV0V1V2Aainfix >V1c0Aainfix >=V0c0FFFF">
+    <label
+     name="expl:Lemma gcd_property, lemma">
+     </label>
     <proof
-     prover="coq"
+     prover="2"
      timelimit="5"
-     edited="Gcd_Jessie_model_gcd_property_1.v"
-     obsolete="false">
-     <result status="valid" time="0.77"/>
+     edited="Gcd_Jessie_model_gcd_property_2.v"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.78"/>
     </proof>
    </goal>
   </theory>
   <theory
    name="WP Jessie_program"
+   locfile="tests/java/Gcd/../Gcd.mlw"
+   loclnum="259" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _Gcd_gcd_ensures_bezoutProperty"
+    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    loclnum="97" loccnumb="15" loccnume="18"
     expl="normal postcondition"
-    sum="f62c0862c6575a602644e9562752e9d8"
+    sum="d914217b9f5a7cd0fa6001202f2430f3"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix +ainfix *V9V0ainfix *V10V1V8EEIainfix =V8V7FIainfix >V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V11IaisGcdV7V6V11FAainfix >=V6c0Aainfix >=V7c0FFFFFFIainfix >=V1c0Aainfix >=V0c0FF">
+    <label
+     name="expl:parameter _Gcd_gcd_ensures_bezoutProperty">
+     </label>
+    <label
+     name="expl:Method gcd, Behavior `bezoutProperty'">
+     </label>
     <proof
-     prover="alt-ergo"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Gcd_gcd_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    loclnum="97" loccnumb="15" loccnume="18"
     expl="Method gcd, default behavior"
-    sum="0e0be04db52fac1b3259eefa07de00fb"
+    sum="56dcd184ac5e5933028383cb19657d0a"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix +ainfix *V12V0ainfix *V13V1V9Aainfix =ainfix +ainfix *V10V0ainfix *V11V1V8AaisGcdV0V1V14IaisGcdV8V9V14FAainfix >=V9c0Aainfix >=V8c0Iainfix =V13ainfix -V4ainfix *V2adivV7V6FIainfix =V12ainfix -V5ainfix *V3adivV7V6FIainfix =V11V2FIainfix =V10V3FIainfix =V9amodV7V6FIainfix =V8V6FIainfix >V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix >=V6c0Aainfix >=V7c0FFFFFFAainfix =ainfix +ainfix *c0V0ainfix *c1V1V1Aainfix =ainfix +ainfix *c1V0ainfix *c0V1V0Aainfix >=V1c0Aainfix >=V0c0Iainfix >=V1c0Aainfix >=V0c0FF">
+    <label
+     name="expl:parameter _Gcd_gcd_ensures_default">
+     </label>
+    <label
+     name="expl:Method gcd, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.19"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Gcd_gcd_ensures_resultIsGcd"
+    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    loclnum="97" loccnumb="15" loccnume="18"
     expl="normal postcondition"
-    sum="7366f45e1ed43bffb0c285fa966bd4f7"
+    sum="139616f4bc842f026cdeab8b2d9cb901"
     proved="true"
     expanded="true"
     shape="aisGcdV0V1V8Iainfix =V8V7FIainfix >V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V9IaisGcdV7V6V9FAainfix >=V6c0Aainfix >=V7c0FFFFFFIainfix >=V1c0Aainfix >=V0c0FF">
+    <label
+     name="expl:parameter _Gcd_gcd_ensures_resultIsGcd">
+     </label>
+    <label
+     name="expl:Method gcd, Behavior `resultIsGcd'">
+     </label>
     <proof
-     prover="cvc3"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.23"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.05"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.24"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Gcd_gcd_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    loclnum="97" loccnumb="15" loccnume="18"
     expl="Method gcd, Safety"
-    sum="e7d9c230c7b4024a4917e83fbb575301"
+    sum="48f65f03a6dd6e792ce6f6e8625b56db"
     proved="true"
     expanded="true"
     shape="LadivV7V6ainfix <V10V6Aainfix <=c0V6Iainfix =V14ainfix -V4ainfix *V2V8FIainfix =V13ainfix -V5ainfix *V3V8FIainfix =V12V2FIainfix =V11V3FIainfix =V10amodV7V6FIainfix =V9V6FAainfix =V6c0NAainfix =V6c0NIainfix >V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix >=V6c0Aainfix >=V7c0FFFFFFIainfix >=V1c0Aainfix >=V0c0FF">
+    <label
+     name="expl:parameter _Gcd_gcd_safety">
+     </label>
+    <label
+     name="expl:Method gcd, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.20"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.22"/>
     </proof>
     <proof
-     prover="z3"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Gcd_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
     expl="Constructor of class Gcd, default behavior"
-    sum="757484aa923a994fc857e6b658bbbcc5"
+    sum="d01d054a5d3a0c65aa58a164a59c1174"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter cons_Gcd_ensures_default">
+     </label>
+    <label
+     name="expl:Constructor of class Gcd, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.00"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Gcd_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
     expl="Constructor of class Gcd, Safety"
-    sum="297e036b17ebd68443f7fbba4420f554"
+    sum="d0eb33be50e44322c91e22b88f8d423f"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter cons_Gcd_safety">
+     </label>
+    <label
+     name="expl:Constructor of class Gcd, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
   </theory>

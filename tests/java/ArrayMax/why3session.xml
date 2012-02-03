@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<why3session
+ name="tests/java/ArrayMax/why3session.xml">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.94"/>
+ <prover
+  id="1"
+  name="CVC3"
+  version="2.2"/>
+ <prover
+  id="2"
+  name="Z3"
+  version="2.19"/>
+ <file
+  name="../ArrayMax.mlw"
+  verified="true"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   locfile="tests/java/ArrayMax/../ArrayMax.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
+   verified="true"
+   expanded="true">
+  </theory>
+  <theory
+   name="WP Jessie_program"
+   locfile="tests/java/ArrayMax/../ArrayMax.mlw"
+   loclnum="328" loccnumb="7" loccnume="21"
+   verified="true"
+   expanded="true">
+   <goal
+    name="WP_parameter _ArrayMax_max_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/ArrayMax.java"
+    loclnum="27" loccnumb="22" loccnume="25"
+    expl="Method max, default behavior"
+    sum="aaf5f10793cb2ef306e2cbdffb19fcd1"
+    proved="true"
+    expanded="true"
+    shape="iainfix =ainteger_of_int32V7ainteger_of_int32V6Niainfix <=ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V7ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V6ainfix <=ainteger_of_int32aselectV1ashiftV0V10amaxainteger_of_int32aselectV1ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V6Iainfix <V10ainfix +aoffset_maxV2V0c1Aainfix <ainteger_of_int32V6V10Oainfix <V10ainteger_of_int32V9Aainfix <=c0V10FAainfix <ainteger_of_int32V6ainfix +aoffset_maxV2V0c1Aainfix <=ainteger_of_int32V9ainteger_of_int32V6Aainfix <=c0ainteger_of_int32V9Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix +ainteger_of_int32V7c1Fainfix <=ainteger_of_int32aselectV1ashiftV0V13amaxainteger_of_int32aselectV1ashiftV0ainteger_of_int32V7ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V12Iainfix <V13ainfix +aoffset_maxV2V0c1Aainfix <ainteger_of_int32V12V13Oainfix <V13ainteger_of_int32V7Aainfix <=c0V13FAainfix <ainteger_of_int32V12ainfix +aoffset_maxV2V0c1Aainfix <=ainteger_of_int32V7ainteger_of_int32V12Aainfix <=c0ainteger_of_int32V7Iainfix =V12V11FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V6c1Fainfix <=ainteger_of_int32aselectV1ashiftV0V15ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V14Iainfix <V15ainfix +aoffset_maxV2V0c1Aainfix <=c0V15FAainfix <ainteger_of_int32V14ainfix +aoffset_maxV2V0c1Aainfix <=c0ainteger_of_int32V14Iainfix =V14V7FIainfix <=ainteger_of_int32aselectV1ashiftV0V16amaxainteger_of_int32aselectV1ashiftV0ainteger_of_int32V7ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V6Iainfix <V16ainfix +aoffset_maxV2V0c1Aainfix <ainteger_of_int32V6V16Oainfix <V16ainteger_of_int32V7Aainfix <=c0V16FAainfix <ainteger_of_int32V6ainfix +aoffset_maxV2V0c1Aainfix <=ainteger_of_int32V7ainteger_of_int32V6Aainfix <=c0ainteger_of_int32V7FFAainfix <=ainteger_of_int32aselectV1ashiftV0V17amaxainteger_of_int32aselectV1ashiftV0ainteger_of_int32V3ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V5Iainfix <V17ainfix +aoffset_maxV2V0c1Aainfix <ainteger_of_int32V5V17Oainfix <V17ainteger_of_int32V3Aainfix <=c0V17FAainfix <ainteger_of_int32V5ainfix +aoffset_maxV2V0c1Aainfix <=ainteger_of_int32V3ainteger_of_int32V5Aainfix <=c0ainteger_of_int32V3Iainfix =ainteger_of_int32V5ainfix -V4c1FIainfix =V4ainfix +aoffset_maxV2V0c1Aainfix >=V4c0Aainfix <=V4c2147483647FIainfix =ainteger_of_int32V3c0FIainfix >ainfix +aoffset_maxV2V0c1c0Aaleft_valid_struct_intMV0c0V2FFF">
+    <label
+     name="expl:parameter _ArrayMax_max_ensures_default">
+     </label>
+    <label
+     name="expl:Method max, default behavior">
+     </label>
+    <proof
+     prover="2"
+     timelimit="10"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="1.57"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="10"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="2.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _ArrayMax_max_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/ArrayMax.java"
+    loclnum="27" loccnumb="22" loccnume="25"
+    expl="index bounds"
+    sum="132ce5c814bc61a0fb817dc35c230aa1"
+    proved="true"
+    expanded="true"
+    shape="iainfix <=ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V7ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V6ainfix <ainfix -ainteger_of_int32V6ainteger_of_int32V9ainfix -ainteger_of_int32V6ainteger_of_int32V7Aainfix <=c0ainfix -ainteger_of_int32V6ainteger_of_int32V7Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix +ainteger_of_int32V7c1FAainfix <=ainfix +ainteger_of_int32V7c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V7c1ainfix <ainfix -ainteger_of_int32V11ainteger_of_int32V7ainfix -ainteger_of_int32V6ainteger_of_int32V7Aainfix <=c0ainfix -ainteger_of_int32V6ainteger_of_int32V7Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix -ainteger_of_int32V6c1FAainfix <=ainfix -ainteger_of_int32V6c1c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V6c1Aainfix <=ainteger_of_int32V6aoffset_maxV2V0Aainfix <=aoffset_minV2V0ainteger_of_int32V6Aainfix <=ainteger_of_int32V7aoffset_maxV2V0Aainfix <=aoffset_minV2V0ainteger_of_int32V7Iainfix =ainteger_of_int32V7ainteger_of_int32V6NIainfix <=ainteger_of_int32aselectV1ashiftV0V12amaxainteger_of_int32aselectV1ashiftV0ainteger_of_int32V7ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V6Iainfix <V12ainfix +aoffset_maxV2V0c1Aainfix <ainteger_of_int32V6V12Oainfix <V12ainteger_of_int32V7Aainfix <=c0V12FAainfix <ainteger_of_int32V6ainfix +aoffset_maxV2V0c1Aainfix <=ainteger_of_int32V7ainteger_of_int32V6Aainfix <=c0ainteger_of_int32V7FFIainfix =ainteger_of_int32V5ainfix -V4c1FAainfix <=ainfix -V4c1c2147483647Aainfix <=aprefix -c2147483648ainfix -V4c1Iainfix =V4ainfix +aoffset_maxV2V0c1Aainfix >=V4c0Aainfix <=V4c2147483647FAainfix >=aoffset_maxV2V0aprefix -c1Iainfix =ainteger_of_int32V3c0FIainfix >ainfix +aoffset_maxV2V0c1c0Aaleft_valid_struct_intMV0c0V2FFF">
+    <label
+     name="expl:parameter _ArrayMax_max_safety">
+     </label>
+    <label
+     name="expl:Method max, Safety">
+     </label>
+    <proof
+     prover="2"
+     timelimit="10"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="10"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="10"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_ArrayMax_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="Constructor of class ArrayMax, default behavior"
+    sum="55bfb77cb436a944793db55b3311f9a0"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:parameter cons_ArrayMax_ensures_default">
+     </label>
+    <label
+     name="expl:Constructor of class ArrayMax, default behavior">
+     </label>
+    <proof
+     prover="2"
+     timelimit="10"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="10"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="10"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_ArrayMax_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="Constructor of class ArrayMax, Safety"
+    sum="236ebf36fb79e50992bc7d3bf1e9be9c"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:parameter cons_ArrayMax_safety">
+     </label>
+    <label
+     name="expl:Constructor of class ArrayMax, Safety">
+     </label>
+    <proof
+     prover="2"
+     timelimit="10"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="10"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="10"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+  </theory>
+ </file>
+</why3session>

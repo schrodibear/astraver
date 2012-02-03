@@ -133,7 +133,7 @@ predicate Non_null_intM{Here}(intM[0..] x) =
 (\offset_max(x) >= -1)
 
 predicate Non_null_Object{Here}(Object[0..] x) =
-(\offset_max(x) == 0)
+(\offset_max(x) >= 0)
 
 String[0..] any_string()
 ;
@@ -1402,7 +1402,7 @@ axiom Exception_parenttag_Object : parenttag(Exception_tag, Object_tag)
 
 predicate Non_null_Object(x_1:Object pointer,
  Object_alloc_table:Object alloc_table) =
- (offset_max(Object_alloc_table, x_1) = (0))
+ ge_int(offset_max(Object_alloc_table, x_1), (0))
 
 predicate Non_null_intM(x_0:Object pointer,
  Object_alloc_table:Object alloc_table) =
@@ -1442,7 +1442,7 @@ axiom byte_coerce :
 
 axiom byte_extensionality :
  (forall x:byte.
-  (forall y:byte.
+  (forall y:byte[eq_int(integer_of_byte(x), integer_of_byte(y))].
    (eq_int(integer_of_byte(x), integer_of_byte(y)) -> (x = y))))
 
 axiom byte_range :
@@ -1460,7 +1460,7 @@ axiom char_coerce :
 
 axiom char_extensionality :
  (forall x:char.
-  (forall y:char.
+  (forall y:char[eq_int(integer_of_char(x), integer_of_char(y))].
    (eq_int(integer_of_char(x), integer_of_char(y)) -> (x = y))))
 
 axiom char_range :
@@ -1497,7 +1497,7 @@ axiom int32_coerce :
 
 axiom int32_extensionality :
  (forall x:int32.
-  (forall y:int32.
+  (forall y:int32[eq_int(integer_of_int32(x), integer_of_int32(y))].
    (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range :
@@ -1576,7 +1576,7 @@ axiom long_coerce :
 
 axiom long_extensionality :
  (forall x:long.
-  (forall y:long.
+  (forall y:long[eq_int(integer_of_long(x), integer_of_long(y))].
    (eq_int(integer_of_long(x), integer_of_long(y)) -> (x = y))))
 
 axiom long_range :
@@ -1628,7 +1628,7 @@ axiom short_coerce :
 
 axiom short_extensionality :
  (forall x:short.
-  (forall y:short.
+  (forall y:short[eq_int(integer_of_short(x), integer_of_short(y))].
    (eq_int(integer_of_short(x), integer_of_short(y)) -> (x = y))))
 
 axiom short_range :
@@ -3450,7 +3450,7 @@ axiom sub_disj:
     (forall s2:'a1 mybag.
       (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
         disj_mybag(s1, s3), sub_mybag(s2, s3)].
-        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+        (disj_mybag(s1, s3) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s2))))))
 
 axiom sub_in:
   (forall s1:'a1 mybag.
@@ -3459,6 +3459,13 @@ axiom sub_in:
         sub_mybag(s1, s2)].
         ((not in_mybag(p, s2)) ->
          (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+axiom sub_sub:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [sub_mybag(s1, s3), sub_mybag(s2, s3)|
+        sub_mybag(s1, s3), sub_mybag(s1, s2)].
+        (sub_mybag(s1, s2) -> (sub_mybag(s2, s3) -> sub_mybag(s1, s3))))))
 
 logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
 'a2) memory -> prop
@@ -3556,7 +3563,7 @@ axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
 predicate Non_null_Object(x_1: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_1) = 0)
+  x_1) >= 0)
 
 predicate Non_null_intM(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
@@ -3596,7 +3603,8 @@ axiom byte_coerce:
 
 axiom byte_extensionality:
   (forall x:byte.
-    (forall y:byte. ((integer_of_byte(x) = integer_of_byte(y)) -> (x = y))))
+    (forall y:byte [(integer_of_byte(x) = integer_of_byte(y))].
+      ((integer_of_byte(x) = integer_of_byte(y)) -> (x = y))))
 
 axiom byte_range:
   (forall x:byte.
@@ -3612,7 +3620,8 @@ axiom char_coerce:
 
 axiom char_extensionality:
   (forall x:char.
-    (forall y:char. ((integer_of_char(x) = integer_of_char(y)) -> (x = y))))
+    (forall y:char [(integer_of_char(x) = integer_of_char(y))].
+      ((integer_of_char(x) = integer_of_char(y)) -> (x = y))))
 
 axiom char_range:
   (forall x:char.
@@ -3648,7 +3657,7 @@ axiom int32_coerce:
 
 axiom int32_extensionality:
   (forall x:int32.
-    (forall y:int32.
+    (forall y:int32 [(integer_of_int32(x) = integer_of_int32(y))].
       ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range:
@@ -3725,7 +3734,8 @@ axiom long_coerce:
 
 axiom long_extensionality:
   (forall x:long.
-    (forall y:long. ((integer_of_long(x) = integer_of_long(y)) -> (x = y))))
+    (forall y:long [(integer_of_long(x) = integer_of_long(y))].
+      ((integer_of_long(x) = integer_of_long(y)) -> (x = y))))
 
 axiom long_range:
   (forall x:long.
@@ -3777,7 +3787,7 @@ axiom short_coerce:
 
 axiom short_extensionality:
   (forall x:short.
-    (forall y:short.
+    (forall y:short [(integer_of_short(x) = integer_of_short(y))].
       ((integer_of_short(x) = integer_of_short(y)) -> (x = y))))
 
 axiom short_range:
@@ -6047,13 +6057,13 @@ why -simplify [...] why/BinarySearch.why
 (BG_PUSH
  ;; Why axiom sub_disj
  (FORALL (s1 s2 s3)
- (IMPLIES (EQ (disj_mybag s1 s2) |@true|)
- (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s3) |@true|))))
+ (IMPLIES (EQ (disj_mybag s1 s3) |@true|)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s2) |@true|))))
 
- (FORALL (s1 s2)
- (IMPLIES (EQ (disj_mybag s1 s2) |@true|)
- (FORALL (s3)
- (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s3) |@true|))))))
+ (FORALL (s1 s3)
+ (IMPLIES (EQ (disj_mybag s1 s3) |@true|)
+ (FORALL (s2)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s2) |@true|))))))
 
 (BG_PUSH
  ;; Why axiom sub_in
@@ -6065,6 +6075,17 @@ why -simplify [...] why/BinarySearch.why
  (IMPLIES (NOT (EQ (in_mybag p s2) |@true|))
  (FORALL (s1)
  (IMPLIES (EQ (sub_mybag s1 s2) |@true|) (NOT (EQ (in_mybag p s1) |@true|)))))))
+
+(BG_PUSH
+ ;; Why axiom sub_sub
+ (FORALL (s1 s2 s3)
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (sub_mybag s1 s3) |@true|))))
+
+ (FORALL (s1 s2)
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|)
+ (FORALL (s3)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (sub_mybag s1 s3) |@true|))))))
 
 (BG_PUSH
  ;; Why axiom frame_between_refl
@@ -6163,7 +6184,7 @@ why -simplify [...] why/BinarySearch.why
  (EQ (parenttag Exception_tag Object_tag) |@true|))
 
 (DEFPRED (Non_null_Object x_1 Object_alloc_table)
-  (EQ (offset_max Object_alloc_table x_1) 0))
+  (>= (offset_max Object_alloc_table x_1) 0))
 
 (DEFPRED (Non_null_intM x_0 Object_alloc_table)
   (>= (offset_max Object_alloc_table x_0) (- 0 1)))
@@ -8711,7 +8732,7 @@ axiom sub_disj:
     (forall s2:'a1 mybag.
       (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
         disj_mybag(s1, s3), sub_mybag(s2, s3)].
-        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+        (disj_mybag(s1, s3) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s2))))))
 
 axiom sub_in:
   (forall s1:'a1 mybag.
@@ -8720,6 +8741,13 @@ axiom sub_in:
         sub_mybag(s1, s2)].
         ((not in_mybag(p, s2)) ->
          (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+axiom sub_sub:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [sub_mybag(s1, s3), sub_mybag(s2, s3)|
+        sub_mybag(s1, s3), sub_mybag(s1, s2)].
+        (sub_mybag(s1, s2) -> (sub_mybag(s2, s3) -> sub_mybag(s1, s3))))))
 
 logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
 'a2) memory -> prop
@@ -8817,7 +8845,7 @@ axiom Exception_parenttag_Object: parenttag(Exception_tag, Object_tag)
 
 predicate Non_null_Object(x_1: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
-  x_1) = 0)
+  x_1) >= 0)
 
 predicate Non_null_intM(x_0: Object pointer,
   Object_alloc_table: Object alloc_table) = (offset_max(Object_alloc_table,
@@ -11280,13 +11308,13 @@ failure :   0 (  0%)
 (BG_PUSH
  ;; Why axiom sub_disj
  (FORALL (s1 s2 s3)
- (IMPLIES (EQ (disj_mybag s1 s2) |@true|)
- (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s3) |@true|))))
+ (IMPLIES (EQ (disj_mybag s1 s3) |@true|)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s2) |@true|))))
 
- (FORALL (s1 s2)
- (IMPLIES (EQ (disj_mybag s1 s2) |@true|)
- (FORALL (s3)
- (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s3) |@true|))))))
+ (FORALL (s1 s3)
+ (IMPLIES (EQ (disj_mybag s1 s3) |@true|)
+ (FORALL (s2)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (disj_mybag s1 s2) |@true|))))))
 
 (BG_PUSH
  ;; Why axiom sub_in
@@ -11298,6 +11326,17 @@ failure :   0 (  0%)
  (IMPLIES (NOT (EQ (in_mybag p s2) |@true|))
  (FORALL (s1)
  (IMPLIES (EQ (sub_mybag s1 s2) |@true|) (NOT (EQ (in_mybag p s1) |@true|)))))))
+
+(BG_PUSH
+ ;; Why axiom sub_sub
+ (FORALL (s1 s2 s3)
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (sub_mybag s1 s3) |@true|))))
+
+ (FORALL (s1 s2)
+ (IMPLIES (EQ (sub_mybag s1 s2) |@true|)
+ (FORALL (s3)
+ (IMPLIES (EQ (sub_mybag s2 s3) |@true|) (EQ (sub_mybag s1 s3) |@true|))))))
 
 (BG_PUSH
  ;; Why axiom frame_between_refl
@@ -11396,7 +11435,7 @@ failure :   0 (  0%)
  (EQ (parenttag Exception_tag Object_tag) |@true|))
 
 (DEFPRED (Non_null_Object x_1 Object_alloc_table)
-  (EQ (offset_max Object_alloc_table x_1) 0))
+  (>= (offset_max Object_alloc_table x_1) 0))
 
 (DEFPRED (Non_null_intM x_0 Object_alloc_table)
   (>= (offset_max Object_alloc_table x_0) (- 0 1)))

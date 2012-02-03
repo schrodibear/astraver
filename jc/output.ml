@@ -96,7 +96,9 @@ let rec match_term acc t1 t2 =
 let why3id s =
   match s.[0] with
   | 'A'..'Z' -> "_" ^ s
-  | _ -> s
+  | _ ->
+      if Why3_kw.is_why3_keyword s then s ^ "_why3" else s
+
 
 let why3constr s =
   match s.[0] with
@@ -109,6 +111,9 @@ let why3id_if s =
 
 let why3ident s =
   match s with
+        (* booleans *)
+    | "not" -> "not"
+        (* integers *)
     | "le_int" -> "Int.(<=)"
     | "le_int_" -> "Int.(<=)"
     | "le_int_bool" -> "Int.(<=)"
@@ -1428,12 +1433,18 @@ let fprintf_why_decl form d =
 	(if b then "external " else "") id.name
 	  (fprintf_type ~need_colon:false false) t
     | Logic(b,id,args,t) when !why3syntax ->
-	fprintf form "@[<hov 1>%s%s %s %a : %a@.@."
-	  (if b then "external " else "")
-          (if is_prop t then "predicate" else "function")
-          (why3ident id.name)
-	  (print_list space (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
-	  fprintf_logic_type t
+        if is_prop t then
+	  fprintf form "@[<hov 1>%spredicate %s %a @.@."
+	    (if b then "external " else "")
+            (why3ident id.name)
+	    (print_list space (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
+        else
+	  fprintf form "@[<hov 1>%sfunction %s %a : %a@.@."
+	    (if b then "external " else "")
+            (why3ident id.name)
+	    (print_list space (fun fmt (_id,t) -> fprintf_logic_type fmt t)) args
+	    fprintf_logic_type t
+
     | Logic(b,id,args,t) ->
 	fprintf form "@[<hov 1>%slogic %s: %a -> %a@.@."
 	  (if b then "external " else "") id.name
@@ -1644,6 +1655,7 @@ let fprintf_why_decls ?(why3=false) ?(use_floats=false)
             fprintf form "use import module jessie3.JessieFloats@\n@\n";
         end;
       fprintf form "use import module jessie3.Jessie_memory_model_parameters@\n@\n";
+      fprintf form "use import jessie3_integer.Integer@\n@\n";
     end;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) params;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) defs;

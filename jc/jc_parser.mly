@@ -113,7 +113,7 @@
 %token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES DECREASES THROWS READS
 
 /* \forall \exists \offset_max \offset_min \address \old \result \mutable \typeof \bottom \typeeq \absolute_address */
-%token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSADDRESS BSOLD BSAT 
+%token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSADDRESS BSOLD BSAT BSFRESH
 %token BSRESULT BSMUTABLE BSTYPEOF BSBOTTOM BSTYPEEQ BSABSOLUTE_ADDRESS
 %token BSBASE_BLOCK
 
@@ -134,7 +134,7 @@
 /* @ (string concat) */
 %token AT
 
-%token PRAGMA_GEN_SEP PRAGMA_GEN_FRAME
+%token PRAGMA_GEN_SEP PRAGMA_GEN_FRAME PRAGMA_GEN_SUB
 
 %token EOF
 %type <Jc_ast.pexpr Jc_ast.decl list> file
@@ -580,6 +580,8 @@ postfix_expression:
     { locate (JCPEapp($1, $2, $4)) }
 | IDENTIFIER label_binders LPARRPAR 
     { locate (JCPEapp($1, $2, [])) }
+| BSFRESH LPAR expression RPAR 
+    { locate (JCPEfresh($3)) }
 | BSOLD LPAR expression RPAR 
     { locate (JCPEold($3)) }
 | BSAT LPAR expression COMMA IDENTIFIER RPAR 
@@ -1147,6 +1149,8 @@ pragma_gen_sep:
     { locate (JCDpragma_gen_sep($2,$3, $4)) }
 | PRAGMA_GEN_FRAME IDENTIFIER IDENTIFIER
     { locate (JCDpragma_gen_frame($2,$3)) }
+| PRAGMA_GEN_SUB IDENTIFIER IDENTIFIER
+    { locate (JCDpragma_gen_sub($2,$3)) }
 ;
 
 type_expr_parameters:

@@ -350,7 +350,9 @@ axiom __anonenum_T_ID_TEST_2_coerce :
 
 axiom __anonenum_T_ID_TEST_2_extensionality :
  (forall x:__anonenum_T_ID_TEST_2.
-  (forall y:__anonenum_T_ID_TEST_2.
+  (forall y:__anonenum_T_ID_TEST_2
+   [eq_int(integer_of___anonenum_T_ID_TEST_2(x),
+    integer_of___anonenum_T_ID_TEST_2(y))].
    (eq_int(integer_of___anonenum_T_ID_TEST_2(x),
     integer_of___anonenum_T_ID_TEST_2(y)) -> (x = y))))
 
@@ -371,7 +373,9 @@ axiom __anonenum_T_RESULTAT_1_coerce :
 
 axiom __anonenum_T_RESULTAT_1_extensionality :
  (forall x:__anonenum_T_RESULTAT_1.
-  (forall y:__anonenum_T_RESULTAT_1.
+  (forall y:__anonenum_T_RESULTAT_1
+   [eq_int(integer_of___anonenum_T_RESULTAT_1(x),
+    integer_of___anonenum_T_RESULTAT_1(y))].
    (eq_int(integer_of___anonenum_T_RESULTAT_1(x),
     integer_of___anonenum_T_RESULTAT_1(y)) -> (x = y))))
 
@@ -471,7 +475,7 @@ axiom int8_coerce :
 
 axiom int8_extensionality :
  (forall x:int8.
-  (forall y:int8.
+  (forall y:int8[eq_int(integer_of_int8(x), integer_of_int8(y))].
    (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
@@ -557,7 +561,7 @@ axiom uint32_coerce :
 
 axiom uint32_extensionality :
  (forall x:uint32.
-  (forall y:uint32.
+  (forall y:uint32[eq_int(integer_of_uint32(x), integer_of_uint32(y))].
    (eq_int(integer_of_uint32(x), integer_of_uint32(y)) -> (x = y))))
 
 axiom uint32_range :
@@ -1966,7 +1970,7 @@ why --project [...] why/phase1.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/phase1_po3.why">
-      <location file = "why/phase1.why" line = "1586" begin = "23" end = "165"/>
+      <location file = "why/phase1.why" line = "1590" begin = "23" end = "165"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/phase1_po4.why">
@@ -2050,7 +2054,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase1_po20.why">
-      <location file = "why/phase1.why" line = "1656" begin = "7" end = "89"/>
+      <location file = "why/phase1.why" line = "1660" begin = "7" end = "89"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2906,7 +2910,7 @@ axiom sub_disj:
     (forall s2:'a1 mybag.
       (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
         disj_mybag(s1, s3), sub_mybag(s2, s3)].
-        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+        (disj_mybag(s1, s3) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s2))))))
 
 axiom sub_in:
   (forall s1:'a1 mybag.
@@ -2915,6 +2919,13 @@ axiom sub_in:
         sub_mybag(s1, s2)].
         ((not in_mybag(p, s2)) ->
          (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+axiom sub_sub:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [sub_mybag(s1, s3), sub_mybag(s2, s3)|
+        sub_mybag(s1, s3), sub_mybag(s1, s2)].
+        (sub_mybag(s1, s2) -> (sub_mybag(s2, s3) -> sub_mybag(s1, s3))))))
 
 logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
 'a2) memory -> prop
@@ -3049,7 +3060,7 @@ axiom __anonenum_T_ID_TEST_2_coerce:
 
 axiom __anonenum_T_ID_TEST_2_extensionality:
   (forall x:__anonenum_T_ID_TEST_2.
-    (forall y:__anonenum_T_ID_TEST_2.
+    (forall y:__anonenum_T_ID_TEST_2 [(integer_of___anonenum_T_ID_TEST_2(x) = integer_of___anonenum_T_ID_TEST_2(y))].
       ((integer_of___anonenum_T_ID_TEST_2(x) = integer_of___anonenum_T_ID_TEST_2(y)) ->
        (x = y))))
 
@@ -3069,7 +3080,7 @@ axiom __anonenum_T_RESULTAT_1_coerce:
 
 axiom __anonenum_T_RESULTAT_1_extensionality:
   (forall x:__anonenum_T_RESULTAT_1.
-    (forall y:__anonenum_T_RESULTAT_1.
+    (forall y:__anonenum_T_RESULTAT_1 [(integer_of___anonenum_T_RESULTAT_1(x) = integer_of___anonenum_T_RESULTAT_1(y))].
       ((integer_of___anonenum_T_RESULTAT_1(x) = integer_of___anonenum_T_RESULTAT_1(y)) ->
        (x = y))))
 
@@ -3171,7 +3182,8 @@ axiom int8_coerce:
 
 axiom int8_extensionality:
   (forall x:int8.
-    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
+    (forall y:int8 [(integer_of_int8(x) = integer_of_int8(y))].
+      ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -3256,7 +3268,7 @@ axiom uint32_coerce:
 
 axiom uint32_extensionality:
   (forall x:uint32.
-    (forall y:uint32.
+    (forall y:uint32 [(integer_of_uint32(x) = integer_of_uint32(y))].
       ((integer_of_uint32(x) = integer_of_uint32(y)) -> (x = y))))
 
 axiom uint32_range:

@@ -116,15 +116,6 @@
   publisher = {IEEE Computer Society}
 }
 
-@TECHREPORT{leavens00preliminary,
-  author = {Gary T. Leavens and Albert L. Baker and Clyde Ruby},
-  title = {Preliminary Design of {JML}: {A} Behavioral Interface 
-           Specification Language for {Java}},
-  institution = {Iowa State University},
-  number = {98-06i},
-  year = 2000
-}
-
 
 
 @Manual{baudin09acsl,
@@ -138,4 +129,386 @@
   x-equipes = {demons PROVAL EXT},
   x-type = {contrat},
   x-support = {rapport}
+}
+
+@STRING{SV = {Springer}}
+
+@STRING{LNCS = {Lecture Notes in Computer Science}}
+
+@Misc{ESCJava2,
+  title =	 {{ESC/Java2}},
+  author = {Kiniry, Joseph},
+  note =	 {\url{http://kind.ucd.ie/products/opensource/ESCJava2/}}
+}
+
+
+@BOOK{KR88,
+  author = {Brian Kernighan and Dennis Ritchie},
+  title = {The C Programming Language (2nd Ed.)},
+  publisher = {Prentice-Hall},
+  year = 1988
+}
+
+@ARTICLE{barnett04jot,
+  author = {Mike Barnett and Robert DeLine and Manuel F\"ahndrich and K. Rustan M. Leino and Wolfram Schulte},
+  title = {Verification of object-oriented programs with invariants},
+  journal = {Journal of Object Technology},
+  year = 2004,
+  volume = 3,
+  number = 6,
+  pages = {27--56},
+  month = JUN
+}
+
+@INPROCEEDINGS{leavens00jml,
+  author = {Gary T. Leavens and K. Rustan M. Leino and Erik Poll
+                 and Clyde Ruby and Bart Jacobs},
+  title = {{JML}: notations and tools supporting detailed design in {Java}},
+  booktitle = {{OOPSLA} 2000 Companion, Minneapolis, Minnesota},
+  pages = {105--106},
+  year = 2000
+}
+
+@TECHREPORT{leavens00preliminary,
+  author = {Gary T. Leavens and Albert L. Baker and Clyde Ruby},
+  title = {Preliminary Design of {JML}: {A} Behavioral Interface
+           Specification Language for {Java}},
+  institution = {Iowa State University},
+  number = {98-06i},
+  year = 2000
+}
+
+
+@TECHREPORT{raghavan00desugaring,
+  author = {Arun D. Raghavan and Gary T. Leavens},
+  title = {Desugaring {JML} Method Specifications},
+  institution = {Iowa State University},
+  number = {00-03a},
+  year = 2000
+}
+
+@INPROCEEDINGS{filliatre04icfem,
+  author = {Jean-Christophe Filli{\^a}tre and Claude March{\'e}},
+  title = {Multi-Prover Verification of {C} Programs},
+  crossref = {icfem04},
+  year = {2004},
+  pages = {15--29},
+  topics = {team},
+  type_publi = {icolcomlec},
+  url = {http://www.lri.fr/~filliatr/ftp/publis/caduceus.ps.gz}
+}
+
+@INPROCEEDINGS{filliatre07cav,
+  author = {Jean-Christophe Filli\^atre and Claude March\'e},
+  title = {The {Why/Krakatoa/Caduceus} Platform for Deductive Program
+  Verification},
+  topics = {team, lri},
+  crossref = {cav07},
+  url = {http://www.lri.fr/~filliatr/ftp/publis/cav07.pdf}
+}
+
+
+@TECHREPORT{kiriny07implnotes,
+  author = {David R. Cok and Joseph R. Kiniry},
+  title = {{ESC/Java2} Implementation Notes},
+  year = 2007,
+  month = {may},
+  note = {\url{http://secure.ucd.ie/products/opensource/ESCJava2/ESCTools/docs/Escjava2-ImplementationNotes.pdf}}
+}
+
+@INPROCEEDINGS{necula02ccured,
+  author = {George C. Necula and Scott McPeak and Westley Weimer},
+  title = {{CCured}: Type-Safe Retrofitting of Legacy Code},
+  booktitle = {Symposium on Principles of Programming Languages},
+  year = {2002},
+  pages = {128--139}
+}
+
+@INPROCEEDINGS{condit03ccured,
+  author = {Jeremy Condit and Matthew Harren and Scott McPeak and George C. Necula and Westley Weimer},
+  title = {CCured in the real world},
+  booktitle = {PLDI '03: Proceedings of the ACM SIGPLAN 2003 conference on Programming language design and implementation},
+  year = {2003},
+  pages = {232--244}
+}
+
+@INPROCEEDINGS{condit07deputy,
+  author = {Jeremy Paul Condit and Matthew Thomas Harren and Zachary Ryan Anderson and David Gay and George Necula},
+  booktitle = {ESOP '07: Proceedings of the 16th European Symposium on Programming},
+  title = {Dependent Types for Low-Level Programming},
+  year = {2006},
+  month = {Oct}
+}
+
+@MISC{jmlhomepage,
+  title = {JML},
+  author = { Gary Leavens},
+  note = {\url{http://www.eecs.ucf.edu/~leavens/JML/}}
+}
+
+@TECHREPORT{moy07ccpp,
+  author = {Yannick Moy},
+  title = {Union and Cast in Deductive Verification},
+  booktitle = {Proceedings of the {C/C++} Verification Workshop},
+  year = {2007},
+  month = {jul},
+  institution = {Radboud University Nijmegen},
+  number = {ICIS-R07015},
+  note = {\url{http://www.lri.fr/~moy/union_and_cast/union_and_cast.pdf}}
+}
+
+@MANUAL{standardc99,
+  title = {The {ANSI C} standard ({C99})},
+  organization = {International Organization for Standardization ({ISO})},
+  key = {C99},
+  note = {\url{http://www.open-std.org/JTC1/SC22/WG14/www/docs/n1124.pdf}}
+}
+
+@PROCEEDINGS{icfem04,
+  title = {Formal Engineering Methods},
+  year = 2004,
+  booktitle = {6th International Conference on Formal Engineering Methods},
+  series = LNCS,
+  volume = 3308,
+  editor = {Jim Davies and Wolfram Schulte and Mike Barnett},
+  address = {Seattle, WA, USA},
+  month = NOV,
+  publisher = SV
+}
+
+@PROCEEDINGS{cav07,
+  editor = {Werner Damm and Holger Hermanns},
+  title = {Computer Aided Verification},
+  booktitle = {19th International Conference on Computer Aided Verification},
+  publisher = SV,
+  series = LNCS,
+  address = {Berlin, Germany},
+  month = JUL,
+  year = {2007}
+}
+
+
+@book{Morgan94,
+ author = {Carroll Morgan},
+ title = {Programming from specifications (2nd ed.)},
+ year = 1994,
+ isbn = {0-13-123274-6},
+ publisher = {Prentice Hall International (UK) Ltd.},
+ }
+
+@INCOLLECTION{marche07,
+  AUTHOR = {Claude March\'e},
+  TITLE = {Towards Modular Algebraic Specifications for Pointer Programs: a Case Study},
+  BOOKTITLE = {Rewriting, Computation and Proof},
+  PAGES = {235--258},
+  YEAR = 2007,
+  EDITOR = {H. Comon-Lundh and C. Kirchner and H. Kirchner},
+  VOLUME = 4600,
+  SERIES = LNCS,
+  PUBLISHER = {Springer-Verlag}
+}
+
+@article{leavens07,
+ author = {Gary T. Leavens and K. Rustan M. Leino and Peter M\"uller},
+ title = {Specification and verification challenges for sequential object-oriented programs},
+ journal = {Form. Asp. Comput.},
+ volume = {19},
+ number = {2},
+ year = {2007},
+ issn = {0934-5043},
+ pages = {159--189},
+ doi = {http://dx.doi.org/10.1007/s00165-007-0026-7},
+ publisher = {Springer-Verlag},
+ address = {London, UK}
+ }
+
+@Misc{Coq,
+  title = 	 {{The Coq Proof Assistant}},
+  key =          {Coq},
+  note = 	 {\url{http://coq.inria.fr/}}
+}
+
+@Misc{frama-c,
+  title = 	 {{The Frama-C framework for analysis of C code.}},
+  key =          {Frama-C},
+  note = 	 {\url{http://frama-c.cea.fr/}}
+}
+
+
+
+@inproceedings{giorgetti06fase,
+author = {Giorgetti, A. and Groslambert, J.},
+title = {{JAG}: {JML} {A}nnotation {G}eneration for Verifying Temporal Properties},
+booktitle = {FASE'2006, Fundamental Approaches to Software Engineering},
+series = {LNCS},
+volume = 3922,
+pages = {373--376},
+address = {Vienna, Austria},
+publisher = {Springer},
+url = {http://dx.doi.org/10.1007/11693017_27},
+month = mar,
+year = 2006,
+
+}
+
+@Book{abrial96:_b_book,
+  author =    {Jean-Raymond Abrial},
+  title =        {{The B-Book: Assigning Programs to Meanings}},
+  publisher =    {{Cambridge University Press}},
+  year =         1996}
+
+@Misc{wikipedia-fo-logic,
+  author =    {Wikipedia},
+  title =     {First Order Logic},
+  howpublished = {\url{http://en.wikipedia.org/wiki/First_order_logic}}}
+
+@Misc{wikipedia-float,
+ author =    {Wikipedia},
+  title =     {{IEEE 754}},
+  howpublished = {\url{http://en.wikipedia.org/wiki/IEEE_754-1985}}}
+
+
+@Article{float-std,
+  author =       {David Stevenson and others},
+  title =        {An american national standard: {IEEE} standard for binary floating point arithmetic},
+  journal =      {{ACM SIGPLAN} Notices},
+  year =         1987,
+  volume =    22,
+  number =    2,
+  pages =     {9-25}}
+
+@Misc{cil,
+title={{The C Intermediate Language (CIL) library}},
+author={{Berkeley University}},
+howpublished={\url{http://manju.cs.berkeley.edu/cil/}}
+}
+
+
+@inproceedings{BoldoFilliatre07,
+  author = {Sylvie Boldo and Jean-Christophe Filli\^atre},
+  title = {{Formal Verification of Floating-Point Programs}},
+  booktitle = {18th IEEE International Symposium on Computer Arithmetic},
+  pages = {187-194},
+  month = {June},
+  year = 2007,
+  address = {Montpellier, France},
+  topics = {team,lri},
+  type_publi = {icolcomlec},
+  type_digiteo = {conf_isbn},
+  x-equipes = {demons PROVAL},
+  x-type = {article},
+  x-support = {actes},
+  x-cle-support = {ARITH},
+  x-pdf = {http://www.lri.fr/~filliatr/ftp/publis/caduceus-floats.pdf},
+  abstract = {
+  This paper introduces a methodology to perform formal verification
+  of floating-point C programs. It extends an existing tool for the
+  verification of C programs, Caduceus, with new annotations specific
+  to floating-point arithmetic. The Caduceus first-order logic model
+  for C programs is extended accordingly. Then verification conditions
+  expressing the correctness of the programs are obtained in the usual
+  way and can be discharged interactively with the Coq proof
+  assistant, using an existing Coq formalization of floating-point
+  arithmetic.  This methodology is already implemented and has been
+  successfully applied to several short floating-point programs, which
+  are presented in this paper.}
+}
+
+@techreport{ayad09rr,
+  author = {Ali Ayad},
+  title = {On formal methods for certifying floating-point {C} programs},
+  institution = {INRIA},
+  year = 2009,
+  note = {\url{http://hal.inria.fr/inria-00383793/fr}}
+}
+
+@Misc{ayad09,
+  author =    {Ali Ayad and Claude March\'e},
+  title =     {Behavioral Properties of Floating-Point Programs},
+  howpublished = {Hisseo publications},
+  year =      2009,
+  note =      {\url{http://hisseo.saclay.inria.fr/ayad09.pdf}},
+  url =      {http://hisseo.saclay.inria.fr/ayad09.pdf},
+  topics = {team}
+}
+
+@inproceedings{ayad10ijcar,
+  author = {Ali Ayad and Claude March\'e},
+  title = {Multi-Prover Verification of Floating-Point Programs},
+  crossref = {ijcar10},
+  url = {http://www.lri.fr/~marche/ayad10ijcar.pdf},
+  topics = {team},
+  type_publi = {icolcomlec}
+}
+
+@proceedings{ijcar10,
+  title = {International Joint Conference on Automated Reasoning},
+  booktitle = {Fifth International Joint Conference on Automated Reasoning},
+  year = 2010,
+  editor = {J{\"u}rgen Giesl and Reiner H{\"a}hnle},
+  address = {Edinburgh, Scotland},
+  month = jul,
+  series = {Lecture Notes in Artificial Intelligence},
+  publisher = {Springer}
+}
+
+
+@Misc{boldo09misc,
+  author =    {Boldo, Sylvie and Nguyen, Thi Minh Tuyen},
+  title =     {Hardware-independent proofs of numerical programs},
+  howpublished = {Hisseo publications},
+  year =      2009,
+  note =      {\url{http://hisseo.saclay.inria.fr/tuyen09.pdf}},
+  url =      {http://hisseo.saclay.inria.fr/tuyen09.pdf},
+  topics = {team}
+}
+
+@inproceedings{boldo10-nfm,
+  author = {Sylvie Boldo and Thi Minh Tuyen Nguyen},
+  title = {Hardware-independent proofs of numerical programs},
+  booktitle = {Proceedings of the Second NASA Formal Methods Symposium},
+  year = 2010,
+  series = {NASA Conference Publication},
+  address = {Washington D.C., USA},
+  month = apr,
+  topics = {team},
+  pages = {14--23},
+  editor = {C\'esar Mu\~noz},
+  url = {http://shemesh.larc.nasa.gov/NFM2010/proceedings/NASA-CP-2010-216215.pdf}
+}
+
+
+@InProceedings{Tuch_KN_07,
+  author =    {Harvey Tuch and Gerwin Klein and Michael Norrish},
+  title =     {Types, Bytes, and Separation Logic},
+  booktitle = {Proc.\ 34th ACM SIGPLAN-SIGACT Symposium on Principles of Programming Languages (POPL'07)},
+  pages =     {97-108},
+  year =      2007,
+  editor =    {Martin Hofmann and Matthias Felleisen},
+  address =   {Nice, France},
+  month =     Jan
+}
+
+@phdthesis{moy09phd,
+  author = {Yannick Moy},
+  title = {Automatic Modular Static Safety Checking for C Programs},
+  school = {Universit{\'e} Paris-Sud},
+  year = 2009,
+  month = jan,
+  topics = {team},
+  x-equipes = {demons PROVAL},
+  x-type = {these},
+  x-support = {rapport},
+  url = {http://www.lri.fr/~marche/moy09phd.pdf}
+}
+
+
+
+@article{moy10jsc,
+  author = {Yannick Moy and Claude March\'e},
+  title = {Modular Inference of Subprogram Contracts for Safety Checking},
+  journal = {Journal of Symbolic Computation},
+  year = 2010,
+  topics = {team},
+  note = {to appear}
 }

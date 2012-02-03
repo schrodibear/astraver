@@ -47,72 +47,6 @@ let push_decl d =
 
 let iter = Encoding.iter
 
-let is_why3_keyword =
-  let ht = Hashtbl.create 43 in
-  List.iter (fun kw -> Hashtbl.add ht kw ())
-    [
-        "as";
-        "axiom";
-        "clone";
-        "else";
-        "end";
-        "epsilon";
-        "exists";
-        "export";
-        "false";
-        "forall";
-        "function";
-        "goal";
-        "if";
-        "import";
-        "in";
-        "inductive";
-        "lemma";
-        "let";
-        "match";
-        "meta";
-        "namespace";
-        "not";
-        "predicate";
-        "prop";
-        "then";
-        "theory";
-        "true";
-        "type";
-        "use";
-        "with";
-        "abstract";
-        "absurd";
-        "any";
-        "assert";
-        "assume";
-        "begin";
-        "check";
-        "do";
-        "done";
-        "downto";
-        "exception";
-        "for";
-        "fun";
-        "invariant";
-        "label";
-        "loop";
-        "model";
-        "module";
-        "mutable";
-        "raise";
-        "raises";
-        "reads";
-        "rec";
-        "to";
-        "try";
-        "val";
-        "variant";
-        "while";
-        "writes";
-    ];
-  Hashtbl.mem ht
-
 
 (*
   let capitalize s =
@@ -124,12 +58,12 @@ let is_why3_keyword =
 let ident fmt s =
   let s = Ident.string s in
   let s =
-    if is_why3_keyword s then s ^ "_why3" else s
+    if Why3_kw.is_why3_keyword s then s ^ "_why3" else s
   in
   let s = 
     if 'A' <= s.[0] && s.[0] <= 'Z' then "_" ^ s  else s
   in
-  if is_why3_keyword s then
+  if Why3_kw.is_why3_keyword s then
     fprintf fmt "why3__%s" s
   else
     pp_print_string fmt s

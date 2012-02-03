@@ -30,29 +30,42 @@
 (**************************************************************************)
 
 {
-  open Lexing 
-   
+  open Lexing
+
   let color = ref false
 
   let in_comment = ref false
   let in_slashshash = ref false
 
-  let ocaml_keywords = 
+  let why_keywords =
+    let h  = Hashtbl.create 97 in
+    List.iter (fun s -> Hashtbl.add h s ())
+      [ "absurd"; "and"; "array"; "as"; "assert"; "axiom"; "begin"; "bool";
+        "do"; "done"; "else"; "end"; "exception"; "exists"; "external";
+        "false"; "for"; "forall"; "fun"; "function"; "goal"; "if"; "in";
+        "int"; "invariant"; "let"; "logic"; "not"; "of"; "or"; "parameter";
+        "predicate"; "prop"; "raise"; "raises"; "reads"; "real"; "rec"; "ref";
+        "returns"; "then"; "true"; "try"; "type"; "unit"; "variant"; "void";
+        "while"; "with"; "writes";
+      ];
+    h
+
+  let ocaml_keywords =
     let h = Hashtbl.create 97 in
     List.iter (fun s -> Hashtbl.add h s ())
-      [ 
-	"fun"; "match"; "with"; "begin"; 
+      [
+	"fun"; "match"; "with"; "begin";
 	"end"; "try"; "as"; "let"; "rec"; "in";
-	"function"; "if"; "private"; "then"; "else"; "sig"; "val"; 
+	"function"; "if"; "private"; "then"; "else"; "sig"; "val";
 	"type"; "module";
 	"while"; "do"; "done"; "for"; "struct"; "to"; "raise"
       ];
     h
 
-  let coq_keywords = 
+  let coq_keywords =
     let h = Hashtbl.create 97 in
     List.iter (fun s -> Hashtbl.add h s ())
-      [ 
+      [
 	"Inductive"; "Fixpoint" ; "Definition" ; "Lemma" ;
 	"forall" ; "exists" ; "match" ; "with" ; "end" ; "as" ;
 	"if" ; "then" ; "else" ;
@@ -63,27 +76,27 @@
     let h = Hashtbl.create 97 in
     List.iter (fun s -> Hashtbl.add h s ())
       [
-	"break"; "case"; "continue"; 
+	"break"; "case"; "continue";
 	"default"; "do"; "else"; "for"; "goto"; "if";
 	"return"; "switch"; "while";
 	"struct" ; "typedef"; "union";
 	"reads" ;
-	"requires"; "invariant"; 
+	"requires"; "invariant";
 	"loop" ; "variant" ;
-	"ensures" ; "assigns"; 
-	"logic" ; "type" ; "predicate" ; "axiom";
+	"ensures" ; "assigns"; "assumes"; "behavior";
+	"logic" ; "type" ; "predicate" ; "axiom"; "lemma"; "inductive";
       ];
     h
 
-  let java_keywords = 
+  let java_keywords =
     let h = Hashtbl.create 97 in
     List.iter (fun s -> Hashtbl.add h s ())
-      [ 
+      [
 	"break"; "case"; "continue"; "new";
 	"default"; "do"; "else"; "for"; "goto"; "if";
-	"return"; "switch"; "while"; 
-	"class" ; "interface" ; 
-	"public" ; "private" ; "static" ; 
+	"return"; "switch"; "while";
+	"class" ; "interface" ;
+	"public" ; "private" ; "static" ;
 	"throws" ; "extends" ; "implements" ; "reads" ;
 	"requires"; "invariant"; "ensures" ; "assigns"; "signals" ;
 	"logic" ; "type" ; "predicate" ; "axiom";
@@ -91,18 +104,18 @@
       ];
     h
 
-  let bs_keywords = 
+  let bs_keywords =
     let h = Hashtbl.create 97 in
     List.iter (fun s -> Hashtbl.add h s ())
-      [ 
-	"valid"; "forall"; "exists" ; "old" ; "at" ; "fresh" ; "nothing" ; "result"
+      [
+	"valid"; "forall"; "exists" ; "old" ; "at" ; "fresh" ; "nothing" ; "result"; "valid_range" ; "null" ; "max"; "abs"; "cos";
       ];
     h
 
   let c_types =
     let h = Hashtbl.create 97 in
     List.iter (fun s -> Hashtbl.add h s ())
-      [ 
+      [
 	"char"; "const"; "double"; "enum"; "extern";
 	"float"; "int"; "long"; "register";
 	"short"; "signed"; "static"; "struct";
@@ -112,19 +125,23 @@
 
   let is_ocaml_keyword s = Hashtbl.mem ocaml_keywords s
   let is_coq_keyword s = Hashtbl.mem coq_keywords s
-  let is_c_keyword s = Hashtbl.mem c_keywords s 
-  let is_c_keytype s = Hashtbl.mem c_types s 
-  let is_java_keyword s = Hashtbl.mem java_keywords s 
-  let is_bs_keyword s = Hashtbl.mem bs_keywords s 
+  let is_c_keyword s = Hashtbl.mem c_keywords s
+  let is_c_keytype s = Hashtbl.mem c_types s
+  let is_java_keyword s = Hashtbl.mem java_keywords s
+  let is_bs_keyword s = Hashtbl.mem bs_keywords s
+  let is_why_keyword s = Hashtbl.mem why_keywords s
 
   let print_ident =
-    let print_ident_char c = 
+    let print_ident_char c =
       if c = '_' then print_string "\\_{}" else print_char c
     in
     String.iter print_ident_char
 
   let begin_tt () =
-    print_string "\\begin{flushleft}\\ttfamily\\upshape\\parindent 0pt\n"
+    print_string "\\begin{flushleft}\\ttfamily\\upshape\n";
+    print_string "%BEGIN LATEX\n";
+    print_string "\\parindent 0pt\n";
+    print_string "%END LATEX\n"
 
   let end_tt () = print_string "\\end{flushleft}"
 
@@ -143,7 +160,7 @@ rule ktt = parse
   | '&'  { print_string "\\&{}"; ktt lexbuf }
   | '%'  { print_string "\\%{}"; ktt lexbuf }
   | '\n' { if !in_slashshash then begin
-	     print_string "\\end{slshape}"; 
+	     print_string "\\end{slshape}";
 	     in_slashshash := false ; in_comment := false
 	   end;
 	   print_string "~\\\\\n"; ktt lexbuf }
@@ -160,26 +177,28 @@ rule ktt = parse
 *)
   | "\\end{krakatoa}" { () }
   | "\\emph{" [^'}''\n']* '}' { print_string (lexeme lexbuf); ktt lexbuf }
-  | "\\" beameraction "<" beamerspec ">" 
-      { print_string (lexeme lexbuf); ktt lexbuf 
+  | "\\" beameraction "<" beamerspec ">"
+      { print_string (lexeme lexbuf); ktt lexbuf
       }
-  | "/*@" 
-      { print_string "\\begin{slshape}\\color{blue}/*@"; 
+  | "/*@"
+      { print_string "\\begin{slshape}";
+	if !color then print_string "\\color{blue}";
+        print_string "/*@";
 	ktt lexbuf }
-  | "/*" 
-      { print_string "\\begin{slshape}\\rmfamily\\color{darkgreen}/*"; 
+  | "/*"
+      { print_string "\\begin{slshape}\\rmfamily\\color{darkgreen}/*";
 	in_comment := true;
 	ktt lexbuf }
-  | "*/" { print_string "*/\\end{slshape}"; 
+  | "*/" { print_string "*/\\end{slshape}";
 	   in_comment := false;
 	   ktt lexbuf }
-  | "//@" 
-      { in_slashshash := true; 
+  | "//@"
+      { in_slashshash := true;
 	print_string "\\begin{slshape}\\color{blue}//@";
 	ktt lexbuf }
-  | "//" 
-      { in_comment := true; 
-	in_slashshash := true; 
+  | "//"
+      { in_comment := true;
+	in_slashshash := true;
 	print_string "//\\begin{slshape}\\rmfamily\\color{darkgreen}";
 	ktt lexbuf }
   | eof  { () }
@@ -188,33 +207,33 @@ rule ktt = parse
   | "::" { print_string ":\\hspace*{-0.1em}:"; ktt lexbuf }
   | " "  { print_string "~"; ktt lexbuf }
   | "\t"  { print_string "~~~~~~~~"; ktt lexbuf }
-  | "[" (ident as s) "]" 
+  | "[" (ident as s) "]"
       { if !in_comment then print_string "{\\ttfamily " else print_string "[";
 	print_ident s;
 	if !in_comment then print_string "}" else print_string "]";
 	ktt lexbuf
       }
   | ident as s
-	{ if not !in_comment && is_java_keyword s then 
+	{ if not !in_comment && is_java_keyword s then
 	      begin
 		print_string "\\textbf{"; print_ident s;
 		print_string "}"
-	      end 
-	  else 
+	      end
+	  else
               print_ident s;
-	  ktt lexbuf 
+	  ktt lexbuf
 	}
   | "\\" (ident as s)
-      { if not !in_comment && is_bs_keyword s then 
+      { if not !in_comment && is_bs_keyword s then
 	    begin
 	      print_string "\\textbf{\\char'134 "; print_ident s;
 	      print_string "}"
-	    end 
+	    end
 	else
             print_string (lexeme lexbuf);
-	ktt lexbuf 
+	ktt lexbuf
       }
-  | _   
+  | _
       { print_string (lexeme lexbuf); ktt lexbuf }
 
 
@@ -329,43 +348,78 @@ and coqtt = parse
   | '|'  { print_string "\\textbf{|}"; coqtt lexbuf }
   | "=>"  { print_string "\\ensuremath{\\Rightarrow}"; coqtt lexbuf }
   | "Z"  { print_string "\\ensuremath{\\mathbb{Z}}"; coqtt lexbuf }
-  | "\\" beameraction "<" beamerspec ">" 
-      { print_string (lexeme lexbuf); coqtt lexbuf 
+  | "\\" beameraction "<" beamerspec ">"
+      { print_string (lexeme lexbuf); coqtt lexbuf
       }
-  | "(*" 
-      { print_string "\\begin{slshape}\\color{darkgreen}(*"; 
+  | "(*"
+      { print_string "\\begin{slshape}\\color{darkgreen}(*";
 	in_comment := true;
 	coqtt lexbuf }
-  | "*)" { print_string "*)\\end{slshape}"; 
+  | "*)" { print_string "*)\\end{slshape}";
 	   in_comment := false;
 	   coqtt lexbuf }
   | eof  { () }
   | " "  { print_string "~"; coqtt lexbuf }
-  | "[" (ident as s) "]" 
+  | "[" (ident as s) "]"
       { if !in_comment then print_string "{\\ttfamily ";
 	print_ident s;
 	if !in_comment then print_string "}";
 	coqtt lexbuf
       }
   | ident as s
-      { if not !in_comment && is_coq_keyword s then 
+      { if not !in_comment && is_coq_keyword s then
 	    begin
 	      print_string "\\textbf{"; print_ident s;
 	      print_string "}"
-	    end 
-	else 
+	    end
+	else
             print_ident s;
-	coqtt lexbuf 
+	coqtt lexbuf
       }
   | _   { print_string (lexeme lexbuf); coqtt lexbuf }
 
+and whytt = parse
+  | '{'  { print_string "\\{"; whytt lexbuf }
+  | '}'  { print_string "\\}"; whytt lexbuf }
+(*
+  | '\\' { print_string "\\ensuremath{\\backslash}"; whytt lexbuf }
+*)
+  | '#' { print_string "\\diese{}"; whytt lexbuf }
+  | '_'  { print_string "\\_{}"; whytt lexbuf }
+  | '%'  { print_string "\\%{}"; whytt lexbuf }
+  | '&'  { print_string "\\&{}"; whytt lexbuf }
+  | '%'  { print_string "\\%{}"; whytt lexbuf }
+  | '\n' { print_string "\\linebreak\n\\hspace*{0pt}"; whytt lexbuf }
+  | "->" { print_string "\\ensuremath{\\rightarrow}"; whytt lexbuf }
+  | "=>" { print_string "\\ensuremath{\\Rightarrow}"; whytt lexbuf }
+  | "<->" { print_string "\\ensuremath{\\leftrightarrow}"; whytt lexbuf }
+  | '\n' "\\end{" "why" "}\n" { print_newline () }
+  | "\\emph{" [^'}']* '}' { print_string (lexeme lexbuf); whytt lexbuf }
+  | eof  { () }
+  | "'a" { print_string "\\ensuremath{\\alpha}"; whytt lexbuf }
+  | "'t" { print_string "\\ensuremath{\\tau}"; whytt lexbuf }
+  | "*"  { print_string "\\ensuremath{\\times}"; whytt lexbuf }
+  | "."  { print_string "\\ensuremath{.\\!\\!}"; whytt lexbuf }
+  | ":"  { print_string "\\ensuremath{:}"; whytt lexbuf }
+  | "forall" { print_string "\\ensuremath{\\forall\\!\\!\\!}"; whytt lexbuf }
+  | ident as s
+	{ if is_why_keyword s then
+	      begin
+		print_string "\\textbf{"; print_ident s;
+		print_string "}"
+	      end
+	  else print_ident s;
+	  whytt lexbuf
+	}
+  | _   { print_string (lexeme lexbuf); whytt lexbuf }
+
 and pp = parse
-  | "\\begin{krakatoa}" space* "\n" 
+  | "\\begin{krakatoa}" space* "\n"
       { begin_tt();
 	ktt lexbuf;
 	end_tt();
 	pp lexbuf }
-  | "\\begin{coq}" space* "\n" 
+  | "\\begin{coq}" space* "\n"
       { begin_tt();
 	coqtt lexbuf;
 	end_tt();
@@ -381,9 +435,9 @@ and pp = parse
   | "ù" { print_string "\\`u"; pp lexbuf }
   | "ö" { print_string "\\\"o"; pp lexbuf }
   | "ô" { print_string "\\^o"; pp lexbuf }
-  | eof 
+  | eof
       { () }
-  | _ 
+  | _
       { print_string (lexeme lexbuf); pp lexbuf }
 
 {
@@ -392,6 +446,7 @@ and pp = parse
   let tex_files = ref []
   let c_files = ref []
   let java_files = ref []
+  let why_files = ref []
 
   let () = Arg.parse
     [
@@ -400,6 +455,8 @@ and pp = parse
 			      c_files := f :: !c_files), "read C file <f>" ;
       "-java", Arg.String (fun f ->
 			      java_files := f :: !java_files), "read Java file <f>" ;
+      "-why", Arg.String (fun f ->
+			      why_files := f :: !why_files), "read Why file <f>" ;
     ]
     (fun f -> tex_files := f :: !tex_files)
     "pp [options] file..."
@@ -408,7 +465,7 @@ and pp = parse
   let () =
     List.iter
       (fun (l,func) ->
-	 List.iter 
+	 List.iter
 	   (fun f ->
 	      let cin = open_in f in
 	      let lb = from_channel cin in
@@ -416,6 +473,7 @@ and pp = parse
 	      close_in cin)
 	   l)
       [!tex_files, pp;
+       !why_files, (fun lb -> begin_tt (); whytt lb; end_tt ());
        !c_files, (fun lb -> begin_tt (); ctt lb; end_tt ());
        !java_files, (fun lb -> begin_tt (); ktt lb; end_tt ()) ]
 

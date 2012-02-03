@@ -51,7 +51,7 @@ void swap(int t[], int i, int j) {
   @ behavior permutation:
   @   ensures Permut{Old,Here}(t,0,n-1);
   @*/
-void min_sort(int t[], int n) {
+void sel_sort(int t[], int n) {
   int i,j;
   int mi,mv;
   if (n <= 0) return;

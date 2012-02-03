@@ -32,9 +32,6 @@
 open Plugin
 include Plugin.S
 
-(*
-<<<<<<< .working
-*)
 module ProjectName: Plugin.String
 module Behavior: Plugin.String
 module Analysis: Plugin.Bool

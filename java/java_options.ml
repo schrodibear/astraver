@@ -50,12 +50,12 @@ let close_log () =
 
 (*s environment variables *)
 
-let libdir = 
+let libdir =
   try
     let v = Sys.getenv "KRAKATOALIB" in
     lprintf "KRAKATOALIB is set to %s@." v;
     v
-  with Not_found -> 
+  with Not_found ->
     let p = Version.libdir in
     lprintf "KRAKATOALIB is not set, using %s as default@." p;
     p
@@ -69,17 +69,18 @@ let rec split ch s =
     h::(split ch t)
   with
     Not_found -> [s]
-     
+
 
 let libfile = "krakatoa.why"
 
 let javacard = ref false
 
-      
+
 (*s command-line options *)
-      
+
 let parse_only = ref false
 let type_only = ref false
+let gen_only = ref false
 let abstract = ref ""
 let print_graph = ref false
 let debug = ref false
@@ -103,24 +104,26 @@ let files_ = ref []
 let add_file f = files_ := f :: !files_
 let files () = List.rev !files_
 
-let version () = 
+let version () =
   Printf.printf "This is Krakatoa version %s, compiled on %s
-Copyright (c) 2006-2008 - INRIA team-project ProVal
+Copyright (c) 2006-2011 - INRIA team-project ProVal
 This is free software with ABSOLUTELY NO WARRANTY (use option -warranty)
 " Version.version Version.date;
   exit 0
 
 let usage = "krakatoa [options] files"
 
-let _ = 
-  Arg.parse 
-      [ "-parse-only", Arg.Set parse_only, 
+let _ =
+  Arg.parse
+      [ "-parse-only", Arg.Set parse_only,
 	  "  stops after parsing";
-        "-type-only", Arg.Set type_only, 
+        "-type-only", Arg.Set type_only,
 	  "  stops after typing";
 	"-abstract", Arg.String ((:=) abstract),
 	  " <file> stops after typing and output abstract view to <file>" ;
-        "-print-call-graph", Arg.Set print_graph, 
+	"-gen-only", Arg.Set gen_only,
+	  " <file> stops after producing <file>.jc" ;
+        "-print-call-graph", Arg.Set print_graph,
 	  "  stops after call graph and print call graph";
         "-d", Arg.Set debug,
           "  debugging mode";
@@ -137,7 +140,7 @@ let _ =
 	"-javacard", Arg.Set javacard,
 	  "  source is Java Card";
 	"-nonnull-sem", Arg.String
-	  (function 
+	  (function
 	     | "none" -> nonnull_sem := Java_env.NonNullNone
 	     | "fields" -> nonnull_sem := Java_env.NonNullFields
 	     | "all" -> nonnull_sem := Java_env.NonNullAll
@@ -158,36 +161,36 @@ let verbose = !verbose
 let werror = !werror
 let why_opt = !why_opt
 
-let classpath = 
+let classpath =
   let p =
     try
       let v = Sys.getenv "KRAKATOACLASSPATH" in
 	lprintf "KRAKATOACLASSPATH is set to %s@." v;
 	split ':' v
-    with Not_found ->      
-      let p = Filename.concat libdir 
-	(if !javacard then "javacard_api" else "java_api") 
+    with Not_found ->
+      let p = Filename.concat libdir
+	(if !javacard then "javacard_api" else "java_api")
       in
 	lprintf "KRAKATOACLASSPATH is not set, using %s as default@." p;
 	[p]
   in
-    "." :: p 
+    "." :: p
 
 
 (*s error handling *)
 
 exception Java_error of Loc.position * string
 
-let parsing_error l f = 
-  Format.ksprintf 
-    (fun s -> 
+let parsing_error l f =
+  Format.ksprintf
+    (fun s ->
        let s = if s="" then s else " ("^s^")" in
        raise (Java_error(l, "syntax error" ^ s))) f
 
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "make -j -C .. bin/krakatoa.byte"
-End: 
+End:
 *)
 

@@ -141,6 +141,8 @@ let replace_sub_pexpr e el =
 	JCPEapp(fi,labs,el)
     | JCPEquantifier(q,ty,labs,trigs,_e) ->
 	let e1 = as1 el in JCPEquantifier(q,ty,labs,trigs,e1)
+    | JCPEfresh _e ->
+	let e1 = as1 el in JCPEfresh(e1)
     | JCPEold _e ->
 	let e1 = as1 el in JCPEold(e1)
     | JCPEat(_e,lab) ->
@@ -297,6 +299,7 @@ module PExprAst = struct
       | JCPEthrow(_, e)
       | JCPEpack(e, _)
       | JCPEunpack(e, _)
+      | JCPEfresh e
       | JCPEold e
       | JCPEat(e,_)
       | JCPErange(Some e,None)
@@ -547,6 +550,7 @@ let rec iter_term_and_assertion ft fa a =
 	(* ITerm.iter *) iter_term ft t2
     | JCAapp app ->
 	List.iter (iter_term ft) app.jc_app_args
+    | JCAfresh t1
     | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
 	iter_term ft t1
     | JCAand al | JCAor al ->
@@ -639,6 +643,7 @@ let rec fold_term_in_assertion f acc a =
 	fold_term f acc t2
     | JCAapp app ->
 	List.fold_left (fold_term f) acc app.jc_app_args
+    | JCAfresh t1
     | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
 	fold_term f acc t1
     | JCAand al | JCAor al ->
@@ -703,6 +708,7 @@ let rec fold_sub_term_and_assertion itt ita ft fa acc a =
 	itt ft acc t2
     | JCAapp app ->
 	List.fold_left (itt ft) acc app.jc_app_args
+    | JCAfresh t1
     | JCAinstanceof(t1,_,_) | JCAbool_term t1 | JCAmutable(t1,_,_) ->
 	itt ft acc t1
     | JCAand al | JCAor al ->
@@ -913,6 +919,8 @@ let rec map_term_in_assertion f a =
 	JCAinstanceof(map_term f t1,lab,st)
     | JCAbool_term t1 ->
 	JCAbool_term(map_term f t1)
+    | JCAfresh t1 ->
+	JCAfresh(map_term f t1)
     | JCAmutable(t1,st,tag) ->
 	JCAmutable(map_term f t1,st,tag)
     | JCAand al ->
@@ -1074,6 +1082,8 @@ let replace_sub_expr e el =
 	JCEapp { call with jc_call_args = el }
     | JCEoffset(off,_e,st) ->
 	let e1 = as1 el in JCEoffset(off,e1,st)
+    | JCEfresh(_e) ->
+	let e1 = as1 el in JCEfresh(e1)
     | JCEaddress(absolute,_e) ->
 	let e1 = as1 el in JCEaddress(absolute,e1)
     | JCEbase_block(_e) ->
@@ -1149,6 +1159,7 @@ module ExprAst = struct
       | JCEreal_cast(e, _)
       | JCEoffset(_, e, _)
       | JCEaddress(_,e)
+      | JCEfresh(e)
       | JCEbase_block(e)
       | JCEalloc(e, _)
       | JCEfree e
@@ -1204,6 +1215,7 @@ let fold_sub_expr_and_term_and_assertion
     | JCEoffset(_,e1,_)
     | JCEaddress(_,e1)
     | JCEbase_block(e1)
+    | JCEfresh(e1)
     | JCEcast(e1,_)
     | JCEbitwise_cast(e1,_) 
     | JCErange_cast(e1,_) 
@@ -1306,6 +1318,7 @@ module NExprAst = struct
       | JCNEcast(e, _)
       | JCNEoffset(_, e)
       | JCNEaddress(_,e)
+      | JCNEfresh(e)
       | JCNEbase_block(e)
       | JCNEalloc(e, _)
       | JCNEfree e

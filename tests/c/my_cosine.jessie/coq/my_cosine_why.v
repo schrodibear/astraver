@@ -676,13 +676,13 @@ Save.
      (Rminus
       (1)%R (Rmult (Rmult (single_value x_2) (single_value x_2)) (05 / 10)%R)) (
      cos (single_value x_2))))
-   (15 / 16777216)%R).
+   (18 / 16777216)%R).
 Proof.
 admit.
 (* FILL PROOF HERE *)
 Save.
 
-(* Why obligation from file "my_cosine.c", line 71, characters 12-46: *)
+(* Why obligation from file "my_cosine.c", line 71, characters 12-48: *)
 (*Why goal*) Lemma my_cos4_ensures_default_po_2 : 
   forall (x_2: single),
   forall (HW_1: (* JC_65 *) (Rle (Rabs (single_value x_2)) (007 / 100)%R)),
@@ -694,7 +694,7 @@ Save.
                     (1)%R (Rmult
                            (Rmult (single_value x_2) (single_value x_2)) (05 / 10)%R)) (
                    cos (single_value x_2))))
-                 (15 / 16777216)%R)),
+                 (18 / 16777216)%R)),
   forall (result: single),
   forall (HW_5: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
@@ -715,7 +715,7 @@ Save.
   forall (HW_11: why__return = __retres_0),
   (* JC_67 *)
   (Rle (Rabs (Rminus (single_value why__return) (cos (single_value x_2))))
-   (1 / 1048576)%R).
+   (19 / 16777216)%R).
 Proof.
 admit.
 (* FILL PROOF HERE *)
@@ -733,7 +733,7 @@ Save.
                     (1)%R (Rmult
                            (Rmult (single_value x_2) (single_value x_2)) (05 / 10)%R)) (
                    cos (single_value x_2))))
-                 (15 / 16777216)%R)),
+                 (18 / 16777216)%R)),
   forall (result: single),
   forall (HW_5: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
@@ -757,7 +757,7 @@ Save.
                     (1)%R (Rmult
                            (Rmult (single_value x_2) (single_value x_2)) (05 / 10)%R)) (
                    cos (single_value x_2))))
-                 (15 / 16777216)%R)),
+                 (18 / 16777216)%R)),
   forall (result: single),
   forall (HW_5: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\
@@ -789,7 +789,7 @@ Save.
                     (1)%R (Rmult
                            (Rmult (single_value x_2) (single_value x_2)) (05 / 10)%R)) (
                    cos (single_value x_2))))
-                 (15 / 16777216)%R)),
+                 (18 / 16777216)%R)),
   forall (result: single),
   forall (HW_5: (eq (single_value result) (1)%R) /\
                 (eq (single_exact result) (1)%R) /\

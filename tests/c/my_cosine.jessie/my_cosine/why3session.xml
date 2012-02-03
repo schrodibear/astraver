@@ -1,174 +1,224 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="my_cosine.jessie/my_cosine/why3session.xml">
+ name="my_cosine/why3session.xml">
  <prover
-  id="alt-ergo"
+  id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
-  id="coq"
-  name="Coq"
-  version="8.3pl2"/>
- <prover
-  id="cvc3"
+  id="1"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="gappa"
+  id="2"
+  name="Coq"
+  version="8.3pl3"/>
+ <prover
+  id="3"
   name="Gappa"
-  version="0.15.0"/>
+  version="0.16.0"/>
  <prover
-  id="simplify"
-  name="Simplify"
-  version="1.5.4"/>
- <prover
-  id="spass"
-  name="Spass"
-  version="3.7"/>
- <prover
-  id="vampire"
-  name="Vampire"
-  version="0.6"/>
- <prover
-  id="yices"
-  name="Yices"
-  version="1.0.25"/>
- <prover
-  id="z3"
+  id="4"
   name="Z3"
   version="2.19"/>
  <file
   name="../my_cosine.mlw"
   verified="true"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
+   locfile="my_cosine/../my_cosine.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
-   expanded="true">
+   expanded="false">
    <goal
     name="method_error"
+    locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+    loclnum="36" loccnumb="4" loccnume="111"
     expl="Lemma method_error, lemma"
-    sum="8110925d40f98a4db02547243e80ab09"
+    sum="2598e8de2f23e358f121f5d763861c9a"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *V0V0c0.5acosV0c0x1.p-24Iainfix <=aabsV0c0x1.p-5F">
+    <label
+     name="expl:Lemma method_error, lemma">
+     </label>
     <proof
-     prover="coq"
+     prover="2"
      timelimit="5"
-     edited="my_cosine_Jessie_model_method_error_1.v"
-     obsolete="false">
-     <result status="valid" time="3.93"/>
+     edited="my_cosine_Jessie_model_method_error_2.v"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="3.92"/>
     </proof>
    </goal>
   </theory>
   <theory
    name="WP Jessie_program"
+   locfile="my_cosine/../my_cosine.mlw"
+   loclnum="147" loccnumb="7" loccnume="21"
    verified="true"
-   expanded="true">
+   expanded="false">
    <goal
     name="WP_parameter my_cos1_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+    loclnum="43" loccnumb="6" loccnume="13"
     expl="Function my_cos1, default behavior"
-    sum="8be0bfc623a122764c4d47d618526d72"
+    sum="2b68c8aedf74f67d6a65c1338ffa7712"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FAainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
+    <label
+     name="expl:parameter my_cos1_ensures_default">
+     </label>
+    <label
+     name="expl:Function my_cos1, default behavior">
+     </label>
     <transf
      name="split_goal"
      proved="true"
-     expanded="true">
+     expanded="false">
      <goal
       name="WP_parameter my_cos1_ensures_default.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="43" loccnumb="6" loccnume="13"
       expl="assertion"
-      sum="5cafd5e57cd301e6280f02cb3c0d2248"
+      sum="9c82908d22f43ff9a423d6fa454d103c"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos1_ensures_default">
+       </label>
+      <label
+       name="expl:Function my_cos1, default behavior">
+       </label>
       <proof
-       prover="alt-ergo"
+       prover="4"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.07"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
-       prover="z3"
+       prover="0"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter my_cos1_ensures_default.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="43" loccnumb="6" loccnume="13"
       expl="normal postcondition"
-      sum="459ad45f396a773a09871d1226e84d10"
+      sum="6acd5e35556c773eb48f4e1a3b20bf73"
       proved="true"
-      expanded="true"
+      expanded="false"
       shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos1_ensures_default">
+       </label>
+      <label
+       name="expl:Function my_cos1, default behavior">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.01"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter my_cos1_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+    loclnum="43" loccnumb="6" loccnume="13"
     expl="Function my_cos1, Safety"
-    sum="6b56d3498dcea22c42922ee3bdc73a03"
+    sum="b973c143f7de5e4d05c3c5e104f884a9"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
+    <label
+     name="expl:parameter my_cos1_safety">
+     </label>
+    <label
+     name="expl:Function my_cos1, Safety">
+     </label>
     <transf
      name="split_goal"
      proved="true"
-     expanded="true">
+     expanded="false">
      <goal
       name="WP_parameter my_cos1_safety.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="43" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="5a3ca608f25e6489eefe6ba390a19349"
+      sum="09a169748d73579e913a9ff1ca72c493"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos1_safety">
+       </label>
+      <label
+       name="expl:Function my_cos1, Safety">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter my_cos1_safety.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="43" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="c8f8dd9b6ca732ac8acb410119e03ac5"
+      sum="78754c7f27fcc2b30bccf0aa59345a2b"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos1_safety">
+       </label>
+      <label
+       name="expl:Function my_cos1, Safety">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter my_cos1_safety.3"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="43" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="bdf503a3041d5996ee860dafef51aa86"
+      sum="347558c4c9f0b5741424f49ba7917242"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos1_safety">
+       </label>
+      <label
+       name="expl:Function my_cos1, Safety">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
      </goal>
@@ -176,64 +226,96 @@
    </goal>
    <goal
     name="WP_parameter my_cos2_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+    loclnum="51" loccnumb="6" loccnume="13"
     expl="Function my_cos2, default behavior"
-    sum="82ebd9e2c97242c45f770bd9396289a5"
+    sum="d094ae087e627e2b8821b189ebde274e"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FAainfix <=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FAainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+    <label
+     name="expl:parameter my_cos2_ensures_default">
+     </label>
+    <label
+     name="expl:Function my_cos2, default behavior">
+     </label>
     <transf
      name="split_goal"
      proved="true"
-     expanded="true">
+     expanded="false">
      <goal
       name="WP_parameter my_cos2_ensures_default.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="51" loccnumb="6" loccnume="13"
       expl="assertion"
-      sum="3315d8799a5b981729a8eb4078949649"
+      sum="3fb8e723298543a525c2cdbb355430e1"
       proved="true"
       expanded="false"
       shape="ainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos2_ensures_default">
+       </label>
+      <label
+       name="expl:Function my_cos2, default behavior">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter my_cos2_ensures_default.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="51" loccnumb="6" loccnume="13"
       expl="assertion"
-      sum="764537c9ee3aafb2e6335cb5c1fbd650"
+      sum="7c0335723c22075b9d4ff5db18f9c6b6"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos2_ensures_default">
+       </label>
+      <label
+       name="expl:Function my_cos2, default behavior">
+       </label>
       <proof
-       prover="cvc3"
+       prover="0"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.05"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
-       prover="alt-ergo"
+       prover="1"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.07"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter my_cos2_ensures_default.3"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="51" loccnumb="6" loccnume="13"
       expl="normal postcondition"
-      sum="1078fdb18f7e236b6632669362771121"
+      sum="560b6f7aa9c94bd2a85409efc97eab8b"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix <=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos2_ensures_default">
+       </label>
+      <label
+       name="expl:Function my_cos2, default behavior">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.01"/>
       </proof>
      </goal>
@@ -241,57 +323,89 @@
    </goal>
    <goal
     name="WP_parameter my_cos2_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+    loclnum="51" loccnumb="6" loccnume="13"
     expl="Function my_cos2, Safety"
-    sum="0b43e2fee4d87f285b519213560d7065"
+    sum="227c50d4e3ece81c1a5af19cb456cf0a"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+    <label
+     name="expl:parameter my_cos2_safety">
+     </label>
+    <label
+     name="expl:Function my_cos2, Safety">
+     </label>
     <transf
      name="split_goal"
      proved="true"
-     expanded="true">
+     expanded="false">
      <goal
       name="WP_parameter my_cos2_safety.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="51" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="0c32950e4e813221f7f8cfa15fcf6993"
+      sum="1ec055c49a8f01b26b60ce5248e60f08"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos2_safety">
+       </label>
+      <label
+       name="expl:Function my_cos2, Safety">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter my_cos2_safety.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="51" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="5f18be27f9e2b37a74a3b4a8152cc45e"
+      sum="108e6625af5558de29c4decac0fcaf17"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos2_safety">
+       </label>
+      <label
+       name="expl:Function my_cos2, Safety">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter my_cos2_safety.3"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="51" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="8b6c57c67ff131730f74499cf7fe56a3"
+      sum="bc3cc8fd752390727469c8cbcc39dd46"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos2_safety">
+       </label>
+      <label
+       name="expl:Function my_cos2, Safety">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
      </goal>
@@ -299,107 +413,163 @@
    </goal>
    <goal
     name="WP_parameter my_cos3_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+    loclnum="64" loccnumb="6" loccnume="13"
     expl="Function my_cos3, default behavior"
-    sum="a51ba4b799086f918a8871e85322f938"
+    sum="0eb96e59ddb2da49ecebe23688b123d5"
     proved="true"
-    expanded="true"
+    expanded="false"
     shape="ainfix <=around_errorV7ainfix +around_errorV0c0x3.p-24Aainfix <=aabsainfix -aexactV7acosaexactV0c0x1.p-24Iainfix =V7V6FAainfix <=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
+    <label
+     name="expl:parameter my_cos3_ensures_default">
+     </label>
+    <label
+     name="expl:Function my_cos3, default behavior">
+     </label>
     <transf
      name="split_goal"
      proved="true"
-     expanded="true">
+     expanded="false">
      <goal
       name="WP_parameter my_cos3_ensures_default.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="64" loccnumb="6" loccnume="13"
       expl="assertion"
-      sum="77764d5d452aa84a39660e17793d1c24"
+      sum="9dbdc4e2e492ac414f664398167b3d02"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos3_ensures_default">
+       </label>
+      <label
+       name="expl:Function my_cos3, default behavior">
+       </label>
       <proof
-       prover="cvc3"
+       prover="0"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.05"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
-       prover="alt-ergo"
+       prover="1"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.07"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter my_cos3_ensures_default.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="64" loccnumb="6" loccnume="13"
       expl="normal postcondition"
-      sum="5136efcc9c8ea987cf32b9450ad02f17"
+      sum="8837eb6da1d985dd5fc41b0af41d9bbe"
       proved="true"
       expanded="false"
       shape="ainfix <=around_errorV7ainfix +around_errorV0c0x3.p-24Aainfix <=aabsainfix -aexactV7acosaexactV0c0x1.p-24Iainfix =V7V6FIainfix <=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos3_ensures_default">
+       </label>
+      <label
+       name="expl:Function my_cos3, default behavior">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
-       <result status="valid" time="0.00"/>
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
       </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter my_cos3_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+    loclnum="64" loccnumb="6" loccnume="13"
     expl="Function my_cos3, Safety"
-    sum="852fb4f327b445423560f67d9932abde"
+    sum="e1404676d3ff563d0e770208a64dfab3"
     proved="true"
     expanded="false"
     shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
+    <label
+     name="expl:parameter my_cos3_safety">
+     </label>
+    <label
+     name="expl:Function my_cos3, Safety">
+     </label>
     <transf
      name="split_goal"
      proved="true"
      expanded="false">
      <goal
       name="WP_parameter my_cos3_safety.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="64" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="34c35b8b3bd3cc8cd978084308db2f86"
+      sum="fc9ffc65488600d6529557f9a64d442b"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos3_safety">
+       </label>
+      <label
+       name="expl:Function my_cos3, Safety">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter my_cos3_safety.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="64" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="1984498ba626ca49325d0cfcfbd339f0"
+      sum="8f77c7be248d729839665bd8dc6115a0"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos3_safety">
+       </label>
+      <label
+       name="expl:Function my_cos3, Safety">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter my_cos3_safety.3"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="64" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="d4e9eb7fb892883c121b766f402393e9"
+      sum="c60e7b30fe6bb3af1bb463d5879a05bd"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
+      <label
+       name="expl:parameter my_cos3_safety">
+       </label>
+      <label
+       name="expl:Function my_cos3, Safety">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
      </goal>
@@ -407,42 +577,67 @@
    </goal>
    <goal
     name="WP_parameter my_cos4_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+    loclnum="73" loccnumb="6" loccnume="13"
     expl="Function my_cos4, default behavior"
-    sum="966e3821b71e66e4cba7350d8caa2de3"
+    sum="24f3056a8c6f10040602d841372db7eb"
     proved="true"
     expanded="false"
-    shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.p-20Iainfix =V7V6FIainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FAainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x0.Fp-20Iainfix <=aabsavalueV0c0.07F">
+    shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.3p-20Iainfix =V7V6FIainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FAainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
+    <label
+     name="expl:parameter my_cos4_ensures_default">
+     </label>
+    <label
+     name="expl:Function my_cos4, default behavior">
+     </label>
     <transf
      name="split_goal"
      proved="true"
      expanded="false">
      <goal
       name="WP_parameter my_cos4_ensures_default.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="73" loccnumb="6" loccnume="13"
       expl="assertion"
-      sum="d428db8ac28531c4dd87fbe2c6e26b1c"
+      sum="421e2911736e48a6265f02836752e20d"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x0.Fp-20Iainfix <=aabsavalueV0c0.07F">
+      shape="ainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
+      <label
+       name="expl:parameter my_cos4_ensures_default">
+       </label>
+      <label
+       name="expl:Function my_cos4, default behavior">
+       </label>
       <proof
-       prover="coq"
+       prover="2"
        timelimit="5"
-       edited="my_cosine_WP_Jessie_program_WP_parameter_my_cos4_ensures_default_1.v"
-       obsolete="false">
-       <result status="valid" time="3.40"/>
+       edited="my_cosine_WP_Jessie_program_WP_parameter_my_cos4_ensures_default_2.v"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="3.48"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter my_cos4_ensures_default.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="73" loccnumb="6" loccnume="13"
       expl="normal postcondition"
-      sum="dacc36c6189170aa0ee4445dd9c480a0"
+      sum="f45441ce23c98bbfbf9e77b320e0ffd9"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.p-20Iainfix =V7V6FIainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x0.Fp-20Iainfix <=aabsavalueV0c0.07F">
+      shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.3p-20Iainfix =V7V6FIainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
+      <label
+       name="expl:parameter my_cos4_ensures_default">
+       </label>
+      <label
+       name="expl:Function my_cos4, default behavior">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
      </goal>
@@ -450,57 +645,89 @@
    </goal>
    <goal
     name="WP_parameter my_cos4_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+    loclnum="73" loccnumb="6" loccnume="13"
     expl="Function my_cos4, Safety"
-    sum="64c49ddcc426a833684471b3bd677e67"
+    sum="e99f848b7fcd0a97eefcc67e7dc6a813"
     proved="true"
     expanded="false"
-    shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x0.Fp-20Iainfix <=aabsavalueV0c0.07F">
+    shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
+    <label
+     name="expl:parameter my_cos4_safety">
+     </label>
+    <label
+     name="expl:Function my_cos4, Safety">
+     </label>
     <transf
      name="split_goal"
      proved="true"
      expanded="false">
      <goal
       name="WP_parameter my_cos4_safety.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="73" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="5da48abdf92cc516c32c51b168291e78"
+      sum="b272ee3bd6d227bf3e07427f9656b462"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x0.Fp-20Iainfix <=aabsavalueV0c0.07F">
+      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
+      <label
+       name="expl:parameter my_cos4_safety">
+       </label>
+      <label
+       name="expl:Function my_cos4, Safety">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter my_cos4_safety.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="73" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="17a79299b866e27a1dc7cd46f6e83ea1"
+      sum="07609521023371af3879225fb1920189"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x0.Fp-20Iainfix <=aabsavalueV0c0.07F">
+      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
+      <label
+       name="expl:parameter my_cos4_safety">
+       </label>
+      <label
+       name="expl:Function my_cos4, Safety">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter my_cos4_safety.3"
+      locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
+      loclnum="73" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="6c0772b7dec26d674f7521fffeb58392"
+      sum="281067fbf699ad88cbea2cd6d4b91d9f"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x0.Fp-20Iainfix <=aabsavalueV0c0.07F">
+      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
+      <label
+       name="expl:parameter my_cos4_safety">
+       </label>
+      <label
+       name="expl:Function my_cos4, Safety">
+       </label>
       <proof
-       prover="gappa"
+       prover="3"
        timelimit="5"
-       edited=""
-       obsolete="false">
+       obsolete="false"
+       archived="false">
        <result status="valid" time="0.00"/>
       </proof>
      </goal>

@@ -48,15 +48,15 @@ tag stack_t = {
 type stack_t = [stack_t]
 
 predicate stack_initialized{L}(stack_t[..] s) =
-(((0 < s.size_1) &&
-   ((\offset_min(s.data_0) <= 0) && (\offset_max(s.data_0) >= 0))) &&
-  ((\offset_min(s.data_0) <= 0) && (\offset_max(s.data_0) >= s.size_1)))
+\at((((0 < s.size_1) &&
+       ((\offset_min(s.data_0) <= 0) && (\offset_max(s.data_0) >= 0))) &&
+      ((\offset_min(s.data_0) <= 0) && (\offset_max(s.data_0) >= s.size_1))),L)
 
 predicate stack_full{L}(stack_t[..] s_0) =
-(stack_initialized{L}(s_0) && (s_0.used == s_0.size_1))
+\at((stack_initialized{L}(s_0) && (s_0.used == s_0.size_1)),L)
 
 predicate stack_empty{L}(stack_t[..] s_1) =
-(stack_initialized{L}(s_1) && (s_1.used == 0))
+\at((stack_initialized{L}(s_1) && (s_1.used == 0)),L)
 
 int32 stack_valid(stack_t[..] stack_2)
   requires (C_11 : ((C_12 : (\offset_min(stack_2) <= 0)) &&
@@ -210,7 +210,7 @@ axiom int32_coerce :
 
 axiom int32_extensionality :
  (forall x:int32.
-  (forall y:int32.
+  (forall y:int32[eq_int(integer_of_int32(x), integer_of_int32(y))].
    (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range :
@@ -227,7 +227,7 @@ axiom int8_coerce :
 
 axiom int8_extensionality :
  (forall x:int8.
-  (forall y:int8.
+  (forall y:int8[eq_int(integer_of_int8(x), integer_of_int8(y))].
    (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
@@ -399,7 +399,7 @@ axiom uint32_coerce :
 
 axiom uint32_extensionality :
  (forall x:uint32.
-  (forall y:uint32.
+  (forall y:uint32[eq_int(integer_of_uint32(x), integer_of_uint32(y))].
    (eq_int(integer_of_uint32(x), integer_of_uint32(y)) -> (x = y))))
 
 axiom uint32_range :
@@ -2266,7 +2266,7 @@ axiom sub_disj:
     (forall s2:'a1 mybag.
       (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
         disj_mybag(s1, s3), sub_mybag(s2, s3)].
-        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+        (disj_mybag(s1, s3) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s2))))))
 
 axiom sub_in:
   (forall s1:'a1 mybag.
@@ -2275,6 +2275,13 @@ axiom sub_in:
         sub_mybag(s1, s2)].
         ((not in_mybag(p, s2)) ->
          (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+axiom sub_sub:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [sub_mybag(s1, s3), sub_mybag(s2, s3)|
+        sub_mybag(s1, s3), sub_mybag(s1, s2)].
+        (sub_mybag(s1, s2) -> (sub_mybag(s2, s3) -> sub_mybag(s1, s3))))))
 
 logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
 'a2) memory -> prop
@@ -2403,7 +2410,7 @@ axiom int32_coerce:
 
 axiom int32_extensionality:
   (forall x:int32.
-    (forall y:int32.
+    (forall y:int32 [(integer_of_int32(x) = integer_of_int32(y))].
       ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range:
@@ -2420,7 +2427,8 @@ axiom int8_coerce:
 
 axiom int8_extensionality:
   (forall x:int8.
-    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
+    (forall y:int8 [(integer_of_int8(x) = integer_of_int8(y))].
+      ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
@@ -2589,7 +2597,7 @@ axiom uint32_coerce:
 
 axiom uint32_extensionality:
   (forall x:uint32.
-    (forall y:uint32.
+    (forall y:uint32 [(integer_of_uint32(x) = integer_of_uint32(y))].
       ((integer_of_uint32(x) = integer_of_uint32(y)) -> (x = y))))
 
 axiom uint32_range:

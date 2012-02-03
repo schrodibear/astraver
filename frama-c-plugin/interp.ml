@@ -1205,9 +1205,8 @@ and pred p =
         in
         (mkconjunct elist p.loc)#node
 
-    | Pfresh _t ->
-	(* TODO: add to memory model for Jessie *)
-	Extlib.not_yet_implemented "Interp.pred Pfresh"
+    | Pfresh t ->
+	JCPEfresh(term t)
 
     | Psubtype({term_node = Ttypeof t},{term_node = Ttype ty}) ->
         JCPEinstanceof(term t,get_struct_name (pointed_type ty))

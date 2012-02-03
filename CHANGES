@@ -1,4 +1,6 @@
 
+  o [Jessie and Krakatoa] support for built-in construct \fresh
+  o [Jessie/Why3ML output] avoid Why3 keywords, fixed Frama-C BTS 1004
   o new option -extra-switch for why-dp (pass additional option to prover)
 
 version 2.30, Oct 24, 2011

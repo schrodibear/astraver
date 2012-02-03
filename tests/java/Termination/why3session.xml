@@ -1,41 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="Termination/why3session.xml">
+ name="tests/java/Termination/why3session.xml">
  <prover
-  id="alt-ergo"
+  id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
-  id="coq"
-  name="Coq"
-  version="8.3pl2"/>
- <prover
-  id="cvc3"
+  id="1"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="gappa"
-  name="Gappa"
-  version="0.15.0"/>
- <prover
-  id="simplify"
-  name="Simplify"
-  version="1.5.4"/>
- <prover
-  id="spass"
-  name="Spass"
-  version="3.7"/>
- <prover
-  id="vampire"
-  name="Vampire"
-  version="0.6"/>
- <prover
-  id="yices"
-  name="Yices"
-  version="1.0.25"/>
- <prover
-  id="z3"
+  id="2"
   name="Z3"
   version="2.19"/>
  <file
@@ -44,243 +20,311 @@
   expanded="true">
   <theory
    name="Jessie_model"
+   locfile="tests/java/Termination/../Termination.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="WP Jessie_program"
+   locfile="tests/java/Termination/../Termination.mlw"
+   loclnum="174" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _Termination_loop1_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
+    loclnum="36" loccnumb="9" loccnume="14"
     expl="loop invariant preservation"
-    sum="90eda8c0746dbb950d2de02400e9d806"
+    sum="1f63ce49dfb46c5530cca1aae714df91"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="expl:parameter _Termination_loop1_ensures_default">
+     </label>
+    <label
+     name="expl:Method loop1, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.00"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Termination_loop1_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
+    loclnum="36" loccnumb="9" loccnume="14"
     expl="loop variant decreases"
-    sum="87748bebd0811b4c371f330504a56a7d"
+    sum="457bb38410f658c9d71f1574584bacf0"
     proved="true"
     expanded="false"
     shape="ainfix <V3V2Aainfix <=c0V2Iainfix =V3ainfix -V2c1FIainfix >V2c0FIavalid_struct_TerminationV0c0c0V1FF">
+    <label
+     name="expl:parameter _Termination_loop1_safety">
+     </label>
+    <label
+     name="expl:Method loop1, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Termination_loop2_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
+    loclnum="41" loccnumb="9" loccnume="14"
     expl="loop invariant preservation"
-    sum="a7ac5f6146f9b16a7de86ca539c27f3d"
+    sum="859a1d8d86d6c441592c25a9b0074d10"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="expl:parameter _Termination_loop2_ensures_default">
+     </label>
+    <label
+     name="expl:Method loop2, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Termination_loop2_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
+    loclnum="41" loccnumb="9" loccnume="14"
     expl="loop variant decreases"
-    sum="6f8cefdd6a8bc3b4b59c394267194353"
+    sum="50f38dfaf6db4503547b7e1814fd45ed"
     proved="true"
     expanded="false"
     shape="ainfix <ainfix -c100V3ainfix -c100V2Aainfix <=c0ainfix -c100V2Iainfix =V3ainfix +V2c1FIainfix <V2c100FIavalid_struct_TerminationV0c0c0V1FF">
+    <label
+     name="expl:parameter _Termination_loop2_safety">
+     </label>
+    <label
+     name="expl:Method loop2, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="z3"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Termination_loop3_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
+    loclnum="47" loccnumb="8" loccnume="13"
     expl="Method loop3, default behavior"
-    sum="cab50e9ff570ffd6412fc55cd5d4436c"
+    sum="26e84c00a2b6f05712e63207acf27ae0"
     proved="true"
     expanded="false"
     shape="iainfix >V2c0ainfix <=V3c100Aainfix <=c0V3Iainfix =V3ainfix -V2c1Fainfix =V4c0Iainfix =V4V2FIainfix <=V2c100Aainfix <=c0V2FAainfix <=c100c100Aainfix <=c0c100Iavalid_struct_TerminationV0c0c0V1FF">
+    <label
+     name="expl:parameter _Termination_loop3_ensures_default">
+     </label>
+    <label
+     name="expl:Method loop3, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Termination_loop3_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
+    loclnum="47" loccnumb="8" loccnume="13"
     expl="loop variant decreases"
-    sum="033d09ae3ec8e494f1dbbfe795ae2c27"
+    sum="bd375c05aac03ba3d97c5fcbc5b8ee0a"
     proved="true"
     expanded="false"
     shape="ainfix <V3V2Aainfix <=c0V2Iainfix =V3ainfix -V2c1FIainfix >V2c0Iainfix <=V2c100Aainfix <=c0V2FIavalid_struct_TerminationV0c0c0V1FF">
+    <label
+     name="expl:parameter _Termination_loop3_safety">
+     </label>
+    <label
+     name="expl:Method loop3, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Termination_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
     expl="Constructor of class Termination, default behavior"
-    sum="7ed00b119aa0b2d20445f1e00b6c7220"
+    sum="86338fd2b374638e87144afd6bc9532c"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="expl:parameter cons_Termination_ensures_default">
+     </label>
+    <label
+     name="expl:Constructor of class Termination, default behavior">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Termination_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
     expl="Constructor of class Termination, Safety"
-    sum="7772b2977d15ee664740c7fb93982337"
+    sum="c2675151e815439709e50c1834bbcff6"
     proved="true"
     expanded="false"
     shape="t">
+    <label
+     name="expl:parameter cons_Termination_safety">
+     </label>
+    <label
+     name="expl:Constructor of class Termination, Safety">
+     </label>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
   </theory>

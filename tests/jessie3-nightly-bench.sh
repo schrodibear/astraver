@@ -45,6 +45,7 @@ if test "$?" != "0" ; then
     notify
 else
     echo "Configuration succeeded. " >> $REPORT
+    grep "Frama-C version" $OUT >> $REPORT
 fi
 
 # compilation
@@ -59,17 +60,27 @@ else
 fi
 
 # detection of provers
-bin/why-config.opt &> $OUT
+# bin/why-config.opt &> $OUT
+# if test "$?" != "0" ; then
+#     echo "Prover detection in Why2 failed" >> $REPORT
+#     cat $OUT >> $REPORT
+#     SUBJECT="$SUBJECT prover detection failed"
+#     notify
+# else
+#     echo "Prover detection in Why2 succeeded. " >> $REPORT
+# fi
+
+# detection of Why3 and its provers 
+why3 --version &> $OUT
 if test "$?" != "0" ; then
-    echo "Prover detection in Why2 failed" >> $REPORT
+    echo "why3 --version failed" >> $REPORT
     cat $OUT >> $REPORT
-    SUBJECT="$SUBJECT prover detection failed"
+    SUBJECT="$SUBJECT Why3 not found"
     notify
 else
-    echo "Prover detection in Why2 succeeded. " >> $REPORT
+    cat $OUT >> $REPORT
 fi
 
-# detection of provers in Why3
 why3config --detect &> $OUT
 if test "$?" != "0" ; then
     echo "Prover detection in Why3 failed" >> $REPORT

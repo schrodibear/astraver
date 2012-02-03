@@ -266,6 +266,7 @@ let rec assertion this p =
     | JCAtrue | JCAfalse -> ()
     | JCAif (_, _, _) -> assert false (* TODO *)
     | JCAinstanceof(t,_,_)
+    | JCAfresh t 
     | JCAbool_term t -> term this t
     | JCAold p -> assertion this p
     | JCAat(p,_) -> assertion this p
@@ -336,6 +337,7 @@ let rec assertion_memories aux a = match a#node with
   | JCAquantifier(_,_, _, a) -> assertion_memories aux a
   | JCAapp app -> List.fold_left term_memories aux app.jc_app_args
   | JCAinstanceof(t, _, _ )
+  | JCAfresh t
   | JCAbool_term t -> term_memories aux t
   | JCAif(t, a1, a2) -> assertion_memories (assertion_memories (term_memories aux t) a1) a2
   | JCAmutable(t, _, _) -> term_memories aux t
