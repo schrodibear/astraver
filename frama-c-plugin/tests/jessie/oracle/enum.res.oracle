@@ -131,7 +131,8 @@ axiom E_coerce :
 
 axiom E_extensionality :
  (forall x:E.
-  (forall y:E. (eq_int(integer_of_E(x), integer_of_E(y)) -> (x = y))))
+  (forall y:E[eq_int(integer_of_E(x), integer_of_E(y))].
+   (eq_int(integer_of_E(x), integer_of_E(y)) -> (x = y))))
 
 axiom E_range :
  (forall x:E.
@@ -148,7 +149,8 @@ axiom I_coerce :
 
 axiom I_extensionality :
  (forall x:I.
-  (forall y:I. (eq_int(integer_of_I(x), integer_of_I(y)) -> (x = y))))
+  (forall y:I[eq_int(integer_of_I(x), integer_of_I(y))].
+   (eq_int(integer_of_I(x), integer_of_I(y)) -> (x = y))))
 
 axiom I_range :
  (forall x:I.
@@ -165,7 +167,9 @@ axiom __anonenum_color_1_coerce :
 
 axiom __anonenum_color_1_extensionality :
  (forall x:__anonenum_color_1.
-  (forall y:__anonenum_color_1.
+  (forall y:__anonenum_color_1
+   [eq_int(integer_of___anonenum_color_1(x),
+    integer_of___anonenum_color_1(y))].
    (eq_int(integer_of___anonenum_color_1(x),
     integer_of___anonenum_color_1(y)) -> (x = y))))
 
@@ -237,7 +241,7 @@ axiom int32_coerce :
 
 axiom int32_extensionality :
  (forall x:int32.
-  (forall y:int32.
+  (forall y:int32[eq_int(integer_of_int32(x), integer_of_int32(y))].
    (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range :
@@ -254,7 +258,7 @@ axiom int8_coerce :
 
 axiom int8_extensionality :
  (forall x:int8.
-  (forall y:int8.
+  (forall y:int8[eq_int(integer_of_int8(x), integer_of_int8(y))].
    (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
@@ -1767,7 +1771,7 @@ axiom sub_disj:
     (forall s2:'a1 mybag.
       (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
         disj_mybag(s1, s3), sub_mybag(s2, s3)].
-        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+        (disj_mybag(s1, s3) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s2))))))
 
 axiom sub_in:
   (forall s1:'a1 mybag.
@@ -1776,6 +1780,13 @@ axiom sub_in:
         sub_mybag(s1, s2)].
         ((not in_mybag(p, s2)) ->
          (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+axiom sub_sub:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [sub_mybag(s1, s3), sub_mybag(s2, s3)|
+        sub_mybag(s1, s3), sub_mybag(s1, s2)].
+        (sub_mybag(s1, s2) -> (sub_mybag(s2, s3) -> sub_mybag(s1, s3))))))
 
 logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
 'a2) memory -> prop
@@ -1877,7 +1888,8 @@ axiom E_coerce:
 
 axiom E_extensionality:
   (forall x:E.
-    (forall y:E. ((integer_of_E(x) = integer_of_E(y)) -> (x = y))))
+    (forall y:E [(integer_of_E(x) = integer_of_E(y))].
+      ((integer_of_E(x) = integer_of_E(y)) -> (x = y))))
 
 axiom E_range:
   (forall x:E. ((1 <= integer_of_E(x)) and (integer_of_E(x) <= 4)))
@@ -1892,7 +1904,8 @@ axiom I_coerce:
 
 axiom I_extensionality:
   (forall x:I.
-    (forall y:I. ((integer_of_I(x) = integer_of_I(y)) -> (x = y))))
+    (forall y:I [(integer_of_I(x) = integer_of_I(y))].
+      ((integer_of_I(x) = integer_of_I(y)) -> (x = y))))
 
 axiom I_range:
   (forall x:I. ((0 <= integer_of_I(x)) and (integer_of_I(x) <= 2)))
@@ -1908,7 +1921,7 @@ axiom __anonenum_color_1_coerce:
 
 axiom __anonenum_color_1_extensionality:
   (forall x:__anonenum_color_1.
-    (forall y:__anonenum_color_1.
+    (forall y:__anonenum_color_1 [(integer_of___anonenum_color_1(x) = integer_of___anonenum_color_1(y))].
       ((integer_of___anonenum_color_1(x) = integer_of___anonenum_color_1(y)) ->
        (x = y))))
 
@@ -1981,7 +1994,7 @@ axiom int32_coerce:
 
 axiom int32_extensionality:
   (forall x:int32.
-    (forall y:int32.
+    (forall y:int32 [(integer_of_int32(x) = integer_of_int32(y))].
       ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range:
@@ -1998,7 +2011,8 @@ axiom int8_coerce:
 
 axiom int8_extensionality:
   (forall x:int8.
-    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
+    (forall y:int8 [(integer_of_int8(x) = integer_of_int8(y))].
+      ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.

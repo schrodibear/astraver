@@ -5631,8 +5631,7 @@ axiom byte_coerce:
 
 axiom byte_extensionality:
   (forall x:byte.
-    (forall y:byte [(integer_of_byte(x) = integer_of_byte(y))].
-      ((integer_of_byte(x) = integer_of_byte(y)) -> (x = y))))
+    (forall y:byte. ((integer_of_byte(x) = integer_of_byte(y)) -> (x = y))))
 
 axiom byte_range:
   (forall x:byte.
@@ -5648,8 +5647,7 @@ axiom char_coerce:
 
 axiom char_extensionality:
   (forall x:char.
-    (forall y:char [(integer_of_char(x) = integer_of_char(y))].
-      ((integer_of_char(x) = integer_of_char(y)) -> (x = y))))
+    (forall y:char. ((integer_of_char(x) = integer_of_char(y)) -> (x = y))))
 
 axiom char_range:
   (forall x:char.
@@ -5685,7 +5683,7 @@ axiom int32_coerce:
 
 axiom int32_extensionality:
   (forall x:int32.
-    (forall y:int32 [(integer_of_int32(x) = integer_of_int32(y))].
+    (forall y:int32.
       ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range:
@@ -5743,8 +5741,7 @@ axiom long_coerce:
 
 axiom long_extensionality:
   (forall x:long.
-    (forall y:long [(integer_of_long(x) = integer_of_long(y))].
-      ((integer_of_long(x) = integer_of_long(y)) -> (x = y))))
+    (forall y:long. ((integer_of_long(x) = integer_of_long(y)) -> (x = y))))
 
 axiom long_range:
   (forall x:long.
@@ -5792,7 +5789,7 @@ axiom short_coerce:
 
 axiom short_extensionality:
   (forall x:short.
-    (forall y:short [(integer_of_short(x) = integer_of_short(y))].
+    (forall y:short.
       ((integer_of_short(x) = integer_of_short(y)) -> (x = y))))
 
 axiom short_range:
@@ -6172,10 +6169,10 @@ goal Switch_test2_ensures_normal_po_16:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Switch_why.why            : !!!!!!!!!!!!!!!!!!!! (0/0/0/0/20)
+why/Switch_why.why            : .................... (20/0/0/0/0)
 total   :  20
-valid   :   0 (  0%)
+valid   :  20 (100%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
 timeout :   0 (  0%)
-failure :  20 (100%)
+failure :   0 (  0%)
