@@ -1,4 +1,5 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only pre_in_requires.c
+[kernel] warning: cannot load plug-in `Ltl_to_acsl' (incompatible with Nitrogen-20111001+dev).
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD pre_in_requires.c"
 pre_in_requires.c:11:[kernel] warning: Body of function f falls-through. Adding a return statement
 [jessie] Starting Jessie translation
@@ -106,7 +107,7 @@ axiom int32_coerce :
 
 axiom int32_extensionality :
  (forall x:int32.
-  (forall y:int32.
+  (forall y:int32[eq_int(integer_of_int32(x), integer_of_int32(y))].
    (eq_int(integer_of_int32(x), integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range :
@@ -123,7 +124,7 @@ axiom int8_coerce :
 
 axiom int8_extensionality :
  (forall x:int8.
-  (forall y:int8.
+  (forall y:int8[eq_int(integer_of_int8(x), integer_of_int8(y))].
    (eq_int(integer_of_int8(x), integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range :
@@ -1288,7 +1289,7 @@ axiom sub_disj:
     (forall s2:'a1 mybag.
       (forall s3:'a1 mybag [disj_mybag(s1, s2), sub_mybag(s2, s3)|
         disj_mybag(s1, s3), sub_mybag(s2, s3)].
-        (disj_mybag(s1, s2) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s3))))))
+        (disj_mybag(s1, s3) -> (sub_mybag(s2, s3) -> disj_mybag(s1, s2))))))
 
 axiom sub_in:
   (forall s1:'a1 mybag.
@@ -1297,6 +1298,13 @@ axiom sub_in:
         sub_mybag(s1, s2)].
         ((not in_mybag(p, s2)) ->
          (sub_mybag(s1, s2) -> (not in_mybag(p, s1)))))))
+
+axiom sub_sub:
+  (forall s1:'a1 mybag.
+    (forall s2:'a1 mybag.
+      (forall s3:'a1 mybag [sub_mybag(s1, s3), sub_mybag(s2, s3)|
+        sub_mybag(s1, s3), sub_mybag(s1, s2)].
+        (sub_mybag(s1, s2) -> (sub_mybag(s2, s3) -> sub_mybag(s1, s3))))))
 
 logic frame_between : 'a1 pointer mybag, ('a1, 'a2) memory, ('a1,
 'a2) memory -> prop
@@ -1414,7 +1422,7 @@ axiom int32_coerce:
 
 axiom int32_extensionality:
   (forall x:int32.
-    (forall y:int32.
+    (forall y:int32 [(integer_of_int32(x) = integer_of_int32(y))].
       ((integer_of_int32(x) = integer_of_int32(y)) -> (x = y))))
 
 axiom int32_range:
@@ -1431,7 +1439,8 @@ axiom int8_coerce:
 
 axiom int8_extensionality:
   (forall x:int8.
-    (forall y:int8. ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
+    (forall y:int8 [(integer_of_int8(x) = integer_of_int8(y))].
+      ((integer_of_int8(x) = integer_of_int8(y)) -> (x = y))))
 
 axiom int8_range:
   (forall x:int8.
