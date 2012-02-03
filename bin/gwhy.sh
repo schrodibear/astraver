@@ -3,7 +3,7 @@
 case $1 in
   *.java)
 	b=`basename $1 .java`
-	krakatoa $1 || exit 1
+	krakatoa -gen-only $1 || exit 1
 	echo "krakatoa on $b.java done"
         d=`dirname $1`
         echo "cd $d"
