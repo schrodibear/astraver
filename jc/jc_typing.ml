@@ -2740,6 +2740,7 @@ match a#node with
 	   let (pos1,neg1) = signed_occurrences pi a in
 	   (p+pos1,n+neg1)) (0,0) l
   | JCAor _ -> assert false (* TODO *)
+  | JCAat (p, _) | JCAold p -> signed_occurrences pi p
   | JCAnot p ->
       let (pos,neg) = signed_occurrences pi p in
       (neg,pos)
@@ -2750,8 +2751,6 @@ match a#node with
   | JCAif (_, _, _) -> assert false (* TODO *)
   | JCAbool_term _ -> assert false (* TODO *)
   | JCAinstanceof (_, _, _) -> assert false (* TODO *)
-  | JCAat (_, _) -> assert false (* TODO *)
-  | JCAold _ -> assert false (* TODO *)
   | JCAlet (_, _,_) -> assert false (* TODO *)
   | JCAmatch (_, _) -> assert false (* TODO *)
   | JCAfresh _ -> assert false (* TODO *)
