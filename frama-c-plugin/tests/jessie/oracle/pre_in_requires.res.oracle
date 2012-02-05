@@ -1,5 +1,4 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only pre_in_requires.c
-[kernel] warning: cannot load plug-in `Ltl_to_acsl' (incompatible with Nitrogen-20111001+dev).
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD pre_in_requires.c"
 pre_in_requires.c:11:[kernel] warning: Body of function f falls-through. Adding a return statement
 [jessie] Starting Jessie translation
