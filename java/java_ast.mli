@@ -166,6 +166,7 @@ type variable_declaration =
 type pbehavior =
     { java_pbehavior_assumes : pexpr option;
       java_pbehavior_assigns : (Loc.position * pexpr list) option;
+      java_pbehavior_allocates : (Loc.position * pexpr list) option;
       java_pbehavior_throws : (qualified_ident * identifier option) option;
       java_pbehavior_ensures : pexpr
     }

@@ -207,6 +207,7 @@ rule token = parse
   | "/*"                    { comment lexbuf; token lexbuf }
   | "//" [^ '\n']* '\n'     { newline lexbuf; token lexbuf }
   | "abstract"              { ABSTRACT }
+  | "allocates"             { ALLOCATES }
   | "and"                   { AND }
   | "as"                    { AS }
   | "assert"                { ASSERT }

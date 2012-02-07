@@ -69,19 +69,21 @@ Parser for Java source files
 
   let default_behavior_name = "default"
 
-  let default_behavior assigns ensures behs =
-    match assigns,ensures with
-      | None, None -> behs
-      | a, None ->
+  let default_behavior assigns allocates ensures behs =
+    match assigns,allocates,ensures with
+      | None, None, None -> behs
+      | a, al, None ->
 	  ((Loc.dummy_position,default_behavior_name),
 	   { java_pbehavior_assumes = None;
 	     java_pbehavior_assigns = a;
+	     java_pbehavior_allocates = al;
 	     java_pbehavior_throws = None;
 	     java_pbehavior_ensures = Java_pervasives.expr_true }) :: behs
-      | a, Some e ->
+      | a, al, Some e ->
 	  ((Loc.dummy_position,default_behavior_name),
 	   { java_pbehavior_assumes = None;
 	     java_pbehavior_assigns = a;
+	     java_pbehavior_allocates = al;
 	     java_pbehavior_throws = None;
 	     java_pbehavior_ensures = e }) :: behs
 
@@ -1174,8 +1176,8 @@ label_list_end:
 
 
 kml_field_decl:
-| requires_opt decreases_opt assigns_opt ensures_opt behaviors EOF
-    { JPFmethod_spec($1,$2,default_behavior $3 $4 $5) }
+| requires_opt decreases_opt assigns_opt allocates_opt ensures_opt behaviors EOF
+    { JPFmethod_spec($1,$2,default_behavior $3 $4 $5 $6) }
 | INVARIANT ident COLON expr SEMICOLON EOF
     { JPFinvariant($2,$4) }
 | STATIC INVARIANT ident COLON expr SEMICOLON EOF
@@ -1217,16 +1219,18 @@ behaviors:
 ;
 
 behavior:
-| assumes_opt assigns_opt ENSURES expr SEMICOLON
+| assumes_opt assigns_opt allocates_opt ENSURES expr SEMICOLON
     { { java_pbehavior_assumes = $1;
 	java_pbehavior_assigns = $2;
+	java_pbehavior_allocates = $3;
 	java_pbehavior_throws = None;
-	java_pbehavior_ensures = $4 } }
-| assumes_opt assigns_opt SIGNALS LEFTPAR name ident_option RIGHTPAR expr SEMICOLON
+	java_pbehavior_ensures = $5 } }
+| assumes_opt assigns_opt allocates_opt SIGNALS LEFTPAR name ident_option RIGHTPAR expr SEMICOLON
     { { java_pbehavior_assumes = $1;
 	java_pbehavior_assigns = $2;
-	java_pbehavior_throws = Some($5,$6);
-	java_pbehavior_ensures = $8 } }
+	java_pbehavior_allocates = $3;
+	java_pbehavior_throws = Some($6,$7);
+	java_pbehavior_ensures = $9 } }
 | error
 	{ raise (Java_options.Java_error (loc(),"`ensures' expected")) }
 ;
@@ -1252,6 +1256,15 @@ assigns_opt:
 | ASSIGNS BSNOTHING SEMICOLON
     { Some (loc_i 2,[]) }
 | ASSIGNS expr_comma_list SEMICOLON
+    { Some (loc_i 2,$2) }
+;
+
+allocates_opt:
+| /* $\varepsilon$ */
+    { None }
+| ALLOCATES BSNOTHING SEMICOLON
+    { Some (loc_i 2,[]) }
+| ALLOCATES expr_comma_list SEMICOLON
     { Some (loc_i 2,$2) }
 ;
 
@@ -1282,8 +1295,8 @@ kml_statement_annot:
     { JPSghost_local_decls($2) }
 | GHOST expr SEMICOLON EOF
     { JPSghost_statement($2) }
-| requires_opt decreases_opt assigns_opt ensures_opt behaviors EOF
-    { JPSstatement_spec($1,$2,default_behavior $3 $4 $5) }
+| requires_opt decreases_opt assigns_opt allocates_opt ensures_opt behaviors EOF
+    { JPSstatement_spec($1,$2,default_behavior $3 $4 $5 $6) }
 ;
 
 beh_loop_inv:

@@ -3262,6 +3262,10 @@ let behavior env pre_state_env post_state_env (id, b) =
      (fun (loc,l) ->
         (loc,List.map (location ((*add_Post*) { env with env = ensures_env })) l))
      b.java_pbehavior_assigns,
+   Option_misc.map
+     (fun (loc,l) ->
+        (loc,List.map (location ((*add_Post*) { env with env = ensures_env })) l))
+     b.java_pbehavior_allocates,
    assertion (add_Old {env with env = ensures_env})
      b.java_pbehavior_ensures)
 
@@ -3670,7 +3674,7 @@ let type_method_spec_and_body ?(dobody=true) package_env ti mi =
     let env =
       { env with
 	  behavior_names =
-	  List.map (fun (id,_,_,_,_) -> snd id,id) behs }
+	  List.map (fun (id,_,_,_,_,_) -> snd id,id) behs }
     in
     let body =
       if dobody then
@@ -3692,6 +3696,7 @@ type constructor_table_info =
       ct_behaviors : (Java_ast.identifier *
                         Java_tast.assertion option *
                         Java_env.java_class_info option *
+                        (Loc.position * Java_tast.term list) option *
                         (Loc.position * Java_tast.term list) option *
                         Java_tast.assertion) list ;
       ct_body : Java_tast.block;
@@ -3762,7 +3767,7 @@ let type_constr_spec_and_body ?(dobody=true) package_env current_type ci =
     let env =
       { env with
 	  behavior_names =
-	  List.map (fun (id,_,_,_,_) -> snd id,id) behs }
+	  List.map (fun (id,_,_,_,_,_) -> snd id,id) behs }
     in
     match eci with
       | Invoke_none ->

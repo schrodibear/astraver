@@ -669,6 +669,7 @@ module PDecl :
       ?assumes:pexpr ->
       ?requires:pexpr ->
       ?assigns:Loc.position * pexpr list ->
+      ?allocates:Loc.position * pexpr list ->
       ?ensures:pexpr -> unit -> pexpr pbehavior
 
     val mkrequires_clause : 'a -> 'a clause
@@ -682,6 +683,7 @@ module PDecl :
       ?assumes:pexpr ->
       ?requires:pexpr ->
       ?assigns:Loc.position * pexpr list ->
+      ?allocates:Loc.position * pexpr list ->
       ?ensures:pexpr -> unit -> pexpr clause
 
 (*

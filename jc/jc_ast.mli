@@ -156,8 +156,9 @@ and ppattern = ppattern_node node_positioned
 
 type 'expr pbehavior =
     Loc.position * string * identifier option * 'expr option
-    * 'expr option * (Loc.position * 'expr list) option * 'expr
-      (*r loc, name, throws, assumes,requires,assigns,ensures *)
+    * 'expr option * (Loc.position * 'expr list) option * 
+    (Loc.position * 'expr list) option * 'expr
+      (*r loc, name, throws, assumes,requires,assigns,allocates, ensures *)
 
 and 'expr loopbehavior =
     identifier list
@@ -253,13 +254,13 @@ type 'expr decl_node =
       * (identifier * string * 'expr) list (* invariants *)
   | JCDvariant_type of string * identifier list
   | JCDunion_type of string * bool * identifier list
-      (* name, discriminated, structure names *)
+    (* name, discriminated, structure names *)
   | JCDenum_type of string * Num.num * Num.num
   | JCDlogic_type of string * string list
   | JCDlemma of string * bool * string list * label list * 'expr
-      (* 2nd arg is true if it is an axiom *)
+    (* 2nd arg is true if it is an axiom *)
   | JCDexception of string * ptype option
-  (* logic functions and predicates (return type: None if predicate) *)
+    (* logic functions and predicates (return type: None if predicate) *)
   | JCDlogic of ptype option * string * string list * label list * (ptype * string) list
       * 'expr reads_or_expr
   | JCDlogic_var of ptype * string * 'expr option
@@ -491,6 +492,7 @@ type 'li behavior =
       jc_behavior_throws : exception_info option ;
       jc_behavior_assumes : 'li assertion option ;
       jc_behavior_assigns : (Loc.position * 'li location list) option ;
+      jc_behavior_allocates : (Loc.position * 'li location list) option ;
       mutable jc_behavior_ensures : 'li assertion;
       (* "free" postcondition, proved by static analysis. It can be used
 	 as the postcondition of a call without being checked in the function

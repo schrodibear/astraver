@@ -1595,7 +1595,7 @@ let loop_annot annot =
   let v = variant annot.loop_var in
   ([new identifier "default"],Some invariant,None)::behs_inv, v
 
-let behavior (id,assumes,throws,assigns,ensures) =
+let behavior (id,assumes,throws,assigns,allocates,ensures) =
   mkbehavior
     ~pos: (fst id)
     ~name: (snd id)
@@ -1611,6 +1611,14 @@ let behavior (id,assumes,throws,assigns,ensures) =
             ~locations:(List.map (location (Some LabelPre)) a)
             ())
        assigns)
+    ?allocates:
+    (Option_misc.map
+       (fun (pos,a) ->
+          mkassigns
+            ~pos
+            ~locations:(List.map (location (Some LabelHere)) a)
+            ())
+       allocates)
     ?assumes: (Option_misc.map assertion assumes)
     ~ensures: (reg_assertion ensures)
     ()

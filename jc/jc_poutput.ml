@@ -290,7 +290,7 @@ and case fmt (c,sl) =
   in
   fprintf fmt "%a%a" (print_list nothing onecase) c pexpr sl
 
-and behavior fmt (_loc,id,throws,assumes,requires,assigns,ensures) =
+and behavior fmt (_loc,id,throws,assumes,requires,assigns,allocates,ensures) =
   fprintf fmt "@\n@[<v 2>behavior %s:" id;
   Option_misc.iter
     (fun a ->
@@ -304,6 +304,10 @@ and behavior fmt (_loc,id,throws,assumes,requires,assigns,ensures) =
     (fun (_,locs) -> fprintf fmt "@\nassigns %a;"
        (print_list_or_default "\\nothing" comma pexpr) locs)
     assigns;
+  Option_misc.iter
+    (fun (_,locs) -> fprintf fmt "@\nallocates %a;"
+       (print_list_or_default "\\nothing" comma pexpr) locs)
+    allocates;
   fprintf fmt "@\nensures %a;@]" pexpr ensures
 
 and loop_behavior fmt (ids,inv,ass) =

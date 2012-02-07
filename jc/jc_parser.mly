@@ -109,8 +109,8 @@
 /* integer boolean real double unit void rep */
 %token INTEGER BOOLEAN REAL DOUBLE FLOAT UNIT REP
 
-/* assigns assumes behavior ensures requires decreases throws reads */
-%token ASSIGNS ASSUMES BEHAVIOR ENSURES REQUIRES DECREASES THROWS READS
+/* assigns allocates assumes behavior ensures requires decreases throws reads */
+%token ASSIGNS ALLOCATES ASSUMES BEHAVIOR ENSURES REQUIRES DECREASES THROWS READS
 
 /* \forall \exists \offset_max \offset_min \address \old \result \mutable \typeof \bottom \typeeq \absolute_address */
 %token BSFORALL BSEXISTS BSOFFSET_MAX BSOFFSET_MIN BSADDRESS BSOLD BSAT BSFRESH
@@ -457,8 +457,8 @@ spec_clause:
 
 behavior:
 | BEHAVIOR ident_or_default COLON throws assumes requires assigns_opt
-  ENSURES expression SEMICOLON
-    { (pos_i 2,$2,$4,$5,$6,$7,$9) }
+  allocates_opt ENSURES expression SEMICOLON
+    { (pos_i 2,$2,$4,$5,$6,$7,$8,$10) }
 ;
 
 ident_or_default:
@@ -497,6 +497,20 @@ assigns:
 | ASSIGNS argument_expression_list SEMICOLON
     { Some(pos_i 2,$2) }
 | ASSIGNS BSNOTHING SEMICOLON
+    { Some (pos_i 2,[]) }
+;
+
+allocates_opt:
+| /* epsilon */
+    { None }
+| allocates
+    { $1 }
+;
+
+allocates:
+| ALLOCATES argument_expression_list SEMICOLON
+    { Some(pos_i 2,$2) }
+| ALLOCATES BSNOTHING SEMICOLON
     { Some (pos_i 2,[]) }
 ;
 

@@ -774,6 +774,7 @@ let default_behavior = {
   jc_behavior_throws = None;
   jc_behavior_assumes = None;
   jc_behavior_assigns = None;
+  jc_behavior_allocates = None;
   jc_behavior_ensures = new assertion JCAtrue;
   jc_behavior_free_ensures = new assertion JCAtrue;
 }

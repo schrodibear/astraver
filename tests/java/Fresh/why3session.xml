@@ -5,62 +5,26 @@
  <prover
   id="alt-ergo"
   name="Alt-Ergo"
-  version="0.93"/>
- <prover
-  id="alt-ergo-0.93.1"
-  name="Alt-Ergo"
-  version="0.93.1"/>
+  version="0.94"/>
  <prover
   id="coq"
   name="Coq"
-  version="8.3pl2"/>
+  version="8.2pl2"/>
  <prover
   id="cvc3"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="cvc3-2.4"
-  name="CVC3"
-  version="2.4.1"/>
- <prover
-  id="eprover"
-  name="Eprover"
-  version="1.4 Namring"/>
- <prover
   id="gappa"
   name="Gappa"
-  version="0.15.1"/>
- <prover
-  id="simplify"
-  name="Simplify"
-  version="1.5.4"/>
- <prover
-  id="spass"
-  name="Spass"
-  version="3.7"/>
- <prover
-  id="vampire"
-  name="Vampire"
-  version="0.6"/>
- <prover
-  id="verit"
-  name="veriT"
-  version="dev"/>
- <prover
-  id="yices"
-  name="Yices"
-  version="1.0.25"/>
+  version="0.16.0"/>
  <prover
   id="z3"
   name="Z3"
   version="2.19"/>
- <prover
-  id="z3-3"
-  name="Z3"
-  version="3.2"/>
  <file
   name="../Fresh.mlw"
-  verified="true"
+  verified="false"
   expanded="true">
   <theory
    name="Jessie_model"
@@ -69,27 +33,27 @@
   </theory>
   <theory
    name="WP Jessie_program"
-   verified="true"
+   verified="false"
    expanded="true">
    <goal
     name="WP_parameter cons_Fresh_ensures_default"
     expl="assertion"
-    sum="e131b0b5630ea08ac76ff25940f39131"
-    proved="true"
+    sum="35d2e8f283a4c4cfb6037490e18e8dbd"
+    proved="false"
     expanded="true"
-    shape="ainfix =V0V2NIavalidV1V2NFIavalid_struct_FreshV0c0c0V1FF">
+    shape="ainfix =V0V2NFIavalid_struct_FreshV0c0c0V1FF">
     <proof
      prover="z3-3"
      timelimit="5"
      edited=""
-     obsolete="false">
+     obsolete="true">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="alt-ergo-0.93.1"
      timelimit="5"
      edited=""
-     obsolete="false">
+     obsolete="true">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
@@ -97,34 +61,34 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="unknown" time="1.86"/>
     </proof>
     <proof
      prover="alt-ergo"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.03"/>
+     <result status="unknown" time="0.04"/>
     </proof>
     <proof
      prover="z3"
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.04"/>
+     <result status="timeout" time="5.63"/>
     </proof>
     <proof
      prover="cvc3-2.4"
      timelimit="5"
      edited=""
-     obsolete="false">
+     obsolete="true">
      <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Fresh_safety"
     expl="Constructor of class Fresh, Safety"
-    sum="fac9ed97da07ab28af69981a15c66d3f"
+    sum="5f97393f7237fb0b149762a26bc75a93"
     proved="true"
     expanded="true"
     shape="t">
@@ -132,14 +96,14 @@
      prover="z3-3"
      timelimit="5"
      edited=""
-     obsolete="false">
+     obsolete="true">
      <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="alt-ergo-0.93.1"
      timelimit="5"
      edited=""
-     obsolete="false">
+     obsolete="true">
      <result status="valid" time="0.01"/>
     </proof>
     <proof
@@ -147,7 +111,7 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -161,20 +125,20 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="cvc3-2.4"
      timelimit="5"
      edited=""
-     obsolete="false">
+     obsolete="true">
      <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
     expl="Constructor of class Object, default behavior"
-    sum="201de74cd76493d8f9048215ddcaa26e"
+    sum="3b51b0fffc55192224c82d3eb3b05ca1"
     proved="true"
     expanded="true"
     shape="t">
@@ -182,14 +146,14 @@
      prover="z3-3"
      timelimit="5"
      edited=""
-     obsolete="false">
+     obsolete="true">
      <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="alt-ergo-0.93.1"
      timelimit="5"
      edited=""
-     obsolete="false">
+     obsolete="true">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
@@ -197,7 +161,57 @@
      timelimit="5"
      edited=""
      obsolete="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="alt-ergo"
+     timelimit="5"
+     edited=""
+     obsolete="false">
      <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="z3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="cvc3-2.4"
+     timelimit="5"
+     edited=""
+     obsolete="true">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Object_safety"
+    expl="Constructor of class Object, Safety"
+    sum="1f3ce4ee0a4922d3fbf32624ea4ac388"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <proof
+     prover="z3-3"
+     timelimit="5"
+     edited=""
+     obsolete="true">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="alt-ergo-0.93.1"
+     timelimit="5"
+     edited=""
+     obsolete="true">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="cvc3"
+     timelimit="5"
+     edited=""
+     obsolete="false">
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="alt-ergo"
@@ -211,63 +225,13 @@
      timelimit="5"
      edited=""
      obsolete="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="cvc3-2.4"
      timelimit="5"
      edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Object_safety"
-    expl="Constructor of class Object, Safety"
-    sum="a4215c8d39a3b6287342bcc910687fab"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <proof
-     prover="z3-3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="alt-ergo-0.93.1"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="cvc3-2.4"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="true">
      <result status="valid" time="0.02"/>
     </proof>
    </goal>

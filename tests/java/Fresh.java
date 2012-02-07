@@ -3,6 +3,7 @@
 class Fresh {
 
     /*@ allocates \result;
+      @ ensures \fresh(\result);
       @*/
     static Fresh create();
 
