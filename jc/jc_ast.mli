@@ -408,6 +408,7 @@ and 'li tag_node =
 
 class type ['node] c_location =
 object
+  inherit typed
   inherit regioned
   inherit labeled
   inherit ['node] node_positioned

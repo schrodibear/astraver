@@ -826,11 +826,13 @@ let rec fold_behavior ft fa fl fls acc e =
     fold_term fold_term_and_assertion fold_location fold_location_set
     ft fa fl fls acc e
 
+(*
 let rec fold_rec_behavior ft fa fl fls acc e =
   fold_sub_behavior
     fold_rec_term fold_rec_term_and_assertion fold_rec_location
     fold_rec_location_set
     ft fa fl fls acc e 
+*)
 
 (*
 let iter_behavior ft fa fl fls b =

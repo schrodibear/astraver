@@ -1556,6 +1556,7 @@ let rec location_set env e =
   let locs =
     new location_set
       ~pos: e#pos
+      ~typ:ty
       ~region:r
       ?label: e#label
       locs_node
@@ -1603,6 +1604,7 @@ let rec location env e =
   let loc =
     new location
       ~pos: e#pos
+      ~typ:ty
       ~region:r
       ?label: e#label
       loc_node

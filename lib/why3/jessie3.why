@@ -513,7 +513,7 @@ axiom lsr_of_lsl_identity_on_positive:
 predicate alloc_extends (alloc_table 't) (alloc_table 't)
 
 predicate alloc_fresh (a:alloc_table 't) (p:pointer 't) (n:int) =
-  forall i:int. 0 <= i /\ i < n -> not valid a (shift p i)
+  forall i:int. 0 <= i < n -> not valid a (shift p i)
 
 axiom alloc_extends_offset_min:
   forall a1:alloc_table 't. forall a2:alloc_table 't [alloc_extends a1 a2].

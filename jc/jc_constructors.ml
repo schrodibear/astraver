@@ -144,37 +144,39 @@ class term_var ?(pos = Loc.dummy_position) ?(mark="") v =
   term ~pos ~typ:v.jc_var_info_type ~mark ~region:v.jc_var_info_region
     (JCTvar v)
 
-class location ?(pos = Loc.dummy_position) ?label ?region node =
+class location ?(pos = Loc.dummy_position) ~typ ?label ?region node =
   let region = 
     match region with None -> dummy_region | Some region -> region 
   in
 object
+  inherit typed typ
   inherit regioned region
   inherit labeled label
   inherit [location_node] node_positioned ~pos node
 end
 
 (* ignore argument's label *)
-class location_with ?pos ?label ?region ~node t =
+class location_with ?pos ~typ ?label ?region ~node t =
   let pos = match pos with None -> t#pos | Some pos -> pos in
   let region = match region with None -> t#region | Some region -> region in
-  location ~pos ?label ~region node
+  location ~pos ~typ ?label ~region node
 
-class location_set ?(pos = Loc.dummy_position) ?label ?region node =
+class location_set ?(pos = Loc.dummy_position) ~typ ?label ?region node =
   let region = 
     match region with None -> dummy_region | Some region -> region 
   in
 object
+  inherit typed typ
   inherit regioned region
   inherit labeled label
   inherit [location_set_node] node_positioned ~pos node
 end
 
 (* ignore argument's label *)
-class location_set_with ?pos ?label ?region ~node t =
+class location_set_with ?pos ~typ ?label ?region ~node t =
   let pos = match pos with None -> t#pos | Some pos -> pos in
   let region = match region with None -> t#region | Some region -> region in
-  location_set ~pos ?label ~region node
+  location_set ~pos ~typ ?label ~region node
 
 class expr ?(pos = Loc.dummy_position) ~typ ?(mark="") ?region
   ?original_type node =

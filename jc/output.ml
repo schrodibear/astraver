@@ -412,6 +412,8 @@ let is_why3_local id = Hashtbl.mem why3_locals id
 
 let add_why3_local id = Hashtbl.add why3_locals id ()
 
+let () = add_why3_local "result"
+
 let remove_why3_local id = Hashtbl.remove why3_locals id 
 
 let rec fprintf_term form t =

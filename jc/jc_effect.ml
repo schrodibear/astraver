@@ -909,7 +909,7 @@ let rec location_of_expr e =
 	  JCLderef(location_set_of_expr e1, LabelHere, fi, e#region)
       | _ -> failwith "No location for expr"
     in
-    Some(new location_with ~node:loc_node e)
+    Some(new location_with ~typ:e#typ ~node:loc_node e)
   with Failure "No location for expr" -> None
 
 and location_set_of_expr e =
@@ -923,7 +923,7 @@ and location_set_of_expr e =
 	JCLSrange(location_set_of_expr e1, t2_opt, t2_opt)
     | _ -> failwith "No location for expr"
   in
-  new location_set_with ~node:locs_node e
+  new location_set_with ~typ:e#typ ~node:locs_node e
 
 let location_set_of_expr e =
   try Some(location_set_of_expr e) with Failure "No location for expr" -> None
@@ -941,7 +941,7 @@ let rec location_of_term t =
              | Some l1 -> JCLat(l1,lab))
       | _ -> failwith "No location for term"
     in
-    Some(new location_with ~node t)
+    Some(new location_with ~typ:t#typ ~node t)
   with Failure "No location for term" -> None
 
 and location_set_of_term t =
@@ -953,7 +953,7 @@ and location_set_of_term t =
     | JCTat (t1,lab) -> JCLSat(location_set_of_term t1,lab)
     | _ -> failwith "No location for term"
   in
-  new location_set_with ~node:locs_node t
+  new location_set_with ~typ:t#typ ~node:locs_node t
 
 
 (* last location can be mutated *)
@@ -1164,31 +1164,43 @@ let single_assertion fef a =
   let cont,ef = single_assertion fef.jc_reads a in
   cont,{ fef with jc_reads = ef }
 
-let single_location ~in_assigns fef loc =
+type assign_alloc_clause = Assigns | Allocates | Reads
+
+let single_location ~in_clause fef (loc : Jc_fenv.logic_info Jc_ast.location) =
   let lab =
     match loc#label with None -> LabelHere | Some lab -> lab
   in
   let fef = match loc#node with
     | JCLvar v ->
+(*
 	if v.jc_var_info_assigned then
 	  if v.jc_var_info_static then
-	    if in_assigns then
-	      add_global_writes lab fef v
-	    else
-	      add_global_reads lab fef v
+*)
+      begin
+	    match in_clause with
+              | Assigns -> add_global_writes lab fef v
+              | Allocates -> 
+                let ac = lderef_alloc_class ~type_safe:true loc in
+	        add_alloc_writes lab fef (ac,loc#region)
+	      | Reads -> add_global_reads lab fef v
+      end
+(*
 	  else fef
 	else fef
+*)
     | JCLderef(locs,lab,fi,_r) ->
 	let add_mem ~only_writes fef mc =
-	  if in_assigns then
-	    let fef = add_memory_writes lab fef (mc,locs#region) in
-	    if only_writes then fef else
+	  match in_clause with
+            | Assigns ->
+	      let fef = add_memory_writes lab fef (mc,locs#region) in
+	      if only_writes then fef else
 	      (* Add effect on allocation table for [not_assigns] predicate *)
-	      let ac = alloc_class_of_mem_class mc in
-	      add_alloc_reads lab fef (ac,locs#region)
-	  else
-	    if only_writes then fef else
-	      add_memory_reads lab fef (mc,locs#region)
+	        let ac = alloc_class_of_mem_class mc in
+	        add_alloc_reads lab fef (ac,locs#region)
+            | Allocates -> assert false
+            | Reads ->
+	      if only_writes then fef else
+	        add_memory_reads lab fef (mc,locs#region)
 	in
 	let mc,ufi_opt = lderef_mem_class ~type_safe:true locs fi in
 	let fef = add_mem ~only_writes:false fef mc in
@@ -1202,15 +1214,17 @@ let single_location ~in_assigns fef loc =
 	end
     | JCLderef_term(t1,fi) ->
 	let add_mem ~only_writes fef mc =
-	  if in_assigns then
-	    let fef = add_memory_writes lab fef (mc,t1#region) in
-	    if only_writes then fef else
+	  match in_clause with
+            | Assigns ->
+	      let fef = add_memory_writes lab fef (mc,t1#region) in
+	      if only_writes then fef else
 	      (* Add effect on allocation table for [not_assigns] predicate *)
-	      let ac = alloc_class_of_mem_class mc in
-	      add_alloc_reads lab fef (ac,t1#region)
-	  else
-	    if only_writes then fef else
-	      add_memory_reads lab fef (mc,t1#region)
+	        let ac = alloc_class_of_mem_class mc in
+	        add_alloc_reads lab fef (ac,t1#region)
+            | Allocates -> assert false
+	    | Reads ->
+	        if only_writes then fef else
+	          add_memory_reads lab fef (mc,t1#region)
 	in
 	let mc,ufi_opt = tderef_mem_class ~type_safe:true t1 fi in
 	let fef = add_mem ~only_writes:false fef mc in
@@ -1245,9 +1259,9 @@ let rec single_location_set fef locs =
     | JCLSat(locs,_) -> snd (single_location_set fef locs)
   in true, fef
 
-let location ~in_assigns fef loc =
+let location ~in_clause fef loc =
   Jc_iterators.fold_rec_location single_term
-    (single_location ~in_assigns) single_location_set fef loc
+    (single_location ~in_clause) single_location_set fef loc
 
 
 (******************************************************************************)
@@ -1257,7 +1271,7 @@ let location ~in_assigns fef loc =
 let rec expr fef e =
   Jc_iterators.fold_rec_expr_and_term_and_assertion
     single_term single_assertion
-    (single_location ~in_assigns:true) single_location_set
+    (single_location ~in_clause:Assigns) single_location_set
     (fun (fef : fun_effect) e -> match e#node with
        | JCEvar v ->
 	   true,
@@ -1500,11 +1514,35 @@ let rec expr fef e =
     ) fef e
 
 let behavior fef (_pos,_id,b) =
-  let fef =
-    Jc_iterators.fold_rec_behavior single_term single_assertion
-      (single_location ~in_assigns:true) single_location_set fef b
+  let ita = 
+    Jc_iterators.fold_rec_term_and_assertion single_term single_assertion 
   in
+  let itl = 
+    Jc_iterators.fold_rec_location single_term
+      (single_location ~in_clause:Assigns) single_location_set
+  in
+  let itl_alloc = 
+    Jc_iterators.fold_rec_location single_term
+      (single_location ~in_clause:Allocates) single_location_set
+  in
+  let fef = Option_misc.fold_left ita fef b.jc_behavior_assumes in
+  let fef =
+    Option_misc.fold_left
+      (fun fef (_,locs) -> List.fold_left itl fef locs)
+      fef b.jc_behavior_assigns
+  in
+  let fef =
+    Option_misc.fold_left
+      (fun fef (_,locs) -> 
+        List.fold_left itl_alloc fef locs)
+      fef b.jc_behavior_allocates
+  in
+  let fef = ita fef b.jc_behavior_ensures in
+  let fef = ita fef b.jc_behavior_free_ensures in
   Option_misc.fold_left add_exception_effect fef b.jc_behavior_throws
+
+
+
 
 let spec fef s =
   let fef =
@@ -1513,6 +1551,9 @@ let spec fef s =
   in
   let fef = { fef with jc_reads = assertion fef.jc_reads s.jc_fun_requires } in
   { fef with jc_reads = assertion fef.jc_reads s.jc_fun_free_requires }
+
+
+
 
 (* Type invariant added to precondition for pointer parameters with bounds.
    Therefore, add allocation table to reads. *)
@@ -1610,7 +1651,7 @@ let logic_fun_effects f =
     | JCReads loclist ->
 	List.fold_left
 	  (fun ef loc ->
-	     let fef = location ~in_assigns:false empty_fun_effect loc in
+	     let fef = location ~in_clause:Reads empty_fun_effect loc in
 	     ef_union ef fef.jc_reads
 	  ) ef loclist
   in
