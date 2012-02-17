@@ -39,7 +39,7 @@ extern int getopt (int argc, char *FRAMA_C_STRING const argv[],
   @*/
 extern int chdir(const char *FRAMA_C_STRING path);
 
-/*@ requires \valid_range(buf,0,size-1);
+/*@ requires \valid(buf+(0..size-1));
   @ assigns buf[0..size-1];
   @ ensures \result == NULL || \result == buf;
   @*/

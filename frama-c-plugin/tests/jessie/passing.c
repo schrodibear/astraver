@@ -41,7 +41,7 @@ int g2() { g(r); return *r; }
 int g3() { int i = 1; g(&i); return i; }
 #endif
 
-/*@ requires \valid_index(x,0);  assigns x[0];  ensures x[0] == 1; */
+/*@ requires \valid(x);  assigns x[0];  ensures x[0] == 1; */
 void f(int x[]) {
   x[0] = 1;
 }

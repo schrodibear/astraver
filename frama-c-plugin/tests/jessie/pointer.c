@@ -60,7 +60,7 @@ int h() { int z; z = 0; return f(&z) + z; }
 
 int t[5];
 
-//@ requires \valid_index(t,2); ensures \result == 1 ;
+//@ requires \valid(t+2); ensures \result == 1 ;
 int array1() {
   int * p;
   p = &t[2];

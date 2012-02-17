@@ -13,7 +13,7 @@ int stack_push (stack_t *, int);
 int stack_pop (stack_t *, int *);
 
 /*@ predicate stack_initialized (stack_t *s) =
-  @ (0 < s->size) && \valid (s->data) && \valid_range (s->data, 0, s->size);
+  @ (0 < s->size) && \valid (s->data) && \valid(s->data+(0.. s->size));
   @
   @ predicate stack_full (stack_t *s) =
   @ stack_initialized (s) && (s->used == s->size);
@@ -34,8 +34,8 @@ stack_valid (const stack_t *stack)
 }
 
 /*@ requires \valid (stack);
-  @ requires \valid (data);
-  @ requires \valid_range (data, 0, size);
+  @ requires \valid (data); //VP 2012-02-15: Isn't it redundant?
+  @ requires \valid(data+(0..size));
   @ requires 0 < size;
   @ ensures stack_initialized (stack);
   @ ensures stack->used == 0;

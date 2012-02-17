@@ -50,9 +50,9 @@ T_RESULTAT TesterOK (T_RESULTAT* status, T_ID_TEST id_test);
 //@ ghost T_WORD32 __ConsignerPanne_cpt_t0;
 //@ ghost T_WORD32 __ConsignerPanne_cpt_t1;
 
-/*@ requires \valid_range(__TT0_v0, __TT0_cpt, __TT0_cpt+1);
-  @ requires \valid_range(__TT1_v0, __TT1_cpt, __TT1_cpt+1);
-  @ requires \valid_range(__ConsignerPanne_v0, __ConsignerPanne_cpt, __ConsignerPanne_cpt+1);
+/*@ requires \valid(__TT0_v0+(__TT0_cpt..__TT0_cpt+1));
+  @ requires \valid(__TT1_v0+(__TT1_cpt..__TT1_cpt+1));
+  @ requires \valid(__ConsignerPanne_v0+(__ConsignerPanne_cpt..__ConsignerPanne_cpt+1));
   @ ensures f_cond_OK{Here}(__TT0_v0, \old(__TT0_cpt), __ConsignerPanne_cpt_t0)
   @   && f_cond_OK{Here}(__TT1_v0, \old(__TT1_cpt), __ConsignerPanne_cpt_t1)
   @     ==> \result == OK;

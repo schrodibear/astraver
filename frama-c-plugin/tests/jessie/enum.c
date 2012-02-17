@@ -32,7 +32,7 @@ int g(enum E e) { return e; }
 
 typedef enum { BLUE, WHITE, RED } color;
 
-/*@ requires \valid_range(t,0,9);
+/*@ requires \valid(t+(0..9));
   @ ensures t[2] == BLUE || t[2] == WHITE || t[2] == RED ;
   @*/
 void h(color *t) {
@@ -43,7 +43,7 @@ void h(color *t) {
 
 enum I { U, V, W };
 
-/*@ requires \valid_range(t, U, W);
+/*@ requires \valid(t+(U..W));
   @ ensures  t[V] == 0;
   @*/
 void enum_as_array_index(int *t) {

@@ -71,8 +71,8 @@ extern "C"
 
 /*@
 	requires 0 <= length;
-	requires \valid_range (a, 0, length-1);
-	requires \valid_range (b, 0, length-1);
+	requires \valid(a+(0..length-1));
+	requires \valid(b+(0..length-1));
 
 	assigns b[0 .. length-1];
 	//assigns  b[0..\at(\result,Post)];

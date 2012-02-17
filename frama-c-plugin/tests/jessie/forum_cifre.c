@@ -20,7 +20,7 @@ typedef struct {
 } *paquet_t;
 
 /*@ type invariant paquet_bien_forme (paquet_t paquet) =
-  @      \valid_range (paquet->message, 0, paquet->longueur - 1)
+  @      \valid (paquet->message+(0..paquet->longueur - 1))
   @          // le message est bien alloué dans la mémoire
   @   && valid_string(paquet->message)
   @          // le message est une chaîne de caractères
@@ -44,7 +44,7 @@ char* strncpy (char* destination, const char* source, unsigned taille)
   return destination;
 }
 
-/*@ requires \valid(paquet) && \valid_range(destination, 0, taille - 1);
+/*@ requires \valid(paquet) && \valid(destination+(0..taille - 1));
   @ behavior echec:
   @   assumes taille < paquet->longueur;
   @   assigns \nothing;

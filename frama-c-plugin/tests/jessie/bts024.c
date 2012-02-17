@@ -46,7 +46,7 @@ static struct _alloc a = { 0, cellNil, 0 };
     behavior nonEmpty:
 	assumes a.userCnt < cellMax;
 	ensures a.userCnt == \old(a.userCnt) + 1;
-	ensures \valid_range(\result,0,cellWd-1);
+	ensures \valid(\result+(0..cellWd-1));
 */
 int *allocCells(void)
 {

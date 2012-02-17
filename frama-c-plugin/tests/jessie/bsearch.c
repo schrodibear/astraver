@@ -4,7 +4,7 @@
   @    \forall integer i,j; a <= i <= j <= b ==> t[i] <= t[j];
   @*/
 
-/*@ requires n >= 0 && \valid_range(t,0,n-1);
+/*@ requires n >= 0 && \valid(t+(0..n-1));
   @ ensures -1 <= \result < n;
   @ behavior success:
   @   ensures \result >= 0 ==> t[\result] == v;

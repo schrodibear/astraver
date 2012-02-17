@@ -12,7 +12,7 @@ void swap(int t[], int i, int j) {
   t[j] = tmp;
 }
     
-/*@ requires \valid_range(t,0,n-1);
+/*@ requires \valid(t+(0..n-1));
   @ behavior sorted:
   @   ensures Sorted(t,0,n-1);
   @ behavior permutation:

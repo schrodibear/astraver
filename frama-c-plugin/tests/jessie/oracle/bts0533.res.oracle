@@ -1746,11 +1746,11 @@ text = ""/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0533_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "33" begin = "23" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "33" begin = "23" end = "50"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0533_po7.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "33" begin = "23" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "33" begin = "23" end = "50"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0533_po8.why">
@@ -1770,11 +1770,11 @@ text = ""/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0533_po12.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "33" begin = "23" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "33" begin = "23" end = "50"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0533_po13.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "33" begin = "23" end = "55"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "33" begin = "23" end = "50"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>

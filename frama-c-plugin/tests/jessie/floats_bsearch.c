@@ -6,7 +6,7 @@
   @    \forall integer i,j; a <= i <= j <= b ==> \le_float(t[i],t[j]);
   @*/
 
-/*@ requires n >= 0 && \valid_range(t,0,n-1);
+/*@ requires n >= 0 && \valid(t+(0..n-1));
   @ requires ! \is_NaN(v);
   @ requires \forall integer i; 0 <= i <= n-1 ==> ! \is_NaN(t[i]);
   @ ensures -1 <= \result < n;

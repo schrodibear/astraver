@@ -2,7 +2,7 @@
   @  logic int permut_size{Here}(int *arr) reads arr[0..];
   @  axiom permut_valid{Here}:
   @    \forall int *arr; 
-  @      0 <= permut_size(arr) ==> \valid_range(arr,0,permut_size(arr));
+  @      0 <= permut_size(arr) ==> \valid(arr+(0..permut_size(arr)));
   @  axiom permut_bound{Here}:
   @    \forall integer i; \forall int *arr; 
   @      0 <= i <= permut_size(arr) ==> 0 <= arr[i] <= permut_size(arr);

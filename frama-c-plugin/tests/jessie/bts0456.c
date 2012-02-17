@@ -3,7 +3,7 @@
 /*@
  requires n>0;
  assigns \nothing;
- ensures \valid_range(\result,0,n-1);
+ ensures \valid(\result+(0..n-1));
 */
 double *vecallocd(int n);
 
@@ -13,9 +13,9 @@ double *vecallocd(int n);
 void vecfreed(double *pd);
 
 /*@
- requires (0<n) && \valid_range(my_bodies,0,n-1);
+ requires (0<n) && \valid(my_bodies+(0..n-1));
  assigns \nothing;
- ensures \valid_range(\result,0,n-1);
+ ensures \valid(\result+(0..n-1));
 */
 value_type *cast_double_star(double *my_bodies, int n);
 
@@ -62,7 +62,7 @@ int nloc(int p, int s, int n)
 } /* end nloc */
 
 /*@
- requires p==bsp_p && 0<=s<bsp_p && (bsp_p<n) && \valid_range(x,0,nloc(p,s,n)-1) && \valid_range(y,0,nloc(p,s,n)-1);
+ requires p==bsp_p && 0<=s<bsp_p && (bsp_p<n) && \valid(x+(0..nloc(p,s,n)-1)) && \valid(y+(0..nloc(p,s,n)-1));
  assigns \nothing;
 */
 double bspip(int p, int s, int n, double *x, double *y)
@@ -150,7 +150,7 @@ void bspinprod(int n){
 int atoi(char* arg);
 
 /*@
-requires argc==1 && \valid_range(argv,0,1);
+requires argc==1 && \valid(argv+(0..1));
 assigns \nothing;
 */
 int main(int argc, char **argv){

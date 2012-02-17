@@ -1,6 +1,6 @@
 # pragma JessieIntegerModel(exact)
 
-/*@ requires n >= 0 && \valid_range(t,0,n-1);
+/*@ requires n >= 0 && \valid(t+(0..n-1));
   @ assigns t[0..n-1];
   @ ensures \forall integer k; 0 <= k < n ==> t[k] == -\old(t[k]);
   @*/

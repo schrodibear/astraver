@@ -5,7 +5,7 @@
 /*@ lemma mean_1 : \forall integer x, y; x <= y ==> x <= x+(y-x)/2 <= y; */
 
 /*@ requires
-  @   n >= 0 && \valid_range(t,0,n-1) &&
+  @   n >= 0 && \valid(t+(0..n-1)) &&
   @   \forall integer k1, integer k2; 0 <= k1 <= k2 <= n-1 ==> t[k1] <= t[k2];
   @ ensures
   @   (\result >= 0 && t[\result] == v) ||

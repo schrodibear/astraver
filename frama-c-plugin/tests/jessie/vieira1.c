@@ -34,7 +34,7 @@
  */
 
 /*@ requires
-  @   \valid_range(a,0,n) &&  \valid_range(b,0,n) &&
+  @   \valid(a+(0..n)) &&  \valid(b+(0..n)) &&
   @	  n>0 && 0<=i<n;
   @ ensures b[i] == a[i]+ 1;
   @*/

@@ -1,5 +1,5 @@
 /*@
-  @requires \valid_range(first, 0, last-first -1) 
+  @requires \valid(first+(0..last-first -1)) 
   @      && first <= last && \base_addr(first) == \base_addr(last);
   @behavior is_not_empty:
   @  ensures \forall integer i;

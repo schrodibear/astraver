@@ -6,8 +6,8 @@
  requires last > first;
  requires disjoint_arrays(first, result, last-first); 
  
- requires \valid_range  (first, 0, last-first-1);
- requires \valid_range  (result, 0, last-first-1);
+ requires \valid(first+(0..last-first-1));
+ requires \valid(result+(0..last-first-1));
  ensures  \forall integer i; 0 <= i < last-first ==> result[i] == first[i];  
 */
  

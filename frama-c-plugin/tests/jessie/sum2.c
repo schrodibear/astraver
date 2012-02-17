@@ -40,7 +40,7 @@
   @ }
   @*/
 
-/*@ requires n >= 1 && \valid_range(t,0,n-1) ;
+/*@ requires n >= 1 && \valid(t+(0..n-1)) ;
   @ ensures \result == sum(t,0,n);
   @*/
 int test1(int t[],int n) {
@@ -57,7 +57,7 @@ int test1(int t[],int n) {
 }
 
 
-/*@ requires n >= 1 && \valid_range(t,0,n-1);
+/*@ requires n >= 1 && \valid(t+(0..n-1));
   @ assigns t[..];
   @ ensures sum(t,0,n) == \old(sum(t,0,n))+n;
   @*/

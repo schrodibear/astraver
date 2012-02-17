@@ -39,13 +39,13 @@
   @*/
 
 /*@ predicate valid_string{L}(char *s) =
-  @   0 <= strlen(s) && \valid_range(s,0,strlen(s));
+  @   0 <= strlen(s) && \valid(s+(0..strlen(s)));
   @
   @ predicate valid_string_or_null{L}(char *s) =
   @   s == NULL || valid_string(s);
   @
   @ predicate valid_wstring{L}(wchar_t *s) =
-  @   0 <= wcslen(s) && \valid_range(s,0,wcslen(s));
+  @   0 <= wcslen(s) && \valid(s+(0..wcslen(s)));
   @
   @ predicate valid_wstring_or_null{L}(wchar_t *s) =
   @   s == NULL || valid_wstring(s);

@@ -11,8 +11,8 @@ Status: cannot reproduce
  requires 0 <= length_b;
 
 
- requires \valid_range (a, 0, length_a-1);
- requires \valid_range (b, 0, length_b-1);
+ requires \valid(a+ (0..length_a-1));
+ requires \valid(b+ (0..length_b-1));
  
  assigns \nothing;
 

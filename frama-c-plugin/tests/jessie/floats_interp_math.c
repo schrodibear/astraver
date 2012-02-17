@@ -4,9 +4,9 @@
 //@ ghost int i_f;
 
 /*@ requires 3 <= n <= 17;
-    requires \valid_range(X,0,n);
-    requires \valid_range(Y,0,n);
-    requires \valid_range(V,0,n);
+    requires \valid(X+(0..n));
+    requires \valid(Y+(0..n));
+    requires \valid(V+(0..n));
 
     requires X[0] == X[1];
     requires \forall integer k1, int k2; 1 <= k1 < k2 <= n ==> X[k1] < X[k2];

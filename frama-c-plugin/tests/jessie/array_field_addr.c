@@ -10,7 +10,7 @@ void g(int* i) {
   *i = 1;
 }
 
-/*@ requires \valid(a) && \valid_range(a->tab,0,4); */
+/*@ requires \valid(a) && \valid(a->tab+(0..4)); */
 void f(struct t* a) {
   g (&a->tab[0]);
   //@ assert a->tab[0] == 1;

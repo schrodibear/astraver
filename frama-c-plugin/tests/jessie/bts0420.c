@@ -23,7 +23,7 @@ Status: fixed
 	e{L1}(a,b) && p{L1,L2}(a) && e{L2}(a,b) ==> p{L1,L2}(b);
 */
 
-//@ requires \valid_range(a,0,9) && \valid_range(b,0,9);
+//@ requires \valid(a+(0..9)) && \valid(b+(0..9));
 void ftest(int *a,int *b) {
 L1:
     // ensure mem state at L2 cant be expressed in terms of that at L1:

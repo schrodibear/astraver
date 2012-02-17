@@ -17,7 +17,7 @@
   @ }
   @*/
 
-/*@ requires 0 <= n && \valid_range(a,0,n-1);
+/*@ requires 0 <= n && \valid(a+(0..n-1));
   @ ensures \result == nb_occ(a,0,n-1,d);
   @*/
 int count(long *a, int n, long d) {

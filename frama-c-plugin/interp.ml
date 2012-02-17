@@ -1138,25 +1138,6 @@ and pred p =
 
     | Pat(p,lab) -> JCPEat(pred p,logic_label lab)
 
-    | Pvalid_index(t1,t2) ->
-        let e1 = term t1 in
-        let e2 = term t2 in
-        let eoffmin = mkexpr (JCPEoffset(Offset_min,e1)) p.loc in
-        let emin = mkexpr (JCPEbinary(eoffmin,`Ble,e2)) p.loc in
-        let eoffmax = mkexpr (JCPEoffset(Offset_max,e1)) p.loc in
-        let emax = mkexpr (JCPEbinary(eoffmax,`Bge,e2)) p.loc in
-        (mkconjunct [emin; emax] p.loc)#node
-
-    | Pvalid_range(t1,t2,t3) ->
-        let e1 = term t1 in
-        let e2 = term t2 in
-        let e3 = term t3 in
-        let eoffmin = mkexpr (JCPEoffset(Offset_min,e1)) p.loc in
-        let emin = mkexpr (JCPEbinary(eoffmin,`Ble,e2)) p.loc in
-        let eoffmax = mkexpr (JCPEoffset(Offset_max,e1)) p.loc in
-        let emax = mkexpr (JCPEbinary(eoffmax,`Bge,e3)) p.loc in
-        (mkconjunct [emin; emax] p.loc)#node
-
     | Pvalid({ term_node = TBinOp(PlusPI,t1,{term_node = Trange (t2,t3)})}) ->
         let e1 = terms t1 in
         let mk_one_pred e1 =
@@ -1437,6 +1418,7 @@ let code_annot pos ((acc_assert_before,contract) as acc) a =
 *)
             | APragma _ -> acc (* just ignored *)
             | AAssigns (_, _) -> acc (* should be handled elsewhere *)
+            | AAllocation _ -> acc (* should be handled elsewhere *)
             | AVariant _ -> acc (* should be handled elsewhere *)
             | AStmtSpec ([],s) -> (* TODO: handle case of for *)
                 begin
@@ -1472,6 +1454,7 @@ let code_annot pos ((acc_assert_before,contract) as acc) a =
                 *)
           | APragma _ -> assert false
           | AAssigns (_, _) -> assert false
+          | AAllocation _ -> assert false
           | AVariant _ -> assert false
           | AStmtSpec _ -> assert false
         end

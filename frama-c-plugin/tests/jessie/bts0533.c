@@ -8,7 +8,7 @@ Alt-Ergo bug, should be fixed in Alt-Ergo 0.92
 
 
 
-/*@ requires \valid_range(array, 0, n - 1);
+/*@ requires \valid(array+(0..n-1));
     requires \forall integer i, j; 0 <= i < j < n ==> array[i] < array[j];
     behavior found:
       assumes \exists integer i; 0 <= i < n && array[i] == key ;
@@ -30,7 +30,7 @@ unsigned int bsearch(int key, int array[], unsigned int n) {
     unsigned int right = n - 1;
     unsigned int diff = right - left;
 
-    /*@ loop invariant \valid_range(array, left, right);
+    /*@ loop invariant \valid(array+(left..right));
         loop invariant left <= right;
         loop invariant diff == right - left;
         loop invariant \forall integer i; 0 <= i <= left ==> array[i] != key ;

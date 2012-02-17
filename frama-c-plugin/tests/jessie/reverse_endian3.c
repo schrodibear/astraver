@@ -11,7 +11,7 @@
   @   \forall integer i; i == 256 * (i / 256) + i % 256;
   @*/
 
-/*@ requires \valid_range(x,0,1);
+/*@ requires \valid(x+(0..1));
   @ ensures x[0] == \old(x[1]) && x[1] == \old(x[0]);
   @*/
 void swap(char *x) {

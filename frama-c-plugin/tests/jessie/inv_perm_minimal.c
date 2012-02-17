@@ -1,5 +1,5 @@
 /*@ requires 
-  @   n >= 1 && \valid_range(t,1,n) &&
+  @   n >= 1 && \valid(t+(1..n)) &&
   @   \forall int k; 1 <= k <= n ==> 1 <= t[k] <= n;
   @*/
 void safety(int *t, int n) {

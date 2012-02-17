@@ -1,6 +1,6 @@
 
 /*@ requires n > 0;
-  @ ensures \valid_range(\result,0,n-1);
+  @ ensures \valid(\result+(0..n-1));
   @*/
 char *f(int n) {
   char *i = (char*) malloc(n);

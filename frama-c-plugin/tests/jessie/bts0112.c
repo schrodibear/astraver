@@ -53,14 +53,14 @@ typedef double fp;
 
 
 /*@ predicate is_exact_int_mat{L} (fp *X, integer LDX, integer N, integer M) =
-  @   \valid_range(X,0,N*LDX+M) && 
+  @   \valid(X+(0..N*LDX+M)) && 
   @   0 <= LDX && 0 <= N && 0 <= M  && M <= LDX  &&
   @   \forall integer i; \forall integer j; 0 <= i < N && 0 <= j < M ==>
   @      \round_error(X[i*LDX+j])==0 && \exists integer v;  X[i*LDX+j]==v; 
 
   @ predicate is_exact_int_mat_bounded_by{L}
   @ (fp *X, integer LDX, integer N, integer M, integer min, integer max) =
-  @   \valid_range(X,0,N*LDX+M) && 
+  @   \valid(X+(0..N*LDX+M)) && 
   @   0 <= LDX && 0 <= N && 0 <= M  && M <= LDX  &&
   @   \forall integer i; \forall integer j; 0 <= i < N && 0 <= j < M ==>
   @      \round_error(X[i*LDX+j])==0 && (\exists integer v;  X[i*LDX+j]==v)
@@ -69,7 +69,7 @@ typedef double fp;
   @ predicate temporary_is_exact_int_mat_bounded_by{L}
   @ (fp *X, integer LDX, integer N, integer M, integer k, 
   @      integer min, integer max) =
-  @   \valid_range(X,0,N*LDX+M) && 
+  @   \valid(X+(0..N*LDX+M)) && 
   @   0 <= LDX && 0 <= N && 0 <= M  && M <= LDX  &&
   @   \forall integer i; \forall integer j; 
   @       ((0 <= i < N && 0 <= j < M) || (i==N && 0 <= j < k)) ==>

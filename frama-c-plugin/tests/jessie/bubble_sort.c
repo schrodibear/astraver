@@ -59,7 +59,7 @@ void swap(int t[], int i, int j, int n) {
  
 /*@
   requires 0 < length;
-  requires \valid_range(a, 0, length-1);
+  requires \valid(a+(0..length-1));
   //assigns a[0..length-1];
   behavior sorted: 
 		ensures sorted(a, 0, length-1);

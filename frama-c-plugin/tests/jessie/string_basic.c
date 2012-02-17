@@ -1,7 +1,7 @@
 
 // ??? #include "jessie_prolog.h"
 
-/*@ requires \valid_index(p,i);
+/*@ requires \valid(p+i);
   @ behavior ok:
   @   assumes p[i] == 0;
   @   ensures \result == 1;

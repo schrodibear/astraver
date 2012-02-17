@@ -34,7 +34,7 @@ char t[] = { 0, 0, 0, 0, 0 } ;
 queue q = { t, 5, 0, 0, 0, 1};
 
 /*@ global invariant q_invariant :
-  @   \valid_range(q.contents, 0, q.length-1) &&
+  @   \valid(q.contents+(0..q.length-1)) &&
   @   0 <= q.first < q.length &&
   @   0 <= q.last < q.length ;
   @   // && (q.full != 0 <=> q.last == q.first)

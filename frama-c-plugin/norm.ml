@@ -277,15 +277,16 @@ object(self)
 *)
           (* Define a global validity invariant *)
           let p =
-            Pvalid_range(
-              variable_term v.vdecl (cvar_to_lvar v),
-              constant_term v.vdecl My_bigint.zero,
-              constant_term v.vdecl (My_bigint.pred size))
+            Logic_const.pvalid_range
+              ~loc:v.vdecl
+              (variable_term v.vdecl (cvar_to_lvar v),
+               constant_term v.vdecl My_bigint.zero,
+               constant_term v.vdecl (My_bigint.pred size))
           in
           let globinv =
 	    Cil_const.make_logic_info (unique_logic_name ("valid_" ^ v.vname)) in
           globinv.l_labels <- [ LogicLabel(None,"Here") ];
-          globinv.l_body <- LBpred (predicate v.vdecl p);
+          globinv.l_body <- LBpred p;
           attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
           ChangeTo [g;GAnnot(Dinvariant (globinv,v.vdecl),v.vdecl)]
         else DoChildren
@@ -956,16 +957,17 @@ object(self)
 *)
                 (* Define a global validity invariant *)
                 let p =
-                  Pvalid_range(
-                    variable_term v.vdecl (cvar_to_lvar v),
-                    constant_term v.vdecl My_bigint.zero,
-                    constant_term v.vdecl My_bigint.zero)
+                  Logic_const.pvalid_range
+                    ~loc:v.vdecl
+                    (variable_term v.vdecl (cvar_to_lvar v),
+                     constant_term v.vdecl My_bigint.zero,
+                     constant_term v.vdecl My_bigint.zero)
                 in
                 let globinv =
 		  Cil_const.make_logic_info (unique_logic_name ("valid_" ^ v.vname))
 		in
                 globinv.l_labels <- [ LogicLabel(None, "Here") ];
-                globinv.l_body <- LBpred (predicate v.vdecl p);
+                globinv.l_body <- LBpred p;
                 attach_globaction
 		  (fun () -> Logic_utils.add_logic_function globinv);
                 [g; GAnnot(Dinvariant (globinv,v.vdecl),v.vdecl)]
@@ -1139,7 +1141,7 @@ class retypeAddressTaken =
                  else host
               ) ~dft:host v.lv_origin
       | TResult _ | TMem _ -> host
-    in match lastTermOffset off with
+    in match Logic_const.lastTermOffset off with
       | TField (fi,_) ->
           if Cil_datatype.Fieldinfo.Set.mem fi !fieldset then
             (TMem
@@ -1170,7 +1172,7 @@ class retypeAddressTaken =
     | TAddrOf((TVar _ | TResult _), TNoOffset) -> assert false
     | TAddrOf(TMem t1,TNoOffset) -> t1
     | TAddrOf(_,off) ->
-        begin match lastTermOffset off with
+        begin match Logic_const.lastTermOffset off with
           | TField(fi,_) ->
               if Cil_datatype.Fieldinfo.Set.mem fi !fieldset then assert false
               else t

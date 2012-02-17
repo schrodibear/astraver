@@ -60,18 +60,18 @@ extern void srand(unsigned int seed);
 // Memory management
 
 /*@ assigns \nothing;
-  @ ensures \valid_range((char*)\result,0,size - 1);
+  @ ensures \valid(((char*)\result)+(0..size - 1));
   @*/
 extern void *malloc (size_t size);
 
 /*@ assigns \nothing;
-  @ ensures \valid_range((char*)\result,0,size * nmemb - 1);
+  @ ensures \valid(((char*)\result)+(0..size * nmemb - 1));
   @*/
 extern void *calloc (size_t nmemb, size_t size);
 
 /*@ requires \valid((char*)ptr) || ptr == NULL;
   @ assigns \nothing;
-  @ ensures \valid_range((char*)\result,0,size - 1);
+  @ ensures \valid(((char*)\result)+(0..size - 1));
   @*/
 extern void *realloc (void *ptr, size_t size);
 
@@ -93,19 +93,19 @@ extern void exit(int status);
 
 // Multi-byte conversion functions
 
-/*@ requires valid_string(mbstr) && \valid_range(wcstr,0,n - 1);
+/*@ requires valid_string(mbstr) && \valid(wcstr+(0..n - 1));
   @ assigns wcstr[0..n - 1];
   @ ensures valid_wstring(wcstr) && wcslen(wcstr) < n;
   @*/
 extern size_t mbstowcs (wchar_t *wcstr, const char *mbstr, size_t n);
 
-/*@ requires valid_wstring(wcstr) && \valid_range(mbstr,0,n - 1);
+/*@ requires valid_wstring(wcstr) && \valid(mbstr+(0..n - 1));
   @ assigns mbstr[0..n - 1];
   @ ensures valid_string(mbstr) && strlen(mbstr) < n;
   @*/
 extern size_t wcstombs (char *mbstr, const wchar_t *wcstr, size_t n);
 
-/*@ //requires \valid_range(s,0,sizeof(wchar_t)-1) || s == NULL;
+/*@ //requires \valid(s+(0..sizeof(wchar_t)-1)) || s == NULL;
   @ // Commented out due to bug that keeps sizeof
   @ requires \valid(s) || s == NULL;
   @ assigns s[..];

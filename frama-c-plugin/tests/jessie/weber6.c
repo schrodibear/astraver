@@ -1,7 +1,7 @@
 /*@
  requires last1 > first1;
- requires \valid_range  (first1, 0, last1-first1-1);
- requires \valid_range  (first2, 0, last1-first1-1);
+ requires \valid(first1+(0..last1-first1-1));
+ requires \valid(first2+(0..last1-first1-1));
  
  behavior equal:
   ensures  \forall integer i; 0 <= i < last1-first1 ==> first1[i] == first2[i]; 

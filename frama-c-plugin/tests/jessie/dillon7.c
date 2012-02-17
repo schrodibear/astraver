@@ -9,7 +9,7 @@ typedef ts las;
   @  axiom a{L} : \forall las *p; \forall float * t;
   @    simulated_cast(p,t) ==> p->f0==t[0] && p->f1==t[1] && p->f2==t[2];
   @  axiom b{L} : \forall las * p; \forall float * t;
-  @    simulated_cast(p,t) && \valid(p) ==> \valid_range(t,0,2);
+  @    simulated_cast(p,t) && \valid(p) ==> \valid(t+(0..2));
   @ }
   @*/
  
@@ -18,7 +18,7 @@ typedef ts las;
   @*/
 float *simulated_cast_to_float_ptr(las *x);
 
-/*@ requires \valid_range(d,0,2);
+/*@ requires \valid(d+(0..2));
   @ assigns v;
   @ ensures v == d[1];
   @*/

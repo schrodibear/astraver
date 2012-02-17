@@ -33,13 +33,13 @@
   @*/
 size_t wcslen(const wchar_t *s);
 
-/*@ requires \valid_range(dest,0,wcslen(src)) && valid_wstring(src);
+/*@ requires \valid(dest+(0..wcslen(src))) && valid_wstring(src);
   @ assigns dest[0..wcslen(src)];
   @ ensures valid_wstring(dest) && wcscmp(dest,src) == 0 && \result == dest;
   @*/
 extern wchar_t *wcscpy(wchar_t *dest, const wchar_t *src);
 
-/*@ requires \valid_range(dest,0,n - 1) && valid_wstring(src);
+/*@ requires \valid(dest+(0..n - 1)) && valid_wstring(src);
   @ assigns dest[0..n - 1];
   @ ensures \result == dest;
   @ behavior complete:
@@ -77,13 +77,13 @@ extern wchar_t *wcstok(wchar_t *restrict s,
 
 /*@ requires valid_wstring(wcs);
   @ assigns \nothing;
-  @ ensures \valid_range(\result,0,wcslen(wcs)) && wcscmp(\result,wcs) == 0;
+  @ ensures \valid(\result+(0..wcslen(wcs))) && wcscmp(\result,wcs) == 0;
   @*/
 extern wchar_t *wcsdup(const wchar_t *wcs);
 
 /*@ requires valid_wstring(wcs);
   @ assigns \nothing;
-  @ ensures \valid_range(\result,0,minimum(wcslen(wcs),n)) 
+  @ ensures \valid(\result+(0..minimum(wcslen(wcs),n))) 
   @         && valid_wstring(\result) && wcslen(\result) <= n
   @         && wcsncmp(\result,wcs,n) == 0;
   @*/

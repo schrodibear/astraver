@@ -18,7 +18,7 @@ Status: Closed
 	i >= 0 ==> s{L}(a,i) == s{L}(a,i-1) + \at(a,L)[i];
 } */
 
-//@ requires \valid_range(b,0,8);
+//@ requires \valid(b+(0..8));
 void ftest(int b[9])
 {
 M:

@@ -710,6 +710,10 @@ object
   method vlogic_type_info_use = visitor#vlogic_type_info_use
   method vstmt = visitor#vstmt
 
+  method vallocates = visitor#vallocates
+  method vallocation = visitor#vallocation
+  method vfrees = visitor#vfrees
+
 end
 
 let visit_and_push_statements_visitor visitor =
@@ -1142,12 +1146,33 @@ let malloc_function () =
       findOrCreateFunc
 	(Ast.get ()) "malloc" (TFun(voidPtrType,params,false,[]))
     in
+    let prm =
+      try
+        List.hd (Cil.getFormalsDecl f)
+      with Not_found | Invalid_argument _ ->
+        fatal "unexpected prototype for malloc"
+    in
+    let range = 
+      Logic_const.trange 
+        (Some (Cil.lzero ()), 
+         Some (Logic_const.tvar (Cil.cvar_to_lvar prm)))
+    in
+    let typ = Ctype Cil.charPtrType in
+    let base =
+      Logic_const.term 
+        (TCastE(Cil.charPtrType,Logic_const.tresult Cil.charPtrType)) typ
+    in
+    let alloc = 
+      Logic_const.new_identified_term
+        (Logic_const.term (TBinOp(PlusPI,base,range)) typ)
+    in
     let behav = {
       b_name = Cil.default_behavior_name;
       b_assumes = [];
       b_requires = [];
       b_extended = [];
       b_assigns = Writes [];
+      b_allocation = FreeAlloc([alloc],[]);
       b_post_cond = [];
     } in
     let spec = { (empty_funspec ()) with spec_behavior = [behav]; } in
@@ -1163,12 +1188,23 @@ let free_function () =
       findOrCreateFunc
 	(Ast.get ()) "free" (TFun(voidType,params,false,[]))
     in
+    let prm =
+      try
+        List.hd (Cil.getFormalsDecl f)
+      with Not_found | Invalid_argument _ ->
+        fatal "unexpected prototype for free"
+    in
+    let frees = 
+      Logic_const.new_identified_term
+        (Logic_const.tvar (Cil.cvar_to_lvar prm))
+    in
     let behav = {
       b_name = Cil.default_behavior_name;
       b_assumes = [];
       b_post_cond = [];
       b_requires = [];
       b_extended = [];
+      b_allocation = FreeAlloc([],[frees]);
       b_assigns = Writes [];
     } 
     in

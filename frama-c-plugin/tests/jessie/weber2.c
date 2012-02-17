@@ -1,7 +1,7 @@
 
 /*@
 requires last > first;
-requires \valid_range(first, 0, last-first-1);
+requires \valid(first+(0..last-first-1));
 ensures *\result == value;
 */
 int* find_int_array (int* first, int* last, int value ) {}

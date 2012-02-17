@@ -8,7 +8,7 @@
 
 /*@
 requires i_min <= i_max <= 4294967294 ;
-requires \valid_range(Adresse, i_min, i_max);
+requires \valid(Adresse+(i_min..i_max));
 assigns Adresse[i_min..i_max];
 ensures \forall integer k;
             i_min <= k <= i_max ==> Adresse[k] == ValOct;
@@ -35,7 +35,7 @@ void memset_uchar
 
 /*@
 requires i_min <= i_max <= 4294967294 ;
-requires \valid_range(Adresse, i_min, i_max);
+requires \valid(Adresse+(i_min..i_max));
 ensures \forall integer k;
             i_min <= k <= i_max ==> Adresse[k] == ValMot;
 */
@@ -68,7 +68,7 @@ extern unsigned long int addr_mod4;
 requires 0 <= addr_mod4 <= 3;
 
 requires 1 <= NbOct ;
-requires \valid_range(((char *)Adresse), 0, NbOct-1);
+requires \valid(((char *)Adresse)+(0..NbOct-1));
 
 behavior small_data :
     assumes NbOct < 4;

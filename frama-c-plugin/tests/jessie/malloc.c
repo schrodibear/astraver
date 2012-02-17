@@ -25,7 +25,7 @@
 /*@ requires
   @   n >= 1 ;
   @ ensures
-  @   \valid_range(\result,0,n-1) &&
+  @   \valid(\result+(0..n-1)) &&
   @   \forall int i; 0<=i<n ==> \valid(\result[i]); */
 int** test(int n) {
   int** t = (int**)malloc(n * sizeof(int*));

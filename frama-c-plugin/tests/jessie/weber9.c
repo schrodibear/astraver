@@ -24,8 +24,8 @@
 
 /*@
 requires 0 <= length;
-requires \valid_range (a, 0, length-1);
-requires \valid_range (dest, 0, length-1);
+requires \valid (a+(0..length-1));
+requires \valid(dest+(0..length-1));
 requires disjoint_arrays(a, dest, length);
 ensures \result == length - nb_occ{Old}(a, 0, length, value);
 ensures \forall integer k; 0 <= k < \result ==> dest[k] != value;

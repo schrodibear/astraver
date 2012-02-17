@@ -106,15 +106,15 @@ T_RESULTAT TesterOK (T_RESULTAT* status, T_ID_TEST id_test);
 //@ ghost T_WORD32 __ConsignerPanne_cpt_t6;
 //@ ghost T_WORD32 __ConsignerPanne_cpt_t7;
 
-/*@ requires \valid_range(__TT0_v0, __TT0_cpt, __TT0_cpt+1);
-  @ requires \valid_range(__TT1_v0, __TT1_cpt, __TT1_cpt+1);
-  @ requires \valid_range(__TT2_v0, __TT2_cpt, __TT2_cpt+1);
-  @ requires \valid_range(__TT3_v0, __TT3_cpt, __TT3_cpt+1);
-  @ requires \valid_range(__TT4_v0, __TT4_cpt, __TT4_cpt+1);
-  @ requires \valid_range(__TT5_v0, __TT5_cpt, __TT5_cpt+1);
-  @ requires \valid_range(__TT6_v0, __TT6_cpt, __TT6_cpt+1);
-  @ requires \valid_range(__TT7_v0, __TT7_cpt, __TT7_cpt+1);
-  @ requires \valid_range(__ConsignerPanne_v0, __ConsignerPanne_cpt, __ConsignerPanne_cpt+7);
+/*@ requires \valid(__TT0_v0+(__TT0_cpt..__TT0_cpt+1));
+  @ requires \valid(__TT1_v0+(__TT1_cpt..__TT1_cpt+1));
+  @ requires \valid(__TT2_v0+(__TT2_cpt..__TT2_cpt+1));
+  @ requires \valid(__TT3_v0+(__TT3_cpt..__TT3_cpt+1));
+  @ requires \valid(__TT4_v0+(__TT4_cpt..__TT4_cpt+1));
+  @ requires \valid(__TT5_v0+(__TT5_cpt..__TT5_cpt+1));
+  @ requires \valid(__TT6_v0+(__TT6_cpt..__TT6_cpt+1));
+  @ requires \valid(__TT7_v0+(__TT7_cpt..__TT7_cpt+1));
+  @ requires \valid(__ConsignerPanne_v0+(__ConsignerPanne_cpt..__ConsignerPanne_cpt+7));
   @ ensures f_cond_OK{Here}(__TT0_v0, \old(__TT0_cpt), __ConsignerPanne_cpt_t0)
   @   && f_cond_OK{Here}(__TT1_v0, \old(__TT1_cpt), __ConsignerPanne_cpt_t1)
   @   && f_cond_OK{Here}(__TT2_v0, \old(__TT2_cpt), __ConsignerPanne_cpt_t2)

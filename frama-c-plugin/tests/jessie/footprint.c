@@ -5,7 +5,7 @@
   @ }
   @*/
 
-/*@ requires \valid_range(x,0,1) && p(x);
+/*@ requires \valid(x+(0..1)) && p(x);
   @ assigns *(x+1);
   @*/
 void f(int *x) {
@@ -13,7 +13,7 @@ void f(int *x) {
   //@ assert p(x);
 }
 
-/*@ requires \valid_range(x,0,1) && p(x);
+/*@ requires \valid(x+(0..1)) && p(x);
   @ assigns *(x+1);
   @*/
 void g(int *x) {

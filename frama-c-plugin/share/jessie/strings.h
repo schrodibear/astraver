@@ -31,8 +31,8 @@
   @*/
 extern int strcasecmp(const char *s1, const char *s2);
 
-/*@ requires \valid_range((char*)dest,0,n - 1) 
-  @          && \valid_range((char*)src,0,n - 1);
+/*@ requires \valid(((char*)dest)+(0..n - 1))
+  @          && \valid(((char*)src)+(0..n - 1));
   @ assigns ((char*)dest)[0..n - 1];
   @ ensures memcmp((char*)dest,(char*)src,n) == 0;
   @*/

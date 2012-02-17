@@ -570,11 +570,11 @@ why --project [...] why/permut_search.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/permut_search_po1.why">
-      <location file = "PPCHOME/tests/jessie/permut_search.c" line = "6" begin = "21" end = "175"/>
+      <location file = "PPCHOME/tests/jessie/permut_search.c" line = "6" begin = "21" end = "172"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/permut_search_po2.why">
-      <location file = "PPCHOME/tests/jessie/permut_search.c" line = "6" begin = "21" end = "175"/>
+      <location file = "PPCHOME/tests/jessie/permut_search.c" line = "6" begin = "21" end = "172"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>

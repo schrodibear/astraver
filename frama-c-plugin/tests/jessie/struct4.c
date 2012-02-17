@@ -41,7 +41,7 @@ typedef struct S { A a; A *b; A c[3]; struct S *s; unsigned char i; } S;
   \forall S x ; is_struct_S(x) <=> 
        ( is_struct_A(x.a) 
        && (\forall int i; \valid(x.b+i) => is_struct_A( *(x.b+i)))
-       && \valid_range(x.c,0,3) 
+       && \valid(x.c+(0..3)) 
        && (\forall int i; 0<=i<=3 => is_struct_A(x.c[i]))
        && (\forall int i; \valid(x.s+i) => is_struct_S( *(x.s+i)))
        && is_unsigned_char(x.i))

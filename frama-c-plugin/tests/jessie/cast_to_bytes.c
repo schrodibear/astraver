@@ -5,7 +5,7 @@
 
 #include <limits.h>
 
-//@ requires 0 < size < 10 && \valid_range((char*)p,0,4*size-1);
+//@ requires 0 < size < 10 && \valid((char*)p+(0..4*size-1));
 void f(int* p, int size) {
   char* c = (char*) p;
   int i = 0;

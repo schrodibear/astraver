@@ -100,7 +100,7 @@
 /*****************************************************************************/
 
 /*@ requires
-  @   0 <= low <= high && \valid_range(a, low, high) &&
+  @   0 <= low <= high && \valid(a+(low..high)) &&
   @   H(a, low+1, high);
   @ assigns
   @   a[low..high];
@@ -132,7 +132,7 @@ void sift_down(int* a, unsigned int low, unsigned int high, int v) {
 }
 
 /*@ requires
-  @   0 <= n && \valid_range(a, 0, n-1);
+  @   0 <= n && \valid(a+(0..n-1));
   @ ensures
   @   Permut(contents(a), \old(contents(a)), 0, n-1) &&
   @   Sorted(a, 0, n-1);

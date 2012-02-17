@@ -51,7 +51,7 @@ extern int getc(FILE *stream);
   @*/
 extern int fgetc(FILE *stream);
 
-/*@ requires \valid_range(s,0,size-1) && \valid(stream);
+/*@ requires \valid(s+(0..size-1)) && \valid(stream);
   @ assigns s[0..size-1];
   @ ensures \result == NULL 
   @      || (\result == s && valid_string(s) && strlen(s) <= size-1);

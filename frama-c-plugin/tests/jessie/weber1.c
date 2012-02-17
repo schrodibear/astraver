@@ -5,7 +5,7 @@
   @*/
 
 /*@ requires 0 < n;
-  @ requires \valid_range(a, 0, n-1) && \valid_range(b, 0, n-1);
+  @ requires \valid(a+(0..n-1)) && \valid(b+(0..n-1));
   @ requires disjoint_arrays(a, b, n);
   @ ensures  \forall int k; 0 <= k < n ==> a[k] == \at(b[k],Old);
   @*/

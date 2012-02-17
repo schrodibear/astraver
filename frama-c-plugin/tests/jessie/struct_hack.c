@@ -4,7 +4,7 @@ struct S {
   int a[];
 };
 
-/*@ requires s.i >= 0 && \valid_range(s.a,0,s.i-1);
+/*@ requires s.i >= 0 && \valid(s.a+(0..s.i-1));
   @ */
 void f(struct S s) {
   int j;
@@ -21,7 +21,7 @@ struct S0 {
   int a0[0];
 };
 
-/*@ requires s.i0 >= 0 && \valid_range(s.a0,0,s.i0-1);
+/*@ requires s.i0 >= 0 && \valid(s.a0+(0..s.i0-1));
   @ */
 void f0(struct S0 s) {
   int j;
@@ -38,7 +38,7 @@ struct S1 {
   int a1[1];
 };
 
-/*@ requires s.i1 >= 0 && \valid_range(s.a1,0,s.i1-1);
+/*@ requires s.i1 >= 0 && \valid(s.a1+(0..s.i1-1));
   @ */
 void f1(struct S1 s) {
   int j;

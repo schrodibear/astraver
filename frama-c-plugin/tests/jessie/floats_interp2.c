@@ -69,7 +69,7 @@ ie 2u+l < 1022
 
 //@ ghost int i_interp;
 
-/*@ requires n >= 1 && \valid_range(x,0,n-1) && \valid_range(y,0,n-1);
+/*@ requires n >= 1 && \valid(x+(0..n-1)) && \valid(y+(0..n-1));
   @ requires min_step(x,0,n-1,LOWER);
   @ requires bounded(z,UPPER);
   @ requires array_bounded(x,n,UPPER) ;

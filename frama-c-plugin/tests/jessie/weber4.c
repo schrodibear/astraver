@@ -2,7 +2,7 @@
 */
 /*@
   @requires last >= first;
-  @requires \valid_range(first, 0, (last-first)/sizeof(int)-1);
+  @requires \valid(first+(0..(last-first)/sizeof(int)-1));
   @
   @behavior is_not_empty:
   @  assumes last > first;

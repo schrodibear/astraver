@@ -1,7 +1,7 @@
 typedef double typetab[2];
  
 /*@
-requires \valid(t) && \valid_range(*t,0,1);
+requires \valid(t) && \valid(*t+(0..1));
 assigns \nothing;
 ensures \result==(*t)[0] + (*t)[1];
 */

@@ -32,8 +32,8 @@
 
 /*@
   requires n >= 0;
-  requires \valid_range(a, 0, n-1);
-  requires \valid_range(b, 0, n-1);
+  requires \valid(a+(0..n-1));
+  requires \valid(b+(0..n-1));
 
   // only b[0..\result) may be modified:
   assigns b[0 .. n-1];

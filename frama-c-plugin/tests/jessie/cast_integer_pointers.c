@@ -13,7 +13,7 @@ int uint_to_int(unsigned* up) {
   return *ip;
 }
 
-/*@ requires \valid_range(uarr,0,9);
+/*@ requires \valid(uarr+(0..9));
   @*/
 void init_uint_through_int(unsigned* uarr) {
   int* cur = (int*)uarr;

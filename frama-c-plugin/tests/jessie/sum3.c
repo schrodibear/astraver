@@ -8,7 +8,7 @@ UINT8 b[3];
 
 S vect;
 
-/*@ requires \valid_range(vect.a,0,2) && \valid_range(vect.Sum,0,2) && \valid_range(vect.b,0,2);
+/*@ requires \valid(vect.a+(0..2)) && \valid(vect.Sum+(0..2)) && \valid(vect.b+(0..2));
   @ requires \forall integer i,j; 0 <= i <= 2 && 0 <= j <= 2 ==>
   @    vect.a + i != vect.b + j && vect.a + i != vect.Sum + j && vect.b + i != vect.Sum + j;
  @ assigns vect.a[0..2], vect.Sum[0..2], vect.b[0..2];

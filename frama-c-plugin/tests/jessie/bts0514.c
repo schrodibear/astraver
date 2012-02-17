@@ -10,7 +10,7 @@
   requires 0 < array_length ;
   requires \forall integer i, j ; 
      (0 <= i <= j < array_length ==> array[i] <= array[j]) ;
-  requires \valid_range(array, 0, array_length-1) ;
+  requires \valid(array+(0..array_length-1)) ;
 */
 int 
 interpolationSearch(int key, int array[], int array_length) 

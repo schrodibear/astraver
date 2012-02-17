@@ -22,7 +22,7 @@
   @       j < k && k <= l && t[k] > 0 ==> num_of_pos(i,j,t) < num_of_pos(i,l,t);
   @*/
 
-/*@ requires length >= 0 && \valid_range(t,0,length-1);
+/*@ requires length >= 0 && \valid(t+(0..length-1));
   @*/
 void m(int t[], int length) {
   int count = 0;
