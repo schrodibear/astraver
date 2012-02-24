@@ -10,6 +10,7 @@ int f(int x)
  //@ assigns y; ensures y==3;
  y=x;
  //@ assert y>0;
+ return y;
 }
 
 

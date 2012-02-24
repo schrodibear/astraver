@@ -1,6 +1,5 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only weber2.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD weber2.c"
-weber2.c:7:[kernel] warning: Body of function find_int_array falls-through. Adding a return statement
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir weber2.jessie
 [jessie] File weber2.jessie/weber2.jc written.
@@ -39,15 +38,16 @@ tag voidP = {
 type voidP = [voidP]
 
 intP[..] find_int_array(intP[..] first, intP[..] last, int32 value)
-  requires (C_6 : ((last - first) > 0));
-  requires (C_3 : ((C_4 : (\offset_min(first) <= 0)) &&
-                    (C_5 : (\offset_max(first) >= ((last - first) - 1)))));
+  requires (C_10 : ((last - first) > 0));
+  requires (C_7 : ((C_8 : (\offset_min(first) <= 0)) &&
+                    (C_9 : (\offset_max(first) >= ((last - first) - 1)))));
 behavior default:
-  ensures (C_2 : (\result.intM == \at(value,Old)));
+  ensures (C_6 : (\result.intM == \at(value,Old)));
 {  
    (var intP[..] __retres);
    
-   {  (C_1 : (__retres = null));
+   {  (C_3 : ((C_2 : (C_1 : (last - 1)).intM) = value));
+      (C_5 : (__retres = (C_4 : (last - 1))));
       
       (return __retres)
    }
@@ -55,7 +55,7 @@ behavior default:
 
 unit f()
 behavior default:
-  ensures (C_9 : true);
+  ensures (C_13 : true);
 {  
    (var intP[..] i);
    
@@ -65,7 +65,7 @@ behavior default:
    
    (var intP[..] l);
    
-   {  (C_8 : (l = (C_7 : find_int_array(i, j, k))));
+   {  (C_12 : (l = (C_11 : find_int_array(i, j, k))));
       
       (return ())
    }
@@ -361,27 +361,27 @@ parameter find_int_array :
  first:intP pointer ->
   last:intP pointer ->
    value:int32 ->
-    intP_first_1_alloc_table:intP alloc_table ->
-     intP_intM_result_3:(intP, int32) memory ->
-      { } intP pointer
+    intP_intM_first_1:(intP, int32) memory ref ->
+     intP_first_1_alloc_table:intP alloc_table ->
+      { } intP pointer reads intP_intM_first_1 writes intP_intM_first_1
       { (JC_<somenum>:
-        (integer_of_int32(select(intP_intM_result_3, result)) = integer_of_int32(value))) }
+        (integer_of_int32(select(intP_intM_first_1, result)) = integer_of_int32(value))) }
 
 parameter find_int_array_requires :
  first:intP pointer ->
   last:intP pointer ->
    value:int32 ->
-    intP_first_1_alloc_table:intP alloc_table ->
-     intP_intM_result_3:(intP, int32) memory ->
+    intP_intM_first_1:(intP, int32) memory ref ->
+     intP_first_1_alloc_table:intP alloc_table ->
       { (JC_<somenum>:
         ((JC_<somenum>: gt_int(sub_pointer(last, first), (0)))
         and ((JC_<somenum>: le_int(offset_min(intP_first_1_alloc_table, first), (0)))
             and (JC_<somenum>:
                 ge_int(offset_max(intP_first_1_alloc_table, first),
                 sub_int(sub_pointer(last, first), (1)))))))}
-      intP pointer
+      intP pointer reads intP_intM_first_1 writes intP_intM_first_1
       { (JC_<somenum>:
-        (integer_of_int32(select(intP_intM_result_3, result)) = integer_of_int32(value))) }
+        (integer_of_int32(select(intP_intM_first_1, result)) = integer_of_int32(value))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -405,21 +405,21 @@ let f_ensures_default =
   (init:
   try
    begin
-     (let intP_intM_l_9 = (any_memory void) in
-     (let intP_i_7_alloc_table = (any_alloc_table void) in
+     (let intP_intM_i_6 = ref (any_memory void) in
+     (let intP_i_6_alloc_table = (any_alloc_table void) in
      (let i = (any_pointer void) in
      (let j = (any_pointer void) in
      (let k = (any_int32 void) in
      (let l = ref (any_pointer void) in
-     (C_8:
+     (C_12:
      begin
        (let jessie_<somenum> =
-       (l := (C_7:
+       (l := (C_11:
              (let jessie_<somenum> = i in
              (let jessie_<somenum> = j in
              (let jessie_<somenum> = k in
              (JC_<somenum>:
-             (((((find_int_array jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_i_7_alloc_table) intP_intM_l_9))))))) in
+             (((((find_int_array jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_i_6) intP_i_6_alloc_table))))))) in
        void); (raise Return) end))))))); (raise Return) end with Return ->
    void end) { (JC_<somenum>: true) }
 
@@ -429,26 +429,26 @@ let f_safety =
   (init:
   try
    begin
-     (let intP_intM_l_9 = (any_memory void) in
-     (let intP_i_7_alloc_table = (any_alloc_table void) in
+     (let intP_intM_i_6 = ref (any_memory void) in
+     (let intP_i_6_alloc_table = (any_alloc_table void) in
      (let i = (any_pointer void) in
      (let j = (any_pointer void) in
      (let k = (any_int32 void) in
      (let l = ref (any_pointer void) in
-     (C_8:
+     (C_12:
      begin
        (let jessie_<somenum> =
-       (l := (C_7:
+       (l := (C_11:
              (let jessie_<somenum> = i in
              (let jessie_<somenum> = j in
              (let jessie_<somenum> = k in
              (JC_<somenum>:
-             (((((find_int_array_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_i_7_alloc_table) intP_intM_l_9))))))) in
+             (((((find_int_array_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_i_6) intP_i_6_alloc_table))))))) in
        void); (raise Return) end))))))); (raise Return) end with Return ->
    void end) { true }
 
 let find_int_array_ensures_default =
- fun (first : intP pointer) (last : intP pointer) (value : int32) (intP_first_1_alloc_table : intP alloc_table) (intP_intM_result_3 : (intP, int32) memory) ->
+ fun (first : intP pointer) (last : intP pointer) (value : int32) (intP_intM_first_1 : (intP, int32) memory ref) (intP_first_1_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
     ((JC_<somenum>: gt_int(sub_pointer(last, first), (0)))
     and ((JC_<somenum>: le_int(offset_min(intP_first_1_alloc_table, first), (0)))
@@ -460,15 +460,23 @@ let find_int_array_ensures_default =
   try
    begin
      (let __retres = ref (any_pointer void) in
-     (C_1:
+     (C_3:
+     (C_5:
      begin
-       (let jessie_<somenum> = (__retres := null) in void); (return := !__retres);
-      (raise Return) end)); absurd  end with Return -> !return end))
+       (let jessie_<somenum> = value in
+       (let jessie_<somenum> = last in
+       (let jessie_<somenum> = (-1) in
+       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+       (let jessie_<somenum> = ((shift jessie_<somenum>) (-1)) in
+       (((safe_upd_ intP_intM_first_1) jessie_<somenum>) jessie_<somenum>))))));
+      (let jessie_<somenum> = (__retres := (C_4: ((shift last) (neg_int (1))))) in
+      void); (return := !__retres); (raise Return) end))); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
-    (integer_of_int32(select(intP_intM_result_3, result)) = integer_of_int32(value))) }
+    (integer_of_int32(select(intP_intM_first_1, result)) = integer_of_int32(value))) }
 
 let find_int_array_safety =
- fun (first : intP pointer) (last : intP pointer) (value : int32) (intP_first_1_alloc_table : intP alloc_table) (intP_intM_result_3 : (intP, int32) memory) ->
+ fun (first : intP pointer) (last : intP pointer) (value : int32) (intP_intM_first_1 : (intP, int32) memory ref) (intP_first_1_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
     ((JC_<somenum>: gt_int(sub_pointer(last, first), (0)))
     and ((JC_<somenum>: le_int(offset_min(intP_first_1_alloc_table, first), (0)))
@@ -480,11 +488,19 @@ let find_int_array_safety =
   try
    begin
      (let __retres = ref (any_pointer void) in
-     (C_1:
+     (C_3:
+     (C_5:
      begin
-       (let jessie_<somenum> = (__retres := null) in void); (return := !__retres);
-      (raise Return) end)); absurd  end with Return -> !return end)) 
-  { true }
+       (let jessie_<somenum> = value in
+       (let jessie_<somenum> = last in
+       (let jessie_<somenum> = (-1) in
+       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+       (let jessie_<somenum> = ((shift jessie_<somenum>) (-1)) in
+       (JC_<somenum>:
+       ((((upd_ intP_first_1_alloc_table) intP_intM_first_1) jessie_<somenum>) jessie_<somenum>)))))));
+      (let jessie_<somenum> = (__retres := (C_4: ((shift last) (neg_int (1))))) in
+      void); (return := !__retres); (raise Return) end))); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C weber2.jessie --quiet -f weber2.makefile project
@@ -498,22 +514,34 @@ why --project [...] why/weber2.why
       <explain kind = "Post"/>
     </goal>
     </behavior>
+    <behavior name="Safety">
+    <goal why_file="why/weber2_po5.why">
+      <location file = "PPCHOME/tests/jessie/weber2.jessie/weber2.jc" line = "43" begin = "14" end = "53"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/weber2_po6.why">
+      <location file = "PPCHOME/tests/jessie/weber2.jessie/weber2.jc" line = "43" begin = "14" end = "53"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    </behavior>
   </function>
   <function name="Function f">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/weber2_po1.why">
-      <location file = "PPCHOME/tests/jessie/weber2.c" line = "11" begin = "6" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/weber2.c" line = "14" begin = "6" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/weber2_po2.why">
-      <location file = "PPCHOME/tests/jessie/weber2.c" line = "11" begin = "6" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/weber2.c" line = "14" begin = "6" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/weber2_po3.why">
-      <location file = "PPCHOME/tests/jessie/weber2.c" line = "11" begin = "6" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/weber2.c" line = "14" begin = "6" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

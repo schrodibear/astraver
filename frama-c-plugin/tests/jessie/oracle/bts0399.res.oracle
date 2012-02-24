@@ -1,6 +1,5 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0399.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0399.c"
-bts0399.c:11:[kernel] warning: Body of function f falls-through. Adding a return statement
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0399.jessie
 [jessie] File bts0399.jessie/bts0399.jc written.
@@ -34,11 +33,9 @@ type voidP = [voidP]
 
 int32 f(int32 x)
 behavior default:
-  ensures (C_6 : true);
+  ensures (C_5 : true);
 {  
    (var int32 y);
-   
-   (var int32 __retres);
    
    {  (C_1 : (y = 0));
       
@@ -53,30 +50,29 @@ behavior default:
          (assert for default: (C_4 : (y > 0)));
          ()
       };
-      (C_5 : (__retres = 0));
       
-      (return __retres)
+      (return y)
    }
 }
 
 unit main(int32 x_0)
 behavior default:
-  ensures (C_12 : true);
+  ensures (C_11 : true);
 {  
    (var int32 y_0);
    
-   {  (C_7 : (y_0 = 0));
+   {  (C_6 : (y_0 = 0));
       
-      ( requires (C_10 : (x_0 > 0));
+      ( requires (C_9 : (x_0 > 0));
         
         behavior default:
           assigns y_0;
-          ensures (C_9 : (y_0 == x_0));
-        { (C_8 : (y_0 = x_0))
+          ensures (C_8 : (y_0 == x_0));
+        { (C_7 : (y_0 = x_0))
         });
       
       {  
-         (assert for default: (C_11 : (y_0 > 0)));
+         (assert for default: (C_10 : (y_0 > 0)));
          ()
       };
       
@@ -325,18 +321,15 @@ let f_ensures_default =
   try
    begin
      (let y = ref (any_int32 void) in
-     (let __retres = ref (any_int32 void) in
      (C_1:
-     (C_5:
      begin
        (let jessie_<somenum> = (y := (safe_int32_of_integer_ (0))) in void);
       (let jessie_<somenum> =
       (assert { true }; (((C_2: begin   (y := x_0); !y end))
       {{ (JC_<somenum>: (integer_of_int32(y) = (3))) }})) in void);
       (assert { (JC_<somenum>: gt_int(integer_of_int32(y), (0))) }; void); void;
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+      (return := !y); (raise Return) end)); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (x_0 : int32) ->
@@ -346,9 +339,7 @@ let f_safety =
   try
    begin
      (let y = ref (any_int32 void) in
-     (let __retres = ref (any_int32 void) in
      (C_1:
-     (C_5:
      begin
        (let jessie_<somenum> = (y := (safe_int32_of_integer_ (0))) in void);
       (let jessie_<somenum> =
@@ -357,10 +348,8 @@ let f_safety =
       begin   [ { } unit { (JC_<somenum>: (integer_of_int32(y) = (3))) } ]; jessie_<somenum>
       end) in void);
       [ { } unit reads y { (JC_<somenum>: gt_int(integer_of_int32(y), (0))) } ];
-      void;
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)))); absurd  end with
-   Return -> !return end)) { true }
+      void; (return := !y); (raise Return) end)); absurd  end with Return ->
+   !return end)) { true }
 
 let main_ensures_default =
  fun (x_0_0 : int32) ->
@@ -369,13 +358,13 @@ let main_ensures_default =
   try
    begin
      (let y_0 = ref (any_int32 void) in
-     (C_7:
+     (C_6:
      begin
        (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (0))) in void);
       (let jessie_<somenum> =
       begin
         [ { } unit { (JC_<somenum>: gt_int(integer_of_int32(x_0_0), (0))) } ];
-       (assert { true }; (((C_8: begin   (y_0 := x_0_0); !y_0 end))
+       (assert { true }; (((C_7: begin   (y_0 := x_0_0); !y_0 end))
        {{ (JC_<somenum>: (integer_of_int32(y_0) = integer_of_int32(x_0_0))) }})) end in
       void); (assert { (JC_<somenum>: gt_int(integer_of_int32(y_0), (0))) }; void);
       void; (raise Return) end)); (raise Return) end with Return -> void end)
@@ -388,13 +377,13 @@ let main_safety =
   try
    begin
      (let y_0 = ref (any_int32 void) in
-     (C_7:
+     (C_6:
      begin
        (let jessie_<somenum> = (y_0 := (safe_int32_of_integer_ (0))) in void);
       (let jessie_<somenum> =
       (let jessie_<somenum> =
       (assert { (JC_<somenum>: gt_int(integer_of_int32(x_0_0), (0))) };
-      ((C_8: begin   (y_0 := x_0_0); !y_0 end))) in
+      ((C_7: begin   (y_0 := x_0_0); !y_0 end))) in
       begin
         [ { } unit
           { (JC_<somenum>: (integer_of_int32(y_0) = integer_of_int32(x_0_0))) } ];
@@ -411,17 +400,17 @@ why --project [...] why/bts0399.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/bts0399_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0399.c" line = "20" begin = "37" end = "41"/>
+      <location file = "PPCHOME/tests/jessie/bts0399.c" line = "21" begin = "37" end = "41"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/bts0399_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0399.c" line = "23" begin = "11" end = "14"/>
+      <location file = "PPCHOME/tests/jessie/bts0399.c" line = "24" begin = "11" end = "14"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0399_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0399.c" line = "20" begin = "13" end = "16"/>
+      <location file = "PPCHOME/tests/jessie/bts0399.c" line = "21" begin = "13" end = "16"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>

@@ -1,7 +1,7 @@
 /* run.config
  */
 
-int f () {
+void f () {
   int x = 1;
   L:
   x = 2;

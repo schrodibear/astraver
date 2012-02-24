@@ -1,6 +1,5 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only wolff.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD wolff.c"
-wolff.c:14:[kernel] warning: Body of function main falls-through. Adding a return statement
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir wolff.jessie
 [jessie] File wolff.jessie/wolff.jc written.

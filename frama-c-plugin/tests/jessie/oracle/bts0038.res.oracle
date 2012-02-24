@@ -1,6 +1,5 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0038.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0038.c"
-bts0038.c:29:[kernel] warning: Body of function main falls-through. Adding a return statement
 [jessie] Starting Jessie translation
 [kernel] warning: No code for function printf, default assigns generated for default behavior
 bts0038.c:29:[jessie] warning: skipping all arguments of implicit prototype printf

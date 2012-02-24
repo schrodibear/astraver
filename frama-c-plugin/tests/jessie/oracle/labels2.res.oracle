@@ -1,6 +1,5 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only labels2.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD labels2.c"
-labels2.c:7:[kernel] warning: Body of function f falls-through. Adding a return statement
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir labels2.jessie
 [jessie] File labels2.jessie/labels2.jc written.
@@ -32,13 +31,11 @@ tag voidP = {
 
 type voidP = [voidP]
 
-int32 f()
+unit f()
 behavior default:
-  ensures (C_5 : true);
+  ensures (C_4 : true);
 {  
    (var int32 x);
-   
-   (var int32 __retres);
    
    {  (C_1 : (x = 1));
       (L : (C_2 : (x = 2)));
@@ -47,9 +44,8 @@ behavior default:
          (assert for default: (C_3 : (\at(x,L) == (x - 1))));
          ()
       };
-      (C_4 : (__retres = 0));
       
-      (return __retres)
+      (return ())
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs labels2.jessie/labels2.cloc labels2.jessie/labels2.jc
@@ -262,9 +258,9 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
-parameter f : tt:unit -> { } int32 { true }
+parameter f : tt:unit -> { } unit { true }
 
-parameter f_requires : tt:unit -> { } int32 { true }
+parameter f_requires : tt:unit -> { } unit { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -286,47 +282,37 @@ let f_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>: true) }
   (init:
-  (let return = ref (any_int32 void) in
   try
    begin
      (let x_0 = ref (any_int32 void) in
-     (let __retres = ref (any_int32 void) in
      (C_1:
      (L:
-     (C_4:
      begin
        (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (1))) in void);
       (let jessie_<somenum> = (C_2: (x_0 := (safe_int32_of_integer_ (2)))) in void);
       (assert
       { (JC_<somenum>:
         (integer_of_int32(x_0@L) = sub_int(integer_of_int32(x_0), (1)))) };
-      void); void;
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+      void); void; (raise Return) end))); (raise Return) end with Return ->
+   void end) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
   { (JC_<somenum>: true) }
   (init:
-  (let return = ref (any_int32 void) in
   try
    begin
      (let x_0 = ref (any_int32 void) in
-     (let __retres = ref (any_int32 void) in
      (C_1:
      (L:
-     (C_4:
      begin
        (let jessie_<somenum> = (x_0 := (safe_int32_of_integer_ (1))) in void);
       (let jessie_<somenum> = (C_2: (x_0 := (safe_int32_of_integer_ (2)))) in void);
       [ { } unit reads x_0
         { (JC_<somenum>:
           (integer_of_int32(x_0@L) = sub_int(integer_of_int32(x_0), (1)))) } ];
-      void;
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))))); absurd  end with
-   Return -> !return end)) { true }
+      void; (raise Return) end))); (raise Return) end with Return -> void end)
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C labels2.jessie --quiet -f labels2.makefile project

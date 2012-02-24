@@ -9,5 +9,5 @@ int f (void) {
   { y++; x++; }
   /*@ ensures y == \at(x, Old) + 1 == \at(x,Pre) + 2; */
   y++;
-
+  return y;
 }

@@ -1,6 +1,5 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only pre_in_requires.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD pre_in_requires.c"
-pre_in_requires.c:11:[kernel] warning: Body of function f falls-through. Adding a return statement
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir pre_in_requires.jessie
 [jessie] File pre_in_requires.jessie/pre_in_requires.jc written.
@@ -35,13 +34,11 @@ type voidP = [voidP]
 int32 x;
 
 int32 f()
-  requires (C_16 : (\at(x,Here) <= 2000));
+  requires (C_15 : (\at(x,Here) <= 2000));
 behavior default:
-  ensures (C_15 : true);
+  ensures (C_14 : true);
 {  
    (var int32 y);
-   
-   (var int32 __retres);
    
    {  (C_1 : (y = x));
       
@@ -55,9 +52,8 @@ behavior default:
                             (C_13 : ((\at(x,Old) + 1) == (\at(x,Pre) + 2)))));
         { (C_10 : (y = (C_9 : ((C_8 : (y + 1)) :> int32))))
         });
-      (C_14 : (__retres = 0));
       
-      (return __retres)
+      (return y)
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs pre_in_requires.jessie/pre_in_requires.cloc pre_in_requires.jessie/pre_in_requires.jc
@@ -303,9 +299,7 @@ let f_ensures_default =
   try
    begin
      (let y = ref (any_int32 void) in
-     (let __retres = ref (any_int32 void) in
      (C_1:
-     (C_14:
      begin
        (let jessie_<somenum> = (y := !x_0) in void);
       (let jessie_<somenum> =
@@ -335,9 +329,8 @@ let f_ensures_default =
          and (JC_<somenum>:
              (add_int(integer_of_int32(x_0@), (1)) = add_int(integer_of_int32(x_0@init),
                                                      (2)))))) }})) in void);
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+      (return := !y); (raise Return) end)); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -347,9 +340,7 @@ let f_safety =
   try
    begin
      (let y = ref (any_int32 void) in
-     (let __retres = ref (any_int32 void) in
      (C_1:
-     (C_14:
      begin
        (let jessie_<somenum> = (y := !x_0) in void);
       (let jessie_<somenum> =
@@ -384,10 +375,8 @@ let f_safety =
             and (JC_<somenum>:
                 (add_int(integer_of_int32(x_0@), (1)) = add_int(integer_of_int32(x_0@init),
                                                         (2)))))) } ];
-       jessie_<somenum> end) in void);
-      (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)))); absurd  end with
-   Return -> !return end)) { true }
+       jessie_<somenum> end) in void); (return := !y); (raise Return) end)); 
+    absurd  end with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C pre_in_requires.jessie --quiet -f pre_in_requires.makefile project
