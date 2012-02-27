@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only ref_glob.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD ref_glob.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only ref_glob.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD ref_glob.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir ref_glob.jessie
 [jessie] File ref_glob.jessie/ref_glob.jc written.

@@ -1,8 +1,8 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts1004.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts1004.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts1004.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts1004.c"
 [jessie] Starting Jessie translation
-[kernel] warning: No code for function sensor_accelerator_position, default assigns generated for default behavior
-[kernel] warning: No code for function sensor_driver_input_accelerate, default assigns generated for default behavior
+[kernel] warning: No code nor implicit assigns clause for function sensor_accelerator_position, generating default assigns from the prototype
+[kernel] warning: No code nor implicit assigns clause for function sensor_driver_input_accelerate, generating default assigns from the prototype
 bts1004.c:145:[jessie] warning: skipping all arguments of implicit prototype sensor_speed
 bts1004.c:234:[jessie] warning: skipping all arguments of implicit prototype sensor_speed
 bts1004.c:217:[jessie] warning: skipping all arguments of implicit prototype sensor_driver_input_accelerate

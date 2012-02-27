@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only struct2.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD struct2.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only struct2.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD struct2.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir struct2.jessie
 [jessie] File struct2.jessie/struct2.jc written.

@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only bts0094.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD bts0094.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0094.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0094.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir bts0094.jessie
 [jessie] File bts0094.jessie/bts0094.jc written.
@@ -41,7 +41,7 @@ behavior default:
 {  
    {  
       {  
-         (assert for default: (C_1 : (i >= ((- 127) - 1))));
+         (assert for default: (C_1 : (i >= (- 128))));
          ()
       };
       
@@ -60,7 +60,7 @@ behavior default:
 {  
    {  
       {  
-         (assert for default: (C_4 : (i_0 >= ((- 127) - 1))));
+         (assert for default: (C_4 : (i_0 >= (- 128))));
          ()
       };
       
@@ -84,7 +84,7 @@ behavior default:
       };
       
       {  
-         (assert for default: (C_8 : (i_2 <= ((127 * 2) + 1))));
+         (assert for default: (C_8 : (i_2 <= 255)));
          ()
       };
       
@@ -98,7 +98,7 @@ behavior default:
 {  
    {  
       {  
-         (assert for default: (C_10 : (i_1 >= ((- 32767) - 1))));
+         (assert for default: (C_10 : (i_1 >= (- 32768))));
          ()
       };
       
@@ -122,7 +122,7 @@ behavior default:
       };
       
       {  
-         (assert for default: (C_14 : (i_3 <= ((32767 * 2) + 1))));
+         (assert for default: (C_14 : (i_3 <= 65535)));
          ()
       };
       
@@ -449,12 +449,10 @@ let char_range_ensures_default =
   (let return = ref (any_int8 void) in
   try
    begin
-     (assert
-     { (JC_<somenum>: ge_int(integer_of_int8(i), sub_int(neg_int((127)), (1)))) };
-     void); void;
-    (assert { (JC_<somenum>: le_int(integer_of_int8(i), (127))) }; void); void;
-    (return := i); (raise Return); absurd  end with Return -> !return end))
-  { (JC_<somenum>: true) }
+     (assert { (JC_<somenum>: ge_int(integer_of_int8(i), neg_int((128)))) }; void);
+    void; (assert { (JC_<somenum>: le_int(integer_of_int8(i), (127))) }; void);
+    void; (return := i); (raise Return); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: true) }
 
 let char_range_safety =
  fun (i : int8) ->
@@ -463,8 +461,7 @@ let char_range_safety =
   (let return = ref (any_int8 void) in
   try
    begin
-     [ { } unit
-       { (JC_<somenum>: ge_int(integer_of_int8(i), sub_int(neg_int((127)), (1)))) } ];
+     [ { } unit { (JC_<somenum>: ge_int(integer_of_int8(i), neg_int((128)))) } ];
     void; [ { } unit { (JC_<somenum>: le_int(integer_of_int8(i), (127))) } ]; void;
     (return := i); (raise Return); absurd  end with Return -> !return end))
   { true }
@@ -476,12 +473,10 @@ let schar_range_ensures_default =
   (let return = ref (any_int8 void) in
   try
    begin
-     (assert
-     { (JC_<somenum>: ge_int(integer_of_int8(i_0), sub_int(neg_int((127)), (1)))) };
-     void); void;
-    (assert { (JC_<somenum>: le_int(integer_of_int8(i_0), (127))) }; void); void;
-    (return := i_0); (raise Return); absurd  end with Return -> !return end))
-  { (JC_<somenum>: true) }
+     (assert { (JC_<somenum>: ge_int(integer_of_int8(i_0), neg_int((128)))) }; void);
+    void; (assert { (JC_<somenum>: le_int(integer_of_int8(i_0), (127))) }; void);
+    void; (return := i_0); (raise Return); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: true) }
 
 let schar_range_safety =
  fun (i_0 : int8) ->
@@ -490,8 +485,7 @@ let schar_range_safety =
   (let return = ref (any_int8 void) in
   try
    begin
-     [ { } unit
-       { (JC_<somenum>: ge_int(integer_of_int8(i_0), sub_int(neg_int((127)), (1)))) } ];
+     [ { } unit { (JC_<somenum>: ge_int(integer_of_int8(i_0), neg_int((128)))) } ];
     void; [ { } unit { (JC_<somenum>: le_int(integer_of_int8(i_0), (127))) } ];
     void; (return := i_0); (raise Return); absurd  end with Return ->
    !return end)) { true }
@@ -503,8 +497,7 @@ let short_range_ensures_default =
   (let return = ref (any_int16 void) in
   try
    begin
-     (assert
-     { (JC_<somenum>: ge_int(integer_of_int16(i_1), sub_int(neg_int((32767)), (1)))) };
+     (assert { (JC_<somenum>: ge_int(integer_of_int16(i_1), neg_int((32768)))) };
      void); void;
     (assert { (JC_<somenum>: le_int(integer_of_int16(i_1), (32767))) }; void); void;
     (return := i_1); (raise Return); absurd  end with Return -> !return end))
@@ -517,9 +510,7 @@ let short_range_safety =
   (let return = ref (any_int16 void) in
   try
    begin
-     [ { } unit
-       { (JC_<somenum>:
-         ge_int(integer_of_int16(i_1), sub_int(neg_int((32767)), (1)))) } ];
+     [ { } unit { (JC_<somenum>: ge_int(integer_of_int16(i_1), neg_int((32768)))) } ];
     void; [ { } unit { (JC_<somenum>: le_int(integer_of_int16(i_1), (32767))) } ];
     void; (return := i_1); (raise Return); absurd  end with Return ->
    !return end)) { true }
@@ -532,11 +523,9 @@ let uchar_range_ensures_default =
   try
    begin
      (assert { (JC_<somenum>: ge_int(integer_of_uint8(i_2), (0))) }; void); void;
-    (assert
-    { (JC_<somenum>:
-      le_int(integer_of_uint8(i_2), add_int(mul_int((127), (2)), (1)))) };
-    void); void; (return := i_2); (raise Return); absurd  end with Return ->
-   !return end)) { (JC_<somenum>: true) }
+    (assert { (JC_<somenum>: le_int(integer_of_uint8(i_2), (255))) }; void); void;
+    (return := i_2); (raise Return); absurd  end with Return -> !return end))
+  { (JC_<somenum>: true) }
 
 let uchar_range_safety =
  fun (i_2 : uint8) ->
@@ -546,11 +535,9 @@ let uchar_range_safety =
   try
    begin
      [ { } unit { (JC_<somenum>: ge_int(integer_of_uint8(i_2), (0))) } ]; void;
-    [ { } unit
-      { (JC_<somenum>:
-        le_int(integer_of_uint8(i_2), add_int(mul_int((127), (2)), (1)))) } ];
-    void; (return := i_2); (raise Return); absurd  end with Return ->
-   !return end)) { true }
+    [ { } unit { (JC_<somenum>: le_int(integer_of_uint8(i_2), (255))) } ]; void;
+    (return := i_2); (raise Return); absurd  end with Return -> !return end))
+  { true }
 
 let ushort_range_ensures_default =
  fun (i_3 : uint16) ->
@@ -560,10 +547,8 @@ let ushort_range_ensures_default =
   try
    begin
      (assert { (JC_<somenum>: ge_int(integer_of_uint16(i_3), (0))) }; void); void;
-    (assert
-    { (JC_<somenum>:
-      le_int(integer_of_uint16(i_3), add_int(mul_int((32767), (2)), (1)))) };
-    void); void; (return := i_3); (raise Return); absurd  end with Return ->
+    (assert { (JC_<somenum>: le_int(integer_of_uint16(i_3), (65535))) }; void);
+    void; (return := i_3); (raise Return); absurd  end with Return ->
    !return end)) { (JC_<somenum>: true) }
 
 let ushort_range_safety =
@@ -574,11 +559,9 @@ let ushort_range_safety =
   try
    begin
      [ { } unit { (JC_<somenum>: ge_int(integer_of_uint16(i_3), (0))) } ]; void;
-    [ { } unit
-      { (JC_<somenum>:
-        le_int(integer_of_uint16(i_3), add_int(mul_int((32767), (2)), (1)))) } ];
-    void; (return := i_3); (raise Return); absurd  end with Return ->
-   !return end)) { true }
+    [ { } unit { (JC_<somenum>: le_int(integer_of_uint16(i_3), (65535))) } ]; void;
+    (return := i_3); (raise Return); absurd  end with Return -> !return end))
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0094.jessie --quiet -f bts0094.makefile project
@@ -592,7 +575,7 @@ why --project [...] why/bts0094.why
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0094_po10.why">
-      <location file = "PPCHOME/tests/jessie/bts0094.c" line = "40" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0094.c" line = "40" begin = "15" end = "25"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -605,7 +588,7 @@ why --project [...] why/bts0094.why
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0094_po8.why">
-      <location file = "PPCHOME/tests/jessie/bts0094.c" line = "26" begin = "15" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/bts0094.c" line = "26" begin = "15" end = "23"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -614,7 +597,7 @@ why --project [...] why/bts0094.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/bts0094_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0094.c" line = "32" begin = "15" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/bts0094.c" line = "32" begin = "15" end = "28"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0094_po6.why">
@@ -627,7 +610,7 @@ why --project [...] why/bts0094.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/bts0094_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0094.c" line = "18" begin = "15" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/bts0094.c" line = "18" begin = "15" end = "26"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0094_po4.why">
@@ -640,7 +623,7 @@ why --project [...] why/bts0094.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/bts0094_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts0094.c" line = "11" begin = "15" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/bts0094.c" line = "11" begin = "15" end = "26"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0094_po2.why">

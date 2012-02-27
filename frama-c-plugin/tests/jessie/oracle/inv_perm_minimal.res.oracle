@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only inv_perm_minimal.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD inv_perm_minimal.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only inv_perm_minimal.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD inv_perm_minimal.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir inv_perm_minimal.jessie
 [jessie] File inv_perm_minimal.jessie/inv_perm_minimal.jc written.

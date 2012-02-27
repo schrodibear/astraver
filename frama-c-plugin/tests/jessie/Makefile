@@ -9,6 +9,9 @@
 
 #function canonpath ()
 #{ echo $(cd $(dirname $1); pwd -P)/$(basename $1) }
+ifndef FRAMAC_SHARE
+FRAMAC_SHARE  :=$(shell frama-c -journal-disable -print-path)
+endif
 
 PPCHOME:=$(shell (cd ../..; pwd -P))
 WHYHOME:=$(shell (cd  ../../..; pwd -P))
@@ -61,7 +64,9 @@ EXECCADUCEUSBYTE=WHYLIB=$(WHYLIB) CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUSBYTE)
 EXECCADUCEUSOPT=WHYLIB=$(WHYLIB) CADUCEUSLIB=$(CADUCEUSLIB) $(CADUCEUSOPT)
 
 JC_OPTIONS+=-why-opt -split-user-conj
-PPC_OPTIONS+=-cpp-extra-args="-I $(PPCHOME)/share/jessie" -jessie
+PPC_OPTIONS+=\
+     -cpp-extra-args="-I $(PPCHOME)/share/jessie -I$(FRAMAC_SHARE)/libc" \
+     -jessie
 
 DIR=`pwd`
 CFILES=$(shell ls *.c)
@@ -208,6 +213,8 @@ simplify/%_why.sx.all: %.c
 	@echo "PPCHOME: $(PPCHOME)" >&2
 	@echo "WHYHOME: $(WHYHOME)"
 	@echo "WHYHOME: $(WHYHOME)" >&2
+	@echo "FRAMAC_SHARE: $(FRAMAC_SHARE)"
+	@echo "FRAMAC_SHARE: $(FRAMAC_SHARE)" >&2
 	@echo "*** Begin output command for diff ***"
 	@echo "*** Begin stderr for diff ***" >&2
 	@echo Options are: $(PPC_OPTIONS) -jessie-gen-only $^

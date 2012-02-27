@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only hollas4.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD hollas4.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only hollas4.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD hollas4.c"
 hollas4.c:10:[kernel] warning: found two contracts. Merging them
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir hollas4.jessie

@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only fs252.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD fs252.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only fs252.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD fs252.c"
 [jessie] Starting Jessie translation
 fs252.c:31:[jessie] failure: Casting from type struct intP * to type int not allowed
 [jessie] warning: Unsupported feature(s).

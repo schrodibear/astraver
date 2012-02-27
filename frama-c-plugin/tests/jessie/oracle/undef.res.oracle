@@ -1,11 +1,11 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only undef.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD undef.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only undef.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD undef.c"
 undef.c:544:[kernel] warning: Body of function missing_return_wrong falls-through. Adding a return statement
 undef.c:552:[kernel] warning: Body of function missing_return_unsafe falls-through. Adding a return statement
 [jessie] Starting Jessie translation
-[kernel] warning: No code for function bar, default assigns generated for default behavior
-[kernel] warning: No code for function baz, default assigns generated for default behavior
-[kernel] warning: No code for function foo, default assigns generated for default behavior
+[kernel] warning: No code nor implicit assigns clause for function bar, generating default assigns from the prototype
+[kernel] warning: No code nor implicit assigns clause for function baz, generating default assigns from the prototype
+[kernel] warning: No code nor implicit assigns clause for function foo, generating default assigns from the prototype
 undef.c:628:[jessie] warning: skipping all arguments of implicit prototype baz
 [jessie] Producing Jessie files in subdir undef.jessie
 [jessie] File undef.jessie/undef.jc written.

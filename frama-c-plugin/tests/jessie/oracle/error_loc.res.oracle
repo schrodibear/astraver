@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only error_loc.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD error_loc.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only error_loc.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD error_loc.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir error_loc.jessie
 [jessie] File error_loc.jessie/error_loc.jc written.

@@ -1,8 +1,8 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only qsort-example.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD qsort-example.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only qsort-example.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD qsort-example.c"
 [jessie] Starting Jessie translation
-[kernel] warning: No code for function assert, default assigns generated for default behavior
-[kernel] warning: No code for function qsort, default assigns generated for default behavior
+[kernel] warning: No code nor implicit assigns clause for function assert, generating default assigns from the prototype
+[kernel] warning: No code nor implicit assigns clause for function qsort, generating default assigns from the prototype
 qsort-example.c:39:[jessie] failure: cannot take address of a function
 [jessie] warning: Unsupported feature(s).
                   Jessie plugin can not be used on your code.

@@ -1,9 +1,9 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only floats_loop2.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD floats_loop2.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only floats_loop2.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD floats_loop2.c"
 floats_loop2.c:51:[kernel] warning: Floating-point constant 0.1f is not represented exactly. Will use 0x1.99999a0000000p-4. See documentation for option -warn-decimal-float
 [jessie] Starting Jessie translation
-[kernel] warning: No code for function f_single, default assigns generated for default behavior
-[kernel] warning: No code for function printf, default assigns generated for default behavior
+[kernel] warning: No code nor implicit assigns clause for function f_single, generating default assigns from the prototype
+[kernel] warning: No code nor implicit assigns clause for function printf, generating default assigns from the prototype
 floats_loop2.c:98:[jessie] warning: skipping all arguments of implicit prototype f_single
 floats_loop2.c:98:[jessie] warning: skipping all arguments of implicit prototype printf
 [jessie] Producing Jessie files in subdir floats_loop2.jessie

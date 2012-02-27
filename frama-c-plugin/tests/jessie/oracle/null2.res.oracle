@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only null2.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD null2.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only null2.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD null2.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir null2.jessie
 [jessie] File null2.jessie/null2.jc written.

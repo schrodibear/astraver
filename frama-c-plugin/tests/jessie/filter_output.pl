@@ -1,6 +1,7 @@
 my $output = 0;
 my $PPCHOME = "";
 my $WHYHOME = "";
+my $FRAMAC_SHARE="";
 
 while ( <> ) {
     if ($_ =~ /PPCHOME: (.*)/) {
@@ -11,6 +12,10 @@ while ( <> ) {
         $WHYHOME=$1;
         $output=0
     }
+    if ($_ =~ /FRAMAC_SHARE: (.*)/) {
+        $FRAMAC_SHARE=$1;
+        $output=0
+    }
 
     if ( $_ =~ /total wallclock time/ ) {
 	$output = 0;
@@ -19,6 +24,7 @@ while ( <> ) {
 	$output = 0;
     }
     if ( $output == 1) {
+        s|${FRAMAC_SHARE}|FRAMAC_SHARE|g;
         s|${PPCHOME}|PPCHOME|g;
         s|${WHYHOME}|WHYHOME|g;
         s|^make\[[0-9]+\]:|make:|g;

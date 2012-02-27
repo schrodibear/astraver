@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only heap.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD heap.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only heap.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD heap.c"
 [kernel] warning: ignoring status of global invariant `size_inv'
 [kernel] warning: ignoring status of global invariant `is_heap_inv'
 [jessie] Starting Jessie translation

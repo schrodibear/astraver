@@ -1,5 +1,5 @@
-Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -jessie -jessie-gen-only see.c
-[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -dD see.c"
+Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only see.c
+[kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD see.c"
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir see.jessie
 [jessie] File see.jessie/see.jc written.
