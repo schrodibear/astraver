@@ -2,7 +2,7 @@
 
 
 
-/*@ ensures \valid(\result) && \fresh(\result);
+/*@ ensures \valid(\result) && \fresh(\result,sizeof(int));
   @*/
 int* f();
 

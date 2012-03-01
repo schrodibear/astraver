@@ -285,12 +285,12 @@ behavior default:
       
       loop 
       behavior default:
-        invariant (C_58 : ((((C_61 : (0 <= i_0)) && (C_62 : (i_0 < n))) &&
-                             (C_63 : Permut(contents{Here}(a),
+        invariant (C_57 : ((((C_60 : (0 <= i_0)) && (C_61 : (i_0 < n))) &&
+                             (C_62 : Permut(contents{Here}(a),
                                             \at(contents{Pre}(a),Pre), 0,
                                             (n - 1)))) &&
-                            (C_64 : H{Here}(a, i_0, (n - 1)))));
-      variant (C_57 : i_0);
+                            (C_63 : H{Here}(a, i_0, (n - 1)))));
+      variant (C_64 : i_0);
       while (true)
       {  
          {  (if (i_0 >= 1) then () else 

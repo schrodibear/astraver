@@ -126,19 +126,19 @@ behavior permutation:
       (C_20 : (i_0 = 0));
       
       loop 
-      behavior default:
-        invariant (C_26 : ((C_27 : (0 <= i_0)) && (C_28 : (i_0 < n))));
       behavior sorted:
-        invariant (C_23 : ((C_24 : Sorted{Here}(t, 0, i_0)) &&
-                            (C_25 : (\forall integer k1;
+        invariant (C_26 : ((C_27 : Sorted{Here}(t, 0, i_0)) &&
+                            (C_28 : (\forall integer k1;
                                       (\forall integer k2;
                                         (((0 <= k1) &&
                                            ((k1 < i_0) &&
                                              ((i_0 <= k2) && (k2 < n)))) ==>
                                           ((t + k1).intM <= (t + k2).intM)))))));
       behavior permutation:
-        invariant (C_22 : Permut{Pre, Here}(t, 0, (n - 1)));
-      variant (C_21 : (n - i_0));
+        invariant (C_25 : Permut{Pre, Here}(t, 0, (n - 1)));
+      behavior default:
+        invariant (C_21 : ((C_22 : (0 <= i_0)) && (C_23 : (i_0 < n))));
+      variant (C_24 : (n - i_0));
       while (true)
       {  
          {  (if (i_0 < (C_29 : (n - 1))) then () else 

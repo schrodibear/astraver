@@ -1185,9 +1185,14 @@ and pred p =
           ) (terms t))
         in
         (mkconjunct elist p.loc)#node
+    
+    | Pvalid_read _ ->
+      (* TODO *)
+      Extlib.not_yet_implemented "Interp.pred Pvalid_read"
 
-    | Pfresh t ->
-	JCPEfresh(term t)
+    | Pfresh (t,_) ->
+      (* TODO: take into account size *)
+      JCPEfresh(term t)
 
     | Psubtype({term_node = Ttypeof t},{term_node = Ttype ty}) ->
         JCPEinstanceof(term t,get_struct_name (pointed_type ty))
@@ -2065,8 +2070,9 @@ let rec statement s =
 		 | AAssigns(ids,assign) ->
 		     ((ids,[],assign)::beh,var)
 		 | APragma _ -> (* ignored *) (beh,var)
-		 | _ -> assert false
-		     (* others should not occur in loop annot *))
+                 | AAllocation _ -> (* Ignored *) (beh, var)
+		 | AAssert _ | AStmtSpec _ | AInvariant _ -> assert false
+		     (* should not occur in loop annot *))
 	    loop_annot ([],None)
 	in
         (* Locate the beginning of the loop, to serve as location for generated

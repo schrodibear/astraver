@@ -4,7 +4,7 @@
 typedef struct Str {int x; } *str;
 
 
-/*@ ensures \fresh(\result);
+/*@ ensures \fresh(\result,sizeof(*\result));
   @*/
 str create(void);
 
