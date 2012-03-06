@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/c/swap.jessie/swap/why3session.xml">
+ name="swap.jessie/swap/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -17,17 +17,17 @@
  <file
   name="../swap.mlw"
   verified="true"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
-   locfile="tests/c/swap.jessie/swap/../swap.mlw"
+   locfile="swap.jessie/swap/../swap.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="tests/c/swap.jessie/swap/../swap.mlw"
+   locfile="swap.jessie/swap/../swap.mlw"
    loclnum="153" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
@@ -36,7 +36,7 @@
     locfile="/home/marche/why2-nitrogen/tests/c/swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="2a63cb3d347f5806a0cb43224a9aa634"
+    sum="1b5322db028ed97e3b9875bd5b4eb6cc"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4ainteger_of_int32V1Aainfix =ainteger_of_int32V3ainteger_of_int32V0Iainfix =V4V2FIainfix =V3V0FIainfix =V2V1FFF">
@@ -65,15 +65,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_safety"
     locfile="/home/marche/why2-nitrogen/tests/c/swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
-    expl="Function swap, Safety"
-    sum="8241de4bd8f8baf2392b88a132adaf8c"
+    expl="parameter swap_safety"
+    sum="1b6dc4d3671237e486404644d8b991da"
     proved="true"
     expanded="true"
     shape="t">

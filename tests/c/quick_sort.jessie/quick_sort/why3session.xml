@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="quick_sort.jessie/quick_sort/why3session.xml">
+ name="quick_sort/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -28,14 +28,14 @@
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="quick_sort.jessie/quick_sort/../quick_sort.mlw"
+   locfile="quick_sort/../quick_sort.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="quick_sort.jessie/quick_sort/../quick_sort.mlw"
+   locfile="quick_sort/../quick_sort.mlw"
    loclnum="213" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
@@ -43,10 +43,10 @@
     name="WP_parameter quick_rec_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
-    expl="Function quick_rec, default behavior"
-    sum="e010febaad22ad0e4440322ecfda80f3"
+    expl="parameter quick_rec_ensures_default"
+    sum="d80b4374723a5e02dd8cfd2628185da9"
     proved="true"
-    expanded="false"
+    expanded="true"
     shape="iainfix >=V1V2anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2iainfix <=V8V2iainfix <aselectV10ashiftV0V8V5anot_assignsV3V4V12apset_rangeapset_singletonV0V1V2Aainfix <aselectV12ashiftV0V14V5Iainfix <=V14V11Aainfix <V1V14FAainfix >=aselectV12ashiftV0V15V5Iainfix <V15V13Aainfix <V11V15FAa_PermutV0V1V2V12V4Aainfix <=V13ainfix +V2c1Aainfix <V11V13Aainfix <=V1V11Aainfix =aselectV12ashiftV0V1V5Iainfix =V13ainfix +V8c1FAa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1Fanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V17V5Iainfix <=V17V9Aainfix <V1V17FAainfix >=aselectV10ashiftV0V18V5Iainfix <V18V16Aainfix <V9V18FAa_PermutV0V1V2V10V4Aainfix <=V16ainfix +V2c1Aainfix <V9V16Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5Iainfix =V16ainfix +V8c1Fanot_assignsV3V4V21apset_rangeapset_singletonV0V1V2Ianot_assignsV3V20V21apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V21Aa_PermutV0ainfix +V9c1V2V21V20FIanot_assignsV3V19V20apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V20Aa_PermutV0V1ainfix -V9c1V20V19FAa_PermutV0V1V2V19V10Ianot_assignsV3V10V19apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V19V10FAainfix <=V9V2Aainfix <=V1V9Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V22V5Iainfix <=V22V9Aainfix <V1V22FAainfix >=aselectV10ashiftV0V23V5Iainfix <V23V8Aainfix <V9V23FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFAanot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Aainfix <aselectV4ashiftV0V24V5Iainfix <=V24V6Aainfix <V1V24FAainfix >=aselectV4ashiftV0V25V5Iainfix <V25V7Aainfix <V6V25FAa_PermutV0V1V2V4V4Aainfix <=V7ainfix +V2c1Aainfix <V6V7Aainfix <=V1V6Aainfix =aselectV4ashiftV0V1V5Iainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
     <label
      name="expl:parameter quick_rec_ensures_default">
@@ -57,13 +57,13 @@
     <transf
      name="split_goal"
      proved="true"
-     expanded="false">
+     expanded="true">
      <goal
       name="WP_parameter quick_rec_ensures_default.1"
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="ff615a0ded4b386831ac32b725854fad"
+      sum="41c684e234389058f623335d3e0e48c1"
       proved="true"
       expanded="false"
       shape="anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Iainfix >=V1V2Iainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -78,21 +78,21 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.01"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
@@ -100,7 +100,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="loop invariant init"
-      sum="d954fed425f32aed810e09b54b7c8dd8"
+      sum="6148567774832c68b85a01d1345c77e4"
       proved="true"
       expanded="false"
       shape="anot_assignsV3V4V4apset_rangeapset_singletonV0V1V2Aainfix <aselectV4ashiftV0V8V5Iainfix <=V8V6Aainfix <V1V8FAainfix >=aselectV4ashiftV0V9V5Iainfix <V9V7Aainfix <V6V9FAa_PermutV0V1V2V4V4Aainfix <=V7ainfix +V2c1Aainfix <V6V7Aainfix <=V1V6Aainfix =aselectV4ashiftV0V1V5Iainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -137,7 +137,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="assertion"
-      sum="ba71e306d0372f5727b146ff5e29665e"
+      sum="bc29021fa8c859326f74f61d13582c2c"
       proved="true"
       expanded="false"
       shape="a_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1FIainfix <aselectV10ashiftV0V8V5Iainfix <=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V13V5Iainfix <=V13V9Aainfix <V1V13FAainfix >=aselectV10ashiftV0V14V5Iainfix <V14V8Aainfix <V9V14FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -174,7 +174,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="loop invariant preservation"
-      sum="565a47658b7c665f14e8cfacf463a5d3"
+      sum="8d56f7fb816ecbd27e1b61309a43a4a8"
       proved="true"
       expanded="false"
       shape="anot_assignsV3V4V12apset_rangeapset_singletonV0V1V2Aainfix <aselectV12ashiftV0V14V5Iainfix <=V14V11Aainfix <V1V14FAainfix >=aselectV12ashiftV0V15V5Iainfix <V15V13Aainfix <V11V15FAa_PermutV0V1V2V12V4Aainfix <=V13ainfix +V2c1Aainfix <V11V13Aainfix <=V1V11Aainfix =aselectV12ashiftV0V1V5Iainfix =V13ainfix +V8c1FIa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FIainfix =V11ainfix +V9c1FIainfix <aselectV10ashiftV0V8V5Iainfix <=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V16V5Iainfix <=V16V9Aainfix <V1V16FAainfix >=aselectV10ashiftV0V17V5Iainfix <V17V8Aainfix <V9V17FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -189,7 +189,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.96"/>
+       <result status="valid" time="0.98"/>
       </proof>
      </goal>
      <goal
@@ -197,7 +197,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="loop invariant preservation"
-      sum="edd18744d3f1aec0d6c121a9bca8e170"
+      sum="6ef9fa978108cfc6a0de346e3191d1f8"
       proved="true"
       expanded="false"
       shape="anot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V12V5Iainfix <=V12V9Aainfix <V1V12FAainfix >=aselectV10ashiftV0V13V5Iainfix <V13V11Aainfix <V9V13FAa_PermutV0V1V2V10V4Aainfix <=V11ainfix +V2c1Aainfix <V9V11Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5Iainfix =V11ainfix +V8c1FIainfix <aselectV10ashiftV0V8V5NIainfix <=V8V2Ianot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V14V5Iainfix <=V14V9Aainfix <V1V14FAainfix >=aselectV10ashiftV0V15V5Iainfix <V15V8Aainfix <V9V15FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -212,14 +212,14 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.29"/>
+       <result status="valid" time="0.30"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="1"
@@ -234,7 +234,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="assertion"
-      sum="19bdfee221880790698699d5fb76ae2e"
+      sum="07324c214e8a933cad741325e40c4282"
       proved="true"
       expanded="false"
       shape="ainfix <=V9V2Aainfix <=V1V9Iainfix <=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V11V5Iainfix <=V11V9Aainfix <V1V11FAainfix >=aselectV10ashiftV0V12V5Iainfix <V12V8Aainfix <V9V12FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -249,7 +249,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="0"
@@ -271,7 +271,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="assertion"
-      sum="820fb341ae42faed59cd810c5801469d"
+      sum="39296aba6b17142119fdc559f0fb55d7"
       proved="true"
       expanded="false"
       shape="a_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix <=V9V2Aainfix <=V1V9Iainfix <=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V12V5Iainfix <=V12V9Aainfix <V1V12FAainfix >=aselectV10ashiftV0V13V5Iainfix <V13V8Aainfix <V9V13FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -293,14 +293,14 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
@@ -308,7 +308,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="8beede7b31e24b474e6d32176024d451"
+      sum="a235322bfeaf0eadc26cc30dd9aa9828"
       proved="true"
       expanded="false"
       shape="anot_assignsV3V4V13apset_rangeapset_singletonV0V1V2Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix <=V9V2Aainfix <=V1V9Iainfix <=V8V2NIanot_assignsV3V4V10apset_rangeapset_singletonV0V1V2Aainfix <aselectV10ashiftV0V14V5Iainfix <=V14V9Aainfix <V1V14FAainfix >=aselectV10ashiftV0V15V5Iainfix <V15V8Aainfix <V9V15FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -323,7 +323,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.63"/>
+       <result status="valid" time="0.65"/>
       </proof>
      </goal>
     </transf>
@@ -332,8 +332,8 @@
     name="WP_parameter quick_rec_ensures_permutation"
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
-    expl="Function quick_rec, Behavior `permutation'"
-    sum="459300968376938580f53a0182a4545c"
+    expl="parameter quick_rec_ensures_permutation"
+    sum="18e85408e1177796bdcd9123ec950573"
     proved="false"
     expanded="true"
     shape="iainfix >=V1V2a_PermutV0V1V2V4V4a_PermutV0V1V2V13V4Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix <=V9V2Aainfix <=V1V9Iainfix <=V8V2NIainfix <aselectV10ashiftV0V14V5Iainfix <=V14V9Aainfix <V1V14FAainfix >=aselectV10ashiftV0V15V5Iainfix <V15V8Aainfix <V9V15FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -352,7 +352,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="15c090fc36b436fe3d72e8fcb537fd62"
+      sum="a3c4187688d45251f636f555b4a028d9"
       proved="true"
       expanded="false"
       shape="a_PermutV0V1V2V4V4Iainfix >=V1V2Iainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -389,7 +389,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="167c6761d04459dd608c3045af4e8519"
+      sum="1175c9c5c8bdff1e30c0cc13ab74f9eb"
       proved="false"
       expanded="true"
       shape="a_PermutV0V1V2V13V4Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix <=V9V2Aainfix <=V1V9Iainfix <=V8V2NIainfix <aselectV10ashiftV0V14V5Iainfix <=V14V9Aainfix <V1V14FAainfix >=aselectV10ashiftV0V15V5Iainfix <V15V8Aainfix <V9V15FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -404,35 +404,35 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.03"/>
+       <result status="timeout" time="5.05"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.07"/>
+       <result status="timeout" time="5.05"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.08"/>
+       <result status="timeout" time="5.04"/>
       </proof>
       <proof
        prover="2"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.09"/>
+       <result status="timeout" time="5.08"/>
       </proof>
       <proof
        prover="4"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.03"/>
+       <result status="timeout" time="5.02"/>
       </proof>
      </goal>
     </transf>
@@ -441,8 +441,8 @@
     name="WP_parameter quick_rec_ensures_sorted"
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
-    expl="Function quick_rec, Behavior `sorted'"
-    sum="6ab52dc915d1795ecc5c0e514d8f952c"
+    expl="parameter quick_rec_ensures_sorted"
+    sum="fd1957bc016ff3b1c8ad14a38296e1bd"
     proved="false"
     expanded="true"
     shape="iainfix >=V1V2a_SortedV0V1ainfix +V2c1V4a_SortedV0V1ainfix +V2c1V13Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix <=V9V2Aainfix <=V1V9Iainfix <=V8V2NIainfix <aselectV10ashiftV0V14V5Iainfix <=V14V9Aainfix <V1V14FAainfix >=aselectV10ashiftV0V15V5Iainfix <V15V8Aainfix <V9V15FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -461,7 +461,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="f71535e3a4ab9fbd99c4bc0be35691aa"
+      sum="f6b24467b5f90a50a14feeba69be0606"
       proved="true"
       expanded="false"
       shape="a_SortedV0V1ainfix +V2c1V4Iainfix >=V1V2Iainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -490,7 +490,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
@@ -498,7 +498,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
       loclnum="57" loccnumb="5" loccnume="14"
       expl="normal postcondition"
-      sum="41a8594d05a784b3e05a6fb53a9f7120"
+      sum="c2b356244b186bb7fa47777774f7d9be"
       proved="false"
       expanded="true"
       shape="a_SortedV0V1ainfix +V2c1V13Ianot_assignsV3V12V13apset_rangeapset_singletonV0ainfix +V9c1V2Aa_SortedV0ainfix +V9c1ainfix +V2c1V13Aa_PermutV0ainfix +V9c1V2V13V12FIanot_assignsV3V11V12apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V12Aa_PermutV0V1ainfix -V9c1V12V11FIa_PermutV0V1V2V11V10Ianot_assignsV3V10V11apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V11V10FIainfix <=V9V2Aainfix <=V1V9Iainfix <=V8V2NIainfix <aselectV10ashiftV0V14V5Iainfix <=V14V9Aainfix <V1V14FAainfix >=aselectV10ashiftV0V15V5Iainfix <V15V8Aainfix <V9V15FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FIainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -520,28 +520,28 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.10"/>
+       <result status="timeout" time="5.04"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.01"/>
+       <result status="timeout" time="5.06"/>
       </proof>
       <proof
        prover="2"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.01"/>
+       <result status="timeout" time="5.03"/>
       </proof>
       <proof
        prover="4"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.02"/>
+       <result status="timeout" time="5.03"/>
       </proof>
      </goal>
     </transf>
@@ -550,8 +550,8 @@
     name="WP_parameter quick_rec_safety"
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="57" loccnumb="5" loccnume="14"
-    expl="Function quick_rec, Safety"
-    sum="5bad7167a34b10ea56afaf8a3afbb3b8"
+    expl="parameter quick_rec_safety"
+    sum="0f9eaf70985fa276c487b911f4ca880b"
     proved="true"
     expanded="false"
     shape="iainfix <=V8V2iainfix <aselectV10ashiftV0V8V5ainfix <ainfix -V2V13ainfix -V2V8Aainfix <=c0ainfix -V2V8Iainfix =V13ainfix +V8c1FIa_PermutV0V1V2V12V10Ianot_assignsV3V10V12apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V8V8Aa_SwapV0V8V11V12V10FAainfix >=aoffset_maxV3V0V11Aainfix <=aoffset_minV3V0V11Aainfix >=aoffset_maxV3V0V8Aainfix <=aoffset_minV3V0V8Iainfix =V11ainfix +V9c1Fainfix <ainfix -V2V14ainfix -V2V8Aainfix <=c0ainfix -V2V8Iainfix =V14ainfix +V8c1FAainfix <=V8aoffset_maxV3V0Aainfix <=aoffset_minV3V0V8ainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0ainfix +V9c1Aazwf_zeroainfix -V2ainfix +V9c1ainfix -V2V1Ianot_assignsV3V15V16apset_rangeapset_singletonV0V1ainfix -V9c1Aa_SortedV0V1ainfix +ainfix -V9c1c1V16Aa_PermutV0V1ainfix -V9c1V16V15FAainfix >=aoffset_maxV3V0ainfix -V9c1Aainfix <=aoffset_minV3V0V1Aazwf_zeroainfix -ainfix -V9c1V1ainfix -V2V1Ia_PermutV0V1V2V15V10Ianot_assignsV3V10V15apset_unionapset_rangeapset_singletonV0V9V9apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V9V15V10FAainfix >=aoffset_maxV3V0V9Aainfix <=aoffset_minV3V0V9Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1Iainfix <=V9V2Aainfix <=V1V9Iainfix <aselectV10ashiftV0V17V5Iainfix <=V17V9Aainfix <V1V17FAainfix >=aselectV10ashiftV0V18V5Iainfix <V18V8Aainfix <V9V18FAa_PermutV0V1V2V10V4Aainfix <=V8ainfix +V2c1Aainfix <V9V8Aainfix <=V1V9Aainfix =aselectV10ashiftV0V1V5FFFIainfix =V7ainfix +V1c1FIainfix =V6V1FIainfix =V5aselectV4ashiftV0V1FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Iainfix >=V1V2NIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -566,29 +566,29 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter quick_sort_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
-    expl="Function quick_sort, default behavior"
-    sum="c05eb0ec9c019b12ec459af1b9c8d4da"
+    expl="parameter quick_sort_ensures_default"
+    sum="7283eba8152f67c57e49e0dc21f41b4c"
     proved="true"
     expanded="false"
     shape="t">
@@ -610,14 +610,14 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
@@ -625,7 +625,7 @@
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
     expl="normal postcondition"
-    sum="6fdab06f20cc0732f05bfebad2b1b071"
+    sum="b4493a88cc3620beab384046a53aba86"
     proved="true"
     expanded="false"
     shape="a_PermutV0c0ainfix -V1c1V4V3Ianot_assignsV2V3V4apset_rangeapset_singletonV0c0ainfix -V1c1Aa_SortedV0c0ainfix +ainfix -V1c1c1V4Aa_PermutV0c0ainfix -V1c1V4V3FIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
@@ -640,21 +640,21 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
@@ -662,7 +662,7 @@
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
     expl="normal postcondition"
-    sum="e2ed67dacec0bf86647a37045afbbe01"
+    sum="445a65cd0a2cbfccbb8e7d0ece8696fb"
     proved="true"
     expanded="false"
     shape="a_SortedV0c0V1V4Ianot_assignsV2V3V4apset_rangeapset_singletonV0c0ainfix -V1c1Aa_SortedV0c0ainfix +ainfix -V1c1c1V4Aa_PermutV0c0ainfix -V1c1V4V3FIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
@@ -691,7 +691,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
@@ -699,7 +699,7 @@
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="91" loccnumb="5" loccnume="15"
     expl="precondition for call"
-    sum="97a7b50a438d261b45ff2d8f79af9001"
+    sum="b6b340cdd0b2186de0a674f4d0d53406"
     proved="true"
     expanded="false"
     shape="ainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0Iainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFF">
@@ -736,7 +736,7 @@
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="42" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="0563aed05c56b47287a5e1fb807abbf4"
+    sum="12f0a85222f39598cfa7b0d4945add25"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V2V7V4Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V2Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -751,29 +751,29 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.21"/>
+     <result status="valid" time="0.22"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.82"/>
+     <result status="valid" time="0.84"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.55"/>
+     <result status="valid" time="0.79"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_safety"
     locfile="/home/marche/why2-nitrogen/tests/c/quick_sort.c"
     loclnum="42" loccnumb="5" loccnume="9"
-    expl="Function swap, Safety"
-    sum="d3e2ce8abacbab3563354d3763a4dc61"
+    expl="parameter swap_safety"
+    sum="227f926eb3d8a8660f5a19487328be53"
     proved="true"
     expanded="false"
     shape="ainfix <=V2aoffset_maxV3V0Aainfix <=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Aainfix <=V2aoffset_maxV3V0Aainfix <=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Iainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V2Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1FFFFF">
@@ -795,7 +795,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"

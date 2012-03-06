@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/java/AllZeros/why3session.xml">
+ name="AllZeros/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -28,14 +28,14 @@
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="tests/java/AllZeros/../AllZeros.mlw"
+   locfile="AllZeros/../AllZeros.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="tests/java/AllZeros/../AllZeros.mlw"
+   locfile="AllZeros/../AllZeros.mlw"
    loclnum="315" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
@@ -43,8 +43,8 @@
     name="WP_parameter _AllZeros_all_zeros_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/AllZeros.java"
     loclnum="44" loccnumb="19" loccnume="28"
-    expl="Method all_zeros, default behavior"
-    sum="2434b3b8d7845495f17da641f359c509"
+    expl="parameter _AllZeros_all_zeros_ensures_default"
+    sum="0daab39bd8fd0ebbe5f77020656f96c9"
     proved="true"
     expanded="true"
     shape="iainfix <ainteger_of_int32V4V5iainfix =ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V4c0Nainfix =ainteger_of_int32aselectV1ashiftV0V7c0Iainfix <V7ainfix +aoffset_maxV2V0c1Aainfix <=c0V7Fqainfix =V6aTrueIainfix =V6aTrueNFainfix =ainteger_of_int32aselectV1ashiftV0V10c0Iainfix <V10ainteger_of_int32V9Aainfix <=c0V10FAainfix <=ainteger_of_int32V9ainfix +aoffset_maxV2V0c1Aainfix <=c0ainteger_of_int32V9Iainfix =V9V8FIainfix =ainteger_of_int32V8ainfix +ainteger_of_int32V4c1Fainfix =ainteger_of_int32aselectV1ashiftV0V12c0Iainfix <V12ainfix +aoffset_maxV2V0c1Aainfix <=c0V12Fqainfix =V11aTrueIainfix =V11aTrueFIainfix =V5ainfix +aoffset_maxV2V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIainfix =ainteger_of_int32aselectV1ashiftV0V13c0Iainfix <V13ainteger_of_int32V4Aainfix <=c0V13FAainfix <=ainteger_of_int32V4ainfix +aoffset_maxV2V0c1Aainfix <=c0ainteger_of_int32V4FAainfix =ainteger_of_int32aselectV1ashiftV0V14c0Iainfix <V14ainteger_of_int32V3Aainfix <=c0V14FAainfix <=ainteger_of_int32V3ainfix +aoffset_maxV2V0c1Aainfix <=c0ainteger_of_int32V3Iainfix =ainteger_of_int32V3c0FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
@@ -59,21 +59,21 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
@@ -81,7 +81,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/AllZeros.java"
     loclnum="44" loccnumb="19" loccnume="28"
     expl="index bounds"
-    sum="79051440623e5a18d888585d54cf953c"
+    sum="a0a384c61b312d7704727d7491f8424a"
     proved="true"
     expanded="true"
     shape="ainfix <ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V7ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V4Aainfix <=c0ainfix -ainfix +aoffset_maxV2V0c1ainteger_of_int32V4Iainfix =V7V6FIainfix =ainteger_of_int32V6ainfix +ainteger_of_int32V4c1FAainfix <=ainfix +ainteger_of_int32V4c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V4c1Iainfix =ainteger_of_int32aselectV1ashiftV0ainteger_of_int32V4c0Aainfix <=ainteger_of_int32V4aoffset_maxV2V0Aainfix <=aoffset_minV2V0ainteger_of_int32V4Iainfix <ainteger_of_int32V4V5Iainfix =V5ainfix +aoffset_maxV2V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FAainfix >=aoffset_maxV2V0aprefix -c1Iainfix =ainteger_of_int32aselectV1ashiftV0V8c0Iainfix <V8ainteger_of_int32V4Aainfix <=c0V8FAainfix <=ainteger_of_int32V4ainfix +aoffset_maxV2V0c1Aainfix <=c0ainteger_of_int32V4FIainfix =ainteger_of_int32V3c0FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
@@ -96,7 +96,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="0"
@@ -117,8 +117,8 @@
     name="WP_parameter _AllZeros_should_not_be_proved_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/AllZeros.java"
     loclnum="34" loccnumb="15" loccnume="35"
-    expl="Method should_not_be_proved, default behavior"
-    sum="8f915a289d7ef0fcc1c9f0859b1a8f24"
+    expl="parameter _AllZeros_should_not_be_proved_ensures_default"
+    sum="a7161b16302a01ce487619ab7a58f58b"
     proved="true"
     expanded="true"
     shape="t">
@@ -155,7 +155,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/AllZeros.java"
     loclnum="34" loccnumb="15" loccnume="35"
     expl="index bounds"
-    sum="2b07914a76342614a15bb9aeb9b2d9e5"
+    sum="cc63a6d7d535afc17e81245880623ffc"
     proved="false"
     expanded="true"
     shape="ainfix <=V2c2147483647Aainfix <=aprefix -c2147483648V2Iainfix =V2ainfix +aoffset_maxV1V0c1Aainfix >=V2c0Aainfix <=V2c2147483647FAainfix >=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
@@ -174,7 +174,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/AllZeros.java"
       loclnum="34" loccnumb="15" loccnume="35"
       expl="assertion"
-      sum="c1890633cbbe4ae254fad205b18be0b3"
+      sum="9eb3f6190dbbf10961c705f3a1224c18"
       proved="false"
       expanded="true"
       shape="ainfix >=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
@@ -189,7 +189,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.05"/>
+       <result status="timeout" time="5.04"/>
       </proof>
       <proof
        prover="0"
@@ -203,21 +203,21 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="1.27"/>
+       <result status="unknown" time="0.69"/>
       </proof>
       <proof
        prover="2"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.06"/>
+       <result status="timeout" time="5.04"/>
       </proof>
       <proof
        prover="4"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.05"/>
+       <result status="timeout" time="5.04"/>
       </proof>
      </goal>
      <goal
@@ -225,7 +225,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/AllZeros.java"
       loclnum="34" loccnumb="15" loccnume="35"
       expl="arithmetic overflow"
-      sum="34d1605c024dfd4533d786a10ab5931d"
+      sum="f132a8f80d490a5637ebd0b03e4bee20"
       proved="true"
       expanded="true"
       shape="ainfix <=V2c2147483647Aainfix <=aprefix -c2147483648V2Iainfix =V2ainfix +aoffset_maxV1V0c1Aainfix >=V2c0Aainfix <=V2c2147483647FIainfix >=aoffset_maxV1V0aprefix -c1Ialeft_valid_struct_intMV0c0V1FF">
@@ -240,7 +240,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="0"
@@ -263,8 +263,8 @@
     name="WP_parameter cons_AllZeros_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class AllZeros, default behavior"
-    sum="2b399554d32177ff4dc67659f8d42a86"
+    expl="parameter cons_AllZeros_ensures_default"
+    sum="162c57499c8bb9334acf70a6e840a43c"
     proved="true"
     expanded="true"
     shape="t">
@@ -286,7 +286,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -300,8 +300,8 @@
     name="WP_parameter cons_AllZeros_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class AllZeros, Safety"
-    sum="05a2e7c425094e4d3f8643c60bf5db4e"
+    expl="parameter cons_AllZeros_safety"
+    sum="43037f82602031bf64e220ff0ccabe11"
     proved="true"
     expanded="true"
     shape="t">

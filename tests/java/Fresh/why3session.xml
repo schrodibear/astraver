@@ -25,7 +25,7 @@
  <file
   name="../Fresh.mlw"
   verified="true"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
    locfile="Fresh/../Fresh.mlw"
@@ -44,7 +44,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
     loclnum="8" loccnumb="17" loccnume="23"
     expl="normal postcondition"
-    sum="be372712a386fc926034917a01e9efc2"
+    sum="26691bb323ec231e266cefc55c48a597"
     proved="true"
     expanded="true"
     shape="avalidV0V4NIainfix =V4V3FIainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFFF">
@@ -66,7 +66,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="0"
@@ -80,7 +80,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
      prover="4"
@@ -94,8 +94,8 @@
     name="WP_parameter _Fresh_create_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
     loclnum="8" loccnumb="17" loccnume="23"
-    expl="Method create, Safety"
-    sum="6f3ed432e6db3cc9de5a5613dda21b8b"
+    expl="parameter _Fresh_create_safety"
+    sum="e1df953d21950906fdad39ac38b8b29f"
     proved="true"
     expanded="true"
     shape="ainfix >=aoffset_maxV2V3c0IainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFFAainfix >=c1c0F">
@@ -131,7 +131,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="4"
@@ -146,7 +146,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
     expl="assertion"
-    sum="edd6ae1a4edace631ffcd0f4ddbc1118"
+    sum="34b59e7ba470bb5543f6b70e44132915"
     proved="true"
     expanded="true"
     shape="ainfix =V0V2NIavalidV1V2NFIavalid_struct_FreshV0c0c0V1FF">
@@ -196,8 +196,8 @@
     name="WP_parameter _Fresh_test_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
-    expl="Method test, Safety"
-    sum="8692f5bcc442fed497ab6d90f9d330f0"
+    expl="parameter _Fresh_test_safety"
+    sum="4e6b711e93dd0645c5fd75b52a8459a8"
     proved="true"
     expanded="true"
     shape="t">
@@ -219,14 +219,14 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="2"
@@ -247,8 +247,8 @@
     name="WP_parameter cons_Fresh_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Fresh, default behavior"
-    sum="2fa0569feba35f542ea7d0d3de673cef"
+    expl="parameter cons_Fresh_ensures_default"
+    sum="47d6e09dd9b45b02feba9faf4bebb1fa"
     proved="true"
     expanded="true"
     shape="t">
@@ -270,36 +270,36 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="2"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="4"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Fresh_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Fresh, Safety"
-    sum="d9da4f0946727c02cda98b6bf6118467"
+    expl="parameter cons_Fresh_safety"
+    sum="593e3b829dfd56445342da1abc38d872"
     proved="true"
     expanded="true"
     shape="t">
@@ -321,14 +321,14 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="2"
@@ -342,15 +342,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Object, default behavior"
-    sum="f1da3a195e1968d1399e2e7271b2c30b"
+    expl="parameter cons_Object_ensures_default"
+    sum="5639f71ca6dcc7b8306fbb54224e25d3"
     proved="true"
     expanded="true"
     shape="t">
@@ -372,36 +372,36 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="2"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="4"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Object, Safety"
-    sum="9bf2d781950ae2bf311536932a482f8b"
+    expl="parameter cons_Object_safety"
+    sum="e2f33fd7be5a00a57529ac46a427fc8d"
     proved="true"
     expanded="true"
     shape="t">
@@ -423,28 +423,28 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="2"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="4"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
   </theory>

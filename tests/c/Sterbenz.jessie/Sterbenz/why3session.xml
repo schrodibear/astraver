@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="Sterbenz/why3session.xml">
+ name="Sterbenz.jessie/Sterbenz/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -29,17 +29,17 @@
  <file
   name="../Sterbenz.mlw"
   verified="false"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
-   locfile="Sterbenz/../Sterbenz.mlw"
+   locfile="Sterbenz.jessie/Sterbenz/../Sterbenz.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="Sterbenz/../Sterbenz.mlw"
+   locfile="Sterbenz.jessie/Sterbenz/../Sterbenz.mlw"
    loclnum="134" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
@@ -47,8 +47,8 @@
     name="WP_parameter _Sterbenz_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
-    expl="Function Sterbenz, default behavior"
-    sum="6c2230e474e0a24ea132c220f5ae1894"
+    expl="parameter _Sterbenz_ensures_default"
+    sum="8c277c01e64b2ac70ce1ee1e3ecd5555"
     proved="false"
     expanded="true"
     shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_single_postaNearestTiesToEvenV0V1V2FAainfix <=c0.0avalueV0Aainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
@@ -67,7 +67,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="assertion"
-      sum="88ba30f99ab16590d59cdca55f9e37c1"
+      sum="6f6ed123250a632652e3984368249894"
       proved="true"
       expanded="true"
       shape="ainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
@@ -82,7 +82,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="0"
@@ -104,7 +104,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="assertion"
-      sum="d140083396f87aed59df42046ae8b1a8"
+      sum="90dfe8cfe63d92567ac6fd57940cd6f0"
       proved="true"
       expanded="true"
       shape="ainfix <=c0.0avalueV0Iainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
@@ -126,7 +126,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="3"
@@ -141,7 +141,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="normal postcondition"
-      sum="7ee90b6b01c44e8a7cd4343e04e24018"
+      sum="445f3735ead190d8df6513a2cf937fde"
       proved="false"
       expanded="true"
       shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_single_postaNearestTiesToEvenV0V1V2FIainfix <=c0.0avalueV0Iainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
@@ -156,14 +156,14 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.04"/>
+       <result status="timeout" time="5.02"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="0.36"/>
+       <result status="unknown" time="0.22"/>
       </proof>
       <proof
        prover="0"
@@ -177,14 +177,14 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.06"/>
+       <result status="timeout" time="5.02"/>
       </proof>
       <proof
        prover="5"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.04"/>
+       <result status="timeout" time="5.12"/>
       </proof>
      </goal>
     </transf>
@@ -194,7 +194,7 @@
     locfile="/home/marche/why2-nitrogen/tests/c/Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
     expl="floating-point overflow"
-    sum="0378b250e5108199b6e0fe314a49aaa4"
+    sum="19e4bef29f5465d81ff8e4a70dab0adc"
     proved="true"
     expanded="true"
     shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV0avalueV1amax_singleIainfix <=c0.0avalueV0Iainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">

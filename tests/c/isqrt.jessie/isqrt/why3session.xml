@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/c/isqrt.jessie/isqrt/why3session.xml">
+ name="isqrt.jessie/isqrt/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -25,17 +25,17 @@
  <file
   name="../isqrt.mlw"
   verified="true"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
-   locfile="tests/c/isqrt.jessie/isqrt/../isqrt.mlw"
+   locfile="isqrt.jessie/isqrt/../isqrt.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="tests/c/isqrt.jessie/isqrt/../isqrt.mlw"
+   locfile="isqrt.jessie/isqrt/../isqrt.mlw"
    loclnum="107" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
@@ -43,8 +43,8 @@
     name="WP_parameter isqrt_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
     loclnum="40" loccnumb="4" loccnume="9"
-    expl="Function isqrt, default behavior"
-    sum="78142f145c8896c00612aecfa9e4ca72"
+    expl="parameter isqrt_ensures_default"
+    sum="eaace1239f182d701767416352dac878"
     proved="true"
     expanded="true"
     shape="iainfix <=V3V0ainfix =V6asqrainfix +V5c1Aainfix >=V0asqrV5Aainfix >=V5c0Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1Fainfix <V0asqrainfix +V7c1Aainfix <=asqrV7V0Aainfix >=V7c0Iainfix =V7V4FIainfix =V3asqrainfix +V4c1Aainfix >=V0asqrV4Aainfix >=V4c0FFAainfix =V2asqrainfix +V1c1Aainfix >=V0asqrV1Aainfix >=V1c0Iainfix =V2c1FIainfix =V1c0FIainfix >=V0c0F">
@@ -66,7 +66,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
@@ -74,7 +74,7 @@
     locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
     loclnum="40" loccnumb="4" loccnume="9"
     expl="loop variant decreases"
-    sum="c485fdbf1e0ddb896594d01ef2369049"
+    sum="48de68b2be19d60624868e88b5d7d33c"
     proved="true"
     expanded="true"
     shape="ainfix <ainfix -V0V5ainfix -V0V4Aainfix <=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix <=V3V0Iainfix =V3asqrainfix +V4c1Aainfix >=V0asqrV4Aainfix >=V4c0FFIainfix =V2c1FIainfix =V1c0FIainfix >=V0c0F">
@@ -93,7 +93,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
       loclnum="40" loccnumb="4" loccnume="9"
       expl="loop variant decreases"
-      sum="c485fdbf1e0ddb896594d01ef2369049"
+      sum="48de68b2be19d60624868e88b5d7d33c"
       proved="true"
       expanded="true"
       shape="ainfix <ainfix -V0V5ainfix -V0V4Aainfix <=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix <=V3V0Iainfix =V3asqrainfix +V4c1Aainfix >=V0asqrV4Aainfix >=V4c0FFIainfix =V2c1FIainfix =V1c0FIainfix >=V0c0F">
@@ -131,8 +131,8 @@
     name="WP_parameter main_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
     loclnum="50" loccnumb="4" loccnume="8"
-    expl="Function main, default behavior"
-    sum="d85a9c1165dc677dc413ff9a082caa18"
+    expl="parameter main_ensures_default"
+    sum="115faff844ac5f13b01ab173d47d712f"
     proved="true"
     expanded="true"
     shape="ainfix =V2c4Iainfix =V2V1FAainfix >V1c4NAainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -161,11 +161,11 @@
      proved="true"
      expanded="true">
      <goal
-      name="WP_parameter main_ensures_default.0"
+      name="WP_parameter main_ensures_default.1"
       locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="assertion"
-      sum="8cb4d1652dfb1648556fe423e75dfeb4"
+      sum="1a0f7699cc476118ef5ba0c97893c655"
       proved="true"
       expanded="false"
       shape="ainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -198,11 +198,11 @@
       </proof>
      </goal>
      <goal
-      name="WP_parameter main_ensures_default.1"
+      name="WP_parameter main_ensures_default.2"
       locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="assertion"
-      sum="61d27f5481bef4fd8c3eddb88907249f"
+      sum="ca174ee8d987efe45e60629b3023ce45"
       proved="true"
       expanded="false"
       shape="ainfix >V1c4NIainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -224,15 +224,15 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
-      name="WP_parameter main_ensures_default.2"
+      name="WP_parameter main_ensures_default.3"
       locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="normal postcondition"
-      sum="13b7b185748ea0b73e536cf731524efb"
+      sum="6963847762526ced60b5bc113215f141"
       proved="true"
       expanded="false"
       shape="ainfix =V2c4Iainfix =V2V1FIainfix >V1c4NIainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -254,7 +254,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.02"/>
       </proof>
       <proof
        prover="0"
@@ -285,7 +285,7 @@
     locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
     loclnum="50" loccnumb="4" loccnume="8"
     expl="precondition for call"
-    sum="fd9a01043a7bdf705e9a85ac77abfeb7"
+    sum="4da9b3c1d15493a96b81aece394a8183"
     proved="true"
     expanded="true"
     shape="ainfix >=c17c0">

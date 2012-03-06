@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="my_cosine/why3session.xml">
+ name="my_cosine.jessie/my_cosine/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -28,7 +28,7 @@
   expanded="false">
   <theory
    name="Jessie_model"
-   locfile="my_cosine/../my_cosine.mlw"
+   locfile="my_cosine.jessie/my_cosine/../my_cosine.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
@@ -37,7 +37,7 @@
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="36" loccnumb="4" loccnume="111"
     expl="Lemma method_error, lemma"
-    sum="2598e8de2f23e358f121f5d763861c9a"
+    sum="fab1f484f5c2b102cce9610753e6f5dd"
     proved="true"
     expanded="false"
     shape="ainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *V0V0c0.5acosV0c0x1.p-24Iainfix <=aabsV0c0x1.p-5F">
@@ -50,13 +50,13 @@
      edited="my_cosine_Jessie_model_method_error_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="3.92"/>
+     <result status="valid" time="4.20"/>
     </proof>
    </goal>
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="my_cosine/../my_cosine.mlw"
+   locfile="my_cosine.jessie/my_cosine/../my_cosine.mlw"
    loclnum="147" loccnumb="7" loccnume="21"
    verified="true"
    expanded="false">
@@ -64,8 +64,8 @@
     name="WP_parameter my_cos1_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="43" loccnumb="6" loccnume="13"
-    expl="Function my_cos1, default behavior"
-    sum="2b68c8aedf74f67d6a65c1338ffa7712"
+    expl="parameter my_cos1_ensures_default"
+    sum="127d082206f5a1f8ea259bcd0e129644"
     proved="true"
     expanded="false"
     shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FAainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
@@ -78,13 +78,13 @@
     <transf
      name="split_goal"
      proved="true"
-     expanded="false">
+     expanded="true">
      <goal
       name="WP_parameter my_cos1_ensures_default.1"
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="43" loccnumb="6" loccnume="13"
       expl="assertion"
-      sum="9c82908d22f43ff9a423d6fa454d103c"
+      sum="1274e6d946a847f0046f8efd61e1c0d1"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
@@ -106,7 +106,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.07"/>
       </proof>
      </goal>
      <goal
@@ -114,7 +114,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="43" loccnumb="6" loccnume="13"
       expl="normal postcondition"
-      sum="6acd5e35556c773eb48f4e1a3b20bf73"
+      sum="811c6efa2e5e8a380915918210598ee2"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
@@ -129,7 +129,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.00"/>
+       <result status="valid" time="0.01"/>
       </proof>
      </goal>
     </transf>
@@ -138,8 +138,8 @@
     name="WP_parameter my_cos1_safety"
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="43" loccnumb="6" loccnume="13"
-    expl="Function my_cos1, Safety"
-    sum="b973c143f7de5e4d05c3c5e104f884a9"
+    expl="parameter my_cos1_safety"
+    sum="d9eb85655fbe115c56f25250e7352db6"
     proved="true"
     expanded="false"
     shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
@@ -152,13 +152,13 @@
     <transf
      name="split_goal"
      proved="true"
-     expanded="false">
+     expanded="true">
      <goal
       name="WP_parameter my_cos1_safety.1"
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="43" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="09a169748d73579e913a9ff1ca72c493"
+      sum="01ebdd0523a0dc70af77a05fe77695ca"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
@@ -181,7 +181,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="43" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="78754c7f27fcc2b30bccf0aa59345a2b"
+      sum="51a8653992c8dcd967be5c469ce1fbf6"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
@@ -204,7 +204,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="43" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="347558c4c9f0b5741424f49ba7917242"
+      sum="8379221b02c9932ac758003efd63ec81"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
@@ -228,8 +228,8 @@
     name="WP_parameter my_cos2_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="51" loccnumb="6" loccnume="13"
-    expl="Function my_cos2, default behavior"
-    sum="d094ae087e627e2b8821b189ebde274e"
+    expl="parameter my_cos2_ensures_default"
+    sum="2f7497438dc07e7e8c8434c4d8b7c100"
     proved="true"
     expanded="false"
     shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FAainfix <=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FAainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
@@ -242,13 +242,13 @@
     <transf
      name="split_goal"
      proved="true"
-     expanded="false">
+     expanded="true">
      <goal
       name="WP_parameter my_cos2_ensures_default.1"
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="51" loccnumb="6" loccnume="13"
       expl="assertion"
-      sum="3fb8e723298543a525c2cdbb355430e1"
+      sum="f3b7c0684c1ac70a3bfdbf562fd788c7"
       proved="true"
       expanded="false"
       shape="ainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
@@ -271,7 +271,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="51" loccnumb="6" loccnume="13"
       expl="assertion"
-      sum="7c0335723c22075b9d4ff5db18f9c6b6"
+      sum="2e04327ea0868b61da891460dbc7fa9d"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
@@ -286,7 +286,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.09"/>
       </proof>
       <proof
        prover="1"
@@ -301,7 +301,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="51" loccnumb="6" loccnume="13"
       expl="normal postcondition"
-      sum="560b6f7aa9c94bd2a85409efc97eab8b"
+      sum="ad33aada59e4e98fe74b63a79fc3ef2d"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix <=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
@@ -325,8 +325,8 @@
     name="WP_parameter my_cos2_safety"
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="51" loccnumb="6" loccnume="13"
-    expl="Function my_cos2, Safety"
-    sum="227c50d4e3ece81c1a5af19cb456cf0a"
+    expl="parameter my_cos2_safety"
+    sum="408b29c6ab3ac86e78479713d23dad38"
     proved="true"
     expanded="false"
     shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
@@ -339,13 +339,13 @@
     <transf
      name="split_goal"
      proved="true"
-     expanded="false">
+     expanded="true">
      <goal
       name="WP_parameter my_cos2_safety.1"
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="51" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="1ec055c49a8f01b26b60ce5248e60f08"
+      sum="26a90047790d4d8e9d247592e5621f1d"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
@@ -368,7 +368,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="51" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="108e6625af5558de29c4decac0fcaf17"
+      sum="0906bf04efd4274546e59fca4e13780a"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
@@ -391,7 +391,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="51" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="bc3cc8fd752390727469c8cbcc39dd46"
+      sum="7ac387417fecb645e2c6f73d9263047c"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
@@ -415,8 +415,8 @@
     name="WP_parameter my_cos3_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="64" loccnumb="6" loccnume="13"
-    expl="Function my_cos3, default behavior"
-    sum="0eb96e59ddb2da49ecebe23688b123d5"
+    expl="parameter my_cos3_ensures_default"
+    sum="fa2c9bb1bc33b58735be349616323a7c"
     proved="true"
     expanded="false"
     shape="ainfix <=around_errorV7ainfix +around_errorV0c0x3.p-24Aainfix <=aabsainfix -aexactV7acosaexactV0c0x1.p-24Iainfix =V7V6FAainfix <=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
@@ -429,13 +429,13 @@
     <transf
      name="split_goal"
      proved="true"
-     expanded="false">
+     expanded="true">
      <goal
       name="WP_parameter my_cos3_ensures_default.1"
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="64" loccnumb="6" loccnume="13"
       expl="assertion"
-      sum="9dbdc4e2e492ac414f664398167b3d02"
+      sum="f513cace49db8615183f9c306cf48726"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
@@ -457,7 +457,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
@@ -465,7 +465,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="64" loccnumb="6" loccnume="13"
       expl="normal postcondition"
-      sum="8837eb6da1d985dd5fc41b0af41d9bbe"
+      sum="b5c552bf6cd57f898150e833d198990a"
       proved="true"
       expanded="false"
       shape="ainfix <=around_errorV7ainfix +around_errorV0c0x3.p-24Aainfix <=aabsainfix -aexactV7acosaexactV0c0x1.p-24Iainfix =V7V6FIainfix <=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
@@ -489,8 +489,8 @@
     name="WP_parameter my_cos3_safety"
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="64" loccnumb="6" loccnume="13"
-    expl="Function my_cos3, Safety"
-    sum="e1404676d3ff563d0e770208a64dfab3"
+    expl="parameter my_cos3_safety"
+    sum="17de93a8bddd965affecf2a6d3d32103"
     proved="true"
     expanded="false"
     shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
@@ -503,13 +503,13 @@
     <transf
      name="split_goal"
      proved="true"
-     expanded="false">
+     expanded="true">
      <goal
       name="WP_parameter my_cos3_safety.1"
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="64" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="fc9ffc65488600d6529557f9a64d442b"
+      sum="92a9f79f48f0683afbb6136e82e19428"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
@@ -532,7 +532,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="64" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="8f77c7be248d729839665bd8dc6115a0"
+      sum="608e5e9938c6d6e0859b71485f52da30"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
@@ -555,7 +555,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="64" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="c60e7b30fe6bb3af1bb463d5879a05bd"
+      sum="b841965d98c79c1fe66cbb18eac78ee8"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
@@ -579,8 +579,8 @@
     name="WP_parameter my_cos4_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="73" loccnumb="6" loccnume="13"
-    expl="Function my_cos4, default behavior"
-    sum="24f3056a8c6f10040602d841372db7eb"
+    expl="parameter my_cos4_ensures_default"
+    sum="8bc4ae1d55904c0265232bb5c2d7079b"
     proved="true"
     expanded="false"
     shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.3p-20Iainfix =V7V6FIainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FAainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
@@ -593,13 +593,13 @@
     <transf
      name="split_goal"
      proved="true"
-     expanded="false">
+     expanded="true">
      <goal
       name="WP_parameter my_cos4_ensures_default.1"
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="73" loccnumb="6" loccnume="13"
       expl="assertion"
-      sum="421e2911736e48a6265f02836752e20d"
+      sum="ed7db2e9483bd59e560324ae4eb0ee54"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
@@ -615,7 +615,7 @@
        edited="my_cosine_WP_Jessie_program_WP_parameter_my_cos4_ensures_default_2.v"
        obsolete="false"
        archived="false">
-       <result status="valid" time="3.48"/>
+       <result status="valid" time="3.69"/>
       </proof>
      </goal>
      <goal
@@ -623,7 +623,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="73" loccnumb="6" loccnume="13"
       expl="normal postcondition"
-      sum="f45441ce23c98bbfbf9e77b320e0ffd9"
+      sum="5d5b89d832e97d2d2f7cd0dd391954e8"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.3p-20Iainfix =V7V6FIainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
@@ -638,7 +638,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.00"/>
+       <result status="valid" time="0.01"/>
       </proof>
      </goal>
     </transf>
@@ -647,8 +647,8 @@
     name="WP_parameter my_cos4_safety"
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="73" loccnumb="6" loccnume="13"
-    expl="Function my_cos4, Safety"
-    sum="e99f848b7fcd0a97eefcc67e7dc6a813"
+    expl="parameter my_cos4_safety"
+    sum="8f212bb5f724d276adf9572fc481381d"
     proved="true"
     expanded="false"
     shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
@@ -661,13 +661,13 @@
     <transf
      name="split_goal"
      proved="true"
-     expanded="false">
+     expanded="true">
      <goal
       name="WP_parameter my_cos4_safety.1"
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="73" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="b272ee3bd6d227bf3e07427f9656b462"
+      sum="324d485cc5e5f6c9de5cd4f2b1650be3"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
@@ -690,7 +690,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="73" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="07609521023371af3879225fb1920189"
+      sum="208e4a1eb7ffe957c004ec056cc464e4"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
@@ -713,7 +713,7 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="73" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="281067fbf699ad88cbea2cd6d4b91d9f"
+      sum="41359424a840ffec6e90513fcdd7da9a"
       proved="true"
       expanded="false"
       shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
