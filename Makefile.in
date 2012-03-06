@@ -82,6 +82,8 @@ JESSIE_PLUGIN_BEST= jessie_plugin.$(OCAMLBEST)
 .PHONY: $(JESSIE_PLUGIN_BYTE) $(JESSIE_PLUGIN_OPT)
 endif
 
+enable_local=@enable_local@
+
 ATPLIB = -I atp
 
 COQC7  = @COQC7@
@@ -103,6 +105,7 @@ VO8= lib/coq/WhyInt.vo lib/coq/WhyArrays.vo  lib/coq/WhyBool.vo \
      lib/coq/WhySorted.vo  \
      lib/coq/WhyExn.vo lib/coq/WhyLemmas.vo  lib/coq/WhyTactics.vo \
      lib/coq/WhyPrelude.vo lib/coq/WhyCM.vo lib/coq/Why.vo lib/coq/WhyReal.vo \
+     @JESSIE3LIBCOQ@ \
      @JESSIELIBCOQ@ \
      @WHYFLOATS@
 
@@ -131,7 +134,8 @@ GENERATED = src/version.ml src/rc.ml src/xml.ml \
 	    tools/simplify_parser.ml \
 	    tools/toolstat_lex.ml \
 	    tools/toolstat_pars.ml tools/toolstat_pars.mli \
-	    mix/mix_lexer.ml mix/mix_parser.mli mix/mix_parser.ml
+	    mix/mix_lexer.ml mix/mix_parser.mli mix/mix_parser.ml \
+	    lib/why3/why3.conf
 
 
 # main targets
@@ -625,6 +629,26 @@ bin/cadlog.opt: src/version.cmx c/cversion.cmx tools/cadlog.cmx
 
 static:: $(STATICBINARY)
 
+ifeq ($(enable_local),"no")
+lib/why3/why3.conf:
+	@(echo "[main]"; \
+	echo "loadpath=\"$(LIBDIR)/why/why3\""; \
+	echo; \
+	echo "[prover coq]"; \
+	echo "option=\"-R $(LIBDIR)/why/coq Why\""; \
+	echo "driver=\"$(LIBDIR)/why/why3/coq.drv\""; \
+	) > $@
+else
+lib/why3/why3.conf:
+	@(echo "[main]"; \
+	echo "loadpath=\"$(PWD)/lib/why3\""; \
+	echo; \
+	echo "[prover coq]"; \
+	echo "option=\"-R $(PWD)/lib/coq Why\""; \
+	echo "driver=\"$(PWD)/lib/why3/coq.drv\""; \
+	) > $@
+endif
+
 ########
 # COQ
 ########
@@ -750,11 +774,11 @@ install-binary:
 		cp -f bin/gwhy.$(OCAMLBEST) $(BINDIR)/gwhy-bin$(EXE); \
 	fi
 
-install-lib: $(JCLIB)
+install-lib: $(JCLIB) lib/why3/why3.conf
 	mkdir -p $(LIBDIR)/why/why
 	cp -f $(PRELUDE) $(LIBDIR)/why/why
 	mkdir -p $(LIBDIR)/why/why3
-	cp -f lib/why3/jessie3.why lib/why3/jessie3.mlw lib/why3/jessie3_integer.why $(LIBDIR)/why/why3
+	cp -f lib/why3/why3.conf lib/why3/coq.drv lib/why3/jessie3.why lib/why3/jessie3.mlw lib/why3/jessie3_integer.why $(LIBDIR)/why/why3
 	mkdir -p $(LIBDIR)/jessie
 	cp -f $(JCLIB) $(JCCMI_EXPORT) $(LIBDIR)/jessie
 	mkdir -p $(LIBDIR)/coq
@@ -934,8 +958,10 @@ apidoc: $(OCAMLDOCSRC)
 .ml4.ml:
 	$(CAMLP4) pr_o.cmo -impl $< > $@
 
+@JESSIE3LIBCOQ@: COQEXTRAR += -R @WHY3COQPATH@ Why3
+
 lib/coq/%.vo: lib/coq/%.v
-	$(COQC8) -R lib/coq Why $<
+	$(COQC8) $(COQEXTRAR) -R lib/coq Why $<
 
 lib/coq-v7/%.vo: lib/coq-v7/%.v
 	$(COQC7) -I lib/coq-v7 $<

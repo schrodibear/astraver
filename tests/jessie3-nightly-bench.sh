@@ -37,7 +37,7 @@ echo "== Jessie3 bench on $DATE ==" > $REPORT
 
 # configuration
 autoconf
-./configure &> $OUT
+./configure --enable-local &> $OUT
 if test "$?" != "0" ; then
     echo "Configure failed" >> $REPORT
     cat $OUT >> $REPORT
