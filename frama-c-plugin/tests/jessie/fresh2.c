@@ -1,10 +1,11 @@
 
-// #pragma SeparationPolicy(none)
+#pragma SeparationPolicy(none)
 
 typedef struct Str {int x; } *str;
 
 
-/*@ ensures \fresh(\result,sizeof(*\result));
+/*@ allocates \result;
+  @ ensures \fresh(\result,sizeof(*\result));
   @*/
 str create(void);
 

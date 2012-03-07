@@ -60,6 +60,8 @@ open Visitor
 open Common
 open Integer
 
+let label_here = LogicLabel(None,"Here")
+
 (*****************************************************************************)
 (* Retype variables of array type.                                           *)
 (*****************************************************************************)
@@ -279,13 +281,14 @@ object(self)
           let p =
             Logic_const.pvalid_range
               ~loc:v.vdecl
-              (variable_term v.vdecl (cvar_to_lvar v),
+              (label_here,
+               variable_term v.vdecl (cvar_to_lvar v),
                constant_term v.vdecl My_bigint.zero,
                constant_term v.vdecl (My_bigint.pred size))
           in
           let globinv =
 	    Cil_const.make_logic_info (unique_logic_name ("valid_" ^ v.vname)) in
-          globinv.l_labels <- [ LogicLabel(None,"Here") ];
+          globinv.l_labels <- [ label_here ];
           globinv.l_body <- LBpred p;
           attach_globaction (fun () -> Logic_utils.add_logic_function globinv);
           ChangeTo [g;GAnnot(Dinvariant (globinv,v.vdecl),v.vdecl)]
@@ -747,7 +750,7 @@ object(self)
       | TSizeOf _ | TSizeOfE _ | TSizeOfStr _ | TAlignOf _ | TAlignOfE _
       | Tlambda _ | TDataCons _ | Tbase_addr _ | TBinOp _ | TUnOp _
       | Tblock_length _ | TCoerce _ | TCoerceE _ | TUpdate _
-      | Ttypeof _ | Ttype _ | Tlet _ -> assert false
+      | Ttypeof _ | Ttype _ | Tlet _ | Toffset _ -> assert false
     in
     let zone idts =
       List.map Logic_const.new_identified_term (term idts.it_content)
@@ -959,14 +962,15 @@ object(self)
                 let p =
                   Logic_const.pvalid_range
                     ~loc:v.vdecl
-                    (variable_term v.vdecl (cvar_to_lvar v),
+                    (label_here,
+                     variable_term v.vdecl (cvar_to_lvar v),
                      constant_term v.vdecl My_bigint.zero,
                      constant_term v.vdecl My_bigint.zero)
                 in
                 let globinv =
 		  Cil_const.make_logic_info (unique_logic_name ("valid_" ^ v.vname))
 		in
-                globinv.l_labels <- [ LogicLabel(None, "Here") ];
+                globinv.l_labels <- [ label_here ];
                 globinv.l_body <- LBpred p;
                 attach_globaction
 		  (fun () -> Logic_utils.add_logic_function globinv);

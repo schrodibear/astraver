@@ -706,6 +706,10 @@ and terms t =
 	(* TODO *)
         Extlib.not_yet_implemented "Interp.terms TUpdate"
 
+    | Toffset _ ->
+	(* TODO *)
+        Extlib.not_yet_implemented "Interp.terms TOffset"
+
     | TLval lv ->
         List.map (fun x -> x#node) (terms_lval t.term_loc lv)
 
@@ -886,9 +890,9 @@ and terms t =
 
     | Tat(t,lab) -> List.map (fun x -> JCPEat(x,logic_label lab)) (terms t)
 
-    | Tbase_addr t -> List.map (fun x -> JCPEbase_block x) (terms t)
+    | Tbase_addr (_lab,t) -> List.map (fun x -> JCPEbase_block x) (terms t)
 
-    | Tblock_length _t ->
+    | Tblock_length (_lab,_t) ->
 	(* TODO: memory model for Jessie *)
 	Extlib.not_yet_implemented "Interp.terms Tblock_length"
 
@@ -1138,7 +1142,8 @@ and pred p =
 
     | Pat(p,lab) -> JCPEat(pred p,logic_label lab)
 
-    | Pvalid({ term_node = TBinOp(PlusPI,t1,{term_node = Trange (t2,t3)})}) ->
+    | Pvalid(_lab,
+             { term_node = TBinOp(PlusPI,t1,{term_node = Trange (t2,t3)})}) ->
         let e1 = terms t1 in
         let mk_one_pred e1 =
           match t2,t3 with
@@ -1161,7 +1166,7 @@ and pred p =
                 mkconjunct [emin; emax] p.loc
         in (mkconjunct (List.map mk_one_pred e1) p.loc)#node
 
-    | Pvalid({ term_node = TBinOp(PlusPI,t1,t2)}) ->
+    | Pvalid(_lab,{ term_node = TBinOp(PlusPI,t1,t2)}) ->
         let e1 = terms t1 in
         let e2 = term t2 in
         (mkconjunct
@@ -1174,7 +1179,7 @@ and pred p =
                     let emax = mkexpr (JCPEbinary(eoffmax,`Bge,e2)) p.loc in
                     [emin; emax])
                  e1)) p.loc)#node
-    | Pvalid t ->
+    | Pvalid (_lab,t) ->
         let elist =
           List.flatten (List.map (fun e ->
             let eoffmin = mkexpr (JCPEoffset(Offset_min,e)) p.loc in
@@ -1190,9 +1195,13 @@ and pred p =
       (* TODO *)
       Extlib.not_yet_implemented "Interp.pred Pvalid_read"
 
-    | Pfresh (t,_) ->
+    | Pfresh (_lab1,_lab2,t,_) ->
       (* TODO: take into account size *)
       JCPEfresh(term t)
+
+    | Pallocable _ | Pfreeable _ ->
+	(* TODO *)
+	Extlib.not_yet_implemented "Interp.pred Pallocable|Pfreeable"
 
     | Psubtype({term_node = Ttypeof t},{term_node = Ttype ty}) ->
         JCPEinstanceof(term t,get_struct_name (pointed_type ty))
@@ -1266,7 +1275,7 @@ let spec funspec =
       Some(conjunct Loc.dummy_position b.b_assumes),
       None, (* requires *)
       assigns b.b_assigns,
-      None, (* allocates *)
+      None (* allocates b.b_allocation *), 
       locate
         (conjunct Loc.dummy_position
            (Extlib.filter_map
