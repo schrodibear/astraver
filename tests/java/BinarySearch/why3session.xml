@@ -326,7 +326,7 @@
          timelimit="5"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.07"/>
+         <result status="unknown" time="4.40"/>
         </proof>
         <proof
          prover="4"
