@@ -26,11 +26,6 @@ use import floating_point.Double
 
 (* Specification of operations in single precision *)
 
-predicate single_of_double_post (m:mode) (x:double) (res:single) =
-  Single.value res = Single.round m (Double.value x) /\
-  Single.exact res = Double.exact x /\
-  Single.model res = Double.model x
-
 predicate neg_single_post (x res:single) =
   Single.value res = - Single.value x /\
   Single.exact res = - Single.exact x /\
@@ -56,13 +51,34 @@ predicate div_single_post (m:mode) (x y res:single) =
   Single.exact res = Single.exact x / Single.exact y /\
   Single.model res = Single.model x / Single.model y
 
+predicate single_of_real_post (m:mode) (x:real) (res:single) =
+  Single.value res = Single.round m x /\
+  Single.exact res = x /\
+  Single.model res = x
+
+predicate single_of_double_post (m:mode) (x:double) (res:single) =
+  Single.value res = Single.round m (Double.value x) /\
+  Single.exact res = Double.exact x /\
+  Single.model res = Double.model x
+
 val any_single : () -> { } single { }
+
+val single_of_real (m:mode) (x:real) :
+  { Single.no_overflow m x }
+  single
+  { single_of_real_post m x result }
+
+val single_of_real_safe (m:mode) (x:real) :
+  { }
+  single
+  { single_of_real_post m x result }
 
 val single_of_real_exact (x:real) :
   { }
   single
   { Single.value result = x /\
-    Single.exact result = x /\ Single.model result = x }
+    Single.exact result = x /\
+    Single.model result = x }
 
 val single_of_double (m:mode) (x:double) :
   { Single.no_overflow m (Double.value x) }

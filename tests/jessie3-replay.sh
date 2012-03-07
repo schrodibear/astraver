@@ -1,7 +1,7 @@
 #!/bin/bash
 
-JAVA="AllZeros ArrayMax Arrays BinarySearch Counter Creation 
-      Fibonacci FlagStatic Gcd Hello \
+JAVA="AllZeros ArrayMax Arrays BinarySearch Counter Creation
+      Fibonacci FlagStatic Fresh Gcd Hello \
       Isqrt Literals MacCarthy Muller NameConflicts Negate \
       PreAndOld Purse SelectionSort \
       SideEffects SimpleAlloc Switch \
@@ -65,7 +65,7 @@ for i in $JAVA; do
         if test "$ret" != "0"  ; then
 	    report_error $ret "jessie"
         else
-            why3replayer $REPLAYOPT -I $WHYLIB/why3 $i 2> $TMPERR > $TMP
+            why3replayer $REPLAYOPT --extra-config $WHYLIB/why3/why3.conf $i 2> $TMPERR > $TMP
             ret=$?
             if test "$ret" != "0"  ; then
 	        printf "replay FAILED (ret code=$ret):"
@@ -103,7 +103,7 @@ for i in $C; do
        if test "$ret" != "0"; then
 	   report_error $ret "jessie"
         else
-            why3replayer $REPLAYOPT -I $WHYLIB/why3 $i.jessie/$i 2> $TMPERR > $TMP
+            why3replayer $REPLAYOPT --extra-config $WHYLIB/why3/why3.conf $i.jessie/$i 2> $TMPERR > $TMP
             ret=$?
             if test "$ret" != "0"  ; then
 	        printf "replay FAILED (ret code=$ret):"

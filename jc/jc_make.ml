@@ -79,8 +79,7 @@ let generic full f targets =
 					 (Filename.concat "why" s))))
 	 (Jc_options.get_libfiles ());
        out "@\n";
-       out "JESSIE3LIB ?=%s@\n@\n" (String.escaped (Filename.concat "$(WHYLIB)"
-					 "why3"));
+       out "JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf@\n@\n";
        out "COQDEP = coqdep@\n@\n";
 
        out ".PHONY: all coq pvs simplify vampire cvcl harvey smtlib zenon@\n@\n";
@@ -225,10 +224,7 @@ let generic full f targets =
        in
        out "why3ml: %s@\n" why3ml_target;
        out "\t@@echo 'why3ml [...] $<' \
-            && why3ide -I $(JESSIE3LIB) $<@\n@\n";
-(*
-       out "\twhy3ide -I $(JESSIE3LIB) $<@\n@\n";
-*)
+            && why3ide --extra-config $(JESSIE3CONF) $<@\n@\n";
 
        out "-include %s.depend@\n@\n" f;
        out "depend: %a@\n" (print_files coq_v) targets;

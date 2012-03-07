@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/java/Fibonacci/why3session.xml">
+ name="Fibonacci/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -24,7 +24,7 @@
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="tests/java/Fibonacci/../Fibonacci.mlw"
+   locfile="Fibonacci/../Fibonacci.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
@@ -33,7 +33,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
     loclnum="46" loccnumb="10" loccnume="19"
     expl="Lemma isfib_2_1, lemma"
-    sum="21ae86d99339b04efb4e183fd58877e2"
+    sum="a66d25a6fc987cf9db89bdcf5bb2bbd6"
     proved="true"
     expanded="true"
     shape="aisfibc2c1">
@@ -45,15 +45,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.09"/>
     </proof>
     <proof
      prover="2"
      timelimit="5"
      edited="Fibonacci_Jessie_model_isfib_2_1_2.v"
-     obsolete="false"
+     obsolete="true"
      archived="false">
-     <result status="valid" time="0.62"/>
+     <result status="valid" time="0.51"/>
     </proof>
    </goal>
    <goal
@@ -61,7 +61,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
     loclnum="47" loccnumb="10" loccnume="19"
     expl="Lemma isfib_6_8, lemma"
-    sum="6ffcd54462da30dbf569182c2c3e4085"
+    sum="2ca5f65e5c0c2e2480abb02d11bea9b0"
     proved="true"
     expanded="true"
     shape="aisfibc6c8">
@@ -74,7 +74,7 @@
      edited="Fibonacci_Jessie_model_isfib_6_8_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.60"/>
+     <result status="valid" time="0.53"/>
     </proof>
    </goal>
    <goal
@@ -82,79 +82,12 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
     loclnum="50" loccnumb="10" loccnume="23"
     expl="Lemma not_isfib_2_2, lemma"
-    sum="e4c6b835475ae4ea3f3b5f06aa638042"
+    sum="d2e0129c1f3a24bdb7ff67851c8e9e08"
     proved="true"
     expanded="true"
     shape="aisfibc2c2N">
     <label
      name="expl:Lemma not_isfib_2_2, lemma">
-     </label>
-    <proof
-     prover="3"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-   </goal>
-  </theory>
-  <theory
-   name="WP Jessie_program"
-   locfile="tests/java/Fibonacci/../Fibonacci.mlw"
-   loclnum="196" loccnumb="7" loccnume="21"
-   verified="true"
-   expanded="true">
-   <goal
-    name="WP_parameter _Fibonacci_Fib_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
-    loclnum="57" loccnumb="23" loccnume="26"
-    expl="Method Fib, default behavior"
-    sum="61735adb441d5b2851c2304a39115778"
-    proved="true"
-    expanded="true"
-    shape="iainfix <V1V0aisfibV7V5Aaisfibainfix +V7c1V6Aainfix <=V7V0Aainfix <=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FaisfibV0V8Iainfix =V8V3FIaisfibV1V3Aaisfibainfix +V1c1V2Aainfix <=V1V0Aainfix <=c0V1FFFAaisfibc0c0Aaisfibainfix +c0c1c1Aainfix <=c0V0Aainfix <=c0c0Iainfix >=V0c0F">
-    <label
-     name="expl:parameter _Fibonacci_Fib_ensures_default">
-     </label>
-    <label
-     name="expl:Method Fib, default behavior">
-     </label>
-    <proof
-     prover="0"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter _Fibonacci_Fib_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
-    loclnum="57" loccnumb="23" loccnume="26"
-    expl="loop variant decreases"
-    sum="d50ae183ee3a2d885d61ee0a239bffc7"
-    proved="true"
-    expanded="true"
-    shape="ainfix <ainfix -V0V7ainfix -V0V1Aainfix <=c0ainfix -V0V1Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix <V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix <=V1V0Aainfix <=c0V1FFFIainfix >=V0c0F">
-    <label
-     name="expl:parameter _Fibonacci_Fib_safety">
-     </label>
-    <label
-     name="expl:Method Fib, Safety">
      </label>
     <proof
      prover="3"
@@ -178,12 +111,79 @@
      <result status="valid" time="0.03"/>
     </proof>
    </goal>
+  </theory>
+  <theory
+   name="WP Jessie_program"
+   locfile="Fibonacci/../Fibonacci.mlw"
+   loclnum="196" loccnumb="7" loccnume="21"
+   verified="true"
+   expanded="true">
+   <goal
+    name="WP_parameter _Fibonacci_Fib_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
+    loclnum="57" loccnumb="23" loccnume="26"
+    expl="parameter _Fibonacci_Fib_ensures_default"
+    sum="6b065f2fcaf0bab6bddc638e73640342"
+    proved="true"
+    expanded="true"
+    shape="iainfix <V1V0aisfibV7V5Aaisfibainfix +V7c1V6Aainfix <=V7V0Aainfix <=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FaisfibV0V8Iainfix =V8V3FIaisfibV1V3Aaisfibainfix +V1c1V2Aainfix <=V1V0Aainfix <=c0V1FFFAaisfibc0c0Aaisfibainfix +c0c1c1Aainfix <=c0V0Aainfix <=c0c0Iainfix >=V0c0F">
+    <label
+     name="expl:parameter _Fibonacci_Fib_ensures_default">
+     </label>
+    <label
+     name="expl:Method Fib, default behavior">
+     </label>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Fibonacci_Fib_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
+    loclnum="57" loccnumb="23" loccnume="26"
+    expl="loop variant decreases"
+    sum="232475ec46ef2eb522c30ca6c4fe2cbf"
+    proved="true"
+    expanded="true"
+    shape="ainfix <ainfix -V0V7ainfix -V0V1Aainfix <=c0ainfix -V0V1Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix <V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix <=V1V0Aainfix <=c0V1FFFIainfix >=V0c0F">
+    <label
+     name="expl:parameter _Fibonacci_Fib_safety">
+     </label>
+    <label
+     name="expl:Method Fib, Safety">
+     </label>
+    <proof
+     prover="3"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
    <goal
     name="WP_parameter cons_Fibonacci_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Fibonacci, default behavior"
-    sum="d55f1acb38c47d9ee8d60c4c4d2b336f"
+    expl="parameter cons_Fibonacci_ensures_default"
+    sum="84d47ca5bfbfd627386f47d99e41dc21"
     proved="true"
     expanded="true"
     shape="t">
@@ -219,8 +219,8 @@
     name="WP_parameter cons_Fibonacci_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Fibonacci, Safety"
-    sum="483d19a4c8f44825ca2d0516e7064d7a"
+    expl="parameter cons_Fibonacci_safety"
+    sum="560f21c97e29f697390a2f583bb52579"
     proved="true"
     expanded="true"
     shape="t">
@@ -249,7 +249,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
   </theory>

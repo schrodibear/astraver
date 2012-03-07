@@ -3,272 +3,448 @@
 <why3session
  name="Fresh/why3session.xml">
  <prover
-  id="alt-ergo"
+  id="0"
   name="Alt-Ergo"
-  version="0.93"/>
+  version="0.94"/>
  <prover
-  id="alt-ergo-0.93.1"
-  name="Alt-Ergo"
-  version="0.93.1"/>
- <prover
-  id="coq"
-  name="Coq"
-  version="8.3pl2"/>
- <prover
-  id="cvc3"
+  id="1"
   name="CVC3"
   version="2.2"/>
  <prover
-  id="cvc3-2.4"
+  id="2"
   name="CVC3"
   version="2.4.1"/>
  <prover
-  id="eprover"
-  name="Eprover"
-  version="1.4 Namring"/>
- <prover
-  id="gappa"
-  name="Gappa"
-  version="0.15.1"/>
- <prover
-  id="simplify"
-  name="Simplify"
-  version="1.5.4"/>
- <prover
-  id="spass"
-  name="Spass"
-  version="3.7"/>
- <prover
-  id="vampire"
-  name="Vampire"
-  version="0.6"/>
- <prover
-  id="verit"
-  name="veriT"
-  version="dev"/>
- <prover
-  id="yices"
-  name="Yices"
-  version="1.0.25"/>
- <prover
-  id="z3"
+  id="3"
   name="Z3"
   version="2.19"/>
  <prover
-  id="z3-3"
+  id="4"
   name="Z3"
   version="3.2"/>
  <file
   name="../Fresh.mlw"
   verified="true"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
+   locfile="Fresh/../Fresh.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
-   expanded="true">
+   expanded="false">
   </theory>
   <theory
    name="WP Jessie_program"
+   locfile="Fresh/../Fresh.mlw"
+   loclnum="295" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
-    name="WP_parameter cons_Fresh_ensures_default"
+    name="WP_parameter _Fresh_create_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
+    loclnum="8" loccnumb="17" loccnume="23"
+    expl="normal postcondition"
+    sum="26691bb323ec231e266cefc55c48a597"
+    proved="true"
+    expanded="true"
+    shape="avalidV0V4NIainfix =V4V3FIainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFFF">
+    <label
+     name="expl:parameter _Fresh_create_ensures_default">
+     </label>
+    <label
+     name="expl:Method create, default behavior">
+     </label>
+    <proof
+     prover="3"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.06"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="unknown" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.08"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="timeout" time="5.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Fresh_create_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
+    loclnum="8" loccnumb="17" loccnume="23"
+    expl="parameter _Fresh_create_safety"
+    sum="e1df953d21950906fdad39ac38b8b29f"
+    proved="true"
+    expanded="true"
+    shape="ainfix >=aoffset_maxV2V3c0IainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFFAainfix >=c1c0F">
+    <label
+     name="expl:parameter _Fresh_create_safety">
+     </label>
+    <label
+     name="expl:Method create, Safety">
+     </label>
+    <proof
+     prover="3"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Fresh_test_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
+    loclnum="12" loccnumb="9" loccnume="13"
     expl="assertion"
-    sum="e131b0b5630ea08ac76ff25940f39131"
+    sum="34b59e7ba470bb5543f6b70e44132915"
     proved="true"
     expanded="true"
     shape="ainfix =V0V2NIavalidV1V2NFIavalid_struct_FreshV0c0c0V1FF">
+    <label
+     name="expl:parameter _Fresh_test_ensures_default">
+     </label>
+    <label
+     name="expl:Method test, default behavior">
+     </label>
     <proof
-     prover="z3-3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.04"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
-     prover="alt-ergo-0.93.1"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.03"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="0"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="z3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="cvc3-2.4"
+     prover="4"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Fresh_test_safety"
+    locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
+    loclnum="12" loccnumb="9" loccnume="13"
+    expl="parameter _Fresh_test_safety"
+    sum="4e6b711e93dd0645c5fd75b52a8459a8"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:parameter _Fresh_test_safety">
+     </label>
+    <label
+     name="expl:Method test, Safety">
+     </label>
+    <proof
+     prover="3"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Fresh_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="parameter cons_Fresh_ensures_default"
+    sum="47d6e09dd9b45b02feba9faf4bebb1fa"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:parameter cons_Fresh_ensures_default">
+     </label>
+    <label
+     name="expl:Constructor of class Fresh, default behavior">
+     </label>
+    <proof
+     prover="3"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Fresh_safety"
-    expl="Constructor of class Fresh, Safety"
-    sum="fac9ed97da07ab28af69981a15c66d3f"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="parameter cons_Fresh_safety"
+    sum="593e3b829dfd56445342da1abc38d872"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter cons_Fresh_safety">
+     </label>
+    <label
+     name="expl:Constructor of class Fresh, Safety">
+     </label>
     <proof
-     prover="z3-3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="alt-ergo-0.93.1"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="cvc3-2.4"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Object_ensures_default"
-    expl="Constructor of class Object, default behavior"
-    sum="201de74cd76493d8f9048215ddcaa26e"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="parameter cons_Object_ensures_default"
+    sum="5639f71ca6dcc7b8306fbb54224e25d3"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter cons_Object_ensures_default">
+     </label>
+    <label
+     name="expl:Constructor of class Object, default behavior">
+     </label>
     <proof
-     prover="z3-3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.01"/>
-    </proof>
-    <proof
-     prover="alt-ergo-0.93.1"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="cvc3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="alt-ergo"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="cvc3-2.4"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="4"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Object_safety"
-    expl="Constructor of class Object, Safety"
-    sum="a4215c8d39a3b6287342bcc910687fab"
+    locfile="/home/marche/why2-nitrogen/tests/java/"
+    loclnum="0" loccnumb="0" loccnume="0"
+    expl="parameter cons_Object_safety"
+    sum="e2f33fd7be5a00a57529ac46a427fc8d"
     proved="true"
     expanded="true"
     shape="t">
+    <label
+     name="expl:parameter cons_Object_safety">
+     </label>
+    <label
+     name="expl:Constructor of class Object, Safety">
+     </label>
     <proof
-     prover="z3-3"
+     prover="3"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
     </proof>
     <proof
-     prover="alt-ergo-0.93.1"
+     prover="1"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="cvc3"
+     prover="2"
      timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.02"/>
     </proof>
     <proof
-     prover="alt-ergo"
+     prover="4"
      timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="z3"
-     timelimit="5"
-     edited=""
-     obsolete="false">
+     obsolete="false"
+     archived="false">
      <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="cvc3-2.4"
-     timelimit="5"
-     edited=""
-     obsolete="false">
-     <result status="valid" time="0.02"/>
     </proof>
    </goal>
   </theory>

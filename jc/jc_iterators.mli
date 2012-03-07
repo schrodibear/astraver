@@ -123,12 +123,14 @@ val fold_rec_expr_and_term_and_assertion :
   ('a -> ('b, 'c) Jc_ast.expr -> bool * 'a) ->
   'a -> ('b, 'c) Jc_ast.expr -> 'a
 
+(*
 val fold_rec_behavior: 
   ('a -> 'b Jc_ast.term -> bool * 'a) ->
   ('a -> 'b Jc_ast.assertion -> bool * 'a) ->
   ('a -> 'b Jc_ast.location -> bool * 'a) ->
   ('a -> 'b Jc_ast.location_set -> bool * 'a) ->
   'a -> 'b Jc_ast.behavior -> 'a
+*)
 
 module IPExpr : sig
 

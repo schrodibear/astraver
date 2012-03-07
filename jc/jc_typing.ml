@@ -743,7 +743,7 @@ let rec type_labels env ~result_label label e =
 	  begin match label,result_label with
 	    | Some lab1, Some lab2 ->
 		if lab1 <> lab2 then
-		  typing_error e#pos "\\result not allowed here"
+		  typing_error e#pos "\\result not allowed here (lab1 = %a, lab2= %a)" Jc_output_misc.label lab1 Jc_output_misc.label lab2
 	    | None, _
 	    | _, None -> typing_error e#pos "\\result not allowed here"
 	  end;
@@ -787,7 +787,7 @@ and type_labels_opt env ~result_label label e =
     | Some e -> type_labels env ~result_label label e
 
 and behavior_labels env
-    (_loc,_id,_throws,assumes,requires,assigns,ensures) =
+    (_loc,_id,_throws,assumes,requires,assigns,allocates,ensures) =
   let here = Some LabelHere in
   let _ = type_labels_opt env ~result_label:None here assumes in
   let _ = type_labels_opt env ~result_label:None here requires in
@@ -799,6 +799,13 @@ and behavior_labels env
 	    ignore(type_labels env
 		     ~result_label:(Some LabelPost) (Some LabelOld) e)) a)
     assigns;
+  Option_misc.iter
+    (fun (_,a) ->
+       List.iter
+	 (fun e ->
+	    ignore(type_labels env
+		     ~result_label:(Some LabelHere) (Some LabelHere) e)) a)
+    allocates;
   let _ = type_labels env ~result_label:here here ensures in
   ()
 
@@ -1549,6 +1556,7 @@ let rec location_set env e =
   let locs =
     new location_set
       ~pos: e#pos
+      ~typ:ty
       ~region:r
       ?label: e#label
       locs_node
@@ -1596,12 +1604,13 @@ let rec location env e =
   let loc =
     new location
       ~pos: e#pos
+      ~typ:ty
       ~region:r
       ?label: e#label
       loc_node
   in ty,r,loc
 
-let behavior env vi_result (loc, id, throws, assumes, _requires, assigns, ensures) =
+let behavior env vi_result (loc, id, throws, assumes, _requires, assigns, allocates, ensures) =
   let throws,env_result =
     match throws with
       | None -> None, (vi_result.jc_var_info_name,vi_result)::env
@@ -1638,6 +1647,18 @@ let behavior env vi_result (loc, id, throws, assumes, _requires, assigns, ensure
             l))
       assigns
   in
+  let allocates =
+    Option_misc.map
+      (fun (loc, l) ->
+         (loc, List.map
+            (fun a -> let _,_,tl = location env_result a in
+             (match tl#node with
+                | JCLvar vi -> vi.jc_var_info_assigned <- true
+                | _ -> ());
+             tl)
+            l))
+      allocates
+  in
   let b = {
     jc_behavior_throws = throws;
     jc_behavior_assumes = assumes;
@@ -1645,6 +1666,7 @@ let behavior env vi_result (loc, id, throws, assumes, _requires, assigns, ensure
       jc_behavior_requires = requires;
     *)
     jc_behavior_assigns = assigns;
+    jc_behavior_allocates = allocates;
     jc_behavior_ensures = assertion env_result ensures;
     jc_behavior_free_ensures = Assertion.mktrue () }
   in
@@ -2403,7 +2425,7 @@ with the correct label environment. *)
 let type_labels_in_clause = function
   | JCCrequires e | JCCdecreases(e,_) ->
       type_labels [LabelHere] ~result_label:None (Some LabelHere) e
-  | JCCbehavior(_, _, _, assumes, requires, assigns, ensures) ->
+  | JCCbehavior(_, _, _, assumes, requires, assigns, allocates, ensures) ->
       Option_misc.iter
 	(type_labels [LabelHere] ~result_label:None (Some LabelHere)) assumes;
       Option_misc.iter
@@ -2414,6 +2436,13 @@ let type_labels_in_clause = function
              (type_labels [LabelOld; LabelPre; LabelPost]
 		~result_label:(Some LabelPost) (Some LabelOld)) x)
         assigns;
+      Option_misc.iter
+        (fun (_, x) ->
+           List.iter
+             (type_labels [LabelOld; LabelPre; LabelPost]
+(* warning: allocates L: L evaluated in the post-state *)
+		~result_label:(Some LabelHere) (Some LabelHere)) x)
+        allocates;
       type_labels [LabelOld; LabelPre; LabelHere]
 	~result_label:(Some LabelHere) (Some LabelHere) ensures
 

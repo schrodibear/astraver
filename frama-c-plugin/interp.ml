@@ -1266,6 +1266,7 @@ let spec funspec =
       Some(conjunct Loc.dummy_position b.b_assumes),
       None, (* requires *)
       assigns b.b_assigns,
+      None, (* allocates *)
       locate
         (conjunct Loc.dummy_position
            (Extlib.filter_map
@@ -1307,7 +1308,7 @@ let spec funspec =
            (List.fold_left
               (fun acc b ->
                  match b with
-                   | JCCbehavior(_,name,_,Some a,_,_,_) ->
+                   | JCCbehavior(_,name,_,Some a,_,_,_,_) ->
                        if (bnames = [] && name <> Common.name_of_default_behavior)
                          || List.mem name bnames
                        then
@@ -1330,7 +1331,7 @@ let spec funspec =
            List.fold_left
              (fun acc b ->
                 match b with
-                  | JCCbehavior(_,name,_,Some a,_,_,_) ->
+                  | JCCbehavior(_,name,_,Some a,_,_,_,_) ->
 (*
                       Format.eprintf "name = %s, len bnames = %d@."
                         name (List.length bnames);

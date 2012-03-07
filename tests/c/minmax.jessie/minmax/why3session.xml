@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/c/minmax.jessie/minmax/why3session.xml">
+ name="minmax.jessie/minmax/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -17,17 +17,17 @@
  <file
   name="../minmax.mlw"
   verified="true"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
-   locfile="tests/c/minmax.jessie/minmax/../minmax.mlw"
+   locfile="minmax.jessie/minmax/../minmax.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="tests/c/minmax.jessie/minmax/../minmax.mlw"
+   locfile="minmax.jessie/minmax/../minmax.mlw"
    loclnum="160" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
@@ -35,8 +35,8 @@
     name="WP_parameter dmax_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
     loclnum="58" loccnumb="7" loccnume="11"
-    expl="Function dmax, default behavior"
-    sum="f2735a8f783fec7fc63e295d849fc684"
+    expl="parameter dmax_ensures_default"
+    sum="71f81bd4a7c95b6ed08cd2081d21a84a"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
@@ -65,8 +65,8 @@
     name="WP_parameter dmax_safety"
     locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
     loclnum="58" loccnumb="7" loccnume="11"
-    expl="Function dmax, Safety"
-    sum="d215d4c605d695978231d0d729379f39"
+    expl="parameter dmax_safety"
+    sum="57dc584abd11239bb56d0d85c27b597d"
     proved="true"
     expanded="true"
     shape="t">
@@ -95,15 +95,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter dmin_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
     loclnum="64" loccnumb="7" loccnume="11"
-    expl="Function dmin, default behavior"
-    sum="762b82da20fb866ac8c22d4b3041e248"
+    expl="parameter dmin_ensures_default"
+    sum="a63d632f5e4107e7847aac354d545943"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
@@ -132,8 +132,8 @@
     name="WP_parameter dmin_safety"
     locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
     loclnum="64" loccnumb="7" loccnume="11"
-    expl="Function dmin, Safety"
-    sum="040550b29a2839bd06cb428cd49960ed"
+    expl="parameter dmin_safety"
+    sum="bf3a039158ccadc72ee32f2d15909625"
     proved="true"
     expanded="true"
     shape="t">
@@ -148,7 +148,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.00"/>
     </proof>
     <proof
      prover="0"
@@ -169,8 +169,8 @@
     name="WP_parameter fmax_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
     loclnum="46" loccnumb="6" loccnume="10"
-    expl="Function fmax, default behavior"
-    sum="bda85a598bac80f675a5b98b8b7a1f98"
+    expl="parameter fmax_ensures_default"
+    sum="a0e6b89ff7fdf8e4f9b04db5e546afc6"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
@@ -185,7 +185,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
@@ -199,8 +199,8 @@
     name="WP_parameter fmax_safety"
     locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
     loclnum="46" loccnumb="6" loccnume="10"
-    expl="Function fmax, Safety"
-    sum="631acad7a0dd00a19e83ef350e383b96"
+    expl="parameter fmax_safety"
+    sum="130c56af57a22159a93f7a0eec4b892f"
     proved="true"
     expanded="true"
     shape="t">
@@ -236,8 +236,8 @@
     name="WP_parameter fmin_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
     loclnum="52" loccnumb="6" loccnume="10"
-    expl="Function fmin, default behavior"
-    sum="a77f2de6242d2ca0ba0a00f2d481481a"
+    expl="parameter fmin_ensures_default"
+    sum="e44078262d3192c5f890474d2f8a2edb"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
@@ -266,8 +266,8 @@
     name="WP_parameter fmin_safety"
     locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
     loclnum="52" loccnumb="6" loccnume="10"
-    expl="Function fmin, Safety"
-    sum="2ba5f9dfa69a4af24d2534c1c7592b81"
+    expl="parameter fmin_safety"
+    sum="105340ff2a7083aecfa590374794ae9b"
     proved="true"
     expanded="true"
     shape="t">
@@ -296,15 +296,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter max_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
     loclnum="34" loccnumb="4" loccnume="7"
-    expl="Function max, default behavior"
-    sum="317853f9c8793d5a06f88f6ae55186a4"
+    expl="parameter max_ensures_default"
+    sum="d1c5e6beb1a895373fe9935478fe56f9"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V1Fainfix =ainteger_of_int32V5amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V0FFF">
@@ -319,7 +319,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="1"
@@ -333,8 +333,8 @@
     name="WP_parameter max_safety"
     locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
     loclnum="34" loccnumb="4" loccnume="7"
-    expl="Function max, Safety"
-    sum="9d86d54ab488895625ad83eed028c70d"
+    expl="parameter max_safety"
+    sum="6f915c34ea4484e61bd252ad6aed04eb"
     proved="true"
     expanded="true"
     shape="t">
@@ -363,15 +363,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter min_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
     loclnum="40" loccnumb="4" loccnume="7"
-    expl="Function min, default behavior"
-    sum="8444a4069225ca57ed4a2b6220dfcffe"
+    expl="parameter min_ensures_default"
+    sum="6348cacada4c5d20bcf344037ab09cef"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V0Fainfix =ainteger_of_int32V5aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V1FFF">
@@ -400,8 +400,8 @@
     name="WP_parameter min_safety"
     locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
     loclnum="40" loccnumb="4" loccnume="7"
-    expl="Function min, Safety"
-    sum="e091fd36f7478a2bf5894cd8613552b8"
+    expl="parameter min_safety"
+    sum="847bc6e0eea3ad324f488136abfba5b0"
     proved="true"
     expanded="true"
     shape="t">
@@ -430,7 +430,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
   </theory>

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/java/Isqrt/why3session.xml">
+ name="Isqrt/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -17,17 +17,17 @@
  <file
   name="../Isqrt.mlw"
   verified="true"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
-   locfile="tests/java/Isqrt/../Isqrt.mlw"
+   locfile="Isqrt/../Isqrt.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="tests/java/Isqrt/../Isqrt.mlw"
+   locfile="Isqrt/../Isqrt.mlw"
    loclnum="176" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
@@ -35,8 +35,8 @@
     name="WP_parameter _Isqrt_isqrt_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/Isqrt.java"
     loclnum="42" loccnumb="11" loccnume="16"
-    expl="Method isqrt, default behavior"
-    sum="3c1062f618ce947d4cba70587989019e"
+    expl="parameter _Isqrt_isqrt_ensures_default"
+    sum="51609adf4ac0e90119f5ae041469f4de"
     proved="true"
     expanded="false"
     shape="iainfix <=V1V0ainfix =V4asqrainfix +V3c1Aainfix >=V0asqrV3Aainfix >=V3c0Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1Fainfix <V0asqrainfix +V5c1Aainfix <=asqrV5V0Aainfix >=V5c0Iainfix =V5V2FIainfix =V1asqrainfix +V2c1Aainfix >=V0asqrV2Aainfix >=V2c0FFAainfix =c1asqrainfix +c0c1Aainfix >=V0asqrc0Aainfix >=c0c0Iainfix >=V0c0F">
@@ -58,7 +58,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -66,7 +66,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Isqrt.java"
     loclnum="42" loccnumb="11" loccnume="16"
     expl="loop variant decreases"
-    sum="bee9ae5d021792068dacf84043d8d6da"
+    sum="6a1b42490288c13d70e17e1258fc51b5"
     proved="true"
     expanded="true"
     shape="ainfix <ainfix -V0V3ainfix -V0V2Aainfix <=c0ainfix -V0V2Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix <=V1V0Iainfix =V1asqrainfix +V2c1Aainfix >=V0asqrV2Aainfix >=V2c0FFIainfix >=V0c0F">
@@ -106,7 +106,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/Isqrt.java"
       loclnum="42" loccnumb="11" loccnume="16"
       expl="loop variant decreases"
-      sum="bee9ae5d021792068dacf84043d8d6da"
+      sum="6a1b42490288c13d70e17e1258fc51b5"
       proved="true"
       expanded="false"
       shape="ainfix <ainfix -V0V3ainfix -V0V2Aainfix <=c0ainfix -V0V2Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix <=V1V0Iainfix =V1asqrainfix +V2c1Aainfix >=V0asqrV2Aainfix >=V2c0FFIainfix >=V0c0F">
@@ -144,8 +144,8 @@
     name="WP_parameter _Isqrt_main_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/Isqrt.java"
     loclnum="52" loccnumb="11" loccnume="15"
-    expl="Method main, default behavior"
-    sum="085c01d7944110f6c15c3710828d4108"
+    expl="parameter _Isqrt_main_ensures_default"
+    sum="07348a0c38c5569e58ddfd9d1e6b397b"
     proved="true"
     expanded="false"
     shape="ainfix =V2c4Iainfix =V2V1FAainfix >V1c4NAainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -160,7 +160,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -168,7 +168,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Isqrt.java"
     loclnum="52" loccnumb="11" loccnume="15"
     expl="precondition for call"
-    sum="aefffb12cddd3b029c4ddc40cd9cbf10"
+    sum="52a75f5129bb58942b858b5a6eae05b0"
     proved="true"
     expanded="false"
     shape="ainfix >=c17c0">
@@ -204,8 +204,8 @@
     name="WP_parameter cons_Isqrt_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Isqrt, default behavior"
-    sum="603f29a5ea8f4f6f55d0beafb59645bf"
+    expl="parameter cons_Isqrt_ensures_default"
+    sum="8471f6aa25a6c8a8e216530db7321dcd"
     proved="true"
     expanded="false"
     shape="t">
@@ -227,7 +227,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -241,8 +241,8 @@
     name="WP_parameter cons_Isqrt_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Isqrt, Safety"
-    sum="5cfb35ac7b27b39458d236b54defc7ee"
+    expl="parameter cons_Isqrt_safety"
+    sum="02ff083eee04655a0c20a5340c62255c"
     proved="true"
     expanded="false"
     shape="t">
@@ -264,7 +264,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -278,8 +278,8 @@
     name="WP_parameter cons_Object_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Object, default behavior"
-    sum="906bd1c8cbfc9020bbaeb57687821581"
+    expl="parameter cons_Object_ensures_default"
+    sum="2ddef8c4578b4883ddd3b23da98d4356"
     proved="true"
     expanded="false"
     shape="t">
@@ -301,7 +301,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -315,8 +315,8 @@
     name="WP_parameter cons_Object_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Object, Safety"
-    sum="308d35442369c1f0ddf61f175332923d"
+    expl="parameter cons_Object_safety"
+    sum="37e81a6137e489e15d1436ea4f19f054"
     proved="true"
     expanded="false"
     shape="t">
@@ -338,7 +338,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"

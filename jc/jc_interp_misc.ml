@@ -717,11 +717,11 @@ let rec transpose_location ~region_assoc ~param_assoc (loc,(mc,rdist)) =
 		JCLderef(locs,lab,fi,r) (* TODO: remove useless lab & r *)
             | JCLat(loc,lab) ->
                 let node = mk_node loc in
-                JCLat(new location_with ~region:rloc ~node loc,lab)
+                JCLat(new location_with ~typ:loc#typ ~region:rloc ~node loc,lab)
 	    | _ -> assert false (* TODO *)
 	  in
           let node = mk_node loc in
-	  let loc = new location_with ~region:rloc ~node loc in
+	  let loc = new location_with ~typ:loc#typ ~region:rloc ~node loc in
 	  Some(PreciseMemory(loc,(mc,rloc)))
 	with NoRegion ->
 	  Some(RawMemory(mc,rloc))
@@ -754,7 +754,7 @@ and transpose_location_set ~region_assoc ~param_assoc locs =
               in JCLSat(locs',lab)
 	  | _ -> assert false (* TODO *)
 	in
-	new location_set_with ~region:rloc ~node locs
+	new location_set_with ~typ:locs#typ  ~region:rloc ~node locs
 
 let transpose_location_set ~region_assoc ~param_assoc locs _w =
   try Some(transpose_location_set ~region_assoc ~param_assoc locs)

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/java/Counter/why3session.xml">
+ name="Counter/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -17,17 +17,17 @@
  <file
   name="../Counter.mlw"
   verified="true"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
-   locfile="tests/java/Counter/../Counter.mlw"
+   locfile="Counter/../Counter.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="tests/java/Counter/../Counter.mlw"
+   locfile="Counter/../Counter.mlw"
    loclnum="178" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
@@ -36,7 +36,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="49" loccnumb="16" loccnume="25"
     expl="normal postcondition"
-    sum="b215b4226891ebe09f59ee2d599d0b54"
+    sum="1d323628b958ac6a92a186f506b478c0"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV0V4V1ainfix -avalueV0V2V1c1Iainfix =V4astoreV2V0ainfix +aselectV2V0c1FIavalid_struct_CounterV0c0c0V3FFFF">
@@ -72,8 +72,8 @@
     name="WP_parameter _Counter_decrement_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="49" loccnumb="16" loccnume="25"
-    expl="Method decrement, Safety"
-    sum="2563eff773d3e876b347623df71b56ee"
+    expl="parameter _Counter_decrement_safety"
+    sum="994fdb74572864075222d5d8ccf8d455"
     proved="true"
     expanded="true"
     shape="t">
@@ -95,7 +95,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -110,7 +110,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="44" loccnumb="16" loccnume="25"
     expl="normal postcondition"
-    sum="541b9995201ad18d5096a39e73b54c96"
+    sum="8c1e82503a2bfffd02184a4012e15bde"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV0V2V4ainfix +avalueV0V2V1c1Iainfix =V4astoreV1V0ainfix +aselectV1V0c1FIavalid_struct_CounterV0c0c0V3FFFF">
@@ -139,15 +139,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Counter_increment_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="44" loccnumb="16" loccnume="25"
-    expl="Method increment, Safety"
-    sum="4eaecefaafa08d5bbebca19917f0735a"
+    expl="parameter _Counter_increment_safety"
+    sum="c2ed10ccbd45701a7b37499010a44b15"
     proved="true"
     expanded="true"
     shape="t">
@@ -183,8 +183,8 @@
     name="WP_parameter cons_Counter_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Counter, default behavior"
-    sum="da2af0c89fbbf2c8251dc0f6942cb6a2"
+    expl="parameter cons_Counter_ensures_default"
+    sum="9b09b13fa67916f9e388109f807e6d21"
     proved="true"
     expanded="true"
     shape="t">
@@ -206,7 +206,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -220,8 +220,8 @@
     name="WP_parameter cons_Counter_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Counter, Safety"
-    sum="860c6bf4507395e32c53d93ab2107d17"
+    expl="parameter cons_Counter_safety"
+    sum="085ac1db1d7441d8b8ae7e31b0243adf"
     proved="true"
     expanded="true"
     shape="t">

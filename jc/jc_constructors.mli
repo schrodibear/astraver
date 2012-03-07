@@ -156,12 +156,14 @@ class term_var :
 
 class location :
   ?pos:Loc.position ->
+  typ:jc_type ->
   ?label:label ->
   ?region:region ->
   location_node ->
   object
     val mutable r : region
     method pos : Loc.position
+    method typ : jc_type
     method node : location_node
     method region : region
     method set_region : region -> unit
@@ -171,6 +173,7 @@ class location :
 
 class location_with :
   ?pos:Loc.position ->
+  typ:jc_type ->
   ?label:label ->
   ?region:region ->
   node:location_node ->
@@ -179,12 +182,14 @@ class location_with :
 
 class location_set :
   ?pos:Loc.position ->
+  typ:jc_type ->
   ?label:label ->
   ?region:region ->
   location_set_node ->
   object
     val mutable r : region
     method pos : Loc.position
+    method typ : jc_type
     method node : location_set_node
     method region : region
     method set_region : region -> unit
@@ -194,6 +199,7 @@ class location_set :
 
 class location_set_with :
   ?pos:Loc.position ->
+  typ:jc_type ->
   ?label:label ->
   ?region:region ->
   node:location_set_node ->
@@ -669,6 +675,7 @@ module PDecl :
       ?assumes:pexpr ->
       ?requires:pexpr ->
       ?assigns:Loc.position * pexpr list ->
+      ?allocates:Loc.position * pexpr list ->
       ?ensures:pexpr -> unit -> pexpr pbehavior
 
     val mkrequires_clause : 'a -> 'a clause
@@ -682,6 +689,7 @@ module PDecl :
       ?assumes:pexpr ->
       ?requires:pexpr ->
       ?assigns:Loc.position * pexpr list ->
+      ?allocates:Loc.position * pexpr list ->
       ?ensures:pexpr -> unit -> pexpr clause
 
 (*

@@ -118,10 +118,15 @@ let loop_annot acc la =
   term (assertion acc la.java_loop_invariant) la.java_loop_variant
 *)
 
-let behavior acc (_id,assumes,_throws,assigns,ensures) =
+let behavior acc (_id,assumes,_throws,assigns,allocates,ensures) =
   let acc = Option_misc.fold_left assertion acc assumes in
   let acc =
     match assigns with
+      | None -> acc
+      | Some(_,l) -> List.fold_left term acc l
+  in
+  let acc =
+    match allocates with
       | None -> acc
       | Some(_,l) -> List.fold_left term acc l
   in

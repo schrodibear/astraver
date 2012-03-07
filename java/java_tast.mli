@@ -148,6 +148,7 @@ type behavior =
       assertion option * (* assumes *)
       java_class_info option * (* throws *)
       (Loc.position * term list) option * (* assigns *)
+      (Loc.position * term list) option * (* allocates *)
       assertion (* ensures *)
 
 type loop_annot =

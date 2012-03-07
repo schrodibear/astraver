@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/java/TestNonNull/why3session.xml">
+ name="TestNonNull/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -20,14 +20,14 @@
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="tests/java/TestNonNull/../TestNonNull.mlw"
+   locfile="TestNonNull/../TestNonNull.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="tests/java/TestNonNull/../TestNonNull.mlw"
+   locfile="TestNonNull/../TestNonNull.mlw"
    loclnum="336" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
@@ -35,8 +35,8 @@
     name="WP_parameter _TestNonNull_test_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
     loclnum="52" loccnumb="9" loccnume="13"
-    expl="Method test, default behavior"
-    sum="6f0b9bf04ae9e35b4d7e71b23733dcb2"
+    expl="parameter _TestNonNull_test_ensures_default"
+    sum="9d86174f601f881d3424f1ff38dbf76f"
     proved="true"
     expanded="true"
     shape="t">
@@ -72,8 +72,8 @@
     name="WP_parameter _TestNonNull_test_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
     loclnum="52" loccnumb="9" loccnume="13"
-    expl="Method test, Safety"
-    sum="7a3f41238148f3e9bdf6bc22a7c08144"
+    expl="parameter _TestNonNull_test_safety"
+    sum="ef420958c7ef1b3af43265ba8389e168"
     proved="true"
     expanded="true"
     shape="at_lengthV0V4V3Aast_lengthV4Aainfix <=c3aoffset_maxV4a_TestNonNull_stIainfix =V8astoreV6ashiftV1c3V7FAainfix <=c3aoffset_maxV4V1Iainfix =ainteger_of_int32V7c1FAainfix <=c2aoffset_maxV4V1Iainfix =V6astoreV2ashiftV1c2V5FAainfix <=c2aoffset_maxV4V1Iainfix =ainteger_of_int32V5c1FAainfix <=c3aoffset_maxV4V1Iat_lengthV0V4V3Aast_lengthV4Aainfix >=ainfix +aoffset_maxV4V1c1c4Aavalid_struct_TestNonNullV0c0c0V4V3Aavalid_struct_intMV1c0aprefix -c1V4FFFFF">
@@ -110,7 +110,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
     loclnum="45" loccnumb="4" loccnume="15"
     expl="assertion"
-    sum="c2b155aee2ec8505511762319106a9de"
+    sum="aec1e58d75de7513e283b0911a137785"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
@@ -125,7 +125,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="0"
@@ -146,8 +146,8 @@
     name="WP_parameter cons_TestNonNull_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
     loclnum="45" loccnumb="4" loccnume="15"
-    expl="Constructor of class TestNonNull, Safety"
-    sum="db63f094a966a1bb26ca4316421d034d"
+    expl="parameter cons_TestNonNull_safety"
+    sum="7a2ed61a4334cbebc805dbf7414e3278"
     proved="false"
     expanded="true"
     shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FAainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFAainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
@@ -166,7 +166,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
       loclnum="45" loccnumb="4" loccnume="15"
       expl="allocation size"
-      sum="4032691ad5e91eb463bdc014c1965dff"
+      sum="673120f2d7a331bbe4db43f70c22c984"
       proved="true"
       expanded="true"
       shape="ainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
@@ -203,7 +203,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
       loclnum="45" loccnumb="4" loccnume="15"
       expl="assertion"
-      sum="13c6d753da2ea36fe16f012dee00ef20"
+      sum="82c54b9df157762c651a11ccbc9ceaa8"
       proved="true"
       expanded="true"
       shape="ainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
@@ -240,7 +240,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
       loclnum="45" loccnumb="4" loccnume="15"
       expl="normal postcondition"
-      sum="4ec56cb5b79379b5f0f2a437918e0fa0"
+      sum="2718d25584e89a2782630910f9377dd7"
       proved="false"
       expanded="true"
       shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
@@ -258,8 +258,8 @@
         name="WP_parameter cons_TestNonNull_safety.3.1"
         locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
         loclnum="45" loccnumb="4" loccnume="15"
-        expl="Constructor of class TestNonNull, Safety"
-        sum="32f2850dac7b5838ebe706d3331a4554"
+        expl="parameter cons_TestNonNull_safety"
+        sum="475f0707989da9df75e67328ef466640"
         proved="false"
         expanded="true"
         shape="ast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
@@ -295,8 +295,8 @@
         name="WP_parameter cons_TestNonNull_safety.3.2"
         locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
         loclnum="45" loccnumb="4" loccnume="15"
-        expl="Constructor of class TestNonNull, Safety"
-        sum="f221fb83102e0365bb3bb107d90367a5"
+        expl="parameter cons_TestNonNull_safety"
+        sum="98573b261eea6395c7db7ead7b78bd16"
         proved="true"
         expanded="true"
         shape="at_lengthV0V5V7Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
@@ -311,7 +311,7 @@
          timelimit="5"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.04"/>
         </proof>
         <proof
          prover="0"

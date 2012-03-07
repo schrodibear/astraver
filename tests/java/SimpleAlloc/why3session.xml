@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/java/SimpleAlloc/why3session.xml">
+ name="SimpleAlloc/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -28,14 +28,14 @@
   expanded="true">
   <theory
    name="Jessie_model"
-   locfile="tests/java/SimpleAlloc/../SimpleAlloc.mlw"
+   locfile="SimpleAlloc/../SimpleAlloc.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="tests/java/SimpleAlloc/../SimpleAlloc.mlw"
+   locfile="SimpleAlloc/../SimpleAlloc.mlw"
    loclnum="332" loccnumb="7" loccnume="21"
    verified="false"
    expanded="true">
@@ -44,7 +44,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
     loclnum="36" loccnumb="4" loccnume="8"
     expl="normal postcondition"
-    sum="ae8f23544c8e5d8eacae9510cd1c1f29"
+    sum="1655981220e8963da22758a8aa77d79c"
     proved="true"
     expanded="true"
     shape="anot_assignsV1V2V4apset_singletonV0Iainfix =V4astoreV2V0V3FIainfix =ainteger_of_int32V3c0FIavalid_struct_NodeV0c0c0V1FFF">
@@ -59,7 +59,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="0"
@@ -73,15 +73,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.17"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Node_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
     loclnum="36" loccnumb="4" loccnume="8"
-    expl="Constructor of class Node, Safety"
-    sum="abfcbfee10cd7da6cdb5e2d30cea674c"
+    expl="parameter cons_Node_safety"
+    sum="7e5afdc2d148a6ef2f9bf3ce222ad5e0"
     proved="true"
     expanded="true"
     shape="t">
@@ -117,8 +117,8 @@
     name="WP_parameter cons_test_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class test, default behavior"
-    sum="680da14d171bbf7742ae09058a4fcd97"
+    expl="parameter cons_test_ensures_default"
+    sum="a9d214657d6017d36725a9cf47cce8d2"
     proved="true"
     expanded="true"
     shape="t">
@@ -140,22 +140,22 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_test_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class test, Safety"
-    sum="9248d581e65d51077440628b3d669f65"
+    expl="parameter cons_test_safety"
+    sum="337b8bbb649fbbdefbf059322c8f79d8"
     proved="true"
     expanded="true"
     shape="t">
@@ -177,14 +177,14 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
@@ -192,7 +192,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
     loclnum="46" loccnumb="9" loccnume="13"
     expl="normal postcondition"
-    sum="dd1e8b87bc7194f619c2344a75c744e2"
+    sum="66070977f16b54ca6414dd64e544b9aa"
     proved="false"
     expanded="true"
     shape="anot_assignsV2V4V9apset_rangeapset_derefV1apset_singletonV0c0c0Aanot_assignsV2V3V8apset_emptyAa_Non_null_NodeMaselectV1V0V6Iainfix =V9astoreV4aselectV1V0V7FIanot_assignsV6V3V8apset_singletonV7FIainstanceofV5V7a_Node_tagAaalloc_freshV2V7c1Aaalloc_extendsV2V6Aastrict_valid_struct_NodeV7c0ainfix -c1c1V6FFFIainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFFF">
@@ -207,8 +207,8 @@
     name="WP_parameter test_test_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
     loclnum="46" loccnumb="9" loccnume="13"
-    expl="Method test, Safety"
-    sum="0d1bdf325aee6e3aa058eb86db746ba8"
+    expl="parameter test_test_safety"
+    sum="596849f0eb93c59a88371d5e2041d3cf"
     proved="false"
     expanded="true"
     shape="ainfix <=c0aoffset_maxV5aselectV1V0Ianot_assignsV5V3V7apset_singletonV6FAainfix >=aoffset_maxV5V6c0IainstanceofV4V6a_Node_tagAaalloc_freshV2V6c1Aaalloc_extendsV2V5Aastrict_valid_struct_NodeV6c0ainfix -c1c1V5FFFAainfix >=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFF">
@@ -227,7 +227,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
       loclnum="46" loccnumb="9" loccnume="13"
       expl="allocation size"
-      sum="2d99936ecf74548a65618a75e3fad0fe"
+      sum="edc517e9f9af0f373c3b4f55978fadd1"
       proved="true"
       expanded="false"
       shape="ainfix >=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFF">
@@ -256,7 +256,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.02"/>
       </proof>
      </goal>
      <goal
@@ -264,7 +264,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
       loclnum="46" loccnumb="9" loccnume="13"
       expl="assertion"
-      sum="4553015ae236791957c9396462a668f6"
+      sum="dc4e6841e2ce969b2aaa1b3c5b3c4e2e"
       proved="true"
       expanded="false"
       shape="ainfix >=aoffset_maxV5V6c0IainstanceofV4V6a_Node_tagAaalloc_freshV2V6c1Aaalloc_extendsV2V5Aastrict_valid_struct_NodeV6c0ainfix -c1c1V5FFFIainfix >=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFF">
@@ -279,7 +279,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="0"
@@ -301,7 +301,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/SimpleAlloc.java"
       loclnum="46" loccnumb="9" loccnume="13"
       expl="index bounds"
-      sum="d3c9f3c6dec2d0d1d0312c102db347a1"
+      sum="7c57df2fc6557012ffb92ba6efac6e8b"
       proved="false"
       expanded="true"
       shape="ainfix <=c0aoffset_maxV5aselectV1V0Ianot_assignsV5V3V7apset_singletonV6FIainfix >=aoffset_maxV5V6c0IainstanceofV4V6a_Node_tagAaalloc_freshV2V6c1Aaalloc_extendsV2V5Aastrict_valid_struct_NodeV6c0ainfix -c1c1V5FFFIainfix >=c1c0Iainfix =ainfix +aoffset_maxV2aselectV1V0c1c10Aa_Non_null_NodeMaselectV1V0V2Aavalid_struct_testV0c0c0V2FFFF">
@@ -323,21 +323,21 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.07"/>
+       <result status="timeout" time="5.04"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="0.03"/>
+       <result status="unknown" time="0.04"/>
       </proof>
       <proof
        prover="2"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.07"/>
+       <result status="timeout" time="5.04"/>
       </proof>
       <proof
        prover="4"

@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/java/NameConflicts/why3session.xml">
+ name="NameConflicts/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -17,17 +17,17 @@
  <file
   name="../NameConflicts.mlw"
   verified="true"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
-   locfile="tests/java/NameConflicts/../NameConflicts.mlw"
+   locfile="NameConflicts/../NameConflicts.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="tests/java/NameConflicts/../NameConflicts.mlw"
+   locfile="NameConflicts/../NameConflicts.mlw"
    loclnum="295" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
@@ -35,8 +35,8 @@
     name="WP_parameter _NameConflicts_field_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="50" loccnumb="8" loccnume="13"
-    expl="Method field, default behavior"
-    sum="d512f05b33819e9106ebc90a64bb13b9"
+    expl="parameter _NameConflicts_field_ensures_default"
+    sum="fae5220bb7b14e0a69b796884b2e99cd"
     proved="true"
     expanded="true"
     shape="t">
@@ -58,22 +58,22 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _NameConflicts_field_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="50" loccnumb="8" loccnume="13"
-    expl="Method field, Safety"
-    sum="5986cad0832ee5e011f08b26095e74a9"
+    expl="parameter _NameConflicts_field_safety"
+    sum="0a55a65d06ae81cf13ec755c5b8045db"
     proved="true"
     expanded="true"
     shape="t">
@@ -109,8 +109,8 @@
     name="WP_parameter _NameConflicts_m_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
-    expl="Method m, default behavior"
-    sum="de6efe3ab365ed94923cb8c77cd6d8f3"
+    expl="parameter _NameConflicts_m_ensures_default"
+    sum="d3e0ccdb54d07eebf2eb606180808361"
     proved="true"
     expanded="true"
     shape="t">
@@ -139,7 +139,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
@@ -147,7 +147,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
     expl="normal postcondition"
-    sum="8d6684d16ccd47a4848ebdf1e07f1dc5"
+    sum="863fe0b2b9e114a965881762b72ea2c6"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c0Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =ainteger_of_int32V2c0FIavalid_struct_NameConflictsV0c0c0V1FF">
@@ -176,15 +176,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _NameConflicts_m_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
-    expl="Method m, Safety"
-    sum="eb5addad3ce26386c5e16a81143d030d"
+    expl="parameter _NameConflicts_m_safety"
+    sum="c590f7356694fae255bc1c2dde7ca9e1"
     proved="true"
     expanded="true"
     shape="t">
@@ -220,8 +220,8 @@
     name="WP_parameter _NameConflicts_setI_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="36" loccnumb="9" loccnume="13"
-    expl="Method setI, default behavior"
-    sum="429a6b964c9b76c9340c56338d62744a"
+    expl="parameter _NameConflicts_setI_ensures_default"
+    sum="da1b40c8238626be7ed618b3392404e5"
     proved="true"
     expanded="true"
     shape="t">
@@ -243,7 +243,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -257,8 +257,8 @@
     name="WP_parameter _NameConflicts_setI_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="36" loccnumb="9" loccnume="13"
-    expl="Method setI, Safety"
-    sum="3f45d78ca025a36552a5694f164e7c61"
+    expl="parameter _NameConflicts_setI_safety"
+    sum="27344f60bd8429b6372c9168c81485f4"
     proved="true"
     expanded="true"
     shape="t">
@@ -287,15 +287,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_NameConflicts_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class NameConflicts, default behavior"
-    sum="5e967e7a0d3e9961a3f9f65bb2fe4559"
+    expl="parameter cons_NameConflicts_ensures_default"
+    sum="01c59512c0e11080f00717ef6ae1a822"
     proved="true"
     expanded="true"
     shape="t">
@@ -324,15 +324,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_NameConflicts_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class NameConflicts, Safety"
-    sum="f15db3e6b358d83d54b72cd3f0c9b32f"
+    expl="parameter cons_NameConflicts_safety"
+    sum="4b1a980c36a737d33db4f50719e4064f"
     proved="true"
     expanded="true"
     shape="t">
@@ -354,14 +354,14 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
   </theory>

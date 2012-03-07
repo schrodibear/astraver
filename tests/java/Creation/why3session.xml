@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/java/Creation/why3session.xml">
+ name="Creation/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -17,17 +17,17 @@
  <file
   name="../Creation.mlw"
   verified="true"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
-   locfile="tests/java/Creation/../Creation.mlw"
+   locfile="Creation/../Creation.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="false">
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="tests/java/Creation/../Creation.mlw"
+   locfile="Creation/../Creation.mlw"
    loclnum="191" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
@@ -35,8 +35,8 @@
     name="WP_parameter _Creation_test1_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="65" loccnumb="22" loccnume="27"
-    expl="Method test1, default behavior"
-    sum="acd62fca0891d4b81054f1882ecacf0a"
+    expl="parameter _Creation_test1_ensures_default"
+    sum="051cfb12ef724d6f5c3bbe3c1f565967"
     proved="true"
     expanded="false"
     shape="t">
@@ -58,7 +58,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -73,7 +73,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="65" loccnumb="22" loccnume="27"
     expl="normal postcondition"
-    sum="588083a3863a41fbec0cf6a696e60b4f"
+    sum="251aa0c1b43f520434e202bd1132168a"
     proved="true"
     expanded="false"
     shape="ainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c17FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFFF">
@@ -95,22 +95,22 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Creation_test1_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="65" loccnumb="22" loccnume="27"
-    expl="Method test1, Safety"
-    sum="1b590dae46256f314d277090d7b64bed"
+    expl="parameter _Creation_test1_safety"
+    sum="25ce3f26f15b96d48c678a374e054090"
     proved="true"
     expanded="false"
     shape="ainfix <=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c17FAainfix >=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix >=c1c0FF">
@@ -125,7 +125,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="0"
@@ -146,8 +146,8 @@
     name="WP_parameter _Creation_test2_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="73" loccnumb="22" loccnume="27"
-    expl="Method test2, default behavior"
-    sum="f80103aa107e59079b6da21c67a28da2"
+    expl="parameter _Creation_test2_ensures_default"
+    sum="76372b0f7327148094bd41e9cac8be1f"
     proved="true"
     expanded="false"
     shape="t">
@@ -184,7 +184,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="73" loccnumb="22" loccnume="27"
     expl="normal postcondition"
-    sum="f98ae7bb15167013e0a6b03b1da7b1a7"
+    sum="d3aa6e06b5134d1576f46c8375528c50"
     proved="true"
     expanded="false"
     shape="ainfix =V6c0Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c0FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFFF">
@@ -220,8 +220,8 @@
     name="WP_parameter _Creation_test2_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="73" loccnumb="22" loccnume="27"
-    expl="Method test2, Safety"
-    sum="a045e25a7cee374017fdaf01b4b2393a"
+    expl="parameter _Creation_test2_safety"
+    sum="32431bbb5060efa299d9b86e0f0e7ebd"
     proved="true"
     expanded="false"
     shape="ainfix <=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c0FAainfix >=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix >=c1c0FF">
@@ -257,8 +257,8 @@
     name="WP_parameter _Creation_test3_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="82" loccnumb="22" loccnume="27"
-    expl="Method test3, default behavior"
-    sum="e009c15fc9e4ed5b26031aaccf76bdc4"
+    expl="parameter _Creation_test3_ensures_default"
+    sum="2192e3e23febef466cfbdf17796bc0ec"
     proved="true"
     expanded="false"
     shape="t">
@@ -280,7 +280,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -295,7 +295,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="82" loccnumb="22" loccnume="27"
     expl="normal postcondition"
-    sum="7900d283a6f5fca956fa263ec850d2d2"
+    sum="d7e74ee53b7077bea99c7d175f3c9b9e"
     proved="true"
     expanded="false"
     shape="anot_assignsV0V1V5apset_emptyAainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFFF">
@@ -317,15 +317,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.67"/>
+     <result status="valid" time="0.19"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Creation_test3_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="82" loccnumb="22" loccnume="27"
-    expl="Method test3, Safety"
-    sum="5210291d1df974234a074b26edaeddbc"
+    expl="parameter _Creation_test3_safety"
+    sum="2f5469294a20034cbb5c2cacb7a31a65"
     proved="true"
     expanded="false"
     shape="ainfix <=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FAainfix >=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix >=c1c0FF">
@@ -361,8 +361,8 @@
     name="WP_parameter cons_Creation_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="42" loccnumb="4" loccnume="12"
-    expl="Constructor of class Creation, default behavior"
-    sum="8a86be0c23886dce2b045eed6cb53cca"
+    expl="parameter cons_Creation_ensures_default"
+    sum="3ece59e05a0f796a6a69e011cf33002e"
     proved="true"
     expanded="false"
     shape="t">
@@ -399,7 +399,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="42" loccnumb="4" loccnume="12"
     expl="normal postcondition"
-    sum="e86a54e33ad6d8f3707dcb4847873c97"
+    sum="6e2e29137772008079dad75b65fa2c6e"
     proved="true"
     expanded="false"
     shape="anot_assignsV1V2V4apset_singletonV0Aainfix =aselectV4V0c0Ianot_assignsV1V3V4apset_singletonV0Aainfix =aselectV4V0c0FIainfix =V3astoreV2V0c0FIavalid_struct_CreationV0c0c0V1FFF">
@@ -428,7 +428,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.17"/>
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
    <goal
@@ -436,15 +436,15 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="50" loccnumb="4" loccnume="12"
     expl="Constructor of class Creation, default behavior"
-    sum="f3e4d3b89fd6513a793141a4aa43c0ad"
+    sum="5bd2d267f87970ce5399ca34141a5fc9"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Creation_int_ensures_default">
+     name="expl:Constructor of class Creation, default behavior">
      </label>
     <label
-     name="expl:Constructor of class Creation, default behavior">
+     name="expl:parameter cons_Creation_int_ensures_default">
      </label>
     <proof
      prover="2"
@@ -473,15 +473,15 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="50" loccnumb="4" loccnume="12"
     expl="normal postcondition"
-    sum="32c11ece607d0c294166158b1ad7db7d"
+    sum="47d7666a785b74185aa52b78a644bb6f"
     proved="true"
     expanded="false"
     shape="anot_assignsV2V3V5apset_singletonV0Aainfix =aselectV5V0V1Iainfix =V5astoreV4V0V1FIainfix =V4astoreV3V0c0FIavalid_struct_CreationV0c0c0V2FFFF">
     <label
-     name="expl:parameter cons_Creation_int_ensures_normal">
+     name="expl:Constructor of class Creation, Behavior `normal'">
      </label>
     <label
-     name="expl:Constructor of class Creation, Behavior `normal'">
+     name="expl:parameter cons_Creation_int_ensures_normal">
      </label>
     <proof
      prover="2"
@@ -502,7 +502,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
    <goal
@@ -510,15 +510,15 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="58" loccnumb="4" loccnume="12"
     expl="Constructor of class Creation, default behavior"
-    sum="d55ca79604ba94ad1eb9094bb6e0350d"
+    sum="b730c2bc6af59fbf755f6c9980087ac9"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Creation_int_int_ensures_default">
+     name="expl:Constructor of class Creation, default behavior">
      </label>
     <label
-     name="expl:Constructor of class Creation, default behavior">
+     name="expl:parameter cons_Creation_int_int_ensures_default">
      </label>
     <proof
      prover="2"
@@ -547,15 +547,15 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="58" loccnumb="4" loccnume="12"
     expl="normal postcondition"
-    sum="0ba00c99d729cb56b5f48018093ad78f"
+    sum="52d356b637c15e16f61f4eb4be1834d6"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V4V6apset_singletonV0Aainfix =aselectV6V0ainfix +V1V2Ianot_assignsV3V5V6apset_singletonV0Aainfix =aselectV6V0ainfix +V1V2FIainfix =V5astoreV4V0c0FIavalid_struct_CreationV0c0c0V3FFFFF">
     <label
-     name="expl:parameter cons_Creation_int_int_ensures_normal">
+     name="expl:Constructor of class Creation, Behavior `normal'">
      </label>
     <label
-     name="expl:Constructor of class Creation, Behavior `normal'">
+     name="expl:parameter cons_Creation_int_int_ensures_normal">
      </label>
     <proof
      prover="2"
@@ -569,22 +569,22 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.17"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Creation_int_int_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="58" loccnumb="4" loccnume="12"
-    expl="Constructor of class Creation, Safety"
-    sum="11693995e23cf23e745cf1faab1c6fc4"
+    expl="parameter cons_Creation_int_int_safety"
+    sum="4e00a94fec3d81cab36dc99d8545e892"
     proved="true"
     expanded="false"
     shape="t">
@@ -621,15 +621,15 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="50" loccnumb="4" loccnume="12"
     expl="Constructor of class Creation, Safety"
-    sum="4c0653ed107493f105fb77abbe1df2ed"
+    sum="00a1b73a1e0e32443f8b7007f7858d4a"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Creation_int_safety">
+     name="expl:Constructor of class Creation, Safety">
      </label>
     <label
-     name="expl:Constructor of class Creation, Safety">
+     name="expl:parameter cons_Creation_int_safety">
      </label>
     <proof
      prover="2"
@@ -643,7 +643,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -658,15 +658,15 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="42" loccnumb="4" loccnume="12"
     expl="Constructor of class Creation, Safety"
-    sum="b51c4ba5535a627d9d3286863842b4f9"
+    sum="28b70ffa95e47639630da67622964323"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Creation_safety">
+     name="expl:Constructor of class Creation, Safety">
      </label>
     <label
-     name="expl:Constructor of class Creation, Safety">
+     name="expl:parameter cons_Creation_safety">
      </label>
     <proof
      prover="2"
@@ -694,8 +694,8 @@
     name="WP_parameter cons_TestSuperConstructor_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="96" loccnumb="4" loccnume="24"
-    expl="Constructor of class TestSuperConstructor, default behavior"
-    sum="8913c5679b37ee2f20cfced80d6eeb9a"
+    expl="parameter cons_TestSuperConstructor_ensures_default"
+    sum="ca5e95028aac615d62f78516ebe6e239"
     proved="true"
     expanded="false"
     shape="t">
@@ -717,7 +717,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -732,7 +732,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="96" loccnumb="4" loccnume="24"
     expl="normal postcondition"
-    sum="fea6d61aa215c307ce07d7b8eb8a9af7"
+    sum="0cf8d259bfda1482d6e09a48426125e6"
     proved="true"
     expanded="false"
     shape="anot_assignsV1V2V3apset_singletonV0Aainfix =aselectV3V0c12Ianot_assignsV1V2V3apset_singletonV0Aainfix =aselectV3V0c12FIavalid_struct_TestSuperConstructorV0c0c0V1FFF">
@@ -761,15 +761,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_TestSuperConstructor_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="96" loccnumb="4" loccnume="24"
-    expl="Constructor of class TestSuperConstructor, Safety"
-    sum="5cf0e012dd6ff01e208c667f7b138230"
+    expl="parameter cons_TestSuperConstructor_safety"
+    sum="648f8330339192306f60b286f6b9f0cd"
     proved="true"
     expanded="false"
     shape="t">
@@ -791,7 +791,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"

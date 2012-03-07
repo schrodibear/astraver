@@ -1644,22 +1644,26 @@ let rec old_to_pre_lset lset =
     | JCLSvar _ -> lset
     | JCLSderef(lset,lab,fi,_region) ->
 	new location_set_with
+          ~typ:lset#typ
 	  ~node:(JCLSderef(old_to_pre_lset lset, old_to_pre lab, fi, lset#region))
 	  lset
     | JCLSrange(lset,t1,t2) ->
 	new location_set_with
+          ~typ:lset#typ
 	  ~node:(JCLSrange(old_to_pre_lset lset,
 			   Option_misc.map old_to_pre_term t1,
 			   Option_misc.map old_to_pre_term t2))
 	  lset
     | JCLSrange_term(lset,t1,t2) ->
 	new location_set_with
+          ~typ:lset#typ
 	  ~node:(JCLSrange_term(old_to_pre_term lset,
 				Option_misc.map old_to_pre_term t1,
 				Option_misc.map old_to_pre_term t2))
 	  lset
     | JCLSat(lset,lab) ->
 	new location_set_with
+          ~typ:lset#typ
 	  ~node:(JCLSat(old_to_pre_lset lset,old_to_pre lab))
 	  lset
 
@@ -1668,14 +1672,17 @@ let rec old_to_pre_loc loc =
     | JCLvar _ -> loc
     | JCLat(l,lab) ->
 	new location_with
+          ~typ:loc#typ
 	  ~node:(JCLat(old_to_pre_loc l, old_to_pre lab))
 	  loc
     | JCLderef(lset,lab,fi,_region) ->
 	new location_with
+          ~typ:loc#typ
 	  ~node:(JCLderef(old_to_pre_lset lset,old_to_pre lab, fi, lset#region))
 	  loc
     | JCLderef_term(t1,fi) ->
 	new location_with
+          ~typ:loc#typ
 	  ~node:(JCLderef_term(old_to_pre_term t1,fi))
 	  loc
 

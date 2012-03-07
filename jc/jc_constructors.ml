@@ -144,37 +144,39 @@ class term_var ?(pos = Loc.dummy_position) ?(mark="") v =
   term ~pos ~typ:v.jc_var_info_type ~mark ~region:v.jc_var_info_region
     (JCTvar v)
 
-class location ?(pos = Loc.dummy_position) ?label ?region node =
+class location ?(pos = Loc.dummy_position) ~typ ?label ?region node =
   let region = 
     match region with None -> dummy_region | Some region -> region 
   in
 object
+  inherit typed typ
   inherit regioned region
   inherit labeled label
   inherit [location_node] node_positioned ~pos node
 end
 
 (* ignore argument's label *)
-class location_with ?pos ?label ?region ~node t =
+class location_with ?pos ~typ ?label ?region ~node t =
   let pos = match pos with None -> t#pos | Some pos -> pos in
   let region = match region with None -> t#region | Some region -> region in
-  location ~pos ?label ~region node
+  location ~pos ~typ ?label ~region node
 
-class location_set ?(pos = Loc.dummy_position) ?label ?region node =
+class location_set ?(pos = Loc.dummy_position) ~typ ?label ?region node =
   let region = 
     match region with None -> dummy_region | Some region -> region 
   in
 object
+  inherit typed typ
   inherit regioned region
   inherit labeled label
   inherit [location_set_node] node_positioned ~pos node
 end
 
 (* ignore argument's label *)
-class location_set_with ?pos ?label ?region ~node t =
+class location_set_with ?pos ~typ ?label ?region ~node t =
   let pos = match pos with None -> t#pos | Some pos -> pos in
   let region = match region with None -> t#region | Some region -> region in
-  location_set ~pos ?label ~region node
+  location_set ~pos ~typ ?label ~region node
 
 class expr ?(pos = Loc.dummy_position) ~typ ?(mark="") ?region
   ?original_type node =
@@ -446,21 +448,21 @@ module PDecl = struct
   let mkint_model_def ~value = mk ~node:(JCDint_model value)
 
   let mkbehavior ?(pos = Loc.dummy_position) ~name ?throws ?assumes ?requires
-      ?assigns ?(ensures = mkboolean ~value:true ()) () =
-    (pos, name, throws, assumes, requires, assigns, ensures)
+      ?assigns ?allocates ?(ensures = mkboolean ~value:true ()) () =
+    (pos, name, throws, assumes, requires, assigns, allocates, ensures)
 
   let mkrequires_clause expr = JCCrequires expr
 
   let mkdecreases_clause ?measure expr = JCCdecreases(expr,measure)
 
   let mkbehavior_clause ?(pos = Loc.dummy_position) ~name ?throws ?assumes ?requires
-      ?assigns ?(ensures = mkboolean ~value:true ()) () =
-      JCCbehavior (mkbehavior ~pos ~name ?throws ?assumes ?requires ?assigns ~ensures ())
+      ?assigns ?allocates ?(ensures = mkboolean ~value:true ()) () =
+      JCCbehavior (mkbehavior ~pos ~name ?throws ?assumes ?requires ?assigns ?allocates ~ensures ())
 
-  let mkbehavior_clause_with ?pos ?name ?throws ?assumes ?requires ?assigns ?ensures =
+  let mkbehavior_clause_with ?pos ?name ?throws ?assumes ?requires ?assigns ?allocates ?ensures =
     function
       | JCCbehavior(pos', name', throws', assumes', requires', assigns',
-                    ensures') ->
+                    allocates', ensures') ->
           JCCbehavior(
             oo pos pos',
             oo name name',
@@ -468,6 +470,7 @@ module PDecl = struct
             oo assumes assumes',
             oo requires requires',
             oo assigns assigns',
+            oo allocates allocates',
             oo ensures ensures'
           )
       | _ -> raise (Invalid_argument "mkbehavior_with")
@@ -477,7 +480,7 @@ module PDecl = struct
   let mktag_invariant ~name ~var ~body = name, var, body
 
   let behavior_ensures = function
-    | JCCbehavior(_, _, _, _, _, _, e) -> e
+    | JCCbehavior(_, _, _, _, _, _, _, e) -> e
     | _ -> raise (Invalid_argument "behavior_ensures")
 end
 

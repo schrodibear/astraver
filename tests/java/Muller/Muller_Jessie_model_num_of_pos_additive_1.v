@@ -14,7 +14,17 @@ Definition implb(x:bool) (y:bool): bool := match (x,
 
 Parameter usObject : Type.
 
+Parameter byte : Type.
+
+Parameter char : Type.
+
+Parameter int32 : Type.
+
 Parameter interface : Type.
+
+Parameter long : Type.
+
+Parameter short : Type.
 
 Parameter usException_tag: (Jessie_memory_model.tag_id usObject).
 
@@ -23,15 +33,23 @@ Parameter usObject_tag: (Jessie_memory_model.tag_id usObject).
 Axiom usException_parenttag_Object : (Jessie_memory_model.parenttag usException_tag
   usObject_tag).
 
-Parameter usFibonacci_tag: (Jessie_memory_model.tag_id usObject).
+Parameter usMuller_tag: (Jessie_memory_model.tag_id usObject).
 
-Axiom usFibonacci_parenttag_Object : (Jessie_memory_model.parenttag usFibonacci_tag
+Axiom usMuller_parenttag_Object : (Jessie_memory_model.parenttag usMuller_tag
   usObject_tag).
 
 (* Why3 assumption *)
-Definition usNon_null_Object(x_0:(Jessie_memory_model.pointer usObject))
-  (usObject_alloc_table:(Jessie_memory_model.alloc_table usObject)): Prop :=
-  (0%Z <= (Jessie_memory_model.offset_max usObject_alloc_table x_0))%Z.
+Definition usNon_null_Object(x_1:(Jessie_memory_model.pointer usObject))
+  (usObject_x_2_alloc_table:(Jessie_memory_model.alloc_table
+  usObject)): Prop :=
+  (0%Z <= (Jessie_memory_model.offset_max usObject_x_2_alloc_table x_1))%Z.
+
+(* Why3 assumption *)
+Definition usNon_null_intM(x_0:(Jessie_memory_model.pointer usObject))
+  (usObject_x_1_alloc_table:(Jessie_memory_model.alloc_table
+  usObject)): Prop :=
+  ((-1%Z)%Z <= (Jessie_memory_model.offset_max usObject_x_1_alloc_table
+  x_0))%Z.
 
 Axiom usObject_int : ((Jessie_memory_model.int_of_tag usObject_tag) = 1%Z).
 
@@ -59,6 +77,75 @@ Parameter usThrowable_tag: (Jessie_memory_model.tag_id usObject).
 Axiom usThrowable_parenttag_Object : (Jessie_memory_model.parenttag usThrowable_tag
   usObject_tag).
 
+Parameter integer_of_byte: byte -> Z.
+
+Parameter byte_of_integer: Z -> byte.
+
+Axiom byte_coerce : forall (x:Z), (((-128%Z)%Z <= x)%Z /\ (x <= 127%Z)%Z) ->
+  ((integer_of_byte (byte_of_integer x)) = x).
+
+Axiom byte_extensionality : forall (x:byte), forall (y:byte),
+  ((integer_of_byte x) = (integer_of_byte y)) -> (x = y).
+
+Axiom byte_range : forall (x:byte), ((-128%Z)%Z <= (integer_of_byte x))%Z /\
+  ((integer_of_byte x) <= 127%Z)%Z.
+
+Parameter integer_of_char: char -> Z.
+
+Parameter char_of_integer: Z -> char.
+
+Axiom char_coerce : forall (x:Z), ((0%Z <= x)%Z /\ (x <= 65535%Z)%Z) ->
+  ((integer_of_char (char_of_integer x)) = x).
+
+Axiom char_extensionality : forall (x:char), forall (y:char),
+  ((integer_of_char x) = (integer_of_char y)) -> (x = y).
+
+Axiom char_range : forall (x:char), (0%Z <= (integer_of_char x))%Z /\
+  ((integer_of_char x) <= 65535%Z)%Z.
+
+(* Why3 assumption *)
+Definition eq_byte(x:byte) (y:byte): Prop :=
+  ((integer_of_byte x) = (integer_of_byte y)).
+
+(* Why3 assumption *)
+Definition eq_char(x:char) (y:char): Prop :=
+  ((integer_of_char x) = (integer_of_char y)).
+
+Parameter integer_of_int32: int32 -> Z.
+
+(* Why3 assumption *)
+Definition eq_int32(x:int32) (y:int32): Prop :=
+  ((integer_of_int32 x) = (integer_of_int32 y)).
+
+Parameter integer_of_long: long -> Z.
+
+(* Why3 assumption *)
+Definition eq_long(x:long) (y:long): Prop :=
+  ((integer_of_long x) = (integer_of_long y)).
+
+Parameter integer_of_short: short -> Z.
+
+(* Why3 assumption *)
+Definition eq_short(x:short) (y:short): Prop :=
+  ((integer_of_short x) = (integer_of_short y)).
+
+Parameter int32_of_integer: Z -> int32.
+
+Axiom int32_coerce : forall (x:Z), (((-2147483648%Z)%Z <= x)%Z /\
+  (x <= 2147483647%Z)%Z) -> ((integer_of_int32 (int32_of_integer x)) = x).
+
+Axiom int32_extensionality : forall (x:int32), forall (y:int32),
+  ((integer_of_int32 x) = (integer_of_int32 y)) -> (x = y).
+
+Axiom int32_range : forall (x:int32),
+  ((-2147483648%Z)%Z <= (integer_of_int32 x))%Z /\
+  ((integer_of_int32 x) <= 2147483647%Z)%Z.
+
+Parameter intM_tag: (Jessie_memory_model.tag_id usObject).
+
+Axiom intM_parenttag_Object : (Jessie_memory_model.parenttag intM_tag
+  usObject_tag).
+
 Parameter interface_tag: (Jessie_memory_model.tag_id interface).
 
 Axiom interface_int : ((Jessie_memory_model.int_of_tag interface_tag) = 1%Z).
@@ -78,14 +165,6 @@ Axiom interface_tags : forall (x:(Jessie_memory_model.pointer interface)),
   (Jessie_memory_model.instanceof interface_tag_table x interface_tag).
 
 (* Why3 assumption *)
-Inductive isfib : Z -> Z -> Prop :=
-  | isfib0 : (isfib 0%Z 0%Z)
-  | isfib1 : (isfib 1%Z 1%Z)
-  | isfibn : forall (n:Z), forall (r_0:Z), forall (p:Z), ((2%Z <= n)%Z /\
-      ((isfib (n - 2%Z)%Z r_0) /\ (isfib (n - 1%Z)%Z p))) -> (isfib n
-      (p + r_0)%Z).
-
-(* Why3 assumption *)
 Definition left_valid_struct_Object(p:(Jessie_memory_model.pointer usObject))
   (a:Z) (usObject_alloc_table:(Jessie_memory_model.alloc_table
   usObject)): Prop := ((Jessie_memory_model.offset_min usObject_alloc_table
@@ -96,6 +175,22 @@ Definition left_valid_struct_interface(p:(Jessie_memory_model.pointer
   interface)) (a:Z) (interface_alloc_table:(Jessie_memory_model.alloc_table
   interface)): Prop := ((Jessie_memory_model.offset_min interface_alloc_table
   p) <= a)%Z.
+
+Parameter long_of_integer: Z -> long.
+
+Axiom long_coerce : forall (x:Z), (((-9223372036854775808%Z)%Z <= x)%Z /\
+  (x <= 9223372036854775807%Z)%Z) ->
+  ((integer_of_long (long_of_integer x)) = x).
+
+Axiom long_extensionality : forall (x:long), forall (y:long),
+  ((integer_of_long x) = (integer_of_long y)) -> (x = y).
+
+Axiom long_range : forall (x:long),
+  ((-9223372036854775808%Z)%Z <= (integer_of_long x))%Z /\
+  ((integer_of_long x) <= 9223372036854775807%Z)%Z.
+
+Parameter num_of_pos: Z -> Z -> (Jessie_memory_model.pointer usObject)
+  -> (Jessie_memory_model.memory usObject int32) -> Z.
 
 Axiom pointer_addr_of_Object_of_pointer_address : forall (p:(Jessie_memory_model.pointer
   unit)),
@@ -116,6 +211,18 @@ Definition right_valid_struct_interface(p:(Jessie_memory_model.pointer
   interface)) (b:Z) (interface_alloc_table:(Jessie_memory_model.alloc_table
   interface)): Prop :=
   (b <= (Jessie_memory_model.offset_max interface_alloc_table p))%Z.
+
+Parameter short_of_integer: Z -> short.
+
+Axiom short_coerce : forall (x:Z), (((-32768%Z)%Z <= x)%Z /\
+  (x <= 32767%Z)%Z) -> ((integer_of_short (short_of_integer x)) = x).
+
+Axiom short_extensionality : forall (x:short), forall (y:short),
+  ((integer_of_short x) = (integer_of_short y)) -> (x = y).
+
+Axiom short_range : forall (x:short),
+  ((-32768%Z)%Z <= (integer_of_short x))%Z /\
+  ((integer_of_short x) <= 32767%Z)%Z.
 
 (* Why3 assumption *)
 Definition strict_valid_root_Object(p:(Jessie_memory_model.pointer usObject))
@@ -172,14 +279,63 @@ Definition valid_struct_interface(p:(Jessie_memory_model.pointer interface))
   p) <= a)%Z /\ (b <= (Jessie_memory_model.offset_max interface_alloc_table
   p))%Z.
 
+Axiom num_of_pos_false_case : forall (intM_intP_t_8_at_L:(Jessie_memory_model.memory
+  usObject int32)), forall (i_2:Z), forall (j_2:Z),
+  forall (t_2:(Jessie_memory_model.pointer usObject)), ((i_2 <  j_2)%Z /\
+  ~ (0%Z <  (integer_of_int32 (Jessie_memory_model.select intM_intP_t_8_at_L
+  (Jessie_memory_model.shift t_2 (j_2 - 1%Z)%Z))))%Z) -> ((num_of_pos i_2 j_2
+  t_2 intM_intP_t_8_at_L) = (num_of_pos i_2 (j_2 - 1%Z)%Z t_2
+  intM_intP_t_8_at_L)).
+
+Axiom num_of_pos_true_case : forall (intM_intP_t_8_at_L:(Jessie_memory_model.memory
+  usObject int32)), forall (i_1:Z), forall (j_1:Z),
+  forall (t_1:(Jessie_memory_model.pointer usObject)), ((i_1 <  j_1)%Z /\
+  (0%Z <  (integer_of_int32 (Jessie_memory_model.select intM_intP_t_8_at_L
+  (Jessie_memory_model.shift t_1 (j_1 - 1%Z)%Z))))%Z) -> ((num_of_pos i_1 j_1
+  t_1 intM_intP_t_8_at_L) = ((num_of_pos i_1 (j_1 - 1%Z)%Z t_1
+  intM_intP_t_8_at_L) + 1%Z)%Z).
+
+Axiom num_of_pos_empty : forall (intM_intP_t_8_at_L:(Jessie_memory_model.memory
+  usObject int32)), forall (i_0:Z), forall (j_0:Z),
+  forall (t_0:(Jessie_memory_model.pointer usObject)), (j_0 <= i_0)%Z ->
+  ((num_of_pos i_0 j_0 t_0 intM_intP_t_8_at_L) = 0%Z).
+
+Axiom num_of_pos_non_negative : forall (intM_intP_t_3_18_at_L:(Jessie_memory_model.memory
+  usObject int32)), forall (i_3:Z), forall (j_3:Z),
+  forall (t_3:(Jessie_memory_model.pointer usObject)),
+  (0%Z <= (num_of_pos i_3 j_3 t_3 intM_intP_t_3_18_at_L))%Z.
+
 Open Scope Z_scope.
+Import Jessie_memory_model.
 
 (* Why3 goal *)
-Theorem isfib_2_1 : (isfib 2%Z 1%Z).
-(* YOU MAY EDIT THE PROOF BELOW *)
-apply isfibn with (r_0:=0) (p:=1); intuition.
-constructor.
-constructor.
+Theorem num_of_pos_additive : forall (intM_intP_t_4_19_at_L:(Jessie_memory_model.memory
+  usObject int32)), forall (i_4:Z), forall (j_4:Z), forall (k_1:Z),
+  forall (t_4:(Jessie_memory_model.pointer usObject)), ((i_4 <= j_4)%Z /\
+  (j_4 <= k_1)%Z) -> ((num_of_pos i_4 k_1 t_4
+  intM_intP_t_4_19_at_L) = ((num_of_pos i_4 j_4 t_4
+  intM_intP_t_4_19_at_L) + (num_of_pos j_4 k_1 t_4
+  intM_intP_t_4_19_at_L))%Z).
+intros tMem i j k t (Hij,Hjk).
+apply Zlt_lower_bound_ind with
+  (P:= fun k => num_of_pos i k t tMem = 
+         num_of_pos i j t tMem + num_of_pos j k t tMem)
+  (z:=j); auto.
+intros k0 Hind Hjk0.
+assert (h:j=k0 \/ j < k0) by omega.
+destruct h.
+assert (h: num_of_pos j k0 t tMem = 0) by 
+  (apply num_of_pos_empty; auto with zarith).
+rewrite h; subst; auto with zarith.
+destruct (Z_lt_dec 0 (integer_of_int32 (select tMem (shift t (k0 - 1))))).
+rewrite num_of_pos_true_case at 1; intuition.
+rewrite Hind; auto with zarith.
+pattern (num_of_pos j k0 t tMem);
+  rewrite num_of_pos_true_case; auto with zarith.
+rewrite num_of_pos_false_case at 1; intuition.
+rewrite Hind; auto with zarith.
+pattern (num_of_pos j k0 t tMem);
+  rewrite num_of_pos_false_case; auto with zarith.
 Qed.
 
 

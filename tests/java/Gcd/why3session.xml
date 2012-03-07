@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE why3session SYSTEM "why3session.dtd">
 <why3session
- name="tests/java/Gcd/why3session.xml">
+ name="Gcd/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -21,10 +21,10 @@
  <file
   name="../Gcd.mlw"
   verified="true"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
-   locfile="tests/java/Gcd/../Gcd.mlw"
+   locfile="Gcd/../Gcd.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
@@ -33,7 +33,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="36" loccnumb="10" loccnume="21"
     expl="Lemma distr_right, lemma"
-    sum="bb0831924633ac70a121a3907f8e5527"
+    sum="f43bc3e0f0270b747e35e63107e5599c"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *V0ainfix +V1V2ainfix +ainfix *V0V1ainfix *V0V2FFF">
@@ -52,7 +52,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -67,7 +67,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="40" loccnumb="10" loccnume="20"
     expl="Lemma distr_left, lemma"
-    sum="bf689e45bbee4cfb7bbdb94cfdb95382"
+    sum="150da829ef16a909bdd57e40f1e99d85"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *ainfix +V0V1V2ainfix +ainfix *V0V2ainfix *V1V2FFF">
@@ -101,46 +101,12 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="44" loccnumb="10" loccnume="27"
     expl="Lemma distr_right_minus, lemma"
-    sum="c86dd5dc5049de24d2a11945a69e4468"
+    sum="34bf9e5b9095ee15616f25f4d7798b87"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *V0ainfix -V1V2ainfix -ainfix *V0V1ainfix *V0V2FFF">
     <label
      name="expl:Lemma distr_right_minus, lemma">
-     </label>
-    <proof
-     prover="3"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-   </goal>
-   <goal
-    name="distr_left_minus"
-    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
-    loclnum="48" loccnumb="10" loccnume="26"
-    expl="Lemma distr_left_minus, lemma"
-    sum="bbf7cfad8c6a53cd5df79223a624562e"
-    proved="true"
-    expanded="true"
-    shape="ainfix =ainfix *ainfix -V0V1V2ainfix -ainfix *V0V2ainfix *V1V2FFF">
-    <label
-     name="expl:Lemma distr_left_minus, lemma">
      </label>
     <proof
      prover="3"
@@ -165,11 +131,45 @@
     </proof>
    </goal>
    <goal
+    name="distr_left_minus"
+    locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
+    loclnum="48" loccnumb="10" loccnume="26"
+    expl="Lemma distr_left_minus, lemma"
+    sum="2b9bbcf806f5efeb56c22c71dc032f98"
+    proved="true"
+    expanded="true"
+    shape="ainfix =ainfix *ainfix -V0V1V2ainfix -ainfix *V0V2ainfix *V1V2FFF">
+    <label
+     name="expl:Lemma distr_left_minus, lemma">
+     </label>
+    <proof
+     prover="3"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
     name="mul_comm"
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="52" loccnumb="10" loccnume="18"
     expl="Lemma mul_comm, lemma"
-    sum="0c056191127af0443fc78b9d8247bf2c"
+    sum="81b33ef20b54453cabd33cd4bdbe6c2c"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *V0V1ainfix *V1V0FF">
@@ -203,7 +203,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="56" loccnumb="10" loccnume="19"
     expl="Lemma mul_assoc, lemma"
-    sum="df512aef4e77b76c78751fd0a4934ad7"
+    sum="76977831f185440f8c4ce614e96d03a5"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix *V0ainfix *V1V2ainfix *ainfix *V0V1V2FFF">
@@ -222,7 +222,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -237,7 +237,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="64" loccnumb="10" loccnume="26"
     expl="Lemma div_mod_property, lemma"
-    sum="77093159678394f300e17ede9e7a1b81"
+    sum="c9c79ee9fe7393a336f8d527b81dfe64"
     proved="true"
     expanded="true"
     shape="ainfix =amodV0V1ainfix -V0ainfix *V1adivV0V1Iainfix >V1c0Aainfix >=V0c0FF">
@@ -271,7 +271,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="69" loccnumb="10" loccnume="22"
     expl="Lemma mod_property, lemma"
-    sum="9df18f5c8bd604ee8440c912538cd458"
+    sum="ce08b1efb5b72799d231975fb2e60281"
     proved="true"
     expanded="true"
     shape="ainfix <amodV0V1V1Aainfix <=c0amodV0V1Iainfix >V1c0Aainfix >=V0c0FF">
@@ -297,7 +297,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
@@ -305,7 +305,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="80" loccnumb="10" loccnume="18"
     expl="Lemma gcd_zero, lemma"
-    sum="3ed792c857e108bd80f0529bcb226847"
+    sum="69ec70a6c308e2283b1efb87d4d4ad91"
     proved="true"
     expanded="true"
     shape="aisGcdV0c0V0F">
@@ -318,7 +318,7 @@
      edited="Gcd_Jessie_model_gcd_zero_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.65"/>
+     <result status="valid" time="0.56"/>
     </proof>
    </goal>
    <goal
@@ -326,7 +326,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="84" loccnumb="10" loccnume="22"
     expl="Lemma gcd_property, lemma"
-    sum="755a7516021b4f123ff1ff0a402d8d6f"
+    sum="32fdd085543ff7811ad484469b4e029a"
     proved="true"
     expanded="true"
     shape="aisGcdV0V1V2IaisGcdV1amodV0V1V2Aainfix >V1c0Aainfix >=V0c0FFFF">
@@ -339,13 +339,13 @@
      edited="Gcd_Jessie_model_gcd_property_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.78"/>
+     <result status="valid" time="0.68"/>
     </proof>
    </goal>
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="tests/java/Gcd/../Gcd.mlw"
+   locfile="Gcd/../Gcd.mlw"
    loclnum="259" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
@@ -354,7 +354,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="normal postcondition"
-    sum="d914217b9f5a7cd0fa6001202f2430f3"
+    sum="5c0fdb4d6a46313530415a514dcda57b"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix +ainfix *V9V0ainfix *V10V1V8EEIainfix =V8V7FIainfix >V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V11IaisGcdV7V6V11FAainfix >=V6c0Aainfix >=V7c0FFFFFFIainfix >=V1c0Aainfix >=V0c0FF">
@@ -369,15 +369,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Gcd_gcd_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
-    expl="Method gcd, default behavior"
-    sum="56dcd184ac5e5933028383cb19657d0a"
+    expl="parameter _Gcd_gcd_ensures_default"
+    sum="c298e1eb594dd09d9bf2c306c0786039"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix +ainfix *V12V0ainfix *V13V1V9Aainfix =ainfix +ainfix *V10V0ainfix *V11V1V8AaisGcdV0V1V14IaisGcdV8V9V14FAainfix >=V9c0Aainfix >=V8c0Iainfix =V13ainfix -V4ainfix *V2adivV7V6FIainfix =V12ainfix -V5ainfix *V3adivV7V6FIainfix =V11V2FIainfix =V10V3FIainfix =V9amodV7V6FIainfix =V8V6FIainfix >V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix >=V6c0Aainfix >=V7c0FFFFFFAainfix =ainfix +ainfix *c0V0ainfix *c1V1V1Aainfix =ainfix +ainfix *c1V0ainfix *c0V1V0Aainfix >=V1c0Aainfix >=V0c0Iainfix >=V1c0Aainfix >=V0c0FF">
@@ -392,7 +392,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.19"/>
+     <result status="valid" time="0.11"/>
     </proof>
    </goal>
    <goal
@@ -400,7 +400,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="normal postcondition"
-    sum="139616f4bc842f026cdeab8b2d9cb901"
+    sum="016bfd11a28fbed0949cf1e6d2452fa6"
     proved="true"
     expanded="true"
     shape="aisGcdV0V1V8Iainfix =V8V7FIainfix >V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V9IaisGcdV7V6V9FAainfix >=V6c0Aainfix >=V7c0FFFFFFIainfix >=V1c0Aainfix >=V0c0FF">
@@ -422,15 +422,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.24"/>
+     <result status="valid" time="0.13"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter _Gcd_gcd_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
-    expl="Method gcd, Safety"
-    sum="48f65f03a6dd6e792ce6f6e8625b56db"
+    expl="parameter _Gcd_gcd_safety"
+    sum="d5d8837b18e57d7f2f11d4acb198cb05"
     proved="true"
     expanded="true"
     shape="LadivV7V6ainfix <V10V6Aainfix <=c0V6Iainfix =V14ainfix -V4ainfix *V2V8FIainfix =V13ainfix -V5ainfix *V3V8FIainfix =V12V2FIainfix =V11V3FIainfix =V10amodV7V6FIainfix =V9V6FAainfix =V6c0NAainfix =V6c0NIainfix >V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix >=V6c0Aainfix >=V7c0FFFFFFIainfix >=V1c0Aainfix >=V0c0FF">
@@ -452,22 +452,22 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.22"/>
+     <result status="valid" time="0.23"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Gcd_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Gcd, default behavior"
-    sum="d01d054a5d3a0c65aa58a164a59c1174"
+    expl="parameter cons_Gcd_ensures_default"
+    sum="637abaa364ab40dd2b91717e999a77fe"
     proved="true"
     expanded="true"
     shape="t">
@@ -503,8 +503,8 @@
     name="WP_parameter cons_Gcd_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
-    expl="Constructor of class Gcd, Safety"
-    sum="d0eb33be50e44322c91e22b88f8d423f"
+    expl="parameter cons_Gcd_safety"
+    sum="ba49152914a8b1da64ea711a774d1fac"
     proved="true"
     expanded="true"
     shape="t">

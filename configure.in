@@ -73,6 +73,11 @@ if test "$VERBOSEMAKE" = yes ; then
 	AC_MSG_RESULT(Make will be verbose.)
 fi
 
+AC_ARG_ENABLE(local,
+  [  --enable-local          use Jessie in the build directory (no installation)],,
+  enable_local=no)
+
+
 # Check for Ocaml compilers
 
 # we first look for ocamlc in the path; if not present, we fail
@@ -393,6 +398,20 @@ else
 	  AC_MSG_RESULT(no)
 	  COQFLOATSLEGACYMSG="no (Coq library AllFloat.vo not found)"
 	fi
+
+	AC_CHECK_PROG(WHY3,why3,why3,no)
+	if test "$WHY3" = no ; then
+	  AC_MSG_WARN(Cannot find why3.)
+	else
+	  AC_MSG_CHECKING(Coq realizations for Why3)
+	  WHY3COQPATH=`$WHY3 --print-libdir`/coq
+	  if test -f "$WHY3COQPATH/int/Int.vo"; then
+	    AC_MSG_RESULT(yes)
+	    JESSIE3LIBCOQ="lib/coq/Jessie_memory_model.vo"
+	  else
+	    AC_MSG_RESULT(no)
+	  fi
+	fi
 	;;
     *)
 	COQ=no
@@ -486,6 +505,10 @@ AC_SUBST(COQVER)
 AC_SUBST(WHYLIBCOQ)
 AC_SUBST(WHYFLOATS)
 AC_SUBST(JESSIELIBCOQ)
+AC_SUBST(JESSIE3LIBCOQ)
+AC_SUBST(WHY3COQPATH)
+
+AC_SUBST(enable_local)
 
 AC_SUBST(PVS)
 AC_SUBST(PVSC)
@@ -527,6 +550,9 @@ if test "$COQ" = "yes" ; then
    echo "    Version              : $COQVER ($COQVERSION)"
    if test "$JESSIELIBCOQ" = ""; then
       echo "                         : (Jessie Coq proofs disabled, requires >= 8.1)"
+   fi
+   if test "$JESSIE3LIBCOQ" = ""; then
+      echo "                         : (Jessie3 Coq proofs disabled, requires Coq realizations for Why3)"
    fi
    echo "    Lib                  : $COQLIB"
    echo "    FP lib (Flocq)       : $COQFLOATSMSG"

@@ -616,11 +616,12 @@ and tag_ tag =
   in
   new ptag ~pos:tag#pos tagnode
 
-and behavior (pos,id,idopt,e1opt,e2opt,asslist,e3) =
+and behavior (pos,id,idopt,e1opt,e2opt,asslist,alloclist,e3) =
   (pos,id,idopt,
    Option_misc.map expr e1opt,
    Option_misc.map expr e2opt,
    Option_misc.map (fun (pos,elist) -> pos,List.map expr elist) asslist,
+   Option_misc.map (fun (pos,elist) -> pos,List.map expr elist) alloclist,
    expr e3)
 
 and loopbehavior (ids,inv,asslist) =

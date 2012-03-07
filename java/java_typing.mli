@@ -35,46 +35,48 @@ val print_type_name : Format.formatter -> Java_env.java_type_info -> unit
 
 val print_type : Format.formatter -> Java_env.java_type -> unit
 
-val type_table : (int, Java_env.java_type_info) Hashtbl.t 
+val type_table : (int, Java_env.java_type_info) Hashtbl.t
 
 type method_table_info =
     { mt_method_info : Java_env.method_info;
       mt_requires : Java_tast.assertion option;
       mt_decreases : (Java_tast.term * Java_env.java_logic_info option) option;
-      mt_behaviors : (Java_ast.identifier * 
-			Java_tast.assertion option * 
+      mt_behaviors : (Java_ast.identifier *
+			Java_tast.assertion option *
 			Java_env.java_class_info option *
-			(Loc.position * Java_tast.term list) option * 
+			(Loc.position * Java_tast.term list) option *
+			(Loc.position * Java_tast.term list) option *
 			Java_tast.assertion) list ;
       mt_body : Java_tast.block option;
     }
 
-val methods_table : 
+val methods_table :
   (int, method_table_info) Hashtbl.t
 
 type constructor_table_info =
     { ct_constr_info : Java_env.constructor_info;
       ct_requires : Java_tast.assertion option;
       ct_decreases : (Java_tast.term * Java_env.java_logic_info option) option;
-      ct_behaviors : (Java_ast.identifier * 
-			Java_tast.assertion option * 
+      ct_behaviors : (Java_ast.identifier *
+			Java_tast.assertion option *
 			Java_env.java_class_info option *
-			(Loc.position * Java_tast.term list) option * 
+			(Loc.position * Java_tast.term list) option *
+			(Loc.position * Java_tast.term list) option *
 			Java_tast.assertion) list ;
       ct_body : Java_tast.block;
     }
 
-val constructors_table : 
+val constructors_table :
   (int, constructor_table_info) Hashtbl.t
 
 val invariants_table :
-  (int, Java_env.java_class_info * Java_env.java_var_info * 
+  (int, Java_env.java_class_info * Java_env.java_var_info *
      (Java_ast.identifier * Java_tast.assertion) list) Hashtbl.t
 
 val static_invariants_table :
   (int, (string * Java_tast.assertion) list) Hashtbl.t
 
-val field_initializer_table : 
+val field_initializer_table :
   (int, Java_tast.initialiser option) Hashtbl.t
 
 val final_field_values_table :
@@ -86,17 +88,17 @@ val lemmas_table : (string,(Loc.position * Java_env.logic_label list * Java_tast
 type logic_def_body =
   [ `Assertion of Java_tast.assertion
   | `Term of Java_tast.term
-  | `Inductive of 
-      (Java_ast.identifier * Java_env.logic_label list * Java_tast.assertion) 
+  | `Inductive of
+      (Java_ast.identifier * Java_env.logic_label list * Java_tast.assertion)
 	list
   | `Builtin ]
 
 type logic_decl_body =
-  [ logic_def_body 
+  [ logic_def_body
   | `None
   | `Reads of Java_tast.term list ]
 
-val logic_defs_table : 
+val logic_defs_table :
   (int,Java_env.java_logic_info * logic_def_body) Hashtbl.t
 
 type axiomatic_defs =
@@ -114,24 +116,24 @@ exception Typing_error of Loc.position * string
 val catch_typing_errors : ('a -> 'b) -> 'a -> 'b
 
 (*
-val get_types : 
-  Java_ast.compilation_unit -> 
-  Java_env.package_info list * 
+val get_types :
+  Java_ast.compilation_unit ->
+  Java_env.package_info list *
     (string * Java_env.java_type_info) list
 *)
 
-val get_types : 
+val get_types :
   Java_env.package_info list ->
-  Java_ast.compilation_unit list -> 
-  Java_env.package_info list * 
+  Java_ast.compilation_unit list ->
+  Java_env.package_info list *
     (string * Java_env.java_type_info) list
 
-val get_bodies : 
+val get_bodies :
   Java_env.package_info list ->
   (string * Java_env.java_type_info) list ->
   Java_ast.compilation_unit -> unit
 
-val type_specs : 
+val type_specs :
   Java_env.package_info list ->
   (string * Java_env.java_type_info) list ->
   unit
@@ -139,7 +141,7 @@ val type_specs :
 
 
 (*
-Local Variables: 
+Local Variables:
 compile-command: "make -j -C .. bin/krakatoa.byte"
-End: 
+End:
 *)

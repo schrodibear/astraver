@@ -3,11 +3,25 @@
 class Fresh {
 
     /*@ allocates \result;
+      @ ensures \fresh(\result);
       @*/
-    static Fresh create();
+    static Fresh create() {
+        return new Fresh ();
+    }
 
-    test() {
+    void test () {
         Fresh f = create ();
         //@ assert this != f;
     }
 }
+
+
+
+
+/*
+Local Variables:
+compile-command: "make Fresh.why3ml"
+End:
+*/
+
+

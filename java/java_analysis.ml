@@ -159,9 +159,10 @@ let switch_label = function
   | Java_ast.Default -> ()
   | Java_ast.Case e -> expr e
   
-let behavior (_id,assumes,_throws,assigns,ensures) =
+let behavior (_id,assumes,_throws,assigns,allocates,ensures) =
   Option_misc.iter assertion assumes;
   Option_misc.iter (fun (_,l) -> List.iter term l) assigns;
+  Option_misc.iter (fun (_,l) -> List.iter term l) allocates;
   assertion ensures
 
 let loop_annot annot =
