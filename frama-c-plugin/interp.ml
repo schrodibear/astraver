@@ -1250,6 +1250,20 @@ let assigns = function
     let assign_list = List.flatten (List.map zone assign_list) in
     Some(Loc.dummy_position,assign_list)
 
+let allocates a =
+  match a with
+    | FreeAlloc(alloc,frees) -> 
+      let assign_list =
+        List.fold_left
+          (fun acc out -> 
+            if false (* Logic_utils.is_result out.it_content *)
+            then acc else (out,1)::acc)
+          [] (alloc @ frees)
+      in
+      let assign_list = List.flatten (List.map zone assign_list) in
+      Some(Loc.dummy_position,assign_list)
+    | FreeAllocAny -> None
+
 let spec funspec =
   let is_normal_postcond =
     function (Normal,_) -> true
@@ -1275,7 +1289,7 @@ let spec funspec =
       Some(conjunct Loc.dummy_position b.b_assumes),
       None, (* requires *)
       assigns b.b_assigns,
-      None (* allocates b.b_allocation *), 
+      allocates b.b_allocation,
       locate
         (conjunct Loc.dummy_position
            (Extlib.filter_map
