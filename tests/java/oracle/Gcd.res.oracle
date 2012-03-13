@@ -611,7 +611,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Gcd.l
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Gcd.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -756,7 +756,7 @@ why3ide: why/Gcd_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: Gcd.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include Gcd.depend
 
@@ -6822,10 +6822,10 @@ goal Gcd_gcd_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Gcd_why.why               : ........?#............ (20/0/1/1/0)
+why/Gcd_why.why               : ......#####...##.##..# (12/0/0/10/0)
 total   :  22
-valid   :  20 ( 91%)
+valid   :  12 ( 55%)
 invalid :   0 (  0%)
-unknown :   1 (  5%)
-timeout :   1 (  5%)
+unknown :   0 (  0%)
+timeout :  10 ( 45%)
 failure :   0 (  0%)

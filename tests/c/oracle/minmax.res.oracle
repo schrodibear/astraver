@@ -356,7 +356,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs minma
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs minmax.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -501,7 +501,7 @@ why3ide: why/minmax_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: minmax.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include minmax.depend
 
@@ -2948,10 +2948,10 @@ goal min_ensures_default_po_2:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/minmax_why.why            : ............ (12/0/0/0/0)
+why/minmax_why.why            : .###.###.... (6/0/0/6/0)
 total   :  12
-valid   :  12 (100%)
+valid   :   6 ( 50%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   0 (  0%)
+timeout :   6 ( 50%)
 failure :   0 (  0%)

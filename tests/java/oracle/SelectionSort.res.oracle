@@ -825,7 +825,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Selec
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs SelectionSort.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -970,7 +970,7 @@ why3ide: why/SelectionSort_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: SelectionSort.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include SelectionSort.depend
 
@@ -16186,10 +16186,10 @@ goal SelectionSort_swap_safety_po_4:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/SelectionSort_why.why     : ................................................#.... (52/0/0/1/0)
+why/SelectionSort_why.why     : .....................###...#...................###.#. (45/0/0/8/0)
 total   :  53
-valid   :  52 ( 98%)
+valid   :  45 ( 85%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   1 (  2%)
+timeout :   8 ( 15%)
 failure :   0 (  0%)

@@ -498,7 +498,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs float
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs floats_bsearch.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_full.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -643,7 +643,7 @@ why3ide: why/floats_bsearch_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: floats_bsearch.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include floats_bsearch.depend
 
@@ -5876,10 +5876,10 @@ goal binary_search_safety_po_19:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/floats_bsearch_why.why    : ..##..............#.........#.......... (35/0/0/4/0)
+why/floats_bsearch_why.why    : ..##........####.##......##.#...#...... (27/0/0/12/0)
 total   :  39
-valid   :  35 ( 90%)
+valid   :  27 ( 69%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   4 ( 10%)
+timeout :  12 ( 31%)
 failure :   0 (  0%)

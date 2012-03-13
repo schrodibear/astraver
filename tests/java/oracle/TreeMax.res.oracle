@@ -548,7 +548,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs TreeM
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs TreeMax.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -693,7 +693,7 @@ why3ide: why/TreeMax_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: TreeMax.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include TreeMax.depend
 
@@ -7885,10 +7885,10 @@ goal Tree_tree_max_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/TreeMax_why.why           : .......#... (10/0/0/1/0)
+why/TreeMax_why.why           : ########... (3/0/0/8/0)
 total   :  11
-valid   :  10 ( 91%)
+valid   :   3 ( 27%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   1 (  9%)
+timeout :   8 ( 73%)
 failure :   0 (  0%)

@@ -1425,7 +1425,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Simpl
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs SimpleApplet.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -1570,7 +1570,7 @@ why3ide: why/SimpleApplet_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: SimpleApplet.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include SimpleApplet.depend
 
@@ -13979,10 +13979,10 @@ goal cons_APDU_safety_po_1:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/SimpleApplet_why.why      : .....###.?# (6/0/1/4/0)
+why/SimpleApplet_why.why      : .#...###.## (5/0/0/6/0)
 total   :  11
-valid   :   6 ( 55%)
+valid   :   5 ( 45%)
 invalid :   0 (  0%)
-unknown :   1 (  9%)
-timeout :   4 ( 36%)
+unknown :   0 (  0%)
+timeout :   6 ( 55%)
 failure :   0 (  0%)

@@ -459,7 +459,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Binar
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs BinarySearch.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -604,7 +604,7 @@ why3ide: why/BinarySearch_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: BinarySearch.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include BinarySearch.depend
 
@@ -10591,12 +10591,12 @@ goal BinarySearch_binary_search_safety_po_18:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/BinarySearch_why.why      : ..?.....................?............. (36/0/2/0/0)
+why/BinarySearch_why.why      : ..##........#..#........#...#......... (32/0/0/6/0)
 total   :  38
-valid   :  36 ( 95%)
+valid   :  32 ( 84%)
 invalid :   0 (  0%)
-unknown :   2 (  5%)
-timeout :   0 (  0%)
+unknown :   0 (  0%)
+timeout :   6 ( 16%)
 failure :   0 (  0%)
 // RUNSIMPLIFY this tells regtests to run Simplify in this example
 ========== generation of Simplify VC output ==========

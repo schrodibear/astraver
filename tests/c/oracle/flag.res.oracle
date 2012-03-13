@@ -805,7 +805,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs flag.
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs flag.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -950,7 +950,7 @@ why3ide: why/flag_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: flag.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include flag.depend
 
@@ -6609,10 +6609,10 @@ goal swap_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/flag_why.why              : .......#....###.......#....###.......................................#... (64/0/0/9/0)
+why/flag_why.why              : .......#....###.....#.#....###........................#.##...........#... (60/0/0/13/0)
 total   :  73
-valid   :  64 ( 88%)
+valid   :  60 ( 82%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   9 ( 12%)
+timeout :  13 ( 18%)
 failure :   0 (  0%)

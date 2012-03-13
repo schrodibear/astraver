@@ -701,7 +701,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs selec
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs selection_sort.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -846,7 +846,7 @@ why3ide: why/selection_sort_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: selection_sort.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include selection_sort.depend
 
@@ -5252,12 +5252,12 @@ goal swap_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/selection_sort_why.why    : ..........................................#... (45/0/0/1/0)
+why/selection_sort_why.why    : .........................###.............##... (41/0/0/5/0)
 total   :  46
-valid   :  45 ( 98%)
+valid   :  41 ( 89%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   1 (  2%)
+timeout :   5 ( 11%)
 failure :   0 (  0%)
 // RUNSIMPLIFY: will ask regtests to run Simplify on this program
 ========== generation of Simplify VC output ==========

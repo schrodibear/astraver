@@ -647,7 +647,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Mulle
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Muller.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -792,7 +792,7 @@ why3ide: why/Muller_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: Muller.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include Muller.depend
 
@@ -16246,10 +16246,10 @@ goal Muller_m_safety_po_28:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Muller_why.why            : ?###.......................................................... (58/0/1/3/0)
+why/Muller_why.why            : ####.........#....#....#....#....#.#............#...##........ (49/0/0/13/0)
 total   :  62
-valid   :  58 ( 94%)
+valid   :  49 ( 79%)
 invalid :   0 (  0%)
-unknown :   1 (  2%)
-timeout :   3 (  5%)
+unknown :   0 (  0%)
+timeout :  13 ( 21%)
 failure :   0 (  0%)

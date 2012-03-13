@@ -349,7 +349,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs clock
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs clock_drift.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -494,7 +494,7 @@ why3ide: why/clock_drift_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: clock_drift.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include clock_drift.depend
 
@@ -3072,12 +3072,12 @@ goal f_single_safety_po_5:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/clock_drift_why.why       : ?......#......... (15/0/1/1/0)
+why/clock_drift_why.why       : #.#..####...#.... (10/0/0/7/0)
 total   :  17
-valid   :  15 ( 88%)
+valid   :  10 ( 59%)
 invalid :   0 (  0%)
-unknown :   1 (  6%)
-timeout :   1 (  6%)
+unknown :   0 (  0%)
+timeout :   7 ( 41%)
 failure :   0 (  0%)
 // RUNGAPPA: will ask regtests to run gappa on VCs of this program
 ========== generation of Gappa VC output ==========

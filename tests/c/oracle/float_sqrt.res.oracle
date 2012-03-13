@@ -539,7 +539,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs float
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs float_sqrt.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -684,7 +684,7 @@ why3ide: why/float_sqrt_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: float_sqrt.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include float_sqrt.depend
 
@@ -4627,10 +4627,10 @@ goal sqrt_safety_po_16:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/float_sqrt_why.why        : ?.#.#.###.?############## (4/0/2/19/0)
+why/float_sqrt_why.why        : ######################### (0/0/0/25/0)
 total   :  25
-valid   :   4 ( 16%)
+valid   :   0 (  0%)
 invalid :   0 (  0%)
-unknown :   2 (  8%)
-timeout :  19 ( 76%)
+unknown :   0 (  0%)
+timeout :  25 (100%)
 failure :   0 (  0%)

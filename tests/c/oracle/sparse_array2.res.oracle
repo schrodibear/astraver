@@ -1157,7 +1157,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs spars
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs sparse_array2.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -1302,7 +1302,7 @@ why3ide: why/sparse_array2_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: sparse_array2.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include sparse_array2.depend
 
@@ -18533,10 +18533,10 @@ goal set_safety_po_21:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/sparse_array2_why.why     : #...#####....................##.................................#.?######.??.####...................... (81/0/3/19/0)
+why/sparse_array2_why.why     : #..######....###.............##.............................##..#.################.............##...... (70/0/0/33/0)
 total   : 103
-valid   :  81 ( 79%)
+valid   :  70 ( 68%)
 invalid :   0 (  0%)
-unknown :   3 (  3%)
-timeout :  19 ( 18%)
+unknown :   0 (  0%)
+timeout :  33 ( 32%)
 failure :   0 (  0%)

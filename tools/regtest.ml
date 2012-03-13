@@ -38,7 +38,9 @@ let default_suites =
 [ "java" ; "c" ]
 
 let () =
+(*
   Unix.putenv "FRAMAC_SHARE" (Filename.concat Filename.current_dir_name "share");
+*)
   Unix.putenv "OCAMLRUNPARAM" ""
 
 (** the name of the directory-wide configuration file*)
