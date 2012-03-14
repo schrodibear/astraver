@@ -6023,10 +6023,10 @@ goal test_test_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/SimpleAlloc_why.why       : ####.## (1/0/0/6/0)
+why/SimpleAlloc_why.why       : .###..# (3/0/0/4/0)
 total   :   7
-valid   :   1 ( 14%)
+valid   :   3 ( 43%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   6 ( 86%)
+timeout :   4 ( 57%)
 failure :   0 (  0%)

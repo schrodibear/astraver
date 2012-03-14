@@ -6659,10 +6659,10 @@ goal SideEffects_m1_safety_po_6:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/SideEffects_why.why       : .............#..... (18/0/0/1/0)
+why/SideEffects_why.why       : ................... (19/0/0/0/0)
 total   :  19
-valid   :  18 ( 95%)
+valid   :  19 (100%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   1 (  5%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

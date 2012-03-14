@@ -6162,10 +6162,10 @@ goal Isqrt_main_safety_po_1:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Isqrt_why.why             : .....#...#..... (13/0/0/2/0)
+why/Isqrt_why.why             : .....?...?..?.. (12/0/3/0/0)
 total   :  15
-valid   :  13 ( 87%)
+valid   :  12 ( 80%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   2 ( 13%)
+unknown :   3 ( 20%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

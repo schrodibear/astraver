@@ -4630,12 +4630,12 @@ goal binary_search_safety_po_17:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/binary_search_why.why     : #............#..#.......#............. (34/0/0/4/0)
+why/binary_search_why.why     : ?.......................?............. (36/0/2/0/0)
 total   :  38
-valid   :  34 ( 89%)
+valid   :  36 ( 95%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   4 ( 11%)
+unknown :   2 (  5%)
+timeout :   0 (  0%)
 failure :   0 (  0%)
 // RUNSIMPLIFY this tells regtests to run Simplify in this example
 ========== generation of Simplify VC output ==========

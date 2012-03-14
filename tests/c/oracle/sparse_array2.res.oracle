@@ -18533,10 +18533,10 @@ goal set_safety_po_21:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/sparse_array2_why.why     : #..######....###.............##.............................##..#.################.............##...... (70/0/0/33/0)
+why/sparse_array2_why.why     : #...#####....................##.................................#.?######.??.####...................... (81/0/3/19/0)
 total   : 103
-valid   :  70 ( 68%)
+valid   :  81 ( 79%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :  33 ( 32%)
+unknown :   3 (  3%)
+timeout :  19 ( 18%)
 failure :   0 (  0%)

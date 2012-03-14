@@ -6414,10 +6414,10 @@ goal m_safety_po_27:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/muller_why.why            : ####....#....#....#....#....#....#.....#..........###.#...#.. (45/0/0/16/0)
+why/muller_why.why            : ?###......................................................... (57/0/1/3/0)
 total   :  61
-valid   :  45 ( 74%)
+valid   :  57 ( 93%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :  16 ( 26%)
+unknown :   1 (  2%)
+timeout :   3 (  5%)
 failure :   0 (  0%)

@@ -13979,10 +13979,10 @@ goal cons_APDU_safety_po_1:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/SimpleApplet_why.why      : .#...###.## (5/0/0/6/0)
+why/SimpleApplet_why.why      : .....###.?# (6/0/1/4/0)
 total   :  11
-valid   :   5 ( 45%)
+valid   :   6 ( 55%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   6 ( 55%)
+unknown :   1 (  9%)
+timeout :   4 ( 36%)
 failure :   0 (  0%)

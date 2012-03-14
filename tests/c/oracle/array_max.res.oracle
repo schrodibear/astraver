@@ -3564,10 +3564,10 @@ goal max_safety_po_14:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/array_max_why.why         : .......#..#..#.............. (25/0/0/3/0)
+why/array_max_why.why         : .......#..#................. (26/0/0/2/0)
 total   :  28
-valid   :  25 ( 89%)
+valid   :  26 ( 93%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   3 ( 11%)
+timeout :   2 (  7%)
 failure :   0 (  0%)

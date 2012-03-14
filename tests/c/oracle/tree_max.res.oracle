@@ -3571,10 +3571,10 @@ goal tree_max_safety_po_11:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/tree_max_why.why          : ######.###..#..#..# (7/0/0/12/0)
+why/tree_max_why.why          : .#.#.#.#........... (15/0/0/4/0)
 total   :  19
-valid   :   7 ( 37%)
+valid   :  15 ( 79%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :  12 ( 63%)
+timeout :   4 ( 21%)
 failure :   0 (  0%)

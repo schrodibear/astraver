@@ -4816,10 +4816,10 @@ goal find_array_safety_po_19:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/find_array_why.why        : .....#..#....##...........#.#.#...# (27/0/0/8/0)
+why/find_array_why.why        : .....#..#.#...#.............#.#...# (28/0/0/7/0)
 total   :  35
-valid   :  27 ( 77%)
+valid   :  28 ( 80%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   8 ( 23%)
+timeout :   7 ( 20%)
 failure :   0 (  0%)

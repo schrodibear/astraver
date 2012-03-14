@@ -3996,10 +3996,10 @@ goal AffectDoubleDansX_safety_po_1:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/float_array_why.why       : .####.###..#####.....### (9/0/0/15/0)
+why/float_array_why.why       : ..##..##...####......##. (14/0/0/10/0)
 total   :  24
-valid   :   9 ( 38%)
+valid   :  14 ( 58%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :  15 ( 62%)
+timeout :  10 ( 42%)
 failure :   0 (  0%)

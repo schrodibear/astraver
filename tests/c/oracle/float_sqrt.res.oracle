@@ -4627,10 +4627,10 @@ goal sqrt_safety_po_16:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/float_sqrt_why.why        : ######################### (0/0/0/25/0)
+why/float_sqrt_why.why        : ?.#.#.###.?############## (4/0/2/19/0)
 total   :  25
-valid   :   0 (  0%)
+valid   :   4 ( 16%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :  25 (100%)
+unknown :   2 (  8%)
+timeout :  19 ( 76%)
 failure :   0 (  0%)

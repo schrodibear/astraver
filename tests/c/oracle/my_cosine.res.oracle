@@ -3519,12 +3519,12 @@ goal my_cos4_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/my_cosine_why.why         : #.###########.######### (2/0/0/21/0)
+why/my_cosine_why.why         : ?.#?.#..#..#..#?.#?#?.# (10/0/5/8/0)
 total   :  23
-valid   :   2 (  9%)
+valid   :  10 ( 43%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :  21 ( 91%)
+unknown :   5 ( 22%)
+timeout :   8 ( 35%)
 failure :   0 (  0%)
 // RUNCOQ: for the first VC
 ========== generation of Coq VC output ==========

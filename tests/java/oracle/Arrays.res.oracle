@@ -13790,10 +13790,10 @@ goal Arrays_findMax_safety_po_8:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/Arrays_why.why            : .....###.#................#.....#.....#............................#..... (65/0/0/8/0)
+why/Arrays_why.why            : ......................................................................... (73/0/0/0/0)
 total   :  73
-valid   :  65 ( 89%)
+valid   :  73 (100%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   8 ( 11%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

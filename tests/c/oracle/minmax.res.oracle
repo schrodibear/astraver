@@ -2948,10 +2948,10 @@ goal min_ensures_default_po_2:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/minmax_why.why            : .###.###.... (6/0/0/6/0)
+why/minmax_why.why            : ............ (12/0/0/0/0)
 total   :  12
-valid   :   6 ( 50%)
+valid   :  12 (100%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   6 ( 50%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

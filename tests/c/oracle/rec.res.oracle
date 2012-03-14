@@ -3013,10 +3013,10 @@ goal sum_safety_po_8:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/rec_why.why               : #............#..#........# (22/0/0/4/0)
+why/rec_why.why               : ?............?............ (24/0/2/0/0)
 total   :  26
-valid   :  22 ( 85%)
+valid   :  24 ( 92%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   4 ( 15%)
+unknown :   2 (  8%)
+timeout :   0 (  0%)
 failure :   0 (  0%)

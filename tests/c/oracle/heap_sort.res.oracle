@@ -4604,10 +4604,10 @@ goal main_safety_po_6:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/heap_sort_why.why         : ........#..............###...... (28/0/0/4/0)
+why/heap_sort_why.why         : ........?..............###...... (28/0/1/3/0)
 total   :  32
 valid   :  28 ( 88%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :   4 ( 12%)
+unknown :   1 (  3%)
+timeout :   3 (  9%)
 failure :   0 (  0%)

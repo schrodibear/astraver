@@ -5363,10 +5363,10 @@ goal scalar_product_safety_po_10:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/scalar_product_why.why    : ###..#########.......##.... (13/0/0/14/0)
+why/scalar_product_why.why    : ?.......####.........##.... (20/0/1/6/0)
 total   :  27
-valid   :  13 ( 48%)
+valid   :  20 ( 74%)
 invalid :   0 (  0%)
-unknown :   0 (  0%)
-timeout :  14 ( 52%)
+unknown :   1 (  4%)
+timeout :   6 ( 22%)
 failure :   0 (  0%)

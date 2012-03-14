@@ -13884,10 +13884,10 @@ goal duplets_safety_po_19:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/duplets_why.why           : ..........####..#....#.......####..#....#....#..#.......................##.........#..........#............#........## (97/0/0/21/0)
+why/duplets_why.why           : ..........#..................#................................................................#......................# (114/0/0/4/0)
 total   : 118
-valid   :  97 ( 82%)
+valid   : 114 ( 97%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :  21 ( 18%)
+timeout :   4 (  3%)
 failure :   0 (  0%)

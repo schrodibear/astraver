@@ -6609,10 +6609,10 @@ goal swap_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/flag_why.why              : .......#....###.....#.#....###........................#.##...........#... (60/0/0/13/0)
+why/flag_why.why              : .......#....###.......#....###.......................................#... (64/0/0/9/0)
 total   :  73
-valid   :  60 ( 82%)
+valid   :  64 ( 88%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :  13 ( 18%)
+timeout :   9 ( 12%)
 failure :   0 (  0%)

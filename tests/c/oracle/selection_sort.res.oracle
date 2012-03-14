@@ -5252,12 +5252,12 @@ goal swap_safety_po_3:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/selection_sort_why.why    : .........................###.............##... (41/0/0/5/0)
+why/selection_sort_why.why    : ..........................................#... (45/0/0/1/0)
 total   :  46
-valid   :  41 ( 89%)
+valid   :  45 ( 98%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :   5 ( 11%)
+timeout :   1 (  2%)
 failure :   0 (  0%)
 // RUNSIMPLIFY: will ask regtests to run Simplify on this program
 ========== generation of Simplify VC output ==========

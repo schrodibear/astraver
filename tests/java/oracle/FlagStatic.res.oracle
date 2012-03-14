@@ -15684,10 +15684,10 @@ goal FlagStatic_swap_safety_po_4:
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations
 (. = valid * = invalid ? = unknown # = timeout ! = failure)
-why/FlagStatic_why.why        : .......#....###.....#.#....###........##................#.##.....#.....##.#. (58/0/0/18/0)
+why/FlagStatic_why.why        : .......#....###.......#....###.........................................#.... (67/0/0/9/0)
 total   :  76
-valid   :  58 ( 76%)
+valid   :  67 ( 88%)
 invalid :   0 (  0%)
 unknown :   0 (  0%)
-timeout :  18 ( 24%)
+timeout :   9 ( 12%)
 failure :   0 (  0%)
