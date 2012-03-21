@@ -36,7 +36,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="49" loccnumb="16" loccnume="25"
     expl="normal postcondition"
-    sum="1d323628b958ac6a92a186f506b478c0"
+    sum="8d49fd874587e5abb96a3825a39affef"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV0V4V1ainfix -avalueV0V2V1c1Iainfix =V4astoreV2V0ainfix +aselectV2V0c1FIavalid_struct_CounterV0c0c0V3FFFF">
@@ -73,7 +73,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="49" loccnumb="16" loccnume="25"
     expl="parameter _Counter_decrement_safety"
-    sum="994fdb74572864075222d5d8ccf8d455"
+    sum="3e7eb0cbd3cc348099c1cbb75021175f"
     proved="true"
     expanded="true"
     shape="t">
@@ -95,7 +95,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -110,7 +110,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="44" loccnumb="16" loccnume="25"
     expl="normal postcondition"
-    sum="8c1e82503a2bfffd02184a4012e15bde"
+    sum="76868f69f888548a368325d53d5ecdf0"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV0V2V4ainfix +avalueV0V2V1c1Iainfix =V4astoreV1V0ainfix +aselectV1V0c1FIavalid_struct_CounterV0c0c0V3FFFF">
@@ -147,7 +147,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="44" loccnumb="16" loccnume="25"
     expl="parameter _Counter_increment_safety"
-    sum="c2ed10ccbd45701a7b37499010a44b15"
+    sum="b6a90a30845c18f1a2153e1f892c1583"
     proved="true"
     expanded="true"
     shape="t">
@@ -184,7 +184,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Counter_ensures_default"
-    sum="9b09b13fa67916f9e388109f807e6d21"
+    sum="c2d938f525bb145a7c265aae3632049a"
     proved="true"
     expanded="true"
     shape="t">
@@ -206,7 +206,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -221,7 +221,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Counter_safety"
-    sum="085ac1db1d7441d8b8ae7e31b0243adf"
+    sum="9ec77b69054092a146178e1d00fff02e"
     proved="true"
     expanded="true"
     shape="t">

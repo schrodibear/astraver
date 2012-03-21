@@ -36,7 +36,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/PreAndOld.java"
     loclnum="46" loccnumb="8" loccnume="9"
     expl="normal postcondition"
-    sum="7749919c1a5a19b71619e7e274d8ec3f"
+    sum="cccd5e9e11f313afa8529782ccc2230e"
     proved="true"
     expanded="true"
     shape="ainfix =V5afV1V2Aainfix =V5afV1V2Aainfix =V5afV1V2Iainfix =V5ainfix +V1V2FIainfix =V4c12FIavalid_struct_PreAndOldV0c0c0V3FFFF">
@@ -73,7 +73,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/PreAndOld.java"
     loclnum="46" loccnumb="8" loccnume="9"
     expl="parameter _PreAndOld_g_safety"
-    sum="3bceb78a00dbc24618148628c47e7551"
+    sum="99900bb077850c2cd52dab55fb9661b4"
     proved="true"
     expanded="true"
     shape="t">
@@ -95,7 +95,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -110,7 +110,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_PreAndOld_ensures_default"
-    sum="20dec133609b16e41aad68ad726dcf2c"
+    sum="7bcb29cc72d5c45b03f808981e4d98fa"
     proved="true"
     expanded="true"
     shape="t">
@@ -147,7 +147,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_PreAndOld_safety"
-    sum="a3642bbf5ed63aa01801cedd3055daf7"
+    sum="c890baa90e427db8c4aa5483b5b4005b"
     proved="true"
     expanded="true"
     shape="t">

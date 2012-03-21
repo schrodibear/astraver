@@ -159,7 +159,8 @@ let why3ident s =
     | "real_max" -> "RealMinMax.max"
     | "abs_real" -> "AbsReal.abs"
     | "sqrt_real" -> "Square.sqrt"
-    | "pow_real" -> "Power.pow"
+    | "pow_real" -> "PowerReal.pow"
+    | "pow_real_int" -> "PowerInt.power"
     | "cos" -> "Trigonometry.cos"
     | "sin" -> "Trigonometry.sin"
     | "tan" -> "Trigonometry.tan"
@@ -208,7 +209,8 @@ let why3_reals = ref false
 let why3_FromInt = ref false
 let why3_Truncate = ref false
 let why3_Square = ref false
-let why3_Power = ref false
+let why3_PowerInt = ref false
+let why3_PowerReal = ref false
 let why3_RealMinMax = ref false
 let why3_AbsReal = ref false
 let why3_Trigonometry = ref false
@@ -225,7 +227,8 @@ let compute_why3_dependencies f =
     | "mul_real"
     | "div_real" -> why3_reals := true
     | "sqrt_real" -> why3_Square := true
-    | "pow_real" -> why3_Power := true
+    | "pow_real_int" -> why3_PowerInt := true
+    | "pow_real" -> why3_PowerReal := true
     | "real_of_int" -> why3_FromInt := true
     | "truncate_real_to_int" -> why3_Truncate := true
     | "real_min" 
@@ -1553,8 +1556,10 @@ let output_why3_imports form use_floats full_floats =
     fprintf form "use import real.Truncate@\n@\n";
   if !why3_Square then
     fprintf form "use import real.Square@\n@\n";
-  if !why3_Power then
-    fprintf form "use import real.Power@\n@\n";
+  if !why3_PowerInt then
+    fprintf form "use import real.PowerInt@\n@\n";
+  if !why3_PowerReal then
+    fprintf form "use import real.PowerReal@\n@\n";
   if !why3_RealMinMax then
     fprintf form "use import real.MinMax as RealMinMax@\n@\n";
   if !why3_AbsReal then

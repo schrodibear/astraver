@@ -36,7 +36,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="50" loccnumb="8" loccnume="13"
     expl="parameter _NameConflicts_field_ensures_default"
-    sum="fae5220bb7b14e0a69b796884b2e99cd"
+    sum="3b0b4b4d4bb6ebeeac93879044770488"
     proved="true"
     expanded="true"
     shape="t">
@@ -73,7 +73,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="50" loccnumb="8" loccnume="13"
     expl="parameter _NameConflicts_field_safety"
-    sum="0a55a65d06ae81cf13ec755c5b8045db"
+    sum="b17263d3732a5655f4854442f021c929"
     proved="true"
     expanded="true"
     shape="t">
@@ -95,7 +95,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -110,7 +110,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
     expl="parameter _NameConflicts_m_ensures_default"
-    sum="d3e0ccdb54d07eebf2eb606180808361"
+    sum="3ba6603f5aa8d72d1d555d66bfe547be"
     proved="true"
     expanded="true"
     shape="t">
@@ -147,7 +147,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
     expl="normal postcondition"
-    sum="863fe0b2b9e114a965881762b72ea2c6"
+    sum="d73dd4494fb4a9fbae8d05149862a0cf"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c0Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =ainteger_of_int32V2c0FIavalid_struct_NameConflictsV0c0c0V1FF">
@@ -169,7 +169,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -184,7 +184,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
     expl="parameter _NameConflicts_m_safety"
-    sum="c590f7356694fae255bc1c2dde7ca9e1"
+    sum="9663b21bb54c858c6f5b04f40b6045e7"
     proved="true"
     expanded="true"
     shape="t">
@@ -221,7 +221,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="36" loccnumb="9" loccnume="13"
     expl="parameter _NameConflicts_setI_ensures_default"
-    sum="da1b40c8238626be7ed618b3392404e5"
+    sum="36d68b64c503aaea2fe1835381e0798c"
     proved="true"
     expanded="true"
     shape="t">
@@ -258,7 +258,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="36" loccnumb="9" loccnume="13"
     expl="parameter _NameConflicts_setI_safety"
-    sum="27344f60bd8429b6372c9168c81485f4"
+    sum="e104f8e9868bddbc41591ef39cfa0ad5"
     proved="true"
     expanded="true"
     shape="t">
@@ -280,7 +280,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -295,7 +295,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_NameConflicts_ensures_default"
-    sum="01c59512c0e11080f00717ef6ae1a822"
+    sum="6a6e53951ca4c97212fab611991d69aa"
     proved="true"
     expanded="true"
     shape="t">
@@ -317,7 +317,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -332,7 +332,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_NameConflicts_safety"
-    sum="4b1a980c36a737d33db4f50719e4064f"
+    sum="c708577aac97ea11efa1ec5f53ccd7a2"
     proved="true"
     expanded="true"
     shape="t">
@@ -354,7 +354,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"

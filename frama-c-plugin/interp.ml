@@ -244,6 +244,8 @@ let full_model_function linfo name default =
 	    | _ -> assert false
 	end
 
+let jessie_builtins = Hashtbl.create 17
+
 let translated_name linfo largs =
 (*
   Format.eprintf "Jessie.interp: linfo = %s(%a)(%d)@."
@@ -403,6 +405,10 @@ let translated_name linfo largs =
 		| _ -> assert false
 	    end
 	| s ->
+
+          try 
+            Hashtbl.find jessie_builtins s
+          with Not_found ->
 	    try
 (*
 	      Format.eprintf "Jessie.interp: Checking if %s overloaded" s;
@@ -2176,7 +2182,8 @@ let rec annotation is_axiomatic annot =
   match annot with
   | Dfun_or_pred (info,pos) ->
       CurrentLoc.set pos;
-      begin try
+      begin 
+        try
         let params = List.map logic_variable info.l_profile in
         let body =
           match info.l_body with
@@ -2196,7 +2203,13 @@ let rec annotation is_axiomatic annot =
               JCinductive l
           | LBterm t -> JCexpr(term t)
         in
-	let name = translated_name info [] in
+	let name =
+          try
+            let _ = Hashtbl.find jessie_builtins info.l_var_info.lv_name in
+            info.l_var_info.lv_name
+        with Not_found ->
+          translated_name info [] 
+        in
         (match info.l_type, info.l_labels, params with
              Some t, [], [] ->
                let def = match body with
@@ -2845,6 +2858,9 @@ let pragma = function
 	      "pragma %s is ignored by Jessie." name;
             []
       end
+  | GPragma(Attr("JessieBuiltin",[ACons(acsl,[]);AStr jessie]),_) ->
+    Hashtbl.add jessie_builtins acsl jessie;
+    []
   | GPragma _ -> []
   | _ -> []
 

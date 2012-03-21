@@ -36,7 +36,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_negate_ensures_default"
-    sum="857b22723b12c84a0033d6dd6cb35fc6"
+    sum="679a3a81493e739426126a4d8ccd45a9"
     proved="true"
     expanded="true"
     shape="t">
@@ -65,7 +65,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
@@ -73,7 +73,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_negate_safety"
-    sum="adface6d0103e4817afbcb92c2d2150f"
+    sum="87f0ef2c71fc8e9e08fa8bcf47ab2343"
     proved="true"
     expanded="true"
     shape="t">
@@ -110,7 +110,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Negate.java"
     loclnum="41" loccnumb="16" loccnume="22"
     expl="parameter negate_negate_ensures_default"
-    sum="66d977412d16045f7391333f8afae756"
+    sum="70a446ca5b99d4e0e79b626ca46d4dc1"
     proved="true"
     expanded="true"
     shape="iainfix <V3V5anot_assignsV2V1V6apset_rangeapset_singletonV0c0ainfix -ainfix +aoffset_maxV2V0c1c1Aainfix =aselectV6ashiftV0V8aselectV1ashiftV0V8Iainfix <V8ainfix +aoffset_maxV2V0c1Aainfix <=V7V8FAainfix =aselectV6ashiftV0V9aprefix -aselectV1ashiftV0V9Iainfix <V9V7Aainfix <=c0V9FAainfix <=V7ainfix +aoffset_maxV2V0c1Aainfix <=c0V7Iainfix =V7ainfix +V3c1FIainfix =V6astoreV4ashiftV0V3aprefix -aselectV4ashiftV0V3Fanot_assignsV2V1V4apset_rangeapset_singletonV0c0ainfix -ainfix +aoffset_maxV2V0c1c1Aainfix =aselectV4ashiftV0V10aprefix -aselectV1ashiftV0V10Iainfix <V10ainfix +aoffset_maxV2V0c1Aainfix <=c0V10FIainfix =V5ainfix +aoffset_maxV2V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FIanot_assignsV2V1V4apset_rangeapset_singletonV0c0ainfix -ainfix +aoffset_maxV2V0c1c1Aainfix =aselectV4ashiftV0V11aselectV1ashiftV0V11Iainfix <V11ainfix +aoffset_maxV2V0c1Aainfix <=V3V11FAainfix =aselectV4ashiftV0V12aprefix -aselectV1ashiftV0V12Iainfix <V12V3Aainfix <=c0V12FAainfix <=V3ainfix +aoffset_maxV2V0c1Aainfix <=c0V3FFAanot_assignsV2V1V1apset_rangeapset_singletonV0c0ainfix -ainfix +aoffset_maxV2V0c1c1Aainfix =aselectV1ashiftV0V13aprefix -aselectV1ashiftV0V13Iainfix <V13c0Aainfix <=c0V13FAainfix <=c0ainfix +aoffset_maxV2V0c1Aainfix <=c0c0Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
@@ -125,21 +125,21 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.18"/>
+     <result status="valid" time="0.17"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.58"/>
+     <result status="valid" time="0.54"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.44"/>
+     <result status="valid" time="0.36"/>
     </proof>
    </goal>
    <goal
@@ -147,7 +147,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Negate.java"
     loclnum="41" loccnumb="16" loccnume="22"
     expl="index bounds"
-    sum="280aa89303192f0e147aa2a541a7577c"
+    sum="6ed5b24dd93feb5f651304aa47c56f09"
     proved="true"
     expanded="true"
     shape="ainfix <ainfix -ainfix +aoffset_maxV2V0c1V7ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix <=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V7ainfix +V3c1FIainfix =V6astoreV4ashiftV0V3aprefix -aselectV4ashiftV0V3FAainfix <=V3aoffset_maxV2V0Aainfix <=aoffset_minV2V0V3Aainfix <=V3aoffset_maxV2V0Aainfix <=aoffset_minV2V0V3Iainfix <V3V5Iainfix =V5ainfix +aoffset_maxV2V0c1Aainfix >=V5c0Aainfix <=V5c2147483647FAainfix >=aoffset_maxV2V0aprefix -c1Iainfix =aselectV4ashiftV0V8aselectV1ashiftV0V8Iainfix <V8ainfix +aoffset_maxV2V0c1Aainfix <=V3V8FAainfix =aselectV4ashiftV0V9aprefix -aselectV1ashiftV0V9Iainfix <V9V3Aainfix <=c0V9FAainfix <=V3ainfix +aoffset_maxV2V0c1Aainfix <=c0V3FFIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
@@ -176,7 +176,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
   </theory>

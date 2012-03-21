@@ -36,7 +36,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="65" loccnumb="22" loccnume="27"
     expl="parameter _Creation_test1_ensures_default"
-    sum="051cfb12ef724d6f5c3bbe3c1f565967"
+    sum="06f92b935a07de229f3ed885ebed5a99"
     proved="true"
     expanded="false"
     shape="t">
@@ -58,7 +58,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -73,7 +73,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="65" loccnumb="22" loccnume="27"
     expl="normal postcondition"
-    sum="251aa0c1b43f520434e202bd1132168a"
+    sum="b33b8d4daebcab750472ffca4361613b"
     proved="true"
     expanded="false"
     shape="ainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c17FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFFF">
@@ -110,7 +110,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="65" loccnumb="22" loccnume="27"
     expl="parameter _Creation_test1_safety"
-    sum="25ce3f26f15b96d48c678a374e054090"
+    sum="bf1324f53c92a50569197d94f91b0a53"
     proved="true"
     expanded="false"
     shape="ainfix <=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c17FAainfix >=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix >=c1c0FF">
@@ -125,7 +125,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="0"
@@ -147,7 +147,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="73" loccnumb="22" loccnume="27"
     expl="parameter _Creation_test2_ensures_default"
-    sum="76372b0f7327148094bd41e9cac8be1f"
+    sum="a6acc881a46a030884493cac81685dc5"
     proved="true"
     expanded="false"
     shape="t">
@@ -169,7 +169,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -184,7 +184,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="73" loccnumb="22" loccnume="27"
     expl="normal postcondition"
-    sum="d3aa6e06b5134d1576f46c8375528c50"
+    sum="905103a6f54a76d97e8d4a76a5d11428"
     proved="true"
     expanded="false"
     shape="ainfix =V6c0Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c0FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFFF">
@@ -221,7 +221,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="73" loccnumb="22" loccnume="27"
     expl="parameter _Creation_test2_safety"
-    sum="32431bbb5060efa299d9b86e0f0e7ebd"
+    sum="d577b048a58fcb73391f09f7bcd96c80"
     proved="true"
     expanded="false"
     shape="ainfix <=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c0FAainfix >=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix >=c1c0FF">
@@ -236,7 +236,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="0"
@@ -250,7 +250,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
@@ -258,7 +258,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="82" loccnumb="22" loccnume="27"
     expl="parameter _Creation_test3_ensures_default"
-    sum="2192e3e23febef466cfbdf17796bc0ec"
+    sum="e6994549cb51eb30c3ec6592a84f1d0d"
     proved="true"
     expanded="false"
     shape="t">
@@ -280,7 +280,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -295,7 +295,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="82" loccnumb="22" loccnume="27"
     expl="normal postcondition"
-    sum="d7e74ee53b7077bea99c7d175f3c9b9e"
+    sum="f058a28435f3956f0cf1a3118cd5121c"
     proved="true"
     expanded="false"
     shape="anot_assignsV0V1V5apset_emptyAainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFFF">
@@ -325,7 +325,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="82" loccnumb="22" loccnume="27"
     expl="parameter _Creation_test3_safety"
-    sum="2f5469294a20034cbb5c2cacb7a31a65"
+    sum="c3dc5ac6e4b19475079b269d4a9e4583"
     proved="true"
     expanded="false"
     shape="ainfix <=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FAainfix >=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix >=c1c0FF">
@@ -362,7 +362,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="42" loccnumb="4" loccnume="12"
     expl="parameter cons_Creation_ensures_default"
-    sum="3ece59e05a0f796a6a69e011cf33002e"
+    sum="33a081689d9b63d70e27eb6e1e501e94"
     proved="true"
     expanded="false"
     shape="t">
@@ -399,7 +399,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="42" loccnumb="4" loccnume="12"
     expl="normal postcondition"
-    sum="6e2e29137772008079dad75b65fa2c6e"
+    sum="640bafcc369d4798b324b2f49b6e8ac1"
     proved="true"
     expanded="false"
     shape="anot_assignsV1V2V4apset_singletonV0Aainfix =aselectV4V0c0Ianot_assignsV1V3V4apset_singletonV0Aainfix =aselectV4V0c0FIainfix =V3astoreV2V0c0FIavalid_struct_CreationV0c0c0V1FFF">
@@ -428,7 +428,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
@@ -436,7 +436,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="50" loccnumb="4" loccnume="12"
     expl="Constructor of class Creation, default behavior"
-    sum="5bd2d267f87970ce5399ca34141a5fc9"
+    sum="0e0c1be8f87c759da61b02b7ba8f8383"
     proved="true"
     expanded="false"
     shape="t">
@@ -473,7 +473,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="50" loccnumb="4" loccnume="12"
     expl="normal postcondition"
-    sum="47d7666a785b74185aa52b78a644bb6f"
+    sum="f68e7fb58a7694db0beaf8e21d703cb6"
     proved="true"
     expanded="false"
     shape="anot_assignsV2V3V5apset_singletonV0Aainfix =aselectV5V0V1Iainfix =V5astoreV4V0V1FIainfix =V4astoreV3V0c0FIavalid_struct_CreationV0c0c0V2FFFF">
@@ -502,7 +502,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
@@ -510,7 +510,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="58" loccnumb="4" loccnume="12"
     expl="Constructor of class Creation, default behavior"
-    sum="b730c2bc6af59fbf755f6c9980087ac9"
+    sum="404020b397c8979a93c8d30e454970db"
     proved="true"
     expanded="false"
     shape="t">
@@ -547,7 +547,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="58" loccnumb="4" loccnume="12"
     expl="normal postcondition"
-    sum="52d356b637c15e16f61f4eb4be1834d6"
+    sum="374b87d015273ed33510fef6034d77c5"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V4V6apset_singletonV0Aainfix =aselectV6V0ainfix +V1V2Ianot_assignsV3V5V6apset_singletonV0Aainfix =aselectV6V0ainfix +V1V2FIainfix =V5astoreV4V0c0FIavalid_struct_CreationV0c0c0V3FFFFF">
@@ -569,7 +569,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -584,7 +584,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="58" loccnumb="4" loccnume="12"
     expl="parameter cons_Creation_int_int_safety"
-    sum="4e00a94fec3d81cab36dc99d8545e892"
+    sum="e0c18a184469c786716ca6de6e4def9b"
     proved="true"
     expanded="false"
     shape="t">
@@ -606,7 +606,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -621,7 +621,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="50" loccnumb="4" loccnume="12"
     expl="Constructor of class Creation, Safety"
-    sum="00a1b73a1e0e32443f8b7007f7858d4a"
+    sum="65a9bb6c439226088a532c9077f4ad18"
     proved="true"
     expanded="false"
     shape="t">
@@ -643,7 +643,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -658,7 +658,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="42" loccnumb="4" loccnume="12"
     expl="Constructor of class Creation, Safety"
-    sum="28b70ffa95e47639630da67622964323"
+    sum="fa80e3b9b314893582f813e0e9f23f95"
     proved="true"
     expanded="false"
     shape="t">
@@ -680,7 +680,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -695,7 +695,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="96" loccnumb="4" loccnume="24"
     expl="parameter cons_TestSuperConstructor_ensures_default"
-    sum="ca5e95028aac615d62f78516ebe6e239"
+    sum="b500df19b554d9fc1ceac0630ce4bc05"
     proved="true"
     expanded="false"
     shape="t">
@@ -732,7 +732,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="96" loccnumb="4" loccnume="24"
     expl="normal postcondition"
-    sum="0cf8d259bfda1482d6e09a48426125e6"
+    sum="0b0d0581c7fc2bf7288611dce1c9fdbd"
     proved="true"
     expanded="false"
     shape="anot_assignsV1V2V3apset_singletonV0Aainfix =aselectV3V0c12Ianot_assignsV1V2V3apset_singletonV0Aainfix =aselectV3V0c12FIavalid_struct_TestSuperConstructorV0c0c0V1FFF">
@@ -754,14 +754,14 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -769,7 +769,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="96" loccnumb="4" loccnume="24"
     expl="parameter cons_TestSuperConstructor_safety"
-    sum="648f8330339192306f60b286f6b9f0cd"
+    sum="3ea6bfcd8360f0bd08fab1e2cd143989"
     proved="true"
     expanded="false"
     shape="t">
@@ -791,7 +791,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"

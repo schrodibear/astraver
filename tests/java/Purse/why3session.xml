@@ -36,7 +36,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="58" loccnumb="16" loccnume="22"
     expl="normal postcondition"
-    sum="aee6451af03ced271fcc6f668d0e7dc8"
+    sum="367b18fea95d0f96624a42823adaed86"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix +aselectV2V0V1Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
@@ -65,7 +65,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
@@ -73,7 +73,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="58" loccnumb="16" loccnume="22"
     expl="normal postcondition"
-    sum="077476ff78e90f204be5b46ae0e470c6"
+    sum="e86494dcc87f9cbd88523380b09da5fb"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V4Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
@@ -102,7 +102,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
    <goal
@@ -110,7 +110,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="77" loccnumb="15" loccnume="25"
     expl="normal postcondition"
-    sum="8eecbf25d66ce78266e998b02c332d15"
+    sum="3190663ba598b77ce88284083f342ac3"
     proved="true"
     expanded="false"
     shape="ainfix =V3aselectV1V0Iainfix =V3aselectV1V0FIabalance_non_negativeV0V1Aavalid_struct_PurseV0c0c0V2FFF">
@@ -132,7 +132,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -147,7 +147,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="77" loccnumb="15" loccnume="25"
     expl="normal postcondition"
-    sum="ef82c10c62b57a80fafdf79e16b78f26"
+    sum="27a068914b718050b82903ded19297ab"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V1Iainfix =V3aselectV1V0FIabalance_non_negativeV0V1Aavalid_struct_PurseV0c0c0V2FFF">
@@ -169,7 +169,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -184,7 +184,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
     expl="parameter _Purse_withdraw_ensures_default"
-    sum="ee4437f593017d134a76e25d6459f7c4"
+    sum="066ec79a36c0c1125341ad181761a10c"
     proved="true"
     expanded="false"
     shape="iainfix >=aselectV2V0V1anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix -aselectV2V0V1Aainfix <=V1aselectV2V0Iainfix =V4astoreV2V0ainfix -aselectV2V0V1Fa_Non_null_ObjectV7V6IainstanceofV5V7a_NoCreditException_tagAaalloc_freshV3V7c1Aaalloc_extendsV3V6Aastrict_valid_struct_NoCreditExceptionV7c0ainfix -c1c1V6FFFIabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
@@ -221,7 +221,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
     expl="exceptional postcondition"
-    sum="c0de2b4753d10b078f026f7e167dcf4c"
+    sum="f972c725755ac538e239a1405f895768"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V2V2apset_emptyAabalance_non_negativeV0V2Aainfix >V1aselectV2V0Ia_Non_null_ObjectV6V5IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFFIainfix >=aselectV2V0V1NIabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
@@ -258,7 +258,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
     expl="parameter _Purse_withdraw_safety"
-    sum="38b7313d5731eeef90d52e4983e7c0b6"
+    sum="1ea360e7dbe637ce9310a78e2c5ea6c4"
     proved="true"
     expanded="false"
     shape="iainfix >=aselectV2V0V1abalance_non_negativeV0V4Iainfix =V4astoreV2V0ainfix -aselectV2V0V1Fainfix >=aoffset_maxV6V7c0IainstanceofV5V7a_NoCreditException_tagAaalloc_freshV3V7c1Aaalloc_extendsV3V6Aastrict_valid_struct_NoCreditExceptionV7c0ainfix -c1c1V6FFFAainfix >=c1c0Iabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
@@ -287,7 +287,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
    <goal
@@ -295,7 +295,7 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
     loclnum="58" loccnumb="11" loccnume="20"
     expl="parameter cons_Exception_String_Throwable_ensures_default"
-    sum="1e2fb3d512a120da3d4ffae95e26c38b"
+    sum="4ecdb43177feb11e2db2391c0d3c03fe"
     proved="true"
     expanded="false"
     shape="t">
@@ -332,7 +332,7 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
     loclnum="58" loccnumb="11" loccnume="20"
     expl="parameter cons_Exception_String_Throwable_safety"
-    sum="5da7ffd7c8ffd49bbcad2265a7110759"
+    sum="2cabd75cd979298eac9442d49735e657"
     proved="true"
     expanded="false"
     shape="t">
@@ -354,7 +354,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -369,7 +369,7 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
     loclnum="40" loccnumb="11" loccnume="20"
     expl="Constructor of class Exception, default behavior"
-    sum="97c38a4a3fdd2a609930779eb93743be"
+    sum="0945be57075c969b0bd181c0bf83cd00"
     proved="true"
     expanded="false"
     shape="t">
@@ -378,80 +378,6 @@
      </label>
     <label
      name="expl:parameter cons_Exception_String_ensures_default">
-     </label>
-    <proof
-     prover="2"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Exception_String_safety"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
-    loclnum="40" loccnumb="11" loccnume="20"
-    expl="Constructor of class Exception, Safety"
-    sum="ba115c3992873d93883664c1f7b43c2e"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:Constructor of class Exception, Safety">
-     </label>
-    <label
-     name="expl:parameter cons_Exception_String_safety">
-     </label>
-    <proof
-     prover="2"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter cons_Exception_Throwable_ensures_default"
-    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
-    loclnum="76" loccnumb="11" loccnume="20"
-    expl="Constructor of class Exception, default behavior"
-    sum="30f0185a79979717398955718212678d"
-    proved="true"
-    expanded="false"
-    shape="t">
-    <label
-     name="expl:Constructor of class Exception, default behavior">
-     </label>
-    <label
-     name="expl:parameter cons_Exception_Throwable_ensures_default">
      </label>
     <proof
      prover="2"
@@ -476,11 +402,85 @@
     </proof>
    </goal>
    <goal
+    name="WP_parameter cons_Exception_String_safety"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
+    loclnum="40" loccnumb="11" loccnume="20"
+    expl="Constructor of class Exception, Safety"
+    sum="3f3fbc445c09baf5e3b8fc52af525d8d"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Exception, Safety">
+     </label>
+    <label
+     name="expl:parameter cons_Exception_String_safety">
+     </label>
+    <proof
+     prover="2"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cons_Exception_Throwable_ensures_default"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
+    loclnum="76" loccnumb="11" loccnume="20"
+    expl="Constructor of class Exception, default behavior"
+    sum="1dc14b00f60a5dcf3fb79369a788e2c1"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:Constructor of class Exception, default behavior">
+     </label>
+    <label
+     name="expl:parameter cons_Exception_Throwable_ensures_default">
+     </label>
+    <proof
+     prover="2"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
     name="WP_parameter cons_Exception_Throwable_safety"
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
     loclnum="76" loccnumb="11" loccnume="20"
     expl="Constructor of class Exception, Safety"
-    sum="5943bbf2599dc317aebacfa90d70d6b0"
+    sum="ed112d0e9a4cd3381a93d83ea9628fa4"
     proved="true"
     expanded="false"
     shape="t">
@@ -517,7 +517,7 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
     loclnum="28" loccnumb="11" loccnume="20"
     expl="Constructor of class Exception, default behavior"
-    sum="ef27e41149351084934557bae68eb09f"
+    sum="f10165527a6e10018f57aa88fdda79f2"
     proved="true"
     expanded="false"
     shape="t">
@@ -539,7 +539,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -554,7 +554,7 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
     loclnum="28" loccnumb="11" loccnume="20"
     expl="Constructor of class Exception, Safety"
-    sum="afcf9ca378ec14a363236b92f2fb9c1f"
+    sum="632346a828ed836319b3271b775301fa"
     proved="true"
     expanded="false"
     shape="t">
@@ -591,7 +591,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="37" loccnumb="11" loccnume="28"
     expl="parameter cons_NoCreditException_ensures_default"
-    sum="2edacce872d388f4e3f0786e3e456bce"
+    sum="74b188ea98961d853ab85bc9eed08462"
     proved="true"
     expanded="false"
     shape="t">
@@ -628,7 +628,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="37" loccnumb="11" loccnume="28"
     expl="parameter cons_NoCreditException_safety"
-    sum="deaeed5cb0f0762211a294ab40a9a3b2"
+    sum="d0913cd8ab27edee244e374b0b546f86"
     proved="true"
     expanded="false"
     shape="t">
@@ -665,7 +665,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="50" loccnumb="11" loccnume="16"
     expl="normal postcondition"
-    sum="cb83ee2efdd236bb4221ec890b03ade6"
+    sum="2fd61912f37870bbfef8e06431ff8b40"
     proved="true"
     expanded="false"
     shape="anot_assignsV2V1V4apset_singletonV0Aainfix =aselectV4V0c0Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FFF">
@@ -702,7 +702,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="50" loccnumb="11" loccnume="16"
     expl="normal postcondition"
-    sum="73651022f14a3f0ba8c3529b12645ff7"
+    sum="baf553dcc7497722756d95823e3227ba"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V4Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FFF">
@@ -717,7 +717,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="0"
@@ -731,7 +731,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.06"/>
     </proof>
    </goal>
    <goal
@@ -739,7 +739,7 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="216" loccnumb="11" loccnume="20"
     expl="parameter cons_Throwable_String_Throwable_ensures_default"
-    sum="69c792bf801b39d30d4db807cb246bb4"
+    sum="182b78cb5843cd8b3eb4e86bf11f0db1"
     proved="true"
     expanded="false"
     shape="t">
@@ -776,7 +776,7 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="216" loccnumb="11" loccnume="20"
     expl="parameter cons_Throwable_String_Throwable_safety"
-    sum="a21966612ea879c4d4871329300714c5"
+    sum="171cda9b7faaa7e4842f1c5931cec362"
     proved="true"
     expanded="false"
     shape="t">
@@ -813,7 +813,7 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="194" loccnumb="11" loccnume="20"
     expl="Constructor of class Throwable, default behavior"
-    sum="bd1c931e974a7f266050573950eabfdf"
+    sum="f34830792be711ae737dff67033bdd4d"
     proved="true"
     expanded="false"
     shape="t">
@@ -850,7 +850,7 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="194" loccnumb="11" loccnume="20"
     expl="Constructor of class Throwable, Safety"
-    sum="e4745e6c6184421401b7e146f4bc2f2d"
+    sum="37e675f22c7cc0e00df9375bec3d63db"
     proved="true"
     expanded="false"
     shape="t">
@@ -887,7 +887,7 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="239" loccnumb="11" loccnume="20"
     expl="Constructor of class Throwable, default behavior"
-    sum="296836b81c707f5038e99588086fa9df"
+    sum="7f09f4256fedcfcb53abad43e5752d46"
     proved="true"
     expanded="false"
     shape="t">
@@ -924,7 +924,7 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="239" loccnumb="11" loccnume="20"
     expl="Constructor of class Throwable, Safety"
-    sum="3027ba5f138183a5cd0db6eef3ead0e5"
+    sum="62b135248982626017cc8ed2675cfb42"
     proved="true"
     expanded="false"
     shape="t">
@@ -946,7 +946,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -961,7 +961,7 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="179" loccnumb="11" loccnume="20"
     expl="Constructor of class Throwable, default behavior"
-    sum="64ef98aaebf03faa06c94ffc18098b65"
+    sum="7ddc76f1786d79fe62635e62b6a54736"
     proved="true"
     expanded="false"
     shape="t">
@@ -983,7 +983,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -998,7 +998,7 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="179" loccnumb="11" loccnume="20"
     expl="Constructor of class Throwable, Safety"
-    sum="5c347a921fa731f56012210dc6b4b88f"
+    sum="17b3755031682510204fe02dbd8722ce"
     proved="true"
     expanded="false"
     shape="t">
@@ -1020,7 +1020,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
