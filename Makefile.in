@@ -630,7 +630,7 @@ bin/cadlog.opt: src/version.cmx c/cversion.cmx tools/cadlog.cmx
 static:: $(STATICBINARY)
 
 ifeq ($(enable_local),"no")
-lib/why3/why3.conf:
+lib/why3/why3.conf: config.status
 	@(echo "[main]"; \
 	echo "loadpath=\"$(LIBDIR)/why/why3\""; \
 	echo; \
@@ -639,7 +639,7 @@ lib/why3/why3.conf:
 	echo "driver=\"$(LIBDIR)/why/why3/coq.drv\""; \
 	) > $@
 else
-lib/why3/why3.conf:
+lib/why3/why3.conf: config.status
 	@(echo "[main]"; \
 	echo "loadpath=\"$(PWD)/lib/why3\""; \
 	echo; \
