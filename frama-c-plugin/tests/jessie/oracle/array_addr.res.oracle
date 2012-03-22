@@ -46,6 +46,7 @@ invariant valid_t :
 unit h(intP[..] p)
 behavior default:
   assigns p.intM;
+  allocates \nothing;
   ensures (C_1 : (\at(p,Old).intM == 0));
 ;
 
@@ -700,12 +701,12 @@ why --project [...] why/array_addr.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/array_addr_po5.why">
-      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "63" begin = "14" end = "68"/>
+      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "64" begin = "14" end = "68"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/array_addr_po6.why">
-      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "63" begin = "14" end = "68"/>
+      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "64" begin = "14" end = "68"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -723,12 +724,12 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/array_addr_po1.why">
-      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "51" begin = "13" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "52" begin = "13" end = "64"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/array_addr_po2.why">
-      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "51" begin = "13" end = "64"/>
+      <location file = "PPCHOME/tests/jessie/array_addr.jessie/array_addr.jc" line = "52" begin = "13" end = "64"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

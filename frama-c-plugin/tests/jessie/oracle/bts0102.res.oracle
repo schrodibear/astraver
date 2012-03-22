@@ -54,6 +54,7 @@ unit g(intP[..] p)
                     (C_4 : (\offset_max(p) >= 0))));
 behavior default:
   assigns p.intM;
+  allocates \nothing;
   ensures (C_1 : true);
 ;
 
@@ -647,12 +648,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0102_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "69" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "70" begin = "13" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0102_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "69" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "70" begin = "13" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -662,12 +663,12 @@ text = "UserCall"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0102_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "57" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "58" begin = "13" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0102_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "57" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0102.jessie/bts0102.jc" line = "58" begin = "13" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

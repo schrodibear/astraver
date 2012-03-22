@@ -41,6 +41,7 @@ predicate is_bit(integer n) =
 uint32 nd()
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : is_bit(\result));
 ;
 

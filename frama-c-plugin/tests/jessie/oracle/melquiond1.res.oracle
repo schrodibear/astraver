@@ -38,12 +38,14 @@ type voidP = [voidP]
 uint32 mul(uint32 unnamed, uint32 unnamed_0)
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : true);
 ;
 
 uint32 max(uint32 unnamed_1, uint32 unnamed_2)
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_2 : true);
 ;
 

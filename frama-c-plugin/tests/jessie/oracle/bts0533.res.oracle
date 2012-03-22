@@ -150,6 +150,7 @@ behavior notfound:
 int32 printf()
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_53 : true);
 ;
 

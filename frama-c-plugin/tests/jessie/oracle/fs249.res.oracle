@@ -49,6 +49,7 @@ invariant valid_t :
 unit CEA_F(int32 unnamed)
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : true);
 ;
 

@@ -150,7 +150,7 @@ void push(int x) {
     @   (i < size ==>
     @      is_heap(tree_of_array(heap+0, 0, size+1)) &&
     @      bag_of_tree(tree_of_array(heap+0, 0, size+1)) ==
-    @      add_bag(heap[i], \at(model,Pre)));
+    @      add_bag(heap[i],\at(model,Pre)));
     @ loop assigns
     @   heap[..];
     @ loop variant

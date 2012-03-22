@@ -42,6 +42,7 @@ invariant valid___string__a__d_ :
 int32 printf()
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : true);
 ;
 

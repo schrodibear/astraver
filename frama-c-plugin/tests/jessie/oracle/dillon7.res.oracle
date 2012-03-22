@@ -69,6 +69,7 @@ axiomatic MyCast {
 floatP[..] simulated_cast_to_float_ptr(__anonstruct_ts_1[..] x)
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : simulated_cast{Here}(\at(x,Old), \result));
 ;
 
@@ -723,12 +724,12 @@ text = "AllocSize"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/dillon7_po8.why">
-      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "94" begin = "17" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "95" begin = "17" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/dillon7_po9.why">
-      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "94" begin = "17" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/dillon7.jessie/dillon7.jc" line = "95" begin = "17" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

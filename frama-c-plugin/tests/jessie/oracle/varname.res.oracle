@@ -40,12 +40,14 @@ type voidP = [voidP]
 charP[..] f()
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : true);
 ;
 
 charP[..] ff()
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_2 : true);
 ;
 

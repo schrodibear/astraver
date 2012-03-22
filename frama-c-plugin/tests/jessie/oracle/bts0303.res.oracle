@@ -44,6 +44,7 @@ type voidP = [voidP]
 charP[..] __builtin_alloca(uint32 unnamed)
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : true);
 ;
 

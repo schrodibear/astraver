@@ -42,6 +42,7 @@ invariant valid___string_a__a_b__a_c__a_res__a_ :
 int32 printf()
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : true);
 ;
 
@@ -471,12 +472,12 @@ why --project [...] why/fp-test2.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/fp-test2_po2.why">
-      <location file = "PPCHOME/tests/jessie/fp-test2.jessie/fp-test2.jc" line = "58" begin = "21" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/fp-test2.jessie/fp-test2.jc" line = "59" begin = "21" end = "39"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/fp-test2_po3.why">
-      <location file = "PPCHOME/tests/jessie/fp-test2.jessie/fp-test2.jc" line = "59" begin = "21" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/fp-test2.jessie/fp-test2.jc" line = "60" begin = "21" end = "39"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

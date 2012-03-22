@@ -47,6 +47,7 @@ type voidP = [voidP]
 float_xP[..] allocM(int32 m, int32 n)
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : (((C_3 : (\offset_min(\result) <= 0)) &&
                     (C_4 : (\offset_max(\result) >= (\at(m,Old) - 1)))) &&
                    (C_5 : (\forall integer k;
@@ -1233,11 +1234,11 @@ why --project [...] why/jobredeaux.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po8.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "96" begin = "6" end = "5867"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "97" begin = "6" end = "5867"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po9.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "96" begin = "6" end = "5867"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "97" begin = "6" end = "5867"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po10.why">
@@ -1269,11 +1270,11 @@ why --project [...] why/jobredeaux.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po17.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "133" begin = "18" end = "3750"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "134" begin = "18" end = "3750"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po18.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "133" begin = "18" end = "3750"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "134" begin = "18" end = "3750"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po19.why">
@@ -1309,11 +1310,11 @@ why --project [...] why/jobredeaux.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po27.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "133" begin = "18" end = "3750"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "134" begin = "18" end = "3750"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po28.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "133" begin = "18" end = "3750"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "134" begin = "18" end = "3750"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po29.why">
@@ -1333,11 +1334,11 @@ why --project [...] why/jobredeaux.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po33.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "96" begin = "6" end = "5867"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "97" begin = "6" end = "5867"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po34.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "96" begin = "6" end = "5867"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "97" begin = "6" end = "5867"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po35.why">
@@ -1366,12 +1367,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/jobredeaux_po40.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "185" begin = "36" end = "193"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "186" begin = "36" end = "193"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/jobredeaux_po41.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "185" begin = "36" end = "193"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "186" begin = "36" end = "193"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

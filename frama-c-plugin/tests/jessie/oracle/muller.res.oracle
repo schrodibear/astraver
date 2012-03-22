@@ -79,6 +79,7 @@ lemma num_of_pos_strictly_increasing{Here} :
 int32 calloc()
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : true);
 ;
 
@@ -1026,12 +1027,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/muller_po37.why">
-      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "138" begin = "27" end = "290"/>
+      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "139" begin = "27" end = "290"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/muller_po38.why">
-      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "138" begin = "27" end = "290"/>
+      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "139" begin = "27" end = "290"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

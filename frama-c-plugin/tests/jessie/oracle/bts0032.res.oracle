@@ -1,6 +1,29 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0032.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0032.c"
 [jessie] Starting Jessie translation
-[kernel] State_builder.aborted because of unimplemented feature.
-         Please send a feature request at http://bts.frama-c.com with:
-         'Interp.terms Tcomprehension'.
+[kernel] failure: Incorrect Cil initialization: cannot find Frama_C_memset builtin
+[kernel] The full backtrace is:
+         Raised at file "src/kernel/log.ml", line 528, characters 30-31
+         Called from file "src/kernel/log.ml", line 522, characters 9-16
+         Re-raised at file "src/kernel/log.ml", line 525, characters 15-16
+         Called from file "cil/src/frontc/cabs2cil.ml", line 3066, characters 6-93
+         Called from file "cil/src/frontc/cabs2cil.ml", line 7927, characters 18-45
+         Called from file "cil/src/frontc/cabs2cil.ml", line 8025, characters 10-38
+         Called from file "rewrite.ml", line 436, characters 15-62
+         Called from file "hashtbl.ml", line 145, characters 8-13
+         Called from file "hashtbl.ml", line 148, characters 4-19
+         Called from file "common.ml", line 547, characters 2-13
+         Called from file "rewrite.ml", line 1690, characters 2-28
+         Called from file "register.ml", line 122, characters 4-24
+         Called from file "register.ml", line 290, characters 6-12
+         Called from file "queue.ml", line 134, characters 6-20
+         Called from file "src/kernel/boot.ml", line 36, characters 4-20
+         Called from file "src/kernel/cmdline.ml", line 719, characters 2-9
+         Called from file "src/kernel/cmdline.ml", line 200, characters 4-8
+         
+         Frama-C aborted because of internal error.
+         Please report as 'crash' at http://bts.frama-c.com/.
+         Your Frama-C version is Nitrogen-20111001+dev.
+         Note that a version and a backtrace alone often does not have information
+         to understand the bug. Guidelines for reporting bugs are at:
+         http://bts.frama-c.com/dokuwiki/doku.php?id=mantis:frama-c:bug_reporting_guidelines

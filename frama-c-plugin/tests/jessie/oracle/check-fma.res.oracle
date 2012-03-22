@@ -41,6 +41,7 @@ invariant valid___string__g_ :
 int32 printf()
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : true);
 ;
 
@@ -473,7 +474,7 @@ why --project [...] why/check-fma.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/check-fma_po4.why">
-      <location file = "PPCHOME/tests/jessie/check-fma.jessie/check-fma.jc" line = "53" begin = "20" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/check-fma.jessie/check-fma.jc" line = "54" begin = "20" end = "38"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

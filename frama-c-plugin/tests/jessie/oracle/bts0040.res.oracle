@@ -45,6 +45,7 @@ type __anonstruct_las_1 = [__anonstruct_las_1]
 unit g(floatP[..] y)
 behavior default:
   assigns y.floatM;
+  allocates \nothing;
   ensures (C_1 : true);
 ;
 

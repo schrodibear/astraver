@@ -397,6 +397,7 @@ charP[..] memcpy(charP[..] dest, charP[..] src, uint32 n)
                       (C_12 : (\offset_max(src) >= (n - 1))))));
 behavior default:
   assigns (dest + [0..(n - 1)]).charM;
+  allocates \nothing;
   ensures (C_1 : (((C_3 : (memcmp{Here}(\at(dest,Old), \at(src,Old),
                                         \at(n,Old)) ==
                             0)) &&
@@ -409,12 +410,14 @@ uint32 strlen(charP[..] s)
   requires (C_14 : valid_string{Here}(s));
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_13 : (\result == strlen{Here}(\at(s,Old))));
 ;
 
 charP[..] calloc(uint32 nmemb, uint32 size)
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_15 : ((C_16 : (\offset_min(\result) <= 0)) &&
                     (C_17 : (\offset_max(\result) >=
                               ((\at(size,Old) * \at(nmemb,Old)) - 1)))));
@@ -2005,22 +2008,22 @@ text = "ArithOverflow"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/calloc_po6.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "428" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "431" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po7.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "428" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "431" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po8.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "428" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "431" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po9.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "428" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "431" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

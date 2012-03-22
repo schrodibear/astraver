@@ -450,6 +450,7 @@ predicate valid_wstring_or_null{L}(unsigned_shortP[..] s_31) =
 unit exit(int32 status)
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : false);
 ;
 
@@ -766,12 +767,14 @@ behavior default:
 int32 printf()
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_253 : true);
 ;
 
 int32 strtol()
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_254 : true);
 ;
 
@@ -7163,72 +7166,72 @@ text = "ArithOverflow"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/hd_snoob_po4.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "786" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "789" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po5.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "786" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "789" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po6.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "786" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "789" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po7.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "786" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "789" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po8.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "786" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "789" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po9.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "786" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "789" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po10.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "786" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "789" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po11.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "787" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "790" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po12.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "787" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "790" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po13.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "787" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "790" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po14.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "787" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "790" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po15.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "787" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "790" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po16.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "787" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "790" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po17.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "787" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "790" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -7268,107 +7271,107 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po25.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "796" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po26.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "796" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po27.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "796" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po28.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "796" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po29.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "796" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po30.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "796" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po31.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "796" begin = "18" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "799" begin = "18" end = "26"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po32.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po33.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po34.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po35.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po36.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po37.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po38.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "797" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po39.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po40.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po41.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po42.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po43.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po44.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po45.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "800" begin = "15" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "803" begin = "15" end = "23"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -7393,37 +7396,37 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po50.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "821" begin = "24" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "824" begin = "24" end = "32"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po51.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "821" begin = "24" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "824" begin = "24" end = "32"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po52.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "821" begin = "24" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "824" begin = "24" end = "32"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po53.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "821" begin = "24" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "824" begin = "24" end = "32"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po54.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "821" begin = "24" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "824" begin = "24" end = "32"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po55.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "821" begin = "24" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "824" begin = "24" end = "32"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/hd_snoob_po56.why">
-      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "821" begin = "24" end = "32"/>
+      <location file = "PPCHOME/tests/jessie/hd_snoob.jessie/hd_snoob.jc" line = "824" begin = "24" end = "32"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

@@ -47,6 +47,7 @@ int32 max_prio;
 Proc[..] pid2pcb(uint32 unnamed)
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : ((C_2 : (\offset_min(\result) <= 0)) &&
                    (C_3 : (\offset_max(\result) >= 0))));
 ;
@@ -1124,12 +1125,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po24.why">
-      <location file = "PPCHOME/tests/jessie/vamos.jessie/vamos.jc" line = "131" begin = "27" end = "63"/>
+      <location file = "PPCHOME/tests/jessie/vamos.jessie/vamos.jc" line = "132" begin = "27" end = "63"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/vamos_po25.why">
-      <location file = "PPCHOME/tests/jessie/vamos.jessie/vamos.jc" line = "131" begin = "27" end = "63"/>
+      <location file = "PPCHOME/tests/jessie/vamos.jessie/vamos.jc" line = "132" begin = "27" end = "63"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

@@ -7,7 +7,7 @@ Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_S
 [jessie] File fresh2.jessie/fresh2.cloc written.
 # IntModel = bounded
 # InvariantPolicy = Arguments
-# SeparationPolicy = Regions
+# SeparationPolicy = None
 # AnnotationPolicy = None
 # AbstractDomain = Pol
 
@@ -41,21 +41,24 @@ type Str = [Str]
 Str[..] create()
 behavior default:
   assigns \nothing;
-  ensures (C_1 : \fresh(\result));
+  allocates \result;
+  ensures (C_1 : (((C_3 : (\offset_min(\result) <= 0)) &&
+                    (C_4 : (\offset_max(\result) >= 0))) &&
+                   (C_5 : \fresh(\result))));
 ;
 
 unit test(Str[..] this)
-  requires (C_6 : ((C_7 : (\offset_min(this) <= 0)) &&
-                    (C_8 : (\offset_max(this) >= 0))));
+  requires (C_10 : ((C_11 : (\offset_min(this) <= 0)) &&
+                     (C_12 : (\offset_max(this) >= 0))));
 behavior default:
-  ensures (C_5 : true);
+  ensures (C_9 : true);
 {  
    (var Str[..] f);
    
-   {  (C_3 : (f = (C_2 : create())));
+   {  (C_7 : (f = (C_6 : create())));
       
       {  
-         (assert for default: (C_4 : (this != f)));
+         (assert for default: (C_8 : (this != f)));
          ()
       };
       
@@ -65,17 +68,17 @@ behavior default:
 
 unit smoke_detector()
 behavior default:
-  ensures (C_14 : true);
+  ensures (C_18 : true);
 {  
    (var Str[..] s1);
    
    (var Str[..] s2);
    
-   {  (C_10 : (s1 = (C_9 : create())));
-      (C_12 : (s2 = (C_11 : create())));
+   {  (C_14 : (s1 = (C_13 : create())));
+      (C_16 : (s2 = (C_15 : create())));
       
       {  
-         (assert for default: (C_13 : false));
+         (assert for default: (C_17 : (0 == 1)));
          ()
       };
       
@@ -286,6 +289,8 @@ parameter Str_alloc_table : Str alloc_table ref
 
 parameter Str_tag_table : Str tag_table ref
 
+parameter Str_x : (Str, int32) memory ref
+
 parameter alloc_struct_Str :
  n:int ->
   Str_alloc_table:Str alloc_table ref ->
@@ -362,13 +367,23 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
+parameter charP_charM : (charP, int8) memory ref
+
 parameter create :
- Str_result_1_alloc_table:Str alloc_table ->
-  { } Str pointer { (JC_<somenum>: (not valid(Str_result_1_alloc_table, result))) }
+ tt:unit ->
+  { } Str pointer reads Str_alloc_table
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(Str_alloc_table, result), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(Str_alloc_table, result), (0)))
+        and (JC_<somenum>: (not valid(Str_alloc_table@, result)))))) }
 
 parameter create_requires :
- Str_result_1_alloc_table:Str alloc_table ->
-  { } Str pointer { (JC_<somenum>: (not valid(Str_result_1_alloc_table, result))) }
+ tt:unit ->
+  { } Str pointer reads Str_alloc_table
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(Str_alloc_table, result), (0)))
+    and ((JC_<somenum>: ge_int(offset_max(Str_alloc_table, result), (0)))
+        and (JC_<somenum>: (not valid(Str_alloc_table@, result)))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -386,21 +401,19 @@ parameter safe_int32_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
-parameter smoke_detector : tt:unit -> { } unit { true }
+parameter smoke_detector : tt:unit -> { } unit reads Str_alloc_table { true }
 
-parameter smoke_detector_requires : tt:unit -> { } unit { true }
+parameter smoke_detector_requires :
+ tt:unit -> { } unit reads Str_alloc_table { true }
 
-parameter test :
- this:Str pointer ->
-  Str_this_3_alloc_table:Str alloc_table -> { } unit { true }
+parameter test : this:Str pointer -> { } unit reads Str_alloc_table { true }
 
 parameter test_requires :
  this:Str pointer ->
-  Str_this_3_alloc_table:Str alloc_table ->
-   { (JC_<somenum>:
-     ((JC_<somenum>: le_int(offset_min(Str_this_3_alloc_table, this), (0)))
-     and (JC_<somenum>: ge_int(offset_max(Str_this_3_alloc_table, this), (0)))))}
-   unit { true }
+  { (JC_<somenum>:
+    ((JC_<somenum>: le_int(offset_min(Str_alloc_table, this), (0)))
+    and (JC_<somenum>: ge_int(offset_max(Str_alloc_table, this), (0)))))}
+  unit reads Str_alloc_table { true }
 
 let smoke_detector_ensures_default =
  fun (tt : unit) ->
@@ -408,18 +421,14 @@ let smoke_detector_ensures_default =
   (init:
   try
    begin
-     (let Str_s2_7_alloc_table = (any_alloc_table void) in
-     (let Str_s1_6_alloc_table = (any_alloc_table void) in
      (let s1_1 = ref (any_pointer void) in
      (let s2_1 = ref (any_pointer void) in
-     (C_10:
-     (C_12:
+     (C_14:
+     (C_16:
      begin
-       (let jessie_<somenum> =
-       (s1_1 := (C_9: (JC_<somenum>: (create Str_s1_6_alloc_table)))) in void);
-      (let jessie_<somenum> =
-      (s2_1 := (C_11: (JC_<somenum>: (create Str_s2_7_alloc_table)))) in void);
-      (assert { (JC_<somenum>: (false = true)) }; void); void; (raise Return) end))))));
+       (let jessie_<somenum> = (s1_1 := (C_13: (JC_<somenum>: (create void)))) in void);
+      (let jessie_<somenum> = (s2_1 := (C_15: (JC_<somenum>: (create void)))) in void);
+      (assert { (JC_<somenum>: ((0) = (1))) }; void); void; (raise Return) end))));
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
 let smoke_detector_safety =
@@ -428,53 +437,46 @@ let smoke_detector_safety =
   (init:
   try
    begin
-     (let Str_s2_7_alloc_table = (any_alloc_table void) in
-     (let Str_s1_6_alloc_table = (any_alloc_table void) in
      (let s1_1 = ref (any_pointer void) in
      (let s2_1 = ref (any_pointer void) in
-     (C_10:
-     (C_12:
+     (C_14:
+     (C_16:
      begin
-       (let jessie_<somenum> =
-       (s1_1 := (C_9: (JC_<somenum>: (create_requires Str_s1_6_alloc_table)))) in
+       (let jessie_<somenum> = (s1_1 := (C_13: (JC_<somenum>: (create_requires void)))) in
        void);
-      (let jessie_<somenum> =
-      (s2_1 := (C_11: (JC_<somenum>: (create_requires Str_s2_7_alloc_table)))) in
-      void); [ { } unit { (JC_<somenum>: (false = true)) } ]; void; (raise Return)
-     end)))))); (raise Return) end with Return -> void end) { true }
+      (let jessie_<somenum> = (s2_1 := (C_15: (JC_<somenum>: (create_requires void)))) in
+      void); [ { } unit { (JC_<somenum>: ((0) = (1))) } ]; void; (raise Return) end))));
+    (raise Return) end with Return -> void end) { true }
 
 let test_ensures_default =
- fun (this : Str pointer) (Str_this_3_alloc_table : Str alloc_table) ->
+ fun (this : Str pointer) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(Str_this_3_alloc_table, this), (0)))
-    and (JC_<somenum>: ge_int(offset_max(Str_this_3_alloc_table, this), (0))))) }
+    ((JC_<somenum>: le_int(offset_min(Str_alloc_table, this), (0)))
+    and (JC_<somenum>: ge_int(offset_max(Str_alloc_table, this), (0))))) }
   (init:
   try
    begin
      (let f = ref (any_pointer void) in
-     (C_3:
+     (C_7:
      begin
-       (let jessie_<somenum> =
-       (f := (C_2: (JC_<somenum>: (create Str_this_3_alloc_table)))) in void);
+       (let jessie_<somenum> = (f := (C_6: (JC_<somenum>: (create void)))) in void);
       (assert { (JC_<somenum>: (this <> f)) }; void); void; (raise Return) end));
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
 let test_safety =
- fun (this : Str pointer) (Str_this_3_alloc_table : Str alloc_table) ->
+ fun (this : Str pointer) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int(offset_min(Str_this_3_alloc_table, this), (0)))
-    and (JC_<somenum>: ge_int(offset_max(Str_this_3_alloc_table, this), (0))))) }
+    ((JC_<somenum>: le_int(offset_min(Str_alloc_table, this), (0)))
+    and (JC_<somenum>: ge_int(offset_max(Str_alloc_table, this), (0))))) }
   (init:
   try
    begin
      (let f = ref (any_pointer void) in
-     (C_3:
+     (C_7:
      begin
-       (let jessie_<somenum> =
-       (f := (C_2: (JC_<somenum>: (create_requires Str_this_3_alloc_table)))) in
-       void); [ { } unit reads f { (JC_<somenum>: (this <> f)) } ]; void;
-      (raise Return) end)); (raise Return) end with Return -> void end)
-  { true }
+       (let jessie_<somenum> = (f := (C_6: (JC_<somenum>: (create_requires void)))) in void);
+      [ { } unit reads f { (JC_<somenum>: (this <> f)) } ]; void; (raise Return) end));
+    (raise Return) end with Return -> void end) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C fresh2.jessie --quiet -f fresh2.makefile project
@@ -484,7 +486,7 @@ why --project [...] why/fresh2.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/fresh2_po2.why">
-      <location file = "PPCHOME/tests/jessie/fresh2.c" line = "15" begin = "13" end = "22"/>
+      <location file = "PPCHOME/tests/jessie/fresh2.c" line = "17" begin = "13" end = "22"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -493,7 +495,7 @@ why --project [...] why/fresh2.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/fresh2_po1.why">
-      <location file = "PPCHOME/tests/jessie/fresh2.c" line = "21" begin = "13" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/fresh2.c" line = "23" begin = "13" end = "19"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>

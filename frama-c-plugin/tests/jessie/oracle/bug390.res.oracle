@@ -35,6 +35,7 @@ type voidP = [voidP]
 int32 atoi(charP[..] c)
 behavior default:
   assigns c.charM;
+  allocates \nothing;
   ensures (C_1 : true);
 ;
 

@@ -36,6 +36,7 @@ int32 e;
 unit f()
 behavior default:
   assigns e;
+  allocates \nothing;
   ensures (C_1 : (e == 0));
 ;
 

@@ -107,6 +107,7 @@ behavior default:
 int32 printf()
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_21 : true);
 ;
 
