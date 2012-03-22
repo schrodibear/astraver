@@ -659,6 +659,7 @@ object
   method vtype = visitor#vtype
   method vattr = visitor#vattr
   method vattrparam = visitor#vattrparam
+  method vmodel_info = visitor#vmodel_info
 
   (* Methods from Cil visitor for logic constructs *)
   method vlogic_type = visitor#vlogic_type
@@ -971,7 +972,8 @@ object(self)
         DoChildren
 
   method vterm_offset = function
-      TNoOffset -> SkipChildren
+    | TNoOffset -> SkipChildren
+    | TModel _ -> SkipChildren
     | TIndex _ -> DoChildren
     | TField(fi,_) ->
         begin
@@ -1121,7 +1123,7 @@ let rec lift_toffset ty off =
         let siz = array_size subty in
         begin match lift_toffset subty suboff with
             | TIndex(idx,off) -> TIndex(change_idx idx1 idx siz,off)
-            | TField _ | TNoOffset -> assert false
+            | TModel _ | TField _ | TNoOffset -> assert false
         end
     | TIndex(idx1,TNoOffset) ->
         let subty = direct_element_type ty in
@@ -1133,7 +1135,7 @@ let rec lift_toffset ty off =
                    siz,
                  TNoOffset)
         else off
-    | TIndex _ | TField _ | TNoOffset -> off
+    | TIndex _ | TField _ | TModel _ | TNoOffset -> off
 
 (* Allocation/deallocation *)
 

@@ -36,7 +36,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
     loclnum="38" loccnumb="22" loccnume="27"
     expl="parameter _Switch_test1_ensures_default"
-    sum="e14871a4f4df2fc779dc3c9088239851"
+    sum="f356a0fe041396558d747eb7f51a9b21"
     proved="true"
     expanded="true"
     shape="t">
@@ -65,7 +65,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
@@ -73,7 +73,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
     loclnum="38" loccnumb="22" loccnume="27"
     expl="parameter _Switch_test1_ensures_normal"
-    sum="0df0af6347e6e953d04b4e5eda668974"
+    sum="bc3f693369463c6c703605e31a6c7e76"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V0c0Oainfix =ainteger_of_int32V0c1ainfix =ainteger_of_int32V3c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fainfix =ainteger_of_int32V6c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c2FF">
@@ -102,7 +102,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -110,7 +110,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
     loclnum="38" loccnumb="22" loccnume="27"
     expl="parameter _Switch_test1_safety"
-    sum="1b8c7d2542899f9db128e4c7ed2614ba"
+    sum="4e2f71d2985175de2134483351924d13"
     proved="true"
     expanded="true"
     shape="t">
@@ -119,6 +119,43 @@
      </label>
     <label
      name="expl:Method test1, Safety">
+     </label>
+    <proof
+     prover="2"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Switch_test2_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
+    loclnum="56" loccnumb="22" loccnume="27"
+    expl="parameter _Switch_test2_ensures_default"
+    sum="855ea637037ae8aa2c64aaaaa99e8c16"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:parameter _Switch_test2_ensures_default">
+     </label>
+    <label
+     name="expl:Method test2, default behavior">
      </label>
     <proof
      prover="2"
@@ -143,48 +180,11 @@
     </proof>
    </goal>
    <goal
-    name="WP_parameter _Switch_test2_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
-    loclnum="56" loccnumb="22" loccnume="27"
-    expl="parameter _Switch_test2_ensures_default"
-    sum="d9e3353e3de50a821c0eff5326d9ec47"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter _Switch_test2_ensures_default">
-     </label>
-    <label
-     name="expl:Method test2, default behavior">
-     </label>
-    <proof
-     prover="2"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-   </goal>
-   <goal
     name="WP_parameter _Switch_test2_ensures_normal"
     locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
     loclnum="56" loccnumb="22" loccnume="27"
     expl="parameter _Switch_test2_ensures_normal"
-    sum="a197396f71eb7c46aace7992eef5f8ac"
+    sum="7a9f1c253ada1c6a5496ef701814d8ac"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V0c0Oainfix =ainteger_of_int32V0c1ainfix =ainteger_of_int32V3c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V3c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fiainfix =ainteger_of_int32V0c4Oainfix =ainteger_of_int32V0c7ainfix =ainteger_of_int32V6c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V6c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c1Fainfix =ainteger_of_int32V9c0qainfix =ainteger_of_int32V0c1Oainfix =ainteger_of_int32V0c0Aainfix =ainteger_of_int32V9c1qainfix =ainteger_of_int32V0c7Oainfix =ainteger_of_int32V0c4Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7c2FF">
@@ -221,7 +221,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Switch.java"
     loclnum="56" loccnumb="22" loccnume="27"
     expl="parameter _Switch_test2_safety"
-    sum="56bf0f963ce7a84863a79f2a73b915e8"
+    sum="8703856647dd8f9982683490954e451e"
     proved="true"
     expanded="true"
     shape="t">
@@ -258,7 +258,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Switch_ensures_default"
-    sum="366dc5e3c6527e66702ba7b14971dec8"
+    sum="09b7675371b86805450554dc5515b52b"
     proved="true"
     expanded="true"
     shape="t">
@@ -295,7 +295,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Switch_safety"
-    sum="ef8a88765f8c005bf7ac1da6e62d08b3"
+    sum="11807ca33303a0f14381b78700327697"
     proved="true"
     expanded="true"
     shape="t">

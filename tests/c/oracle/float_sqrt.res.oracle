@@ -119,7 +119,7 @@ End:
 ========== frama-c -jessie execution ==========
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/float_sqrt.c"
 [jessie] Starting Jessie translation
-[kernel] warning: No code for function sqrt_init, default assigns generated for default behavior
+[kernel] warning: No code nor implicit assigns clause for function sqrt_init, generating default assigns from the prototype
 [jessie] Producing Jessie files in subdir tests/c/float_sqrt.jessie
 [jessie] File tests/c/float_sqrt.jessie/float_sqrt.jc written.
 [jessie] File tests/c/float_sqrt.jessie/float_sqrt.cloc written.
@@ -171,6 +171,7 @@ double sqrt_init(double x_0)
                     (C_4 : ((x_0 :> real) <= 2))));
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : (\real_abs(((\result :> real) -
                               (1 / \real_sqrt((\at(x_0,Old) :> real))))) <=
                    (0x1p-6 *
@@ -539,7 +540,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs float
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs float_sqrt.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why $(WHYLIB)/why/floats_strict.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -684,7 +685,7 @@ why3ide: why/float_sqrt_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: float_sqrt.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include float_sqrt.depend
 
@@ -1906,8 +1907,6 @@ axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 axiom sqr_sqrt: (forall x:real. ((x >= 0.0) -> (sqrt_real((x * x)) = x)))
 
-logic pow_real : real, real -> real
-
 logic abs_real : real -> real
 
 axiom abs_real_pos:
@@ -1925,6 +1924,10 @@ logic log10 : real -> real
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
 
 axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
+
+logic pow_real_int : real, int -> real
+
+logic pow_real : real, real -> real
 
 logic cos : real -> real
 

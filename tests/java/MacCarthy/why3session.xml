@@ -36,7 +36,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/MacCarthy.java"
     loclnum="45" loccnumb="22" loccnume="25"
     expl="parameter _MacCarthy_f91_ensures_default"
-    sum="f84a7b925fd3dfb322886db910284a91"
+    sum="82e2d1f7426c843cd56f337524be306e"
     proved="true"
     expanded="false"
     shape="t">
@@ -73,7 +73,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/MacCarthy.java"
     loclnum="45" loccnumb="22" loccnume="25"
     expl="parameter _MacCarthy_f91_ensures_greater_than_100"
-    sum="417e36d2bb079d9df71bf74137f4386a"
+    sum="b2cd7056e3fc819333b558a4e71acef9"
     proved="true"
     expanded="false"
     shape="iainfix <=ainteger_of_int32V0c100ainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V0c10Iainfix =V4V3FIainfix =ainteger_of_int32V3c91Iainfix <=ainteger_of_int32V2c100Aainfix =ainteger_of_int32V3ainfix -ainteger_of_int32V2c10Iainfix >=ainteger_of_int32V2c101FIainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V6ainfix -ainteger_of_int32V0c10Iainfix =V6V5FIainfix =ainteger_of_int32V5ainfix -ainteger_of_int32V0c10FIainfix >=ainteger_of_int32V0c101F">
@@ -102,7 +102,7 @@
      timelimit="10"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
@@ -110,7 +110,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/MacCarthy.java"
     loclnum="45" loccnumb="22" loccnume="25"
     expl="parameter _MacCarthy_f91_ensures_less_than_101"
-    sum="28eb0184114b30432794043351b60474"
+    sum="c1b3daaea690eeb8d8ade665cf65660d"
     proved="true"
     expanded="false"
     shape="iainfix <=ainteger_of_int32V0c100ainfix =ainteger_of_int32V4c91Iainfix =V4V3FIainfix =ainteger_of_int32V3c91Iainfix <=ainteger_of_int32V2c100Aainfix =ainteger_of_int32V3ainfix -ainteger_of_int32V2c10Iainfix >=ainteger_of_int32V2c101FIainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V6c91Iainfix =V6V5FIainfix =ainteger_of_int32V5ainfix -ainteger_of_int32V0c10FIainfix <=ainteger_of_int32V0c100F">
@@ -132,7 +132,7 @@
      timelimit="10"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -147,7 +147,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/MacCarthy.java"
     loclnum="45" loccnumb="22" loccnume="25"
     expl="parameter _MacCarthy_f91_safety"
-    sum="99565773205d3ee9b0c6d3fef6c0a6dc"
+    sum="c1dc707beffbb31f48b1c85715081a96"
     proved="true"
     expanded="false"
     shape="iainfix <=ainteger_of_int32V0c100azwf_zeroainfix -c101ainteger_of_int32V2ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FAazwf_zeroainfix -c101ainteger_of_int32V1ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11FAainfix <=ainfix +ainteger_of_int32V0c11c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V0c11ainfix <=ainfix -ainteger_of_int32V0c10c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V0c10F">
@@ -169,14 +169,14 @@
      timelimit="10"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="10"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -184,7 +184,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_MacCarthy_ensures_default"
-    sum="55c2eb3a5bd5c860320cadedfd1c6bcd"
+    sum="5919d36062e7f060144175c82d2b23b5"
     proved="true"
     expanded="false"
     shape="t">
@@ -221,7 +221,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_MacCarthy_safety"
-    sum="cd813c10c3b3ddebf9149f5c77482b89"
+    sum="8676759178142f6ff4c85f426d0a5539"
     proved="true"
     expanded="false"
     shape="t">
@@ -243,14 +243,14 @@
      timelimit="10"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="10"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
@@ -258,7 +258,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Object_ensures_default"
-    sum="7aa7e51999479196f57b1e4c2f52611e"
+    sum="f00617d74dc9c131a674b9f56a9fe8c7"
     proved="true"
     expanded="false"
     shape="t">
@@ -280,14 +280,14 @@
      timelimit="10"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="10"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
@@ -295,7 +295,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Object_safety"
-    sum="41945230b966fd84ae3d73eb29d2f4b6"
+    sum="1f1ac5cdf1dd6617847505e4eae7bd4e"
     proved="true"
     expanded="false"
     shape="t">
@@ -317,14 +317,14 @@
      timelimit="10"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="10"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
   </theory>

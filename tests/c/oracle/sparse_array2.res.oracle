@@ -69,7 +69,7 @@ typedef struct SparseArray {
 
 /*@ requires sz >= 0;
   @ assigns \nothing;
-  @ ensures \fresh(\result);
+  @ ensures \fresh(\result,sizeof(struct Sparse_array));
   @ ensures inv(\result);
   @ ensures \result->sz == sz;
   @ ensures \forall integer i; model(\result,i) == DEFAULT;
@@ -141,9 +141,12 @@ End:
 */
 ========== frama-c -jessie execution ==========
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/sparse_array2.c"
+tests/c/sparse_array2.c:61:[kernel] warning: parsing obsolete ACSL construct '\valid_range(addr,min,max)'. '\valid(addr+(min..max))' should be used instead.
+tests/c/sparse_array2.c:62:[kernel] warning: parsing obsolete ACSL construct '\valid_range(addr,min,max)'. '\valid(addr+(min..max))' should be used instead.
+tests/c/sparse_array2.c:63:[kernel] warning: parsing obsolete ACSL construct '\valid_range(addr,min,max)'. '\valid(addr+(min..max))' should be used instead.
 [jessie] Starting Jessie translation
-[kernel] warning: No code for function calloc, default assigns generated for default behavior
-[kernel] warning: No code for function malloc, default assigns generated for default behavior
+[kernel] warning: No code nor implicit assigns clause for function calloc, generating default assigns from the prototype
+[kernel] warning: No code nor implicit assigns clause for function malloc, generating default assigns from the prototype
 [jessie] Producing Jessie files in subdir tests/c/sparse_array2.jessie
 [jessie] File tests/c/sparse_array2.jessie/sparse_array2.jc written.
 [jessie] File tests/c/sparse_array2.jessie/sparse_array2.cloc written.
@@ -237,6 +240,7 @@ predicate inv{L}(SparseArray[..] a_3) =
 int32 calloc()
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : true);
 ;
 
@@ -611,7 +615,7 @@ end = 14
 file = "HOME/tests/c/sparse_array2.c"
 line = 71
 begin = 12
-end = 27
+end = 55
 
 [C_103]
 file = "HOME/tests/c/sparse_array2.c"
@@ -1158,7 +1162,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs spars
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs sparse_array2.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -1303,7 +1307,7 @@ why3ide: why/sparse_array2_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: sparse_array2.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include sparse_array2.depend
 
@@ -1413,7 +1417,7 @@ end = 79
 [JC_45]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 106
+line = 107
 begin = 14
 end = 54
 
@@ -1432,7 +1436,7 @@ end = -1
 [JC_46]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 107
+line = 108
 begin = 14
 end = 63
 
@@ -1445,7 +1449,7 @@ end = 12
 [JC_152]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 229
+line = 230
 begin = 14
 end = 28
 
@@ -1464,7 +1468,7 @@ end = 8
 [JC_47]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 108
+line = 109
 begin = 15
 end = 67
 
@@ -1477,7 +1481,7 @@ end = -1
 [JC_153]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 230
+line = 231
 begin = 15
 end = 27
 
@@ -1490,7 +1494,7 @@ end = 8
 [JC_48]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 109
+line = 110
 begin = 15
 end = 33
 
@@ -1524,7 +1528,7 @@ end = 7
 [JC_49]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 110
+line = 111
 begin = 15
 end = 37
 
@@ -1543,7 +1547,7 @@ end = 28
 
 [JC_103]
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 165
+line = 166
 begin = 10
 end = 108
 
@@ -1561,7 +1565,7 @@ end = 19
 
 [JC_104]
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 164
+line = 165
 begin = 9
 end = 16
 
@@ -1785,7 +1789,7 @@ end = 45
 
 [JC_113]
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 165
+line = 166
 begin = 10
 end = 108
 
@@ -1798,7 +1802,7 @@ end = 14
 
 [JC_114]
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 164
+line = 165
 begin = 9
 end = 16
 
@@ -1843,7 +1847,7 @@ end = 8
 [JC_118]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 177
+line = 178
 begin = 15
 end = 66
 
@@ -1923,7 +1927,7 @@ end = 20
 [JC_171]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 229
+line = 230
 begin = 14
 end = 28
 
@@ -1942,7 +1946,7 @@ end = -1
 [JC_172]
 kind = UserCall
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 230
+line = 231
 begin = 15
 end = 27
 
@@ -1955,7 +1959,7 @@ end = 17
 
 [JC_67]
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 122
+line = 123
 begin = 10
 end = 18
 
@@ -1963,7 +1967,7 @@ end = 18
 file = "HOME/tests/c/sparse_array2.c"
 line = 71
 begin = 12
-end = 27
+end = 55
 
 [JC_173]
 kind = UserCall
@@ -2007,7 +2011,7 @@ end = 43
 
 [JC_69]
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 122
+line = 123
 begin = 10
 end = 18
 
@@ -2113,7 +2117,7 @@ end = 99
 [JC_129]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 194
+line = 195
 begin = 18
 end = 101
 
@@ -2235,7 +2239,7 @@ end = 23
 
 [JC_25]
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 96
+line = 97
 begin = 10
 end = 18
 
@@ -2255,14 +2259,14 @@ end = 13
 
 [JC_26]
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 95
+line = 96
 begin = 9
 end = 16
 
 [JC_132]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 196
+line = 197
 begin = 18
 end = 92
 
@@ -2277,7 +2281,7 @@ end = 24
 file = "HOME/tests/c/sparse_array2.c"
 line = 71
 begin = 12
-end = 27
+end = 55
 
 [JC_133]
 kind = PointerDeref
@@ -2308,7 +2312,7 @@ end = 29
 [JC_135]
 kind = PointerDeref
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 197
+line = 198
 begin = 18
 end = 85
 
@@ -2484,7 +2488,7 @@ end = 22
 
 [JC_37]
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 96
+line = 97
 begin = 10
 end = 18
 
@@ -2496,7 +2500,7 @@ end = -1
 
 [JC_38]
 file = "HOME/tests/c/sparse_array2.jessie/sparse_array2.jc"
-line = 95
+line = 96
 begin = 9
 end = 16
 
@@ -4673,8 +4677,6 @@ axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 axiom sqr_sqrt: (forall x:real. ((x >= 0.0) -> (sqrt_real((x * x)) = x)))
 
-logic pow_real : real, real -> real
-
 logic abs_real : real -> real
 
 axiom abs_real_pos:
@@ -4692,6 +4694,10 @@ logic log10 : real -> real
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
 
 axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
+
+logic pow_real_int : real, int -> real
+
+logic pow_real : real, real -> real
 
 logic cos : real -> real
 

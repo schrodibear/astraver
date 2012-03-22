@@ -36,7 +36,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/TreeMax.java"
     loclnum="63" loccnumb="8" loccnume="16"
     expl="parameter _Tree_tree_max_ensures_default"
-    sum="94c47751fa2d57616835524fd0bc6a30"
+    sum="46a4ebe89b76c766c2bf75c7698e1e08"
     proved="true"
     expanded="true"
     shape="LaselectV3V0iainfix =V6aTrueLaselectV3V0LaselectV2V0iainfix =V12aTrueLaselectV2V0ainfix >=ainteger_of_int32V17ainteger_of_int32V18IamemV18V0V4V2V3V1FAamemV17V0V4V2V3V1Iainfix =V17V16FIainfix =V16V15FIainfix =ainteger_of_int32V15amaxainteger_of_int32V10ainteger_of_int32V14FIainfix >=ainteger_of_int32V14ainteger_of_int32V19IamemV19V13V4V2V3V1FAamemV14V13V4V2V3V1Fainfix >=ainteger_of_int32V20ainteger_of_int32V21IamemV21V0V4V2V3V1FAamemV20V0V4V2V3V1Iainfix =V20V10FIiainfix =V12aTrueainfix =aoffset_maxV4V11c0ainfix =V11anullFIainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix >=ainteger_of_int32V8ainteger_of_int32V22IamemV22V7V4V2V3V1FAamemV8V7V4V2V3V1FLaselectV2V0iainfix =V24aTrueLaselectV2V0ainfix >=ainteger_of_int32V29ainteger_of_int32V30IamemV30V0V4V2V3V1FAamemV29V0V4V2V3V1Iainfix =V29V28FIainfix =V28V27FIainfix =ainteger_of_int32V27amaxainteger_of_int32aselectV1V0ainteger_of_int32V26FIainfix >=ainteger_of_int32V26ainteger_of_int32V31IamemV31V25V4V2V3V1FAamemV26V25V4V2V3V1Fainfix >=ainteger_of_int32V32ainteger_of_int32V33IamemV33V0V4V2V3V1FAamemV32V0V4V2V3V1Iainfix =V32aselectV1V0FIiainfix =V24aTrueainfix =aoffset_maxV4V23c0ainfix =V23anullFIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -55,7 +55,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="normal postcondition"
-      sum="1988bda6f639bcecd5aa3bb34a1ce9d7"
+      sum="f1ad8bc6b3079eff42a0fedde2704fd3"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV3V0LaselectV2V0LaselectV2V0ainfix >=ainteger_of_int32V17ainteger_of_int32V18IamemV18V0V4V2V3V1FAamemV17V0V4V2V3V1Iainfix =V17V16FIainfix =V16V15FIainfix =ainteger_of_int32V15amaxainteger_of_int32V10ainteger_of_int32V14FIainfix >=ainteger_of_int32V14ainteger_of_int32V19IamemV19V13V4V2V3V1FAamemV14V13V4V2V3V1FIainfix =V12aTrueIiainfix =V12aTrueainfix =aoffset_maxV4V11c0ainfix =V11anullFIainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix >=ainteger_of_int32V8ainteger_of_int32V20IamemV20V7V4V2V3V1FAamemV8V7V4V2V3V1FIainfix =V6aTrueIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -77,14 +77,14 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.65"/>
+       <result status="valid" time="1.62"/>
       </proof>
       <proof
        prover="1"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.16"/>
+       <result status="valid" time="0.14"/>
       </proof>
      </goal>
      <goal
@@ -92,7 +92,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="normal postcondition"
-      sum="de92d2133e81cfc5db49f0e2df915cce"
+      sum="006184f58ece574022a78e38d76aed70"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV3V0LaselectV2V0ainfix >=ainteger_of_int32V13ainteger_of_int32V14IamemV14V0V4V2V3V1FAamemV13V0V4V2V3V1Iainfix =V13V10FIainfix =V12aTrueNIiainfix =V12aTrueainfix =aoffset_maxV4V11c0ainfix =V11anullFIainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix >=ainteger_of_int32V8ainteger_of_int32V15IamemV15V7V4V2V3V1FAamemV8V7V4V2V3V1FIainfix =V6aTrueIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -114,14 +114,14 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.27"/>
+       <result status="valid" time="0.25"/>
       </proof>
       <proof
        prover="1"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.14"/>
+       <result status="valid" time="0.13"/>
       </proof>
      </goal>
      <goal
@@ -129,7 +129,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="normal postcondition"
-      sum="8cae67af0f265918458fd9e88a257658"
+      sum="8ec1df4db664881e3d35709c5d21589d"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV2V0LaselectV2V0ainfix >=ainteger_of_int32V13ainteger_of_int32V14IamemV14V0V4V2V3V1FAamemV13V0V4V2V3V1Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32aselectV1V0ainteger_of_int32V10FIainfix >=ainteger_of_int32V10ainteger_of_int32V15IamemV15V9V4V2V3V1FAamemV10V9V4V2V3V1FIainfix =V8aTrueIiainfix =V8aTrueainfix =aoffset_maxV4V7c0ainfix =V7anullFIainfix =V6aTrueNIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -166,7 +166,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="normal postcondition"
-      sum="f9c02485176b0c9549b368275a93fe38"
+      sum="cdcdf5903bf847a731ca6d283404d28b"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV2V0ainfix >=ainteger_of_int32V9ainteger_of_int32V10IamemV10V0V4V2V3V1FAamemV9V0V4V2V3V1Iainfix =V9aselectV1V0FIainfix =V8aTrueNIiainfix =V8aTrueainfix =aoffset_maxV4V7c0ainfix =V7anullFIainfix =V6aTrueNIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -181,7 +181,7 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.07"/>
       </proof>
      </goal>
     </transf>
@@ -191,7 +191,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/TreeMax.java"
     loclnum="63" loccnumb="8" loccnume="16"
     expl="parameter _Tree_tree_max_safety"
-    sum="0fe50a9521f3ae68f0969ac948ec4349"
+    sum="1ae2c16fc5957a83085e731bb8f6417a"
     proved="true"
     expanded="true"
     shape="LaselectV3V0iainfix =V6aTrueLaselectV3V0LaselectV2V0ainfix >=aoffset_maxV4aselectV2V0c0Iainfix =V12aTrueIiainfix =V12aTrueainfix =aoffset_maxV4V11c0ainfix =V11anullFIainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix >=ainteger_of_int32V8ainteger_of_int32V13IamemV13V7V4V2V3V1FAamemV8V7V4V2V3V1FAainfix >=aoffset_maxV4V7c0LaselectV2V0ainfix >=aoffset_maxV4aselectV2V0c0Iainfix =V15aTrueIiainfix =V15aTrueainfix =aoffset_maxV4V14c0ainfix =V14anullFIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -210,7 +210,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="assertion"
-      sum="3a9498a2034cc2eec5270bfe50fd975b"
+      sum="a3c4cc7e37df8093c09837714ce32d46"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV3V0ainfix >=aoffset_maxV4V7c0Iainfix =V6aTrueIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -233,7 +233,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="index bounds"
-      sum="e36f4c0041d9b481b55f064be0f0b8d1"
+      sum="8a397fe4e0aa5c907c7601bc46f2c2c3"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV3V0LaselectV2V0ainfix >=aoffset_maxV4aselectV2V0c0Iainfix =V12aTrueIiainfix =V12aTrueainfix =aoffset_maxV4V11c0ainfix =V11anullFIainfix =V10V9FIainfix =ainteger_of_int32V9amaxainteger_of_int32aselectV1V0ainteger_of_int32V8FIainfix >=ainteger_of_int32V8ainteger_of_int32V13IamemV13V7V4V2V3V1FAamemV8V7V4V2V3V1FIainfix >=aoffset_maxV4V7c0Iainfix =V6aTrueIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -256,7 +256,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/TreeMax.java"
       loclnum="63" loccnumb="8" loccnume="16"
       expl="index bounds"
-      sum="1c2a8307d11c7eed3db3b98fb743a397"
+      sum="eb22085e58063ec2d8e38bbeedc37133"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV2V0ainfix >=aoffset_maxV4aselectV2V0c0Iainfix =V8aTrueIiainfix =V8aTrueainfix =aoffset_maxV4V7c0ainfix =V7anullFIainfix =V6aTrueNIiainfix =V6aTrueainfix =aoffset_maxV4V5c0ainfix =V5anullFIavalid_struct_TreeV0c0c0V4FFFFF">
@@ -281,7 +281,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Int_ensures_default"
-    sum="07d22874b0b4446d7b30cf5c6430c602"
+    sum="6674a0d0ac093912019b937e028728bb"
     proved="true"
     expanded="false"
     shape="t">
@@ -304,7 +304,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Int_safety"
-    sum="ccb14258ebbb54b28667dcbf9917de7a"
+    sum="452249d12be47d3ae169c905cd0a6cda"
     proved="true"
     expanded="false"
     shape="t">
@@ -327,7 +327,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Object_ensures_default"
-    sum="ae5503b6391f11f9370bc8e490b39d88"
+    sum="974a279643769c576f290c9b78508aeb"
     proved="true"
     expanded="false"
     shape="t">
@@ -350,7 +350,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Object_safety"
-    sum="998df8dd4cba8d467f172a922c4d3471"
+    sum="e7c06b8eac6798618f289ebb1e90f06d"
     proved="true"
     expanded="false"
     shape="t">
@@ -373,7 +373,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Tree_ensures_default"
-    sum="b6acd613bd774c9fa31dabdb9725a389"
+    sum="d7160c12b06d5f5f78624d4fbca0868e"
     proved="true"
     expanded="false"
     shape="t">
@@ -388,7 +388,7 @@
      timelimit="9"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
    </goal>
    <goal
@@ -396,7 +396,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Tree_safety"
-    sum="21b439029e0798e7f509c5f119f85822"
+    sum="0d0fd028ecd5b90afddec5663e4c2d84"
     proved="true"
     expanded="false"
     shape="t">
@@ -411,7 +411,7 @@
      timelimit="9"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
    </goal>
   </theory>

@@ -36,7 +36,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Literals.java"
     loclnum="38" loccnumb="8" loccnume="9"
     expl="normal postcondition"
-    sum="0d9c57f59c875dc9c61c0d7dd1fb7fd3"
+    sum="65385f29a48b81cf6f6d31d09efe2c2f"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c13Iainfix =V4V3FIainfix =ainteger_of_int32V3c13FIainfix =ainteger_of_int32V2c2989FIavalid_struct_LiteralsV0c0c0V1FF">
@@ -51,7 +51,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="0"
@@ -73,7 +73,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Literals.java"
     loclnum="38" loccnumb="8" loccnume="9"
     expl="parameter _Literals_f_safety"
-    sum="715184ad77f8ffda6e5dfe1d5eb230ca"
+    sum="4929ed845e38baa8e42cdee8333f1404"
     proved="true"
     expanded="true"
     shape="t">
@@ -110,7 +110,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Literals_ensures_default"
-    sum="090c08ddbfa792d0c43e524c90e475cf"
+    sum="ca6db84719db9b6c204c6b44071d345d"
     proved="true"
     expanded="true"
     shape="t">
@@ -132,7 +132,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -147,7 +147,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Literals_safety"
-    sum="9c9f68bf0a5002ac17aca9c0e82663e9"
+    sum="bf12aec79718dd9f5f25f77a60600fa8"
     proved="true"
     expanded="true"
     shape="t">
@@ -169,7 +169,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"

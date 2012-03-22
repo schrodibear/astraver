@@ -36,7 +36,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="36" loccnumb="9" loccnume="14"
     expl="loop invariant preservation"
-    sum="89a410d5fbda174625e181d4956b0ad5"
+    sum="0021ae7ab9523fcba79c203c1e520e33"
     proved="true"
     expanded="false"
     shape="t">
@@ -58,7 +58,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -73,7 +73,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="36" loccnumb="9" loccnume="14"
     expl="loop variant decreases"
-    sum="813fb872fb2d99471e8a8d2b785ef623"
+    sum="229f8e177a59faf383e8b91fb9d5d6c9"
     proved="true"
     expanded="false"
     shape="ainfix <V3V2Aainfix <=c0V2Iainfix =V3ainfix -V2c1FIainfix >V2c0FIavalid_struct_TerminationV0c0c0V1FF">
@@ -110,7 +110,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="41" loccnumb="9" loccnume="14"
     expl="loop invariant preservation"
-    sum="0fa5e667603b2e06d12059d6a0f31f50"
+    sum="5ae473ab34ca2924f0503afbd90b1ee0"
     proved="true"
     expanded="false"
     shape="t">
@@ -147,7 +147,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="41" loccnumb="9" loccnume="14"
     expl="loop variant decreases"
-    sum="d0e4600158c65118cc01dce93bb63392"
+    sum="8a33aa4fcc7f89b51fa44051416d8797"
     proved="true"
     expanded="false"
     shape="ainfix <ainfix -c100V3ainfix -c100V2Aainfix <=c0ainfix -c100V2Iainfix =V3ainfix +V2c1FIainfix <V2c100FIavalid_struct_TerminationV0c0c0V1FF">
@@ -184,7 +184,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="47" loccnumb="8" loccnume="13"
     expl="parameter _Termination_loop3_ensures_default"
-    sum="f94e2d583a3eea95d19e1f3988bafe62"
+    sum="396eca4e68b87fe969c3966897f615ba"
     proved="true"
     expanded="false"
     shape="iainfix >V2c0ainfix <=V3c100Aainfix <=c0V3Iainfix =V3ainfix -V2c1Fainfix =V4c0Iainfix =V4V2FIainfix <=V2c100Aainfix <=c0V2FAainfix <=c100c100Aainfix <=c0c100Iavalid_struct_TerminationV0c0c0V1FF">
@@ -221,7 +221,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="47" loccnumb="8" loccnume="13"
     expl="loop variant decreases"
-    sum="6dc47d2aa8b89d1fb1d7c548c1e83a78"
+    sum="848e2c36bee987861e9ed7337402af0e"
     proved="true"
     expanded="false"
     shape="ainfix <V3V2Aainfix <=c0V2Iainfix =V3ainfix -V2c1FIainfix >V2c0Iainfix <=V2c100Aainfix <=c0V2FIavalid_struct_TerminationV0c0c0V1FF">
@@ -258,7 +258,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Termination_ensures_default"
-    sum="629211ec13f22c7272f1e0401c94cefc"
+    sum="4e7f2a9d7f677a92f448e778db4b66ce"
     proved="true"
     expanded="false"
     shape="t">
@@ -295,7 +295,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Termination_safety"
-    sum="1c881988fdc1c50aa367ca3b201e6740"
+    sum="6c8be2f3d2e2b46244229dcba89b0abc"
     proved="true"
     expanded="false"
     shape="t">
@@ -317,7 +317,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"

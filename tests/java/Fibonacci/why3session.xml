@@ -21,7 +21,7 @@
  <file
   name="../Fibonacci.mlw"
   verified="true"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
    locfile="Fibonacci/../Fibonacci.mlw"
@@ -33,7 +33,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
     loclnum="46" loccnumb="10" loccnume="19"
     expl="Lemma isfib_2_1, lemma"
-    sum="a66d25a6fc987cf9db89bdcf5bb2bbd6"
+    sum="5ae3fc64432f93db74570b3b8de38bd4"
     proved="true"
     expanded="true"
     shape="aisfibc2c1">
@@ -45,15 +45,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.09"/>
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
      prover="2"
      timelimit="5"
      edited="Fibonacci_Jessie_model_isfib_2_1_2.v"
-     obsolete="true"
+     obsolete="false"
      archived="false">
-     <result status="valid" time="0.51"/>
+     <result status="valid" time="0.52"/>
     </proof>
    </goal>
    <goal
@@ -61,7 +61,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
     loclnum="47" loccnumb="10" loccnume="19"
     expl="Lemma isfib_6_8, lemma"
-    sum="2ca5f65e5c0c2e2480abb02d11bea9b0"
+    sum="100ad125b29012dde33717d4d722bddf"
     proved="true"
     expanded="true"
     shape="aisfibc6c8">
@@ -74,7 +74,7 @@
      edited="Fibonacci_Jessie_model_isfib_6_8_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.53"/>
+     <result status="valid" time="0.52"/>
     </proof>
    </goal>
    <goal
@@ -82,7 +82,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
     loclnum="50" loccnumb="10" loccnume="23"
     expl="Lemma not_isfib_2_2, lemma"
-    sum="d2e0129c1f3a24bdb7ff67851c8e9e08"
+    sum="19719b7bc224585d0192ae00f8e4926b"
     proved="true"
     expanded="true"
     shape="aisfibc2c2N">
@@ -94,7 +94,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
@@ -123,7 +123,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
     loclnum="57" loccnumb="23" loccnume="26"
     expl="parameter _Fibonacci_Fib_ensures_default"
-    sum="6b065f2fcaf0bab6bddc638e73640342"
+    sum="a0f779dd0264e8054d0ba16b76f347dc"
     proved="true"
     expanded="true"
     shape="iainfix <V1V0aisfibV7V5Aaisfibainfix +V7c1V6Aainfix <=V7V0Aainfix <=c0V7Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FaisfibV0V8Iainfix =V8V3FIaisfibV1V3Aaisfibainfix +V1c1V2Aainfix <=V1V0Aainfix <=c0V1FFFAaisfibc0c0Aaisfibainfix +c0c1c1Aainfix <=c0V0Aainfix <=c0c0Iainfix >=V0c0F">
@@ -146,7 +146,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fibonacci.java"
     loclnum="57" loccnumb="23" loccnume="26"
     expl="loop variant decreases"
-    sum="232475ec46ef2eb522c30ca6c4fe2cbf"
+    sum="58933a9a576331463c75b63ab57bcb86"
     proved="true"
     expanded="true"
     shape="ainfix <ainfix -V0V7ainfix -V0V1Aainfix <=c0ainfix -V0V1Iainfix =V7ainfix +V1c1FIainfix =V6ainfix +V2V4FIainfix =V5V2FIainfix =V4V3FIainfix <V1V0IaisfibV1V3Aaisfibainfix +V1c1V2Aainfix <=V1V0Aainfix <=c0V1FFFIainfix >=V0c0F">
@@ -183,7 +183,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Fibonacci_ensures_default"
-    sum="84d47ca5bfbfd627386f47d99e41dc21"
+    sum="9ffdac063eb020266102f9aa80f09660"
     proved="true"
     expanded="true"
     shape="t">
@@ -220,7 +220,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Fibonacci_safety"
-    sum="560f21c97e29f697390a2f583bb52579"
+    sum="35efa5c90ad76611606994ce90f4b6ae"
     proved="true"
     expanded="true"
     shape="t">
@@ -242,14 +242,14 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
   </theory>

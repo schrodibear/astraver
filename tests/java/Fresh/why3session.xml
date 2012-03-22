@@ -44,7 +44,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
     loclnum="8" loccnumb="17" loccnume="23"
     expl="normal postcondition"
-    sum="26691bb323ec231e266cefc55c48a597"
+    sum="98f7ca2fec0be9f4997a661945af5083"
     proved="true"
     expanded="true"
     shape="avalidV0V4NIainfix =V4V3FIainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFFF">
@@ -87,7 +87,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.04"/>
+     <result status="timeout" time="5.01"/>
     </proof>
    </goal>
    <goal
@@ -95,7 +95,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
     loclnum="8" loccnumb="17" loccnume="23"
     expl="parameter _Fresh_create_safety"
-    sum="e1df953d21950906fdad39ac38b8b29f"
+    sum="814272a4da6be91bcde474763c38abc8"
     proved="true"
     expanded="true"
     shape="ainfix >=aoffset_maxV2V3c0IainstanceofV1V3a_Fresh_tagAaalloc_freshV0V3c1Aaalloc_extendsV0V2Aastrict_valid_struct_FreshV3c0ainfix -c1c1V2FFFAainfix >=c1c0F">
@@ -131,14 +131,14 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="4"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
@@ -146,7 +146,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
     expl="assertion"
-    sum="34b59e7ba470bb5543f6b70e44132915"
+    sum="49296cef555bb9667c8d81345ac7fa07"
     proved="true"
     expanded="true"
     shape="ainfix =V0V2NIavalidV1V2NFIavalid_struct_FreshV0c0c0V1FF">
@@ -197,7 +197,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Fresh.java"
     loclnum="12" loccnumb="9" loccnume="13"
     expl="parameter _Fresh_test_safety"
-    sum="4e6b711e93dd0645c5fd75b52a8459a8"
+    sum="244c5d74261c84eb1c2fa9d6e204c659"
     proved="true"
     expanded="true"
     shape="t">
@@ -219,14 +219,14 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="2"
@@ -248,7 +248,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Fresh_ensures_default"
-    sum="47d6e09dd9b45b02feba9faf4bebb1fa"
+    sum="9a98b47616b0b556c4cd22ccc1a3ba8a"
     proved="true"
     expanded="true"
     shape="t">
@@ -270,21 +270,21 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="2"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="4"
@@ -299,7 +299,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Fresh_safety"
-    sum="593e3b829dfd56445342da1abc38d872"
+    sum="2dd8450e700e1261160530394f31c279"
     proved="true"
     expanded="true"
     shape="t">
@@ -321,21 +321,21 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="2"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="4"
@@ -350,7 +350,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Object_ensures_default"
-    sum="5639f71ca6dcc7b8306fbb54224e25d3"
+    sum="e840753b2a8ba2ecc5f84e7bfb23680e"
     proved="true"
     expanded="true"
     shape="t">
@@ -379,14 +379,14 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="2"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="4"
@@ -401,7 +401,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Object_safety"
-    sum="e2f33fd7be5a00a57529ac46a427fc8d"
+    sum="6f1a6eb51efbd82bf5f701f277697121"
     proved="true"
     expanded="true"
     shape="t">
@@ -423,7 +423,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
@@ -437,7 +437,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="4"

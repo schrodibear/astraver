@@ -5,11 +5,12 @@ typedef struct Str {int x; } *str;
 
 
 /*@ allocates \result;
-  @ ensures \fresh(\result,sizeof(*\result));
+  @ ensures \valid(\result) && \fresh(\result,sizeof(*\result));
   @*/
 str create(void);
 
-//@ requires \valid(this);
+/*@ requires \valid(this);
+  @*/
 void test(str this) {
   str f;
   f = create ();
@@ -19,7 +20,7 @@ void test(str this) {
 void smoke_detector() {
   str s1 = create ();
   str s2 = create ();
-  //@ assert \false;
+  //@ assert 0 == 1;
 }
 
 /* 

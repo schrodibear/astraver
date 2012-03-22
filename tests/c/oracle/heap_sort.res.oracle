@@ -62,6 +62,7 @@ void main() {
 
 ========== frama-c -jessie execution ==========
 [kernel] preprocessing with "gcc -C -E -I.  -dD tests/c/heap_sort.c"
+tests/c/heap_sort.c:36:[kernel] warning: parsing obsolete ACSL construct '\valid_range(addr,min,max)'. '\valid(addr+(min..max))' should be used instead.
 [jessie] Starting Jessie translation
 [jessie] Producing Jessie files in subdir tests/c/heap_sort.jessie
 [jessie] File tests/c/heap_sort.jessie/heap_sort.jc written.
@@ -111,18 +112,21 @@ type Heap = [Heap]
 Heap[..] create(uint32 sz)
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_1 : true);
 ;
 
 unit insert(Heap[..] u_0, int32 e)
 behavior default:
   assigns u_0.x;
+  allocates \nothing;
   ensures (C_2 : true);
 ;
 
 int32 extract_min(Heap[..] u)
 behavior default:
   assigns \nothing;
+  allocates \nothing;
   ensures (C_3 : true);
 ;
 
@@ -555,7 +559,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs heap_
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs heap_sort.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -700,7 +704,7 @@ why3ide: why/heap_sort_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: heap_sort.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include heap_sort.depend
 
@@ -714,7 +718,7 @@ clean:
 [JC_90]
 kind = IndexBounds
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 117
+line = 120
 begin = 15
 end = 45
 
@@ -729,7 +733,7 @@ end = 9
 [JC_91]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 121
+line = 124
 begin = 14
 end = 33
 
@@ -827,7 +831,7 @@ end = 15
 [JC_100]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 121
+line = 124
 begin = 14
 end = 33
 
@@ -964,13 +968,13 @@ end = 14
 
 [JC_50]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 77
+line = 80
 begin = 6
 end = 391
 
 [JC_51]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 77
+line = 80
 begin = 6
 end = 391
 
@@ -984,7 +988,7 @@ end = 43
 [JC_53]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 85
+line = 88
 begin = 20
 end = 63
 
@@ -1027,13 +1031,13 @@ end = -1
 
 [JC_60]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 92
+line = 95
 begin = 6
 end = 468
 
 [JC_61]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 92
+line = 95
 begin = 6
 end = 468
 
@@ -1053,13 +1057,13 @@ end = -1
 [JC_63]
 kind = PointerDeref
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 100
+line = 103
 begin = 21
 end = 136
 
 [JC_11]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 48
+line = 49
 begin = 5
 end = 11
 
@@ -1084,7 +1088,7 @@ end = 26
 
 [JC_13]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 48
+line = 49
 begin = 5
 end = 11
 
@@ -1121,7 +1125,7 @@ end = 34
 
 [JC_16]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 48
+line = 49
 begin = 5
 end = 11
 
@@ -1139,7 +1143,7 @@ end = -1
 
 [JC_18]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 48
+line = 49
 begin = 5
 end = 11
 
@@ -1157,13 +1161,13 @@ end = -1
 
 [JC_71]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 77
+line = 80
 begin = 6
 end = 391
 
 [JC_72]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 77
+line = 80
 begin = 6
 end = 391
 
@@ -1176,13 +1180,13 @@ end = -1
 [JC_73]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 85
+line = 88
 begin = 20
 end = 63
 
 [JC_21]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 54
+line = 56
 begin = 6
 end = 17
 
@@ -1206,7 +1210,7 @@ end = 34
 
 [JC_23]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 54
+line = 56
 begin = 6
 end = 17
 
@@ -1236,19 +1240,19 @@ end = -1
 
 [JC_78]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 92
+line = 95
 begin = 6
 end = 468
 
 [JC_26]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 56
+line = 58
 begin = 10
 end = 18
 
 [JC_79]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 92
+line = 95
 begin = 6
 end = 468
 
@@ -1260,7 +1264,7 @@ end = -1
 
 [JC_28]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 56
+line = 58
 begin = 10
 end = 18
 
@@ -2465,8 +2469,6 @@ axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 axiom sqr_sqrt: (forall x:real. ((x >= 0.0) -> (sqrt_real((x * x)) = x)))
 
-logic pow_real : real, real -> real
-
 logic abs_real : real -> real
 
 axiom abs_real_pos:
@@ -2484,6 +2486,10 @@ logic log10 : real -> real
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
 
 axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
+
+logic pow_real_int : real, int -> real
+
+logic pow_real : real, real -> real
 
 logic cos : real -> real
 

@@ -806,7 +806,7 @@ WHY=WHYLIB=$(WHYLIB) $(WHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Sort.
 GWHY=WHYLIB=$(WHYLIB) $(GWHYEXEC) $(WHYOPT)  -split-user-conj -explain -locs Sort.loc
 
 JESSIELIBFILES ?= $(WHYLIB)/why/jessie.why
-JESSIE3LIB ?=$(WHYLIB)/why3
+JESSIE3CONF ?= $(WHYLIB)/why3/why3.conf
 
 COQDEP = coqdep
 
@@ -951,7 +951,7 @@ why3ide: why/Sort_why3.why
 	@echo 'why3ide [...] $<' && why3ide $<
 
 why3ml: Sort.mlw
-	@echo 'why3ml [...] $<' && why3ide -I $(JESSIE3LIB) $<
+	@echo 'why3ml [...] $<' && why3ide --extra-config $(JESSIE3CONF) $<
 
 -include Sort.depend
 
@@ -4204,8 +4204,6 @@ axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 axiom sqr_sqrt: (forall x:real. ((x >= 0.0) -> (sqrt_real((x * x)) = x)))
 
-logic pow_real : real, real -> real
-
 logic abs_real : real -> real
 
 axiom abs_real_pos:
@@ -4223,6 +4221,10 @@ logic log10 : real -> real
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
 
 axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
+
+logic pow_real_int : real, int -> real
+
+logic pow_real : real, real -> real
 
 logic cos : real -> real
 
@@ -9264,8 +9266,6 @@ axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 axiom sqr_sqrt: (forall x:real. ((x >= 0.0) -> (sqrt_real((x * x)) = x)))
 
-logic pow_real : real, real -> real
-
 logic abs_real : real -> real
 
 axiom abs_real_pos:
@@ -9283,6 +9283,10 @@ logic log10 : real -> real
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
 
 axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
+
+logic pow_real_int : real, int -> real
+
+logic pow_real : real, real -> real
 
 logic cos : real -> real
 

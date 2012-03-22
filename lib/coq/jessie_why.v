@@ -277,9 +277,6 @@ Admitted.
   (forall (x:R), ((Rge x (0)%R) -> (eq (sqrt (Rmult x x)) x))).
 Admitted.
 
-(*Why logic*) Definition pow_real : R -> R -> R.
-Admitted.
-
 (*Why logic*) Definition abs_real : R -> R.
 Admitted.
 
@@ -305,6 +302,12 @@ Admitted.
 
 (*Why axiom*) Lemma exp_log :
   (forall (x:R), ((Rgt x (0)%R) -> (eq (exp (log x)) x))).
+Admitted.
+
+(*Why logic*) Definition pow_real_int : R -> Z -> R.
+Admitted.
+
+(*Why logic*) Definition pow_real : R -> R -> R.
 Admitted.
 
 (*Why logic*) Definition cos : R -> R.

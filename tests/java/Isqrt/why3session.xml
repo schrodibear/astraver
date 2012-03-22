@@ -36,7 +36,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Isqrt.java"
     loclnum="42" loccnumb="11" loccnume="16"
     expl="parameter _Isqrt_isqrt_ensures_default"
-    sum="51609adf4ac0e90119f5ae041469f4de"
+    sum="ca06be2dde204860db58aff7a6e6f957"
     proved="true"
     expanded="false"
     shape="iainfix <=V1V0ainfix =V4asqrainfix +V3c1Aainfix >=V0asqrV3Aainfix >=V3c0Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1Fainfix <V0asqrainfix +V5c1Aainfix <=asqrV5V0Aainfix >=V5c0Iainfix =V5V2FIainfix =V1asqrainfix +V2c1Aainfix >=V0asqrV2Aainfix >=V2c0FFAainfix =c1asqrainfix +c0c1Aainfix >=V0asqrc0Aainfix >=c0c0Iainfix >=V0c0F">
@@ -66,7 +66,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Isqrt.java"
     loclnum="42" loccnumb="11" loccnume="16"
     expl="loop variant decreases"
-    sum="6a1b42490288c13d70e17e1258fc51b5"
+    sum="29d8e4d00a9deb8a33ab8b68777d63c3"
     proved="true"
     expanded="true"
     shape="ainfix <ainfix -V0V3ainfix -V0V2Aainfix <=c0ainfix -V0V2Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix <=V1V0Iainfix =V1asqrainfix +V2c1Aainfix >=V0asqrV2Aainfix >=V2c0FFIainfix >=V0c0F">
@@ -106,7 +106,7 @@
       locfile="/home/marche/why2-nitrogen/tests/java/Isqrt.java"
       loclnum="42" loccnumb="11" loccnume="16"
       expl="loop variant decreases"
-      sum="6a1b42490288c13d70e17e1258fc51b5"
+      sum="29d8e4d00a9deb8a33ab8b68777d63c3"
       proved="true"
       expanded="false"
       shape="ainfix <ainfix -V0V3ainfix -V0V2Aainfix <=c0ainfix -V0V2Iainfix =V4ainfix +V1ainfix +ainfix *c2V3c1FIainfix =V3ainfix +V2c1FIainfix <=V1V0Iainfix =V1asqrainfix +V2c1Aainfix >=V0asqrV2Aainfix >=V2c0FFIainfix >=V0c0F">
@@ -135,7 +135,7 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.02"/>
       </proof>
      </goal>
     </transf>
@@ -145,7 +145,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Isqrt.java"
     loclnum="52" loccnumb="11" loccnume="15"
     expl="parameter _Isqrt_main_ensures_default"
-    sum="07348a0c38c5569e58ddfd9d1e6b397b"
+    sum="0bc0ddff21d9a22fbc6563f65b6ab163"
     proved="true"
     expanded="false"
     shape="ainfix =V2c4Iainfix =V2V1FAainfix >V1c4NAainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -160,7 +160,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
@@ -168,7 +168,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Isqrt.java"
     loclnum="52" loccnumb="11" loccnume="15"
     expl="precondition for call"
-    sum="52a75f5129bb58942b858b5a6eae05b0"
+    sum="dd55899b4f4112e029237bac5ae5fa4a"
     proved="true"
     expanded="false"
     shape="ainfix >=c17c0">
@@ -190,7 +190,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -205,7 +205,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Isqrt_ensures_default"
-    sum="8471f6aa25a6c8a8e216530db7321dcd"
+    sum="eeb2ba0efd2e61034c31ea9888985204"
     proved="true"
     expanded="false"
     shape="t">
@@ -227,7 +227,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
@@ -242,7 +242,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Isqrt_safety"
-    sum="02ff083eee04655a0c20a5340c62255c"
+    sum="4e6023686e05b3c452aa27a91cec771a"
     proved="true"
     expanded="false"
     shape="t">
@@ -279,7 +279,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Object_ensures_default"
-    sum="2ddef8c4578b4883ddd3b23da98d4356"
+    sum="a2be8e4b038b8d5004cb074403bced18"
     proved="true"
     expanded="false"
     shape="t">
@@ -301,7 +301,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
@@ -316,7 +316,7 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Object_safety"
-    sum="37e81a6137e489e15d1436ea4f19f054"
+    sum="c066270e6166c22827e2424539ea6345"
     proved="true"
     expanded="false"
     shape="t">

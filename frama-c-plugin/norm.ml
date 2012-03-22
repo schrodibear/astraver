@@ -46,6 +46,7 @@
 
 *)
 
+
 (* Import from Cil *)
 open Cil_types
 open Cil
@@ -1151,7 +1152,7 @@ class retypeAddressTaken =
             (TMem
                (Logic_utils.mk_dummy_term (TLval(host,off)) fi.ftype),TNoOffset)
           else host,off
-      | TIndex _ | TNoOffset -> host,off
+      | TModel _ | TIndex _ | TNoOffset -> host,off
   in
   let postaction_expr e = match e.enode with
     | AddrOf(Var _v,NoOffset) ->
@@ -1181,6 +1182,7 @@ class retypeAddressTaken =
               if Cil_datatype.Fieldinfo.Set.mem fi !fieldset then assert false
               else t
           | TIndex _ -> t
+          | TModel _ -> assert false (* TODO ? *)
           | TNoOffset -> assert false (*unreachable*)
         end
     | _ -> t

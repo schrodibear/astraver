@@ -1172,10 +1172,10 @@ let single_location ~in_clause fef (loc : Jc_fenv.logic_info Jc_ast.location) =
   in
   let fef = match loc#node with
     | JCLvar v ->
-(*
+(**)
 	if v.jc_var_info_assigned then
 	  if v.jc_var_info_static then
-*)
+(**)
       begin
 	    match in_clause with
               | Assigns -> add_global_writes lab fef v
@@ -1184,10 +1184,10 @@ let single_location ~in_clause fef (loc : Jc_fenv.logic_info Jc_ast.location) =
 	        add_alloc_writes lab fef (ac,loc#region)
 	      | Reads -> add_global_reads lab fef v
       end
-(*
+(**)
 	  else fef
 	else fef
-*)
+(**)
     | JCLderef(locs,lab,fi,_r) ->
 	let add_mem ~only_writes fef mc =
 	  match in_clause with

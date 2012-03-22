@@ -68,7 +68,7 @@ typedef struct SparseArray {
 
 /*@ requires sz >= 0;
   @ assigns \nothing;
-  @ ensures \fresh(\result);
+  @ ensures \fresh(\result,sizeof(struct Sparse_array));
   @ ensures inv(\result);
   @ ensures \result->sz == sz;
   @ ensures \forall integer i; model(\result,i) == DEFAULT;
