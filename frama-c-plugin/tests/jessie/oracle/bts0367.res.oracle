@@ -562,8 +562,6 @@ axiom sqrt_sqr: (forall x:real. ((x >= 0.0) -> (sqr_real(sqrt_real(x)) = x)))
 
 axiom sqr_sqrt: (forall x:real. ((x >= 0.0) -> (sqrt_real((x * x)) = x)))
 
-logic pow_real : real, real -> real
-
 logic abs_real : real -> real
 
 axiom abs_real_pos:
@@ -581,6 +579,10 @@ logic log10 : real -> real
 axiom log_exp: (forall x:real. (log(exp(x)) = x))
 
 axiom exp_log: (forall x:real. ((x > 0.0) -> (exp(log(x)) = x)))
+
+logic pow_real_int : real, int -> real
+
+logic pow_real : real, real -> real
 
 logic cos : real -> real
 
