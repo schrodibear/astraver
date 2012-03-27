@@ -127,11 +127,9 @@ behavior default:
       (C_4 : (front_0 = (C_3 : (new intP[1]))));
       (C_5 : sched(rp_0, q, front_0));
       (if ((C_37 : (rdy_head + (C_36 : q.intM)).struct_proc___xM) == null) then 
-      {  
-         {  (C_26 : (tmp = rp_0));
-            (C_29 : ((C_28 : (rdy_tail + (C_27 : q.intM)).struct_proc___xM) = tmp));
-            (C_32 : ((C_31 : (rdy_head + (C_30 : q.intM)).struct_proc___xM) = tmp))
-         };
+      {  (C_26 : (tmp = rp_0));
+         (C_29 : ((C_28 : (rdy_tail + (C_27 : q.intM)).struct_proc___xM) = tmp));
+         (C_32 : ((C_31 : (rdy_head + (C_30 : q.intM)).struct_proc___xM) = tmp));
          (C_35 : ((C_34 : (C_33 : rp_0.p_nextready).struct_proc___xM) = null))
       } else (if ((C_25 : front_0.intM) != 0) then 
              {  (C_21 : ((C_20 : (C_19 : rp_0.p_nextready).struct_proc___xM) = 
@@ -2757,36 +2755,34 @@ let enqueue_ensures_default =
                                                     (C_36:
                                                     ((safe_acc_ !intP_intM_q_15) !q))))))) null)
           then
+           (C_26:
+           (C_29:
+           (C_32:
            begin
-             (let jessie_<somenum> =
-             (C_26:
-             (C_29:
-             begin
-               (let jessie_<somenum> = (tmp := rp_0) in void);
-              (let jessie_<somenum> =
-              (let jessie_<somenum> = !tmp in
-              (let jessie_<somenum> = rdy_tail in
-              (let jessie_<somenum> =
-              (integer_of_int32 (C_27: ((safe_acc_ !intP_intM_q_15) !q))) in
-              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-              (((safe_upd_ struct_proc___xP_struct_proc___xM_rdy_tail_8) jessie_<somenum>) jessie_<somenum>))))) in
-              void);
-              (C_32:
-              (let jessie_<somenum> = !tmp in
-              (let jessie_<somenum> = rdy_head in
-              (let jessie_<somenum> =
-              (integer_of_int32 (C_30: ((safe_acc_ !intP_intM_q_15) !q))) in
-              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-              begin
-                (((safe_upd_ struct_proc___xP_struct_proc___xM_proc_ptr_2) jessie_<somenum>) jessie_<somenum>);
-               jessie_<somenum> end))))) end)) in void);
+             (let jessie_<somenum> = (tmp := rp_0) in void);
+            (let jessie_<somenum> =
+            (let jessie_<somenum> = !tmp in
+            (let jessie_<somenum> = rdy_tail in
+            (let jessie_<somenum> =
+            (integer_of_int32 (C_27: ((safe_acc_ !intP_intM_q_15) !q))) in
+            (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+            (((safe_upd_ struct_proc___xP_struct_proc___xM_rdy_tail_8) jessie_<somenum>) jessie_<somenum>))))) in
+            void);
+            (let jessie_<somenum> =
+            (let jessie_<somenum> = !tmp in
+            (let jessie_<somenum> = rdy_head in
+            (let jessie_<somenum> =
+            (integer_of_int32 (C_30: ((safe_acc_ !intP_intM_q_15) !q))) in
+            (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+            (((safe_upd_ struct_proc___xP_struct_proc___xM_proc_ptr_2) jessie_<somenum>) jessie_<somenum>))))) in
+            void);
             (C_35:
             (let jessie_<somenum> = null in
             begin
               (let jessie_<somenum> =
               (C_33: ((safe_acc_ !proc_0_p_nextready_proc_ptr_2) rp_0)) in
               (((safe_upd_ struct_proc___xP_struct_proc___xM_proc_ptr_2) jessie_<somenum>) jessie_<somenum>));
-             jessie_<somenum> end)) end
+             jessie_<somenum> end)) end)))
           else
            (if ((neq_int_ (integer_of_int32 (C_25:
                                             ((safe_acc_ !intP_intM_front_0_16) !front_0)))) (0))
@@ -2929,31 +2925,29 @@ let enqueue_safety =
                             (integer_of_int32 (C_36:
                                               ((safe_acc_ !intP_intM_q_15) !q))))))) null)
           then
+           (C_26:
+           (C_29:
+           (C_32:
            begin
-             (let jessie_<somenum> =
-             (C_26:
-             (C_29:
-             begin
-               (let jessie_<somenum> = (tmp := rp_0) in void);
-              (let jessie_<somenum> =
-              (let jessie_<somenum> = !tmp in
-              (let jessie_<somenum> = rdy_tail in
-              (let jessie_<somenum> =
-              (integer_of_int32 (C_27: ((safe_acc_ !intP_intM_q_15) !q))) in
-              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-              (JC_<somenum>:
-              (((((offset_upd_ !struct_proc___xP_rdy_tail_8_alloc_table) struct_proc___xP_struct_proc___xM_rdy_tail_8) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
-              void);
-              (C_32:
-              (let jessie_<somenum> = !tmp in
-              (let jessie_<somenum> = rdy_head in
-              (let jessie_<somenum> =
-              (integer_of_int32 (C_30: ((safe_acc_ !intP_intM_q_15) !q))) in
-              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-              begin
-                (JC_<somenum>:
-                (((((offset_upd_ !struct_proc___xP_proc_ptr_2_alloc_table) struct_proc___xP_struct_proc___xM_proc_ptr_2) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
-               jessie_<somenum> end))))) end)) in void);
+             (let jessie_<somenum> = (tmp := rp_0) in void);
+            (let jessie_<somenum> =
+            (let jessie_<somenum> = !tmp in
+            (let jessie_<somenum> = rdy_tail in
+            (let jessie_<somenum> =
+            (integer_of_int32 (C_27: ((safe_acc_ !intP_intM_q_15) !q))) in
+            (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+            (JC_<somenum>:
+            (((((offset_upd_ !struct_proc___xP_rdy_tail_8_alloc_table) struct_proc___xP_struct_proc___xM_rdy_tail_8) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+            void);
+            (let jessie_<somenum> =
+            (let jessie_<somenum> = !tmp in
+            (let jessie_<somenum> = rdy_head in
+            (let jessie_<somenum> =
+            (integer_of_int32 (C_30: ((safe_acc_ !intP_intM_q_15) !q))) in
+            (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
+            (JC_<somenum>:
+            (((((offset_upd_ !struct_proc___xP_proc_ptr_2_alloc_table) struct_proc___xP_struct_proc___xM_proc_ptr_2) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
+            void);
             (C_35:
             (let jessie_<somenum> = null in
             begin
@@ -2962,7 +2956,7 @@ let enqueue_safety =
               (JC_<somenum>:
               (((acc_ !proc_0_proc_ptr_2_alloc_table) !proc_0_p_nextready_proc_ptr_2) rp_0))) in
               (((safe_upd_ struct_proc___xP_struct_proc___xM_proc_ptr_2) jessie_<somenum>) jessie_<somenum>));
-             jessie_<somenum> end)) end
+             jessie_<somenum> end)) end)))
           else
            (if ((neq_int_ (integer_of_int32 (C_25:
                                             ((safe_acc_ !intP_intM_front_0_16) !front_0)))) (0))
@@ -5551,12 +5545,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po537.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "216" begin = "18" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "214" begin = "18" end = "75"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po538.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "216" begin = "18" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "214" begin = "18" end = "75"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -5641,22 +5635,22 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0363_po555.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "222" begin = "15" end = "81"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "220" begin = "15" end = "81"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po556.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "222" begin = "15" end = "81"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "220" begin = "15" end = "81"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po557.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "223" begin = "15" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "221" begin = "15" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po558.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "223" begin = "15" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "221" begin = "15" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -5814,55 +5808,55 @@ text = "PointerDeref"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/bts0363_po212.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po213.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po214.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po215.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po216.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po217.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po218.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po219.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po220.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po221.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po222.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po223.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po224.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po225.why">
@@ -5874,51 +5868,51 @@ text = "PointerDeref"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/bts0363_po227.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po228.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po229.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po230.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po231.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po232.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po233.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po234.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po235.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po236.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po237.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po238.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "693" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po239.why">
@@ -5926,11 +5920,11 @@ text = "PointerDeref"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/bts0363_po240.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "234" begin = "10" end = "550"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "232" begin = "10" end = "550"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/bts0363_po241.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "234" begin = "10" end = "550"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "232" begin = "10" end = "550"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/bts0363_po242.why">
@@ -5990,7 +5984,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po255.why">
-      <location file = "why/bts0363.why" line = "3508" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3504" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6063,7 +6057,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po270.why">
-      <location file = "why/bts0363.why" line = "3564" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3560" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6136,7 +6130,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po285.why">
-      <location file = "why/bts0363.why" line = "3620" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3616" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6209,7 +6203,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po300.why">
-      <location file = "why/bts0363.why" line = "3676" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3672" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6282,7 +6276,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po315.why">
-      <location file = "why/bts0363.why" line = "3732" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3728" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6355,7 +6349,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po330.why">
-      <location file = "why/bts0363.why" line = "3788" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3784" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6428,7 +6422,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po345.why">
-      <location file = "why/bts0363.why" line = "3844" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3840" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6501,7 +6495,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po360.why">
-      <location file = "why/bts0363.why" line = "3900" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3896" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6574,7 +6568,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po375.why">
-      <location file = "why/bts0363.why" line = "3956" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3952" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6647,7 +6641,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po390.why">
-      <location file = "why/bts0363.why" line = "4012" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4008" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6720,7 +6714,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po405.why">
-      <location file = "why/bts0363.why" line = "4068" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4064" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6793,7 +6787,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po420.why">
-      <location file = "why/bts0363.why" line = "4124" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4120" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6866,7 +6860,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po435.why">
-      <location file = "why/bts0363.why" line = "4180" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4176" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6939,7 +6933,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po450.why">
-      <location file = "why/bts0363.why" line = "4236" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4232" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7012,7 +7006,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po465.why">
-      <location file = "why/bts0363.why" line = "4292" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4288" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7085,7 +7079,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po480.why">
-      <location file = "why/bts0363.why" line = "4348" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4344" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7158,7 +7152,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po495.why">
-      <location file = "why/bts0363.why" line = "4404" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4400" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7231,7 +7225,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po510.why">
-      <location file = "why/bts0363.why" line = "4471" begin = "21" end = "45"/>
+      <location file = "why/bts0363.why" line = "4467" begin = "21" end = "45"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7294,11 +7288,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0363_po523.why">
-      <location file = "why/bts0363.why" line = "4455" begin = "46" end = "47"/>
+      <location file = "why/bts0363.why" line = "4451" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0363_po524.why">
-      <location file = "why/bts0363.why" line = "4455" begin = "46" end = "47"/>
+      <location file = "why/bts0363.why" line = "4451" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0363_po525.why">
@@ -7323,37 +7317,37 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0363_po168.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "809" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "807" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po169.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "809" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "807" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po170.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "809" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "807" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po171.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "809" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "807" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po172.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "809" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "807" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po173.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "809" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "807" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po174.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "809" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "807" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -7380,7 +7374,7 @@ text = "UserCall"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0363_po117.why">
-      <location file = "why/bts0363.why" line = "2087" begin = "19" end = "76"/>
+      <location file = "why/bts0363.why" line = "2085" begin = "19" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0363_po118.why">
@@ -7389,7 +7383,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0363_po119.why">
-      <location file = "why/bts0363.why" line = "2096" begin = "24" end = "142"/>
+      <location file = "why/bts0363.why" line = "2094" begin = "24" end = "142"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0363_po120.why">
@@ -7418,27 +7412,27 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po125.why">
-      <location file = "why/bts0363.why" line = "2105" begin = "15" end = "354"/>
+      <location file = "why/bts0363.why" line = "2103" begin = "15" end = "354"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/bts0363_po126.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "126" begin = "21" end = "81"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "125" begin = "18" end = "78"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po127.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "126" begin = "21" end = "81"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "125" begin = "18" end = "78"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po128.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "127" begin = "21" end = "81"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "126" begin = "18" end = "78"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po129.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "127" begin = "21" end = "81"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "126" begin = "18" end = "78"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -7473,12 +7467,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po136.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "133" begin = "25" end = "86"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "131" begin = "25" end = "86"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po137.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "133" begin = "25" end = "86"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "131" begin = "25" end = "86"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -7503,12 +7497,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po142.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "136" begin = "25" end = "86"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "134" begin = "25" end = "86"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po143.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "136" begin = "25" end = "86"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "134" begin = "25" end = "86"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -7523,7 +7517,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po146.why">
-      <location file = "why/bts0363.why" line = "2203" begin = "20" end = "47"/>
+      <location file = "why/bts0363.why" line = "2199" begin = "20" end = "47"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7578,42 +7572,42 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0363_po157.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "150" begin = "17" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "148" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po158.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "150" begin = "17" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "148" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po159.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "150" begin = "17" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "148" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po160.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "150" begin = "17" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "148" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po161.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "150" begin = "17" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "148" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po162.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "150" begin = "17" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "148" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po163.why">
-      <location file = "why/bts0363.why" line = "2235" begin = "15" end = "56"/>
+      <location file = "why/bts0363.why" line = "2231" begin = "15" end = "56"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/bts0363_po164.why">
-      <location file = "why/bts0363.why" line = "2236" begin = "8" end = "61"/>
+      <location file = "why/bts0363.why" line = "2232" begin = "8" end = "61"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7715,12 +7709,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po84.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "187" begin = "27" end = "203"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "185" begin = "27" end = "203"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po85.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "187" begin = "27" end = "203"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "185" begin = "27" end = "203"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -8050,12 +8044,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0363_po36.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "772" begin = "49" end = "319"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "770" begin = "49" end = "319"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po37.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "772" begin = "49" end = "319"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "770" begin = "49" end = "319"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -8170,12 +8164,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po60.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "788" begin = "49" end = "148"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "786" begin = "49" end = "148"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po61.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "788" begin = "49" end = "148"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "786" begin = "49" end = "148"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

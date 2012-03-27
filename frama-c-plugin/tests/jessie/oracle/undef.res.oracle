@@ -1319,10 +1319,14 @@ behavior default:
    (var int32 __retres_45);
    
    {  
-      {  (C_296 : (tmp = 0));
-         (C_298 : ((C_297 : x_12.intM) = tmp));
-         (C_299 : (tmp_0 = 0));
-         (C_301 : ((C_300 : x_12.intM) = tmp_0))
+      {  
+         {  (C_296 : (tmp = 0));
+            (C_298 : ((C_297 : x_12.intM) = tmp))
+         };
+         
+         {  (C_299 : (tmp_0 = 0));
+            (C_301 : ((C_300 : x_12.intM) = tmp_0))
+         }
       };
       (C_304 : (__retres_45 = (C_303 : ((C_302 : (tmp + tmp_0)) :> int32))));
       
@@ -1371,10 +1375,14 @@ behavior default:
    (var int32 __retres_46);
    
    {  
-      {  (C_320 : (tmp_0_1 = 0));
-         (C_322 : ((C_321 : x_11.intM) = tmp_0_1));
-         (C_323 : (tmp_0_2 = 0));
-         (C_325 : ((C_324 : y_8.intM) = tmp_0_2))
+      {  
+         {  (C_320 : (tmp_0_1 = 0));
+            (C_322 : ((C_321 : x_11.intM) = tmp_0_1))
+         };
+         
+         {  (C_323 : (tmp_0_2 = 0));
+            (C_325 : ((C_324 : y_8.intM) = tmp_0_2))
+         }
       };
       (C_328 : (__retres_46 = (C_327 : ((C_326 : (tmp_0_1 + tmp_0_2)) :> int32))));
       
@@ -1399,10 +1407,14 @@ behavior default:
          (goto return_label)
       } else 
       {  
-         {  (C_331 : (tmp_0_3 = 0));
-            (C_333 : ((C_332 : x_10.intM) = tmp_0_3));
-            (C_334 : (tmp_0_4 = 0));
-            (C_336 : ((C_335 : y_7.intM) = tmp_0_4))
+         {  
+            {  (C_331 : (tmp_0_3 = 0));
+               (C_333 : ((C_332 : x_10.intM) = tmp_0_3))
+            };
+            
+            {  (C_334 : (tmp_0_4 = 0));
+               (C_336 : ((C_335 : y_7.intM) = tmp_0_4))
+            }
          };
          (C_339 : (__retres_47 = (C_338 : ((C_337 : (tmp_0_3 + tmp_0_4)) :> int32))));
          
@@ -5257,15 +5269,19 @@ let multiple_update_safe_ensures_default =
          (C_339:
          begin
            (let jessie_<somenum> =
-           (C_331:
-           (C_333:
            (C_334:
            begin
-             (let jessie_<somenum> = (tmp_0_3 := (safe_int32_of_integer_ (0))) in
-             void);
-            (let jessie_<somenum> = !tmp_0_3 in
-            (let jessie_<somenum> = x_10 in
-            (((safe_upd_ intP_intM_x_10_29) jessie_<somenum>) jessie_<somenum>)));
+             (let jessie_<somenum> =
+             (C_331:
+             begin
+               (let jessie_<somenum> = (tmp_0_3 := (safe_int32_of_integer_ (0))) in
+               void);
+              (C_333:
+              (let jessie_<somenum> = !tmp_0_3 in
+              begin
+                (let jessie_<somenum> = x_10 in
+                (((safe_upd_ intP_intM_x_10_29) jessie_<somenum>) jessie_<somenum>));
+               jessie_<somenum> end)) end) in void);
             (let jessie_<somenum> = (tmp_0_4 := (safe_int32_of_integer_ (0))) in
             void);
             (C_336:
@@ -5273,7 +5289,7 @@ let multiple_update_safe_ensures_default =
             begin
               (let jessie_<somenum> = y_7 in
               (((safe_upd_ intP_intM_x_10_29) jessie_<somenum>) jessie_<somenum>));
-             jessie_<somenum> end)) end))) in void);
+             jessie_<somenum> end)) end) in void);
           (let jessie_<somenum> =
           (__retres_47 := (C_338:
                           (safe_int32_of_integer_ (C_337:
@@ -5308,16 +5324,20 @@ let multiple_update_safe_safety =
          (C_339:
          begin
            (let jessie_<somenum> =
-           (C_331:
-           (C_333:
            (C_334:
            begin
-             (let jessie_<somenum> = (tmp_0_3 := (safe_int32_of_integer_ (0))) in
-             void);
-            (let jessie_<somenum> = !tmp_0_3 in
-            (let jessie_<somenum> = x_10 in
-            (JC_<somenum>:
-            ((((upd_ intP_x_10_29_alloc_table) intP_intM_x_10_29) jessie_<somenum>) jessie_<somenum>))));
+             (let jessie_<somenum> =
+             (C_331:
+             begin
+               (let jessie_<somenum> = (tmp_0_3 := (safe_int32_of_integer_ (0))) in
+               void);
+              (C_333:
+              (let jessie_<somenum> = !tmp_0_3 in
+              begin
+                (let jessie_<somenum> = x_10 in
+                (JC_<somenum>:
+                ((((upd_ intP_x_10_29_alloc_table) intP_intM_x_10_29) jessie_<somenum>) jessie_<somenum>)));
+               jessie_<somenum> end)) end) in void);
             (let jessie_<somenum> = (tmp_0_4 := (safe_int32_of_integer_ (0))) in
             void);
             (C_336:
@@ -5326,7 +5346,7 @@ let multiple_update_safe_safety =
               (let jessie_<somenum> = y_7 in
               (JC_<somenum>:
               ((((upd_ intP_x_10_29_alloc_table) intP_intM_x_10_29) jessie_<somenum>) jessie_<somenum>)));
-             jessie_<somenum> end)) end))) in void);
+             jessie_<somenum> end)) end) in void);
           (let jessie_<somenum> =
           (__retres_47 := (C_338:
                           (JC_<somenum>:
@@ -5357,21 +5377,26 @@ let multiple_update_unsafe_ensures_default =
      (C_328:
      begin
        (let jessie_<somenum> =
-       (C_320:
-       (C_322:
        (C_323:
        begin
-         (let jessie_<somenum> = (tmp_0_1 := (safe_int32_of_integer_ (0))) in void);
-        (let jessie_<somenum> = !tmp_0_1 in
-        (let jessie_<somenum> = x_11 in
-        (((safe_upd_ intP_intM_x_11_27) jessie_<somenum>) jessie_<somenum>)));
+         (let jessie_<somenum> =
+         (C_320:
+         begin
+           (let jessie_<somenum> = (tmp_0_1 := (safe_int32_of_integer_ (0))) in
+           void);
+          (C_322:
+          (let jessie_<somenum> = !tmp_0_1 in
+          begin
+            (let jessie_<somenum> = x_11 in
+            (((safe_upd_ intP_intM_x_11_27) jessie_<somenum>) jessie_<somenum>));
+           jessie_<somenum> end)) end) in void);
         (let jessie_<somenum> = (tmp_0_2 := (safe_int32_of_integer_ (0))) in void);
         (C_325:
         (let jessie_<somenum> = !tmp_0_2 in
         begin
           (let jessie_<somenum> = y_8 in
           (((safe_upd_ intP_intM_x_11_27) jessie_<somenum>) jessie_<somenum>));
-         jessie_<somenum> end)) end))) in void);
+         jessie_<somenum> end)) end) in void);
       (let jessie_<somenum> =
       (__retres_46 := (C_327:
                       (safe_int32_of_integer_ (C_326:
@@ -5396,15 +5421,20 @@ let multiple_update_unsafe_safety =
      (C_328:
      begin
        (let jessie_<somenum> =
-       (C_320:
-       (C_322:
        (C_323:
        begin
-         (let jessie_<somenum> = (tmp_0_1 := (safe_int32_of_integer_ (0))) in void);
-        (let jessie_<somenum> = !tmp_0_1 in
-        (let jessie_<somenum> = x_11 in
-        (JC_<somenum>:
-        ((((upd_ intP_x_11_27_alloc_table) intP_intM_x_11_27) jessie_<somenum>) jessie_<somenum>))));
+         (let jessie_<somenum> =
+         (C_320:
+         begin
+           (let jessie_<somenum> = (tmp_0_1 := (safe_int32_of_integer_ (0))) in
+           void);
+          (C_322:
+          (let jessie_<somenum> = !tmp_0_1 in
+          begin
+            (let jessie_<somenum> = x_11 in
+            (JC_<somenum>:
+            ((((upd_ intP_x_11_27_alloc_table) intP_intM_x_11_27) jessie_<somenum>) jessie_<somenum>)));
+           jessie_<somenum> end)) end) in void);
         (let jessie_<somenum> = (tmp_0_2 := (safe_int32_of_integer_ (0))) in void);
         (C_325:
         (let jessie_<somenum> = !tmp_0_2 in
@@ -5412,7 +5442,7 @@ let multiple_update_unsafe_safety =
           (let jessie_<somenum> = y_8 in
           (JC_<somenum>:
           ((((upd_ intP_x_11_27_alloc_table) intP_intM_x_11_27) jessie_<somenum>) jessie_<somenum>)));
-         jessie_<somenum> end)) end))) in void);
+         jessie_<somenum> end)) end) in void);
       (let jessie_<somenum> =
       (__retres_46 := (C_327:
                       (JC_<somenum>:
@@ -5440,21 +5470,25 @@ let multiple_update_wrong_1_ensures_default =
      (C_304:
      begin
        (let jessie_<somenum> =
-       (C_296:
-       (C_298:
        (C_299:
        begin
-         (let jessie_<somenum> = (tmp := (safe_int32_of_integer_ (0))) in void);
-        (let jessie_<somenum> = !tmp in
-        (let jessie_<somenum> = x_12 in
-        (((safe_upd_ intP_intM_x_12_25) jessie_<somenum>) jessie_<somenum>)));
+         (let jessie_<somenum> =
+         (C_296:
+         begin
+           (let jessie_<somenum> = (tmp := (safe_int32_of_integer_ (0))) in void);
+          (C_298:
+          (let jessie_<somenum> = !tmp in
+          begin
+            (let jessie_<somenum> = x_12 in
+            (((safe_upd_ intP_intM_x_12_25) jessie_<somenum>) jessie_<somenum>));
+           jessie_<somenum> end)) end) in void);
         (let jessie_<somenum> = (tmp_0 := (safe_int32_of_integer_ (0))) in void);
         (C_301:
         (let jessie_<somenum> = !tmp_0 in
         begin
           (let jessie_<somenum> = x_12 in
           (((safe_upd_ intP_intM_x_12_25) jessie_<somenum>) jessie_<somenum>));
-         jessie_<somenum> end)) end))) in void);
+         jessie_<somenum> end)) end) in void);
       (let jessie_<somenum> =
       (__retres_45 := (C_303:
                       (safe_int32_of_integer_ (C_302:
@@ -5478,15 +5512,19 @@ let multiple_update_wrong_1_safety =
      (C_304:
      begin
        (let jessie_<somenum> =
-       (C_296:
-       (C_298:
        (C_299:
        begin
-         (let jessie_<somenum> = (tmp := (safe_int32_of_integer_ (0))) in void);
-        (let jessie_<somenum> = !tmp in
-        (let jessie_<somenum> = x_12 in
-        (JC_<somenum>:
-        ((((upd_ intP_x_12_25_alloc_table) intP_intM_x_12_25) jessie_<somenum>) jessie_<somenum>))));
+         (let jessie_<somenum> =
+         (C_296:
+         begin
+           (let jessie_<somenum> = (tmp := (safe_int32_of_integer_ (0))) in void);
+          (C_298:
+          (let jessie_<somenum> = !tmp in
+          begin
+            (let jessie_<somenum> = x_12 in
+            (JC_<somenum>:
+            ((((upd_ intP_x_12_25_alloc_table) intP_intM_x_12_25) jessie_<somenum>) jessie_<somenum>)));
+           jessie_<somenum> end)) end) in void);
         (let jessie_<somenum> = (tmp_0 := (safe_int32_of_integer_ (0))) in void);
         (C_301:
         (let jessie_<somenum> = !tmp_0 in
@@ -5494,7 +5532,7 @@ let multiple_update_wrong_1_safety =
           (let jessie_<somenum> = x_12 in
           (JC_<somenum>:
           ((((upd_ intP_x_12_25_alloc_table) intP_intM_x_12_25) jessie_<somenum>) jessie_<somenum>)));
-         jessie_<somenum> end)) end))) in void);
+         jessie_<somenum> end)) end) in void);
       (let jessie_<somenum> =
       (__retres_45 := (C_303:
                       (JC_<somenum>:
@@ -8236,7 +8274,7 @@ text = "ArithOverflow"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po116.why">
-      <location file = "why/undef.why" line = "4738" begin = "17" end = "95"/>
+      <location file = "why/undef.why" line = "4764" begin = "17" end = "95"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po117.why">
@@ -8245,11 +8283,11 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po118.why">
-      <location file = "why/undef.why" line = "4747" begin = "14" end = "74"/>
+      <location file = "why/undef.why" line = "4773" begin = "14" end = "74"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po119.why">
-      <location file = "why/undef.why" line = "4755" begin = "42" end = "68"/>
+      <location file = "why/undef.why" line = "4781" begin = "42" end = "68"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8264,12 +8302,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/undef_po122.why">
-      <location file = "why/undef.why" line = "4756" begin = "14" end = "59"/>
+      <location file = "why/undef.why" line = "4782" begin = "14" end = "59"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/undef_po123.why">
-      <location file = "why/undef.why" line = "4757" begin = "7" end = "50"/>
+      <location file = "why/undef.why" line = "4783" begin = "7" end = "50"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8279,7 +8317,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po110.why">
-      <location file = "why/undef.why" line = "4655" begin = "51" end = "75"/>
+      <location file = "why/undef.why" line = "4681" begin = "51" end = "75"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8312,11 +8350,11 @@ text = "ArithOverflow"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po105.why">
-      <location file = "why/undef.why" line = "4591" begin = "19" end = "100"/>
+      <location file = "why/undef.why" line = "4617" begin = "19" end = "100"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po106.why">
-      <location file = "why/undef.why" line = "4599" begin = "42" end = "68"/>
+      <location file = "why/undef.why" line = "4625" begin = "42" end = "68"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8331,7 +8369,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/undef_po109.why">
-      <location file = "why/undef.why" line = "4600" begin = "14" end = "63"/>
+      <location file = "why/undef.why" line = "4626" begin = "14" end = "63"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8435,7 +8473,7 @@ text = "PointerDeref"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po85.why">
-      <location file = "why/undef.why" line = "4182" begin = "13" end = "35"/>
+      <location file = "why/undef.why" line = "4208" begin = "13" end = "35"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8473,12 +8511,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/undef_po83.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1343" begin = "19" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1347" begin = "19" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po84.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1343" begin = "19" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1347" begin = "19" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -8513,22 +8551,22 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po71.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1311" begin = "19" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1312" begin = "22" end = "47"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po72.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1311" begin = "19" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1312" begin = "22" end = "47"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po73.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1313" begin = "19" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1316" begin = "22" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po74.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1313" begin = "19" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1316" begin = "22" end = "49"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -8548,22 +8586,22 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po63.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1363" begin = "19" end = "48"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1368" begin = "22" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po64.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1363" begin = "19" end = "48"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1368" begin = "22" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po65.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1365" begin = "19" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1372" begin = "22" end = "50"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po66.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1365" begin = "19" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1372" begin = "22" end = "50"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -8591,27 +8629,27 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po56.why">
-      <location file = "why/undef.why" line = "3801" begin = "13" end = "34"/>
+      <location file = "why/undef.why" line = "3805" begin = "13" end = "34"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/undef_po57.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1391" begin = "22" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1400" begin = "25" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po58.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1391" begin = "22" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1400" begin = "25" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po59.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1393" begin = "22" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1404" begin = "25" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po60.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1393" begin = "22" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1404" begin = "25" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -8631,12 +8669,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po54.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1483" begin = "16" end = "57"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1495" begin = "16" end = "57"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po55.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1483" begin = "16" end = "57"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1495" begin = "16" end = "57"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -8880,12 +8918,12 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po16.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1469" begin = "16" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1481" begin = "16" end = "39"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/undef_po17.why">
-      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1469" begin = "16" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/undef.jessie/undef.jc" line = "1481" begin = "16" end = "39"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

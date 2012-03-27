@@ -438,9 +438,9 @@ behavior default:
                   (C_4 : (curseur = (C_3 : (curseur + 1))));
                   (C_5 : (tmp_1 = source));
                   (C_7 : (source = (C_6 : (source + 1))));
-                  (C_9 : (tmp_0 = (C_8 : tmp_1.charM)));
-                  (C_11 : ((C_10 : tmp.charM) = tmp_0))
+                  (C_9 : (tmp_0 = (C_8 : tmp_1.charM)))
                };
+               (C_11 : ((C_10 : tmp.charM) = tmp_0));
                (if (tmp_0 != 0) then 
                {  (C_14 : (taille_0 = (C_13 : ((C_12 : (taille_0 - 1)) :> uint32))));
                   (if (taille_0 > 0) then () else 
@@ -2441,6 +2441,7 @@ let strncpy_ensures_default =
            begin
              [ { } unit { true } ];
             try
+             (C_11:
              begin
                (let jessie_<somenum> =
                (C_2:
@@ -2456,15 +2457,11 @@ let strncpy_ensures_default =
                 (let jessie_<somenum> =
                 (mutable_source := (C_6: ((shift !mutable_source) (1)))) in
                 void);
-                (let jessie_<somenum> =
-                (tmp_0 := (C_8: ((safe_acc_ charP_charM_source_22) !tmp_1))) in
-                void);
-                (C_11:
-                (let jessie_<somenum> = !tmp_0 in
-                begin
-                  (let jessie_<somenum> = !tmp in
-                  (((safe_upd_ charP_charM_destination_0_21) jessie_<somenum>) jessie_<somenum>));
-                 jessie_<somenum> end)) end))))) in void);
+                (tmp_0 := (C_8: ((safe_acc_ charP_charM_source_22) !tmp_1)));
+                !tmp_0 end))))) in void);
+              (let jessie_<somenum> = !tmp_0 in
+              (let jessie_<somenum> = !tmp in
+              (((safe_upd_ charP_charM_destination_0_21) jessie_<somenum>) jessie_<somenum>)));
               (if ((neq_int_ (integer_of_int8 !tmp_0)) (0))
               then
                (C_14:
@@ -2478,7 +2475,7 @@ let strncpy_ensures_default =
                 (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
                 then void else (raise (Goto_while_0_break_exc void))) end)
               else (raise (Goto_while_0_break_exc void)));
-              (raise (Loop_continue_exc void)) end with
+              (raise (Loop_continue_exc void)) end) with
              Loop_continue_exc jessie_<somenum> -> void end end done);
          (raise (Goto_while_0_break_exc void)) end with
         Goto_while_0_break_exc jessie_<somenum> ->
@@ -2573,6 +2570,7 @@ let strncpy_safety =
            begin
              [ { } unit { true } ];
             try
+             (C_11:
              begin
                (let jessie_<somenum> =
                (C_2:
@@ -2588,18 +2586,14 @@ let strncpy_safety =
                 (let jessie_<somenum> =
                 (mutable_source := (C_6: ((shift !mutable_source) (1)))) in
                 void);
-                (let jessie_<somenum> =
                 (tmp_0 := (C_8:
                           (JC_<somenum>:
-                          (((acc_ charP_source_22_alloc_table) charP_charM_source_22) !tmp_1)))) in
-                void);
-                (C_11:
-                (let jessie_<somenum> = !tmp_0 in
-                begin
-                  (let jessie_<somenum> = !tmp in
-                  (JC_<somenum>:
-                  ((((upd_ charP_destination_0_21_alloc_table) charP_charM_destination_0_21) jessie_<somenum>) jessie_<somenum>)));
-                 jessie_<somenum> end)) end))))) in void);
+                          (((acc_ charP_source_22_alloc_table) charP_charM_source_22) !tmp_1))));
+                !tmp_0 end))))) in void);
+              (let jessie_<somenum> = !tmp_0 in
+              (let jessie_<somenum> = !tmp in
+              (JC_<somenum>:
+              ((((upd_ charP_destination_0_21_alloc_table) charP_charM_destination_0_21) jessie_<somenum>) jessie_<somenum>))));
               (if ((neq_int_ (integer_of_int8 !tmp_0)) (0))
               then
                (C_14:
@@ -2613,7 +2607,7 @@ let strncpy_safety =
                 (if ((gt_int_ (integer_of_uint32 !mutable_taille_0)) (0))
                 then void else (raise (Goto_while_0_break_exc void))) end)
               else (raise (Goto_while_0_break_exc void)));
-              (raise (Loop_continue_exc void)) end with
+              (raise (Loop_continue_exc void)) end) with
              Loop_continue_exc jessie_<somenum> -> void end end done);
          (raise (Goto_while_0_break_exc void)) end with
         Goto_while_0_break_exc jessie_<somenum> ->
@@ -2703,12 +2697,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po12.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "435" begin = "27" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "436" begin = "24" end = "50"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/forum_cifre_po13.why">
-      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "435" begin = "27" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/forum_cifre.jessie/forum_cifre.jc" line = "436" begin = "24" end = "50"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

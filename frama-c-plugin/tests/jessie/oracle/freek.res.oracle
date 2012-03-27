@@ -100,9 +100,9 @@ behavior default:
       
       {  (C_15 : (tmp_0 = i));
          (C_18 : (i = (C_17 : ((C_16 : (i + 1)) :> int32))));
-         (C_19 : (j = tmp_0));
-         (C_20 : (i = j))
+         (C_19 : (j = tmp_0))
       };
+      (C_20 : (i = j));
       
       {  
          (assert for default: (C_21 : (i == 0)));
@@ -525,6 +525,7 @@ let main_ensures_default =
      (C_6:
      (C_12:
      (C_14:
+     (C_20:
      (C_22:
      (C_23:
      begin
@@ -553,20 +554,20 @@ let main_ensures_default =
       (C_15:
       (C_18:
       (C_19:
-      (C_20:
       begin
         (let jessie_<somenum> = (tmp_0 := !i) in void);
        (let jessie_<somenum> =
        (i := (C_17:
              (safe_int32_of_integer_ (C_16:
                                      ((add_int (integer_of_int32 !i)) (1)))))) in
-       void); (let jessie_<somenum> = (j := !tmp_0) in void); (i := !j); !i end)))) in
-      void); (assert { (JC_<somenum>: (integer_of_int32(i) = (0))) }; void); void;
+       void); (j := !tmp_0); !j end))) in void);
+      (let jessie_<somenum> = (i := !j) in void);
+      (assert { (JC_<somenum>: (integer_of_int32(i) = (0))) }; void); void;
       (let jessie_<somenum> = !i in
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
       (JC_<somenum>: ((print_equality jessie_<somenum>) jessie_<somenum>))));
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))))))))))); absurd  end with
+      (return := !__retres); (raise Return) end)))))))))))); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
@@ -585,6 +586,7 @@ let main_safety =
      (C_6:
      (C_12:
      (C_14:
+     (C_20:
      (C_22:
      (C_23:
      begin
@@ -613,21 +615,20 @@ let main_safety =
       (C_15:
       (C_18:
       (C_19:
-      (C_20:
       begin
         (let jessie_<somenum> = (tmp_0 := !i) in void);
        (let jessie_<somenum> =
        (i := (C_17:
              (JC_<somenum>:
              (int32_of_integer_ (C_16: ((add_int (integer_of_int32 !i)) (1))))))) in
-       void); (let jessie_<somenum> = (j := !tmp_0) in void); (i := !j); !i end)))) in
-      void); [ { } unit reads i { (JC_<somenum>: (integer_of_int32(i) = (0))) } ];
-      void;
+       void); (j := !tmp_0); !j end))) in void);
+      (let jessie_<somenum> = (i := !j) in void);
+      [ { } unit reads i { (JC_<somenum>: (integer_of_int32(i) = (0))) } ]; void;
       (let jessie_<somenum> = !i in
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
       (JC_<somenum>: ((print_equality_requires jessie_<somenum>) jessie_<somenum>))));
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))))))))))); absurd  end with
+      (return := !__retres); (raise Return) end)))))))))))); absurd  end with
    Return -> !return end))
   { (JC_<somenum>: valid___string__d_____d_(charP___string__d_____d__1_alloc_table)) }
 
