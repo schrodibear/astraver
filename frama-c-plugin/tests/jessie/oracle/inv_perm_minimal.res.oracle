@@ -16,6 +16,8 @@ axiomatic Padding {
   
 }
 
+type uint8 = 0..255
+
 type int32 = -2147483648..2147483647
 
 type int8 = -128..127
@@ -25,6 +27,12 @@ tag intP = {
 }
 
 type intP = [intP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -37,14 +45,14 @@ tag voidP = {
 
 type voidP = [voidP]
 
-unit safety(intP[..] t, int32 n)
-  requires (C_48 : (((C_50 : (n >= 1)) &&
+unit safety(intP[..] t, int32 n_1)
+  requires (C_48 : (((C_50 : (n_1 >= 1)) &&
                       ((C_52 : (\offset_min(t) <= 1)) &&
-                        (C_53 : (\offset_max(t) >= n)))) &&
+                        (C_53 : (\offset_max(t) >= n_1)))) &&
                      (C_54 : (\forall int32 k_1;
-                               (((1 <= k_1) && (k_1 <= n)) ==>
+                               (((1 <= k_1) && (k_1 <= n_1)) ==>
                                  ((1 <= (t + k_1).intM) &&
-                                   ((t + k_1).intM <= n)))))));
+                                   ((t + k_1).intM <= n_1)))))));
 behavior default:
   ensures (C_47 : true);
 {  
@@ -54,19 +62,19 @@ behavior default:
    
    (var int32 i);
    
-   {  (C_1 : (m = n));
+   {  (C_1 : (m = n_1));
       (C_2 : (j = -1));
       
       loop 
       behavior default:
-        invariant (C_3 : ((((C_6 : (1 <= m)) && (C_7 : (m <= n))) &&
-                            ((C_9 : ((- n) <= j)) && (C_10 : (j <= (- 1))))) &&
+        invariant (C_3 : ((((C_6 : (1 <= m)) && (C_7 : (m <= n_1))) &&
+                            ((C_9 : ((- n_1) <= j)) && (C_10 : (j <= (- 1))))) &&
                            (C_11 : (\forall int32 k_0;
-                                     (((1 <= k_0) && (k_0 <= n)) ==>
-                                       ((((- n) <= (t + k_0).intM) &&
+                                     (((1 <= k_0) && (k_0 <= n_1)) ==>
+                                       ((((- n_1) <= (t + k_0).intM) &&
                                           ((t + k_0).intM <= (- 1))) ||
                                          ((1 <= (t + k_0).intM) &&
-                                           ((t + k_0).intM <= n))))))));
+                                           ((t + k_0).intM <= n_1))))))));
       while (true)
       {  
          {  
@@ -76,18 +84,19 @@ behavior default:
                   loop 
                   behavior default:
                     invariant (C_15 : (((((C_19 : (1 <= m)) &&
-                                           (C_20 : (m <= n))) &&
+                                           (C_20 : (m <= n_1))) &&
                                           ((C_22 : (1 <= i)) &&
-                                            (C_23 : (i <= n)))) &&
-                                         ((C_25 : ((- n) <= j)) &&
+                                            (C_23 : (i <= n_1)))) &&
+                                         ((C_25 : ((- n_1) <= j)) &&
                                            (C_26 : (j <= (- 1))))) &&
                                         (C_27 : (\forall int32 k;
-                                                  (((1 <= k) && (k <= n)) ==>
-                                                    ((((- n) <= (t + k).intM) &&
+                                                  (((1 <= k) && (k <= n_1)) ==>
+                                                    ((((- n_1) <=
+                                                        (t + k).intM) &&
                                                        ((t + k).intM <=
                                                          (- 1))) ||
                                                       ((1 <= (t + k).intM) &&
-                                                        ((t + k).intM <= n))))))));
+                                                        ((t + k).intM <= n_1))))))));
                   while (true)
                   {  
                      {  
@@ -127,6 +136,10 @@ type intP
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag:  -> charP tag_id
@@ -154,6 +167,11 @@ logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
+
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic int32_of_integer: int -> int32
 
@@ -211,6 +229,10 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
 predicate left_valid_struct_intP(p:intP pointer, a:int,
  intP_alloc_table:intP alloc_table) = (offset_min(intP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -220,6 +242,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 
 axiom pointer_addr_of_intP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -232,6 +260,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
 
 predicate right_valid_struct_intP(p:intP pointer, b:int,
  intP_alloc_table:intP alloc_table) = (offset_max(intP_alloc_table, p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -246,6 +278,11 @@ predicate strict_valid_root_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -262,10 +299,47 @@ predicate strict_valid_struct_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -276,6 +350,11 @@ predicate valid_root_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -291,6 +370,11 @@ predicate valid_struct_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -373,6 +457,38 @@ parameter alloc_struct_intP_requires :
           and (alloc_fresh(intP_alloc_table@, result, n)
               and instanceof(intP_tag_table, result, intP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -403,6 +519,8 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
+parameter any_uint8 : unit -> { } uint8 { true }
+
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -419,54 +537,63 @@ parameter safe_int32_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
 parameter safety :
  t:intP pointer ->
-  n:int32 ->
+  n_1:int32 ->
    intP_intM_t_1:(intP, int32) memory ref ->
     intP_t_1_alloc_table:intP alloc_table ->
      { } unit reads intP_intM_t_1 writes intP_intM_t_1 { true }
 
 parameter safety_requires :
  t:intP pointer ->
-  n:int32 ->
+  n_1:int32 ->
    intP_intM_t_1:(intP, int32) memory ref ->
     intP_t_1_alloc_table:intP alloc_table ->
      { (JC_<somenum>:
-       ((JC_<somenum>: ge_int(integer_of_int32(n), (1)))
+       ((JC_<somenum>: ge_int(integer_of_int32(n_1), (1)))
        and ((JC_<somenum>: le_int(offset_min(intP_t_1_alloc_table, t), (1)))
            and ((JC_<somenum>:
                 ge_int(offset_max(intP_t_1_alloc_table, t),
-                integer_of_int32(n)))
+                integer_of_int32(n_1)))
                and (JC_<somenum>:
                    (forall k_1:int32.
                     ((le_int((1), integer_of_int32(k_1))
-                     and le_int(integer_of_int32(k_1), integer_of_int32(n))) ->
+                     and le_int(integer_of_int32(k_1), integer_of_int32(n_1))) ->
                      (le_int((1),
                       integer_of_int32(select(intP_intM_t_1,
                                        shift(t, integer_of_int32(k_1)))))
                      and le_int(integer_of_int32(select(intP_intM_t_1,
                                                  shift(t,
                                                  integer_of_int32(k_1)))),
-                         integer_of_int32(n))))))))))}
+                         integer_of_int32(n_1))))))))))}
      unit reads intP_intM_t_1 writes intP_intM_t_1 { true }
 
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
+
 let safety_ensures_default =
- fun (t : intP pointer) (n : int32) (intP_intM_t_1 : (intP, int32) memory ref) (intP_t_1_alloc_table : intP alloc_table) ->
+ fun (t : intP pointer) (n_1 : int32) (intP_intM_t_1 : (intP, int32) memory ref) (intP_t_1_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: ge_int(integer_of_int32(n), (1)))
+    ((JC_<somenum>: ge_int(integer_of_int32(n_1), (1)))
     and ((JC_<somenum>: le_int(offset_min(intP_t_1_alloc_table, t), (1)))
         and ((JC_<somenum>:
-             ge_int(offset_max(intP_t_1_alloc_table, t), integer_of_int32(n)))
+             ge_int(offset_max(intP_t_1_alloc_table, t),
+             integer_of_int32(n_1)))
             and (JC_<somenum>:
                 (forall k_1:int32.
                  ((le_int((1), integer_of_int32(k_1))
-                  and le_int(integer_of_int32(k_1), integer_of_int32(n))) ->
+                  and le_int(integer_of_int32(k_1), integer_of_int32(n_1))) ->
                   (le_int((1),
                    integer_of_int32(select(intP_intM_t_1,
                                     shift(t, integer_of_int32(k_1)))))
                   and le_int(integer_of_int32(select(intP_intM_t_1,
                                               shift(t, integer_of_int32(k_1)))),
-                      integer_of_int32(n)))))))))) }
+                      integer_of_int32(n_1)))))))))) }
   (init:
   try
    begin
@@ -477,7 +604,7 @@ let safety_ensures_default =
       (C_1:
       (C_2:
       begin
-        (let jessie_<somenum> = (m := n) in void);
+        (let jessie_<somenum> = (m := n_1) in void);
        (let jessie_<somenum> = (j := (safe_int32_of_integer_ (neg_int (1)))) in
        void);
        (loop_3:
@@ -485,16 +612,17 @@ let safety_ensures_default =
        { invariant
            (JC_<somenum>:
            ((JC_<somenum>: le_int((1), integer_of_int32(m)))
-           and ((JC_<somenum>: le_int(integer_of_int32(m), integer_of_int32(n)))
+           and ((JC_<somenum>: le_int(integer_of_int32(m), integer_of_int32(n_1)))
                and ((JC_<somenum>:
-                    le_int(neg_int(integer_of_int32(n)), integer_of_int32(j)))
+                    le_int(neg_int(integer_of_int32(n_1)),
+                    integer_of_int32(j)))
                    and ((JC_<somenum>: le_int(integer_of_int32(j), neg_int((1))))
                        and (JC_<somenum>:
                            (forall k_0:int32.
                             ((le_int((1), integer_of_int32(k_0))
                              and le_int(integer_of_int32(k_0),
-                                 integer_of_int32(n))) ->
-                             ((le_int(neg_int(integer_of_int32(n)),
+                                 integer_of_int32(n_1))) ->
+                             ((le_int(neg_int(integer_of_int32(n_1)),
                                integer_of_int32(select(intP_intM_t_1,
                                                 shift(t,
                                                 integer_of_int32(k_0)))))
@@ -509,7 +637,8 @@ let safety_ensures_default =
                                 and le_int(integer_of_int32(select(intP_intM_t_1,
                                                             shift(t,
                                                             integer_of_int32(k_0)))),
-                                    integer_of_int32(n))))))))))))  }
+                                    integer_of_int32(n_1)))))))))))) 
+          }
         begin
           [ { } unit { true } ];
          try
@@ -534,13 +663,13 @@ let safety_ensures_default =
                      (JC_<somenum>:
                      ((JC_<somenum>: le_int((1), integer_of_int32(m)))
                      and ((JC_<somenum>:
-                          le_int(integer_of_int32(m), integer_of_int32(n)))
+                          le_int(integer_of_int32(m), integer_of_int32(n_1)))
                          and ((JC_<somenum>: le_int((1), integer_of_int32(i)))
                              and ((JC_<somenum>:
                                   le_int(integer_of_int32(i),
-                                  integer_of_int32(n)))
+                                  integer_of_int32(n_1)))
                                  and ((JC_<somenum>:
-                                      le_int(neg_int(integer_of_int32(n)),
+                                      le_int(neg_int(integer_of_int32(n_1)),
                                       integer_of_int32(j)))
                                      and ((JC_<somenum>:
                                           le_int(integer_of_int32(j),
@@ -550,8 +679,8 @@ let safety_ensures_default =
                                               ((le_int((1),
                                                 integer_of_int32(k))
                                                and le_int(integer_of_int32(k),
-                                                   integer_of_int32(n))) ->
-                                               ((le_int(neg_int(integer_of_int32(n)),
+                                                   integer_of_int32(n_1))) ->
+                                               ((le_int(neg_int(integer_of_int32(n_1)),
                                                  integer_of_int32(select(intP_intM_t_1,
                                                                   shift(t,
                                                                   integer_of_int32(k)))))
@@ -568,7 +697,7 @@ let safety_ensures_default =
                                                              select(intP_intM_t_1,
                                                              shift(t,
                                                              integer_of_int32(k)))),
-                                                      integer_of_int32(n))))))))))))))
+                                                      integer_of_int32(n_1))))))))))))))
                     }
                   begin
                     [ { } unit { true } ];
@@ -627,22 +756,23 @@ let safety_ensures_default =
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
 let safety_safety =
- fun (t : intP pointer) (n : int32) (intP_intM_t_1 : (intP, int32) memory ref) (intP_t_1_alloc_table : intP alloc_table) ->
+ fun (t : intP pointer) (n_1 : int32) (intP_intM_t_1 : (intP, int32) memory ref) (intP_t_1_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: ge_int(integer_of_int32(n), (1)))
+    ((JC_<somenum>: ge_int(integer_of_int32(n_1), (1)))
     and ((JC_<somenum>: le_int(offset_min(intP_t_1_alloc_table, t), (1)))
         and ((JC_<somenum>:
-             ge_int(offset_max(intP_t_1_alloc_table, t), integer_of_int32(n)))
+             ge_int(offset_max(intP_t_1_alloc_table, t),
+             integer_of_int32(n_1)))
             and (JC_<somenum>:
                 (forall k_1:int32.
                  ((le_int((1), integer_of_int32(k_1))
-                  and le_int(integer_of_int32(k_1), integer_of_int32(n))) ->
+                  and le_int(integer_of_int32(k_1), integer_of_int32(n_1))) ->
                   (le_int((1),
                    integer_of_int32(select(intP_intM_t_1,
                                     shift(t, integer_of_int32(k_1)))))
                   and le_int(integer_of_int32(select(intP_intM_t_1,
                                               shift(t, integer_of_int32(k_1)))),
-                      integer_of_int32(n)))))))))) }
+                      integer_of_int32(n_1)))))))))) }
   (init:
   try
    begin
@@ -653,7 +783,7 @@ let safety_safety =
       (C_1:
       (C_2:
       begin
-        (let jessie_<somenum> = (m := n) in void);
+        (let jessie_<somenum> = (m := n_1) in void);
        (let jessie_<somenum> = (j := (safe_int32_of_integer_ (neg_int (1)))) in
        void);
        (loop_1:
@@ -663,17 +793,18 @@ let safety_safety =
           [ { } unit reads intP_intM_t_1,j,m
             { (JC_<somenum>:
               ((JC_<somenum>: le_int((1), integer_of_int32(m)))
-              and ((JC_<somenum>: le_int(integer_of_int32(m), integer_of_int32(n)))
+              and ((JC_<somenum>:
+                   le_int(integer_of_int32(m), integer_of_int32(n_1)))
                   and ((JC_<somenum>:
-                       le_int(neg_int(integer_of_int32(n)),
+                       le_int(neg_int(integer_of_int32(n_1)),
                        integer_of_int32(j)))
                       and ((JC_<somenum>: le_int(integer_of_int32(j), neg_int((1))))
                           and (JC_<somenum>:
                               (forall k_0:int32.
                                ((le_int((1), integer_of_int32(k_0))
                                 and le_int(integer_of_int32(k_0),
-                                    integer_of_int32(n))) ->
-                                ((le_int(neg_int(integer_of_int32(n)),
+                                    integer_of_int32(n_1))) ->
+                                ((le_int(neg_int(integer_of_int32(n_1)),
                                   integer_of_int32(select(intP_intM_t_1,
                                                    shift(t,
                                                    integer_of_int32(k_0)))))
@@ -688,7 +819,7 @@ let safety_safety =
                                    and le_int(integer_of_int32(select(intP_intM_t_1,
                                                                shift(t,
                                                                integer_of_int32(k_0)))),
-                                       integer_of_int32(n)))))))))))) } ];
+                                       integer_of_int32(n_1)))))))))))) } ];
          try
           begin
             (let jessie_<somenum> =
@@ -713,13 +844,14 @@ let safety_safety =
                       { (JC_<somenum>:
                         ((JC_<somenum>: le_int((1), integer_of_int32(m)))
                         and ((JC_<somenum>:
-                             le_int(integer_of_int32(m), integer_of_int32(n)))
+                             le_int(integer_of_int32(m),
+                             integer_of_int32(n_1)))
                             and ((JC_<somenum>: le_int((1), integer_of_int32(i)))
                                 and ((JC_<somenum>:
                                      le_int(integer_of_int32(i),
-                                     integer_of_int32(n)))
+                                     integer_of_int32(n_1)))
                                     and ((JC_<somenum>:
-                                         le_int(neg_int(integer_of_int32(n)),
+                                         le_int(neg_int(integer_of_int32(n_1)),
                                          integer_of_int32(j)))
                                         and ((JC_<somenum>:
                                              le_int(integer_of_int32(j),
@@ -729,8 +861,8 @@ let safety_safety =
                                                  ((le_int((1),
                                                    integer_of_int32(k))
                                                   and le_int(integer_of_int32(k),
-                                                      integer_of_int32(n))) ->
-                                                  ((le_int(neg_int(integer_of_int32(n)),
+                                                      integer_of_int32(n_1))) ->
+                                                  ((le_int(neg_int(integer_of_int32(n_1)),
                                                     integer_of_int32(
                                                     select(intP_intM_t_1,
                                                     shift(t,
@@ -749,7 +881,7 @@ let safety_safety =
                                                                 select(intP_intM_t_1,
                                                                 shift(t,
                                                                 integer_of_int32(k)))),
-                                                         integer_of_int32(n)))))))))))))) } ];
+                                                         integer_of_int32(n_1)))))))))))))) } ];
                    try
                     begin
                       (let jessie_<somenum> =
@@ -922,12 +1054,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po26.why">
-      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "88" begin = "36" end = "70"/>
+      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "97" begin = "36" end = "70"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po27.why">
-      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "88" begin = "36" end = "70"/>
+      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "97" begin = "36" end = "70"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -952,11 +1084,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po32.why">
-      <location file = "why/inv_perm_minimal.why" line = "591" begin = "52" end = "53"/>
+      <location file = "why/inv_perm_minimal.why" line = "713" begin = "52" end = "53"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po33.why">
-      <location file = "why/inv_perm_minimal.why" line = "591" begin = "52" end = "53"/>
+      <location file = "why/inv_perm_minimal.why" line = "713" begin = "52" end = "53"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po34.why">
@@ -970,12 +1102,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po36.why">
-      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "100" begin = "24" end = "158"/>
+      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "109" begin = "24" end = "158"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po37.why">
-      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "100" begin = "24" end = "158"/>
+      <location file = "PPCHOME/tests/jessie/inv_perm_minimal.jessie/inv_perm_minimal.jc" line = "109" begin = "24" end = "158"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -990,11 +1122,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po40.why">
-      <location file = "why/inv_perm_minimal.why" line = "542" begin = "42" end = "43"/>
+      <location file = "why/inv_perm_minimal.why" line = "663" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/inv_perm_minimal_po41.why">
-      <location file = "why/inv_perm_minimal.why" line = "542" begin = "42" end = "43"/>
+      <location file = "why/inv_perm_minimal.why" line = "663" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -1948,6 +2080,10 @@ type intP
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag : charP tag_id
@@ -1976,6 +2112,11 @@ logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
+
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
 
 logic int32_of_integer : int -> int32
 
@@ -2034,6 +2175,10 @@ predicate left_valid_struct_intP(p: intP pointer, a: int,
   intP_alloc_table: intP alloc_table) = (offset_min(intP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -2043,6 +2188,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 
 axiom pointer_addr_of_intP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -2057,6 +2208,10 @@ predicate right_valid_struct_intP(p: intP pointer, b: int,
   intP_alloc_table: intP alloc_table) = (offset_max(intP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
@@ -2070,6 +2225,11 @@ predicate strict_valid_root_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2086,10 +2246,46 @@ predicate strict_valid_struct_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -2100,6 +2296,11 @@ predicate valid_root_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2115,6 +2316,11 @@ predicate valid_struct_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =

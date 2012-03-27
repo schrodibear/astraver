@@ -15,6 +15,12 @@ axiomatic Padding {
   
 }
 
+tag unsigned_charP = {
+  integer unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
 tag charP = {
   integer charM: 8;
 }

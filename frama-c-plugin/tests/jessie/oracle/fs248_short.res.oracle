@@ -16,6 +16,8 @@ axiomatic Padding {
   
 }
 
+type uint8 = 0..255
+
 type int32 = -2147483648..2147483647
 
 type int8 = -128..127
@@ -25,6 +27,12 @@ tag intP = {
 }
 
 type intP = [intP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -276,6 +284,10 @@ type q2_4
 
 type q_2
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic A:  -> int32
@@ -349,6 +361,11 @@ logic integer_of_int8: int8 -> int
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
+
 logic g:  -> S pointer
 
 logic int32_of_integer: int -> int32
@@ -410,6 +427,10 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
 predicate left_valid_struct_intP(p:intP pointer, a:int,
  intP_alloc_table:intP alloc_table) = (offset_min(intP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -424,6 +445,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 
 axiom pointer_addr_of_intP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -444,6 +471,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
 predicate right_valid_struct_intP(p:intP pointer, b:int,
  intP_alloc_table:intP alloc_table) = (offset_max(intP_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_max(voidP_alloc_table, p) >= b)
@@ -461,6 +492,11 @@ predicate strict_valid_root_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -481,6 +517,11 @@ predicate strict_valid_struct_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
@@ -497,6 +538,38 @@ logic tz1:  -> int32
 logic tz2:  -> int32
 
 logic tz3:  -> int32
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_e(S_e_9_alloc_table:S alloc_table) =
  (le_int(offset_min(S_e_9_alloc_table, e), (0))
@@ -537,6 +610,11 @@ predicate valid_root_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
 
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
+
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) <= a)
@@ -556,6 +634,11 @@ predicate valid_struct_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -672,6 +755,38 @@ parameter alloc_struct_intP_requires :
           and (alloc_fresh(intP_alloc_table@, result, n)
               and instanceof(intP_tag_table, result, intP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -701,6 +816,8 @@ parameter alloc_struct_voidP_requires :
 parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
+
+parameter any_uint8 : unit -> { } uint8 { true }
 
 parameter intP_q2_4_alloc_table : intP alloc_table ref
 
@@ -854,6 +971,14 @@ parameter safe_int32_of_integer_ :
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
+
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
 
 let f2_ensures_default =
  fun (x_0_0_0 : charP pointer) (charP_charM_x_0_0_13 : (charP, int8) memory ref) (charP_x_0_0_13_alloc_table : charP alloc_table) ->
@@ -1524,7 +1649,7 @@ why --project [...] why/fs248_short.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/fs248_short_po50.why">
-      <location file = "why/fs248_short.why" line = "1078" begin = "18" end = "74"/>
+      <location file = "why/fs248_short.why" line = "1195" begin = "18" end = "74"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/fs248_short_po51.why">
@@ -1533,16 +1658,16 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/fs248_short_po52.why">
-      <location file = "why/fs248_short.why" line = "1087" begin = "17" end = "73"/>
+      <location file = "why/fs248_short.why" line = "1204" begin = "17" end = "73"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/fs248_short_po53.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "187" begin = "15" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "195" begin = "15" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po54.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "187" begin = "15" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "195" begin = "15" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1617,12 +1742,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs248_short_po69.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "209" begin = "18" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "217" begin = "18" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po70.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "209" begin = "18" end = "44"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "217" begin = "18" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1647,12 +1772,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs248_short_po75.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "221" begin = "15" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "229" begin = "15" end = "38"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po76.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "221" begin = "15" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "229" begin = "15" end = "38"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1667,7 +1792,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po79.why">
-      <location file = "why/fs248_short.why" line = "1234" begin = "11" end = "35"/>
+      <location file = "why/fs248_short.why" line = "1351" begin = "11" end = "35"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1682,7 +1807,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po82.why">
-      <location file = "why/fs248_short.why" line = "1247" begin = "43" end = "69"/>
+      <location file = "why/fs248_short.why" line = "1364" begin = "43" end = "69"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1697,12 +1822,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs248_short_po85.why">
-      <location file = "why/fs248_short.why" line = "1249" begin = "7" end = "50"/>
+      <location file = "why/fs248_short.why" line = "1366" begin = "7" end = "50"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/fs248_short_po86.why">
-      <location file = "why/fs248_short.why" line = "1250" begin = "7" end = "50"/>
+      <location file = "why/fs248_short.why" line = "1367" begin = "7" end = "50"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1762,12 +1887,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs248_short_po7.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "68" begin = "15" end = "169"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "76" begin = "15" end = "169"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po8.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "68" begin = "15" end = "169"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "76" begin = "15" end = "169"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1802,12 +1927,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs248_short_po15.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "71" begin = "15" end = "163"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "79" begin = "15" end = "163"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po16.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "71" begin = "15" end = "163"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "79" begin = "15" end = "163"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1867,12 +1992,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs248_short_po28.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "48" begin = "14" end = "153"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "56" begin = "14" end = "153"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po29.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "48" begin = "14" end = "153"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "56" begin = "14" end = "153"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1907,12 +2032,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs248_short_po36.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "54" begin = "15" end = "163"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "62" begin = "15" end = "163"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po37.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "54" begin = "15" end = "163"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "62" begin = "15" end = "163"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1937,12 +2062,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/fs248_short_po42.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "56" begin = "15" end = "87"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "64" begin = "15" end = "87"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/fs248_short_po43.why">
-      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "56" begin = "15" end = "87"/>
+      <location file = "PPCHOME/tests/jessie/fs248_short.jessie/fs248_short.jc" line = "64" begin = "15" end = "87"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2931,6 +3056,10 @@ type q2_4
 
 type q_2
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic A : int32
@@ -3005,6 +3134,11 @@ logic integer_of_int8 : int8 -> int
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
 
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
+
 logic g : S pointer
 
 logic int32_of_integer : int -> int32
@@ -3067,6 +3201,10 @@ predicate left_valid_struct_intP(p: intP pointer, a: int,
   intP_alloc_table: intP alloc_table) = (offset_min(intP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -3081,6 +3219,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 
 axiom pointer_addr_of_intP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -3102,6 +3246,10 @@ predicate right_valid_struct_intP(p: intP pointer, b: int,
   intP_alloc_table: intP alloc_table) = (offset_max(intP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
@@ -3119,6 +3267,11 @@ predicate strict_valid_root_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3139,6 +3292,11 @@ predicate strict_valid_struct_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
@@ -3155,6 +3313,37 @@ logic tz1 : int32
 logic tz2 : int32
 
 logic tz3 : int32
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_e(S_e_9_alloc_table: S alloc_table) =
   ((offset_min(S_e_9_alloc_table, e) <= 0) and (offset_max(S_e_9_alloc_table,
@@ -3195,6 +3384,11 @@ predicate valid_root_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
 
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
+
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
@@ -3214,6 +3408,11 @@ predicate valid_struct_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =

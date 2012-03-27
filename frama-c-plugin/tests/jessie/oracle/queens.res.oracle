@@ -29,6 +29,12 @@ tag intP = {
 
 type intP = [intP]
 
+tag unsigned_charP = {
+  integer unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
 tag charP = {
   integer charM: 8;
 }
@@ -47,8 +53,8 @@ axiomatic integer_sets {
   predicate in_(integer x, int_set s)
    
   predicate included(int_set a, int_set b) =
-  (\forall integer i;
-    (in_(i, a) ==> in_(i, b)))
+  (\forall integer i_1;
+    (in_(i_1, a) ==> in_(i_1, b)))
    
   logic integer card(int_set s_0)
    
@@ -59,8 +65,8 @@ axiomatic integer_sets {
   logic int_set empty 
    
   axiom empty_def :
-  (\forall integer i_0;
-    (! in_(i_0, empty)))
+  (\forall integer i_2;
+    (! in_(i_2, empty)))
    
   axiom empty_card :
   (\forall int_set s_2;
@@ -71,29 +77,29 @@ axiomatic integer_sets {
   axiom diff_def :
   (\forall int_set a_1;
     (\forall int_set b_1;
-      (\forall integer i_1;
-        (in_(i_1, diff(a_1, b_1)) <==> (in_(i_1, a_1) && (! in_(i_1, b_1)))))))
+      (\forall integer i_3;
+        (in_(i_3, diff(a_1, b_1)) <==> (in_(i_3, a_1) && (! in_(i_3, b_1)))))))
    
   logic int_set add(integer x_0, int_set a_2)
    
   axiom add_def :
   (\forall int_set s_3;
     (\forall integer x_1;
-      (\forall integer i_2;
-        (in_(i_2, add(x_1, s_3)) <==> ((i_2 == x_1) || in_(i_2, s_3))))))
+      (\forall integer i_4;
+        (in_(i_4, add(x_1, s_3)) <==> ((i_4 == x_1) || in_(i_4, s_3))))))
    
   logic int_set remove(integer x_2, int_set s_4)
    
   axiom remove_def :
   (\forall int_set s_5;
     (\forall integer x_3;
-      (\forall integer i_3;
-        (in_(i_3, remove(x_3, s_5)) <==> (in_(i_3, s_5) && (i_3 != x_3))))))
+      (\forall integer i_5;
+        (in_(i_5, remove(x_3, s_5)) <==> (in_(i_5, s_5) && (i_5 != x_3))))))
    
   axiom remove_card :
   (\forall int_set s_6;
-    (\forall integer i_4;
-      (in_(i_4, s_6) ==> (card(remove(i_4, s_6)) == (card(s_6) - 1)))))
+    (\forall integer i_6;
+      (in_(i_6, s_6) ==> (card(remove(i_6, s_6)) == (card(s_6) - 1)))))
    
   logic integer min_elt(int_set s_7)
    
@@ -101,46 +107,46 @@ axiomatic integer_sets {
   (\forall int_set s_8;
     ((card(s_8) > 0) ==>
       (in_(min_elt(s_8), s_8) &&
-        (\forall integer i_5;
-          (in_(i_5, s_8) ==> (min_elt(s_8) <= i_5))))))
+        (\forall integer i_7;
+          (in_(i_7, s_8) ==> (min_elt(s_8) <= i_7))))))
    
   logic int_set singleton(integer x_4)
    
   axiom singleton_def :
-  (\forall integer i_6;
-    (\forall integer j;
-      (in_(j, singleton(i_6)) <==> (j == i_6))))
+  (\forall integer i_8;
+    (\forall integer j_0;
+      (in_(j_0, singleton(i_8)) <==> (j_0 == i_8))))
    
   logic int_set succ(int_set s_9)
    
   axiom succ_def_1 :
   (\forall int_set s_10;
-    (\forall integer i_7;
-      (in_(i_7, s_10) ==> in_((i_7 + 1), succ(s_10)))))
+    (\forall integer i_9;
+      (in_(i_9, s_10) ==> in_((i_9 + 1), succ(s_10)))))
    
   axiom succ_def_2 :
   (\forall int_set s_11;
-    (\forall integer i_8;
-      (in_(i_8, succ(s_11)) ==> ((i_8 >= 1) && in_((i_8 - 1), s_11)))))
+    (\forall integer i_10;
+      (in_(i_10, succ(s_11)) ==> ((i_10 >= 1) && in_((i_10 - 1), s_11)))))
    
   logic int_set pred(int_set s_12)
    
   axiom pred_def_1 :
   (\forall int_set s_13;
-    (\forall integer i_9;
-      ((i_9 >= 1) ==> (in_(i_9, s_13) ==> in_((i_9 - 1), pred(s_13))))))
+    (\forall integer i_11;
+      ((i_11 >= 1) ==> (in_(i_11, s_13) ==> in_((i_11 - 1), pred(s_13))))))
    
   axiom pred_def_2 :
   (\forall int_set s_14;
-    (\forall integer i_10;
-      (in_(i_10, pred(s_14)) ==> in_((i_10 + 1), s_14))))
+    (\forall integer i_12;
+      (in_(i_12, pred(s_14)) ==> in_((i_12 + 1), s_14))))
    
   logic int_set below(integer n)
    
   axiom below_def :
   (\forall integer n_0;
-    (\forall integer i_11;
-      (in_(i_11, below(n_0)) <==> ((0 <= i_11) && (i_11 < n_0)))))
+    (\forall integer i_13;
+      (in_(i_13, below(n_0)) <==> ((0 <= i_13) && (i_13 < n_0)))))
    
   axiom below_card :
   (\forall integer n_1;
@@ -254,9 +260,9 @@ axiomatic N_queens {
   
 }
 
-predicate eq_prefix{L}(intP[..] t, intP[..] u, integer i_12) =
+predicate eq_prefix{L}(intP[..] t, intP[..] u, integer i_14) =
 (\forall integer k;
-  (((0 <= k) && (k < i_12)) ==> ((t + k).intM == (u + k).intM)))
+  (((0 <= k) && (k < i_14)) ==> ((t + k).intM == (u + k).intM)))
 
 predicate eq_sol{L}(intP[..] t_0, intP[..] u_0) =
 eq_prefix{L}(t_0, u_0, N)
@@ -270,28 +276,28 @@ intP[..] col;
 integer k;
 
 lemma dont_bother_me_I_am_a_ghost_1{L} :
-(\forall integer i_13;
-  ((\offset_min(sol) <= i_13) && (\offset_max(sol) >= i_13)))
+(\forall integer i_15;
+  ((\offset_min(sol) <= i_15) && (\offset_max(sol) >= i_15)))
 
 lemma dont_bother_me_I_am_a_ghost_2{L} :
-(\forall integer i_14;
-  (\forall integer j_0;
-    ((\offset_min((sol + i_14).int_xM) <= j_0) &&
-      (\offset_max((sol + i_14).int_xM) >= j_0))))
+(\forall integer i_16;
+  (\forall integer j_1;
+    ((\offset_min((sol + i_16).int_xM) <= j_1) &&
+      (\offset_max((sol + i_16).int_xM) >= j_1))))
 
 lemma dont_bother_me_I_am_a_ghost_3{L} :
-(\forall integer i_15;
-  ((\offset_min(col) <= i_15) && (\offset_max(col) >= i_15)))
+(\forall integer i_17;
+  ((\offset_min(col) <= i_17) && (\offset_max(col) >= i_17)))
 
 predicate partial_solution{L}(integer k_0, intP[..] s_15) =
-(\forall integer i_16;
-  (((0 <= i_16) && (i_16 < k_0)) ==>
-    (((0 <= (s_15 + i_16).intM) && ((s_15 + i_16).intM < N)) &&
-      (\forall integer j_1;
-        (((0 <= j_1) && (j_1 < i_16)) ==>
-          ((((s_15 + i_16).intM != (s_15 + j_1).intM) &&
-             (((s_15 + i_16).intM - (s_15 + j_1).intM) != (i_16 - j_1))) &&
-            (((s_15 + i_16).intM - (s_15 + j_1).intM) != (j_1 - i_16))))))))
+(\forall integer i_18;
+  (((0 <= i_18) && (i_18 < k_0)) ==>
+    (((0 <= (s_15 + i_18).intM) && ((s_15 + i_18).intM < N)) &&
+      (\forall integer j_2;
+        (((0 <= j_2) && (j_2 < i_18)) ==>
+          ((((s_15 + i_18).intM != (s_15 + j_2).intM) &&
+             (((s_15 + i_18).intM - (s_15 + j_2).intM) != (i_18 - j_2))) &&
+            (((s_15 + i_18).intM - (s_15 + j_2).intM) != (j_2 - i_18))))))))
 
 predicate solution{L}(intP[..] s_16) =
 partial_solution{L}(N, s_16)
@@ -304,15 +310,15 @@ lemma partial_solution_eq_prefix{L} :
         (eq_prefix{L}(t_1, u_1, k_1) ==> partial_solution{L}(k_1, u_1))))))
 
 predicate lt_sol{L}(intP[..] s1, intP[..] s2) =
-(\exists integer i_17;
-  ((((0 <= i_17) && (i_17 < N)) && eq_prefix{L}(s1, s2, i_17)) &&
-    ((s1 + i_17).intM < (s2 + i_17).intM)))
+(\exists integer i_19;
+  ((((0 <= i_19) && (i_19 < N)) && eq_prefix{L}(s1, s2, i_19)) &&
+    ((s1 + i_19).intM < (s2 + i_19).intM)))
 
 predicate sorted{L}(int_xP[..] s_17, integer a_6, integer b_5) =
-(\forall integer i_18;
-  (\forall integer j_2;
-    (((a_6 <= i_18) && ((i_18 < j_2) && (j_2 < b_5))) ==>
-      lt_sol{L}((s_17 + i_18).int_xM, (s_17 + j_2).int_xM))))
+(\forall integer i_20;
+  (\forall integer j_3;
+    (((a_6 <= i_20) && ((i_20 < j_3) && (j_3 < b_5))) ==>
+      lt_sol{L}((s_17 + i_20).int_xM, (s_17 + j_3).int_xM))))
 
 integer min_elt(integer x)
   requires (C_28 : (x != 0));
@@ -336,26 +342,26 @@ integer t3(integer a_0, integer b_0, integer c_0)
   requires (C_87 : ((((C_90 : (0 <= k)) &&
                        (C_91 : ((k + card(iset(a_0))) == N))) &&
                       (C_92 : (0 <= s))) &&
-                     ((C_94 : (\forall integer i_20;
-                                (in_(i_20, iset(a_0)) <==>
-                                  (((0 <= i_20) && (i_20 < N)) &&
-                                    (\forall integer j_3;
-                                      (((0 <= j_3) && (j_3 < k)) ==>
-                                        (i_20 != (col + j_3).intM))))))) &&
-                       ((C_96 : (\forall integer i_21;
-                                  ((i_21 >= 0) ==>
-                                    (in_(i_21, iset(b_0)) <==>
-                                      (\exists integer j_4;
-                                        (((0 <= j_4) && (j_4 < k)) &&
-                                          ((col + j_4).intM ==
-                                            ((i_21 + j_4) - k)))))))) &&
-                         ((C_98 : (\forall integer i_22;
-                                    ((i_22 >= 0) ==>
-                                      (in_(i_22, iset(c_0)) <==>
-                                        (\exists integer j_5;
-                                          (((0 <= j_5) && (j_5 < k)) &&
-                                            ((col + j_5).intM ==
-                                              ((i_22 + k) - j_5)))))))) &&
+                     ((C_94 : (\forall integer i_22;
+                                (in_(i_22, iset(a_0)) <==>
+                                  (((0 <= i_22) && (i_22 < N)) &&
+                                    (\forall integer j_4;
+                                      (((0 <= j_4) && (j_4 < k)) ==>
+                                        (i_22 != (col + j_4).intM))))))) &&
+                       ((C_96 : (\forall integer i_23;
+                                  ((i_23 >= 0) ==>
+                                    (in_(i_23, iset(b_0)) <==>
+                                      (\exists integer j_5;
+                                        (((0 <= j_5) && (j_5 < k)) &&
+                                          ((col + j_5).intM ==
+                                            ((i_23 + j_5) - k)))))))) &&
+                         ((C_98 : (\forall integer i_24;
+                                    ((i_24 >= 0) ==>
+                                      (in_(i_24, iset(c_0)) <==>
+                                        (\exists integer j_6;
+                                          (((0 <= j_6) && (j_6 < k)) &&
+                                            ((col + j_6).intM ==
+                                              ((i_24 + k) - j_6)))))))) &&
                            (C_99 : partial_solution{Here}(k, col)))))));
   decreases (C_100 : card(iset(a_0)));
 behavior default:
@@ -370,9 +376,9 @@ behavior default:
                     (C_86 : (\forall intP[..] t_3;
                               ((solution{Here}(t_3) &&
                                  eq_prefix{Here}(col, t_3, k)) <==>
-                                (\exists integer i_23;
-                                  (((\at(s,Old) <= i_23) && (i_23 < s)) &&
-                                    eq_sol{Here}(t_3, (sol + i_23).int_xM))))))));
+                                (\exists integer i_25;
+                                  (((\at(s,Old) <= i_25) && (i_25 < s)) &&
+                                    eq_sol{Here}(t_3, (sol + i_25).int_xM))))))));
 {  
    (var integer d_0);
    
@@ -406,11 +412,11 @@ behavior default:
                                                          iset(e_0))) &&
                                                  eq_prefix{Here}(col, t_2, k)) &&
                                                 ((t_2 + k).intM == di)))) <==>
-                                           (\exists integer i_19;
-                                             (((\at(s,L) <= i_19) &&
-                                                (i_19 < s)) &&
+                                           (\exists integer i_21;
+                                             (((\at(s,L) <= i_21) &&
+                                                (i_21 < s)) &&
                                                eq_sol{Here}(t_2,
-                                                            (sol + i_19).int_xM))))))));
+                                                            (sol + i_21).int_xM))))))));
          behavior default:
            
            assigns (col + [k..]).intM,
@@ -455,31 +461,31 @@ behavior default:
    }
 }
 
-integer queens(integer n)
-  requires (C_114 : (((C_116 : (n == N)) && (C_117 : (s == 0))) &&
+integer queens(integer n_1)
+  requires (C_114 : (((C_116 : (n_1 == N)) && (C_117 : (s == 0))) &&
                       (C_118 : (k == 0))));
 behavior default:
   ensures (C_109 : (((C_111 : (\result == s)) &&
                       (C_112 : sorted{Here}(sol, 0, s))) &&
                      (C_113 : (\forall intP[..] t_4;
                                 (solution{Here}(t_4) <==>
-                                  (\exists integer i_24;
-                                    (((0 <= i_24) && (i_24 < \result)) &&
-                                      eq_sol{Here}(t_4, (sol + i_24).int_xM))))))));
+                                  (\exists integer i_26;
+                                    (((0 <= i_26) && (i_26 < \result)) &&
+                                      eq_sol{Here}(t_4, (sol + i_26).int_xM))))))));
 {  
    (var integer tmp_1);
    
    {  
       {  
-         (assert for default: (C_104 : (-1 <= (2147483647 >>> n))));
+         (assert for default: (C_104 : (-1 <= (2147483647 >>> n_1))));
          
          (assert for default: (C_103 : (-1 >= 0)));
          
-         (assert for default: (C_102 : (n < 32)));
+         (assert for default: (C_102 : (n_1 < 32)));
          
-         (assert for default: (C_101 : (n >= 0)));
-         (C_108 : (tmp_1 = (C_107 : t3((C_106 : (~ (C_105 : (-1 << n)))), 0,
-                                       0))))
+         (assert for default: (C_101 : (n_1 >= 0)));
+         (C_108 : (tmp_1 = (C_107 : t3((C_106 : (~ (C_105 : (-1 << n_1)))),
+                                       0, 0))))
       };
       
       (return tmp_1)
@@ -495,6 +501,8 @@ type int_set
 type int_xP
 
 type padding
+
+type unsigned_charP
 
 type voidP
 
@@ -528,10 +536,10 @@ logic diff: int_set, int_set -> int_set
 
 logic empty:  -> int_set
 
-predicate eq_prefix(t:intP pointer, u:intP pointer, i_12:int,
+predicate eq_prefix(t:intP pointer, u:intP pointer, i_14:int,
  intP_intM_at_L:(intP, int) memory) =
  (forall k_1:int.
-  ((le_int((0), k_1) and lt_int(k_1, i_12)) ->
+  ((le_int((0), k_1) and lt_int(k_1, i_14)) ->
    (select(intP_intM_at_L, shift(t, k_1)) = select(intP_intM_at_L,
                                             shift(u, k_1)))))
 
@@ -541,7 +549,7 @@ predicate eq_sol(t_0:intP pointer, u_0:intP pointer,
 logic in_: int, int_set -> prop
 
 predicate included(a:int_set, b:int_set) =
- (forall i:int. (in_(i, a) -> in_(i, b)))
+ (forall i_1:int. (in_(i_1, a) -> in_(i_1, b)))
 
 logic intP_tag:  -> intP tag_id
 
@@ -589,37 +597,41 @@ predicate left_valid_struct_int_xP(p:int_xP pointer, a:int,
  int_xP_alloc_table:int_xP alloc_table) =
  (offset_min(int_xP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
 
 predicate lt_sol(s1_1:intP pointer, s2_1:intP pointer,
  intP_intM_at_L:(intP, int) memory) =
- (exists i_17:int.
-  (le_int((0), i_17)
-  and (lt_int(i_17, N)
-      and (eq_prefix(s1_1, s2_1, i_17, intP_intM_at_L)
-          and lt_int(select(intP_intM_at_L, shift(s1_1, i_17)),
-              select(intP_intM_at_L, shift(s2_1, i_17)))))))
+ (exists i_19:int.
+  (le_int((0), i_19)
+  and (lt_int(i_19, N)
+      and (eq_prefix(s1_1, s2_1, i_19, intP_intM_at_L)
+          and lt_int(select(intP_intM_at_L, shift(s1_1, i_19)),
+              select(intP_intM_at_L, shift(s2_1, i_19)))))))
 
 logic min_elt: int_set -> int
 
 predicate partial_solution(k_0:int, s_15:intP pointer,
  intP_intM_at_L:(intP, int) memory) =
- (forall i_16:int.
-  ((le_int((0), i_16) and lt_int(i_16, k_0)) ->
-   (le_int((0), select(intP_intM_at_L, shift(s_15, i_16)))
-   and (lt_int(select(intP_intM_at_L, shift(s_15, i_16)), N)
-       and (forall j_1:int.
-            ((le_int((0), j_1) and lt_int(j_1, i_16)) ->
-             ((select(intP_intM_at_L, shift(s_15, i_16)) <> select(intP_intM_at_L,
-                                                            shift(s_15, j_1)))
-             and ((sub_int(select(intP_intM_at_L, shift(s_15, i_16)),
-                   select(intP_intM_at_L, shift(s_15, j_1))) <> sub_int(i_16,
-                                                                j_1))
-                 and (sub_int(select(intP_intM_at_L, shift(s_15, i_16)),
-                      select(intP_intM_at_L, shift(s_15, j_1))) <> sub_int(j_1,
-                                                                   i_16))))))))))
+ (forall i_18:int.
+  ((le_int((0), i_18) and lt_int(i_18, k_0)) ->
+   (le_int((0), select(intP_intM_at_L, shift(s_15, i_18)))
+   and (lt_int(select(intP_intM_at_L, shift(s_15, i_18)), N)
+       and (forall j_2:int.
+            ((le_int((0), j_2) and lt_int(j_2, i_18)) ->
+             ((select(intP_intM_at_L, shift(s_15, i_18)) <> select(intP_intM_at_L,
+                                                            shift(s_15, j_2)))
+             and ((sub_int(select(intP_intM_at_L, shift(s_15, i_18)),
+                   select(intP_intM_at_L, shift(s_15, j_2))) <> sub_int(i_18,
+                                                                j_2))
+                 and (sub_int(select(intP_intM_at_L, shift(s_15, i_18)),
+                      select(intP_intM_at_L, shift(s_15, j_2))) <> sub_int(j_2,
+                                                                   i_18))))))))))
 
 axiom pointer_addr_of_charP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
@@ -629,6 +641,12 @@ axiom pointer_addr_of_intP_of_pointer_address :
 
 axiom pointer_addr_of_int_xP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(int_xP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -650,6 +668,10 @@ predicate right_valid_struct_int_xP(p:int_xP pointer, b:int,
  int_xP_alloc_table:int_xP alloc_table) =
  (offset_max(int_xP_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_max(voidP_alloc_table, p) >= b)
@@ -664,11 +686,11 @@ predicate solution(s_16:intP pointer, intP_intM_at_L:(intP, int) memory) =
 predicate sorted(s_17:int_xP pointer, a_6:int, b_5:int,
  intP_intM_at_L:(intP, int) memory,
  int_xP_int_xM_at_L:(int_xP, intP pointer) memory) =
- (forall i_18:int.
-  (forall j_2:int.
-   ((le_int(a_6, i_18) and (lt_int(i_18, j_2) and lt_int(j_2, b_5))) ->
-    lt_sol(select(int_xP_int_xM_at_L, shift(s_17, i_18)),
-    select(int_xP_int_xM_at_L, shift(s_17, j_2)), intP_intM_at_L))))
+ (forall i_20:int.
+  (forall j_3:int.
+   ((le_int(a_6, i_20) and (lt_int(i_20, j_3) and lt_int(j_3, b_5))) ->
+    lt_sol(select(int_xP_int_xM_at_L, shift(s_17, i_20)),
+    select(int_xP_int_xM_at_L, shift(s_17, j_3)), intP_intM_at_L))))
 
 predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -684,6 +706,11 @@ predicate strict_valid_root_int_xP(p:int_xP pointer, a:int, b:int,
  int_xP_alloc_table:int_xP alloc_table) =
  ((offset_min(int_xP_alloc_table, p) = a)
  and (offset_max(int_xP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -705,12 +732,33 @@ predicate strict_valid_struct_int_xP(p:int_xP pointer, a:int, b:int,
  ((offset_min(int_xP_alloc_table, p) = a)
  and (offset_max(int_xP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
 logic succ: int_set -> int_set
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -726,6 +774,11 @@ predicate valid_root_int_xP(p:int_xP pointer, a:int, b:int,
  int_xP_alloc_table:int_xP alloc_table) =
  ((offset_min(int_xP_alloc_table, p) <= a)
  and (offset_max(int_xP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -746,6 +799,11 @@ predicate valid_struct_int_xP(p:int_xP pointer, a:int, b:int,
  int_xP_alloc_table:int_xP alloc_table) =
  ((offset_min(int_xP_alloc_table, p) <= a)
  and (offset_max(int_xP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -768,7 +826,7 @@ axiom voidP_tags :
 
 axiom card_nonneg : (forall s_1_0:int_set. ge_int(card(s_1_0), (0)))
 
-axiom empty_def : (forall i_0:int. (not in_(i_0, empty)))
+axiom empty_def : (forall i_2:int. (not in_(i_2, empty)))
 
 axiom empty_card :
  (forall s_2:int_set. ((card(s_2) = (0)) <-> (s_2 = empty)))
@@ -776,62 +834,63 @@ axiom empty_card :
 axiom diff_def :
  (forall a_1_0:int_set.
   (forall b_1_0:int_set.
-   (forall i_1:int.
-    (in_(i_1, diff(a_1_0, b_1_0))
-    <-> (in_(i_1, a_1_0) and (not in_(i_1, b_1_0)))))))
+   (forall i_3:int.
+    (in_(i_3, diff(a_1_0, b_1_0))
+    <-> (in_(i_3, a_1_0) and (not in_(i_3, b_1_0)))))))
 
 axiom add_def :
  (forall s_3:int_set.
   (forall x_1_0:int.
-   (forall i_2:int.
-    (in_(i_2, add(x_1_0, s_3)) <-> ((i_2 = x_1_0) or in_(i_2, s_3))))))
+   (forall i_4:int.
+    (in_(i_4, add(x_1_0, s_3)) <-> ((i_4 = x_1_0) or in_(i_4, s_3))))))
 
 axiom remove_def :
  (forall s_5:int_set.
   (forall x_3:int.
-   (forall i_3:int.
-    (in_(i_3, remove(x_3, s_5)) <-> (in_(i_3, s_5) and (i_3 <> x_3))))))
+   (forall i_5:int.
+    (in_(i_5, remove(x_3, s_5)) <-> (in_(i_5, s_5) and (i_5 <> x_3))))))
 
 axiom remove_card :
  (forall s_6:int_set.
-  (forall i_4:int.
-   (in_(i_4, s_6) -> (card(remove(i_4, s_6)) = sub_int(card(s_6), (1))))))
+  (forall i_6:int.
+   (in_(i_6, s_6) -> (card(remove(i_6, s_6)) = sub_int(card(s_6), (1))))))
 
 axiom min_elt_def :
  (forall s_8:int_set.
   (gt_int(card(s_8), (0)) ->
    (in_(min_elt(s_8), s_8)
-   and (forall i_5:int. (in_(i_5, s_8) -> le_int(min_elt(s_8), i_5))))))
+   and (forall i_7:int. (in_(i_7, s_8) -> le_int(min_elt(s_8), i_7))))))
 
 axiom singleton_def :
- (forall i_6:int. (forall j:int. (in_(j, singleton(i_6)) <-> (j = i_6))))
+ (forall i_8:int.
+  (forall j_0:int. (in_(j_0, singleton(i_8)) <-> (j_0 = i_8))))
 
 axiom succ_def_1 :
  (forall s_10:int_set.
-  (forall i_7:int. (in_(i_7, s_10) -> in_(add_int(i_7, (1)), succ(s_10)))))
+  (forall i_9:int. (in_(i_9, s_10) -> in_(add_int(i_9, (1)), succ(s_10)))))
 
 axiom succ_def_2 :
  (forall s_11:int_set.
-  (forall i_8:int.
-   (in_(i_8, succ(s_11)) ->
-    (ge_int(i_8, (1)) and in_(sub_int(i_8, (1)), s_11)))))
+  (forall i_10:int.
+   (in_(i_10, succ(s_11)) ->
+    (ge_int(i_10, (1)) and in_(sub_int(i_10, (1)), s_11)))))
 
 axiom pred_def_1 :
  (forall s_13:int_set.
-  (forall i_9:int.
-   (ge_int(i_9, (1)) ->
-    (in_(i_9, s_13) -> in_(sub_int(i_9, (1)), pred(s_13))))))
+  (forall i_11:int.
+   (ge_int(i_11, (1)) ->
+    (in_(i_11, s_13) -> in_(sub_int(i_11, (1)), pred(s_13))))))
 
 axiom pred_def_2 :
  (forall s_14:int_set.
-  (forall i_10:int. (in_(i_10, pred(s_14)) -> in_(add_int(i_10, (1)), s_14))))
+  (forall i_12:int. (in_(i_12, pred(s_14)) -> in_(add_int(i_12, (1)), s_14))))
 
 axiom below_def :
- (forall n_0_0:int.
-  (forall i_11:int.
-   (in_(i_11, below(n_0_0)) <-> (le_int((0), i_11) and lt_int(i_11, n_0_0)))))
+ (forall n_0:int.
+  (forall i_13:int.
+   (in_(i_13, below(n_0)) <-> (le_int((0), i_13) and lt_int(i_13, n_0)))))
 
-axiom below_card : (forall n_1:int. (card(below(n_1)) = n_1))
+axiom below_card : (forall n_1_0:int. (card(below(n_1_0)) = n_1_0))
 
 axiom iset_c_zero : (forall x_6:int. ((iset(x_6) = empty) <-> (x_6 = (0))))
 
@@ -871,27 +930,27 @@ axiom N_positive : gt_int(N, (0))
 
 lemma dont_bother_me_I_am_a_ghost_1 :
  (forall int_xP_alloc_table_at_L:int_xP alloc_table.
-  (forall i_13:int.
-   (le_int(offset_min(int_xP_alloc_table_at_L, sol), i_13)
-   and ge_int(offset_max(int_xP_alloc_table_at_L, sol), i_13))))
+  (forall i_15:int.
+   (le_int(offset_min(int_xP_alloc_table_at_L, sol), i_15)
+   and ge_int(offset_max(int_xP_alloc_table_at_L, sol), i_15))))
 
 lemma dont_bother_me_I_am_a_ghost_2 :
  (forall intP_alloc_table_at_L:intP alloc_table.
   (forall int_xP_int_xM_at_L:(int_xP, intP pointer) memory.
-   (forall i_14:int.
-    (forall j_0:int.
+   (forall i_16:int.
+    (forall j_1:int.
      (le_int(offset_min(intP_alloc_table_at_L,
-             select(int_xP_int_xM_at_L, shift(sol, i_14))),
-      j_0)
+             select(int_xP_int_xM_at_L, shift(sol, i_16))),
+      j_1)
      and ge_int(offset_max(intP_alloc_table_at_L,
-                select(int_xP_int_xM_at_L, shift(sol, i_14))),
-         j_0))))))
+                select(int_xP_int_xM_at_L, shift(sol, i_16))),
+         j_1))))))
 
 lemma dont_bother_me_I_am_a_ghost_3 :
  (forall intP_alloc_table_at_L:intP alloc_table.
-  (forall i_15:int.
-   (le_int(offset_min(intP_alloc_table_at_L, col), i_15)
-   and ge_int(offset_max(intP_alloc_table_at_L, col), i_15))))
+  (forall i_17:int.
+   (le_int(offset_min(intP_alloc_table_at_L, col), i_17)
+   and ge_int(offset_max(intP_alloc_table_at_L, col), i_17))))
 
 lemma partial_solution_eq_prefix :
  (forall intP_intM_at_L:(intP, int) memory.
@@ -989,6 +1048,38 @@ parameter alloc_struct_int_xP_requires :
           and (alloc_fresh(int_xP_alloc_table@, result, n)
               and instanceof(int_xP_tag_table, result, int_xP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -1033,7 +1124,7 @@ parameter min_elt_0_requires :
 parameter s_0 : int ref
 
 parameter queens :
- n_0:int ->
+ n_1:int ->
   { } int reads intP_alloc_table,intP_intM,int_xP_int_xM,k,s_0
   writes intP_intM,k,s_0
   { (JC_<somenum>:
@@ -1042,16 +1133,16 @@ parameter queens :
         and (JC_<somenum>:
             (forall t_4:intP pointer.
              (solution(t_4, intP_intM)
-             <-> (exists i_24:int.
-                  (le_int((0), i_24)
-                  and (lt_int(i_24, result)
+             <-> (exists i_26:int.
+                  (le_int((0), i_26)
+                  and (lt_int(i_26, result)
                       and eq_sol(t_4,
-                          select(int_xP_int_xM, shift(sol, i_24)), intP_intM)))))))))) }
+                          select(int_xP_int_xM, shift(sol, i_26)), intP_intM)))))))))) }
 
 parameter queens_requires :
- n_0:int ->
+ n_1:int ->
   { (JC_<somenum>:
-    ((JC_<somenum>: (n_0 = N)) and ((JC_<somenum>: (s_0 = (0))) and (JC_<somenum>: (k = (0))))))}
+    ((JC_<somenum>: (n_1 = N)) and ((JC_<somenum>: (s_0 = (0))) and (JC_<somenum>: (k = (0))))))}
   int reads intP_alloc_table,intP_intM,int_xP_int_xM,k,s_0
   writes intP_intM,k,s_0
   { (JC_<somenum>:
@@ -1060,11 +1151,11 @@ parameter queens_requires :
         and (JC_<somenum>:
             (forall t_4:intP pointer.
              (solution(t_4, intP_intM)
-             <-> (exists i_24:int.
-                  (le_int((0), i_24)
-                  and (lt_int(i_24, result)
+             <-> (exists i_26:int.
+                  (le_int((0), i_26)
+                  and (lt_int(i_26, result)
                       and eq_sol(t_4,
-                          select(int_xP_int_xM, shift(sol, i_24)), intP_intM)))))))))) }
+                          select(int_xP_int_xM, shift(sol, i_26)), intP_intM)))))))))) }
 
 parameter store_solution :
  tt:unit ->
@@ -1116,11 +1207,11 @@ parameter t3 :
                        (forall t_3:intP pointer.
                         ((solution(t_3, intP_intM)
                          and eq_prefix(col, t_3, k, intP_intM))
-                        <-> (exists i_23:int.
-                             (le_int(s_0@, i_23)
-                             and (lt_int(i_23, s_0)
+                        <-> (exists i_25:int.
+                             (le_int(s_0@, i_25)
+                             and (lt_int(i_25, s_0)
                                  and eq_sol(t_3,
-                                     select(int_xP_int_xM, shift(sol, i_23)),
+                                     select(int_xP_int_xM, shift(sol, i_25)),
                                      intP_intM))))))))))))
       and (JC_<somenum>:
           not_assigns(intP_alloc_table@, intP_intM@, intP_intM,
@@ -1137,31 +1228,31 @@ parameter t3_requires :
       and ((JC_<somenum>: (add_int(k, card(iset(a_0_0))) = N))
           and ((JC_<somenum>: le_int((0), s_0))
               and ((JC_<somenum>:
-                   (forall i_20:int.
-                    (in_(i_20, iset(a_0_0))
-                    <-> (le_int((0), i_20)
-                        and (lt_int(i_20, N)
-                            and (forall j_3:int.
-                                 ((le_int((0), j_3) and lt_int(j_3, k)) ->
-                                  (i_20 <> select(intP_intM, shift(col, j_3))))))))))
+                   (forall i_22:int.
+                    (in_(i_22, iset(a_0_0))
+                    <-> (le_int((0), i_22)
+                        and (lt_int(i_22, N)
+                            and (forall j_4:int.
+                                 ((le_int((0), j_4) and lt_int(j_4, k)) ->
+                                  (i_22 <> select(intP_intM, shift(col, j_4))))))))))
                   and ((JC_<somenum>:
-                       (forall i_21:int.
-                        (ge_int(i_21, (0)) ->
-                         (in_(i_21, iset(b_0_0))
-                         <-> (exists j_4:int.
-                              (le_int((0), j_4)
-                              and (lt_int(j_4, k)
-                                  and (select(intP_intM, shift(col, j_4)) = 
-                                      sub_int(add_int(i_21, j_4), k)))))))))
+                       (forall i_23:int.
+                        (ge_int(i_23, (0)) ->
+                         (in_(i_23, iset(b_0_0))
+                         <-> (exists j_5:int.
+                              (le_int((0), j_5)
+                              and (lt_int(j_5, k)
+                                  and (select(intP_intM, shift(col, j_5)) = 
+                                      sub_int(add_int(i_23, j_5), k)))))))))
                       and ((JC_<somenum>:
-                           (forall i_22:int.
-                            (ge_int(i_22, (0)) ->
-                             (in_(i_22, iset(c_0))
-                             <-> (exists j_5:int.
-                                  (le_int((0), j_5)
-                                  and (lt_int(j_5, k)
-                                      and (select(intP_intM, shift(col, j_5)) = 
-                                          sub_int(add_int(i_22, k), j_5)))))))))
+                           (forall i_24:int.
+                            (ge_int(i_24, (0)) ->
+                             (in_(i_24, iset(c_0))
+                             <-> (exists j_6:int.
+                                  (le_int((0), j_6)
+                                  and (lt_int(j_6, k)
+                                      and (select(intP_intM, shift(col, j_6)) = 
+                                          sub_int(add_int(i_24, k), j_6)))))))))
                           and (JC_<somenum>: partial_solution(k, col, intP_intM)))))))))}
     int reads intP_alloc_table,intP_intM,int_xP_int_xM,k,s_0
     writes intP_intM,k,s_0
@@ -1175,11 +1266,11 @@ parameter t3_requires :
                        (forall t_3:intP pointer.
                         ((solution(t_3, intP_intM)
                          and eq_prefix(col, t_3, k, intP_intM))
-                        <-> (exists i_23:int.
-                             (le_int(s_0@, i_23)
-                             and (lt_int(i_23, s_0)
+                        <-> (exists i_25:int.
+                             (le_int(s_0@, i_25)
+                             and (lt_int(i_25, s_0)
                                  and eq_sol(t_3,
-                                     select(int_xP_int_xM, shift(sol, i_23)),
+                                     select(int_xP_int_xM, shift(sol, i_25)),
                                      intP_intM))))))))))))
       and (JC_<somenum>:
           not_assigns(intP_alloc_table@, intP_intM@, intP_intM,
@@ -1187,10 +1278,12 @@ parameter t3_requires :
                               pset_range_right(pset_singleton(sol), s_0@))),
           pset_range_right(pset_singleton(col), k@)))))) }
 
+parameter unsigned_charP_unsigned_charM : (unsigned_charP, int) memory ref
+
 let queens_ensures_default =
- fun (n_0 : int) ->
+ fun (n_1 : int) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: (n_0 = N)) and ((JC_<somenum>: (s_0 = (0))) and (JC_<somenum>: (k = (0)))))) }
+    ((JC_<somenum>: (n_1 = N)) and ((JC_<somenum>: (s_0 = (0))) and (JC_<somenum>: (k = (0)))))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -1200,13 +1293,13 @@ let queens_ensures_default =
        (let jessie_<somenum> =
        (C_108:
        begin
-         (assert { (JC_<somenum>: le_int(neg_int((1)), asr((2147483647), n_0))) };
+         (assert { (JC_<somenum>: le_int(neg_int((1)), asr((2147483647), n_1))) };
          void); (assert { (JC_<somenum>: ge_int(neg_int((1)), (0))) }; void);
-        (assert { (JC_<somenum>: lt_int(n_0, (32))) }; void);
-        (assert { (JC_<somenum>: ge_int(n_0, (0))) }; void);
+        (assert { (JC_<somenum>: lt_int(n_1, (32))) }; void);
+        (assert { (JC_<somenum>: ge_int(n_1, (0))) }; void);
         (tmp_1 := (C_107:
                   (let jessie_<somenum> =
-                  (C_106: (bw_compl (C_105: ((lsl (neg_int (1))) n_0)))) in
+                  (C_106: (bw_compl (C_105: ((lsl (neg_int (1))) n_1)))) in
                   (let jessie_<somenum> = (0) in
                   (let jessie_<somenum> = (0) in
                   (JC_<somenum>: (((t3 jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))));
@@ -1218,16 +1311,16 @@ let queens_ensures_default =
         and (JC_<somenum>:
             (forall t_4:intP pointer.
              (solution(t_4, intP_intM)
-             <-> (exists i_24:int.
-                  (le_int((0), i_24)
-                  and (lt_int(i_24, result)
+             <-> (exists i_26:int.
+                  (le_int((0), i_26)
+                  and (lt_int(i_26, result)
                       and eq_sol(t_4,
-                          select(int_xP_int_xM, shift(sol, i_24)), intP_intM)))))))))) }
+                          select(int_xP_int_xM, shift(sol, i_26)), intP_intM)))))))))) }
 
 let queens_safety =
- fun (n_0 : int) ->
+ fun (n_1 : int) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: (n_0 = N)) and ((JC_<somenum>: (s_0 = (0))) and (JC_<somenum>: (k = (0)))))) }
+    ((JC_<somenum>: (n_1 = N)) and ((JC_<somenum>: (s_0 = (0))) and (JC_<somenum>: (k = (0)))))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -1238,13 +1331,13 @@ let queens_safety =
        (C_108:
        begin
          [ { } unit
-           { (JC_<somenum>: le_int(neg_int((1)), asr((2147483647), n_0))) } ];
+           { (JC_<somenum>: le_int(neg_int((1)), asr((2147483647), n_1))) } ];
         [ { } unit { (JC_<somenum>: ge_int(neg_int((1)), (0))) } ];
-        [ { } unit { (JC_<somenum>: lt_int(n_0, (32))) } ];
-        [ { } unit { (JC_<somenum>: ge_int(n_0, (0))) } ];
+        [ { } unit { (JC_<somenum>: lt_int(n_1, (32))) } ];
+        [ { } unit { (JC_<somenum>: ge_int(n_1, (0))) } ];
         (tmp_1 := (C_107:
                   (let jessie_<somenum> =
-                  (C_106: (bw_compl (C_105: ((lsl (neg_int (1))) n_0)))) in
+                  (C_106: (bw_compl (C_105: ((lsl (neg_int (1))) n_1)))) in
                   (let jessie_<somenum> = (0) in
                   (let jessie_<somenum> = (0) in
                   (JC_<somenum>:
@@ -1402,31 +1495,31 @@ let t3_ensures_default =
     and ((JC_<somenum>: (add_int(k, card(iset(a_0_0))) = N))
         and ((JC_<somenum>: le_int((0), s_0))
             and ((JC_<somenum>:
-                 (forall i_20:int.
-                  (in_(i_20, iset(a_0_0))
-                  <-> (le_int((0), i_20)
-                      and (lt_int(i_20, N)
-                          and (forall j_3:int.
-                               ((le_int((0), j_3) and lt_int(j_3, k)) ->
-                                (i_20 <> select(intP_intM, shift(col, j_3))))))))))
+                 (forall i_22:int.
+                  (in_(i_22, iset(a_0_0))
+                  <-> (le_int((0), i_22)
+                      and (lt_int(i_22, N)
+                          and (forall j_4:int.
+                               ((le_int((0), j_4) and lt_int(j_4, k)) ->
+                                (i_22 <> select(intP_intM, shift(col, j_4))))))))))
                 and ((JC_<somenum>:
-                     (forall i_21:int.
-                      (ge_int(i_21, (0)) ->
-                       (in_(i_21, iset(b_0_0))
-                       <-> (exists j_4:int.
-                            (le_int((0), j_4)
-                            and (lt_int(j_4, k)
-                                and (select(intP_intM, shift(col, j_4)) = 
-                                    sub_int(add_int(i_21, j_4), k)))))))))
+                     (forall i_23:int.
+                      (ge_int(i_23, (0)) ->
+                       (in_(i_23, iset(b_0_0))
+                       <-> (exists j_5:int.
+                            (le_int((0), j_5)
+                            and (lt_int(j_5, k)
+                                and (select(intP_intM, shift(col, j_5)) = 
+                                    sub_int(add_int(i_23, j_5), k)))))))))
                     and ((JC_<somenum>:
-                         (forall i_22:int.
-                          (ge_int(i_22, (0)) ->
-                           (in_(i_22, iset(c_0))
-                           <-> (exists j_5:int.
-                                (le_int((0), j_5)
-                                and (lt_int(j_5, k)
-                                    and (select(intP_intM, shift(col, j_5)) = 
-                                        sub_int(add_int(i_22, k), j_5)))))))))
+                         (forall i_24:int.
+                          (ge_int(i_24, (0)) ->
+                           (in_(i_24, iset(c_0))
+                           <-> (exists j_6:int.
+                                (le_int((0), j_6)
+                                and (lt_int(j_6, k)
+                                    and (select(intP_intM, shift(col, j_6)) = 
+                                        sub_int(add_int(i_24, k), j_6)))))))))
                         and (JC_<somenum>: partial_solution(k, col, intP_intM))))))))) }
   (init:
   (let return = ref (any_int void) in
@@ -1473,12 +1566,12 @@ let t3_ensures_default =
                                                   intP_intM)
                                                  and (select(intP_intM,
                                                       shift(t_2, k)) = di)))))
-                                       <-> (exists i_19:int.
-                                            (le_int(s_0@L, i_19)
-                                            and (lt_int(i_19, s_0)
+                                       <-> (exists i_21:int.
+                                            (le_int(s_0@L, i_21)
+                                            and (lt_int(i_21, s_0)
                                                 and eq_sol(t_2,
                                                     select(int_xP_int_xM,
-                                                    shift(sol, i_19)),
+                                                    shift(sol, i_21)),
                                                     intP_intM))))))))))))))
              and ((JC_<somenum>:
                   not_assigns(intP_alloc_table@loop_4, intP_intM@loop_4,
@@ -1562,11 +1655,11 @@ let t3_ensures_default =
                      (forall t_3:intP pointer.
                       ((solution(t_3, intP_intM)
                        and eq_prefix(col, t_3, k, intP_intM))
-                      <-> (exists i_23:int.
-                           (le_int(s_0@, i_23)
-                           and (lt_int(i_23, s_0)
+                      <-> (exists i_25:int.
+                           (le_int(s_0@, i_25)
+                           and (lt_int(i_25, s_0)
                                and eq_sol(t_3,
-                                   select(int_xP_int_xM, shift(sol, i_23)),
+                                   select(int_xP_int_xM, shift(sol, i_25)),
                                    intP_intM))))))))))))
     and (JC_<somenum>:
         not_assigns(intP_alloc_table@, intP_intM@, intP_intM,
@@ -1581,31 +1674,31 @@ let t3_safety =
     and ((JC_<somenum>: (add_int(k, card(iset(a_0_0))) = N))
         and ((JC_<somenum>: le_int((0), s_0))
             and ((JC_<somenum>:
-                 (forall i_20:int.
-                  (in_(i_20, iset(a_0_0))
-                  <-> (le_int((0), i_20)
-                      and (lt_int(i_20, N)
-                          and (forall j_3:int.
-                               ((le_int((0), j_3) and lt_int(j_3, k)) ->
-                                (i_20 <> select(intP_intM, shift(col, j_3))))))))))
+                 (forall i_22:int.
+                  (in_(i_22, iset(a_0_0))
+                  <-> (le_int((0), i_22)
+                      and (lt_int(i_22, N)
+                          and (forall j_4:int.
+                               ((le_int((0), j_4) and lt_int(j_4, k)) ->
+                                (i_22 <> select(intP_intM, shift(col, j_4))))))))))
                 and ((JC_<somenum>:
-                     (forall i_21:int.
-                      (ge_int(i_21, (0)) ->
-                       (in_(i_21, iset(b_0_0))
-                       <-> (exists j_4:int.
-                            (le_int((0), j_4)
-                            and (lt_int(j_4, k)
-                                and (select(intP_intM, shift(col, j_4)) = 
-                                    sub_int(add_int(i_21, j_4), k)))))))))
+                     (forall i_23:int.
+                      (ge_int(i_23, (0)) ->
+                       (in_(i_23, iset(b_0_0))
+                       <-> (exists j_5:int.
+                            (le_int((0), j_5)
+                            and (lt_int(j_5, k)
+                                and (select(intP_intM, shift(col, j_5)) = 
+                                    sub_int(add_int(i_23, j_5), k)))))))))
                     and ((JC_<somenum>:
-                         (forall i_22:int.
-                          (ge_int(i_22, (0)) ->
-                           (in_(i_22, iset(c_0))
-                           <-> (exists j_5:int.
-                                (le_int((0), j_5)
-                                and (lt_int(j_5, k)
-                                    and (select(intP_intM, shift(col, j_5)) = 
-                                        sub_int(add_int(i_22, k), j_5)))))))))
+                         (forall i_24:int.
+                          (ge_int(i_24, (0)) ->
+                           (in_(i_24, iset(c_0))
+                           <-> (exists j_6:int.
+                                (le_int((0), j_6)
+                                and (lt_int(j_6, k)
+                                    and (select(intP_intM, shift(col, j_6)) = 
+                                        sub_int(add_int(i_24, k), j_6)))))))))
                         and (JC_<somenum>: partial_solution(k, col, intP_intM))))))))) }
   (init:
   (let return = ref (any_int void) in
@@ -1654,12 +1747,12 @@ let t3_safety =
                                                     intP_intM)
                                                    and (select(intP_intM,
                                                         shift(t_2, k)) = di)))))
-                                         <-> (exists i_19:int.
-                                              (le_int(s_0@L, i_19)
-                                              and (lt_int(i_19, s_0)
+                                         <-> (exists i_21:int.
+                                              (le_int(s_0@L, i_21)
+                                              and (lt_int(i_21, s_0)
                                                   and eq_sol(t_2,
                                                       select(int_xP_int_xM,
-                                                      shift(sol, i_19)),
+                                                      shift(sol, i_21)),
                                                       intP_intM)))))))))))))) } ];
            try
             begin
@@ -1816,11 +1909,11 @@ why --project [...] why/queens.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/queens_po42.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "384" begin = "9" end = "3025"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "390" begin = "9" end = "3025"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/queens_po43.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "384" begin = "9" end = "3025"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "390" begin = "9" end = "3025"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/queens_po44.why">
@@ -1864,11 +1957,11 @@ why --project [...] why/queens.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/queens_po54.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "384" begin = "9" end = "3025"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "390" begin = "9" end = "3025"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/queens_po55.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "384" begin = "9" end = "3025"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "390" begin = "9" end = "3025"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/queens_po56.why">
@@ -1911,12 +2004,12 @@ why --project [...] why/queens.why
 text = "UserCall"/>
     </goal>
     <goal why_file="why/queens_po65.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "427" begin = "27" end = "146"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "433" begin = "27" end = "146"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/queens_po66.why">
-      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "427" begin = "27" end = "146"/>
+      <location file = "PPCHOME/tests/jessie/queens.jessie/queens.jc" line = "433" begin = "27" end = "146"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1926,11 +2019,11 @@ text = "PointerDeref"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po68.why">
-      <location file = "why/queens.why" line = "1226" begin = "30" end = "132"/>
+      <location file = "why/queens.why" line = "1313" begin = "30" end = "132"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po69.why">
-      <location file = "why/queens.why" line = "1226" begin = "30" end = "132"/>
+      <location file = "why/queens.why" line = "1313" begin = "30" end = "132"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po70.why">
@@ -2031,11 +2124,11 @@ text = "UserCall"/>
 text = "DivByZero"/>
     </goal>
     <goal why_file="why/queens_po30.why">
-      <location file = "why/queens.why" line = "897" begin = "26" end = "120"/>
+      <location file = "why/queens.why" line = "984" begin = "26" end = "120"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po31.why">
-      <location file = "why/queens.why" line = "897" begin = "26" end = "120"/>
+      <location file = "why/queens.why" line = "984" begin = "26" end = "120"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/queens_po32.why">
@@ -3096,6 +3189,8 @@ type int_xP
 
 type padding
 
+type unsigned_charP
+
 type voidP
 
 logic N : int
@@ -3129,10 +3224,10 @@ logic diff : int_set, int_set -> int_set
 
 logic empty : int_set
 
-predicate eq_prefix(t: intP pointer, u: intP pointer, i_12: int,
+predicate eq_prefix(t: intP pointer, u: intP pointer, i_14: int,
   intP_intM_at_L: (intP, int) memory) =
   (forall k_1:int.
-    (((0 <= k_1) and (k_1 < i_12)) -> (select(intP_intM_at_L, shift(t,
+    (((0 <= k_1) and (k_1 < i_14)) -> (select(intP_intM_at_L, shift(t,
      k_1)) = select(intP_intM_at_L, shift(u, k_1)))))
 
 predicate eq_sol(t_0: intP pointer, u_0: intP pointer, intP_intM_at_L: (intP,
@@ -3141,7 +3236,7 @@ predicate eq_sol(t_0: intP pointer, u_0: intP pointer, intP_intM_at_L: (intP,
 logic in_ : int, int_set -> prop
 
 predicate included(a: int_set, b: int_set) =
-  (forall i:int. (in_(i, a) -> in_(i, b)))
+  (forall i_1:int. (in_(i_1, a) -> in_(i_1, b)))
 
 logic intP_tag : intP tag_id
 
@@ -3190,36 +3285,40 @@ predicate left_valid_struct_int_xP(p: int_xP pointer, a: int,
   int_xP_alloc_table: int_xP alloc_table) = (offset_min(int_xP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
 
 predicate lt_sol(s1_1: intP pointer, s2_1: intP pointer,
   intP_intM_at_L: (intP, int) memory) =
-  (exists i_17:int.
-    ((0 <= i_17) and
-     ((i_17 < N) and
-      (eq_prefix(s1_1, s2_1, i_17, intP_intM_at_L) and
-       (select(intP_intM_at_L, shift(s1_1, i_17)) < select(intP_intM_at_L,
-       shift(s2_1, i_17)))))))
+  (exists i_19:int.
+    ((0 <= i_19) and
+     ((i_19 < N) and
+      (eq_prefix(s1_1, s2_1, i_19, intP_intM_at_L) and
+       (select(intP_intM_at_L, shift(s1_1, i_19)) < select(intP_intM_at_L,
+       shift(s2_1, i_19)))))))
 
 logic min_elt : int_set -> int
 
 predicate partial_solution(k_0: int, s_15: intP pointer,
   intP_intM_at_L: (intP, int) memory) =
-  (forall i_16:int.
-    (((0 <= i_16) and (i_16 < k_0)) ->
-     ((0 <= select(intP_intM_at_L, shift(s_15, i_16))) and
-      ((select(intP_intM_at_L, shift(s_15, i_16)) < N) and
-       (forall j_1:int.
-         (((0 <= j_1) and (j_1 < i_16)) ->
+  (forall i_18:int.
+    (((0 <= i_18) and (i_18 < k_0)) ->
+     ((0 <= select(intP_intM_at_L, shift(s_15, i_18))) and
+      ((select(intP_intM_at_L, shift(s_15, i_18)) < N) and
+       (forall j_2:int.
+         (((0 <= j_2) and (j_2 < i_18)) ->
           ((select(intP_intM_at_L, shift(s_15,
-           i_16)) <> select(intP_intM_at_L, shift(s_15, j_1))) and
+           i_18)) <> select(intP_intM_at_L, shift(s_15, j_2))) and
            (((select(intP_intM_at_L, shift(s_15,
-            i_16)) - select(intP_intM_at_L, shift(s_15,
-            j_1))) <> (i_16 - j_1)) and ((select(intP_intM_at_L, shift(s_15,
-            i_16)) - select(intP_intM_at_L, shift(s_15,
-            j_1))) <> (j_1 - i_16))))))))))
+            i_18)) - select(intP_intM_at_L, shift(s_15,
+            j_2))) <> (i_18 - j_2)) and ((select(intP_intM_at_L, shift(s_15,
+            i_18)) - select(intP_intM_at_L, shift(s_15,
+            j_2))) <> (j_2 - i_18))))))))))
 
 axiom pointer_addr_of_charP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
@@ -3230,6 +3329,12 @@ axiom pointer_addr_of_intP_of_pointer_address:
 axiom pointer_addr_of_int_xP_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(int_xP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -3252,6 +3357,10 @@ predicate right_valid_struct_int_xP(p: int_xP pointer, b: int,
   int_xP_alloc_table: int_xP alloc_table) = (offset_max(int_xP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
@@ -3266,11 +3375,11 @@ predicate solution(s_16: intP pointer, intP_intM_at_L: (intP, int) memory) =
 predicate sorted(s_17: int_xP pointer, a_6: int, b_5: int,
   intP_intM_at_L: (intP, int) memory, int_xP_int_xM_at_L: (int_xP,
   intP pointer) memory) =
-  (forall i_18:int.
-    (forall j_2:int.
-      (((a_6 <= i_18) and ((i_18 < j_2) and (j_2 < b_5))) ->
-       lt_sol(select(int_xP_int_xM_at_L, shift(s_17, i_18)),
-       select(int_xP_int_xM_at_L, shift(s_17, j_2)), intP_intM_at_L))))
+  (forall i_20:int.
+    (forall j_3:int.
+      (((a_6 <= i_20) and ((i_20 < j_3) and (j_3 < b_5))) ->
+       lt_sol(select(int_xP_int_xM_at_L, shift(s_17, i_20)),
+       select(int_xP_int_xM_at_L, shift(s_17, j_3)), intP_intM_at_L))))
 
 predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -3286,6 +3395,11 @@ predicate strict_valid_root_int_xP(p: int_xP pointer, a: int, b: int,
   int_xP_alloc_table: int_xP alloc_table) =
   ((offset_min(int_xP_alloc_table, p) = a) and
    (offset_max(int_xP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3307,12 +3421,33 @@ predicate strict_valid_struct_int_xP(p: int_xP pointer, a: int, b: int,
   ((offset_min(int_xP_alloc_table, p) = a) and
    (offset_max(int_xP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
 
 logic succ : int_set -> int_set
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -3328,6 +3463,11 @@ predicate valid_root_int_xP(p: int_xP pointer, a: int, b: int,
   int_xP_alloc_table: int_xP alloc_table) =
   ((offset_min(int_xP_alloc_table, p) <= a) and
    (offset_max(int_xP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3348,6 +3488,11 @@ predicate valid_struct_int_xP(p: int_xP pointer, a: int, b: int,
   int_xP_alloc_table: int_xP alloc_table) =
   ((offset_min(int_xP_alloc_table, p) <= a) and
    (offset_max(int_xP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3371,67 +3516,68 @@ axiom voidP_tags:
 
 axiom card_nonneg: (forall s_1_0:int_set. (card(s_1_0) >= 0))
 
-axiom empty_def: (forall i_0:int. (not in_(i_0, empty)))
+axiom empty_def: (forall i_2:int. (not in_(i_2, empty)))
 
 axiom empty_card: (forall s_2:int_set. ((card(s_2) = 0) <-> (s_2 = empty)))
 
 axiom diff_def:
   (forall a_1_0:int_set.
     (forall b_1_0:int_set.
-      (forall i_1:int.
-        (in_(i_1, diff(a_1_0, b_1_0)) <->
-         (in_(i_1, a_1_0) and (not in_(i_1, b_1_0)))))))
+      (forall i_3:int.
+        (in_(i_3, diff(a_1_0, b_1_0)) <->
+         (in_(i_3, a_1_0) and (not in_(i_3, b_1_0)))))))
 
 axiom add_def:
   (forall s_3:int_set.
     (forall x_1_0:int.
-      (forall i_2:int.
-        (in_(i_2, add(x_1_0, s_3)) <-> ((i_2 = x_1_0) or in_(i_2, s_3))))))
+      (forall i_4:int.
+        (in_(i_4, add(x_1_0, s_3)) <-> ((i_4 = x_1_0) or in_(i_4, s_3))))))
 
 axiom remove_def:
   (forall s_5:int_set.
     (forall x_3:int.
-      (forall i_3:int.
-        (in_(i_3, remove(x_3, s_5)) <-> (in_(i_3, s_5) and (i_3 <> x_3))))))
+      (forall i_5:int.
+        (in_(i_5, remove(x_3, s_5)) <-> (in_(i_5, s_5) and (i_5 <> x_3))))))
 
 axiom remove_card:
   (forall s_6:int_set.
-    (forall i_4:int.
-      (in_(i_4, s_6) -> (card(remove(i_4, s_6)) = (card(s_6) - 1)))))
+    (forall i_6:int.
+      (in_(i_6, s_6) -> (card(remove(i_6, s_6)) = (card(s_6) - 1)))))
 
 axiom min_elt_def:
   (forall s_8:int_set.
     ((card(s_8) > 0) ->
      (in_(min_elt(s_8), s_8) and
-      (forall i_5:int. (in_(i_5, s_8) -> (min_elt(s_8) <= i_5))))))
+      (forall i_7:int. (in_(i_7, s_8) -> (min_elt(s_8) <= i_7))))))
 
 axiom singleton_def:
-  (forall i_6:int. (forall j:int. (in_(j, singleton(i_6)) <-> (j = i_6))))
+  (forall i_8:int.
+    (forall j_0:int. (in_(j_0, singleton(i_8)) <-> (j_0 = i_8))))
 
 axiom succ_def_1:
   (forall s_10:int_set.
-    (forall i_7:int. (in_(i_7, s_10) -> in_((i_7 + 1), succ(s_10)))))
+    (forall i_9:int. (in_(i_9, s_10) -> in_((i_9 + 1), succ(s_10)))))
 
 axiom succ_def_2:
   (forall s_11:int_set.
-    (forall i_8:int.
-      (in_(i_8, succ(s_11)) -> ((i_8 >= 1) and in_((i_8 - 1), s_11)))))
+    (forall i_10:int.
+      (in_(i_10, succ(s_11)) -> ((i_10 >= 1) and in_((i_10 - 1), s_11)))))
 
 axiom pred_def_1:
   (forall s_13:int_set.
-    (forall i_9:int.
-      ((i_9 >= 1) -> (in_(i_9, s_13) -> in_((i_9 - 1), pred(s_13))))))
+    (forall i_11:int.
+      ((i_11 >= 1) -> (in_(i_11, s_13) -> in_((i_11 - 1), pred(s_13))))))
 
 axiom pred_def_2:
   (forall s_14:int_set.
-    (forall i_10:int. (in_(i_10, pred(s_14)) -> in_((i_10 + 1), s_14))))
+    (forall i_12:int. (in_(i_12, pred(s_14)) -> in_((i_12 + 1), s_14))))
 
 axiom below_def:
-  (forall n_0_0:int.
-    (forall i_11:int.
-      (in_(i_11, below(n_0_0)) <-> ((0 <= i_11) and (i_11 < n_0_0)))))
+  (forall n_0:int.
+    (forall i_13:int.
+      (in_(i_13, below(n_0)) <-> ((0 <= i_13) and (i_13 < n_0)))))
 
-axiom below_card: (forall n_1:int. (card(below(n_1)) = n_1))
+axiom below_card: (forall n_1_0:int. (card(below(n_1_0)) = n_1_0))
 
 axiom iset_c_zero: (forall x_6:int. ((iset(x_6) = empty) <-> (x_6 = 0)))
 

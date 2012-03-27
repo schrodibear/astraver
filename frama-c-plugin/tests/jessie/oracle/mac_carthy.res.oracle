@@ -15,6 +15,12 @@ axiomatic Padding {
   
 }
 
+tag unsigned_charP = {
+  integer unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
 tag charP = {
   integer charM: 8;
 }
@@ -26,16 +32,16 @@ tag voidP = {
 
 type voidP = [voidP]
 
-integer f91(integer n)
-  decreases (C_12 : (101 - n));
+integer f91(integer n_1)
+  decreases (C_12 : (101 - n_1));
 behavior default:
   ensures (C_9 : true);
 behavior less_than_101:
-  assumes (n <= 100);
+  assumes (n_1 <= 100);
   ensures (C_10 : (\result == 91));
 behavior greater_than_100:
-  assumes (n >= 101);
-  ensures (C_11 : (\result == (\at(n,Old) - 10)));
+  assumes (n_1 >= 101);
+  ensures (C_11 : (\result == (\at(n_1,Old) - 10)));
 {  
    (var integer tmp);
    
@@ -43,16 +49,16 @@ behavior greater_than_100:
    
    (var integer __retres);
    
-   {  (if (n <= 100) then 
+   {  (if (n_1 <= 100) then 
       {  
-         {  (C_5 : (tmp = (C_4 : f91((C_3 : (n + 11))))));
+         {  (C_5 : (tmp = (C_4 : f91((C_3 : (n_1 + 11))))));
             (C_7 : (tmp_0 = (C_6 : f91(tmp))))
          };
          (C_8 : (__retres = tmp_0));
          
          (goto return_label)
       } else 
-      {  (C_2 : (__retres = (C_1 : (n - 10))));
+      {  (C_2 : (__retres = (C_1 : (n_1 - 10))));
          
          (goto return_label)
       });
@@ -110,28 +116,28 @@ case lex1: (\forall integer x1;
   
 }
 
-integer f91_nonrec(integer n_0, integer x)
-  requires (C_24 : (n_0 >= 1));
+integer f91_nonrec(integer n_2, integer x)
+  requires (C_24 : (n_2 >= 1));
 behavior default:
-  ensures (C_23 : (\result == iter_f(\at(n_0,Old), \at(x,Old))));
+  ensures (C_23 : (\result == iter_f(\at(n_2,Old), \at(x,Old))));
 {  
    {  
       loop 
       behavior default:
-        invariant (C_14 : (n_0 >= 0));
+        invariant (C_14 : (n_2 >= 0));
       behavior default:
-        invariant (C_13 : (iter_f(n_0, x) == \at(iter_f(n_0, x),Pre)));
+        invariant (C_13 : (iter_f(n_2, x) == \at(iter_f(n_2, x),Pre)));
       while (true)
       {  
-         {  (if (n_0 > 0) then () else 
+         {  (if (n_2 > 0) then () else 
             (goto while_0_break));
             
             {  (if (x > 100) then 
                {  (C_20 : (x = (C_19 : (x - 10))));
-                  (C_22 : (n_0 = (C_21 : (n_0 - 1))))
+                  (C_22 : (n_2 = (C_21 : (n_2 - 1))))
                } else 
                {  (C_16 : (x = (C_15 : (x + 11))));
-                  (C_18 : (n_0 = (C_17 : (n_0 + 1))))
+                  (C_18 : (n_2 = (C_17 : (n_2 + 1))))
                })
             }
          }
@@ -147,6 +153,8 @@ type charP
 type padding
 
 type pair_type
+
+type unsigned_charP
 
 type voidP
 
@@ -174,6 +182,10 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
  charP_alloc_table:charP alloc_table) =
  (offset_min(charP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -196,6 +208,12 @@ inductive lex: pair_type, pair_type -> prop =
 axiom pointer_addr_of_charP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
+
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
 axiom pointer_addr_of_voidP_of_pointer_address :
@@ -205,6 +223,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
  charP_alloc_table:charP alloc_table) =
  (offset_max(charP_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_max(voidP_alloc_table, p) >= b)
@@ -213,6 +235,11 @@ predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) = a)
  and (offset_max(charP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -224,15 +251,41 @@ predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
  ((offset_min(charP_alloc_table, p) = a)
  and (offset_max(charP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
  and (offset_max(charP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -243,6 +296,11 @@ predicate valid_struct_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
  and (offset_max(charP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -273,10 +331,10 @@ axiom f_def2 :
 axiom iter_f_def1 : (forall x_3:int. (iter_f((0), x_3) = x_3))
 
 axiom iter_f_def2 :
- (forall n_0_1:int.
+ (forall n_0:int.
   (forall x_4:int.
-   (gt_int(n_0_1, (0)) ->
-    (iter_f(n_0_1, x_4) = iter_f(sub_int(n_0_1, (1)), f(x_4))))))
+   (gt_int(n_0, (0)) ->
+    (iter_f(n_0, x_4) = iter_f(sub_int(n_0, (1)), f(x_4))))))
 
 exception Goto_while_0_break_exc of unit
 
@@ -312,6 +370,38 @@ parameter alloc_struct_charP_requires :
           and (alloc_fresh(charP_alloc_table@, result, n)
               and instanceof(charP_tag_table, result, charP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -339,28 +429,27 @@ parameter alloc_struct_voidP_requires :
               and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
 parameter f91 :
- n:int ->
+ n_1:int ->
   { } int
-  { ((ge_int(n, (101)) -> (JC_<somenum>: (result = sub_int(n, (10)))))
-    and (le_int(n, (100)) -> (JC_<somenum>: (result = (91))))) }
+  { ((ge_int(n_1, (101)) -> (JC_<somenum>: (result = sub_int(n_1, (10)))))
+    and (le_int(n_1, (100)) -> (JC_<somenum>: (result = (91))))) }
 
 parameter f91_nonrec :
- n_0_0:int -> x_1:int -> { } int { (JC_<somenum>: (result = iter_f(n_0_0, x_1))) }
+ n_2:int -> x_1:int -> { } int { (JC_<somenum>: (result = iter_f(n_2, x_1))) }
 
 parameter f91_nonrec_requires :
- n_0_0:int ->
+ n_2:int ->
   x_1:int ->
-   { (JC_<somenum>: ge_int(n_0_0, (1)))} int
-   { (JC_<somenum>: (result = iter_f(n_0_0, x_1))) }
+   { (JC_<somenum>: ge_int(n_2, (1)))} int { (JC_<somenum>: (result = iter_f(n_2, x_1))) }
 
 parameter f91_requires :
- n:int ->
+ n_1:int ->
   { } int
-  { ((ge_int(n, (101)) -> (JC_<somenum>: (result = sub_int(n, (10)))))
-    and (le_int(n, (100)) -> (JC_<somenum>: (result = (91))))) }
+  { ((ge_int(n_1, (101)) -> (JC_<somenum>: (result = sub_int(n_1, (10)))))
+    and (le_int(n_1, (100)) -> (JC_<somenum>: (result = (91))))) }
 
 let f91_ensures_default =
- fun (n : int) ->
+ fun (n_1 : int) ->
   { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int void) in
@@ -371,7 +460,7 @@ let f91_ensures_default =
      (let __retres = ref (any_int void) in
      try
       begin
-        (if ((le_int_ n) (100))
+        (if ((le_int_ n_1) (100))
         then
          (C_8:
          begin
@@ -381,7 +470,7 @@ let f91_ensures_default =
            begin
              (let jessie_<somenum> =
              (tmp := (C_4:
-                     (let jessie_<somenum> = (C_3: ((add_int n) (11))) in
+                     (let jessie_<somenum> = (C_3: ((add_int n_1) (11))) in
                      (JC_<somenum>: (f91 jessie_<somenum>))))) in void);
             (tmp_0 := (C_6:
                       (let jessie_<somenum> = !tmp in (JC_<somenum>: (f91 jessie_<somenum>)))));
@@ -391,15 +480,15 @@ let f91_ensures_default =
         else
          (C_2:
          begin
-           (let jessie_<somenum> = (__retres := (C_1: ((sub_int n) (10)))) in void);
-          (raise (Return_label_exc void)) end));
+           (let jessie_<somenum> = (__retres := (C_1: ((sub_int n_1) (10)))) in
+           void); (raise (Return_label_exc void)) end));
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let f91_ensures_greater_than_100 =
- fun (n : int) ->
-  { ge_int(n, (101)) }
+ fun (n_1 : int) ->
+  { ge_int(n_1, (101)) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -409,7 +498,7 @@ let f91_ensures_greater_than_100 =
      (let __retres = ref (any_int void) in
      try
       begin
-        (if ((le_int_ n) (100))
+        (if ((le_int_ n_1) (100))
         then
          (C_8:
          begin
@@ -419,7 +508,7 @@ let f91_ensures_greater_than_100 =
            begin
              (let jessie_<somenum> =
              (tmp := (C_4:
-                     (let jessie_<somenum> = (C_3: ((add_int n) (11))) in
+                     (let jessie_<somenum> = (C_3: ((add_int n_1) (11))) in
                      (JC_<somenum>: (f91 jessie_<somenum>))))) in void);
             (tmp_0 := (C_6:
                       (let jessie_<somenum> = !tmp in (JC_<somenum>: (f91 jessie_<somenum>)))));
@@ -429,16 +518,16 @@ let f91_ensures_greater_than_100 =
         else
          (C_2:
          begin
-           (let jessie_<somenum> = (__retres := (C_1: ((sub_int n) (10)))) in void);
-          (raise (Return_label_exc void)) end));
+           (let jessie_<somenum> = (__retres := (C_1: ((sub_int n_1) (10)))) in
+           void); (raise (Return_label_exc void)) end));
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
     absurd  end with Return -> !return end))
-  { (JC_<somenum>: (result = sub_int(n, (10)))) }
+  { (JC_<somenum>: (result = sub_int(n_1, (10)))) }
 
 let f91_ensures_less_than_101 =
- fun (n : int) ->
-  { le_int(n, (100)) }
+ fun (n_1 : int) ->
+  { le_int(n_1, (100)) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -448,7 +537,7 @@ let f91_ensures_less_than_101 =
      (let __retres = ref (any_int void) in
      try
       begin
-        (if ((le_int_ n) (100))
+        (if ((le_int_ n_1) (100))
         then
          (C_8:
          begin
@@ -458,7 +547,7 @@ let f91_ensures_less_than_101 =
            begin
              (let jessie_<somenum> =
              (tmp := (C_4:
-                     (let jessie_<somenum> = (C_3: ((add_int n) (11))) in
+                     (let jessie_<somenum> = (C_3: ((add_int n_1) (11))) in
                      (JC_<somenum>: (f91 jessie_<somenum>))))) in void);
             (tmp_0 := (C_6:
                       (let jessie_<somenum> = !tmp in (JC_<somenum>: (f91 jessie_<somenum>)))));
@@ -468,16 +557,16 @@ let f91_ensures_less_than_101 =
         else
          (C_2:
          begin
-           (let jessie_<somenum> = (__retres := (C_1: ((sub_int n) (10)))) in void);
-          (raise (Return_label_exc void)) end));
+           (let jessie_<somenum> = (__retres := (C_1: ((sub_int n_1) (10)))) in
+           void); (raise (Return_label_exc void)) end));
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { (JC_<somenum>: (result = (91))) }
 
 let f91_nonrec_ensures_default =
- fun (n_0_0 : int) (x_1 : int) ->
-  { (JC_<somenum>: ge_int(n_0_0, (1))) }
-  (let mutable_n_0_0 = ref n_0_0 in
+ fun (n_2 : int) (x_1 : int) ->
+  { (JC_<somenum>: ge_int(n_2, (1))) }
+  (let mutable_n_2 = ref n_2 in
   (let mutable_x_1 = ref x_1 in
   (init:
   (let return = ref (any_int void) in
@@ -489,16 +578,16 @@ let f91_nonrec_ensures_default =
         while true do
         { invariant
             ((JC_<somenum>:
-             (iter_f(mutable_n_0_0, mutable_x_1) = iter_f(mutable_n_0_0@init,
-                                                   mutable_x_1@init)))
-            and (JC_<somenum>: ge_int(mutable_n_0_0, (0))))  }
+             (iter_f(mutable_n_2, mutable_x_1) = iter_f(mutable_n_2@init,
+                                                 mutable_x_1@init)))
+            and (JC_<somenum>: ge_int(mutable_n_2, (0))))  }
          begin
            [ { } unit { true } ];
           try
            begin
              (let jessie_<somenum> =
              begin
-               (if ((gt_int_ !mutable_n_0_0) (0)) then void
+               (if ((gt_int_ !mutable_n_2) (0)) then void
                else (raise (Goto_while_0_break_exc void)));
               (if ((gt_int_ !mutable_x_1) (100))
               then
@@ -508,8 +597,8 @@ let f91_nonrec_ensures_default =
                  (let jessie_<somenum> =
                  (mutable_x_1 := (C_19: ((sub_int !mutable_x_1) (10)))) in
                  void);
-                (mutable_n_0_0 := (C_21: ((sub_int !mutable_n_0_0) (1))));
-                !mutable_n_0_0 end))
+                (mutable_n_2 := (C_21: ((sub_int !mutable_n_2) (1))));
+                !mutable_n_2 end))
               else
                (C_16:
                (C_18:
@@ -517,8 +606,8 @@ let f91_nonrec_ensures_default =
                  (let jessie_<somenum> =
                  (mutable_x_1 := (C_15: ((add_int !mutable_x_1) (11)))) in
                  void);
-                (mutable_n_0_0 := (C_17: ((add_int !mutable_n_0_0) (1))));
-                !mutable_n_0_0 end))) end in void);
+                (mutable_n_2 := (C_17: ((add_int !mutable_n_2) (1))));
+                !mutable_n_2 end))) end in void);
             (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end with
@@ -526,12 +615,12 @@ let f91_nonrec_ensures_default =
       (while_0_break:
       begin   void; (return := !mutable_x_1); (raise Return) end) end; 
     absurd  end with Return -> !return end))))
-  { (JC_<somenum>: (result = iter_f(n_0_0, x_1))) }
+  { (JC_<somenum>: (result = iter_f(n_2, x_1))) }
 
 let f91_nonrec_safety =
- fun (n_0_0 : int) (x_1 : int) ->
-  { (JC_<somenum>: ge_int(n_0_0, (1))) }
-  (let mutable_n_0_0 = ref n_0_0 in
+ fun (n_2 : int) (x_1 : int) ->
+  { (JC_<somenum>: ge_int(n_2, (1))) }
+  (let mutable_n_2 = ref n_2 in
   (let mutable_x_1 = ref x_1 in
   (init:
   (let return = ref (any_int void) in
@@ -543,16 +632,16 @@ let f91_nonrec_safety =
         while true do
         { invariant (JC_<somenum>: true) variant (0) }
          begin
-           [ { } unit reads mutable_n_0_0,mutable_x_1
+           [ { } unit reads mutable_n_2,mutable_x_1
              { ((JC_<somenum>:
-                (iter_f(mutable_n_0_0, mutable_x_1) = iter_f(mutable_n_0_0@init,
-                                                      mutable_x_1@init)))
-               and (JC_<somenum>: ge_int(mutable_n_0_0, (0)))) } ];
+                (iter_f(mutable_n_2, mutable_x_1) = iter_f(mutable_n_2@init,
+                                                    mutable_x_1@init)))
+               and (JC_<somenum>: ge_int(mutable_n_2, (0)))) } ];
           try
            begin
              (let jessie_<somenum> =
              begin
-               (if ((gt_int_ !mutable_n_0_0) (0)) then void
+               (if ((gt_int_ !mutable_n_2) (0)) then void
                else (raise (Goto_while_0_break_exc void)));
               (if ((gt_int_ !mutable_x_1) (100))
               then
@@ -562,8 +651,8 @@ let f91_nonrec_safety =
                  (let jessie_<somenum> =
                  (mutable_x_1 := (C_19: ((sub_int !mutable_x_1) (10)))) in
                  void);
-                (mutable_n_0_0 := (C_21: ((sub_int !mutable_n_0_0) (1))));
-                !mutable_n_0_0 end))
+                (mutable_n_2 := (C_21: ((sub_int !mutable_n_2) (1))));
+                !mutable_n_2 end))
               else
                (C_16:
                (C_18:
@@ -571,8 +660,8 @@ let f91_nonrec_safety =
                  (let jessie_<somenum> =
                  (mutable_x_1 := (C_15: ((add_int !mutable_x_1) (11)))) in
                  void);
-                (mutable_n_0_0 := (C_17: ((add_int !mutable_n_0_0) (1))));
-                !mutable_n_0_0 end))) end in void);
+                (mutable_n_2 := (C_17: ((add_int !mutable_n_2) (1))));
+                !mutable_n_2 end))) end in void);
             (raise (Loop_continue_exc void)) end with
            Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end with
@@ -582,7 +671,7 @@ let f91_nonrec_safety =
     absurd  end with Return -> !return end)))) { true }
 
 let f91_safety =
- fun (n : int) ->
+ fun (n_1 : int) ->
   { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int void) in
@@ -593,7 +682,7 @@ let f91_safety =
      (let __retres = ref (any_int void) in
      try
       begin
-        (if ((le_int_ n) (100))
+        (if ((le_int_ n_1) (100))
         then
          (C_8:
          begin
@@ -603,26 +692,26 @@ let f91_safety =
            begin
              (let jessie_<somenum> =
              (tmp := (C_4:
-                     (let jessie_<somenum> = (C_3: ((add_int n) (11))) in
+                     (let jessie_<somenum> = (C_3: ((add_int n_1) (11))) in
                      (JC_<somenum>:
                      (check
                      { zwf_zero((JC_<somenum> : sub_int((101), jessie_<somenum>)),
-                       (JC_<somenum> : sub_int((101), n))) };
+                       (JC_<somenum> : sub_int((101), n_1))) };
                      (JC_<somenum>: (f91_requires jessie_<somenum>))))))) in void);
             (tmp_0 := (C_6:
                       (let jessie_<somenum> = !tmp in
                       (JC_<somenum>:
                       (check
                       { zwf_zero((JC_<somenum> : sub_int((101), jessie_<somenum>)),
-                        (JC_<somenum> : sub_int((101), n))) };
+                        (JC_<somenum> : sub_int((101), n_1))) };
                       (JC_<somenum>: (f91_requires jessie_<somenum>))))))); !tmp_0 end)) in
            void); (let jessie_<somenum> = (__retres := !tmp_0) in void);
           (raise (Return_label_exc void)) end)
         else
          (C_2:
          begin
-           (let jessie_<somenum> = (__retres := (C_1: ((sub_int n) (10)))) in void);
-          (raise (Return_label_exc void)) end));
+           (let jessie_<somenum> = (__retres := (C_1: ((sub_int n_1) (10)))) in
+           void); (raise (Return_label_exc void)) end));
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { true }
@@ -653,11 +742,11 @@ why --project [...] why/mac_carthy.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/mac_carthy_po7.why">
-      <location file = "why/mac_carthy.why" line = "400" begin = "43" end = "44"/>
+      <location file = "why/mac_carthy.why" line = "483" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/mac_carthy_po8.why">
-      <location file = "why/mac_carthy.why" line = "400" begin = "43" end = "44"/>
+      <location file = "why/mac_carthy.why" line = "483" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -666,19 +755,19 @@ why --project [...] why/mac_carthy.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/mac_carthy_po9.why">
-      <location file = "why/mac_carthy.why" line = "465" begin = "23" end = "119"/>
+      <location file = "why/mac_carthy.why" line = "548" begin = "23" end = "121"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/mac_carthy_po10.why">
-      <location file = "why/mac_carthy.why" line = "465" begin = "23" end = "119"/>
+      <location file = "why/mac_carthy.why" line = "548" begin = "23" end = "121"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/mac_carthy_po11.why">
-      <location file = "why/mac_carthy.why" line = "472" begin = "24" end = "121"/>
+      <location file = "why/mac_carthy.why" line = "555" begin = "24" end = "123"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/mac_carthy_po12.why">
-      <location file = "why/mac_carthy.why" line = "472" begin = "24" end = "121"/>
+      <location file = "why/mac_carthy.why" line = "555" begin = "24" end = "123"/>
       <explain kind = "Check"/>
     </goal>
     </behavior>
@@ -1640,6 +1729,8 @@ type padding
 
 type pair_type
 
+type unsigned_charP
+
 type voidP
 
 logic charP_tag : charP tag_id
@@ -1667,6 +1758,10 @@ predicate left_valid_struct_charP(p: charP pointer, a: int,
   charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -1691,6 +1786,12 @@ inductive lex: pair_type, pair_type -> prop =
 axiom pointer_addr_of_charP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
+
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
 axiom pointer_addr_of_voidP_of_pointer_address:
@@ -1700,6 +1801,10 @@ predicate right_valid_struct_charP(p: charP pointer, b: int,
   charP_alloc_table: charP alloc_table) = (offset_max(charP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
@@ -1708,6 +1813,11 @@ predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
    p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -1719,15 +1829,41 @@ predicate strict_valid_struct_charP(p: charP pointer, a: int, b: int,
   ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
 
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -1738,6 +1874,11 @@ predicate valid_struct_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -1767,7 +1908,7 @@ axiom f_def2: (forall x_1_0:int. ((x_1_0 <= 101) -> (f(x_1_0) = 91)))
 axiom iter_f_def1: (forall x_3:int. (iter_f(0, x_3) = x_3))
 
 axiom iter_f_def2:
-  (forall n_0_1:int.
+  (forall n_0:int.
     (forall x_4:int.
-      ((n_0_1 > 0) -> (iter_f(n_0_1, x_4) = iter_f((n_0_1 - 1), f(x_4))))))
+      ((n_0 > 0) -> (iter_f(n_0, x_4) = iter_f((n_0 - 1), f(x_4))))))
 

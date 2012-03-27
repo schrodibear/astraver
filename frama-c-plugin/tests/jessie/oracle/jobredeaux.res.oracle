@@ -17,6 +17,8 @@ axiomatic Padding {
   
 }
 
+type uint8 = 0..255
+
 type int8 = -128..127
 
 type int32 = -2147483648..2147483647
@@ -33,6 +35,12 @@ tag float_xP = {
 
 type float_xP = [float_xP]
 
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
 tag charP = {
   int8 charM: 8;
 }
@@ -44,7 +52,7 @@ tag voidP = {
 
 type voidP = [voidP]
 
-float_xP[..] allocM(int32 m, int32 n)
+float_xP[..] allocM(int32 m, int32 n_1)
 behavior default:
   assigns \nothing;
   allocates \nothing;
@@ -54,19 +62,19 @@ behavior default:
                             (((0 <= k) && (k < \at(m,Old))) ==>
                               ((\offset_min((\result + k).float_xM) <= 0) &&
                                 (\offset_max((\result + k).float_xM) >=
-                                  (\at(n,Old) - 1))))))));
+                                  (\at(n_1,Old) - 1))))))));
 ;
 
-float_xP[..] ones(int32 m_0, int32 n_0)
-  requires (C_61 : ((C_62 : (m_0 > 0)) && (C_63 : (n_0 > 0))));
+float_xP[..] ones(int32 m_0, int32 n_2)
+  requires (C_61 : ((C_62 : (m_0 > 0)) && (C_63 : (n_2 > 0))));
 behavior default:
   assigns \nothing;
   ensures (C_60 : ((\result == null) ||
-                    (\forall integer i;
-                      (\forall integer j;
-                        ((((0 <= i) && (i < \at(m_0,Old))) &&
-                           ((0 <= j) && (j < \at(n_0,Old)))) ==>
-                          ((((\result + i).float_xM + j).floatM :> real) ==
+                    (\forall integer i_1;
+                      (\forall integer j_0;
+                        ((((0 <= i_1) && (i_1 < \at(m_0,Old))) &&
+                           ((0 <= j_0) && (j_0 < \at(n_2,Old)))) ==>
+                          ((((\result + i_1).float_xM + j_0).floatM :> real) ==
                             1.0))))));
 {  
    (var float_xP[..] c);
@@ -77,11 +85,11 @@ behavior default:
    
    {  
       {  
-         (assert for default: (C_6 : ((C_7 : (m_0 > 0)) && (C_8 : (n_0 > 0)))));
+         (assert for default: (C_6 : ((C_7 : (m_0 > 0)) && (C_8 : (n_2 > 0)))));
          ()
       };
       
-      {  (C_10 : (c = (C_9 : allocM(m_0, n_0))))
+      {  (C_10 : (c = (C_9 : allocM(m_0, n_2))))
       };
       
       {  
@@ -94,7 +102,7 @@ behavior default:
                                                     ((\offset_min((c + k_0).float_xM) <=
                                                        0) &&
                                                       (\offset_max((c + k_0).float_xM) >=
-                                                        (n_0 - 1)))))))));
+                                                        (n_2 - 1)))))))));
          ()
       };
       (C_16 : (i = 0));
@@ -107,12 +115,12 @@ behavior default:
                             (C_24 : (\forall integer k_1;
                                       (\forall integer q_1;
                                         ((((0 <= k_1) && (k_1 < i)) &&
-                                           ((0 <= q_1) && (q_1 < n_0))) ==>
+                                           ((0 <= q_1) && (q_1 < n_2))) ==>
                                           ((((c + k_1).float_xM + q_1).floatM :> real) ==
                                             1.0)))))));
       behavior default:
         
-        assigns ((c + [0..(m_0 - 1)]).float_xM + [0..(n_0 - 1)]).floatM;
+        assigns ((c + [0..(m_0 - 1)]).float_xM + [0..(n_2 - 1)]).floatM;
       variant (C_19 : (m_0 - i));
       while (true)
       {  
@@ -132,7 +140,7 @@ behavior default:
                                                           0)) &&
                                                  (C_30 : (\offset_max(
                                                            (c + i).float_xM) >=
-                                                           (n_0 - 1))))));
+                                                           (n_2 - 1))))));
                   ()
                };
                
@@ -141,7 +149,7 @@ behavior default:
                   loop 
                   behavior default:
                     invariant (C_35 : (((C_37 : (0 <= j)) &&
-                                         (C_38 : (j <= n_0))) &&
+                                         (C_38 : (j <= n_2))) &&
                                         (C_39 : (\forall integer l;
                                                   (((0 <= l) && (l < j)) ==>
                                                     ((((c + i).float_xM + l).floatM :> real) ==
@@ -150,23 +158,23 @@ behavior default:
                     invariant (C_34 : (\forall integer p;
                                         (\forall integer q;
                                           ((((0 <= p) && (p < i)) &&
-                                             ((0 <= q) && (q < n_0))) ==>
+                                             ((0 <= q) && (q < n_2))) ==>
                                             ((((c + p).float_xM + q).floatM :> real) ==
                                               (\at(((c + p).float_xM + q).floatM,Here) :> real))))));
                   behavior default:
                     invariant (C_33 : (\forall integer p_0;
                                         (\forall integer q_0;
-                                          ((((i < p_0) && (p_0 < n_0)) &&
-                                             ((0 <= q_0) && (q_0 < n_0))) ==>
+                                          ((((i < p_0) && (p_0 < n_2)) &&
+                                             ((0 <= q_0) && (q_0 < n_2))) ==>
                                             ((((c + p_0).float_xM + q_0).floatM :> real) ==
                                               (\at(((c + p_0).float_xM + q_0).floatM,Here) :> real))))));
                   behavior default:
                     
-                    assigns ((c + i).float_xM + [0..(n_0 - 1)]).floatM;
-                  variant (C_32 : (n_0 - j));
+                    assigns ((c + i).float_xM + [0..(n_2 - 1)]).floatM;
+                  variant (C_32 : (n_2 - j));
                   while (true)
                   {  
-                     {  (if (j < n_0) then () else 
+                     {  (if (j < n_2) then () else 
                         (goto while_1_break));
                         
                         {  
@@ -174,7 +182,7 @@ behavior default:
                               (assert for default: (C_40 : ((C_41 : (0 <= j)) &&
                                                              (C_42 : 
                                                              (j <
-                                                               n_0)))));
+                                                               n_2)))));
                               ()
                            };
                            
@@ -208,7 +216,7 @@ behavior default:
                
                {  
                   (assert for default: (C_56 : (\forall integer l_0;
-                                                 (((0 <= l_0) && (l_0 < n_0)) ==>
+                                                 (((0 <= l_0) && (l_0 < n_2)) ==>
                                                    ((((c + i).float_xM + l_0).floatM :> real) ==
                                                      1.0)))));
                   ()
@@ -234,6 +242,10 @@ type int32
 type int8
 
 type padding
+
+type uint8
+
+type unsigned_charP
 
 type voidP
 
@@ -262,6 +274,11 @@ logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
+
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic floatP_tag:  -> floatP tag_id
 
@@ -342,6 +359,10 @@ predicate left_valid_struct_float_xP(p:float_xP pointer, a:int,
  float_xP_alloc_table:float_xP alloc_table) =
  (offset_min(float_xP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -355,6 +376,12 @@ axiom pointer_addr_of_floatP_of_pointer_address :
 axiom pointer_addr_of_float_xP_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(float_xP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -372,6 +399,10 @@ predicate right_valid_struct_floatP(p:floatP pointer, b:int,
 predicate right_valid_struct_float_xP(p:float_xP pointer, b:int,
  float_xP_alloc_table:float_xP alloc_table) =
  (offset_max(float_xP_alloc_table, p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -391,6 +422,11 @@ predicate strict_valid_root_float_xP(p:float_xP pointer, a:int, b:int,
  float_xP_alloc_table:float_xP alloc_table) =
  ((offset_min(float_xP_alloc_table, p) = a)
  and (offset_max(float_xP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -412,10 +448,47 @@ predicate strict_valid_struct_float_xP(p:float_xP pointer, a:int, b:int,
  ((offset_min(float_xP_alloc_table, p) = a)
  and (offset_max(float_xP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -431,6 +504,11 @@ predicate valid_root_float_xP(p:float_xP pointer, a:int, b:int,
  float_xP_alloc_table:float_xP alloc_table) =
  ((offset_min(float_xP_alloc_table, p) <= a)
  and (offset_max(float_xP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -451,6 +529,11 @@ predicate valid_struct_float_xP(p:float_xP pointer, a:int, b:int,
  float_xP_alloc_table:float_xP alloc_table) =
  ((offset_min(float_xP_alloc_table, p) <= a)
  and (offset_max(float_xP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -483,7 +566,7 @@ exception Return_label_exc of unit
 
 parameter allocM :
  m:int32 ->
-  n:int32 ->
+  n_1:int32 ->
    float_xP_result_1_alloc_table:float_xP alloc_table ->
     floatP_float_xM_5_alloc_table:floatP alloc_table ->
      float_xP_float_xM_result_1:(float_xP, floatP pointer) memory ->
@@ -504,11 +587,11 @@ parameter allocM :
                   and ge_int(offset_max(floatP_float_xM_5_alloc_table,
                              select(float_xP_float_xM_result_1,
                              shift(result, k))),
-                      sub_int(integer_of_int32(n), (1)))))))))) }
+                      sub_int(integer_of_int32(n_1), (1)))))))))) }
 
 parameter allocM_requires :
  m:int32 ->
-  n:int32 ->
+  n_1:int32 ->
    float_xP_result_1_alloc_table:float_xP alloc_table ->
     floatP_float_xM_5_alloc_table:floatP alloc_table ->
      float_xP_float_xM_result_1:(float_xP, floatP pointer) memory ->
@@ -529,7 +612,7 @@ parameter allocM_requires :
                   and ge_int(offset_max(floatP_float_xM_5_alloc_table,
                              select(float_xP_float_xM_result_1,
                              shift(result, k))),
-                      sub_int(integer_of_int32(n), (1)))))))))) }
+                      sub_int(integer_of_int32(n_1), (1)))))))))) }
 
 parameter charP_alloc_table : charP alloc_table ref
 
@@ -611,6 +694,38 @@ parameter alloc_struct_float_xP_requires :
           and (alloc_fresh(float_xP_alloc_table@, result, n)
               and instanceof(float_xP_tag_table, result, float_xP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -641,6 +756,8 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
+parameter any_uint8 : unit -> { } uint8 { true }
+
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -653,7 +770,7 @@ parameter int8_of_integer_ :
 
 parameter ones :
  m_0:int32 ->
-  n_0:int32 ->
+  n_2:int32 ->
    floatP_floatM_float_xM_7:(floatP, single) memory ref ->
     float_xP_result_3_alloc_table:float_xP alloc_table ->
      floatP_float_xM_7_alloc_table:floatP alloc_table ->
@@ -663,43 +780,45 @@ parameter ones :
        { (JC_<somenum>:
          ((JC_<somenum>:
           ((result = null)
-          or (forall i:int.
-              (forall j:int.
-               ((le_int((0), i)
-                and (lt_int(i, integer_of_int32(m_0))
-                    and (le_int((0), j) and lt_int(j, integer_of_int32(n_0))))) ->
+          or (forall i_1:int.
+              (forall j_0:int.
+               ((le_int((0), i_1)
+                and (lt_int(i_1, integer_of_int32(m_0))
+                    and (le_int((0), j_0)
+                        and lt_int(j_0, integer_of_int32(n_2))))) ->
                 (single_value(select(floatP_floatM_float_xM_7,
                               shift(select(float_xP_float_xM_result_3,
-                                    shift(result, i)),
-                              j))) = 1.0))))))
+                                    shift(result, i_1)),
+                              j_0))) = 1.0))))))
          and (JC_<somenum>:
              not_assigns(floatP_float_xM_7_alloc_table,
              floatP_floatM_float_xM_7@, floatP_floatM_float_xM_7, pset_empty)))) }
 
 parameter ones_requires :
  m_0:int32 ->
-  n_0:int32 ->
+  n_2:int32 ->
    floatP_floatM_float_xM_7:(floatP, single) memory ref ->
     float_xP_result_3_alloc_table:float_xP alloc_table ->
      floatP_float_xM_7_alloc_table:floatP alloc_table ->
       float_xP_float_xM_result_3:(float_xP, floatP pointer) memory ->
        { (JC_<somenum>:
          ((JC_<somenum>: gt_int(integer_of_int32(m_0), (0)))
-         and (JC_<somenum>: gt_int(integer_of_int32(n_0), (0)))))}
+         and (JC_<somenum>: gt_int(integer_of_int32(n_2), (0)))))}
        float_xP pointer reads floatP_floatM_float_xM_7
        writes floatP_floatM_float_xM_7
        { (JC_<somenum>:
          ((JC_<somenum>:
           ((result = null)
-          or (forall i:int.
-              (forall j:int.
-               ((le_int((0), i)
-                and (lt_int(i, integer_of_int32(m_0))
-                    and (le_int((0), j) and lt_int(j, integer_of_int32(n_0))))) ->
+          or (forall i_1:int.
+              (forall j_0:int.
+               ((le_int((0), i_1)
+                and (lt_int(i_1, integer_of_int32(m_0))
+                    and (le_int((0), j_0)
+                        and lt_int(j_0, integer_of_int32(n_2))))) ->
                 (single_value(select(floatP_floatM_float_xM_7,
                               shift(select(float_xP_float_xM_result_3,
-                                    shift(result, i)),
-                              j))) = 1.0))))))
+                                    shift(result, i_1)),
+                              j_0))) = 1.0))))))
          and (JC_<somenum>:
              not_assigns(floatP_float_xM_7_alloc_table,
              floatP_floatM_float_xM_7@, floatP_floatM_float_xM_7, pset_empty)))) }
@@ -710,18 +829,26 @@ parameter safe_int32_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
+
 let ones_ensures_default =
- fun (m_0 : int32) (n_0 : int32) (floatP_floatM_float_xM_7 : (floatP, single) memory ref) (floatP_float_xM_7_alloc_table : floatP alloc_table) (float_xP_result_3_alloc_table : float_xP alloc_table) (float_xP_float_xM_result_3 : (float_xP, floatP pointer) memory) ->
+ fun (m_0 : int32) (n_2 : int32) (floatP_floatM_float_xM_7 : (floatP, single) memory ref) (floatP_float_xM_7_alloc_table : floatP alloc_table) (float_xP_result_3_alloc_table : float_xP alloc_table) (float_xP_float_xM_result_3 : (float_xP, floatP pointer) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: gt_int(integer_of_int32(m_0), (0)))
-    and (JC_<somenum>: gt_int(integer_of_int32(n_0), (0))))) }
+    and (JC_<somenum>: gt_int(integer_of_int32(n_2), (0))))) }
   (init:
   (let return = ref (any_pointer void) in
   try
    begin
      (let c = ref (any_pointer void) in
-     (let i_0 = ref (any_int32 void) in
-     (let j_0 = ref (any_int32 void) in
+     (let i = ref (any_int32 void) in
+     (let j = ref (any_int32 void) in
      try
       (C_16:
       (C_17:
@@ -730,13 +857,13 @@ let ones_ensures_default =
         (assert
         { (JC_<somenum>:
           ((JC_<somenum>: gt_int(integer_of_int32(m_0), (0)))
-          and (JC_<somenum>: gt_int(integer_of_int32(n_0), (0))))) }; void); void;
+          and (JC_<somenum>: gt_int(integer_of_int32(n_2), (0))))) }; void); void;
        (let jessie_<somenum> =
        (C_10:
        begin
          (c := (C_9:
                (let jessie_<somenum> = m_0 in
-               (let jessie_<somenum> = n_0 in
+               (let jessie_<somenum> = n_2 in
                (JC_<somenum>:
                (((((allocM jessie_<somenum>) jessie_<somenum>) float_xP_result_3_alloc_table) floatP_float_xM_7_alloc_table) float_xP_float_xM_result_3))))));
         !c end) in void);
@@ -755,24 +882,23 @@ let ones_ensures_default =
                    and ge_int(offset_max(floatP_float_xM_7_alloc_table,
                               select(float_xP_float_xM_result_3,
                               shift(c, k_0))),
-                       sub_int(integer_of_int32(n_0), (1)))))))))) }; void);
-       void; (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<somenum> = (j_0 := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
+                       sub_int(integer_of_int32(n_2), (1)))))))))) }; void);
+       void; (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
        (loop_3:
        while true do
        { invariant
            ((JC_<somenum>:
-            ((JC_<somenum>: le_int((0), integer_of_int32(i_0)))
-            and ((JC_<somenum>:
-                 le_int(integer_of_int32(i_0), integer_of_int32(m_0)))
+            ((JC_<somenum>: le_int((0), integer_of_int32(i)))
+            and ((JC_<somenum>: le_int(integer_of_int32(i), integer_of_int32(m_0)))
                 and (JC_<somenum>:
                     (forall k_1:int.
                      (forall q_1:int.
                       ((le_int((0), k_1)
-                       and (lt_int(k_1, integer_of_int32(i_0))
+                       and (lt_int(k_1, integer_of_int32(i))
                            and (le_int((0), q_1)
-                               and lt_int(q_1, integer_of_int32(n_0))))) ->
+                               and lt_int(q_1, integer_of_int32(n_2))))) ->
                        (single_value(select(floatP_floatM_float_xM_7,
                                      shift(select(float_xP_float_xM_result_3,
                                            shift(c, k_1)),
@@ -783,7 +909,7 @@ let ones_ensures_default =
                 pset_range(pset_deref(float_xP_float_xM_result_3,
                            pset_range(pset_singleton(c), (0),
                            sub_int(integer_of_int32(m_0), (1)))),
-                (0), sub_int(integer_of_int32(n_0), (1)))))
+                (0), sub_int(integer_of_int32(n_2), (1)))))
                and (JC_<somenum>:
                    not_assigns(floatP_float_xM_7_alloc_table,
                    floatP_floatM_float_xM_7@init, floatP_floatM_float_xM_7,
@@ -795,41 +921,40 @@ let ones_ensures_default =
             (let jessie_<somenum> =
             (C_59:
             begin
-              (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 m_0))
+              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 m_0))
               then void else (raise (Goto_while_0_break_exc void)));
              (assert
              { (JC_<somenum>:
-               ((JC_<somenum>: le_int((0), integer_of_int32(i_0)))
+               ((JC_<somenum>: le_int((0), integer_of_int32(i)))
                and (JC_<somenum>:
-                   lt_int(integer_of_int32(i_0), integer_of_int32(m_0))))) };
+                   lt_int(integer_of_int32(i), integer_of_int32(m_0))))) };
              void); void;
              (assert
              { (JC_<somenum>:
                ((JC_<somenum>:
                 le_int(offset_min(floatP_float_xM_7_alloc_table,
                        select(float_xP_float_xM_result_3,
-                       shift(c, integer_of_int32(i_0)))),
+                       shift(c, integer_of_int32(i)))),
                 (0)))
                and (JC_<somenum>:
                    ge_int(offset_max(floatP_float_xM_7_alloc_table,
                           select(float_xP_float_xM_result_3,
-                          shift(c, integer_of_int32(i_0)))),
-                   sub_int(integer_of_int32(n_0), (1)))))) }; void); void;
+                          shift(c, integer_of_int32(i)))),
+                   sub_int(integer_of_int32(n_2), (1)))))) }; void); void;
              try
               (C_31:
               begin
-                (let jessie_<somenum> = (j_0 := (safe_int32_of_integer_ (0))) in
-                void);
+                (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
                (loop_4:
                while true do
                { invariant
                    (((JC_<somenum>:
                      (forall p_0:int.
                       (forall q_0:int.
-                       ((lt_int(integer_of_int32(i_0), p_0)
-                        and (lt_int(p_0, integer_of_int32(n_0))
+                       ((lt_int(integer_of_int32(i), p_0)
+                        and (lt_int(p_0, integer_of_int32(n_2))
                             and (le_int((0), q_0)
-                                and lt_int(q_0, integer_of_int32(n_0))))) ->
+                                and lt_int(q_0, integer_of_int32(n_2))))) ->
                         (single_value(select(floatP_floatM_float_xM_7,
                                       shift(select(float_xP_float_xM_result_3,
                                             shift(c, p_0)),
@@ -842,9 +967,9 @@ let ones_ensures_default =
                          (forall p:int.
                           (forall q:int.
                            ((le_int((0), p)
-                            and (lt_int(p, integer_of_int32(i_0))
+                            and (lt_int(p, integer_of_int32(i))
                                 and (le_int((0), q)
-                                    and lt_int(q, integer_of_int32(n_0))))) ->
+                                    and lt_int(q, integer_of_int32(n_2))))) ->
                             (single_value(select(floatP_floatM_float_xM_7,
                                           shift(select(float_xP_float_xM_result_3,
                                                 shift(c, p)),
@@ -854,18 +979,18 @@ let ones_ensures_default =
                                                                     p)),
                                                               q))))))))
                         and (JC_<somenum>:
-                            ((JC_<somenum>: le_int((0), integer_of_int32(j_0)))
+                            ((JC_<somenum>: le_int((0), integer_of_int32(j)))
                             and ((JC_<somenum>:
-                                 le_int(integer_of_int32(j_0),
-                                 integer_of_int32(n_0)))
+                                 le_int(integer_of_int32(j),
+                                 integer_of_int32(n_2)))
                                 and (JC_<somenum>:
                                     (forall l:int.
                                      ((le_int((0), l)
-                                      and lt_int(l, integer_of_int32(j_0))) ->
+                                      and lt_int(l, integer_of_int32(j))) ->
                                       (single_value(select(floatP_floatM_float_xM_7,
                                                     shift(select(float_xP_float_xM_result_3,
                                                           shift(c,
-                                                          integer_of_int32(i_0))),
+                                                          integer_of_int32(i))),
                                                     l))) = 1.0)))))))))
                    and ((JC_<somenum>:
                         not_assigns(floatP_float_xM_7_alloc_table,
@@ -873,9 +998,8 @@ let ones_ensures_default =
                         floatP_floatM_float_xM_7,
                         pset_range(pset_deref(float_xP_float_xM_result_3,
                                    pset_range(pset_singleton(c),
-                                   integer_of_int32(i_0),
-                                   integer_of_int32(i_0))),
-                        (0), sub_int(integer_of_int32(n_0), (1)))))
+                                   integer_of_int32(i), integer_of_int32(i))),
+                        (0), sub_int(integer_of_int32(n_2), (1)))))
                        and (JC_<somenum>:
                            not_assigns(floatP_float_xM_7_alloc_table,
                            floatP_floatM_float_xM_7@init,
@@ -888,26 +1012,26 @@ let ones_ensures_default =
                     (C_51:
                     (C_55:
                     begin
-                      (if ((lt_int_ (integer_of_int32 !j_0)) (integer_of_int32 n_0))
+                      (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 n_2))
                       then void else (raise (Goto_while_1_break_exc void)));
                      (assert
                      { (JC_<somenum>:
-                       ((JC_<somenum>: le_int((0), integer_of_int32(j_0)))
+                       ((JC_<somenum>: le_int((0), integer_of_int32(j)))
                        and (JC_<somenum>:
-                           lt_int(integer_of_int32(j_0),
-                           integer_of_int32(n_0))))) }; void); void;
+                           lt_int(integer_of_int32(j), integer_of_int32(n_2))))) };
+                     void); void;
                      (assert
                      { (JC_<somenum>:
                        ((JC_<somenum>:
                         le_int(offset_min(floatP_float_xM_7_alloc_table,
                                select(float_xP_float_xM_result_3,
-                               shift(c, integer_of_int32(i_0)))),
-                        integer_of_int32(j_0)))
+                               shift(c, integer_of_int32(i)))),
+                        integer_of_int32(j)))
                        and (JC_<somenum>:
                            ge_int(offset_max(floatP_float_xM_7_alloc_table,
                                   select(float_xP_float_xM_result_3,
-                                  shift(c, integer_of_int32(i_0)))),
-                           integer_of_int32(j_0))))) }; void); void;
+                                  shift(c, integer_of_int32(i)))),
+                           integer_of_int32(j))))) }; void); void;
                      (let jessie_<somenum> =
                      (let jessie_<somenum> =
                      (C_46:
@@ -916,8 +1040,8 @@ let ones_ensures_default =
                      (C_48:
                      ((safe_acc_ float_xP_float_xM_result_3) (C_47:
                                                              ((shift !c) 
-                                                              (integer_of_int32 !i_0))))) in
-                     (let jessie_<somenum> = (integer_of_int32 !j_0) in
+                                                              (integer_of_int32 !i))))) in
+                     (let jessie_<somenum> = (integer_of_int32 !j) in
                      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                      (((safe_upd_ floatP_floatM_float_xM_7) jessie_<somenum>) jessie_<somenum>))))) in
                      void);
@@ -925,28 +1049,28 @@ let ones_ensures_default =
                      { (JC_<somenum>:
                        (single_value(select(floatP_floatM_float_xM_7,
                                      shift(select(float_xP_float_xM_result_3,
-                                           shift(c, integer_of_int32(i_0))),
-                                     integer_of_int32(j_0)))) = 1.0)) };
-                     void); void;
-                     (j_0 := (C_54:
-                             (safe_int32_of_integer_ (C_53:
-                                                     ((add_int (integer_of_int32 !j_0)) (1))))));
-                     !j_0 end)) in void); (raise (Loop_continue_exc void))
-                  end with Loop_continue_exc jessie_<somenum> -> void end end done);
+                                           shift(c, integer_of_int32(i))),
+                                     integer_of_int32(j)))) = 1.0)) }; void);
+                     void;
+                     (j := (C_54:
+                           (safe_int32_of_integer_ (C_53:
+                                                   ((add_int (integer_of_int32 !j)) (1))))));
+                     !j end)) in void); (raise (Loop_continue_exc void)) end
+                  with Loop_continue_exc jessie_<somenum> -> void end end done);
                (raise (Goto_while_1_break_exc void)) end) with
               Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
              (assert
              { (JC_<somenum>:
                (forall l_0:int.
-                ((le_int((0), l_0) and lt_int(l_0, integer_of_int32(n_0))) ->
+                ((le_int((0), l_0) and lt_int(l_0, integer_of_int32(n_2))) ->
                  (single_value(select(floatP_floatM_float_xM_7,
                                shift(select(float_xP_float_xM_result_3,
-                                     shift(c, integer_of_int32(i_0))),
+                                     shift(c, integer_of_int32(i))),
                                l_0))) = 1.0)))) }; void); void;
-             (i_0 := (C_58:
-                     (safe_int32_of_integer_ (C_57:
-                                             ((add_int (integer_of_int32 !i_0)) (1))))));
-             !i_0 end) in void); (raise (Loop_continue_exc void)) end with
+             (i := (C_58:
+                   (safe_int32_of_integer_ (C_57:
+                                           ((add_int (integer_of_int32 !i)) (1))))));
+             !i end) in void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end))) with
       Goto_while_0_break_exc jessie_<somenum> ->
@@ -955,31 +1079,31 @@ let ones_ensures_default =
   { (JC_<somenum>:
     ((JC_<somenum>:
      ((result = null)
-     or (forall i:int.
-         (forall j:int.
-          ((le_int((0), i)
-           and (lt_int(i, integer_of_int32(m_0))
-               and (le_int((0), j) and lt_int(j, integer_of_int32(n_0))))) ->
+     or (forall i_1:int.
+         (forall j_0:int.
+          ((le_int((0), i_1)
+           and (lt_int(i_1, integer_of_int32(m_0))
+               and (le_int((0), j_0) and lt_int(j_0, integer_of_int32(n_2))))) ->
            (single_value(select(floatP_floatM_float_xM_7,
                          shift(select(float_xP_float_xM_result_3,
-                               shift(result, i)),
-                         j))) = 1.0))))))
+                               shift(result, i_1)),
+                         j_0))) = 1.0))))))
     and (JC_<somenum>:
         not_assigns(floatP_float_xM_7_alloc_table, floatP_floatM_float_xM_7@,
         floatP_floatM_float_xM_7, pset_empty)))) }
 
 let ones_safety =
- fun (m_0 : int32) (n_0 : int32) (floatP_floatM_float_xM_7 : (floatP, single) memory ref) (floatP_float_xM_7_alloc_table : floatP alloc_table) (float_xP_result_3_alloc_table : float_xP alloc_table) (float_xP_float_xM_result_3 : (float_xP, floatP pointer) memory) ->
+ fun (m_0 : int32) (n_2 : int32) (floatP_floatM_float_xM_7 : (floatP, single) memory ref) (floatP_float_xM_7_alloc_table : floatP alloc_table) (float_xP_result_3_alloc_table : float_xP alloc_table) (float_xP_float_xM_result_3 : (float_xP, floatP pointer) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: gt_int(integer_of_int32(m_0), (0)))
-    and (JC_<somenum>: gt_int(integer_of_int32(n_0), (0))))) }
+    and (JC_<somenum>: gt_int(integer_of_int32(n_2), (0))))) }
   (init:
   (let return = ref (any_pointer void) in
   try
    begin
      (let c = ref (any_pointer void) in
-     (let i_0 = ref (any_int32 void) in
-     (let j_0 = ref (any_int32 void) in
+     (let i = ref (any_int32 void) in
+     (let j = ref (any_int32 void) in
      try
       (C_16:
       (C_17:
@@ -988,13 +1112,13 @@ let ones_safety =
         [ { } unit
           { (JC_<somenum>:
             ((JC_<somenum>: gt_int(integer_of_int32(m_0), (0)))
-            and (JC_<somenum>: gt_int(integer_of_int32(n_0), (0))))) } ]; void;
+            and (JC_<somenum>: gt_int(integer_of_int32(n_2), (0))))) } ]; void;
        (let jessie_<somenum> =
        (C_10:
        begin
          (c := (C_9:
                (let jessie_<somenum> = m_0 in
-               (let jessie_<somenum> = n_0 in
+               (let jessie_<somenum> = n_2 in
                (JC_<somenum>:
                (((((allocM_requires jessie_<somenum>) jessie_<somenum>) float_xP_result_3_alloc_table) floatP_float_xM_7_alloc_table) float_xP_float_xM_result_3))))));
         !c end) in void);
@@ -1016,28 +1140,27 @@ let ones_safety =
                      and ge_int(offset_max(floatP_float_xM_7_alloc_table,
                                 select(float_xP_float_xM_result_3,
                                 shift(c, k_0))),
-                         sub_int(integer_of_int32(n_0), (1)))))))))) } ];
-       void; (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<somenum> = (j_0 := (safe_int32_of_integer_ (0))) in void);
-       (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
+                         sub_int(integer_of_int32(n_2), (1)))))))))) } ];
+       void; (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
        (loop_1:
        while true do
        { invariant (JC_<somenum>: true)
-         variant (JC_<somenum> : sub_int(integer_of_int32(m_0),
-                          integer_of_int32(i_0))) }
+         variant (JC_<somenum> : sub_int(integer_of_int32(m_0), integer_of_int32(i))) }
         begin
-          [ { } unit reads c,floatP_floatM_float_xM_7,i_0
+          [ { } unit reads c,floatP_floatM_float_xM_7,i
             { (JC_<somenum>:
-              ((JC_<somenum>: le_int((0), integer_of_int32(i_0)))
+              ((JC_<somenum>: le_int((0), integer_of_int32(i)))
               and ((JC_<somenum>:
-                   le_int(integer_of_int32(i_0), integer_of_int32(m_0)))
+                   le_int(integer_of_int32(i), integer_of_int32(m_0)))
                   and (JC_<somenum>:
                       (forall k_1:int.
                        (forall q_1:int.
                         ((le_int((0), k_1)
-                         and (lt_int(k_1, integer_of_int32(i_0))
+                         and (lt_int(k_1, integer_of_int32(i))
                              and (le_int((0), q_1)
-                                 and lt_int(q_1, integer_of_int32(n_0))))) ->
+                                 and lt_int(q_1, integer_of_int32(n_2))))) ->
                          (single_value(select(floatP_floatM_float_xM_7,
                                        shift(select(float_xP_float_xM_result_3,
                                              shift(c, k_1)),
@@ -1047,45 +1170,44 @@ let ones_safety =
             (let jessie_<somenum> =
             (C_59:
             begin
-              (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 m_0))
+              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 m_0))
               then void else (raise (Goto_while_0_break_exc void)));
-             [ { } unit reads i_0
+             [ { } unit reads i
                { (JC_<somenum>:
-                 ((JC_<somenum>: le_int((0), integer_of_int32(i_0)))
+                 ((JC_<somenum>: le_int((0), integer_of_int32(i)))
                  and (JC_<somenum>:
-                     lt_int(integer_of_int32(i_0), integer_of_int32(m_0))))) } ];
+                     lt_int(integer_of_int32(i), integer_of_int32(m_0))))) } ];
              void;
-             [ { } unit reads c,i_0
+             [ { } unit reads c,i
                { (JC_<somenum>:
                  ((JC_<somenum>:
                   le_int(offset_min(floatP_float_xM_7_alloc_table,
                          select(float_xP_float_xM_result_3,
-                         shift(c, integer_of_int32(i_0)))),
+                         shift(c, integer_of_int32(i)))),
                   (0)))
                  and (JC_<somenum>:
                      ge_int(offset_max(floatP_float_xM_7_alloc_table,
                             select(float_xP_float_xM_result_3,
-                            shift(c, integer_of_int32(i_0)))),
-                     sub_int(integer_of_int32(n_0), (1)))))) } ]; void;
+                            shift(c, integer_of_int32(i)))),
+                     sub_int(integer_of_int32(n_2), (1)))))) } ]; void;
              try
               (C_31:
               begin
-                (let jessie_<somenum> = (j_0 := (safe_int32_of_integer_ (0))) in
-                void);
+                (let jessie_<somenum> = (j := (safe_int32_of_integer_ (0))) in void);
                (loop_2:
                while true do
                { invariant (JC_<somenum>: true)
-                 variant (JC_<somenum> : sub_int(integer_of_int32(n_0),
-                                  integer_of_int32(j_0))) }
+                 variant (JC_<somenum> : sub_int(integer_of_int32(n_2),
+                                  integer_of_int32(j))) }
                 begin
-                  [ { } unit reads c,floatP_floatM_float_xM_7,i_0,j_0
+                  [ { } unit reads c,floatP_floatM_float_xM_7,i,j
                     { ((JC_<somenum>:
                        (forall p_0:int.
                         (forall q_0:int.
-                         ((lt_int(integer_of_int32(i_0), p_0)
-                          and (lt_int(p_0, integer_of_int32(n_0))
+                         ((lt_int(integer_of_int32(i), p_0)
+                          and (lt_int(p_0, integer_of_int32(n_2))
                               and (le_int((0), q_0)
-                                  and lt_int(q_0, integer_of_int32(n_0))))) ->
+                                  and lt_int(q_0, integer_of_int32(n_2))))) ->
                           (single_value(select(floatP_floatM_float_xM_7,
                                         shift(select(float_xP_float_xM_result_3,
                                               shift(c, p_0)),
@@ -1098,9 +1220,9 @@ let ones_safety =
                            (forall p:int.
                             (forall q:int.
                              ((le_int((0), p)
-                              and (lt_int(p, integer_of_int32(i_0))
+                              and (lt_int(p, integer_of_int32(i))
                                   and (le_int((0), q)
-                                      and lt_int(q, integer_of_int32(n_0))))) ->
+                                      and lt_int(q, integer_of_int32(n_2))))) ->
                               (single_value(select(floatP_floatM_float_xM_7,
                                             shift(select(float_xP_float_xM_result_3,
                                                   shift(c, p)),
@@ -1110,18 +1232,18 @@ let ones_safety =
                                                                 shift(c, p)),
                                                                 q))))))))
                           and (JC_<somenum>:
-                              ((JC_<somenum>: le_int((0), integer_of_int32(j_0)))
+                              ((JC_<somenum>: le_int((0), integer_of_int32(j)))
                               and ((JC_<somenum>:
-                                   le_int(integer_of_int32(j_0),
-                                   integer_of_int32(n_0)))
+                                   le_int(integer_of_int32(j),
+                                   integer_of_int32(n_2)))
                                   and (JC_<somenum>:
                                       (forall l:int.
                                        ((le_int((0), l)
-                                        and lt_int(l, integer_of_int32(j_0))) ->
+                                        and lt_int(l, integer_of_int32(j))) ->
                                         (single_value(select(floatP_floatM_float_xM_7,
                                                       shift(select(float_xP_float_xM_result_3,
                                                             shift(c,
-                                                            integer_of_int32(i_0))),
+                                                            integer_of_int32(i))),
                                                       l))) = 1.0))))))))) } ];
                  try
                   begin
@@ -1129,26 +1251,26 @@ let ones_safety =
                     (C_51:
                     (C_55:
                     begin
-                      (if ((lt_int_ (integer_of_int32 !j_0)) (integer_of_int32 n_0))
+                      (if ((lt_int_ (integer_of_int32 !j)) (integer_of_int32 n_2))
                       then void else (raise (Goto_while_1_break_exc void)));
-                     [ { } unit reads j_0
+                     [ { } unit reads j
                        { (JC_<somenum>:
-                         ((JC_<somenum>: le_int((0), integer_of_int32(j_0)))
+                         ((JC_<somenum>: le_int((0), integer_of_int32(j)))
                          and (JC_<somenum>:
-                             lt_int(integer_of_int32(j_0),
-                             integer_of_int32(n_0))))) } ]; void;
-                     [ { } unit reads c,i_0,j_0
+                             lt_int(integer_of_int32(j),
+                             integer_of_int32(n_2))))) } ]; void;
+                     [ { } unit reads c,i,j
                        { (JC_<somenum>:
                          ((JC_<somenum>:
                           le_int(offset_min(floatP_float_xM_7_alloc_table,
                                  select(float_xP_float_xM_result_3,
-                                 shift(c, integer_of_int32(i_0)))),
-                          integer_of_int32(j_0)))
+                                 shift(c, integer_of_int32(i)))),
+                          integer_of_int32(j)))
                          and (JC_<somenum>:
                              ge_int(offset_max(floatP_float_xM_7_alloc_table,
                                     select(float_xP_float_xM_result_3,
-                                    shift(c, integer_of_int32(i_0)))),
-                             integer_of_int32(j_0))))) } ]; void;
+                                    shift(c, integer_of_int32(i)))),
+                             integer_of_int32(j))))) } ]; void;
                      (let jessie_<somenum> =
                      (let jessie_<somenum> =
                      (C_46:
@@ -1158,40 +1280,40 @@ let ones_safety =
                      (C_48:
                      (JC_<somenum>:
                      ((((offset_acc_ float_xP_result_3_alloc_table) float_xP_float_xM_result_3) !c) 
-                      (integer_of_int32 !i_0)))) in
-                     (let jessie_<somenum> = (integer_of_int32 !j_0) in
+                      (integer_of_int32 !i)))) in
+                     (let jessie_<somenum> = (integer_of_int32 !j) in
                      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                      (JC_<somenum>:
                      (((((offset_upd_ floatP_float_xM_7_alloc_table) floatP_floatM_float_xM_7) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
                      void);
-                     [ { } unit reads c,floatP_floatM_float_xM_7,i_0,j_0
+                     [ { } unit reads c,floatP_floatM_float_xM_7,i,j
                        { (JC_<somenum>:
                          (single_value(select(floatP_floatM_float_xM_7,
                                        shift(select(float_xP_float_xM_result_3,
-                                             shift(c, integer_of_int32(i_0))),
-                                       integer_of_int32(j_0)))) = 1.0)) } ];
+                                             shift(c, integer_of_int32(i))),
+                                       integer_of_int32(j)))) = 1.0)) } ];
                      void;
-                     (j_0 := (C_54:
-                             (JC_<somenum>:
-                             (int32_of_integer_ (C_53:
-                                                ((add_int (integer_of_int32 !j_0)) (1)))))));
-                     !j_0 end)) in void); (raise (Loop_continue_exc void))
-                  end with Loop_continue_exc jessie_<somenum> -> void end end done);
+                     (j := (C_54:
+                           (JC_<somenum>:
+                           (int32_of_integer_ (C_53:
+                                              ((add_int (integer_of_int32 !j)) (1)))))));
+                     !j end)) in void); (raise (Loop_continue_exc void)) end
+                  with Loop_continue_exc jessie_<somenum> -> void end end done);
                (raise (Goto_while_1_break_exc void)) end) with
               Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
-             [ { } unit reads c,floatP_floatM_float_xM_7,i_0
+             [ { } unit reads c,floatP_floatM_float_xM_7,i
                { (JC_<somenum>:
                  (forall l_0:int.
-                  ((le_int((0), l_0) and lt_int(l_0, integer_of_int32(n_0))) ->
+                  ((le_int((0), l_0) and lt_int(l_0, integer_of_int32(n_2))) ->
                    (single_value(select(floatP_floatM_float_xM_7,
                                  shift(select(float_xP_float_xM_result_3,
-                                       shift(c, integer_of_int32(i_0))),
+                                       shift(c, integer_of_int32(i))),
                                  l_0))) = 1.0)))) } ]; void;
-             (i_0 := (C_58:
-                     (JC_<somenum>:
-                     (int32_of_integer_ (C_57:
-                                        ((add_int (integer_of_int32 !i_0)) (1)))))));
-             !i_0 end) in void); (raise (Loop_continue_exc void)) end with
+             (i := (C_58:
+                   (JC_<somenum>:
+                   (int32_of_integer_ (C_57:
+                                      ((add_int (integer_of_int32 !i)) (1)))))));
+             !i end) in void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end))) with
       Goto_while_0_break_exc jessie_<somenum> ->
@@ -1234,11 +1356,11 @@ why --project [...] why/jobredeaux.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po8.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "97" begin = "6" end = "5867"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "105" begin = "6" end = "5867"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po9.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "97" begin = "6" end = "5867"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "105" begin = "6" end = "5867"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po10.why">
@@ -1270,11 +1392,11 @@ why --project [...] why/jobredeaux.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po17.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "134" begin = "18" end = "3750"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "142" begin = "18" end = "3750"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po18.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "134" begin = "18" end = "3750"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "142" begin = "18" end = "3750"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/jobredeaux_po19.why">
@@ -1310,11 +1432,11 @@ why --project [...] why/jobredeaux.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po27.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "134" begin = "18" end = "3750"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "142" begin = "18" end = "3750"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po28.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "134" begin = "18" end = "3750"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "142" begin = "18" end = "3750"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po29.why">
@@ -1334,11 +1456,11 @@ why --project [...] why/jobredeaux.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po33.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "97" begin = "6" end = "5867"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "105" begin = "6" end = "5867"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po34.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "97" begin = "6" end = "5867"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "105" begin = "6" end = "5867"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/jobredeaux_po35.why">
@@ -1367,12 +1489,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/jobredeaux_po40.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "186" begin = "36" end = "193"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "194" begin = "36" end = "193"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/jobredeaux_po41.why">
-      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "186" begin = "36" end = "193"/>
+      <location file = "PPCHOME/tests/jessie/jobredeaux.jessie/jobredeaux.jc" line = "194" begin = "36" end = "193"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2594,6 +2716,10 @@ type int8
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag : charP tag_id
@@ -2622,6 +2748,11 @@ logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
+
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
 
 logic floatP_tag : floatP tag_id
 
@@ -2702,6 +2833,10 @@ predicate left_valid_struct_float_xP(p: float_xP pointer, a: int,
   float_xP_alloc_table: float_xP alloc_table) =
   (offset_min(float_xP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -2716,6 +2851,12 @@ axiom pointer_addr_of_floatP_of_pointer_address:
 axiom pointer_addr_of_float_xP_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(float_xP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -2733,6 +2874,10 @@ predicate right_valid_struct_floatP(p: floatP pointer, b: int,
 predicate right_valid_struct_float_xP(p: float_xP pointer, b: int,
   float_xP_alloc_table: float_xP alloc_table) =
   (offset_max(float_xP_alloc_table, p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
@@ -2752,6 +2897,11 @@ predicate strict_valid_root_float_xP(p: float_xP pointer, a: int, b: int,
   float_xP_alloc_table: float_xP alloc_table) =
   ((offset_min(float_xP_alloc_table, p) = a) and
    (offset_max(float_xP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2773,10 +2923,46 @@ predicate strict_valid_struct_float_xP(p: float_xP pointer, a: int, b: int,
   ((offset_min(float_xP_alloc_table, p) = a) and
    (offset_max(float_xP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -2792,6 +2978,11 @@ predicate valid_root_float_xP(p: float_xP pointer, a: int, b: int,
   float_xP_alloc_table: float_xP alloc_table) =
   ((offset_min(float_xP_alloc_table, p) <= a) and
    (offset_max(float_xP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2812,6 +3003,11 @@ predicate valid_struct_float_xP(p: float_xP pointer, a: int, b: int,
   float_xP_alloc_table: float_xP alloc_table) =
   ((offset_min(float_xP_alloc_table, p) <= a) and
    (offset_max(float_xP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =

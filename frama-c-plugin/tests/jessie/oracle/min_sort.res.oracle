@@ -17,6 +17,8 @@ axiomatic Padding {
   
 }
 
+type uint8 = 0..255
+
 type int32 = -2147483648..2147483647
 
 type int8 = -128..127
@@ -26,6 +28,12 @@ tag intP = {
 }
 
 type intP = [intP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -38,11 +46,11 @@ tag voidP = {
 
 type voidP = [voidP]
 
-predicate Swap{L1, L2}(intP[..] a, integer i, integer j) =
-(((\at((a + i).intM,L1) == \at((a + j).intM,L2)) &&
-   (\at((a + j).intM,L1) == \at((a + i).intM,L2))) &&
+predicate Swap{L1, L2}(intP[..] a, integer i_1, integer j_0) =
+(((\at((a + i_1).intM,L1) == \at((a + j_0).intM,L2)) &&
+   (\at((a + j_0).intM,L1) == \at((a + i_1).intM,L2))) &&
   (\forall integer k;
-    (((k != i) && (k != j)) ==>
+    (((k != i_1) && (k != j_0)) ==>
       (\at((a + k).intM,L1) == \at((a + k).intM,L2)))))
 
 predicate Permut{L1, L2}(intP[..] a_0, integer l, integer h) {
@@ -73,21 +81,21 @@ case Permut_refl{L}: \at((\forall intP[..] a_1;
   case Permut_swap{L1, L2}: (\forall intP[..] a_4;
                               (\forall integer l_3;
                                 (\forall integer h_3;
-                                  (\forall integer i_0;
-                                    (\forall integer j_0;
-                                      (((((l_3 <= i_0) && (i_0 <= h_3)) &&
-                                          ((l_3 <= j_0) && (j_0 <= h_3))) &&
+                                  (\forall integer i_2;
+                                    (\forall integer j_1;
+                                      (((((l_3 <= i_2) && (i_2 <= h_3)) &&
+                                          ((l_3 <= j_1) && (j_1 <= h_3))) &&
                                          Swap{L1,
-                                         L2}(a_4, i_0, j_0)) ==>
+                                         L2}(a_4, i_2, j_1)) ==>
                                         Permut{L1,
                                         L2}(a_4, l_3, h_3)))))));
   
 }
 
 predicate Sorted{L}(intP[..] a_5, integer l_4, integer h_4) =
-(\forall integer i_1;
-  (((l_4 <= i_1) && (i_1 < h_4)) ==>
-    ((a_5 + i_1).intM <= (a_5 + (i_1 + 1)).intM)))
+(\forall integer i_3;
+  (((l_4 <= i_3) && (i_3 < h_4)) ==>
+    ((a_5 + i_3).intM <= (a_5 + (i_3 + 1)).intM)))
 
 unit swap(intP[..] t_0, int32 i, int32 j)
   requires (C_2 : (((C_4 : (\offset_min(t_0) <= i)) &&
@@ -100,16 +108,16 @@ behavior default:
   ensures (C_1 : Swap{Old, Here}(\at(t_0,Old), \at(i,Old), \at(j,Old)));
 ;
 
-unit min_sort(intP[..] t, int32 n)
-  requires (C_35 : ((C_36 : (n >= 0)) &&
+unit min_sort(intP[..] t, int32 n_1)
+  requires (C_35 : ((C_36 : (n_1 >= 0)) &&
                      ((C_38 : (\offset_min(t) <= 0)) &&
-                       (C_39 : (\offset_max(t) >= (n - 1))))));
+                       (C_39 : (\offset_max(t) >= (n_1 - 1))))));
 behavior default:
   ensures (C_32 : true);
 behavior sorted:
-  ensures (C_33 : Sorted{Here}(\at(t,Old), 0, (\at(n,Old) - 1)));
+  ensures (C_33 : Sorted{Here}(\at(t,Old), 0, (\at(n_1,Old) - 1)));
 behavior permutation:
-  ensures (C_34 : Permut{Old, Here}(\at(t,Old), 0, (\at(n,Old) - 1)));
+  ensures (C_34 : Permut{Old, Here}(\at(t,Old), 0, (\at(n_1,Old) - 1)));
 {  
    (var int32 i_0);
    
@@ -124,7 +132,7 @@ behavior permutation:
       loop 
       while (true)
       {  
-         {  (if (i_0 < (C_11 : ((C_10 : (n - 1)) :> int32))) then () else 
+         {  (if (i_0 < (C_11 : ((C_10 : (n_1 - 1)) :> int32))) then () else 
             (goto while_0_break));
             
             {  (C_14 : (mv = (C_13 : (C_12 : (t + i_0)).intM)));
@@ -134,7 +142,7 @@ behavior permutation:
                loop 
                while (true)
                {  
-                  {  (if (j_0 < n) then () else 
+                  {  (if (j_0 < n_1) then () else 
                      (goto while_1_break));
                      
                      {  (if ((C_24 : (C_23 : (t + j_0)).intM) < mv) then 
@@ -167,22 +175,25 @@ type intP
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic integer_of_int32: int32 -> int
 
-predicate Swap(a:intP pointer, i:int, j:int,
+predicate Swap(a:intP pointer, i_1:int, j_0:int,
  intP_intM_a_1_at_L2:(intP, int32) memory,
  intP_intM_a_1_at_L1:(intP, int32) memory) =
- ((integer_of_int32(select(intP_intM_a_1_at_L1, shift(a, i))) = integer_of_int32(
-                                                                select(intP_intM_a_1_at_L2,
-                                                                shift(a, j))))
- and ((integer_of_int32(select(intP_intM_a_1_at_L1, shift(a, j))) = integer_of_int32(
-                                                                    select(intP_intM_a_1_at_L2,
-                                                                    shift(a,
-                                                                    i))))
+ ((integer_of_int32(select(intP_intM_a_1_at_L1, shift(a, i_1))) = integer_of_int32(
+                                                                  select(intP_intM_a_1_at_L2,
+                                                                  shift(a,
+                                                                  j_0))))
+ and ((integer_of_int32(select(intP_intM_a_1_at_L1, shift(a, j_0))) = 
+      integer_of_int32(select(intP_intM_a_1_at_L2, shift(a, i_1))))
      and (forall k:int.
-          (((k <> i) and (k <> j)) ->
+          (((k <> i_1) and (k <> j_0)) ->
            (integer_of_int32(select(intP_intM_a_1_at_L1, shift(a, k))) = 
            integer_of_int32(select(intP_intM_a_1_at_L2, shift(a, k))))))))
 
@@ -220,13 +231,13 @@ inductive Permut: intP pointer, int, int, (intP, int32) memory,
                   (forall a_4:intP pointer.
                    (forall l_3:int.
                     (forall h_3:int.
-                     (forall i_0_0:int.
-                      (forall j_0_0:int.
-                       ((le_int(l_3, i_0_0)
-                        and (le_int(i_0_0, h_3)
-                            and (le_int(l_3, j_0_0)
-                                and (le_int(j_0_0, h_3)
-                                    and Swap(a_4, i_0_0, j_0_0,
+                     (forall i_2:int.
+                      (forall j_1:int.
+                       ((le_int(l_3, i_2)
+                        and (le_int(i_2, h_3)
+                            and (le_int(l_3, j_1)
+                                and (le_int(j_1, h_3)
+                                    and Swap(a_4, i_2, j_1,
                                         intP_intM_a_0_2_at_L2,
                                         intP_intM_a_0_2_at_L1))))) ->
                         Permut(a_4, l_3, h_3, intP_intM_a_0_2_at_L2,
@@ -234,11 +245,11 @@ inductive Permut: intP pointer, int, int, (intP, int32) memory,
  
 predicate Sorted(a_5:intP pointer, l_4:int, h_4:int,
  intP_intM_a_5_3_at_L:(intP, int32) memory) =
- (forall i_1:int.
-  ((le_int(l_4, i_1) and lt_int(i_1, h_4)) ->
-   le_int(integer_of_int32(select(intP_intM_a_5_3_at_L, shift(a_5, i_1))),
+ (forall i_3:int.
+  ((le_int(l_4, i_3) and lt_int(i_3, h_4)) ->
+   le_int(integer_of_int32(select(intP_intM_a_5_3_at_L, shift(a_5, i_3))),
    integer_of_int32(select(intP_intM_a_5_3_at_L,
-                    shift(a_5, add_int(i_1, (1))))))))
+                    shift(a_5, add_int(i_3, (1))))))))
 
 logic charP_tag:  -> charP tag_id
 
@@ -263,6 +274,11 @@ logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
+
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic int32_of_integer: int -> int32
 
@@ -320,6 +336,10 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
 predicate left_valid_struct_intP(p:intP pointer, a:int,
  intP_alloc_table:intP alloc_table) = (offset_min(intP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -329,6 +349,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 
 axiom pointer_addr_of_intP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -341,6 +367,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
 
 predicate right_valid_struct_intP(p:intP pointer, b:int,
  intP_alloc_table:intP alloc_table) = (offset_max(intP_alloc_table, p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -355,6 +385,11 @@ predicate strict_valid_root_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -371,10 +406,47 @@ predicate strict_valid_struct_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -385,6 +457,11 @@ predicate valid_root_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -400,6 +477,11 @@ predicate valid_struct_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -482,6 +564,38 @@ parameter alloc_struct_intP_requires :
           and (alloc_fresh(intP_alloc_table@, result, n)
               and instanceof(intP_tag_table, result, intP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -512,6 +626,8 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
+parameter any_uint8 : unit -> { } uint8 { true }
+
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -524,33 +640,33 @@ parameter int8_of_integer_ :
 
 parameter min_sort :
  t:intP pointer ->
-  n:int32 ->
+  n_1:int32 ->
    intP_intM_t_5:(intP, int32) memory ref ->
     intP_t_5_alloc_table:intP alloc_table ->
      { } unit reads intP_intM_t_5 writes intP_intM_t_5
      { ((JC_<somenum>:
-        Permut(t, (0), sub_int(integer_of_int32(n), (1)), intP_intM_t_5,
+        Permut(t, (0), sub_int(integer_of_int32(n_1), (1)), intP_intM_t_5,
         intP_intM_t_5@))
        and (JC_<somenum>:
-           Sorted(t, (0), sub_int(integer_of_int32(n), (1)), intP_intM_t_5))) }
+           Sorted(t, (0), sub_int(integer_of_int32(n_1), (1)), intP_intM_t_5))) }
 
 parameter min_sort_requires :
  t:intP pointer ->
-  n:int32 ->
+  n_1:int32 ->
    intP_intM_t_5:(intP, int32) memory ref ->
     intP_t_5_alloc_table:intP alloc_table ->
      { (JC_<somenum>:
-       ((JC_<somenum>: ge_int(integer_of_int32(n), (0)))
+       ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
        and ((JC_<somenum>: le_int(offset_min(intP_t_5_alloc_table, t), (0)))
            and (JC_<somenum>:
                ge_int(offset_max(intP_t_5_alloc_table, t),
-               sub_int(integer_of_int32(n), (1)))))))}
+               sub_int(integer_of_int32(n_1), (1)))))))}
      unit reads intP_intM_t_5 writes intP_intM_t_5
      { ((JC_<somenum>:
-        Permut(t, (0), sub_int(integer_of_int32(n), (1)), intP_intM_t_5,
+        Permut(t, (0), sub_int(integer_of_int32(n_1), (1)), intP_intM_t_5,
         intP_intM_t_5@))
        and (JC_<somenum>:
-           Sorted(t, (0), sub_int(integer_of_int32(n), (1)), intP_intM_t_5))) }
+           Sorted(t, (0), sub_int(integer_of_int32(n_1), (1)), intP_intM_t_5))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -558,68 +674,75 @@ parameter safe_int32_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
 parameter swap :
  t_0:intP pointer ->
-  i_0:int32 ->
-   j_0:int32 ->
+  i:int32 ->
+   j:int32 ->
     intP_intM_t_0_4:(intP, int32) memory ref ->
      intP_t_0_4_alloc_table:intP alloc_table ->
       { } unit reads intP_intM_t_0_4 writes intP_intM_t_0_4
       { (JC_<somenum>:
         ((JC_<somenum>:
-         Swap(t_0, integer_of_int32(i_0), integer_of_int32(j_0),
-         intP_intM_t_0_4, intP_intM_t_0_4@))
+         Swap(t_0, integer_of_int32(i), integer_of_int32(j), intP_intM_t_0_4,
+         intP_intM_t_0_4@))
         and (JC_<somenum>:
             not_assigns(intP_t_0_4_alloc_table, intP_intM_t_0_4@,
             intP_intM_t_0_4, pset_singleton(t_0))))) }
 
 parameter swap_requires :
  t_0:intP pointer ->
-  i_0:int32 ->
-   j_0:int32 ->
+  i:int32 ->
+   j:int32 ->
     intP_intM_t_0_4:(intP, int32) memory ref ->
      intP_t_0_4_alloc_table:intP alloc_table ->
       { (JC_<somenum>:
         ((JC_<somenum>:
-         le_int(offset_min(intP_t_0_4_alloc_table, t_0),
-         integer_of_int32(i_0)))
+         le_int(offset_min(intP_t_0_4_alloc_table, t_0), integer_of_int32(i)))
         and ((JC_<somenum>:
              ge_int(offset_max(intP_t_0_4_alloc_table, t_0),
-             integer_of_int32(i_0)))
+             integer_of_int32(i)))
             and ((JC_<somenum>:
                  le_int(offset_min(intP_t_0_4_alloc_table, t_0),
-                 integer_of_int32(j_0)))
+                 integer_of_int32(j)))
                 and (JC_<somenum>:
                     ge_int(offset_max(intP_t_0_4_alloc_table, t_0),
-                    integer_of_int32(j_0)))))))}
+                    integer_of_int32(j)))))))}
       unit reads intP_intM_t_0_4 writes intP_intM_t_0_4
       { (JC_<somenum>:
         ((JC_<somenum>:
-         Swap(t_0, integer_of_int32(i_0), integer_of_int32(j_0),
-         intP_intM_t_0_4, intP_intM_t_0_4@))
+         Swap(t_0, integer_of_int32(i), integer_of_int32(j), intP_intM_t_0_4,
+         intP_intM_t_0_4@))
         and (JC_<somenum>:
             not_assigns(intP_t_0_4_alloc_table, intP_intM_t_0_4@,
             intP_intM_t_0_4, pset_singleton(t_0))))) }
 
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
+
 let min_sort_ensures_default =
- fun (t : intP pointer) (n : int32) (intP_intM_t_5 : (intP, int32) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
+ fun (t : intP pointer) (n_1 : int32) (intP_intM_t_5 : (intP, int32) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: ge_int(integer_of_int32(n), (0)))
+    ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_<somenum>: le_int(offset_min(intP_t_5_alloc_table, t), (0)))
         and (JC_<somenum>:
             ge_int(offset_max(intP_t_5_alloc_table, t),
-            sub_int(integer_of_int32(n), (1))))))) }
+            sub_int(integer_of_int32(n_1), (1))))))) }
   (init:
   try
    begin
-     (let i_0_1 = ref (any_int32 void) in
-     (let j_0_1 = ref (any_int32 void) in
+     (let i_0 = ref (any_int32 void) in
+     (let j_0_0 = ref (any_int32 void) in
      (let mi = ref (any_int32 void) in
      (let mv = ref (any_int32 void) in
      try
       (C_9:
       begin
-        (let jessie_<somenum> = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
+        (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
        (loop_3:
        while true do
        { invariant (JC_<somenum>: true)  }
@@ -630,11 +753,11 @@ let min_sort_ensures_default =
             (let jessie_<somenum> =
             (C_31:
             begin
-              (if ((lt_int_ (integer_of_int32 !i_0_1)) (integer_of_int32 
-                                                        (C_11:
-                                                        (safe_int32_of_integer_ 
-                                                         (C_10:
-                                                         ((sub_int (integer_of_int32 n)) (1)))))))
+              (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 
+                                                      (C_11:
+                                                      (safe_int32_of_integer_ 
+                                                       (C_10:
+                                                       ((sub_int (integer_of_int32 n_1)) (1)))))))
               then void else (raise (Goto_while_0_break_exc void)));
              try
               (C_14:
@@ -644,12 +767,12 @@ let min_sort_ensures_default =
                 (let jessie_<somenum> =
                 (mv := (C_13:
                        ((safe_acc_ !intP_intM_t_5) (C_12:
-                                                   ((shift t) (integer_of_int32 !i_0_1)))))) in
-                void); (let jessie_<somenum> = (mi := !i_0_1) in void);
+                                                   ((shift t) (integer_of_int32 !i_0)))))) in
+                void); (let jessie_<somenum> = (mi := !i_0) in void);
                (let jessie_<somenum> =
-               (j_0_1 := (C_17:
+               (j_0_0 := (C_17:
                          (safe_int32_of_integer_ (C_16:
-                                                 ((add_int (integer_of_int32 !i_0_1)) (1)))))) in
+                                                 ((add_int (integer_of_int32 !i_0)) (1)))))) in
                void);
                (loop_4:
                while true do
@@ -661,28 +784,28 @@ let min_sort_ensures_default =
                     (let jessie_<somenum> =
                     (C_27:
                     begin
-                      (if ((lt_int_ (integer_of_int32 !j_0_1)) (integer_of_int32 n))
+                      (if ((lt_int_ (integer_of_int32 !j_0_0)) (integer_of_int32 n_1))
                       then void else (raise (Goto_while_1_break_exc void)));
                      (if ((lt_int_ (integer_of_int32 (C_24:
                                                      ((safe_acc_ !intP_intM_t_5) 
                                                       (C_23:
-                                                      ((shift t) (integer_of_int32 !j_0_1))))))) 
+                                                      ((shift t) (integer_of_int32 !j_0_0))))))) 
                           (integer_of_int32 !mv))
                      then
                       (let jessie_<somenum> =
                       (C_19:
                       (C_22:
                       begin
-                        (let jessie_<somenum> = (mi := !j_0_1) in void);
+                        (let jessie_<somenum> = (mi := !j_0_0) in void);
                        (mv := (C_21:
                               ((safe_acc_ !intP_intM_t_5) (C_20:
                                                           ((shift t) 
-                                                           (integer_of_int32 !j_0_1))))));
+                                                           (integer_of_int32 !j_0_0))))));
                        !mv end)) in void) else void);
-                     (j_0_1 := (C_26:
+                     (j_0_0 := (C_26:
                                (safe_int32_of_integer_ (C_25:
-                                                       ((add_int (integer_of_int32 !j_0_1)) (1))))));
-                     !j_0_1 end) in void); (raise (Loop_continue_exc void))
+                                                       ((add_int (integer_of_int32 !j_0_0)) (1))))));
+                     !j_0_0 end) in void); (raise (Loop_continue_exc void))
                   end with Loop_continue_exc jessie_<somenum> -> void end end done);
                (raise (Goto_while_1_break_exc void)) end))) with
               Goto_while_1_break_exc jessie_<somenum> ->
@@ -691,15 +814,15 @@ let min_sort_ensures_default =
                 void;
                (C_28:
                (let jessie_<somenum> = t in
-               (let jessie_<somenum> = !i_0_1 in
+               (let jessie_<somenum> = !i_0 in
                (let jessie_<somenum> = !mi in
                (JC_<somenum>:
                (((((swap jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_t_5) intP_t_5_alloc_table))))))
               end) end;
-             (i_0_1 := (C_30:
-                       (safe_int32_of_integer_ (C_29:
-                                               ((add_int (integer_of_int32 !i_0_1)) (1))))));
-             !i_0_1 end) in void); (raise (Loop_continue_exc void)) end with
+             (i_0 := (C_30:
+                     (safe_int32_of_integer_ (C_29:
+                                             ((add_int (integer_of_int32 !i_0)) (1))))));
+             !i_0 end) in void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
@@ -707,24 +830,24 @@ let min_sort_ensures_default =
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
 let min_sort_ensures_permutation =
- fun (t : intP pointer) (n : int32) (intP_intM_t_5 : (intP, int32) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
+ fun (t : intP pointer) (n_1 : int32) (intP_intM_t_5 : (intP, int32) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: ge_int(integer_of_int32(n), (0)))
+    ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_<somenum>: le_int(offset_min(intP_t_5_alloc_table, t), (0)))
         and (JC_<somenum>:
             ge_int(offset_max(intP_t_5_alloc_table, t),
-            sub_int(integer_of_int32(n), (1))))))) }
+            sub_int(integer_of_int32(n_1), (1))))))) }
   (init:
   try
    begin
-     (let i_0_1 = ref (any_int32 void) in
-     (let j_0_1 = ref (any_int32 void) in
+     (let i_0 = ref (any_int32 void) in
+     (let j_0_0 = ref (any_int32 void) in
      (let mi = ref (any_int32 void) in
      (let mv = ref (any_int32 void) in
      try
       (C_9:
       begin
-        (let jessie_<somenum> = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
+        (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
        (loop_7:
        while true do
        { invariant (JC_<somenum>: true)  }
@@ -735,11 +858,11 @@ let min_sort_ensures_permutation =
             (let jessie_<somenum> =
             (C_31:
             begin
-              (if ((lt_int_ (integer_of_int32 !i_0_1)) (integer_of_int32 
-                                                        (C_11:
-                                                        (safe_int32_of_integer_ 
-                                                         (C_10:
-                                                         ((sub_int (integer_of_int32 n)) (1)))))))
+              (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 
+                                                      (C_11:
+                                                      (safe_int32_of_integer_ 
+                                                       (C_10:
+                                                       ((sub_int (integer_of_int32 n_1)) (1)))))))
               then void else (raise (Goto_while_0_break_exc void)));
              try
               (C_14:
@@ -749,12 +872,12 @@ let min_sort_ensures_permutation =
                 (let jessie_<somenum> =
                 (mv := (C_13:
                        ((safe_acc_ !intP_intM_t_5) (C_12:
-                                                   ((shift t) (integer_of_int32 !i_0_1)))))) in
-                void); (let jessie_<somenum> = (mi := !i_0_1) in void);
+                                                   ((shift t) (integer_of_int32 !i_0)))))) in
+                void); (let jessie_<somenum> = (mi := !i_0) in void);
                (let jessie_<somenum> =
-               (j_0_1 := (C_17:
+               (j_0_0 := (C_17:
                          (safe_int32_of_integer_ (C_16:
-                                                 ((add_int (integer_of_int32 !i_0_1)) (1)))))) in
+                                                 ((add_int (integer_of_int32 !i_0)) (1)))))) in
                void);
                (loop_8:
                while true do
@@ -766,28 +889,28 @@ let min_sort_ensures_permutation =
                     (let jessie_<somenum> =
                     (C_27:
                     begin
-                      (if ((lt_int_ (integer_of_int32 !j_0_1)) (integer_of_int32 n))
+                      (if ((lt_int_ (integer_of_int32 !j_0_0)) (integer_of_int32 n_1))
                       then void else (raise (Goto_while_1_break_exc void)));
                      (if ((lt_int_ (integer_of_int32 (C_24:
                                                      ((safe_acc_ !intP_intM_t_5) 
                                                       (C_23:
-                                                      ((shift t) (integer_of_int32 !j_0_1))))))) 
+                                                      ((shift t) (integer_of_int32 !j_0_0))))))) 
                           (integer_of_int32 !mv))
                      then
                       (let jessie_<somenum> =
                       (C_19:
                       (C_22:
                       begin
-                        (let jessie_<somenum> = (mi := !j_0_1) in void);
+                        (let jessie_<somenum> = (mi := !j_0_0) in void);
                        (mv := (C_21:
                               ((safe_acc_ !intP_intM_t_5) (C_20:
                                                           ((shift t) 
-                                                           (integer_of_int32 !j_0_1))))));
+                                                           (integer_of_int32 !j_0_0))))));
                        !mv end)) in void) else void);
-                     (j_0_1 := (C_26:
+                     (j_0_0 := (C_26:
                                (safe_int32_of_integer_ (C_25:
-                                                       ((add_int (integer_of_int32 !j_0_1)) (1))))));
-                     !j_0_1 end) in void); (raise (Loop_continue_exc void))
+                                                       ((add_int (integer_of_int32 !j_0_0)) (1))))));
+                     !j_0_0 end) in void); (raise (Loop_continue_exc void))
                   end with Loop_continue_exc jessie_<somenum> -> void end end done);
                (raise (Goto_while_1_break_exc void)) end))) with
               Goto_while_1_break_exc jessie_<somenum> ->
@@ -796,43 +919,43 @@ let min_sort_ensures_permutation =
                 void;
                (C_28:
                (let jessie_<somenum> = t in
-               (let jessie_<somenum> = !i_0_1 in
+               (let jessie_<somenum> = !i_0 in
                (let jessie_<somenum> = !mi in
                (JC_<somenum>:
                (((((swap jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_t_5) intP_t_5_alloc_table))))))
               end) end;
-             (i_0_1 := (C_30:
-                       (safe_int32_of_integer_ (C_29:
-                                               ((add_int (integer_of_int32 !i_0_1)) (1))))));
-             !i_0_1 end) in void); (raise (Loop_continue_exc void)) end with
+             (i_0 := (C_30:
+                     (safe_int32_of_integer_ (C_29:
+                                             ((add_int (integer_of_int32 !i_0)) (1))))));
+             !i_0 end) in void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end))));
     (raise Return) end with Return -> void end)
   { (JC_<somenum>:
-    Permut(t, (0), sub_int(integer_of_int32(n), (1)), intP_intM_t_5,
+    Permut(t, (0), sub_int(integer_of_int32(n_1), (1)), intP_intM_t_5,
     intP_intM_t_5@)) }
 
 let min_sort_ensures_sorted =
- fun (t : intP pointer) (n : int32) (intP_intM_t_5 : (intP, int32) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
+ fun (t : intP pointer) (n_1 : int32) (intP_intM_t_5 : (intP, int32) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: ge_int(integer_of_int32(n), (0)))
+    ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_<somenum>: le_int(offset_min(intP_t_5_alloc_table, t), (0)))
         and (JC_<somenum>:
             ge_int(offset_max(intP_t_5_alloc_table, t),
-            sub_int(integer_of_int32(n), (1))))))) }
+            sub_int(integer_of_int32(n_1), (1))))))) }
   (init:
   try
    begin
-     (let i_0_1 = ref (any_int32 void) in
-     (let j_0_1 = ref (any_int32 void) in
+     (let i_0 = ref (any_int32 void) in
+     (let j_0_0 = ref (any_int32 void) in
      (let mi = ref (any_int32 void) in
      (let mv = ref (any_int32 void) in
      try
       (C_9:
       begin
-        (let jessie_<somenum> = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
+        (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
        (loop_5:
        while true do
        { invariant (JC_<somenum>: true)  }
@@ -843,11 +966,11 @@ let min_sort_ensures_sorted =
             (let jessie_<somenum> =
             (C_31:
             begin
-              (if ((lt_int_ (integer_of_int32 !i_0_1)) (integer_of_int32 
-                                                        (C_11:
-                                                        (safe_int32_of_integer_ 
-                                                         (C_10:
-                                                         ((sub_int (integer_of_int32 n)) (1)))))))
+              (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 
+                                                      (C_11:
+                                                      (safe_int32_of_integer_ 
+                                                       (C_10:
+                                                       ((sub_int (integer_of_int32 n_1)) (1)))))))
               then void else (raise (Goto_while_0_break_exc void)));
              try
               (C_14:
@@ -857,12 +980,12 @@ let min_sort_ensures_sorted =
                 (let jessie_<somenum> =
                 (mv := (C_13:
                        ((safe_acc_ !intP_intM_t_5) (C_12:
-                                                   ((shift t) (integer_of_int32 !i_0_1)))))) in
-                void); (let jessie_<somenum> = (mi := !i_0_1) in void);
+                                                   ((shift t) (integer_of_int32 !i_0)))))) in
+                void); (let jessie_<somenum> = (mi := !i_0) in void);
                (let jessie_<somenum> =
-               (j_0_1 := (C_17:
+               (j_0_0 := (C_17:
                          (safe_int32_of_integer_ (C_16:
-                                                 ((add_int (integer_of_int32 !i_0_1)) (1)))))) in
+                                                 ((add_int (integer_of_int32 !i_0)) (1)))))) in
                void);
                (loop_6:
                while true do
@@ -874,28 +997,28 @@ let min_sort_ensures_sorted =
                     (let jessie_<somenum> =
                     (C_27:
                     begin
-                      (if ((lt_int_ (integer_of_int32 !j_0_1)) (integer_of_int32 n))
+                      (if ((lt_int_ (integer_of_int32 !j_0_0)) (integer_of_int32 n_1))
                       then void else (raise (Goto_while_1_break_exc void)));
                      (if ((lt_int_ (integer_of_int32 (C_24:
                                                      ((safe_acc_ !intP_intM_t_5) 
                                                       (C_23:
-                                                      ((shift t) (integer_of_int32 !j_0_1))))))) 
+                                                      ((shift t) (integer_of_int32 !j_0_0))))))) 
                           (integer_of_int32 !mv))
                      then
                       (let jessie_<somenum> =
                       (C_19:
                       (C_22:
                       begin
-                        (let jessie_<somenum> = (mi := !j_0_1) in void);
+                        (let jessie_<somenum> = (mi := !j_0_0) in void);
                        (mv := (C_21:
                               ((safe_acc_ !intP_intM_t_5) (C_20:
                                                           ((shift t) 
-                                                           (integer_of_int32 !j_0_1))))));
+                                                           (integer_of_int32 !j_0_0))))));
                        !mv end)) in void) else void);
-                     (j_0_1 := (C_26:
+                     (j_0_0 := (C_26:
                                (safe_int32_of_integer_ (C_25:
-                                                       ((add_int (integer_of_int32 !j_0_1)) (1))))));
-                     !j_0_1 end) in void); (raise (Loop_continue_exc void))
+                                                       ((add_int (integer_of_int32 !j_0_0)) (1))))));
+                     !j_0_0 end) in void); (raise (Loop_continue_exc void))
                   end with Loop_continue_exc jessie_<somenum> -> void end end done);
                (raise (Goto_while_1_break_exc void)) end))) with
               Goto_while_1_break_exc jessie_<somenum> ->
@@ -904,41 +1027,42 @@ let min_sort_ensures_sorted =
                 void;
                (C_28:
                (let jessie_<somenum> = t in
-               (let jessie_<somenum> = !i_0_1 in
+               (let jessie_<somenum> = !i_0 in
                (let jessie_<somenum> = !mi in
                (JC_<somenum>:
                (((((swap jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_t_5) intP_t_5_alloc_table))))))
               end) end;
-             (i_0_1 := (C_30:
-                       (safe_int32_of_integer_ (C_29:
-                                               ((add_int (integer_of_int32 !i_0_1)) (1))))));
-             !i_0_1 end) in void); (raise (Loop_continue_exc void)) end with
+             (i_0 := (C_30:
+                     (safe_int32_of_integer_ (C_29:
+                                             ((add_int (integer_of_int32 !i_0)) (1))))));
+             !i_0 end) in void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end))));
     (raise Return) end with Return -> void end)
-  { (JC_<somenum>: Sorted(t, (0), sub_int(integer_of_int32(n), (1)), intP_intM_t_5)) }
+  { (JC_<somenum>:
+    Sorted(t, (0), sub_int(integer_of_int32(n_1), (1)), intP_intM_t_5)) }
 
 let min_sort_safety =
- fun (t : intP pointer) (n : int32) (intP_intM_t_5 : (intP, int32) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
+ fun (t : intP pointer) (n_1 : int32) (intP_intM_t_5 : (intP, int32) memory ref) (intP_t_5_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: ge_int(integer_of_int32(n), (0)))
+    ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_<somenum>: le_int(offset_min(intP_t_5_alloc_table, t), (0)))
         and (JC_<somenum>:
             ge_int(offset_max(intP_t_5_alloc_table, t),
-            sub_int(integer_of_int32(n), (1))))))) }
+            sub_int(integer_of_int32(n_1), (1))))))) }
   (init:
   try
    begin
-     (let i_0_1 = ref (any_int32 void) in
-     (let j_0_1 = ref (any_int32 void) in
+     (let i_0 = ref (any_int32 void) in
+     (let j_0_0 = ref (any_int32 void) in
      (let mi = ref (any_int32 void) in
      (let mv = ref (any_int32 void) in
      try
       (C_9:
       begin
-        (let jessie_<somenum> = (i_0_1 := (safe_int32_of_integer_ (0))) in void);
+        (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
        (loop_1:
        while true do
        { invariant (JC_<somenum>: true) variant (0) }
@@ -949,12 +1073,12 @@ let min_sort_safety =
             (let jessie_<somenum> =
             (C_31:
             begin
-              (if ((lt_int_ (integer_of_int32 !i_0_1)) (integer_of_int32 
-                                                        (C_11:
-                                                        (JC_<somenum>:
-                                                        (int32_of_integer_ 
-                                                         (C_10:
-                                                         ((sub_int (integer_of_int32 n)) (1))))))))
+              (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 
+                                                      (C_11:
+                                                      (JC_<somenum>:
+                                                      (int32_of_integer_ 
+                                                       (C_10:
+                                                       ((sub_int (integer_of_int32 n_1)) (1))))))))
               then void else (raise (Goto_while_0_break_exc void)));
              try
               (C_14:
@@ -965,13 +1089,13 @@ let min_sort_safety =
                 (mv := (C_13:
                        (JC_<somenum>:
                        ((((offset_acc_ intP_t_5_alloc_table) !intP_intM_t_5) t) 
-                        (integer_of_int32 !i_0_1))))) in void);
-               (let jessie_<somenum> = (mi := !i_0_1) in void);
+                        (integer_of_int32 !i_0))))) in void);
+               (let jessie_<somenum> = (mi := !i_0) in void);
                (let jessie_<somenum> =
-               (j_0_1 := (C_17:
+               (j_0_0 := (C_17:
                          (JC_<somenum>:
                          (int32_of_integer_ (C_16:
-                                            ((add_int (integer_of_int32 !i_0_1)) (1))))))) in
+                                            ((add_int (integer_of_int32 !i_0)) (1))))))) in
                void);
                (loop_2:
                while true do
@@ -983,29 +1107,29 @@ let min_sort_safety =
                     (let jessie_<somenum> =
                     (C_27:
                     begin
-                      (if ((lt_int_ (integer_of_int32 !j_0_1)) (integer_of_int32 n))
+                      (if ((lt_int_ (integer_of_int32 !j_0_0)) (integer_of_int32 n_1))
                       then void else (raise (Goto_while_1_break_exc void)));
                      (if ((lt_int_ (integer_of_int32 (C_24:
                                                      (JC_<somenum>:
                                                      ((((offset_acc_ intP_t_5_alloc_table) !intP_intM_t_5) t) 
-                                                      (integer_of_int32 !j_0_1)))))) 
+                                                      (integer_of_int32 !j_0_0)))))) 
                           (integer_of_int32 !mv))
                      then
                       (let jessie_<somenum> =
                       (C_19:
                       (C_22:
                       begin
-                        (let jessie_<somenum> = (mi := !j_0_1) in void);
+                        (let jessie_<somenum> = (mi := !j_0_0) in void);
                        (mv := (C_21:
                               (JC_<somenum>:
                               ((((offset_acc_ intP_t_5_alloc_table) !intP_intM_t_5) t) 
-                               (integer_of_int32 !j_0_1))))); !mv end)) in
+                               (integer_of_int32 !j_0_0))))); !mv end)) in
                       void) else void);
-                     (j_0_1 := (C_26:
+                     (j_0_0 := (C_26:
                                (JC_<somenum>:
                                (int32_of_integer_ (C_25:
-                                                  ((add_int (integer_of_int32 !j_0_1)) (1)))))));
-                     !j_0_1 end) in void); (raise (Loop_continue_exc void))
+                                                  ((add_int (integer_of_int32 !j_0_0)) (1)))))));
+                     !j_0_0 end) in void); (raise (Loop_continue_exc void))
                   end with Loop_continue_exc jessie_<somenum> -> void end end done);
                (raise (Goto_while_1_break_exc void)) end))) with
               Goto_while_1_break_exc jessie_<somenum> ->
@@ -1014,16 +1138,16 @@ let min_sort_safety =
                 void;
                (C_28:
                (let jessie_<somenum> = t in
-               (let jessie_<somenum> = !i_0_1 in
+               (let jessie_<somenum> = !i_0 in
                (let jessie_<somenum> = !mi in
                (JC_<somenum>:
                (((((swap_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_t_5) intP_t_5_alloc_table))))))
               end) end;
-             (i_0_1 := (C_30:
-                       (JC_<somenum>:
-                       (int32_of_integer_ (C_29:
-                                          ((add_int (integer_of_int32 !i_0_1)) (1)))))));
-             !i_0_1 end) in void); (raise (Loop_continue_exc void)) end with
+             (i_0 := (C_30:
+                     (JC_<somenum>:
+                     (int32_of_integer_ (C_29:
+                                        ((add_int (integer_of_int32 !i_0)) (1)))))));
+             !i_0 end) in void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
@@ -1098,30 +1222,30 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/min_sort_po15.why">
-      <location file = "why/min_sort.why" line = "819" begin = "50" end = "51"/>
+      <location file = "why/min_sort.why" line = "935" begin = "50" end = "51"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/min_sort_po16.why">
-      <location file = "why/min_sort.why" line = "819" begin = "50" end = "51"/>
+      <location file = "why/min_sort.why" line = "935" begin = "50" end = "51"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/min_sort_po17.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "142" begin = "23" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "150" begin = "23" end = "39"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/min_sort_po18.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "142" begin = "23" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "150" begin = "23" end = "39"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/min_sort_po19.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "142" begin = "23" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "150" begin = "23" end = "39"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/min_sort_po20.why">
-      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "142" begin = "23" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/min_sort.jessie/min_sort.jc" line = "150" begin = "23" end = "39"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -1136,11 +1260,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/min_sort_po23.why">
-      <location file = "why/min_sort.why" line = "785" begin = "42" end = "43"/>
+      <location file = "why/min_sort.why" line = "901" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/min_sort_po24.why">
-      <location file = "why/min_sort.why" line = "785" begin = "42" end = "43"/>
+      <location file = "why/min_sort.why" line = "901" begin = "42" end = "43"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -2106,18 +2230,24 @@ type intP
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic integer_of_int32 : int32 -> int
 
-predicate Swap(a: intP pointer, i: int, j: int, intP_intM_a_1_at_L2: (intP,
-  int32) memory, intP_intM_a_1_at_L1: (intP, int32) memory) =
+predicate Swap(a: intP pointer, i_1: int, j_0: int,
+  intP_intM_a_1_at_L2: (intP, int32) memory, intP_intM_a_1_at_L1: (intP,
+  int32) memory) =
   ((integer_of_int32(select(intP_intM_a_1_at_L1, shift(a,
-   i))) = integer_of_int32(select(intP_intM_a_1_at_L2, shift(a, j)))) and
+   i_1))) = integer_of_int32(select(intP_intM_a_1_at_L2, shift(a, j_0)))) and
    ((integer_of_int32(select(intP_intM_a_1_at_L1, shift(a,
-    j))) = integer_of_int32(select(intP_intM_a_1_at_L2, shift(a, i)))) and
+    j_0))) = integer_of_int32(select(intP_intM_a_1_at_L2, shift(a,
+    i_1)))) and
     (forall k:int.
-      (((k <> i) and (k <> j)) ->
+      (((k <> i_1) and (k <> j_0)) ->
        (integer_of_int32(select(intP_intM_a_1_at_L1, shift(a,
        k))) = integer_of_int32(select(intP_intM_a_1_at_L2, shift(a, k))))))))
 
@@ -2153,13 +2283,13 @@ inductive Permut: intP pointer, int, int, (intP, int32) memory, (intP,
                      (forall a_4:intP pointer.
                        (forall l_3:int.
                          (forall h_3:int.
-                           (forall i_0_0:int.
-                             (forall j_0_0:int.
-                               (((l_3 <= i_0_0) and
-                                 ((i_0_0 <= h_3) and
-                                  ((l_3 <= j_0_0) and
-                                   ((j_0_0 <= h_3) and Swap(a_4, i_0_0,
-                                    j_0_0, intP_intM_a_0_2_at_L2,
+                           (forall i_2:int.
+                             (forall j_1:int.
+                               (((l_3 <= i_2) and
+                                 ((i_2 <= h_3) and
+                                  ((l_3 <= j_1) and
+                                   ((j_1 <= h_3) and Swap(a_4, i_2, j_1,
+                                    intP_intM_a_0_2_at_L2,
                                     intP_intM_a_0_2_at_L1))))) ->
                                 Permut(a_4, l_3, h_3, intP_intM_a_0_2_at_L2,
                                 intP_intM_a_0_2_at_L1)))))))))
@@ -2168,11 +2298,11 @@ inductive Permut: intP pointer, int, int, (intP, int32) memory, (intP,
 
 predicate Sorted(a_5: intP pointer, l_4: int, h_4: int,
   intP_intM_a_5_3_at_L: (intP, int32) memory) =
-  (forall i_1:int.
-    (((l_4 <= i_1) and (i_1 < h_4)) ->
+  (forall i_3:int.
+    (((l_4 <= i_3) and (i_3 < h_4)) ->
      (integer_of_int32(select(intP_intM_a_5_3_at_L, shift(a_5,
-     i_1))) <= integer_of_int32(select(intP_intM_a_5_3_at_L, shift(a_5,
-     (i_1 + 1)))))))
+     i_3))) <= integer_of_int32(select(intP_intM_a_5_3_at_L, shift(a_5,
+     (i_3 + 1)))))))
 
 logic charP_tag : charP tag_id
 
@@ -2198,6 +2328,11 @@ logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
+
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
 
 logic int32_of_integer : int -> int32
 
@@ -2256,6 +2391,10 @@ predicate left_valid_struct_intP(p: intP pointer, a: int,
   intP_alloc_table: intP alloc_table) = (offset_min(intP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -2265,6 +2404,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 
 axiom pointer_addr_of_intP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -2279,6 +2424,10 @@ predicate right_valid_struct_intP(p: intP pointer, b: int,
   intP_alloc_table: intP alloc_table) = (offset_max(intP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
@@ -2292,6 +2441,11 @@ predicate strict_valid_root_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2308,10 +2462,46 @@ predicate strict_valid_struct_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -2322,6 +2512,11 @@ predicate valid_root_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2337,6 +2532,11 @@ predicate valid_struct_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =

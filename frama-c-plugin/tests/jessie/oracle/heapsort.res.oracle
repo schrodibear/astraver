@@ -18,6 +18,8 @@ axiomatic Padding {
 
 type uint32 = 0..4294967295
 
+type uint8 = 0..255
+
 type int32 = -2147483648..2147483647
 
 type int8 = -128..127
@@ -27,6 +29,12 @@ tag intP = {
 }
 
 type intP = [intP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -43,31 +51,31 @@ axiomatic IntArray {
 
   logic type int_array
    
-  logic int32 access(int_array a, integer i)
+  logic int32 access(int_array a, integer i_1)
    
-  logic int_array update(int_array a_0, integer i_0, int32 v)
+  logic int_array update(int_array a_0, integer i_2, int32 v)
    
   axiom access_update_eq :
   (\forall int_array a_1;
-    (\forall integer i_1;
+    (\forall integer i_3;
       (\forall int32 v_0;
-        (access(update(a_1, i_1, v_0), i_1) == v_0))))
+        (access(update(a_1, i_3, v_0), i_3) == v_0))))
    
   axiom access_update_neq :
   (\forall int_array a_2;
-    (\forall integer i_2;
-      (\forall integer j;
+    (\forall integer i_4;
+      (\forall integer j_0;
         (\forall int32 v_1;
-          ((i_2 != j) ==>
-            (access(update(a_2, i_2, v_1), j) == access(a_2, j)))))))
+          ((i_4 != j_0) ==>
+            (access(update(a_2, i_4, v_1), j_0) == access(a_2, j_0)))))))
   
 }
 
-predicate Swap(int_array a1, int_array a2, integer i_3, integer j_0) =
-(((access(a1, i_3) == access(a2, j_0)) &&
-   (access(a1, j_0) == access(a2, i_3))) &&
+predicate Swap(int_array a1, int_array a2, integer i_5, integer j_1) =
+(((access(a1, i_5) == access(a2, j_1)) &&
+   (access(a1, j_1) == access(a2, i_5))) &&
   (\forall integer k;
-    ((k != i_3) ==> ((k != j_0) ==> (access(a1, k) == access(a2, k))))))
+    ((k != i_5) ==> ((k != j_1) ==> (access(a1, k) == access(a2, k))))))
 
 axiomatic Permut {
 
@@ -100,11 +108,11 @@ axiomatic Permut {
     (\forall int_array a2_3;
       (\forall integer l_3;
         (\forall integer h_3;
-          (\forall integer i_4;
-            (\forall integer j_1;
-              (((l_3 <= i_4) && (i_4 <= h_3)) ==>
-                (((l_3 <= j_1) && (j_1 <= h_3)) ==>
-                  (Swap(a1_3, a2_3, i_4, j_1) ==>
+          (\forall integer i_6;
+            (\forall integer j_2;
+              (((l_3 <= i_6) && (i_6 <= h_3)) ==>
+                (((l_3 <= j_2) && (j_2 <= h_3)) ==>
+                  (Swap(a1_3, a2_3, i_6, j_2) ==>
                     Permut(a1_3, a2_3, l_3, h_3))))))))))
    
   axiom Permut_extend :
@@ -126,25 +134,25 @@ axiomatic ArrayContents {
    
   axiom access_contents{L} :
   (\forall intP[..] a_5;
-    (\forall integer i_5;
-      (access(contents{L}(a_5), i_5) == (a_5 + i_5).intM)))
+    (\forall integer i_7;
+      (access(contents{L}(a_5), i_7) == (a_5 + i_7).intM)))
   
 }
 
 predicate Sorted{L}(intP[..] a_6, integer l_5, integer h_5) =
-(\forall integer i_6;
-  (((l_5 <= i_6) && (i_6 < h_5)) ==>
-    ((a_6 + i_6).intM <= (a_6 + (i_6 + 1)).intM)))
+(\forall integer i_8;
+  (((l_5 <= i_8) && (i_8 < h_5)) ==>
+    ((a_6 + i_8).intM <= (a_6 + (i_8 + 1)).intM)))
 
-predicate Hnode{L}(intP[..] a_7, integer i_7, integer h_6) =
-(((((2 * i_7) + 1) <= h_6) ==>
-   ((a_7 + i_7).intM >= (a_7 + ((2 * i_7) + 1)).intM)) &&
-  ((((2 * i_7) + 2) <= h_6) ==>
-    ((a_7 + i_7).intM >= (a_7 + ((2 * i_7) + 2)).intM)))
+predicate Hnode{L}(intP[..] a_7, integer i_9, integer h_6) =
+(((((2 * i_9) + 1) <= h_6) ==>
+   ((a_7 + i_9).intM >= (a_7 + ((2 * i_9) + 1)).intM)) &&
+  ((((2 * i_9) + 2) <= h_6) ==>
+    ((a_7 + i_9).intM >= (a_7 + ((2 * i_9) + 2)).intM)))
 
 predicate H{L}(intP[..] a_8, integer l_6, integer h_7) =
-(\forall integer i_8;
-  (((l_6 <= i_8) && (i_8 <= h_7)) ==> Hnode{L}(a_8, i_8, h_7)))
+(\forall integer i_10;
+  (((l_6 <= i_10) && (i_10 <= h_7)) ==> Hnode{L}(a_8, i_10, h_7)))
 
 lemma H_init{L} :
 (\forall intP[..] a_9;
@@ -161,37 +169,37 @@ lemma H_max{L} :
 (\forall intP[..] a_11;
   (\forall integer h_10;
     (H{L}(a_11, 0, h_10) ==>
-      (\forall integer i_9;
-        (((0 <= i_9) && (i_9 <= h_10)) ==>
-          ((a_11 + 0).intM >= (a_11 + i_9).intM))))))
+      (\forall integer i_11;
+        (((0 <= i_11) && (i_11 <= h_10)) ==>
+          ((a_11 + 0).intM >= (a_11 + i_11).intM))))))
 
 lemma div2_1 :
-(\forall int32 i_10;
-  ((0 <= i_10) ==> ((0 <= (i_10 / 2)) && ((i_10 / 2) <= i_10))))
+(\forall int32 i_12;
+  ((0 <= i_12) ==> ((0 <= (i_12 / 2)) && ((i_12 / 2) <= i_12))))
 
 lemma div2_2 :
-(\forall int32 i_11;
-  ((0 < i_11) ==> ((0 <= (i_11 / 2)) && ((i_11 / 2) < i_11))))
+(\forall int32 i_13;
+  ((0 < i_13) ==> ((0 <= (i_13 / 2)) && ((i_13 / 2) < i_13))))
 
 lemma div2_3 :
-(\forall int32 i_12;
-  ((0 <= i_12) ==> ((i_12 - 1) < ((2 * (i_12 / 2)) + 1))))
+(\forall int32 i_14;
+  ((0 <= i_14) ==> ((i_14 - 1) < ((2 * (i_14 / 2)) + 1))))
 
 lemma div2_4 :
-(\forall int32 i_13;
+(\forall int32 i_15;
   (\forall int32 k_0;
-    ((0 <= i_13) ==>
+    ((0 <= i_15) ==>
       ((0 <= k_0) ==>
-        ((k_0 != ((i_13 - 1) / 2)) ==> (((2 * k_0) + 1) != i_13))))))
+        ((k_0 != ((i_15 - 1) / 2)) ==> (((2 * k_0) + 1) != i_15))))))
 
 lemma div2_5 :
-(\forall int32 i_14;
+(\forall int32 i_16;
   (\forall int32 k_1;
-    ((0 <= i_14) ==>
+    ((0 <= i_16) ==>
       ((0 <= k_1) ==>
-        ((k_1 != ((i_14 - 1) / 2)) ==> (((2 * k_1) + 2) != i_14))))))
+        ((k_1 != ((i_16 - 1) / 2)) ==> (((2 * k_1) + 2) != i_16))))))
 
-unit sift_down(intP[..] a_0, uint32 low, uint32 high, int32 v)
+unit sift_down(intP[..] a_0, uint32 low, uint32 high, int32 v_0)
   requires (C_45 : ((((C_48 : (0 <= low)) && (C_49 : (low <= high))) &&
                       ((C_51 : (\offset_min(a_0) <= low)) &&
                         (C_52 : (\offset_max(a_0) >= high)))) &&
@@ -199,7 +207,7 @@ unit sift_down(intP[..] a_0, uint32 low, uint32 high, int32 v)
 behavior default:
   assigns (a_0 + [low..high]).intM;
   ensures (C_42 : ((C_43 : Permut(contents{Here}(\at(a_0,Old)),
-                                  \at(update(contents{Old}(a_0), low, v),Old),
+                                  \at(update(contents{Old}(a_0), low, v_0),Old),
                                   \at(low,Old), \at(high,Old))) &&
                     (C_44 : H{Here}(\at(a_0,Old), \at(low,Old), \at(high,Old)))));
 {  
@@ -221,7 +229,7 @@ behavior default:
                             (C_12 : ((low < i) ==>
                                       Hnode{Here}(a_0, low, high)))) &&
                            (C_13 : ((low <= ((i - 1) / 2)) ==>
-                                     ((a_0 + ((i - 1) / 2)).intM >= v)))));
+                                     ((a_0 + ((i - 1) / 2)).intM >= v_0)))));
       behavior default:
         
         assigns (a_0 + [low..high]).intM;
@@ -244,7 +252,7 @@ behavior default:
                                                                 (C_19 : 
                                                                 (child +
                                                                   1)) :> uint32)))) else ()) else ());
-               (if (v >= (C_31 : (C_30 : (a_0 + child)).intM)) then 
+               (if (v_0 >= (C_31 : (C_30 : (a_0 + child)).intM)) then 
                (goto while_0_break) else ());
                (C_36 : ((C_35 : (C_34 : (a_0 + i)).intM) = (C_33 : (C_32 : 
                                                                    (a_0 +
@@ -259,64 +267,64 @@ behavior default:
          }
       };
       (while_0_break : ());
-      (C_41 : ((C_40 : (C_39 : (a_0 + i)).intM) = v));
+      (C_41 : ((C_40 : (C_39 : (a_0 + i)).intM) = v_0));
       
       (return ())
    }
 }
 
-unit heapsort(intP[..] a, uint32 n)
-  requires (C_109 : ((C_110 : (0 <= n)) &&
+unit heapsort(intP[..] a, uint32 n_1)
+  requires (C_109 : ((C_110 : (0 <= n_1)) &&
                       ((C_112 : (\offset_min(a) <= 0)) &&
-                        (C_113 : (\offset_max(a) >= (n - 1))))));
+                        (C_113 : (\offset_max(a) >= (n_1 - 1))))));
 behavior default:
   ensures (C_106 : ((C_107 : Permut(contents{Here}(\at(a,Old)),
                                     \at(contents{Old}(a),Old), 0,
-                                    (\at(n,Old) - 1))) &&
-                     (C_108 : Sorted{Here}(\at(a,Old), 0, (\at(n,Old) - 1)))));
+                                    (\at(n_1,Old) - 1))) &&
+                     (C_108 : Sorted{Here}(\at(a,Old), 0, (\at(n_1,Old) - 1)))));
 {  
    (var uint32 i_0);
    
    (var int32 tmp);
    
-   {  (if (n <= 1) then 
+   {  (if (n_1 <= 1) then 
       (goto return_label) else ());
-      (C_56 : (i_0 = (C_55 : ((C_54 : (n / 2)) :> uint32))));
+      (C_56 : (i_0 = (C_55 : ((C_54 : (n_1 / 2)) :> uint32))));
       
       loop 
       behavior default:
-        invariant (C_57 : ((((C_60 : (0 <= i_0)) && (C_61 : (i_0 < n))) &&
+        invariant (C_57 : ((((C_60 : (0 <= i_0)) && (C_61 : (i_0 < n_1))) &&
                              (C_62 : Permut(contents{Here}(a),
                                             \at(contents{Pre}(a),Pre), 0,
-                                            (n - 1)))) &&
-                            (C_63 : H{Here}(a, i_0, (n - 1)))));
+                                            (n_1 - 1)))) &&
+                            (C_63 : H{Here}(a, i_0, (n_1 - 1)))));
       variant (C_64 : i_0);
       while (true)
       {  
          {  (if (i_0 >= 1) then () else 
             (goto while_0_break));
             (C_73 : sift_down(a, (C_66 : ((C_65 : (i_0 - 1)) :> uint32)),
-                              (C_68 : ((C_67 : (n - 1)) :> uint32)),
+                              (C_68 : ((C_67 : (n_1 - 1)) :> uint32)),
                               (C_72 : (C_71 : (a +
                                                 (C_70 : ((C_69 : (i_0 - 1)) :> uint32)))).intM)));
             (C_76 : (i_0 = (C_75 : ((C_74 : (i_0 - 1)) :> uint32))))
          }
       };
       (while_0_break : ());
-      (C_79 : (i_0 = (C_78 : ((C_77 : (n - 1)) :> uint32))));
+      (C_79 : (i_0 = (C_78 : ((C_77 : (n_1 - 1)) :> uint32))));
       
       loop 
       behavior default:
-        invariant (C_81 : ((((((C_86 : (0 <= i_0)) && (C_87 : (i_0 < n))) &&
+        invariant (C_81 : ((((((C_86 : (0 <= i_0)) && (C_87 : (i_0 < n_1))) &&
                                (C_88 : Permut(contents{Here}(a),
                                               \at(contents{Pre}(a),Pre), 0,
-                                              (n - 1)))) &&
+                                              (n_1 - 1)))) &&
                               (C_89 : H{Here}(a, 0, i_0))) &&
-                             (C_90 : Sorted{Here}(a, (i_0 + 1), (n - 1)))) &&
+                             (C_90 : Sorted{Here}(a, (i_0 + 1), (n_1 - 1)))) &&
                             (C_91 : (\forall int32 k1;
                                       (\forall int32 k2;
                                         (((0 <= k1) && (k1 <= i_0)) ==>
-                                          (((i_0 < k2) && (k2 < n)) ==>
+                                          (((i_0 < k2) && (k2 < n_1)) ==>
                                             ((a + k1).intM <= (a + k2).intM))))))));
       variant (C_80 : i_0);
       while (true)
@@ -355,45 +363,49 @@ type padding
 
 type uint32
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic integer_of_int32: int32 -> int
 
-predicate Hnode(a_7:intP pointer, i_7:int, h_6:int,
+predicate Hnode(a_7:intP pointer, i_9:int, h_6:int,
  intP_intM_a_7_3_at_L:(intP, int32) memory) =
- ((le_int(add_int(mul_int((2), i_7), (1)), h_6) ->
-   ge_int(integer_of_int32(select(intP_intM_a_7_3_at_L, shift(a_7, i_7))),
+ ((le_int(add_int(mul_int((2), i_9), (1)), h_6) ->
+   ge_int(integer_of_int32(select(intP_intM_a_7_3_at_L, shift(a_7, i_9))),
    integer_of_int32(select(intP_intM_a_7_3_at_L,
-                    shift(a_7, add_int(mul_int((2), i_7), (1)))))))
- and (le_int(add_int(mul_int((2), i_7), (2)), h_6) ->
-      ge_int(integer_of_int32(select(intP_intM_a_7_3_at_L, shift(a_7, i_7))),
+                    shift(a_7, add_int(mul_int((2), i_9), (1)))))))
+ and (le_int(add_int(mul_int((2), i_9), (2)), h_6) ->
+      ge_int(integer_of_int32(select(intP_intM_a_7_3_at_L, shift(a_7, i_9))),
       integer_of_int32(select(intP_intM_a_7_3_at_L,
-                       shift(a_7, add_int(mul_int((2), i_7), (2))))))))
+                       shift(a_7, add_int(mul_int((2), i_9), (2))))))))
 
 predicate H(a_8:intP pointer, l_6:int, h_7:int,
  intP_intM_a_8_4_at_L:(intP, int32) memory) =
- (forall i_8:int.
-  ((le_int(l_6, i_8) and le_int(i_8, h_7)) ->
-   Hnode(a_8, i_8, h_7, intP_intM_a_8_4_at_L)))
+ (forall i_10:int.
+  ((le_int(l_6, i_10) and le_int(i_10, h_7)) ->
+   Hnode(a_8, i_10, h_7, intP_intM_a_8_4_at_L)))
 
 logic Permut: int_array, int_array, int, int -> prop
 
 predicate Sorted(a_6:intP pointer, l_5:int, h_5:int,
  intP_intM_a_6_2_at_L:(intP, int32) memory) =
- (forall i_6:int.
-  ((le_int(l_5, i_6) and lt_int(i_6, h_5)) ->
-   le_int(integer_of_int32(select(intP_intM_a_6_2_at_L, shift(a_6, i_6))),
+ (forall i_8:int.
+  ((le_int(l_5, i_8) and lt_int(i_8, h_5)) ->
+   le_int(integer_of_int32(select(intP_intM_a_6_2_at_L, shift(a_6, i_8))),
    integer_of_int32(select(intP_intM_a_6_2_at_L,
-                    shift(a_6, add_int(i_6, (1))))))))
+                    shift(a_6, add_int(i_8, (1))))))))
 
 logic access: int_array, int -> int32
 
-predicate Swap(a1:int_array, a2:int_array, i_3:int, j_0:int) =
- ((integer_of_int32(access(a1, i_3)) = integer_of_int32(access(a2, j_0)))
- and ((integer_of_int32(access(a1, j_0)) = integer_of_int32(access(a2, i_3)))
+predicate Swap(a1:int_array, a2:int_array, i_5:int, j_1:int) =
+ ((integer_of_int32(access(a1, i_5)) = integer_of_int32(access(a2, j_1)))
+ and ((integer_of_int32(access(a1, j_1)) = integer_of_int32(access(a2, i_5)))
      and (forall k:int.
-          ((k <> i_3) ->
-           ((k <> j_0) ->
+          ((k <> i_5) ->
+           ((k <> j_1) ->
             (integer_of_int32(access(a1, k)) = integer_of_int32(access(a2, k))))))))
 
 logic charP_tag:  -> charP tag_id
@@ -426,6 +438,11 @@ logic integer_of_uint32: uint32 -> int
 
 predicate eq_uint32(x:uint32, y:uint32) =
  eq_int(integer_of_uint32(x), integer_of_uint32(y))
+
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic int32_of_integer: int -> int32
 
@@ -483,6 +500,10 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
 predicate left_valid_struct_intP(p:intP pointer, a:int,
  intP_alloc_table:intP alloc_table) = (offset_min(intP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -513,6 +534,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 axiom pointer_addr_of_intP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
 
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
+
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
 axiom pointer_addr_of_voidP_of_pointer_address :
@@ -524,6 +551,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
 
 predicate right_valid_struct_intP(p:intP pointer, b:int,
  intP_alloc_table:intP alloc_table) = (offset_max(intP_alloc_table, p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -539,6 +570,11 @@ predicate strict_valid_root_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
 
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
@@ -553,6 +589,11 @@ predicate strict_valid_struct_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
+
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -576,6 +617,38 @@ axiom uint32_range :
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
 
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 logic update: int_array, int, int32 -> int_array
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
@@ -587,6 +660,11 @@ predicate valid_root_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -602,6 +680,11 @@ predicate valid_struct_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -624,18 +707,19 @@ axiom voidP_tags :
 
 axiom access_update_eq :
  (forall a_1_0:int_array.
-  (forall i_1:int.
+  (forall i_3:int.
    (forall v_0_0:int32.
-    (integer_of_int32(access(update(a_1_0, i_1, v_0_0), i_1)) = integer_of_int32(v_0_0)))))
+    (integer_of_int32(access(update(a_1_0, i_3, v_0_0), i_3)) = integer_of_int32(v_0_0)))))
 
 axiom access_update_neq :
  (forall a_2:int_array.
-  (forall i_2:int.
-   (forall j:int.
+  (forall i_4:int.
+   (forall j_0:int.
     (forall v_1:int32.
-     ((i_2 <> j) ->
-      (integer_of_int32(access(update(a_2, i_2, v_1), j)) = integer_of_int32(
-                                                            access(a_2, j))))))))
+     ((i_4 <> j_0) ->
+      (integer_of_int32(access(update(a_2, i_4, v_1), j_0)) = integer_of_int32(
+                                                              access(a_2,
+                                                              j_0))))))))
 
 axiom Permut_refl :
  (forall a_3:int_array.
@@ -662,11 +746,11 @@ axiom Permut_swap :
   (forall a2_3:int_array.
    (forall l_3:int.
     (forall h_3:int.
-     (forall i_4:int.
-      (forall j_1:int.
-       ((le_int(l_3, i_4) and le_int(i_4, h_3)) ->
-        ((le_int(l_3, j_1) and le_int(j_1, h_3)) ->
-         (Swap(a1_3, a2_3, i_4, j_1) -> Permut(a1_3, a2_3, l_3, h_3))))))))))
+     (forall i_6:int.
+      (forall j_2:int.
+       ((le_int(l_3, i_6) and le_int(i_6, h_3)) ->
+        ((le_int(l_3, j_2) and le_int(j_2, h_3)) ->
+         (Swap(a1_3, a2_3, i_6, j_2) -> Permut(a1_3, a2_3, l_3, h_3))))))))))
 
 axiom Permut_extend :
  (forall a1_4:int_array.
@@ -681,9 +765,9 @@ axiom Permut_extend :
 axiom access_contents :
  (forall intP_intM_a_4_1_at_L:(intP, int32) memory.
   (forall a_5:intP pointer.
-   (forall i_5:int.
-    (integer_of_int32(access(contents(a_5, intP_intM_a_4_1_at_L), i_5)) = 
-    integer_of_int32(select(intP_intM_a_4_1_at_L, shift(a_5, i_5)))))))
+   (forall i_7:int.
+    (integer_of_int32(access(contents(a_5, intP_intM_a_4_1_at_L), i_7)) = 
+    integer_of_int32(select(intP_intM_a_4_1_at_L, shift(a_5, i_7)))))))
 
 lemma H_init :
  (forall intP_intM_a_9_8_at_L:(intP, int32) memory.
@@ -706,51 +790,51 @@ lemma H_max :
   (forall a_11:intP pointer.
    (forall h_10:int.
     (H(a_11, (0), h_10, intP_intM_a_11_10_at_L) ->
-     (forall i_9:int.
-      ((le_int((0), i_9) and le_int(i_9, h_10)) ->
+     (forall i_11:int.
+      ((le_int((0), i_11) and le_int(i_11, h_10)) ->
        ge_int(integer_of_int32(select(intP_intM_a_11_10_at_L,
                                shift(a_11, (0)))),
-       integer_of_int32(select(intP_intM_a_11_10_at_L, shift(a_11, i_9))))))))))
+       integer_of_int32(select(intP_intM_a_11_10_at_L, shift(a_11, i_11))))))))))
 
 lemma div2_1 :
- (forall i_10:int32.
-  (le_int((0), integer_of_int32(i_10)) ->
-   (le_int((0), computer_div(integer_of_int32(i_10), (2)))
-   and le_int(computer_div(integer_of_int32(i_10), (2)),
-       integer_of_int32(i_10)))))
-
-lemma div2_2 :
- (forall i_11:int32.
-  (lt_int((0), integer_of_int32(i_11)) ->
-   (le_int((0), computer_div(integer_of_int32(i_11), (2)))
-   and lt_int(computer_div(integer_of_int32(i_11), (2)),
-       integer_of_int32(i_11)))))
-
-lemma div2_3 :
  (forall i_12:int32.
   (le_int((0), integer_of_int32(i_12)) ->
-   lt_int(sub_int(integer_of_int32(i_12), (1)),
-   add_int(mul_int((2), computer_div(integer_of_int32(i_12), (2))), (1)))))
+   (le_int((0), computer_div(integer_of_int32(i_12), (2)))
+   and le_int(computer_div(integer_of_int32(i_12), (2)),
+       integer_of_int32(i_12)))))
+
+lemma div2_2 :
+ (forall i_13:int32.
+  (lt_int((0), integer_of_int32(i_13)) ->
+   (le_int((0), computer_div(integer_of_int32(i_13), (2)))
+   and lt_int(computer_div(integer_of_int32(i_13), (2)),
+       integer_of_int32(i_13)))))
+
+lemma div2_3 :
+ (forall i_14:int32.
+  (le_int((0), integer_of_int32(i_14)) ->
+   lt_int(sub_int(integer_of_int32(i_14), (1)),
+   add_int(mul_int((2), computer_div(integer_of_int32(i_14), (2))), (1)))))
 
 lemma div2_4 :
- (forall i_13:int32.
+ (forall i_15:int32.
   (forall k_0:int32.
-   (le_int((0), integer_of_int32(i_13)) ->
+   (le_int((0), integer_of_int32(i_15)) ->
     (le_int((0), integer_of_int32(k_0)) ->
-     ((integer_of_int32(k_0) <> computer_div(sub_int(integer_of_int32(i_13),
+     ((integer_of_int32(k_0) <> computer_div(sub_int(integer_of_int32(i_15),
                                              (1)),
                                 (2))) ->
-      (add_int(mul_int((2), integer_of_int32(k_0)), (1)) <> integer_of_int32(i_13)))))))
+      (add_int(mul_int((2), integer_of_int32(k_0)), (1)) <> integer_of_int32(i_15)))))))
 
 lemma div2_5 :
- (forall i_14:int32.
+ (forall i_16:int32.
   (forall k_1:int32.
-   (le_int((0), integer_of_int32(i_14)) ->
+   (le_int((0), integer_of_int32(i_16)) ->
     (le_int((0), integer_of_int32(k_1)) ->
-     ((integer_of_int32(k_1) <> computer_div(sub_int(integer_of_int32(i_14),
+     ((integer_of_int32(k_1) <> computer_div(sub_int(integer_of_int32(i_16),
                                              (1)),
                                 (2))) ->
-      (add_int(mul_int((2), integer_of_int32(k_1)), (2)) <> integer_of_int32(i_14)))))))
+      (add_int(mul_int((2), integer_of_int32(k_1)), (2)) <> integer_of_int32(i_16)))))))
 
 exception Goto_while_0_break_exc of unit
 
@@ -814,6 +898,38 @@ parameter alloc_struct_intP_requires :
           and (alloc_fresh(intP_alloc_table@, result, n)
               and instanceof(intP_tag_table, result, intP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -846,38 +962,40 @@ parameter any_int8 : unit -> { } int8 { true }
 
 parameter any_uint32 : unit -> { } uint32 { true }
 
+parameter any_uint8 : unit -> { } uint8 { true }
+
 parameter heapsort :
  a_1:intP pointer ->
-  n:uint32 ->
+  n_1:uint32 ->
    intP_intM_a_6:(intP, int32) memory ref ->
     intP_a_6_alloc_table:intP alloc_table ->
      { } unit reads intP_intM_a_6 writes intP_intM_a_6
      { (JC_<somenum>:
        ((JC_<somenum>:
         Permut(contents(a_1, intP_intM_a_6), contents(a_1, intP_intM_a_6@),
-        (0), sub_int(integer_of_uint32(n), (1))))
+        (0), sub_int(integer_of_uint32(n_1), (1))))
        and (JC_<somenum>:
-           Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)),
+           Sorted(a_1, (0), sub_int(integer_of_uint32(n_1), (1)),
            intP_intM_a_6)))) }
 
 parameter heapsort_requires :
  a_1:intP pointer ->
-  n:uint32 ->
+  n_1:uint32 ->
    intP_intM_a_6:(intP, int32) memory ref ->
     intP_a_6_alloc_table:intP alloc_table ->
      { (JC_<somenum>:
-       ((JC_<somenum>: le_int((0), integer_of_uint32(n)))
+       ((JC_<somenum>: le_int((0), integer_of_uint32(n_1)))
        and ((JC_<somenum>: le_int(offset_min(intP_a_6_alloc_table, a_1), (0)))
            and (JC_<somenum>:
                ge_int(offset_max(intP_a_6_alloc_table, a_1),
-               sub_int(integer_of_uint32(n), (1)))))))}
+               sub_int(integer_of_uint32(n_1), (1)))))))}
      unit reads intP_intM_a_6 writes intP_intM_a_6
      { (JC_<somenum>:
        ((JC_<somenum>:
         Permut(contents(a_1, intP_intM_a_6), contents(a_1, intP_intM_a_6@),
-        (0), sub_int(integer_of_uint32(n), (1))))
+        (0), sub_int(integer_of_uint32(n_1), (1))))
        and (JC_<somenum>:
-           Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)),
+           Sorted(a_1, (0), sub_int(integer_of_uint32(n_1), (1)),
            intP_intM_a_6)))) }
 
 parameter int32_of_integer_ :
@@ -898,6 +1016,9 @@ parameter safe_int8_of_integer_ :
 
 parameter safe_uint32_of_integer_ :
  x:int -> { } uint32 { eq_int(integer_of_uint32(result), x) }
+
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
 
 parameter sift_down :
  a_0_0:intP pointer ->
@@ -962,18 +1083,23 @@ parameter uint32_of_integer_ :
   { (le_int((0), x) and le_int(x, (4294967295)))} uint32
   { eq_int(integer_of_uint32(result), x) }
 
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
+
 let heapsort_ensures_default =
- fun (a_1 : intP pointer) (n : uint32) (intP_intM_a_6 : (intP, int32) memory ref) (intP_a_6_alloc_table : intP alloc_table) ->
+ fun (a_1 : intP pointer) (n_1 : uint32) (intP_intM_a_6 : (intP, int32) memory ref) (intP_a_6_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int((0), integer_of_uint32(n)))
+    ((JC_<somenum>: le_int((0), integer_of_uint32(n_1)))
     and ((JC_<somenum>: le_int(offset_min(intP_a_6_alloc_table, a_1), (0)))
         and (JC_<somenum>:
             ge_int(offset_max(intP_a_6_alloc_table, a_1),
-            sub_int(integer_of_uint32(n), (1))))))) }
+            sub_int(integer_of_uint32(n_1), (1))))))) }
   (init:
   try
    begin
-     (let i_0_0 = ref (any_uint32 void) in
+     (let i_0 = ref (any_uint32 void) in
      (let tmp = ref (any_int32 void) in
      try
       begin
@@ -982,28 +1108,28 @@ let heapsort_ensures_default =
            try
             (C_56:
             begin
-              (if ((le_int_ (integer_of_uint32 n)) (1))
+              (if ((le_int_ (integer_of_uint32 n_1)) (1))
               then (raise (Return_label_exc void)) else void);
              (let jessie_<somenum> =
-             (i_0_0 := (C_55:
-                       (safe_uint32_of_integer_ (C_54:
-                                                (JC_<somenum>:
-                                                ((computer_div (integer_of_uint32 n)) (2))))))) in
+             (i_0 := (C_55:
+                     (safe_uint32_of_integer_ (C_54:
+                                              (JC_<somenum>:
+                                              ((computer_div (integer_of_uint32 n_1)) (2))))))) in
              void);
              (loop_5:
              while true do
              { invariant
                  (JC_<somenum>:
-                 ((JC_<somenum>: le_int((0), integer_of_uint32(i_0_0)))
+                 ((JC_<somenum>: le_int((0), integer_of_uint32(i_0)))
                  and ((JC_<somenum>:
-                      lt_int(integer_of_uint32(i_0_0), integer_of_uint32(n)))
+                      lt_int(integer_of_uint32(i_0), integer_of_uint32(n_1)))
                      and ((JC_<somenum>:
                           Permut(contents(a_1, intP_intM_a_6),
                           contents(a_1, intP_intM_a_6@init), (0),
-                          sub_int(integer_of_uint32(n), (1))))
+                          sub_int(integer_of_uint32(n_1), (1))))
                          and (JC_<somenum>:
-                             H(a_1, integer_of_uint32(i_0_0),
-                             sub_int(integer_of_uint32(n), (1)),
+                             H(a_1, integer_of_uint32(i_0),
+                             sub_int(integer_of_uint32(n_1), (1)),
                              intP_intM_a_6))))))  }
               begin
                 [ { } unit { true } ];
@@ -1013,17 +1139,17 @@ let heapsort_ensures_default =
                   (C_73:
                   (C_76:
                   begin
-                    (if ((ge_int_ (integer_of_uint32 !i_0_0)) (1)) then void
+                    (if ((ge_int_ (integer_of_uint32 !i_0)) (1)) then void
                     else (raise (Goto_while_0_break_exc void)));
                    (let jessie_<somenum> = a_1 in
                    (let jessie_<somenum> =
                    (C_66:
                    (safe_uint32_of_integer_ (C_65:
-                                            ((sub_int (integer_of_uint32 !i_0_0)) (1))))) in
+                                            ((sub_int (integer_of_uint32 !i_0)) (1))))) in
                    (let jessie_<somenum> =
                    (C_68:
                    (safe_uint32_of_integer_ (C_67:
-                                            ((sub_int (integer_of_uint32 n)) (1))))) in
+                                            ((sub_int (integer_of_uint32 n_1)) (1))))) in
                    (let jessie_<somenum> =
                    (C_72:
                    ((safe_acc_ !intP_intM_a_6) (C_71:
@@ -1032,14 +1158,14 @@ let heapsort_ensures_default =
                                                              (safe_uint32_of_integer_ 
                                                               (C_69:
                                                               ((sub_int 
-                                                                (integer_of_uint32 !i_0_0)) (1)))))))))) in
+                                                                (integer_of_uint32 !i_0)) (1)))))))))) in
                    (JC_<somenum>:
                    ((((((sift_down jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_a_6) intP_a_6_alloc_table))))));
-                   (i_0_0 := (C_75:
-                             (safe_uint32_of_integer_ (C_74:
-                                                      ((sub_int (integer_of_uint32 !i_0_0)) (1))))));
-                   !i_0_0 end)) in void); (raise (Loop_continue_exc void))
-                end with Loop_continue_exc jessie_<somenum> -> void end end done);
+                   (i_0 := (C_75:
+                           (safe_uint32_of_integer_ (C_74:
+                                                    ((sub_int (integer_of_uint32 !i_0)) (1))))));
+                   !i_0 end)) in void); (raise (Loop_continue_exc void)) end
+                with Loop_continue_exc jessie_<somenum> -> void end end done);
              (raise (Goto_while_0_break_exc void)) end) with
             Goto_while_0_break_exc jessie_<somenum> ->
             (while_0_break:
@@ -1047,39 +1173,39 @@ let heapsort_ensures_default =
             begin
               void;
              (let jessie_<somenum> =
-             (i_0_0 := (C_78:
-                       (safe_uint32_of_integer_ (C_77:
-                                                ((sub_int (integer_of_uint32 n)) (1)))))) in
+             (i_0 := (C_78:
+                     (safe_uint32_of_integer_ (C_77:
+                                              ((sub_int (integer_of_uint32 n_1)) (1)))))) in
              void);
              (loop_6:
              while true do
              { invariant
                  (JC_<somenum>:
-                 ((JC_<somenum>: le_int((0), integer_of_uint32(i_0_0)))
+                 ((JC_<somenum>: le_int((0), integer_of_uint32(i_0)))
                  and ((JC_<somenum>:
-                      lt_int(integer_of_uint32(i_0_0), integer_of_uint32(n)))
+                      lt_int(integer_of_uint32(i_0), integer_of_uint32(n_1)))
                      and ((JC_<somenum>:
                           Permut(contents(a_1, intP_intM_a_6),
                           contents(a_1, intP_intM_a_6@init), (0),
-                          sub_int(integer_of_uint32(n), (1))))
+                          sub_int(integer_of_uint32(n_1), (1))))
                          and ((JC_<somenum>:
-                              H(a_1, (0), integer_of_uint32(i_0_0),
+                              H(a_1, (0), integer_of_uint32(i_0),
                               intP_intM_a_6))
                              and ((JC_<somenum>:
                                   Sorted(a_1,
-                                  add_int(integer_of_uint32(i_0_0), (1)),
-                                  sub_int(integer_of_uint32(n), (1)),
+                                  add_int(integer_of_uint32(i_0), (1)),
+                                  sub_int(integer_of_uint32(n_1), (1)),
                                   intP_intM_a_6))
                                  and (JC_<somenum>:
                                      (forall k1:int32.
                                       (forall k2:int32.
                                        ((le_int((0), integer_of_int32(k1))
                                         and le_int(integer_of_int32(k1),
-                                            integer_of_uint32(i_0_0))) ->
-                                        ((lt_int(integer_of_uint32(i_0_0),
+                                            integer_of_uint32(i_0))) ->
+                                        ((lt_int(integer_of_uint32(i_0),
                                           integer_of_int32(k2))
                                          and lt_int(integer_of_int32(k2),
-                                             integer_of_uint32(n))) ->
+                                             integer_of_uint32(n_1))) ->
                                          le_int(integer_of_int32(select(intP_intM_a_6,
                                                                  shift(a_1,
                                                                  integer_of_int32(k1)))),
@@ -1096,19 +1222,19 @@ let heapsort_ensures_default =
                   (C_99:
                   (C_105:
                   begin
-                    (if ((ge_int_ (integer_of_uint32 !i_0_0)) (1)) then void
+                    (if ((ge_int_ (integer_of_uint32 !i_0)) (1)) then void
                     else (raise (Goto_while_1_break_exc void)));
                    (let jessie_<somenum> =
                    (tmp := (C_93:
                            ((safe_acc_ !intP_intM_a_6) (C_92:
-                                                       ((shift a_1) (integer_of_uint32 !i_0_0)))))) in
+                                                       ((shift a_1) (integer_of_uint32 !i_0)))))) in
                    void);
                    (let jessie_<somenum> =
                    (let jessie_<somenum> =
                    (C_96:
                    ((safe_acc_ !intP_intM_a_6) (C_95: ((shift a_1) (0))))) in
                    (let jessie_<somenum> = a_1 in
-                   (let jessie_<somenum> = (integer_of_uint32 !i_0_0) in
+                   (let jessie_<somenum> = (integer_of_uint32 !i_0) in
                    (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                    (((safe_upd_ intP_intM_a_6) jessie_<somenum>) jessie_<somenum>))))) in
                    void);
@@ -1118,16 +1244,16 @@ let heapsort_ensures_default =
                    (let jessie_<somenum> =
                    (C_101:
                    (safe_uint32_of_integer_ (C_100:
-                                            ((sub_int (integer_of_uint32 !i_0_0)) (1))))) in
+                                            ((sub_int (integer_of_uint32 !i_0)) (1))))) in
                    (let jessie_<somenum> = !tmp in
                    (JC_<somenum>:
                    ((((((sift_down jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_a_6) intP_a_6_alloc_table)))))));
-                   (i_0_0 := (C_104:
-                             (safe_uint32_of_integer_ (C_103:
-                                                      ((sub_int (integer_of_uint32 !i_0_0)) (1))))));
-                   !i_0_0 end))) in void); (raise (Loop_continue_exc void))
-                end with Loop_continue_exc jessie_<somenum> -> void end end done)
-            end)) end; (raise (Goto_while_1_break_exc void)) end with
+                   (i_0 := (C_104:
+                           (safe_uint32_of_integer_ (C_103:
+                                                    ((sub_int (integer_of_uint32 !i_0)) (1))))));
+                   !i_0 end))) in void); (raise (Loop_continue_exc void)) end
+                with Loop_continue_exc jessie_<somenum> -> void end end done) end)) end;
+          (raise (Goto_while_1_break_exc void)) end with
          Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: (raise Return)) end)); (raise Return) end with Return ->
@@ -1135,22 +1261,22 @@ let heapsort_ensures_default =
   { (JC_<somenum>:
     ((JC_<somenum>:
      Permut(contents(a_1, intP_intM_a_6), contents(a_1, intP_intM_a_6@), (0),
-     sub_int(integer_of_uint32(n), (1))))
+     sub_int(integer_of_uint32(n_1), (1))))
     and (JC_<somenum>:
-        Sorted(a_1, (0), sub_int(integer_of_uint32(n), (1)), intP_intM_a_6)))) }
+        Sorted(a_1, (0), sub_int(integer_of_uint32(n_1), (1)), intP_intM_a_6)))) }
 
 let heapsort_safety =
- fun (a_1 : intP pointer) (n : uint32) (intP_intM_a_6 : (intP, int32) memory ref) (intP_a_6_alloc_table : intP alloc_table) ->
+ fun (a_1 : intP pointer) (n_1 : uint32) (intP_intM_a_6 : (intP, int32) memory ref) (intP_a_6_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: le_int((0), integer_of_uint32(n)))
+    ((JC_<somenum>: le_int((0), integer_of_uint32(n_1)))
     and ((JC_<somenum>: le_int(offset_min(intP_a_6_alloc_table, a_1), (0)))
         and (JC_<somenum>:
             ge_int(offset_max(intP_a_6_alloc_table, a_1),
-            sub_int(integer_of_uint32(n), (1))))))) }
+            sub_int(integer_of_uint32(n_1), (1))))))) }
   (init:
   try
    begin
-     (let i_0_0 = ref (any_uint32 void) in
+     (let i_0 = ref (any_uint32 void) in
      (let tmp = ref (any_int32 void) in
      try
       begin
@@ -1159,33 +1285,33 @@ let heapsort_safety =
            try
             (C_56:
             begin
-              (if ((le_int_ (integer_of_uint32 n)) (1))
+              (if ((le_int_ (integer_of_uint32 n_1)) (1))
               then (raise (Return_label_exc void)) else void);
              (let jessie_<somenum> =
-             (i_0_0 := (C_55:
-                       (JC_<somenum>:
-                       (uint32_of_integer_ (C_54:
-                                           (JC_<somenum>:
-                                           ((computer_div_ (integer_of_uint32 n)) (2)))))))) in
+             (i_0 := (C_55:
+                     (JC_<somenum>:
+                     (uint32_of_integer_ (C_54:
+                                         (JC_<somenum>:
+                                         ((computer_div_ (integer_of_uint32 n_1)) (2)))))))) in
              void);
              (loop_3:
              while true do
              { invariant (JC_<somenum>: true)
-               variant integer_of_uint32((JC_<somenum> : i_0_0)) }
+               variant integer_of_uint32((JC_<somenum> : i_0)) }
               begin
-                [ { } unit reads i_0_0,intP_intM_a_6
+                [ { } unit reads i_0,intP_intM_a_6
                   { (JC_<somenum>:
-                    ((JC_<somenum>: le_int((0), integer_of_uint32(i_0_0)))
+                    ((JC_<somenum>: le_int((0), integer_of_uint32(i_0)))
                     and ((JC_<somenum>:
-                         lt_int(integer_of_uint32(i_0_0),
-                         integer_of_uint32(n)))
+                         lt_int(integer_of_uint32(i_0),
+                         integer_of_uint32(n_1)))
                         and ((JC_<somenum>:
                              Permut(contents(a_1, intP_intM_a_6),
                              contents(a_1, intP_intM_a_6@init), (0),
-                             sub_int(integer_of_uint32(n), (1))))
+                             sub_int(integer_of_uint32(n_1), (1))))
                             and (JC_<somenum>:
-                                H(a_1, integer_of_uint32(i_0_0),
-                                sub_int(integer_of_uint32(n), (1)),
+                                H(a_1, integer_of_uint32(i_0),
+                                sub_int(integer_of_uint32(n_1), (1)),
                                 intP_intM_a_6)))))) } ];
                try
                 begin
@@ -1193,19 +1319,19 @@ let heapsort_safety =
                   (C_73:
                   (C_76:
                   begin
-                    (if ((ge_int_ (integer_of_uint32 !i_0_0)) (1)) then void
+                    (if ((ge_int_ (integer_of_uint32 !i_0)) (1)) then void
                     else (raise (Goto_while_0_break_exc void)));
                    (let jessie_<somenum> = a_1 in
                    (let jessie_<somenum> =
                    (C_66:
                    (JC_<somenum>:
                    (uint32_of_integer_ (C_65:
-                                       ((sub_int (integer_of_uint32 !i_0_0)) (1)))))) in
+                                       ((sub_int (integer_of_uint32 !i_0)) (1)))))) in
                    (let jessie_<somenum> =
                    (C_68:
                    (JC_<somenum>:
                    (uint32_of_integer_ (C_67:
-                                       ((sub_int (integer_of_uint32 n)) (1)))))) in
+                                       ((sub_int (integer_of_uint32 n_1)) (1)))))) in
                    (let jessie_<somenum> =
                    (C_72:
                    (JC_<somenum>:
@@ -1214,15 +1340,15 @@ let heapsort_safety =
                                        (JC_<somenum>:
                                        (uint32_of_integer_ (C_69:
                                                            ((sub_int 
-                                                             (integer_of_uint32 !i_0_0)) (1)))))))))) in
+                                                             (integer_of_uint32 !i_0)) (1)))))))))) in
                    (JC_<somenum>:
                    ((((((sift_down_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_a_6) intP_a_6_alloc_table))))));
-                   (i_0_0 := (C_75:
-                             (JC_<somenum>:
-                             (uint32_of_integer_ (C_74:
-                                                 ((sub_int (integer_of_uint32 !i_0_0)) (1)))))));
-                   !i_0_0 end)) in void); (raise (Loop_continue_exc void))
-                end with Loop_continue_exc jessie_<somenum> -> void end end done);
+                   (i_0 := (C_75:
+                           (JC_<somenum>:
+                           (uint32_of_integer_ (C_74:
+                                               ((sub_int (integer_of_uint32 !i_0)) (1)))))));
+                   !i_0 end)) in void); (raise (Loop_continue_exc void)) end
+                with Loop_continue_exc jessie_<somenum> -> void end end done);
              (raise (Goto_while_0_break_exc void)) end) with
             Goto_while_0_break_exc jessie_<somenum> ->
             (while_0_break:
@@ -1230,44 +1356,44 @@ let heapsort_safety =
             begin
               void;
              (let jessie_<somenum> =
-             (i_0_0 := (C_78:
-                       (JC_<somenum>:
-                       (uint32_of_integer_ (C_77:
-                                           ((sub_int (integer_of_uint32 n)) (1))))))) in
+             (i_0 := (C_78:
+                     (JC_<somenum>:
+                     (uint32_of_integer_ (C_77:
+                                         ((sub_int (integer_of_uint32 n_1)) (1))))))) in
              void);
              (loop_4:
              while true do
              { invariant (JC_<somenum>: true)
-               variant integer_of_uint32((JC_<somenum> : i_0_0)) }
+               variant integer_of_uint32((JC_<somenum> : i_0)) }
               begin
-                [ { } unit reads i_0_0,intP_intM_a_6
+                [ { } unit reads i_0,intP_intM_a_6
                   { (JC_<somenum>:
-                    ((JC_<somenum>: le_int((0), integer_of_uint32(i_0_0)))
+                    ((JC_<somenum>: le_int((0), integer_of_uint32(i_0)))
                     and ((JC_<somenum>:
-                         lt_int(integer_of_uint32(i_0_0),
-                         integer_of_uint32(n)))
+                         lt_int(integer_of_uint32(i_0),
+                         integer_of_uint32(n_1)))
                         and ((JC_<somenum>:
                              Permut(contents(a_1, intP_intM_a_6),
                              contents(a_1, intP_intM_a_6@init), (0),
-                             sub_int(integer_of_uint32(n), (1))))
+                             sub_int(integer_of_uint32(n_1), (1))))
                             and ((JC_<somenum>:
-                                 H(a_1, (0), integer_of_uint32(i_0_0),
+                                 H(a_1, (0), integer_of_uint32(i_0),
                                  intP_intM_a_6))
                                 and ((JC_<somenum>:
                                      Sorted(a_1,
-                                     add_int(integer_of_uint32(i_0_0), (1)),
-                                     sub_int(integer_of_uint32(n), (1)),
+                                     add_int(integer_of_uint32(i_0), (1)),
+                                     sub_int(integer_of_uint32(n_1), (1)),
                                      intP_intM_a_6))
                                     and (JC_<somenum>:
                                         (forall k1:int32.
                                          (forall k2:int32.
                                           ((le_int((0), integer_of_int32(k1))
                                            and le_int(integer_of_int32(k1),
-                                               integer_of_uint32(i_0_0))) ->
-                                           ((lt_int(integer_of_uint32(i_0_0),
+                                               integer_of_uint32(i_0))) ->
+                                           ((lt_int(integer_of_uint32(i_0),
                                              integer_of_int32(k2))
                                             and lt_int(integer_of_int32(k2),
-                                                integer_of_uint32(n))) ->
+                                                integer_of_uint32(n_1))) ->
                                             le_int(integer_of_int32(select(intP_intM_a_6,
                                                                     shift(a_1,
                                                                     integer_of_int32(k1)))),
@@ -1281,20 +1407,20 @@ let heapsort_safety =
                   (C_99:
                   (C_105:
                   begin
-                    (if ((ge_int_ (integer_of_uint32 !i_0_0)) (1)) then void
+                    (if ((ge_int_ (integer_of_uint32 !i_0)) (1)) then void
                     else (raise (Goto_while_1_break_exc void)));
                    (let jessie_<somenum> =
                    (tmp := (C_93:
                            (JC_<somenum>:
                            ((((offset_acc_ intP_a_6_alloc_table) !intP_intM_a_6) a_1) 
-                            (integer_of_uint32 !i_0_0))))) in void);
+                            (integer_of_uint32 !i_0))))) in void);
                    (let jessie_<somenum> =
                    (let jessie_<somenum> =
                    (C_96:
                    (JC_<somenum>:
                    (((acc_ intP_a_6_alloc_table) !intP_intM_a_6) a_1))) in
                    (let jessie_<somenum> = a_1 in
-                   (let jessie_<somenum> = (integer_of_uint32 !i_0_0) in
+                   (let jessie_<somenum> = (integer_of_uint32 !i_0) in
                    (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                    (JC_<somenum>:
                    (((((offset_upd_ intP_a_6_alloc_table) intP_intM_a_6) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
@@ -1306,17 +1432,17 @@ let heapsort_safety =
                    (C_101:
                    (JC_<somenum>:
                    (uint32_of_integer_ (C_100:
-                                       ((sub_int (integer_of_uint32 !i_0_0)) (1)))))) in
+                                       ((sub_int (integer_of_uint32 !i_0)) (1)))))) in
                    (let jessie_<somenum> = !tmp in
                    (JC_<somenum>:
                    ((((((sift_down_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) intP_intM_a_6) intP_a_6_alloc_table)))))));
-                   (i_0_0 := (C_104:
-                             (JC_<somenum>:
-                             (uint32_of_integer_ (C_103:
-                                                 ((sub_int (integer_of_uint32 !i_0_0)) (1)))))));
-                   !i_0_0 end))) in void); (raise (Loop_continue_exc void))
-                end with Loop_continue_exc jessie_<somenum> -> void end end done)
-            end)) end; (raise (Goto_while_1_break_exc void)) end with
+                   (i_0 := (C_104:
+                           (JC_<somenum>:
+                           (uint32_of_integer_ (C_103:
+                                               ((sub_int (integer_of_uint32 !i_0)) (1)))))));
+                   !i_0 end))) in void); (raise (Loop_continue_exc void)) end
+                with Loop_continue_exc jessie_<somenum> -> void end end done) end)) end;
+          (raise (Goto_while_1_break_exc void)) end with
          Goto_while_1_break_exc jessie_<somenum> -> (while_1_break: void) end;
        (raise (Return_label_exc void)) end with Return_label_exc jessie_<somenum> ->
       (return_label: (raise Return)) end)); (raise Return) end with Return ->
@@ -1339,19 +1465,19 @@ let sift_down_ensures_default =
   (init:
   try
    begin
-     (let i_15 = ref (any_uint32 void) in
+     (let i = ref (any_uint32 void) in
      (let child = ref (any_uint32 void) in
      try
       (C_1:
       begin
-        (let jessie_<somenum> = (i_15 := low) in void);
+        (let jessie_<somenum> = (i := low) in void);
        (loop_2:
        while true do
        { invariant
            ((JC_<somenum>:
-            ((JC_<somenum>: le_int(integer_of_uint32(low), integer_of_uint32(i_15)))
+            ((JC_<somenum>: le_int(integer_of_uint32(low), integer_of_uint32(i)))
             and ((JC_<somenum>:
-                 le_int(integer_of_uint32(i_15), integer_of_uint32(high)))
+                 le_int(integer_of_uint32(i), integer_of_uint32(high)))
                 and ((JC_<somenum>:
                      Permut(contents(a_0_0, intP_intM_a_0_5),
                      contents(a_0_0, intP_intM_a_0_5@init),
@@ -1366,18 +1492,18 @@ let sift_down_ensures_default =
                            integer_of_uint32(high), intP_intM_a_0_5))))
                         and ((JC_<somenum>:
                              (lt_int(integer_of_uint32(low),
-                              integer_of_uint32(i_15)) ->
+                              integer_of_uint32(i)) ->
                               Hnode(a_0_0, integer_of_uint32(low),
                               integer_of_uint32(high), intP_intM_a_0_5)))
                             and (JC_<somenum>:
                                 (le_int(integer_of_uint32(low),
-                                 computer_div(sub_int(integer_of_uint32(i_15),
+                                 computer_div(sub_int(integer_of_uint32(i),
                                               (1)),
                                  (2))) ->
                                  ge_int(integer_of_int32(select(intP_intM_a_0_5,
                                                          shift(a_0_0,
                                                          computer_div(
-                                                         sub_int(integer_of_uint32(i_15),
+                                                         sub_int(integer_of_uint32(i),
                                                          (1)), (2))))),
                                  integer_of_int32(v_0))))))))))
            and ((JC_<somenum>:
@@ -1407,7 +1533,7 @@ let sift_down_ensures_default =
                                                             (safe_uint32_of_integer_ 
                                                              (C_14:
                                                              ((mul_int (2)) 
-                                                              (integer_of_uint32 !i_15))))))) (1)))))) in
+                                                              (integer_of_uint32 !i))))))) (1)))))) in
               void); void;
              (if ((le_int_ (integer_of_uint32 !child)) (integer_of_uint32 high))
              then void else (raise (Goto_while_0_break_exc void)));
@@ -1449,13 +1575,13 @@ let sift_down_ensures_default =
              ((safe_acc_ !intP_intM_a_0_5) (C_32:
                                            ((shift a_0_0) (integer_of_uint32 !child))))) in
              (let jessie_<somenum> = a_0_0 in
-             (let jessie_<somenum> = (integer_of_uint32 !i_15) in
+             (let jessie_<somenum> = (integer_of_uint32 !i) in
              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
              (((safe_upd_ intP_intM_a_0_5) jessie_<somenum>) jessie_<somenum>))))) in void);
              (assert
              { (JC_<somenum>:
-               Hnode(a_0_0, integer_of_uint32(i_15), integer_of_uint32(high),
-               intP_intM_a_0_5)) }; void); void; (i_15 := !child); !i_15 end))) in
+               Hnode(a_0_0, integer_of_uint32(i), integer_of_uint32(high),
+               intP_intM_a_0_5)) }; void); void; (i := !child); !i end))) in
             void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
@@ -1467,7 +1593,7 @@ let sift_down_ensures_default =
        (let jessie_<somenum> =
        (let jessie_<somenum> = v_0 in
        (let jessie_<somenum> = a_0_0 in
-       (let jessie_<somenum> = (integer_of_uint32 !i_15) in
+       (let jessie_<somenum> = (integer_of_uint32 !i) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
        (((safe_upd_ intP_intM_a_0_5) jessie_<somenum>) jessie_<somenum>))))) in void);
        (raise Return) end)) end)); (raise Return) end with Return -> void end)
@@ -1503,24 +1629,23 @@ let sift_down_safety =
   (init:
   try
    begin
-     (let i_15 = ref (any_uint32 void) in
+     (let i = ref (any_uint32 void) in
      (let child = ref (any_uint32 void) in
      try
       (C_1:
       begin
-        (let jessie_<somenum> = (i_15 := low) in void);
+        (let jessie_<somenum> = (i := low) in void);
        (loop_1:
        while true do
        { invariant (JC_<somenum>: true)
          variant (JC_<somenum> : sub_int(integer_of_uint32(high),
-                          integer_of_uint32(i_15))) }
+                          integer_of_uint32(i))) }
         begin
-          [ { } unit reads i_15,intP_intM_a_0_5
+          [ { } unit reads i,intP_intM_a_0_5
             { (JC_<somenum>:
-              ((JC_<somenum>:
-               le_int(integer_of_uint32(low), integer_of_uint32(i_15)))
+              ((JC_<somenum>: le_int(integer_of_uint32(low), integer_of_uint32(i)))
               and ((JC_<somenum>:
-                   le_int(integer_of_uint32(i_15), integer_of_uint32(high)))
+                   le_int(integer_of_uint32(i), integer_of_uint32(high)))
                   and ((JC_<somenum>:
                        Permut(contents(a_0_0, intP_intM_a_0_5),
                        contents(a_0_0, intP_intM_a_0_5@init),
@@ -1535,18 +1660,18 @@ let sift_down_safety =
                              integer_of_uint32(high), intP_intM_a_0_5))))
                           and ((JC_<somenum>:
                                (lt_int(integer_of_uint32(low),
-                                integer_of_uint32(i_15)) ->
+                                integer_of_uint32(i)) ->
                                 Hnode(a_0_0, integer_of_uint32(low),
                                 integer_of_uint32(high), intP_intM_a_0_5)))
                               and (JC_<somenum>:
                                   (le_int(integer_of_uint32(low),
-                                   computer_div(sub_int(integer_of_uint32(i_15),
+                                   computer_div(sub_int(integer_of_uint32(i),
                                                 (1)),
                                    (2))) ->
                                    ge_int(integer_of_int32(select(intP_intM_a_0_5,
                                                            shift(a_0_0,
                                                            computer_div(
-                                                           sub_int(integer_of_uint32(i_15),
+                                                           sub_int(integer_of_uint32(i),
                                                            (1)), (2))))),
                                    integer_of_int32(v_0)))))))))) } ];
          try
@@ -1566,7 +1691,7 @@ let sift_down_safety =
                                                        (uint32_of_integer_ 
                                                         (C_14:
                                                         ((mul_int (2)) 
-                                                         (integer_of_uint32 !i_15)))))))) (1))))))) in
+                                                         (integer_of_uint32 !i)))))))) (1))))))) in
               void); void;
              (if ((le_int_ (integer_of_uint32 !child)) (integer_of_uint32 high))
              then void else (raise (Goto_while_0_break_exc void)));
@@ -1611,17 +1736,16 @@ let sift_down_safety =
              ((((offset_acc_ intP_a_0_5_alloc_table) !intP_intM_a_0_5) a_0_0) 
               (integer_of_uint32 !child)))) in
              (let jessie_<somenum> = a_0_0 in
-             (let jessie_<somenum> = (integer_of_uint32 !i_15) in
+             (let jessie_<somenum> = (integer_of_uint32 !i) in
              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
              (JC_<somenum>:
              (((((offset_upd_ intP_a_0_5_alloc_table) intP_intM_a_0_5) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
              void);
-             [ { } unit reads i_15,intP_intM_a_0_5
+             [ { } unit reads i,intP_intM_a_0_5
                { (JC_<somenum>:
-                 Hnode(a_0_0, integer_of_uint32(i_15),
-                 integer_of_uint32(high), intP_intM_a_0_5)) } ]; void;
-             (i_15 := !child); !i_15 end))) in void);
-           (raise (Loop_continue_exc void)) end with
+                 Hnode(a_0_0, integer_of_uint32(i), integer_of_uint32(high),
+                 intP_intM_a_0_5)) } ]; void; (i := !child); !i end))) in
+            void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
@@ -1632,7 +1756,7 @@ let sift_down_safety =
        (let jessie_<somenum> =
        (let jessie_<somenum> = v_0 in
        (let jessie_<somenum> = a_0_0 in
-       (let jessie_<somenum> = (integer_of_uint32 !i_15) in
+       (let jessie_<somenum> = (integer_of_uint32 !i) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
        (JC_<somenum>:
        (((((offset_upd_ intP_a_0_5_alloc_table) intP_intM_a_0_5) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
@@ -1751,11 +1875,11 @@ why --project [...] why/heapsort.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po76.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "206" begin = "6" end = "2405"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "214" begin = "6" end = "2409"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po77.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "206" begin = "6" end = "2405"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "214" begin = "6" end = "2409"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po78.why">
@@ -1787,11 +1911,11 @@ why --project [...] why/heapsort.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po85.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "206" begin = "6" end = "2405"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "214" begin = "6" end = "2409"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po86.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "206" begin = "6" end = "2405"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "214" begin = "6" end = "2409"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po87.why">
@@ -1899,12 +2023,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po108.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "243" begin = "24" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "251" begin = "24" end = "231"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po109.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "243" begin = "24" end = "231"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "251" begin = "24" end = "231"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1917,12 +2041,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po112.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "256" begin = "15" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "264" begin = "15" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po113.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "256" begin = "15" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "264" begin = "15" end = "53"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2077,27 +2201,27 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po42.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "292" begin = "20" end = "290"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "300" begin = "20" end = "292"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po43.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "292" begin = "20" end = "290"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "300" begin = "20" end = "292"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po44.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "292" begin = "20" end = "290"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "300" begin = "20" end = "292"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po45.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "292" begin = "20" end = "290"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "300" begin = "20" end = "292"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po46.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "292" begin = "20" end = "290"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "300" begin = "20" end = "292"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2112,11 +2236,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po49.why">
-      <location file = "why/heapsort.why" line = "831" begin = "23" end = "57"/>
+      <location file = "why/heapsort.why" line = "949" begin = "23" end = "55"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po50.why">
-      <location file = "why/heapsort.why" line = "831" begin = "23" end = "57"/>
+      <location file = "why/heapsort.why" line = "949" begin = "23" end = "55"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po51.why">
@@ -2150,12 +2274,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po57.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "322" begin = "24" end = "225"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "330" begin = "24" end = "225"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po58.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "322" begin = "24" end = "225"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "330" begin = "24" end = "225"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2170,27 +2294,27 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po61.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "325" begin = "24" end = "155"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "333" begin = "24" end = "155"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po62.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "325" begin = "24" end = "155"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "333" begin = "24" end = "155"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po63.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "325" begin = "24" end = "155"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "333" begin = "24" end = "155"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po64.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "325" begin = "24" end = "155"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "333" begin = "24" end = "155"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/heapsort_po65.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "325" begin = "24" end = "155"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "333" begin = "24" end = "155"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2205,11 +2329,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/heapsort_po68.why">
-      <location file = "why/heapsort.why" line = "898" begin = "23" end = "58"/>
+      <location file = "why/heapsort.why" line = "1016" begin = "23" end = "56"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po69.why">
-      <location file = "why/heapsort.why" line = "898" begin = "23" end = "58"/>
+      <location file = "why/heapsort.why" line = "1016" begin = "23" end = "56"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -3167,47 +3291,51 @@ type padding
 
 type uint32
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic integer_of_int32 : int32 -> int
 
-predicate Hnode(a_7: intP pointer, i_7: int, h_6: int,
+predicate Hnode(a_7: intP pointer, i_9: int, h_6: int,
   intP_intM_a_7_3_at_L: (intP, int32) memory) =
-  (((((2 * i_7) + 1) <= h_6) ->
+  (((((2 * i_9) + 1) <= h_6) ->
     (integer_of_int32(select(intP_intM_a_7_3_at_L, shift(a_7,
-    i_7))) >= integer_of_int32(select(intP_intM_a_7_3_at_L, shift(a_7,
-    ((2 * i_7) + 1)))))) and
-   ((((2 * i_7) + 2) <= h_6) ->
+    i_9))) >= integer_of_int32(select(intP_intM_a_7_3_at_L, shift(a_7,
+    ((2 * i_9) + 1)))))) and
+   ((((2 * i_9) + 2) <= h_6) ->
     (integer_of_int32(select(intP_intM_a_7_3_at_L, shift(a_7,
-    i_7))) >= integer_of_int32(select(intP_intM_a_7_3_at_L, shift(a_7,
-    ((2 * i_7) + 2)))))))
+    i_9))) >= integer_of_int32(select(intP_intM_a_7_3_at_L, shift(a_7,
+    ((2 * i_9) + 2)))))))
 
 predicate H(a_8: intP pointer, l_6: int, h_7: int,
   intP_intM_a_8_4_at_L: (intP, int32) memory) =
-  (forall i_8:int.
-    (((l_6 <= i_8) and (i_8 <= h_7)) -> Hnode(a_8, i_8, h_7,
+  (forall i_10:int.
+    (((l_6 <= i_10) and (i_10 <= h_7)) -> Hnode(a_8, i_10, h_7,
      intP_intM_a_8_4_at_L)))
 
 logic Permut : int_array, int_array, int, int -> prop
 
 predicate Sorted(a_6: intP pointer, l_5: int, h_5: int,
   intP_intM_a_6_2_at_L: (intP, int32) memory) =
-  (forall i_6:int.
-    (((l_5 <= i_6) and (i_6 < h_5)) ->
+  (forall i_8:int.
+    (((l_5 <= i_8) and (i_8 < h_5)) ->
      (integer_of_int32(select(intP_intM_a_6_2_at_L, shift(a_6,
-     i_6))) <= integer_of_int32(select(intP_intM_a_6_2_at_L, shift(a_6,
-     (i_6 + 1)))))))
+     i_8))) <= integer_of_int32(select(intP_intM_a_6_2_at_L, shift(a_6,
+     (i_8 + 1)))))))
 
 logic access : int_array, int -> int32
 
-predicate Swap(a1: int_array, a2: int_array, i_3: int, j_0: int) =
-  ((integer_of_int32(access(a1, i_3)) = integer_of_int32(access(a2,
-   j_0))) and
-   ((integer_of_int32(access(a1, j_0)) = integer_of_int32(access(a2,
-    i_3))) and
+predicate Swap(a1: int_array, a2: int_array, i_5: int, j_1: int) =
+  ((integer_of_int32(access(a1, i_5)) = integer_of_int32(access(a2,
+   j_1))) and
+   ((integer_of_int32(access(a1, j_1)) = integer_of_int32(access(a2,
+    i_5))) and
     (forall k:int.
-      ((k <> i_3) ->
-       ((k <> j_0) -> (integer_of_int32(access(a1,
+      ((k <> i_5) ->
+       ((k <> j_1) -> (integer_of_int32(access(a1,
         k)) = integer_of_int32(access(a2, k))))))))
 
 logic charP_tag : charP tag_id
@@ -3241,6 +3369,11 @@ logic integer_of_uint32 : uint32 -> int
 
 predicate eq_uint32(x: uint32, y: uint32) =
   (integer_of_uint32(x) = integer_of_uint32(y))
+
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
 
 logic int32_of_integer : int -> int32
 
@@ -3299,6 +3432,10 @@ predicate left_valid_struct_intP(p: intP pointer, a: int,
   intP_alloc_table: intP alloc_table) = (offset_min(intP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -3328,6 +3465,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 axiom pointer_addr_of_intP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
 
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
+
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
 axiom pointer_addr_of_voidP_of_pointer_address:
@@ -3340,6 +3483,10 @@ predicate right_valid_struct_charP(p: charP pointer, b: int,
 predicate right_valid_struct_intP(p: intP pointer, b: int,
   intP_alloc_table: intP alloc_table) = (offset_max(intP_alloc_table,
   p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
@@ -3355,6 +3502,11 @@ predicate strict_valid_root_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
@@ -3369,6 +3521,11 @@ predicate strict_valid_struct_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
+
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3391,6 +3548,37 @@ axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
 
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 logic update : int_array, int, int32 -> int_array
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
@@ -3402,6 +3590,11 @@ predicate valid_root_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3417,6 +3610,11 @@ predicate valid_struct_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3440,17 +3638,17 @@ axiom voidP_tags:
 
 axiom access_update_eq:
   (forall a_1_0:int_array.
-    (forall i_1:int.
-      (forall v_0_0:int32. (integer_of_int32(access(update(a_1_0, i_1,
-        v_0_0), i_1)) = integer_of_int32(v_0_0)))))
+    (forall i_3:int.
+      (forall v_0_0:int32. (integer_of_int32(access(update(a_1_0, i_3,
+        v_0_0), i_3)) = integer_of_int32(v_0_0)))))
 
 axiom access_update_neq:
   (forall a_2:int_array.
-    (forall i_2:int.
-      (forall j:int.
+    (forall i_4:int.
+      (forall j_0:int.
         (forall v_1:int32.
-          ((i_2 <> j) -> (integer_of_int32(access(update(a_2, i_2, v_1),
-           j)) = integer_of_int32(access(a_2, j))))))))
+          ((i_4 <> j_0) -> (integer_of_int32(access(update(a_2, i_4, v_1),
+           j_0)) = integer_of_int32(access(a_2, j_0))))))))
 
 axiom Permut_refl:
   (forall a_3:int_array.
@@ -3477,11 +3675,11 @@ axiom Permut_swap:
     (forall a2_3:int_array.
       (forall l_3:int.
         (forall h_3:int.
-          (forall i_4:int.
-            (forall j_1:int.
-              (((l_3 <= i_4) and (i_4 <= h_3)) ->
-               (((l_3 <= j_1) and (j_1 <= h_3)) ->
-                (Swap(a1_3, a2_3, i_4, j_1) -> Permut(a1_3, a2_3, l_3, h_3))))))))))
+          (forall i_6:int.
+            (forall j_2:int.
+              (((l_3 <= i_6) and (i_6 <= h_3)) ->
+               (((l_3 <= j_2) and (j_2 <= h_3)) ->
+                (Swap(a1_3, a2_3, i_6, j_2) -> Permut(a1_3, a2_3, l_3, h_3))))))))))
 
 axiom Permut_extend:
   (forall a1_4:int_array.
@@ -3496,8 +3694,8 @@ axiom Permut_extend:
 axiom access_contents:
   (forall intP_intM_a_4_1_at_L:(intP, int32) memory.
     (forall a_5:intP pointer.
-      (forall i_5:int. (integer_of_int32(access(contents(a_5,
+      (forall i_7:int. (integer_of_int32(access(contents(a_5,
         intP_intM_a_4_1_at_L),
-        i_5)) = integer_of_int32(select(intP_intM_a_4_1_at_L, shift(a_5,
-        i_5)))))))
+        i_7)) = integer_of_int32(select(intP_intM_a_4_1_at_L, shift(a_5,
+        i_7)))))))
 

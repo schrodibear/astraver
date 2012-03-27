@@ -675,10 +675,7 @@ object
   method vquantifiers = visitor#vquantifiers
   method vpredicate = visitor#vpredicate
   method vpredicate_named = visitor#vpredicate_named
-(*
-  method vpredicate_info_decl = visitor#vpredicate_info_decl
-  method vpredicate_info_use = visitor#vpredicate_info_use
-*)
+  method vmodel_info = visitor#vmodel_info
   method vbehavior = visitor#vbehavior
   method vspec = visitor#vspec
   method vassigns = visitor#vassigns
@@ -948,7 +945,8 @@ object(self)
       | TLval _ ->
 	  begin match t.term_type with
 	    | Ctype ty when isVoidType ty ->
-		Jessie_options.fatal ~current:true "Term %a has void type" !Ast_printer.d_term t
+		Jessie_options.fatal
+                  ~current:true "Term %a has void type" !Ast_printer.d_term t
 	    | _ -> DoChildren
 	  end
       | _ -> DoChildren
@@ -973,8 +971,8 @@ object(self)
 
   method vterm_offset = function
     | TNoOffset -> SkipChildren
-    | TModel _ -> SkipChildren
     | TIndex _ -> DoChildren
+    | TModel _ -> DoChildren
     | TField(fi,_) ->
         begin
           try

@@ -18,6 +18,8 @@ axiomatic Padding {
 
 type uint32 = 0..4294967295
 
+type uint8 = 0..255
+
 type int8 = -128..127
 
 tag enum___anonenum_T_RESULTAT_1P = {
@@ -25,6 +27,12 @@ tag enum___anonenum_T_RESULTAT_1P = {
 }
 
 type enum___anonenum_T_RESULTAT_1P = [enum___anonenum_T_RESULTAT_1P]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -172,6 +180,10 @@ type padding
 
 type uint32
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic __ConsignerPanne_v0:  -> enum___anonenum_T_RESULTAT_1P pointer
@@ -283,6 +295,11 @@ logic integer_of_uint32: uint32 -> int
 predicate eq_uint32(x:uint32, y:uint32) =
  eq_int(integer_of_uint32(x), integer_of_uint32(y))
 
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
+
 predicate f_cond0(testv0:enum___anonenum_T_RESULTAT_1P pointer, cpt:int,
  enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_testv0_4_at_L:(enum___anonenum_T_RESULTAT_1P, __anonenum_T_RESULTAT_1) memory) =
  (integer_of___anonenum_T_RESULTAT_1(select(enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_testv0_4_at_L,
@@ -333,6 +350,10 @@ predicate left_valid_struct_enum___anonenum_T_RESULTAT_1P(p:enum___anonenum_T_RE
  enum___anonenum_T_RESULTAT_1P_alloc_table:enum___anonenum_T_RESULTAT_1P alloc_table) =
  (offset_min(enum___anonenum_T_RESULTAT_1P_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -343,6 +364,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 axiom pointer_addr_of_enum___anonenum_T_RESULTAT_1P_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(enum___anonenum_T_RESULTAT_1P_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -357,6 +384,10 @@ predicate right_valid_struct_enum___anonenum_T_RESULTAT_1P(p:enum___anonenum_T_R
  b:int,
  enum___anonenum_T_RESULTAT_1P_alloc_table:enum___anonenum_T_RESULTAT_1P alloc_table) =
  (offset_max(enum___anonenum_T_RESULTAT_1P_alloc_table, p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -373,6 +404,11 @@ predicate strict_valid_root_enum___anonenum_T_RESULTAT_1P(p:enum___anonenum_T_RE
  ((offset_min(enum___anonenum_T_RESULTAT_1P_alloc_table, p) = a)
  and (offset_max(enum___anonenum_T_RESULTAT_1P_alloc_table, p) = b))
 
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
@@ -388,6 +424,11 @@ predicate strict_valid_struct_enum___anonenum_T_RESULTAT_1P(p:enum___anonenum_T_
  enum___anonenum_T_RESULTAT_1P_alloc_table:enum___anonenum_T_RESULTAT_1P alloc_table) =
  ((offset_min(enum___anonenum_T_RESULTAT_1P_alloc_table, p) = a)
  and (offset_max(enum___anonenum_T_RESULTAT_1P_alloc_table, p) = b))
+
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -411,6 +452,38 @@ axiom uint32_range :
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
 
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -421,6 +494,11 @@ predicate valid_root_enum___anonenum_T_RESULTAT_1P(p:enum___anonenum_T_RESULTAT_
  enum___anonenum_T_RESULTAT_1P_alloc_table:enum___anonenum_T_RESULTAT_1P alloc_table) =
  ((offset_min(enum___anonenum_T_RESULTAT_1P_alloc_table, p) <= a)
  and (offset_max(enum___anonenum_T_RESULTAT_1P_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -437,6 +515,11 @@ predicate valid_struct_enum___anonenum_T_RESULTAT_1P(p:enum___anonenum_T_RESULTA
  enum___anonenum_T_RESULTAT_1P_alloc_table:enum___anonenum_T_RESULTAT_1P alloc_table) =
  ((offset_min(enum___anonenum_T_RESULTAT_1P_alloc_table, p) <= a)
  and (offset_max(enum___anonenum_T_RESULTAT_1P_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -691,6 +774,38 @@ parameter alloc_struct_enum___anonenum_T_RESULTAT_1P_requires :
               and instanceof(enum___anonenum_T_RESULTAT_1P_tag_table, result,
                   enum___anonenum_T_RESULTAT_1P_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -726,6 +841,8 @@ parameter any___anonenum_T_RESULTAT_1 :
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter any_uint32 : unit -> { } uint32 { true }
+
+parameter any_uint8 : unit -> { } uint8 { true }
 
 parameter enum___anonenum_T_RESULTAT_1P___ConsignerPanne_v0_1_alloc_table :
  enum___anonenum_T_RESULTAT_1P alloc_table ref
@@ -816,10 +933,18 @@ parameter safe_int8_of_integer_ :
 parameter safe_uint32_of_integer_ :
  x:int -> { } uint32 { eq_int(integer_of_uint32(result), x) }
 
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
 parameter uint32_of_integer_ :
  x:int ->
   { (le_int((0), x) and le_int(x, (4294967295)))} uint32
   { eq_int(integer_of_uint32(result), x) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
 
 let phase1_ensures_default =
  fun (tt : unit) ->
@@ -1032,31 +1157,31 @@ why --project [...] why/phase12.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/phase12_po4.why">
-      <location file = "why/phase12.why" line = "819" begin = "23" end = "164"/>
+      <location file = "why/phase12.why" line = "936" begin = "23" end = "164"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/phase12_po5.why">
-      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "129" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "137" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase12_po6.why">
-      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "129" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "137" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase12_po7.why">
-      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "140" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "148" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase12_po8.why">
-      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "140" begin = "14" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/phase12.jessie/phase12.jc" line = "148" begin = "14" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/phase12_po9.why">
-      <location file = "why/phase12.why" line = "852" begin = "7" end = "88"/>
+      <location file = "why/phase12.why" line = "969" begin = "7" end = "88"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -2021,6 +2146,10 @@ type padding
 
 type uint32
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic __ConsignerPanne_v0 : enum___anonenum_T_RESULTAT_1P pointer
@@ -2124,6 +2253,11 @@ logic integer_of_uint32 : uint32 -> int
 predicate eq_uint32(x: uint32, y: uint32) =
   (integer_of_uint32(x) = integer_of_uint32(y))
 
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
+
 predicate f_cond0(testv0: enum___anonenum_T_RESULTAT_1P pointer, cpt: int,
   enum___anonenum_T_RESULTAT_1P_enum___anonenum_T_RESULTAT_1M_testv0_4_at_L: (enum___anonenum_T_RESULTAT_1P,
   __anonenum_T_RESULTAT_1) memory) =
@@ -2178,6 +2312,10 @@ predicate left_valid_struct_enum___anonenum_T_RESULTAT_1P(p: enum___anonenum_T_R
   enum___anonenum_T_RESULTAT_1P_alloc_table: enum___anonenum_T_RESULTAT_1P alloc_table) =
   (offset_min(enum___anonenum_T_RESULTAT_1P_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -2188,6 +2326,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 axiom pointer_addr_of_enum___anonenum_T_RESULTAT_1P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(enum___anonenum_T_RESULTAT_1P_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -2202,6 +2346,10 @@ predicate right_valid_struct_enum___anonenum_T_RESULTAT_1P(p: enum___anonenum_T_
   b: int,
   enum___anonenum_T_RESULTAT_1P_alloc_table: enum___anonenum_T_RESULTAT_1P alloc_table) =
   (offset_max(enum___anonenum_T_RESULTAT_1P_alloc_table, p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
@@ -2218,6 +2366,11 @@ predicate strict_valid_root_enum___anonenum_T_RESULTAT_1P(p: enum___anonenum_T_R
   ((offset_min(enum___anonenum_T_RESULTAT_1P_alloc_table, p) = a) and
    (offset_max(enum___anonenum_T_RESULTAT_1P_alloc_table, p) = b))
 
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
@@ -2233,6 +2386,11 @@ predicate strict_valid_struct_enum___anonenum_T_RESULTAT_1P(p: enum___anonenum_T
   enum___anonenum_T_RESULTAT_1P_alloc_table: enum___anonenum_T_RESULTAT_1P alloc_table) =
   ((offset_min(enum___anonenum_T_RESULTAT_1P_alloc_table, p) = a) and
    (offset_max(enum___anonenum_T_RESULTAT_1P_alloc_table, p) = b))
+
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2255,6 +2413,37 @@ axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
 
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
@@ -2265,6 +2454,11 @@ predicate valid_root_enum___anonenum_T_RESULTAT_1P(p: enum___anonenum_T_RESULTAT
   enum___anonenum_T_RESULTAT_1P_alloc_table: enum___anonenum_T_RESULTAT_1P alloc_table) =
   ((offset_min(enum___anonenum_T_RESULTAT_1P_alloc_table, p) <= a) and
    (offset_max(enum___anonenum_T_RESULTAT_1P_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2281,6 +2475,11 @@ predicate valid_struct_enum___anonenum_T_RESULTAT_1P(p: enum___anonenum_T_RESULT
   enum___anonenum_T_RESULTAT_1P_alloc_table: enum___anonenum_T_RESULTAT_1P alloc_table) =
   ((offset_min(enum___anonenum_T_RESULTAT_1P_alloc_table, p) <= a) and
    (offset_max(enum___anonenum_T_RESULTAT_1P_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =

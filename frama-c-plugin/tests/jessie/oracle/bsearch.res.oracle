@@ -16,6 +16,8 @@ axiomatic Padding {
   
 }
 
+type uint8 = 0..255
+
 type int32 = -2147483648..2147483647
 
 type int8 = -128..127
@@ -25,6 +27,12 @@ tag longP = {
 }
 
 type longP = [longP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -43,27 +51,27 @@ lemma mean :
     ((x <= y) ==> ((x <= ((x + y) / 2)) && (((x + y) / 2) <= y)))))
 
 predicate sorted{L}(longP[..] t, integer a, integer b) =
-(\forall integer i;
-  (\forall integer j;
-    (((a <= i) && ((i <= j) && (j <= b))) ==>
-      ((t + i).longM <= (t + j).longM))))
+(\forall integer i_1;
+  (\forall integer j_0;
+    (((a <= i_1) && ((i_1 <= j_0) && (j_0 <= b))) ==>
+      ((t + i_1).longM <= (t + j_0).longM))))
 
-int32 binary_search(longP[..] t, int32 n, int32 v)
-  requires (C_32 : ((C_33 : (n >= 0)) &&
+int32 binary_search(longP[..] t, int32 n_1, int32 v_0)
+  requires (C_32 : ((C_33 : (n_1 >= 0)) &&
                      ((C_35 : (\offset_min(t) <= 0)) &&
-                       (C_36 : (\offset_max(t) >= (n - 1))))));
+                       (C_36 : (\offset_max(t) >= (n_1 - 1))))));
 behavior default:
   ensures (C_27 : ((C_28 : ((- 1) <= \result)) &&
-                    (C_29 : (\result < \at(n,Old)))));
+                    (C_29 : (\result < \at(n_1,Old)))));
 behavior success:
   ensures (C_30 : ((\result >= 0) ==>
-                    ((\at(t,Old) + \result).longM == \at(v,Old))));
+                    ((\at(t,Old) + \result).longM == \at(v_0,Old))));
 behavior failure:
-  assumes sorted{Here}(t, 0, (n - 1));
+  assumes sorted{Here}(t, 0, (n_1 - 1));
   ensures (C_31 : ((\result == (- 1)) ==>
                     (\forall integer k_0;
-                      (((0 <= k_0) && (k_0 < \at(n,Old))) ==>
-                        ((\at(t,Old) + k_0).longM != \at(v,Old))))));
+                      (((0 <= k_0) && (k_0 < \at(n_1,Old))) ==>
+                        ((\at(t,Old) + k_0).longM != \at(v_0,Old))))));
 {  
    (var int32 l);
    
@@ -74,14 +82,15 @@ behavior failure:
    (var int32 __retres);
    
    {  (C_1 : (l = 0));
-      (C_4 : (u = (C_3 : ((C_2 : (n - 1)) :> int32))));
+      (C_4 : (u = (C_3 : ((C_2 : (n_1 - 1)) :> int32))));
       
       loop 
       behavior default:
-        invariant (C_7 : ((C_8 : (0 <= l)) && (C_9 : (u <= (n - 1)))));
+        invariant (C_7 : ((C_8 : (0 <= l)) && (C_9 : (u <= (n_1 - 1)))));
       behavior failure:
         invariant (C_6 : (\forall integer k;
-                           ((((0 <= k) && (k < n)) && ((t + k).longM == v)) ==>
+                           ((((0 <= k) && (k < n_1)) &&
+                              ((t + k).longM == v_0)) ==>
                              ((l <= k) && (k <= u)))));
       variant (C_5 : (u - l));
       while (true)
@@ -91,14 +100,16 @@ behavior failure:
             
             {  (C_14 : (m = (C_13 : ((C_12 : ((C_11 : ((C_10 : (l + u)) :> int32)) /
                                                2)) :> int32))));
-               (if ((C_25 : (C_24 : (t + m)).longM) < v) then (C_23 : (l = 
-                                                              (C_22 : (
-                                                              (C_21 : 
-                                                              (m + 1)) :> int32)))) else 
-               (if ((C_20 : (C_19 : (t + m)).longM) > v) then (C_18 : (u = 
-                                                              (C_17 : (
-                                                              (C_16 : 
-                                                              (m - 1)) :> int32)))) else 
+               (if ((C_25 : (C_24 : (t + m)).longM) < v_0) then (C_23 : (l = 
+                                                                (C_22 : (
+                                                                (C_21 : 
+                                                                (m +
+                                                                  1)) :> int32)))) else 
+               (if ((C_20 : (C_19 : (t + m)).longM) > v_0) then (C_18 : (u = 
+                                                                (C_17 : (
+                                                                (C_16 : 
+                                                                (m -
+                                                                  1)) :> int32)))) else 
                {  (C_15 : (__retres = m));
                   
                   (goto return_label)
@@ -122,6 +133,10 @@ type int8
 type longP
 
 type padding
+
+type uint8
+
+type unsigned_charP
 
 type voidP
 
@@ -150,6 +165,11 @@ logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
+
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic int32_of_integer: int -> int32
 
@@ -192,6 +212,10 @@ predicate left_valid_struct_longP(p:longP pointer, a:int,
  longP_alloc_table:longP alloc_table) =
  (offset_min(longP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -218,6 +242,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 axiom pointer_addr_of_longP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(longP_of_pointer_address(p))))
 
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
+
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
 axiom pointer_addr_of_voidP_of_pointer_address :
@@ -231,17 +261,21 @@ predicate right_valid_struct_longP(p:longP pointer, b:int,
  longP_alloc_table:longP alloc_table) =
  (offset_max(longP_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_max(voidP_alloc_table, p) >= b)
 
 predicate sorted(t:longP pointer, a:int, b:int,
  longP_longM_t_1_at_L:(longP, int32) memory) =
- (forall i:int.
-  (forall j:int.
-   ((le_int(a, i) and (le_int(i, j) and le_int(j, b))) ->
-    le_int(integer_of_int32(select(longP_longM_t_1_at_L, shift(t, i))),
-    integer_of_int32(select(longP_longM_t_1_at_L, shift(t, j)))))))
+ (forall i_1:int.
+  (forall j_0:int.
+   ((le_int(a, i_1) and (le_int(i_1, j_0) and le_int(j_0, b))) ->
+    le_int(integer_of_int32(select(longP_longM_t_1_at_L, shift(t, i_1))),
+    integer_of_int32(select(longP_longM_t_1_at_L, shift(t, j_0)))))))
 
 predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -252,6 +286,11 @@ predicate strict_valid_root_longP(p:longP pointer, a:int, b:int,
  longP_alloc_table:longP alloc_table) =
  ((offset_min(longP_alloc_table, p) = a)
  and (offset_max(longP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -268,10 +307,47 @@ predicate strict_valid_struct_longP(p:longP pointer, a:int, b:int,
  ((offset_min(longP_alloc_table, p) = a)
  and (offset_max(longP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -282,6 +358,11 @@ predicate valid_root_longP(p:longP pointer, a:int, b:int,
  longP_alloc_table:longP alloc_table) =
  ((offset_min(longP_alloc_table, p) <= a)
  and (offset_max(longP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -297,6 +378,11 @@ predicate valid_struct_longP(p:longP pointer, a:int, b:int,
  longP_alloc_table:longP alloc_table) =
  ((offset_min(longP_alloc_table, p) <= a)
  and (offset_max(longP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -384,6 +470,38 @@ parameter alloc_struct_longP_requires :
           and (alloc_fresh(longP_alloc_table@, result, n)
               and instanceof(longP_tag_table, result, longP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -414,61 +532,63 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
+parameter any_uint8 : unit -> { } uint8 { true }
+
 parameter binary_search :
  t_0:longP pointer ->
-  n:int32 ->
-   v:int32 ->
+  n_1:int32 ->
+   v_0:int32 ->
     longP_t_2_alloc_table:longP alloc_table ->
      longP_longM_t_2:(longP, int32) memory ->
       { } int32
-      { ((sorted(t_0, (0), sub_int(integer_of_int32(n), (1)),
+      { ((sorted(t_0, (0), sub_int(integer_of_int32(n_1), (1)),
           longP_longM_t_2) ->
           (JC_<somenum>:
           ((integer_of_int32(result) = neg_int((1))) ->
            (forall k_0:int.
-            ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
+            ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n_1))) ->
              (integer_of_int32(select(longP_longM_t_2, shift(t_0, k_0))) <> 
-             integer_of_int32(v)))))))
+             integer_of_int32(v_0)))))))
         and ((JC_<somenum>:
              (ge_int(integer_of_int32(result), (0)) ->
               (integer_of_int32(select(longP_longM_t_2,
                                 shift(t_0, integer_of_int32(result)))) = 
-              integer_of_int32(v))))
+              integer_of_int32(v_0))))
             and (JC_<somenum>:
                 ((JC_<somenum>: le_int(neg_int((1)), integer_of_int32(result)))
                 and (JC_<somenum>:
-                    lt_int(integer_of_int32(result), integer_of_int32(n))))))) }
+                    lt_int(integer_of_int32(result), integer_of_int32(n_1))))))) }
 
 parameter binary_search_requires :
  t_0:longP pointer ->
-  n:int32 ->
-   v:int32 ->
+  n_1:int32 ->
+   v_0:int32 ->
     longP_t_2_alloc_table:longP alloc_table ->
      longP_longM_t_2:(longP, int32) memory ->
       { (JC_<somenum>:
-        ((JC_<somenum>: ge_int(integer_of_int32(n), (0)))
+        ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
         and ((JC_<somenum>: le_int(offset_min(longP_t_2_alloc_table, t_0), (0)))
             and (JC_<somenum>:
                 ge_int(offset_max(longP_t_2_alloc_table, t_0),
-                sub_int(integer_of_int32(n), (1)))))))}
+                sub_int(integer_of_int32(n_1), (1)))))))}
       int32
-      { ((sorted(t_0, (0), sub_int(integer_of_int32(n), (1)),
+      { ((sorted(t_0, (0), sub_int(integer_of_int32(n_1), (1)),
           longP_longM_t_2) ->
           (JC_<somenum>:
           ((integer_of_int32(result) = neg_int((1))) ->
            (forall k_0:int.
-            ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
+            ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n_1))) ->
              (integer_of_int32(select(longP_longM_t_2, shift(t_0, k_0))) <> 
-             integer_of_int32(v)))))))
+             integer_of_int32(v_0)))))))
         and ((JC_<somenum>:
              (ge_int(integer_of_int32(result), (0)) ->
               (integer_of_int32(select(longP_longM_t_2,
                                 shift(t_0, integer_of_int32(result)))) = 
-              integer_of_int32(v))))
+              integer_of_int32(v_0))))
             and (JC_<somenum>:
                 ((JC_<somenum>: le_int(neg_int((1)), integer_of_int32(result)))
                 and (JC_<somenum>:
-                    lt_int(integer_of_int32(result), integer_of_int32(n))))))) }
+                    lt_int(integer_of_int32(result), integer_of_int32(n_1))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -486,14 +606,22 @@ parameter safe_int32_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
+
 let binary_search_ensures_default =
- fun (t_0 : longP pointer) (n : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
+ fun (t_0 : longP pointer) (n_1 : int32) (v_0 : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: ge_int(integer_of_int32(n), (0)))
+    ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_<somenum>: le_int(offset_min(longP_t_2_alloc_table, t_0), (0)))
         and (JC_<somenum>:
             ge_int(offset_max(longP_t_2_alloc_table, t_0),
-            sub_int(integer_of_int32(n), (1))))))) }
+            sub_int(integer_of_int32(n_1), (1))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -512,7 +640,7 @@ let binary_search_ensures_default =
           (let jessie_<somenum> =
           (u := (C_3:
                 (safe_int32_of_integer_ (C_2:
-                                        ((sub_int (integer_of_int32 n)) (1)))))) in
+                                        ((sub_int (integer_of_int32 n_1)) (1)))))) in
           void);
           (loop_2:
           while true do
@@ -521,7 +649,7 @@ let binary_search_ensures_default =
               ((JC_<somenum>: le_int((0), integer_of_int32(l)))
               and (JC_<somenum>:
                   le_int(integer_of_int32(u),
-                  sub_int(integer_of_int32(n), (1))))))  }
+                  sub_int(integer_of_int32(n_1), (1))))))  }
            begin
              [ { } unit { true } ];
             try
@@ -545,7 +673,7 @@ let binary_search_ensures_default =
                                               ((safe_acc_ longP_longM_t_2) 
                                                (C_24:
                                                ((shift t_0) (integer_of_int32 !m))))))) 
-                   (integer_of_int32 v))
+                   (integer_of_int32 v_0))
               then
                (let jessie_<somenum> =
                (C_23:
@@ -558,7 +686,7 @@ let binary_search_ensures_default =
                                                ((safe_acc_ longP_longM_t_2) 
                                                 (C_19:
                                                 ((shift t_0) (integer_of_int32 !m))))))) 
-                    (integer_of_int32 v))
+                    (integer_of_int32 v_0))
                then
                 (let jessie_<somenum> =
                 (C_18:
@@ -586,17 +714,17 @@ let binary_search_ensures_default =
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(neg_int((1)), integer_of_int32(result)))
-    and (JC_<somenum>: lt_int(integer_of_int32(result), integer_of_int32(n))))) }
+    and (JC_<somenum>: lt_int(integer_of_int32(result), integer_of_int32(n_1))))) }
 
 let binary_search_ensures_failure =
- fun (t_0 : longP pointer) (n : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
-  { (sorted(t_0, (0), sub_int(integer_of_int32(n), (1)), longP_longM_t_2)
+ fun (t_0 : longP pointer) (n_1 : int32) (v_0 : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
+  { (sorted(t_0, (0), sub_int(integer_of_int32(n_1), (1)), longP_longM_t_2)
     and (JC_<somenum>:
-        ((JC_<somenum>: ge_int(integer_of_int32(n), (0)))
+        ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
         and ((JC_<somenum>: le_int(offset_min(longP_t_2_alloc_table, t_0), (0)))
             and (JC_<somenum>:
                 ge_int(offset_max(longP_t_2_alloc_table, t_0),
-                sub_int(integer_of_int32(n), (1)))))))) }
+                sub_int(integer_of_int32(n_1), (1)))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -615,7 +743,7 @@ let binary_search_ensures_failure =
           (let jessie_<somenum> =
           (u := (C_3:
                 (safe_int32_of_integer_ (C_2:
-                                        ((sub_int (integer_of_int32 n)) (1)))))) in
+                                        ((sub_int (integer_of_int32 n_1)) (1)))))) in
           void);
           (loop_4:
           while true do
@@ -623,9 +751,9 @@ let binary_search_ensures_failure =
               (JC_<somenum>:
               (forall k:int.
                ((le_int((0), k)
-                and (lt_int(k, integer_of_int32(n))
+                and (lt_int(k, integer_of_int32(n_1))
                     and (integer_of_int32(select(longP_longM_t_2,
-                                          shift(t_0, k))) = integer_of_int32(v)))) ->
+                                          shift(t_0, k))) = integer_of_int32(v_0)))) ->
                 (le_int(integer_of_int32(l), k)
                 and le_int(k, integer_of_int32(u))))))  }
            begin
@@ -634,7 +762,7 @@ let binary_search_ensures_failure =
                  ((JC_<somenum>: le_int((0), integer_of_int32(l)))
                  and (JC_<somenum>:
                      le_int(integer_of_int32(u),
-                     sub_int(integer_of_int32(n), (1)))))) } ];
+                     sub_int(integer_of_int32(n_1), (1)))))) } ];
             try
              (C_14:
              begin
@@ -656,7 +784,7 @@ let binary_search_ensures_failure =
                                               ((safe_acc_ longP_longM_t_2) 
                                                (C_24:
                                                ((shift t_0) (integer_of_int32 !m))))))) 
-                   (integer_of_int32 v))
+                   (integer_of_int32 v_0))
               then
                (let jessie_<somenum> =
                (C_23:
@@ -669,7 +797,7 @@ let binary_search_ensures_failure =
                                                ((safe_acc_ longP_longM_t_2) 
                                                 (C_19:
                                                 ((shift t_0) (integer_of_int32 !m))))))) 
-                    (integer_of_int32 v))
+                    (integer_of_int32 v_0))
                then
                 (let jessie_<somenum> =
                 (C_18:
@@ -698,18 +826,18 @@ let binary_search_ensures_failure =
   { (JC_<somenum>:
     ((integer_of_int32(result) = neg_int((1))) ->
      (forall k_0:int.
-      ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n))) ->
+      ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n_1))) ->
        (integer_of_int32(select(longP_longM_t_2, shift(t_0, k_0))) <> 
-       integer_of_int32(v)))))) }
+       integer_of_int32(v_0)))))) }
 
 let binary_search_ensures_success =
- fun (t_0 : longP pointer) (n : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
+ fun (t_0 : longP pointer) (n_1 : int32) (v_0 : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: ge_int(integer_of_int32(n), (0)))
+    ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_<somenum>: le_int(offset_min(longP_t_2_alloc_table, t_0), (0)))
         and (JC_<somenum>:
             ge_int(offset_max(longP_t_2_alloc_table, t_0),
-            sub_int(integer_of_int32(n), (1))))))) }
+            sub_int(integer_of_int32(n_1), (1))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -728,7 +856,7 @@ let binary_search_ensures_success =
           (let jessie_<somenum> =
           (u := (C_3:
                 (safe_int32_of_integer_ (C_2:
-                                        ((sub_int (integer_of_int32 n)) (1)))))) in
+                                        ((sub_int (integer_of_int32 n_1)) (1)))))) in
           void);
           (loop_3:
           while true do
@@ -739,7 +867,7 @@ let binary_search_ensures_success =
                  ((JC_<somenum>: le_int((0), integer_of_int32(l)))
                  and (JC_<somenum>:
                      le_int(integer_of_int32(u),
-                     sub_int(integer_of_int32(n), (1)))))) } ];
+                     sub_int(integer_of_int32(n_1), (1)))))) } ];
             try
              (C_14:
              begin
@@ -761,7 +889,7 @@ let binary_search_ensures_success =
                                               ((safe_acc_ longP_longM_t_2) 
                                                (C_24:
                                                ((shift t_0) (integer_of_int32 !m))))))) 
-                   (integer_of_int32 v))
+                   (integer_of_int32 v_0))
               then
                (let jessie_<somenum> =
                (C_23:
@@ -774,7 +902,7 @@ let binary_search_ensures_success =
                                                ((safe_acc_ longP_longM_t_2) 
                                                 (C_19:
                                                 ((shift t_0) (integer_of_int32 !m))))))) 
-                    (integer_of_int32 v))
+                    (integer_of_int32 v_0))
                then
                 (let jessie_<somenum> =
                 (C_18:
@@ -803,16 +931,16 @@ let binary_search_ensures_success =
   { (JC_<somenum>:
     (ge_int(integer_of_int32(result), (0)) ->
      (integer_of_int32(select(longP_longM_t_2,
-                       shift(t_0, integer_of_int32(result)))) = integer_of_int32(v)))) }
+                       shift(t_0, integer_of_int32(result)))) = integer_of_int32(v_0)))) }
 
 let binary_search_safety =
- fun (t_0 : longP pointer) (n : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
+ fun (t_0 : longP pointer) (n_1 : int32) (v_0 : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
   { (JC_<somenum>:
-    ((JC_<somenum>: ge_int(integer_of_int32(n), (0)))
+    ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_<somenum>: le_int(offset_min(longP_t_2_alloc_table, t_0), (0)))
         and (JC_<somenum>:
             ge_int(offset_max(longP_t_2_alloc_table, t_0),
-            sub_int(integer_of_int32(n), (1))))))) }
+            sub_int(integer_of_int32(n_1), (1))))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -832,7 +960,7 @@ let binary_search_safety =
           (u := (C_3:
                 (JC_<somenum>:
                 (int32_of_integer_ (C_2:
-                                   ((sub_int (integer_of_int32 n)) (1))))))) in
+                                   ((sub_int (integer_of_int32 n_1)) (1))))))) in
           void);
           (loop_1:
           while true do
@@ -845,7 +973,7 @@ let binary_search_safety =
                  ((JC_<somenum>: le_int((0), integer_of_int32(l)))
                  and (JC_<somenum>:
                      le_int(integer_of_int32(u),
-                     sub_int(integer_of_int32(n), (1)))))) } ];
+                     sub_int(integer_of_int32(n_1), (1)))))) } ];
             try
              (C_14:
              begin
@@ -868,7 +996,7 @@ let binary_search_safety =
                                               (JC_<somenum>:
                                               ((((offset_acc_ longP_t_2_alloc_table) longP_longM_t_2) t_0) 
                                                (integer_of_int32 !m)))))) 
-                   (integer_of_int32 v))
+                   (integer_of_int32 v_0))
               then
                (let jessie_<somenum> =
                (C_23:
@@ -882,7 +1010,7 @@ let binary_search_safety =
                                                (JC_<somenum>:
                                                ((((offset_acc_ longP_t_2_alloc_table) longP_longM_t_2) t_0) 
                                                 (integer_of_int32 !m)))))) 
-                    (integer_of_int32 v))
+                    (integer_of_int32 v_0))
                then
                 (let jessie_<somenum> =
                 (C_18:
@@ -2015,6 +2143,10 @@ type longP
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag : charP tag_id
@@ -2043,6 +2175,11 @@ logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
+
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
 
 logic int32_of_integer : int -> int32
 
@@ -2085,6 +2222,10 @@ predicate left_valid_struct_longP(p: longP pointer, a: int,
   longP_alloc_table: longP alloc_table) = (offset_min(longP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -2112,6 +2253,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 axiom pointer_addr_of_longP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(longP_of_pointer_address(p))))
 
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
+
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
 axiom pointer_addr_of_voidP_of_pointer_address:
@@ -2125,17 +2272,22 @@ predicate right_valid_struct_longP(p: longP pointer, b: int,
   longP_alloc_table: longP alloc_table) = (offset_max(longP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
 
 predicate sorted(t: longP pointer, a: int, b: int,
   longP_longM_t_1_at_L: (longP, int32) memory) =
-  (forall i:int.
-    (forall j:int.
-      (((a <= i) and ((i <= j) and (j <= b))) ->
+  (forall i_1:int.
+    (forall j_0:int.
+      (((a <= i_1) and ((i_1 <= j_0) and (j_0 <= b))) ->
        (integer_of_int32(select(longP_longM_t_1_at_L, shift(t,
-       i))) <= integer_of_int32(select(longP_longM_t_1_at_L, shift(t, j)))))))
+       i_1))) <= integer_of_int32(select(longP_longM_t_1_at_L, shift(t,
+       j_0)))))))
 
 predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -2146,6 +2298,11 @@ predicate strict_valid_root_longP(p: longP pointer, a: int, b: int,
   longP_alloc_table: longP alloc_table) =
   ((offset_min(longP_alloc_table, p) = a) and (offset_max(longP_alloc_table,
    p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2162,10 +2319,46 @@ predicate strict_valid_struct_longP(p: longP pointer, a: int, b: int,
   ((offset_min(longP_alloc_table, p) = a) and (offset_max(longP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -2176,6 +2369,11 @@ predicate valid_root_longP(p: longP pointer, a: int, b: int,
   longP_alloc_table: longP alloc_table) =
   ((offset_min(longP_alloc_table, p) <= a) and (offset_max(longP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2191,6 +2389,11 @@ predicate valid_struct_longP(p: longP pointer, a: int, b: int,
   longP_alloc_table: longP alloc_table) =
   ((offset_min(longP_alloc_table, p) <= a) and (offset_max(longP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =

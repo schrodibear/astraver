@@ -17,6 +17,8 @@ axiomatic Padding {
   
 }
 
+type uint8 = 0..255
+
 type int32 = -2147483648..2147483647
 
 type int8 = -128..127
@@ -26,6 +28,12 @@ tag intP = {
 }
 
 type intP = [intP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -44,11 +52,11 @@ predicate sorted{Here}(intP[..] a, integer start_index, integer end_index) =
     (((start_index <= k1) && ((k1 <= k2) && (k2 <= end_index))) ==>
       ((a + k1).intM <= (a + k2).intM))))
 
-predicate swapped{L1, L2}(intP[..] a_0, integer i, integer j) =
-(((\at((a_0 + i).intM,L1) == \at((a_0 + j).intM,L2)) &&
-   (\at((a_0 + j).intM,L1) == \at((a_0 + i).intM,L2))) &&
+predicate swapped{L1, L2}(intP[..] a_0, integer i_1, integer j_0) =
+(((\at((a_0 + i_1).intM,L1) == \at((a_0 + j_0).intM,L2)) &&
+   (\at((a_0 + j_0).intM,L1) == \at((a_0 + i_1).intM,L2))) &&
   (\forall integer k;
-    (((k != i) && (k != j)) ==>
+    (((k != i_1) && (k != j_0)) ==>
       (\at((a_0 + k).intM,L1) == \at((a_0 + k).intM,L2)))))
 
 predicate Permut{L1, L2}(intP[..] a_1, integer index_start, integer end_start) {
@@ -79,27 +87,27 @@ case Permut_refl{L}: \at((\forall intP[..] a_2;
   case Permut_swap{L1, L2}: (\forall intP[..] a_5;
                               (\forall integer index_start_3;
                                 (\forall integer end_start_3;
-                                  (\forall integer i_0;
-                                    (\forall integer j_0;
-                                      (((((index_start_3 <= i_0) &&
-                                           (i_0 <= end_start_3)) &&
-                                          ((index_start_3 <= j_0) &&
-                                            (j_0 <= end_start_3))) &&
+                                  (\forall integer i_2;
+                                    (\forall integer j_1;
+                                      (((((index_start_3 <= i_2) &&
+                                           (i_2 <= end_start_3)) &&
+                                          ((index_start_3 <= j_1) &&
+                                            (j_1 <= end_start_3))) &&
                                          swapped{L1,
-                                         L2}(a_5, i_0, j_0)) ==>
+                                         L2}(a_5, i_2, j_1)) ==>
                                         Permut{L1,
                                         L2}(a_5, index_start_3, end_start_3)))))));
   
 }
 
-unit swap(intP[..] t, int32 i, int32 j, int32 n)
+unit swap(intP[..] t, int32 i, int32 j, int32 n_1)
   requires (C_15 : (((C_17 : (\offset_min(t) <= i)) &&
                       (C_18 : (\offset_max(t) >= i))) &&
                      ((C_20 : (\offset_min(t) <= j)) &&
                        (C_21 : (\offset_max(t) >= j)))));
 behavior default:
   ensures (C_12 : ((C_13 : (\forall integer k_0;
-                             (((((0 <= k_0) && (k_0 < \at(n,Old))) &&
+                             (((((0 <= k_0) && (k_0 < \at(n_1,Old))) &&
                                  (k_0 != \at(i,Old))) &&
                                 (k_0 != \at(j,Old))) ==>
                                ((\at(t,Old) + k_0).intM ==
@@ -337,21 +345,23 @@ type intP
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic integer_of_int32: int32 -> int
 
-predicate swapped(a_0:intP pointer, i:int, j:int,
+predicate swapped(a_0:intP pointer, i_1:int, j_0:int,
  intP_intM_a_0_2_at_L2:(intP, int32) memory,
  intP_intM_a_0_2_at_L1:(intP, int32) memory) =
- ((integer_of_int32(select(intP_intM_a_0_2_at_L1, shift(a_0, i))) = integer_of_int32(
-                                                                    select(intP_intM_a_0_2_at_L2,
-                                                                    shift(a_0,
-                                                                    j))))
- and ((integer_of_int32(select(intP_intM_a_0_2_at_L1, shift(a_0, j))) = 
-      integer_of_int32(select(intP_intM_a_0_2_at_L2, shift(a_0, i))))
+ ((integer_of_int32(select(intP_intM_a_0_2_at_L1, shift(a_0, i_1))) = 
+  integer_of_int32(select(intP_intM_a_0_2_at_L2, shift(a_0, j_0))))
+ and ((integer_of_int32(select(intP_intM_a_0_2_at_L1, shift(a_0, j_0))) = 
+      integer_of_int32(select(intP_intM_a_0_2_at_L2, shift(a_0, i_1))))
      and (forall k:int.
-          (((k <> i) and (k <> j)) ->
+          (((k <> i_1) and (k <> j_0)) ->
            (integer_of_int32(select(intP_intM_a_0_2_at_L1, shift(a_0, k))) = 
            integer_of_int32(select(intP_intM_a_0_2_at_L2, shift(a_0, k))))))))
 
@@ -389,13 +399,13 @@ inductive Permut: intP pointer, int, int, (intP, int32) memory,
                   (forall a_5:intP pointer.
                    (forall index_start_3:int.
                     (forall end_start_3:int.
-                     (forall i_0_0:int.
-                      (forall j_0_0:int.
-                       ((le_int(index_start_3, i_0_0)
-                        and (le_int(i_0_0, end_start_3)
-                            and (le_int(index_start_3, j_0_0)
-                                and (le_int(j_0_0, end_start_3)
-                                    and swapped(a_5, i_0_0, j_0_0,
+                     (forall i_2:int.
+                      (forall j_1:int.
+                       ((le_int(index_start_3, i_2)
+                        and (le_int(i_2, end_start_3)
+                            and (le_int(index_start_3, j_1)
+                                and (le_int(j_1, end_start_3)
+                                    and swapped(a_5, i_2, j_1,
                                         intP_intM_a_1_3_at_L2,
                                         intP_intM_a_1_3_at_L1))))) ->
                         Permut(a_5, index_start_3, end_start_3,
@@ -424,6 +434,11 @@ logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
+
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic int32_of_integer: int -> int32
 
@@ -481,6 +496,10 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
 predicate left_valid_struct_intP(p:intP pointer, a:int,
  intP_alloc_table:intP alloc_table) = (offset_min(intP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -490,6 +509,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 
 axiom pointer_addr_of_intP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -502,6 +527,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
 
 predicate right_valid_struct_intP(p:intP pointer, b:int,
  intP_alloc_table:intP alloc_table) = (offset_max(intP_alloc_table, p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -525,6 +554,11 @@ predicate strict_valid_root_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
 
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
@@ -540,10 +574,47 @@ predicate strict_valid_struct_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -554,6 +625,11 @@ predicate valid_root_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -569,6 +645,11 @@ predicate valid_struct_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -651,6 +732,38 @@ parameter alloc_struct_intP_requires :
           and (alloc_fresh(intP_alloc_table@, result, n)
               and instanceof(intP_tag_table, result, intP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -680,6 +793,8 @@ parameter alloc_struct_voidP_requires :
 parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
+
+parameter any_uint8 : unit -> { } uint8 { true }
 
 parameter bubble_sort :
  a_2:intP pointer ->
@@ -729,11 +844,14 @@ parameter safe_int32_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
 parameter swap :
  t:intP pointer ->
-  i_0:int32 ->
-   j_0:int32 ->
-    n:int32 ->
+  i:int32 ->
+   j:int32 ->
+    n_1:int32 ->
      intP_intM_t_4:(intP, int32) memory ref ->
       intP_t_4_alloc_table:intP alloc_table ->
        { } unit reads intP_intM_t_4 writes intP_intM_t_4
@@ -741,47 +859,52 @@ parameter swap :
          ((JC_<somenum>:
           (forall k_0:int.
            ((le_int((0), k_0)
-            and (lt_int(k_0, integer_of_int32(n))
-                and ((k_0 <> integer_of_int32(i_0))
-                    and (k_0 <> integer_of_int32(j_0))))) ->
+            and (lt_int(k_0, integer_of_int32(n_1))
+                and ((k_0 <> integer_of_int32(i))
+                    and (k_0 <> integer_of_int32(j))))) ->
             (integer_of_int32(select(intP_intM_t_4, shift(t, k_0))) = 
             integer_of_int32(select(intP_intM_t_4@, shift(t, k_0)))))))
          and (JC_<somenum>:
-             swapped(t, integer_of_int32(i_0), integer_of_int32(j_0),
+             swapped(t, integer_of_int32(i), integer_of_int32(j),
              intP_intM_t_4, intP_intM_t_4@)))) }
 
 parameter swap_requires :
  t:intP pointer ->
-  i_0:int32 ->
-   j_0:int32 ->
-    n:int32 ->
+  i:int32 ->
+   j:int32 ->
+    n_1:int32 ->
      intP_intM_t_4:(intP, int32) memory ref ->
       intP_t_4_alloc_table:intP alloc_table ->
        { (JC_<somenum>:
          ((JC_<somenum>:
-          le_int(offset_min(intP_t_4_alloc_table, t), integer_of_int32(i_0)))
+          le_int(offset_min(intP_t_4_alloc_table, t), integer_of_int32(i)))
          and ((JC_<somenum>:
               ge_int(offset_max(intP_t_4_alloc_table, t),
-              integer_of_int32(i_0)))
+              integer_of_int32(i)))
              and ((JC_<somenum>:
                   le_int(offset_min(intP_t_4_alloc_table, t),
-                  integer_of_int32(j_0)))
+                  integer_of_int32(j)))
                  and (JC_<somenum>:
                      ge_int(offset_max(intP_t_4_alloc_table, t),
-                     integer_of_int32(j_0)))))))}
+                     integer_of_int32(j)))))))}
        unit reads intP_intM_t_4 writes intP_intM_t_4
        { (JC_<somenum>:
          ((JC_<somenum>:
           (forall k_0:int.
            ((le_int((0), k_0)
-            and (lt_int(k_0, integer_of_int32(n))
-                and ((k_0 <> integer_of_int32(i_0))
-                    and (k_0 <> integer_of_int32(j_0))))) ->
+            and (lt_int(k_0, integer_of_int32(n_1))
+                and ((k_0 <> integer_of_int32(i))
+                    and (k_0 <> integer_of_int32(j))))) ->
             (integer_of_int32(select(intP_intM_t_4, shift(t, k_0))) = 
             integer_of_int32(select(intP_intM_t_4@, shift(t, k_0)))))))
          and (JC_<somenum>:
-             swapped(t, integer_of_int32(i_0), integer_of_int32(j_0),
+             swapped(t, integer_of_int32(i), integer_of_int32(j),
              intP_intM_t_4, intP_intM_t_4@)))) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
 
 let bubble_sort_ensures_default =
  fun (a_2 : intP pointer) (length : int32) (intP_intM_a_5 : (intP, int32) memory ref) (intP_a_5_alloc_table : intP alloc_table) ->
@@ -1354,18 +1477,16 @@ let bubble_sort_safety =
     (raise Return) end with Return -> void end) { true }
 
 let swap_ensures_default =
- fun (t : intP pointer) (i_0 : int32) (j_0 : int32) (n : int32) (intP_intM_t_4 : (intP, int32) memory ref) (intP_t_4_alloc_table : intP alloc_table) ->
+ fun (t : intP pointer) (i : int32) (j : int32) (n_1 : int32) (intP_intM_t_4 : (intP, int32) memory ref) (intP_t_4_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     le_int(offset_min(intP_t_4_alloc_table, t), integer_of_int32(i_0)))
+    ((JC_<somenum>: le_int(offset_min(intP_t_4_alloc_table, t), integer_of_int32(i)))
     and ((JC_<somenum>:
-         ge_int(offset_max(intP_t_4_alloc_table, t), integer_of_int32(i_0)))
+         ge_int(offset_max(intP_t_4_alloc_table, t), integer_of_int32(i)))
         and ((JC_<somenum>:
-             le_int(offset_min(intP_t_4_alloc_table, t),
-             integer_of_int32(j_0)))
+             le_int(offset_min(intP_t_4_alloc_table, t), integer_of_int32(j)))
             and (JC_<somenum>:
                 ge_int(offset_max(intP_t_4_alloc_table, t),
-                integer_of_int32(j_0))))))) }
+                integer_of_int32(j))))))) }
   (init:
   try
    begin
@@ -1377,20 +1498,20 @@ let swap_ensures_default =
        (let jessie_<somenum> =
        (tmp := (C_2:
                ((safe_acc_ !intP_intM_t_4) (C_1:
-                                           ((shift t) (integer_of_int32 i_0)))))) in
+                                           ((shift t) (integer_of_int32 i)))))) in
        void);
       (let jessie_<somenum> =
       (let jessie_<somenum> =
       (C_5:
-      ((safe_acc_ !intP_intM_t_4) (C_4: ((shift t) (integer_of_int32 j_0))))) in
+      ((safe_acc_ !intP_intM_t_4) (C_4: ((shift t) (integer_of_int32 j))))) in
       (let jessie_<somenum> = t in
-      (let jessie_<somenum> = (integer_of_int32 i_0) in
+      (let jessie_<somenum> = (integer_of_int32 i) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (((safe_upd_ intP_intM_t_4) jessie_<somenum>) jessie_<somenum>))))) in void);
       (let jessie_<somenum> =
       (let jessie_<somenum> = !tmp in
       (let jessie_<somenum> = t in
-      (let jessie_<somenum> = (integer_of_int32 j_0) in
+      (let jessie_<somenum> = (integer_of_int32 j) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (((safe_upd_ intP_intM_t_4) jessie_<somenum>) jessie_<somenum>))))) in void);
       (raise Return) end)))); (raise Return) end with Return -> void end)
@@ -1398,30 +1519,28 @@ let swap_ensures_default =
     ((JC_<somenum>:
      (forall k_0:int.
       ((le_int((0), k_0)
-       and (lt_int(k_0, integer_of_int32(n))
-           and ((k_0 <> integer_of_int32(i_0))
-               and (k_0 <> integer_of_int32(j_0))))) ->
+       and (lt_int(k_0, integer_of_int32(n_1))
+           and ((k_0 <> integer_of_int32(i))
+               and (k_0 <> integer_of_int32(j))))) ->
        (integer_of_int32(select(intP_intM_t_4, shift(t, k_0))) = integer_of_int32(
                                                                  select(intP_intM_t_4@,
                                                                  shift(t,
                                                                  k_0)))))))
     and (JC_<somenum>:
-        swapped(t, integer_of_int32(i_0), integer_of_int32(j_0),
-        intP_intM_t_4, intP_intM_t_4@)))) }
+        swapped(t, integer_of_int32(i), integer_of_int32(j), intP_intM_t_4,
+        intP_intM_t_4@)))) }
 
 let swap_safety =
- fun (t : intP pointer) (i_0 : int32) (j_0 : int32) (n : int32) (intP_intM_t_4 : (intP, int32) memory ref) (intP_t_4_alloc_table : intP alloc_table) ->
+ fun (t : intP pointer) (i : int32) (j : int32) (n_1 : int32) (intP_intM_t_4 : (intP, int32) memory ref) (intP_t_4_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     le_int(offset_min(intP_t_4_alloc_table, t), integer_of_int32(i_0)))
+    ((JC_<somenum>: le_int(offset_min(intP_t_4_alloc_table, t), integer_of_int32(i)))
     and ((JC_<somenum>:
-         ge_int(offset_max(intP_t_4_alloc_table, t), integer_of_int32(i_0)))
+         ge_int(offset_max(intP_t_4_alloc_table, t), integer_of_int32(i)))
         and ((JC_<somenum>:
-             le_int(offset_min(intP_t_4_alloc_table, t),
-             integer_of_int32(j_0)))
+             le_int(offset_min(intP_t_4_alloc_table, t), integer_of_int32(j)))
             and (JC_<somenum>:
                 ge_int(offset_max(intP_t_4_alloc_table, t),
-                integer_of_int32(j_0))))))) }
+                integer_of_int32(j))))))) }
   (init:
   try
    begin
@@ -1434,14 +1553,14 @@ let swap_safety =
        (tmp := (C_2:
                (JC_<somenum>:
                ((((offset_acc_ intP_t_4_alloc_table) !intP_intM_t_4) t) 
-                (integer_of_int32 i_0))))) in void);
+                (integer_of_int32 i))))) in void);
       (let jessie_<somenum> =
       (let jessie_<somenum> =
       (C_5:
       (JC_<somenum>:
-      ((((offset_acc_ intP_t_4_alloc_table) !intP_intM_t_4) t) (integer_of_int32 j_0)))) in
+      ((((offset_acc_ intP_t_4_alloc_table) !intP_intM_t_4) t) (integer_of_int32 j)))) in
       (let jessie_<somenum> = t in
-      (let jessie_<somenum> = (integer_of_int32 i_0) in
+      (let jessie_<somenum> = (integer_of_int32 i) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (JC_<somenum>:
       (((((offset_upd_ intP_t_4_alloc_table) intP_intM_t_4) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
@@ -1449,7 +1568,7 @@ let swap_safety =
       (let jessie_<somenum> =
       (let jessie_<somenum> = !tmp in
       (let jessie_<somenum> = t in
-      (let jessie_<somenum> = (integer_of_int32 j_0) in
+      (let jessie_<somenum> = (integer_of_int32 j) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (JC_<somenum>:
       (((((offset_upd_ intP_t_4_alloc_table) intP_intM_t_4) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>)))))) in
@@ -1494,22 +1613,22 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po71.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "107" begin = "14" end = "73"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "115" begin = "14" end = "73"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po72.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "107" begin = "14" end = "73"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "115" begin = "14" end = "73"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po73.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "108" begin = "15" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "116" begin = "15" end = "50"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bubble_sort_po74.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "108" begin = "15" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "116" begin = "15" end = "50"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1565,22 +1684,22 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bubble_sort_po57.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "237" begin = "32" end = "168"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "245" begin = "32" end = "168"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bubble_sort_po58.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "237" begin = "32" end = "168"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "245" begin = "32" end = "168"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bubble_sort_po59.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "237" begin = "32" end = "168"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "245" begin = "32" end = "168"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bubble_sort_po60.why">
-      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "237" begin = "32" end = "168"/>
+      <location file = "PPCHOME/tests/jessie/bubble_sort.jessie/bubble_sort.jc" line = "245" begin = "32" end = "168"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2747,20 +2866,25 @@ type intP
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic integer_of_int32 : int32 -> int
 
-predicate swapped(a_0: intP pointer, i: int, j: int,
+predicate swapped(a_0: intP pointer, i_1: int, j_0: int,
   intP_intM_a_0_2_at_L2: (intP, int32) memory, intP_intM_a_0_2_at_L1: (intP,
   int32) memory) =
   ((integer_of_int32(select(intP_intM_a_0_2_at_L1, shift(a_0,
-   i))) = integer_of_int32(select(intP_intM_a_0_2_at_L2, shift(a_0, j)))) and
+   i_1))) = integer_of_int32(select(intP_intM_a_0_2_at_L2, shift(a_0,
+   j_0)))) and
    ((integer_of_int32(select(intP_intM_a_0_2_at_L1, shift(a_0,
-    j))) = integer_of_int32(select(intP_intM_a_0_2_at_L2, shift(a_0,
-    i)))) and
+    j_0))) = integer_of_int32(select(intP_intM_a_0_2_at_L2, shift(a_0,
+    i_1)))) and
     (forall k:int.
-      (((k <> i) and (k <> j)) ->
+      (((k <> i_1) and (k <> j_0)) ->
        (integer_of_int32(select(intP_intM_a_0_2_at_L1, shift(a_0,
        k))) = integer_of_int32(select(intP_intM_a_0_2_at_L2, shift(a_0, k))))))))
 
@@ -2799,13 +2923,13 @@ inductive Permut: intP pointer, int, int, (intP, int32) memory, (intP,
                      (forall a_5:intP pointer.
                        (forall index_start_3:int.
                          (forall end_start_3:int.
-                           (forall i_0_0:int.
-                             (forall j_0_0:int.
-                               (((index_start_3 <= i_0_0) and
-                                 ((i_0_0 <= end_start_3) and
-                                  ((index_start_3 <= j_0_0) and
-                                   ((j_0_0 <= end_start_3) and swapped(a_5,
-                                    i_0_0, j_0_0, intP_intM_a_1_3_at_L2,
+                           (forall i_2:int.
+                             (forall j_1:int.
+                               (((index_start_3 <= i_2) and
+                                 ((i_2 <= end_start_3) and
+                                  ((index_start_3 <= j_1) and
+                                   ((j_1 <= end_start_3) and swapped(a_5,
+                                    i_2, j_1, intP_intM_a_1_3_at_L2,
                                     intP_intM_a_1_3_at_L1))))) ->
                                 Permut(a_5, index_start_3, end_start_3,
                                 intP_intM_a_1_3_at_L2, intP_intM_a_1_3_at_L1)))))))))
@@ -2836,6 +2960,11 @@ logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
+
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
 
 logic int32_of_integer : int -> int32
 
@@ -2894,6 +3023,10 @@ predicate left_valid_struct_intP(p: intP pointer, a: int,
   intP_alloc_table: intP alloc_table) = (offset_min(intP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -2903,6 +3036,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 
 axiom pointer_addr_of_intP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -2916,6 +3055,10 @@ predicate right_valid_struct_charP(p: charP pointer, b: int,
 predicate right_valid_struct_intP(p: intP pointer, b: int,
   intP_alloc_table: intP alloc_table) = (offset_max(intP_alloc_table,
   p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
@@ -2939,6 +3082,11 @@ predicate strict_valid_root_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
@@ -2954,10 +3102,46 @@ predicate strict_valid_struct_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -2968,6 +3152,11 @@ predicate valid_root_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2983,6 +3172,11 @@ predicate valid_struct_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =

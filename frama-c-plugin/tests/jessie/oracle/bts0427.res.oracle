@@ -18,9 +18,17 @@ axiomatic Padding {
 
 type uint32 = 0..4294967295
 
+type uint8 = 0..255
+
 type int32 = -2147483648..2147483647
 
 type int8 = -128..127
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag intP = {
   int32 intM: 32;
@@ -41,19 +49,19 @@ type voidP = [voidP]
 
 tag stack_t = {
   intP[..] data_0: 32; 
-  uint32 size_1: 32; 
+  uint32 size_2: 32; 
   uint32 used: 32;
 }
 
 type stack_t = [stack_t]
 
 predicate stack_initialized{L}(stack_t[..] s) =
-\at((((0 < s.size_1) &&
+\at((((0 < s.size_2) &&
        ((\offset_min(s.data_0) <= 0) && (\offset_max(s.data_0) >= 0))) &&
-      ((\offset_min(s.data_0) <= 0) && (\offset_max(s.data_0) >= s.size_1))),L)
+      ((\offset_min(s.data_0) <= 0) && (\offset_max(s.data_0) >= s.size_2))),L)
 
 predicate stack_full{L}(stack_t[..] s_0) =
-\at((stack_initialized{L}(s_0) && (s_0.used == s_0.size_1)),L)
+\at((stack_initialized{L}(s_0) && (s_0.used == s_0.size_2)),L)
 
 predicate stack_empty{L}(stack_t[..] s_1) =
 \at((stack_initialized{L}(s_1) && (s_1.used == 0)),L)
@@ -68,7 +76,7 @@ behavior default:
 {  
    (var int32 tmp);
    
-   {  (if ((C_5 : stack_2.data_0) != null) then (if ((C_4 : stack_2.size_1) !=
+   {  (if ((C_5 : stack_2.data_0) != null) then (if ((C_4 : stack_2.size_2) !=
                                                       0) then (C_3 : (tmp = 1)) else 
                                                 (C_2 : (tmp = 0))) else 
       (C_1 : (tmp = 0)));
@@ -77,20 +85,20 @@ behavior default:
    }
 }
 
-unit stack_init(stack_t[..] stack, intP[..] data, uint32 size_0)
+unit stack_init(stack_t[..] stack, intP[..] data, uint32 size_1)
   requires (C_30 : ((C_31 : (\offset_min(stack) <= 0)) &&
                      (C_32 : (\offset_max(stack) >= 0))));
   requires (C_27 : ((C_28 : (\offset_min(data) <= 0)) &&
                      (C_29 : (\offset_max(data) >= 0))));
   requires (C_24 : ((C_25 : (\offset_min(data) <= 0)) &&
-                     (C_26 : (\offset_max(data) >= size_0))));
-  requires (C_23 : (0 < size_0));
+                     (C_26 : (\offset_max(data) >= size_1))));
+  requires (C_23 : (0 < size_1));
 behavior default:
   ensures (C_20 : ((C_21 : stack_initialized{Here}(\at(stack,Old))) &&
                     (C_22 : (\at(stack,Old).used == 0))));
 {  
    {  (C_15 : ((C_14 : stack.data_0) = data));
-      (C_17 : ((C_16 : stack.size_1) = size_0));
+      (C_17 : ((C_16 : stack.size_2) = size_1));
       (C_19 : ((C_18 : stack.used) = 0));
       
       (return ())
@@ -107,7 +115,7 @@ behavior default:
 {  
    (var int32 __retres);
    
-   {  (if ((C_46 : stack_1.used) < (C_45 : stack_1.size_1)) then 
+   {  (if ((C_46 : stack_1.used) < (C_45 : stack_1.size_2)) then 
       {  (C_38 : ((C_37 : stack_1.used) = (C_36 : ((C_35 : ((C_34 : stack_1.used) +
                                                              1)) :> uint32))));
          (C_43 : ((C_42 : (C_41 : ((C_40 : stack_1.data_0) +
@@ -168,6 +176,10 @@ type stack_t
 
 type uint32
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag:  -> charP tag_id
@@ -200,6 +212,11 @@ logic integer_of_uint32: uint32 -> int
 
 predicate eq_uint32(x:uint32, y:uint32) =
  eq_int(integer_of_uint32(x), integer_of_uint32(y))
+
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic int32_of_integer: int -> int32
 
@@ -261,6 +278,10 @@ predicate left_valid_struct_stack_t(p:stack_t pointer, a:int,
  stack_t_alloc_table:stack_t alloc_table) =
  (offset_min(stack_t_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -276,6 +297,12 @@ logic stack_t_of_pointer_address: unit pointer -> stack_t pointer
 axiom pointer_addr_of_stack_t_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(stack_t_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -293,15 +320,19 @@ predicate right_valid_struct_stack_t(p:stack_t pointer, b:int,
  stack_t_alloc_table:stack_t alloc_table) =
  (offset_max(stack_t_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_max(voidP_alloc_table, p) >= b)
 
 predicate stack_initialized(s_0:stack_t pointer,
  intP_data_0_10_alloc_table_at_L:intP alloc_table,
- stack_t_size_1_s_1_at_L:(stack_t, uint32) memory,
+ stack_t_size_2_s_1_at_L:(stack_t, uint32) memory,
  stack_t_data_0_s_1_at_L:(stack_t, intP pointer) memory) =
- (lt_int((0), integer_of_uint32(select(stack_t_size_1_s_1_at_L, s_0)))
+ (lt_int((0), integer_of_uint32(select(stack_t_size_2_s_1_at_L, s_0)))
  and (le_int(offset_min(intP_data_0_10_alloc_table_at_L,
              select(stack_t_data_0_s_1_at_L, s_0)),
       (0))
@@ -313,26 +344,26 @@ predicate stack_initialized(s_0:stack_t pointer,
               (0))
              and ge_int(offset_max(intP_data_0_10_alloc_table_at_L,
                         select(stack_t_data_0_s_1_at_L, s_0)),
-                 integer_of_uint32(select(stack_t_size_1_s_1_at_L, s_0)))))))
+                 integer_of_uint32(select(stack_t_size_2_s_1_at_L, s_0)))))))
 
 predicate stack_empty(s_1:stack_t pointer,
  intP_data_0_20_alloc_table_at_L:intP alloc_table,
  stack_t_used_s_1_3_at_L:(stack_t, uint32) memory,
- stack_t_size_1_s_1_3_at_L:(stack_t, uint32) memory,
+ stack_t_size_2_s_1_3_at_L:(stack_t, uint32) memory,
  stack_t_data_0_s_1_3_at_L:(stack_t, intP pointer) memory) =
  (stack_initialized(s_1, intP_data_0_20_alloc_table_at_L,
-  stack_t_size_1_s_1_3_at_L, stack_t_data_0_s_1_3_at_L)
+  stack_t_size_2_s_1_3_at_L, stack_t_data_0_s_1_3_at_L)
  and (integer_of_uint32(select(stack_t_used_s_1_3_at_L, s_1)) = (0)))
 
 predicate stack_full(s_0_0:stack_t pointer,
  intP_data_0_16_alloc_table_at_L:intP alloc_table,
  stack_t_used_s_0_2_at_L:(stack_t, uint32) memory,
- stack_t_size_1_s_0_2_at_L:(stack_t, uint32) memory,
+ stack_t_size_2_s_0_2_at_L:(stack_t, uint32) memory,
  stack_t_data_0_s_0_2_at_L:(stack_t, intP pointer) memory) =
  (stack_initialized(s_0_0, intP_data_0_16_alloc_table_at_L,
-  stack_t_size_1_s_0_2_at_L, stack_t_data_0_s_0_2_at_L)
+  stack_t_size_2_s_0_2_at_L, stack_t_data_0_s_0_2_at_L)
  and (integer_of_uint32(select(stack_t_used_s_0_2_at_L, s_0_0)) = integer_of_uint32(
-                                                                  select(stack_t_size_1_s_0_2_at_L,
+                                                                  select(stack_t_size_2_s_0_2_at_L,
                                                                   s_0_0))))
 
 logic stack_t_tag:  -> stack_t tag_id
@@ -365,6 +396,11 @@ predicate strict_valid_root_stack_t(p:stack_t pointer, a:int, b:int,
  ((offset_min(stack_t_alloc_table, p) = a)
  and (offset_max(stack_t_alloc_table, p) = b))
 
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
@@ -384,6 +420,11 @@ predicate strict_valid_struct_stack_t(p:stack_t pointer, a:int, b:int,
  stack_t_alloc_table:stack_t alloc_table) =
  ((offset_min(stack_t_alloc_table, p) = a)
  and (offset_max(stack_t_alloc_table, p) = b))
+
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -407,6 +448,38 @@ axiom uint32_range :
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
 
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -421,6 +494,11 @@ predicate valid_root_stack_t(p:stack_t pointer, a:int, b:int,
  stack_t_alloc_table:stack_t alloc_table) =
  ((offset_min(stack_t_alloc_table, p) <= a)
  and (offset_max(stack_t_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -441,6 +519,11 @@ predicate valid_struct_stack_t(p:stack_t pointer, a:int, b:int,
  stack_t_alloc_table:stack_t alloc_table) =
  ((offset_min(stack_t_alloc_table, p) <= a)
  and (offset_max(stack_t_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -546,6 +629,38 @@ parameter alloc_struct_stack_t_requires :
           and (alloc_fresh(stack_t_alloc_table@, result, n)
               and instanceof(stack_t_tag_table, result, stack_t_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -578,6 +693,8 @@ parameter any_int8 : unit -> { } int8 { true }
 
 parameter any_uint32 : unit -> { } uint32 { true }
 
+parameter any_uint8 : unit -> { } uint8 { true }
+
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -597,31 +714,34 @@ parameter safe_int8_of_integer_ :
 parameter safe_uint32_of_integer_ :
  x:int -> { } uint32 { eq_int(integer_of_uint32(result), x) }
 
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
 parameter stack_init :
  stack:stack_t pointer ->
   data:intP pointer ->
-   size_0:uint32 ->
+   size_1:uint32 ->
     stack_t_used_stack_5:(stack_t, uint32) memory ref ->
-     stack_t_size_1_stack_5:(stack_t, uint32) memory ref ->
+     stack_t_size_2_stack_5:(stack_t, uint32) memory ref ->
       stack_t_data_0_stack_5:(stack_t, intP pointer) memory ref ->
        stack_t_stack_5_alloc_table:stack_t alloc_table ->
         intP_data_6_alloc_table:intP alloc_table ->
          { } unit
-         reads stack_t_data_0_stack_5,stack_t_size_1_stack_5,stack_t_used_stack_5
-         writes stack_t_data_0_stack_5,stack_t_size_1_stack_5,stack_t_used_stack_5
+         reads stack_t_data_0_stack_5,stack_t_size_2_stack_5,stack_t_used_stack_5
+         writes stack_t_data_0_stack_5,stack_t_size_2_stack_5,stack_t_used_stack_5
          { (JC_<somenum>:
            ((JC_<somenum>:
             stack_initialized(stack, intP_data_6_alloc_table,
-            stack_t_size_1_stack_5, stack_t_data_0_stack_5))
+            stack_t_size_2_stack_5, stack_t_data_0_stack_5))
            and (JC_<somenum>:
                (integer_of_uint32(select(stack_t_used_stack_5, stack)) = (0))))) }
 
 parameter stack_init_requires :
  stack:stack_t pointer ->
   data:intP pointer ->
-   size_0:uint32 ->
+   size_1:uint32 ->
     stack_t_used_stack_5:(stack_t, uint32) memory ref ->
-     stack_t_size_1_stack_5:(stack_t, uint32) memory ref ->
+     stack_t_size_2_stack_5:(stack_t, uint32) memory ref ->
       stack_t_data_0_stack_5:(stack_t, intP pointer) memory ref ->
        stack_t_stack_5_alloc_table:stack_t alloc_table ->
         intP_data_6_alloc_table:intP alloc_table ->
@@ -641,16 +761,16 @@ parameter stack_init_requires :
                            and ((JC_<somenum>:
                                 ge_int(offset_max(intP_data_6_alloc_table,
                                        data),
-                                integer_of_uint32(size_0)))
+                                integer_of_uint32(size_1)))
                                and (JC_<somenum>:
-                                   lt_int((0), integer_of_uint32(size_0))))))))))}
+                                   lt_int((0), integer_of_uint32(size_1))))))))))}
          unit
-         reads stack_t_data_0_stack_5,stack_t_size_1_stack_5,stack_t_used_stack_5
-         writes stack_t_data_0_stack_5,stack_t_size_1_stack_5,stack_t_used_stack_5
+         reads stack_t_data_0_stack_5,stack_t_size_2_stack_5,stack_t_used_stack_5
+         writes stack_t_data_0_stack_5,stack_t_size_2_stack_5,stack_t_used_stack_5
          { (JC_<somenum>:
            ((JC_<somenum>:
             stack_initialized(stack, intP_data_6_alloc_table,
-            stack_t_size_1_stack_5, stack_t_data_0_stack_5))
+            stack_t_size_2_stack_5, stack_t_data_0_stack_5))
            and (JC_<somenum>:
                (integer_of_uint32(select(stack_t_used_stack_5, stack)) = (0))))) }
 
@@ -662,7 +782,7 @@ parameter stack_pop :
      stack_t_stack_0_8_alloc_table:stack_t alloc_table ->
       intP_data_0_15_alloc_table:intP alloc_table ->
        intP_item_9_alloc_table:intP alloc_table ->
-        stack_t_size_1_stack_0_8:(stack_t, uint32) memory ->
+        stack_t_size_2_stack_0_8:(stack_t, uint32) memory ->
          stack_t_data_0_stack_0_8:(stack_t, intP pointer) memory ->
           intP_intM_data_0_15:(intP, int32) memory ->
            { } int32 reads stack_t_used_stack_0_8
@@ -676,7 +796,7 @@ parameter stack_pop_requires :
      stack_t_stack_0_8_alloc_table:stack_t alloc_table ->
       intP_data_0_15_alloc_table:intP alloc_table ->
        intP_item_9_alloc_table:intP alloc_table ->
-        stack_t_size_1_stack_0_8:(stack_t, uint32) memory ->
+        stack_t_size_2_stack_0_8:(stack_t, uint32) memory ->
          stack_t_data_0_stack_0_8:(stack_t, intP pointer) memory ->
           intP_intM_data_0_15:(intP, int32) memory ->
            { (JC_<somenum>:
@@ -687,7 +807,7 @@ parameter stack_pop_requires :
                   (0)))
                  and ((JC_<somenum>:
                       stack_initialized(stack_0, intP_data_0_15_alloc_table,
-                      stack_t_size_1_stack_0_8, stack_t_data_0_stack_0_8))
+                      stack_t_size_2_stack_0_8, stack_t_data_0_stack_0_8))
                      and ((JC_<somenum>:
                           le_int(offset_min(intP_item_9_alloc_table, item),
                           (0)))
@@ -704,13 +824,13 @@ parameter stack_push :
     intP_intM_data_0_14:(intP, int32) memory ref ->
      stack_t_stack_1_7_alloc_table:stack_t alloc_table ->
       intP_data_0_14_alloc_table:intP alloc_table ->
-       stack_t_size_1_stack_1_7:(stack_t, uint32) memory ->
+       stack_t_size_2_stack_1_7:(stack_t, uint32) memory ->
         stack_t_data_0_stack_1_7:(stack_t, intP pointer) memory ->
          { } int32 reads stack_t_used_stack_1_7
          writes intP_intM_data_0_14,stack_t_used_stack_1_7
          { (JC_<somenum>:
            ((not stack_full(stack_1, intP_data_0_14_alloc_table,
-                 stack_t_used_stack_1_7, stack_t_size_1_stack_1_7,
+                 stack_t_used_stack_1_7, stack_t_size_2_stack_1_7,
                  stack_t_data_0_stack_1_7)) ->
             lt_int(integer_of_uint32(select(stack_t_used_stack_1_7@, stack_1)),
             integer_of_uint32(select(stack_t_used_stack_1_7, stack_1))))) }
@@ -722,7 +842,7 @@ parameter stack_push_requires :
     intP_intM_data_0_14:(intP, int32) memory ref ->
      stack_t_stack_1_7_alloc_table:stack_t alloc_table ->
       intP_data_0_14_alloc_table:intP alloc_table ->
-       stack_t_size_1_stack_1_7:(stack_t, uint32) memory ->
+       stack_t_size_2_stack_1_7:(stack_t, uint32) memory ->
         stack_t_data_0_stack_1_7:(stack_t, intP pointer) memory ->
          { (JC_<somenum>:
            ((JC_<somenum>:
@@ -732,12 +852,12 @@ parameter stack_push_requires :
                 (0)))
                and (JC_<somenum>:
                    stack_initialized(stack_1, intP_data_0_14_alloc_table,
-                   stack_t_size_1_stack_1_7, stack_t_data_0_stack_1_7)))))}
+                   stack_t_size_2_stack_1_7, stack_t_data_0_stack_1_7)))))}
          int32 reads stack_t_used_stack_1_7
          writes intP_intM_data_0_14,stack_t_used_stack_1_7
          { (JC_<somenum>:
            ((not stack_full(stack_1, intP_data_0_14_alloc_table,
-                 stack_t_used_stack_1_7, stack_t_size_1_stack_1_7,
+                 stack_t_used_stack_1_7, stack_t_size_2_stack_1_7,
                  stack_t_data_0_stack_1_7)) ->
             lt_int(integer_of_uint32(select(stack_t_used_stack_1_7@, stack_1)),
             integer_of_uint32(select(stack_t_used_stack_1_7, stack_1))))) }
@@ -746,7 +866,7 @@ parameter stack_valid :
  stack_2:stack_t pointer ->
   stack_t_stack_2_4_alloc_table:stack_t alloc_table ->
    intP_null_11_alloc_table:intP alloc_table ->
-    stack_t_size_1_stack_2_4:(stack_t, uint32) memory ->
+    stack_t_size_2_stack_2_4:(stack_t, uint32) memory ->
      stack_t_data_0_stack_2_4:(stack_t, intP pointer) memory ->
       { } int32
       { (JC_<somenum>:
@@ -754,14 +874,14 @@ parameter stack_valid :
         and ((JC_<somenum>: le_int(integer_of_int32(result), (1)))
             and (JC_<somenum>:
                 (stack_initialized(stack_2, intP_null_11_alloc_table,
-                 stack_t_size_1_stack_2_4, stack_t_data_0_stack_2_4) ->
+                 stack_t_size_2_stack_2_4, stack_t_data_0_stack_2_4) ->
                  (integer_of_int32(result) = (1))))))) }
 
 parameter stack_valid_requires :
  stack_2:stack_t pointer ->
   stack_t_stack_2_4_alloc_table:stack_t alloc_table ->
    intP_null_11_alloc_table:intP alloc_table ->
-    stack_t_size_1_stack_2_4:(stack_t, uint32) memory ->
+    stack_t_size_2_stack_2_4:(stack_t, uint32) memory ->
      stack_t_data_0_stack_2_4:(stack_t, intP pointer) memory ->
       { (JC_<somenum>:
         ((JC_<somenum>:
@@ -774,7 +894,7 @@ parameter stack_valid_requires :
         and ((JC_<somenum>: le_int(integer_of_int32(result), (1)))
             and (JC_<somenum>:
                 (stack_initialized(stack_2, intP_null_11_alloc_table,
-                 stack_t_size_1_stack_2_4, stack_t_data_0_stack_2_4) ->
+                 stack_t_size_2_stack_2_4, stack_t_data_0_stack_2_4) ->
                  (integer_of_int32(result) = (1))))))) }
 
 parameter uint32_of_integer_ :
@@ -782,8 +902,13 @@ parameter uint32_of_integer_ :
   { (le_int((0), x) and le_int(x, (4294967295)))} uint32
   { eq_int(integer_of_uint32(result), x) }
 
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
+
 let stack_init_ensures_default =
- fun (stack : stack_t pointer) (data : intP pointer) (size_0 : uint32) (stack_t_data_0_stack_5 : (stack_t, intP pointer) memory ref) (stack_t_size_1_stack_5 : (stack_t, uint32) memory ref) (stack_t_used_stack_5 : (stack_t, uint32) memory ref) (intP_data_6_alloc_table : intP alloc_table) (stack_t_stack_5_alloc_table : stack_t alloc_table) ->
+ fun (stack : stack_t pointer) (data : intP pointer) (size_1 : uint32) (stack_t_data_0_stack_5 : (stack_t, intP pointer) memory ref) (stack_t_size_2_stack_5 : (stack_t, uint32) memory ref) (stack_t_used_stack_5 : (stack_t, uint32) memory ref) (intP_data_6_alloc_table : intP alloc_table) (stack_t_stack_5_alloc_table : stack_t alloc_table) ->
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(offset_min(stack_t_stack_5_alloc_table, stack), (0)))
     and ((JC_<somenum>: ge_int(offset_max(stack_t_stack_5_alloc_table, stack), (0)))
@@ -794,8 +919,8 @@ let stack_init_ensures_default =
                      le_int(offset_min(intP_data_6_alloc_table, data), (0)))
                     and ((JC_<somenum>:
                          ge_int(offset_max(intP_data_6_alloc_table, data),
-                         integer_of_uint32(size_0)))
-                        and (JC_<somenum>: lt_int((0), integer_of_uint32(size_0)))))))))) }
+                         integer_of_uint32(size_1)))
+                        and (JC_<somenum>: lt_int((0), integer_of_uint32(size_1)))))))))) }
   (init:
   try
    (C_15:
@@ -805,9 +930,9 @@ let stack_init_ensures_default =
      (let jessie_<somenum> = data in
      (let jessie_<somenum> = stack in
      (((safe_upd_ stack_t_data_0_stack_5) jessie_<somenum>) jessie_<somenum>)));
-    (let jessie_<somenum> = size_0 in
+    (let jessie_<somenum> = size_1 in
     (let jessie_<somenum> = stack in
-    (((safe_upd_ stack_t_size_1_stack_5) jessie_<somenum>) jessie_<somenum>)));
+    (((safe_upd_ stack_t_size_2_stack_5) jessie_<somenum>) jessie_<somenum>)));
     (let jessie_<somenum> = (safe_uint32_of_integer_ (0)) in
     (let jessie_<somenum> = stack in
     (((safe_upd_ stack_t_used_stack_5) jessie_<somenum>) jessie_<somenum>)));
@@ -815,12 +940,12 @@ let stack_init_ensures_default =
   { (JC_<somenum>:
     ((JC_<somenum>:
      stack_initialized(stack, intP_data_6_alloc_table,
-     stack_t_size_1_stack_5, stack_t_data_0_stack_5))
+     stack_t_size_2_stack_5, stack_t_data_0_stack_5))
     and (JC_<somenum>:
         (integer_of_uint32(select(stack_t_used_stack_5, stack)) = (0))))) }
 
 let stack_init_safety =
- fun (stack : stack_t pointer) (data : intP pointer) (size_0 : uint32) (stack_t_data_0_stack_5 : (stack_t, intP pointer) memory ref) (stack_t_size_1_stack_5 : (stack_t, uint32) memory ref) (stack_t_used_stack_5 : (stack_t, uint32) memory ref) (intP_data_6_alloc_table : intP alloc_table) (stack_t_stack_5_alloc_table : stack_t alloc_table) ->
+ fun (stack : stack_t pointer) (data : intP pointer) (size_1 : uint32) (stack_t_data_0_stack_5 : (stack_t, intP pointer) memory ref) (stack_t_size_2_stack_5 : (stack_t, uint32) memory ref) (stack_t_used_stack_5 : (stack_t, uint32) memory ref) (intP_data_6_alloc_table : intP alloc_table) (stack_t_stack_5_alloc_table : stack_t alloc_table) ->
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(offset_min(stack_t_stack_5_alloc_table, stack), (0)))
     and ((JC_<somenum>: ge_int(offset_max(stack_t_stack_5_alloc_table, stack), (0)))
@@ -831,8 +956,8 @@ let stack_init_safety =
                      le_int(offset_min(intP_data_6_alloc_table, data), (0)))
                     and ((JC_<somenum>:
                          ge_int(offset_max(intP_data_6_alloc_table, data),
-                         integer_of_uint32(size_0)))
-                        and (JC_<somenum>: lt_int((0), integer_of_uint32(size_0)))))))))) }
+                         integer_of_uint32(size_1)))
+                        and (JC_<somenum>: lt_int((0), integer_of_uint32(size_1)))))))))) }
   (init:
   try
    (C_15:
@@ -843,10 +968,10 @@ let stack_init_safety =
      (let jessie_<somenum> = stack in
      (JC_<somenum>:
      ((((upd_ stack_t_stack_5_alloc_table) stack_t_data_0_stack_5) jessie_<somenum>) jessie_<somenum>))));
-    (let jessie_<somenum> = size_0 in
+    (let jessie_<somenum> = size_1 in
     (let jessie_<somenum> = stack in
     (JC_<somenum>:
-    ((((upd_ stack_t_stack_5_alloc_table) stack_t_size_1_stack_5) jessie_<somenum>) jessie_<somenum>))));
+    ((((upd_ stack_t_stack_5_alloc_table) stack_t_size_2_stack_5) jessie_<somenum>) jessie_<somenum>))));
     (let jessie_<somenum> = (safe_uint32_of_integer_ (0)) in
     (let jessie_<somenum> = stack in
     (JC_<somenum>:
@@ -854,14 +979,14 @@ let stack_init_safety =
     (raise Return); (raise Return) end))) with Return -> void end) { true }
 
 let stack_pop_ensures_default =
- fun (stack_0 : stack_t pointer) (item : intP pointer) (intP_intM_item_9 : (intP, int32) memory ref) (stack_t_used_stack_0_8 : (stack_t, uint32) memory ref) (intP_item_9_alloc_table : intP alloc_table) (intP_data_0_15_alloc_table : intP alloc_table) (stack_t_stack_0_8_alloc_table : stack_t alloc_table) (intP_intM_data_0_15 : (intP, int32) memory) (stack_t_data_0_stack_0_8 : (stack_t, intP pointer) memory) (stack_t_size_1_stack_0_8 : (stack_t, uint32) memory) ->
+ fun (stack_0 : stack_t pointer) (item : intP pointer) (intP_intM_item_9 : (intP, int32) memory ref) (stack_t_used_stack_0_8 : (stack_t, uint32) memory ref) (intP_item_9_alloc_table : intP alloc_table) (intP_data_0_15_alloc_table : intP alloc_table) (stack_t_stack_0_8_alloc_table : stack_t alloc_table) (intP_intM_data_0_15 : (intP, int32) memory) (stack_t_data_0_stack_0_8 : (stack_t, intP pointer) memory) (stack_t_size_2_stack_0_8 : (stack_t, uint32) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(offset_min(stack_t_stack_0_8_alloc_table, stack_0), (0)))
     and ((JC_<somenum>:
          ge_int(offset_max(stack_t_stack_0_8_alloc_table, stack_0), (0)))
         and ((JC_<somenum>:
              stack_initialized(stack_0, intP_data_0_15_alloc_table,
-             stack_t_size_1_stack_0_8, stack_t_data_0_stack_0_8))
+             stack_t_size_2_stack_0_8, stack_t_data_0_stack_0_8))
             and ((JC_<somenum>:
                  le_int(offset_min(intP_item_9_alloc_table, item), (0)))
                 and (JC_<somenum>:
@@ -908,14 +1033,14 @@ let stack_pop_ensures_default =
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let stack_pop_safety =
- fun (stack_0 : stack_t pointer) (item : intP pointer) (intP_intM_item_9 : (intP, int32) memory ref) (stack_t_used_stack_0_8 : (stack_t, uint32) memory ref) (intP_item_9_alloc_table : intP alloc_table) (intP_data_0_15_alloc_table : intP alloc_table) (stack_t_stack_0_8_alloc_table : stack_t alloc_table) (intP_intM_data_0_15 : (intP, int32) memory) (stack_t_data_0_stack_0_8 : (stack_t, intP pointer) memory) (stack_t_size_1_stack_0_8 : (stack_t, uint32) memory) ->
+ fun (stack_0 : stack_t pointer) (item : intP pointer) (intP_intM_item_9 : (intP, int32) memory ref) (stack_t_used_stack_0_8 : (stack_t, uint32) memory ref) (intP_item_9_alloc_table : intP alloc_table) (intP_data_0_15_alloc_table : intP alloc_table) (stack_t_stack_0_8_alloc_table : stack_t alloc_table) (intP_intM_data_0_15 : (intP, int32) memory) (stack_t_data_0_stack_0_8 : (stack_t, intP pointer) memory) (stack_t_size_2_stack_0_8 : (stack_t, uint32) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(offset_min(stack_t_stack_0_8_alloc_table, stack_0), (0)))
     and ((JC_<somenum>:
          ge_int(offset_max(stack_t_stack_0_8_alloc_table, stack_0), (0)))
         and ((JC_<somenum>:
              stack_initialized(stack_0, intP_data_0_15_alloc_table,
-             stack_t_size_1_stack_0_8, stack_t_data_0_stack_0_8))
+             stack_t_size_2_stack_0_8, stack_t_data_0_stack_0_8))
             and ((JC_<somenum>:
                  le_int(offset_min(intP_item_9_alloc_table, item), (0)))
                 and (JC_<somenum>:
@@ -970,14 +1095,14 @@ let stack_pop_safety =
     absurd  end with Return -> !return end)) { true }
 
 let stack_push_ensures_default =
- fun (stack_1 : stack_t pointer) (item_0 : int32) (intP_intM_data_0_14 : (intP, int32) memory ref) (stack_t_used_stack_1_7 : (stack_t, uint32) memory ref) (intP_data_0_14_alloc_table : intP alloc_table) (stack_t_stack_1_7_alloc_table : stack_t alloc_table) (stack_t_data_0_stack_1_7 : (stack_t, intP pointer) memory) (stack_t_size_1_stack_1_7 : (stack_t, uint32) memory) ->
+ fun (stack_1 : stack_t pointer) (item_0 : int32) (intP_intM_data_0_14 : (intP, int32) memory ref) (stack_t_used_stack_1_7 : (stack_t, uint32) memory ref) (intP_data_0_14_alloc_table : intP alloc_table) (stack_t_stack_1_7_alloc_table : stack_t alloc_table) (stack_t_data_0_stack_1_7 : (stack_t, intP pointer) memory) (stack_t_size_2_stack_1_7 : (stack_t, uint32) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(offset_min(stack_t_stack_1_7_alloc_table, stack_1), (0)))
     and ((JC_<somenum>:
          ge_int(offset_max(stack_t_stack_1_7_alloc_table, stack_1), (0)))
         and (JC_<somenum>:
             stack_initialized(stack_1, intP_data_0_14_alloc_table,
-            stack_t_size_1_stack_1_7, stack_t_data_0_stack_1_7))))) }
+            stack_t_size_2_stack_1_7, stack_t_data_0_stack_1_7))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -988,7 +1113,7 @@ let stack_push_ensures_default =
         (if ((lt_int_ (integer_of_uint32 (C_46:
                                          ((safe_acc_ !stack_t_used_stack_1_7) stack_1)))) 
              (integer_of_uint32 (C_45:
-                                ((safe_acc_ stack_t_size_1_stack_1_7) stack_1))))
+                                ((safe_acc_ stack_t_size_2_stack_1_7) stack_1))))
         then
          (C_38:
          (C_43:
@@ -1023,20 +1148,20 @@ let stack_push_ensures_default =
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
     ((not stack_full(stack_1, intP_data_0_14_alloc_table,
-          stack_t_used_stack_1_7, stack_t_size_1_stack_1_7,
+          stack_t_used_stack_1_7, stack_t_size_2_stack_1_7,
           stack_t_data_0_stack_1_7)) ->
      lt_int(integer_of_uint32(select(stack_t_used_stack_1_7@, stack_1)),
      integer_of_uint32(select(stack_t_used_stack_1_7, stack_1))))) }
 
 let stack_push_safety =
- fun (stack_1 : stack_t pointer) (item_0 : int32) (intP_intM_data_0_14 : (intP, int32) memory ref) (stack_t_used_stack_1_7 : (stack_t, uint32) memory ref) (intP_data_0_14_alloc_table : intP alloc_table) (stack_t_stack_1_7_alloc_table : stack_t alloc_table) (stack_t_data_0_stack_1_7 : (stack_t, intP pointer) memory) (stack_t_size_1_stack_1_7 : (stack_t, uint32) memory) ->
+ fun (stack_1 : stack_t pointer) (item_0 : int32) (intP_intM_data_0_14 : (intP, int32) memory ref) (stack_t_used_stack_1_7 : (stack_t, uint32) memory ref) (intP_data_0_14_alloc_table : intP alloc_table) (stack_t_stack_1_7_alloc_table : stack_t alloc_table) (stack_t_data_0_stack_1_7 : (stack_t, intP pointer) memory) (stack_t_size_2_stack_1_7 : (stack_t, uint32) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(offset_min(stack_t_stack_1_7_alloc_table, stack_1), (0)))
     and ((JC_<somenum>:
          ge_int(offset_max(stack_t_stack_1_7_alloc_table, stack_1), (0)))
         and (JC_<somenum>:
             stack_initialized(stack_1, intP_data_0_14_alloc_table,
-            stack_t_size_1_stack_1_7, stack_t_data_0_stack_1_7))))) }
+            stack_t_size_2_stack_1_7, stack_t_data_0_stack_1_7))))) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -1049,7 +1174,7 @@ let stack_push_safety =
                                          (((acc_ stack_t_stack_1_7_alloc_table) !stack_t_used_stack_1_7) stack_1))))) 
              (integer_of_uint32 (C_45:
                                 (JC_<somenum>:
-                                (((acc_ stack_t_stack_1_7_alloc_table) stack_t_size_1_stack_1_7) stack_1)))))
+                                (((acc_ stack_t_stack_1_7_alloc_table) stack_t_size_2_stack_1_7) stack_1)))))
         then
          (C_38:
          (C_43:
@@ -1091,7 +1216,7 @@ let stack_push_safety =
     absurd  end with Return -> !return end)) { true }
 
 let stack_valid_ensures_default =
- fun (stack_2 : stack_t pointer) (intP_null_11_alloc_table : intP alloc_table) (stack_t_stack_2_4_alloc_table : stack_t alloc_table) (stack_t_data_0_stack_2_4 : (stack_t, intP pointer) memory) (stack_t_size_1_stack_2_4 : (stack_t, uint32) memory) ->
+ fun (stack_2 : stack_t pointer) (intP_null_11_alloc_table : intP alloc_table) (stack_t_stack_2_4_alloc_table : stack_t alloc_table) (stack_t_data_0_stack_2_4 : (stack_t, intP pointer) memory) (stack_t_size_2_stack_2_4 : (stack_t, uint32) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(offset_min(stack_t_stack_2_4_alloc_table, stack_2), (0)))
     and (JC_<somenum>:
@@ -1107,7 +1232,7 @@ let stack_valid_ensures_default =
                               ((safe_acc_ stack_t_data_0_stack_2_4) stack_2))) null)
        then
         (if ((neq_int_ (integer_of_uint32 (C_4:
-                                          ((safe_acc_ stack_t_size_1_stack_2_4) stack_2)))) (0))
+                                          ((safe_acc_ stack_t_size_2_stack_2_4) stack_2)))) (0))
         then (C_3: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
         else (C_2: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
        else (C_1: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
@@ -1118,11 +1243,11 @@ let stack_valid_ensures_default =
     and ((JC_<somenum>: le_int(integer_of_int32(result), (1)))
         and (JC_<somenum>:
             (stack_initialized(stack_2, intP_null_11_alloc_table,
-             stack_t_size_1_stack_2_4, stack_t_data_0_stack_2_4) ->
+             stack_t_size_2_stack_2_4, stack_t_data_0_stack_2_4) ->
              (integer_of_int32(result) = (1))))))) }
 
 let stack_valid_safety =
- fun (stack_2 : stack_t pointer) (intP_null_11_alloc_table : intP alloc_table) (stack_t_stack_2_4_alloc_table : stack_t alloc_table) (stack_t_data_0_stack_2_4 : (stack_t, intP pointer) memory) (stack_t_size_1_stack_2_4 : (stack_t, uint32) memory) ->
+ fun (stack_2 : stack_t pointer) (intP_null_11_alloc_table : intP alloc_table) (stack_t_stack_2_4_alloc_table : stack_t alloc_table) (stack_t_data_0_stack_2_4 : (stack_t, intP pointer) memory) (stack_t_size_2_stack_2_4 : (stack_t, uint32) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: le_int(offset_min(stack_t_stack_2_4_alloc_table, stack_2), (0)))
     and (JC_<somenum>:
@@ -1140,7 +1265,7 @@ let stack_valid_safety =
        then
         (if ((neq_int_ (integer_of_uint32 (C_4:
                                           (JC_<somenum>:
-                                          (((acc_ stack_t_stack_2_4_alloc_table) stack_t_size_1_stack_2_4) stack_2))))) (0))
+                                          (((acc_ stack_t_stack_2_4_alloc_table) stack_t_size_2_stack_2_4) stack_2))))) (0))
         then (C_3: begin   (tmp := (safe_int32_of_integer_ (1))); !tmp end)
         else (C_2: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end))
        else (C_1: begin   (tmp := (safe_int32_of_integer_ (0))); !tmp end)) in
@@ -1179,7 +1304,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po47.why">
-      <location file = "why/bts0427.why" line = "981" begin = "12" end = "170"/>
+      <location file = "why/bts0427.why" line = "1098" begin = "12" end = "170"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1245,12 +1370,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0427_po34.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "105" begin = "18" end = "160"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "113" begin = "18" end = "160"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po35.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "105" begin = "18" end = "160"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "113" begin = "18" end = "160"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1275,12 +1400,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po40.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "107" begin = "18" end = "135"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "115" begin = "18" end = "135"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po41.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "107" begin = "18" end = "135"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "115" begin = "18" end = "135"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1330,12 +1455,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po17.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "134" begin = "18" end = "168"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "142" begin = "18" end = "168"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po18.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "134" begin = "18" end = "168"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "142" begin = "18" end = "168"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1360,12 +1485,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0427_po23.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "136" begin = "18" end = "160"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "144" begin = "18" end = "160"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po24.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "136" begin = "18" end = "160"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "144" begin = "18" end = "160"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1385,32 +1510,32 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0427_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "86" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "94" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "86" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "94" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "87" begin = "15" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "95" begin = "15" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "87" begin = "15" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "95" begin = "15" end = "45"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po7.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "88" begin = "15" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "96" begin = "15" end = "38"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0427_po8.why">
-      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "88" begin = "15" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/bts0427.jessie/bts0427.jc" line = "96" begin = "15" end = "38"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2369,6 +2494,10 @@ type stack_t
 
 type uint32
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag : charP tag_id
@@ -2402,6 +2531,11 @@ logic integer_of_uint32 : uint32 -> int
 
 predicate eq_uint32(x: uint32, y: uint32) =
   (integer_of_uint32(x) = integer_of_uint32(y))
+
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
 
 logic int32_of_integer : int -> int32
 
@@ -2464,6 +2598,10 @@ predicate left_valid_struct_stack_t(p: stack_t pointer, a: int,
   stack_t_alloc_table: stack_t alloc_table) =
   (offset_min(stack_t_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -2479,6 +2617,12 @@ logic stack_t_of_pointer_address : unit pointer -> stack_t pointer
 axiom pointer_addr_of_stack_t_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(stack_t_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -2497,15 +2641,19 @@ predicate right_valid_struct_stack_t(p: stack_t pointer, b: int,
   stack_t_alloc_table: stack_t alloc_table) =
   (offset_max(stack_t_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
 
 predicate stack_initialized(s_0: stack_t pointer,
   intP_data_0_10_alloc_table_at_L: intP alloc_table,
-  stack_t_size_1_s_1_at_L: (stack_t, uint32) memory,
+  stack_t_size_2_s_1_at_L: (stack_t, uint32) memory,
   stack_t_data_0_s_1_at_L: (stack_t, intP pointer) memory) =
-  ((0 < integer_of_uint32(select(stack_t_size_1_s_1_at_L, s_0))) and
+  ((0 < integer_of_uint32(select(stack_t_size_2_s_1_at_L, s_0))) and
    ((offset_min(intP_data_0_10_alloc_table_at_L,
     select(stack_t_data_0_s_1_at_L, s_0)) <= 0) and
     ((offset_max(intP_data_0_10_alloc_table_at_L,
@@ -2514,26 +2662,26 @@ predicate stack_initialized(s_0: stack_t pointer,
       select(stack_t_data_0_s_1_at_L, s_0)) <= 0) and
       (offset_max(intP_data_0_10_alloc_table_at_L,
       select(stack_t_data_0_s_1_at_L,
-      s_0)) >= integer_of_uint32(select(stack_t_size_1_s_1_at_L, s_0)))))))
+      s_0)) >= integer_of_uint32(select(stack_t_size_2_s_1_at_L, s_0)))))))
 
 predicate stack_empty(s_1: stack_t pointer,
   intP_data_0_20_alloc_table_at_L: intP alloc_table,
   stack_t_used_s_1_3_at_L: (stack_t, uint32) memory,
-  stack_t_size_1_s_1_3_at_L: (stack_t, uint32) memory,
+  stack_t_size_2_s_1_3_at_L: (stack_t, uint32) memory,
   stack_t_data_0_s_1_3_at_L: (stack_t, intP pointer) memory) =
   (stack_initialized(s_1, intP_data_0_20_alloc_table_at_L,
-   stack_t_size_1_s_1_3_at_L, stack_t_data_0_s_1_3_at_L) and
+   stack_t_size_2_s_1_3_at_L, stack_t_data_0_s_1_3_at_L) and
    (integer_of_uint32(select(stack_t_used_s_1_3_at_L, s_1)) = 0))
 
 predicate stack_full(s_0_0: stack_t pointer,
   intP_data_0_16_alloc_table_at_L: intP alloc_table,
   stack_t_used_s_0_2_at_L: (stack_t, uint32) memory,
-  stack_t_size_1_s_0_2_at_L: (stack_t, uint32) memory,
+  stack_t_size_2_s_0_2_at_L: (stack_t, uint32) memory,
   stack_t_data_0_s_0_2_at_L: (stack_t, intP pointer) memory) =
   (stack_initialized(s_0_0, intP_data_0_16_alloc_table_at_L,
-   stack_t_size_1_s_0_2_at_L, stack_t_data_0_s_0_2_at_L) and
+   stack_t_size_2_s_0_2_at_L, stack_t_data_0_s_0_2_at_L) and
    (integer_of_uint32(select(stack_t_used_s_0_2_at_L,
-   s_0_0)) = integer_of_uint32(select(stack_t_size_1_s_0_2_at_L, s_0_0))))
+   s_0_0)) = integer_of_uint32(select(stack_t_size_2_s_0_2_at_L, s_0_0))))
 
 logic stack_t_tag : stack_t tag_id
 
@@ -2565,6 +2713,11 @@ predicate strict_valid_root_stack_t(p: stack_t pointer, a: int, b: int,
   ((offset_min(stack_t_alloc_table, p) = a) and
    (offset_max(stack_t_alloc_table, p) = b))
 
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
@@ -2584,6 +2737,11 @@ predicate strict_valid_struct_stack_t(p: stack_t pointer, a: int, b: int,
   stack_t_alloc_table: stack_t alloc_table) =
   ((offset_min(stack_t_alloc_table, p) = a) and
    (offset_max(stack_t_alloc_table, p) = b))
+
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2606,6 +2764,37 @@ axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
 
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
@@ -2620,6 +2809,11 @@ predicate valid_root_stack_t(p: stack_t pointer, a: int, b: int,
   stack_t_alloc_table: stack_t alloc_table) =
   ((offset_min(stack_t_alloc_table, p) <= a) and
    (offset_max(stack_t_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2640,6 +2834,11 @@ predicate valid_struct_stack_t(p: stack_t pointer, a: int, b: int,
   stack_t_alloc_table: stack_t alloc_table) =
   ((offset_min(stack_t_alloc_table, p) <= a) and
    (offset_max(stack_t_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =

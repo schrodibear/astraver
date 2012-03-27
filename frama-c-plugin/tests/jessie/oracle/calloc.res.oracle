@@ -20,6 +20,8 @@ type uint16 = 0..65535
 
 type uint32 = 0..4294967295
 
+type uint8 = 0..255
+
 type int8 = -128..127
 
 type int32 = -2147483648..2147483647
@@ -29,6 +31,12 @@ tag unsigned_shortP = {
 }
 
 type unsigned_shortP = [unsigned_shortP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -58,9 +66,9 @@ axiomatic MemCmp {
     (\forall charP[..] s2_1;
       (\forall integer n_1;
         ((memcmp{L}(s1_1, s2_1, n_1) == 0) <==>
-          (\forall integer i;
-            (((0 <= i) && (i < n_1)) ==>
-              ((s1_1 + i).charM == (s2_1 + i).charM)))))))
+          (\forall integer i_1;
+            (((0 <= i_1) && (i_1 < n_1)) ==>
+              ((s1_1 + i_1).charM == (s2_1 + i_1).charM)))))))
   
 }
 
@@ -74,8 +82,8 @@ axiomatic MemChr {
     (\forall integer c_0;
       (\forall integer n_3;
         ((memchr{L}(s_0, c_0, n_3) == true) <==>
-          (\exists int32 i_0;
-            (((0 <= i_0) && (i_0 < n_3)) && ((s_0 + i_0).charM == c_0)))))))
+          (\exists int32 i_2;
+            (((0 <= i_2) && (i_2 < n_3)) && ((s_0 + i_2).charM == c_0)))))))
   
 }
 
@@ -89,8 +97,8 @@ axiomatic MemSet {
     (\forall integer c_2;
       (\forall integer n_5;
         ((memset{L}(s_2, c_2, n_5) == true) <==>
-          (\forall integer i_1;
-            (((0 <= i_1) && (i_1 < n_5)) ==> ((s_2 + i_1).charM == c_2)))))))
+          (\forall integer i_3;
+            (((0 <= i_3) && (i_3 < n_5)) ==> ((s_2 + i_3).charM == c_2)))))))
   
 }
 
@@ -100,17 +108,17 @@ axiomatic StrLen {
    
   axiom strlen_pos_or_null{L} :
   (\forall charP[..] s_4;
-    (\forall integer i_2;
-      (((((0 <= i_2) && (i_2 <= 2147483647)) &&
-          (\forall integer j;
-            (((0 <= j) && (j < i_2)) ==> ((s_4 + j).charM != 0)))) &&
-         ((s_4 + i_2).charM == 0)) ==>
-        (strlen{L}(s_4) == i_2))))
+    (\forall integer i_4;
+      (((((0 <= i_4) && (i_4 <= 2147483647)) &&
+          (\forall integer j_0;
+            (((0 <= j_0) && (j_0 < i_4)) ==> ((s_4 + j_0).charM != 0)))) &&
+         ((s_4 + i_4).charM == 0)) ==>
+        (strlen{L}(s_4) == i_4))))
    
   axiom strlen_neg{L} :
   (\forall charP[..] s_5;
-    ((\forall integer i_3;
-       (((0 <= i_3) && (i_3 <= 2147483647)) ==> ((s_5 + i_3).charM != 0))) ==>
+    ((\forall integer i_5;
+       (((0 <= i_5) && (i_5 <= 2147483647)) ==> ((s_5 + i_5).charM != 0))) ==>
       (strlen{L}(s_5) < 0)))
    
   axiom strlen_range{L} :
@@ -119,8 +127,8 @@ axiomatic StrLen {
    
   axiom strlen_before_null{L} :
   (\forall charP[..] s_7;
-    (\forall integer i_4;
-      (((0 <= i_4) && (i_4 < strlen{L}(s_7))) ==> ((s_7 + i_4).charM != 0))))
+    (\forall integer i_6;
+      (((0 <= i_6) && (i_6 < strlen{L}(s_7))) ==> ((s_7 + i_6).charM != 0))))
    
   axiom strlen_at_null{L} :
   (\forall charP[..] s_8;
@@ -128,43 +136,43 @@ axiomatic StrLen {
    
   axiom strlen_not_zero{L} :
   (\forall charP[..] s_9;
-    (\forall integer i_5;
-      ((((0 <= i_5) && (i_5 <= strlen{L}(s_9))) && ((s_9 + i_5).charM != 0)) ==>
-        (i_5 < strlen{L}(s_9)))))
+    (\forall integer i_7;
+      ((((0 <= i_7) && (i_7 <= strlen{L}(s_9))) && ((s_9 + i_7).charM != 0)) ==>
+        (i_7 < strlen{L}(s_9)))))
    
   axiom strlen_zero{L} :
   (\forall charP[..] s_10;
-    (\forall integer i_6;
-      ((((0 <= i_6) && (i_6 <= strlen{L}(s_10))) &&
-         ((s_10 + i_6).charM == 0)) ==>
-        (i_6 == strlen{L}(s_10)))))
+    (\forall integer i_8;
+      ((((0 <= i_8) && (i_8 <= strlen{L}(s_10))) &&
+         ((s_10 + i_8).charM == 0)) ==>
+        (i_8 == strlen{L}(s_10)))))
    
   axiom strlen_sup{L} :
   (\forall charP[..] s_11;
-    (\forall integer i_7;
-      (((0 <= i_7) && ((s_11 + i_7).charM == 0)) ==>
-        ((0 <= strlen{L}(s_11)) && (strlen{L}(s_11) <= i_7)))))
+    (\forall integer i_9;
+      (((0 <= i_9) && ((s_11 + i_9).charM == 0)) ==>
+        ((0 <= strlen{L}(s_11)) && (strlen{L}(s_11) <= i_9)))))
    
   axiom strlen_shift{L} :
   (\forall charP[..] s_12;
-    (\forall integer i_8;
-      (((0 <= i_8) && (i_8 <= strlen{L}(s_12))) ==>
-        (strlen{L}((s_12 + i_8)) == (strlen{L}(s_12) - i_8)))))
+    (\forall integer i_10;
+      (((0 <= i_10) && (i_10 <= strlen{L}(s_12))) ==>
+        (strlen{L}((s_12 + i_10)) == (strlen{L}(s_12) - i_10)))))
    
   axiom strlen_create{L} :
   (\forall charP[..] s_13;
-    (\forall integer i_9;
-      ((((0 <= i_9) && (i_9 <= 2147483647)) && ((s_13 + i_9).charM == 0)) ==>
-        ((0 <= strlen{L}(s_13)) && (strlen{L}(s_13) <= i_9)))))
+    (\forall integer i_11;
+      ((((0 <= i_11) && (i_11 <= 2147483647)) && ((s_13 + i_11).charM == 0)) ==>
+        ((0 <= strlen{L}(s_13)) && (strlen{L}(s_13) <= i_11)))))
    
   axiom strlen_create_shift{L} :
   (\forall charP[..] s_14;
-    (\forall integer i_10;
+    (\forall integer i_12;
       (\forall integer k;
-        ((((0 <= k) && ((k <= i_10) && (i_10 <= 2147483647))) &&
-           ((s_14 + i_10).charM == 0)) ==>
+        ((((0 <= k) && ((k <= i_12) && (i_12 <= 2147483647))) &&
+           ((s_14 + i_12).charM == 0)) ==>
           ((0 <= strlen{L}((s_14 + k))) &&
-            (strlen{L}((s_14 + k)) <= (i_10 - k)))))))
+            (strlen{L}((s_14 + k)) <= (i_12 - k)))))))
    
   axiom memcmp_strlen_left{L} :
   (\forall charP[..] s1_2;
@@ -219,9 +227,9 @@ axiomatic StrCmp {
     (\forall charP[..] s2_8;
       ((strcmp{L}(s1_8, s2_8) == 0) <==>
         ((strlen{L}(s1_8) == strlen{L}(s2_8)) &&
-          (\forall integer i_11;
-            (((0 <= i_11) && (i_11 <= strlen{L}(s1_8))) ==>
-              ((s1_8 + i_11).charM == (s2_8 + i_11).charM)))))))
+          (\forall integer i_13;
+            (((0 <= i_13) && (i_13 <= strlen{L}(s1_8))) ==>
+              ((s1_8 + i_13).charM == (s2_8 + i_13).charM)))))))
   
 }
 
@@ -236,9 +244,9 @@ axiomatic StrNCmp {
       (\forall integer n_11;
         ((strncmp{L}(s1_10, s2_10, n_11) == 0) <==>
           (((strlen{L}(s1_10) < n_11) && (strcmp{L}(s1_10, s2_10) == 0)) ||
-            (\forall integer i_12;
-              (((0 <= i_12) && (i_12 < n_11)) ==>
-                ((s1_10 + i_12).charM == (s2_10 + i_12).charM))))))))
+            (\forall integer i_14;
+              (((0 <= i_14) && (i_14 < n_11)) ==>
+                ((s1_10 + i_14).charM == (s2_10 + i_14).charM))))))))
   
 }
 
@@ -251,9 +259,9 @@ axiomatic StrChr {
   (\forall charP[..] s_16;
     (\forall integer c_4;
       ((strchr{L}(s_16, c_4) == true) <==>
-        (\exists integer i_13;
-          (((0 <= i_13) && (i_13 <= strlen{L}(s_16))) &&
-            ((s_16 + i_13).charM == c_4))))))
+        (\exists integer i_15;
+          (((0 <= i_15) && (i_15 <= strlen{L}(s_16))) &&
+            ((s_16 + i_15).charM == c_4))))))
   
 }
 
@@ -264,25 +272,25 @@ axiomatic WcsLen {
    
   axiom wcslen_pos_or_null{L} :
   (\forall unsigned_shortP[..] s_18;
-    (\forall integer i_14;
-      ((((0 <= i_14) &&
-          (\forall integer j_0;
-            (((0 <= j_0) && (j_0 < i_14)) ==>
-              ((s_18 + j_0).unsigned_shortM != 0)))) &&
-         ((s_18 + i_14).unsigned_shortM == 0)) ==>
-        (wcslen{L}(s_18) == i_14))))
+    (\forall integer i_16;
+      ((((0 <= i_16) &&
+          (\forall integer j_1;
+            (((0 <= j_1) && (j_1 < i_16)) ==>
+              ((s_18 + j_1).unsigned_shortM != 0)))) &&
+         ((s_18 + i_16).unsigned_shortM == 0)) ==>
+        (wcslen{L}(s_18) == i_16))))
    
   axiom wcslen_neg{L} :
   (\forall unsigned_shortP[..] s_19;
-    ((\forall integer i_15;
-       ((0 <= i_15) ==> ((s_19 + i_15).unsigned_shortM != 0))) ==>
+    ((\forall integer i_17;
+       ((0 <= i_17) ==> ((s_19 + i_17).unsigned_shortM != 0))) ==>
       (wcslen{L}(s_19) < 0)))
    
   axiom wcslen_before_null{L} :
   (\forall unsigned_shortP[..] s_20;
-    (\forall int32 i_16;
-      (((0 <= i_16) && (i_16 < wcslen{L}(s_20))) ==>
-        ((s_20 + i_16).unsigned_shortM != 0))))
+    (\forall int32 i_18;
+      (((0 <= i_18) && (i_18 < wcslen{L}(s_20))) ==>
+        ((s_20 + i_18).unsigned_shortM != 0))))
    
   axiom wcslen_at_null{L} :
   (\forall unsigned_shortP[..] s_21;
@@ -291,44 +299,44 @@ axiomatic WcsLen {
    
   axiom wcslen_not_zero{L} :
   (\forall unsigned_shortP[..] s_22;
-    (\forall int32 i_17;
-      ((((0 <= i_17) && (i_17 <= wcslen{L}(s_22))) &&
-         ((s_22 + i_17).unsigned_shortM != 0)) ==>
-        (i_17 < wcslen{L}(s_22)))))
+    (\forall int32 i_19;
+      ((((0 <= i_19) && (i_19 <= wcslen{L}(s_22))) &&
+         ((s_22 + i_19).unsigned_shortM != 0)) ==>
+        (i_19 < wcslen{L}(s_22)))))
    
   axiom wcslen_zero{L} :
   (\forall unsigned_shortP[..] s_23;
-    (\forall int32 i_18;
-      ((((0 <= i_18) && (i_18 <= wcslen{L}(s_23))) &&
-         ((s_23 + i_18).unsigned_shortM == 0)) ==>
-        (i_18 == wcslen{L}(s_23)))))
+    (\forall int32 i_20;
+      ((((0 <= i_20) && (i_20 <= wcslen{L}(s_23))) &&
+         ((s_23 + i_20).unsigned_shortM == 0)) ==>
+        (i_20 == wcslen{L}(s_23)))))
    
   axiom wcslen_sup{L} :
   (\forall unsigned_shortP[..] s_24;
-    (\forall int32 i_19;
-      (((0 <= i_19) && ((s_24 + i_19).unsigned_shortM == 0)) ==>
-        ((0 <= wcslen{L}(s_24)) && (wcslen{L}(s_24) <= i_19)))))
+    (\forall int32 i_21;
+      (((0 <= i_21) && ((s_24 + i_21).unsigned_shortM == 0)) ==>
+        ((0 <= wcslen{L}(s_24)) && (wcslen{L}(s_24) <= i_21)))))
    
   axiom wcslen_shift{L} :
   (\forall unsigned_shortP[..] s_25;
-    (\forall int32 i_20;
-      (((0 <= i_20) && (i_20 <= wcslen{L}(s_25))) ==>
-        (wcslen{L}((s_25 + i_20)) == (wcslen{L}(s_25) - i_20)))))
+    (\forall int32 i_22;
+      (((0 <= i_22) && (i_22 <= wcslen{L}(s_25))) ==>
+        (wcslen{L}((s_25 + i_22)) == (wcslen{L}(s_25) - i_22)))))
    
   axiom wcslen_create{L} :
   (\forall unsigned_shortP[..] s_26;
-    (\forall int32 i_21;
-      (((0 <= i_21) && ((s_26 + i_21).unsigned_shortM == 0)) ==>
-        ((0 <= wcslen{L}(s_26)) && (wcslen{L}(s_26) <= i_21)))))
+    (\forall int32 i_23;
+      (((0 <= i_23) && ((s_26 + i_23).unsigned_shortM == 0)) ==>
+        ((0 <= wcslen{L}(s_26)) && (wcslen{L}(s_26) <= i_23)))))
    
   axiom wcslen_create_shift{L} :
   (\forall unsigned_shortP[..] s_27;
-    (\forall int32 i_22;
+    (\forall int32 i_24;
       (\forall int32 k_2;
-        ((((0 <= k_2) && (k_2 <= i_22)) &&
-           ((s_27 + i_22).unsigned_shortM == 0)) ==>
+        ((((0 <= k_2) && (k_2 <= i_24)) &&
+           ((s_27 + i_24).unsigned_shortM == 0)) ==>
           ((0 <= wcslen{L}((s_27 + k_2))) &&
-            (wcslen{L}((s_27 + k_2)) <= (i_22 - k_2)))))))
+            (wcslen{L}((s_27 + k_2)) <= (i_24 - k_2)))))))
   
 }
 
@@ -343,10 +351,10 @@ axiomatic WcsCmp {
     (\forall unsigned_shortP[..] s2_12;
       ((wcscmp{L}(s1_12, s2_12) == 0) <==>
         ((wcslen{L}(s1_12) == wcslen{L}(s2_12)) &&
-          (\forall integer i_23;
-            (((0 <= i_23) && (i_23 <= wcslen{L}(s1_12))) ==>
-              ((s1_12 + i_23).unsigned_shortM ==
-                (s2_12 + i_23).unsigned_shortM)))))))
+          (\forall integer i_25;
+            (((0 <= i_25) && (i_25 <= wcslen{L}(s1_12))) ==>
+              ((s1_12 + i_25).unsigned_shortM ==
+                (s2_12 + i_25).unsigned_shortM)))))))
   
 }
 
@@ -363,18 +371,18 @@ axiomatic WcsNCmp {
       (\forall integer n_13;
         ((wcsncmp{L}(s1_14, s2_14, n_13) == 0) <==>
           (((wcslen{L}(s1_14) < n_13) && (wcscmp{L}(s1_14, s2_14) == 0)) ||
-            (\forall integer i_24;
-              (((0 <= i_24) && (i_24 < n_13)) ==>
-                ((s1_14 + i_24).unsigned_shortM ==
-                  (s2_14 + i_24).unsigned_shortM))))))))
+            (\forall integer i_26;
+              (((0 <= i_26) && (i_26 < n_13)) ==>
+                ((s1_14 + i_26).unsigned_shortM ==
+                  (s2_14 + i_26).unsigned_shortM))))))))
   
 }
 
-logic integer minimum(integer i_25, integer j_1) =
-(if (i_25 < j_1) then i_25 else j_1)
+logic integer minimum(integer i_27, integer j_2) =
+(if (i_27 < j_2) then i_27 else j_2)
 
-logic integer maximum(integer i_26, integer j_2) =
-(if (i_26 < j_2) then j_2 else i_26)
+logic integer maximum(integer i_28, integer j_3) =
+(if (i_28 < j_3) then j_3 else i_28)
 
 predicate valid_string{L}(charP[..] s_28) =
 ((0 <= strlen{L}(s_28)) &&
@@ -390,20 +398,20 @@ predicate valid_wstring{L}(unsigned_shortP[..] s_30) =
 predicate valid_wstring_or_null{L}(unsigned_shortP[..] s_31) =
 ((s_31 == null) || valid_wstring{L}(s_31))
 
-charP[..] memcpy(charP[..] dest, charP[..] src, uint32 n)
-  requires (C_6 : (((C_8 : (\offset_min(dest) <= 0)) &&
-                     (C_9 : (\offset_max(dest) >= (n - 1)))) &&
+charP[..] memcpy(charP[..] dest_1, charP[..] src, uint32 n_1)
+  requires (C_6 : (((C_8 : (\offset_min(dest_1) <= 0)) &&
+                     (C_9 : (\offset_max(dest_1) >= (n_1 - 1)))) &&
                     ((C_11 : (\offset_min(src) <= 0)) &&
-                      (C_12 : (\offset_max(src) >= (n - 1))))));
+                      (C_12 : (\offset_max(src) >= (n_1 - 1))))));
 behavior default:
-  assigns (dest + [0..(n - 1)]).charM;
+  assigns (dest_1 + [0..(n_1 - 1)]).charM;
   allocates \nothing;
-  ensures (C_1 : (((C_3 : (memcmp{Here}(\at(dest,Old), \at(src,Old),
-                                        \at(n,Old)) ==
+  ensures (C_1 : (((C_3 : (memcmp{Here}(\at(dest_1,Old), \at(src,Old),
+                                        \at(n_1,Old)) ==
                             0)) &&
-                    (C_4 : (\result == \at(dest,Old)))) &&
+                    (C_4 : (\result == \at(dest_1,Old)))) &&
                    (C_5 : (\base_block(\result) ==
-                            \base_block(\at(dest,Old))))));
+                            \base_block(\at(dest_1,Old))))));
 ;
 
 uint32 strlen(charP[..] s)
@@ -414,17 +422,17 @@ behavior default:
   ensures (C_13 : (\result == strlen{Here}(\at(s,Old))));
 ;
 
-charP[..] calloc(uint32 nmemb, uint32 size)
+charP[..] calloc(uint32 nmemb, uint32 size_0)
 behavior default:
   assigns \nothing;
   allocates \nothing;
   ensures (C_15 : ((C_16 : (\offset_min(\result) <= 0)) &&
                     (C_17 : (\offset_max(\result) >=
-                              ((\at(size,Old) * \at(nmemb,Old)) - 1)))));
+                              ((\at(size_0,Old) * \at(nmemb,Old)) - 1)))));
 ;
 
 unit f(charP[..] x)
-  requires (C_27 : valid_string(x));
+  requires (C_27 : valid_string{Here}(x));
 behavior default:
   ensures (C_26 : true);
 {  
@@ -456,6 +464,10 @@ type padding
 type uint16
 
 type uint32
+
+type uint8
+
+type unsigned_charP
 
 type unsigned_shortP
 
@@ -497,6 +509,11 @@ logic integer_of_uint32: uint32 -> int
 predicate eq_uint32(x:uint32, y:uint32) =
  eq_int(integer_of_uint32(x), integer_of_uint32(y))
 
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
+
 logic int32_of_integer: int -> int32
 
 axiom int32_coerce :
@@ -534,6 +551,10 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
  charP_alloc_table:charP alloc_table) =
  (offset_min(charP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_unsigned_shortP(p:unsigned_shortP pointer, a:int,
  unsigned_shortP_alloc_table:unsigned_shortP alloc_table) =
  (offset_min(unsigned_shortP_alloc_table, p) <= a)
@@ -542,8 +563,8 @@ predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
 
-function maximum(i_26:int, j_2:int) : int =
- (if lt_int_bool(i_26, j_2) then j_2 else i_26)
+function maximum(i_28:int, j_3:int) : int =
+ (if lt_int_bool(i_28, j_3) then j_3 else i_28)
 
 logic memchr: charP pointer, int, int, (charP, int8) memory -> bool
 
@@ -552,8 +573,8 @@ logic memcmp: charP pointer, charP pointer, int, (charP, int8) memory,
 
 logic memset: charP pointer, int, int, (charP, int8) memory -> bool
 
-function minimum(i_25:int, j_1:int) : int =
- (if lt_int_bool(i_25, j_1) then i_25 else j_1)
+function minimum(i_27:int, j_2:int) : int =
+ (if lt_int_bool(i_27, j_2) then i_27 else j_2)
 
 axiom no_assign_memchr_0 :
  (forall tmp:charP pset.
@@ -1050,6 +1071,12 @@ axiom no_update_wcsncmp_1 :
 axiom pointer_addr_of_charP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
+
 logic unsigned_shortP_of_pointer_address: unit pointer -> unsigned_shortP pointer
 
 axiom pointer_addr_of_unsigned_shortP_of_pointer_address :
@@ -1065,6 +1092,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
  charP_alloc_table:charP alloc_table) =
  (offset_max(charP_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_unsigned_shortP(p:unsigned_shortP pointer,
  b:int, unsigned_shortP_alloc_table:unsigned_shortP alloc_table) =
  (offset_max(unsigned_shortP_alloc_table, p) >= b)
@@ -1077,6 +1108,11 @@ predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) = a)
  and (offset_max(charP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_unsigned_shortP(p:unsigned_shortP pointer, a:int,
  b:int, unsigned_shortP_alloc_table:unsigned_shortP alloc_table) =
@@ -1092,6 +1128,11 @@ predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) = a)
  and (offset_max(charP_alloc_table, p) = b))
+
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_struct_unsigned_shortP(p:unsigned_shortP pointer,
  a:int, b:int, unsigned_shortP_alloc_table:unsigned_shortP alloc_table) =
@@ -1137,6 +1178,38 @@ axiom uint32_range :
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
 
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 logic unsigned_shortP_tag:  -> unsigned_shortP tag_id
 
 axiom unsigned_shortP_int : (int_of_tag(unsigned_shortP_tag) = (1))
@@ -1157,6 +1230,11 @@ predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
  and (offset_max(charP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_unsigned_shortP(p:unsigned_shortP pointer, a:int, b:int,
  unsigned_shortP_alloc_table:unsigned_shortP alloc_table) =
@@ -1187,6 +1265,11 @@ predicate valid_struct_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
  and (offset_max(charP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_unsigned_shortP(p:unsigned_shortP pointer, a:int,
  b:int, unsigned_shortP_alloc_table:unsigned_shortP alloc_table) =
@@ -1232,11 +1315,11 @@ axiom memcmp_range :
   (forall charP_charM_s1_1_at_L:(charP, int8) memory.
    (forall s1_0_0:charP pointer.
     (forall s2_0_0:charP pointer.
-     (forall n_0_0:int.
+     (forall n_0:int.
       (le_int(sub_int(neg_int((2147483647)), (1)),
-       memcmp(s1_0_0, s2_0_0, n_0_0, charP_charM_s2_2_at_L,
+       memcmp(s1_0_0, s2_0_0, n_0, charP_charM_s2_2_at_L,
        charP_charM_s1_1_at_L))
-      and le_int(memcmp(s1_0_0, s2_0_0, n_0_0, charP_charM_s2_2_at_L,
+      and le_int(memcmp(s1_0_0, s2_0_0, n_0, charP_charM_s2_2_at_L,
                  charP_charM_s1_1_at_L),
           (2147483647))))))))
 
@@ -1245,13 +1328,15 @@ axiom memcmp_zero :
   (forall charP_charM_s1_1_at_L:(charP, int8) memory.
    (forall s1_1_0:charP pointer.
     (forall s2_1_0:charP pointer.
-     (forall n_1:int.
-      ((memcmp(s1_1_0, s2_1_0, n_1, charP_charM_s2_2_at_L,
+     (forall n_1_0:int.
+      ((memcmp(s1_1_0, s2_1_0, n_1_0, charP_charM_s2_2_at_L,
         charP_charM_s1_1_at_L) = (0))
-      <-> (forall i:int.
-           ((le_int((0), i) and lt_int(i, n_1)) ->
-            (integer_of_int8(select(charP_charM_s1_1_at_L, shift(s1_1_0, i))) = 
-            integer_of_int8(select(charP_charM_s2_2_at_L, shift(s2_1_0, i))))))))))))
+      <-> (forall i_1:int.
+           ((le_int((0), i_1) and lt_int(i_1, n_1_0)) ->
+            (integer_of_int8(select(charP_charM_s1_1_at_L,
+                             shift(s1_1_0, i_1))) = integer_of_int8(select(charP_charM_s2_2_at_L,
+                                                                    shift(s2_1_0,
+                                                                    i_1))))))))))))
 
 axiom memchr_def :
  (forall charP_charM_s_3_at_L:(charP, int8) memory.
@@ -1259,11 +1344,11 @@ axiom memchr_def :
    (forall c_0:int.
     (forall n_3:int.
      ((memchr(s_0_0, c_0, n_3, charP_charM_s_3_at_L) = true)
-     <-> (exists i_0:int32.
-          (le_int((0), integer_of_int32(i_0))
-          and (lt_int(integer_of_int32(i_0), n_3)
+     <-> (exists i_2:int32.
+          (le_int((0), integer_of_int32(i_2))
+          and (lt_int(integer_of_int32(i_2), n_3)
               and (integer_of_int8(select(charP_charM_s_3_at_L,
-                                   shift(s_0_0, integer_of_int32(i_0)))) = c_0)))))))))
+                                   shift(s_0_0, integer_of_int32(i_2)))) = c_0)))))))))
 
 axiom memset_def :
  (forall charP_charM_s_1_4_at_L:(charP, int8) memory.
@@ -1271,30 +1356,30 @@ axiom memset_def :
    (forall c_2:int.
     (forall n_5:int.
      ((memset(s_2_0, c_2, n_5, charP_charM_s_1_4_at_L) = true)
-     <-> (forall i_1:int.
-          ((le_int((0), i_1) and lt_int(i_1, n_5)) ->
-           (integer_of_int8(select(charP_charM_s_1_4_at_L, shift(s_2_0, i_1))) = c_2))))))))
+     <-> (forall i_3:int.
+          ((le_int((0), i_3) and lt_int(i_3, n_5)) ->
+           (integer_of_int8(select(charP_charM_s_1_4_at_L, shift(s_2_0, i_3))) = c_2))))))))
 
 axiom strlen_pos_or_null :
  (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
   (forall s_4:charP pointer.
-   (forall i_2:int.
-    ((le_int((0), i_2)
-     and (le_int(i_2, (2147483647))
-         and ((forall j:int.
-               ((le_int((0), j) and lt_int(j, i_2)) ->
+   (forall i_4:int.
+    ((le_int((0), i_4)
+     and (le_int(i_4, (2147483647))
+         and ((forall j_0:int.
+               ((le_int((0), j_0) and lt_int(j_0, i_4)) ->
                 (integer_of_int8(select(charP_charM_s_3_5_at_L,
-                                 shift(s_4, j))) <> (0))))
+                                 shift(s_4, j_0))) <> (0))))
              and (integer_of_int8(select(charP_charM_s_3_5_at_L,
-                                  shift(s_4, i_2))) = (0))))) ->
-     (strlen(s_4, charP_charM_s_3_5_at_L) = i_2)))))
+                                  shift(s_4, i_4))) = (0))))) ->
+     (strlen(s_4, charP_charM_s_3_5_at_L) = i_4)))))
 
 axiom strlen_neg :
  (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
   (forall s_5:charP pointer.
-   ((forall i_3:int.
-     ((le_int((0), i_3) and le_int(i_3, (2147483647))) ->
-      (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_5, i_3))) <> (0)))) ->
+   ((forall i_5:int.
+     ((le_int((0), i_5) and le_int(i_5, (2147483647))) ->
+      (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_5, i_5))) <> (0)))) ->
     lt_int(strlen(s_5, charP_charM_s_3_5_at_L), (0)))))
 
 axiom strlen_range :
@@ -1305,9 +1390,9 @@ axiom strlen_range :
 axiom strlen_before_null :
  (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
   (forall s_7:charP pointer.
-   (forall i_4:int.
-    ((le_int((0), i_4) and lt_int(i_4, strlen(s_7, charP_charM_s_3_5_at_L))) ->
-     (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_7, i_4))) <> (0))))))
+   (forall i_6:int.
+    ((le_int((0), i_6) and lt_int(i_6, strlen(s_7, charP_charM_s_3_5_at_L))) ->
+     (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_7, i_6))) <> (0))))))
 
 axiom strlen_at_null :
  (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
@@ -1319,64 +1404,65 @@ axiom strlen_at_null :
 axiom strlen_not_zero :
  (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
   (forall s_9:charP pointer.
-   (forall i_5:int.
-    ((le_int((0), i_5)
-     and (le_int(i_5, strlen(s_9, charP_charM_s_3_5_at_L))
-         and (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_9, i_5))) <> (0)))) ->
-     lt_int(i_5, strlen(s_9, charP_charM_s_3_5_at_L))))))
+   (forall i_7:int.
+    ((le_int((0), i_7)
+     and (le_int(i_7, strlen(s_9, charP_charM_s_3_5_at_L))
+         and (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_9, i_7))) <> (0)))) ->
+     lt_int(i_7, strlen(s_9, charP_charM_s_3_5_at_L))))))
 
 axiom strlen_zero :
  (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
   (forall s_10:charP pointer.
-   (forall i_6:int.
-    ((le_int((0), i_6)
-     and (le_int(i_6, strlen(s_10, charP_charM_s_3_5_at_L))
+   (forall i_8:int.
+    ((le_int((0), i_8)
+     and (le_int(i_8, strlen(s_10, charP_charM_s_3_5_at_L))
          and (integer_of_int8(select(charP_charM_s_3_5_at_L,
-                              shift(s_10, i_6))) = (0)))) ->
-     (i_6 = strlen(s_10, charP_charM_s_3_5_at_L))))))
+                              shift(s_10, i_8))) = (0)))) ->
+     (i_8 = strlen(s_10, charP_charM_s_3_5_at_L))))))
 
 axiom strlen_sup :
  (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
   (forall s_11:charP pointer.
-   (forall i_7:int.
-    ((le_int((0), i_7)
-     and (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_11, i_7))) = (0))) ->
+   (forall i_9:int.
+    ((le_int((0), i_9)
+     and (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_11, i_9))) = (0))) ->
      (le_int((0), strlen(s_11, charP_charM_s_3_5_at_L))
-     and le_int(strlen(s_11, charP_charM_s_3_5_at_L), i_7))))))
+     and le_int(strlen(s_11, charP_charM_s_3_5_at_L), i_9))))))
 
 axiom strlen_shift :
  (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
   (forall s_12:charP pointer.
-   (forall i_8:int.
-    ((le_int((0), i_8) and le_int(i_8, strlen(s_12, charP_charM_s_3_5_at_L))) ->
-     (strlen(shift(s_12, i_8), charP_charM_s_3_5_at_L) = sub_int(strlen(s_12,
-                                                                 charP_charM_s_3_5_at_L),
-                                                         i_8))))))
+   (forall i_10:int.
+    ((le_int((0), i_10)
+     and le_int(i_10, strlen(s_12, charP_charM_s_3_5_at_L))) ->
+     (strlen(shift(s_12, i_10), charP_charM_s_3_5_at_L) = sub_int(strlen(s_12,
+                                                                  charP_charM_s_3_5_at_L),
+                                                          i_10))))))
 
 axiom strlen_create :
  (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
   (forall s_13:charP pointer.
-   (forall i_9:int.
-    ((le_int((0), i_9)
-     and (le_int(i_9, (2147483647))
+   (forall i_11:int.
+    ((le_int((0), i_11)
+     and (le_int(i_11, (2147483647))
          and (integer_of_int8(select(charP_charM_s_3_5_at_L,
-                              shift(s_13, i_9))) = (0)))) ->
+                              shift(s_13, i_11))) = (0)))) ->
      (le_int((0), strlen(s_13, charP_charM_s_3_5_at_L))
-     and le_int(strlen(s_13, charP_charM_s_3_5_at_L), i_9))))))
+     and le_int(strlen(s_13, charP_charM_s_3_5_at_L), i_11))))))
 
 axiom strlen_create_shift :
  (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
   (forall s_14:charP pointer.
-   (forall i_10:int.
+   (forall i_12:int.
     (forall k:int.
      ((le_int((0), k)
-      and (le_int(k, i_10)
-          and (le_int(i_10, (2147483647))
+      and (le_int(k, i_12)
+          and (le_int(i_12, (2147483647))
               and (integer_of_int8(select(charP_charM_s_3_5_at_L,
-                                   shift(s_14, i_10))) = (0))))) ->
+                                   shift(s_14, i_12))) = (0))))) ->
       (le_int((0), strlen(shift(s_14, k), charP_charM_s_3_5_at_L))
       and le_int(strlen(shift(s_14, k), charP_charM_s_3_5_at_L),
-          sub_int(i_10, k))))))))
+          sub_int(i_12, k))))))))
 
 axiom memcmp_strlen_left :
  (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
@@ -1447,13 +1533,13 @@ axiom strcmp_zero :
      ((strcmp(s1_8, s2_8, charP_charM_s2_6_7_at_L, charP_charM_s1_6_6_at_L) = (0))
      <-> ((strlen(s1_8, charP_charM_s1_6_6_at_L) = strlen(s2_8,
                                                    charP_charM_s2_6_7_at_L))
-         and (forall i_11:int.
-              ((le_int((0), i_11)
-               and le_int(i_11, strlen(s1_8, charP_charM_s1_6_6_at_L))) ->
+         and (forall i_13:int.
+              ((le_int((0), i_13)
+               and le_int(i_13, strlen(s1_8, charP_charM_s1_6_6_at_L))) ->
                (integer_of_int8(select(charP_charM_s1_6_6_at_L,
-                                shift(s1_8, i_11))) = integer_of_int8(
+                                shift(s1_8, i_13))) = integer_of_int8(
                                                       select(charP_charM_s2_6_7_at_L,
-                                                      shift(s2_8, i_11))))))))))))
+                                                      shift(s2_8, i_13))))))))))))
 
 axiom strncmp_zero :
  (forall charP_charM_s2_9_9_at_L:(charP, int8) memory.
@@ -1466,58 +1552,58 @@ axiom strncmp_zero :
       <-> ((lt_int(strlen(s1_10, charP_charM_s1_9_8_at_L), n_11)
            and (strcmp(s1_10, s2_10, charP_charM_s2_9_9_at_L,
                 charP_charM_s1_9_8_at_L) = (0)))
-          or (forall i_12:int.
-              ((le_int((0), i_12) and lt_int(i_12, n_11)) ->
+          or (forall i_14:int.
+              ((le_int((0), i_14) and lt_int(i_14, n_11)) ->
                (integer_of_int8(select(charP_charM_s1_9_8_at_L,
-                                shift(s1_10, i_12))) = integer_of_int8(
+                                shift(s1_10, i_14))) = integer_of_int8(
                                                        select(charP_charM_s2_9_9_at_L,
-                                                       shift(s2_10, i_12)))))))))))))
+                                                       shift(s2_10, i_14)))))))))))))
 
 axiom strchr_def :
  (forall charP_charM_s_15_10_at_L:(charP, int8) memory.
   (forall s_16:charP pointer.
    (forall c_4:int.
     ((strchr(s_16, c_4, charP_charM_s_15_10_at_L) = true)
-    <-> (exists i_13:int.
-         (le_int((0), i_13)
-         and (le_int(i_13, strlen(s_16, charP_charM_s_15_10_at_L))
+    <-> (exists i_15:int.
+         (le_int((0), i_15)
+         and (le_int(i_15, strlen(s_16, charP_charM_s_15_10_at_L))
              and (integer_of_int8(select(charP_charM_s_15_10_at_L,
-                                  shift(s_16, i_13))) = c_4))))))))
+                                  shift(s_16, i_15))) = c_4))))))))
 
 axiom wcslen_pos_or_null :
  (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:
   (unsigned_shortP, uint16) memory.
   (forall s_18:unsigned_shortP pointer.
-   (forall i_14:int.
-    ((le_int((0), i_14)
-     and ((forall j_0:int.
-           ((le_int((0), j_0) and lt_int(j_0, i_14)) ->
+   (forall i_16:int.
+    ((le_int((0), i_16)
+     and ((forall j_1:int.
+           ((le_int((0), j_1) and lt_int(j_1, i_16)) ->
             (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-                               shift(s_18, j_0))) <> (0))))
+                               shift(s_18, j_1))) <> (0))))
          and (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-                                shift(s_18, i_14))) = (0)))) ->
-     (wcslen(s_18, unsigned_shortP_unsigned_shortM_s_17_11_at_L) = i_14)))))
+                                shift(s_18, i_16))) = (0)))) ->
+     (wcslen(s_18, unsigned_shortP_unsigned_shortM_s_17_11_at_L) = i_16)))))
 
 axiom wcslen_neg :
  (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:
   (unsigned_shortP, uint16) memory.
   (forall s_19:unsigned_shortP pointer.
-   ((forall i_15:int.
-     (le_int((0), i_15) ->
+   ((forall i_17:int.
+     (le_int((0), i_17) ->
       (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-                         shift(s_19, i_15))) <> (0)))) ->
+                         shift(s_19, i_17))) <> (0)))) ->
     lt_int(wcslen(s_19, unsigned_shortP_unsigned_shortM_s_17_11_at_L), (0)))))
 
 axiom wcslen_before_null :
  (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:
   (unsigned_shortP, uint16) memory.
   (forall s_20:unsigned_shortP pointer.
-   (forall i_16:int32.
-    ((le_int((0), integer_of_int32(i_16))
-     and lt_int(integer_of_int32(i_16),
+   (forall i_18:int32.
+    ((le_int((0), integer_of_int32(i_18))
+     and lt_int(integer_of_int32(i_18),
          wcslen(s_20, unsigned_shortP_unsigned_shortM_s_17_11_at_L))) ->
      (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-                        shift(s_20, integer_of_int32(i_16)))) <> (0))))))
+                        shift(s_20, integer_of_int32(i_18)))) <> (0))))))
 
 axiom wcslen_at_null :
  (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:
@@ -1533,81 +1619,81 @@ axiom wcslen_not_zero :
  (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:
   (unsigned_shortP, uint16) memory.
   (forall s_22:unsigned_shortP pointer.
-   (forall i_17:int32.
-    ((le_int((0), integer_of_int32(i_17))
-     and (le_int(integer_of_int32(i_17),
+   (forall i_19:int32.
+    ((le_int((0), integer_of_int32(i_19))
+     and (le_int(integer_of_int32(i_19),
           wcslen(s_22, unsigned_shortP_unsigned_shortM_s_17_11_at_L))
          and (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-                                shift(s_22, integer_of_int32(i_17)))) <> (0)))) ->
-     lt_int(integer_of_int32(i_17),
+                                shift(s_22, integer_of_int32(i_19)))) <> (0)))) ->
+     lt_int(integer_of_int32(i_19),
      wcslen(s_22, unsigned_shortP_unsigned_shortM_s_17_11_at_L))))))
 
 axiom wcslen_zero :
  (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:
   (unsigned_shortP, uint16) memory.
   (forall s_23:unsigned_shortP pointer.
-   (forall i_18:int32.
-    ((le_int((0), integer_of_int32(i_18))
-     and (le_int(integer_of_int32(i_18),
+   (forall i_20:int32.
+    ((le_int((0), integer_of_int32(i_20))
+     and (le_int(integer_of_int32(i_20),
           wcslen(s_23, unsigned_shortP_unsigned_shortM_s_17_11_at_L))
          and (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-                                shift(s_23, integer_of_int32(i_18)))) = (0)))) ->
-     (integer_of_int32(i_18) = wcslen(s_23,
+                                shift(s_23, integer_of_int32(i_20)))) = (0)))) ->
+     (integer_of_int32(i_20) = wcslen(s_23,
                                unsigned_shortP_unsigned_shortM_s_17_11_at_L))))))
 
 axiom wcslen_sup :
  (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:
   (unsigned_shortP, uint16) memory.
   (forall s_24:unsigned_shortP pointer.
-   (forall i_19:int32.
-    ((le_int((0), integer_of_int32(i_19))
+   (forall i_21:int32.
+    ((le_int((0), integer_of_int32(i_21))
      and (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-                            shift(s_24, integer_of_int32(i_19)))) = (0))) ->
+                            shift(s_24, integer_of_int32(i_21)))) = (0))) ->
      (le_int((0), wcslen(s_24, unsigned_shortP_unsigned_shortM_s_17_11_at_L))
      and le_int(wcslen(s_24, unsigned_shortP_unsigned_shortM_s_17_11_at_L),
-         integer_of_int32(i_19)))))))
+         integer_of_int32(i_21)))))))
 
 axiom wcslen_shift :
  (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:
   (unsigned_shortP, uint16) memory.
   (forall s_25:unsigned_shortP pointer.
-   (forall i_20:int32.
-    ((le_int((0), integer_of_int32(i_20))
-     and le_int(integer_of_int32(i_20),
+   (forall i_22:int32.
+    ((le_int((0), integer_of_int32(i_22))
+     and le_int(integer_of_int32(i_22),
          wcslen(s_25, unsigned_shortP_unsigned_shortM_s_17_11_at_L))) ->
-     (wcslen(shift(s_25, integer_of_int32(i_20)),
+     (wcslen(shift(s_25, integer_of_int32(i_22)),
       unsigned_shortP_unsigned_shortM_s_17_11_at_L) = sub_int(wcslen(s_25,
                                                               unsigned_shortP_unsigned_shortM_s_17_11_at_L),
-                                                      integer_of_int32(i_20)))))))
+                                                      integer_of_int32(i_22)))))))
 
 axiom wcslen_create :
  (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:
   (unsigned_shortP, uint16) memory.
   (forall s_26:unsigned_shortP pointer.
-   (forall i_21:int32.
-    ((le_int((0), integer_of_int32(i_21))
+   (forall i_23:int32.
+    ((le_int((0), integer_of_int32(i_23))
      and (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-                            shift(s_26, integer_of_int32(i_21)))) = (0))) ->
+                            shift(s_26, integer_of_int32(i_23)))) = (0))) ->
      (le_int((0), wcslen(s_26, unsigned_shortP_unsigned_shortM_s_17_11_at_L))
      and le_int(wcslen(s_26, unsigned_shortP_unsigned_shortM_s_17_11_at_L),
-         integer_of_int32(i_21)))))))
+         integer_of_int32(i_23)))))))
 
 axiom wcslen_create_shift :
  (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:
   (unsigned_shortP, uint16) memory.
   (forall s_27:unsigned_shortP pointer.
-   (forall i_22:int32.
+   (forall i_24:int32.
     (forall k_2:int32.
      ((le_int((0), integer_of_int32(k_2))
-      and (le_int(integer_of_int32(k_2), integer_of_int32(i_22))
+      and (le_int(integer_of_int32(k_2), integer_of_int32(i_24))
           and (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-                                 shift(s_27, integer_of_int32(i_22)))) = (0)))) ->
+                                 shift(s_27, integer_of_int32(i_24)))) = (0)))) ->
       (le_int((0),
        wcslen(shift(s_27, integer_of_int32(k_2)),
        unsigned_shortP_unsigned_shortM_s_17_11_at_L))
       and le_int(wcslen(shift(s_27, integer_of_int32(k_2)),
                  unsigned_shortP_unsigned_shortM_s_17_11_at_L),
-          sub_int(integer_of_int32(i_22), integer_of_int32(k_2)))))))))
+          sub_int(integer_of_int32(i_24), integer_of_int32(k_2)))))))))
 
 axiom wcscmp_zero :
  (forall unsigned_shortP_unsigned_shortM_s2_11_13_at_L:
@@ -1620,15 +1706,15 @@ axiom wcscmp_zero :
        unsigned_shortP_unsigned_shortM_s1_11_12_at_L) = (0))
      <-> ((wcslen(s1_12, unsigned_shortP_unsigned_shortM_s1_11_12_at_L) = 
           wcslen(s2_12, unsigned_shortP_unsigned_shortM_s2_11_13_at_L))
-         and (forall i_23:int.
-              ((le_int((0), i_23)
-               and le_int(i_23,
+         and (forall i_25:int.
+              ((le_int((0), i_25)
+               and le_int(i_25,
                    wcslen(s1_12,
                    unsigned_shortP_unsigned_shortM_s1_11_12_at_L))) ->
                (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s1_11_12_at_L,
-                                  shift(s1_12, i_23))) = integer_of_uint16(
+                                  shift(s1_12, i_25))) = integer_of_uint16(
                                                          select(unsigned_shortP_unsigned_shortM_s2_11_13_at_L,
-                                                         shift(s2_12, i_23))))))))))))
+                                                         shift(s2_12, i_25))))))))))))
 
 axiom wcsncmp_zero :
  (forall unsigned_shortP_unsigned_shortM_s2_13_15_at_L:
@@ -1647,12 +1733,12 @@ axiom wcsncmp_zero :
            and (wcscmp(s1_14, s2_14,
                 unsigned_shortP_unsigned_shortM_s2_13_15_at_L,
                 unsigned_shortP_unsigned_shortM_s1_13_14_at_L) = (0)))
-          or (forall i_24:int.
-              ((le_int((0), i_24) and lt_int(i_24, n_13)) ->
+          or (forall i_26:int.
+              ((le_int((0), i_26) and lt_int(i_26, n_13)) ->
                (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s1_13_14_at_L,
-                                  shift(s1_14, i_24))) = integer_of_uint16(
+                                  shift(s1_14, i_26))) = integer_of_uint16(
                                                          select(unsigned_shortP_unsigned_shortM_s2_13_15_at_L,
-                                                         shift(s2_14, i_24)))))))))))))
+                                                         shift(s2_14, i_26)))))))))))))
 
 exception Loop_continue_exc of unit
 
@@ -1685,6 +1771,38 @@ parameter alloc_struct_charP_requires :
       and (alloc_extends(charP_alloc_table@, charP_alloc_table)
           and (alloc_fresh(charP_alloc_table@, result, n)
               and instanceof(charP_tag_table, result, charP_tag)))) }
+
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
 
 parameter unsigned_shortP_alloc_table : unsigned_shortP alloc_table ref
 
@@ -1752,28 +1870,32 @@ parameter any_uint16 : unit -> { } uint16 { true }
 
 parameter any_uint32 : unit -> { } uint32 { true }
 
+parameter any_uint8 : unit -> { } uint8 { true }
+
 parameter calloc :
  nmemb:uint32 ->
-  size:uint32 ->
+  size_0:uint32 ->
    charP_result_25_alloc_table:charP alloc_table ->
     { } charP pointer
     { (JC_<somenum>:
       ((JC_<somenum>: le_int(offset_min(charP_result_25_alloc_table, result), (0)))
       and (JC_<somenum>:
           ge_int(offset_max(charP_result_25_alloc_table, result),
-          sub_int(mul_int(integer_of_uint32(size), integer_of_uint32(nmemb)),
+          sub_int(mul_int(integer_of_uint32(size_0),
+                  integer_of_uint32(nmemb)),
           (1)))))) }
 
 parameter calloc_requires :
  nmemb:uint32 ->
-  size:uint32 ->
+  size_0:uint32 ->
    charP_result_25_alloc_table:charP alloc_table ->
     { } charP pointer
     { (JC_<somenum>:
       ((JC_<somenum>: le_int(offset_min(charP_result_25_alloc_table, result), (0)))
       and (JC_<somenum>:
           ge_int(offset_max(charP_result_25_alloc_table, result),
-          sub_int(mul_int(integer_of_uint32(size), integer_of_uint32(nmemb)),
+          sub_int(mul_int(integer_of_uint32(size_0),
+                  integer_of_uint32(nmemb)),
           (1)))))) }
 
 parameter f :
@@ -1799,59 +1921,61 @@ parameter int8_of_integer_ :
   { eq_int(integer_of_int8(result), x) }
 
 parameter memcpy :
- dest:charP pointer ->
+ dest_1:charP pointer ->
   src:charP pointer ->
-   n_0:uint32 ->
-    charP_charM_dest_20:(charP, int8) memory ref ->
+   n_1:uint32 ->
+    charP_charM_dest_1_20:(charP, int8) memory ref ->
      charP_src_21_alloc_table:charP alloc_table ->
-      charP_dest_20_alloc_table:charP alloc_table ->
+      charP_dest_1_20_alloc_table:charP alloc_table ->
        charP_charM_src_21:(charP, int8) memory ->
-        { } charP pointer reads charP_charM_dest_20
-        writes charP_charM_dest_20
+        { } charP pointer reads charP_charM_dest_1_20
+        writes charP_charM_dest_1_20
         { (JC_<somenum>:
           ((JC_<somenum>:
            ((JC_<somenum>:
-            (memcmp(dest, src, integer_of_uint32(n_0), charP_charM_src_21,
-             charP_charM_dest_20) = (0)))
-           and ((JC_<somenum>: (result = dest))
-               and (JC_<somenum>: same_block(result, dest)))))
+            (memcmp(dest_1, src, integer_of_uint32(n_1), charP_charM_src_21,
+             charP_charM_dest_1_20) = (0)))
+           and ((JC_<somenum>: (result = dest_1))
+               and (JC_<somenum>: same_block(result, dest_1)))))
           and (JC_<somenum>:
-              not_assigns(charP_dest_20_alloc_table, charP_charM_dest_20@,
-              charP_charM_dest_20,
-              pset_range(pset_singleton(dest), (0),
-              sub_int(integer_of_uint32(n_0), (1))))))) }
+              not_assigns(charP_dest_1_20_alloc_table,
+              charP_charM_dest_1_20@, charP_charM_dest_1_20,
+              pset_range(pset_singleton(dest_1), (0),
+              sub_int(integer_of_uint32(n_1), (1))))))) }
 
 parameter memcpy_requires :
- dest:charP pointer ->
+ dest_1:charP pointer ->
   src:charP pointer ->
-   n_0:uint32 ->
-    charP_charM_dest_20:(charP, int8) memory ref ->
+   n_1:uint32 ->
+    charP_charM_dest_1_20:(charP, int8) memory ref ->
      charP_src_21_alloc_table:charP alloc_table ->
-      charP_dest_20_alloc_table:charP alloc_table ->
+      charP_dest_1_20_alloc_table:charP alloc_table ->
        charP_charM_src_21:(charP, int8) memory ->
         { (JC_<somenum>:
-          ((JC_<somenum>: le_int(offset_min(charP_dest_20_alloc_table, dest), (0)))
+          ((JC_<somenum>:
+           le_int(offset_min(charP_dest_1_20_alloc_table, dest_1), (0)))
           and ((JC_<somenum>:
-               ge_int(offset_max(charP_dest_20_alloc_table, dest),
-               sub_int(integer_of_uint32(n_0), (1))))
+               ge_int(offset_max(charP_dest_1_20_alloc_table, dest_1),
+               sub_int(integer_of_uint32(n_1), (1))))
               and ((JC_<somenum>:
                    le_int(offset_min(charP_src_21_alloc_table, src), (0)))
                   and (JC_<somenum>:
                       ge_int(offset_max(charP_src_21_alloc_table, src),
-                      sub_int(integer_of_uint32(n_0), (1))))))))}
-        charP pointer reads charP_charM_dest_20 writes charP_charM_dest_20
+                      sub_int(integer_of_uint32(n_1), (1))))))))}
+        charP pointer reads charP_charM_dest_1_20
+        writes charP_charM_dest_1_20
         { (JC_<somenum>:
           ((JC_<somenum>:
            ((JC_<somenum>:
-            (memcmp(dest, src, integer_of_uint32(n_0), charP_charM_src_21,
-             charP_charM_dest_20) = (0)))
-           and ((JC_<somenum>: (result = dest))
-               and (JC_<somenum>: same_block(result, dest)))))
+            (memcmp(dest_1, src, integer_of_uint32(n_1), charP_charM_src_21,
+             charP_charM_dest_1_20) = (0)))
+           and ((JC_<somenum>: (result = dest_1))
+               and (JC_<somenum>: same_block(result, dest_1)))))
           and (JC_<somenum>:
-              not_assigns(charP_dest_20_alloc_table, charP_charM_dest_20@,
-              charP_charM_dest_20,
-              pset_range(pset_singleton(dest), (0),
-              sub_int(integer_of_uint32(n_0), (1))))))) }
+              not_assigns(charP_dest_1_20_alloc_table,
+              charP_charM_dest_1_20@, charP_charM_dest_1_20,
+              pset_range(pset_singleton(dest_1), (0),
+              sub_int(integer_of_uint32(n_1), (1))))))) }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -1864,6 +1988,9 @@ parameter safe_uint16_of_integer_ :
 
 parameter safe_uint32_of_integer_ :
  x:int -> { } uint32 { eq_int(integer_of_uint32(result), x) }
+
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
 
 parameter strlen_0 :
  s_2:charP pointer ->
@@ -1889,6 +2016,11 @@ parameter uint32_of_integer_ :
  x:int ->
   { (le_int((0), x) and le_int(x, (4294967295)))} uint32
   { eq_int(integer_of_uint32(result), x) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
 
 let f_ensures_default =
  fun (x_0 : charP pointer) (charP_x_27_alloc_table : charP alloc_table) (charP_charM_x_27 : (charP, int8) memory) ->
@@ -2008,22 +2140,22 @@ text = "ArithOverflow"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/calloc_po6.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "431" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "439" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po7.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "431" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "439" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po8.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "431" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "439" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/calloc_po9.why">
-      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "431" begin = "14" end = "31"/>
+      <location file = "PPCHOME/tests/jessie/calloc.jessie/calloc.jc" line = "439" begin = "14" end = "31"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2980,6 +3112,10 @@ type uint16
 
 type uint32
 
+type uint8
+
+type unsigned_charP
+
 type unsigned_shortP
 
 type voidP
@@ -3021,6 +3157,11 @@ logic integer_of_uint32 : uint32 -> int
 predicate eq_uint32(x: uint32, y: uint32) =
   (integer_of_uint32(x) = integer_of_uint32(y))
 
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
+
 logic int32_of_integer : int -> int32
 
 axiom int32_coerce:
@@ -3058,6 +3199,10 @@ predicate left_valid_struct_charP(p: charP pointer, a: int,
   charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_unsigned_shortP(p: unsigned_shortP pointer,
   a: int, unsigned_shortP_alloc_table: unsigned_shortP alloc_table) =
   (offset_min(unsigned_shortP_alloc_table, p) <= a)
@@ -3066,8 +3211,8 @@ predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
 
-function maximum(i_26: int, j_2: int) : int = ite(lt_int_bool(i_26, j_2),
-  j_2, i_26)
+function maximum(i_28: int, j_3: int) : int = ite(lt_int_bool(i_28, j_3),
+  j_3, i_28)
 
 logic memchr : charP pointer, int, int, (charP, int8) memory -> bool
 
@@ -3076,8 +3221,8 @@ logic memcmp : charP pointer, charP pointer, int, (charP, int8) memory,
 
 logic memset : charP pointer, int, int, (charP, int8) memory -> bool
 
-function minimum(i_25: int, j_1: int) : int = ite(lt_int_bool(i_25, j_1),
-  i_25, j_1)
+function minimum(i_27: int, j_2: int) : int = ite(lt_int_bool(i_27, j_2),
+  i_27, j_2)
 
 axiom no_assign_memchr_0:
   (forall tmp:charP pset.
@@ -3559,6 +3704,12 @@ axiom no_update_wcsncmp_1:
 axiom pointer_addr_of_charP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
+
 logic unsigned_shortP_of_pointer_address : unit pointer -> unsigned_shortP pointer
 
 axiom pointer_addr_of_unsigned_shortP_of_pointer_address:
@@ -3574,6 +3725,10 @@ predicate right_valid_struct_charP(p: charP pointer, b: int,
   charP_alloc_table: charP alloc_table) = (offset_max(charP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_unsigned_shortP(p: unsigned_shortP pointer,
   b: int, unsigned_shortP_alloc_table: unsigned_shortP alloc_table) =
   (offset_max(unsigned_shortP_alloc_table, p) >= b)
@@ -3586,6 +3741,11 @@ predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
    p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_unsigned_shortP(p: unsigned_shortP pointer,
   a: int, b: int, unsigned_shortP_alloc_table: unsigned_shortP alloc_table) =
@@ -3601,6 +3761,11 @@ predicate strict_valid_struct_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
    p) = b))
+
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_struct_unsigned_shortP(p: unsigned_shortP pointer,
   a: int, b: int, unsigned_shortP_alloc_table: unsigned_shortP alloc_table) =
@@ -3644,6 +3809,37 @@ axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
 
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 logic unsigned_shortP_tag : unsigned_shortP tag_id
 
 axiom unsigned_shortP_int: (int_of_tag(unsigned_shortP_tag) = 1)
@@ -3664,6 +3860,11 @@ predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_unsigned_shortP(p: unsigned_shortP pointer, a: int,
   b: int, unsigned_shortP_alloc_table: unsigned_shortP alloc_table) =
@@ -3693,6 +3894,11 @@ predicate valid_struct_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_unsigned_shortP(p: unsigned_shortP pointer, a: int,
   b: int, unsigned_shortP_alloc_table: unsigned_shortP alloc_table) =
@@ -3741,10 +3947,10 @@ axiom memcmp_range:
     (forall charP_charM_s1_1_at_L:(charP, int8) memory.
       (forall s1_0_0:charP pointer.
         (forall s2_0_0:charP pointer.
-          (forall n_0_0:int.
-            ((((-2147483647) - 1) <= memcmp(s1_0_0, s2_0_0, n_0_0,
+          (forall n_0:int.
+            ((((-2147483647) - 1) <= memcmp(s1_0_0, s2_0_0, n_0,
              charP_charM_s2_2_at_L, charP_charM_s1_1_at_L)) and
-             (memcmp(s1_0_0, s2_0_0, n_0_0, charP_charM_s2_2_at_L,
+             (memcmp(s1_0_0, s2_0_0, n_0, charP_charM_s2_2_at_L,
              charP_charM_s1_1_at_L) <= 2147483647)))))))
 
 axiom memcmp_zero:
@@ -3752,14 +3958,14 @@ axiom memcmp_zero:
     (forall charP_charM_s1_1_at_L:(charP, int8) memory.
       (forall s1_1_0:charP pointer.
         (forall s2_1_0:charP pointer.
-          (forall n_1:int.
-            ((memcmp(s1_1_0, s2_1_0, n_1, charP_charM_s2_2_at_L,
+          (forall n_1_0:int.
+            ((memcmp(s1_1_0, s2_1_0, n_1_0, charP_charM_s2_2_at_L,
              charP_charM_s1_1_at_L) = 0) <->
-             (forall i:int.
-               (((0 <= i) and (i < n_1)) ->
+             (forall i_1:int.
+               (((0 <= i_1) and (i_1 < n_1_0)) ->
                 (integer_of_int8(select(charP_charM_s1_1_at_L, shift(s1_1_0,
-                i))) = integer_of_int8(select(charP_charM_s2_2_at_L,
-                shift(s2_1_0, i))))))))))))
+                i_1))) = integer_of_int8(select(charP_charM_s2_2_at_L,
+                shift(s2_1_0, i_1))))))))))))
 
 axiom memchr_def:
   (forall charP_charM_s_3_at_L:(charP, int8) memory.
@@ -3767,11 +3973,11 @@ axiom memchr_def:
       (forall c_0:int.
         (forall n_3:int.
           ((memchr(s_0_0, c_0, n_3, charP_charM_s_3_at_L) = true) <->
-           (exists i_0:int32.
-             ((0 <= integer_of_int32(i_0)) and
-              ((integer_of_int32(i_0) < n_3) and
+           (exists i_2:int32.
+             ((0 <= integer_of_int32(i_2)) and
+              ((integer_of_int32(i_2) < n_3) and
                (integer_of_int8(select(charP_charM_s_3_at_L, shift(s_0_0,
-               integer_of_int32(i_0)))) = c_0)))))))))
+               integer_of_int32(i_2)))) = c_0)))))))))
 
 axiom memset_def:
   (forall charP_charM_s_1_4_at_L:(charP, int8) memory.
@@ -3779,32 +3985,32 @@ axiom memset_def:
       (forall c_2:int.
         (forall n_5:int.
           ((memset(s_2_0, c_2, n_5, charP_charM_s_1_4_at_L) = true) <->
-           (forall i_1:int.
-             (((0 <= i_1) and (i_1 < n_5)) ->
+           (forall i_3:int.
+             (((0 <= i_3) and (i_3 < n_5)) ->
               (integer_of_int8(select(charP_charM_s_1_4_at_L, shift(s_2_0,
-              i_1))) = c_2))))))))
+              i_3))) = c_2))))))))
 
 axiom strlen_pos_or_null:
   (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
     (forall s_4:charP pointer.
-      (forall i_2:int.
-        (((0 <= i_2) and
-          ((i_2 <= 2147483647) and
-           ((forall j:int.
-              (((0 <= j) and (j < i_2)) ->
+      (forall i_4:int.
+        (((0 <= i_4) and
+          ((i_4 <= 2147483647) and
+           ((forall j_0:int.
+              (((0 <= j_0) and (j_0 < i_4)) ->
                (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_4,
-               j))) <> 0))) and
+               j_0))) <> 0))) and
             (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_4,
-            i_2))) = 0)))) ->
-         (strlen(s_4, charP_charM_s_3_5_at_L) = i_2)))))
+            i_4))) = 0)))) ->
+         (strlen(s_4, charP_charM_s_3_5_at_L) = i_4)))))
 
 axiom strlen_neg:
   (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
     (forall s_5:charP pointer.
-      ((forall i_3:int.
-         (((0 <= i_3) and (i_3 <= 2147483647)) ->
+      ((forall i_5:int.
+         (((0 <= i_5) and (i_5 <= 2147483647)) ->
           (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_5,
-          i_3))) <> 0))) ->
+          i_5))) <> 0))) ->
        (strlen(s_5, charP_charM_s_3_5_at_L) < 0))))
 
 axiom strlen_range:
@@ -3815,10 +4021,10 @@ axiom strlen_range:
 axiom strlen_before_null:
   (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
     (forall s_7:charP pointer.
-      (forall i_4:int.
-        (((0 <= i_4) and (i_4 < strlen(s_7, charP_charM_s_3_5_at_L))) ->
+      (forall i_6:int.
+        (((0 <= i_6) and (i_6 < strlen(s_7, charP_charM_s_3_5_at_L))) ->
          (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_7,
-         i_4))) <> 0)))))
+         i_6))) <> 0)))))
 
 axiom strlen_at_null:
   (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
@@ -3830,63 +4036,63 @@ axiom strlen_at_null:
 axiom strlen_not_zero:
   (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
     (forall s_9:charP pointer.
-      (forall i_5:int.
-        (((0 <= i_5) and
-          ((i_5 <= strlen(s_9, charP_charM_s_3_5_at_L)) and
+      (forall i_7:int.
+        (((0 <= i_7) and
+          ((i_7 <= strlen(s_9, charP_charM_s_3_5_at_L)) and
            (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_9,
-           i_5))) <> 0))) ->
-         (i_5 < strlen(s_9, charP_charM_s_3_5_at_L))))))
+           i_7))) <> 0))) ->
+         (i_7 < strlen(s_9, charP_charM_s_3_5_at_L))))))
 
 axiom strlen_zero:
   (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
     (forall s_10:charP pointer.
-      (forall i_6:int.
-        (((0 <= i_6) and
-          ((i_6 <= strlen(s_10, charP_charM_s_3_5_at_L)) and
+      (forall i_8:int.
+        (((0 <= i_8) and
+          ((i_8 <= strlen(s_10, charP_charM_s_3_5_at_L)) and
            (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_10,
-           i_6))) = 0))) ->
-         (i_6 = strlen(s_10, charP_charM_s_3_5_at_L))))))
+           i_8))) = 0))) ->
+         (i_8 = strlen(s_10, charP_charM_s_3_5_at_L))))))
 
 axiom strlen_sup:
   (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
     (forall s_11:charP pointer.
-      (forall i_7:int.
-        (((0 <= i_7) and (integer_of_int8(select(charP_charM_s_3_5_at_L,
-          shift(s_11, i_7))) = 0)) ->
+      (forall i_9:int.
+        (((0 <= i_9) and (integer_of_int8(select(charP_charM_s_3_5_at_L,
+          shift(s_11, i_9))) = 0)) ->
          ((0 <= strlen(s_11, charP_charM_s_3_5_at_L)) and (strlen(s_11,
-          charP_charM_s_3_5_at_L) <= i_7))))))
+          charP_charM_s_3_5_at_L) <= i_9))))))
 
 axiom strlen_shift:
   (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
     (forall s_12:charP pointer.
-      (forall i_8:int.
-        (((0 <= i_8) and (i_8 <= strlen(s_12, charP_charM_s_3_5_at_L))) ->
-         (strlen(shift(s_12, i_8), charP_charM_s_3_5_at_L) = (strlen(s_12,
-         charP_charM_s_3_5_at_L) - i_8))))))
+      (forall i_10:int.
+        (((0 <= i_10) and (i_10 <= strlen(s_12, charP_charM_s_3_5_at_L))) ->
+         (strlen(shift(s_12, i_10), charP_charM_s_3_5_at_L) = (strlen(s_12,
+         charP_charM_s_3_5_at_L) - i_10))))))
 
 axiom strlen_create:
   (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
     (forall s_13:charP pointer.
-      (forall i_9:int.
-        (((0 <= i_9) and
-          ((i_9 <= 2147483647) and
+      (forall i_11:int.
+        (((0 <= i_11) and
+          ((i_11 <= 2147483647) and
            (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_13,
-           i_9))) = 0))) ->
+           i_11))) = 0))) ->
          ((0 <= strlen(s_13, charP_charM_s_3_5_at_L)) and (strlen(s_13,
-          charP_charM_s_3_5_at_L) <= i_9))))))
+          charP_charM_s_3_5_at_L) <= i_11))))))
 
 axiom strlen_create_shift:
   (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
     (forall s_14:charP pointer.
-      (forall i_10:int.
+      (forall i_12:int.
         (forall k:int.
           (((0 <= k) and
-            ((k <= i_10) and
-             ((i_10 <= 2147483647) and
+            ((k <= i_12) and
+             ((i_12 <= 2147483647) and
               (integer_of_int8(select(charP_charM_s_3_5_at_L, shift(s_14,
-              i_10))) = 0)))) ->
+              i_12))) = 0)))) ->
            ((0 <= strlen(shift(s_14, k), charP_charM_s_3_5_at_L)) and
-            (strlen(shift(s_14, k), charP_charM_s_3_5_at_L) <= (i_10 - k))))))))
+            (strlen(shift(s_14, k), charP_charM_s_3_5_at_L) <= (i_12 - k))))))))
 
 axiom memcmp_strlen_left:
   (forall charP_charM_s_3_5_at_L:(charP, int8) memory.
@@ -3955,12 +4161,12 @@ axiom strcmp_zero:
            charP_charM_s1_6_6_at_L) = 0) <->
            ((strlen(s1_8, charP_charM_s1_6_6_at_L) = strlen(s2_8,
             charP_charM_s2_6_7_at_L)) and
-            (forall i_11:int.
-              (((0 <= i_11) and (i_11 <= strlen(s1_8,
+            (forall i_13:int.
+              (((0 <= i_13) and (i_13 <= strlen(s1_8,
                 charP_charM_s1_6_6_at_L))) ->
                (integer_of_int8(select(charP_charM_s1_6_6_at_L, shift(s1_8,
-               i_11))) = integer_of_int8(select(charP_charM_s2_6_7_at_L,
-               shift(s2_8, i_11))))))))))))
+               i_13))) = integer_of_int8(select(charP_charM_s2_6_7_at_L,
+               shift(s2_8, i_13))))))))))))
 
 axiom strncmp_zero:
   (forall charP_charM_s2_9_9_at_L:(charP, int8) memory.
@@ -3973,58 +4179,58 @@ axiom strncmp_zero:
              (((strlen(s1_10, charP_charM_s1_9_8_at_L) < n_11) and
                (strcmp(s1_10, s2_10, charP_charM_s2_9_9_at_L,
                charP_charM_s1_9_8_at_L) = 0)) or
-              (forall i_12:int.
-                (((0 <= i_12) and (i_12 < n_11)) ->
+              (forall i_14:int.
+                (((0 <= i_14) and (i_14 < n_11)) ->
                  (integer_of_int8(select(charP_charM_s1_9_8_at_L,
                  shift(s1_10,
-                 i_12))) = integer_of_int8(select(charP_charM_s2_9_9_at_L,
-                 shift(s2_10, i_12)))))))))))))
+                 i_14))) = integer_of_int8(select(charP_charM_s2_9_9_at_L,
+                 shift(s2_10, i_14)))))))))))))
 
 axiom strchr_def:
   (forall charP_charM_s_15_10_at_L:(charP, int8) memory.
     (forall s_16:charP pointer.
       (forall c_4:int.
         ((strchr(s_16, c_4, charP_charM_s_15_10_at_L) = true) <->
-         (exists i_13:int.
-           ((0 <= i_13) and
-            ((i_13 <= strlen(s_16, charP_charM_s_15_10_at_L)) and
+         (exists i_15:int.
+           ((0 <= i_15) and
+            ((i_15 <= strlen(s_16, charP_charM_s_15_10_at_L)) and
              (integer_of_int8(select(charP_charM_s_15_10_at_L, shift(s_16,
-             i_13))) = c_4))))))))
+             i_15))) = c_4))))))))
 
 axiom wcslen_pos_or_null:
   (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:(unsigned_shortP,
     uint16) memory.
     (forall s_18:unsigned_shortP pointer.
-      (forall i_14:int.
-        (((0 <= i_14) and
-          ((forall j_0:int.
-             (((0 <= j_0) and (j_0 < i_14)) ->
+      (forall i_16:int.
+        (((0 <= i_16) and
+          ((forall j_1:int.
+             (((0 <= j_1) and (j_1 < i_16)) ->
               (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-              shift(s_18, j_0))) <> 0))) and
+              shift(s_18, j_1))) <> 0))) and
            (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-           shift(s_18, i_14))) = 0))) ->
-         (wcslen(s_18, unsigned_shortP_unsigned_shortM_s_17_11_at_L) = i_14)))))
+           shift(s_18, i_16))) = 0))) ->
+         (wcslen(s_18, unsigned_shortP_unsigned_shortM_s_17_11_at_L) = i_16)))))
 
 axiom wcslen_neg:
   (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:(unsigned_shortP,
     uint16) memory.
     (forall s_19:unsigned_shortP pointer.
-      ((forall i_15:int.
-         ((0 <= i_15) ->
+      ((forall i_17:int.
+         ((0 <= i_17) ->
           (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-          shift(s_19, i_15))) <> 0))) ->
+          shift(s_19, i_17))) <> 0))) ->
        (wcslen(s_19, unsigned_shortP_unsigned_shortM_s_17_11_at_L) < 0))))
 
 axiom wcslen_before_null:
   (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:(unsigned_shortP,
     uint16) memory.
     (forall s_20:unsigned_shortP pointer.
-      (forall i_16:int32.
-        (((0 <= integer_of_int32(i_16)) and
-          (integer_of_int32(i_16) < wcslen(s_20,
+      (forall i_18:int32.
+        (((0 <= integer_of_int32(i_18)) and
+          (integer_of_int32(i_18) < wcslen(s_20,
           unsigned_shortP_unsigned_shortM_s_17_11_at_L))) ->
          (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-         shift(s_20, integer_of_int32(i_16)))) <> 0)))))
+         shift(s_20, integer_of_int32(i_18)))) <> 0)))))
 
 axiom wcslen_at_null:
   (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:(unsigned_shortP,
@@ -4039,78 +4245,78 @@ axiom wcslen_not_zero:
   (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:(unsigned_shortP,
     uint16) memory.
     (forall s_22:unsigned_shortP pointer.
-      (forall i_17:int32.
-        (((0 <= integer_of_int32(i_17)) and
-          ((integer_of_int32(i_17) <= wcslen(s_22,
+      (forall i_19:int32.
+        (((0 <= integer_of_int32(i_19)) and
+          ((integer_of_int32(i_19) <= wcslen(s_22,
            unsigned_shortP_unsigned_shortM_s_17_11_at_L)) and
            (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-           shift(s_22, integer_of_int32(i_17)))) <> 0))) ->
-         (integer_of_int32(i_17) < wcslen(s_22,
+           shift(s_22, integer_of_int32(i_19)))) <> 0))) ->
+         (integer_of_int32(i_19) < wcslen(s_22,
          unsigned_shortP_unsigned_shortM_s_17_11_at_L))))))
 
 axiom wcslen_zero:
   (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:(unsigned_shortP,
     uint16) memory.
     (forall s_23:unsigned_shortP pointer.
-      (forall i_18:int32.
-        (((0 <= integer_of_int32(i_18)) and
-          ((integer_of_int32(i_18) <= wcslen(s_23,
+      (forall i_20:int32.
+        (((0 <= integer_of_int32(i_20)) and
+          ((integer_of_int32(i_20) <= wcslen(s_23,
            unsigned_shortP_unsigned_shortM_s_17_11_at_L)) and
            (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-           shift(s_23, integer_of_int32(i_18)))) = 0))) ->
-         (integer_of_int32(i_18) = wcslen(s_23,
+           shift(s_23, integer_of_int32(i_20)))) = 0))) ->
+         (integer_of_int32(i_20) = wcslen(s_23,
          unsigned_shortP_unsigned_shortM_s_17_11_at_L))))))
 
 axiom wcslen_sup:
   (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:(unsigned_shortP,
     uint16) memory.
     (forall s_24:unsigned_shortP pointer.
-      (forall i_19:int32.
-        (((0 <= integer_of_int32(i_19)) and
+      (forall i_21:int32.
+        (((0 <= integer_of_int32(i_21)) and
           (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-          shift(s_24, integer_of_int32(i_19)))) = 0)) ->
+          shift(s_24, integer_of_int32(i_21)))) = 0)) ->
          ((0 <= wcslen(s_24,
           unsigned_shortP_unsigned_shortM_s_17_11_at_L)) and (wcslen(s_24,
-          unsigned_shortP_unsigned_shortM_s_17_11_at_L) <= integer_of_int32(i_19)))))))
+          unsigned_shortP_unsigned_shortM_s_17_11_at_L) <= integer_of_int32(i_21)))))))
 
 axiom wcslen_shift:
   (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:(unsigned_shortP,
     uint16) memory.
     (forall s_25:unsigned_shortP pointer.
-      (forall i_20:int32.
-        (((0 <= integer_of_int32(i_20)) and
-          (integer_of_int32(i_20) <= wcslen(s_25,
+      (forall i_22:int32.
+        (((0 <= integer_of_int32(i_22)) and
+          (integer_of_int32(i_22) <= wcslen(s_25,
           unsigned_shortP_unsigned_shortM_s_17_11_at_L))) ->
-         (wcslen(shift(s_25, integer_of_int32(i_20)),
+         (wcslen(shift(s_25, integer_of_int32(i_22)),
          unsigned_shortP_unsigned_shortM_s_17_11_at_L) = (wcslen(s_25,
-         unsigned_shortP_unsigned_shortM_s_17_11_at_L) - integer_of_int32(i_20)))))))
+         unsigned_shortP_unsigned_shortM_s_17_11_at_L) - integer_of_int32(i_22)))))))
 
 axiom wcslen_create:
   (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:(unsigned_shortP,
     uint16) memory.
     (forall s_26:unsigned_shortP pointer.
-      (forall i_21:int32.
-        (((0 <= integer_of_int32(i_21)) and
+      (forall i_23:int32.
+        (((0 <= integer_of_int32(i_23)) and
           (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-          shift(s_26, integer_of_int32(i_21)))) = 0)) ->
+          shift(s_26, integer_of_int32(i_23)))) = 0)) ->
          ((0 <= wcslen(s_26,
           unsigned_shortP_unsigned_shortM_s_17_11_at_L)) and (wcslen(s_26,
-          unsigned_shortP_unsigned_shortM_s_17_11_at_L) <= integer_of_int32(i_21)))))))
+          unsigned_shortP_unsigned_shortM_s_17_11_at_L) <= integer_of_int32(i_23)))))))
 
 axiom wcslen_create_shift:
   (forall unsigned_shortP_unsigned_shortM_s_17_11_at_L:(unsigned_shortP,
     uint16) memory.
     (forall s_27:unsigned_shortP pointer.
-      (forall i_22:int32.
+      (forall i_24:int32.
         (forall k_2:int32.
           (((0 <= integer_of_int32(k_2)) and
-            ((integer_of_int32(k_2) <= integer_of_int32(i_22)) and
+            ((integer_of_int32(k_2) <= integer_of_int32(i_24)) and
              (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s_17_11_at_L,
-             shift(s_27, integer_of_int32(i_22)))) = 0))) ->
+             shift(s_27, integer_of_int32(i_24)))) = 0))) ->
            ((0 <= wcslen(shift(s_27, integer_of_int32(k_2)),
             unsigned_shortP_unsigned_shortM_s_17_11_at_L)) and
             (wcslen(shift(s_27, integer_of_int32(k_2)),
-            unsigned_shortP_unsigned_shortM_s_17_11_at_L) <= (integer_of_int32(i_22) - integer_of_int32(k_2)))))))))
+            unsigned_shortP_unsigned_shortM_s_17_11_at_L) <= (integer_of_int32(i_24) - integer_of_int32(k_2)))))))))
 
 axiom wcscmp_zero:
   (forall unsigned_shortP_unsigned_shortM_s2_11_13_at_L:(unsigned_shortP,
@@ -4125,13 +4331,13 @@ axiom wcscmp_zero:
            ((wcslen(s1_12,
             unsigned_shortP_unsigned_shortM_s1_11_12_at_L) = wcslen(s2_12,
             unsigned_shortP_unsigned_shortM_s2_11_13_at_L)) and
-            (forall i_23:int.
-              (((0 <= i_23) and (i_23 <= wcslen(s1_12,
+            (forall i_25:int.
+              (((0 <= i_25) and (i_25 <= wcslen(s1_12,
                 unsigned_shortP_unsigned_shortM_s1_11_12_at_L))) ->
                (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s1_11_12_at_L,
                shift(s1_12,
-               i_23))) = integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s2_11_13_at_L,
-               shift(s2_12, i_23))))))))))))
+               i_25))) = integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s2_11_13_at_L,
+               shift(s2_12, i_25))))))))))))
 
 axiom wcsncmp_zero:
   (forall unsigned_shortP_unsigned_shortM_s2_13_15_at_L:(unsigned_shortP,
@@ -4149,10 +4355,10 @@ axiom wcsncmp_zero:
                (wcscmp(s1_14, s2_14,
                unsigned_shortP_unsigned_shortM_s2_13_15_at_L,
                unsigned_shortP_unsigned_shortM_s1_13_14_at_L) = 0)) or
-              (forall i_24:int.
-                (((0 <= i_24) and (i_24 < n_13)) ->
+              (forall i_26:int.
+                (((0 <= i_26) and (i_26 < n_13)) ->
                  (integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s1_13_14_at_L,
                  shift(s1_14,
-                 i_24))) = integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s2_13_15_at_L,
-                 shift(s2_14, i_24)))))))))))))
+                 i_26))) = integer_of_uint16(select(unsigned_shortP_unsigned_shortM_s2_13_15_at_L,
+                 shift(s2_14, i_26)))))))))))))
 

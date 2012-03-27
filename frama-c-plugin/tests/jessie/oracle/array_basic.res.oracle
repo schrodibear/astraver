@@ -16,6 +16,10 @@ axiomatic Padding {
   
 }
 
+type uint32 = 0..4294967295
+
+type uint8 = 0..255
+
 type int32 = -2147483648..2147483647
 
 type int8 = -128..127
@@ -25,6 +29,12 @@ tag intP = {
 }
 
 type intP = [intP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -36,6 +46,17 @@ tag voidP = {
 }
 
 type voidP = [voidP]
+
+unit Frama_C_memset(unsigned_charP[..] dest_0, uint8 v, uint32 n_0)
+  requires (C_2 : ((C_3 : (\offset_min(dest_0) <= 0)) &&
+                    (C_4 : (\offset_max(dest_0) >= (n_0 - 1)))));
+behavior default:
+  assigns (dest_0 + [0..(n_0 - 1)]).unsigned_charM;
+  allocates \nothing;
+  ensures (C_1 : (\forall integer i;
+                   (((0 <= i) && (i < \at(n_0,Old))) ==>
+                     ((\at(dest_0,Old) + i).unsigned_charM == \at(v,Old)))));
+;
 
 intP[0] ga1;
 
@@ -54,13 +75,13 @@ invariant valid_ga3 :
 
 unit fg(int32 i)
 behavior default:
-  ensures (C_7 : ((C_8 : ((ga1 + 0).intM == \at(i,Old))) &&
-                   ((C_10 : ((ga2 + 1).intM == \at(i,Old))) &&
-                     (C_11 : ((ga3 + 2).intM == \at(i,Old))))));
+  ensures (C_11 : ((C_12 : ((ga1 + 0).intM == \at(i,Old))) &&
+                    ((C_14 : ((ga2 + 1).intM == \at(i,Old))) &&
+                      (C_15 : ((ga3 + 2).intM == \at(i,Old))))));
 {  
-   {  (C_2 : ((C_1 : (ga1 + 0).intM) = i));
-      (C_4 : ((C_3 : (ga2 + 1).intM) = i));
-      (C_6 : ((C_5 : (ga3 + 2).intM) = i));
+   {  (C_6 : ((C_5 : (ga1 + 0).intM) = i));
+      (C_8 : ((C_7 : (ga2 + 1).intM) = i));
+      (C_10 : ((C_9 : (ga3 + 2).intM) = i));
       
       (return ())
    }
@@ -68,22 +89,22 @@ behavior default:
 
 unit testg()
 behavior default:
-  ensures (C_16 : true);
+  ensures (C_20 : true);
 {  
-   {  (C_12 : fg(5));
+   {  (C_16 : fg(5));
       
       {  
-         (assert for default: (C_13 : ((ga1 + 0).intM == 5)));
+         (assert for default: (C_17 : ((ga1 + 0).intM == 5)));
          ()
       };
       
       {  
-         (assert for default: (C_14 : ((ga2 + 1).intM == 5)));
+         (assert for default: (C_18 : ((ga2 + 1).intM == 5)));
          ()
       };
       
       {  
-         (assert for default: (C_15 : ((ga3 + 2).intM == 5)));
+         (assert for default: (C_19 : ((ga3 + 2).intM == 5)));
          ()
       };
       
@@ -91,9 +112,20 @@ behavior default:
    }
 }
 
+unit implicit_init(intP[..] la3)
+behavior default:
+  assigns (la3 + [0..(3 - 1)]).intM;
+  allocates \nothing;
+  ensures (C_21 : ((C_22 : ((la3 + 0).intM == 0)) &&
+                    ((C_24 : ((la3 + 1).intM == 0)) &&
+                      (C_25 : (\forall integer __i;
+                                (((2 <= __i) && (__i <= 2)) ==>
+                                  ((la3 + __i).intM == 0)))))));
+;
+
 unit lg(int32 i_0)
 behavior default:
-  ensures (C_41 : true);
+  ensures (C_50 : true);
 {  
    (var intP[0] la1);
    
@@ -101,34 +133,43 @@ behavior default:
    
    (var intP[0..2] la3);
    
-   {  (C_18 : (la1 = (C_17 : (new intP[1]))));
-      (C_20 : (la2 = (C_19 : (new intP[2]))));
-      (C_22 : (la3 = (C_21 : (new intP[3]))));
-      (C_24 : ((C_23 : (la3 + 0).intM) = 0));
-      (C_26 : ((C_25 : (la3 + 1).intM) = 0));
-      (C_28 : ((C_27 : (la3 + 2).intM) = 0));
-      (C_30 : ((C_29 : (la1 + 0).intM) = i_0));
-      (C_32 : ((C_31 : (la2 + 1).intM) = i_0));
-      (C_34 : ((C_33 : (la3 + 2).intM) = i_0));
+   {  (C_27 : (la1 = (C_26 : (new intP[1]))));
+      (C_29 : (la2 = (C_28 : (new intP[2]))));
+      (C_31 : (la3 = (C_30 : (new intP[3]))));
+      
+      ( 
+        behavior Frama_C_implicit_init:
+          assigns (la3 + [0..(3 - 1)]).intM;
+          allocates \nothing;
+          ensures (C_33 : ((C_34 : ((la3 + 0).intM == 0)) &&
+                            ((C_36 : ((la3 + 1).intM == 0)) &&
+                              (C_37 : (\forall integer __i;
+                                        (((2 <= __i) && (__i <= 2)) ==>
+                                          ((la3 + __i).intM == 0)))))));
+        { (C_32 : implicit_init(la3))
+        });
+      (C_39 : ((C_38 : (la1 + 0).intM) = i_0));
+      (C_41 : ((C_40 : (la2 + 1).intM) = i_0));
+      (C_43 : ((C_42 : (la3 + 2).intM) = i_0));
       
       {  
-         (assert for default: (C_35 : ((la1 + 0).intM == i_0)));
+         (assert for default: (C_44 : ((la1 + 0).intM == i_0)));
          ()
       };
       
       {  
-         (assert for default: (C_36 : ((la2 + 1).intM == i_0)));
+         (assert for default: (C_45 : ((la2 + 1).intM == i_0)));
          ()
       };
       
       {  
-         (assert for default: (C_37 : ((la3 + 2).intM == i_0)));
+         (assert for default: (C_46 : ((la3 + 2).intM == i_0)));
          ()
       };
       
-      {  (C_38 : (free(la1)));
-         (C_39 : (free(la2)));
-         (C_40 : (free(la3)));
+      {  (C_47 : (free(la1)));
+         (C_48 : (free(la2)));
+         (C_49 : (free(la3)));
          
          (return ())
       }
@@ -150,6 +191,12 @@ type int8
 type intP
 
 type padding
+
+type uint32
+
+type uint8
+
+type unsigned_charP
 
 type voidP
 
@@ -178,6 +225,16 @@ logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
+
+logic integer_of_uint32: uint32 -> int
+
+predicate eq_uint32(x:uint32, y:uint32) =
+ eq_int(integer_of_uint32(x), integer_of_uint32(y))
+
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic ga1:  -> intP pointer
 
@@ -241,6 +298,10 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
 predicate left_valid_struct_intP(p:intP pointer, a:int,
  intP_alloc_table:intP alloc_table) = (offset_min(intP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -250,6 +311,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 
 axiom pointer_addr_of_intP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -262,6 +329,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
 
 predicate right_valid_struct_intP(p:intP pointer, b:int,
  intP_alloc_table:intP alloc_table) = (offset_max(intP_alloc_table, p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -276,6 +347,11 @@ predicate strict_valid_root_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -292,10 +368,64 @@ predicate strict_valid_struct_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic uint32_of_integer: int -> uint32
+
+axiom uint32_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (4294967295))) ->
+   eq_int(integer_of_uint32(uint32_of_integer(x)), x)))
+
+axiom uint32_extensionality :
+ (forall x:uint32.
+  (forall y:uint32[eq_int(integer_of_uint32(x), integer_of_uint32(y))].
+   (eq_int(integer_of_uint32(x), integer_of_uint32(y)) -> (x = y))))
+
+axiom uint32_range :
+ (forall x:uint32.
+  (le_int((0), integer_of_uint32(x))
+  and le_int(integer_of_uint32(x), (4294967295))))
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_ga1(intP_ga1_1_alloc_table:intP alloc_table) =
  (le_int(offset_min(intP_ga1_1_alloc_table, ga1), (0))
@@ -319,6 +449,11 @@ predicate valid_root_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
 
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
+
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) <= a)
@@ -333,6 +468,11 @@ predicate valid_struct_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -352,6 +492,75 @@ axiom voidP_tags :
  (forall x:voidP pointer.
   (forall voidP_tag_table:voidP tag_table.
    instanceof(voidP_tag_table, x, voidP_tag)))
+
+parameter intP_ga3_3_alloc_table : intP alloc_table ref
+
+parameter intP_ga2_2_alloc_table : intP alloc_table ref
+
+parameter intP_ga1_1_alloc_table : intP alloc_table ref
+
+parameter Frama_C_memset :
+ dest_0:unsigned_charP pointer ->
+  v:uint8 ->
+   n_0:uint32 ->
+    unsigned_charP_unsigned_charM_dest_0_4:(unsigned_charP, uint8) memory ref ->
+     unsigned_charP_dest_0_4_alloc_table:unsigned_charP alloc_table ->
+      { } unit
+      reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,unsigned_charP_unsigned_charM_dest_0_4
+      writes unsigned_charP_unsigned_charM_dest_0_4
+      { ((JC_<somenum>:
+         ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+         and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
+             and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))
+        and (JC_<somenum>:
+            ((JC_<somenum>:
+             (forall i_1:int.
+              ((le_int((0), i_1) and lt_int(i_1, integer_of_uint32(n_0))) ->
+               (integer_of_uint8(select(unsigned_charP_unsigned_charM_dest_0_4,
+                                 shift(dest_0, i_1))) = integer_of_uint8(v)))))
+            and (JC_<somenum>:
+                not_assigns(unsigned_charP_dest_0_4_alloc_table,
+                unsigned_charP_unsigned_charM_dest_0_4@,
+                unsigned_charP_unsigned_charM_dest_0_4,
+                pset_range(pset_singleton(dest_0), (0),
+                sub_int(integer_of_uint32(n_0), (1)))))))) }
+
+parameter Frama_C_memset_requires :
+ dest_0:unsigned_charP pointer ->
+  v:uint8 ->
+   n_0:uint32 ->
+    unsigned_charP_unsigned_charM_dest_0_4:(unsigned_charP, uint8) memory ref ->
+     unsigned_charP_dest_0_4_alloc_table:unsigned_charP alloc_table ->
+      { (JC_<somenum>:
+        ((JC_<somenum>:
+         ((JC_<somenum>:
+          le_int(offset_min(unsigned_charP_dest_0_4_alloc_table, dest_0),
+          (0)))
+         and (JC_<somenum>:
+             ge_int(offset_max(unsigned_charP_dest_0_4_alloc_table, dest_0),
+             sub_int(integer_of_uint32(n_0), (1))))))
+        and ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+            and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
+                and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))))}
+      unit
+      reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,unsigned_charP_unsigned_charM_dest_0_4
+      writes unsigned_charP_unsigned_charM_dest_0_4
+      { ((JC_<somenum>:
+         ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+         and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
+             and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))
+        and (JC_<somenum>:
+            ((JC_<somenum>:
+             (forall i_1:int.
+              ((le_int((0), i_1) and lt_int(i_1, integer_of_uint32(n_0))) ->
+               (integer_of_uint8(select(unsigned_charP_unsigned_charM_dest_0_4,
+                                 shift(dest_0, i_1))) = integer_of_uint8(v)))))
+            and (JC_<somenum>:
+                not_assigns(unsigned_charP_dest_0_4_alloc_table,
+                unsigned_charP_unsigned_charM_dest_0_4@,
+                unsigned_charP_unsigned_charM_dest_0_4,
+                pset_range(pset_singleton(dest_0), (0),
+                sub_int(integer_of_uint32(n_0), (1)))))))) }
 
 exception Loop_continue_exc of unit
 
@@ -411,6 +620,38 @@ parameter alloc_struct_intP_requires :
           and (alloc_fresh(intP_alloc_table@, result, n)
               and instanceof(intP_tag_table, result, intP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -441,11 +682,9 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
-parameter intP_ga3_3_alloc_table : intP alloc_table ref
+parameter any_uint32 : unit -> { } uint32 { true }
 
-parameter intP_ga2_2_alloc_table : intP alloc_table ref
-
-parameter intP_ga1_1_alloc_table : intP alloc_table ref
+parameter any_uint8 : unit -> { } uint8 { true }
 
 parameter intP_intM_ga3_3 : (intP, int32) memory ref
 
@@ -497,6 +736,64 @@ parameter fg_requires :
                 (integer_of_int32(select(intP_intM_ga3_3, shift(ga3, (2)))) = 
                 integer_of_int32(i))))))) }
 
+parameter implicit_init :
+ la3:intP pointer ->
+  intP_intM_la3_5:(intP, int32) memory ref ->
+   intP_la3_5_alloc_table:intP alloc_table ->
+    { } unit
+    reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,intP_intM_la3_5
+    writes intP_intM_la3_5
+    { ((JC_<somenum>:
+       ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+       and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
+           and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))
+      and (JC_<somenum>:
+          ((JC_<somenum>:
+           ((JC_<somenum>:
+            (integer_of_int32(select(intP_intM_la3_5, shift(la3, (0)))) = (0)))
+           and ((JC_<somenum>:
+                (integer_of_int32(select(intP_intM_la3_5, shift(la3, (1)))) = (0)))
+               and (JC_<somenum>:
+                   (forall __i:int.
+                    ((le_int((2), __i) and le_int(__i, (2))) ->
+                     (integer_of_int32(select(intP_intM_la3_5,
+                                       shift(la3, __i))) = (0))))))))
+          and (JC_<somenum>:
+              not_assigns(intP_la3_5_alloc_table, intP_intM_la3_5@,
+              intP_intM_la3_5,
+              pset_range(pset_singleton(la3), (0), sub_int((3), (1)))))))) }
+
+parameter implicit_init_requires :
+ la3:intP pointer ->
+  intP_intM_la3_5:(intP, int32) memory ref ->
+   intP_la3_5_alloc_table:intP alloc_table ->
+    { (JC_<somenum>:
+      ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+      and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
+          and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))}
+    unit
+    reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,intP_intM_la3_5
+    writes intP_intM_la3_5
+    { ((JC_<somenum>:
+       ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+       and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
+           and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))
+      and (JC_<somenum>:
+          ((JC_<somenum>:
+           ((JC_<somenum>:
+            (integer_of_int32(select(intP_intM_la3_5, shift(la3, (0)))) = (0)))
+           and ((JC_<somenum>:
+                (integer_of_int32(select(intP_intM_la3_5, shift(la3, (1)))) = (0)))
+               and (JC_<somenum>:
+                   (forall __i:int.
+                    ((le_int((2), __i) and le_int(__i, (2))) ->
+                     (integer_of_int32(select(intP_intM_la3_5,
+                                       shift(la3, __i))) = (0))))))))
+          and (JC_<somenum>:
+              not_assigns(intP_la3_5_alloc_table, intP_intM_la3_5@,
+              intP_intM_la3_5,
+              pset_range(pset_singleton(la3), (0), sub_int((3), (1)))))))) }
+
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -535,6 +832,12 @@ parameter safe_int32_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
+parameter safe_uint32_of_integer_ :
+ x:int -> { } uint32 { eq_int(integer_of_uint32(result), x) }
+
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
 parameter testg :
  tt:unit ->
   { } unit
@@ -559,6 +862,16 @@ parameter testg_requires :
     and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
         and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
 
+parameter uint32_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (4294967295)))} uint32
+  { eq_int(integer_of_uint32(result), x) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
+
 let fg_ensures_default =
  fun (i : int32) ->
   { (JC_<somenum>:
@@ -567,9 +880,9 @@ let fg_ensures_default =
         and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
   (init:
   try
-   (C_2:
-   (C_4:
    (C_6:
+   (C_8:
+   (C_10:
    begin
      (let jessie_<somenum> = i in
      (let jessie_<somenum> = ga1 in
@@ -605,9 +918,9 @@ let fg_safety =
         and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
   (init:
   try
-   (C_2:
-   (C_4:
    (C_6:
+   (C_8:
+   (C_10:
    begin
      (let jessie_<somenum> = i in
      (let jessie_<somenum> = ga1 in
@@ -639,94 +952,96 @@ let lg_ensures_default =
   (init:
   try
    begin
-     (let intP_intM_la3_6 = ref (any_memory void) in
-     (let intP_intM_la2_5 = ref (any_memory void) in
-     (let intP_intM_la1_4 = ref (any_memory void) in
-     (let intP_la1_4_tag_table = ref (any_tag_table void) in
-     (let intP_la2_5_tag_table = ref (any_tag_table void) in
-     (let intP_la3_6_tag_table = ref (any_tag_table void) in
-     (let intP_la3_6_alloc_table = ref (any_alloc_table void) in
-     (let intP_la2_5_alloc_table = ref (any_alloc_table void) in
-     (let intP_la1_4_alloc_table = ref (any_alloc_table void) in
+     (let intP_intM_la3_8 = ref (any_memory void) in
+     (let intP_intM_la2_7 = ref (any_memory void) in
+     (let intP_intM_la1_6 = ref (any_memory void) in
+     (let intP_la1_6_tag_table = ref (any_tag_table void) in
+     (let intP_la2_7_tag_table = ref (any_tag_table void) in
+     (let intP_la3_8_tag_table = ref (any_tag_table void) in
+     (let intP_la3_8_alloc_table = ref (any_alloc_table void) in
+     (let intP_la2_7_alloc_table = ref (any_alloc_table void) in
+     (let intP_la1_6_alloc_table = ref (any_alloc_table void) in
      (let la1 = ref (any_pointer void) in
      (let la2 = ref (any_pointer void) in
-     (let la3 = ref (any_pointer void) in
-     (C_18:
-     (C_20:
-     (C_22:
-     (C_24:
-     (C_26:
-     (C_28:
-     (C_30:
-     (C_32:
-     (C_34:
-     (C_38:
+     (let la3_0 = ref (any_pointer void) in
+     (C_27:
+     (C_29:
+     (C_31:
      (C_39:
-     (C_40:
+     (C_41:
+     (C_43:
+     (C_47:
+     (C_48:
+     (C_49:
      begin
        (let jessie_<somenum> =
-       (la1 := (C_17:
+       (la1 := (C_26:
                (JC_<somenum>:
-               (((alloc_struct_intP (1)) intP_la1_4_alloc_table) intP_la1_4_tag_table)))) in
+               (((alloc_struct_intP (1)) intP_la1_6_alloc_table) intP_la1_6_tag_table)))) in
        void);
       (let jessie_<somenum> =
-      (la2 := (C_19:
+      (la2 := (C_28:
               (JC_<somenum>:
-              (((alloc_struct_intP (2)) intP_la2_5_alloc_table) intP_la2_5_tag_table)))) in
+              (((alloc_struct_intP (2)) intP_la2_7_alloc_table) intP_la2_7_tag_table)))) in
       void);
       (let jessie_<somenum> =
-      (la3 := (C_21:
-              (JC_<somenum>:
-              (((alloc_struct_intP (3)) intP_la3_6_alloc_table) intP_la3_6_tag_table)))) in
-      void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = !la3 in
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = !la3 in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = !la3 in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit reads intP_intM_la3_6,intP_la3_6_alloc_table
-        writes intP_intM_la3_6
-        { (not_assigns(intP_la3_6_alloc_table, intP_intM_la3_6@,
-           intP_intM_la3_6, pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-          and ((select(intP_intM_la3_6, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(intP_intM_la3_6, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and (select(intP_intM_la3_6, shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
+      (la3_0 := (C_30:
+                (JC_<somenum>:
+                (((alloc_struct_intP (3)) intP_la3_8_alloc_table) intP_la3_8_tag_table)))) in
+      void); [ { } unit { true } ];
+      (let jessie_<somenum> =
+      (assert { true };
+      ((C_32:
+       (let jessie_<somenum> = !la3_0 in
+       (JC_<somenum>:
+       (((implicit_init jessie_<somenum>) intP_intM_la3_8) !intP_la3_8_alloc_table)))))) in
+      [ { } unit
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            (integer_of_int32(select(intP_intM_la3_8, shift(la3_0, (0)))) = (0)))
+           and ((JC_<somenum>:
+                (integer_of_int32(select(intP_intM_la3_8, shift(la3_0, (1)))) = (0)))
+               and (JC_<somenum>:
+                   (forall __i_0:int.
+                    ((le_int((2), __i_0) and le_int(__i_0, (2))) ->
+                     (integer_of_int32(select(intP_intM_la3_8,
+                                       shift(la3_0, __i_0))) = (0))))))))
+          and (JC_<somenum>:
+              not_assigns(intP_la3_8_alloc_table@init, intP_intM_la3_8@init,
+              intP_intM_la3_8,
+              pset_range(pset_singleton(la3_0@), (0), sub_int((3), (1)))))) } ]);
       (let jessie_<somenum> = i_0 in
       (let jessie_<somenum> = !la1 in
-      (((safe_upd_ intP_intM_la1_4) jessie_<somenum>) jessie_<somenum>)));
+      (((safe_upd_ intP_intM_la1_6) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> = i_0 in
       (let jessie_<somenum> = !la2 in
       (let jessie_<somenum> = (1) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-      (((safe_upd_ intP_intM_la2_5) jessie_<somenum>) jessie_<somenum>))))));
+      (((safe_upd_ intP_intM_la2_7) jessie_<somenum>) jessie_<somenum>))))));
       (let jessie_<somenum> = i_0 in
-      (let jessie_<somenum> = !la3 in
+      (let jessie_<somenum> = !la3_0 in
       (let jessie_<somenum> = (2) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-      (((safe_upd_ intP_intM_la3_6) jessie_<somenum>) jessie_<somenum>))))));
+      (((safe_upd_ intP_intM_la3_8) jessie_<somenum>) jessie_<somenum>))))));
       (assert
       { (JC_<somenum>:
-        (integer_of_int32(select(intP_intM_la1_4, shift(la1, (0)))) = 
+        (integer_of_int32(select(intP_intM_la1_6, shift(la1, (0)))) = 
         integer_of_int32(i_0))) }; void); void;
       (assert
       { (JC_<somenum>:
-        (integer_of_int32(select(intP_intM_la2_5, shift(la2, (1)))) = 
+        (integer_of_int32(select(intP_intM_la2_7, shift(la2, (1)))) = 
         integer_of_int32(i_0))) }; void); void;
       (assert
       { (JC_<somenum>:
-        (integer_of_int32(select(intP_intM_la3_6, shift(la3, (2)))) = 
+        (integer_of_int32(select(intP_intM_la3_8, shift(la3_0, (2)))) = 
         integer_of_int32(i_0))) }; void); void;
-      ((safe_free_parameter intP_la1_4_alloc_table) !la1);
-      ((safe_free_parameter intP_la2_5_alloc_table) !la2);
-      ((safe_free_parameter intP_la3_6_alloc_table) !la3); (raise Return) end))))))))))))))))))))))));
-    (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
+      ((safe_free_parameter intP_la1_6_alloc_table) !la1);
+      ((safe_free_parameter intP_la2_7_alloc_table) !la2);
+      ((safe_free_parameter intP_la3_8_alloc_table) !la3_0); (raise Return)
+     end))))))))))))))))))))); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let lg_safety =
  fun (i_0 : int32) ->
@@ -737,105 +1052,109 @@ let lg_safety =
   (init:
   try
    begin
-     (let intP_intM_la3_6 = ref (any_memory void) in
-     (let intP_intM_la2_5 = ref (any_memory void) in
-     (let intP_intM_la1_4 = ref (any_memory void) in
-     (let intP_la1_4_tag_table = ref (any_tag_table void) in
-     (let intP_la2_5_tag_table = ref (any_tag_table void) in
-     (let intP_la3_6_tag_table = ref (any_tag_table void) in
-     (let intP_la3_6_alloc_table = ref (any_alloc_table void) in
-     (let intP_la2_5_alloc_table = ref (any_alloc_table void) in
-     (let intP_la1_4_alloc_table = ref (any_alloc_table void) in
+     (let intP_intM_la3_8 = ref (any_memory void) in
+     (let intP_intM_la2_7 = ref (any_memory void) in
+     (let intP_intM_la1_6 = ref (any_memory void) in
+     (let intP_la1_6_tag_table = ref (any_tag_table void) in
+     (let intP_la2_7_tag_table = ref (any_tag_table void) in
+     (let intP_la3_8_tag_table = ref (any_tag_table void) in
+     (let intP_la3_8_alloc_table = ref (any_alloc_table void) in
+     (let intP_la2_7_alloc_table = ref (any_alloc_table void) in
+     (let intP_la1_6_alloc_table = ref (any_alloc_table void) in
      (let la1 = ref (any_pointer void) in
      (let la2 = ref (any_pointer void) in
-     (let la3 = ref (any_pointer void) in
-     (C_18:
-     (C_20:
-     (C_22:
-     (C_24:
-     (C_26:
-     (C_28:
-     (C_30:
-     (C_32:
-     (C_34:
-     (C_38:
+     (let la3_0 = ref (any_pointer void) in
+     (C_27:
+     (C_29:
+     (C_31:
      (C_39:
-     (C_40:
+     (C_41:
+     (C_43:
+     (C_47:
+     (C_48:
+     (C_49:
      begin
        (let jessie_<somenum> =
        (la1 := (let jessie_<somenum> =
-               (C_17:
+               (C_26:
                (JC_<somenum>:
-               (((alloc_struct_intP_requires (1)) intP_la1_4_alloc_table) intP_la1_4_tag_table))) in
+               (((alloc_struct_intP_requires (1)) intP_la1_6_alloc_table) intP_la1_6_tag_table))) in
                (JC_<somenum>:
                (assert
-               { ge_int(offset_max(intP_la1_4_alloc_table, jessie_<somenum>), (0)) };
+               { ge_int(offset_max(intP_la1_6_alloc_table, jessie_<somenum>), (0)) };
                jessie_<somenum>)))) in void);
       (let jessie_<somenum> =
       (la2 := (let jessie_<somenum> =
-              (C_19:
+              (C_28:
               (JC_<somenum>:
-              (((alloc_struct_intP_requires (2)) intP_la2_5_alloc_table) intP_la2_5_tag_table))) in
+              (((alloc_struct_intP_requires (2)) intP_la2_7_alloc_table) intP_la2_7_tag_table))) in
               (JC_<somenum>:
               (assert
-              { ge_int(offset_max(intP_la2_5_alloc_table, jessie_<somenum>), (1)) };
+              { ge_int(offset_max(intP_la2_7_alloc_table, jessie_<somenum>), (1)) };
               jessie_<somenum>)))) in void);
       (let jessie_<somenum> =
-      (la3 := (let jessie_<somenum> =
-              (C_21:
-              (JC_<somenum>:
-              (((alloc_struct_intP_requires (3)) intP_la3_6_alloc_table) intP_la3_6_tag_table))) in
-              (JC_<somenum>:
-              (assert
-              { ge_int(offset_max(intP_la3_6_alloc_table, jessie_<somenum>), (2)) };
-              jessie_<somenum>)))) in void);
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = !la3 in
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = !la3 in
-      (let jessie_<somenum> = (1) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-      (let jessie_<somenum> = !la3 in
-      (let jessie_<somenum> = (2) in
-      (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-      [ { } unit reads intP_intM_la3_6,intP_la3_6_alloc_table
-        writes intP_intM_la3_6
-        { (not_assigns(intP_la3_6_alloc_table, intP_intM_la3_6@,
-           intP_intM_la3_6, pset_range(pset_singleton(jessie_<somenum>), (0), (2)))
-          and ((select(intP_intM_la3_6, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-              and ((select(intP_intM_la3_6, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                  and (select(intP_intM_la3_6, shift(jessie_<somenum>, (2))) = jessie_<somenum>)))) } ]))))))))));
+      (la3_0 := (let jessie_<somenum> =
+                (C_30:
+                (JC_<somenum>:
+                (((alloc_struct_intP_requires (3)) intP_la3_8_alloc_table) intP_la3_8_tag_table))) in
+                (JC_<somenum>:
+                (assert
+                { ge_int(offset_max(intP_la3_8_alloc_table, jessie_<somenum>), (2)) };
+                jessie_<somenum>)))) in void);
+      (let jessie_<somenum> =
+      (assert { true };
+      ((C_32:
+       (let jessie_<somenum> = !la3_0 in
+       (JC_<somenum>:
+       (((implicit_init_requires jessie_<somenum>) intP_intM_la3_8) !intP_la3_8_alloc_table)))))) in
+      begin
+        [ { } unit
+          { ((JC_<somenum>:
+             ((JC_<somenum>:
+              (integer_of_int32(select(intP_intM_la3_8, shift(la3_0, (0)))) = (0)))
+             and ((JC_<somenum>:
+                  (integer_of_int32(select(intP_intM_la3_8,
+                                    shift(la3_0, (1)))) = (0)))
+                 and (JC_<somenum>:
+                     (forall __i_0:int.
+                      ((le_int((2), __i_0) and le_int(__i_0, (2))) ->
+                       (integer_of_int32(select(intP_intM_la3_8,
+                                         shift(la3_0, __i_0))) = (0))))))))
+            and (JC_<somenum>:
+                not_assigns(intP_la3_8_alloc_table@init,
+                intP_intM_la3_8@init, intP_intM_la3_8,
+                pset_range(pset_singleton(la3_0@), (0), sub_int((3), (1)))))) } ];
+       jessie_<somenum> end);
       (let jessie_<somenum> = i_0 in
       (let jessie_<somenum> = !la1 in
-      (((safe_upd_ intP_intM_la1_4) jessie_<somenum>) jessie_<somenum>)));
+      (((safe_upd_ intP_intM_la1_6) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> = i_0 in
       (let jessie_<somenum> = !la2 in
       (let jessie_<somenum> = (1) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-      (((safe_upd_ intP_intM_la2_5) jessie_<somenum>) jessie_<somenum>))))));
+      (((safe_upd_ intP_intM_la2_7) jessie_<somenum>) jessie_<somenum>))))));
       (let jessie_<somenum> = i_0 in
-      (let jessie_<somenum> = !la3 in
+      (let jessie_<somenum> = !la3_0 in
       (let jessie_<somenum> = (2) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-      (((safe_upd_ intP_intM_la3_6) jessie_<somenum>) jessie_<somenum>))))));
-      [ { } unit reads intP_intM_la1_4,la1
+      (((safe_upd_ intP_intM_la3_8) jessie_<somenum>) jessie_<somenum>))))));
+      [ { } unit reads intP_intM_la1_6,la1
         { (JC_<somenum>:
-          (integer_of_int32(select(intP_intM_la1_4, shift(la1, (0)))) = 
+          (integer_of_int32(select(intP_intM_la1_6, shift(la1, (0)))) = 
           integer_of_int32(i_0))) } ]; void;
-      [ { } unit reads intP_intM_la2_5,la2
+      [ { } unit reads intP_intM_la2_7,la2
         { (JC_<somenum>:
-          (integer_of_int32(select(intP_intM_la2_5, shift(la2, (1)))) = 
+          (integer_of_int32(select(intP_intM_la2_7, shift(la2, (1)))) = 
           integer_of_int32(i_0))) } ]; void;
-      [ { } unit reads intP_intM_la3_6,la3
+      [ { } unit reads intP_intM_la3_8,la3_0
         { (JC_<somenum>:
-          (integer_of_int32(select(intP_intM_la3_6, shift(la3, (2)))) = 
+          (integer_of_int32(select(intP_intM_la3_8, shift(la3_0, (2)))) = 
           integer_of_int32(i_0))) } ]; void;
-      ((free_parameter intP_la1_4_alloc_table) !la1);
-      ((free_parameter intP_la2_5_alloc_table) !la2);
-      ((free_parameter intP_la3_6_alloc_table) !la3); (raise Return) end))))))))))))))))))))))));
+      ((free_parameter intP_la1_6_alloc_table) !la1);
+      ((free_parameter intP_la2_7_alloc_table) !la2);
+      ((free_parameter intP_la3_8_alloc_table) !la3_0); (raise Return) end)))))))))))))))))))));
     (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
@@ -850,7 +1169,7 @@ let testg_ensures_default =
         and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
   (init:
   try
-   (C_12:
+   (C_16:
    begin
      (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
      (JC_<somenum>: (fg jessie_<somenum>)));
@@ -876,7 +1195,7 @@ let testg_safety =
         and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))) }
   (init:
   try
-   (C_12:
+   (C_16:
    begin
      (let jessie_<somenum> = (safe_int32_of_integer_ (5)) in
      (JC_<somenum>: (fg_requires jessie_<somenum>)));
@@ -904,35 +1223,35 @@ why --project [...] why/array_basic.why
   <function name="Function testg">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
-    <goal why_file="why/array_basic_po20.why">
+    <goal why_file="why/array_basic_po22.why">
       <location file = "PPCHOME/tests/jessie/array_basic.c" line = "18" begin = "13" end = "24"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/array_basic_po21.why">
+    <goal why_file="why/array_basic_po23.why">
       <location file = "PPCHOME/tests/jessie/array_basic.c" line = "19" begin = "13" end = "24"/>
       <explain kind = "Assert"/>
     </goal>
-    <goal why_file="why/array_basic_po22.why">
+    <goal why_file="why/array_basic_po24.why">
       <location file = "PPCHOME/tests/jessie/array_basic.c" line = "20" begin = "13" end = "24"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
     <behavior name="Safety">
-    <goal why_file="why/array_basic_po23.why">
-      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "67" begin = "14" end = "19"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
-    <goal why_file="why/array_basic_po24.why">
-      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "67" begin = "14" end = "19"/>
-      <explain kind = "Pre"
-text = "UserCall"/>
-    </goal>
     <goal why_file="why/array_basic_po25.why">
+      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "88" begin = "14" end = "19"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/array_basic_po26.why">
+      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "88" begin = "14" end = "19"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/array_basic_po27.why">
       <location file = "PPCHOME/tests/jessie/array_basic.c" line = "16" begin = "5" end = "10"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/array_basic_po26.why">
+    <goal why_file="why/array_basic_po28.why">
       <location file = "PPCHOME/tests/jessie/array_basic.c" line = "16" begin = "5" end = "10"/>
       <explain kind = "Post"/>
     </goal>
@@ -961,7 +1280,7 @@ text = "UserCall"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/array_basic_po10.why">
-      <location file = "why/array_basic.why" line = "635" begin = "17" end = "75"/>
+      <location file = "why/array_basic.why" line = "906" begin = "17" end = "75"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/array_basic_po11.why">
@@ -970,7 +1289,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/array_basic_po12.why">
-      <location file = "why/array_basic.why" line = "644" begin = "16" end = "74"/>
+      <location file = "why/array_basic.why" line = "915" begin = "16" end = "74"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/array_basic_po13.why">
@@ -979,29 +1298,39 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/array_basic_po14.why">
-      <location file = "why/array_basic.why" line = "653" begin = "16" end = "74"/>
+      <location file = "why/array_basic.why" line = "924" begin = "18" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/array_basic_po15.why">
-      <location file = "why/array_basic.why" line = "699" begin = "7" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "143" begin = "18" end = "36"/>
       <explain kind = "Pre"
-text = ""/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/array_basic_po16.why">
-      <location file = "why/array_basic.why" line = "700" begin = "7" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/array_basic.jessie/array_basic.jc" line = "143" begin = "18" end = "36"/>
       <explain kind = "Pre"
-text = ""/>
+text = "UserCall"/>
     </goal>
     <goal why_file="why/array_basic_po17.why">
-      <location file = "why/array_basic.why" line = "701" begin = "7" end = "51"/>
+      <location file = "why/array_basic.why" line = "977" begin = "7" end = "51"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/array_basic_po18.why">
+      <location file = "why/array_basic.why" line = "978" begin = "7" end = "51"/>
+      <explain kind = "Pre"
+text = ""/>
+    </goal>
+    <goal why_file="why/array_basic_po19.why">
+      <location file = "why/array_basic.why" line = "979" begin = "7" end = "53"/>
+      <explain kind = "Pre"
+text = ""/>
+    </goal>
+    <goal why_file="why/array_basic_po20.why">
       <location file = "PPCHOME/tests/jessie/array_basic.c" line = "23" begin = "5" end = "7"/>
       <explain kind = "Post"/>
     </goal>
-    <goal why_file="why/array_basic_po19.why">
+    <goal why_file="why/array_basic_po21.why">
       <location file = "PPCHOME/tests/jessie/array_basic.c" line = "23" begin = "5" end = "7"/>
       <explain kind = "Post"/>
     </goal>
@@ -1989,6 +2318,12 @@ type intP
 
 type padding
 
+type uint32
+
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag : charP tag_id
@@ -2017,6 +2352,16 @@ logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
+
+logic integer_of_uint32 : uint32 -> int
+
+predicate eq_uint32(x: uint32, y: uint32) =
+  (integer_of_uint32(x) = integer_of_uint32(y))
+
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
 
 logic ga1 : intP pointer
 
@@ -2081,6 +2426,10 @@ predicate left_valid_struct_intP(p: intP pointer, a: int,
   intP_alloc_table: intP alloc_table) = (offset_min(intP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -2090,6 +2439,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 
 axiom pointer_addr_of_intP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -2104,6 +2459,10 @@ predicate right_valid_struct_intP(p: intP pointer, b: int,
   intP_alloc_table: intP alloc_table) = (offset_max(intP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
@@ -2117,6 +2476,11 @@ predicate strict_valid_root_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2133,10 +2497,62 @@ predicate strict_valid_struct_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic uint32_of_integer : int -> uint32
+
+axiom uint32_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 4294967295)) ->
+     (integer_of_uint32(uint32_of_integer(x)) = x)))
+
+axiom uint32_extensionality:
+  (forall x:uint32.
+    (forall y:uint32 [(integer_of_uint32(x) = integer_of_uint32(y))].
+      ((integer_of_uint32(x) = integer_of_uint32(y)) -> (x = y))))
+
+axiom uint32_range:
+  (forall x:uint32.
+    ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_ga1(intP_ga1_1_alloc_table: intP alloc_table) =
   ((offset_min(intP_ga1_1_alloc_table, ga1) <= 0) and
@@ -2160,6 +2576,11 @@ predicate valid_root_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
 
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
+
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
@@ -2174,6 +2595,11 @@ predicate valid_struct_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =

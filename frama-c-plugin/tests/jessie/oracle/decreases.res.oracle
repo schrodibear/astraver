@@ -15,6 +15,12 @@ axiomatic Padding {
   
 }
 
+tag unsigned_charP = {
+  integer unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
 tag charP = {
   integer charM: 8;
 }
@@ -26,9 +32,9 @@ tag voidP = {
 
 type voidP = [voidP]
 
-integer even(integer n)
-  requires (C_9 : (n >= 0));
-  decreases (C_10 : n);
+integer even(integer n_1)
+  requires (C_9 : (n_1 >= 0));
+  decreases (C_10 : n_1);
 behavior default:
   ensures (C_8 : true);
 {  
@@ -38,12 +44,12 @@ behavior default:
    
    (var integer __retres);
    
-   {  (if (n == 0) then 
+   {  (if (n_1 == 0) then 
       {  (C_1 : (__retres = 1));
          
          (goto return_label)
       } else ());
-      (C_4 : (tmp = (C_3 : odd((C_2 : (n - 1))))));
+      (C_4 : (tmp = (C_3 : odd((C_2 : (n_1 - 1))))));
       (if (tmp != 0) then (C_6 : (tmp_0 = 0)) else (C_5 : (tmp_0 = 1)));
       (C_7 : (__retres = tmp_0));
       (return_label : 
@@ -51,9 +57,9 @@ behavior default:
    }
 }
 
-integer odd(integer n_0)
-  requires (C_19 : (n_0 >= 0));
-  decreases (C_20 : n_0);
+integer odd(integer n_2)
+  requires (C_19 : (n_2 >= 0));
+  decreases (C_20 : n_2);
 behavior default:
   ensures (C_18 : true);
 {  
@@ -63,12 +69,12 @@ behavior default:
    
    (var integer __retres_0);
    
-   {  (if (n_0 == 0) then 
+   {  (if (n_2 == 0) then 
       {  (C_11 : (__retres_0 = 0));
          
          (goto return_label)
       } else ());
-      (C_14 : (tmp_0_0 = (C_13 : even((C_12 : (n_0 - 1))))));
+      (C_14 : (tmp_0_0 = (C_13 : even((C_12 : (n_2 - 1))))));
       (if (tmp_0_0 != 0) then (C_16 : (tmp_0_1 = 0)) else (C_15 : (tmp_0_1 = 1)));
       (C_17 : (__retres_0 = tmp_0_1));
       (return_label : 
@@ -84,20 +90,20 @@ integer f(double y)
 behavior default:
   ensures (C_33 : true);
 {  
-   (var integer n_1);
+   (var integer n_3);
    
    (var double x);
    
    (var integer __retres_1);
    
-   {  (C_21 : (n_1 = 0));
+   {  (C_21 : (n_3 = 0));
       (C_22 : (x = y));
       (if (x <= (1.0 :> double)) then 
-      {  (C_23 : (__retres_1 = n_1));
+      {  (C_23 : (__retres_1 = n_3));
          
          (goto return_label)
       } else ());
-      (C_26 : (n_1 = (C_25 : f((C_24 : (x - (2.0 :> double)))))));
+      (C_26 : (n_3 = (C_25 : f((C_24 : (x - (2.0 :> double)))))));
       
       loop 
       variant (C_27 : x) for R;
@@ -106,13 +112,13 @@ behavior default:
          {  (if (x >= (10.0 :> double)) then () else 
             (goto while_0_break));
             
-            {  (C_29 : (n_1 = (C_28 : (n_1 + 1))));
+            {  (C_29 : (n_3 = (C_28 : (n_3 + 1))));
                (C_31 : (x = (C_30 : (x - (1.0 :> double)))))
             }
          }
       };
       (while_0_break : ());
-      (C_32 : (__retres_1 = n_1));
+      (C_32 : (__retres_1 = n_3));
       (return_label : 
       (return __retres_1))
    }
@@ -121,6 +127,8 @@ WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fa
 type charP
 
 type padding
+
+type unsigned_charP
 
 type voidP
 
@@ -147,12 +155,22 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
  charP_alloc_table:charP alloc_table) =
  (offset_min(charP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
 
 axiom pointer_addr_of_charP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -163,6 +181,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
  charP_alloc_table:charP alloc_table) =
  (offset_max(charP_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_max(voidP_alloc_table, p) >= b)
@@ -171,6 +193,11 @@ predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) = a)
  and (offset_max(charP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -182,15 +209,41 @@ predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
  ((offset_min(charP_alloc_table, p) = a)
  and (offset_max(charP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
  and (offset_max(charP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -201,6 +254,11 @@ predicate valid_struct_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
  and (offset_max(charP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -255,6 +313,38 @@ parameter alloc_struct_charP_requires :
           and (alloc_fresh(charP_alloc_table@, result, n)
               and instanceof(charP_tag_table, result, charP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -281,21 +371,21 @@ parameter alloc_struct_voidP_requires :
           and (alloc_fresh(voidP_alloc_table@, result, n)
               and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
-parameter even : n:int -> { } int { true }
+parameter even : n_1:int -> { } int { true }
 
-parameter even_requires : n:int -> { (JC_<somenum>: ge_int(n, (0)))} int { true }
+parameter even_requires : n_1:int -> { (JC_<somenum>: ge_int(n_1, (0)))} int { true }
 
 parameter f : y_0:double -> { } int { true }
 
 parameter f_requires : y_0:double -> { } int { true }
 
-parameter odd : n_0:int -> { } int { true }
+parameter odd : n_2:int -> { } int { true }
 
-parameter odd_requires : n_0:int -> { (JC_<somenum>: ge_int(n_0, (0)))} int { true }
+parameter odd_requires : n_2:int -> { (JC_<somenum>: ge_int(n_2, (0)))} int { true }
 
 let even_ensures_default =
- fun (n : int) ->
-  { (JC_<somenum>: ge_int(n, (0))) }
+ fun (n_1 : int) ->
+  { (JC_<somenum>: ge_int(n_1, (0))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -307,7 +397,7 @@ let even_ensures_default =
       (C_4:
       (C_7:
       begin
-        (if ((eq_int_ n) (0))
+        (if ((eq_int_ n_1) (0))
         then
          (C_1:
          begin
@@ -315,7 +405,7 @@ let even_ensures_default =
           (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> =
        (tmp := (C_3:
-               (let jessie_<somenum> = (C_2: ((sub_int n) (1))) in
+               (let jessie_<somenum> = (C_2: ((sub_int n_1) (1))) in
                (JC_<somenum>: (odd jessie_<somenum>))))) in void);
        (let jessie_<somenum> =
        (if ((neq_int_ !tmp) (0))
@@ -328,8 +418,8 @@ let even_ensures_default =
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let even_safety =
- fun (n : int) ->
-  { (JC_<somenum>: ge_int(n, (0))) }
+ fun (n_1 : int) ->
+  { (JC_<somenum>: ge_int(n_1, (0))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -341,7 +431,7 @@ let even_safety =
       (C_4:
       (C_7:
       begin
-        (if ((eq_int_ n) (0))
+        (if ((eq_int_ n_1) (0))
         then
          (C_1:
          begin
@@ -349,9 +439,9 @@ let even_safety =
           (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> =
        (tmp := (C_3:
-               (let jessie_<somenum> = (C_2: ((sub_int n) (1))) in
+               (let jessie_<somenum> = (C_2: ((sub_int n_1) (1))) in
                (JC_<somenum>:
-               (check { zwf_zero((JC_<somenum> : jessie_<somenum>), (JC_<somenum> : n)) };
+               (check { zwf_zero((JC_<somenum> : jessie_<somenum>), (JC_<somenum> : n_1)) };
                (JC_<somenum>: (odd_requires jessie_<somenum>))))))) in void);
        (let jessie_<somenum> =
        (if ((neq_int_ !tmp) (0))
@@ -370,7 +460,7 @@ let f_ensures_default =
   (let return = ref (any_int void) in
   try
    begin
-     (let n_1 = ref (any_int void) in
+     (let n_3 = ref (any_int void) in
      (let x_1 = ref (any_double void) in
      (let __retres_1 = ref (any_int void) in
      try
@@ -380,16 +470,16 @@ let f_ensures_default =
          (C_22:
          (C_26:
          begin
-           (let jessie_<somenum> = (n_1 := (0)) in void);
+           (let jessie_<somenum> = (n_3 := (0)) in void);
           (let jessie_<somenum> = (x_1 := y_0) in void);
           (if ((le_double_ !x_1) (double_of_real_exact 1.0))
           then
            (C_23:
            begin
-             (let jessie_<somenum> = (__retres_1 := !n_1) in void);
+             (let jessie_<somenum> = (__retres_1 := !n_3) in void);
             (raise (Return_label_exc void)) end) else void);
           (let jessie_<somenum> =
-          (n_1 := (C_25:
+          (n_3 := (C_25:
                   (let jessie_<somenum> =
                   (C_24:
                   (JC_<somenum>:
@@ -408,7 +498,7 @@ let f_ensures_default =
                begin
                  (if ((ge_double_ !x_1) (double_of_real_exact 10.0))
                  then void else (raise (Goto_while_0_break_exc void)));
-                (let jessie_<somenum> = (n_1 := (C_28: ((add_int !n_1) (1)))) in
+                (let jessie_<somenum> = (n_3 := (C_28: ((add_int !n_3) (1)))) in
                 void);
                 (x_1 := (C_30:
                         (JC_<somenum>:
@@ -419,7 +509,7 @@ let f_ensures_default =
          Goto_while_0_break_exc jessie_<somenum> ->
          (let jessie_<somenum> =
          (while_0_break:
-         (C_32: begin   void; (__retres_1 := !n_1); !__retres_1 end)) in
+         (C_32: begin   void; (__retres_1 := !n_3); !__retres_1 end)) in
          void) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_1); (raise Return) end) end)));
@@ -432,7 +522,7 @@ let f_safety =
   (let return = ref (any_int void) in
   try
    begin
-     (let n_1 = ref (any_int void) in
+     (let n_3 = ref (any_int void) in
      (let x_1 = ref (any_double void) in
      (let __retres_1 = ref (any_int void) in
      try
@@ -442,16 +532,16 @@ let f_safety =
          (C_22:
          (C_26:
          begin
-           (let jessie_<somenum> = (n_1 := (0)) in void);
+           (let jessie_<somenum> = (n_3 := (0)) in void);
           (let jessie_<somenum> = (x_1 := y_0) in void);
           (if ((le_double_ !x_1) (double_of_real_exact 1.0))
           then
            (C_23:
            begin
-             (let jessie_<somenum> = (__retres_1 := !n_1) in void);
+             (let jessie_<somenum> = (__retres_1 := !n_3) in void);
             (raise (Return_label_exc void)) end) else void);
           (let jessie_<somenum> =
-          (n_1 := (C_25:
+          (n_3 := (C_25:
                   (let jessie_<somenum> =
                   (C_24:
                   (JC_<somenum>:
@@ -474,7 +564,7 @@ let f_safety =
                begin
                  (if ((ge_double_ !x_1) (double_of_real_exact 10.0))
                  then void else (raise (Goto_while_0_break_exc void)));
-                (let jessie_<somenum> = (n_1 := (C_28: ((add_int !n_1) (1)))) in
+                (let jessie_<somenum> = (n_3 := (C_28: ((add_int !n_3) (1)))) in
                 void);
                 (x_1 := (C_30:
                         (JC_<somenum>:
@@ -485,15 +575,15 @@ let f_safety =
          Goto_while_0_break_exc jessie_<somenum> ->
          (let jessie_<somenum> =
          (while_0_break:
-         (C_32: begin   void; (__retres_1 := !n_1); !__retres_1 end)) in
+         (C_32: begin   void; (__retres_1 := !n_3); !__retres_1 end)) in
          void) end; (raise (Return_label_exc void)) end with
       Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres_1); (raise Return) end) end)));
     absurd  end with Return -> !return end)) { true }
 
 let odd_ensures_default =
- fun (n_0 : int) ->
-  { (JC_<somenum>: ge_int(n_0, (0))) }
+ fun (n_2 : int) ->
+  { (JC_<somenum>: ge_int(n_2, (0))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -505,7 +595,7 @@ let odd_ensures_default =
       (C_14:
       (C_17:
       begin
-        (if ((eq_int_ n_0) (0))
+        (if ((eq_int_ n_2) (0))
         then
          (C_11:
          begin
@@ -513,7 +603,7 @@ let odd_ensures_default =
           (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> =
        (tmp_0_0 := (C_13:
-                   (let jessie_<somenum> = (C_12: ((sub_int n_0) (1))) in
+                   (let jessie_<somenum> = (C_12: ((sub_int n_2) (1))) in
                    (JC_<somenum>: (even jessie_<somenum>))))) in void);
        (let jessie_<somenum> =
        (if ((neq_int_ !tmp_0_0) (0))
@@ -526,8 +616,8 @@ let odd_ensures_default =
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let odd_safety =
- fun (n_0 : int) ->
-  { (JC_<somenum>: ge_int(n_0, (0))) }
+ fun (n_2 : int) ->
+  { (JC_<somenum>: ge_int(n_2, (0))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -539,7 +629,7 @@ let odd_safety =
       (C_14:
       (C_17:
       begin
-        (if ((eq_int_ n_0) (0))
+        (if ((eq_int_ n_2) (0))
         then
          (C_11:
          begin
@@ -547,9 +637,9 @@ let odd_safety =
           (raise (Return_label_exc void)) end) else void);
        (let jessie_<somenum> =
        (tmp_0_0 := (C_13:
-                   (let jessie_<somenum> = (C_12: ((sub_int n_0) (1))) in
+                   (let jessie_<somenum> = (C_12: ((sub_int n_2) (1))) in
                    (JC_<somenum>:
-                   (check { zwf_zero((JC_<somenum> : jessie_<somenum>), (JC_<somenum> : n_0)) };
+                   (check { zwf_zero((JC_<somenum> : jessie_<somenum>), (JC_<somenum> : n_2)) };
                    (JC_<somenum>: (even_requires jessie_<somenum>))))))) in void);
        (let jessie_<somenum> =
        (if ((neq_int_ !tmp_0_0) (0))
@@ -569,11 +659,11 @@ why --project [...] why/decreases.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/decreases_po9.why">
-      <location file = "why/decreases.why" line = "432" begin = "28" end = "72"/>
+      <location file = "why/decreases.why" line = "516" begin = "28" end = "72"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/decreases_po10.why">
-      <location file = "why/decreases.why" line = "432" begin = "28" end = "72"/>
+      <location file = "why/decreases.why" line = "516" begin = "28" end = "72"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/decreases_po11.why">
@@ -592,7 +682,7 @@ text = "UserCall"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/decreases_po5.why">
-      <location file = "why/decreases.why" line = "341" begin = "20" end = "105"/>
+      <location file = "why/decreases.why" line = "425" begin = "20" end = "105"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/decreases_po6.why">
@@ -615,11 +705,11 @@ text = "FPOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/decreases_po1.why">
-      <location file = "why/decreases.why" line = "234" begin = "24" end = "66"/>
+      <location file = "why/decreases.why" line = "318" begin = "24" end = "68"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/decreases_po2.why">
-      <location file = "why/decreases.why" line = "234" begin = "24" end = "66"/>
+      <location file = "why/decreases.why" line = "318" begin = "24" end = "68"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/decreases_po3.why">
@@ -1801,6 +1891,8 @@ type charP
 
 type padding
 
+type unsigned_charP
+
 type voidP
 
 predicate R(x_0: real, y: real) = ((0.0 <= y) and ((y - x_0) >= 1.0))
@@ -1826,12 +1918,22 @@ predicate left_valid_struct_charP(p: charP pointer, a: int,
   charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
 
 axiom pointer_addr_of_charP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -1842,6 +1944,10 @@ predicate right_valid_struct_charP(p: charP pointer, b: int,
   charP_alloc_table: charP alloc_table) = (offset_max(charP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
@@ -1850,6 +1956,11 @@ predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
    p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -1861,15 +1972,41 @@ predicate strict_valid_struct_charP(p: charP pointer, a: int, b: int,
   ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
 
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -1880,6 +2017,11 @@ predicate valid_struct_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =

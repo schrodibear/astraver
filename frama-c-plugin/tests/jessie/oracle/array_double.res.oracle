@@ -16,7 +16,15 @@ axiomatic Padding {
   
 }
 
+type uint8 = 0..255
+
 type int8 = -128..127
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag char__x__1__P = {
   charP[0..9] char__x__1__M: 32;
@@ -72,6 +80,10 @@ type char__x__1__P
 type int8
 
 type padding
+
+type uint8
+
+type unsigned_charP
 
 type voidP
 
@@ -139,6 +151,11 @@ predicate eq_int8(x:int8, y:int8) =
 
 logic eq_message: charP pointer, int -> prop
 
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
+
 logic int8_of_integer: int -> int8
 
 axiom int8_coerce :
@@ -180,6 +197,10 @@ predicate left_valid_struct___anonstruct_T_CompositionPage_1(p:__anonstruct_T_Co
      (0), charP_alloc_table, char__x__1__P_alloc_table,
      char__x__1__P_char__x__1__M))
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -194,6 +215,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 axiom pointer_addr_of_char__x__1__P_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(char__x__1__P_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -225,6 +252,10 @@ predicate right_valid_struct___anonstruct_T_CompositionPage_1(p:__anonstruct_T_C
      (9), charP_alloc_table, char__x__1__P_alloc_table,
      char__x__1__P_char__x__1__M))
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_max(voidP_alloc_table, p) >= b)
@@ -244,6 +275,11 @@ predicate strict_valid_root_char__x__1__P(p:char__x__1__P pointer, a:int,
  b:int, char__x__1__P_alloc_table:char__x__1__P alloc_table) =
  ((offset_min(char__x__1__P_alloc_table, p) = a)
  and (offset_max(char__x__1__P_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -278,10 +314,47 @@ predicate strict_valid_struct___anonstruct_T_CompositionPage_1(p:__anonstruct_T_
          (0), (9), charP_alloc_table, char__x__1__P_alloc_table,
          char__x__1__P_char__x__1__M)))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table:__anonstruct_T_CompositionPage_1 alloc_table) =
  (le_int(offset_min(__anonstruct_T_CompositionPage_1_Page_1_alloc_table,
@@ -306,6 +379,11 @@ predicate valid_root_char__x__1__P(p:char__x__1__P pointer, a:int, b:int,
  char__x__1__P_alloc_table:char__x__1__P alloc_table) =
  ((offset_min(char__x__1__P_alloc_table, p) <= a)
  and (offset_max(char__x__1__P_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -339,6 +417,11 @@ predicate valid_struct___anonstruct_T_CompositionPage_1(p:__anonstruct_T_Composi
                                     p),
          (0), (9), charP_alloc_table, char__x__1__P_alloc_table,
          char__x__1__P_char__x__1__M)))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -485,6 +568,38 @@ parameter alloc_struct_char__x__1__P_requires :
                 and instanceof(char__x__1__P_tag_table, result,
                     char__x__1__P_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -512,6 +627,8 @@ parameter alloc_struct_voidP_requires :
               and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
 parameter any_int8 : unit -> { } int8 { true }
+
+parameter any_uint8 : unit -> { } uint8 { true }
 
 parameter char__x__1__P_char__x__1__M_Page_1 :
  (char__x__1__P, charP pointer) memory ref
@@ -550,6 +667,14 @@ parameter int8_of_integer_ :
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
+
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
 
 let f_ensures_default =
  fun (tt : unit) ->
@@ -1535,6 +1660,10 @@ type int8
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic Page : __anonstruct_T_CompositionPage_1 pointer
@@ -1601,6 +1730,11 @@ predicate eq_int8(x: int8, y: int8) =
 
 logic eq_message : charP pointer, int -> prop
 
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
+
 logic int8_of_integer : int -> int8
 
 axiom int8_coerce:
@@ -1642,6 +1776,10 @@ predicate left_valid_struct___anonstruct_T_CompositionPage_1(p: __anonstruct_T_C
    p), 0, charP_alloc_table, char__x__1__P_alloc_table,
    char__x__1__P_char__x__1__M))
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -1656,6 +1794,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 axiom pointer_addr_of_char__x__1__P_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(char__x__1__P_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -1687,6 +1831,10 @@ predicate right_valid_struct___anonstruct_T_CompositionPage_1(p: __anonstruct_T_
    p), 9, charP_alloc_table, char__x__1__P_alloc_table,
    char__x__1__P_char__x__1__M))
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
@@ -1706,6 +1854,11 @@ predicate strict_valid_root_char__x__1__P(p: char__x__1__P pointer, a: int,
   b: int, char__x__1__P_alloc_table: char__x__1__P alloc_table) =
   ((offset_min(char__x__1__P_alloc_table, p) = a) and
    (offset_max(char__x__1__P_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -1740,10 +1893,46 @@ predicate strict_valid_struct___anonstruct_T_CompositionPage_1(p: __anonstruct_T
     p), 0, 9, charP_alloc_table, char__x__1__P_alloc_table,
     char__x__1__P_char__x__1__M)))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_Page(__anonstruct_T_CompositionPage_1_Page_1_alloc_table: __anonstruct_T_CompositionPage_1 alloc_table) =
   ((offset_min(__anonstruct_T_CompositionPage_1_Page_1_alloc_table,
@@ -1766,6 +1955,11 @@ predicate valid_root_char__x__1__P(p: char__x__1__P pointer, a: int, b: int,
   char__x__1__P_alloc_table: char__x__1__P alloc_table) =
   ((offset_min(char__x__1__P_alloc_table, p) <= a) and
    (offset_max(char__x__1__P_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -1799,6 +1993,11 @@ predicate valid_struct___anonstruct_T_CompositionPage_1(p: __anonstruct_T_Compos
     valid_struct_char__x__1__P(select(__anonstruct_T_CompositionPage_1_Texte,
     p), 0, 9, charP_alloc_table, char__x__1__P_alloc_table,
     char__x__1__P_char__x__1__M)))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =

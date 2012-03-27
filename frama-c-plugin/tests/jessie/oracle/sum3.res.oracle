@@ -59,12 +59,13 @@ unit f()
                         (C_54 : (\offset_max(vect.Sum) >= 2)))) &&
                      ((C_56 : (\offset_min(vect.b) <= 0)) &&
                        (C_57 : (\offset_max(vect.b) >= 2)))));
-  requires (C_46 : (\forall integer i;
-                     (\forall integer j;
-                       ((((0 <= i) && (i <= 2)) && ((0 <= j) && (j <= 2))) ==>
-                         ((((vect.a + i) != (vect.b + j)) &&
-                            ((vect.a + i) != (vect.Sum + j))) &&
-                           ((vect.b + i) != (vect.Sum + j)))))));
+  requires (C_46 : (\forall integer i_1;
+                     (\forall integer j_0;
+                       ((((0 <= i_1) && (i_1 <= 2)) &&
+                          ((0 <= j_0) && (j_0 <= 2))) ==>
+                         ((((vect.a + i_1) != (vect.b + j_0)) &&
+                            ((vect.a + i_1) != (vect.Sum + j_0))) &&
+                           ((vect.b + i_1) != (vect.Sum + j_0)))))));
 behavior default:
   assigns (vect.a + [0..2]).unsigned_charM,
   (vect.Sum + [0..2]).unsigned_charM,

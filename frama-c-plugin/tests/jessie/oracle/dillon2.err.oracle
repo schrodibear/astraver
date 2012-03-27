@@ -1,2 +1,2 @@
-File "dillon2.jessie/dillon2.jc", line 68, characters 10-22: typing error: invalid memory location
+File "dillon2.jessie/dillon2.jc", line 76, characters 10-22: typing error: invalid memory location
 make: *** [dillon2.regtest] Error 1

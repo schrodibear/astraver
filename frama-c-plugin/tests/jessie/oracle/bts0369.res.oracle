@@ -15,6 +15,12 @@ axiomatic Padding {
   
 }
 
+tag unsigned_charP = {
+  integer unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
 tag charP = {
   integer charM: 8;
 }
@@ -33,13 +39,13 @@ tag qr = {
 
 type qr = [qr]
 
-qr[0] md(integer n, integer d)
-  requires (C_42 : ((C_43 : (d > 0)) && (C_44 : (n >= 0))));
-  decreases (C_45 : n);
+qr[0] md(integer n_1, integer d)
+  requires (C_42 : ((C_43 : (d > 0)) && (C_44 : (n_1 >= 0))));
+  decreases (C_45 : n_1);
 behavior default:
   ensures (C_41 : true);
 {  
-   (var qr[0] v);
+   (var qr[0] v_0);
    
    (var qr[0] __retres);
    
@@ -47,30 +53,30 @@ behavior default:
    
    (var qr[0] __cil_tmp_9);
    
-   {  (C_2 : (v = (C_1 : (new qr[1]))));
+   {  (C_2 : (v_0 = (C_1 : (new qr[1]))));
       (C_4 : (__retres = (C_3 : (new qr[1]))));
       (C_6 : (__cil_tmp = (C_5 : (new qr[1]))));
-      (if (n == 0) then 
-      {  (C_24 : ((C_23 : v.q) = 0));
-         (C_26 : ((C_25 : v.r) = 0));
+      (if (n_1 == 0) then 
+      {  (C_24 : ((C_23 : v_0.q) = 0));
+         (C_26 : ((C_25 : v_0.r) = 0));
          
-         {  (C_29 : ((C_28 : __retres.q) = (C_27 : v.q)));
-            (C_32 : ((C_31 : __retres.r) = (C_30 : v.r)))
+         {  (C_29 : ((C_28 : __retres.q) = (C_27 : v_0.q)));
+            (C_32 : ((C_31 : __retres.r) = (C_30 : v_0.r)))
          };
          
          (goto return_label)
       } else 
       {  
-         {  (C_9 : (__cil_tmp_9 = (C_8 : md((C_7 : (n - 1)), d))));
+         {  (C_9 : (__cil_tmp_9 = (C_8 : md((C_7 : (n_1 - 1)), d))));
             
-            {  (C_12 : ((C_11 : v.q) = (C_10 : __cil_tmp_9.q)));
-               (C_15 : ((C_14 : v.r) = (C_13 : __cil_tmp_9.r)))
+            {  (C_12 : ((C_11 : v_0.q) = (C_10 : __cil_tmp_9.q)));
+               (C_15 : ((C_14 : v_0.r) = (C_13 : __cil_tmp_9.r)))
             };
             (C_16 : (free(__cil_tmp_9)))
          };
          
-         {  (C_19 : ((C_18 : __retres.q) = (C_17 : v.q)));
-            (C_22 : ((C_21 : __retres.r) = (C_20 : v.r)))
+         {  (C_19 : ((C_18 : __retres.q) = (C_17 : v_0.q)));
+            (C_22 : ((C_21 : __retres.r) = (C_20 : v_0.r)))
          };
          
          (goto return_label)
@@ -79,7 +85,7 @@ behavior default:
       {  (C_35 : ((C_34 : __cil_tmp.q) = (C_33 : __retres.q)));
          (C_38 : ((C_37 : __cil_tmp.r) = (C_36 : __retres.r)));
          
-         {  (C_39 : (free(v)));
+         {  (C_39 : (free(v_0)));
             (C_40 : (free(__retres)));
             
             (return __cil_tmp)
@@ -93,6 +99,8 @@ type charP
 type padding
 
 type qr
+
+type unsigned_charP
 
 type voidP
 
@@ -119,6 +127,10 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
 predicate left_valid_struct_qr(p:qr pointer, a:int,
  qr_alloc_table:qr alloc_table) = (offset_min(qr_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -130,6 +142,12 @@ logic qr_of_pointer_address: unit pointer -> qr pointer
 
 axiom pointer_addr_of_qr_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(qr_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -156,6 +174,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
 predicate right_valid_struct_qr(p:qr pointer, b:int,
  qr_alloc_table:qr alloc_table) = (offset_max(qr_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_max(voidP_alloc_table, p) >= b)
@@ -169,6 +191,11 @@ predicate strict_valid_root_qr(p:qr pointer, a:int, b:int,
  qr_alloc_table:qr alloc_table) =
  ((offset_min(qr_alloc_table, p) = a)
  and (offset_max(qr_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -185,10 +212,31 @@ predicate strict_valid_struct_qr(p:qr pointer, a:int, b:int,
  ((offset_min(qr_alloc_table, p) = a)
  and (offset_max(qr_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -199,6 +247,11 @@ predicate valid_root_qr(p:qr pointer, a:int, b:int,
  qr_alloc_table:qr alloc_table) =
  ((offset_min(qr_alloc_table, p) <= a)
  and (offset_max(qr_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -214,6 +267,11 @@ predicate valid_struct_qr(p:qr pointer, a:int, b:int,
  qr_alloc_table:qr alloc_table) =
  ((offset_min(qr_alloc_table, p) <= a)
  and (offset_max(qr_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -290,6 +348,38 @@ parameter alloc_struct_qr_requires :
           and (alloc_fresh(qr_alloc_table@, result, n)
               and instanceof(qr_tag_table, result, qr_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -317,7 +407,7 @@ parameter alloc_struct_voidP_requires :
               and instanceof(voidP_tag_table, result, voidP_tag)))) }
 
 parameter md :
- n:int ->
+ n_1:int ->
   d:int ->
    qr_md_2_alloc_table:qr alloc_table ref ->
     qr_md_2_tag_table:qr tag_table ref ->
@@ -328,33 +418,33 @@ parameter md :
        { true }
 
 parameter md_requires :
- n:int ->
+ n_1:int ->
   d:int ->
    qr_md_2_alloc_table:qr alloc_table ref ->
     qr_md_2_tag_table:qr tag_table ref ->
      qr_r_md_2:(qr, int) memory ref ->
       qr_q_md_2:(qr, int) memory ref ->
-       { (JC_<somenum>: ((JC_<somenum>: gt_int(d, (0))) and (JC_<somenum>: ge_int(n, (0)))))}
+       { (JC_<somenum>: ((JC_<somenum>: gt_int(d, (0))) and (JC_<somenum>: ge_int(n_1, (0)))))}
        qr pointer reads qr_md_2_alloc_table,qr_q_md_2,qr_r_md_2
        writes qr_md_2_alloc_table,qr_md_2_tag_table,qr_q_md_2,qr_r_md_2
        { true }
 
 let md_ensures_default =
- fun (n : int) (d : int) (qr_md_2_alloc_table : qr alloc_table ref) (qr_md_2_tag_table : qr tag_table ref) (qr_q_md_2 : (qr, int) memory ref) (qr_r_md_2 : (qr, int) memory ref) ->
-  { (JC_<somenum>: ((JC_<somenum>: gt_int(d, (0))) and (JC_<somenum>: ge_int(n, (0))))) }
+ fun (n_1 : int) (d : int) (qr_md_2_alloc_table : qr alloc_table ref) (qr_md_2_tag_table : qr tag_table ref) (qr_q_md_2 : (qr, int) memory ref) (qr_r_md_2 : (qr, int) memory ref) ->
+  { (JC_<somenum>: ((JC_<somenum>: gt_int(d, (0))) and (JC_<somenum>: ge_int(n_1, (0))))) }
   (init:
   (let return = ref (any_pointer void) in
   try
    begin
      (let qr_r___retres_4 = ref (any_memory void) in
-     (let qr_r_v_3 = ref (any_memory void) in
+     (let qr_r_v_0_3 = ref (any_memory void) in
      (let qr_q___retres_4 = ref (any_memory void) in
-     (let qr_q_v_3 = ref (any_memory void) in
-     (let qr_v_3_tag_table = ref (any_tag_table void) in
+     (let qr_q_v_0_3 = ref (any_memory void) in
+     (let qr_v_0_3_tag_table = ref (any_tag_table void) in
      (let qr___retres_4_tag_table = ref (any_tag_table void) in
      (let qr___retres_4_alloc_table = ref (any_alloc_table void) in
-     (let qr_v_3_alloc_table = ref (any_alloc_table void) in
-     (let v = ref (any_pointer void) in
+     (let qr_v_0_3_alloc_table = ref (any_alloc_table void) in
+     (let v_0 = ref (any_pointer void) in
      (let __retres = ref (any_pointer void) in
      (let __cil_tmp = ref (any_pointer void) in
      (let __cil_tmp_9 = ref (any_pointer void) in
@@ -364,9 +454,9 @@ let md_ensures_default =
       (C_6:
       begin
         (let jessie_<somenum> =
-        (v := (C_1:
-              (JC_<somenum>:
-              (((alloc_struct_qr (1)) qr_v_3_alloc_table) qr_v_3_tag_table)))) in
+        (v_0 := (C_1:
+                (JC_<somenum>:
+                (((alloc_struct_qr (1)) qr_v_0_3_alloc_table) qr_v_0_3_tag_table)))) in
         void);
        (let jessie_<somenum> =
        (__retres := (C_3:
@@ -378,24 +468,25 @@ let md_ensures_default =
                      (JC_<somenum>:
                      (((alloc_struct_qr (1)) qr_md_2_alloc_table) qr_md_2_tag_table)))) in
        void);
-       (if ((eq_int_ n) (0))
+       (if ((eq_int_ n_1) (0))
        then
         (C_24:
         (C_26:
         begin
           (let jessie_<somenum> = (0) in
-          (let jessie_<somenum> = !v in
-          (((safe_upd_ qr_q_v_3) jessie_<somenum>) jessie_<somenum>)));
+          (let jessie_<somenum> = !v_0 in
+          (((safe_upd_ qr_q_v_0_3) jessie_<somenum>) jessie_<somenum>)));
          (let jessie_<somenum> = (0) in
-         (let jessie_<somenum> = !v in (((safe_upd_ qr_r_v_3) jessie_<somenum>) jessie_<somenum>)));
+         (let jessie_<somenum> = !v_0 in
+         (((safe_upd_ qr_r_v_0_3) jessie_<somenum>) jessie_<somenum>)));
          (let jessie_<somenum> =
          (C_29:
          begin
-           (let jessie_<somenum> = (C_27: ((safe_acc_ !qr_q_v_3) !v)) in
+           (let jessie_<somenum> = (C_27: ((safe_acc_ !qr_q_v_0_3) !v_0)) in
            (let jessie_<somenum> = !__retres in
            (((safe_upd_ qr_q___retres_4) jessie_<somenum>) jessie_<somenum>)));
           (C_32:
-          (let jessie_<somenum> = (C_30: ((safe_acc_ !qr_r_v_3) !v)) in
+          (let jessie_<somenum> = (C_30: ((safe_acc_ !qr_r_v_0_3) !v_0)) in
           begin
             (let jessie_<somenum> = !__retres in
             (((safe_upd_ qr_r___retres_4) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum>
@@ -405,7 +496,7 @@ let md_ensures_default =
         begin
           (let jessie_<somenum> =
           (__cil_tmp_9 := (C_8:
-                          (let jessie_<somenum> = (C_7: ((sub_int n) (1))) in
+                          (let jessie_<somenum> = (C_7: ((sub_int n_1) (1))) in
                           (let jessie_<somenum> = d in
                           (JC_<somenum>:
                           ((((((md jessie_<somenum>) jessie_<somenum>) qr_md_2_alloc_table) qr_md_2_tag_table) qr_r_md_2) qr_q_md_2)))))) in
@@ -414,23 +505,23 @@ let md_ensures_default =
          (C_12:
          begin
            (let jessie_<somenum> = (C_10: ((safe_acc_ !qr_q_md_2) !__cil_tmp_9)) in
-           (let jessie_<somenum> = !v in
-           (((safe_upd_ qr_q_v_3) jessie_<somenum>) jessie_<somenum>)));
+           (let jessie_<somenum> = !v_0 in
+           (((safe_upd_ qr_q_v_0_3) jessie_<somenum>) jessie_<somenum>)));
           (C_15:
           (let jessie_<somenum> = (C_13: ((safe_acc_ !qr_r_md_2) !__cil_tmp_9)) in
           begin
-            (let jessie_<somenum> = !v in
-            (((safe_upd_ qr_r_v_3) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
+            (let jessie_<somenum> = !v_0 in
+            (((safe_upd_ qr_r_v_0_3) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
          end) in void);
          (C_16: ((safe_free_parameter qr_md_2_alloc_table) !__cil_tmp_9));
          (let jessie_<somenum> =
          (C_19:
          begin
-           (let jessie_<somenum> = (C_17: ((safe_acc_ !qr_q_v_3) !v)) in
+           (let jessie_<somenum> = (C_17: ((safe_acc_ !qr_q_v_0_3) !v_0)) in
            (let jessie_<somenum> = !__retres in
            (((safe_upd_ qr_q___retres_4) jessie_<somenum>) jessie_<somenum>)));
           (C_22:
-          (let jessie_<somenum> = (C_20: ((safe_acc_ !qr_r_v_3) !v)) in
+          (let jessie_<somenum> = (C_20: ((safe_acc_ !qr_r_v_0_3) !v_0)) in
           begin
             (let jessie_<somenum> = !__retres in
             (((safe_upd_ qr_r___retres_4) jessie_<somenum>) jessie_<somenum>));
@@ -449,27 +540,27 @@ let md_ensures_default =
        (let jessie_<somenum> = (C_36: ((safe_acc_ !qr_r___retres_4) !__retres)) in
        (let jessie_<somenum> = !__cil_tmp in
        (((safe_upd_ qr_r_md_2) jessie_<somenum>) jessie_<somenum>)));
-       ((safe_free_parameter qr_v_3_alloc_table) !v);
+       ((safe_free_parameter qr_v_0_3_alloc_table) !v_0);
        ((safe_free_parameter qr___retres_4_alloc_table) !__retres);
        (return := !__cil_tmp); (raise Return) end))))) end))))))))))));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let md_safety =
- fun (n : int) (d : int) (qr_md_2_alloc_table : qr alloc_table ref) (qr_md_2_tag_table : qr tag_table ref) (qr_q_md_2 : (qr, int) memory ref) (qr_r_md_2 : (qr, int) memory ref) ->
-  { (JC_<somenum>: ((JC_<somenum>: gt_int(d, (0))) and (JC_<somenum>: ge_int(n, (0))))) }
+ fun (n_1 : int) (d : int) (qr_md_2_alloc_table : qr alloc_table ref) (qr_md_2_tag_table : qr tag_table ref) (qr_q_md_2 : (qr, int) memory ref) (qr_r_md_2 : (qr, int) memory ref) ->
+  { (JC_<somenum>: ((JC_<somenum>: gt_int(d, (0))) and (JC_<somenum>: ge_int(n_1, (0))))) }
   (init:
   (let return = ref (any_pointer void) in
   try
    begin
      (let qr_r___retres_4 = ref (any_memory void) in
-     (let qr_r_v_3 = ref (any_memory void) in
+     (let qr_r_v_0_3 = ref (any_memory void) in
      (let qr_q___retres_4 = ref (any_memory void) in
-     (let qr_q_v_3 = ref (any_memory void) in
-     (let qr_v_3_tag_table = ref (any_tag_table void) in
+     (let qr_q_v_0_3 = ref (any_memory void) in
+     (let qr_v_0_3_tag_table = ref (any_tag_table void) in
      (let qr___retres_4_tag_table = ref (any_tag_table void) in
      (let qr___retres_4_alloc_table = ref (any_alloc_table void) in
-     (let qr_v_3_alloc_table = ref (any_alloc_table void) in
-     (let v = ref (any_pointer void) in
+     (let qr_v_0_3_alloc_table = ref (any_alloc_table void) in
+     (let v_0 = ref (any_pointer void) in
      (let __retres = ref (any_pointer void) in
      (let __cil_tmp = ref (any_pointer void) in
      (let __cil_tmp_9 = ref (any_pointer void) in
@@ -479,14 +570,14 @@ let md_safety =
       (C_6:
       begin
         (let jessie_<somenum> =
-        (v := (let jessie_<somenum> =
-              (C_1:
-              (JC_<somenum>:
-              (((alloc_struct_qr_requires (1)) qr_v_3_alloc_table) qr_v_3_tag_table))) in
-              (JC_<somenum>:
-              (assert
-              { ge_int(offset_max(qr_v_3_alloc_table, jessie_<somenum>), (0)) };
-              jessie_<somenum>)))) in void);
+        (v_0 := (let jessie_<somenum> =
+                (C_1:
+                (JC_<somenum>:
+                (((alloc_struct_qr_requires (1)) qr_v_0_3_alloc_table) qr_v_0_3_tag_table))) in
+                (JC_<somenum>:
+                (assert
+                { ge_int(offset_max(qr_v_0_3_alloc_table, jessie_<somenum>), (0)) };
+                jessie_<somenum>)))) in void);
        (let jessie_<somenum> =
        (__retres := (let jessie_<somenum> =
                     (C_3:
@@ -505,23 +596,25 @@ let md_safety =
                      (assert
                      { ge_int(offset_max(qr_md_2_alloc_table, jessie_<somenum>), (0)) };
                      jessie_<somenum>)))) in void);
-       (if ((eq_int_ n) (0))
+       (if ((eq_int_ n_1) (0))
        then
         (C_24:
         (C_26:
         begin
           (let jessie_<somenum> = (0) in
-          (let jessie_<somenum> = !v in (((safe_upd_ qr_q_v_3) jessie_<somenum>) jessie_<somenum>)));
+          (let jessie_<somenum> = !v_0 in
+          (((safe_upd_ qr_q_v_0_3) jessie_<somenum>) jessie_<somenum>)));
          (let jessie_<somenum> = (0) in
-         (let jessie_<somenum> = !v in (((safe_upd_ qr_r_v_3) jessie_<somenum>) jessie_<somenum>)));
+         (let jessie_<somenum> = !v_0 in
+         (((safe_upd_ qr_r_v_0_3) jessie_<somenum>) jessie_<somenum>)));
          (let jessie_<somenum> =
          (C_29:
          begin
-           (let jessie_<somenum> = (C_27: ((safe_acc_ !qr_q_v_3) !v)) in
+           (let jessie_<somenum> = (C_27: ((safe_acc_ !qr_q_v_0_3) !v_0)) in
            (let jessie_<somenum> = !__retres in
            (((safe_upd_ qr_q___retres_4) jessie_<somenum>) jessie_<somenum>)));
           (C_32:
-          (let jessie_<somenum> = (C_30: ((safe_acc_ !qr_r_v_3) !v)) in
+          (let jessie_<somenum> = (C_30: ((safe_acc_ !qr_r_v_0_3) !v_0)) in
           begin
             (let jessie_<somenum> = !__retres in
             (((safe_upd_ qr_r___retres_4) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum>
@@ -531,11 +624,11 @@ let md_safety =
         begin
           (let jessie_<somenum> =
           (__cil_tmp_9 := (C_8:
-                          (let jessie_<somenum> = (C_7: ((sub_int n) (1))) in
+                          (let jessie_<somenum> = (C_7: ((sub_int n_1) (1))) in
                           (let jessie_<somenum> = d in
                           (JC_<somenum>:
                           (check
-                          { zwf_zero((JC_<somenum> : jessie_<somenum>), (JC_<somenum> : n)) };
+                          { zwf_zero((JC_<somenum> : jessie_<somenum>), (JC_<somenum> : n_1)) };
                           (JC_<somenum>:
                           ((((((md_requires jessie_<somenum>) jessie_<somenum>) qr_md_2_alloc_table) qr_md_2_tag_table) qr_r_md_2) qr_q_md_2)))))))) in
           void);
@@ -543,23 +636,23 @@ let md_safety =
          (C_12:
          begin
            (let jessie_<somenum> = (C_10: ((safe_acc_ !qr_q_md_2) !__cil_tmp_9)) in
-           (let jessie_<somenum> = !v in
-           (((safe_upd_ qr_q_v_3) jessie_<somenum>) jessie_<somenum>)));
+           (let jessie_<somenum> = !v_0 in
+           (((safe_upd_ qr_q_v_0_3) jessie_<somenum>) jessie_<somenum>)));
           (C_15:
           (let jessie_<somenum> = (C_13: ((safe_acc_ !qr_r_md_2) !__cil_tmp_9)) in
           begin
-            (let jessie_<somenum> = !v in
-            (((safe_upd_ qr_r_v_3) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
+            (let jessie_<somenum> = !v_0 in
+            (((safe_upd_ qr_r_v_0_3) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
          end) in void);
          (C_16: ((free_parameter qr_md_2_alloc_table) !__cil_tmp_9));
          (let jessie_<somenum> =
          (C_19:
          begin
-           (let jessie_<somenum> = (C_17: ((safe_acc_ !qr_q_v_3) !v)) in
+           (let jessie_<somenum> = (C_17: ((safe_acc_ !qr_q_v_0_3) !v_0)) in
            (let jessie_<somenum> = !__retres in
            (((safe_upd_ qr_q___retres_4) jessie_<somenum>) jessie_<somenum>)));
           (C_22:
-          (let jessie_<somenum> = (C_20: ((safe_acc_ !qr_r_v_3) !v)) in
+          (let jessie_<somenum> = (C_20: ((safe_acc_ !qr_r_v_0_3) !v_0)) in
           begin
             (let jessie_<somenum> = !__retres in
             (((safe_upd_ qr_r___retres_4) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum>
@@ -578,7 +671,7 @@ let md_safety =
        (let jessie_<somenum> = (C_36: ((safe_acc_ !qr_r___retres_4) !__retres)) in
        (let jessie_<somenum> = !__cil_tmp in
        (((safe_upd_ qr_r_md_2) jessie_<somenum>) jessie_<somenum>)));
-       ((free_parameter qr_v_3_alloc_table) !v);
+       ((free_parameter qr_v_0_3_alloc_table) !v_0);
        ((free_parameter qr___retres_4_alloc_table) !__retres);
        (return := !__cil_tmp); (raise Return) end))))) end))))))))))));
     absurd  end with Return -> !return end)) { true }
@@ -596,7 +689,7 @@ why --project [...] why/bts0369.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0369_po2.why">
-      <location file = "why/bts0369.why" line = "398" begin = "16" end = "69"/>
+      <location file = "why/bts0369.why" line = "483" begin = "18" end = "73"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0369_po3.why">
@@ -605,7 +698,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0369_po4.why">
-      <location file = "why/bts0369.why" line = "407" begin = "22" end = "104"/>
+      <location file = "why/bts0369.why" line = "492" begin = "22" end = "104"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0369_po5.why">
@@ -614,15 +707,15 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0369_po6.why">
-      <location file = "why/bts0369.why" line = "416" begin = "23" end = "77"/>
+      <location file = "why/bts0369.why" line = "501" begin = "23" end = "77"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0369_po7.why">
-      <location file = "why/bts0369.why" line = "448" begin = "28" end = "70"/>
+      <location file = "why/bts0369.why" line = "535" begin = "28" end = "72"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0369_po8.why">
-      <location file = "why/bts0369.why" line = "448" begin = "28" end = "70"/>
+      <location file = "why/bts0369.why" line = "535" begin = "28" end = "72"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0369_po9.why">
@@ -636,17 +729,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0369_po11.why">
-      <location file = "why/bts0369.why" line = "464" begin = "17" end = "66"/>
+      <location file = "why/bts0369.why" line = "551" begin = "17" end = "66"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/bts0369_po12.why">
-      <location file = "why/bts0369.why" line = "491" begin = "8" end = "46"/>
+      <location file = "why/bts0369.why" line = "578" begin = "8" end = "50"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/bts0369_po13.why">
-      <location file = "why/bts0369.why" line = "492" begin = "8" end = "60"/>
+      <location file = "why/bts0369.why" line = "579" begin = "8" end = "60"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1597,6 +1690,8 @@ type padding
 
 type qr
 
+type unsigned_charP
+
 type voidP
 
 logic charP_tag : charP tag_id
@@ -1623,6 +1718,10 @@ predicate left_valid_struct_charP(p: charP pointer, a: int,
 predicate left_valid_struct_qr(p: qr pointer, a: int,
   qr_alloc_table: qr alloc_table) = (offset_min(qr_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -1634,6 +1733,12 @@ logic qr_of_pointer_address : unit pointer -> qr pointer
 
 axiom pointer_addr_of_qr_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(qr_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -1660,6 +1765,10 @@ predicate right_valid_struct_charP(p: charP pointer, b: int,
 predicate right_valid_struct_qr(p: qr pointer, b: int,
   qr_alloc_table: qr alloc_table) = (offset_max(qr_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
@@ -1673,6 +1782,11 @@ predicate strict_valid_root_qr(p: qr pointer, a: int, b: int,
   qr_alloc_table: qr alloc_table) =
   ((offset_min(qr_alloc_table, p) = a) and (offset_max(qr_alloc_table,
    p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -1689,10 +1803,31 @@ predicate strict_valid_struct_qr(p: qr pointer, a: int, b: int,
   ((offset_min(qr_alloc_table, p) = a) and (offset_max(qr_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -1703,6 +1838,11 @@ predicate valid_root_qr(p: qr pointer, a: int, b: int,
   qr_alloc_table: qr alloc_table) =
   ((offset_min(qr_alloc_table, p) <= a) and (offset_max(qr_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -1718,6 +1858,11 @@ predicate valid_struct_qr(p: qr pointer, a: int, b: int,
   qr_alloc_table: qr alloc_table) =
   ((offset_min(qr_alloc_table, p) <= a) and (offset_max(qr_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =

@@ -25,17 +25,17 @@ type int8 = -128..127
 
 type int32 = -2147483648..2147483647
 
-tag unsigned_charP = {
-  uint8 unsigned_charM: 8;
-}
-
-type unsigned_charP = [unsigned_charP]
-
 tag unsigned_shortP = {
   uint16 unsigned_shortM: 16;
 }
 
 type unsigned_shortP = [unsigned_shortP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -65,9 +65,9 @@ axiomatic MemCmp {
     (\forall charP[..] s2_1;
       (\forall integer n_1;
         ((memcmp{L}(s1_1, s2_1, n_1) == 0) <==>
-          (\forall integer i;
-            (((0 <= i) && (i < n_1)) ==>
-              ((s1_1 + i).charM == (s2_1 + i).charM)))))))
+          (\forall integer i_1;
+            (((0 <= i_1) && (i_1 < n_1)) ==>
+              ((s1_1 + i_1).charM == (s2_1 + i_1).charM)))))))
   
 }
 
@@ -81,8 +81,8 @@ axiomatic MemChr {
     (\forall integer c_0;
       (\forall integer n_3;
         ((memchr{L}(s_0, c_0, n_3) == true) <==>
-          (\exists int32 i_0;
-            (((0 <= i_0) && (i_0 < n_3)) && ((s_0 + i_0).charM == c_0)))))))
+          (\exists int32 i_2;
+            (((0 <= i_2) && (i_2 < n_3)) && ((s_0 + i_2).charM == c_0)))))))
   
 }
 
@@ -96,8 +96,8 @@ axiomatic MemSet {
     (\forall integer c_2;
       (\forall integer n_5;
         ((memset{L}(s_2, c_2, n_5) == true) <==>
-          (\forall integer i_1;
-            (((0 <= i_1) && (i_1 < n_5)) ==> ((s_2 + i_1).charM == c_2)))))))
+          (\forall integer i_3;
+            (((0 <= i_3) && (i_3 < n_5)) ==> ((s_2 + i_3).charM == c_2)))))))
   
 }
 
@@ -107,17 +107,17 @@ axiomatic StrLen {
    
   axiom strlen_pos_or_null{L} :
   (\forall charP[..] s_4;
-    (\forall integer i_2;
-      (((((0 <= i_2) && (i_2 <= 2147483647)) &&
-          (\forall integer j;
-            (((0 <= j) && (j < i_2)) ==> ((s_4 + j).charM != 0)))) &&
-         ((s_4 + i_2).charM == 0)) ==>
-        (strlen{L}(s_4) == i_2))))
+    (\forall integer i_4;
+      (((((0 <= i_4) && (i_4 <= 2147483647)) &&
+          (\forall integer j_0;
+            (((0 <= j_0) && (j_0 < i_4)) ==> ((s_4 + j_0).charM != 0)))) &&
+         ((s_4 + i_4).charM == 0)) ==>
+        (strlen{L}(s_4) == i_4))))
    
   axiom strlen_neg{L} :
   (\forall charP[..] s_5;
-    ((\forall integer i_3;
-       (((0 <= i_3) && (i_3 <= 2147483647)) ==> ((s_5 + i_3).charM != 0))) ==>
+    ((\forall integer i_5;
+       (((0 <= i_5) && (i_5 <= 2147483647)) ==> ((s_5 + i_5).charM != 0))) ==>
       (strlen{L}(s_5) < 0)))
    
   axiom strlen_range{L} :
@@ -126,8 +126,8 @@ axiomatic StrLen {
    
   axiom strlen_before_null{L} :
   (\forall charP[..] s_7;
-    (\forall integer i_4;
-      (((0 <= i_4) && (i_4 < strlen{L}(s_7))) ==> ((s_7 + i_4).charM != 0))))
+    (\forall integer i_6;
+      (((0 <= i_6) && (i_6 < strlen{L}(s_7))) ==> ((s_7 + i_6).charM != 0))))
    
   axiom strlen_at_null{L} :
   (\forall charP[..] s_8;
@@ -135,43 +135,43 @@ axiomatic StrLen {
    
   axiom strlen_not_zero{L} :
   (\forall charP[..] s_9;
-    (\forall integer i_5;
-      ((((0 <= i_5) && (i_5 <= strlen{L}(s_9))) && ((s_9 + i_5).charM != 0)) ==>
-        (i_5 < strlen{L}(s_9)))))
+    (\forall integer i_7;
+      ((((0 <= i_7) && (i_7 <= strlen{L}(s_9))) && ((s_9 + i_7).charM != 0)) ==>
+        (i_7 < strlen{L}(s_9)))))
    
   axiom strlen_zero{L} :
   (\forall charP[..] s_10;
-    (\forall integer i_6;
-      ((((0 <= i_6) && (i_6 <= strlen{L}(s_10))) &&
-         ((s_10 + i_6).charM == 0)) ==>
-        (i_6 == strlen{L}(s_10)))))
+    (\forall integer i_8;
+      ((((0 <= i_8) && (i_8 <= strlen{L}(s_10))) &&
+         ((s_10 + i_8).charM == 0)) ==>
+        (i_8 == strlen{L}(s_10)))))
    
   axiom strlen_sup{L} :
   (\forall charP[..] s_11;
-    (\forall integer i_7;
-      (((0 <= i_7) && ((s_11 + i_7).charM == 0)) ==>
-        ((0 <= strlen{L}(s_11)) && (strlen{L}(s_11) <= i_7)))))
+    (\forall integer i_9;
+      (((0 <= i_9) && ((s_11 + i_9).charM == 0)) ==>
+        ((0 <= strlen{L}(s_11)) && (strlen{L}(s_11) <= i_9)))))
    
   axiom strlen_shift{L} :
   (\forall charP[..] s_12;
-    (\forall integer i_8;
-      (((0 <= i_8) && (i_8 <= strlen{L}(s_12))) ==>
-        (strlen{L}((s_12 + i_8)) == (strlen{L}(s_12) - i_8)))))
+    (\forall integer i_10;
+      (((0 <= i_10) && (i_10 <= strlen{L}(s_12))) ==>
+        (strlen{L}((s_12 + i_10)) == (strlen{L}(s_12) - i_10)))))
    
   axiom strlen_create{L} :
   (\forall charP[..] s_13;
-    (\forall integer i_9;
-      ((((0 <= i_9) && (i_9 <= 2147483647)) && ((s_13 + i_9).charM == 0)) ==>
-        ((0 <= strlen{L}(s_13)) && (strlen{L}(s_13) <= i_9)))))
+    (\forall integer i_11;
+      ((((0 <= i_11) && (i_11 <= 2147483647)) && ((s_13 + i_11).charM == 0)) ==>
+        ((0 <= strlen{L}(s_13)) && (strlen{L}(s_13) <= i_11)))))
    
   axiom strlen_create_shift{L} :
   (\forall charP[..] s_14;
-    (\forall integer i_10;
+    (\forall integer i_12;
       (\forall integer k;
-        ((((0 <= k) && ((k <= i_10) && (i_10 <= 2147483647))) &&
-           ((s_14 + i_10).charM == 0)) ==>
+        ((((0 <= k) && ((k <= i_12) && (i_12 <= 2147483647))) &&
+           ((s_14 + i_12).charM == 0)) ==>
           ((0 <= strlen{L}((s_14 + k))) &&
-            (strlen{L}((s_14 + k)) <= (i_10 - k)))))))
+            (strlen{L}((s_14 + k)) <= (i_12 - k)))))))
    
   axiom memcmp_strlen_left{L} :
   (\forall charP[..] s1_2;
@@ -226,9 +226,9 @@ axiomatic StrCmp {
     (\forall charP[..] s2_8;
       ((strcmp{L}(s1_8, s2_8) == 0) <==>
         ((strlen{L}(s1_8) == strlen{L}(s2_8)) &&
-          (\forall integer i_11;
-            (((0 <= i_11) && (i_11 <= strlen{L}(s1_8))) ==>
-              ((s1_8 + i_11).charM == (s2_8 + i_11).charM)))))))
+          (\forall integer i_13;
+            (((0 <= i_13) && (i_13 <= strlen{L}(s1_8))) ==>
+              ((s1_8 + i_13).charM == (s2_8 + i_13).charM)))))))
   
 }
 
@@ -243,9 +243,9 @@ axiomatic StrNCmp {
       (\forall integer n_11;
         ((strncmp{L}(s1_10, s2_10, n_11) == 0) <==>
           (((strlen{L}(s1_10) < n_11) && (strcmp{L}(s1_10, s2_10) == 0)) ||
-            (\forall integer i_12;
-              (((0 <= i_12) && (i_12 < n_11)) ==>
-                ((s1_10 + i_12).charM == (s2_10 + i_12).charM))))))))
+            (\forall integer i_14;
+              (((0 <= i_14) && (i_14 < n_11)) ==>
+                ((s1_10 + i_14).charM == (s2_10 + i_14).charM))))))))
   
 }
 
@@ -258,9 +258,9 @@ axiomatic StrChr {
   (\forall charP[..] s_16;
     (\forall integer c_4;
       ((strchr{L}(s_16, c_4) == true) <==>
-        (\exists integer i_13;
-          (((0 <= i_13) && (i_13 <= strlen{L}(s_16))) &&
-            ((s_16 + i_13).charM == c_4))))))
+        (\exists integer i_15;
+          (((0 <= i_15) && (i_15 <= strlen{L}(s_16))) &&
+            ((s_16 + i_15).charM == c_4))))))
   
 }
 
@@ -271,25 +271,25 @@ axiomatic WcsLen {
    
   axiom wcslen_pos_or_null{L} :
   (\forall unsigned_shortP[..] s_18;
-    (\forall integer i_14;
-      ((((0 <= i_14) &&
-          (\forall integer j_0;
-            (((0 <= j_0) && (j_0 < i_14)) ==>
-              ((s_18 + j_0).unsigned_shortM != 0)))) &&
-         ((s_18 + i_14).unsigned_shortM == 0)) ==>
-        (wcslen{L}(s_18) == i_14))))
+    (\forall integer i_16;
+      ((((0 <= i_16) &&
+          (\forall integer j_1;
+            (((0 <= j_1) && (j_1 < i_16)) ==>
+              ((s_18 + j_1).unsigned_shortM != 0)))) &&
+         ((s_18 + i_16).unsigned_shortM == 0)) ==>
+        (wcslen{L}(s_18) == i_16))))
    
   axiom wcslen_neg{L} :
   (\forall unsigned_shortP[..] s_19;
-    ((\forall integer i_15;
-       ((0 <= i_15) ==> ((s_19 + i_15).unsigned_shortM != 0))) ==>
+    ((\forall integer i_17;
+       ((0 <= i_17) ==> ((s_19 + i_17).unsigned_shortM != 0))) ==>
       (wcslen{L}(s_19) < 0)))
    
   axiom wcslen_before_null{L} :
   (\forall unsigned_shortP[..] s_20;
-    (\forall int32 i_16;
-      (((0 <= i_16) && (i_16 < wcslen{L}(s_20))) ==>
-        ((s_20 + i_16).unsigned_shortM != 0))))
+    (\forall int32 i_18;
+      (((0 <= i_18) && (i_18 < wcslen{L}(s_20))) ==>
+        ((s_20 + i_18).unsigned_shortM != 0))))
    
   axiom wcslen_at_null{L} :
   (\forall unsigned_shortP[..] s_21;
@@ -298,44 +298,44 @@ axiomatic WcsLen {
    
   axiom wcslen_not_zero{L} :
   (\forall unsigned_shortP[..] s_22;
-    (\forall int32 i_17;
-      ((((0 <= i_17) && (i_17 <= wcslen{L}(s_22))) &&
-         ((s_22 + i_17).unsigned_shortM != 0)) ==>
-        (i_17 < wcslen{L}(s_22)))))
+    (\forall int32 i_19;
+      ((((0 <= i_19) && (i_19 <= wcslen{L}(s_22))) &&
+         ((s_22 + i_19).unsigned_shortM != 0)) ==>
+        (i_19 < wcslen{L}(s_22)))))
    
   axiom wcslen_zero{L} :
   (\forall unsigned_shortP[..] s_23;
-    (\forall int32 i_18;
-      ((((0 <= i_18) && (i_18 <= wcslen{L}(s_23))) &&
-         ((s_23 + i_18).unsigned_shortM == 0)) ==>
-        (i_18 == wcslen{L}(s_23)))))
+    (\forall int32 i_20;
+      ((((0 <= i_20) && (i_20 <= wcslen{L}(s_23))) &&
+         ((s_23 + i_20).unsigned_shortM == 0)) ==>
+        (i_20 == wcslen{L}(s_23)))))
    
   axiom wcslen_sup{L} :
   (\forall unsigned_shortP[..] s_24;
-    (\forall int32 i_19;
-      (((0 <= i_19) && ((s_24 + i_19).unsigned_shortM == 0)) ==>
-        ((0 <= wcslen{L}(s_24)) && (wcslen{L}(s_24) <= i_19)))))
+    (\forall int32 i_21;
+      (((0 <= i_21) && ((s_24 + i_21).unsigned_shortM == 0)) ==>
+        ((0 <= wcslen{L}(s_24)) && (wcslen{L}(s_24) <= i_21)))))
    
   axiom wcslen_shift{L} :
   (\forall unsigned_shortP[..] s_25;
-    (\forall int32 i_20;
-      (((0 <= i_20) && (i_20 <= wcslen{L}(s_25))) ==>
-        (wcslen{L}((s_25 + i_20)) == (wcslen{L}(s_25) - i_20)))))
+    (\forall int32 i_22;
+      (((0 <= i_22) && (i_22 <= wcslen{L}(s_25))) ==>
+        (wcslen{L}((s_25 + i_22)) == (wcslen{L}(s_25) - i_22)))))
    
   axiom wcslen_create{L} :
   (\forall unsigned_shortP[..] s_26;
-    (\forall int32 i_21;
-      (((0 <= i_21) && ((s_26 + i_21).unsigned_shortM == 0)) ==>
-        ((0 <= wcslen{L}(s_26)) && (wcslen{L}(s_26) <= i_21)))))
+    (\forall int32 i_23;
+      (((0 <= i_23) && ((s_26 + i_23).unsigned_shortM == 0)) ==>
+        ((0 <= wcslen{L}(s_26)) && (wcslen{L}(s_26) <= i_23)))))
    
   axiom wcslen_create_shift{L} :
   (\forall unsigned_shortP[..] s_27;
-    (\forall int32 i_22;
+    (\forall int32 i_24;
       (\forall int32 k_2;
-        ((((0 <= k_2) && (k_2 <= i_22)) &&
-           ((s_27 + i_22).unsigned_shortM == 0)) ==>
+        ((((0 <= k_2) && (k_2 <= i_24)) &&
+           ((s_27 + i_24).unsigned_shortM == 0)) ==>
           ((0 <= wcslen{L}((s_27 + k_2))) &&
-            (wcslen{L}((s_27 + k_2)) <= (i_22 - k_2)))))))
+            (wcslen{L}((s_27 + k_2)) <= (i_24 - k_2)))))))
   
 }
 
@@ -350,10 +350,10 @@ axiomatic WcsCmp {
     (\forall unsigned_shortP[..] s2_12;
       ((wcscmp{L}(s1_12, s2_12) == 0) <==>
         ((wcslen{L}(s1_12) == wcslen{L}(s2_12)) &&
-          (\forall integer i_23;
-            (((0 <= i_23) && (i_23 <= wcslen{L}(s1_12))) ==>
-              ((s1_12 + i_23).unsigned_shortM ==
-                (s2_12 + i_23).unsigned_shortM)))))))
+          (\forall integer i_25;
+            (((0 <= i_25) && (i_25 <= wcslen{L}(s1_12))) ==>
+              ((s1_12 + i_25).unsigned_shortM ==
+                (s2_12 + i_25).unsigned_shortM)))))))
   
 }
 
@@ -370,18 +370,18 @@ axiomatic WcsNCmp {
       (\forall integer n_13;
         ((wcsncmp{L}(s1_14, s2_14, n_13) == 0) <==>
           (((wcslen{L}(s1_14) < n_13) && (wcscmp{L}(s1_14, s2_14) == 0)) ||
-            (\forall integer i_24;
-              (((0 <= i_24) && (i_24 < n_13)) ==>
-                ((s1_14 + i_24).unsigned_shortM ==
-                  (s2_14 + i_24).unsigned_shortM))))))))
+            (\forall integer i_26;
+              (((0 <= i_26) && (i_26 < n_13)) ==>
+                ((s1_14 + i_26).unsigned_shortM ==
+                  (s2_14 + i_26).unsigned_shortM))))))))
   
 }
 
-logic integer minimum(integer i_25, integer j_1) =
-(if (i_25 < j_1) then i_25 else j_1)
+logic integer minimum(integer i_27, integer j_2) =
+(if (i_27 < j_2) then i_27 else j_2)
 
-logic integer maximum(integer i_26, integer j_2) =
-(if (i_26 < j_2) then j_2 else i_26)
+logic integer maximum(integer i_28, integer j_3) =
+(if (i_28 < j_3) then j_3 else i_28)
 
 predicate valid_string{L}(charP[..] s_28) =
 ((0 <= strlen{L}(s_28)) &&

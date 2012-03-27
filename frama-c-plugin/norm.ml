@@ -199,8 +199,7 @@ class retypeArrayVariables =
   in
 object(self)
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vvdec v =
     if isArrayType v.vtype && not (Cil_datatype.Varinfo.Set.mem v !varset) then
@@ -408,8 +407,7 @@ class retypeLogicFunctions =
   in
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vannotation =
     let return_type ty =
@@ -917,8 +915,7 @@ class retypeStructVariables =
   in
 object(self)
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vvdec v =
     if isStructOrUnionType v.vtype && not v.vformal then
@@ -1181,8 +1178,8 @@ class retypeAddressTaken =
           | TField(fi,_) ->
               if Cil_datatype.Fieldinfo.Set.mem fi !fieldset then assert false
               else t
+          | TModel _ -> Extlib.not_yet_implemented "Model field"
           | TIndex _ -> t
-          | TModel _ -> assert false (* TODO ? *)
           | TNoOffset -> assert false (*unreachable*)
         end
     | _ -> t
@@ -1191,8 +1188,7 @@ class retypeAddressTaken =
   let in_funspec = ref false in
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vglob_aux = function
     | GVar(v,_,_) ->
@@ -1397,8 +1393,7 @@ class retypeFields =
   in
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vglob_aux = function
     | GCompTag (compinfo,_) ->
@@ -1450,8 +1445,7 @@ let retype_fields file =
 class retypeTypeTags =
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vterm t = match t.term_node with
     | Ttype ty -> ChangeTo ({ t with term_node = Ttype(TPtr(ty,[])) })
@@ -1576,7 +1570,7 @@ object(self)
     match lv with
       | Var _, NoOffset -> lv
       | Var _, _ ->
-          unsupported "cannot handle this lvalue"
+          unsupported "cannot handle this lvalue: %a" !Ast_printer.d_lval lv;
       | Mem e, NoOffset ->
           begin match self#wrap_type_if_needed (typeOf e) with
             | Some newtyp ->
@@ -1609,8 +1603,7 @@ object(self)
 
   (* Usual methods in visitor interface. *)
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vfile _ =
     Common.struct_type_for_void := self#new_wrapper_for_type voidType;
@@ -1769,8 +1762,7 @@ class translateUnions =
   in
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vglob_aux = function
     | GCompTag (compinfo,_) as g when not compinfo.cstruct ->
@@ -1800,8 +1792,7 @@ let translate_unions file =
 class removeArrayAddress =
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vexpr e =
     let preaction e = match e.enode with

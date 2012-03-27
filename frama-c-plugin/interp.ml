@@ -667,8 +667,9 @@ let term_lhost pos = function
        with Not_found ->
          mkexpr (JCPEvar v.lv_name) pos)
   | TResult _ -> mkexpr (JCPEvar "\\result") pos
-  | TMem _ ->
-      unsupported "this kind of memory access is not currently supported"
+  | TMem t ->
+      unsupported "this kind of memory access is not currently supported: *%a"
+        !Ast_printer.d_term t
 (*
          Loc.report_position pos
 *)
@@ -1012,9 +1013,9 @@ and terms_lval pos lv =
               caste,repfi
           in
           List.map (fun e -> mkexpr (JCPEderef(e,fi.fname)) pos) e
-
     | TMem _e, TIndex _ ->
-        unsupported "cannot interpreted this lvalue"
+        unsupported "cannot interpret this lvalue: %a" 
+          !Ast_printer.d_term_lval lv
 
 and term t =
   match terms t with [ t ] -> t
@@ -2728,6 +2729,12 @@ let file f =
   let defined_var =
     function GFun(f,_) -> f.svar | GVar(vi,_,_) -> vi | _ -> assert false
   in
+  let is_needed =
+    function
+      | GVarDecl(_,v,_) when Cil.hasAttribute "FC_BUILTIN" v.vattr ->
+          v.vreferenced
+      | _ -> true
+  in
   let globals =
 (* AVOID CHECKING THE GLOBAL INITIALIZATION FUNCTION, WHICH IS GUARANTEED *)
 (*     if Globals.has_entry_point () then *)
@@ -2735,7 +2742,8 @@ let file f =
 (*         Kernel_function.get_definition (Globals.Functions.get_glob_init f) *)
 (*       in *)
 (*       f.globals @ [GFun(gif,Loc.dummy_position)] *)
-(*     else  *)f.globals
+(*     else  *)
+    List.filter is_needed f.globals
   in
   let vardefs =
     List.rev (List.rev_map defined_var (List.filter filter_defined globals))

@@ -18,6 +18,8 @@ axiomatic Padding {
 
 type uint32 = 0..4294967295
 
+type uint8 = 0..255
+
 type int16 = -32768..32767
 
 type int32 = -2147483648..2147483647
@@ -29,6 +31,12 @@ tag intP = {
 }
 
 type intP = [intP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag struct_proc___xP = {
   proc_0[..] struct_proc___xM: 32;
@@ -841,6 +849,10 @@ type struct_proc___xP
 
 type uint32
 
+type uint8
+
+type unsigned_charP
+
 type unsigned_intP
 
 type voidP
@@ -880,6 +892,11 @@ logic integer_of_uint32: uint32 -> int
 
 predicate eq_uint32(x:uint32, y:uint32) =
  eq_int(integer_of_uint32(x), integer_of_uint32(y))
+
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic int16_of_integer: int -> int16
 
@@ -969,6 +986,10 @@ predicate left_valid_struct_proc_0(p:proc_0 pointer, a:int,
  and left_valid_struct_struct_proc___xP(select(proc_0_p_nextready, p), (0),
      struct_proc___xP_alloc_table))
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_unsigned_intP(p:unsigned_intP pointer, a:int,
  unsigned_intP_alloc_table:unsigned_intP alloc_table) =
  (offset_min(unsigned_intP_alloc_table, p) <= a)
@@ -998,6 +1019,12 @@ logic struct_proc___xP_of_pointer_address: unit pointer -> struct_proc___xP poin
 axiom pointer_addr_of_struct_proc___xP_of_pointer_address :
  (forall p:unit pointer.
   (p = pointer_address(struct_proc___xP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic unsigned_intP_of_pointer_address: unit pointer -> unsigned_intP pointer
 
@@ -1073,6 +1100,10 @@ predicate right_valid_struct_proc_0(p:proc_0 pointer, b:int,
  and right_valid_struct_struct_proc___xP(select(proc_0_p_nextready, p), (0),
      struct_proc___xP_alloc_table))
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_unsigned_intP(p:unsigned_intP pointer, b:int,
  unsigned_intP_alloc_table:unsigned_intP alloc_table) =
  (offset_max(unsigned_intP_alloc_table, p) >= b)
@@ -1105,6 +1136,11 @@ predicate strict_valid_root_struct_proc___xP(p:struct_proc___xP pointer,
  a:int, b:int, struct_proc___xP_alloc_table:struct_proc___xP alloc_table) =
  ((offset_min(struct_proc___xP_alloc_table, p) = a)
  and (offset_max(struct_proc___xP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_unsigned_intP(p:unsigned_intP pointer, a:int,
  b:int, unsigned_intP_alloc_table:unsigned_intP alloc_table) =
@@ -1144,6 +1180,11 @@ predicate strict_valid_struct_proc_0(p:proc_0 pointer, a:int, b:int,
  and ((offset_max(proc_0_alloc_table, p) = b)
      and strict_valid_struct_struct_proc___xP(select(proc_0_p_nextready, p),
          (0), (0), struct_proc___xP_alloc_table)))
+
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_struct_unsigned_intP(p:unsigned_intP pointer, a:int,
  b:int, unsigned_intP_alloc_table:unsigned_intP alloc_table) =
@@ -1187,6 +1228,38 @@ axiom uint32_range :
  (forall x:uint32.
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 logic unsigned_intP_tag:  -> unsigned_intP tag_id
 
@@ -1249,6 +1322,11 @@ predicate valid_root_struct_proc___xP(p:struct_proc___xP pointer, a:int,
  ((offset_min(struct_proc___xP_alloc_table, p) <= a)
  and (offset_max(struct_proc___xP_alloc_table, p) >= b))
 
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
+
 predicate valid_root_unsigned_intP(p:unsigned_intP pointer, a:int, b:int,
  unsigned_intP_alloc_table:unsigned_intP alloc_table) =
  ((offset_min(unsigned_intP_alloc_table, p) <= a)
@@ -1287,6 +1365,11 @@ predicate valid_struct_proc_0(p:proc_0 pointer, a:int, b:int,
  and ((offset_max(proc_0_alloc_table, p) >= b)
      and valid_struct_struct_proc___xP(select(proc_0_p_nextready, p), (0),
          (0), struct_proc___xP_alloc_table)))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_unsigned_intP(p:unsigned_intP pointer, a:int, b:int,
  unsigned_intP_alloc_table:unsigned_intP alloc_table) =
@@ -1468,6 +1551,38 @@ parameter alloc_struct_struct_proc___xP_requires :
               and instanceof(struct_proc___xP_tag_table, result,
                   struct_proc___xP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter unsigned_intP_alloc_table : unsigned_intP alloc_table ref
 
 parameter unsigned_intP_tag_table : unsigned_intP tag_table ref
@@ -1533,6 +1648,8 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter any_uint32 : unit -> { } uint32 { true }
+
+parameter any_uint8 : unit -> { } uint8 { true }
 
 parameter struct_proc___xP_rdy_tail_8_alloc_table :
  struct_proc___xP alloc_table ref
@@ -1969,6 +2086,9 @@ parameter safe_int8_of_integer_ :
 parameter safe_uint32_of_integer_ :
  x:int -> { } uint32 { eq_int(integer_of_uint32(result), x) }
 
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
 parameter sched :
  rp_1:proc_0 pointer ->
   queue:intP pointer ->
@@ -2029,6 +2149,11 @@ parameter uint32_of_integer_ :
  x:int ->
   { (le_int((0), x) and le_int(x, (4294967295)))} uint32
   { eq_int(integer_of_uint32(result), x) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
 
 let balance_queues_ensures_default =
  fun (tp : intP pointer) (intP_tp_14_alloc_table : intP alloc_table) ->
@@ -5426,12 +5551,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po537.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "208" begin = "18" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "216" begin = "18" end = "75"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po538.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "208" begin = "18" end = "75"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "216" begin = "18" end = "75"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -5516,22 +5641,22 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0363_po555.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "214" begin = "15" end = "81"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "222" begin = "15" end = "81"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po556.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "214" begin = "15" end = "81"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "222" begin = "15" end = "81"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po557.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "215" begin = "15" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "223" begin = "15" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po558.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "215" begin = "15" end = "46"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "223" begin = "15" end = "46"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -5689,55 +5814,55 @@ text = "PointerDeref"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/bts0363_po212.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po213.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po214.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po215.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po216.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po217.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po218.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po219.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po220.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po221.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po222.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po223.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po224.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0363_po225.why">
@@ -5749,51 +5874,51 @@ text = "PointerDeref"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/bts0363_po227.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po228.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po229.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po230.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po231.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po232.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po233.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po234.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po235.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po236.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po237.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po238.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "687" begin = "9" end = "1584"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "695" begin = "9" end = "1584"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0363_po239.why">
@@ -5801,11 +5926,11 @@ text = "PointerDeref"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/bts0363_po240.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "226" begin = "10" end = "550"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "234" begin = "10" end = "550"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/bts0363_po241.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "226" begin = "10" end = "550"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "234" begin = "10" end = "550"/>
       <explain kind = "Post"/>
     </goal>
     <goal why_file="why/bts0363_po242.why">
@@ -5865,7 +5990,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po255.why">
-      <location file = "why/bts0363.why" line = "3391" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3508" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -5938,7 +6063,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po270.why">
-      <location file = "why/bts0363.why" line = "3447" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3564" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6011,7 +6136,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po285.why">
-      <location file = "why/bts0363.why" line = "3503" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3620" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6084,7 +6209,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po300.why">
-      <location file = "why/bts0363.why" line = "3559" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3676" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6157,7 +6282,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po315.why">
-      <location file = "why/bts0363.why" line = "3615" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3732" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6230,7 +6355,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po330.why">
-      <location file = "why/bts0363.why" line = "3671" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3788" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6303,7 +6428,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po345.why">
-      <location file = "why/bts0363.why" line = "3727" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3844" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6376,7 +6501,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po360.why">
-      <location file = "why/bts0363.why" line = "3783" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3900" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6449,7 +6574,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po375.why">
-      <location file = "why/bts0363.why" line = "3839" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "3956" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6522,7 +6647,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po390.why">
-      <location file = "why/bts0363.why" line = "3895" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4012" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6595,7 +6720,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po405.why">
-      <location file = "why/bts0363.why" line = "3951" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4068" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6668,7 +6793,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po420.why">
-      <location file = "why/bts0363.why" line = "4007" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4124" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6741,7 +6866,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po435.why">
-      <location file = "why/bts0363.why" line = "4063" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4180" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6814,7 +6939,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po450.why">
-      <location file = "why/bts0363.why" line = "4119" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4236" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6887,7 +7012,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po465.why">
-      <location file = "why/bts0363.why" line = "4175" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4292" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -6960,7 +7085,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po480.why">
-      <location file = "why/bts0363.why" line = "4231" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4348" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7033,7 +7158,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po495.why">
-      <location file = "why/bts0363.why" line = "4287" begin = "15" end = "39"/>
+      <location file = "why/bts0363.why" line = "4404" begin = "15" end = "39"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7106,7 +7231,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po510.why">
-      <location file = "why/bts0363.why" line = "4354" begin = "21" end = "45"/>
+      <location file = "why/bts0363.why" line = "4471" begin = "21" end = "45"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7169,11 +7294,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0363_po523.why">
-      <location file = "why/bts0363.why" line = "4338" begin = "46" end = "47"/>
+      <location file = "why/bts0363.why" line = "4455" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0363_po524.why">
-      <location file = "why/bts0363.why" line = "4338" begin = "46" end = "47"/>
+      <location file = "why/bts0363.why" line = "4455" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0363_po525.why">
@@ -7198,37 +7323,37 @@ text = "ArithOverflow"/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/bts0363_po168.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "801" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "809" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po169.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "801" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "809" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po170.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "801" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "809" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po171.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "801" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "809" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po172.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "801" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "809" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po173.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "801" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "809" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po174.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "801" begin = "15" end = "35"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "809" begin = "15" end = "35"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -7255,7 +7380,7 @@ text = "UserCall"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0363_po117.why">
-      <location file = "why/bts0363.why" line = "1970" begin = "19" end = "76"/>
+      <location file = "why/bts0363.why" line = "2087" begin = "19" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0363_po118.why">
@@ -7264,21 +7389,21 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0363_po119.why">
-      <location file = "why/bts0363.why" line = "1979" begin = "24" end = "142"/>
+      <location file = "why/bts0363.why" line = "2096" begin = "24" end = "142"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0363_po120.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "114" begin = "13" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "122" begin = "13" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po121.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "114" begin = "13" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "122" begin = "13" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po122.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "114" begin = "13" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "122" begin = "13" end = "36"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -7293,27 +7418,27 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po125.why">
-      <location file = "why/bts0363.why" line = "1988" begin = "15" end = "354"/>
+      <location file = "why/bts0363.why" line = "2105" begin = "15" end = "354"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/bts0363_po126.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "118" begin = "21" end = "81"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "126" begin = "21" end = "81"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po127.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "118" begin = "21" end = "81"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "126" begin = "21" end = "81"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po128.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "119" begin = "21" end = "81"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "127" begin = "21" end = "81"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po129.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "119" begin = "21" end = "81"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "127" begin = "21" end = "81"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -7348,12 +7473,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po136.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "125" begin = "25" end = "86"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "133" begin = "25" end = "86"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po137.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "125" begin = "25" end = "86"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "133" begin = "25" end = "86"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -7378,12 +7503,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po142.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "128" begin = "25" end = "86"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "136" begin = "25" end = "86"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po143.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "128" begin = "25" end = "86"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "136" begin = "25" end = "86"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -7398,7 +7523,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po146.why">
-      <location file = "why/bts0363.why" line = "2086" begin = "20" end = "47"/>
+      <location file = "why/bts0363.why" line = "2203" begin = "20" end = "47"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7453,42 +7578,42 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0363_po157.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "142" begin = "17" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "150" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po158.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "142" begin = "17" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "150" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po159.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "142" begin = "17" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "150" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po160.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "142" begin = "17" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "150" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po161.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "142" begin = "17" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "150" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po162.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "142" begin = "17" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "150" begin = "17" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po163.why">
-      <location file = "why/bts0363.why" line = "2118" begin = "15" end = "56"/>
+      <location file = "why/bts0363.why" line = "2235" begin = "15" end = "56"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/bts0363_po164.why">
-      <location file = "why/bts0363.why" line = "2119" begin = "8" end = "61"/>
+      <location file = "why/bts0363.why" line = "2236" begin = "8" end = "61"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7550,7 +7675,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po76.why">
-      <location file = "why/bts0363.why" line = "1705" begin = "19" end = "222"/>
+      <location file = "why/bts0363.why" line = "1822" begin = "19" end = "222"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7565,7 +7690,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po79.why">
-      <location file = "why/bts0363.why" line = "1712" begin = "20" end = "220"/>
+      <location file = "why/bts0363.why" line = "1829" begin = "20" end = "220"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7590,12 +7715,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po84.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "179" begin = "27" end = "203"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "187" begin = "27" end = "203"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po85.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "179" begin = "27" end = "203"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "187" begin = "27" end = "203"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -7610,7 +7735,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po88.why">
-      <location file = "why/bts0363.why" line = "1730" begin = "22" end = "311"/>
+      <location file = "why/bts0363.why" line = "1847" begin = "22" end = "311"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7625,7 +7750,7 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po91.why">
-      <location file = "why/bts0363.why" line = "1744" begin = "22" end = "46"/>
+      <location file = "why/bts0363.why" line = "1861" begin = "22" end = "46"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7660,7 +7785,7 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0363_po98.why">
-      <location file = "why/bts0363.why" line = "1747" begin = "23" end = "48"/>
+      <location file = "why/bts0363.why" line = "1864" begin = "23" end = "48"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7725,11 +7850,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po111.why">
-      <location file = "why/bts0363.why" line = "1697" begin = "43" end = "44"/>
+      <location file = "why/bts0363.why" line = "1814" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0363_po112.why">
-      <location file = "why/bts0363.why" line = "1697" begin = "43" end = "44"/>
+      <location file = "why/bts0363.why" line = "1814" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0363_po113.why">
@@ -7760,7 +7885,7 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0363_po3.why">
-      <location file = "why/bts0363.why" line = "1410" begin = "29" end = "129"/>
+      <location file = "why/bts0363.why" line = "1527" begin = "29" end = "129"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -7925,12 +8050,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0363_po36.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "764" begin = "49" end = "319"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "772" begin = "49" end = "319"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po37.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "764" begin = "49" end = "319"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "772" begin = "49" end = "319"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -8045,21 +8170,21 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po60.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "780" begin = "49" end = "148"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "788" begin = "49" end = "148"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po61.why">
-      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "780" begin = "49" end = "148"/>
+      <location file = "PPCHOME/tests/jessie/bts0363.jessie/bts0363.jc" line = "788" begin = "49" end = "148"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0363_po62.why">
-      <location file = "why/bts0363.why" line = "1401" begin = "43" end = "44"/>
+      <location file = "why/bts0363.why" line = "1518" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0363_po63.why">
-      <location file = "why/bts0363.why" line = "1401" begin = "43" end = "44"/>
+      <location file = "why/bts0363.why" line = "1518" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0363_po64.why">
@@ -9049,6 +9174,10 @@ type struct_proc___xP
 
 type uint32
 
+type uint8
+
+type unsigned_charP
+
 type unsigned_intP
 
 type voidP
@@ -9089,6 +9218,11 @@ logic integer_of_uint32 : uint32 -> int
 
 predicate eq_uint32(x: uint32, y: uint32) =
   (integer_of_uint32(x) = integer_of_uint32(y))
+
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
 
 logic int16_of_integer : int -> int16
 
@@ -9179,6 +9313,10 @@ predicate left_valid_struct_proc_0(p: proc_0 pointer, a: int,
    left_valid_struct_struct_proc___xP(select(proc_0_p_nextready, p), 0,
    struct_proc___xP_alloc_table))
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_unsigned_intP(p: unsigned_intP pointer, a: int,
   unsigned_intP_alloc_table: unsigned_intP alloc_table) =
   (offset_min(unsigned_intP_alloc_table, p) <= a)
@@ -9209,6 +9347,12 @@ logic struct_proc___xP_of_pointer_address : unit pointer -> struct_proc___xP poi
 axiom pointer_addr_of_struct_proc___xP_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(struct_proc___xP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic unsigned_intP_of_pointer_address : unit pointer -> unsigned_intP pointer
 
@@ -9286,6 +9430,10 @@ predicate right_valid_struct_proc_0(p: proc_0 pointer, b: int,
    right_valid_struct_struct_proc___xP(select(proc_0_p_nextready, p), 0,
    struct_proc___xP_alloc_table))
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_unsigned_intP(p: unsigned_intP pointer, b: int,
   unsigned_intP_alloc_table: unsigned_intP alloc_table) =
   (offset_max(unsigned_intP_alloc_table, p) >= b)
@@ -9319,6 +9467,11 @@ predicate strict_valid_root_struct_proc___xP(p: struct_proc___xP pointer,
   struct_proc___xP_alloc_table: struct_proc___xP alloc_table) =
   ((offset_min(struct_proc___xP_alloc_table, p) = a) and
    (offset_max(struct_proc___xP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_unsigned_intP(p: unsigned_intP pointer, a: int,
   b: int, unsigned_intP_alloc_table: unsigned_intP alloc_table) =
@@ -9359,6 +9512,11 @@ predicate strict_valid_struct_proc_0(p: proc_0 pointer, a: int, b: int,
    ((offset_max(proc_0_alloc_table, p) = b) and
     strict_valid_struct_struct_proc___xP(select(proc_0_p_nextready, p), 0, 0,
     struct_proc___xP_alloc_table)))
+
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_struct_unsigned_intP(p: unsigned_intP pointer, a: int,
   b: int, unsigned_intP_alloc_table: unsigned_intP alloc_table) =
@@ -9401,6 +9559,37 @@ axiom uint32_extensionality:
 axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 logic unsigned_intP_tag : unsigned_intP tag_id
 
@@ -9460,6 +9649,11 @@ predicate valid_root_struct_proc___xP(p: struct_proc___xP pointer, a: int,
   ((offset_min(struct_proc___xP_alloc_table, p) <= a) and
    (offset_max(struct_proc___xP_alloc_table, p) >= b))
 
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
+
 predicate valid_root_unsigned_intP(p: unsigned_intP pointer, a: int, b: int,
   unsigned_intP_alloc_table: unsigned_intP alloc_table) =
   ((offset_min(unsigned_intP_alloc_table, p) <= a) and
@@ -9498,6 +9692,11 @@ predicate valid_struct_proc_0(p: proc_0 pointer, a: int, b: int,
    ((offset_max(proc_0_alloc_table, p) >= b) and
     valid_struct_struct_proc___xP(select(proc_0_p_nextready, p), 0, 0,
     struct_proc___xP_alloc_table)))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_unsigned_intP(p: unsigned_intP pointer, a: int,
   b: int, unsigned_intP_alloc_table: unsigned_intP alloc_table) =

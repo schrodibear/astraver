@@ -49,8 +49,8 @@ open Common
 
 class add_default_behavior =
   object(self)
-    inherit Visitor.generic_frama_c_visitor (Project.current())
-      (Cil.inplace_visit())
+    inherit Visitor.frama_c_inplace
+
     method vspec s =
       if not (List.exists (fun x -> x.b_name = Cil.default_behavior_name)
                 s.spec_behavior)
@@ -97,8 +97,7 @@ class renameEntities
   in
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vfunc f =
     List.iter add_variable f.slocals;
@@ -206,8 +205,7 @@ let rename_entities file =
 class fillOffsetSizeInFields =
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vglob_aux = function
     | GCompTag(compinfo,_loc) ->
@@ -246,8 +244,7 @@ let fill_offset_size_in_fields file =
 class replaceAddrofArray =
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vexpr e = match e.enode with
     | AddrOf lv ->
@@ -381,8 +378,7 @@ class replaceStringConstants =
   in
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vexpr e = match e.enode with
     | Const(CStr s) ->
@@ -458,6 +454,154 @@ let gather_initialization file =
 	iinfo.init <- None
       )) file
 
+class copy_spec_specialize_memset =
+object(self)
+  inherit Visitor.frama_c_copy (Project.current())
+  method private has_changed lv =
+    (Cil.get_original_logic_var self#behavior lv) != lv
+
+  method vlogic_var_use lv =
+    if self#has_changed lv then DoChildren (* Already visited *)
+    else begin
+      match lv.lv_origin with
+        | Some v when not v.vglob -> (* Don't change global references *)
+            let v' = Cil_const.copy_with_new_vid v in
+            v'.vformal <- true;
+            (match Cil.unrollType v.vtype with
+              | TArray _ as t -> v'.vtype <- TPtr(t,[])
+              | _ -> ());
+            v'.vlogic_var_assoc <- None; (* reset association. *)
+            let lv' = Cil.cvar_to_lvar v' in
+            Cil.set_logic_var self#behavior lv lv';
+            Cil.set_orig_logic_var self#behavior lv' lv;
+            Cil.set_varinfo self#behavior v v';
+            Cil.set_orig_varinfo self#behavior v' v;
+            ChangeTo lv'
+        | Some _ | None -> DoChildren
+    end
+
+  method vterm t =
+    let post_action t =
+      let loc = t.term_loc in
+      match t.term_node with
+        | TStartOf (TVar lv, TNoOffset) ->
+            if self#has_changed lv then begin
+              (* Original was an array, and is now a pointer to an array.
+                 Update term accordingly*)
+              let base = Logic_const.tvar ~loc lv in
+              let tmem = (TMem base,TNoOffset) in
+              Logic_const.term
+                ~loc (TStartOf tmem) (Cil.typeOfTermLval tmem)
+            end else t
+        | TLval (TVar lv, (TIndex _ as idx)) ->
+            if self#has_changed lv then begin
+                (* Change array access into pointer shift. *)
+              let base = Logic_const.tvar ~loc lv in
+              let tmem = TMem base, idx in
+              Logic_const.term ~loc (TLval tmem) t.term_type
+            end else t
+        | _ -> t
+    in ChangeDoChildrenPost(t,post_action)
+
+  method vspec s =
+    let refresh_deps = function
+      | FromAny -> FromAny
+      | From locs -> From (List.map Logic_const.refresh_identified_term locs)
+    in
+    let refresh_froms (loc,deps) =
+      (Logic_const.refresh_identified_term loc, refresh_deps deps)
+    in
+    let refresh_assigns = function
+      | WritesAny -> WritesAny
+      | Writes (writes) -> Writes (List.map refresh_froms writes)
+    in
+    let refresh_allocates = function
+      | FreeAllocAny -> FreeAllocAny
+      | FreeAlloc (free,alloc) ->
+          FreeAlloc (List.map Logic_const.refresh_identified_term free,
+                     List.map Logic_const.refresh_identified_term alloc)
+    in
+    let refresh_extended e =
+      List.map (fun (s,i,p) -> (s,i,List.map Logic_const.refresh_predicate p)) e
+    in
+    let refresh_behavior b =
+      let requires = List.map Logic_const.refresh_predicate b.b_requires in
+      let assumes = List.map Logic_const.refresh_predicate b.b_assumes in
+      let post_cond = 
+        List.map
+          (fun (k,p) -> (k,Logic_const.refresh_predicate p)) b.b_post_cond
+      in
+      let assigns = refresh_assigns b.b_assigns in
+      let allocation = Some (refresh_allocates b.b_allocation) in
+      let extended = refresh_extended b.b_extended in
+      Cil.mk_behavior
+        ~assumes ~requires ~post_cond ~assigns ~allocation ~extended ()
+    in
+    let refresh s =
+      let bhvs = List.map refresh_behavior s.spec_behavior in
+      s.spec_behavior <- bhvs;
+      s
+    in
+    ChangeDoChildrenPost(s,refresh)
+end
+
+let copy_spec_specialize_memset s =
+  let vis = new copy_spec_specialize_memset in
+  let s' = Visitor.visitFramacFunspec vis s in
+  let args =
+    Cil.fold_visitor_varinfo 
+      vis#behavior (fun oldv newv acc -> (oldv,newv)::acc) []
+  in
+  args,s'
+
+class specialize_memset =
+object
+  inherit Visitor.frama_c_inplace
+  val mutable my_globals = []
+  method vstmt_aux s =
+    match Annotations.get_filter Logic_utils.is_contract s with
+      | [ annot ] ->
+          (match (Annotations.get_code_annotation annot).annot_content with
+            | AStmtSpec
+                (_,({ spec_behavior =
+                    [ { b_name = "Frama_C_implicit_init" }]} as spec))
+              ->
+                let loc = Cil_datatype.Stmt.loc s in
+                let mk_actual v =
+                  match Cil.unrollType v.vtype with
+                    | TArray _ ->
+                        Cil.new_exp ~loc (StartOf (Cil.var v))
+                    | _ -> Cil.evar ~loc v
+                in
+                let prms, spec = copy_spec_specialize_memset spec in
+                let (actuals,formals) = List.split prms in
+                let actuals = List.map mk_actual actuals in
+                let arg_type =
+                  List.map (fun v -> v.vname, v.vtype, []) formals in
+                let f =
+                  Cil.makeGlobalVar
+                    (Common.unique_name "implicit_init")
+                    (TFun (TVoid [], Some arg_type, false, []))
+                in
+                 Cil.unsafeSetFormalsDecl f formals;
+                my_globals <- 
+                  GVarDecl(Cil.empty_funspec(),f,loc) :: my_globals;
+                Globals.Functions.replace_by_declaration spec f loc;
+                let my_instr = Call(None,Cil.evar ~loc f,actuals,loc) in
+                s.skind <- Instr my_instr;
+                SkipChildren
+            | _ -> DoChildren)
+      | _ -> DoChildren
+
+  method vglob_aux g =
+    let add_specialized g = let s = my_globals in my_globals <- []; s @ g in
+    ChangeDoChildrenPost([g],add_specialized)
+end
+
+let specialize_memset file = 
+  visitFramacFile (new specialize_memset) file;
+  (* We may have introduced new globals: clear the last_decl table. *)
+  Ast.clear_last_decl () 
 
 (*****************************************************************************)
 (* Rewrite comparison of pointers into difference of pointers.               *)
@@ -476,8 +620,7 @@ class rewritePointerCompare =
   in
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vexpr e =
     ChangeDoChildrenPost (preaction_expr e, fun x -> x)
@@ -628,8 +771,7 @@ class collectCursorPointers
   in
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vfunc f =
     curFundec := f;
@@ -789,8 +931,7 @@ class rewriteCursorPointers
   in
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vfunc f =
     let local v =
@@ -1008,8 +1149,7 @@ class collectCursorIntegers
   in
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vfunc f =
     (* For simplicity, consider formals as self-cursors initially.
@@ -1089,8 +1229,7 @@ class rewriteCursorIntegers
   in
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vfunc f =
     let local v =
@@ -1294,8 +1433,7 @@ class annotateCodeStrlen(strlen : logic_info) =
   in
 object(self)
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vexpr e =
     begin match destruct_string_access e with None -> () | Some(v,off) ->
@@ -1413,8 +1551,7 @@ let annotate_code_strlen file =
 class annotateOverflow =
 object(self)
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vexpr e = 
     match e.enode with
@@ -1536,8 +1673,7 @@ let annotate_overflow file =
 class rewriteVoidPointer =
 object
 
-  inherit Visitor.generic_frama_c_visitor
-    (Project.current ()) (Cil.inplace_visit ()) as super
+  inherit Visitor.frama_c_inplace as super
 
   method vtype ty =
     if isVoidPtrType ty then
@@ -1688,6 +1824,9 @@ let rewrite file =
   (* Replace global compound initializations by equivalent statements. *)
   Jessie_options.debug "Put all global initializations in the [globinit] file";
   gather_initialization file;
+  if checking then check_types file;
+  Jessie_options.debug "Use specialized versions of Frama_C_memset";
+  specialize_memset file;
   if checking then check_types file;
   (* Rewrite comparison of pointers into difference of pointers. *)
   if Jessie_options.InferAnnot.get () <> "" then

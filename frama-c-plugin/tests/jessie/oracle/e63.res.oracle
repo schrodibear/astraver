@@ -17,6 +17,8 @@ axiomatic Padding {
   
 }
 
+type uint8 = 0..255
+
 type int8 = -128..127
 
 tag floatP = {
@@ -24,6 +26,12 @@ tag floatP = {
 }
 
 type floatP = [floatP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -36,25 +44,25 @@ tag voidP = {
 
 type voidP = [voidP]
 
-predicate incr{L}(floatP[..] t, integer i, integer j) {
+predicate incr{L}(floatP[..] t, integer i_1, integer j_0) {
 case incr_ok{L}: \at((\forall floatP[..] t_0;
-                       (\forall integer i_0;
-                         (\forall integer j_0;
-                           ((i_0 < j_0) ==>
-                             (((t_0 + i_0).floatM <=
-                                (t_0 + (i_0 + 1)).floatM) ==>
-                               (incr{L}(t_0, (i_0 + 1), j_0) ==>
-                                 incr{L}(t_0, i_0, j_0))))))),L);
+                       (\forall integer i_2;
+                         (\forall integer j_1;
+                           ((i_2 < j_1) ==>
+                             (((t_0 + i_2).floatM <=
+                                (t_0 + (i_2 + 1)).floatM) ==>
+                               (incr{L}(t_0, (i_2 + 1), j_1) ==>
+                                 incr{L}(t_0, i_2, j_1))))))),L);
   
   case incr_alone{L}: \at((\forall floatP[..] t_1;
-                            (\forall integer i_1;
-                              incr{L}(t_1, i_1, i_1))),L);
+                            (\forall integer i_3;
+                              incr{L}(t_1, i_3, i_3))),L);
   
 }
 
-predicate incr2{L}(floatP[..] t_2, integer i_2, integer j_1) =
+predicate incr2{L}(floatP[..] t_2, integer i_4, integer j_2) =
 (\forall integer k;
-  (((i_2 <= k) && (k < j_1)) ==>
+  (((i_4 <= k) && (k < j_2)) ==>
     ((t_2 + k).floatM <= (t_2 + (k + 1)).floatM)))
 
 unit f()
@@ -221,6 +229,10 @@ type int8
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag:  -> charP tag_id
@@ -244,6 +256,11 @@ logic integer_of_int8: int8 -> int
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
+
 logic floatP_tag:  -> floatP tag_id
 
 axiom floatP_int : (int_of_tag(floatP_tag) = (1))
@@ -264,23 +281,23 @@ axiom floatP_tags :
 inductive incr: floatP pointer, int, int, (floatP, real) memory -> prop =
  | incr_ok: (forall floatP_floatM_t_1_at_L:(floatP, real) memory.
              (forall t_0:floatP pointer.
-              (forall i_0:int.
-               (forall j_0:int.
-                (lt_int(i_0, j_0) ->
-                 (le_real(select(floatP_floatM_t_1_at_L, shift(t_0, i_0)),
+              (forall i_2:int.
+               (forall j_1:int.
+                (lt_int(i_2, j_1) ->
+                 (le_real(select(floatP_floatM_t_1_at_L, shift(t_0, i_2)),
                   select(floatP_floatM_t_1_at_L,
-                  shift(t_0, add_int(i_0, (1))))) ->
-                  (incr(t_0, add_int(i_0, (1)), j_0, floatP_floatM_t_1_at_L) ->
-                   incr(t_0, i_0, j_0, floatP_floatM_t_1_at_L))))))))
+                  shift(t_0, add_int(i_2, (1))))) ->
+                  (incr(t_0, add_int(i_2, (1)), j_1, floatP_floatM_t_1_at_L) ->
+                   incr(t_0, i_2, j_1, floatP_floatM_t_1_at_L))))))))
  | incr_alone: (forall floatP_floatM_t_1_at_L:(floatP, real) memory.
                 (forall t_1:floatP pointer.
-                 (forall i_1:int.
-                  incr(t_1, i_1, i_1, floatP_floatM_t_1_at_L))))
+                 (forall i_3:int.
+                  incr(t_1, i_3, i_3, floatP_floatM_t_1_at_L))))
  
-predicate incr2(t_2:floatP pointer, i_2:int, j_1:int,
+predicate incr2(t_2:floatP pointer, i_4:int, j_2:int,
  floatP_floatM_t_2_2_at_L:(floatP, real) memory) =
  (forall k:int.
-  ((le_int(i_2, k) and lt_int(k, j_1)) ->
+  ((le_int(i_4, k) and lt_int(k, j_2)) ->
    le_real(select(floatP_floatM_t_2_2_at_L, shift(t_2, k)),
    select(floatP_floatM_t_2_2_at_L, shift(t_2, add_int(k, (1)))))))
 
@@ -308,6 +325,10 @@ predicate left_valid_struct_floatP(p:floatP pointer, a:int,
  floatP_alloc_table:floatP alloc_table) =
  (offset_min(floatP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -317,6 +338,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 
 axiom pointer_addr_of_floatP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(floatP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -331,6 +358,10 @@ predicate right_valid_struct_floatP(p:floatP pointer, b:int,
  floatP_alloc_table:floatP alloc_table) =
  (offset_max(floatP_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_max(voidP_alloc_table, p) >= b)
@@ -344,6 +375,11 @@ predicate strict_valid_root_floatP(p:floatP pointer, a:int, b:int,
  floatP_alloc_table:floatP alloc_table) =
  ((offset_min(floatP_alloc_table, p) = a)
  and (offset_max(floatP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -360,10 +396,47 @@ predicate strict_valid_struct_floatP(p:floatP pointer, a:int, b:int,
  ((offset_min(floatP_alloc_table, p) = a)
  and (offset_max(floatP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -374,6 +447,11 @@ predicate valid_root_floatP(p:floatP pointer, a:int, b:int,
  floatP_alloc_table:floatP alloc_table) =
  ((offset_min(floatP_alloc_table, p) <= a)
  and (offset_max(floatP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -389,6 +467,11 @@ predicate valid_struct_floatP(p:floatP pointer, a:int, b:int,
  floatP_alloc_table:floatP alloc_table) =
  ((offset_min(floatP_alloc_table, p) <= a)
  and (offset_max(floatP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -468,6 +551,38 @@ parameter alloc_struct_floatP_requires :
           and (alloc_fresh(floatP_alloc_table@, result, n)
               and instanceof(floatP_tag_table, result, floatP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -496,6 +611,8 @@ parameter alloc_struct_voidP_requires :
 
 parameter any_int8 : unit -> { } int8 { true }
 
+parameter any_uint8 : unit -> { } uint8 { true }
+
 parameter f : tt:unit -> { } unit { true }
 
 parameter f_requires : tt:unit -> { } unit { true }
@@ -507,6 +624,14 @@ parameter int8_of_integer_ :
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
+
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
 
 let f_ensures_default =
  fun (tt : unit) ->
@@ -2954,7 +3079,7 @@ why --project [...] why/e63.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/e63_po6.why">
-      <location file = "why/e63.why" line = "1541" begin = "17" end = "75"/>
+      <location file = "why/e63.why" line = "1658" begin = "17" end = "75"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/e63_po7.why">
@@ -2963,16 +3088,16 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/e63_po8.why">
-      <location file = "why/e63.why" line = "1550" begin = "15" end = "74"/>
+      <location file = "why/e63.why" line = "1667" begin = "15" end = "74"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/e63_po9.why">
-      <location file = "why/e63.why" line = "2707" begin = "13" end = "57"/>
+      <location file = "why/e63.why" line = "2824" begin = "13" end = "57"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/e63_po10.why">
-      <location file = "why/e63.why" line = "2708" begin = "7" end = "51"/>
+      <location file = "why/e63.why" line = "2825" begin = "7" end = "51"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -3925,6 +4050,10 @@ type int8
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag : charP tag_id
@@ -3949,6 +4078,11 @@ logic integer_of_int8 : int8 -> int
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
 
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
+
 logic floatP_tag : floatP tag_id
 
 axiom floatP_int: (int_of_tag(floatP_tag) = 1)
@@ -3969,25 +4103,25 @@ axiom floatP_tags:
 inductive incr: floatP pointer, int, int, (floatP, real) memory -> prop =
   | incr_ok: (forall floatP_floatM_t_1_at_L:(floatP, real) memory.
                (forall t_0:floatP pointer.
-                 (forall i_0:int.
-                   (forall j_0:int.
-                     ((i_0 < j_0) ->
+                 (forall i_2:int.
+                   (forall j_1:int.
+                     ((i_2 < j_1) ->
                       ((select(floatP_floatM_t_1_at_L, shift(t_0,
-                       i_0)) <= select(floatP_floatM_t_1_at_L, shift(t_0,
-                       (i_0 + 1)))) ->
-                       (incr(t_0, (i_0 + 1), j_0, floatP_floatM_t_1_at_L) ->
-                        incr(t_0, i_0, j_0, floatP_floatM_t_1_at_L))))))))
+                       i_2)) <= select(floatP_floatM_t_1_at_L, shift(t_0,
+                       (i_2 + 1)))) ->
+                       (incr(t_0, (i_2 + 1), j_1, floatP_floatM_t_1_at_L) ->
+                        incr(t_0, i_2, j_1, floatP_floatM_t_1_at_L))))))))
   | incr_alone: (forall floatP_floatM_t_1_at_L:(floatP, real) memory.
                   (forall t_1:floatP pointer.
-                    (forall i_1:int. incr(t_1, i_1, i_1,
+                    (forall i_3:int. incr(t_1, i_3, i_3,
                       floatP_floatM_t_1_at_L))))
 
 
 
-predicate incr2(t_2: floatP pointer, i_2: int, j_1: int,
+predicate incr2(t_2: floatP pointer, i_4: int, j_2: int,
   floatP_floatM_t_2_2_at_L: (floatP, real) memory) =
   (forall k:int.
-    (((i_2 <= k) and (k < j_1)) -> (select(floatP_floatM_t_2_2_at_L,
+    (((i_4 <= k) and (k < j_2)) -> (select(floatP_floatM_t_2_2_at_L,
      shift(t_2, k)) <= select(floatP_floatM_t_2_2_at_L, shift(t_2, (k + 1))))))
 
 logic int8_of_integer : int -> int8
@@ -4014,6 +4148,10 @@ predicate left_valid_struct_floatP(p: floatP pointer, a: int,
   floatP_alloc_table: floatP alloc_table) = (offset_min(floatP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -4024,6 +4162,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 axiom pointer_addr_of_floatP_of_pointer_address:
   (forall p:unit pointer.
     (p = pointer_address(floatP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -4038,6 +4182,10 @@ predicate right_valid_struct_floatP(p: floatP pointer, b: int,
   floatP_alloc_table: floatP alloc_table) = (offset_max(floatP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
@@ -4051,6 +4199,11 @@ predicate strict_valid_root_floatP(p: floatP pointer, a: int, b: int,
   floatP_alloc_table: floatP alloc_table) =
   ((offset_min(floatP_alloc_table, p) = a) and
    (offset_max(floatP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -4067,10 +4220,46 @@ predicate strict_valid_struct_floatP(p: floatP pointer, a: int, b: int,
   ((offset_min(floatP_alloc_table, p) = a) and
    (offset_max(floatP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -4081,6 +4270,11 @@ predicate valid_root_floatP(p: floatP pointer, a: int, b: int,
   floatP_alloc_table: floatP alloc_table) =
   ((offset_min(floatP_alloc_table, p) <= a) and
    (offset_max(floatP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -4096,6 +4290,11 @@ predicate valid_struct_floatP(p: floatP pointer, a: int, b: int,
   floatP_alloc_table: floatP alloc_table) =
   ((offset_min(floatP_alloc_table, p) <= a) and
    (offset_max(floatP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =

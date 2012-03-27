@@ -18,6 +18,8 @@ axiomatic Padding {
   
 }
 
+type uint8 = 0..255
+
 type int32 = -2147483648..2147483647
 
 type int8 = -128..127
@@ -27,6 +29,12 @@ tag intP = {
 }
 
 type intP = [intP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -268,7 +276,7 @@ behavior default:
 {  
    (var int32 res);
    
-   (var int32 v);
+   (var int32 v_0);
    
    (var int32 i_0);
    
@@ -277,7 +285,7 @@ behavior default:
    {  (C_34 : (res = (C_33 : (heap + 0).intM)));
       (C_37 : (size = (C_36 : ((C_35 : (size - 1)) :> int32))));
       (if (size != 0) then 
-      {  (C_39 : (v = (C_38 : (heap + size).intM)));
+      {  (C_39 : (v_0 = (C_38 : (heap + size).intM)));
          (C_40 : (i_0 = 0));
          
          loop 
@@ -298,7 +306,7 @@ behavior default:
                   (if ((C_56 : (heap + j).intM) <
                         (C_55 : (heap + (C_54 : ((C_53 : (j + 1)) :> int32))).intM)) then 
                   (C_52 : (j = (C_51 : ((C_50 : (j + 1)) :> int32)))) else ()) else ());
-                  (if (v >= (C_59 : (heap + j).intM)) then 
+                  (if (v_0 >= (C_59 : (heap + j).intM)) then 
                   (goto while_0_break) else ());
                   (C_62 : ((C_61 : (heap + i_0).intM) = (C_60 : (heap + j).intM)));
                   (C_63 : (i_0 = j))
@@ -306,7 +314,7 @@ behavior default:
             }
          };
          (while_0_break : ());
-         (C_65 : ((C_64 : (heap + i_0).intM) = v))
+         (C_65 : ((C_64 : (heap + i_0).intM) = v_0))
       } else ());
       
       (return res)
@@ -328,6 +336,10 @@ type intP
 type padding
 
 type tree
+
+type uint8
+
+type unsigned_charP
 
 type voidP
 
@@ -370,6 +382,11 @@ logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
+
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic heap:  -> intP pointer
 
@@ -444,6 +461,10 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
 predicate left_valid_struct_intP(p:intP pointer, a:int,
  intP_alloc_table:intP alloc_table) = (offset_min(intP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -487,6 +508,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 axiom pointer_addr_of_intP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
 
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
+
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
 axiom pointer_addr_of_voidP_of_pointer_address :
@@ -498,6 +525,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
 
 predicate right_valid_struct_intP(p:intP pointer, b:int,
  intP_alloc_table:intP alloc_table) = (offset_max(intP_alloc_table, p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -517,6 +548,11 @@ predicate strict_valid_root_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
 
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
@@ -532,10 +568,47 @@ predicate strict_valid_struct_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_heap(intP_heap_1_alloc_table:intP alloc_table) =
  (le_int(offset_min(intP_heap_1_alloc_table, heap), (0))
@@ -551,6 +624,11 @@ predicate valid_root_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
 
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
+
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) <= a)
@@ -565,6 +643,11 @@ predicate valid_struct_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -732,6 +815,38 @@ parameter alloc_struct_intP_requires :
           and (alloc_fresh(intP_alloc_table@, result, n)
               and instanceof(intP_tag_table, result, intP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -761,6 +876,8 @@ parameter alloc_struct_voidP_requires :
 parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
+
+parameter any_uint8 : unit -> { } uint8 { true }
 
 parameter intP_heap_1_alloc_table : intP alloc_table ref
 
@@ -919,6 +1036,14 @@ parameter safe_int32_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
+
 let clear_ensures_default =
  fun (tt : unit) ->
   { (JC_<somenum>:
@@ -1008,7 +1133,7 @@ let pop_ensures_default =
   try
    begin
      (let res = ref (any_int32 void) in
-     (let v = ref (any_int32 void) in
+     (let v_0 = ref (any_int32 void) in
      (let i_0 = ref (any_int32 void) in
      (let j = ref (any_int32 void) in
      (C_34:
@@ -1029,8 +1154,8 @@ let pop_ensures_default =
         (C_40:
         begin
           (let jessie_<somenum> =
-          (v := (C_38:
-                ((safe_acc_ !intP_intM_heap_1) ((shift heap) (integer_of_int32 !size))))) in
+          (v_0 := (C_38:
+                  ((safe_acc_ !intP_intM_heap_1) ((shift heap) (integer_of_int32 !size))))) in
           void);
          (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
          (loop_4:
@@ -1094,10 +1219,11 @@ let pop_ensures_default =
                        (safe_int32_of_integer_ (C_50:
                                                ((add_int (integer_of_int32 !j)) (1))))))) in
                  void) else void) else void);
-               (if ((ge_int_ (integer_of_int32 !v)) (integer_of_int32 
-                                                     (C_59:
-                                                     ((safe_acc_ !intP_intM_heap_1) 
-                                                      ((shift heap) (integer_of_int32 !j))))))
+               (if ((ge_int_ (integer_of_int32 !v_0)) (integer_of_int32 
+                                                       (C_59:
+                                                       ((safe_acc_ !intP_intM_heap_1) 
+                                                        ((shift heap) 
+                                                         (integer_of_int32 !j))))))
                then (raise (Goto_while_0_break_exc void)) else void);
                (let jessie_<somenum> =
                (let jessie_<somenum> =
@@ -1117,7 +1243,7 @@ let pop_ensures_default =
         begin
           void;
          (C_65:
-         (let jessie_<somenum> = !v in
+         (let jessie_<somenum> = !v_0 in
          (let jessie_<somenum> = heap in
          (let jessie_<somenum> = (integer_of_int32 !i_0) in
          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
@@ -1151,7 +1277,7 @@ let pop_safety =
   try
    begin
      (let res = ref (any_int32 void) in
-     (let v = ref (any_int32 void) in
+     (let v_0 = ref (any_int32 void) in
      (let i_0 = ref (any_int32 void) in
      (let j = ref (any_int32 void) in
      (C_34:
@@ -1173,10 +1299,10 @@ let pop_safety =
         (C_40:
         begin
           (let jessie_<somenum> =
-          (v := (C_38:
-                (JC_<somenum>:
-                ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
-                 (integer_of_int32 !size))))) in void);
+          (v_0 := (C_38:
+                  (JC_<somenum>:
+                  ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
+                   (integer_of_int32 !size))))) in void);
          (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
          (loop_3:
          while true do
@@ -1237,11 +1363,11 @@ let pop_safety =
                        (int32_of_integer_ (C_50:
                                           ((add_int (integer_of_int32 !j)) (1)))))))) in
                  void) else void) else void);
-               (if ((ge_int_ (integer_of_int32 !v)) (integer_of_int32 
-                                                     (C_59:
-                                                     (JC_<somenum>:
-                                                     ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
-                                                      (integer_of_int32 !j))))))
+               (if ((ge_int_ (integer_of_int32 !v_0)) (integer_of_int32 
+                                                       (C_59:
+                                                       (JC_<somenum>:
+                                                       ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
+                                                        (integer_of_int32 !j))))))
                then (raise (Goto_while_0_break_exc void)) else void);
                (let jessie_<somenum> =
                (let jessie_<somenum> =
@@ -1264,7 +1390,7 @@ let pop_safety =
         begin
           void;
          (C_65:
-         (let jessie_<somenum> = !v in
+         (let jessie_<somenum> = !v_0 in
          (let jessie_<somenum> = heap in
          (let jessie_<somenum> = (integer_of_int32 !i_0) in
          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
@@ -1538,19 +1664,19 @@ why --project [...] why/heap.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po55.why">
-      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "182"/>
+      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "183"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po56.why">
-      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "182"/>
+      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "183"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po57.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1615"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "203" begin = "6" end = "1615"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po58.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1615"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "203" begin = "6" end = "1615"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po59.why">
@@ -1570,19 +1696,19 @@ why --project [...] why/heap.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po63.why">
-      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "182"/>
+      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "183"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po64.why">
-      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "182"/>
+      <location file = "PPCHOME/tests/jessie/heap.c" line = "150" begin = "8" end = "183"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po65.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1615"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "203" begin = "6" end = "1615"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po66.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "195" begin = "6" end = "1615"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "203" begin = "6" end = "1615"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po67.why">
@@ -1631,30 +1757,30 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po76.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "224" begin = "24" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "232" begin = "24" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po77.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "224" begin = "24" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "232" begin = "24" end = "52"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po78.why">
-      <location file = "why/heap.why" line = "1102" begin = "41" end = "70"/>
+      <location file = "why/heap.why" line = "1220" begin = "41" end = "70"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po79.why">
-      <location file = "why/heap.why" line = "1102" begin = "41" end = "70"/>
+      <location file = "why/heap.why" line = "1220" begin = "41" end = "70"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po80.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "230" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "238" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po81.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "230" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "238" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1694,11 +1820,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po11.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1107"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1109"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po12.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1107"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1109"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po13.why">
@@ -1710,11 +1836,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po15.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1107"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1109"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po16.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "275" begin = "9" end = "1107"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1109"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po17.why">
@@ -1846,12 +1972,12 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po43.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "295" begin = "27" end = "80"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "303" begin = "27" end = "80"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po44.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "295" begin = "27" end = "80"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "303" begin = "27" end = "80"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -1864,12 +1990,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po47.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "301" begin = "18" end = "48"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "309" begin = "18" end = "50"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po48.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "301" begin = "18" end = "48"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "309" begin = "18" end = "50"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
@@ -2884,6 +3010,10 @@ type padding
 
 type tree
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic Empty : tree
@@ -2926,6 +3056,11 @@ logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
+
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
 
 logic heap : intP pointer
 
@@ -3000,6 +3135,10 @@ predicate left_valid_struct_intP(p: intP pointer, a: int,
   intP_alloc_table: intP alloc_table) = (offset_min(intP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -3040,6 +3179,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 axiom pointer_addr_of_intP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
 
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
+
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
 axiom pointer_addr_of_voidP_of_pointer_address:
@@ -3052,6 +3197,10 @@ predicate right_valid_struct_charP(p: charP pointer, b: int,
 predicate right_valid_struct_intP(p: intP pointer, b: int,
   intP_alloc_table: intP alloc_table) = (offset_max(intP_alloc_table,
   p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
@@ -3070,6 +3219,11 @@ predicate strict_valid_root_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
@@ -3085,10 +3239,46 @@ predicate strict_valid_struct_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8 [(integer_of_uint8(x) = integer_of_uint8(y))].
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_heap(intP_heap_1_alloc_table: intP alloc_table) =
   ((offset_min(intP_heap_1_alloc_table, heap) <= 0) and
@@ -3104,6 +3294,11 @@ predicate valid_root_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
 
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
+
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) <= a) and (offset_max(voidP_alloc_table,
@@ -3118,6 +3313,11 @@ predicate valid_struct_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
