@@ -71,11 +71,9 @@ behavior default:
 {  
    (var int32 tmp);
    
-   {  
-      {  (C_9 : (tmp = (C_8 : f(1))));
-         
-         (assert for default: (C_10 : (tmp > 0)))
-      };
+   {  (C_9 : (tmp = (C_8 : f(1))));
+      
+      (assert for default: (C_10 : (tmp > 0)));
       
       (return ())
    }

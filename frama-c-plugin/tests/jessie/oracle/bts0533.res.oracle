@@ -196,9 +196,9 @@ behavior default:
             
             {  
                {  (C_79 : (tmp = (C_78 : bsearch(i, array_0, 10))));
-                  ();
-                  (C_80 : printf())
-               }
+                  ()
+               };
+               (C_80 : printf())
             };
             (C_83 : (i = (C_82 : ((C_81 : (i + 1)) :> int32))))
          }

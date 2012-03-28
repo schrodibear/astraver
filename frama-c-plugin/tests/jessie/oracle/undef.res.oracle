@@ -1458,9 +1458,9 @@ behavior default:
    
    {  
       {  (C_347 : (tmp_0_5 = (C_346 : baz())));
-         (C_349 : (tmp_0_6 = (C_348 : bar())));
-         (C_351 : (tmp_1 = (C_350 : foo(tmp_0_6, tmp_0_5))))
+         (C_349 : (tmp_0_6 = (C_348 : bar())))
       };
+      (C_351 : (tmp_1 = (C_350 : foo(tmp_0_6, tmp_0_5))));
       
       (return tmp_1)
    }
@@ -6013,22 +6013,22 @@ let order_of_arg_eval_ensures_default =
      (let tmp_0_5 = ref (any_int32 void) in
      (let tmp_0_6 = ref (any_int32 void) in
      (let tmp_1 = ref (any_int32 void) in
+     (C_351:
      begin
        (let jessie_<somenum> =
        (C_347:
        (C_349:
-       (C_351:
        begin
          (let jessie_<somenum> = (tmp_0_5 := (C_346: (JC_<somenum>: (baz void)))) in
-         void);
-        (let jessie_<somenum> = (tmp_0_6 := (C_348: (JC_<somenum>: (bar void)))) in
-        void);
-        (tmp_1 := (C_350:
-                  (let jessie_<somenum> = !tmp_0_6 in
-                  (let jessie_<somenum> = !tmp_0_5 in
-                  (JC_<somenum>: ((foo jessie_<somenum>) jessie_<somenum>)))))); !tmp_1 end))) in
-       void); (return := !tmp_1); (raise Return) end))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+         void); (tmp_0_6 := (C_348: (JC_<somenum>: (bar void)))); !tmp_0_6 end)) in
+       void);
+      (let jessie_<somenum> =
+      (tmp_1 := (C_350:
+                (let jessie_<somenum> = !tmp_0_6 in
+                (let jessie_<somenum> = !tmp_0_5 in
+                (JC_<somenum>: ((foo jessie_<somenum>) jessie_<somenum>)))))) in void);
+      (return := !tmp_1); (raise Return) end)))); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: true) }
 
 let order_of_arg_eval_safety =
  fun (tt : unit) ->
@@ -6042,22 +6042,23 @@ let order_of_arg_eval_safety =
      (let tmp_0_5 = ref (any_int32 void) in
      (let tmp_0_6 = ref (any_int32 void) in
      (let tmp_1 = ref (any_int32 void) in
+     (C_351:
      begin
        (let jessie_<somenum> =
        (C_347:
        (C_349:
-       (C_351:
        begin
          (let jessie_<somenum> =
          (tmp_0_5 := (C_346: (JC_<somenum>: (baz_requires void)))) in void);
-        (let jessie_<somenum> =
-        (tmp_0_6 := (C_348: (JC_<somenum>: (bar_requires void)))) in void);
-        (tmp_1 := (C_350:
-                  (let jessie_<somenum> = !tmp_0_6 in
-                  (let jessie_<somenum> = !tmp_0_5 in
-                  (JC_<somenum>: ((foo_requires jessie_<somenum>) jessie_<somenum>))))));
-        !tmp_1 end))) in void); (return := !tmp_1); (raise Return) end)));
-    absurd  end with Return -> !return end))
+        (tmp_0_6 := (C_348: (JC_<somenum>: (bar_requires void)))); !tmp_0_6 end)) in
+       void);
+      (let jessie_<somenum> =
+      (tmp_1 := (C_350:
+                (let jessie_<somenum> = !tmp_0_6 in
+                (let jessie_<somenum> = !tmp_0_5 in
+                (JC_<somenum>: ((foo_requires jessie_<somenum>) jessie_<somenum>)))))) in
+      void); (return := !tmp_1); (raise Return) end)))); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: valid___string_abc(charP___string_abc_1_alloc_table))
     and (JC_<somenum>: valid_a(intP_a_2_alloc_table)))) }
@@ -8274,7 +8275,7 @@ text = "ArithOverflow"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po116.why">
-      <location file = "why/undef.why" line = "4764" begin = "17" end = "95"/>
+      <location file = "why/undef.why" line = "4765" begin = "17" end = "95"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po117.why">
@@ -8283,11 +8284,11 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po118.why">
-      <location file = "why/undef.why" line = "4773" begin = "14" end = "74"/>
+      <location file = "why/undef.why" line = "4774" begin = "14" end = "74"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po119.why">
-      <location file = "why/undef.why" line = "4781" begin = "42" end = "68"/>
+      <location file = "why/undef.why" line = "4782" begin = "42" end = "68"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8302,12 +8303,12 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/undef_po122.why">
-      <location file = "why/undef.why" line = "4782" begin = "14" end = "59"/>
+      <location file = "why/undef.why" line = "4783" begin = "14" end = "59"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/undef_po123.why">
-      <location file = "why/undef.why" line = "4783" begin = "7" end = "50"/>
+      <location file = "why/undef.why" line = "4784" begin = "7" end = "50"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8317,7 +8318,7 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
     <goal why_file="why/undef_po110.why">
-      <location file = "why/undef.why" line = "4681" begin = "51" end = "75"/>
+      <location file = "why/undef.why" line = "4682" begin = "51" end = "75"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8350,11 +8351,11 @@ text = "ArithOverflow"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/undef_po105.why">
-      <location file = "why/undef.why" line = "4617" begin = "19" end = "100"/>
+      <location file = "why/undef.why" line = "4618" begin = "19" end = "100"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/undef_po106.why">
-      <location file = "why/undef.why" line = "4625" begin = "42" end = "68"/>
+      <location file = "why/undef.why" line = "4626" begin = "42" end = "68"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -8369,7 +8370,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/undef_po109.why">
-      <location file = "why/undef.why" line = "4626" begin = "14" end = "63"/>
+      <location file = "why/undef.why" line = "4627" begin = "14" end = "63"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

@@ -251,9 +251,9 @@ behavior default:
    {  (if ((C_60 : this_9.previously_active) != 0) then (C_59 : ((C_58 : this_9.active) = 1)) else 
       {  
          {  (C_55 : (tmp = (C_54 : sensor_speed())));
-            ();
-            (C_56 : tempomat_set(this_9, tmp))
+            ()
          };
+         (C_56 : tempomat_set(this_9, tmp));
          (C_57 : (tempomat_resume_speed = sensor_speed_result))
       });
       
@@ -454,9 +454,9 @@ behavior default:
            case 5:
            {  
               {  (C_88 : (tmp_3 = (C_87 : sensor_speed())));
-                 ();
-                 (C_89 : tempomat_set(this_7, tmp_3))
+                 ()
               };
+              (C_89 : tempomat_set(this_7, tmp_3));
               (C_90 : (tempomat_handler_speed = sensor_speed_result));
               
               (goto switch_0_break_0)
@@ -550,10 +550,13 @@ behavior default:
                                                                     };
                                                                     
                                                                     {
+                                                                      
+                                                                    {
                                                                       (C_140 : (tmp_0_0 = 
                                                                     (C_139 : sensor_speed(
                                                                     ))));
-                                                                    ();
+                                                                    ()
+                                                                    };
                                                                     (C_145 : epc_input_tempomat(
                                                                     (C_144 : (
                                                                     (C_143 : 
@@ -567,10 +570,8 @@ behavior default:
       
       (goto _LAND_0);
       (_LAND : 
-      {  
-         {  (C_151 : (tmp_0_1 = (C_150 : sensor_accelerator_position())));
-            (C_152 : epc_input_manual(tmp_0_1))
-         }
+      {  (C_151 : (tmp_0_1 = (C_150 : sensor_accelerator_position())));
+         (C_152 : epc_input_manual(tmp_0_1))
       });
       (_LAND_0 : ());
       
@@ -4484,19 +4485,19 @@ let tempomat_handler_ensures_default =
                                                                    (integer_of_uint32 jessie_<somenum>)) (2)))))
             then
              (C_88:
+             (C_89:
              (C_90:
              begin
                (let jessie_<somenum> =
                (tmp_3 := (C_87: (JC_<somenum>: (sensor_speed void)))) in void);
               void;
-              (C_89:
               (let jessie_<somenum> = this_7_0 in
               (let jessie_<somenum> = !tmp_3 in
               (JC_<somenum>:
-              (((((((tempomat_set jessie_<somenum>) jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_7_15) __anonstruct_tempomat_t_2_temp_override_this_7_15) __anonstruct_tempomat_t_2_active_this_7_15) __anonstruct_tempomat_t_2_this_7_15_alloc_table) !__anonstruct_tempomat_t_2_previously_active_this_7_15)))));
+              (((((((tempomat_set jessie_<somenum>) jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_7_15) __anonstruct_tempomat_t_2_temp_override_this_7_15) __anonstruct_tempomat_t_2_active_this_7_15) __anonstruct_tempomat_t_2_this_7_15_alloc_table) !__anonstruct_tempomat_t_2_previously_active_this_7_15))));
               (let jessie_<somenum> =
               (tempomat_handler_speed := !sensor_speed_result) in void);
-              (raise (Goto_switch_0_break_0_exc void)) end)) else void);
+              (raise (Goto_switch_0_break_0_exc void)) end))) else void);
            (if (((eq_int_ (integer_of_uint32 jessie_<somenum>)) (6)) || (((eq_int_ 
                                                                    (integer_of_uint32 jessie_<somenum>)) (5)) || 
                                                                 (((eq_int_ 
@@ -4732,19 +4733,19 @@ let tempomat_handler_safety =
                                                                    (integer_of_uint32 jessie_<somenum>)) (2)))))
             then
              (C_88:
+             (C_89:
              (C_90:
              begin
                (let jessie_<somenum> =
                (tmp_3 := (C_87: (JC_<somenum>: (sensor_speed_requires void)))) in
                void); void;
-              (C_89:
               (let jessie_<somenum> = this_7_0 in
               (let jessie_<somenum> = !tmp_3 in
               (JC_<somenum>:
-              (((((((tempomat_set_requires jessie_<somenum>) jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_7_15) __anonstruct_tempomat_t_2_temp_override_this_7_15) __anonstruct_tempomat_t_2_active_this_7_15) __anonstruct_tempomat_t_2_this_7_15_alloc_table) !__anonstruct_tempomat_t_2_previously_active_this_7_15)))));
+              (((((((tempomat_set_requires jessie_<somenum>) jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_7_15) __anonstruct_tempomat_t_2_temp_override_this_7_15) __anonstruct_tempomat_t_2_active_this_7_15) __anonstruct_tempomat_t_2_this_7_15_alloc_table) !__anonstruct_tempomat_t_2_previously_active_this_7_15))));
               (let jessie_<somenum> =
               (tempomat_handler_speed := !sensor_speed_result) in void);
-              (raise (Goto_switch_0_break_0_exc void)) end)) else void);
+              (raise (Goto_switch_0_break_0_exc void)) end))) else void);
            (if (((eq_int_ (integer_of_uint32 jessie_<somenum>)) (6)) || (((eq_int_ 
                                                                    (integer_of_uint32 jessie_<somenum>)) (5)) || 
                                                                 (((eq_int_ 
@@ -4930,17 +4931,17 @@ let tempomat_resume_ensures_default =
          jessie_<somenum> end))
        else
         (C_55:
+        (C_56:
         (C_57:
         begin
           (let jessie_<somenum> = (tmp := (C_54: (JC_<somenum>: (sensor_speed void)))) in
           void); void;
-         (C_56:
          (let jessie_<somenum> = this_9 in
          (let jessie_<somenum> = !tmp in
          (JC_<somenum>:
-         (((((((tempomat_set jessie_<somenum>) jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_9_11) __anonstruct_tempomat_t_2_temp_override_this_9_11) __anonstruct_tempomat_t_2_active_this_9_11) __anonstruct_tempomat_t_2_this_9_11_alloc_table) __anonstruct_tempomat_t_2_previously_active_this_9_11)))));
+         (((((((tempomat_set jessie_<somenum>) jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_9_11) __anonstruct_tempomat_t_2_temp_override_this_9_11) __anonstruct_tempomat_t_2_active_this_9_11) __anonstruct_tempomat_t_2_this_9_11_alloc_table) __anonstruct_tempomat_t_2_previously_active_this_9_11))));
          (tempomat_resume_speed := !sensor_speed_result);
-         !tempomat_resume_speed end))) in void); (raise Return) end);
+         !tempomat_resume_speed end)))) in void); (raise Return) end);
     (raise Return) end with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
@@ -4994,18 +4995,18 @@ let tempomat_resume_safety =
          jessie_<somenum> end))
        else
         (C_55:
+        (C_56:
         (C_57:
         begin
           (let jessie_<somenum> =
           (tmp := (C_54: (JC_<somenum>: (sensor_speed_requires void)))) in void);
          void;
-         (C_56:
          (let jessie_<somenum> = this_9 in
          (let jessie_<somenum> = !tmp in
          (JC_<somenum>:
-         (((((((tempomat_set_requires jessie_<somenum>) jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_9_11) __anonstruct_tempomat_t_2_temp_override_this_9_11) __anonstruct_tempomat_t_2_active_this_9_11) __anonstruct_tempomat_t_2_this_9_11_alloc_table) __anonstruct_tempomat_t_2_previously_active_this_9_11)))));
+         (((((((tempomat_set_requires jessie_<somenum>) jessie_<somenum>) __anonstruct_tempomat_t_2_target_speed_this_9_11) __anonstruct_tempomat_t_2_temp_override_this_9_11) __anonstruct_tempomat_t_2_active_this_9_11) __anonstruct_tempomat_t_2_this_9_11_alloc_table) __anonstruct_tempomat_t_2_previously_active_this_9_11))));
          (tempomat_resume_speed := !sensor_speed_result);
-         !tempomat_resume_speed end))) in void); (raise Return) end);
+         !tempomat_resume_speed end)))) in void); (raise Return) end);
     (raise Return) end with Return -> void end) { true }
 
 let tempomat_set_ensures_default =
@@ -5185,17 +5186,17 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts1004_po147.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "239" begin = "20" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "240" begin = "17" end = "42"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po148.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "239" begin = "20" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "240" begin = "17" end = "42"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po149.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "239" begin = "20" end = "45"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "240" begin = "17" end = "42"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -5485,17 +5486,17 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts1004_po124.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "442" begin = "25" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "443" begin = "22" end = "49"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po125.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "442" begin = "25" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "443" begin = "22" end = "49"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po126.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "442" begin = "25" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "443" begin = "22" end = "49"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -5636,27 +5637,27 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts1004_po56.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "641" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "642" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po57.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "641" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "642" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po58.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "641" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "642" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po59.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "641" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "642" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po60.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "641" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "642" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -5730,27 +5731,27 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts1004_po39.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "702" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "703" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po40.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "702" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "703" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po41.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "702" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "703" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po42.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "702" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "703" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po43.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "702" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "703" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -5780,27 +5781,27 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts1004_po32.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "683" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "684" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po33.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "683" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "684" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po34.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "683" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "684" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po35.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "683" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "684" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po36.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "683" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "684" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -5816,27 +5817,27 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts1004_po24.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "660" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "661" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po25.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "660" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "661" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po26.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "660" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "661" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po27.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "660" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "661" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts1004_po28.why">
-      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "660" begin = "15" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts1004.jessie/bts1004.jc" line = "661" begin = "15" end = "43"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>

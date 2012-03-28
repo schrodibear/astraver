@@ -95,10 +95,8 @@ behavior default:
    {  (C_12 : (a_0 = (C_11 : (new intP[2]))));
       (C_14 : ((C_13 : (a_0 + 0).intM) = 1));
       (C_16 : ((C_15 : (a_0 + 1).intM) = 2));
-      
-      {  (C_18 : (tmp = (C_17 : foo(a_0))));
-         (C_19 : printf())
-      };
+      (C_18 : (tmp = (C_17 : foo(a_0))));
+      (C_19 : printf());
       (C_20 : (__retres = 0));
       
       {  (C_21 : (free(a_0)));
@@ -697,6 +695,8 @@ let main_ensures_default =
      (C_12:
      (C_14:
      (C_16:
+     (C_18:
+     (C_19:
      (C_20:
      (C_21:
      begin
@@ -718,18 +718,15 @@ let main_ensures_default =
           and ((select(intP_intM_a_0_5, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_a_0_5, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
       (let jessie_<somenum> =
-      (C_18:
-      begin
-        (let jessie_<somenum> =
-        (tmp := (C_17:
-                (let jessie_<somenum> = !a_0 in
-                (JC_<somenum>:
-                (((foo jessie_<somenum>) intP_intM_a_0_5) !intP_a_0_5_alloc_table))))) in
-        void); (C_19: (JC_<somenum>: (printf void))) end) in void);
+      (tmp := (C_17:
+              (let jessie_<somenum> = !a_0 in
+              (JC_<somenum>:
+              (((foo jessie_<somenum>) intP_intM_a_0_5) !intP_a_0_5_alloc_table))))) in
+      void); (let jessie_<somenum> = (JC_<somenum>: (printf void)) in void);
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
       ((safe_free_parameter intP_a_0_5_alloc_table) !a_0);
-      (return := !__retres); (raise Return) end))))))))))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+      (return := !__retres); (raise Return) end))))))))))))); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
@@ -747,6 +744,8 @@ let main_safety =
      (C_12:
      (C_14:
      (C_16:
+     (C_18:
+     (C_19:
      (C_20:
      (C_21:
      begin
@@ -772,17 +771,14 @@ let main_safety =
           and ((select(intP_intM_a_0_5, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(intP_intM_a_0_5, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
       (let jessie_<somenum> =
-      (C_18:
-      begin
-        (let jessie_<somenum> =
-        (tmp := (C_17:
-                (let jessie_<somenum> = !a_0 in
-                (JC_<somenum>:
-                (((foo_requires jessie_<somenum>) intP_intM_a_0_5) !intP_a_0_5_alloc_table))))) in
-        void); (C_19: (JC_<somenum>: (printf_requires void))) end) in void);
+      (tmp := (C_17:
+              (let jessie_<somenum> = !a_0 in
+              (JC_<somenum>:
+              (((foo_requires jessie_<somenum>) intP_intM_a_0_5) !intP_a_0_5_alloc_table))))) in
+      void); (let jessie_<somenum> = (JC_<somenum>: (printf_requires void)) in void);
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
       ((free_parameter intP_a_0_5_alloc_table) !a_0); (return := !__retres);
-      (raise Return) end))))))))))); absurd  end with Return -> !return end))
+      (raise Return) end))))))))))))); absurd  end with Return -> !return end))
   { (JC_<somenum>: valid___string__d_(charP___string__d__1_alloc_table)) }
 
 

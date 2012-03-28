@@ -248,11 +248,11 @@ behavior default:
                                                          (C_220 : (tmp_0_0 = 
                                                          (C_219 : mul_dn(
                                                          (C_217 : x_2.l),
-                                                         (C_218 : y_2.u)))));
-                                                         (C_223 : ((C_222 : z_0.l) = 
-                                                         (C_221 : min(
-                                                         tmp_0_0, tmp_1))))
+                                                         (C_218 : y_2.u)))))
                                                       };
+                                                      (C_223 : ((C_222 : z_0.l) = 
+                                                      (C_221 : min(tmp_0_0,
+                                                                   tmp_1))));
                                                       
                                                       {  (C_227 : (tmp_1_0 = 
                                                          (C_226 : mul_up(
@@ -261,11 +261,11 @@ behavior default:
                                                          (C_231 : (tmp_2 = 
                                                          (C_230 : mul_up(
                                                          (C_228 : x_2.l),
-                                                         (C_229 : y_2.l)))));
-                                                         (C_234 : ((C_233 : z_0.u) = 
-                                                         (C_232 : max(
-                                                         tmp_2, tmp_1_0))))
-                                                      }
+                                                         (C_229 : y_2.l)))))
+                                                      };
+                                                      (C_234 : ((C_233 : z_0.u) = 
+                                                      (C_232 : max(tmp_2,
+                                                                   tmp_1_0))))
                                                    } else 
                                                    {  (C_207 : ((C_206 : z_0.l) = 
                                                       (C_205 : mul_dn(
@@ -1556,8 +1556,7 @@ let mul_ensures_default =
                           ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0))) 
               (double_of_real_exact 0.0))
          then
-          (C_227:
-          (C_231:
+          (C_223:
           begin
             (let jessie_<somenum> =
             (C_216:
@@ -1573,7 +1572,6 @@ let mul_ensures_default =
                         ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
                         (JC_<somenum>: ((mul_dn jessie_<somenum>) jessie_<somenum>)))))) in
               void);
-             (let jessie_<somenum> =
              (tmp_0_0 := (C_219:
                          (let jessie_<somenum> =
                          (C_217:
@@ -1581,37 +1579,38 @@ let mul_ensures_default =
                          (let jessie_<somenum> =
                          (C_218:
                          ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-                         (JC_<somenum>: ((mul_dn jessie_<somenum>) jessie_<somenum>)))))) in
-             void);
-             (C_223:
+                         (JC_<somenum>: ((mul_dn jessie_<somenum>) jessie_<somenum>))))));
+             !tmp_0_0 end)) in void);
+           (let jessie_<somenum> =
+           (C_221:
+           (let jessie_<somenum> = !tmp_0_0 in
+           (let jessie_<somenum> = !tmp_1 in
+           (JC_<somenum>: ((min jessie_<somenum>) jessie_<somenum>))))) in
+           (let jessie_<somenum> = !z_0 in
+           (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_<somenum>) jessie_<somenum>)));
+           (let jessie_<somenum> =
+           (C_227:
+           (C_231:
+           begin
              (let jessie_<somenum> =
-             (C_221:
-             (let jessie_<somenum> = !tmp_0_0 in
-             (let jessie_<somenum> = !tmp_1 in
-             (JC_<somenum>: ((min jessie_<somenum>) jessie_<somenum>))))) in
-             begin
-               (let jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_<somenum>) jessie_<somenum>));
-              jessie_<somenum> end)) end)) in void);
-           (let jessie_<somenum> =
-           (tmp_1_0 := (C_226:
-                       (let jessie_<somenum> =
-                       (C_224:
-                       ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-                       (let jessie_<somenum> =
-                       (C_225:
-                       ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-                       (JC_<somenum>: ((mul_up jessie_<somenum>) jessie_<somenum>)))))) in
-           void);
-           (let jessie_<somenum> =
-           (tmp_2 := (C_230:
-                     (let jessie_<somenum> =
-                     (C_228:
-                     ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-                     (let jessie_<somenum> =
-                     (C_229:
-                     ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-                     (JC_<somenum>: ((mul_up jessie_<somenum>) jessie_<somenum>)))))) in void);
+             (tmp_1_0 := (C_226:
+                         (let jessie_<somenum> =
+                         (C_224:
+                         ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
+                         (let jessie_<somenum> =
+                         (C_225:
+                         ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
+                         (JC_<somenum>: ((mul_up jessie_<somenum>) jessie_<somenum>)))))) in
+             void);
+            (tmp_2 := (C_230:
+                      (let jessie_<somenum> =
+                      (C_228:
+                      ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
+                      (let jessie_<somenum> =
+                      (C_229:
+                      ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
+                      (JC_<somenum>: ((mul_up jessie_<somenum>) jessie_<somenum>)))))); !tmp_2
+           end)) in void);
            (C_234:
            (let jessie_<somenum> =
            (C_232:
@@ -1621,7 +1620,7 @@ let mul_ensures_default =
            begin
              (let jessie_<somenum> = !z_0 in
              (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_<somenum>) jessie_<somenum>));
-            jessie_<somenum> end)) end))
+            jessie_<somenum> end)) end)
          else
           (C_207:
           begin
@@ -2049,8 +2048,7 @@ let mul_safety =
                           ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0))) 
               (double_of_real_exact 0.0))
          then
-          (C_227:
-          (C_231:
+          (C_223:
           begin
             (let jessie_<somenum> =
             (C_216:
@@ -2066,7 +2064,6 @@ let mul_safety =
                         ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
                         (JC_<somenum>: ((mul_dn_requires jessie_<somenum>) jessie_<somenum>)))))) in
               void);
-             (let jessie_<somenum> =
              (tmp_0_0 := (C_219:
                          (let jessie_<somenum> =
                          (C_217:
@@ -2074,38 +2071,38 @@ let mul_safety =
                          (let jessie_<somenum> =
                          (C_218:
                          ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-                         (JC_<somenum>: ((mul_dn_requires jessie_<somenum>) jessie_<somenum>)))))) in
-             void);
-             (C_223:
+                         (JC_<somenum>: ((mul_dn_requires jessie_<somenum>) jessie_<somenum>))))));
+             !tmp_0_0 end)) in void);
+           (let jessie_<somenum> =
+           (C_221:
+           (let jessie_<somenum> = !tmp_0_0 in
+           (let jessie_<somenum> = !tmp_1 in
+           (JC_<somenum>: ((min_requires jessie_<somenum>) jessie_<somenum>))))) in
+           (let jessie_<somenum> = !z_0 in
+           (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_<somenum>) jessie_<somenum>)));
+           (let jessie_<somenum> =
+           (C_227:
+           (C_231:
+           begin
              (let jessie_<somenum> =
-             (C_221:
-             (let jessie_<somenum> = !tmp_0_0 in
-             (let jessie_<somenum> = !tmp_1 in
-             (JC_<somenum>: ((min_requires jessie_<somenum>) jessie_<somenum>))))) in
-             begin
-               (let jessie_<somenum> = !z_0 in
-               (((safe_upd_ __anonstruct_interval_1_l_z_0_21) jessie_<somenum>) jessie_<somenum>));
-              jessie_<somenum> end)) end)) in void);
-           (let jessie_<somenum> =
-           (tmp_1_0 := (C_226:
-                       (let jessie_<somenum> =
-                       (C_224:
-                       ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
-                       (let jessie_<somenum> =
-                       (C_225:
-                       ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
-                       (JC_<somenum>: ((mul_up_requires jessie_<somenum>) jessie_<somenum>)))))) in
-           void);
-           (let jessie_<somenum> =
-           (tmp_2 := (C_230:
-                     (let jessie_<somenum> =
-                     (C_228:
-                     ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
-                     (let jessie_<somenum> =
-                     (C_229:
-                     ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
-                     (JC_<somenum>: ((mul_up_requires jessie_<somenum>) jessie_<somenum>)))))) in
-           void);
+             (tmp_1_0 := (C_226:
+                         (let jessie_<somenum> =
+                         (C_224:
+                         ((safe_acc_ !__anonstruct_interval_1_u_x_2_19) !x_2_1)) in
+                         (let jessie_<somenum> =
+                         (C_225:
+                         ((safe_acc_ !__anonstruct_interval_1_u_y_2_20) !y_2_0)) in
+                         (JC_<somenum>: ((mul_up_requires jessie_<somenum>) jessie_<somenum>)))))) in
+             void);
+            (tmp_2 := (C_230:
+                      (let jessie_<somenum> =
+                      (C_228:
+                      ((safe_acc_ !__anonstruct_interval_1_l_x_2_19) !x_2_1)) in
+                      (let jessie_<somenum> =
+                      (C_229:
+                      ((safe_acc_ !__anonstruct_interval_1_l_y_2_20) !y_2_0)) in
+                      (JC_<somenum>: ((mul_up_requires jessie_<somenum>) jessie_<somenum>))))));
+            !tmp_2 end)) in void);
            (C_234:
            (let jessie_<somenum> =
            (C_232:
@@ -2115,7 +2112,7 @@ let mul_safety =
            begin
              (let jessie_<somenum> = !z_0 in
              (((safe_upd_ __anonstruct_interval_1_u_z_0_21) jessie_<somenum>) jessie_<somenum>));
-            jessie_<somenum> end)) end))
+            jessie_<somenum> end)) end)
          else
           (C_207:
           begin
@@ -2513,7 +2510,7 @@ why --project [...] why/interval_arith_struct.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po22.why">
-      <location file = "why/interval_arith_struct.why" line = "1573" begin = "19" end = "143"/>
+      <location file = "why/interval_arith_struct.why" line = "1572" begin = "19" end = "143"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po23.why">
@@ -2522,7 +2519,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po24.why">
-      <location file = "why/interval_arith_struct.why" line = "1583" begin = "18" end = "140"/>
+      <location file = "why/interval_arith_struct.why" line = "1582" begin = "18" end = "140"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po25.why">
@@ -2531,7 +2528,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po26.why">
-      <location file = "why/interval_arith_struct.why" line = "1593" begin = "16" end = "134"/>
+      <location file = "why/interval_arith_struct.why" line = "1592" begin = "16" end = "134"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po27.why">
@@ -2540,7 +2537,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po28.why">
-      <location file = "why/interval_arith_struct.why" line = "1603" begin = "24" end = "160"/>
+      <location file = "why/interval_arith_struct.why" line = "1602" begin = "24" end = "160"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po29.why">
@@ -3214,17 +3211,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/interval_arith_struct_po163.why">
-      <location file = "why/interval_arith_struct.why" line = "1998" begin = "7" end = "73"/>
+      <location file = "why/interval_arith_struct.why" line = "1995" begin = "7" end = "73"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po164.why">
-      <location file = "why/interval_arith_struct.why" line = "1999" begin = "7" end = "73"/>
+      <location file = "why/interval_arith_struct.why" line = "1996" begin = "7" end = "73"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/interval_arith_struct_po165.why">
-      <location file = "why/interval_arith_struct.why" line = "2000" begin = "7" end = "71"/>
+      <location file = "why/interval_arith_struct.why" line = "1997" begin = "7" end = "71"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

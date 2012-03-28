@@ -162,9 +162,9 @@ behavior default:
       
       {  (C_56 : (tmp_2 = p));
          (C_58 : (p = (C_57 : (p + 1))));
-         (C_59 : (tmp_0_1 = 1));
-         (C_61 : ((C_60 : tmp_2.intM) = tmp_0_1))
+         (C_59 : (tmp_0_1 = 1))
       };
+      (C_61 : ((C_60 : tmp_2.intM) = tmp_0_1));
       
       (return tmp_0_1)
    }
@@ -935,6 +935,7 @@ let array1_ensures_default =
      (let tmp_2 = ref (any_pointer void) in
      (let tmp_0_1 = ref (any_int32 void) in
      (C_55:
+     (C_61:
      begin
        (let jessie_<somenum> = (p := (C_54: ((shift t) (2)))) in void);
       (let jessie_<somenum> =
@@ -944,15 +945,12 @@ let array1_ensures_default =
       begin
         (let jessie_<somenum> = (tmp_2 := !p) in void);
        (let jessie_<somenum> = (p := (C_57: ((shift !p) (1)))) in void);
-       (let jessie_<somenum> = (tmp_0_1 := (safe_int32_of_integer_ (1))) in void);
-       (C_61:
-       (let jessie_<somenum> = !tmp_0_1 in
-       begin
-         (let jessie_<somenum> = !tmp_2 in
-         (((safe_upd_ intP_intM_t_2) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
-      end))) in void); (return := !tmp_0_1); (raise Return) end)))); 
-    absurd  end with Return -> !return end))
-  { (JC_<somenum>: (integer_of_int32(result) = (1))) }
+       (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1 end))) in void);
+      (let jessie_<somenum> = !tmp_0_1 in
+      (let jessie_<somenum> = !tmp_2 in
+      (((safe_upd_ intP_intM_t_2) jessie_<somenum>) jessie_<somenum>)));
+      (return := !tmp_0_1); (raise Return) end))))); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (1))) }
 
 let array1_safety =
  fun (tt : unit) ->
@@ -970,6 +968,7 @@ let array1_safety =
      (let tmp_2 = ref (any_pointer void) in
      (let tmp_0_1 = ref (any_int32 void) in
      (C_55:
+     (C_61:
      begin
        (let jessie_<somenum> = (p := (C_54: ((shift t) (2)))) in void);
       (let jessie_<somenum> =
@@ -979,15 +978,13 @@ let array1_safety =
       begin
         (let jessie_<somenum> = (tmp_2 := !p) in void);
        (let jessie_<somenum> = (p := (C_57: ((shift !p) (1)))) in void);
-       (let jessie_<somenum> = (tmp_0_1 := (safe_int32_of_integer_ (1))) in void);
-       (C_61:
-       (let jessie_<somenum> = !tmp_0_1 in
-       begin
-         (let jessie_<somenum> = !tmp_2 in
-         (JC_<somenum>:
-         ((((upd_ !intP_t_2_alloc_table) intP_intM_t_2) jessie_<somenum>) jessie_<somenum>)));
-        jessie_<somenum> end)) end))) in void); (return := !tmp_0_1);
-      (raise Return) end)))); absurd  end with Return -> !return end))
+       (tmp_0_1 := (safe_int32_of_integer_ (1))); !tmp_0_1 end))) in void);
+      (let jessie_<somenum> = !tmp_0_1 in
+      (let jessie_<somenum> = !tmp_2 in
+      (JC_<somenum>:
+      ((((upd_ !intP_t_2_alloc_table) intP_intM_t_2) jessie_<somenum>) jessie_<somenum>))));
+      (return := !tmp_0_1); (raise Return) end))))); absurd  end with
+   Return -> !return end))
   { (JC_<somenum>:
     ((JC_<somenum>: valid_t(intP_t_2_alloc_table))
     and (JC_<somenum>: valid_s(S_s_3_alloc_table)))) }
@@ -1472,7 +1469,7 @@ text = "PointerDeref"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/pointer_po48.why">
-      <location file = "why/pointer.why" line = "1143" begin = "15" end = "71"/>
+      <location file = "why/pointer.why" line = "1140" begin = "15" end = "71"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/pointer_po49.why">
@@ -1496,7 +1493,7 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/pointer_po53.why">
-      <location file = "why/pointer.why" line = "1161" begin = "14" end = "54"/>
+      <location file = "why/pointer.why" line = "1158" begin = "14" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1727,12 +1724,12 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/pointer_po2.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "159" begin = "18" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "160" begin = "15" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/pointer_po3.why">
-      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "159" begin = "18" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/pointer.jessie/pointer.jc" line = "160" begin = "15" end = "44"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

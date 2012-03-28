@@ -145,10 +145,8 @@ behavior default:
    
    (var int32 __retres);
    
-   {  
-      {  (C_24 : (tmp = (C_23 : f_single())));
-         (C_25 : printf())
-      };
+   {  (C_24 : (tmp = (C_23 : f_single())));
+      (C_25 : printf());
       (C_26 : (__retres = 0));
       
       (return __retres)
@@ -766,15 +764,14 @@ let main_ensures_default =
    begin
      (let tmp = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
+     (C_24:
+     (C_25:
      (C_26:
      begin
-       (let jessie_<somenum> =
-       (C_24:
-       begin
-         (let jessie_<somenum> = (tmp := (C_23: (JC_<somenum>: (f_single void)))) in void);
-        (C_25: (JC_<somenum>: (printf void))) end) in void);
+       (let jessie_<somenum> = (tmp := (C_23: (JC_<somenum>: (f_single void)))) in void);
+      (let jessie_<somenum> = (JC_<somenum>: (printf void)) in void);
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))); absurd  end with
+      (return := !__retres); (raise Return) end))))); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
@@ -787,16 +784,14 @@ let main_safety =
    begin
      (let tmp = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
+     (C_24:
+     (C_25:
      (C_26:
      begin
-       (let jessie_<somenum> =
-       (C_24:
-       begin
-         (let jessie_<somenum> =
-         (tmp := (C_23: (JC_<somenum>: (f_single_requires void)))) in void);
-        (C_25: (JC_<somenum>: (printf_requires void))) end) in void);
+       (let jessie_<somenum> = (tmp := (C_23: (JC_<somenum>: (f_single_requires void)))) in
+       void); (let jessie_<somenum> = (JC_<somenum>: (printf_requires void)) in void);
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end))); absurd  end with
+      (return := !__retres); (raise Return) end))))); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
     valid___string_float___2__15f_(charP___string_float___2__15f__1_alloc_table)) }
