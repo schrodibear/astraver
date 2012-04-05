@@ -1,14 +1,16 @@
 #pragma SeparationPolicy(Regions)
 
-/*@ axiom little_endian_low_byte_short{L}: 
-  @   \forall short *s; *(char*)s == *s % 256;
+/*@ axiomatic Conversion {
+  @   axiom little_endian_low_byte_short{L}: 
+  @     \forall short *s; *(char*)s == *s % 256;
   @   
   @ axiom little_endian_high_byte_short{L}: 
-  @   \forall short *s; *((char*)s+1) == *s / 256;
+  @   \forall short *s; *((char*)s+1) == *s / 256; }
   @*/
 
-/*@ axiom div_modulo:
-  @   \forall integer i; i == 256 * (i / 256) + i % 256;
+/*@ axiomatic Div {
+  @  axiom div_modulo:
+  @   \forall integer i; i == 256 * (i / 256) + i % 256; }
   @*/
 
 /*@ requires \valid(x+(0..1));

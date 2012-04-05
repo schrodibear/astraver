@@ -16,12 +16,15 @@ void f(int* i) {
   s->c4 = 0;
 }
 
-// take address of quantified variable in axiom
-//@ axiom c1_zero{L}: \forall int i; i == 0 ==> ((struct int_struct*)&i)->c1 == 0;
-//@ axiom c2_zero{L}: \forall int i; i == 0 ==> ((struct int_struct*)&i)->c2 == 0;
-
-//@ axiom c3_zero{L}: \forall int* i; *i == 0 ==> ((struct int_struct*)i)->c3 == 0;
-//@ axiom c4_zero{L}: \forall int* i; *i == 0 ==> ((struct int_struct*)i)->c4 == 0;
+/*@
+axiomatic PointerCast {
+// c1 and c2 are illegal: they take address of quantified variable in axiom
+//axiom c1_zero{L}: \forall int i; i == 0 ==> ((struct int_struct*)&i)->c1 == 0;
+//axiom c2_zero{L}: \forall int i; i == 0 ==> ((struct int_struct*)&i)->c2 == 0;
+axiom c3_zero{L}: \forall int* i; *i == 0 ==> ((struct int_struct*)i)->c3 == 0;
+axiom c4_zero{L}: \forall int* i; *i == 0 ==> ((struct int_struct*)i)->c4 == 0;
+}
+*/
 
 //@ requires \valid(i);
 void g(int* i) {

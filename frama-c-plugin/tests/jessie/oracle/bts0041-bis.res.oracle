@@ -408,18 +408,322 @@ predicate valid_wstring{L}(unsigned_shortP[..] s_30) =
 predicate valid_wstring_or_null{L}(unsigned_shortP[..] s_31) =
 ((s_31 == null) || valid_wstring{L}(s_31))
 
-charP[..] strndup(charP[..] s, integer n_1)
-  requires (C_10 : valid_string{Here}(s));
+integer memcmp(charP[..] s1, charP[..] s2, integer n_2)
+  requires (C_2 : (((C_4 : (\offset_min(s1) <= 0)) &&
+                     (C_5 : (\offset_max(s1) >= (n_2 - 1)))) &&
+                    ((C_7 : (\offset_min(s2) <= 0)) &&
+                      (C_8 : (\offset_max(s2) >= (n_2 - 1))))));
 behavior default:
   assigns \nothing;
   allocates \nothing;
-  ensures (C_1 : (((((C_5 : (\offset_min(\result) <= 0)) &&
-                      (C_6 : (\offset_max(\result) >=
-                               minimum(strlen{Here}(\at(s,Old)), \at(n_1,Old))))) &&
-                     (C_7 : valid_string{Here}(\result))) &&
-                    (C_8 : (strlen{Here}(\result) <= \at(n_1,Old)))) &&
-                   (C_9 : (strncmp{Here}(\result, \at(s,Old), \at(n_1,Old)) ==
-                            0))));
+  ensures (C_1 : (\result ==
+                   memcmp{Here}(\at(s1,Old), \at(s2,Old), \at(n_2,Old))));
+;
+
+charP[..] memchr(charP[..] s, integer c_0, integer n_1)
+  requires (C_14 : ((C_15 : (\offset_min(s) <= 0)) &&
+                     (C_16 : (\offset_max(s) >= (n_1 - 1)))));
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_9 : ((C_10 : (\result == \at(s,Old))) &&
+                   (C_11 : (\base_block(\result) == \base_block(\at(s,Old))))));
+behavior found:
+  assumes (memchr{Here}(s, c_0, n_1) == true);
+  ensures (C_12 : (\result.charM == \at(c_0,Old)));
+behavior not_found:
+  assumes (! (memchr{Here}(s, c_0, n_1) == true));
+  ensures (C_13 : (\result == null));
+;
+
+charP[..] memcpy(charP[..] dest_1, charP[..] src, integer n_3)
+  requires (C_22 : (((C_24 : (\offset_min(dest_1) <= 0)) &&
+                      (C_25 : (\offset_max(dest_1) >= (n_3 - 1)))) &&
+                     ((C_27 : (\offset_min(src) <= 0)) &&
+                       (C_28 : (\offset_max(src) >= (n_3 - 1))))));
+behavior default:
+  assigns (dest_1 + [0..(n_3 - 1)]).charM;
+  allocates \nothing;
+  ensures (C_17 : (((C_19 : (memcmp{Here}(\at(dest_1,Old), \at(src,Old),
+                                          \at(n_3,Old)) ==
+                              0)) &&
+                     (C_20 : (\result == \at(dest_1,Old)))) &&
+                    (C_21 : (\base_block(\result) ==
+                              \base_block(\at(dest_1,Old))))));
+;
+
+charP[..] memmove(charP[..] dest_2, charP[..] src_0, integer n_4)
+  requires (C_34 : (((C_36 : (\offset_min(dest_2) <= 0)) &&
+                      (C_37 : (\offset_max(dest_2) >= (n_4 - 1)))) &&
+                     ((C_39 : (\offset_min(src_0) <= 0)) &&
+                       (C_40 : (\offset_max(src_0) >= (n_4 - 1))))));
+behavior default:
+  assigns (dest_2 + [0..(n_4 - 1)]).charM;
+  allocates \nothing;
+  ensures (C_29 : (((C_31 : (memcmp{Here}(\at(dest_2,Old), \at(src_0,Old),
+                                          \at(n_4,Old)) ==
+                              0)) &&
+                     (C_32 : (\result == \at(dest_2,Old)))) &&
+                    (C_33 : (\base_block(\result) ==
+                              \base_block(\at(dest_2,Old))))));
+;
+
+charP[..] memset(charP[..] s_0, integer c_1, integer n_5)
+  requires (C_46 : ((C_47 : (\offset_min(s_0) <= 0)) &&
+                     (C_48 : (\offset_max(s_0) >= (n_5 - 1)))));
+behavior default:
+  assigns (s_0 + [0..(n_5 - 1)]).charM;
+  allocates \nothing;
+  ensures (C_41 : (((C_43 : (memset{Here}(\at(s_0,Old), \at(c_1,Old),
+                                          \at(n_5,Old)) ==
+                              true)) &&
+                     (C_44 : (\result == \at(s_0,Old)))) &&
+                    (C_45 : (\base_block(\result) ==
+                              \base_block(\at(s_0,Old))))));
+;
+
+integer strlen(charP[..] s_4)
+  requires (C_50 : valid_string{Here}(s_4));
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_49 : (\result == strlen{Here}(\at(s_4,Old))));
+;
+
+integer strcmp(charP[..] s1_0, charP[..] s2_0)
+  requires (C_52 : ((C_53 : valid_string{Here}(s1_0)) &&
+                     (C_54 : valid_string{Here}(s2_0))));
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_51 : (\result == strcmp{Here}(\at(s1_0,Old), \at(s2_0,Old))));
+;
+
+integer strncmp(charP[..] s1_2, charP[..] s2_2, integer n_7)
+  requires (C_56 : ((C_57 : valid_string{Here}(s1_2)) &&
+                     (C_58 : valid_string{Here}(s2_2))));
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_55 : (\result ==
+                    strncmp{Here}(\at(s1_2,Old), \at(s2_2,Old), \at(n_7,Old))));
+;
+
+integer strcoll(charP[..] s1_1, charP[..] s2_1)
+  requires (C_60 : ((C_61 : valid_string{Here}(s1_1)) &&
+                     (C_62 : valid_string{Here}(s2_1))));
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_59 : true);
+;
+
+charP[..] strchr(charP[..] s_1, integer c_2)
+  requires (C_70 : valid_string{Here}(s_1));
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_63 : true);
+behavior found:
+  assumes (strchr{Here}(s_1, c_2) == true);
+  ensures (C_64 : (((C_66 : (\result.charM == \at(c_2,Old))) &&
+                     (C_67 : (\base_block(\result) ==
+                               \base_block(\at(s_1,Old))))) &&
+                    (C_68 : valid_string{Here}(\result))));
+behavior not_found:
+  assumes (! (strchr{Here}(s_1, c_2) == true));
+  ensures (C_69 : (\result == null));
+;
+
+charP[..] strrchr(charP[..] s_7, integer c_3)
+  requires (C_78 : valid_string{Here}(s_7));
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_71 : true);
+behavior found:
+  assumes (strchr{Here}(s_7, c_3) == true);
+  ensures (C_72 : (((C_74 : (\result.charM == \at(c_3,Old))) &&
+                     (C_75 : (\base_block(\result) ==
+                               \base_block(\at(s_7,Old))))) &&
+                    (C_76 : valid_string{Here}(\result))));
+behavior not_found:
+  assumes (! (strchr{Here}(s_7, c_3) == true));
+  ensures (C_77 : (\result == null));
+;
+
+integer strcspn(charP[..] s_2, charP[..] reject)
+  requires (C_82 : ((C_83 : valid_string{Here}(s_2)) &&
+                     (C_84 : valid_string{Here}(reject))));
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_79 : ((C_80 : (0 <= \result)) &&
+                    (C_81 : (\result <= strlen{Here}(\at(s_2,Old))))));
+;
+
+integer strspn(charP[..] s_8, charP[..] accept_0)
+  requires (C_88 : ((C_89 : valid_string{Here}(s_8)) &&
+                     (C_90 : valid_string{Here}(accept_0))));
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_85 : ((C_86 : (0 <= \result)) &&
+                    (C_87 : (\result <= strlen{Here}(\at(s_8,Old))))));
+;
+
+charP[..] strpbrk(charP[..] s_6, charP[..] accept)
+  requires (C_92 : ((C_93 : valid_string{Here}(s_6)) &&
+                     (C_94 : valid_string{Here}(accept))));
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_91 : ((\result == null) ||
+                    (\base_block(\result) == \base_block(\at(s_6,Old)))));
+;
+
+charP[..] strstr(charP[..] haystack, charP[..] needle)
+  requires (C_96 : ((C_97 : valid_string{Here}(haystack)) &&
+                     (C_98 : valid_string{Here}(needle))));
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_95 : ((\result == null) ||
+                    ((\base_block(\result) == \base_block(\at(haystack,Old))) &&
+                      (memcmp{Here}(\result, \at(needle,Old),
+                                    strlen{Here}(\at(needle,Old))) ==
+                        0))));
+;
+
+charP[..] strtok(charP[..] s_9, charP[..] delim)
+  requires (C_100 : ((C_101 : (valid_string{Here}(s_9) || (s_9 == null))) &&
+                      (C_102 : valid_string{Here}(delim))));
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_99 : true);
+;
+
+charP[..] strerror(integer errnum)
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_103 : valid_string{Here}(\result));
+;
+
+charP[..] strcpy(charP[..] dest_4, charP[..] src_2)
+  requires (C_109 : (((C_111 : (\offset_min(dest_4) <= 0)) &&
+                       (C_112 : (\offset_max(dest_4) >= strlen{Here}(src_2)))) &&
+                      (C_113 : valid_string{Here}(src_2))));
+behavior default:
+  assigns (dest_4 + [0..strlen{Old}(src_2)]).charM;
+  allocates \nothing;
+  ensures (C_104 : (((C_106 : (strcmp{Here}(\at(dest_4,Old), \at(src_2,Old)) ==
+                                0)) &&
+                      (C_107 : (\result == \at(dest_4,Old)))) &&
+                     (C_108 : (\base_block(\result) ==
+                                \base_block(\at(dest_4,Old))))));
+;
+
+charP[..] strncpy(charP[..] dest_6, charP[..] src_4, integer n_8)
+  requires (C_119 : (((C_121 : (\offset_min(dest_6) <= 0)) &&
+                       (C_122 : (\offset_max(dest_6) >= (n_8 - 1)))) &&
+                      (C_123 : valid_string{Here}(src_4))));
+behavior default:
+  assigns (dest_6 + [0..(n_8 - 1)]).charM;
+  allocates \nothing;
+  ensures (C_114 : (\result == \at(dest_6,Old)));
+behavior complete:
+  assumes (strlen{Here}(src_4) < n_8);
+  assigns (dest_6 + [0..(n_8 - 1)]).charM;
+  ensures (C_115 : ((C_116 : (strcmp{Here}(\at(dest_6,Old), \at(src_4,Old)) ==
+                               0)) &&
+                     (C_117 : (\base_block(\result) ==
+                                \base_block(\at(dest_6,Old))))));
+behavior partial:
+  assumes (n_8 <= strlen{Here}(src_4));
+  assigns (dest_6 + [0..(n_8 - 1)]).charM;
+  ensures (C_118 : (memcmp{Here}(\at(dest_6,Old), \at(src_4,Old),
+                                 \at(n_8,Old)) ==
+                     0));
+;
+
+charP[..] strcat(charP[..] dest_3, charP[..] src_1)
+  requires (C_129 : ((((C_132 : (\offset_min(dest_3) <= 0)) &&
+                        (C_133 : (\offset_max(dest_3) >=
+                                   (strlen{Here}(dest_3) +
+                                     strlen{Here}(src_1))))) &&
+                       (C_134 : valid_string{Here}(dest_3))) &&
+                      (C_135 : valid_string{Here}(src_1))));
+behavior default:
+  assigns (dest_3 + [0..(strlen{Old}(dest_3) + strlen{Old}(src_1))]).charM;
+  allocates \nothing;
+  ensures (C_124 : (((C_126 : (strlen{Here}(\at(dest_3,Old)) ==
+                                \at((strlen{Old}(dest_3) +
+                                      strlen{Old}(src_1)),Old))) &&
+                      (C_127 : (\result == \at(dest_3,Old)))) &&
+                     (C_128 : (\base_block(\result) ==
+                                \base_block(\at(dest_3,Old))))));
+;
+
+charP[..] strncat(charP[..] dest_5, charP[..] src_3, integer n_6)
+  requires (C_141 : ((((C_144 : (\offset_min(dest_5) <= 0)) &&
+                        (C_145 : (\offset_max(dest_5) >= (n_6 - 1)))) &&
+                       (C_146 : valid_string{Here}(dest_5))) &&
+                      (C_147 : valid_string{Here}(src_3))));
+behavior default:
+  assigns (dest_5 + [0..((strlen{Old}(dest_5) + n_6) - 1)]).charM;
+  allocates \nothing;
+  ensures (C_136 : ((C_137 : (\result == \at(dest_5,Old))) &&
+                     (C_138 : (\base_block(\result) ==
+                                \base_block(\at(dest_5,Old))))));
+behavior complete:
+  assumes (strlen{Here}(src_3) <= n_6);
+  assigns (dest_5 + [0..(strlen{Old}(dest_5) + strlen{Old}(src_3))]).charM;
+  ensures (C_139 : (strlen{Here}(\at(dest_5,Old)) ==
+                     \at((strlen{Old}(dest_5) + strlen{Old}(src_3)),Old)));
+behavior partial:
+  assumes (n_6 < strlen{Here}(src_3));
+  assigns (dest_5 + [0..(strlen{Old}(dest_5) + n_6)]).charM;
+  ensures (C_140 : (strlen{Here}(\at(dest_5,Old)) ==
+                     (\at(strlen{Old}(dest_5),Old) + \at(n_6,Old))));
+;
+
+integer strxfrm(charP[..] dest_7, charP[..] src_5, integer n_10)
+  requires (C_149 : (((C_151 : (\offset_min(dest_7) <= 0)) &&
+                       (C_152 : (\offset_max(dest_7) >= (n_10 - 1)))) &&
+                      (C_153 : valid_string{Here}(src_5))));
+behavior default:
+  assigns (dest_7 + [0..(n_10 - 1)]).charM;
+  allocates \nothing;
+  ensures (C_148 : true);
+;
+
+charP[..] strdup(charP[..] s_3)
+  requires (C_159 : valid_string{Here}(s_3));
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_154 : (((C_156 : (\offset_min(\result) <= 0)) &&
+                      (C_157 : (\offset_max(\result) >=
+                                 strlen{Here}(\at(s_3,Old))))) &&
+                     (C_158 : (strcmp{Here}(\result, \at(s_3,Old)) == 0))));
+;
+
+charP[..] strndup(charP[..] s_5, integer n_9)
+  requires (C_169 : valid_string{Here}(s_5));
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_160 : (((((C_164 : (\offset_min(\result) <= 0)) &&
+                        (C_165 : (\offset_max(\result) >=
+                                   minimum(strlen{Here}(\at(s_5,Old)),
+                                           \at(n_9,Old))))) &&
+                       (C_166 : valid_string{Here}(\result))) &&
+                      (C_167 : (strlen{Here}(\result) <= \at(n_9,Old)))) &&
+                     (C_168 : (strncmp{Here}(\result, \at(s_5,Old),
+                                             \at(n_9,Old)) ==
+                                0))));
 ;
 
 intP[0..11] a;
@@ -435,26 +739,26 @@ invariant valid_c :
 unit assign_int()
 behavior default:
   assigns (a + [..]).intM;
-  ensures (C_19 : true);
+  ensures (C_178 : true);
 {  
    (var integer i);
    
-   {  (C_11 : (i = 0));
+   {  (C_170 : (i = 0));
       
       loop 
       behavior default:
         
         assigns (a + [..]).intM;
       behavior default:
-        invariant (C_12 : ((C_13 : (0 <= i)) && (C_14 : (i <= 12))));
+        invariant (C_171 : ((C_172 : (0 <= i)) && (C_173 : (i <= 12))));
       while (true)
       {  
          {  (if (i < 12) then () else 
             (goto while_0_break));
             
-            {  (C_16 : ((C_15 : (a + i).intM) = 0x45))
+            {  (C_175 : ((C_174 : (a + i).intM) = 0x45))
             };
-            (C_18 : (i = (C_17 : (i + 1))))
+            (C_177 : (i = (C_176 : (i + 1))))
          }
       };
       (while_0_break : ());
@@ -466,27 +770,27 @@ behavior default:
 unit assign_char()
 behavior default:
   assigns (c + [..]).char_xM;
-  ensures (C_29 : true);
+  ensures (C_188 : true);
 {  
    (var integer i_0);
    
-   {  (C_20 : (i_0 = 0));
+   {  (C_179 : (i_0 = 0));
       
       loop 
       behavior default:
         
         assigns (c + [..]).char_xM;
       behavior default:
-        invariant (C_21 : ((C_22 : (0 <= i_0)) && (C_23 : (i_0 <= 12))));
+        invariant (C_180 : ((C_181 : (0 <= i_0)) && (C_182 : (i_0 <= 12))));
       while (true)
       {  
          {  (if (i_0 < 12) then () else 
             (goto while_0_break));
             
-            {  (C_26 : ((C_25 : (c + i_0).char_xM) = (C_24 : strndup(
-                                                     __string_something, 12))))
+            {  (C_185 : ((C_184 : (c + i_0).char_xM) = (C_183 : strndup(
+                                                       __string_something, 12))))
             };
-            (C_28 : (i_0 = (C_27 : (i_0 + 1))))
+            (C_187 : (i_0 = (C_186 : (i_0 + 1))))
          }
       };
       (while_0_break : ());
@@ -499,29 +803,29 @@ unit main()
 behavior default:
   assigns (a + [..]).intM,
   (c + [..]).char_xM;
-  ensures (C_32 : true);
+  ensures (C_191 : true);
 {  
-   {  (C_30 : assign_int());
-      (C_31 : assign_char());
+   {  (C_189 : assign_int());
+      (C_190 : assign_char());
       
       (return ())
    }
 }
 
 unit foo(intP[..] a_0, integer aLength)
-  requires (C_41 : ((C_42 : (\offset_min(a_0) <= 0)) &&
-                     (C_43 : (\offset_max(a_0) >= (aLength - 1)))));
+  requires (C_200 : ((C_201 : (\offset_min(a_0) <= 0)) &&
+                      (C_202 : (\offset_max(a_0) >= (aLength - 1)))));
 behavior default:
   assigns (a_0 + [..]).intM;
-  ensures (C_40 : true);
+  ensures (C_199 : true);
 {  
    (var integer j);
    
-   {  (C_33 : (j = 0));
+   {  (C_192 : (j = 0));
       
       loop 
       behavior default:
-        invariant (C_34 : (0 <= j));
+        invariant (C_193 : (0 <= j));
       behavior default:
         
         assigns (a_0 + [..]).intM;
@@ -530,9 +834,9 @@ behavior default:
          {  (if (j < aLength) then () else 
             (goto while_0_break));
             
-            {  (C_37 : ((C_36 : (C_35 : (a_0 + j)).intM) = 0))
+            {  (C_196 : ((C_195 : (C_194 : (a_0 + j)).intM) = 0))
             };
-            (C_39 : (j = (C_38 : (j + 1))))
+            (C_198 : (j = (C_197 : (j + 1))))
          }
       };
       (while_0_break : ());
@@ -545,9 +849,9 @@ type __string_something_1
 
 type a_2
 
-type c_3
+type c_149
 
-type c_75
+type c_3
 
 type charP
 
@@ -1419,98 +1723,99 @@ axiom voidP_tags :
 axiom memcmp_range :
  (forall charP_charM_s2_5_at_L:(charP, int) memory.
   (forall charP_charM_s1_4_at_L:(charP, int) memory.
-   (forall s1_0_0:charP pointer.
-    (forall s2_0_0:charP pointer.
+   (forall s1_0_1:charP pointer.
+    (forall s2_0_1:charP pointer.
      (forall n_0:int.
       (le_int(sub_int(neg_int((2147483647)), (1)),
-       memcmp(s1_0_0, s2_0_0, n_0, charP_charM_s2_5_at_L,
+       memcmp(s1_0_1, s2_0_1, n_0, charP_charM_s2_5_at_L,
        charP_charM_s1_4_at_L))
-      and le_int(memcmp(s1_0_0, s2_0_0, n_0, charP_charM_s2_5_at_L,
+      and le_int(memcmp(s1_0_1, s2_0_1, n_0, charP_charM_s2_5_at_L,
                  charP_charM_s1_4_at_L),
           (2147483647))))))))
 
 axiom memcmp_zero :
  (forall charP_charM_s2_5_at_L:(charP, int) memory.
   (forall charP_charM_s1_4_at_L:(charP, int) memory.
-   (forall s1_1_0:charP pointer.
-    (forall s2_1_0:charP pointer.
+   (forall s1_1_1:charP pointer.
+    (forall s2_1_1:charP pointer.
      (forall n_1_0:int.
-      ((memcmp(s1_1_0, s2_1_0, n_1_0, charP_charM_s2_5_at_L,
+      ((memcmp(s1_1_1, s2_1_1, n_1_0, charP_charM_s2_5_at_L,
         charP_charM_s1_4_at_L) = (0))
       <-> (forall i_1:int.
            ((le_int((0), i_1) and lt_int(i_1, n_1_0)) ->
-            (select(charP_charM_s1_4_at_L, shift(s1_1_0, i_1)) = select(charP_charM_s2_5_at_L,
-                                                                 shift(s2_1_0,
+            (select(charP_charM_s1_4_at_L, shift(s1_1_1, i_1)) = select(charP_charM_s2_5_at_L,
+                                                                 shift(s2_1_1,
                                                                  i_1)))))))))))
 
 axiom memchr_def :
  (forall charP_charM_s_6_at_L:(charP, int) memory.
-  (forall s_0_0:charP pointer.
-   (forall c_0_0:int.
-    (forall n_3:int.
-     ((memchr(s_0_0, c_0_0, n_3, charP_charM_s_6_at_L) = true)
+  (forall s_0_1:charP pointer.
+   (forall c_0_1:int.
+    (forall n_3_0:int.
+     ((memchr(s_0_1, c_0_1, n_3_0, charP_charM_s_6_at_L) = true)
      <-> (exists i_2:int.
           (le_int((0), i_2)
-          and (lt_int(i_2, n_3)
-              and (select(charP_charM_s_6_at_L, shift(s_0_0, i_2)) = c_0_0)))))))))
+          and (lt_int(i_2, n_3_0)
+              and (select(charP_charM_s_6_at_L, shift(s_0_1, i_2)) = c_0_1)))))))))
 
 axiom memset_def :
  (forall charP_charM_s_1_7_at_L:(charP, int) memory.
-  (forall s_2_0:charP pointer.
-   (forall c_2:int.
-    (forall n_5:int.
-     ((memset(s_2_0, c_2, n_5, charP_charM_s_1_7_at_L) = true)
+  (forall s_2_1:charP pointer.
+   (forall c_2_0:int.
+    (forall n_5_0:int.
+     ((memset(s_2_1, c_2_0, n_5_0, charP_charM_s_1_7_at_L) = true)
      <-> (forall i_3:int.
-          ((le_int((0), i_3) and lt_int(i_3, n_5)) ->
-           (select(charP_charM_s_1_7_at_L, shift(s_2_0, i_3)) = c_2))))))))
+          ((le_int((0), i_3) and lt_int(i_3, n_5_0)) ->
+           (select(charP_charM_s_1_7_at_L, shift(s_2_1, i_3)) = c_2_0))))))))
 
 axiom strlen_pos_or_null :
  (forall charP_charM_s_3_8_at_L:(charP, int) memory.
-  (forall s_4:charP pointer.
+  (forall s_4_0:charP pointer.
    (forall i_4:int.
     ((le_int((0), i_4)
      and (le_int(i_4, (2147483647))
          and ((forall j_0:int.
                ((le_int((0), j_0) and lt_int(j_0, i_4)) ->
-                (select(charP_charM_s_3_8_at_L, shift(s_4, j_0)) <> (0))))
-             and (select(charP_charM_s_3_8_at_L, shift(s_4, i_4)) = (0))))) ->
-     (strlen(s_4, charP_charM_s_3_8_at_L) = i_4)))))
+                (select(charP_charM_s_3_8_at_L, shift(s_4_0, j_0)) <> (0))))
+             and (select(charP_charM_s_3_8_at_L, shift(s_4_0, i_4)) = (0))))) ->
+     (strlen(s_4_0, charP_charM_s_3_8_at_L) = i_4)))))
 
 axiom strlen_neg :
  (forall charP_charM_s_3_8_at_L:(charP, int) memory.
-  (forall s_5:charP pointer.
+  (forall s_5_0:charP pointer.
    ((forall i_5:int.
      ((le_int((0), i_5) and le_int(i_5, (2147483647))) ->
-      (select(charP_charM_s_3_8_at_L, shift(s_5, i_5)) <> (0)))) ->
-    lt_int(strlen(s_5, charP_charM_s_3_8_at_L), (0)))))
+      (select(charP_charM_s_3_8_at_L, shift(s_5_0, i_5)) <> (0)))) ->
+    lt_int(strlen(s_5_0, charP_charM_s_3_8_at_L), (0)))))
 
 axiom strlen_range :
  (forall charP_charM_s_3_8_at_L:(charP, int) memory.
-  (forall s_6:charP pointer.
-   le_int(strlen(s_6, charP_charM_s_3_8_at_L), (2147483647))))
+  (forall s_6_0:charP pointer.
+   le_int(strlen(s_6_0, charP_charM_s_3_8_at_L), (2147483647))))
 
 axiom strlen_before_null :
  (forall charP_charM_s_3_8_at_L:(charP, int) memory.
-  (forall s_7:charP pointer.
+  (forall s_7_0:charP pointer.
    (forall i_6:int.
-    ((le_int((0), i_6) and lt_int(i_6, strlen(s_7, charP_charM_s_3_8_at_L))) ->
-     (select(charP_charM_s_3_8_at_L, shift(s_7, i_6)) <> (0))))))
+    ((le_int((0), i_6)
+     and lt_int(i_6, strlen(s_7_0, charP_charM_s_3_8_at_L))) ->
+     (select(charP_charM_s_3_8_at_L, shift(s_7_0, i_6)) <> (0))))))
 
 axiom strlen_at_null :
  (forall charP_charM_s_3_8_at_L:(charP, int) memory.
-  (forall s_8:charP pointer.
-   (le_int((0), strlen(s_8, charP_charM_s_3_8_at_L)) ->
+  (forall s_8_0:charP pointer.
+   (le_int((0), strlen(s_8_0, charP_charM_s_3_8_at_L)) ->
     (select(charP_charM_s_3_8_at_L,
-     shift(s_8, strlen(s_8, charP_charM_s_3_8_at_L))) = (0)))))
+     shift(s_8_0, strlen(s_8_0, charP_charM_s_3_8_at_L))) = (0)))))
 
 axiom strlen_not_zero :
  (forall charP_charM_s_3_8_at_L:(charP, int) memory.
-  (forall s_9:charP pointer.
+  (forall s_9_0:charP pointer.
    (forall i_7:int.
     ((le_int((0), i_7)
-     and (le_int(i_7, strlen(s_9, charP_charM_s_3_8_at_L))
-         and (select(charP_charM_s_3_8_at_L, shift(s_9, i_7)) <> (0)))) ->
-     lt_int(i_7, strlen(s_9, charP_charM_s_3_8_at_L))))))
+     and (le_int(i_7, strlen(s_9_0, charP_charM_s_3_8_at_L))
+         and (select(charP_charM_s_3_8_at_L, shift(s_9_0, i_7)) <> (0)))) ->
+     lt_int(i_7, strlen(s_9_0, charP_charM_s_3_8_at_L))))))
 
 axiom strlen_zero :
  (forall charP_charM_s_3_8_at_L:(charP, int) memory.
@@ -1565,23 +1870,23 @@ axiom strlen_create_shift :
 
 axiom memcmp_strlen_left :
  (forall charP_charM_s_3_8_at_L:(charP, int) memory.
-  (forall s1_2:charP pointer.
-   (forall s2_2:charP pointer.
-    (forall n_6:int.
-     (((memcmp(s1_2, s2_2, n_6, charP_charM_s_3_8_at_L,
+  (forall s1_2_1:charP pointer.
+   (forall s2_2_1:charP pointer.
+    (forall n_6_0:int.
+     (((memcmp(s1_2_1, s2_2_1, n_6_0, charP_charM_s_3_8_at_L,
         charP_charM_s_3_8_at_L) = (0))
-      and lt_int(strlen(s1_2, charP_charM_s_3_8_at_L), n_6)) ->
-      (strlen(s1_2, charP_charM_s_3_8_at_L) = strlen(s2_2,
-                                              charP_charM_s_3_8_at_L)))))))
+      and lt_int(strlen(s1_2_1, charP_charM_s_3_8_at_L), n_6_0)) ->
+      (strlen(s1_2_1, charP_charM_s_3_8_at_L) = strlen(s2_2_1,
+                                                charP_charM_s_3_8_at_L)))))))
 
 axiom memcmp_strlen_right :
  (forall charP_charM_s_3_8_at_L:(charP, int) memory.
   (forall s1_3:charP pointer.
    (forall s2_3:charP pointer.
-    (forall n_7:int.
-     (((memcmp(s1_3, s2_3, n_7, charP_charM_s_3_8_at_L,
+    (forall n_7_0:int.
+     (((memcmp(s1_3, s2_3, n_7_0, charP_charM_s_3_8_at_L,
         charP_charM_s_3_8_at_L) = (0))
-      and lt_int(strlen(s2_3, charP_charM_s_3_8_at_L), n_7)) ->
+      and lt_int(strlen(s2_3, charP_charM_s_3_8_at_L), n_7_0)) ->
       (strlen(s1_3, charP_charM_s_3_8_at_L) = strlen(s2_3,
                                               charP_charM_s_3_8_at_L)))))))
 
@@ -1590,11 +1895,11 @@ axiom memcmp_strlen_shift_left :
   (forall s1_4:charP pointer.
    (forall s2_4:charP pointer.
     (forall k_0:int.
-     (forall n_8:int.
-      (((memcmp(s1_4, shift(s2_4, k_0), n_8, charP_charM_s_3_8_at_L,
+     (forall n_8_0:int.
+      (((memcmp(s1_4, shift(s2_4, k_0), n_8_0, charP_charM_s_3_8_at_L,
          charP_charM_s_3_8_at_L) = (0))
        and (le_int((0), k_0)
-           and lt_int(strlen(s1_4, charP_charM_s_3_8_at_L), n_8))) ->
+           and lt_int(strlen(s1_4, charP_charM_s_3_8_at_L), n_8_0))) ->
        (le_int((0), strlen(s2_4, charP_charM_s_3_8_at_L))
        and le_int(strlen(s2_4, charP_charM_s_3_8_at_L),
            add_int(k_0, strlen(s1_4, charP_charM_s_3_8_at_L))))))))))
@@ -1604,11 +1909,11 @@ axiom memcmp_strlen_shift_right :
   (forall s1_5:charP pointer.
    (forall s2_5:charP pointer.
     (forall k_1:int.
-     (forall n_9:int.
-      (((memcmp(shift(s1_5, k_1), s2_5, n_9, charP_charM_s_3_8_at_L,
+     (forall n_9_0:int.
+      (((memcmp(shift(s1_5, k_1), s2_5, n_9_0, charP_charM_s_3_8_at_L,
          charP_charM_s_3_8_at_L) = (0))
        and (le_int((0), k_1)
-           and lt_int(strlen(s2_5, charP_charM_s_3_8_at_L), n_9))) ->
+           and lt_int(strlen(s2_5, charP_charM_s_3_8_at_L), n_9_0))) ->
        (le_int((0), strlen(s1_5, charP_charM_s_3_8_at_L))
        and le_int(strlen(s1_5, charP_charM_s_3_8_at_L),
            add_int(k_1, strlen(s2_5, charP_charM_s_3_8_at_L))))))))))
@@ -2006,11 +2311,11 @@ parameter intP_a_2_alloc_table : intP alloc_table ref
 
 parameter char_xP_c_3_alloc_table : char_xP alloc_table ref
 
-parameter charP_c_75_alloc_table : charP alloc_table ref
+parameter charP_c_149_alloc_table : charP alloc_table ref
 
 parameter charP___string_something_1_alloc_table : charP alloc_table ref
 
-parameter charP_charM_c_75 : (charP, int) memory ref
+parameter charP_charM_c_149 : (charP, int) memory ref
 
 parameter charP_charM___string_something_1 : (charP, int) memory ref
 
@@ -2019,7 +2324,7 @@ parameter char_xP_char_xM_c_3 : (char_xP, charP pointer) memory ref
 parameter assign_char :
  tt:unit ->
   { } unit
-  reads charP___string_something_1_alloc_table,charP_c_75_alloc_table,charP_charM___string_something_1,charP_charM_c_75,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+  reads charP___string_something_1_alloc_table,charP_c_149_alloc_table,charP_charM___string_something_1,charP_charM_c_149,char_xP_c_3_alloc_table,intP_a_2_alloc_table
   writes char_xP_char_xM_c_3
   { ((JC_<somenum>:
      ((JC_<somenum>:
@@ -2044,7 +2349,7 @@ parameter assign_char_requires :
         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))}
   unit
-  reads charP___string_something_1_alloc_table,charP_c_75_alloc_table,charP_charM___string_something_1,charP_charM_c_75,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+  reads charP___string_something_1_alloc_table,charP_c_149_alloc_table,charP_charM___string_something_1,charP_charM_c_149,char_xP_c_3_alloc_table,intP_a_2_alloc_table
   writes char_xP_char_xM_c_3
   { ((JC_<somenum>:
      ((JC_<somenum>:
@@ -2105,11 +2410,11 @@ parameter assign_int_requires :
 parameter foo :
  a_0:intP pointer ->
   aLength:int ->
-   intP_intM_a_0_26:(intP, int) memory ref ->
-    intP_a_0_26_alloc_table:intP alloc_table ->
+   intP_intM_a_0_94:(intP, int) memory ref ->
+    intP_a_0_94_alloc_table:intP alloc_table ->
      { } unit
      reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
-     writes intP_intM_a_0_26
+     writes intP_intM_a_0_94
      { ((JC_<somenum>:
         ((JC_<somenum>:
          valid___string_something(charP___string_something_1_alloc_table,
@@ -2119,19 +2424,19 @@ parameter foo :
             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
        and (JC_<somenum>:
-           not_assigns(intP_a_0_26_alloc_table, intP_intM_a_0_26@,
-           intP_intM_a_0_26, pset_all(pset_singleton(a_0))))) }
+           not_assigns(intP_a_0_94_alloc_table, intP_intM_a_0_94@,
+           intP_intM_a_0_94, pset_all(pset_singleton(a_0))))) }
 
 parameter foo_requires :
  a_0:intP pointer ->
   aLength:int ->
-   intP_intM_a_0_26:(intP, int) memory ref ->
-    intP_a_0_26_alloc_table:intP alloc_table ->
+   intP_intM_a_0_94:(intP, int) memory ref ->
+    intP_a_0_94_alloc_table:intP alloc_table ->
      { (JC_<somenum>:
        ((JC_<somenum>:
-        ((JC_<somenum>: le_int(offset_min(intP_a_0_26_alloc_table, a_0), (0)))
+        ((JC_<somenum>: le_int(offset_min(intP_a_0_94_alloc_table, a_0), (0)))
         and (JC_<somenum>:
-            ge_int(offset_max(intP_a_0_26_alloc_table, a_0),
+            ge_int(offset_max(intP_a_0_94_alloc_table, a_0),
             sub_int(aLength, (1))))))
        and ((JC_<somenum>:
             valid___string_something(charP___string_something_1_alloc_table,
@@ -2142,7 +2447,7 @@ parameter foo_requires :
                    and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
      unit
      reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
-     writes intP_intM_a_0_26
+     writes intP_intM_a_0_94
      { ((JC_<somenum>:
         ((JC_<somenum>:
          valid___string_something(charP___string_something_1_alloc_table,
@@ -2152,13 +2457,13 @@ parameter foo_requires :
             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
        and (JC_<somenum>:
-           not_assigns(intP_a_0_26_alloc_table, intP_intM_a_0_26@,
-           intP_intM_a_0_26, pset_all(pset_singleton(a_0))))) }
+           not_assigns(intP_a_0_94_alloc_table, intP_intM_a_0_94@,
+           intP_intM_a_0_94, pset_all(pset_singleton(a_0))))) }
 
 parameter main :
  tt:unit ->
   { } unit
-  reads charP___string_something_1_alloc_table,charP_c_75_alloc_table,charP_charM___string_something_1,charP_charM_c_75,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+  reads charP___string_something_1_alloc_table,charP_c_149_alloc_table,charP_charM___string_something_1,charP_charM_c_149,char_xP_c_3_alloc_table,intP_a_2_alloc_table
   writes char_xP_char_xM_c_3,intP_intM_a_2
   { ((JC_<somenum>:
      ((JC_<somenum>:
@@ -2187,7 +2492,7 @@ parameter main_requires :
         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))}
   unit
-  reads charP___string_something_1_alloc_table,charP_c_75_alloc_table,charP_charM___string_something_1,charP_charM_c_75,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+  reads charP___string_something_1_alloc_table,charP_c_149_alloc_table,charP_charM___string_something_1,charP_charM_c_149,char_xP_c_3_alloc_table,intP_a_2_alloc_table
   writes char_xP_char_xM_c_3,intP_intM_a_2
   { ((JC_<somenum>:
      ((JC_<somenum>:
@@ -2205,13 +2510,1354 @@ parameter main_requires :
             not_assigns(intP_a_2_alloc_table@, intP_intM_a_2@, intP_intM_a_2,
             pset_all(pset_singleton(a))))))) }
 
-parameter strndup :
+parameter memchr_0 :
  s_2:charP pointer ->
-  n_1:int ->
-   charP_result_24_alloc_table:charP alloc_table ->
-    charP_s_23_alloc_table:charP alloc_table ->
-     charP_charM_result_24:(charP, int) memory ->
-      charP_charM_s_23:(charP, int) memory ->
+  c_0_0:int ->
+   n_1:int ->
+    charP_s_25_alloc_table:charP alloc_table ->
+     charP_charM_s_25:(charP, int) memory ->
+      { } charP pointer
+      reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+      { ((JC_<somenum>:
+         ((JC_<somenum>:
+          valid___string_something(charP___string_something_1_alloc_table,
+          charP_charM___string_something_1))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+        and (((not (memchr(s_2, c_0_0, n_1, charP_charM_s_25) = true)) ->
+              (JC_<somenum>:
+              ((JC_<somenum>: (result = null))
+              and ((JC_<somenum>:
+                   valid___string_something(charP___string_something_1_alloc_table,
+                   charP_charM___string_something_1))
+                  and ((JC_<somenum>:
+                       valid___string_something_0(charP___string_something_1_alloc_table))
+                      and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                          and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+            and (((memchr(s_2, c_0_0, n_1, charP_charM_s_25) = true) ->
+                  (JC_<somenum>:
+                  ((JC_<somenum>: (select(charP_charM_s_25, result) = c_0_0))
+                  and ((JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))
+                      and ((JC_<somenum>:
+                           valid___string_something_0(charP___string_something_1_alloc_table))
+                          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                              and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+                and (JC_<somenum>:
+                    ((JC_<somenum>: (result = s_2))
+                    and (JC_<somenum>: same_block(result, s_2))))))) }
+
+parameter memchr_0_requires :
+ s_2:charP pointer ->
+  c_0_0:int ->
+   n_1:int ->
+    charP_s_25_alloc_table:charP alloc_table ->
+     charP_charM_s_25:(charP, int) memory ->
+      { (JC_<somenum>:
+        ((JC_<somenum>:
+         ((JC_<somenum>: le_int(offset_min(charP_s_25_alloc_table, s_2), (0)))
+         and (JC_<somenum>:
+             ge_int(offset_max(charP_s_25_alloc_table, s_2),
+             sub_int(n_1, (1))))))
+        and ((JC_<somenum>:
+             valid___string_something(charP___string_something_1_alloc_table,
+             charP_charM___string_something_1))
+            and ((JC_<somenum>:
+                 valid___string_something_0(charP___string_something_1_alloc_table))
+                and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                    and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+      charP pointer
+      reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+      { ((JC_<somenum>:
+         ((JC_<somenum>:
+          valid___string_something(charP___string_something_1_alloc_table,
+          charP_charM___string_something_1))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+        and (((not (memchr(s_2, c_0_0, n_1, charP_charM_s_25) = true)) ->
+              (JC_<somenum>:
+              ((JC_<somenum>: (result = null))
+              and ((JC_<somenum>:
+                   valid___string_something(charP___string_something_1_alloc_table,
+                   charP_charM___string_something_1))
+                  and ((JC_<somenum>:
+                       valid___string_something_0(charP___string_something_1_alloc_table))
+                      and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                          and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+            and (((memchr(s_2, c_0_0, n_1, charP_charM_s_25) = true) ->
+                  (JC_<somenum>:
+                  ((JC_<somenum>: (select(charP_charM_s_25, result) = c_0_0))
+                  and ((JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))
+                      and ((JC_<somenum>:
+                           valid___string_something_0(charP___string_something_1_alloc_table))
+                          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                              and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+                and (JC_<somenum>:
+                    ((JC_<somenum>: (result = s_2))
+                    and (JC_<somenum>: same_block(result, s_2))))))) }
+
+parameter memcmp_0 :
+ s1_2:charP pointer ->
+  s2_2:charP pointer ->
+   n_2_0:int ->
+    charP_s2_24_alloc_table:charP alloc_table ->
+     charP_s1_23_alloc_table:charP alloc_table ->
+      charP_charM_s2_24:(charP, int) memory ->
+       charP_charM_s1_23:(charP, int) memory ->
+        { } int
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and (JC_<somenum>:
+              (result = memcmp(s1_2, s2_2, n_2_0, charP_charM_s2_24,
+                        charP_charM_s1_23)))) }
+
+parameter memcmp_0_requires :
+ s1_2:charP pointer ->
+  s2_2:charP pointer ->
+   n_2_0:int ->
+    charP_s2_24_alloc_table:charP alloc_table ->
+     charP_s1_23_alloc_table:charP alloc_table ->
+      charP_charM_s2_24:(charP, int) memory ->
+       charP_charM_s1_23:(charP, int) memory ->
+        { (JC_<somenum>:
+          ((JC_<somenum>:
+           ((JC_<somenum>: le_int(offset_min(charP_s1_23_alloc_table, s1_2), (0)))
+           and ((JC_<somenum>:
+                ge_int(offset_max(charP_s1_23_alloc_table, s1_2),
+                sub_int(n_2_0, (1))))
+               and ((JC_<somenum>:
+                    le_int(offset_min(charP_s2_24_alloc_table, s2_2), (0)))
+                   and (JC_<somenum>:
+                       ge_int(offset_max(charP_s2_24_alloc_table, s2_2),
+                       sub_int(n_2_0, (1))))))))
+          and ((JC_<somenum>:
+               valid___string_something(charP___string_something_1_alloc_table,
+               charP_charM___string_something_1))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+        int
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and (JC_<somenum>:
+              (result = memcmp(s1_2, s2_2, n_2_0, charP_charM_s2_24,
+                        charP_charM_s1_23)))) }
+
+parameter memcpy :
+ dest_1:charP pointer ->
+  src:charP pointer ->
+   n_3:int ->
+    charP_charM_dest_1_28:(charP, int) memory ref ->
+     charP_src_29_alloc_table:charP alloc_table ->
+      charP_dest_1_28_alloc_table:charP alloc_table ->
+       charP_charM_src_29:(charP, int) memory ->
+        { } charP pointer
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_1_28,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        writes charP_charM_dest_1_28
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and (JC_<somenum>:
+              ((JC_<somenum>:
+               ((JC_<somenum>:
+                (memcmp(dest_1, src, n_3, charP_charM_src_29,
+                 charP_charM_dest_1_28) = (0)))
+               and ((JC_<somenum>: (result = dest_1))
+                   and (JC_<somenum>: same_block(result, dest_1)))))
+              and (JC_<somenum>:
+                  not_assigns(charP_dest_1_28_alloc_table,
+                  charP_charM_dest_1_28@, charP_charM_dest_1_28,
+                  pset_range(pset_singleton(dest_1), (0), sub_int(n_3, (1)))))))) }
+
+parameter memcpy_requires :
+ dest_1:charP pointer ->
+  src:charP pointer ->
+   n_3:int ->
+    charP_charM_dest_1_28:(charP, int) memory ref ->
+     charP_src_29_alloc_table:charP alloc_table ->
+      charP_dest_1_28_alloc_table:charP alloc_table ->
+       charP_charM_src_29:(charP, int) memory ->
+        { (JC_<somenum>:
+          ((JC_<somenum>:
+           ((JC_<somenum>:
+            le_int(offset_min(charP_dest_1_28_alloc_table, dest_1), (0)))
+           and ((JC_<somenum>:
+                ge_int(offset_max(charP_dest_1_28_alloc_table, dest_1),
+                sub_int(n_3, (1))))
+               and ((JC_<somenum>:
+                    le_int(offset_min(charP_src_29_alloc_table, src), (0)))
+                   and (JC_<somenum>:
+                       ge_int(offset_max(charP_src_29_alloc_table, src),
+                       sub_int(n_3, (1))))))))
+          and ((JC_<somenum>:
+               valid___string_something(charP___string_something_1_alloc_table,
+               charP_charM___string_something_1))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+        charP pointer
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_1_28,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        writes charP_charM_dest_1_28
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and (JC_<somenum>:
+              ((JC_<somenum>:
+               ((JC_<somenum>:
+                (memcmp(dest_1, src, n_3, charP_charM_src_29,
+                 charP_charM_dest_1_28) = (0)))
+               and ((JC_<somenum>: (result = dest_1))
+                   and (JC_<somenum>: same_block(result, dest_1)))))
+              and (JC_<somenum>:
+                  not_assigns(charP_dest_1_28_alloc_table,
+                  charP_charM_dest_1_28@, charP_charM_dest_1_28,
+                  pset_range(pset_singleton(dest_1), (0), sub_int(n_3, (1)))))))) }
+
+parameter memmove :
+ dest_2:charP pointer ->
+  src_0:charP pointer ->
+   n_4_0:int ->
+    charP_charM_dest_2_32:(charP, int) memory ref ->
+     charP_src_0_33_alloc_table:charP alloc_table ->
+      charP_dest_2_32_alloc_table:charP alloc_table ->
+       charP_charM_src_0_33:(charP, int) memory ->
+        { } charP pointer
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_2_32,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        writes charP_charM_dest_2_32
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and (JC_<somenum>:
+              ((JC_<somenum>:
+               ((JC_<somenum>:
+                (memcmp(dest_2, src_0, n_4_0, charP_charM_src_0_33,
+                 charP_charM_dest_2_32) = (0)))
+               and ((JC_<somenum>: (result = dest_2))
+                   and (JC_<somenum>: same_block(result, dest_2)))))
+              and (JC_<somenum>:
+                  not_assigns(charP_dest_2_32_alloc_table,
+                  charP_charM_dest_2_32@, charP_charM_dest_2_32,
+                  pset_range(pset_singleton(dest_2), (0),
+                  sub_int(n_4_0, (1)))))))) }
+
+parameter memmove_requires :
+ dest_2:charP pointer ->
+  src_0:charP pointer ->
+   n_4_0:int ->
+    charP_charM_dest_2_32:(charP, int) memory ref ->
+     charP_src_0_33_alloc_table:charP alloc_table ->
+      charP_dest_2_32_alloc_table:charP alloc_table ->
+       charP_charM_src_0_33:(charP, int) memory ->
+        { (JC_<somenum>:
+          ((JC_<somenum>:
+           ((JC_<somenum>:
+            le_int(offset_min(charP_dest_2_32_alloc_table, dest_2), (0)))
+           and ((JC_<somenum>:
+                ge_int(offset_max(charP_dest_2_32_alloc_table, dest_2),
+                sub_int(n_4_0, (1))))
+               and ((JC_<somenum>:
+                    le_int(offset_min(charP_src_0_33_alloc_table, src_0),
+                    (0)))
+                   and (JC_<somenum>:
+                       ge_int(offset_max(charP_src_0_33_alloc_table, src_0),
+                       sub_int(n_4_0, (1))))))))
+          and ((JC_<somenum>:
+               valid___string_something(charP___string_something_1_alloc_table,
+               charP_charM___string_something_1))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+        charP pointer
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_2_32,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        writes charP_charM_dest_2_32
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and (JC_<somenum>:
+              ((JC_<somenum>:
+               ((JC_<somenum>:
+                (memcmp(dest_2, src_0, n_4_0, charP_charM_src_0_33,
+                 charP_charM_dest_2_32) = (0)))
+               and ((JC_<somenum>: (result = dest_2))
+                   and (JC_<somenum>: same_block(result, dest_2)))))
+              and (JC_<somenum>:
+                  not_assigns(charP_dest_2_32_alloc_table,
+                  charP_charM_dest_2_32@, charP_charM_dest_2_32,
+                  pset_range(pset_singleton(dest_2), (0),
+                  sub_int(n_4_0, (1)))))))) }
+
+parameter memset_0 :
+ s_0_0:charP pointer ->
+  c_1_0:int ->
+   n_5:int ->
+    charP_charM_s_0_36:(charP, int) memory ref ->
+     charP_s_0_36_alloc_table:charP alloc_table ->
+      { } charP pointer
+      reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_s_0_36,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+      writes charP_charM_s_0_36
+      { ((JC_<somenum>:
+         ((JC_<somenum>:
+          valid___string_something(charP___string_something_1_alloc_table,
+          charP_charM___string_something_1))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+        and (JC_<somenum>:
+            ((JC_<somenum>:
+             ((JC_<somenum>:
+              (memset(s_0_0, c_1_0, n_5, charP_charM_s_0_36) = true))
+             and ((JC_<somenum>: (result = s_0_0))
+                 and (JC_<somenum>: same_block(result, s_0_0)))))
+            and (JC_<somenum>:
+                not_assigns(charP_s_0_36_alloc_table, charP_charM_s_0_36@,
+                charP_charM_s_0_36,
+                pset_range(pset_singleton(s_0_0), (0), sub_int(n_5, (1)))))))) }
+
+parameter memset_0_requires :
+ s_0_0:charP pointer ->
+  c_1_0:int ->
+   n_5:int ->
+    charP_charM_s_0_36:(charP, int) memory ref ->
+     charP_s_0_36_alloc_table:charP alloc_table ->
+      { (JC_<somenum>:
+        ((JC_<somenum>:
+         ((JC_<somenum>: le_int(offset_min(charP_s_0_36_alloc_table, s_0_0), (0)))
+         and (JC_<somenum>:
+             ge_int(offset_max(charP_s_0_36_alloc_table, s_0_0),
+             sub_int(n_5, (1))))))
+        and ((JC_<somenum>:
+             valid___string_something(charP___string_something_1_alloc_table,
+             charP_charM___string_something_1))
+            and ((JC_<somenum>:
+                 valid___string_something_0(charP___string_something_1_alloc_table))
+                and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                    and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+      charP pointer
+      reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_s_0_36,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+      writes charP_charM_s_0_36
+      { ((JC_<somenum>:
+         ((JC_<somenum>:
+          valid___string_something(charP___string_something_1_alloc_table,
+          charP_charM___string_something_1))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+        and (JC_<somenum>:
+            ((JC_<somenum>:
+             ((JC_<somenum>:
+              (memset(s_0_0, c_1_0, n_5, charP_charM_s_0_36) = true))
+             and ((JC_<somenum>: (result = s_0_0))
+                 and (JC_<somenum>: same_block(result, s_0_0)))))
+            and (JC_<somenum>:
+                not_assigns(charP_s_0_36_alloc_table, charP_charM_s_0_36@,
+                charP_charM_s_0_36,
+                pset_range(pset_singleton(s_0_0), (0), sub_int(n_5, (1)))))))) }
+
+parameter strcat :
+ dest_3:charP pointer ->
+  src_1:charP pointer ->
+   charP_charM_dest_3_78:(charP, int) memory ref ->
+    charP_src_1_79_alloc_table:charP alloc_table ->
+     charP_dest_3_78_alloc_table:charP alloc_table ->
+      charP_charM_src_1_79:(charP, int) memory ->
+       { } charP pointer
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_3_78,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       writes charP_charM_dest_3_78
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (JC_<somenum>:
+             ((JC_<somenum>:
+              ((JC_<somenum>:
+               (strlen(dest_3, charP_charM_dest_3_78) = add_int(strlen(dest_3,
+                                                                charP_charM_dest_3_78@),
+                                                        strlen(src_1,
+                                                        charP_charM_src_1_79))))
+              and ((JC_<somenum>: (result = dest_3))
+                  and (JC_<somenum>: same_block(result, dest_3)))))
+             and (JC_<somenum>:
+                 not_assigns(charP_dest_3_78_alloc_table,
+                 charP_charM_dest_3_78@, charP_charM_dest_3_78,
+                 pset_range(pset_singleton(dest_3), (0),
+                 add_int(strlen(dest_3, charP_charM_dest_3_78@),
+                 strlen(src_1, charP_charM_src_1_79)))))))) }
+
+parameter strcat_requires :
+ dest_3:charP pointer ->
+  src_1:charP pointer ->
+   charP_charM_dest_3_78:(charP, int) memory ref ->
+    charP_src_1_79_alloc_table:charP alloc_table ->
+     charP_dest_3_78_alloc_table:charP alloc_table ->
+      charP_charM_src_1_79:(charP, int) memory ->
+       { (JC_<somenum>:
+         ((JC_<somenum>:
+          ((JC_<somenum>:
+           le_int(offset_min(charP_dest_3_78_alloc_table, dest_3), (0)))
+          and ((JC_<somenum>:
+               ge_int(offset_max(charP_dest_3_78_alloc_table, dest_3),
+               add_int(strlen(dest_3, charP_charM_dest_3_78),
+               strlen(src_1, charP_charM_src_1_79))))
+              and ((JC_<somenum>:
+                   valid_string(dest_3, charP_dest_3_78_alloc_table,
+                   charP_charM_dest_3_78))
+                  and (JC_<somenum>:
+                      valid_string(src_1, charP_src_1_79_alloc_table,
+                      charP_charM_src_1_79))))))
+         and ((JC_<somenum>:
+              valid___string_something(charP___string_something_1_alloc_table,
+              charP_charM___string_something_1))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+       charP pointer
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_3_78,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       writes charP_charM_dest_3_78
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (JC_<somenum>:
+             ((JC_<somenum>:
+              ((JC_<somenum>:
+               (strlen(dest_3, charP_charM_dest_3_78) = add_int(strlen(dest_3,
+                                                                charP_charM_dest_3_78@),
+                                                        strlen(src_1,
+                                                        charP_charM_src_1_79))))
+              and ((JC_<somenum>: (result = dest_3))
+                  and (JC_<somenum>: same_block(result, dest_3)))))
+             and (JC_<somenum>:
+                 not_assigns(charP_dest_3_78_alloc_table,
+                 charP_charM_dest_3_78@, charP_charM_dest_3_78,
+                 pset_range(pset_singleton(dest_3), (0),
+                 add_int(strlen(dest_3, charP_charM_dest_3_78@),
+                 strlen(src_1, charP_charM_src_1_79)))))))) }
+
+parameter strchr_0 :
+ s_1_0:charP pointer ->
+  c_2:int ->
+   charP_result_47_alloc_table:charP alloc_table ->
+    charP_s_1_46_alloc_table:charP alloc_table ->
+     charP_charM_result_47:(charP, int) memory ->
+      charP_charM_s_1_46:(charP, int) memory ->
+       { } charP pointer
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (((not (strchr(s_1_0, c_2, charP_charM_s_1_46) = true)) ->
+               (JC_<somenum>:
+               ((JC_<somenum>: (result = null))
+               and ((JC_<somenum>:
+                    valid___string_something(charP___string_something_1_alloc_table,
+                    charP_charM___string_something_1))
+                   and ((JC_<somenum>:
+                        valid___string_something_0(charP___string_something_1_alloc_table))
+                       and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                           and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+             and ((strchr(s_1_0, c_2, charP_charM_s_1_46) = true) ->
+                  (JC_<somenum>:
+                  ((JC_<somenum>:
+                   ((JC_<somenum>: (select(charP_charM_result_47, result) = c_2))
+                   and ((JC_<somenum>: same_block(result, s_1_0))
+                       and (JC_<somenum>:
+                           valid_string(result, charP_result_47_alloc_table,
+                           charP_charM_result_47)))))
+                  and ((JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))
+                      and ((JC_<somenum>:
+                           valid___string_something_0(charP___string_something_1_alloc_table))
+                          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                              and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))))) }
+
+parameter strchr_0_requires :
+ s_1_0:charP pointer ->
+  c_2:int ->
+   charP_result_47_alloc_table:charP alloc_table ->
+    charP_s_1_46_alloc_table:charP alloc_table ->
+     charP_charM_result_47:(charP, int) memory ->
+      charP_charM_s_1_46:(charP, int) memory ->
+       { (JC_<somenum>:
+         ((JC_<somenum>:
+          valid_string(s_1_0, charP_s_1_46_alloc_table, charP_charM_s_1_46))
+         and ((JC_<somenum>:
+              valid___string_something(charP___string_something_1_alloc_table,
+              charP_charM___string_something_1))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+       charP pointer
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (((not (strchr(s_1_0, c_2, charP_charM_s_1_46) = true)) ->
+               (JC_<somenum>:
+               ((JC_<somenum>: (result = null))
+               and ((JC_<somenum>:
+                    valid___string_something(charP___string_something_1_alloc_table,
+                    charP_charM___string_something_1))
+                   and ((JC_<somenum>:
+                        valid___string_something_0(charP___string_something_1_alloc_table))
+                       and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                           and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+             and ((strchr(s_1_0, c_2, charP_charM_s_1_46) = true) ->
+                  (JC_<somenum>:
+                  ((JC_<somenum>:
+                   ((JC_<somenum>: (select(charP_charM_result_47, result) = c_2))
+                   and ((JC_<somenum>: same_block(result, s_1_0))
+                       and (JC_<somenum>:
+                           valid_string(result, charP_result_47_alloc_table,
+                           charP_charM_result_47)))))
+                  and ((JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))
+                      and ((JC_<somenum>:
+                           valid___string_something_0(charP___string_something_1_alloc_table))
+                          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                              and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))))) }
+
+parameter strcmp_0 :
+ s1_0_0:charP pointer ->
+  s2_0_0:charP pointer ->
+   charP_s2_0_41_alloc_table:charP alloc_table ->
+    charP_s1_0_40_alloc_table:charP alloc_table ->
+     charP_charM_s2_0_41:(charP, int) memory ->
+      charP_charM_s1_0_40:(charP, int) memory ->
+       { } int
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (JC_<somenum>:
+             (result = strcmp(s1_0_0, s2_0_0, charP_charM_s2_0_41,
+                       charP_charM_s1_0_40)))) }
+
+parameter strcmp_0_requires :
+ s1_0_0:charP pointer ->
+  s2_0_0:charP pointer ->
+   charP_s2_0_41_alloc_table:charP alloc_table ->
+    charP_s1_0_40_alloc_table:charP alloc_table ->
+     charP_charM_s2_0_41:(charP, int) memory ->
+      charP_charM_s1_0_40:(charP, int) memory ->
+       { (JC_<somenum>:
+         ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid_string(s1_0_0, charP_s1_0_40_alloc_table,
+           charP_charM_s1_0_40))
+          and (JC_<somenum>:
+              valid_string(s2_0_0, charP_s2_0_41_alloc_table,
+              charP_charM_s2_0_41))))
+         and ((JC_<somenum>:
+              valid___string_something(charP___string_something_1_alloc_table,
+              charP_charM___string_something_1))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+       int
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (JC_<somenum>:
+             (result = strcmp(s1_0_0, s2_0_0, charP_charM_s2_0_41,
+                       charP_charM_s1_0_40)))) }
+
+parameter strcoll :
+ s1_1_0:charP pointer ->
+  s2_1_0:charP pointer ->
+   charP_s2_1_45_alloc_table:charP alloc_table ->
+    charP_s1_1_44_alloc_table:charP alloc_table ->
+     charP_charM_s2_1_45:(charP, int) memory ->
+      charP_charM_s1_1_44:(charP, int) memory ->
+       { } int
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { (JC_<somenum>:
+         ((JC_<somenum>:
+          valid___string_something(charP___string_something_1_alloc_table,
+          charP_charM___string_something_1))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+
+parameter strcoll_requires :
+ s1_1_0:charP pointer ->
+  s2_1_0:charP pointer ->
+   charP_s2_1_45_alloc_table:charP alloc_table ->
+    charP_s1_1_44_alloc_table:charP alloc_table ->
+     charP_charM_s2_1_45:(charP, int) memory ->
+      charP_charM_s1_1_44:(charP, int) memory ->
+       { (JC_<somenum>:
+         ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid_string(s1_1_0, charP_s1_1_44_alloc_table,
+           charP_charM_s1_1_44))
+          and (JC_<somenum>:
+              valid_string(s2_1_0, charP_s2_1_45_alloc_table,
+              charP_charM_s2_1_45))))
+         and ((JC_<somenum>:
+              valid___string_something(charP___string_something_1_alloc_table,
+              charP_charM___string_something_1))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+       int
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { (JC_<somenum>:
+         ((JC_<somenum>:
+          valid___string_something(charP___string_something_1_alloc_table,
+          charP_charM___string_something_1))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+
+parameter strcpy :
+ dest_4:charP pointer ->
+  src_2:charP pointer ->
+   charP_charM_dest_4_70:(charP, int) memory ref ->
+    charP_src_2_71_alloc_table:charP alloc_table ->
+     charP_dest_4_70_alloc_table:charP alloc_table ->
+      charP_charM_src_2_71:(charP, int) memory ->
+       { } charP pointer
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_4_70,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       writes charP_charM_dest_4_70
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (JC_<somenum>:
+             ((JC_<somenum>:
+              ((JC_<somenum>:
+               (strcmp(dest_4, src_2, charP_charM_src_2_71,
+                charP_charM_dest_4_70) = (0)))
+              and ((JC_<somenum>: (result = dest_4))
+                  and (JC_<somenum>: same_block(result, dest_4)))))
+             and (JC_<somenum>:
+                 not_assigns(charP_dest_4_70_alloc_table,
+                 charP_charM_dest_4_70@, charP_charM_dest_4_70,
+                 pset_range(pset_singleton(dest_4), (0),
+                 strlen(src_2, charP_charM_src_2_71))))))) }
+
+parameter strcpy_requires :
+ dest_4:charP pointer ->
+  src_2:charP pointer ->
+   charP_charM_dest_4_70:(charP, int) memory ref ->
+    charP_src_2_71_alloc_table:charP alloc_table ->
+     charP_dest_4_70_alloc_table:charP alloc_table ->
+      charP_charM_src_2_71:(charP, int) memory ->
+       { (JC_<somenum>:
+         ((JC_<somenum>:
+          ((JC_<somenum>:
+           le_int(offset_min(charP_dest_4_70_alloc_table, dest_4), (0)))
+          and ((JC_<somenum>:
+               ge_int(offset_max(charP_dest_4_70_alloc_table, dest_4),
+               strlen(src_2, charP_charM_src_2_71)))
+              and (JC_<somenum>:
+                  valid_string(src_2, charP_src_2_71_alloc_table,
+                  charP_charM_src_2_71)))))
+         and ((JC_<somenum>:
+              valid___string_something(charP___string_something_1_alloc_table,
+              charP_charM___string_something_1))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+       charP pointer
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_4_70,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       writes charP_charM_dest_4_70
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (JC_<somenum>:
+             ((JC_<somenum>:
+              ((JC_<somenum>:
+               (strcmp(dest_4, src_2, charP_charM_src_2_71,
+                charP_charM_dest_4_70) = (0)))
+              and ((JC_<somenum>: (result = dest_4))
+                  and (JC_<somenum>: same_block(result, dest_4)))))
+             and (JC_<somenum>:
+                 not_assigns(charP_dest_4_70_alloc_table,
+                 charP_charM_dest_4_70@, charP_charM_dest_4_70,
+                 pset_range(pset_singleton(dest_4), (0),
+                 strlen(src_2, charP_charM_src_2_71))))))) }
+
+parameter strcspn :
+ s_2_0:charP pointer ->
+  reject:charP pointer ->
+   charP_reject_53_alloc_table:charP alloc_table ->
+    charP_s_2_52_alloc_table:charP alloc_table ->
+     charP_charM_reject_53:(charP, int) memory ->
+      charP_charM_s_2_52:(charP, int) memory ->
+       { } int
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (JC_<somenum>:
+             ((JC_<somenum>: le_int((0), result))
+             and (JC_<somenum>: le_int(result, strlen(s_2_0, charP_charM_s_2_52)))))) }
+
+parameter strcspn_requires :
+ s_2_0:charP pointer ->
+  reject:charP pointer ->
+   charP_reject_53_alloc_table:charP alloc_table ->
+    charP_s_2_52_alloc_table:charP alloc_table ->
+     charP_charM_reject_53:(charP, int) memory ->
+      charP_charM_s_2_52:(charP, int) memory ->
+       { (JC_<somenum>:
+         ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid_string(s_2_0, charP_s_2_52_alloc_table, charP_charM_s_2_52))
+          and (JC_<somenum>:
+              valid_string(reject, charP_reject_53_alloc_table,
+              charP_charM_reject_53))))
+         and ((JC_<somenum>:
+              valid___string_something(charP___string_something_1_alloc_table,
+              charP_charM___string_something_1))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+       int
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (JC_<somenum>:
+             ((JC_<somenum>: le_int((0), result))
+             and (JC_<somenum>: le_int(result, strlen(s_2_0, charP_charM_s_2_52)))))) }
+
+parameter strdup :
+ s_3_0:charP pointer ->
+  charP_result_89_alloc_table:charP alloc_table ->
+   charP_s_3_88_alloc_table:charP alloc_table ->
+    charP_charM_result_89:(charP, int) memory ->
+     charP_charM_s_3_88:(charP, int) memory ->
+      { } charP pointer
+      reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+      { ((JC_<somenum>:
+         ((JC_<somenum>:
+          valid___string_something(charP___string_something_1_alloc_table,
+          charP_charM___string_something_1))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+        and (JC_<somenum>:
+            ((JC_<somenum>:
+             le_int(offset_min(charP_result_89_alloc_table, result), (0)))
+            and ((JC_<somenum>:
+                 ge_int(offset_max(charP_result_89_alloc_table, result),
+                 strlen(s_3_0, charP_charM_s_3_88)))
+                and (JC_<somenum>:
+                    (strcmp(result, s_3_0, charP_charM_s_3_88,
+                     charP_charM_result_89) = (0))))))) }
+
+parameter strdup_requires :
+ s_3_0:charP pointer ->
+  charP_result_89_alloc_table:charP alloc_table ->
+   charP_s_3_88_alloc_table:charP alloc_table ->
+    charP_charM_result_89:(charP, int) memory ->
+     charP_charM_s_3_88:(charP, int) memory ->
+      { (JC_<somenum>:
+        ((JC_<somenum>:
+         valid_string(s_3_0, charP_s_3_88_alloc_table, charP_charM_s_3_88))
+        and ((JC_<somenum>:
+             valid___string_something(charP___string_something_1_alloc_table,
+             charP_charM___string_something_1))
+            and ((JC_<somenum>:
+                 valid___string_something_0(charP___string_something_1_alloc_table))
+                and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                    and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+      charP pointer
+      reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+      { ((JC_<somenum>:
+         ((JC_<somenum>:
+          valid___string_something(charP___string_something_1_alloc_table,
+          charP_charM___string_something_1))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+        and (JC_<somenum>:
+            ((JC_<somenum>:
+             le_int(offset_min(charP_result_89_alloc_table, result), (0)))
+            and ((JC_<somenum>:
+                 ge_int(offset_max(charP_result_89_alloc_table, result),
+                 strlen(s_3_0, charP_charM_s_3_88)))
+                and (JC_<somenum>:
+                    (strcmp(result, s_3_0, charP_charM_s_3_88,
+                     charP_charM_result_89) = (0))))))) }
+
+parameter strerror :
+ errnum:int ->
+  charP_result_68_alloc_table:charP alloc_table ->
+   charP_charM_result_68:(charP, int) memory ->
+    { } charP pointer
+    reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+    { ((JC_<somenum>:
+       ((JC_<somenum>:
+        valid___string_something(charP___string_something_1_alloc_table,
+        charP_charM___string_something_1))
+       and ((JC_<somenum>:
+            valid___string_something_0(charP___string_something_1_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+      and (JC_<somenum>:
+          valid_string(result, charP_result_68_alloc_table,
+          charP_charM_result_68))) }
+
+parameter strerror_requires :
+ errnum:int ->
+  charP_result_68_alloc_table:charP alloc_table ->
+   charP_charM_result_68:(charP, int) memory ->
+    { (JC_<somenum>:
+      ((JC_<somenum>:
+       valid___string_something(charP___string_something_1_alloc_table,
+       charP_charM___string_something_1))
+      and ((JC_<somenum>:
+           valid___string_something_0(charP___string_something_1_alloc_table))
+          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+              and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))}
+    charP pointer
+    reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+    { ((JC_<somenum>:
+       ((JC_<somenum>:
+        valid___string_something(charP___string_something_1_alloc_table,
+        charP_charM___string_something_1))
+       and ((JC_<somenum>:
+            valid___string_something_0(charP___string_something_1_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+      and (JC_<somenum>:
+          valid_string(result, charP_result_68_alloc_table,
+          charP_charM_result_68))) }
+
+parameter strlen_0 :
+ s_4:charP pointer ->
+  charP_s_4_39_alloc_table:charP alloc_table ->
+   charP_charM_s_4_39:(charP, int) memory ->
+    { } int
+    reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+    { ((JC_<somenum>:
+       ((JC_<somenum>:
+        valid___string_something(charP___string_something_1_alloc_table,
+        charP_charM___string_something_1))
+       and ((JC_<somenum>:
+            valid___string_something_0(charP___string_something_1_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+      and (JC_<somenum>: (result = strlen(s_4, charP_charM_s_4_39)))) }
+
+parameter strlen_0_requires :
+ s_4:charP pointer ->
+  charP_s_4_39_alloc_table:charP alloc_table ->
+   charP_charM_s_4_39:(charP, int) memory ->
+    { (JC_<somenum>:
+      ((JC_<somenum>:
+       valid_string(s_4, charP_s_4_39_alloc_table, charP_charM_s_4_39))
+      and ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+    int
+    reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+    { ((JC_<somenum>:
+       ((JC_<somenum>:
+        valid___string_something(charP___string_something_1_alloc_table,
+        charP_charM___string_something_1))
+       and ((JC_<somenum>:
+            valid___string_something_0(charP___string_something_1_alloc_table))
+           and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+               and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+      and (JC_<somenum>: (result = strlen(s_4, charP_charM_s_4_39)))) }
+
+parameter strncat :
+ dest_5:charP pointer ->
+  src_3:charP pointer ->
+   n_6:int ->
+    charP_charM_dest_5_82:(charP, int) memory ref ->
+     charP_src_3_83_alloc_table:charP alloc_table ->
+      charP_dest_5_82_alloc_table:charP alloc_table ->
+       charP_charM_src_3_83:(charP, int) memory ->
+        { } charP pointer
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_5_82,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        writes charP_charM_dest_5_82
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and ((lt_int(n_6, strlen(src_3, charP_charM_src_3_83)) ->
+                (JC_<somenum>:
+                ((JC_<somenum>:
+                 ((JC_<somenum>:
+                  (strlen(dest_5, charP_charM_dest_5_82) = add_int(strlen(dest_5,
+                                                                   charP_charM_dest_5_82@),
+                                                           n_6)))
+                 and ((JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))
+                     and ((JC_<somenum>:
+                          valid___string_something_0(charP___string_something_1_alloc_table))
+                         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))
+                and (JC_<somenum>:
+                    not_assigns(charP_dest_5_82_alloc_table,
+                    charP_charM_dest_5_82@, charP_charM_dest_5_82,
+                    pset_range(pset_singleton(dest_5), (0),
+                    add_int(strlen(dest_5, charP_charM_dest_5_82@), n_6)))))))
+              and ((le_int(strlen(src_3, charP_charM_src_3_83), n_6) ->
+                    (JC_<somenum>:
+                    ((JC_<somenum>:
+                     ((JC_<somenum>:
+                      (strlen(dest_5, charP_charM_dest_5_82) = add_int(
+                                                               strlen(dest_5,
+                                                               charP_charM_dest_5_82@),
+                                                               strlen(src_3,
+                                                               charP_charM_src_3_83))))
+                     and ((JC_<somenum>:
+                          valid___string_something(charP___string_something_1_alloc_table,
+                          charP_charM___string_something_1))
+                         and ((JC_<somenum>:
+                              valid___string_something_0(charP___string_something_1_alloc_table))
+                             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                                 and (JC_<somenum>:
+                                     valid_c(char_xP_c_3_alloc_table)))))))
+                    and (JC_<somenum>:
+                        not_assigns(charP_dest_5_82_alloc_table,
+                        charP_charM_dest_5_82@, charP_charM_dest_5_82,
+                        pset_range(pset_singleton(dest_5), (0),
+                        add_int(strlen(dest_5, charP_charM_dest_5_82@),
+                        strlen(src_3, charP_charM_src_3_83))))))))
+                  and (JC_<somenum>:
+                      ((JC_<somenum>:
+                       ((JC_<somenum>: (result = dest_5))
+                       and (JC_<somenum>: same_block(result, dest_5))))
+                      and (JC_<somenum>:
+                          not_assigns(charP_dest_5_82_alloc_table,
+                          charP_charM_dest_5_82@, charP_charM_dest_5_82,
+                          pset_range(pset_singleton(dest_5), (0),
+                          sub_int(add_int(strlen(dest_5,
+                                          charP_charM_dest_5_82@),
+                                  n_6),
+                          (1)))))))))) }
+
+parameter strncat_requires :
+ dest_5:charP pointer ->
+  src_3:charP pointer ->
+   n_6:int ->
+    charP_charM_dest_5_82:(charP, int) memory ref ->
+     charP_src_3_83_alloc_table:charP alloc_table ->
+      charP_dest_5_82_alloc_table:charP alloc_table ->
+       charP_charM_src_3_83:(charP, int) memory ->
+        { (JC_<somenum>:
+          ((JC_<somenum>:
+           ((JC_<somenum>:
+            le_int(offset_min(charP_dest_5_82_alloc_table, dest_5), (0)))
+           and ((JC_<somenum>:
+                ge_int(offset_max(charP_dest_5_82_alloc_table, dest_5),
+                sub_int(n_6, (1))))
+               and ((JC_<somenum>:
+                    valid_string(dest_5, charP_dest_5_82_alloc_table,
+                    charP_charM_dest_5_82))
+                   and (JC_<somenum>:
+                       valid_string(src_3, charP_src_3_83_alloc_table,
+                       charP_charM_src_3_83))))))
+          and ((JC_<somenum>:
+               valid___string_something(charP___string_something_1_alloc_table,
+               charP_charM___string_something_1))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+        charP pointer
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_5_82,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        writes charP_charM_dest_5_82
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and ((lt_int(n_6, strlen(src_3, charP_charM_src_3_83)) ->
+                (JC_<somenum>:
+                ((JC_<somenum>:
+                 ((JC_<somenum>:
+                  (strlen(dest_5, charP_charM_dest_5_82) = add_int(strlen(dest_5,
+                                                                   charP_charM_dest_5_82@),
+                                                           n_6)))
+                 and ((JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))
+                     and ((JC_<somenum>:
+                          valid___string_something_0(charP___string_something_1_alloc_table))
+                         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))
+                and (JC_<somenum>:
+                    not_assigns(charP_dest_5_82_alloc_table,
+                    charP_charM_dest_5_82@, charP_charM_dest_5_82,
+                    pset_range(pset_singleton(dest_5), (0),
+                    add_int(strlen(dest_5, charP_charM_dest_5_82@), n_6)))))))
+              and ((le_int(strlen(src_3, charP_charM_src_3_83), n_6) ->
+                    (JC_<somenum>:
+                    ((JC_<somenum>:
+                     ((JC_<somenum>:
+                      (strlen(dest_5, charP_charM_dest_5_82) = add_int(
+                                                               strlen(dest_5,
+                                                               charP_charM_dest_5_82@),
+                                                               strlen(src_3,
+                                                               charP_charM_src_3_83))))
+                     and ((JC_<somenum>:
+                          valid___string_something(charP___string_something_1_alloc_table,
+                          charP_charM___string_something_1))
+                         and ((JC_<somenum>:
+                              valid___string_something_0(charP___string_something_1_alloc_table))
+                             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                                 and (JC_<somenum>:
+                                     valid_c(char_xP_c_3_alloc_table)))))))
+                    and (JC_<somenum>:
+                        not_assigns(charP_dest_5_82_alloc_table,
+                        charP_charM_dest_5_82@, charP_charM_dest_5_82,
+                        pset_range(pset_singleton(dest_5), (0),
+                        add_int(strlen(dest_5, charP_charM_dest_5_82@),
+                        strlen(src_3, charP_charM_src_3_83))))))))
+                  and (JC_<somenum>:
+                      ((JC_<somenum>:
+                       ((JC_<somenum>: (result = dest_5))
+                       and (JC_<somenum>: same_block(result, dest_5))))
+                      and (JC_<somenum>:
+                          not_assigns(charP_dest_5_82_alloc_table,
+                          charP_charM_dest_5_82@, charP_charM_dest_5_82,
+                          pset_range(pset_singleton(dest_5), (0),
+                          sub_int(add_int(strlen(dest_5,
+                                          charP_charM_dest_5_82@),
+                                  n_6),
+                          (1)))))))))) }
+
+parameter strncmp_0 :
+ s1_2_0:charP pointer ->
+  s2_2_0:charP pointer ->
+   n_7:int ->
+    charP_s2_2_43_alloc_table:charP alloc_table ->
+     charP_s1_2_42_alloc_table:charP alloc_table ->
+      charP_charM_s2_2_43:(charP, int) memory ->
+       charP_charM_s1_2_42:(charP, int) memory ->
+        { } int
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and (JC_<somenum>:
+              (result = strncmp(s1_2_0, s2_2_0, n_7, charP_charM_s2_2_43,
+                        charP_charM_s1_2_42)))) }
+
+parameter strncmp_0_requires :
+ s1_2_0:charP pointer ->
+  s2_2_0:charP pointer ->
+   n_7:int ->
+    charP_s2_2_43_alloc_table:charP alloc_table ->
+     charP_s1_2_42_alloc_table:charP alloc_table ->
+      charP_charM_s2_2_43:(charP, int) memory ->
+       charP_charM_s1_2_42:(charP, int) memory ->
+        { (JC_<somenum>:
+          ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid_string(s1_2_0, charP_s1_2_42_alloc_table,
+            charP_charM_s1_2_42))
+           and (JC_<somenum>:
+               valid_string(s2_2_0, charP_s2_2_43_alloc_table,
+               charP_charM_s2_2_43))))
+          and ((JC_<somenum>:
+               valid___string_something(charP___string_something_1_alloc_table,
+               charP_charM___string_something_1))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+        int
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and (JC_<somenum>:
+              (result = strncmp(s1_2_0, s2_2_0, n_7, charP_charM_s2_2_43,
+                        charP_charM_s1_2_42)))) }
+
+parameter strncpy :
+ dest_6:charP pointer ->
+  src_4:charP pointer ->
+   n_8:int ->
+    charP_charM_dest_6_74:(charP, int) memory ref ->
+     charP_src_4_75_alloc_table:charP alloc_table ->
+      charP_dest_6_74_alloc_table:charP alloc_table ->
+       charP_charM_src_4_75:(charP, int) memory ->
+        { } charP pointer
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_6_74,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        writes charP_charM_dest_6_74
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and ((le_int(n_8, strlen(src_4, charP_charM_src_4_75)) ->
+                (JC_<somenum>:
+                ((JC_<somenum>:
+                 ((JC_<somenum>:
+                  (memcmp(dest_6, src_4, n_8, charP_charM_src_4_75,
+                   charP_charM_dest_6_74) = (0)))
+                 and ((JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))
+                     and ((JC_<somenum>:
+                          valid___string_something_0(charP___string_something_1_alloc_table))
+                         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))
+                and (JC_<somenum>:
+                    not_assigns(charP_dest_6_74_alloc_table,
+                    charP_charM_dest_6_74@, charP_charM_dest_6_74,
+                    pset_range(pset_singleton(dest_6), (0),
+                    sub_int(n_8, (1))))))))
+              and ((lt_int(strlen(src_4, charP_charM_src_4_75), n_8) ->
+                    (JC_<somenum>:
+                    ((JC_<somenum>:
+                     ((JC_<somenum>:
+                      ((JC_<somenum>:
+                       (strcmp(dest_6, src_4, charP_charM_src_4_75,
+                        charP_charM_dest_6_74) = (0)))
+                      and (JC_<somenum>: same_block(result, dest_6))))
+                     and ((JC_<somenum>:
+                          valid___string_something(charP___string_something_1_alloc_table,
+                          charP_charM___string_something_1))
+                         and ((JC_<somenum>:
+                              valid___string_something_0(charP___string_something_1_alloc_table))
+                             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                                 and (JC_<somenum>:
+                                     valid_c(char_xP_c_3_alloc_table)))))))
+                    and (JC_<somenum>:
+                        not_assigns(charP_dest_6_74_alloc_table,
+                        charP_charM_dest_6_74@, charP_charM_dest_6_74,
+                        pset_range(pset_singleton(dest_6), (0),
+                        sub_int(n_8, (1))))))))
+                  and (JC_<somenum>:
+                      ((JC_<somenum>: (result = dest_6))
+                      and (JC_<somenum>:
+                          not_assigns(charP_dest_6_74_alloc_table,
+                          charP_charM_dest_6_74@, charP_charM_dest_6_74,
+                          pset_range(pset_singleton(dest_6), (0),
+                          sub_int(n_8, (1)))))))))) }
+
+parameter strncpy_requires :
+ dest_6:charP pointer ->
+  src_4:charP pointer ->
+   n_8:int ->
+    charP_charM_dest_6_74:(charP, int) memory ref ->
+     charP_src_4_75_alloc_table:charP alloc_table ->
+      charP_dest_6_74_alloc_table:charP alloc_table ->
+       charP_charM_src_4_75:(charP, int) memory ->
+        { (JC_<somenum>:
+          ((JC_<somenum>:
+           ((JC_<somenum>:
+            le_int(offset_min(charP_dest_6_74_alloc_table, dest_6), (0)))
+           and ((JC_<somenum>:
+                ge_int(offset_max(charP_dest_6_74_alloc_table, dest_6),
+                sub_int(n_8, (1))))
+               and (JC_<somenum>:
+                   valid_string(src_4, charP_src_4_75_alloc_table,
+                   charP_charM_src_4_75)))))
+          and ((JC_<somenum>:
+               valid___string_something(charP___string_something_1_alloc_table,
+               charP_charM___string_something_1))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+        charP pointer
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,charP_charM_dest_6_74,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        writes charP_charM_dest_6_74
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and ((le_int(n_8, strlen(src_4, charP_charM_src_4_75)) ->
+                (JC_<somenum>:
+                ((JC_<somenum>:
+                 ((JC_<somenum>:
+                  (memcmp(dest_6, src_4, n_8, charP_charM_src_4_75,
+                   charP_charM_dest_6_74) = (0)))
+                 and ((JC_<somenum>:
+                      valid___string_something(charP___string_something_1_alloc_table,
+                      charP_charM___string_something_1))
+                     and ((JC_<somenum>:
+                          valid___string_something_0(charP___string_something_1_alloc_table))
+                         and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))
+                and (JC_<somenum>:
+                    not_assigns(charP_dest_6_74_alloc_table,
+                    charP_charM_dest_6_74@, charP_charM_dest_6_74,
+                    pset_range(pset_singleton(dest_6), (0),
+                    sub_int(n_8, (1))))))))
+              and ((lt_int(strlen(src_4, charP_charM_src_4_75), n_8) ->
+                    (JC_<somenum>:
+                    ((JC_<somenum>:
+                     ((JC_<somenum>:
+                      ((JC_<somenum>:
+                       (strcmp(dest_6, src_4, charP_charM_src_4_75,
+                        charP_charM_dest_6_74) = (0)))
+                      and (JC_<somenum>: same_block(result, dest_6))))
+                     and ((JC_<somenum>:
+                          valid___string_something(charP___string_something_1_alloc_table,
+                          charP_charM___string_something_1))
+                         and ((JC_<somenum>:
+                              valid___string_something_0(charP___string_something_1_alloc_table))
+                             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                                 and (JC_<somenum>:
+                                     valid_c(char_xP_c_3_alloc_table)))))))
+                    and (JC_<somenum>:
+                        not_assigns(charP_dest_6_74_alloc_table,
+                        charP_charM_dest_6_74@, charP_charM_dest_6_74,
+                        pset_range(pset_singleton(dest_6), (0),
+                        sub_int(n_8, (1))))))))
+                  and (JC_<somenum>:
+                      ((JC_<somenum>: (result = dest_6))
+                      and (JC_<somenum>:
+                          not_assigns(charP_dest_6_74_alloc_table,
+                          charP_charM_dest_6_74@, charP_charM_dest_6_74,
+                          pset_range(pset_singleton(dest_6), (0),
+                          sub_int(n_8, (1)))))))))) }
+
+parameter strndup :
+ s_5:charP pointer ->
+  n_9:int ->
+   charP_result_92_alloc_table:charP alloc_table ->
+    charP_s_5_91_alloc_table:charP alloc_table ->
+     charP_charM_result_92:(charP, int) memory ->
+      charP_charM_s_5_91:(charP, int) memory ->
        { } charP pointer
        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
        { ((JC_<somenum>:
@@ -2224,29 +3870,29 @@ parameter strndup :
                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
          and (JC_<somenum>:
              ((JC_<somenum>:
-              le_int(offset_min(charP_result_24_alloc_table, result), (0)))
+              le_int(offset_min(charP_result_92_alloc_table, result), (0)))
              and ((JC_<somenum>:
-                  ge_int(offset_max(charP_result_24_alloc_table, result),
-                  minimum(strlen(s_2, charP_charM_s_23), n_1)))
+                  ge_int(offset_max(charP_result_92_alloc_table, result),
+                  minimum(strlen(s_5, charP_charM_s_5_91), n_9)))
                  and ((JC_<somenum>:
-                      valid_string(result, charP_result_24_alloc_table,
-                      charP_charM_result_24))
+                      valid_string(result, charP_result_92_alloc_table,
+                      charP_charM_result_92))
                      and ((JC_<somenum>:
-                          le_int(strlen(result, charP_charM_result_24), n_1))
+                          le_int(strlen(result, charP_charM_result_92), n_9))
                          and (JC_<somenum>:
-                             (strncmp(result, s_2, n_1, charP_charM_s_23,
-                              charP_charM_result_24) = (0))))))))) }
+                             (strncmp(result, s_5, n_9, charP_charM_s_5_91,
+                              charP_charM_result_92) = (0))))))))) }
 
 parameter strndup_requires :
- s_2:charP pointer ->
-  n_1:int ->
-   charP_result_24_alloc_table:charP alloc_table ->
-    charP_s_23_alloc_table:charP alloc_table ->
-     charP_charM_result_24:(charP, int) memory ->
-      charP_charM_s_23:(charP, int) memory ->
+ s_5:charP pointer ->
+  n_9:int ->
+   charP_result_92_alloc_table:charP alloc_table ->
+    charP_s_5_91_alloc_table:charP alloc_table ->
+     charP_charM_result_92:(charP, int) memory ->
+      charP_charM_s_5_91:(charP, int) memory ->
        { (JC_<somenum>:
          ((JC_<somenum>:
-          valid_string(s_2, charP_s_23_alloc_table, charP_charM_s_23))
+          valid_string(s_5, charP_s_5_91_alloc_table, charP_charM_s_5_91))
          and ((JC_<somenum>:
               valid___string_something(charP___string_something_1_alloc_table,
               charP_charM___string_something_1))
@@ -2266,18 +3912,403 @@ parameter strndup_requires :
                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
          and (JC_<somenum>:
              ((JC_<somenum>:
-              le_int(offset_min(charP_result_24_alloc_table, result), (0)))
+              le_int(offset_min(charP_result_92_alloc_table, result), (0)))
              and ((JC_<somenum>:
-                  ge_int(offset_max(charP_result_24_alloc_table, result),
-                  minimum(strlen(s_2, charP_charM_s_23), n_1)))
+                  ge_int(offset_max(charP_result_92_alloc_table, result),
+                  minimum(strlen(s_5, charP_charM_s_5_91), n_9)))
                  and ((JC_<somenum>:
-                      valid_string(result, charP_result_24_alloc_table,
-                      charP_charM_result_24))
+                      valid_string(result, charP_result_92_alloc_table,
+                      charP_charM_result_92))
                      and ((JC_<somenum>:
-                          le_int(strlen(result, charP_charM_result_24), n_1))
+                          le_int(strlen(result, charP_charM_result_92), n_9))
                          and (JC_<somenum>:
-                             (strncmp(result, s_2, n_1, charP_charM_s_23,
-                              charP_charM_result_24) = (0))))))))) }
+                             (strncmp(result, s_5, n_9, charP_charM_s_5_91,
+                              charP_charM_result_92) = (0))))))))) }
+
+parameter strpbrk :
+ s_6:charP pointer ->
+  accept:charP pointer ->
+   charP_accept_57_alloc_table:charP alloc_table ->
+    charP_s_6_56_alloc_table:charP alloc_table ->
+     charP_charM_accept_57:(charP, int) memory ->
+      charP_charM_s_6_56:(charP, int) memory ->
+       { } charP pointer
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (JC_<somenum>: ((result = null) or same_block(result, s_6)))) }
+
+parameter strpbrk_requires :
+ s_6:charP pointer ->
+  accept:charP pointer ->
+   charP_accept_57_alloc_table:charP alloc_table ->
+    charP_s_6_56_alloc_table:charP alloc_table ->
+     charP_charM_accept_57:(charP, int) memory ->
+      charP_charM_s_6_56:(charP, int) memory ->
+       { (JC_<somenum>:
+         ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid_string(s_6, charP_s_6_56_alloc_table, charP_charM_s_6_56))
+          and (JC_<somenum>:
+              valid_string(accept, charP_accept_57_alloc_table,
+              charP_charM_accept_57))))
+         and ((JC_<somenum>:
+              valid___string_something(charP___string_something_1_alloc_table,
+              charP_charM___string_something_1))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+       charP pointer
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (JC_<somenum>: ((result = null) or same_block(result, s_6)))) }
+
+parameter strrchr :
+ s_7:charP pointer ->
+  c_3_0:int ->
+   charP_result_50_alloc_table:charP alloc_table ->
+    charP_s_7_49_alloc_table:charP alloc_table ->
+     charP_charM_result_50:(charP, int) memory ->
+      charP_charM_s_7_49:(charP, int) memory ->
+       { } charP pointer
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (((not (strchr(s_7, c_3_0, charP_charM_s_7_49) = true)) ->
+               (JC_<somenum>:
+               ((JC_<somenum>: (result = null))
+               and ((JC_<somenum>:
+                    valid___string_something(charP___string_something_1_alloc_table,
+                    charP_charM___string_something_1))
+                   and ((JC_<somenum>:
+                        valid___string_something_0(charP___string_something_1_alloc_table))
+                       and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                           and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+             and ((strchr(s_7, c_3_0, charP_charM_s_7_49) = true) ->
+                  (JC_<somenum>:
+                  ((JC_<somenum>:
+                   ((JC_<somenum>: (select(charP_charM_result_50, result) = c_3_0))
+                   and ((JC_<somenum>: same_block(result, s_7))
+                       and (JC_<somenum>:
+                           valid_string(result, charP_result_50_alloc_table,
+                           charP_charM_result_50)))))
+                  and ((JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))
+                      and ((JC_<somenum>:
+                           valid___string_something_0(charP___string_something_1_alloc_table))
+                          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                              and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))))) }
+
+parameter strrchr_requires :
+ s_7:charP pointer ->
+  c_3_0:int ->
+   charP_result_50_alloc_table:charP alloc_table ->
+    charP_s_7_49_alloc_table:charP alloc_table ->
+     charP_charM_result_50:(charP, int) memory ->
+      charP_charM_s_7_49:(charP, int) memory ->
+       { (JC_<somenum>:
+         ((JC_<somenum>:
+          valid_string(s_7, charP_s_7_49_alloc_table, charP_charM_s_7_49))
+         and ((JC_<somenum>:
+              valid___string_something(charP___string_something_1_alloc_table,
+              charP_charM___string_something_1))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+       charP pointer
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (((not (strchr(s_7, c_3_0, charP_charM_s_7_49) = true)) ->
+               (JC_<somenum>:
+               ((JC_<somenum>: (result = null))
+               and ((JC_<somenum>:
+                    valid___string_something(charP___string_something_1_alloc_table,
+                    charP_charM___string_something_1))
+                   and ((JC_<somenum>:
+                        valid___string_something_0(charP___string_something_1_alloc_table))
+                       and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                           and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))))
+             and ((strchr(s_7, c_3_0, charP_charM_s_7_49) = true) ->
+                  (JC_<somenum>:
+                  ((JC_<somenum>:
+                   ((JC_<somenum>: (select(charP_charM_result_50, result) = c_3_0))
+                   and ((JC_<somenum>: same_block(result, s_7))
+                       and (JC_<somenum>:
+                           valid_string(result, charP_result_50_alloc_table,
+                           charP_charM_result_50)))))
+                  and ((JC_<somenum>:
+                       valid___string_something(charP___string_something_1_alloc_table,
+                       charP_charM___string_something_1))
+                      and ((JC_<somenum>:
+                           valid___string_something_0(charP___string_something_1_alloc_table))
+                          and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                              and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))))) }
+
+parameter strspn :
+ s_8:charP pointer ->
+  accept_0:charP pointer ->
+   charP_accept_0_55_alloc_table:charP alloc_table ->
+    charP_s_8_54_alloc_table:charP alloc_table ->
+     charP_charM_accept_0_55:(charP, int) memory ->
+      charP_charM_s_8_54:(charP, int) memory ->
+       { } int
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (JC_<somenum>:
+             ((JC_<somenum>: le_int((0), result))
+             and (JC_<somenum>: le_int(result, strlen(s_8, charP_charM_s_8_54)))))) }
+
+parameter strspn_requires :
+ s_8:charP pointer ->
+  accept_0:charP pointer ->
+   charP_accept_0_55_alloc_table:charP alloc_table ->
+    charP_s_8_54_alloc_table:charP alloc_table ->
+     charP_charM_accept_0_55:(charP, int) memory ->
+      charP_charM_s_8_54:(charP, int) memory ->
+       { (JC_<somenum>:
+         ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid_string(s_8, charP_s_8_54_alloc_table, charP_charM_s_8_54))
+          and (JC_<somenum>:
+              valid_string(accept_0, charP_accept_0_55_alloc_table,
+              charP_charM_accept_0_55))))
+         and ((JC_<somenum>:
+              valid___string_something(charP___string_something_1_alloc_table,
+              charP_charM___string_something_1))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+       int
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { ((JC_<somenum>:
+          ((JC_<somenum>:
+           valid___string_something(charP___string_something_1_alloc_table,
+           charP_charM___string_something_1))
+          and ((JC_<somenum>:
+               valid___string_something_0(charP___string_something_1_alloc_table))
+              and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                  and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+         and (JC_<somenum>:
+             ((JC_<somenum>: le_int((0), result))
+             and (JC_<somenum>: le_int(result, strlen(s_8, charP_charM_s_8_54)))))) }
+
+parameter strstr :
+ haystack:charP pointer ->
+  needle:charP pointer ->
+   charP_needle_61_alloc_table:charP alloc_table ->
+    charP_haystack_60_alloc_table:charP alloc_table ->
+     charP_charM_result_62:(charP, int) memory ->
+      charP_charM_needle_61:(charP, int) memory ->
+       charP_charM_haystack_60:(charP, int) memory ->
+        { } charP pointer
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and (JC_<somenum>:
+              ((result = null)
+              or (same_block(result, haystack)
+                 and (memcmp(result, needle,
+                      strlen(needle, charP_charM_needle_61),
+                      charP_charM_needle_61, charP_charM_result_62) = (0)))))) }
+
+parameter strstr_requires :
+ haystack:charP pointer ->
+  needle:charP pointer ->
+   charP_needle_61_alloc_table:charP alloc_table ->
+    charP_haystack_60_alloc_table:charP alloc_table ->
+     charP_charM_result_62:(charP, int) memory ->
+      charP_charM_needle_61:(charP, int) memory ->
+       charP_charM_haystack_60:(charP, int) memory ->
+        { (JC_<somenum>:
+          ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid_string(haystack, charP_haystack_60_alloc_table,
+            charP_charM_haystack_60))
+           and (JC_<somenum>:
+               valid_string(needle, charP_needle_61_alloc_table,
+               charP_charM_needle_61))))
+          and ((JC_<somenum>:
+               valid___string_something(charP___string_something_1_alloc_table,
+               charP_charM___string_something_1))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+        charP pointer
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and (JC_<somenum>:
+              ((result = null)
+              or (same_block(result, haystack)
+                 and (memcmp(result, needle,
+                      strlen(needle, charP_charM_needle_61),
+                      charP_charM_needle_61, charP_charM_result_62) = (0)))))) }
+
+parameter strtok :
+ s_9:charP pointer ->
+  delim:charP pointer ->
+   charP_delim_65_alloc_table:charP alloc_table ->
+    charP_s_9_64_alloc_table:charP alloc_table ->
+     charP_charM_delim_65:(charP, int) memory ->
+      charP_charM_s_9_64:(charP, int) memory ->
+       { } charP pointer
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { (JC_<somenum>:
+         ((JC_<somenum>:
+          valid___string_something(charP___string_something_1_alloc_table,
+          charP_charM___string_something_1))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+
+parameter strtok_requires :
+ s_9:charP pointer ->
+  delim:charP pointer ->
+   charP_delim_65_alloc_table:charP alloc_table ->
+    charP_s_9_64_alloc_table:charP alloc_table ->
+     charP_charM_delim_65:(charP, int) memory ->
+      charP_charM_s_9_64:(charP, int) memory ->
+       { (JC_<somenum>:
+         ((JC_<somenum>:
+          ((JC_<somenum>:
+           (valid_string(s_9, charP_s_9_64_alloc_table, charP_charM_s_9_64)
+           or (s_9 = null)))
+          and (JC_<somenum>:
+              valid_string(delim, charP_delim_65_alloc_table,
+              charP_charM_delim_65))))
+         and ((JC_<somenum>:
+              valid___string_something(charP___string_something_1_alloc_table,
+              charP_charM___string_something_1))
+             and ((JC_<somenum>:
+                  valid___string_something_0(charP___string_something_1_alloc_table))
+                 and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                     and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+       charP pointer
+       reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+       { (JC_<somenum>:
+         ((JC_<somenum>:
+          valid___string_something(charP___string_something_1_alloc_table,
+          charP_charM___string_something_1))
+         and ((JC_<somenum>:
+              valid___string_something_0(charP___string_something_1_alloc_table))
+             and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                 and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
+
+parameter strxfrm :
+ dest_7:charP pointer ->
+  src_5:charP pointer ->
+   n_10_0:int ->
+    charP_charM_dest_7_86:(charP, int) memory ref ->
+     charP_src_5_87_alloc_table:charP alloc_table ->
+      charP_dest_7_86_alloc_table:charP alloc_table ->
+       charP_charM_src_5_87:(charP, int) memory ->
+        { } int
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        writes charP_charM_dest_7_86
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and (JC_<somenum>:
+              not_assigns(charP_dest_7_86_alloc_table,
+              charP_charM_dest_7_86@, charP_charM_dest_7_86,
+              pset_range(pset_singleton(dest_7), (0), sub_int(n_10_0, (1)))))) }
+
+parameter strxfrm_requires :
+ dest_7:charP pointer ->
+  src_5:charP pointer ->
+   n_10_0:int ->
+    charP_charM_dest_7_86:(charP, int) memory ref ->
+     charP_src_5_87_alloc_table:charP alloc_table ->
+      charP_dest_7_86_alloc_table:charP alloc_table ->
+       charP_charM_src_5_87:(charP, int) memory ->
+        { (JC_<somenum>:
+          ((JC_<somenum>:
+           ((JC_<somenum>:
+            le_int(offset_min(charP_dest_7_86_alloc_table, dest_7), (0)))
+           and ((JC_<somenum>:
+                ge_int(offset_max(charP_dest_7_86_alloc_table, dest_7),
+                sub_int(n_10_0, (1))))
+               and (JC_<somenum>:
+                   valid_string(src_5, charP_src_5_87_alloc_table,
+                   charP_charM_src_5_87)))))
+          and ((JC_<somenum>:
+               valid___string_something(charP___string_something_1_alloc_table,
+               charP_charM___string_something_1))
+              and ((JC_<somenum>:
+                   valid___string_something_0(charP___string_something_1_alloc_table))
+                  and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                      and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))))}
+        int
+        reads charP___string_something_1_alloc_table,charP_charM___string_something_1,char_xP_c_3_alloc_table,intP_a_2_alloc_table
+        writes charP_charM_dest_7_86
+        { ((JC_<somenum>:
+           ((JC_<somenum>:
+            valid___string_something(charP___string_something_1_alloc_table,
+            charP_charM___string_something_1))
+           and ((JC_<somenum>:
+                valid___string_something_0(charP___string_something_1_alloc_table))
+               and ((JC_<somenum>: valid_a(intP_a_2_alloc_table))
+                   and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table))))))
+          and (JC_<somenum>:
+              not_assigns(charP_dest_7_86_alloc_table,
+              charP_charM_dest_7_86@, charP_charM_dest_7_86,
+              pset_range(pset_singleton(dest_7), (0), sub_int(n_10_0, (1)))))) }
 
 let assign_char_ensures_default =
  fun (tt : unit) ->
@@ -2294,7 +4325,7 @@ let assign_char_ensures_default =
    begin
      (let i_0 = ref (any_int void) in
      try
-      (C_20:
+      (C_179:
       begin
         (let jessie_<somenum> = (i_0 := (0)) in void);
        (loop_4:
@@ -2315,25 +4346,25 @@ let assign_char_ensures_default =
          try
           begin
             (let jessie_<somenum> =
-            (C_28:
+            (C_187:
             begin
               (if ((lt_int_ !i_0) (12)) then void
               else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
-             (C_26:
+             (C_185:
              (let jessie_<somenum> =
-             (C_24:
+             (C_183:
              (let jessie_<somenum> = __string_something in
              (let jessie_<somenum> = (12) in
              (JC_<somenum>:
-             ((((((strndup jessie_<somenum>) jessie_<somenum>) !charP_c_75_alloc_table) !charP___string_something_1_alloc_table) !charP_charM_c_75) !charP_charM___string_something_1))))) in
+             ((((((strndup jessie_<somenum>) jessie_<somenum>) !charP_c_149_alloc_table) !charP___string_something_1_alloc_table) !charP_charM_c_149) !charP_charM___string_something_1))))) in
              (let jessie_<somenum> = c in
              (let jessie_<somenum> = !i_0 in
              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
              begin
                (((safe_upd_ char_xP_char_xM_c_3) jessie_<somenum>) jessie_<somenum>);
               jessie_<somenum> end))))) in void);
-             (i_0 := (C_27: ((add_int !i_0) (1)))); !i_0 end) in void);
+             (i_0 := (C_186: ((add_int !i_0) (1)))); !i_0 end) in void);
            (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
@@ -2359,7 +4390,7 @@ let assign_char_safety =
    begin
      (let i_0 = ref (any_int void) in
      try
-      (C_20:
+      (C_179:
       begin
         (let jessie_<somenum> = (i_0 := (0)) in void);
        (loop_3:
@@ -2372,18 +4403,18 @@ let assign_char_safety =
          try
           begin
             (let jessie_<somenum> =
-            (C_28:
+            (C_187:
             begin
               (if ((lt_int_ !i_0) (12)) then void
               else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
-             (C_26:
+             (C_185:
              (let jessie_<somenum> =
-             (C_24:
+             (C_183:
              (let jessie_<somenum> = __string_something in
              (let jessie_<somenum> = (12) in
              (JC_<somenum>:
-             ((((((strndup_requires jessie_<somenum>) jessie_<somenum>) !charP_c_75_alloc_table) !charP___string_something_1_alloc_table) !charP_charM_c_75) !charP_charM___string_something_1))))) in
+             ((((((strndup_requires jessie_<somenum>) jessie_<somenum>) !charP_c_149_alloc_table) !charP___string_something_1_alloc_table) !charP_charM_c_149) !charP_charM___string_something_1))))) in
              (let jessie_<somenum> = c in
              (let jessie_<somenum> = !i_0 in
              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
@@ -2391,7 +4422,7 @@ let assign_char_safety =
                (JC_<somenum>:
                (((((offset_upd_ !char_xP_c_3_alloc_table) char_xP_char_xM_c_3) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
               jessie_<somenum> end))))) in void);
-             (i_0 := (C_27: ((add_int !i_0) (1)))); !i_0 end) in void);
+             (i_0 := (C_186: ((add_int !i_0) (1)))); !i_0 end) in void);
            (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
@@ -2422,13 +4453,14 @@ let assign_int_ensures_default =
    begin
      (let i = ref (any_int void) in
      try
-      (C_11:
+      (C_170:
       begin
         (let jessie_<somenum> = (i := (0)) in void);
        (loop_2:
        while true do
        { invariant
-           ((JC_<somenum>: ((JC_<somenum>: le_int((0), i)) and (JC_<somenum>: le_int(i, (12)))))
+           ((JC_<somenum>:
+            ((JC_<somenum>: le_int((0), i)) and (JC_<somenum>: le_int(i, (12)))))
            and ((JC_<somenum>:
                 not_assigns(intP_a_2_alloc_table@loop_2,
                 intP_intM_a_2@loop_2, intP_intM_a_2,
@@ -2441,19 +4473,19 @@ let assign_int_ensures_default =
          try
           begin
             (let jessie_<somenum> =
-            (C_18:
+            (C_177:
             begin
               (if ((lt_int_ !i) (12)) then void
               else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
-             (C_16:
+             (C_175:
              (let jessie_<somenum> = (69) in
              (let jessie_<somenum> = a in
              (let jessie_<somenum> = !i in
              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
              begin
                (((safe_upd_ intP_intM_a_2) jessie_<somenum>) jessie_<somenum>); jessie_<somenum>
-             end))))) in void); (i := (C_17: ((add_int !i) (1)))); !i end) in
+             end))))) in void); (i := (C_176: ((add_int !i) (1)))); !i end) in
             void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
@@ -2479,7 +4511,7 @@ let assign_int_safety =
    begin
      (let i = ref (any_int void) in
      try
-      (C_11:
+      (C_170:
       begin
         (let jessie_<somenum> = (i := (0)) in void);
        (loop_1:
@@ -2487,16 +4519,17 @@ let assign_int_safety =
        { invariant (JC_<somenum>: true) variant (0) }
         begin
           [ { } unit reads i
-            { (JC_<somenum>: ((JC_<somenum>: le_int((0), i)) and (JC_<somenum>: le_int(i, (12))))) } ];
+            { (JC_<somenum>:
+              ((JC_<somenum>: le_int((0), i)) and (JC_<somenum>: le_int(i, (12))))) } ];
          try
           begin
             (let jessie_<somenum> =
-            (C_18:
+            (C_177:
             begin
               (if ((lt_int_ !i) (12)) then void
               else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
-             (C_16:
+             (C_175:
              (let jessie_<somenum> = (69) in
              (let jessie_<somenum> = a in
              (let jessie_<somenum> = !i in
@@ -2504,8 +4537,9 @@ let assign_int_safety =
              begin
                (JC_<somenum>:
                (((((offset_upd_ !intP_a_2_alloc_table) intP_intM_a_2) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
-              jessie_<somenum> end))))) in void); (i := (C_17: ((add_int !i) (1))));
-             !i end) in void); (raise (Loop_continue_exc void)) end with
+              jessie_<somenum> end))))) in void);
+             (i := (C_176: ((add_int !i) (1)))); !i end) in void);
+           (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
@@ -2521,12 +4555,12 @@ let assign_int_safety =
             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
 
 let foo_ensures_default =
- fun (a_0 : intP pointer) (aLength : int) (intP_intM_a_0_26 : (intP, int) memory ref) (intP_a_0_26_alloc_table : intP alloc_table) ->
+ fun (a_0 : intP pointer) (aLength : int) (intP_intM_a_0_94 : (intP, int) memory ref) (intP_a_0_94_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
-     ((JC_<somenum>: le_int(offset_min(intP_a_0_26_alloc_table, a_0), (0)))
+     ((JC_<somenum>: le_int(offset_min(intP_a_0_94_alloc_table, a_0), (0)))
      and (JC_<somenum>:
-         ge_int(offset_max(intP_a_0_26_alloc_table, a_0),
+         ge_int(offset_max(intP_a_0_94_alloc_table, a_0),
          sub_int(aLength, (1))))))
     and ((JC_<somenum>:
          valid___string_something(charP___string_something_1_alloc_table,
@@ -2540,7 +4574,7 @@ let foo_ensures_default =
    begin
      (let j = ref (any_int void) in
      try
-      (C_33:
+      (C_192:
       begin
         (let jessie_<somenum> = (j := (0)) in void);
        (loop_6:
@@ -2548,47 +4582,48 @@ let foo_ensures_default =
        { invariant
            ((JC_<somenum>: le_int((0), j))
            and ((JC_<somenum>:
-                not_assigns(intP_a_0_26_alloc_table, intP_intM_a_0_26@loop_6,
-                intP_intM_a_0_26, pset_all(pset_singleton(a_0))))
+                not_assigns(intP_a_0_94_alloc_table, intP_intM_a_0_94@loop_6,
+                intP_intM_a_0_94, pset_all(pset_singleton(a_0))))
                and (JC_<somenum>:
-                   not_assigns(intP_a_0_26_alloc_table,
-                   intP_intM_a_0_26@init, intP_intM_a_0_26,
+                   not_assigns(intP_a_0_94_alloc_table,
+                   intP_intM_a_0_94@init, intP_intM_a_0_94,
                    pset_all(pset_singleton(a_0))))))  }
         begin
           [ { } unit { true } ];
          try
           begin
             (let jessie_<somenum> =
-            (C_39:
+            (C_198:
             begin
               (if ((lt_int_ !j) aLength) then void
               else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
-             (C_37:
+             (C_196:
              (let jessie_<somenum> = (0) in
              (let jessie_<somenum> = a_0 in
              (let jessie_<somenum> = !j in
              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
              begin
-               (((safe_upd_ intP_intM_a_0_26) jessie_<somenum>) jessie_<somenum>);
-              jessie_<somenum> end))))) in void); (j := (C_38: ((add_int !j) (1))));
-             !j end) in void); (raise (Loop_continue_exc void)) end with
+               (((safe_upd_ intP_intM_a_0_94) jessie_<somenum>) jessie_<somenum>);
+              jessie_<somenum> end))))) in void);
+             (j := (C_197: ((add_int !j) (1)))); !j end) in void);
+           (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break: begin   void; (raise Return) end) end); (raise Return)
    end with Return -> void end)
   { (JC_<somenum>:
-    not_assigns(intP_a_0_26_alloc_table, intP_intM_a_0_26@, intP_intM_a_0_26,
+    not_assigns(intP_a_0_94_alloc_table, intP_intM_a_0_94@, intP_intM_a_0_94,
     pset_all(pset_singleton(a_0)))) }
 
 let foo_safety =
- fun (a_0 : intP pointer) (aLength : int) (intP_intM_a_0_26 : (intP, int) memory ref) (intP_a_0_26_alloc_table : intP alloc_table) ->
+ fun (a_0 : intP pointer) (aLength : int) (intP_intM_a_0_94 : (intP, int) memory ref) (intP_a_0_94_alloc_table : intP alloc_table) ->
   { (JC_<somenum>:
     ((JC_<somenum>:
-     ((JC_<somenum>: le_int(offset_min(intP_a_0_26_alloc_table, a_0), (0)))
+     ((JC_<somenum>: le_int(offset_min(intP_a_0_94_alloc_table, a_0), (0)))
      and (JC_<somenum>:
-         ge_int(offset_max(intP_a_0_26_alloc_table, a_0),
+         ge_int(offset_max(intP_a_0_94_alloc_table, a_0),
          sub_int(aLength, (1))))))
     and ((JC_<somenum>:
          valid___string_something(charP___string_something_1_alloc_table,
@@ -2602,7 +4637,7 @@ let foo_safety =
    begin
      (let j = ref (any_int void) in
      try
-      (C_33:
+      (C_192:
       begin
         (let jessie_<somenum> = (j := (0)) in void);
        (loop_5:
@@ -2613,21 +4648,22 @@ let foo_safety =
          try
           begin
             (let jessie_<somenum> =
-            (C_39:
+            (C_198:
             begin
               (if ((lt_int_ !j) aLength) then void
               else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
-             (C_37:
+             (C_196:
              (let jessie_<somenum> = (0) in
              (let jessie_<somenum> = a_0 in
              (let jessie_<somenum> = !j in
              (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
              begin
                (JC_<somenum>:
-               (((((offset_upd_ intP_a_0_26_alloc_table) intP_intM_a_0_26) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
-              jessie_<somenum> end))))) in void); (j := (C_38: ((add_int !j) (1))));
-             !j end) in void); (raise (Loop_continue_exc void)) end with
+               (((((offset_upd_ intP_a_0_94_alloc_table) intP_intM_a_0_94) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+              jessie_<somenum> end))))) in void);
+             (j := (C_197: ((add_int !j) (1)))); !j end) in void);
+           (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
@@ -2654,8 +4690,8 @@ let main_ensures_default =
             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
   (init:
   try
-   (C_30:
-   (C_31:
+   (C_189:
+   (C_190:
    begin
      (JC_<somenum>: (assign_int void)); (JC_<somenum>: (assign_char void));
     (raise Return); (raise Return) end)) with Return -> void end)
@@ -2679,12 +4715,12 @@ let main_safety =
             and (JC_<somenum>: valid_c(char_xP_c_3_alloc_table)))))) }
   (init:
   try
-   (C_30:
-   (C_31:
+   (C_189:
+   (C_190:
    begin
      (JC_<somenum>: (assign_int_requires void));
-    (JC_<somenum>: (assign_char_requires void)); (raise Return); (raise Return) end))
-   with Return -> void end)
+    (JC_<somenum>: (assign_char_requires void)); (raise Return); (raise Return)
+   end)) with Return -> void end)
   { (JC_<somenum>:
     ((JC_<somenum>:
      valid___string_something(charP___string_something_1_alloc_table,
@@ -2712,32 +4748,32 @@ why --project [...] why/bts0041-bis.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0041-bis_po54.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "498" begin = "14" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "802" begin = "15" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po55.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "498" begin = "14" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "802" begin = "15" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po56.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "498" begin = "14" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "802" begin = "15" end = "27"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po57.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "499" begin = "14" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "803" begin = "15" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po58.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "499" begin = "14" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "803" begin = "15" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po59.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "499" begin = "14" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "803" begin = "15" end = "28"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
@@ -2763,11 +4799,11 @@ text = "UserCall"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po38.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "516" begin = "6" end = "402"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "820" begin = "6" end = "408"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po39.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "516" begin = "6" end = "402"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "820" begin = "6" end = "408"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po40.why">
@@ -2775,11 +4811,11 @@ text = "UserCall"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po41.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "516" begin = "6" end = "402"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "820" begin = "6" end = "408"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po42.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "516" begin = "6" end = "402"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "820" begin = "6" end = "408"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po43.why">
@@ -2789,21 +4825,21 @@ text = "UserCall"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0041-bis_po44.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "527" begin = "24" end = "60"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "831" begin = "25" end = "63"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041-bis_po45.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "527" begin = "24" end = "60"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "831" begin = "25" end = "63"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041-bis_po46.why">
-      <location file = "why/bts0041-bis.why" line = "2067" begin = "43" end = "44"/>
+      <location file = "why/bts0041-bis.why" line = "3798" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041-bis_po47.why">
-      <location file = "why/bts0041-bis.why" line = "2067" begin = "43" end = "44"/>
+      <location file = "why/bts0041-bis.why" line = "3798" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041-bis_po48.why">
@@ -2836,11 +4872,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po23.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "438" begin = "6" end = "420"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "742" begin = "6" end = "427"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po24.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "438" begin = "6" end = "420"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "742" begin = "6" end = "427"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po25.why">
@@ -2852,11 +4888,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po27.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "438" begin = "6" end = "420"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "742" begin = "6" end = "427"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po28.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "438" begin = "6" end = "420"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "742" begin = "6" end = "427"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po29.why">
@@ -2866,21 +4902,21 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/bts0041-bis_po30.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "449" begin = "24" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "753" begin = "25" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041-bis_po31.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "449" begin = "24" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "753" begin = "25" end = "54"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041-bis_po32.why">
-      <location file = "why/bts0041-bis.why" line = "1944" begin = "42" end = "43"/>
+      <location file = "why/bts0041-bis.why" line = "3672" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041-bis_po33.why">
-      <location file = "why/bts0041-bis.why" line = "1944" begin = "42" end = "43"/>
+      <location file = "why/bts0041-bis.why" line = "3672" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041-bis_po34.why">
@@ -2909,11 +4945,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "469" begin = "6" end = "528"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "773" begin = "6" end = "538"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "469" begin = "6" end = "528"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "773" begin = "6" end = "538"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0041-bis_po5.why">
@@ -2925,11 +4961,11 @@ text = "PointerDeref"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po7.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "469" begin = "6" end = "528"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "773" begin = "6" end = "538"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po8.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "469" begin = "6" end = "528"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "773" begin = "6" end = "538"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0041-bis_po9.why">
@@ -2959,21 +4995,21 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0041-bis_po14.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "480" begin = "24" end = "147"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "784" begin = "25" end = "152"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041-bis_po15.why">
-      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "480" begin = "24" end = "147"/>
+      <location file = "PPCHOME/tests/jessie/bts0041-bis.jessie/bts0041-bis.jc" line = "784" begin = "25" end = "152"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0041-bis_po16.why">
-      <location file = "why/bts0041-bis.why" line = "1824" begin = "43" end = "44"/>
+      <location file = "why/bts0041-bis.why" line = "3551" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041-bis_po17.why">
-      <location file = "why/bts0041-bis.why" line = "1824" begin = "43" end = "44"/>
+      <location file = "why/bts0041-bis.why" line = "3551" begin = "44" end = "45"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0041-bis_po18.why">
@@ -3933,9 +5969,9 @@ type __string_something_1
 
 type a_2
 
-type c_3
+type c_149
 
-type c_75
+type c_3
 
 type charP
 
@@ -4793,95 +6829,95 @@ axiom voidP_tags:
 axiom memcmp_range:
   (forall charP_charM_s2_5_at_L:(charP, int) memory.
     (forall charP_charM_s1_4_at_L:(charP, int) memory.
-      (forall s1_0_0:charP pointer.
-        (forall s2_0_0:charP pointer.
+      (forall s1_0_1:charP pointer.
+        (forall s2_0_1:charP pointer.
           (forall n_0:int.
-            ((((-2147483647) - 1) <= memcmp(s1_0_0, s2_0_0, n_0,
+            ((((-2147483647) - 1) <= memcmp(s1_0_1, s2_0_1, n_0,
              charP_charM_s2_5_at_L, charP_charM_s1_4_at_L)) and
-             (memcmp(s1_0_0, s2_0_0, n_0, charP_charM_s2_5_at_L,
+             (memcmp(s1_0_1, s2_0_1, n_0, charP_charM_s2_5_at_L,
              charP_charM_s1_4_at_L) <= 2147483647)))))))
 
 axiom memcmp_zero:
   (forall charP_charM_s2_5_at_L:(charP, int) memory.
     (forall charP_charM_s1_4_at_L:(charP, int) memory.
-      (forall s1_1_0:charP pointer.
-        (forall s2_1_0:charP pointer.
+      (forall s1_1_1:charP pointer.
+        (forall s2_1_1:charP pointer.
           (forall n_1_0:int.
-            ((memcmp(s1_1_0, s2_1_0, n_1_0, charP_charM_s2_5_at_L,
+            ((memcmp(s1_1_1, s2_1_1, n_1_0, charP_charM_s2_5_at_L,
              charP_charM_s1_4_at_L) = 0) <->
              (forall i_1:int.
                (((0 <= i_1) and (i_1 < n_1_0)) ->
-                (select(charP_charM_s1_4_at_L, shift(s1_1_0,
-                i_1)) = select(charP_charM_s2_5_at_L, shift(s2_1_0, i_1)))))))))))
+                (select(charP_charM_s1_4_at_L, shift(s1_1_1,
+                i_1)) = select(charP_charM_s2_5_at_L, shift(s2_1_1, i_1)))))))))))
 
 axiom memchr_def:
   (forall charP_charM_s_6_at_L:(charP, int) memory.
-    (forall s_0_0:charP pointer.
-      (forall c_0_0:int.
-        (forall n_3:int.
-          ((memchr(s_0_0, c_0_0, n_3, charP_charM_s_6_at_L) = true) <->
+    (forall s_0_1:charP pointer.
+      (forall c_0_1:int.
+        (forall n_3_0:int.
+          ((memchr(s_0_1, c_0_1, n_3_0, charP_charM_s_6_at_L) = true) <->
            (exists i_2:int.
              ((0 <= i_2) and
-              ((i_2 < n_3) and (select(charP_charM_s_6_at_L, shift(s_0_0,
-               i_2)) = c_0_0)))))))))
+              ((i_2 < n_3_0) and (select(charP_charM_s_6_at_L, shift(s_0_1,
+               i_2)) = c_0_1)))))))))
 
 axiom memset_def:
   (forall charP_charM_s_1_7_at_L:(charP, int) memory.
-    (forall s_2_0:charP pointer.
-      (forall c_2:int.
-        (forall n_5:int.
-          ((memset(s_2_0, c_2, n_5, charP_charM_s_1_7_at_L) = true) <->
+    (forall s_2_1:charP pointer.
+      (forall c_2_0:int.
+        (forall n_5_0:int.
+          ((memset(s_2_1, c_2_0, n_5_0, charP_charM_s_1_7_at_L) = true) <->
            (forall i_3:int.
-             (((0 <= i_3) and (i_3 < n_5)) -> (select(charP_charM_s_1_7_at_L,
-              shift(s_2_0, i_3)) = c_2))))))))
+             (((0 <= i_3) and (i_3 < n_5_0)) ->
+              (select(charP_charM_s_1_7_at_L, shift(s_2_1, i_3)) = c_2_0))))))))
 
 axiom strlen_pos_or_null:
   (forall charP_charM_s_3_8_at_L:(charP, int) memory.
-    (forall s_4:charP pointer.
+    (forall s_4_0:charP pointer.
       (forall i_4:int.
         (((0 <= i_4) and
           ((i_4 <= 2147483647) and
            ((forall j_0:int.
               (((0 <= j_0) and (j_0 < i_4)) ->
-               (select(charP_charM_s_3_8_at_L, shift(s_4, j_0)) <> 0))) and
-            (select(charP_charM_s_3_8_at_L, shift(s_4, i_4)) = 0)))) ->
-         (strlen(s_4, charP_charM_s_3_8_at_L) = i_4)))))
+               (select(charP_charM_s_3_8_at_L, shift(s_4_0, j_0)) <> 0))) and
+            (select(charP_charM_s_3_8_at_L, shift(s_4_0, i_4)) = 0)))) ->
+         (strlen(s_4_0, charP_charM_s_3_8_at_L) = i_4)))))
 
 axiom strlen_neg:
   (forall charP_charM_s_3_8_at_L:(charP, int) memory.
-    (forall s_5:charP pointer.
+    (forall s_5_0:charP pointer.
       ((forall i_5:int.
          (((0 <= i_5) and (i_5 <= 2147483647)) ->
-          (select(charP_charM_s_3_8_at_L, shift(s_5, i_5)) <> 0))) ->
-       (strlen(s_5, charP_charM_s_3_8_at_L) < 0))))
+          (select(charP_charM_s_3_8_at_L, shift(s_5_0, i_5)) <> 0))) ->
+       (strlen(s_5_0, charP_charM_s_3_8_at_L) < 0))))
 
 axiom strlen_range:
   (forall charP_charM_s_3_8_at_L:(charP, int) memory.
-    (forall s_6:charP pointer. (strlen(s_6,
+    (forall s_6_0:charP pointer. (strlen(s_6_0,
       charP_charM_s_3_8_at_L) <= 2147483647)))
 
 axiom strlen_before_null:
   (forall charP_charM_s_3_8_at_L:(charP, int) memory.
-    (forall s_7:charP pointer.
+    (forall s_7_0:charP pointer.
       (forall i_6:int.
-        (((0 <= i_6) and (i_6 < strlen(s_7, charP_charM_s_3_8_at_L))) ->
-         (select(charP_charM_s_3_8_at_L, shift(s_7, i_6)) <> 0)))))
+        (((0 <= i_6) and (i_6 < strlen(s_7_0, charP_charM_s_3_8_at_L))) ->
+         (select(charP_charM_s_3_8_at_L, shift(s_7_0, i_6)) <> 0)))))
 
 axiom strlen_at_null:
   (forall charP_charM_s_3_8_at_L:(charP, int) memory.
-    (forall s_8:charP pointer.
-      ((0 <= strlen(s_8, charP_charM_s_3_8_at_L)) ->
-       (select(charP_charM_s_3_8_at_L, shift(s_8, strlen(s_8,
+    (forall s_8_0:charP pointer.
+      ((0 <= strlen(s_8_0, charP_charM_s_3_8_at_L)) ->
+       (select(charP_charM_s_3_8_at_L, shift(s_8_0, strlen(s_8_0,
        charP_charM_s_3_8_at_L))) = 0))))
 
 axiom strlen_not_zero:
   (forall charP_charM_s_3_8_at_L:(charP, int) memory.
-    (forall s_9:charP pointer.
+    (forall s_9_0:charP pointer.
       (forall i_7:int.
         (((0 <= i_7) and
-          ((i_7 <= strlen(s_9, charP_charM_s_3_8_at_L)) and
-           (select(charP_charM_s_3_8_at_L, shift(s_9, i_7)) <> 0))) ->
-         (i_7 < strlen(s_9, charP_charM_s_3_8_at_L))))))
+          ((i_7 <= strlen(s_9_0, charP_charM_s_3_8_at_L)) and
+           (select(charP_charM_s_3_8_at_L, shift(s_9_0, i_7)) <> 0))) ->
+         (i_7 < strlen(s_9_0, charP_charM_s_3_8_at_L))))))
 
 axiom strlen_zero:
   (forall charP_charM_s_3_8_at_L:(charP, int) memory.
@@ -4933,23 +6969,23 @@ axiom strlen_create_shift:
 
 axiom memcmp_strlen_left:
   (forall charP_charM_s_3_8_at_L:(charP, int) memory.
-    (forall s1_2:charP pointer.
-      (forall s2_2:charP pointer.
-        (forall n_6:int.
-          (((memcmp(s1_2, s2_2, n_6, charP_charM_s_3_8_at_L,
-            charP_charM_s_3_8_at_L) = 0) and (strlen(s1_2,
-            charP_charM_s_3_8_at_L) < n_6)) ->
-           (strlen(s1_2, charP_charM_s_3_8_at_L) = strlen(s2_2,
+    (forall s1_2_1:charP pointer.
+      (forall s2_2_1:charP pointer.
+        (forall n_6_0:int.
+          (((memcmp(s1_2_1, s2_2_1, n_6_0, charP_charM_s_3_8_at_L,
+            charP_charM_s_3_8_at_L) = 0) and (strlen(s1_2_1,
+            charP_charM_s_3_8_at_L) < n_6_0)) ->
+           (strlen(s1_2_1, charP_charM_s_3_8_at_L) = strlen(s2_2_1,
            charP_charM_s_3_8_at_L)))))))
 
 axiom memcmp_strlen_right:
   (forall charP_charM_s_3_8_at_L:(charP, int) memory.
     (forall s1_3:charP pointer.
       (forall s2_3:charP pointer.
-        (forall n_7:int.
-          (((memcmp(s1_3, s2_3, n_7, charP_charM_s_3_8_at_L,
+        (forall n_7_0:int.
+          (((memcmp(s1_3, s2_3, n_7_0, charP_charM_s_3_8_at_L,
             charP_charM_s_3_8_at_L) = 0) and (strlen(s2_3,
-            charP_charM_s_3_8_at_L) < n_7)) ->
+            charP_charM_s_3_8_at_L) < n_7_0)) ->
            (strlen(s1_3, charP_charM_s_3_8_at_L) = strlen(s2_3,
            charP_charM_s_3_8_at_L)))))))
 
@@ -4958,10 +6994,10 @@ axiom memcmp_strlen_shift_left:
     (forall s1_4:charP pointer.
       (forall s2_4:charP pointer.
         (forall k_0:int.
-          (forall n_8:int.
-            (((memcmp(s1_4, shift(s2_4, k_0), n_8, charP_charM_s_3_8_at_L,
+          (forall n_8_0:int.
+            (((memcmp(s1_4, shift(s2_4, k_0), n_8_0, charP_charM_s_3_8_at_L,
               charP_charM_s_3_8_at_L) = 0) and
-              ((0 <= k_0) and (strlen(s1_4, charP_charM_s_3_8_at_L) < n_8))) ->
+              ((0 <= k_0) and (strlen(s1_4, charP_charM_s_3_8_at_L) < n_8_0))) ->
              ((0 <= strlen(s2_4, charP_charM_s_3_8_at_L)) and (strlen(s2_4,
               charP_charM_s_3_8_at_L) <= (k_0 + strlen(s1_4,
               charP_charM_s_3_8_at_L))))))))))
@@ -4971,10 +7007,10 @@ axiom memcmp_strlen_shift_right:
     (forall s1_5:charP pointer.
       (forall s2_5:charP pointer.
         (forall k_1:int.
-          (forall n_9:int.
-            (((memcmp(shift(s1_5, k_1), s2_5, n_9, charP_charM_s_3_8_at_L,
+          (forall n_9_0:int.
+            (((memcmp(shift(s1_5, k_1), s2_5, n_9_0, charP_charM_s_3_8_at_L,
               charP_charM_s_3_8_at_L) = 0) and
-              ((0 <= k_1) and (strlen(s2_5, charP_charM_s_3_8_at_L) < n_9))) ->
+              ((0 <= k_1) and (strlen(s2_5, charP_charM_s_3_8_at_L) < n_9_0))) ->
              ((0 <= strlen(s1_5, charP_charM_s_3_8_at_L)) and (strlen(s1_5,
               charP_charM_s_3_8_at_L) <= (k_1 + strlen(s2_5,
               charP_charM_s_3_8_at_L))))))))))

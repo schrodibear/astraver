@@ -1,1 +1,2 @@
+cat: reverse_endian4.jessie/reverse_endian4.jc: No such file or directory
 make: *** [reverse_endian4.regtest] Error 1

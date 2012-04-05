@@ -1,5 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only reverse_endian3.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD reverse_endian3.c"
-reverse_endian3.c:17:[kernel] user error: syntax error
-[kernel] user error: skipping file "reverse_endian3.c" that has errors.
-[kernel] Frama-C aborted because of invalid user input.
+[jessie] Starting Jessie translation
+reverse_endian3.c:5:[jessie] failure: Casting from type struct shortP * to type struct charP * not allowed in logic
+[jessie] warning: Unsupported feature(s).
+                  Jessie plugin can not be used on your code.

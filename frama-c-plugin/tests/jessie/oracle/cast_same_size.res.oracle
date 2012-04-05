@@ -1,5 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only cast_same_size.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD cast_same_size.c"
-cast_same_size.c:26:[kernel] user error: syntax error
-[kernel] user error: skipping file "cast_same_size.c" that has errors.
-[kernel] Frama-C aborted because of invalid user input.
+[jessie] Starting Jessie translation
+cast_same_size.c:24:[jessie] failure: Casting from type struct intP * to type struct int_struct * not allowed in logic
+[jessie] warning: Unsupported feature(s).
+                  Jessie plugin can not be used on your code.
