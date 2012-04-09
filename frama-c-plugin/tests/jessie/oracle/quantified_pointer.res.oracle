@@ -69,6 +69,14 @@ predicate is_in_list{L}(_Node[..] x_3, integer elem) =
 predicate is_cycle{L}(_Node[..] x_4) =
 (\exists _Node[..] y_2;
   (reachable{L}(x_4, y_2) && (y_2.next == x_4)))
+
+unit f(_Node[..] x)
+  requires (C_2 : is_in_list{Here}(x, 0));
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_1 : true);
+;
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs quantified_pointer.jessie/quantified_pointer.cloc quantified_pointer.jessie/quantified_pointer.jc
 type _Node
 
@@ -175,14 +183,15 @@ inductive reachable: _Node pointer, _Node pointer, _Node alloc_table,
              _Node_next_x_1_at_L))))
  | not_empty: (forall _Node_x_1_alloc_table_at_L:_Node alloc_table.
                (forall _Node_next_x_1_at_L:(_Node, _Node pointer) memory.
-                (forall x_1:_Node pointer.
+                (forall x_1_0:_Node pointer.
                  (forall y_0:_Node pointer.
-                  ((le_int(offset_min(_Node_x_1_alloc_table_at_L, x_1), (0))
-                   and (ge_int(offset_max(_Node_x_1_alloc_table_at_L, x_1),
+                  ((le_int(offset_min(_Node_x_1_alloc_table_at_L, x_1_0),
+                    (0))
+                   and (ge_int(offset_max(_Node_x_1_alloc_table_at_L, x_1_0),
                         (0))
-                       and reachable(select(_Node_next_x_1_at_L, x_1), y_0,
+                       and reachable(select(_Node_next_x_1_at_L, x_1_0), y_0,
                            _Node_x_1_alloc_table_at_L, _Node_next_x_1_at_L))) ->
-                   reachable(x_1, y_0, _Node_x_1_alloc_table_at_L,
+                   reachable(x_1_0, y_0, _Node_x_1_alloc_table_at_L,
                    _Node_next_x_1_at_L))))))
  
 predicate is_cycle(x_4:_Node pointer,
@@ -501,6 +510,22 @@ parameter any_int32 : unit -> { } int32 { true }
 parameter any_int8 : unit -> { } int8 { true }
 
 parameter any_uint8 : unit -> { } uint8 { true }
+
+parameter f :
+ x_1:_Node pointer ->
+  _Node_x_6_alloc_table:_Node alloc_table ->
+   _Node_next_x_6:(_Node, _Node pointer) memory ->
+    _Node_elem_x_6:(_Node, int32) memory -> { } unit { true }
+
+parameter f_requires :
+ x_1:_Node pointer ->
+  _Node_x_6_alloc_table:_Node alloc_table ->
+   _Node_next_x_6:(_Node, _Node pointer) memory ->
+    _Node_elem_x_6:(_Node, int32) memory ->
+     { (JC_<somenum>:
+       is_in_list(x_1, (0), _Node_x_6_alloc_table, _Node_next_x_6,
+       _Node_elem_x_6))}
+     unit { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1575,15 +1600,15 @@ inductive reachable: _Node pointer, _Node pointer, _Node alloc_table, (_Node,
                  _Node_x_1_alloc_table_at_L, _Node_next_x_1_at_L))))
   | not_empty: (forall _Node_x_1_alloc_table_at_L:_Node alloc_table.
                  (forall _Node_next_x_1_at_L:(_Node, _Node pointer) memory.
-                   (forall x_1:_Node pointer.
+                   (forall x_1_0:_Node pointer.
                      (forall y_0:_Node pointer.
                        (((offset_min(_Node_x_1_alloc_table_at_L,
-                         x_1) <= 0) and
+                         x_1_0) <= 0) and
                          ((offset_max(_Node_x_1_alloc_table_at_L,
-                          x_1) >= 0) and
-                          reachable(select(_Node_next_x_1_at_L, x_1), y_0,
+                          x_1_0) >= 0) and
+                          reachable(select(_Node_next_x_1_at_L, x_1_0), y_0,
                           _Node_x_1_alloc_table_at_L, _Node_next_x_1_at_L))) ->
-                        reachable(x_1, y_0, _Node_x_1_alloc_table_at_L,
+                        reachable(x_1_0, y_0, _Node_x_1_alloc_table_at_L,
                         _Node_next_x_1_at_L))))))
 
 
