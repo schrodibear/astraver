@@ -143,9 +143,11 @@ behavior failure:
                      (assert for default: (C_19 : false));
                      ()
                   };
-                  (C_20 : (__retres = mid));
                   
-                  (goto return_label)
+                  {  (C_20 : (__retres = mid));
+                     
+                     (goto return_label)
+                  }
                }))
             }
          }

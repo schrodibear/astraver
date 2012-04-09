@@ -114,9 +114,11 @@ behavior default:
                                                           (x1 :> real)))))))));
          ()
       };
-      (C_10 : (__retres = (C_9 : (y1 + b))));
       
-      (return __retres)
+      {  (C_10 : (__retres = (C_9 : (y1 + b))));
+         
+         (return __retres)
+      }
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs floats_interp_no_div.jessie/floats_interp_no_div.cloc floats_interp_no_div.jessie/floats_interp_no_div.jc

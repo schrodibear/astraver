@@ -158,14 +158,16 @@ behavior inter:
          (assert for big: (C_27 : (i == n_1)));
          ()
       };
-      (C_37 : (__retres = (C_36 : ((C_35 : (C_34 : (Y + i)).doubleM) +
-                                    (C_33 : ((C_32 : (x -
-                                                       (C_31 : (C_30 : 
-                                                               (X +
-                                                                 i)).doubleM))) *
-                                              (C_29 : (C_28 : (V + i)).doubleM)))))));
       
-      (return __retres)
+      {  (C_37 : (__retres = (C_36 : ((C_35 : (C_34 : (Y + i)).doubleM) +
+                                       (C_33 : ((C_32 : (x -
+                                                          (C_31 : (C_30 : 
+                                                                  (X +
+                                                                    i)).doubleM))) *
+                                                 (C_29 : (C_28 : (V + i)).doubleM)))))));
+         
+         (return __retres)
+      }
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs floats_interp_math.jessie/floats_interp_math.cloc floats_interp_math.jessie/floats_interp_math.jc

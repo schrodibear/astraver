@@ -49,7 +49,8 @@ behavior default:
    
    {  
       {  (C_1 : (tmp = x));
-         (C_4 : (x = (C_3 : ((C_2 : (x + 1)) :> int32))))
+         (C_4 : (x = (C_3 : ((C_2 : (x + 1)) :> int32))));
+         ()
       };
       
       (return tmp)
@@ -447,17 +448,16 @@ let f_ensures_default =
   try
    begin
      (let tmp = ref (any_int32 void) in
+     (C_1:
+     (C_4:
      begin
-       (let jessie_<somenum> =
-       (C_1:
-       (C_4:
-       begin
-         (let jessie_<somenum> = (tmp := !x_0) in void);
-        (x_0 := (C_3:
-                (safe_int32_of_integer_ (C_2:
-                                        ((add_int (integer_of_int32 !x_0)) (1))))));
-        !x_0 end)) in void); (return := !tmp); (raise Return) end); absurd 
-   end with Return -> !return end)) { (JC_<somenum>: true) }
+       (let jessie_<somenum> = (tmp := !x_0) in void);
+      (let jessie_<somenum> =
+      (x_0 := (C_3:
+              (safe_int32_of_integer_ (C_2:
+                                      ((add_int (integer_of_int32 !x_0)) (1)))))) in
+      void); void; (return := !tmp); (raise Return) end))); absurd  end with
+   Return -> !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
  fun (tt : unit) ->
@@ -467,18 +467,17 @@ let f_safety =
   try
    begin
      (let tmp = ref (any_int32 void) in
+     (C_1:
+     (C_4:
      begin
-       (let jessie_<somenum> =
-       (C_1:
-       (C_4:
-       begin
-         (let jessie_<somenum> = (tmp := !x_0) in void);
-        (x_0 := (C_3:
-                (JC_<somenum>:
-                (int32_of_integer_ (C_2:
-                                   ((add_int (integer_of_int32 !x_0)) (1)))))));
-        !x_0 end)) in void); (return := !tmp); (raise Return) end); absurd 
-   end with Return -> !return end)) { true }
+       (let jessie_<somenum> = (tmp := !x_0) in void);
+      (let jessie_<somenum> =
+      (x_0 := (C_3:
+              (JC_<somenum>:
+              (int32_of_integer_ (C_2:
+                                 ((add_int (integer_of_int32 !x_0)) (1))))))) in
+      void); void; (return := !tmp); (raise Return) end))); absurd  end with
+   Return -> !return end)) { true }
 
 let main_ensures_default =
  fun (tt : unit) ->

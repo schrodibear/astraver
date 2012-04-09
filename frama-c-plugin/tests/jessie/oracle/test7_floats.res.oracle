@@ -58,14 +58,16 @@ behavior default:
                                        0x0.FFFFp-4)));
          ()
       };
-      (C_7 : (__retres = (C_6 : ((C_5 : ((0.9890365552 :> double) +
-                                          (C_4 : ((1.130258690 :> double) *
-                                                   x)))) +
-                                  (C_3 : ((C_2 : ((0.5540440796 :> double) *
-                                                   x)) *
-                                           x))))));
       
-      (return __retres)
+      {  (C_7 : (__retres = (C_6 : ((C_5 : ((0.9890365552 :> double) +
+                                             (C_4 : ((1.130258690 :> double) *
+                                                      x)))) +
+                                     (C_3 : ((C_2 : ((0.5540440796 :> double) *
+                                                      x)) *
+                                              x))))));
+         
+         (return __retres)
+      }
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs test7_floats.jessie/test7_floats.cloc test7_floats.jessie/test7_floats.jc
@@ -495,12 +497,12 @@ why --project [...] why/test7_floats.why
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/test7_floats_po3.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "54" begin = "41" end = "65"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "55" begin = "44" end = "68"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test7_floats_po4.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "55" begin = "50" end = "73"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "56" begin = "53" end = "76"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>
@@ -515,7 +517,7 @@ text = "FPOverflow"/>
 text = "FPOverflow"/>
     </goal>
     <goal why_file="why/test7_floats_po7.why">
-      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "57" begin = "50" end = "74"/>
+      <location file = "PPCHOME/tests/jessie/test7_floats.jessie/test7_floats.jc" line = "58" begin = "53" end = "77"/>
       <explain kind = "Pre"
 text = "FPOverflow"/>
     </goal>

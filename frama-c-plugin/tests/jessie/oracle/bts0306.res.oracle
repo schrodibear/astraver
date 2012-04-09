@@ -432,7 +432,10 @@ behavior default:
          }
       };
       (while_0_break : ());
-      (C_15 : (s2 = (C_14 : (s2 - 1))));
+      
+      {  (C_15 : (s2 = (C_14 : (s2 - 1))));
+         ()
+      };
       (C_24 : (__retres = (C_23 : ((C_22 : ((C_21 : ((C_20 : (C_19 : (s1 :> unsigned_charP[..])).unsigned_charM) :> int32)) -
                                              (C_18 : ((C_17 : (C_16 : (s2 :> unsigned_charP[..])).unsigned_charM) :> int32)))) :> int32))));
       (return_label : 

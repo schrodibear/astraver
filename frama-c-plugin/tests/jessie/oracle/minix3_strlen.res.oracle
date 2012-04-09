@@ -735,7 +735,10 @@ behavior default:
          }
       };
       (while_0_break : ());
-      (C_174 : (s_9 = (C_173 : (s_9 - 1))));
+      
+      {  (C_174 : (s_9 = (C_173 : (s_9 - 1))));
+         ()
+      };
       (C_177 : (__retres = (C_176 : ((C_175 : (s_9 - org)) :> uint32))));
       
       (return __retres)
@@ -3300,7 +3303,7 @@ let strlen_ensures_default =
       begin
         void;
        (let jessie_<somenum> = (s_9_0 := (C_173: ((shift !s_9_0) (neg_int (1))))) in
-       void);
+       void); void;
        (let jessie_<somenum> =
        (__retres := (C_176:
                     (safe_uint32_of_integer_ (C_175:
@@ -3349,7 +3352,7 @@ let strlen_safety =
       begin
         void;
        (let jessie_<somenum> = (s_9_0 := (C_173: ((shift !s_9_0) (neg_int (1))))) in
-       void);
+       void); void;
        (let jessie_<somenum> =
        (__retres := (C_176:
                     (JC_<somenum>:

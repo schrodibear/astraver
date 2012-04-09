@@ -67,9 +67,11 @@ behavior default:
          (assert for default: (C_4 : ((C_5 : (x >= 0)) && (C_6 : (x < 9)))));
          ()
       };
-      (C_9 : (__retres = (C_8 : ((C_7 : (x + 1)) :> int32))));
       
-      (return __retres)
+      {  (C_9 : (__retres = (C_8 : ((C_7 : (x + 1)) :> int32))));
+         
+         (return __retres)
+      }
    }
 }
 
@@ -1230,12 +1232,12 @@ text = "PointerDeref"/>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/trace_po50.why">
-      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "195" begin = "15" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "197" begin = "15" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/trace_po51.why">
-      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "195" begin = "15" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/trace.jessie/trace.jc" line = "197" begin = "15" end = "33"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

@@ -56,7 +56,9 @@ behavior default:
          ()
       };
       
-      (return i)
+      {  
+         (return i)
+      }
    }
 }
 
@@ -75,7 +77,9 @@ behavior default:
          ()
       };
       
-      (return i_0)
+      {  
+         (return i_0)
+      }
    }
 }
 
@@ -94,7 +98,9 @@ behavior default:
          ()
       };
       
-      (return i_2)
+      {  
+         (return i_2)
+      }
    }
 }
 
@@ -113,7 +119,9 @@ behavior default:
          ()
       };
       
-      (return i_1)
+      {  
+         (return i_1)
+      }
    }
 }
 
@@ -132,7 +140,9 @@ behavior default:
          ()
       };
       
-      (return i_3)
+      {  
+         (return i_3)
+      }
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs bts0094.jessie/bts0094.cloc bts0094.jessie/bts0094.jc

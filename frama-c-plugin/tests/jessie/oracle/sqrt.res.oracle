@@ -206,9 +206,11 @@ behavior default:
                                         \real_sqrt((x :> real)))));
          ()
       };
-      (C_42 : (__retres = (C_41 : (x * t))));
       
-      (return __retres)
+      {  (C_42 : (__retres = (C_41 : (x * t))));
+         
+         (return __retres)
+      }
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs sqrt.jessie/sqrt.cloc sqrt.jessie/sqrt.jc

@@ -56,11 +56,13 @@ behavior default:
                                        0x1p-24)));
          ()
       };
-      (C_5 : (__retres = (C_4 : ((1.0 :> float) -
-                                  (C_3 : ((C_2 : (x_2 * x_2)) *
-                                           (0.5 :> float)))))));
       
-      (return __retres)
+      {  (C_5 : (__retres = (C_4 : ((1.0 :> float) -
+                                     (C_3 : ((C_2 : (x_2 * x_2)) *
+                                              (0.5 :> float)))))));
+         
+         (return __retres)
+      }
    }
 }
 
@@ -84,7 +86,9 @@ behavior default:
          ()
       };
       
-      (return r)
+      {  
+         (return r)
+      }
    }
 }
 
@@ -145,7 +149,9 @@ behavior default:
          ()
       };
       
-      (return r_0)
+      {  
+         (return r_0)
+      }
    }
 }
 
@@ -168,11 +174,13 @@ behavior default:
                                         0x0.Fp-20)));
          ()
       };
-      (C_35 : (__retres_0 = (C_34 : ((1.0 :> float) -
-                                      (C_33 : ((C_32 : (x_0 * x_0)) *
-                                                (0.5 :> float)))))));
       
-      (return __retres_0)
+      {  (C_35 : (__retres_0 = (C_34 : ((1.0 :> float) -
+                                         (C_33 : ((C_32 : (x_0 * x_0)) *
+                                                   (0.5 :> float)))))));
+         
+         (return __retres_0)
+      }
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs test1_floats.jessie/test1_floats.cloc test1_floats.jessie/test1_floats.jc

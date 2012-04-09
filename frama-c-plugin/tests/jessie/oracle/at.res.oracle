@@ -60,7 +60,9 @@ behavior default:
          ()
       };
       
-      (return x)
+      {  
+         (return x)
+      }
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs at.jessie/at.cloc at.jessie/at.jc

@@ -49,8 +49,9 @@ behavior default:
       
       (goto l1);
       (C_2 : (x_2 = 1));
-      (l1 : 
-      (return x_2))
+      (l1 : ());
+      
+      (return x_2)
    }
 }
 
@@ -61,8 +62,9 @@ behavior default:
    {  (if (x == 0) then 
       (goto l1) else ());
       (C_4 : (x = 1));
-      (l1 : 
-      (return x))
+      (l1 : ());
+      
+      (return x)
    }
 }
 
@@ -76,8 +78,9 @@ behavior default:
       (if (x_0 == 10) then 
       (goto l1) else ());
       (C_9 : (x_0 = 1));
-      (l1 : 
-      (return x_0))
+      (l1 : ());
+      
+      (return x_0)
    }
 }
 
@@ -88,8 +91,9 @@ behavior default:
    {  (if (x_1 == 0) then 
       (goto l1) else ());
       (l2 : (C_13 : (x_1 = (C_12 : ((C_11 : (x_1 + 1)) :> int32)))));
-      (l1 : 
-      (return x_1))
+      (l1 : ());
+      
+      (return x_1)
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs goto.jessie/goto.cloc goto.jessie/goto.jc
@@ -495,8 +499,9 @@ let f1_ensures_default =
        (raise (Goto_l1_exc void));
        (let jessie_<somenum> = (x_2 := (safe_int32_of_integer_ (1))) in void);
        (raise (Goto_l1_exc void)) end)) with Goto_l1_exc jessie_<somenum> ->
-      (l1: begin   (return := !x_2); (raise Return) end) end); absurd  end
-   with Return -> !return end)) { (JC_<somenum>: (integer_of_int32(result) = (0))) }
+      (l1: begin   void; (return := !x_2); (raise Return) end) end); 
+    absurd  end with Return -> !return end))
+  { (JC_<somenum>: (integer_of_int32(result) = (0))) }
 
 let f1_safety =
  fun (tt : unit) ->
@@ -514,8 +519,8 @@ let f1_safety =
        (raise (Goto_l1_exc void));
        (let jessie_<somenum> = (x_2 := (safe_int32_of_integer_ (1))) in void);
        (raise (Goto_l1_exc void)) end)) with Goto_l1_exc jessie_<somenum> ->
-      (l1: begin   (return := !x_2); (raise Return) end) end); absurd  end
-   with Return -> !return end)) { true }
+      (l1: begin   void; (return := !x_2); (raise Return) end) end); 
+    absurd  end with Return -> !return end)) { true }
 
 let f2_ensures_default =
  fun (x_0 : int32) ->
@@ -532,7 +537,7 @@ let f2_ensures_default =
         then (raise (Goto_l1_exc void)) else void);
        (let jessie_<somenum> = (mutable_x_0 := (safe_int32_of_integer_ (1))) in
        void); (raise (Goto_l1_exc void)) end) with Goto_l1_exc jessie_<somenum> ->
-      (l1: begin   (return := !mutable_x_0); (raise Return) end) end; 
+      (l1: begin   void; (return := !mutable_x_0); (raise Return) end) end;
     absurd  end with Return -> !return end)))
   { (JC_<somenum>:
     ((integer_of_int32(x_0) = (0)) -> (integer_of_int32(result) = (0)))) }
@@ -552,7 +557,7 @@ let f2_safety =
         then (raise (Goto_l1_exc void)) else void);
        (let jessie_<somenum> = (mutable_x_0 := (safe_int32_of_integer_ (1))) in
        void); (raise (Goto_l1_exc void)) end) with Goto_l1_exc jessie_<somenum> ->
-      (l1: begin   (return := !mutable_x_0); (raise Return) end) end; 
+      (l1: begin   void; (return := !mutable_x_0); (raise Return) end) end;
     absurd  end with Return -> !return end))) { true }
 
 let f3_ensures_default =
@@ -578,7 +583,7 @@ let f3_ensures_default =
        then (raise (Goto_l1_exc void)) else void);
        (let jessie_<somenum> = (mutable_x_0_0 := (safe_int32_of_integer_ (1))) in
        void); (raise (Goto_l1_exc void)) end)) with Goto_l1_exc jessie_<somenum> ->
-      (l1: begin   (return := !mutable_x_0_0); (raise Return) end) end;
+      (l1: begin   void; (return := !mutable_x_0_0); (raise Return) end) end;
     absurd  end with Return -> !return end)))
   { (JC_<somenum>:
     ((integer_of_int32(x_0_0) = (9)) <-> (integer_of_int32(result) = (10)))) }
@@ -607,7 +612,7 @@ let f3_safety =
        then (raise (Goto_l1_exc void)) else void);
        (let jessie_<somenum> = (mutable_x_0_0 := (safe_int32_of_integer_ (1))) in
        void); (raise (Goto_l1_exc void)) end)) with Goto_l1_exc jessie_<somenum> ->
-      (l1: begin   (return := !mutable_x_0_0); (raise Return) end) end;
+      (l1: begin   void; (return := !mutable_x_0_0); (raise Return) end) end;
     absurd  end with Return -> !return end))) { true }
 
 let f4_ensures_default =
@@ -629,7 +634,7 @@ let f4_ensures_default =
                        (safe_int32_of_integer_ (C_11:
                                                ((add_int (integer_of_int32 !mutable_x_1)) (1))))))) in
        void); (raise (Goto_l1_exc void)) end) with Goto_l1_exc jessie_<somenum> ->
-      (l1: begin   (return := !mutable_x_1); (raise Return) end) end; 
+      (l1: begin   void; (return := !mutable_x_1); (raise Return) end) end;
     absurd  end with Return -> !return end)))
   { (JC_<somenum>:
     ((integer_of_int32(x_1) = (0)) -> (integer_of_int32(result) = (0)))) }
@@ -654,7 +659,7 @@ let f4_safety =
                        (int32_of_integer_ (C_11:
                                           ((add_int (integer_of_int32 !mutable_x_1)) (1)))))))) in
        void); (raise (Goto_l1_exc void)) end) with Goto_l1_exc jessie_<somenum> ->
-      (l1: begin   (return := !mutable_x_1); (raise Return) end) end; 
+      (l1: begin   void; (return := !mutable_x_1); (raise Return) end) end;
     absurd  end with Return -> !return end))) { true }
 
 

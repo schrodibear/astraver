@@ -93,7 +93,9 @@ behavior default:
          ()
       };
       
-      (return r)
+      {  
+         (return r)
+      }
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs pi_example_full.jessie/pi_example_full.cloc pi_example_full.jessie/pi_example_full.jc

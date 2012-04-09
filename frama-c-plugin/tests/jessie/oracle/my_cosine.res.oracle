@@ -55,10 +55,13 @@ behavior default:
                                        0x1p-24)));
          ()
       };
-      (C_5 : (__retres = (C_4 : ((1.0 :> float) -
-                                  (C_3 : ((C_2 : (x * x)) * (0.5 :> float)))))));
       
-      (return __retres)
+      {  (C_5 : (__retres = (C_4 : ((1.0 :> float) -
+                                     (C_3 : ((C_2 : (x * x)) *
+                                              (0.5 :> float)))))));
+         
+         (return __retres)
+      }
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs my_cosine.jessie/my_cosine.cloc my_cosine.jessie/my_cosine.jc

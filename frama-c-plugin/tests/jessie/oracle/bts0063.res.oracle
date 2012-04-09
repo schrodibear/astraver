@@ -53,7 +53,9 @@ behavior default:
          ()
       };
       
-      (return x)
+      {  
+         (return x)
+      }
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs bts0063.jessie/bts0063.cloc bts0063.jessie/bts0063.jc

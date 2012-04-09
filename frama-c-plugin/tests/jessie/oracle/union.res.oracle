@@ -228,11 +228,13 @@ behavior default:
          (assert for default: (C_168 : ((u :> s2P[0]).s2M.c_2 == 2)));
          ()
       };
-      (C_172 : (__retres = (C_171 : (C_170 : (C_169 : (u :> s1P[0])).s1M).i_2)));
       
-      {  (C_173 : (free(u)));
+      {  (C_172 : (__retres = (C_171 : (C_170 : (C_169 : (u :> s1P[0])).s1M).i_2)));
          
-         (return __retres)
+         {  (C_173 : (free(u)));
+            
+            (return __retres)
+         }
       }
    }
 }

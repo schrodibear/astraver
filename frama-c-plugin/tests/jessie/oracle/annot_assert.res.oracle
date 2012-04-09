@@ -50,7 +50,9 @@ behavior default:
          ()
       };
       
-      (return i)
+      {  
+         (return i)
+      }
    }
 }
 
@@ -67,7 +69,9 @@ behavior default:
          ()
       };
       
-      (return i_0)
+      {  
+         (return i_0)
+      }
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs annot_assert.jessie/annot_assert.cloc annot_assert.jessie/annot_assert.jc

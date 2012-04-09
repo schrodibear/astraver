@@ -60,7 +60,10 @@ behavior default:
          
          (goto return_label)
       } else ());
-      (C_4 : (tmp = (C_3 : fact((C_2 : (n_1 - 1))))));
+      
+      {  (C_4 : (tmp = (C_3 : fact((C_2 : (n_1 - 1))))));
+         ()
+      };
       (C_6 : (__retres = (C_5 : (n_1 * tmp))));
       (return_label : 
       (return __retres))
@@ -348,7 +351,7 @@ let fact_ensures_default =
        (let jessie_<somenum> =
        (tmp := (C_3:
                (let jessie_<somenum> = (C_2: ((sub_int n_1) (1))) in
-               (JC_<somenum>: (fact jessie_<somenum>))))) in void);
+               (JC_<somenum>: (fact jessie_<somenum>))))) in void); void;
        (let jessie_<somenum> = (__retres := (C_5: ((mul_int n_1) !tmp))) in void);
        (raise (Return_label_exc void)) end)) with
       Return_label_exc jessie_<somenum> ->
@@ -380,7 +383,7 @@ let fact_safety =
                (let jessie_<somenum> = (C_2: ((sub_int n_1) (1))) in
                (JC_<somenum>:
                (check { zwf_zero((JC_<somenum> : jessie_<somenum>), (JC_<somenum> : n_1)) };
-               (JC_<somenum>: (fact_requires jessie_<somenum>))))))) in void);
+               (JC_<somenum>: (fact_requires jessie_<somenum>))))))) in void); void;
        (let jessie_<somenum> = (__retres := (C_5: ((mul_int n_1) !tmp))) in void);
        (raise (Return_label_exc void)) end)) with
       Return_label_exc jessie_<somenum> ->
