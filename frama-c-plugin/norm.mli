@@ -31,5 +31,7 @@
 
 val generated_union_types : unit Cil_datatype.Typ.Hashtbl.t
 
+val model_fields : Cil_types.compinfo -> Cil_types.model_info list
+
 (* performs similar normalization tasks as Caduceus *)
 val normalize : Cil_types.file -> unit

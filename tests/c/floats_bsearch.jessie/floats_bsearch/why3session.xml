@@ -33,10 +33,10 @@
    expanded="true">
    <goal
     name="WP_parameter binary_search_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/floats_bsearch.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/floats_bsearch.c"
     loclnum="49" loccnumb="4" loccnume="17"
     expl="parameter binary_search_ensures_default"
-    sum="79c5a62bd3c941cb30c86c93880d0271"
+    sum="5674266b9457ae281d8c85b20fa60980"
     proved="true"
     expanded="false"
     shape="iainfix <=ainteger_of_int32V10ainteger_of_int32V9LaselectV4ashiftV0ainteger_of_int32V14iainfix =V16aTrueainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V18Iainfix =V18V17FIainfix =ainteger_of_int32V17ainfix +ainteger_of_int32V14c1FLaselectV4ashiftV0ainteger_of_int32V14iainfix =V20aTrueainfix <=ainteger_of_int32V22ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10Iainfix =V22V21FIainfix =ainteger_of_int32V21ainfix -ainteger_of_int32V14c1Fainfix <ainteger_of_int32V24ainteger_of_int32V1Aainfix <=aprefix -c1ainteger_of_int32V24Iainfix =V24V23FIainfix =V23V14FIiainfix =V20aTrueagt_fullV19V2agt_fullV19V2NFIiainfix =V16aTruealt_fullV15V2alt_fullV15V2NFAainfix <=ainteger_of_int32V14ainteger_of_int32V9Aainfix <=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10Fainfix <ainteger_of_int32V27ainteger_of_int32V1Aainfix <=aprefix -c1ainteger_of_int32V27Iainfix =V27V26FIainfix =V26V25FIainfix =ainteger_of_int32V25aprefix -c1FIainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10FFAainfix <=ainteger_of_int32V8ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V6Iainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V28NIainfix <=V28ainfix -ainteger_of_int32V1c1Aainfix <=c0V28FAais_NaNV2NAainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0FFFFF">
@@ -51,15 +51,15 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.19"/>
+     <result status="valid" time="0.57"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter binary_search_ensures_failure"
-    locfile="/home/marche/why2-nitrogen/tests/c/floats_bsearch.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/floats_bsearch.c"
     loclnum="49" loccnumb="4" loccnume="17"
     expl="parameter binary_search_ensures_failure"
-    sum="7afafc2a042b2875c28a3f0e7aadff7c"
+    sum="c8b99742a39161ce390d7feb3e98d74e"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V10ainteger_of_int32V9LaselectV4ashiftV0ainteger_of_int32V14iainfix =V16aTruealt_fullaselectV4ashiftV0V19V2Iainfix <V19ainteger_of_int32V18Aainfix <=c0V19FAalt_fullV2aselectV4ashiftV0V20Iainfix <=V20ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V9V20FIainfix =V18V17FIainfix =ainteger_of_int32V17ainfix +ainteger_of_int32V14c1FLaselectV4ashiftV0ainteger_of_int32V14iainfix =V22aTruealt_fullaselectV4ashiftV0V25V2Iainfix <V25ainteger_of_int32V10Aainfix <=c0V25FAalt_fullV2aselectV4ashiftV0V26Iainfix <=V26ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V24V26FIainfix =V24V23FIainfix =ainteger_of_int32V23ainfix -ainteger_of_int32V14c1Fane_fullaselectV4ashiftV0V29V2Iainfix <V29ainteger_of_int32V1Aainfix <=c0V29FIainfix =ainteger_of_int32V28aprefix -c1Iainfix =V28V27FIainfix =V27V14FIiainfix =V22aTrueagt_fullV21V2agt_fullV21V2NFIiainfix =V16aTruealt_fullV15V2alt_fullV15V2NFIainfix <=ainteger_of_int32V14ainteger_of_int32V9Aainfix <=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10Fane_fullaselectV4ashiftV0V33V2Iainfix <V33ainteger_of_int32V1Aainfix <=c0V33FIainfix =ainteger_of_int32V32aprefix -c1Iainfix =V32V31FIainfix =V31V30FIainfix =ainteger_of_int32V30aprefix -c1FIainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10Ialt_fullaselectV4ashiftV0V34V2Iainfix <V34ainteger_of_int32V10Aainfix <=c0V34FAalt_fullV2aselectV4ashiftV0V35Iainfix <=V35ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V9V35FFFAalt_fullaselectV4ashiftV0V36V2Iainfix <V36ainteger_of_int32V6Aainfix <=c0V36FAalt_fullV2aselectV4ashiftV0V37Iainfix <=V37ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V8V37FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V38NIainfix <=V38ainfix -ainteger_of_int32V1c1Aainfix <=c0V38FAais_NaNV2NAainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4FFFFF">
@@ -75,10 +75,10 @@
      expanded="true">
      <goal
       name="WP_parameter binary_search_ensures_failure.1"
-      locfile="/home/marche/why2-nitrogen/tests/c/floats_bsearch.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/floats_bsearch.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="loop invariant init"
-      sum="49d62ea9c215c35a10b0bc158015fa70"
+      sum="6b0ae2c941d067ffc9a9e7f8ac4346a5"
       proved="true"
       expanded="false"
       shape="alt_fullaselectV4ashiftV0V9V2Iainfix <V9ainteger_of_int32V6Aainfix <=c0V9FAalt_fullV2aselectV4ashiftV0V10Iainfix <=V10ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V8V10FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V11NIainfix <=V11ainfix -ainteger_of_int32V1c1Aainfix <=c0V11FAais_NaNV2NAainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4FFFFF">
@@ -93,22 +93,22 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.22"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.17"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter binary_search_ensures_failure.2"
-      locfile="/home/marche/why2-nitrogen/tests/c/floats_bsearch.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/floats_bsearch.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="loop invariant preservation"
-      sum="e3da8331798474b9462d979c55a10b3b"
+      sum="53a2fd8f703a3d9bde936caf0916ca87"
       proved="true"
       expanded="true"
       shape="LaselectV4ashiftV0ainteger_of_int32V14alt_fullaselectV4ashiftV0V19V2Iainfix <V19ainteger_of_int32V18Aainfix <=c0V19FAalt_fullV2aselectV4ashiftV0V20Iainfix <=V20ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V9V20FIainfix =V18V17FIainfix =ainteger_of_int32V17ainfix +ainteger_of_int32V14c1FIainfix =V16aTrueIiainfix =V16aTruealt_fullV15V2alt_fullV15V2NFIainfix <=ainteger_of_int32V14ainteger_of_int32V9Aainfix <=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10Ialt_fullaselectV4ashiftV0V21V2Iainfix <V21ainteger_of_int32V10Aainfix <=c0V21FAalt_fullV2aselectV4ashiftV0V22Iainfix <=V22ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V9V22FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V23NIainfix <=V23ainfix -ainteger_of_int32V1c1Aainfix <=c0V23FAais_NaNV2NAainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4FFFFF">
@@ -124,10 +124,10 @@
        expanded="true">
        <goal
         name="WP_parameter binary_search_ensures_failure.2.1"
-        locfile="/home/marche/why2-nitrogen/tests/c/floats_bsearch.c"
+        locfile="/home/cmarche/why2-trunk/tests/c/floats_bsearch.c"
         loclnum="49" loccnumb="4" loccnume="17"
         expl="parameter binary_search_ensures_failure"
-        sum="0c33e5ba2737c560ef1a274ebcf9cf28"
+        sum="d4fff41e26423ad6170d80c64bd5d39f"
         proved="true"
         expanded="true"
         shape="LaselectV4ashiftV0ainteger_of_int32V14alt_fullV2aselectV4ashiftV0V19Iainfix <=V19ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V9V19FIainfix =V18V17FIainfix =ainteger_of_int32V17ainfix +ainteger_of_int32V14c1FIainfix =V16aTrueIiainfix =V16aTruealt_fullV15V2alt_fullV15V2NFIainfix <=ainteger_of_int32V14ainteger_of_int32V9Aainfix <=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10Ialt_fullaselectV4ashiftV0V20V2Iainfix <V20ainteger_of_int32V10Aainfix <=c0V20FAalt_fullV2aselectV4ashiftV0V21Iainfix <=V21ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V9V21FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V22NIainfix <=V22ainfix -ainteger_of_int32V1c1Aainfix <=c0V22FAais_NaNV2NAainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4FFFFF">
@@ -142,22 +142,22 @@
          timelimit="5"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.09"/>
         </proof>
         <proof
          prover="1"
          timelimit="5"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.09"/>
+         <result status="valid" time="0.22"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter binary_search_ensures_failure.2.2"
-        locfile="/home/marche/why2-nitrogen/tests/c/floats_bsearch.c"
+        locfile="/home/cmarche/why2-trunk/tests/c/floats_bsearch.c"
         loclnum="49" loccnumb="4" loccnume="17"
         expl="parameter binary_search_ensures_failure"
-        sum="330491d0c72d9ccbd135f8a74e65deac"
+        sum="9347bd24f7edf6735e7718796d7f88ac"
         proved="true"
         expanded="true"
         shape="LaselectV4ashiftV0ainteger_of_int32V14alt_fullaselectV4ashiftV0V19V2Iainfix <V19ainteger_of_int32V18Aainfix <=c0V19FIainfix =V18V17FIainfix =ainteger_of_int32V17ainfix +ainteger_of_int32V14c1FIainfix =V16aTrueIiainfix =V16aTruealt_fullV15V2alt_fullV15V2NFIainfix <=ainteger_of_int32V14ainteger_of_int32V9Aainfix <=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10Ialt_fullaselectV4ashiftV0V20V2Iainfix <V20ainteger_of_int32V10Aainfix <=c0V20FAalt_fullV2aselectV4ashiftV0V21Iainfix <=V21ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V9V21FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V22NIainfix <=V22ainfix -ainteger_of_int32V1c1Aainfix <=c0V22FAais_NaNV2NAainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4FFFFF">
@@ -172,17 +172,17 @@
          timelimit="50"
          obsolete="false"
          archived="false">
-         <result status="valid" time="7.22"/>
+         <result status="valid" time="21.24"/>
         </proof>
        </goal>
       </transf>
      </goal>
      <goal
       name="WP_parameter binary_search_ensures_failure.3"
-      locfile="/home/marche/why2-nitrogen/tests/c/floats_bsearch.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/floats_bsearch.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="loop invariant preservation"
-      sum="42d833891f80c2e76320dafdff640a13"
+      sum="d2a728c13d61deb8fb298bc4b8067f7f"
       proved="true"
       expanded="true"
       shape="LaselectV4ashiftV0ainteger_of_int32V14LaselectV4ashiftV0ainteger_of_int32V14alt_fullaselectV4ashiftV0V21V2Iainfix <V21ainteger_of_int32V10Aainfix <=c0V21FAalt_fullV2aselectV4ashiftV0V22Iainfix <=V22ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V20V22FIainfix =V20V19FIainfix =ainteger_of_int32V19ainfix -ainteger_of_int32V14c1FIainfix =V18aTrueIiainfix =V18aTrueagt_fullV17V2agt_fullV17V2NFIainfix =V16aTrueNIiainfix =V16aTruealt_fullV15V2alt_fullV15V2NFIainfix <=ainteger_of_int32V14ainteger_of_int32V9Aainfix <=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10Ialt_fullaselectV4ashiftV0V23V2Iainfix <V23ainteger_of_int32V10Aainfix <=c0V23FAalt_fullV2aselectV4ashiftV0V24Iainfix <=V24ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V9V24FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V25NIainfix <=V25ainfix -ainteger_of_int32V1c1Aainfix <=c0V25FAais_NaNV2NAainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4FFFFF">
@@ -198,10 +198,10 @@
        expanded="true">
        <goal
         name="WP_parameter binary_search_ensures_failure.3.1"
-        locfile="/home/marche/why2-nitrogen/tests/c/floats_bsearch.c"
+        locfile="/home/cmarche/why2-trunk/tests/c/floats_bsearch.c"
         loclnum="49" loccnumb="4" loccnume="17"
         expl="parameter binary_search_ensures_failure"
-        sum="0b788276b7d586d974ee5f9467ede6e4"
+        sum="cfdf0fa57bd5ea37325a708e3c3f2f7a"
         proved="true"
         expanded="true"
         shape="LaselectV4ashiftV0ainteger_of_int32V14LaselectV4ashiftV0ainteger_of_int32V14alt_fullV2aselectV4ashiftV0V21Iainfix <=V21ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V20V21FIainfix =V20V19FIainfix =ainteger_of_int32V19ainfix -ainteger_of_int32V14c1FIainfix =V18aTrueIiainfix =V18aTrueagt_fullV17V2agt_fullV17V2NFIainfix =V16aTrueNIiainfix =V16aTruealt_fullV15V2alt_fullV15V2NFIainfix <=ainteger_of_int32V14ainteger_of_int32V9Aainfix <=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10Ialt_fullaselectV4ashiftV0V22V2Iainfix <V22ainteger_of_int32V10Aainfix <=c0V22FAalt_fullV2aselectV4ashiftV0V23Iainfix <=V23ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V9V23FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V24NIainfix <=V24ainfix -ainteger_of_int32V1c1Aainfix <=c0V24FAais_NaNV2NAainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4FFFFF">
@@ -216,15 +216,15 @@
          timelimit="50"
          obsolete="false"
          archived="false">
-         <result status="valid" time="16.32"/>
+         <result status="valid" time="42.59"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter binary_search_ensures_failure.3.2"
-        locfile="/home/marche/why2-nitrogen/tests/c/floats_bsearch.c"
+        locfile="/home/cmarche/why2-trunk/tests/c/floats_bsearch.c"
         loclnum="49" loccnumb="4" loccnume="17"
         expl="parameter binary_search_ensures_failure"
-        sum="a9c3edbc9ff32093bb3d38821b01f157"
+        sum="f1ac299064e210620e52a5c1ae9b6d06"
         proved="true"
         expanded="true"
         shape="LaselectV4ashiftV0ainteger_of_int32V14LaselectV4ashiftV0ainteger_of_int32V14alt_fullaselectV4ashiftV0V21V2Iainfix <V21ainteger_of_int32V10Aainfix <=c0V21FIainfix =V20V19FIainfix =ainteger_of_int32V19ainfix -ainteger_of_int32V14c1FIainfix =V18aTrueIiainfix =V18aTrueagt_fullV17V2agt_fullV17V2NFIainfix =V16aTrueNIiainfix =V16aTruealt_fullV15V2alt_fullV15V2NFIainfix <=ainteger_of_int32V14ainteger_of_int32V9Aainfix <=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10Ialt_fullaselectV4ashiftV0V22V2Iainfix <V22ainteger_of_int32V10Aainfix <=c0V22FAalt_fullV2aselectV4ashiftV0V23Iainfix <=V23ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V9V23FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V24NIainfix <=V24ainfix -ainteger_of_int32V1c1Aainfix <=c0V24FAais_NaNV2NAainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4FFFFF">
@@ -239,24 +239,24 @@
          timelimit="5"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.03"/>
+         <result status="valid" time="0.09"/>
         </proof>
         <proof
          prover="1"
          timelimit="5"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.22"/>
         </proof>
        </goal>
       </transf>
      </goal>
      <goal
       name="WP_parameter binary_search_ensures_failure.4"
-      locfile="/home/marche/why2-nitrogen/tests/c/floats_bsearch.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/floats_bsearch.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="normal postcondition"
-      sum="33cf4b3f99454c3a1c513f56b7eab4f9"
+      sum="6b88d8db55414d473cc38147054c990f"
       proved="true"
       expanded="false"
       shape="LaselectV4ashiftV0ainteger_of_int32V14LaselectV4ashiftV0ainteger_of_int32V14ane_fullaselectV4ashiftV0V21V2Iainfix <V21ainteger_of_int32V1Aainfix <=c0V21FIainfix =ainteger_of_int32V20aprefix -c1Iainfix =V20V19FIainfix =V19V14FIainfix =V18aTrueNIiainfix =V18aTrueagt_fullV17V2agt_fullV17V2NFIainfix =V16aTrueNIiainfix =V16aTruealt_fullV15V2alt_fullV15V2NFIainfix <=ainteger_of_int32V14ainteger_of_int32V9Aainfix <=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10Ialt_fullaselectV4ashiftV0V22V2Iainfix <V22ainteger_of_int32V10Aainfix <=c0V22FAalt_fullV2aselectV4ashiftV0V23Iainfix <=V23ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V9V23FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V24NIainfix <=V24ainfix -ainteger_of_int32V1c1Aainfix <=c0V24FAais_NaNV2NAainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4FFFFF">
@@ -271,29 +271,29 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.20"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.09"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.23"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter binary_search_ensures_failure.5"
-      locfile="/home/marche/why2-nitrogen/tests/c/floats_bsearch.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/floats_bsearch.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="normal postcondition"
-      sum="c0b767805964fe75a369de485627b80c"
+      sum="6474f4c86e15c3b50e5e9f21b89ef675"
       proved="true"
       expanded="false"
       shape="ane_fullaselectV4ashiftV0V14V2Iainfix <V14ainteger_of_int32V1Aainfix <=c0V14FIainfix =ainteger_of_int32V13aprefix -c1Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1FIainfix <=ainteger_of_int32V10ainteger_of_int32V9NIainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10Ialt_fullaselectV4ashiftV0V15V2Iainfix <V15ainteger_of_int32V10Aainfix <=c0V15FAalt_fullV2aselectV4ashiftV0V16Iainfix <=V16ainfix -ainteger_of_int32V1c1Aainfix <ainteger_of_int32V9V16FFFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V17NIainfix <=V17ainfix -ainteger_of_int32V1c1Aainfix <=c0V17FAais_NaNV2NAainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0AasortedV0c0ainfix -ainteger_of_int32V1c1V4FFFFF">
@@ -308,17 +308,17 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.44"/>
+       <result status="valid" time="1.38"/>
       </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter binary_search_ensures_success"
-    locfile="/home/marche/why2-nitrogen/tests/c/floats_bsearch.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/floats_bsearch.c"
     loclnum="49" loccnumb="4" loccnume="17"
     expl="parameter binary_search_ensures_success"
-    sum="f494e60e9fe2d70447878561025fd94f"
+    sum="d38249d0009d45009a4877f305e65c9e"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V10ainteger_of_int32V9LaselectV4ashiftV0ainteger_of_int32V14LaselectV4ashiftV0ainteger_of_int32V14aeq_fullaselectV4ashiftV0ainteger_of_int32V20V2Iainfix >=ainteger_of_int32V20c0Iainfix =V20V19FIainfix =V19V14FIainfix =V18aTrueNIiainfix =V18aTrueagt_fullV17V2agt_fullV17V2NFIainfix =V16aTrueNIiainfix =V16aTruealt_fullV15V2alt_fullV15V2NFIainfix <=ainteger_of_int32V14ainteger_of_int32V9Aainfix <=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10Faeq_fullaselectV4ashiftV0ainteger_of_int32V23V2Iainfix >=ainteger_of_int32V23c0Iainfix =V23V22FIainfix =V22V21FIainfix =ainteger_of_int32V21aprefix -c1FIainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V24NIainfix <=V24ainfix -ainteger_of_int32V1c1Aainfix <=c0V24FAais_NaNV2NAainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0FFFFF">
@@ -334,10 +334,10 @@
      expanded="true">
      <goal
       name="WP_parameter binary_search_ensures_success.1"
-      locfile="/home/marche/why2-nitrogen/tests/c/floats_bsearch.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/floats_bsearch.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="normal postcondition"
-      sum="b8eefd747875a8fa308b68b1fe5f1c40"
+      sum="2d47dc5fb08c7624e109f70c83a059c1"
       proved="true"
       expanded="false"
       shape="LaselectV4ashiftV0ainteger_of_int32V14LaselectV4ashiftV0ainteger_of_int32V14aeq_fullaselectV4ashiftV0ainteger_of_int32V20V2Iainfix >=ainteger_of_int32V20c0Iainfix =V20V19FIainfix =V19V14FIainfix =V18aTrueNIiainfix =V18aTrueagt_fullV17V2agt_fullV17V2NFIainfix =V16aTrueNIiainfix =V16aTruealt_fullV15V2alt_fullV15V2NFIainfix <=ainteger_of_int32V14ainteger_of_int32V9Aainfix <=ainteger_of_int32V10ainteger_of_int32V14Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix +ainteger_of_int32V10ainteger_of_int32V12FIainfix =ainteger_of_int32V12adivainteger_of_int32V11c2FIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FIainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V21NIainfix <=V21ainfix -ainteger_of_int32V1c1Aainfix <=c0V21FAais_NaNV2NAainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0FFFFF">
@@ -352,15 +352,15 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.98"/>
+       <result status="valid" time="4.32"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter binary_search_ensures_success.2"
-      locfile="/home/marche/why2-nitrogen/tests/c/floats_bsearch.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/floats_bsearch.c"
       loclnum="49" loccnumb="4" loccnume="17"
       expl="normal postcondition"
-      sum="cad38f0860cbf731e364cdbd24c10e6d"
+      sum="e89a48ddce071ecbaa76272334791add"
       proved="true"
       expanded="false"
       shape="aeq_fullaselectV4ashiftV0ainteger_of_int32V13V2Iainfix >=ainteger_of_int32V13c0Iainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11aprefix -c1FIainfix <=ainteger_of_int32V10ainteger_of_int32V9NIainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FIainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V14NIainfix <=V14ainfix -ainteger_of_int32V1c1Aainfix <=c0V14FAais_NaNV2NAainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0FFFFF">
@@ -375,31 +375,31 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.18"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.17"/>
       </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter binary_search_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/floats_bsearch.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/floats_bsearch.c"
     loclnum="49" loccnumb="4" loccnume="17"
     expl="parameter binary_search_safety"
-    sum="824be2b1f94fee8138114bbd0278dd6c"
+    sum="d9383aa92f6a2d4475872e8c2c311fa3"
     proved="true"
     expanded="false"
     shape="Ladivainteger_of_int32V11c2LaselectV4ashiftV0ainteger_of_int32V15iainfix =V17aTrueainfix <ainfix -ainteger_of_int32V9ainteger_of_int32V19ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix <=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V19V18FIainfix =ainteger_of_int32V18ainfix +ainteger_of_int32V15c1FAainfix <=ainfix +ainteger_of_int32V15c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V15c1LaselectV4ashiftV0ainteger_of_int32V15ainfix <ainfix -ainteger_of_int32V23ainteger_of_int32V10ainfix -ainteger_of_int32V9ainteger_of_int32V10Aainfix <=c0ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix =V23V22FIainfix =ainteger_of_int32V22ainfix -ainteger_of_int32V15c1FAainfix <=ainfix -ainteger_of_int32V15c1c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V15c1Iainfix =V21aTrueIiainfix =V21aTrueagt_fullV20V2agt_fullV20V2NFAainfix <=ainteger_of_int32V15aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V15Iiainfix =V17aTruealt_fullV16V2alt_fullV16V2NFAainfix <=ainteger_of_int32V15aoffset_maxV3V0Aainfix <=aoffset_minV3V0ainteger_of_int32V15Iainfix <=ainteger_of_int32V15ainteger_of_int32V9Aainfix <=ainteger_of_int32V10ainteger_of_int32V15Iainfix =V15V14FIainfix =ainteger_of_int32V14ainfix +ainteger_of_int32V10ainteger_of_int32V13FAainfix <=ainfix +ainteger_of_int32V10ainteger_of_int32V13c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V10ainteger_of_int32V13Iainfix =ainteger_of_int32V13V12FAainfix <=V12c2147483647Aainfix <=aprefix -c2147483648V12Aainfix =c2c0NIainfix =ainteger_of_int32V11ainfix -ainteger_of_int32V9ainteger_of_int32V10FAainfix <=ainfix -ainteger_of_int32V9ainteger_of_int32V10c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V9ainteger_of_int32V10Iainfix <=ainteger_of_int32V10ainteger_of_int32V9Iainfix <=ainteger_of_int32V9ainfix -ainteger_of_int32V1c1Aainfix <=c0ainteger_of_int32V10FFIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V1c1FAainfix <=ainfix -ainteger_of_int32V1c1c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V6V5FIainfix =ainteger_of_int32V5c0FIais_NaNaselectV4ashiftV0V24NIainfix <=V24ainfix -ainteger_of_int32V1c1Aainfix <=c0V24FAais_NaNV2NAainfix >=aoffset_maxV3V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV3V0c0Aainfix >=ainteger_of_int32V1c0FFFFF">
@@ -414,14 +414,14 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.41"/>
+     <result status="valid" time="0.99"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.15"/>
+     <result status="valid" time="0.41"/>
     </proof>
    </goal>
   </theory>

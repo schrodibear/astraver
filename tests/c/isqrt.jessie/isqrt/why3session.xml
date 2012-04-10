@@ -41,10 +41,10 @@
    expanded="true">
    <goal
     name="WP_parameter isqrt_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
     loclnum="40" loccnumb="4" loccnume="9"
     expl="parameter isqrt_ensures_default"
-    sum="eaace1239f182d701767416352dac878"
+    sum="e81c5a30e54d2434ab1439e814e4c5db"
     proved="true"
     expanded="true"
     shape="iainfix <=V3V0ainfix =V6asqrainfix +V5c1Aainfix >=V0asqrV5Aainfix >=V5c0Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1Fainfix <V0asqrainfix +V7c1Aainfix <=asqrV7V0Aainfix >=V7c0Iainfix =V7V4FIainfix =V3asqrainfix +V4c1Aainfix >=V0asqrV4Aainfix >=V4c0FFAainfix =V2asqrainfix +V1c1Aainfix >=V0asqrV1Aainfix >=V1c0Iainfix =V2c1FIainfix =V1c0FIainfix >=V0c0F">
@@ -59,22 +59,22 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.12"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.10"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter isqrt_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
     loclnum="40" loccnumb="4" loccnume="9"
     expl="loop variant decreases"
-    sum="48de68b2be19d60624868e88b5d7d33c"
+    sum="0a1aa8181f299e4670e12bbf059d09d6"
     proved="true"
     expanded="true"
     shape="ainfix <ainfix -V0V5ainfix -V0V4Aainfix <=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix <=V3V0Iainfix =V3asqrainfix +V4c1Aainfix >=V0asqrV4Aainfix >=V4c0FFIainfix =V2c1FIainfix =V1c0FIainfix >=V0c0F">
@@ -90,10 +90,10 @@
      expanded="true">
      <goal
       name="WP_parameter isqrt_safety.1"
-      locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
       loclnum="40" loccnumb="4" loccnume="9"
       expl="loop variant decreases"
-      sum="48de68b2be19d60624868e88b5d7d33c"
+      sum="0a1aa8181f299e4670e12bbf059d09d6"
       proved="true"
       expanded="true"
       shape="ainfix <ainfix -V0V5ainfix -V0V4Aainfix <=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix <=V3V0Iainfix =V3asqrainfix +V4c1Aainfix >=V0asqrV4Aainfix >=V4c0FFIainfix =V2c1FIainfix =V1c0FIainfix >=V0c0F">
@@ -108,31 +108,31 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.11"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.07"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.09"/>
       </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter main_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
     loclnum="50" loccnumb="4" loccnume="8"
     expl="parameter main_ensures_default"
-    sum="115faff844ac5f13b01ab173d47d712f"
+    sum="16205326a2f465c974e332c0bedc22a0"
     proved="true"
     expanded="true"
     shape="ainfix =V2c4Iainfix =V2V1FAainfix >V1c4NAainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -147,14 +147,14 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.11"/>
     </proof>
     <proof
      prover="4"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.12"/>
     </proof>
     <transf
      name="split_goal"
@@ -162,10 +162,10 @@
      expanded="true">
      <goal
       name="WP_parameter main_ensures_default.1"
-      locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="assertion"
-      sum="1a0f7699cc476118ef5ba0c97893c655"
+      sum="7ec96fa585cd1939e9b6c35d5fffbf3b"
       proved="true"
       expanded="false"
       shape="ainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -180,29 +180,29 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.11"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="4"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.10"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter main_ensures_default.2"
-      locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="assertion"
-      sum="ca174ee8d987efe45e60629b3023ce45"
+      sum="b636e6119958d01e87393b1cb7d9643e"
       proved="true"
       expanded="false"
       shape="ainfix >V1c4NIainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -217,22 +217,22 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.11"/>
       </proof>
       <proof
        prover="4"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.10"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter main_ensures_default.3"
-      locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="normal postcondition"
-      sum="6963847762526ced60b5bc113215f141"
+      sum="69a6f8fbaca2e94ceb5132c3e0f4100b"
       proved="true"
       expanded="false"
       shape="ainfix =V2c4Iainfix =V2V1FIainfix >V1c4NIainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
@@ -247,45 +247,45 @@
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.11"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.09"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="2"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.10"/>
       </proof>
       <proof
        prover="4"
        timelimit="5"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.10"/>
       </proof>
      </goal>
     </transf>
    </goal>
    <goal
     name="WP_parameter main_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/isqrt.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
     loclnum="50" loccnumb="4" loccnume="8"
     expl="precondition for call"
-    sum="4da9b3c1d15493a96b81aece394a8183"
+    sum="cd1f1a525d7ecc5057facf5a6310c8ac"
     proved="true"
     expanded="true"
     shape="ainfix >=c17c0">
@@ -300,21 +300,21 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.07"/>
     </proof>
    </goal>
   </theory>

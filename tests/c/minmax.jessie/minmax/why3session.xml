@@ -33,10 +33,10 @@
    expanded="true">
    <goal
     name="WP_parameter dmax_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="58" loccnumb="7" loccnume="11"
     expl="parameter dmax_ensures_default"
-    sum="71f81bd4a7c95b6ed08cd2081d21a84a"
+    sum="d5c6a562c6c7c58d9999791d15394dbf"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
@@ -51,22 +51,22 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.12"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter dmax_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="58" loccnumb="7" loccnume="11"
     expl="parameter dmax_safety"
-    sum="57dc584abd11239bb56d0d85c27b597d"
+    sum="34d0adad1cd390f715484655d0a6dcc3"
     proved="true"
     expanded="true"
     shape="t">
@@ -81,29 +81,29 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.10"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter dmin_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="64" loccnumb="7" loccnume="11"
     expl="parameter dmin_ensures_default"
-    sum="a63d632f5e4107e7847aac354d545943"
+    sum="cc5ec256bf2768f4e20a9c5fe9054b7f"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
@@ -118,22 +118,22 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.12"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter dmin_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="64" loccnumb="7" loccnume="11"
     expl="parameter dmin_safety"
-    sum="bf3a039158ccadc72ee32f2d15909625"
+    sum="78c4d94862f5ee66875685c6c65f33ef"
     proved="true"
     expanded="true"
     shape="t">
@@ -148,29 +148,29 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.10"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter fmax_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="46" loccnumb="6" loccnume="10"
     expl="parameter fmax_ensures_default"
-    sum="a0e6b89ff7fdf8e4f9b04db5e546afc6"
+    sum="57eaaae23ac86f8c31a391ce703e6495"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
@@ -185,22 +185,22 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.12"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter fmax_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="46" loccnumb="6" loccnume="10"
     expl="parameter fmax_safety"
-    sum="130c56af57a22159a93f7a0eec4b892f"
+    sum="551827941f801443aff237ba9f43d727"
     proved="true"
     expanded="true"
     shape="t">
@@ -215,29 +215,29 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.10"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter fmin_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="52" loccnumb="6" loccnume="10"
     expl="parameter fmin_ensures_default"
-    sum="e44078262d3192c5f890474d2f8a2edb"
+    sum="e5f4b4b63e314b97942904c2b847aac3"
     proved="true"
     expanded="true"
     shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
@@ -252,22 +252,22 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.12"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter fmin_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="52" loccnumb="6" loccnume="10"
     expl="parameter fmin_safety"
-    sum="105340ff2a7083aecfa590374794ae9b"
+    sum="3a90f3c79dba8421c92c6c89928e0cc4"
     proved="true"
     expanded="true"
     shape="t">
@@ -282,29 +282,29 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.10"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter max_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="34" loccnumb="4" loccnume="7"
     expl="parameter max_ensures_default"
-    sum="d1c5e6beb1a895373fe9935478fe56f9"
+    sum="077430cc78cbd5fa4f82d25f6b2ab8f7"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V1Fainfix =ainteger_of_int32V5amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V0FFF">
@@ -319,22 +319,22 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.11"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.12"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter max_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="34" loccnumb="4" loccnume="7"
     expl="parameter max_safety"
-    sum="6f915c34ea4484e61bd252ad6aed04eb"
+    sum="af3ccfd65ac17d27f2fc76310eed4b58"
     proved="true"
     expanded="true"
     shape="t">
@@ -349,29 +349,29 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.10"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter min_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="40" loccnumb="4" loccnume="7"
     expl="parameter min_ensures_default"
-    sum="6348cacada4c5d20bcf344037ab09cef"
+    sum="84ad8d5dcbc709a7f9ab56b75429e666"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V0Fainfix =ainteger_of_int32V5aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V1FFF">
@@ -386,22 +386,22 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.10"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.12"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter min_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/minmax.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="40" loccnumb="4" loccnume="7"
     expl="parameter min_safety"
-    sum="847bc6e0eea3ad324f488136abfba5b0"
+    sum="09de316e20b3823f95e9db4cf4236786"
     proved="true"
     expanded="true"
     shape="t">
@@ -416,21 +416,21 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.10"/>
     </proof>
    </goal>
   </theory>

@@ -26,10 +26,10 @@
    expanded="true">
    <goal
     name="sum_rec"
-    locfile="/home/marche/why2-nitrogen/tests/c/rec.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="34" loccnumb="4" loccnume="89"
     expl="Lemma sum_rec, lemma"
-    sum="19d7c77de495e6b7be7b2d76fb8a7f9a"
+    sum="34e9fc27a890ccf68214a2ceb7f12c18"
     proved="true"
     expanded="true"
     shape="ainfix =asum_uptoainfix +V0c1ainfix +ainfix +asum_uptoV0V0c1Iainfix >=V0c0F">
@@ -41,21 +41,21 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.16"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.36"/>
+     <result status="valid" time="0.79"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.13"/>
     </proof>
    </goal>
   </theory>
@@ -67,10 +67,10 @@
    expanded="true">
    <goal
     name="WP_parameter f91_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/rec.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="parameter f91_ensures_default"
-    sum="0f7b4e790f8cee28c634056239598895"
+    sum="8b110be3ffc1ce5eb28f7a6545e405c2"
     proved="true"
     expanded="true"
     shape="t">
@@ -85,29 +85,29 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter f91_ensures_greater_than_100"
-    locfile="/home/marche/why2-nitrogen/tests/c/rec.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="parameter f91_ensures_greater_than_100"
-    sum="f6ff6401d151e7519d725a6cb46992b6"
+    sum="265c002f3453de28180f348dba7c8e46"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V0c100ainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V0c10Iainfix =V7V6FIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c91Iainfix <=ainteger_of_int32V3c100Aainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V3c10Iainfix >=ainteger_of_int32V3c101FIainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V10ainfix -ainteger_of_int32V0c10Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V0c10FIainfix >=ainteger_of_int32V0c101F">
@@ -122,29 +122,29 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.11"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.09"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter f91_ensures_less_than_101"
-    locfile="/home/marche/why2-nitrogen/tests/c/rec.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="parameter f91_ensures_less_than_101"
-    sum="754f67e7ccf201ca715c866d76eebdbb"
+    sum="7fda4ce986ec75a3718b7fbc3f0021af"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V0c100ainfix =ainteger_of_int32V7c91Iainfix =V7V6FIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c91Iainfix <=ainteger_of_int32V3c100Aainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V3c10Iainfix >=ainteger_of_int32V3c101FIainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V10c91Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V0c10FIainfix <=ainteger_of_int32V0c100F">
@@ -159,29 +159,29 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.11"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.11"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter f91_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/rec.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="parameter f91_safety"
-    sum="24898748466a6676022f1d7cb153b742"
+    sum="98800cd9170dd5a1a6e916c8f0d96264"
     proved="true"
     expanded="true"
     shape="iainfix <=ainteger_of_int32V0c100azwf_zeroainfix -c101ainteger_of_int32V3ainfix -c101ainteger_of_int32V0Iainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FAazwf_zeroainfix -c101ainteger_of_int32V1ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11FAainfix <=ainfix +ainteger_of_int32V0c11c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V0c11ainfix <=ainfix -ainteger_of_int32V0c10c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V0c10F">
@@ -196,29 +196,29 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.11"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.08"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.09"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter main_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/rec.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="51" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="0245896d80cfa28ecab8eb4ed9f55a96"
+    sum="d69e4fcad09da5b33afe649647ab0234"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V3c36Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1asum_uptoainteger_of_int32V0FIainfix =ainteger_of_int32V0c8F">
@@ -233,29 +233,29 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.11"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.14"/>
+     <result status="valid" time="0.35"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.13"/>
+     <result status="valid" time="0.38"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter main_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/rec.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="51" loccnumb="5" loccnume="9"
     expl="precondition for call"
-    sum="f0416b521794461391645611f1a4d925"
+    sum="f8c66e6bc70e05a3cc1043fed30226bf"
     proved="true"
     expanded="true"
     shape="ainfix <=ainteger_of_int32V0c1000Aainfix >=ainteger_of_int32V0c0Iainfix =ainteger_of_int32V0c8F">
@@ -270,29 +270,29 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.11"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter sum_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/rec.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="43" loccnumb="5" loccnume="8"
     expl="parameter sum_ensures_default"
-    sum="148d665ae2737d24f1b848d3cc5faf52"
+    sum="2461965ce9c6df3ee1ed87f350adc68b"
     proved="true"
     expanded="true"
     shape="iainfix =ainteger_of_int32V0c0ainfix =ainteger_of_int32V3asum_uptoainteger_of_int32V0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fainfix =ainteger_of_int32V9asum_uptoainteger_of_int32V0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix +ainteger_of_int32V0ainteger_of_int32V6FIainfix =V6V5FIainfix =ainteger_of_int32V5asum_uptoainteger_of_int32V4FIainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V0c1FIainfix <=ainteger_of_int32V0c1000Aainfix >=ainteger_of_int32V0c0F">
@@ -307,22 +307,22 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.50"/>
+     <result status="valid" time="1.22"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.12"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter sum_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/rec.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="43" loccnumb="5" loccnume="8"
     expl="parameter sum_safety"
-    sum="cd6ec257eb28d180fd674404732f7d98"
+    sum="2cd165dca1c1637742b01b42bdb65265"
     proved="true"
     expanded="true"
     shape="ainfix <=ainfix +ainteger_of_int32V0ainteger_of_int32V3c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V0ainteger_of_int32V3Iainfix =V3V2FIainfix =ainteger_of_int32V2asum_uptoainteger_of_int32V1FAainfix <=ainteger_of_int32V1c1000Aainfix >=ainteger_of_int32V1c0Aazwf_zeroainteger_of_int32V1ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix -ainteger_of_int32V0c1FAainfix <=ainfix -ainteger_of_int32V0c1c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V0c1Iainfix =ainteger_of_int32V0c0NIainfix <=ainteger_of_int32V0c1000Aainfix >=ainteger_of_int32V0c0F">
@@ -337,7 +337,7 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.12"/>
     </proof>
    </goal>
   </theory>

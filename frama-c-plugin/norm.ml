@@ -343,6 +343,15 @@ let retype_array_variables file =
 (* Retype logic functions/predicates with structure parameters or return.    *)
 (*****************************************************************************)
 
+let model_fields_table = Hashtbl.create 7
+
+let model_fields compinfo =
+  (* Format.eprintf "looking in model_fields_table for %s@." compinfo.cname; *)
+  try
+    Hashtbl.find model_fields_table compinfo.ckey
+  with Not_found -> []
+
+
 (* logic parameter:
  * - change parameter type to pointer to structure
  * - change uses of parameters in logical annotations
@@ -449,7 +458,22 @@ object
           end
       | Dtype _ | Dlemma _ | Dinvariant _ | Dvolatile _  -> DoChildren
       | Daxiomatic _ -> DoChildren (* FIXME: correct ? *)
-      | Dmodel_annot _ -> DoChildren (* FIXME: correct ? *)
+      | Dmodel_annot (mi,_) -> 
+          begin
+            match unrollType mi.mi_base_type with
+              | TComp (ci, _, _) ->
+                  begin
+                    let l = 
+                      try Hashtbl.find model_fields_table ci.ckey
+                      with Not_found -> []
+                    in
+                    (* Format.eprintf "filling model_fields_table for %s@." ci.cname; *)
+                    Hashtbl.replace model_fields_table ci.ckey (mi::l)
+                  end
+              | _ -> 
+              Extlib.not_yet_implemented "model field only on structures"
+          end;
+          DoChildren (* FIXME: correct ? *)
       | Dcustom_annot _ -> DoChildren (* FIXME: correct ? *)
     in annot
 

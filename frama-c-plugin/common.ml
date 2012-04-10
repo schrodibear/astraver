@@ -659,7 +659,6 @@ object
   method vtype = visitor#vtype
   method vattr = visitor#vattr
   method vattrparam = visitor#vattrparam
-  method vmodel_info = visitor#vmodel_info
 
   (* Methods from Cil visitor for logic constructs *)
   method vlogic_type = visitor#vlogic_type
@@ -851,47 +850,59 @@ let visit_until_convergence visitor file =
 let do_on_term_offset (preaction_offset,postaction_offset) tlv =
   let preaction_toffset tlv =
     match preaction_offset with None -> tlv | Some preaction_offset ->
-      let lv,env =
-	!Db.Properties.Interp.force_term_offset_to_offset tlv
-      in
-      let lv = preaction_offset lv in
-      !Db.Properties.Interp.force_back_offset_to_term_offset env lv
+      try
+        let lv,env =
+	  !Db.Properties.Interp.force_term_offset_to_offset tlv
+        in
+        let lv = preaction_offset lv in
+        !Db.Properties.Interp.force_back_offset_to_term_offset env lv
+      with Exit -> tlv
   in
   let postaction_toffset tlv =
     match postaction_offset with None -> tlv | Some postaction_offset ->
-      let lv,env = !Db.Properties.Interp.force_term_offset_to_offset tlv in
-      let lv = postaction_offset lv in
-      !Db.Properties.Interp.force_back_offset_to_term_offset env lv
+      try
+        let lv,env = !Db.Properties.Interp.force_term_offset_to_offset tlv in
+        let lv = postaction_offset lv in
+        !Db.Properties.Interp.force_back_offset_to_term_offset env lv
+      with Exit -> tlv
   in
   ChangeDoChildrenPost (preaction_toffset tlv, postaction_toffset)
 
 let do_on_term_lval (preaction_lval,postaction_lval) tlv =
   let preaction_tlval tlv =
     match preaction_lval with None -> tlv | Some preaction_lval ->
-      let lv,env = !Db.Properties.Interp.force_term_lval_to_lval tlv in
-      let lv = preaction_lval lv in
-      !Db.Properties.Interp.force_back_lval_to_term_lval env lv
+      try
+        let lv,env = !Db.Properties.Interp.force_term_lval_to_lval tlv in
+        let lv = preaction_lval lv in
+        !Db.Properties.Interp.force_back_lval_to_term_lval env lv
+      with Exit -> tlv
   in
   let postaction_tlval tlv =
     match postaction_lval with None -> tlv | Some postaction_lval ->
-      let lv,env = !Db.Properties.Interp.force_term_lval_to_lval tlv in
-      let lv = postaction_lval lv in
-      !Db.Properties.Interp.force_back_lval_to_term_lval env lv
+      try
+        let lv,env = !Db.Properties.Interp.force_term_lval_to_lval tlv in
+        let lv = postaction_lval lv in
+        !Db.Properties.Interp.force_back_lval_to_term_lval env lv
+      with Exit -> tlv
   in
   ChangeDoChildrenPost (preaction_tlval tlv, postaction_tlval)
 
 let do_on_term (preaction_expr,postaction_expr) t =
   let preaction_term t =
     match preaction_expr with None -> t | Some preaction_expr ->
-      let e,env = !Db.Properties.Interp.force_term_to_exp t in
-      let e = map_under_info preaction_expr e in
-      !Db.Properties.Interp.force_back_exp_to_term env e
+      try
+        let e,env = !Db.Properties.Interp.force_term_to_exp t in
+        let e = map_under_info preaction_expr e in
+        !Db.Properties.Interp.force_back_exp_to_term env e
+      with Exit -> t
   in
   let postaction_term t =
     match postaction_expr with None -> t | Some postaction_expr ->
-      let e,env = !Db.Properties.Interp.force_term_to_exp t in
-      let e = map_under_info postaction_expr e in
-      !Db.Properties.Interp.force_back_exp_to_term env e
+      try
+        let e,env = !Db.Properties.Interp.force_term_to_exp t in
+        let e = map_under_info postaction_expr e in
+        !Db.Properties.Interp.force_back_exp_to_term env e
+      with Exit -> t
   in
   ChangeDoChildrenPost (preaction_term t, postaction_term)
 

@@ -959,11 +959,14 @@ and terms_lval pos lv =
   match lv with
     | lhost, TNoOffset -> [term_lhost pos lhost]
 
-    | _lhost, TModel _ -> unsupported "terms_lval: model field"
-
     | (TVar _ | TResult _), _off ->
         assert false (* Should have been rewritten *)
 
+    | TMem t, TModel(mi, toff) -> 
+        assert (toff = TNoOffset); (* Others should have been rewritten *)
+        let e = terms t in
+          List.map (fun e -> mkexpr (JCPEderef(e,mi.mi_name)) pos) e
+        
     | TMem t, TField(fi,toff) ->
         assert (toff = TNoOffset); (* Others should have been rewritten *)
         let e = terms t in
@@ -2409,8 +2412,8 @@ let rec annotation is_axiomatic annot =
     (* TODO *)
     Extlib.not_yet_implemented "Interp.annotation Dvolatile"
   | Dmodel_annot _ ->
-    (* TODO *)
-    Extlib.not_yet_implemented "Interp.annotation Dmodel_annot"
+      (* already handled in norm.ml *)
+      []
   | Dcustom_annot _ ->
     (* TODO *)
     Extlib.not_yet_implemented "Interp.annotation Dcustom_annot"
@@ -2448,13 +2451,24 @@ let global vardefs g =
             in
             [this;padding]
         in
+        let model_field mi =
+          default_field_modifiers,
+            ltype mi.mi_field_type,
+            mi.mi_name, None
+        in
         let fields =
-          List.fold_right (fun fi acc ->
-                             let repfi = Retype.FieldUnion.repr fi in
-                             if Fieldinfo.equal fi repfi then
-                               field fi @ acc
-                             else acc
-                          ) compinfo.cfields []
+          List.fold_right 
+            (fun fi acc ->
+               let repfi = Retype.FieldUnion.repr fi in
+               if Fieldinfo.equal fi repfi then
+                 field fi @ acc
+               else acc) 
+            compinfo.cfields []
+        in
+        let fields =
+          List.fold_right 
+            (fun mi acc -> model_field mi :: acc)
+            (Norm.model_fields compinfo) fields
         in
         let _parent = None in
 (*           find_or_none (Hashtbl.find Norm.type_to_parent_type) compinfo.cname *)

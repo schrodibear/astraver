@@ -14,6 +14,12 @@ Admitted.
 (*Why type*) Definition padding: Set.
 Admitted.
 
+(*Why type*) Definition uint8: Set.
+Admitted.
+
+(*Why type*) Definition unsigned_charP: Set.
+Admitted.
+
 (*Why type*) Definition voidP: Set.
 Admitted.
 
@@ -52,6 +58,12 @@ Admitted.
 (*Why predicate*) Definition eq_int8  (x:int8) (y:int8)
   := (integer_of_int8 x) = (integer_of_int8 y).
 
+(*Why logic*) Definition integer_of_uint8 : uint8 -> Z.
+Admitted.
+
+(*Why predicate*) Definition eq_uint8  (x:uint8) (y:uint8)
+  := (integer_of_uint8 x) = (integer_of_uint8 y).
+
 (*Why logic*) Definition int8_of_integer : Z -> int8.
 Admitted.
 
@@ -74,6 +86,9 @@ Admitted.
 (*Why predicate*) Definition left_valid_struct_charP  (p:(pointer charP)) (a:Z) (charP_alloc_table:(alloc_table charP))
   := (offset_min charP_alloc_table p) <= a.
 
+(*Why predicate*) Definition left_valid_struct_unsigned_charP  (p:(pointer unsigned_charP)) (a:Z) (unsigned_charP_alloc_table:(alloc_table unsigned_charP))
+  := (offset_min unsigned_charP_alloc_table p) <= a.
+
 (*Why predicate*) Definition left_valid_struct_voidP  (p:(pointer voidP)) (a:Z) (voidP_alloc_table:(alloc_table voidP))
   := (offset_min voidP_alloc_table p) <= a.
 
@@ -82,6 +97,16 @@ Admitted.
    p = (pointer_address (charP_of_pointer_address p))).
 Admitted.
 Dp_hint pointer_addr_of_charP_of_pointer_address.
+
+(*Why logic*) Definition unsigned_charP_of_pointer_address :
+  (pointer unit) -> (pointer unsigned_charP).
+Admitted.
+
+(*Why axiom*) Lemma pointer_addr_of_unsigned_charP_of_pointer_address :
+  (forall (p:(pointer unit)),
+   p = (pointer_address (unsigned_charP_of_pointer_address p))).
+Admitted.
+Dp_hint pointer_addr_of_unsigned_charP_of_pointer_address.
 
 (*Why logic*) Definition voidP_of_pointer_address :
   (pointer unit) -> (pointer voidP).
@@ -96,12 +121,19 @@ Dp_hint pointer_addr_of_voidP_of_pointer_address.
 (*Why predicate*) Definition right_valid_struct_charP  (p:(pointer charP)) (b:Z) (charP_alloc_table:(alloc_table charP))
   := (offset_max charP_alloc_table p) >= b.
 
+(*Why predicate*) Definition right_valid_struct_unsigned_charP  (p:(pointer unsigned_charP)) (b:Z) (unsigned_charP_alloc_table:(alloc_table unsigned_charP))
+  := (offset_max unsigned_charP_alloc_table p) >= b.
+
 (*Why predicate*) Definition right_valid_struct_voidP  (p:(pointer voidP)) (b:Z) (voidP_alloc_table:(alloc_table voidP))
   := (offset_max voidP_alloc_table p) >= b.
 
 (*Why predicate*) Definition strict_valid_root_charP  (p:(pointer charP)) (a:Z) (b:Z) (charP_alloc_table:(alloc_table charP))
   := (offset_min charP_alloc_table p) = a /\
      (offset_max charP_alloc_table p) = b.
+
+(*Why predicate*) Definition strict_valid_root_unsigned_charP  (p:(pointer unsigned_charP)) (a:Z) (b:Z) (unsigned_charP_alloc_table:(alloc_table unsigned_charP))
+  := (offset_min unsigned_charP_alloc_table p) = a /\
+     (offset_max unsigned_charP_alloc_table p) = b.
 
 (*Why predicate*) Definition strict_valid_root_voidP  (p:(pointer voidP)) (a:Z) (b:Z) (voidP_alloc_table:(alloc_table voidP))
   := (offset_min voidP_alloc_table p) = a /\
@@ -111,13 +143,66 @@ Dp_hint pointer_addr_of_voidP_of_pointer_address.
   := (offset_min charP_alloc_table p) = a /\
      (offset_max charP_alloc_table p) = b.
 
+(*Why predicate*) Definition strict_valid_struct_unsigned_charP  (p:(pointer unsigned_charP)) (a:Z) (b:Z) (unsigned_charP_alloc_table:(alloc_table unsigned_charP))
+  := (offset_min unsigned_charP_alloc_table p) = a /\
+     (offset_max unsigned_charP_alloc_table p) = b.
+
 (*Why predicate*) Definition strict_valid_struct_voidP  (p:(pointer voidP)) (a:Z) (b:Z) (voidP_alloc_table:(alloc_table voidP))
   := (offset_min voidP_alloc_table p) = a /\
      (offset_max voidP_alloc_table p) = b.
 
+(*Why logic*) Definition uint8_of_integer : Z -> uint8.
+Admitted.
+
+(*Why axiom*) Lemma uint8_coerce :
+  (forall (x:Z),
+   (0 <= x /\ x <= 255 -> (integer_of_uint8 (uint8_of_integer x)) = x)).
+Admitted.
+Dp_hint uint8_coerce.
+
+(*Why axiom*) Lemma uint8_extensionality :
+  (forall (x:uint8),
+   (forall (y:uint8), ((integer_of_uint8 x) = (integer_of_uint8 y) -> x = y))).
+Admitted.
+Dp_hint uint8_extensionality.
+
+(*Why axiom*) Lemma uint8_range :
+  (forall (x:uint8), 0 <= (integer_of_uint8 x) /\ (integer_of_uint8 x) <= 255).
+Admitted.
+Dp_hint uint8_range.
+
+(*Why logic*) Definition unsigned_charP_tag : (tag_id unsigned_charP).
+Admitted.
+
+(*Why axiom*) Lemma unsigned_charP_int : (int_of_tag unsigned_charP_tag) = 1.
+Admitted.
+Dp_hint unsigned_charP_int.
+
+(*Why axiom*) Lemma unsigned_charP_of_pointer_address_of_pointer_addr :
+  (forall (p:(pointer unsigned_charP)),
+   p = (unsigned_charP_of_pointer_address (pointer_address p))).
+Admitted.
+Dp_hint unsigned_charP_of_pointer_address_of_pointer_addr.
+
+(*Why axiom*) Lemma unsigned_charP_parenttag_bottom :
+  (parenttag unsigned_charP_tag (@bottom_tag unsigned_charP)).
+Admitted.
+Dp_hint unsigned_charP_parenttag_bottom.
+
+(*Why axiom*) Lemma unsigned_charP_tags :
+  (forall (x:(pointer unsigned_charP)),
+   (forall (unsigned_charP_tag_table:(tag_table unsigned_charP)),
+    (instanceof unsigned_charP_tag_table x unsigned_charP_tag))).
+Admitted.
+Dp_hint unsigned_charP_tags.
+
 (*Why predicate*) Definition valid_root_charP  (p:(pointer charP)) (a:Z) (b:Z) (charP_alloc_table:(alloc_table charP))
   := (offset_min charP_alloc_table p) <= a /\
      (offset_max charP_alloc_table p) >= b.
+
+(*Why predicate*) Definition valid_root_unsigned_charP  (p:(pointer unsigned_charP)) (a:Z) (b:Z) (unsigned_charP_alloc_table:(alloc_table unsigned_charP))
+  := (offset_min unsigned_charP_alloc_table p) <= a /\
+     (offset_max unsigned_charP_alloc_table p) >= b.
 
 (*Why predicate*) Definition valid_root_voidP  (p:(pointer voidP)) (a:Z) (b:Z) (voidP_alloc_table:(alloc_table voidP))
   := (offset_min voidP_alloc_table p) <= a /\
@@ -126,6 +211,10 @@ Dp_hint pointer_addr_of_voidP_of_pointer_address.
 (*Why predicate*) Definition valid_struct_charP  (p:(pointer charP)) (a:Z) (b:Z) (charP_alloc_table:(alloc_table charP))
   := (offset_min charP_alloc_table p) <= a /\
      (offset_max charP_alloc_table p) >= b.
+
+(*Why predicate*) Definition valid_struct_unsigned_charP  (p:(pointer unsigned_charP)) (a:Z) (b:Z) (unsigned_charP_alloc_table:(alloc_table unsigned_charP))
+  := (offset_min unsigned_charP_alloc_table p) <= a /\
+     (offset_max unsigned_charP_alloc_table p) >= b.
 
 (*Why predicate*) Definition valid_struct_voidP  (p:(pointer voidP)) (a:Z) (b:Z) (voidP_alloc_table:(alloc_table voidP))
   := (offset_min voidP_alloc_table p) <= a /\

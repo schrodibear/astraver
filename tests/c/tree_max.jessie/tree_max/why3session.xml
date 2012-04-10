@@ -33,10 +33,10 @@
    expanded="true">
    <goal
     name="WP_parameter tree_max_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
     loclnum="62" loccnumb="4" loccnume="12"
     expl="parameter tree_max_ensures_default"
-    sum="9ce54854bfea67665a63782d9bcf7e81"
+    sum="492e2629ddbcebb0b9281c3c05e16691"
     proved="true"
     expanded="true"
     shape="LaselectV3V0iainfix =V7aTrueLaselectV3V0LaselectV4V0iainfix =V14aTrueLaselectV4V0ainfix >=ainteger_of_int32V20ainteger_of_int32V21IamemV21V0V4V3V2FAamemV20V0V4V3V2Iainfix =V20V19FIainfix =V19V18FIainfix =ainteger_of_int32V18amaxainteger_of_int32V12ainteger_of_int32V17FIainfix =V17V16FIainfix >=ainteger_of_int32V16ainteger_of_int32V22IamemV22V15V4V3V2FAamemV16V15V4V3V2Fainfix >=ainteger_of_int32V23ainteger_of_int32V24IamemV24V0V4V3V2FAamemV23V0V4V3V2Iainfix =V23V12FIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFIainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix >=ainteger_of_int32V9ainteger_of_int32V25IamemV25V8V4V3V2FAamemV9V8V4V3V2FLaselectV4V0iainfix =V27aTrueLaselectV4V0ainfix >=ainteger_of_int32V33ainteger_of_int32V34IamemV34V0V4V3V2FAamemV33V0V4V3V2Iainfix =V33V32FIainfix =V32V31FIainfix =ainteger_of_int32V31amaxainteger_of_int32V5ainteger_of_int32V30FIainfix =V30V29FIainfix >=ainteger_of_int32V29ainteger_of_int32V35IamemV35V28V4V3V2FAamemV29V28V4V3V2Fainfix >=ainteger_of_int32V36ainteger_of_int32V37IamemV37V0V4V3V2FAamemV36V0V4V3V2Iainfix =V36V5FIiainfix =V27aTrueainfix =V26anullNainfix =V26anullFIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -52,10 +52,10 @@
      expanded="true">
      <goal
       name="WP_parameter tree_max_ensures_default.1"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="normal postcondition"
-      sum="682a0473419376df9559fb3708a2c3f8"
+      sum="9f8829cfdad65412ce420246a584a0e1"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV3V0LaselectV4V0LaselectV4V0ainfix >=ainteger_of_int32V20ainteger_of_int32V21IamemV21V0V4V3V2FAamemV20V0V4V3V2Iainfix =V20V19FIainfix =V19V18FIainfix =ainteger_of_int32V18amaxainteger_of_int32V12ainteger_of_int32V17FIainfix =V17V16FIainfix >=ainteger_of_int32V16ainteger_of_int32V22IamemV22V15V4V3V2FAamemV16V15V4V3V2FIainfix =V14aTrueIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFIainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix >=ainteger_of_int32V9ainteger_of_int32V23IamemV23V8V4V3V2FAamemV9V8V4V3V2FIainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -70,22 +70,22 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.19"/>
       </proof>
       <proof
        prover="1"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.19"/>
+       <result status="valid" time="0.44"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_ensures_default.2"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="normal postcondition"
-      sum="d569373693ab07592693730cbc7e7320"
+      sum="73a02265033f82a54e81cc3e23c32f3b"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV3V0LaselectV4V0ainfix >=ainteger_of_int32V15ainteger_of_int32V16IamemV16V0V4V3V2FAamemV15V0V4V3V2Iainfix =V15V12FIainfix =V14aTrueNIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFIainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix >=ainteger_of_int32V9ainteger_of_int32V17IamemV17V8V4V3V2FAamemV9V8V4V3V2FIainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -100,29 +100,29 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.16"/>
       </proof>
       <proof
        prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.62"/>
+       <result status="valid" time="1.45"/>
       </proof>
       <proof
        prover="1"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.29"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_ensures_default.3"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="normal postcondition"
-      sum="ce7169aaa67d2ac6570b511138e2d192"
+      sum="999d0ee7f61818e273bc3d35828ab40c"
       proved="true"
       expanded="true"
       shape="LaselectV3V0LaselectV4V0LaselectV4V0ainfix >=ainteger_of_int32V15ainteger_of_int32V16IamemV16V0V4V3V2FAamemV15V0V4V3V2Iainfix =V15V14FIainfix =V14V13FIainfix =ainteger_of_int32V13amaxainteger_of_int32V5ainteger_of_int32V12FIainfix =V12V11FIainfix >=ainteger_of_int32V11ainteger_of_int32V17IamemV17V10V4V3V2FAamemV11V10V4V3V2FIainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFIainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -137,21 +137,21 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.16"/>
       </proof>
       <proof
        prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.62"/>
+       <result status="valid" time="1.45"/>
       </proof>
       <proof
        prover="1"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.29"/>
       </proof>
       <transf
        name="split_goal"
@@ -159,10 +159,10 @@
        expanded="true">
        <goal
         name="WP_parameter tree_max_ensures_default.3.1"
-        locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+        locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
         loclnum="62" loccnumb="4" loccnume="12"
         expl="parameter tree_max_ensures_default"
-        sum="e1bafd219f0a990d8e8626e73e60b765"
+        sum="9f82a0f4049bd94a722b4c123eda80fe"
         proved="true"
         expanded="true"
         shape="LaselectV3V0LaselectV4V0LaselectV4V0amemV15V0V4V3V2Iainfix =V15V14FIainfix =V14V13FIainfix =ainteger_of_int32V13amaxainteger_of_int32V5ainteger_of_int32V12FIainfix =V12V11FIainfix >=ainteger_of_int32V11ainteger_of_int32V16IamemV16V10V4V3V2FAamemV11V10V4V3V2FIainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFIainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -177,29 +177,29 @@
          timelimit="3"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.14"/>
         </proof>
         <proof
          prover="0"
          timelimit="100"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.18"/>
         </proof>
         <proof
          prover="1"
          timelimit="3"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.19"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter tree_max_ensures_default.3.2"
-        locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+        locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
         loclnum="62" loccnumb="4" loccnume="12"
         expl="parameter tree_max_ensures_default"
-        sum="4f92b5005723629061bcbf26a03ab54f"
+        sum="9c5450ef4be69acde5efa023bf5af536"
         proved="true"
         expanded="true"
         shape="LaselectV3V0LaselectV4V0LaselectV4V0ainfix >=ainteger_of_int32V15ainteger_of_int32V16IamemV16V0V4V3V2FIainfix =V15V14FIainfix =V14V13FIainfix =ainteger_of_int32V13amaxainteger_of_int32V5ainteger_of_int32V12FIainfix =V12V11FIainfix >=ainteger_of_int32V11ainteger_of_int32V17IamemV17V10V4V3V2FAamemV11V10V4V3V2FIainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFIainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -214,24 +214,24 @@
          timelimit="3"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.17"/>
         </proof>
         <proof
          prover="1"
          timelimit="3"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.06"/>
+         <result status="valid" time="0.15"/>
         </proof>
        </goal>
       </transf>
      </goal>
      <goal
       name="WP_parameter tree_max_ensures_default.4"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="normal postcondition"
-      sum="5382fa46a11b2a776de5e2c94c7fd388"
+      sum="b9d995b3cbb544b1f6812147532df27d"
       proved="true"
       expanded="true"
       shape="LaselectV3V0LaselectV4V0ainfix >=ainteger_of_int32V10ainteger_of_int32V11IamemV11V0V4V3V2FAamemV10V0V4V3V2Iainfix =V10V5FIainfix =V9aTrueNIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFIainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -246,7 +246,7 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.13"/>
       </proof>
       <transf
        name="split_goal"
@@ -254,10 +254,10 @@
        expanded="true">
        <goal
         name="WP_parameter tree_max_ensures_default.4.1"
-        locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+        locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
         loclnum="62" loccnumb="4" loccnume="12"
         expl="parameter tree_max_ensures_default"
-        sum="92f420d1bd9947a7b37d9893e7f1ddfe"
+        sum="aff9fb1535471e256ecf4f6b1eb4ed4b"
         proved="true"
         expanded="false"
         shape="LaselectV3V0LaselectV4V0amemV10V0V4V3V2Iainfix =V10V5FIainfix =V9aTrueNIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFIainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -272,15 +272,15 @@
          timelimit="3"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.03"/>
+         <result status="valid" time="0.06"/>
         </proof>
        </goal>
        <goal
         name="WP_parameter tree_max_ensures_default.4.2"
-        locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+        locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
         loclnum="62" loccnumb="4" loccnume="12"
         expl="parameter tree_max_ensures_default"
-        sum="4eca2e362f149770b81f3f368ab29c50"
+        sum="f8d122978ac11b4c8f262bb84ae476e4"
         proved="true"
         expanded="false"
         shape="LaselectV3V0LaselectV4V0ainfix >=ainteger_of_int32V10ainteger_of_int32V11IamemV11V0V4V3V2FIainfix =V10V5FIainfix =V9aTrueNIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFIainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =V5aselectV2V0FIavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -295,7 +295,7 @@
          timelimit="3"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.13"/>
         </proof>
        </goal>
       </transf>
@@ -304,10 +304,10 @@
    </goal>
    <goal
     name="WP_parameter tree_max_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
     loclnum="62" loccnumb="4" loccnume="12"
     expl="parameter tree_max_safety"
-    sum="555fc03aa305641d71b2737ab00438df"
+    sum="f4b0e3399f0e75261f59df922d3570c7"
     proved="true"
     expanded="true"
     shape="LaselectV3V0iainfix =V7aTrueLaselectV3V0LaselectV4V0LaselectV4V0avalid_treeV15V1V4V3Aainfix =V15anullNAainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V14aTrueIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFAainfix =anullanullOainfix =V13anullOasame_blockV13anullAainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix >=ainteger_of_int32V9ainteger_of_int32V16IamemV16V8V4V3V2FAamemV9V8V4V3V2FAavalid_treeV8V1V4V3Aainfix =V8anullNAainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0LaselectV4V0LaselectV4V0avalid_treeV19V1V4V3Aainfix =V19anullNAainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V18aTrueIiainfix =V18aTrueainfix =V17anullNainfix =V17anullFAainfix =anullanullOainfix =V17anullOasame_blockV17anullAainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iiainfix =V7aTrueainfix =V6anullNainfix =V6anullFAainfix =anullanullOainfix =V6anullOasame_blockV6anullAainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V5aselectV2V0FAainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -323,10 +323,10 @@
      expanded="true">
      <goal
       name="WP_parameter tree_max_safety.1"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="pointer dereference"
-      sum="8be04abee54ed0baec899f09d8e4f938"
+      sum="3dbd3e7585b28f07c9d4fc79f71f8720"
       proved="true"
       expanded="false"
       shape="ainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -341,29 +341,29 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.13"/>
       </proof>
       <proof
        prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="1"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.13"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.2"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="pointer dereference"
-      sum="de0253d84f3faa127ec7de8f27bbe144"
+      sum="3b67f9a82a60c790f307aea2e504d6f4"
       proved="true"
       expanded="false"
       shape="ainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -378,22 +378,22 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.12"/>
       </proof>
       <proof
        prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.3"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="precondition"
-      sum="29bb25387c6c3301aa937d43b989809e"
+      sum="324818c48ed746d14641642470f7dcc1"
       proved="true"
       expanded="false"
       shape="LaselectV3V0ainfix =anullanullOainfix =V6anullOasame_blockV6anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -408,22 +408,22 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.00"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.4"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="pointer dereference"
-      sum="137b8a80988550d85ec720afb18f4d0a"
+      sum="0a0845c2c5e165627e9e63cf73fbeec5"
       proved="true"
       expanded="false"
       shape="LaselectV3V0ainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -438,22 +438,22 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.12"/>
       </proof>
       <proof
        prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.5"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="precondition for call"
-      sum="a33b1cce3b5c6125dcf4b5de4262be86"
+      sum="43856b9f92430878d196a45d15a69aa5"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV3V0avalid_treeV8V1V4V3Aainfix =V8anullNIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -468,22 +468,22 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.14"/>
       </proof>
       <proof
        prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.08"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.6"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="pointer dereference"
-      sum="df87b96ee7181e4c30cdceef4aadb6c6"
+      sum="b9fa09d4082836e0961ee1a2dfe057ad"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV3V0ainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix >=ainteger_of_int32V9ainteger_of_int32V13IamemV13V8V4V3V2FAamemV9V8V4V3V2FIavalid_treeV8V1V4V3Aainfix =V8anullNIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -498,22 +498,22 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.13"/>
       </proof>
       <proof
        prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.7"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="precondition"
-      sum="22c9359c5289108f921849f97a4f075e"
+      sum="be296d02d26cfaca61380b96e9e4541a"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV3V0LaselectV4V0ainfix =anullanullOainfix =V13anullOasame_blockV13anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix >=ainteger_of_int32V9ainteger_of_int32V14IamemV14V8V4V3V2FAamemV9V8V4V3V2FIavalid_treeV8V1V4V3Aainfix =V8anullNIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -528,22 +528,22 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.00"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.8"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="pointer dereference"
-      sum="504d7ff4a4d26c297a9ad4f23f1e304f"
+      sum="0ce8d950448908fe1665ea7ccafd3910"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV3V0LaselectV4V0ainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V14aTrueIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFIainfix =anullanullOainfix =V13anullOasame_blockV13anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix >=ainteger_of_int32V9ainteger_of_int32V15IamemV15V8V4V3V2FAamemV9V8V4V3V2FIavalid_treeV8V1V4V3Aainfix =V8anullNIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -558,22 +558,22 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.13"/>
       </proof>
       <proof
        prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.9"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="precondition for call"
-      sum="b2dd474caa74b1628f97f6e2d32b2c0d"
+      sum="e3b9877572e02476b546f80cccebff8a"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV3V0LaselectV4V0LaselectV4V0avalid_treeV15V1V4V3Aainfix =V15anullNIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V14aTrueIiainfix =V14aTrueainfix =V13anullNainfix =V13anullFIainfix =anullanullOainfix =V13anullOasame_blockV13anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V12V11FIainfix =ainteger_of_int32V11amaxainteger_of_int32V5ainteger_of_int32V10FIainfix =V10V9FIainfix >=ainteger_of_int32V9ainteger_of_int32V16IamemV16V8V4V3V2FAamemV9V8V4V3V2FIavalid_treeV8V1V4V3Aainfix =V8anullNIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V7aTrueIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -588,29 +588,29 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.15"/>
       </proof>
       <proof
        prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.54"/>
+       <result status="valid" time="1.30"/>
       </proof>
       <proof
        prover="1"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.21"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.10"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="pointer dereference"
-      sum="ac0f03e4ab0fba48f06cf66bc8cbffa9"
+      sum="374350413168df00be488cb31380f82f"
       proved="true"
       expanded="false"
       shape="LaselectV3V0ainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -625,22 +625,22 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.12"/>
       </proof>
       <proof
        prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.11"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="precondition"
-      sum="9642f4102a2e770e95fd8e1d763d0ce7"
+      sum="bc51eacb3ee587ed12b1e61797baa7a6"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV4V0ainfix =anullanullOainfix =V8anullOasame_blockV8anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -655,22 +655,22 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.02"/>
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.12"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="pointer dereference"
-      sum="9577caf8cbdc1e4f01a51c9e1ddfbe74"
+      sum="72e2730416f606453d75cdac89689a62"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV4V0ainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFIainfix =anullanullOainfix =V8anullOasame_blockV8anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -685,29 +685,29 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.12"/>
       </proof>
       <proof
        prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="1"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.11"/>
       </proof>
      </goal>
      <goal
       name="WP_parameter tree_max_safety.13"
-      locfile="/home/marche/why2-nitrogen/tests/c/tree_max.c"
+      locfile="/home/cmarche/why2-trunk/tests/c/tree_max.c"
       loclnum="62" loccnumb="4" loccnume="12"
       expl="precondition for call"
-      sum="be29b1b73c21d46e9ed81630e2a18658"
+      sum="bd7f3ba4cf21dab2db6f8ada8a31b4dd"
       proved="true"
       expanded="false"
       shape="LaselectV3V0LaselectV4V0LaselectV4V0avalid_treeV10V1V4V3Aainfix =V10anullNIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V9aTrueIiainfix =V9aTrueainfix =V8anullNainfix =V8anullFIainfix =anullanullOainfix =V8anullOasame_blockV8anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V7aTrueNIiainfix =V7aTrueainfix =V6anullNainfix =V6anullFIainfix =anullanullOainfix =V6anullOasame_blockV6anullIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iainfix =V5aselectV2V0FIainfix <=c0aoffset_maxV1V0Aainfix <=aoffset_minV1V0c0Iavalid_treeV0V1V4V3Aainfix =V0anullNFFFFF">
@@ -722,21 +722,21 @@
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.14"/>
       </proof>
       <proof
        prover="0"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.03"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="1"
        timelimit="3"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.16"/>
       </proof>
      </goal>
     </transf>

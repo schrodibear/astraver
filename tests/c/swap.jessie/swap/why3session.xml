@@ -33,10 +33,10 @@
    expanded="true">
    <goal
     name="WP_parameter swap_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/swap.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="1b5322db028ed97e3b9875bd5b4eb6cc"
+    sum="6b44b847940d4399dfe7e89a6f039ef9"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4ainteger_of_int32V1Aainfix =ainteger_of_int32V3ainteger_of_int32V0Iainfix =V4V2FIainfix =V3V0FIainfix =V2V1FFF">
@@ -51,29 +51,29 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.11"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter swap_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/swap.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/swap.c"
     loclnum="37" loccnumb="5" loccnume="9"
     expl="parameter swap_safety"
-    sum="1b6dc4d3671237e486404644d8b991da"
+    sum="6d255edff3820ee2d13865d21d7c766b"
     proved="true"
     expanded="true"
     shape="t">
@@ -88,21 +88,21 @@
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
   </theory>
