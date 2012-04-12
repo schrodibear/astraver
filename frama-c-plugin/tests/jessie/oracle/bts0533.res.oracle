@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only bts0533.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD bts0533.c"
 [jessie] Starting Jessie translation
-[kernel] warning: No code nor implicit assigns clause for function printf, generating default assigns from the prototype
-bts0533.c:60:[jessie] warning: skipping all arguments of implicit prototype printf
 [jessie] Producing Jessie files in subdir bts0533.jessie
 [jessie] File bts0533.jessie/bts0533.jc written.
 [jessie] File bts0533.jessie/bts0533.cloc written.
@@ -48,12 +46,6 @@ tag voidP = {
 }
 
 type voidP = [voidP]
-
-charP[0..14] __string_key__d_pos__u_;
-
-invariant valid___string_key__d_pos__u_ :
-((\offset_min(__string_key__d_pos__u_) <= 0) &&
-  (\offset_max(__string_key__d_pos__u_) >= 14))
 
 uint32 bsearch(int32 key, intP[..] array, uint32 n_1)
   requires (C_50 : ((C_51 : (\offset_min(array) <= 0)) &&
@@ -155,66 +147,51 @@ behavior notfound:
    }
 }
 
-int32 printf()
-behavior default:
-  assigns \nothing;
-  allocates \nothing;
-  ensures (C_53 : true);
-;
-
 int32 main()
 behavior default:
-  ensures (C_86 : true);
+  ensures (C_83 : true);
 {  
    (var intP[0..9] array_0);
    
    (var int32 i);
    
-   (var uint32 tmp);
-   
    (var int32 __retres_0);
    
-   {  (C_55 : (array_0 = (C_54 : (new intP[10]))));
-      (C_57 : ((C_56 : (array_0 + 0).intM) = 0));
-      (C_59 : ((C_58 : (array_0 + 1).intM) = 1));
-      (C_61 : ((C_60 : (array_0 + 2).intM) = 2));
-      (C_63 : ((C_62 : (array_0 + 3).intM) = 3));
-      (C_65 : ((C_64 : (array_0 + 4).intM) = 4));
-      (C_67 : ((C_66 : (array_0 + 5).intM) = 5));
-      (C_69 : ((C_68 : (array_0 + 6).intM) = 6));
-      (C_71 : ((C_70 : (array_0 + 7).intM) = 7));
-      (C_73 : ((C_72 : (array_0 + 8).intM) = 8));
-      (C_75 : ((C_74 : (array_0 + 9).intM) = 9));
-      (C_76 : (i = -1));
+   {  (C_54 : (array_0 = (C_53 : (new intP[10]))));
+      (C_56 : ((C_55 : (array_0 + 0).intM) = 0));
+      (C_58 : ((C_57 : (array_0 + 1).intM) = 1));
+      (C_60 : ((C_59 : (array_0 + 2).intM) = 2));
+      (C_62 : ((C_61 : (array_0 + 3).intM) = 3));
+      (C_64 : ((C_63 : (array_0 + 4).intM) = 4));
+      (C_66 : ((C_65 : (array_0 + 5).intM) = 5));
+      (C_68 : ((C_67 : (array_0 + 6).intM) = 6));
+      (C_70 : ((C_69 : (array_0 + 7).intM) = 7));
+      (C_72 : ((C_71 : (array_0 + 8).intM) = 8));
+      (C_74 : ((C_73 : (array_0 + 9).intM) = 9));
+      (C_75 : (i = -1));
       
       loop 
-      variant (C_77 : (10 - i));
+      variant (C_76 : (10 - i));
       while (true)
       {  
          {  (if (i <= 10) then () else 
             (goto while_0_break));
             
-            {  
-               {  (C_79 : (tmp = (C_78 : bsearch(i, array_0, 10))));
-                  ()
-               };
-               (C_80 : printf())
+            {  (C_77 : bsearch(i, array_0, 10))
             };
-            (C_83 : (i = (C_82 : ((C_81 : (i + 1)) :> int32))))
+            (C_80 : (i = (C_79 : ((C_78 : (i + 1)) :> int32))))
          }
       };
       (while_0_break : ());
-      (C_84 : (__retres_0 = 0));
+      (C_81 : (__retres_0 = 0));
       
-      {  (C_85 : (free(array_0)));
+      {  (C_82 : (free(array_0)));
          
          (return __retres_0)
       }
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs bts0533.jessie/bts0533.cloc bts0533.jessie/bts0533.jc
-type __string_key__d_pos__u__1
-
 type charP
 
 type int32
@@ -232,8 +209,6 @@ type uint8
 type unsigned_charP
 
 type voidP
-
-logic __string_key__d_pos__u_:  -> charP pointer
 
 logic charP_tag:  -> charP tag_id
 
@@ -456,14 +431,6 @@ axiom unsigned_charP_tags :
   (forall unsigned_charP_tag_table:unsigned_charP tag_table.
    instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
-predicate valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table:charP alloc_table) =
- (le_int(offset_min(charP___string_key__d_pos__u__1_alloc_table,
-         __string_key__d_pos__u_),
-  (0))
- and ge_int(offset_max(charP___string_key__d_pos__u__1_alloc_table,
-            __string_key__d_pos__u_),
-     (14)))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -644,84 +611,64 @@ parameter any_uint32 : unit -> { } uint32 { true }
 
 parameter any_uint8 : unit -> { } uint8 { true }
 
-parameter charP___string_key__d_pos__u__1_alloc_table : charP alloc_table ref
-
 parameter bsearch :
  key:int32 ->
   array_0:intP pointer ->
    n_1:uint32 ->
-    intP_array_2_alloc_table:intP alloc_table ->
-     intP_intM_array_2:(intP, int32) memory ->
-      { } uint32 reads charP___string_key__d_pos__u__1_alloc_table
-      { ((JC_<somenum>:
-         valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table))
-        and (((forall i_5:int.
-               ((le_int((0), i_5) and lt_int(i_5, integer_of_uint32(n_1))) ->
-                (integer_of_int32(select(intP_intM_array_2,
-                                  shift(array_0, i_5))) <> integer_of_int32(key)))) ->
-              (JC_<somenum>:
-              ((JC_<somenum>: (integer_of_uint32(result) = (4294967295)))
-              and (JC_<somenum>:
-                  valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table)))))
-            and ((exists i_4:int.
-                  (le_int((0), i_4)
-                  and (lt_int(i_4, integer_of_uint32(n_1))
-                      and (integer_of_int32(select(intP_intM_array_2,
-                                            shift(array_0, i_4))) = integer_of_int32(key))))) ->
-                 (JC_<somenum>:
-                 ((JC_<somenum>:
-                  (integer_of_int32(select(intP_intM_array_2,
-                                    shift(array_0, integer_of_uint32(result)))) = 
-                  integer_of_int32(key)))
-                 and (JC_<somenum>:
-                     valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table))))))) }
+    intP_array_1_alloc_table:intP alloc_table ->
+     intP_intM_array_1:(intP, int32) memory ->
+      { } uint32
+      { (((forall i_5:int.
+           ((le_int((0), i_5) and lt_int(i_5, integer_of_uint32(n_1))) ->
+            (integer_of_int32(select(intP_intM_array_1, shift(array_0, i_5))) <> 
+            integer_of_int32(key)))) ->
+          (JC_<somenum>: (integer_of_uint32(result) = (4294967295))))
+        and ((exists i_4:int.
+              (le_int((0), i_4)
+              and (lt_int(i_4, integer_of_uint32(n_1))
+                  and (integer_of_int32(select(intP_intM_array_1,
+                                        shift(array_0, i_4))) = integer_of_int32(key))))) ->
+             (JC_<somenum>:
+             (integer_of_int32(select(intP_intM_array_1,
+                               shift(array_0, integer_of_uint32(result)))) = 
+             integer_of_int32(key))))) }
 
 parameter bsearch_requires :
  key:int32 ->
   array_0:intP pointer ->
    n_1:uint32 ->
-    intP_array_2_alloc_table:intP alloc_table ->
-     intP_intM_array_2:(intP, int32) memory ->
+    intP_array_1_alloc_table:intP alloc_table ->
+     intP_intM_array_1:(intP, int32) memory ->
       { (JC_<somenum>:
-        (((JC_<somenum>: le_int(offset_min(intP_array_2_alloc_table, array_0), (0)))
-         and ((JC_<somenum>:
-              ge_int(offset_max(intP_array_2_alloc_table, array_0),
-              sub_int(integer_of_uint32(n_1), (1))))
-             and (JC_<somenum>:
-                 (forall i_3:int.
-                  (forall j_0:int.
-                   ((le_int((0), i_3)
-                    and (lt_int(i_3, j_0)
-                        and lt_int(j_0, integer_of_uint32(n_1)))) ->
-                    lt_int(integer_of_int32(select(intP_intM_array_2,
-                                            shift(array_0, i_3))),
-                    integer_of_int32(select(intP_intM_array_2,
-                                     shift(array_0, j_0))))))))))
-        and (JC_<somenum>:
-            valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table))))}
-      uint32 reads charP___string_key__d_pos__u__1_alloc_table
-      { ((JC_<somenum>:
-         valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table))
-        and (((forall i_5:int.
-               ((le_int((0), i_5) and lt_int(i_5, integer_of_uint32(n_1))) ->
-                (integer_of_int32(select(intP_intM_array_2,
-                                  shift(array_0, i_5))) <> integer_of_int32(key)))) ->
-              (JC_<somenum>:
-              ((JC_<somenum>: (integer_of_uint32(result) = (4294967295)))
-              and (JC_<somenum>:
-                  valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table)))))
-            and ((exists i_4:int.
-                  (le_int((0), i_4)
-                  and (lt_int(i_4, integer_of_uint32(n_1))
-                      and (integer_of_int32(select(intP_intM_array_2,
-                                            shift(array_0, i_4))) = integer_of_int32(key))))) ->
-                 (JC_<somenum>:
-                 ((JC_<somenum>:
-                  (integer_of_int32(select(intP_intM_array_2,
-                                    shift(array_0, integer_of_uint32(result)))) = 
-                  integer_of_int32(key)))
-                 and (JC_<somenum>:
-                     valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table))))))) }
+        ((JC_<somenum>: le_int(offset_min(intP_array_1_alloc_table, array_0), (0)))
+        and ((JC_<somenum>:
+             ge_int(offset_max(intP_array_1_alloc_table, array_0),
+             sub_int(integer_of_uint32(n_1), (1))))
+            and (JC_<somenum>:
+                (forall i_3:int.
+                 (forall j_0:int.
+                  ((le_int((0), i_3)
+                   and (lt_int(i_3, j_0)
+                       and lt_int(j_0, integer_of_uint32(n_1)))) ->
+                   lt_int(integer_of_int32(select(intP_intM_array_1,
+                                           shift(array_0, i_3))),
+                   integer_of_int32(select(intP_intM_array_1,
+                                    shift(array_0, j_0)))))))))))}
+      uint32
+      { (((forall i_5:int.
+           ((le_int((0), i_5) and lt_int(i_5, integer_of_uint32(n_1))) ->
+            (integer_of_int32(select(intP_intM_array_1, shift(array_0, i_5))) <> 
+            integer_of_int32(key)))) ->
+          (JC_<somenum>: (integer_of_uint32(result) = (4294967295))))
+        and ((exists i_4:int.
+              (le_int((0), i_4)
+              and (lt_int(i_4, integer_of_uint32(n_1))
+                  and (integer_of_int32(select(intP_intM_array_1,
+                                        shift(array_0, i_4))) = integer_of_int32(key))))) ->
+             (JC_<somenum>:
+             (integer_of_int32(select(intP_intM_array_1,
+                               shift(array_0, integer_of_uint32(result)))) = 
+             integer_of_int32(key))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -733,33 +680,9 @@ parameter int8_of_integer_ :
   { (le_int((-128), x) and le_int(x, (127)))} int8
   { eq_int(integer_of_int8(result), x) }
 
-parameter main :
- tt:unit ->
-  { } int32 reads charP___string_key__d_pos__u__1_alloc_table
-  { (JC_<somenum>:
-    valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table)) }
+parameter main : tt:unit -> { } int32 { true }
 
-parameter main_requires :
- tt:unit ->
-  { (JC_<somenum>:
-    valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table))}
-  int32 reads charP___string_key__d_pos__u__1_alloc_table
-  { (JC_<somenum>:
-    valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table)) }
-
-parameter printf :
- tt:unit ->
-  { } int32 reads charP___string_key__d_pos__u__1_alloc_table
-  { (JC_<somenum>:
-    valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table)) }
-
-parameter printf_requires :
- tt:unit ->
-  { (JC_<somenum>:
-    valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table))}
-  int32 reads charP___string_key__d_pos__u__1_alloc_table
-  { (JC_<somenum>:
-    valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table)) }
+parameter main_requires : tt:unit -> { } int32 { true }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -784,24 +707,21 @@ parameter uint8_of_integer_ :
   { eq_int(integer_of_uint8(result), x) }
 
 let bsearch_ensures_default =
- fun (key : int32) (array_0 : intP pointer) (n_1 : uint32) (intP_array_2_alloc_table : intP alloc_table) (intP_intM_array_2 : (intP, int32) memory) ->
+ fun (key : int32) (array_0 : intP pointer) (n_1 : uint32) (intP_array_1_alloc_table : intP alloc_table) (intP_intM_array_1 : (intP, int32) memory) ->
   { (JC_<somenum>:
-    (((JC_<somenum>: le_int(offset_min(intP_array_2_alloc_table, array_0), (0)))
-     and ((JC_<somenum>:
-          ge_int(offset_max(intP_array_2_alloc_table, array_0),
-          sub_int(integer_of_uint32(n_1), (1))))
-         and (JC_<somenum>:
-             (forall i_3:int.
-              (forall j_0:int.
-               ((le_int((0), i_3)
-                and (lt_int(i_3, j_0)
-                    and lt_int(j_0, integer_of_uint32(n_1)))) ->
-                lt_int(integer_of_int32(select(intP_intM_array_2,
-                                        shift(array_0, i_3))),
-                integer_of_int32(select(intP_intM_array_2,
-                                 shift(array_0, j_0))))))))))
-    and (JC_<somenum>:
-        valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table)))) }
+    ((JC_<somenum>: le_int(offset_min(intP_array_1_alloc_table, array_0), (0)))
+    and ((JC_<somenum>:
+         ge_int(offset_max(intP_array_1_alloc_table, array_0),
+         sub_int(integer_of_uint32(n_1), (1))))
+        and (JC_<somenum>:
+            (forall i_3:int.
+             (forall j_0:int.
+              ((le_int((0), i_3)
+               and (lt_int(i_3, j_0) and lt_int(j_0, integer_of_uint32(n_1)))) ->
+               lt_int(integer_of_int32(select(intP_intM_array_1,
+                                       shift(array_0, i_3))),
+               integer_of_int32(select(intP_intM_array_1,
+                                shift(array_0, j_0))))))))))) }
   (init:
   (let return = ref (any_uint32 void) in
   try
@@ -828,7 +748,7 @@ let bsearch_ensures_default =
           (assert { (JC_<somenum>: gt_int(integer_of_uint32(n_1), (0))) }; void);
           void;
           (if ((eq_int_ (integer_of_int32 (C_5:
-                                          ((safe_acc_ intP_intM_array_2) 
+                                          ((safe_acc_ intP_intM_array_1) 
                                            (C_4: ((shift array_0) (0))))))) 
                (integer_of_int32 key))
           then
@@ -837,7 +757,7 @@ let bsearch_ensures_default =
              (let jessie_<somenum> = (__retres := (safe_uint32_of_integer_ (0))) in
              void); (raise (Return_label_exc void)) end) else void);
           (if ((eq_int_ (integer_of_int32 (C_12:
-                                          ((safe_acc_ intP_intM_array_2) 
+                                          ((safe_acc_ intP_intM_array_1) 
                                            (C_11:
                                            ((shift array_0) (integer_of_uint32 
                                                              (C_10:
@@ -873,13 +793,13 @@ let bsearch_ensures_default =
                (forall i_2:int.
                 ((le_int(integer_of_uint32(right), i_2)
                  and lt_int(i_2, integer_of_uint32(n_1))) ->
-                 (integer_of_int32(select(intP_intM_array_2,
+                 (integer_of_int32(select(intP_intM_array_1,
                                    shift(array_0, i_2))) <> integer_of_int32(key)))))
               and ((JC_<somenum>:
                    (forall i_1:int.
                     ((le_int((0), i_1)
                      and le_int(i_1, integer_of_uint32(left))) ->
-                     (integer_of_int32(select(intP_intM_array_2,
+                     (integer_of_int32(select(intP_intM_array_1,
                                        shift(array_0, i_1))) <> integer_of_int32(key)))))
                   and ((JC_<somenum>:
                        (integer_of_uint32(diff) = sub_int(integer_of_uint32(right),
@@ -889,11 +809,11 @@ let bsearch_ensures_default =
                            integer_of_uint32(right)))
                           and (JC_<somenum>:
                               ((JC_<somenum>:
-                               le_int(offset_min(intP_array_2_alloc_table,
+                               le_int(offset_min(intP_array_1_alloc_table,
                                       array_0),
                                integer_of_uint32(left)))
                               and (JC_<somenum>:
-                                  ge_int(offset_max(intP_array_2_alloc_table,
+                                  ge_int(offset_max(intP_array_1_alloc_table,
                                          array_0),
                                   integer_of_uint32(right)))))))))  }
            begin
@@ -924,7 +844,7 @@ let bsearch_ensures_default =
                                                                     (integer_of_uint32 !left))))))) (2)))))))))))) in
                 void);
                 (if ((eq_int_ (integer_of_int32 (C_41:
-                                                ((safe_acc_ intP_intM_array_2) 
+                                                ((safe_acc_ intP_intM_array_1) 
                                                  (C_40:
                                                  ((shift array_0) (integer_of_uint32 !mid))))))) 
                      (integer_of_int32 key))
@@ -936,7 +856,7 @@ let bsearch_ensures_default =
                 else
                  (let jessie_<somenum> =
                  (if ((lt_int_ (integer_of_int32 (C_38:
-                                                 ((safe_acc_ intP_intM_array_2) 
+                                                 ((safe_acc_ intP_intM_array_1) 
                                                   (C_37:
                                                   ((shift array_0) (integer_of_uint32 !mid))))))) 
                       (integer_of_int32 key))
@@ -961,29 +881,27 @@ let bsearch_ensures_default =
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let bsearch_ensures_found =
- fun (key : int32) (array_0 : intP pointer) (n_1 : uint32) (intP_array_2_alloc_table : intP alloc_table) (intP_intM_array_2 : (intP, int32) memory) ->
+ fun (key : int32) (array_0 : intP pointer) (n_1 : uint32) (intP_array_1_alloc_table : intP alloc_table) (intP_intM_array_1 : (intP, int32) memory) ->
   { ((exists i_4:int.
       (le_int((0), i_4)
       and (lt_int(i_4, integer_of_uint32(n_1))
-          and (integer_of_int32(select(intP_intM_array_2,
+          and (integer_of_int32(select(intP_intM_array_1,
                                 shift(array_0, i_4))) = integer_of_int32(key)))))
     and (JC_<somenum>:
-        (((JC_<somenum>: le_int(offset_min(intP_array_2_alloc_table, array_0), (0)))
-         and ((JC_<somenum>:
-              ge_int(offset_max(intP_array_2_alloc_table, array_0),
-              sub_int(integer_of_uint32(n_1), (1))))
-             and (JC_<somenum>:
-                 (forall i_3:int.
-                  (forall j_0:int.
-                   ((le_int((0), i_3)
-                    and (lt_int(i_3, j_0)
-                        and lt_int(j_0, integer_of_uint32(n_1)))) ->
-                    lt_int(integer_of_int32(select(intP_intM_array_2,
-                                            shift(array_0, i_3))),
-                    integer_of_int32(select(intP_intM_array_2,
-                                     shift(array_0, j_0))))))))))
-        and (JC_<somenum>:
-            valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table))))) }
+        ((JC_<somenum>: le_int(offset_min(intP_array_1_alloc_table, array_0), (0)))
+        and ((JC_<somenum>:
+             ge_int(offset_max(intP_array_1_alloc_table, array_0),
+             sub_int(integer_of_uint32(n_1), (1))))
+            and (JC_<somenum>:
+                (forall i_3:int.
+                 (forall j_0:int.
+                  ((le_int((0), i_3)
+                   and (lt_int(i_3, j_0)
+                       and lt_int(j_0, integer_of_uint32(n_1)))) ->
+                   lt_int(integer_of_int32(select(intP_intM_array_1,
+                                           shift(array_0, i_3))),
+                   integer_of_int32(select(intP_intM_array_1,
+                                    shift(array_0, j_0)))))))))))) }
   (init:
   (let return = ref (any_uint32 void) in
   try
@@ -1010,7 +928,7 @@ let bsearch_ensures_found =
           [ { } unit { (JC_<somenum>: gt_int(integer_of_uint32(n_1), (0))) } ];
           void;
           (if ((eq_int_ (integer_of_int32 (C_5:
-                                          ((safe_acc_ intP_intM_array_2) 
+                                          ((safe_acc_ intP_intM_array_1) 
                                            (C_4: ((shift array_0) (0))))))) 
                (integer_of_int32 key))
           then
@@ -1019,7 +937,7 @@ let bsearch_ensures_found =
              (let jessie_<somenum> = (__retres := (safe_uint32_of_integer_ (0))) in
              void); (raise (Return_label_exc void)) end) else void);
           (if ((eq_int_ (integer_of_int32 (C_12:
-                                          ((safe_acc_ intP_intM_array_2) 
+                                          ((safe_acc_ intP_intM_array_1) 
                                            (C_11:
                                            ((shift array_0) (integer_of_uint32 
                                                              (C_10:
@@ -1057,13 +975,13 @@ let bsearch_ensures_found =
                   (forall i_2:int.
                    ((le_int(integer_of_uint32(right), i_2)
                     and lt_int(i_2, integer_of_uint32(n_1))) ->
-                    (integer_of_int32(select(intP_intM_array_2,
+                    (integer_of_int32(select(intP_intM_array_1,
                                       shift(array_0, i_2))) <> integer_of_int32(key)))))
                  and ((JC_<somenum>:
                       (forall i_1:int.
                        ((le_int((0), i_1)
                         and le_int(i_1, integer_of_uint32(left))) ->
-                        (integer_of_int32(select(intP_intM_array_2,
+                        (integer_of_int32(select(intP_intM_array_1,
                                           shift(array_0, i_1))) <> integer_of_int32(key)))))
                      and ((JC_<somenum>:
                           (integer_of_uint32(diff) = sub_int(integer_of_uint32(right),
@@ -1073,11 +991,11 @@ let bsearch_ensures_found =
                               integer_of_uint32(right)))
                              and (JC_<somenum>:
                                  ((JC_<somenum>:
-                                  le_int(offset_min(intP_array_2_alloc_table,
+                                  le_int(offset_min(intP_array_1_alloc_table,
                                          array_0),
                                   integer_of_uint32(left)))
                                  and (JC_<somenum>:
-                                     ge_int(offset_max(intP_array_2_alloc_table,
+                                     ge_int(offset_max(intP_array_1_alloc_table,
                                             array_0),
                                      integer_of_uint32(right))))))))) } ];
             try
@@ -1106,7 +1024,7 @@ let bsearch_ensures_found =
                                                                     (integer_of_uint32 !left))))))) (2)))))))))))) in
                 void);
                 (if ((eq_int_ (integer_of_int32 (C_41:
-                                                ((safe_acc_ intP_intM_array_2) 
+                                                ((safe_acc_ intP_intM_array_1) 
                                                  (C_40:
                                                  ((shift array_0) (integer_of_uint32 !mid))))))) 
                      (integer_of_int32 key))
@@ -1118,7 +1036,7 @@ let bsearch_ensures_found =
                 else
                  (let jessie_<somenum> =
                  (if ((lt_int_ (integer_of_int32 (C_38:
-                                                 ((safe_acc_ intP_intM_array_2) 
+                                                 ((safe_acc_ intP_intM_array_1) 
                                                   (C_37:
                                                   ((shift array_0) (integer_of_uint32 !mid))))))) 
                       (integer_of_int32 key))
@@ -1142,36 +1060,30 @@ let bsearch_ensures_found =
       (return_label: begin   (return := !__retres); (raise Return) end) end)))));
     absurd  end with Return -> !return end))
   { (JC_<somenum>:
-    ((JC_<somenum>:
-     (integer_of_int32(select(intP_intM_array_2,
-                       shift(array_0, integer_of_uint32(result)))) = 
-     integer_of_int32(key)))
-    and (JC_<somenum>:
-        valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table)))) }
+    (integer_of_int32(select(intP_intM_array_1,
+                      shift(array_0, integer_of_uint32(result)))) = integer_of_int32(key))) }
 
 let bsearch_ensures_notfound =
- fun (key : int32) (array_0 : intP pointer) (n_1 : uint32) (intP_array_2_alloc_table : intP alloc_table) (intP_intM_array_2 : (intP, int32) memory) ->
+ fun (key : int32) (array_0 : intP pointer) (n_1 : uint32) (intP_array_1_alloc_table : intP alloc_table) (intP_intM_array_1 : (intP, int32) memory) ->
   { ((forall i_5:int.
       ((le_int((0), i_5) and lt_int(i_5, integer_of_uint32(n_1))) ->
-       (integer_of_int32(select(intP_intM_array_2, shift(array_0, i_5))) <> 
+       (integer_of_int32(select(intP_intM_array_1, shift(array_0, i_5))) <> 
        integer_of_int32(key))))
     and (JC_<somenum>:
-        (((JC_<somenum>: le_int(offset_min(intP_array_2_alloc_table, array_0), (0)))
-         and ((JC_<somenum>:
-              ge_int(offset_max(intP_array_2_alloc_table, array_0),
-              sub_int(integer_of_uint32(n_1), (1))))
-             and (JC_<somenum>:
-                 (forall i_3:int.
-                  (forall j_0:int.
-                   ((le_int((0), i_3)
-                    and (lt_int(i_3, j_0)
-                        and lt_int(j_0, integer_of_uint32(n_1)))) ->
-                    lt_int(integer_of_int32(select(intP_intM_array_2,
-                                            shift(array_0, i_3))),
-                    integer_of_int32(select(intP_intM_array_2,
-                                     shift(array_0, j_0))))))))))
-        and (JC_<somenum>:
-            valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table))))) }
+        ((JC_<somenum>: le_int(offset_min(intP_array_1_alloc_table, array_0), (0)))
+        and ((JC_<somenum>:
+             ge_int(offset_max(intP_array_1_alloc_table, array_0),
+             sub_int(integer_of_uint32(n_1), (1))))
+            and (JC_<somenum>:
+                (forall i_3:int.
+                 (forall j_0:int.
+                  ((le_int((0), i_3)
+                   and (lt_int(i_3, j_0)
+                       and lt_int(j_0, integer_of_uint32(n_1)))) ->
+                   lt_int(integer_of_int32(select(intP_intM_array_1,
+                                           shift(array_0, i_3))),
+                   integer_of_int32(select(intP_intM_array_1,
+                                    shift(array_0, j_0)))))))))))) }
   (init:
   (let return = ref (any_uint32 void) in
   try
@@ -1198,7 +1110,7 @@ let bsearch_ensures_notfound =
           [ { } unit { (JC_<somenum>: gt_int(integer_of_uint32(n_1), (0))) } ];
           void;
           (if ((eq_int_ (integer_of_int32 (C_5:
-                                          ((safe_acc_ intP_intM_array_2) 
+                                          ((safe_acc_ intP_intM_array_1) 
                                            (C_4: ((shift array_0) (0))))))) 
                (integer_of_int32 key))
           then
@@ -1207,7 +1119,7 @@ let bsearch_ensures_notfound =
              (let jessie_<somenum> = (__retres := (safe_uint32_of_integer_ (0))) in
              void); (raise (Return_label_exc void)) end) else void);
           (if ((eq_int_ (integer_of_int32 (C_12:
-                                          ((safe_acc_ intP_intM_array_2) 
+                                          ((safe_acc_ intP_intM_array_1) 
                                            (C_11:
                                            ((shift array_0) (integer_of_uint32 
                                                              (C_10:
@@ -1245,13 +1157,13 @@ let bsearch_ensures_notfound =
                   (forall i_2:int.
                    ((le_int(integer_of_uint32(right), i_2)
                     and lt_int(i_2, integer_of_uint32(n_1))) ->
-                    (integer_of_int32(select(intP_intM_array_2,
+                    (integer_of_int32(select(intP_intM_array_1,
                                       shift(array_0, i_2))) <> integer_of_int32(key)))))
                  and ((JC_<somenum>:
                       (forall i_1:int.
                        ((le_int((0), i_1)
                         and le_int(i_1, integer_of_uint32(left))) ->
-                        (integer_of_int32(select(intP_intM_array_2,
+                        (integer_of_int32(select(intP_intM_array_1,
                                           shift(array_0, i_1))) <> integer_of_int32(key)))))
                      and ((JC_<somenum>:
                           (integer_of_uint32(diff) = sub_int(integer_of_uint32(right),
@@ -1261,11 +1173,11 @@ let bsearch_ensures_notfound =
                               integer_of_uint32(right)))
                              and (JC_<somenum>:
                                  ((JC_<somenum>:
-                                  le_int(offset_min(intP_array_2_alloc_table,
+                                  le_int(offset_min(intP_array_1_alloc_table,
                                          array_0),
                                   integer_of_uint32(left)))
                                  and (JC_<somenum>:
-                                     ge_int(offset_max(intP_array_2_alloc_table,
+                                     ge_int(offset_max(intP_array_1_alloc_table,
                                             array_0),
                                      integer_of_uint32(right))))))))) } ];
             try
@@ -1294,7 +1206,7 @@ let bsearch_ensures_notfound =
                                                                     (integer_of_uint32 !left))))))) (2)))))))))))) in
                 void);
                 (if ((eq_int_ (integer_of_int32 (C_41:
-                                                ((safe_acc_ intP_intM_array_2) 
+                                                ((safe_acc_ intP_intM_array_1) 
                                                  (C_40:
                                                  ((shift array_0) (integer_of_uint32 !mid))))))) 
                      (integer_of_int32 key))
@@ -1306,7 +1218,7 @@ let bsearch_ensures_notfound =
                 else
                  (let jessie_<somenum> =
                  (if ((lt_int_ (integer_of_int32 (C_38:
-                                                 ((safe_acc_ intP_intM_array_2) 
+                                                 ((safe_acc_ intP_intM_array_1) 
                                                   (C_37:
                                                   ((shift array_0) (integer_of_uint32 !mid))))))) 
                       (integer_of_int32 key))
@@ -1329,30 +1241,24 @@ let bsearch_ensures_notfound =
       with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)))));
     absurd  end with Return -> !return end))
-  { (JC_<somenum>:
-    ((JC_<somenum>: (integer_of_uint32(result) = (4294967295)))
-    and (JC_<somenum>:
-        valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table)))) }
+  { (JC_<somenum>: (integer_of_uint32(result) = (4294967295))) }
 
 let bsearch_safety =
- fun (key : int32) (array_0 : intP pointer) (n_1 : uint32) (intP_array_2_alloc_table : intP alloc_table) (intP_intM_array_2 : (intP, int32) memory) ->
+ fun (key : int32) (array_0 : intP pointer) (n_1 : uint32) (intP_array_1_alloc_table : intP alloc_table) (intP_intM_array_1 : (intP, int32) memory) ->
   { (JC_<somenum>:
-    (((JC_<somenum>: le_int(offset_min(intP_array_2_alloc_table, array_0), (0)))
-     and ((JC_<somenum>:
-          ge_int(offset_max(intP_array_2_alloc_table, array_0),
-          sub_int(integer_of_uint32(n_1), (1))))
-         and (JC_<somenum>:
-             (forall i_3:int.
-              (forall j_0:int.
-               ((le_int((0), i_3)
-                and (lt_int(i_3, j_0)
-                    and lt_int(j_0, integer_of_uint32(n_1)))) ->
-                lt_int(integer_of_int32(select(intP_intM_array_2,
-                                        shift(array_0, i_3))),
-                integer_of_int32(select(intP_intM_array_2,
-                                 shift(array_0, j_0))))))))))
-    and (JC_<somenum>:
-        valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table)))) }
+    ((JC_<somenum>: le_int(offset_min(intP_array_1_alloc_table, array_0), (0)))
+    and ((JC_<somenum>:
+         ge_int(offset_max(intP_array_1_alloc_table, array_0),
+         sub_int(integer_of_uint32(n_1), (1))))
+        and (JC_<somenum>:
+            (forall i_3:int.
+             (forall j_0:int.
+              ((le_int((0), i_3)
+               and (lt_int(i_3, j_0) and lt_int(j_0, integer_of_uint32(n_1)))) ->
+               lt_int(integer_of_int32(select(intP_intM_array_1,
+                                       shift(array_0, i_3))),
+               integer_of_int32(select(intP_intM_array_1,
+                                shift(array_0, j_0))))))))))) }
   (init:
   (let return = ref (any_uint32 void) in
   try
@@ -1380,7 +1286,7 @@ let bsearch_safety =
           void;
           (if ((eq_int_ (integer_of_int32 (C_5:
                                           (JC_<somenum>:
-                                          (((acc_ intP_array_2_alloc_table) intP_intM_array_2) array_0))))) 
+                                          (((acc_ intP_array_1_alloc_table) intP_intM_array_1) array_0))))) 
                (integer_of_int32 key))
           then
            (C_3:
@@ -1389,7 +1295,7 @@ let bsearch_safety =
              void); (raise (Return_label_exc void)) end) else void);
           (if ((eq_int_ (integer_of_int32 (C_12:
                                           (JC_<somenum>:
-                                          ((((offset_acc_ intP_array_2_alloc_table) intP_intM_array_2) array_0) 
+                                          ((((offset_acc_ intP_array_1_alloc_table) intP_intM_array_1) array_0) 
                                            (integer_of_uint32 (C_10:
                                                               (JC_<somenum>:
                                                               (uint32_of_integer_ 
@@ -1430,13 +1336,13 @@ let bsearch_safety =
                   (forall i_2:int.
                    ((le_int(integer_of_uint32(right), i_2)
                     and lt_int(i_2, integer_of_uint32(n_1))) ->
-                    (integer_of_int32(select(intP_intM_array_2,
+                    (integer_of_int32(select(intP_intM_array_1,
                                       shift(array_0, i_2))) <> integer_of_int32(key)))))
                  and ((JC_<somenum>:
                       (forall i_1:int.
                        ((le_int((0), i_1)
                         and le_int(i_1, integer_of_uint32(left))) ->
-                        (integer_of_int32(select(intP_intM_array_2,
+                        (integer_of_int32(select(intP_intM_array_1,
                                           shift(array_0, i_1))) <> integer_of_int32(key)))))
                      and ((JC_<somenum>:
                           (integer_of_uint32(diff) = sub_int(integer_of_uint32(right),
@@ -1446,11 +1352,11 @@ let bsearch_safety =
                               integer_of_uint32(right)))
                              and (JC_<somenum>:
                                  ((JC_<somenum>:
-                                  le_int(offset_min(intP_array_2_alloc_table,
+                                  le_int(offset_min(intP_array_1_alloc_table,
                                          array_0),
                                   integer_of_uint32(left)))
                                  and (JC_<somenum>:
-                                     ge_int(offset_max(intP_array_2_alloc_table,
+                                     ge_int(offset_max(intP_array_1_alloc_table,
                                             array_0),
                                      integer_of_uint32(right))))))))) } ];
             try
@@ -1483,7 +1389,7 @@ let bsearch_safety =
                 void);
                 (if ((eq_int_ (integer_of_int32 (C_41:
                                                 (JC_<somenum>:
-                                                ((((offset_acc_ intP_array_2_alloc_table) intP_intM_array_2) array_0) 
+                                                ((((offset_acc_ intP_array_1_alloc_table) intP_intM_array_1) array_0) 
                                                  (integer_of_uint32 !mid)))))) 
                      (integer_of_int32 key))
                 then
@@ -1495,7 +1401,7 @@ let bsearch_safety =
                  (let jessie_<somenum> =
                  (if ((lt_int_ (integer_of_int32 (C_38:
                                                  (JC_<somenum>:
-                                                 ((((offset_acc_ intP_array_2_alloc_table) intP_intM_array_2) array_0) 
+                                                 ((((offset_acc_ intP_array_1_alloc_table) intP_intM_array_1) array_0) 
                                                   (integer_of_uint32 !mid)))))) 
                       (integer_of_int32 key))
                  then (C_36: begin   (left := !mid); !left end)
@@ -1517,43 +1423,39 @@ let bsearch_safety =
           !__retres end)) in void) end; (raise (Return_label_exc void)) end
       with Return_label_exc jessie_<somenum> ->
       (return_label: begin   (return := !__retres); (raise Return) end) end)))));
-    absurd  end with Return -> !return end))
-  { (JC_<somenum>:
-    valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table)) }
+    absurd  end with Return -> !return end)) { true }
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { (JC_<somenum>:
-    valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table)) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
-     (let intP_intM_array_0_3 = ref (any_memory void) in
-     (let intP_array_0_3_tag_table = ref (any_tag_table void) in
-     (let intP_array_0_3_alloc_table = ref (any_alloc_table void) in
+     (let intP_intM_array_0_2 = ref (any_memory void) in
+     (let intP_array_0_2_tag_table = ref (any_tag_table void) in
+     (let intP_array_0_2_alloc_table = ref (any_alloc_table void) in
      (let array_0_0 = ref (any_pointer void) in
      (let i = ref (any_int32 void) in
-     (let tmp = ref (any_uint32 void) in
      (let __retres_0 = ref (any_int32 void) in
      try
-      (C_55:
-      (C_57:
-      (C_59:
-      (C_61:
-      (C_63:
-      (C_65:
-      (C_67:
-      (C_69:
-      (C_71:
-      (C_73:
+      (C_54:
+      (C_56:
+      (C_58:
+      (C_60:
+      (C_62:
+      (C_64:
+      (C_66:
+      (C_68:
+      (C_70:
+      (C_72:
+      (C_74:
       (C_75:
-      (C_76:
       begin
         (let jessie_<somenum> =
-        (array_0_0 := (C_54:
+        (array_0_0 := (C_53:
                       (JC_<somenum>:
-                      (((alloc_struct_intP (10)) intP_array_0_3_alloc_table) intP_array_0_3_tag_table)))) in
+                      (((alloc_struct_intP (10)) intP_array_0_2_alloc_table) intP_array_0_2_tag_table)))) in
         void);
        (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
        (let jessie_<somenum> = !array_0_0 in
@@ -1593,27 +1495,27 @@ let main_ensures_default =
        (let jessie_<somenum> = !array_0_0 in
        (let jessie_<somenum> = (9) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-       [ { } unit reads intP_array_0_3_alloc_table,intP_intM_array_0_3
-         writes intP_intM_array_0_3
-         { (not_assigns(intP_array_0_3_alloc_table, intP_intM_array_0_3@,
-            intP_intM_array_0_3,
+       [ { } unit reads intP_array_0_2_alloc_table,intP_intM_array_0_2
+         writes intP_intM_array_0_2
+         { (not_assigns(intP_array_0_2_alloc_table, intP_intM_array_0_2@,
+            intP_intM_array_0_2,
             pset_range(pset_singleton(jessie_<somenum>), (0), (9)))
-           and ((select(intP_intM_array_0_3, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-               and ((select(intP_intM_array_0_3, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                   and ((select(intP_intM_array_0_3, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
-                       and ((select(intP_intM_array_0_3,
+           and ((select(intP_intM_array_0_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
+               and ((select(intP_intM_array_0_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
+                   and ((select(intP_intM_array_0_2, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
+                       and ((select(intP_intM_array_0_2,
                              shift(jessie_<somenum>, (3))) = jessie_<somenum>)
-                           and ((select(intP_intM_array_0_3,
+                           and ((select(intP_intM_array_0_2,
                                  shift(jessie_<somenum>, (4))) = jessie_<somenum>)
-                               and ((select(intP_intM_array_0_3,
+                               and ((select(intP_intM_array_0_2,
                                      shift(jessie_<somenum>, (5))) = jessie_<somenum>)
-                                   and ((select(intP_intM_array_0_3,
+                                   and ((select(intP_intM_array_0_2,
                                          shift(jessie_<somenum>, (6))) = jessie_<somenum>)
-                                       and ((select(intP_intM_array_0_3,
+                                       and ((select(intP_intM_array_0_2,
                                              shift(jessie_<somenum>, (7))) = jessie_<somenum>)
-                                           and ((select(intP_intM_array_0_3,
+                                           and ((select(intP_intM_array_0_2,
                                                  shift(jessie_<somenum>, (8))) = jessie_<somenum>)
-                                               and (select(intP_intM_array_0_3,
+                                               and (select(intP_intM_array_0_2,
                                                     shift(jessie_<somenum>, (9))) = jessie_<somenum>))))))))))) } ]))))))))))))))))))))))))))))))))))))));
        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (neg_int (1)))) in
        void);
@@ -1625,75 +1527,70 @@ let main_ensures_default =
          try
           begin
             (let jessie_<somenum> =
-            (C_83:
+            (C_80:
             begin
               (if ((le_int_ (integer_of_int32 !i)) (10)) then void
               else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
-             (C_79:
-             begin
-               (let jessie_<somenum> =
-               (tmp := (C_78:
-                       (let jessie_<somenum> = !i in
-                       (let jessie_<somenum> = !array_0_0 in
-                       (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
-                       (JC_<somenum>:
-                       (((((bsearch jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) !intP_array_0_3_alloc_table) !intP_intM_array_0_3))))))) in
-               void); void; (C_80: (JC_<somenum>: (printf void))) end) in void);
-             (i := (C_82:
-                   (safe_int32_of_integer_ (C_81:
+             (C_77:
+             (let jessie_<somenum> = !i in
+             (let jessie_<somenum> = !array_0_0 in
+             (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
+             (JC_<somenum>:
+             (((((bsearch jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) !intP_array_0_2_alloc_table) !intP_intM_array_0_2)))))) in
+             void);
+             (i := (C_79:
+                   (safe_int32_of_integer_ (C_78:
                                            ((add_int (integer_of_int32 !i)) (1))))));
              !i end) in void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end)))))))))))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
-      (C_84:
-      (C_85:
+      (C_81:
+      (C_82:
       begin
         void;
        (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (0))) in
-       void); ((safe_free_parameter intP_array_0_3_alloc_table) !array_0_0);
-       (return := !__retres_0); (raise Return) end))) end))))))); absurd  end
+       void); ((safe_free_parameter intP_array_0_2_alloc_table) !array_0_0);
+       (return := !__retres_0); (raise Return) end))) end)))))); absurd  end
    with Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_<somenum>:
-    valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table)) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
    begin
-     (let intP_intM_array_0_3 = ref (any_memory void) in
-     (let intP_array_0_3_tag_table = ref (any_tag_table void) in
-     (let intP_array_0_3_alloc_table = ref (any_alloc_table void) in
+     (let intP_intM_array_0_2 = ref (any_memory void) in
+     (let intP_array_0_2_tag_table = ref (any_tag_table void) in
+     (let intP_array_0_2_alloc_table = ref (any_alloc_table void) in
      (let array_0_0 = ref (any_pointer void) in
      (let i = ref (any_int32 void) in
-     (let tmp = ref (any_uint32 void) in
      (let __retres_0 = ref (any_int32 void) in
      try
-      (C_55:
-      (C_57:
-      (C_59:
-      (C_61:
-      (C_63:
-      (C_65:
-      (C_67:
-      (C_69:
-      (C_71:
-      (C_73:
+      (C_54:
+      (C_56:
+      (C_58:
+      (C_60:
+      (C_62:
+      (C_64:
+      (C_66:
+      (C_68:
+      (C_70:
+      (C_72:
+      (C_74:
       (C_75:
-      (C_76:
       begin
         (let jessie_<somenum> =
         (array_0_0 := (let jessie_<somenum> =
-                      (C_54:
+                      (C_53:
                       (JC_<somenum>:
-                      (((alloc_struct_intP_requires (10)) intP_array_0_3_alloc_table) intP_array_0_3_tag_table))) in
+                      (((alloc_struct_intP_requires (10)) intP_array_0_2_alloc_table) intP_array_0_2_tag_table))) in
                       (JC_<somenum>:
                       (assert
-                      { ge_int(offset_max(intP_array_0_3_alloc_table,
+                      { ge_int(offset_max(intP_array_0_2_alloc_table,
                                jessie_<somenum>),
                         (9)) }; jessie_<somenum>)))) in void);
        (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
@@ -1734,27 +1631,27 @@ let main_safety =
        (let jessie_<somenum> = !array_0_0 in
        (let jessie_<somenum> = (9) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
-       [ { } unit reads intP_array_0_3_alloc_table,intP_intM_array_0_3
-         writes intP_intM_array_0_3
-         { (not_assigns(intP_array_0_3_alloc_table, intP_intM_array_0_3@,
-            intP_intM_array_0_3,
+       [ { } unit reads intP_array_0_2_alloc_table,intP_intM_array_0_2
+         writes intP_intM_array_0_2
+         { (not_assigns(intP_array_0_2_alloc_table, intP_intM_array_0_2@,
+            intP_intM_array_0_2,
             pset_range(pset_singleton(jessie_<somenum>), (0), (9)))
-           and ((select(intP_intM_array_0_3, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
-               and ((select(intP_intM_array_0_3, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
-                   and ((select(intP_intM_array_0_3, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
-                       and ((select(intP_intM_array_0_3,
+           and ((select(intP_intM_array_0_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
+               and ((select(intP_intM_array_0_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>)
+                   and ((select(intP_intM_array_0_2, shift(jessie_<somenum>, (2))) = jessie_<somenum>)
+                       and ((select(intP_intM_array_0_2,
                              shift(jessie_<somenum>, (3))) = jessie_<somenum>)
-                           and ((select(intP_intM_array_0_3,
+                           and ((select(intP_intM_array_0_2,
                                  shift(jessie_<somenum>, (4))) = jessie_<somenum>)
-                               and ((select(intP_intM_array_0_3,
+                               and ((select(intP_intM_array_0_2,
                                      shift(jessie_<somenum>, (5))) = jessie_<somenum>)
-                                   and ((select(intP_intM_array_0_3,
+                                   and ((select(intP_intM_array_0_2,
                                          shift(jessie_<somenum>, (6))) = jessie_<somenum>)
-                                       and ((select(intP_intM_array_0_3,
+                                       and ((select(intP_intM_array_0_2,
                                              shift(jessie_<somenum>, (7))) = jessie_<somenum>)
-                                           and ((select(intP_intM_array_0_3,
+                                           and ((select(intP_intM_array_0_2,
                                                  shift(jessie_<somenum>, (8))) = jessie_<somenum>)
-                                               and (select(intP_intM_array_0_3,
+                                               and (select(intP_intM_array_0_2,
                                                     shift(jessie_<somenum>, (9))) = jessie_<somenum>))))))))))) } ]))))))))))))))))))))))))))))))))))))));
        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (neg_int (1)))) in
        void);
@@ -1767,41 +1664,35 @@ let main_safety =
          try
           begin
             (let jessie_<somenum> =
-            (C_83:
+            (C_80:
             begin
               (if ((le_int_ (integer_of_int32 !i)) (10)) then void
               else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
-             (C_79:
-             begin
-               (let jessie_<somenum> =
-               (tmp := (C_78:
-                       (let jessie_<somenum> = !i in
-                       (let jessie_<somenum> = !array_0_0 in
-                       (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
-                       (JC_<somenum>:
-                       (((((bsearch_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) !intP_array_0_3_alloc_table) !intP_intM_array_0_3))))))) in
-               void); void; (C_80: (JC_<somenum>: (printf_requires void))) end) in
+             (C_77:
+             (let jessie_<somenum> = !i in
+             (let jessie_<somenum> = !array_0_0 in
+             (let jessie_<somenum> = (safe_uint32_of_integer_ (10)) in
+             (JC_<somenum>:
+             (((((bsearch_requires jessie_<somenum>) jessie_<somenum>) jessie_<somenum>) !intP_array_0_2_alloc_table) !intP_intM_array_0_2)))))) in
              void);
-             (i := (C_82:
+             (i := (C_79:
                    (JC_<somenum>:
-                   (int32_of_integer_ (C_81:
+                   (int32_of_integer_ (C_78:
                                       ((add_int (integer_of_int32 !i)) (1)))))));
              !i end) in void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end)))))))))))) with
       Goto_while_0_break_exc jessie_<somenum> ->
       (while_0_break:
-      (C_84:
-      (C_85:
+      (C_81:
+      (C_82:
       begin
         void;
        (let jessie_<somenum> = (__retres_0 := (safe_int32_of_integer_ (0))) in
-       void); ((free_parameter intP_array_0_3_alloc_table) !array_0_0);
-       (return := !__retres_0); (raise Return) end))) end))))))); absurd  end
-   with Return -> !return end))
-  { (JC_<somenum>:
-    valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table)) }
+       void); ((free_parameter intP_array_0_2_alloc_table) !array_0_0);
+       (return := !__retres_0); (raise Return) end))) end)))))); absurd  end
+   with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C bts0533.jessie --quiet -f bts0533.makefile project
@@ -1810,50 +1701,50 @@ why --project [...] why/bts0533.why
   <function name="Function main">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="Safety">
-    <goal why_file="why/bts0533_po45.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "55" begin = "8" end = "13"/>
+    <goal why_file="why/bts0533_po43.why">
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "53" begin = "8" end = "13"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/bts0533_po46.why">
-      <location file = "why/bts0533.why" line = "1481" begin = "24" end = "142"/>
+    <goal why_file="why/bts0533_po44.why">
+      <location file = "why/bts0533.why" line = "1399" begin = "24" end = "142"/>
       <explain kind = "Assert"/>
     </goal>
+    <goal why_file="why/bts0533_po45.why">
+      <location file = "PPCHOME/tests/jessie/bts0533.jessie/bts0533.jc" line = "174" begin = "23" end = "46"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
+    <goal why_file="why/bts0533_po46.why">
+      <location file = "PPCHOME/tests/jessie/bts0533.jessie/bts0533.jc" line = "174" begin = "23" end = "46"/>
+      <explain kind = "Pre"
+text = "UserCall"/>
+    </goal>
     <goal why_file="why/bts0533_po47.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "60" begin = "37" end = "58"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.jessie/bts0533.jc" line = "174" begin = "23" end = "46"/>
       <explain kind = "Pre"
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0533_po48.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "60" begin = "37" end = "58"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "57" begin = "26" end = "29"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po49.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "60" begin = "37" end = "58"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "57" begin = "26" end = "29"/>
       <explain kind = "Pre"
-text = "UserCall"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po50.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "59" begin = "26" end = "29"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "56" begin = "21" end = "27"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0533_po51.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "59" begin = "26" end = "29"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "56" begin = "21" end = "27"/>
+      <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/bts0533_po52.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "58" begin = "21" end = "27"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/bts0533_po53.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "58" begin = "21" end = "27"/>
-      <explain kind = "VarDecr"/>
-    </goal>
-    <goal why_file="why/bts0533_po54.why">
-      <location file = "why/bts0533.why" line = "1585" begin = "15" end = "69"/>
+      <location file = "why/bts0533.why" line = "1499" begin = "15" end = "69"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1863,210 +1754,202 @@ text = ""/>
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/bts0533_po1.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "24" begin = "15" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "22" begin = "15" end = "20"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0533_po2.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "37" begin = "23" end = "76"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "35" begin = "23" end = "76"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0533_po3.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "36" begin = "23" end = "76"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "34" begin = "23" end = "76"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0533_po4.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "35" begin = "23" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "33" begin = "23" end = "43"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0533_po5.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "34" begin = "23" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "32" begin = "23" end = "36"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0533_po6.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "33" begin = "23" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "31" begin = "23" end = "50"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0533_po7.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "33" begin = "23" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "31" begin = "23" end = "50"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/bts0533_po8.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "37" begin = "23" end = "76"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "35" begin = "23" end = "76"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0533_po9.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "36" begin = "23" end = "76"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "34" begin = "23" end = "76"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0533_po10.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "35" begin = "23" end = "43"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "33" begin = "23" end = "43"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0533_po11.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "34" begin = "23" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "32" begin = "23" end = "36"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0533_po12.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "33" begin = "23" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "31" begin = "23" end = "50"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/bts0533_po13.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "33" begin = "23" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "31" begin = "23" end = "50"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>
     <behavior name="Safety">
-    <goal why_file="why/bts0533_po18.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "26" begin = "8" end = "16"/>
+    <goal why_file="why/bts0533_po16.why">
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "24" begin = "8" end = "16"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bts0533_po17.why">
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "24" begin = "8" end = "16"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bts0533_po18.why">
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "25" begin = "14" end = "17"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po19.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "26" begin = "8" end = "16"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "25" begin = "14" end = "17"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po20.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "27" begin = "14" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "25" begin = "8" end = "18"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0533_po21.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "27" begin = "14" end = "17"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "25" begin = "8" end = "18"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/bts0533_po22.why">
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "25" begin = "36" end = "39"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/bts0533_po22.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "27" begin = "8" end = "18"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
     <goal why_file="why/bts0533_po23.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "27" begin = "8" end = "18"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "25" begin = "36" end = "39"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po24.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "27" begin = "36" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "28" begin = "25" end = "30"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po25.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "27" begin = "36" end = "39"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "28" begin = "25" end = "30"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po26.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "30" begin = "25" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "29" begin = "24" end = "36"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po27.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "30" begin = "25" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "29" begin = "24" end = "36"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po28.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "31" begin = "24" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "39" begin = "35" end = "47"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po29.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "31" begin = "24" end = "36"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "39" begin = "35" end = "47"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po30.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "41" begin = "35" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "39" begin = "34" end = "52"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "DivByZero"/>
     </goal>
     <goal why_file="why/bts0533_po31.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "41" begin = "35" end = "47"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "39" begin = "34" end = "52"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po32.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "41" begin = "34" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "39" begin = "34" end = "52"/>
       <explain kind = "Pre"
-text = "DivByZero"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po33.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "41" begin = "34" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "39" begin = "27" end = "52"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po34.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "41" begin = "34" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "39" begin = "27" end = "52"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po35.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "41" begin = "27" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "40" begin = "12" end = "22"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0533_po36.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "41" begin = "27" end = "52"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "40" begin = "12" end = "22"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0533_po37.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "42" begin = "12" end = "22"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "41" begin = "17" end = "27"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0533_po38.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "42" begin = "12" end = "22"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "41" begin = "17" end = "27"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/bts0533_po39.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "43" begin = "17" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "46" begin = "15" end = "27"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po40.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "43" begin = "17" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "46" begin = "15" end = "27"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0533_po41.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "48" begin = "15" end = "27"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0533_po42.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "48" begin = "15" end = "27"/>
-      <explain kind = "Pre"
-text = "ArithOverflow"/>
-    </goal>
-    <goal why_file="why/bts0533_po43.why">
-      <location file = "why/bts0533.why" line = "1211" begin = "20" end = "53"/>
+      <location file = "why/bts0533.why" line = "1138" begin = "20" end = "53"/>
       <explain kind = "VarDecr"/>
     </goal>
-    <goal why_file="why/bts0533_po44.why">
-      <location file = "why/bts0533.why" line = "1211" begin = "20" end = "53"/>
+    <goal why_file="why/bts0533_po42.why">
+      <location file = "why/bts0533.why" line = "1138" begin = "20" end = "53"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
     <behavior name="Behavior `notfound'">
-    <goal why_file="why/bts0533_po16.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "18" begin = "14" end = "37"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/bts0533_po17.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "20" begin = "13" end = "20"/>
+    <goal why_file="why/bts0533_po15.why">
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "16" begin = "14" end = "37"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
     <behavior name="Behavior `found'">
     <goal why_file="why/bts0533_po14.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "15" begin = "14" end = "35"/>
-      <explain kind = "Post"/>
-    </goal>
-    <goal why_file="why/bts0533_po15.why">
-      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "20" begin = "13" end = "20"/>
+      <location file = "PPCHOME/tests/jessie/bts0533.c" line = "13" begin = "14" end = "35"/>
       <explain kind = "Post"/>
     </goal>
     </behavior>
@@ -3010,8 +2893,6 @@ axiom frame_between_sub:
           (frame_between(sa, m1, m2) ->
            (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
-type __string_key__d_pos__u__1
-
 type charP
 
 type int32
@@ -3029,8 +2910,6 @@ type uint8
 type unsigned_charP
 
 type voidP
-
-logic __string_key__d_pos__u_ : charP pointer
 
 logic charP_tag : charP tag_id
 
@@ -3253,12 +3132,6 @@ axiom unsigned_charP_tags:
   (forall x:unsigned_charP pointer.
     (forall unsigned_charP_tag_table:unsigned_charP tag_table.
       instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
-
-predicate valid___string_key__d_pos__u_(charP___string_key__d_pos__u__1_alloc_table: charP alloc_table) =
-  ((offset_min(charP___string_key__d_pos__u__1_alloc_table,
-   __string_key__d_pos__u_) <= 0) and
-   (offset_max(charP___string_key__d_pos__u__1_alloc_table,
-   __string_key__d_pos__u_) >= 14))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

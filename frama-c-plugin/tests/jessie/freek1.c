@@ -4,7 +4,7 @@ void
 expected_actually(x, y)
   int x, y;
 {
-  printf("expected: %d, actually: %d\n", x, y);
+  //printf("expected: %d, actually: %d\n", x, y);
 }
 
 int i;

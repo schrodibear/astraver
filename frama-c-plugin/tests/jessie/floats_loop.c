@@ -1,4 +1,3 @@
-
 #define NMAX 1000000
 #define NMAXR 1000000.0
 
@@ -93,7 +92,8 @@ double f_double()
 
 
 int main() {
-  printf("float: %20.15f\n", f_single(100));   
+  f_single(100);
+  //printf("float: %20.15f\n", f_single(100));   
   /*
   printf("double: %30.25f\n", f_double(100)); 
   */

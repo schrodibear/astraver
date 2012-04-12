@@ -5,7 +5,7 @@ next subset of the same size as the given one. */
 
 // extern long int strtol(const char * restrict nptr,char ** restrict endptr,int base);
 
-// extern int printf (const char* restrict fmt,...);
+extern int printf (const char* restrict fmt,...);
 
 extern void exit(int status);
 
@@ -141,17 +141,17 @@ int main(int argc, char *argv[]) {
    unsigned x, y, z, u, v, w;
 
    if (argc != 2) {
-      printf("Need exactly one argument, an integer from 1 to 7.\n");
+     //printf("Need exactly one argument, an integer from 1 to 7.\n");
       exit(1);
    }
 
    n = strtol(argv[1], NULL, 10);
    if (n < 1 || n > 7) {
-      printf("Argument must be an integer from 1 to 7.\n");
+     //printf("Argument must be an integer from 1 to 7.\n");
       exit(1);
    }
 
-   printf("n = %d\n", n);
+   //printf("n = %d\n", n);
 
    x = (1 << n) - 1;
    y = x;
@@ -160,7 +160,7 @@ int main(int argc, char *argv[]) {
    v = x;
    w = x;
    do {
-      printf("x, y, z, u, v, w = %02X %02X %02X %02X %02X %02X\n", x, y, z, u, v, w);
+     //printf("x, y, z, u, v, w = %02X %02X %02X %02X %02X %02X\n", x, y, z, u, v, w);
       y = snoob1(x);
       z = snoob2(x);
       u = snoob3(x);

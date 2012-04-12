@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only freek.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD freek.c"
 [jessie] Starting Jessie translation
-[kernel] warning: No code nor implicit assigns clause for function printf, generating default assigns from the prototype
-freek.c:7:[jessie] warning: skipping all arguments of implicit prototype printf
 [jessie] Producing Jessie files in subdir freek.jessie
 [jessie] File freek.jessie/freek.jc written.
 [jessie] File freek.jessie/freek.cloc written.
@@ -41,32 +39,18 @@ tag voidP = {
 
 type voidP = [voidP]
 
-charP[0..9] __string__d_____d_;
-
-invariant valid___string__d_____d_ :
-((\offset_min(__string__d_____d_) <= 0) &&
-  (\offset_max(__string__d_____d_) >= 9))
-
-int32 printf()
-behavior default:
-  assigns \nothing;
-  allocates \nothing;
-  ensures (C_1 : true);
-;
-
 unit print_equality(int32 x, int32 y)
 behavior default:
-  ensures (C_3 : true);
+  ensures (C_1 : true);
 {  
-   {  (C_2 : printf());
-      
+   {  
       (return ())
    }
 }
 
 int32 main()
 behavior default:
-  ensures (C_24 : true);
+  ensures (C_22 : true);
 {  
    (var int32 i);
    
@@ -78,45 +62,43 @@ behavior default:
    
    (var int32 __retres);
    
-   {  (C_4 : (i = 0));
+   {  (C_2 : (i = 0));
       
       {  
-         (assert for default: (C_5 : (i == 0)));
+         (assert for default: (C_3 : (i == 0)));
          ()
       };
-      (C_6 : print_equality(i, 0));
+      (C_4 : print_equality(i, 0));
       
-      {  (C_7 : (tmp = i));
-         (C_10 : (i = (C_9 : ((C_8 : (i + 1)) :> int32))));
-         (C_11 : (j = tmp))
+      {  (C_5 : (tmp = i));
+         (C_8 : (i = (C_7 : ((C_6 : (i + 1)) :> int32))));
+         (C_9 : (j = tmp))
       };
-      (C_12 : (i = j));
+      (C_10 : (i = j));
       
       {  
-         (assert for default: (C_13 : (i == 0)));
+         (assert for default: (C_11 : (i == 0)));
          ()
       };
-      (C_14 : print_equality(i, 0));
+      (C_12 : print_equality(i, 0));
       
-      {  (C_15 : (tmp_0 = i));
-         (C_18 : (i = (C_17 : ((C_16 : (i + 1)) :> int32))));
-         (C_19 : (j = tmp_0))
+      {  (C_13 : (tmp_0 = i));
+         (C_16 : (i = (C_15 : ((C_14 : (i + 1)) :> int32))));
+         (C_17 : (j = tmp_0))
       };
-      (C_20 : (i = j));
+      (C_18 : (i = j));
       
       {  
-         (assert for default: (C_21 : (i == 0)));
+         (assert for default: (C_19 : (i == 0)));
          ()
       };
-      (C_22 : print_equality(i, 0));
-      (C_23 : (__retres = 0));
+      (C_20 : print_equality(i, 0));
+      (C_21 : (__retres = 0));
       
       (return __retres)
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs freek.jessie/freek.cloc freek.jessie/freek.jc
-type __string__d_____d__1
-
 type charP
 
 type int32
@@ -130,8 +112,6 @@ type uint8
 type unsigned_charP
 
 type voidP
-
-logic __string__d_____d_:  -> charP pointer
 
 logic charP_tag:  -> charP tag_id
 
@@ -297,14 +277,6 @@ axiom unsigned_charP_tags :
   (forall unsigned_charP_tag_table:unsigned_charP tag_table.
    instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
-predicate valid___string__d_____d_(charP___string__d_____d__1_alloc_table:charP alloc_table) =
- (le_int(offset_min(charP___string__d_____d__1_alloc_table,
-         __string__d_____d_),
-  (0))
- and ge_int(offset_max(charP___string__d_____d__1_alloc_table,
-            __string__d_____d_),
-     (9)))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -445,8 +417,6 @@ parameter any_int8 : unit -> { } int8 { true }
 
 parameter any_uint8 : unit -> { } uint8 { true }
 
-parameter charP___string__d_____d__1_alloc_table : charP alloc_table ref
-
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -457,43 +427,13 @@ parameter int8_of_integer_ :
   { (le_int((-128), x) and le_int(x, (127)))} int8
   { eq_int(integer_of_int8(result), x) }
 
-parameter main :
- tt:unit ->
-  { } int32 reads charP___string__d_____d__1_alloc_table
-  { (JC_<somenum>: valid___string__d_____d_(charP___string__d_____d__1_alloc_table)) }
+parameter main : tt:unit -> { } int32 { true }
 
-parameter main_requires :
- tt:unit ->
-  { (JC_<somenum>: valid___string__d_____d_(charP___string__d_____d__1_alloc_table))}
-  int32 reads charP___string__d_____d__1_alloc_table
-  { (JC_<somenum>: valid___string__d_____d_(charP___string__d_____d__1_alloc_table)) }
+parameter main_requires : tt:unit -> { } int32 { true }
 
-parameter print_equality :
- x_0:int32 ->
-  y:int32 ->
-   { } unit reads charP___string__d_____d__1_alloc_table
-   { (JC_<somenum>:
-     valid___string__d_____d_(charP___string__d_____d__1_alloc_table)) }
+parameter print_equality : x_0:int32 -> y:int32 -> { } unit { true }
 
-parameter print_equality_requires :
- x_0:int32 ->
-  y:int32 ->
-   { (JC_<somenum>:
-     valid___string__d_____d_(charP___string__d_____d__1_alloc_table))}
-   unit reads charP___string__d_____d__1_alloc_table
-   { (JC_<somenum>:
-     valid___string__d_____d_(charP___string__d_____d__1_alloc_table)) }
-
-parameter printf :
- tt:unit ->
-  { } int32 reads charP___string__d_____d__1_alloc_table
-  { (JC_<somenum>: valid___string__d_____d_(charP___string__d_____d__1_alloc_table)) }
-
-parameter printf_requires :
- tt:unit ->
-  { (JC_<somenum>: valid___string__d_____d_(charP___string__d_____d__1_alloc_table))}
-  int32 reads charP___string__d_____d__1_alloc_table
-  { (JC_<somenum>: valid___string__d_____d_(charP___string__d_____d__1_alloc_table)) }
+parameter print_equality_requires : x_0:int32 -> y:int32 -> { } unit { true }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -511,7 +451,7 @@ parameter uint8_of_integer_ :
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { (JC_<somenum>: valid___string__d_____d_(charP___string__d_____d__1_alloc_table)) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -521,13 +461,13 @@ let main_ensures_default =
      (let tmp = ref (any_int32 void) in
      (let tmp_0 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
+     (C_2:
      (C_4:
-     (C_6:
+     (C_10:
      (C_12:
-     (C_14:
+     (C_18:
      (C_20:
-     (C_22:
-     (C_23:
+     (C_21:
      begin
        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
       (assert { (JC_<somenum>: (integer_of_int32(i) = (0))) }; void); void;
@@ -535,14 +475,14 @@ let main_ensures_default =
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
       (JC_<somenum>: ((print_equality jessie_<somenum>) jessie_<somenum>))));
       (let jessie_<somenum> =
-      (C_7:
-      (C_10:
-      (C_11:
+      (C_5:
+      (C_8:
+      (C_9:
       begin
         (let jessie_<somenum> = (tmp := !i) in void);
        (let jessie_<somenum> =
-       (i := (C_9:
-             (safe_int32_of_integer_ (C_8:
+       (i := (C_7:
+             (safe_int32_of_integer_ (C_6:
                                      ((add_int (integer_of_int32 !i)) (1)))))) in
        void); (j := !tmp); !j end))) in void);
       (let jessie_<somenum> = (i := !j) in void);
@@ -551,14 +491,14 @@ let main_ensures_default =
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
       (JC_<somenum>: ((print_equality jessie_<somenum>) jessie_<somenum>))));
       (let jessie_<somenum> =
-      (C_15:
-      (C_18:
-      (C_19:
+      (C_13:
+      (C_16:
+      (C_17:
       begin
         (let jessie_<somenum> = (tmp_0 := !i) in void);
        (let jessie_<somenum> =
-       (i := (C_17:
-             (safe_int32_of_integer_ (C_16:
+       (i := (C_15:
+             (safe_int32_of_integer_ (C_14:
                                      ((add_int (integer_of_int32 !i)) (1)))))) in
        void); (j := !tmp_0); !j end))) in void);
       (let jessie_<somenum> = (i := !j) in void);
@@ -572,7 +512,7 @@ let main_ensures_default =
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_<somenum>: valid___string__d_____d_(charP___string__d_____d__1_alloc_table)) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -582,13 +522,13 @@ let main_safety =
      (let tmp = ref (any_int32 void) in
      (let tmp_0 = ref (any_int32 void) in
      (let __retres = ref (any_int32 void) in
+     (C_2:
      (C_4:
-     (C_6:
+     (C_10:
      (C_12:
-     (C_14:
+     (C_18:
      (C_20:
-     (C_22:
-     (C_23:
+     (C_21:
      begin
        (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
       [ { } unit reads i { (JC_<somenum>: (integer_of_int32(i) = (0))) } ]; void;
@@ -596,15 +536,15 @@ let main_safety =
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
       (JC_<somenum>: ((print_equality_requires jessie_<somenum>) jessie_<somenum>))));
       (let jessie_<somenum> =
-      (C_7:
-      (C_10:
-      (C_11:
+      (C_5:
+      (C_8:
+      (C_9:
       begin
         (let jessie_<somenum> = (tmp := !i) in void);
        (let jessie_<somenum> =
-       (i := (C_9:
+       (i := (C_7:
              (JC_<somenum>:
-             (int32_of_integer_ (C_8: ((add_int (integer_of_int32 !i)) (1))))))) in
+             (int32_of_integer_ (C_6: ((add_int (integer_of_int32 !i)) (1))))))) in
        void); (j := !tmp); !j end))) in void);
       (let jessie_<somenum> = (i := !j) in void);
       [ { } unit reads i { (JC_<somenum>: (integer_of_int32(i) = (0))) } ]; void;
@@ -612,15 +552,15 @@ let main_safety =
       (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
       (JC_<somenum>: ((print_equality_requires jessie_<somenum>) jessie_<somenum>))));
       (let jessie_<somenum> =
-      (C_15:
-      (C_18:
-      (C_19:
+      (C_13:
+      (C_16:
+      (C_17:
       begin
         (let jessie_<somenum> = (tmp_0 := !i) in void);
        (let jessie_<somenum> =
-       (i := (C_17:
+       (i := (C_15:
              (JC_<somenum>:
-             (int32_of_integer_ (C_16: ((add_int (integer_of_int32 !i)) (1))))))) in
+             (int32_of_integer_ (C_14: ((add_int (integer_of_int32 !i)) (1))))))) in
        void); (j := !tmp_0); !j end))) in void);
       (let jessie_<somenum> = (i := !j) in void);
       [ { } unit reads i { (JC_<somenum>: (integer_of_int32(i) = (0))) } ]; void;
@@ -629,29 +569,21 @@ let main_safety =
       (JC_<somenum>: ((print_equality_requires jessie_<somenum>) jessie_<somenum>))));
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
       (return := !__retres); (raise Return) end)))))))))))); absurd  end with
-   Return -> !return end))
-  { (JC_<somenum>: valid___string__d_____d_(charP___string__d_____d__1_alloc_table)) }
+   Return -> !return end)) { true }
 
 let print_equality_ensures_default =
  fun (x_0 : int32) (y : int32) ->
-  { (JC_<somenum>: valid___string__d_____d_(charP___string__d_____d__1_alloc_table)) }
+  { (JC_<somenum>: true) }
   (init:
-  try
-   (C_2:
-   begin
-     (let jessie_<somenum> = (JC_<somenum>: (printf void)) in void); (raise Return);
-    (raise Return) end) with Return -> void end) { (JC_<somenum>: true) }
+  try begin   (raise Return); (raise Return) end with Return -> void end)
+  { (JC_<somenum>: true) }
 
 let print_equality_safety =
  fun (x_0 : int32) (y : int32) ->
-  { (JC_<somenum>: valid___string__d_____d_(charP___string__d_____d__1_alloc_table)) }
+  { (JC_<somenum>: true) }
   (init:
-  try
-   (C_2:
-   begin
-     (let jessie_<somenum> = (JC_<somenum>: (printf_requires void)) in void);
-    (raise Return); (raise Return) end) with Return -> void end)
-  { (JC_<somenum>: valid___string__d_____d_(charP___string__d_____d__1_alloc_table)) }
+  try begin   (raise Return); (raise Return) end with Return -> void end)
+  { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C freek.jessie --quiet -f freek.makefile project
@@ -1638,8 +1570,6 @@ axiom frame_between_sub:
           (frame_between(sa, m1, m2) ->
            (sub_mybag(sa, sb) -> frame_between(sb, m1, m2)))))))
 
-type __string__d_____d__1
-
 type charP
 
 type int32
@@ -1653,8 +1583,6 @@ type uint8
 type unsigned_charP
 
 type voidP
-
-logic __string__d_____d_ : charP pointer
 
 logic charP_tag : charP tag_id
 
@@ -1819,12 +1747,6 @@ axiom unsigned_charP_tags:
   (forall x:unsigned_charP pointer.
     (forall unsigned_charP_tag_table:unsigned_charP tag_table.
       instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
-
-predicate valid___string__d_____d_(charP___string__d_____d__1_alloc_table: charP alloc_table) =
-  ((offset_min(charP___string__d_____d__1_alloc_table,
-   __string__d_____d_) <= 0) and
-   (offset_max(charP___string__d_____d__1_alloc_table,
-   __string__d_____d_) >= 9))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

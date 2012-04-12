@@ -4,7 +4,7 @@ void
 print_equality(x, y)
   int x, y;
 {
-  printf("%d == %d\n", x, y);
+  //printf("%d == %d\n", x, y);
 }
 
 int

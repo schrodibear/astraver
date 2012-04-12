@@ -38,7 +38,7 @@ int main() {
   struct date b[] = { {1,1,2010} , { 2,2, 2009}, {3,3,2010}};
   qsort(b,3,sizeof(struct date),&compare_for_qsort);
   assert(b[0].year <= b[1].year);
-  printf("OK\n");
+  //printf("OK\n");
   return 0;
 }
 

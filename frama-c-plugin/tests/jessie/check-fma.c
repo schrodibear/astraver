@@ -1,4 +1,3 @@
-
 // 100% proved by gappa
 
 int main() {
@@ -9,7 +8,7 @@ int main() {
   //@ assert y == \exact(y);
   double res = x - y * y;
   //@ assert res == 0.0;   // OK if IEEE-754, but if real mode or FMA: -1.0
-  printf("%g\n",res);
+  //printf("%g\n",res);
   return 0;
 }
 /* 

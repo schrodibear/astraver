@@ -84,7 +84,7 @@ lemma num_of_pos_strictly_increasing{Here} :
           ((((j_4 < k) && (k <= l)) && ((t_3 + k).intM > 0)) ==>
             (num_of_pos{Here}(i_5, j_4, t_3) < num_of_pos{Here}(i_5, l, t_3))))))))
 
-int32 calloc()
+int32 calloc(int32 x_0, int32 x_1)
 behavior default:
   assigns \nothing;
   allocates \nothing;
@@ -635,9 +635,9 @@ parameter any_int8 : unit -> { } int8 { true }
 
 parameter any_uint8 : unit -> { } uint8 { true }
 
-parameter calloc : tt:unit -> { } int32 { true }
+parameter calloc : x_0:int32 -> x_1:int32 -> { } int32 { true }
 
-parameter calloc_requires : tt:unit -> { } int32 { true }
+parameter calloc_requires : x_0:int32 -> x_1:int32 -> { } int32 { true }
 
 parameter int32_of_integer_ :
  x:int ->

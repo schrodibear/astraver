@@ -26,7 +26,8 @@ int foo(int a[]) {
 
 int main() {
   int a[2] = {1,2};
-  printf("%d\n", foo(a));
+  return foo(a);
+  //printf("%d\n", foo(a));
 }
 
 

@@ -10,5 +10,5 @@ const int n = 5678;
 
 int main() {
   f((int*)&n);
-  printf("n = %d\n",n); 
+  //printf("n = %d\n",n); 
 }

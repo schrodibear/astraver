@@ -6,8 +6,6 @@ Alt-Ergo bug, should be fixed in Alt-Ergo 0.92
 */
 
 
-
-
 /*@ requires \valid(array+(0..n-1));
     requires \forall integer i, j; 0 <= i < j < n ==> array[i] < array[j];
     behavior found:
@@ -57,7 +55,8 @@ int main() {
     int i;
     /*@ loop variant 10 - i; */
     for (i = -1; i <= 10; ++i) {
-        printf("key=%d pos=%u\n", i, bsearch(i, array, 10));
+      bsearch(i, array, 10);
+      //printf("key=%d pos=%u\n", i, bsearch(i, array, 10));
     }
     return 0;
 }

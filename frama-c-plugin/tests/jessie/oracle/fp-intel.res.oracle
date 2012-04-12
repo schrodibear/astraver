@@ -1,8 +1,6 @@
 Options are: -journal-disable -cpp-extra-args=-I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -jessie -jessie-gen-only fp-intel.c
 [kernel] preprocessing with "gcc -C -E -I. -I PPCHOME/share/jessie -IFRAMAC_SHARE/libc -dD fp-intel.c"
 [jessie] Starting Jessie translation
-[kernel] warning: No code nor implicit assigns clause for function printf, generating default assigns from the prototype
-fp-intel.c:19:[jessie] warning: skipping all arguments of implicit prototype printf
 [jessie] Producing Jessie files in subdir fp-intel.jessie
 [jessie] File fp-intel.jessie/fp-intel.jc written.
 [jessie] File fp-intel.jessie/fp-intel.cloc written.
@@ -42,21 +40,9 @@ tag voidP = {
 
 type voidP = [voidP]
 
-charP[0..6] __string__a__d_;
-
-invariant valid___string__a__d_ :
-((\offset_min(__string__a__d_) <= 0) && (\offset_max(__string__a__d_) >= 6))
-
-int32 printf()
-behavior default:
-  assigns \nothing;
-  allocates \nothing;
-  ensures (C_1 : true);
-;
-
 int32 main()
 behavior default:
-  ensures (C_14 : true);
+  ensures (C_11 : true);
 {  
    (var double v_0);
    
@@ -64,47 +50,44 @@ behavior default:
    
    (var int32 __retres);
    
-   {  (C_2 : (v_0 = (0x1.0p600 :> double)));
+   {  (C_1 : (v_0 = (0x1.0p600 :> double)));
       
       {  
-         (assert for default: (C_3 : ((v_0 :> real) == \double_exact(v_0))));
+         (assert for default: (C_2 : ((v_0 :> real) == \double_exact(v_0))));
          ()
       };
       
       {  
-         (assert for default: (C_4 : \double_is_finite(v_0)));
+         (assert for default: (C_3 : \double_is_finite(v_0)));
          ()
       };
       
       {  
-         (assert for default: (C_5 : ((v_0 :> real) == 0x1.0p600)));
+         (assert for default: (C_4 : ((v_0 :> real) == 0x1.0p600)));
          ()
       };
       
       {  
-         (assert for default: (C_6 : (! \no_overflow_double(\NearestEven(
+         (assert for default: (C_5 : (! \no_overflow_double(\NearestEven(
                                                             ),
                                                             ((v_0 :> real) *
                                                               (v_0 :> real))))));
          ()
       };
       
-      {  (C_9 : (x = (C_8 : ((C_7 : (v_0 * v_0)) / v_0))))
+      {  (C_8 : (x = (C_7 : ((C_6 : (v_0 * v_0)) / v_0))))
       };
       
       {  
-         (assert for default: (C_10 : \double_is_plus_infinity(x)));
+         (assert for default: (C_9 : \double_is_plus_infinity(x)));
          ()
       };
-      (C_12 : printf());
-      (C_13 : (__retres = 0));
+      (C_10 : (__retres = 0));
       
       (return __retres)
    }
 }
 WHYLIB=WHYHOME/lib WHYHOME/bin/jessie.opt -why-opt -split-user-conj -why-opt -fast-wp -locs fp-intel.jessie/fp-intel.cloc fp-intel.jessie/fp-intel.jc
-type __string__a__d__1
-
 type charP
 
 type int32
@@ -118,8 +101,6 @@ type uint8
 type unsigned_charP
 
 type voidP
-
-logic __string__a__d_:  -> charP pointer
 
 logic charP_tag:  -> charP tag_id
 
@@ -285,12 +266,6 @@ axiom unsigned_charP_tags :
   (forall unsigned_charP_tag_table:unsigned_charP tag_table.
    instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
-predicate valid___string__a__d_(charP___string__a__d__1_alloc_table:charP alloc_table) =
- (le_int(offset_min(charP___string__a__d__1_alloc_table, __string__a__d_),
-  (0))
- and ge_int(offset_max(charP___string__a__d__1_alloc_table, __string__a__d_),
-     (6)))
-
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
@@ -431,8 +406,6 @@ parameter any_int8 : unit -> { } int8 { true }
 
 parameter any_uint8 : unit -> { } uint8 { true }
 
-parameter charP___string__a__d__1_alloc_table : charP alloc_table ref
-
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -443,27 +416,9 @@ parameter int8_of_integer_ :
   { (le_int((-128), x) and le_int(x, (127)))} int8
   { eq_int(integer_of_int8(result), x) }
 
-parameter main :
- tt:unit ->
-  { } int32 reads charP___string__a__d__1_alloc_table
-  { (JC_<somenum>: valid___string__a__d_(charP___string__a__d__1_alloc_table)) }
+parameter main : tt:unit -> { } int32 { true }
 
-parameter main_requires :
- tt:unit ->
-  { (JC_<somenum>: valid___string__a__d_(charP___string__a__d__1_alloc_table))}
-  int32 reads charP___string__a__d__1_alloc_table
-  { (JC_<somenum>: valid___string__a__d_(charP___string__a__d__1_alloc_table)) }
-
-parameter printf :
- tt:unit ->
-  { } int32 reads charP___string__a__d__1_alloc_table
-  { (JC_<somenum>: valid___string__a__d_(charP___string__a__d__1_alloc_table)) }
-
-parameter printf_requires :
- tt:unit ->
-  { (JC_<somenum>: valid___string__a__d_(charP___string__a__d__1_alloc_table))} int32
-  reads charP___string__a__d__1_alloc_table
-  { (JC_<somenum>: valid___string__a__d_(charP___string__a__d__1_alloc_table)) }
+parameter main_requires : tt:unit -> { } int32 { true }
 
 parameter safe_int32_of_integer_ :
  x:int -> { } int32 { eq_int(integer_of_int32(result), x) }
@@ -481,7 +436,7 @@ parameter uint8_of_integer_ :
 
 let main_ensures_default =
  fun (tt : unit) ->
-  { (JC_<somenum>: valid___string__a__d_(charP___string__a__d__1_alloc_table)) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -489,9 +444,8 @@ let main_ensures_default =
      (let v_0 = ref (any_double void) in
      (let x_0 = ref (any_double void) in
      (let __retres = ref (any_int32 void) in
-     (C_2:
-     (C_12:
-     (C_13:
+     (C_1:
+     (C_10:
      begin
        (let jessie_<somenum> =
        (v_0 := (JC_<somenum>: ((double_of_real nearest_even) 0x1.0p600))) in void);
@@ -504,23 +458,22 @@ let main_ensures_default =
              mul_real(double_value(v_0), double_value(v_0))))) }; void);
       void;
       (let jessie_<somenum> =
-      (C_9:
+      (C_8:
       begin
-        (x_0 := (C_8:
+        (x_0 := (C_7:
                 (JC_<somenum>:
-                (((div_double nearest_even) (C_7:
+                (((div_double nearest_even) (C_6:
                                             (JC_<somenum>:
                                             (((mul_double nearest_even) !v_0) !v_0)))) !v_0))));
        !x_0 end) in void);
       (assert { (JC_<somenum>: double_is_plus_infinity(x_0)) }; void); void;
-      (let jessie_<somenum> = (JC_<somenum>: (printf void)) in void);
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)))))); absurd  end with
+      (return := !__retres); (raise Return) end))))); absurd  end with
    Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (tt : unit) ->
-  { (JC_<somenum>: valid___string__a__d_(charP___string__a__d__1_alloc_table)) }
+  { (JC_<somenum>: true) }
   (init:
   (let return = ref (any_int32 void) in
   try
@@ -528,9 +481,8 @@ let main_safety =
      (let v_0 = ref (any_double void) in
      (let x_0 = ref (any_double void) in
      (let __retres = ref (any_int32 void) in
-     (C_2:
-     (C_12:
-     (C_13:
+     (C_1:
+     (C_10:
      begin
        (let jessie_<somenum> =
        (v_0 := (JC_<somenum>: ((double_of_real nearest_even) 0x1.0p600))) in void);
@@ -544,20 +496,18 @@ let main_safety =
           (not no_overflow_double(nearest_even,
                mul_real(double_value(v_0), double_value(v_0))))) } ]; void;
       (let jessie_<somenum> =
-      (C_9:
+      (C_8:
       begin
-        (x_0 := (C_8:
+        (x_0 := (C_7:
                 (JC_<somenum>:
-                (((div_double nearest_even) (C_7:
+                (((div_double nearest_even) (C_6:
                                             (JC_<somenum>:
                                             (((mul_double nearest_even) !v_0) !v_0)))) !v_0))));
        !x_0 end) in void);
       [ { } unit reads x_0 { (JC_<somenum>: double_is_plus_infinity(x_0)) } ]; void;
-      (let jessie_<somenum> = (JC_<somenum>: (printf_requires void)) in void);
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-      (return := !__retres); (raise Return) end)))))); absurd  end with
-   Return -> !return end))
-  { (JC_<somenum>: valid___string__a__d_(charP___string__a__d__1_alloc_table)) }
+      (return := !__retres); (raise Return) end))))); absurd  end with
+   Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C fp-intel.jessie --quiet -f fp-intel.makefile project
@@ -567,23 +517,23 @@ why --project [...] why/fp-intel.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/fp-intel_po1.why">
-      <location file = "PPCHOME/tests/jessie/fp-intel.c" line = "12" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/fp-intel.c" line = "9" begin = "13" end = "27"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/fp-intel_po2.why">
-      <location file = "PPCHOME/tests/jessie/fp-intel.c" line = "13" begin = "13" end = "26"/>
+      <location file = "PPCHOME/tests/jessie/fp-intel.c" line = "10" begin = "13" end = "26"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/fp-intel_po3.why">
-      <location file = "PPCHOME/tests/jessie/fp-intel.c" line = "14" begin = "13" end = "27"/>
+      <location file = "PPCHOME/tests/jessie/fp-intel.c" line = "11" begin = "13" end = "27"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/fp-intel_po4.why">
-      <location file = "PPCHOME/tests/jessie/fp-intel.c" line = "15" begin = "13" end = "51"/>
+      <location file = "PPCHOME/tests/jessie/fp-intel.c" line = "12" begin = "13" end = "51"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/fp-intel_po5.why">
-      <location file = "PPCHOME/tests/jessie/fp-intel.c" line = "17" begin = "13" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/fp-intel.c" line = "14" begin = "13" end = "33"/>
       <explain kind = "Assert"/>
     </goal>
     </behavior>
@@ -2160,8 +2110,6 @@ axiom double_is_gen_zero_comp2:
         ((not double_is_gen_zero(x)) and (double_value(x) = double_value(y)))) ->
        (not double_is_gen_zero(y)))))
 
-type __string__a__d__1
-
 type charP
 
 type int32
@@ -2175,8 +2123,6 @@ type uint8
 type unsigned_charP
 
 type voidP
-
-logic __string__a__d_ : charP pointer
 
 logic charP_tag : charP tag_id
 
@@ -2341,11 +2287,6 @@ axiom unsigned_charP_tags:
   (forall x:unsigned_charP pointer.
     (forall unsigned_charP_tag_table:unsigned_charP tag_table.
       instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
-
-predicate valid___string__a__d_(charP___string__a__d__1_alloc_table: charP alloc_table) =
-  ((offset_min(charP___string__a__d__1_alloc_table,
-   __string__a__d_) <= 0) and
-   (offset_max(charP___string__a__d__1_alloc_table, __string__a__d_) >= 6))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =

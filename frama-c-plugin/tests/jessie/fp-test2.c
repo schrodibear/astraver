@@ -1,4 +1,3 @@
-
 // 100% proved by gappa
 
 //#pragma JessieFloatInstructionSet(x87)
@@ -19,7 +18,7 @@ int main() {
   //@ assert ifIEEE754: res == 0.0; // in IEEE 754 mode
   // @ assert ifIntel387: res == 0x1p52; // indeed tmp2, in intel 80 bits mode
   // @ assert ifIntel387: res > 0.0; // indeed tmp2, in intel 80 bits mode
-  printf("a=%a b=%a c=%a res=%a\n",a,b,c,res);
+  //printf("a=%a b=%a c=%a res=%a\n",a,b,c,res);
   return 0;
 }
 

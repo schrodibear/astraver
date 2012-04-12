@@ -72,14 +72,14 @@ tag _Decomp = {
 
 type _Decomp = [_Decomp]
 
-type _Integer = [_Integer & x_0P & c_0P]
+type _Integer = [_Integer & x_0_0P & c_0P]
 
 tag _Integer = {
   padding padding_0: 32;
 }
 
-tag x_0P = {
-  int32 x_0M: 32;
+tag x_0_0P = {
+  int32 x_0_0M: 32;
 }
 
 tag c_0P = {
@@ -137,8 +137,8 @@ behavior default:
 
 _Integer[0] endianness2(_Integer[0] v_i_0)
 behavior default:
-  ensures (C_123 : (\at((v_i_0 :> x_0P[0]).x_0M,Old) ==
-                     (\result :> x_0P[0]).x_0M));
+  ensures (C_123 : (\at((v_i_0 :> x_0_0P[0]).x_0_0M,Old) ==
+                     (\result :> x_0_0P[0]).x_0_0M));
 {  
    (var _Integer[0] i_0);
    
@@ -150,7 +150,8 @@ behavior default:
       (C_24 : (j_0 = (C_23 : (new _Integer[1]))));
       (C_26 : (__cil_tmp = (C_25 : (new _Integer[1]))));
       
-      {  (C_31 : ((C_30 : (C_29 : (i_0 :> x_0P[0])).x_0M) = (C_28 : (C_27 : (v_i_0 :> x_0P[0])).x_0M)));
+      {  (C_31 : ((C_30 : (C_29 : (i_0 :> x_0_0P[0])).x_0_0M) = (C_28 : 
+                                                                (C_27 : (v_i_0 :> x_0_0P[0])).x_0_0M)));
          (C_38 : ((C_37 : (C_36 : (C_35 : (i_0 :> c_0P[0])).c_0M).c1_0) = 
          (C_34 : (C_33 : (C_32 : (v_i_0 :> c_0P[0])).c_0M).c1_0)));
          (C_45 : ((C_44 : (C_43 : (C_42 : (i_0 :> c_0P[0])).c_0M).c2_0) = 
@@ -169,8 +170,8 @@ behavior default:
       (C_87 : ((C_86 : (C_85 : (C_84 : (j_0 :> c_0P[0])).c_0M).c4) = 
       (C_83 : (C_82 : (C_81 : (i_0 :> c_0P[0])).c_0M).c4)));
       
-      {  (C_92 : ((C_91 : (C_90 : (__cil_tmp :> x_0P[0])).x_0M) = (C_89 : 
-                                                                  (C_88 : (j_0 :> x_0P[0])).x_0M)));
+      {  (C_92 : ((C_91 : (C_90 : (__cil_tmp :> x_0_0P[0])).x_0_0M) = 
+         (C_89 : (C_88 : (j_0 :> x_0_0P[0])).x_0_0M)));
          (C_99 : ((C_98 : (C_97 : (C_96 : (__cil_tmp :> c_0P[0])).c_0M).c1_0) = 
          (C_95 : (C_94 : (C_93 : (j_0 :> c_0P[0])).c_0M).c1_0)));
          (C_106 : ((C_105 : (C_104 : (C_103 : (__cil_tmp :> c_0P[0])).c_0M).c2_0) = 
@@ -193,8 +194,8 @@ _Integer[..] endianness3(_Integer[..] i_1)
   requires (C_155 : ((C_156 : (\offset_min(i_1) <= 0)) &&
                       (C_157 : (\offset_max(i_1) >= 0))));
 behavior default:
-  ensures (C_154 : ((\at(i_1,Old) :> x_0P[0]).x_0M ==
-                     (\result :> x_0P[0]).x_0M));
+  ensures (C_154 : ((\at(i_1,Old) :> x_0_0P[0]).x_0_0M ==
+                     (\result :> x_0_0P[0]).x_0_0M));
 {  
    (var _Integer[..] j_1);
    

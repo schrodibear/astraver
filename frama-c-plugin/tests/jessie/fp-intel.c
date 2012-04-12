@@ -2,9 +2,6 @@
 
 #pragma JessieFloatModel(full)
 
-/* #include<stdio.h> */
-
-
 int main() {
   double v=0x1.0p600;
   //double v=1e+308; problems with decimal constants in SMT provers
@@ -16,7 +13,7 @@ int main() {
   double x= (v*v)/v;
   //@ assert \is_plus_infinity(x); // by CVC3
   // @ assert x==v;
-  printf("%a %d\n",x,x==v);
+  //printf("%a %d\n",x,x==v);
   return 0;
 }
 
