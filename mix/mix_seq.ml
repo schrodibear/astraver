@@ -85,7 +85,7 @@ module X = struct
 
   let rec string_of_stmt = function
     | Void -> "void"
-    | Mix { node = PSassert p } -> "assert ... "
+    | Mix { node = PSassert _p } -> "assert ... "
     | Mix _ -> "<mix>"
     | Assume s -> "assume " ^ s
     | Seq (s1, s2) -> string_of_stmt s1 ^ "; " ^ string_of_stmt s2
@@ -174,7 +174,7 @@ let nneg s = s ^ " >= 0"
 
 (* prev = previous instruction
    lab = label of current instruction *)
-let interp_stmt self prev lab s = match s.node with
+let interp_stmt self _prev _lab s = match s.node with
   | PSinvariant i -> 
       Ainvariant i
   | PSassert a -> 
@@ -210,7 +210,7 @@ let declare_equ loc id a =
   if Hashtbl.mem equ id then error loc (ClashEqu id);
   Hashtbl.add equ id a
 
-let mixal (pseudo,asm) init =
+let mixal (pseudo,asm) _init =
   let self = ref 0 in
   (* pseudo *)
   List.iter

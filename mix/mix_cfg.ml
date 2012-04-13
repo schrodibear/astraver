@@ -200,7 +200,7 @@ module Make(X : INPUT) = struct
 	let name_n = X.Label.to_string n.node_name in
 	let succ = cfg n in
 	List.iter 
-	  (fun (m,s) -> 
+	  (fun (m,_s) -> 
 	    let name_m = X.Label.to_string m.node_name in
 	    fprintf fmt "  %s -> %s;@\n" name_n name_m) 
 	  succ;
