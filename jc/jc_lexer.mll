@@ -219,16 +219,16 @@ rule token = parse
   | "boolean"               { BOOLEAN }
   | "break"                 { BREAK }
   | "case"                  { CASE }
-  | "default"               { DEFAULT }
   | "catch"                 { CATCH }
   | "check"                 { CHECK }
   | "continue"              { CONTINUE }
   | "decreases"             { DECREASES }
+  | "default"               { DEFAULT }
   | "do"                    { DO }
   | "double"                { Jc_options.has_floats := true; DOUBLE }
   | "else"                  { ELSE }
-  | "ensures"               { ENSURES }
   | "end"                   { END }
+  | "ensures"               { ENSURES }
   | "exception"             { EXCEPTION }
   | "false"                 { CONSTANT (JCCboolean false) }
   | "finally"               { FINALLY }
@@ -266,8 +266,8 @@ rule token = parse
   | "type"                  { TYPE }
   | "unit"                  { UNIT }
   | "unpack"                { UNPACK }
-  | "variant"               { VARIANT }
   | "var"                   { VAR }
+  | "variant"               { VARIANT }
   | "while"                 { WHILE }
   | "with"                  { WITH }
   | "\\absolute_address"    { BSABSOLUTE_ADDRESS }

@@ -408,19 +408,21 @@ let unique_name_if_empty s =
 
 let jessie_reserved_names =
   [
-    (* a *) "and"; "as"; "assert"; "assigns"; "assumes"; "axiom";
+    (* a *) "abstract"; "allocates"; "and"; "as"; "assert"; 
+            "assigns"; "assumes"; "axiom"; "axiomatic";
     (* b *) "behavior"; "boolean"; "break";
-    (* c *) "case"; "catch"; "continue";
-    (* d *) "default"; "do";
+    (* c *) "case"; "catch"; "check"; "continue";
+    (* d *) "decreases"; "default"; "do"; "double";
     (* e *) "else"; "end"; "ensures"; "exception";
-    (* f *) "false"; "finally"; "for"; "free";
+    (* f *) "false"; "finally"; "float"; "for"; "free";
     (* g *) "goto";
+    (* h *) "hint";
     (* i *) "if"; "in"; "integer"; "invariant";
-    (* l *) "lemma"; "let"; "logic";
+    (* l *) "lemma"; "let"; "logic"; "loop";
     (* m *) "match";
     (* n *) "new"; "null";
     (* o *) "of";
-    (* p *) "pack";
+    (* p *) "pack"; "predicate";
     (* r *) "reads"; "real"; "rep"; "requires"; "return";
     (* s *) "switch";
     (* t *) "tag"; "then"; "throw"; "throws"; "true"; "try"; "type";
