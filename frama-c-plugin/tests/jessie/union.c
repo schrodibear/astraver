@@ -1,3 +1,4 @@
+void *malloc(unsigned int);
 
 typedef struct _Decomp2 { char c1; char c2; } Decomp2;
 typedef union _Integer2 { short x; Decomp2 c; } Integer2;

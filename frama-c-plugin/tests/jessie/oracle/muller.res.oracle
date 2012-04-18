@@ -17,6 +17,8 @@ axiomatic Padding {
   
 }
 
+type uint32 = 0..4294967295
+
 type uint8 = 0..255
 
 type int32 = -2147483648..2147483647
@@ -45,6 +47,13 @@ tag voidP = {
 }
 
 type voidP = [voidP]
+
+charP[..] calloc(uint32 unnamed, uint32 unnamed_0)
+behavior default:
+  assigns \nothing;
+  allocates \nothing;
+  ensures (C_1 : true);
+;
 
 axiomatic NumOfPos {
 
@@ -84,19 +93,12 @@ lemma num_of_pos_strictly_increasing{Here} :
           ((((j_4 < k) && (k <= l)) && ((t_3 + k).intM > 0)) ==>
             (num_of_pos{Here}(i_5, j_4, t_3) < num_of_pos{Here}(i_5, l, t_3))))))))
 
-int32 calloc(int32 x_0, int32 x_1)
-behavior default:
-  assigns \nothing;
-  allocates \nothing;
-  ensures (C_1 : true);
-;
-
 unit m(intP[..] t, int32 length)
-  requires (C_51 : ((C_52 : (length >= 0)) &&
-                     ((C_54 : (\offset_min(t) <= 0)) &&
-                       (C_55 : (\offset_max(t) >= (length - 1))))));
+  requires (C_52 : ((C_53 : (length >= 0)) &&
+                     ((C_55 : (\offset_min(t) <= 0)) &&
+                       (C_56 : (\offset_max(t) >= (length - 1))))));
 behavior default:
-  ensures (C_50 : true);
+  ensures (C_51 : true);
 {  
    (var int32 count);
    
@@ -131,33 +133,33 @@ behavior default:
          }
       };
       (while_0_break : ());
-      (C_23 : (u = (C_22 : (new intP[count]))));
-      (C_24 : (count = 0));
-      (C_25 : (i = 0));
+      (C_24 : (u = (C_23 : (new intP[(C_22 : (count :> uint32))]))));
+      (C_25 : (count = 0));
+      (C_26 : (i = 0));
       
       loop 
       behavior default:
-        invariant (C_27 : (((((C_31 : (0 <= i)) && (C_32 : (i <= length))) &&
-                              (C_33 : (0 <= count))) &&
-                             (C_34 : (count <= i))) &&
-                            (C_35 : (count ==
+        invariant (C_28 : (((((C_32 : (0 <= i)) && (C_33 : (i <= length))) &&
+                              (C_34 : (0 <= count))) &&
+                             (C_35 : (count <= i))) &&
+                            (C_36 : (count ==
                                       num_of_pos{Here}(0, (i - 1), t)))));
-      variant (C_26 : (length - i));
+      variant (C_27 : (length - i));
       while (true)
       {  
          {  (if (i < length) then () else 
             (goto while_1_break));
             
-            {  (if ((C_46 : (C_45 : (t + i)).intM) > 0) then 
-               {  (C_36 : (tmp_0 = count));
-                  (C_39 : (count = (C_38 : ((C_37 : (count + 1)) :> int32))));
-                  (C_44 : ((C_43 : (C_42 : (u + tmp_0)).intM) = (C_41 : 
-                                                                (C_40 : 
+            {  (if ((C_47 : (C_46 : (t + i)).intM) > 0) then 
+               {  (C_37 : (tmp_0 = count));
+                  (C_40 : (count = (C_39 : ((C_38 : (count + 1)) :> int32))));
+                  (C_45 : ((C_44 : (C_43 : (u + tmp_0)).intM) = (C_42 : 
+                                                                (C_41 : 
                                                                 (t +
                                                                   i)).intM)))
                } else ())
             };
-            (C_49 : (i = (C_48 : ((C_47 : (i + 1)) :> int32))))
+            (C_50 : (i = (C_49 : ((C_48 : (i + 1)) :> int32))))
          }
       };
       (while_1_break : ());
@@ -175,6 +177,8 @@ type int8
 type intP
 
 type padding
+
+type uint32
 
 type uint8
 
@@ -207,6 +211,11 @@ logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
+
+logic integer_of_uint32: uint32 -> int
+
+predicate eq_uint32(x:uint32, y:uint32) =
+ eq_int(integer_of_uint32(x), integer_of_uint32(y))
 
 logic integer_of_uint8: uint8 -> int
 
@@ -283,25 +292,25 @@ axiom no_assign_num_of_pos_0 :
  (forall tmp:intP pset.
   (forall tmpmem:(intP, int32) memory.
    (forall tmpalloc:intP alloc_table.
-    (forall intP_intM_t_1:(intP, int32) memory.
+    (forall intP_intM_t_3:(intP, int32) memory.
      (forall t:intP pointer.
       (forall j_0:int.
        (forall i_1:int.
         ((pset_disjoint(tmp, pset_range(pset_singleton(t), i_1, i_1))
-         and not_assigns(tmpalloc, intP_intM_t_1, tmpmem, tmp)) ->
-         (num_of_pos(i_1, j_0, t, intP_intM_t_1) = num_of_pos(i_1, j_0, t,
+         and not_assigns(tmpalloc, intP_intM_t_3, tmpmem, tmp)) ->
+         (num_of_pos(i_1, j_0, t, intP_intM_t_3) = num_of_pos(i_1, j_0, t,
                                                    tmpmem))))))))))
 
 axiom no_update_num_of_pos_0 :
  (forall tmp:intP pointer.
   (forall tmpval:int32.
-   (forall intP_intM_t_1:(intP, int32) memory.
+   (forall intP_intM_t_3:(intP, int32) memory.
     (forall t:intP pointer.
      (forall j_0:int.
       (forall i_1:int.
        ((not in_pset(tmp, pset_range(pset_singleton(t), i_1, i_1))) ->
-        (num_of_pos(i_1, j_0, t, intP_intM_t_1) = num_of_pos(i_1, j_0, t,
-                                                  store(intP_intM_t_1, tmp,
+        (num_of_pos(i_1, j_0, t, intP_intM_t_3) = num_of_pos(i_1, j_0, t,
+                                                  store(intP_intM_t_3, tmp,
                                                   tmpval))))))))))
 
 axiom pointer_addr_of_charP_of_pointer_address :
@@ -375,6 +384,23 @@ predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic uint32_of_integer: int -> uint32
+
+axiom uint32_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (4294967295))) ->
+   eq_int(integer_of_uint32(uint32_of_integer(x)), x)))
+
+axiom uint32_extensionality :
+ (forall x:uint32.
+  (forall y:uint32[eq_int(integer_of_uint32(x), integer_of_uint32(y))].
+   (eq_int(integer_of_uint32(x), integer_of_uint32(y)) -> (x = y))))
+
+axiom uint32_range :
+ (forall x:uint32.
+  (le_int((0), integer_of_uint32(x))
+  and le_int(integer_of_uint32(x), (4294967295))))
 
 logic uint8_of_integer: int -> uint8
 
@@ -463,39 +489,39 @@ axiom voidP_tags :
    instanceof(voidP_tag_table, x, voidP_tag)))
 
 axiom num_of_pos_empty :
- (forall intP_intM_t_1:(intP, int32) memory.
+ (forall intP_intM_t_3:(intP, int32) memory.
   (forall i_2:int.
    (forall j_1:int.
     (forall t_0_0:intP pointer.
-     (gt_int(i_2, j_1) -> (num_of_pos(i_2, j_1, t_0_0, intP_intM_t_1) = (0)))))))
+     (gt_int(i_2, j_1) -> (num_of_pos(i_2, j_1, t_0_0, intP_intM_t_3) = (0)))))))
 
 axiom num_of_pos_true_case :
- (forall intP_intM_t_1:(intP, int32) memory.
+ (forall intP_intM_t_3:(intP, int32) memory.
   (forall i_3:int.
    (forall j_2:int.
     (forall t_1:intP pointer.
      ((le_int(i_3, j_2)
-      and gt_int(integer_of_int32(select(intP_intM_t_1, shift(t_1, j_2))),
+      and gt_int(integer_of_int32(select(intP_intM_t_3, shift(t_1, j_2))),
           (0))) ->
-      (num_of_pos(i_3, j_2, t_1, intP_intM_t_1) = add_int(num_of_pos(i_3,
+      (num_of_pos(i_3, j_2, t_1, intP_intM_t_3) = add_int(num_of_pos(i_3,
                                                           sub_int(j_2, (1)),
-                                                          t_1, intP_intM_t_1),
+                                                          t_1, intP_intM_t_3),
                                                   (1))))))))
 
 axiom num_of_pos_false_case :
- (forall intP_intM_t_1:(intP, int32) memory.
+ (forall intP_intM_t_3:(intP, int32) memory.
   (forall i_4:int.
    (forall j_3:int.
     (forall t_2:intP pointer.
      ((le_int(i_4, j_3)
-      and (not gt_int(integer_of_int32(select(intP_intM_t_1, shift(t_2, j_3))),
+      and (not gt_int(integer_of_int32(select(intP_intM_t_3, shift(t_2, j_3))),
                (0)))) ->
-      (num_of_pos(i_4, j_3, t_2, intP_intM_t_1) = num_of_pos(i_4,
+      (num_of_pos(i_4, j_3, t_2, intP_intM_t_3) = num_of_pos(i_4,
                                                   sub_int(j_3, (1)), t_2,
-                                                  intP_intM_t_1)))))))
+                                                  intP_intM_t_3)))))))
 
 lemma num_of_pos_strictly_increasing :
- (forall intP_intM_t_3_6:(intP, int32) memory.
+ (forall intP_intM_t_3_8:(intP, int32) memory.
   (forall i_5:int.
    (forall j_4:int.
     (forall k:int.
@@ -503,11 +529,11 @@ lemma num_of_pos_strictly_increasing :
       (forall t_3:intP pointer.
        ((lt_int(j_4, k)
         and (le_int(k, l)
-            and gt_int(integer_of_int32(select(intP_intM_t_3_6,
+            and gt_int(integer_of_int32(select(intP_intM_t_3_8,
                                         shift(t_3, k))),
                 (0)))) ->
-        lt_int(num_of_pos(i_5, j_4, t_3, intP_intM_t_3_6),
-        num_of_pos(i_5, l, t_3, intP_intM_t_3_6)))))))))
+        lt_int(num_of_pos(i_5, j_4, t_3, intP_intM_t_3_8),
+        num_of_pos(i_5, l, t_3, intP_intM_t_3_8)))))))))
 
 exception Goto_while_0_break_exc of unit
 
@@ -633,11 +659,15 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
+parameter any_uint32 : unit -> { } uint32 { true }
+
 parameter any_uint8 : unit -> { } uint8 { true }
 
-parameter calloc : x_0:int32 -> x_1:int32 -> { } int32 { true }
+parameter calloc :
+ unnamed:uint32 -> unnamed_0:uint32 -> { } charP pointer { true }
 
-parameter calloc_requires : x_0:int32 -> x_1:int32 -> { } int32 { true }
+parameter calloc_requires :
+ unnamed:uint32 -> unnamed_0:uint32 -> { } charP pointer { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -652,19 +682,19 @@ parameter int8_of_integer_ :
 parameter m :
  t_0:intP pointer ->
   length:int32 ->
-   intP_t_2_alloc_table:intP alloc_table ->
-    intP_intM_t_2:(intP, int32) memory -> { } unit { true }
+   intP_t_4_alloc_table:intP alloc_table ->
+    intP_intM_t_4:(intP, int32) memory -> { } unit { true }
 
 parameter m_requires :
  t_0:intP pointer ->
   length:int32 ->
-   intP_t_2_alloc_table:intP alloc_table ->
-    intP_intM_t_2:(intP, int32) memory ->
+   intP_t_4_alloc_table:intP alloc_table ->
+    intP_intM_t_4:(intP, int32) memory ->
      { (JC_<somenum>:
        ((JC_<somenum>: ge_int(integer_of_int32(length), (0)))
-       and ((JC_<somenum>: le_int(offset_min(intP_t_2_alloc_table, t_0), (0)))
+       and ((JC_<somenum>: le_int(offset_min(intP_t_4_alloc_table, t_0), (0)))
            and (JC_<somenum>:
-               ge_int(offset_max(intP_t_2_alloc_table, t_0),
+               ge_int(offset_max(intP_t_4_alloc_table, t_0),
                sub_int(integer_of_int32(length), (1)))))))}
      unit { true }
 
@@ -674,8 +704,16 @@ parameter safe_int32_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
+parameter safe_uint32_of_integer_ :
+ x:int -> { } uint32 { eq_int(integer_of_uint32(result), x) }
+
 parameter safe_uint8_of_integer_ :
  x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
+parameter uint32_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (4294967295)))} uint32
+  { eq_int(integer_of_uint32(result), x) }
 
 parameter uint8_of_integer_ :
  x:int ->
@@ -683,19 +721,19 @@ parameter uint8_of_integer_ :
   { eq_int(integer_of_uint8(result), x) }
 
 let m_ensures_default =
- fun (t_0 : intP pointer) (length : int32) (intP_t_2_alloc_table : intP alloc_table) (intP_intM_t_2 : (intP, int32) memory) ->
+ fun (t_0 : intP pointer) (length : int32) (intP_t_4_alloc_table : intP alloc_table) (intP_intM_t_4 : (intP, int32) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int(integer_of_int32(length), (0)))
-    and ((JC_<somenum>: le_int(offset_min(intP_t_2_alloc_table, t_0), (0)))
+    and ((JC_<somenum>: le_int(offset_min(intP_t_4_alloc_table, t_0), (0)))
         and (JC_<somenum>:
-            ge_int(offset_max(intP_t_2_alloc_table, t_0),
+            ge_int(offset_max(intP_t_4_alloc_table, t_0),
             sub_int(integer_of_int32(length), (1))))))) }
   (init:
   try
    begin
-     (let intP_intM_u_7 = ref (any_memory void) in
-     (let intP_u_7_tag_table = ref (any_tag_table void) in
-     (let intP_u_7_alloc_table = ref (any_alloc_table void) in
+     (let intP_intM_u_9 = ref (any_memory void) in
+     (let intP_u_9_tag_table = ref (any_tag_table void) in
+     (let intP_u_9_alloc_table = ref (any_alloc_table void) in
      (let count = ref (any_int32 void) in
      (let i = ref (any_int32 void) in
      (let u = ref (any_pointer void) in
@@ -723,7 +761,7 @@ let m_ensures_default =
                               (integer_of_int32(count) = num_of_pos((0),
                                                          sub_int(integer_of_int32(i),
                                                          (1)), t_0,
-                                                         intP_intM_t_2))))))))
+                                                         intP_intM_t_4))))))))
              }
            begin
              [ { } unit { true } ];
@@ -735,7 +773,7 @@ let m_ensures_default =
                  (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 length))
                  then void else (raise (Goto_while_0_break_exc void)));
                 (if ((gt_int_ (integer_of_int32 (C_18:
-                                                ((safe_acc_ intP_intM_t_2) 
+                                                ((safe_acc_ intP_intM_t_4) 
                                                  (C_17:
                                                  ((shift t_0) (integer_of_int32 !i))))))) (0))
                 then
@@ -753,15 +791,17 @@ let m_ensures_default =
           (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<somenum> ->
          (while_0_break:
-         (C_23:
          (C_24:
          (C_25:
+         (C_26:
          begin
            void;
           (let jessie_<somenum> =
-          (u := (C_22:
+          (u := (C_23:
                 (JC_<somenum>:
-                (((alloc_struct_intP (integer_of_int32 !count)) intP_u_7_alloc_table) intP_u_7_tag_table)))) in
+                (((alloc_struct_intP (integer_of_uint32 (C_22:
+                                                        (safe_uint32_of_integer_ 
+                                                         (integer_of_int32 !count))))) intP_u_9_alloc_table) intP_u_9_tag_table)))) in
           void);
           (let jessie_<somenum> = (count := (safe_int32_of_integer_ (0))) in void);
           (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
@@ -780,45 +820,45 @@ let m_ensures_default =
                               (integer_of_int32(count) = num_of_pos((0),
                                                          sub_int(integer_of_int32(i),
                                                          (1)), t_0,
-                                                         intP_intM_t_2))))))))
+                                                         intP_intM_t_4))))))))
              }
            begin
              [ { } unit { true } ];
             try
              begin
                (let jessie_<somenum> =
-               (C_49:
+               (C_50:
                begin
                  (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 length))
                  then void else (raise (Goto_while_1_break_exc void)));
-                (if ((gt_int_ (integer_of_int32 (C_46:
-                                                ((safe_acc_ intP_intM_t_2) 
-                                                 (C_45:
+                (if ((gt_int_ (integer_of_int32 (C_47:
+                                                ((safe_acc_ intP_intM_t_4) 
+                                                 (C_46:
                                                  ((shift t_0) (integer_of_int32 !i))))))) (0))
                 then
                  (let jessie_<somenum> =
-                 (C_36:
-                 (C_39:
+                 (C_37:
+                 (C_40:
                  begin
                    (let jessie_<somenum> = (tmp_0 := !count) in void);
                   (let jessie_<somenum> =
-                  (count := (C_38:
-                            (safe_int32_of_integer_ (C_37:
+                  (count := (C_39:
+                            (safe_int32_of_integer_ (C_38:
                                                     ((add_int (integer_of_int32 !count)) (1)))))) in
                   void);
-                  (C_44:
+                  (C_45:
                   (let jessie_<somenum> =
-                  (C_41:
-                  ((safe_acc_ intP_intM_t_2) (C_40:
+                  (C_42:
+                  ((safe_acc_ intP_intM_t_4) (C_41:
                                              ((shift t_0) (integer_of_int32 !i))))) in
                   (let jessie_<somenum> = !u in
                   (let jessie_<somenum> = (integer_of_int32 !tmp_0) in
                   (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                   begin
-                    (((safe_upd_ intP_intM_u_7) jessie_<somenum>) jessie_<somenum>);
+                    (((safe_upd_ intP_intM_u_9) jessie_<somenum>) jessie_<somenum>);
                    jessie_<somenum> end))))) end)) in void) else void);
-                (i := (C_48:
-                      (safe_int32_of_integer_ (C_47:
+                (i := (C_49:
+                      (safe_int32_of_integer_ (C_48:
                                               ((add_int (integer_of_int32 !i)) (1))))));
                 !i end) in void); (raise (Loop_continue_exc void)) end with
              Loop_continue_exc jessie_<somenum> -> void end end done) end)))) end;
@@ -828,19 +868,19 @@ let m_ensures_default =
     (raise Return) end with Return -> void end) { (JC_<somenum>: true) }
 
 let m_safety =
- fun (t_0 : intP pointer) (length : int32) (intP_t_2_alloc_table : intP alloc_table) (intP_intM_t_2 : (intP, int32) memory) ->
+ fun (t_0 : intP pointer) (length : int32) (intP_t_4_alloc_table : intP alloc_table) (intP_intM_t_4 : (intP, int32) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int(integer_of_int32(length), (0)))
-    and ((JC_<somenum>: le_int(offset_min(intP_t_2_alloc_table, t_0), (0)))
+    and ((JC_<somenum>: le_int(offset_min(intP_t_4_alloc_table, t_0), (0)))
         and (JC_<somenum>:
-            ge_int(offset_max(intP_t_2_alloc_table, t_0),
+            ge_int(offset_max(intP_t_4_alloc_table, t_0),
             sub_int(integer_of_int32(length), (1))))))) }
   (init:
   try
    begin
-     (let intP_intM_u_7 = ref (any_memory void) in
-     (let intP_u_7_tag_table = ref (any_tag_table void) in
-     (let intP_u_7_alloc_table = ref (any_alloc_table void) in
+     (let intP_intM_u_9 = ref (any_memory void) in
+     (let intP_u_9_tag_table = ref (any_tag_table void) in
+     (let intP_u_9_alloc_table = ref (any_alloc_table void) in
      (let count = ref (any_int32 void) in
      (let i = ref (any_int32 void) in
      (let u = ref (any_pointer void) in
@@ -872,7 +912,7 @@ let m_safety =
                                  (integer_of_int32(count) = num_of_pos((0),
                                                             sub_int(integer_of_int32(i),
                                                             (1)), t_0,
-                                                            intP_intM_t_2)))))))) } ];
+                                                            intP_intM_t_4)))))))) } ];
             try
              begin
                (let jessie_<somenum> =
@@ -882,7 +922,7 @@ let m_safety =
                  then void else (raise (Goto_while_0_break_exc void)));
                 (if ((gt_int_ (integer_of_int32 (C_18:
                                                 (JC_<somenum>:
-                                                ((((offset_acc_ intP_t_2_alloc_table) intP_intM_t_2) t_0) 
+                                                ((((offset_acc_ intP_t_4_alloc_table) intP_intM_t_4) t_0) 
                                                  (integer_of_int32 !i)))))) (0))
                 then
                  (let jessie_<somenum> =
@@ -901,15 +941,18 @@ let m_safety =
           (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<somenum> ->
          (while_0_break:
-         (C_23:
          (C_24:
          (C_25:
+         (C_26:
          begin
            void;
           (let jessie_<somenum> =
-          (u := (C_22:
+          (u := (C_23:
                 (JC_<somenum>:
-                (((alloc_struct_intP_requires (integer_of_int32 !count)) intP_u_7_alloc_table) intP_u_7_tag_table)))) in
+                (((alloc_struct_intP_requires (integer_of_uint32 (C_22:
+                                                                 (JC_<somenum>:
+                                                                 (uint32_of_integer_ 
+                                                                  (integer_of_int32 !count)))))) intP_u_9_alloc_table) intP_u_9_tag_table)))) in
           void);
           (let jessie_<somenum> = (count := (safe_int32_of_integer_ (0))) in void);
           (let jessie_<somenum> = (i := (safe_int32_of_integer_ (0))) in void);
@@ -932,46 +975,46 @@ let m_safety =
                                  (integer_of_int32(count) = num_of_pos((0),
                                                             sub_int(integer_of_int32(i),
                                                             (1)), t_0,
-                                                            intP_intM_t_2)))))))) } ];
+                                                            intP_intM_t_4)))))))) } ];
             try
              begin
                (let jessie_<somenum> =
-               (C_49:
+               (C_50:
                begin
                  (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 length))
                  then void else (raise (Goto_while_1_break_exc void)));
-                (if ((gt_int_ (integer_of_int32 (C_46:
+                (if ((gt_int_ (integer_of_int32 (C_47:
                                                 (JC_<somenum>:
-                                                ((((offset_acc_ intP_t_2_alloc_table) intP_intM_t_2) t_0) 
+                                                ((((offset_acc_ intP_t_4_alloc_table) intP_intM_t_4) t_0) 
                                                  (integer_of_int32 !i)))))) (0))
                 then
                  (let jessie_<somenum> =
-                 (C_36:
-                 (C_39:
+                 (C_37:
+                 (C_40:
                  begin
                    (let jessie_<somenum> = (tmp_0 := !count) in void);
                   (let jessie_<somenum> =
-                  (count := (C_38:
+                  (count := (C_39:
                             (JC_<somenum>:
-                            (int32_of_integer_ (C_37:
+                            (int32_of_integer_ (C_38:
                                                ((add_int (integer_of_int32 !count)) (1))))))) in
                   void);
-                  (C_44:
+                  (C_45:
                   (let jessie_<somenum> =
-                  (C_41:
+                  (C_42:
                   (JC_<somenum>:
-                  ((((offset_acc_ intP_t_2_alloc_table) intP_intM_t_2) t_0) 
+                  ((((offset_acc_ intP_t_4_alloc_table) intP_intM_t_4) t_0) 
                    (integer_of_int32 !i)))) in
                   (let jessie_<somenum> = !u in
                   (let jessie_<somenum> = (integer_of_int32 !tmp_0) in
                   (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
                   begin
                     (JC_<somenum>:
-                    (((((offset_upd_ !intP_u_7_alloc_table) intP_intM_u_7) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
+                    (((((offset_upd_ !intP_u_9_alloc_table) intP_intM_u_9) jessie_<somenum>) jessie_<somenum>) jessie_<somenum>));
                    jessie_<somenum> end))))) end)) in void) else void);
-                (i := (C_48:
+                (i := (C_49:
                       (JC_<somenum>:
-                      (int32_of_integer_ (C_47:
+                      (int32_of_integer_ (C_48:
                                          ((add_int (integer_of_int32 !i)) (1)))))));
                 !i end) in void); (raise (Loop_continue_exc void)) end with
              Loop_continue_exc jessie_<somenum> -> void end end done) end)))) end;
@@ -987,7 +1030,7 @@ why --project [...] why/muller.why
   <lemma name="num_of_pos_strictly_increasing">
     <location file = "" line = "0" begin = "0" end = "0"/>
     <goal why_file="why/muller_po1.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "20" begin = "4" end = "194"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "22" begin = "4" end = "194"/>
       <explain kind = "Lemma"/>
     </goal>
   </lemma>
@@ -998,186 +1041,196 @@ why --project [...] why/muller.why
     <location file = "" line = "0" begin = "0" end = "0"/>
     <behavior name="default behavior">
     <goal why_file="why/muller_po2.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "33" begin = "9" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "35" begin = "9" end = "15"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/muller_po3.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "33" begin = "19" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "35" begin = "19" end = "30"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/muller_po4.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "34" begin = "9" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "36" begin = "9" end = "19"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/muller_po5.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "34" begin = "23" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "36" begin = "23" end = "33"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/muller_po6.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "35" begin = "9" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "37" begin = "9" end = "37"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/muller_po7.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "33" begin = "9" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "35" begin = "9" end = "15"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/muller_po8.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "33" begin = "19" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "35" begin = "19" end = "30"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/muller_po9.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "34" begin = "9" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "36" begin = "9" end = "19"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/muller_po10.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "34" begin = "23" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "36" begin = "23" end = "33"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/muller_po11.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "35" begin = "9" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "37" begin = "9" end = "37"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/muller_po12.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "45" begin = "9" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "47" begin = "9" end = "15"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/muller_po13.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "45" begin = "19" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "47" begin = "19" end = "30"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/muller_po14.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "46" begin = "9" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "48" begin = "9" end = "19"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/muller_po15.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "46" begin = "23" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "48" begin = "23" end = "33"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/muller_po16.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "47" begin = "9" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "49" begin = "9" end = "37"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/muller_po17.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "45" begin = "9" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "47" begin = "9" end = "15"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/muller_po18.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "45" begin = "19" end = "30"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "47" begin = "19" end = "30"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/muller_po19.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "46" begin = "9" end = "19"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "48" begin = "9" end = "19"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/muller_po20.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "46" begin = "23" end = "33"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "48" begin = "23" end = "33"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/muller_po21.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "47" begin = "9" end = "37"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "49" begin = "9" end = "37"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     </behavior>
     <behavior name="Safety">
     <goal why_file="why/muller_po22.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "39" begin = "8" end = "12"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "41" begin = "8" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/muller_po23.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "39" begin = "8" end = "12"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "41" begin = "8" end = "12"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/muller_po24.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "39" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "41" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/muller_po25.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "39" begin = "18" end = "25"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "41" begin = "18" end = "25"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/muller_po26.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "38" begin = "25" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "40" begin = "25" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/muller_po27.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "38" begin = "25" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "40" begin = "25" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/muller_po28.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "36" begin = "19" end = "29"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "38" begin = "19" end = "29"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/muller_po29.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "36" begin = "19" end = "29"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "38" begin = "19" end = "29"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/muller_po30.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "41" begin = "13" end = "38"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "43" begin = "20" end = "25"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/muller_po31.why">
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "43" begin = "20" end = "25"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/muller_po32.why">
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "43" begin = "13" end = "38"/>
       <explain kind = "Pre"
 text = "AllocSize"/>
     </goal>
-    <goal why_file="why/muller_po31.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "51" begin = "8" end = "12"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
-    <goal why_file="why/muller_po32.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "51" begin = "8" end = "12"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
     <goal why_file="why/muller_po33.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "52" begin = "8" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "53" begin = "8" end = "12"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/muller_po34.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "52" begin = "8" end = "15"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "53" begin = "8" end = "12"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/muller_po35.why">
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "54" begin = "8" end = "15"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/muller_po35.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "52" begin = "19" end = "23"/>
-      <explain kind = "Pre"
-text = "PointerDeref"/>
-    </goal>
     <goal why_file="why/muller_po36.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "52" begin = "19" end = "23"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "54" begin = "8" end = "15"/>
       <explain kind = "Pre"
-text = "PointerDeref"/>
+text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/muller_po37.why">
-      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "147" begin = "27" end = "290"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "54" begin = "19" end = "23"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/muller_po38.why">
-      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "147" begin = "27" end = "290"/>
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "54" begin = "19" end = "23"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/muller_po39.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "50" begin = "25" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "149" begin = "27" end = "290"/>
       <explain kind = "Pre"
-text = "ArithOverflow"/>
+text = "PointerDeref"/>
     </goal>
     <goal why_file="why/muller_po40.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "50" begin = "25" end = "28"/>
+      <location file = "PPCHOME/tests/jessie/muller.jessie/muller.jc" line = "149" begin = "27" end = "290"/>
+      <explain kind = "Pre"
+text = "PointerDeref"/>
+    </goal>
+    <goal why_file="why/muller_po41.why">
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "52" begin = "25" end = "28"/>
       <explain kind = "Pre"
 text = "ArithOverflow"/>
     </goal>
-    <goal why_file="why/muller_po41.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "48" begin = "19" end = "29"/>
+    <goal why_file="why/muller_po42.why">
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "52" begin = "25" end = "28"/>
+      <explain kind = "Pre"
+text = "ArithOverflow"/>
+    </goal>
+    <goal why_file="why/muller_po43.why">
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "50" begin = "19" end = "29"/>
       <explain kind = "VarDecr"/>
     </goal>
-    <goal why_file="why/muller_po42.why">
-      <location file = "PPCHOME/tests/jessie/muller.c" line = "48" begin = "19" end = "29"/>
+    <goal why_file="why/muller_po44.why">
+      <location file = "PPCHOME/tests/jessie/muller.c" line = "50" begin = "19" end = "29"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>
@@ -2131,6 +2184,8 @@ type intP
 
 type padding
 
+type uint32
+
 type uint8
 
 type unsigned_charP
@@ -2163,6 +2218,11 @@ logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
+
+logic integer_of_uint32 : uint32 -> int
+
+predicate eq_uint32(x: uint32, y: uint32) =
+  (integer_of_uint32(x) = integer_of_uint32(y))
 
 logic integer_of_uint8 : uint8 -> int
 
@@ -2240,25 +2300,25 @@ axiom no_assign_num_of_pos_0:
   (forall tmp:intP pset.
     (forall tmpmem:(intP, int32) memory.
       (forall tmpalloc:intP alloc_table.
-        (forall intP_intM_t_1:(intP, int32) memory.
+        (forall intP_intM_t_3:(intP, int32) memory.
           (forall t:intP pointer.
             (forall j_0:int.
               (forall i_1:int.
                 ((pset_disjoint(tmp, pset_range(pset_singleton(t), i_1,
-                  i_1)) and not_assigns(tmpalloc, intP_intM_t_1, tmpmem, tmp)) ->
-                 (num_of_pos(i_1, j_0, t, intP_intM_t_1) = num_of_pos(i_1,
+                  i_1)) and not_assigns(tmpalloc, intP_intM_t_3, tmpmem, tmp)) ->
+                 (num_of_pos(i_1, j_0, t, intP_intM_t_3) = num_of_pos(i_1,
                  j_0, t, tmpmem))))))))))
 
 axiom no_update_num_of_pos_0:
   (forall tmp:intP pointer.
     (forall tmpval:int32.
-      (forall intP_intM_t_1:(intP, int32) memory.
+      (forall intP_intM_t_3:(intP, int32) memory.
         (forall t:intP pointer.
           (forall j_0:int.
             (forall i_1:int.
               ((not in_pset(tmp, pset_range(pset_singleton(t), i_1, i_1))) ->
-               (num_of_pos(i_1, j_0, t, intP_intM_t_1) = num_of_pos(i_1, j_0,
-               t, store(intP_intM_t_1, tmp, tmpval))))))))))
+               (num_of_pos(i_1, j_0, t, intP_intM_t_3) = num_of_pos(i_1, j_0,
+               t, store(intP_intM_t_3, tmp, tmpval))))))))))
 
 axiom pointer_addr_of_charP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
@@ -2332,6 +2392,22 @@ predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic uint32_of_integer : int -> uint32
+
+axiom uint32_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 4294967295)) ->
+     (integer_of_uint32(uint32_of_integer(x)) = x)))
+
+axiom uint32_extensionality:
+  (forall x:uint32.
+    (forall y:uint32 [(integer_of_uint32(x) = integer_of_uint32(y))].
+      ((integer_of_uint32(x) = integer_of_uint32(y)) -> (x = y))))
+
+axiom uint32_range:
+  (forall x:uint32.
+    ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
 
 logic uint8_of_integer : int -> uint8
 
@@ -2420,29 +2496,29 @@ axiom voidP_tags:
       voidP_tag)))
 
 axiom num_of_pos_empty:
-  (forall intP_intM_t_1:(intP, int32) memory.
+  (forall intP_intM_t_3:(intP, int32) memory.
     (forall i_2:int.
       (forall j_1:int.
         (forall t_0_0:intP pointer.
-          ((i_2 > j_1) -> (num_of_pos(i_2, j_1, t_0_0, intP_intM_t_1) = 0))))))
+          ((i_2 > j_1) -> (num_of_pos(i_2, j_1, t_0_0, intP_intM_t_3) = 0))))))
 
 axiom num_of_pos_true_case:
-  (forall intP_intM_t_1:(intP, int32) memory.
+  (forall intP_intM_t_3:(intP, int32) memory.
     (forall i_3:int.
       (forall j_2:int.
         (forall t_1:intP pointer.
-          (((i_3 <= j_2) and (integer_of_int32(select(intP_intM_t_1,
+          (((i_3 <= j_2) and (integer_of_int32(select(intP_intM_t_3,
             shift(t_1, j_2))) > 0)) ->
-           (num_of_pos(i_3, j_2, t_1, intP_intM_t_1) = (num_of_pos(i_3,
-           (j_2 - 1), t_1, intP_intM_t_1) + 1)))))))
+           (num_of_pos(i_3, j_2, t_1, intP_intM_t_3) = (num_of_pos(i_3,
+           (j_2 - 1), t_1, intP_intM_t_3) + 1)))))))
 
 axiom num_of_pos_false_case:
-  (forall intP_intM_t_1:(intP, int32) memory.
+  (forall intP_intM_t_3:(intP, int32) memory.
     (forall i_4:int.
       (forall j_3:int.
         (forall t_2:intP pointer.
-          (((i_4 <= j_3) and (not (integer_of_int32(select(intP_intM_t_1,
+          (((i_4 <= j_3) and (not (integer_of_int32(select(intP_intM_t_3,
             shift(t_2, j_3))) > 0))) ->
-           (num_of_pos(i_4, j_3, t_2, intP_intM_t_1) = num_of_pos(i_4,
-           (j_3 - 1), t_2, intP_intM_t_1)))))))
+           (num_of_pos(i_4, j_3, t_2, intP_intM_t_3) = num_of_pos(i_4,
+           (j_3 - 1), t_2, intP_intM_t_3)))))))
 

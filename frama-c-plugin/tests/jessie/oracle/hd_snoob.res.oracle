@@ -1261,6 +1261,8 @@ behavior default:
    
    (var uint32 w);
    
+   (var int32 tmp_2);
+   
    (var int32 __retres_8);
    
    {  (if (argc != 2) then (C_509 : exit(1)) else ());
@@ -1299,9 +1301,8 @@ behavior default:
                (C_531 : (z = (C_530 : snoob2(x_8))));
                (C_533 : (u = (C_532 : snoob3(x_8))));
                (C_535 : (v_0 = (C_534 : next_set_of_n_elements(x_8))));
-               (C_540 : (let __cil_tmp =
-                        (C_537 : snoob4((C_536 : (x_8 :> int32))))
-                        in (C_539 : (w = (C_538 : (__cil_tmp :> uint32))))));
+               (C_538 : (tmp_2 = (C_537 : snoob4((C_536 : (x_8 :> int32))))));
+               (C_540 : (w = (C_539 : (tmp_2 :> uint32))));
                (C_542 : (x_8 = (C_541 : snoob(x_8))))
             };
             (if (x_8 <= 255) then () else 
@@ -4695,6 +4696,7 @@ let main_ensures_default =
      (let u = ref (any_uint32 void) in
      (let v_0 = ref (any_uint32 void) in
      (let w = ref (any_uint32 void) in
+     (let tmp_2 = ref (any_int32 void) in
      (let __retres_8 = ref (any_int32 void) in
      try
       begin
@@ -4772,6 +4774,7 @@ let main_ensures_default =
                (C_531:
                (C_533:
                (C_535:
+               (C_538:
                (C_540:
                (C_542:
                begin
@@ -4793,19 +4796,18 @@ let main_ensures_default =
                         (JC_<somenum>: (next_set_of_n_elements jessie_<somenum>))))) in
                 void);
                 (let jessie_<somenum> =
-                (let __cil_tmp =
-                (C_537:
+                (tmp_2 := (C_537:
+                          (let jessie_<somenum> =
+                          (C_536:
+                          (safe_int32_of_integer_ (integer_of_uint32 !x_8))) in
+                          (JC_<somenum>: (snoob4 jessie_<somenum>))))) in void);
                 (let jessie_<somenum> =
-                (C_536: (safe_int32_of_integer_ (integer_of_uint32 !x_8))) in
-                (JC_<somenum>: (snoob4 jessie_<somenum>)))) in
-                (C_539:
-                begin
-                  (w := (C_538:
-                        (safe_uint32_of_integer_ (integer_of_int32 __cil_tmp))));
-                 !w end)) in void);
+                (w := (C_539:
+                      (safe_uint32_of_integer_ (integer_of_int32 !tmp_2)))) in
+                void);
                 (x_8 := (C_541:
                         (let jessie_<somenum> = !x_8 in
-                        (JC_<somenum>: (snoob jessie_<somenum>))))); !x_8 end)))))) in
+                        (JC_<somenum>: (snoob jessie_<somenum>))))); !x_8 end))))))) in
                void);
               (if ((le_int_ (integer_of_uint32 !x_8)) (255)) then void
               else (raise (Goto_while_0_break_exc void)));
@@ -4818,7 +4820,7 @@ let main_ensures_default =
       begin
         void;
        (let jessie_<somenum> = (__retres_8 := (safe_int32_of_integer_ (0))) in
-       void); (return := !__retres_8); (raise Return) end)) end))))))));
+       void); (return := !__retres_8); (raise Return) end)) end)))))))));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
@@ -4835,6 +4837,7 @@ let main_safety =
      (let u = ref (any_uint32 void) in
      (let v_0 = ref (any_uint32 void) in
      (let w = ref (any_uint32 void) in
+     (let tmp_2 = ref (any_int32 void) in
      (let __retres_8 = ref (any_int32 void) in
      try
       begin
@@ -4915,6 +4918,7 @@ let main_safety =
                (C_531:
                (C_533:
                (C_535:
+               (C_538:
                (C_540:
                (C_542:
                begin
@@ -4937,21 +4941,20 @@ let main_safety =
                         (next_set_of_n_elements_requires jessie_<somenum>))))) in
                 void);
                 (let jessie_<somenum> =
-                (let __cil_tmp =
-                (C_537:
+                (tmp_2 := (C_537:
+                          (let jessie_<somenum> =
+                          (C_536:
+                          (JC_<somenum>:
+                          (int32_of_integer_ (integer_of_uint32 !x_8)))) in
+                          (JC_<somenum>: (snoob4_requires jessie_<somenum>))))) in void);
                 (let jessie_<somenum> =
-                (C_536:
-                (JC_<somenum>: (int32_of_integer_ (integer_of_uint32 !x_8)))) in
-                (JC_<somenum>: (snoob4_requires jessie_<somenum>)))) in
-                (C_539:
-                begin
-                  (w := (C_538:
-                        (JC_<somenum>:
-                        (uint32_of_integer_ (integer_of_int32 __cil_tmp)))));
-                 !w end)) in void);
+                (w := (C_539:
+                      (JC_<somenum>:
+                      (uint32_of_integer_ (integer_of_int32 !tmp_2))))) in
+                void);
                 (x_8 := (C_541:
                         (let jessie_<somenum> = !x_8 in
-                        (JC_<somenum>: (snoob_requires jessie_<somenum>))))); !x_8 end)))))) in
+                        (JC_<somenum>: (snoob_requires jessie_<somenum>))))); !x_8 end))))))) in
                void);
               (if ((le_int_ (integer_of_uint32 !x_8)) (255)) then void
               else (raise (Goto_while_0_break_exc void)));
@@ -4964,7 +4967,7 @@ let main_safety =
       begin
         void;
        (let jessie_<somenum> = (__retres_8 := (safe_int32_of_integer_ (0))) in
-       void); (return := !__retres_8); (raise Return) end)) end))))))));
+       void); (return := !__retres_8); (raise Return) end)) end)))))))));
     absurd  end with Return -> !return end)) { true }
 
 let next_set_of_n_elements_ensures_default =
@@ -6600,11 +6603,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po186.why">
-      <location file = "why/hd_snoob.why" line = "5032" begin = "43" end = "44"/>
+      <location file = "why/hd_snoob.why" line = "5034" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po187.why">
-      <location file = "why/hd_snoob.why" line = "5032" begin = "43" end = "44"/>
+      <location file = "why/hd_snoob.why" line = "5034" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po188.why">
@@ -7598,11 +7601,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po14.why">
-      <location file = "why/hd_snoob.why" line = "3591" begin = "46" end = "47"/>
+      <location file = "why/hd_snoob.why" line = "3593" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po15.why">
-      <location file = "why/hd_snoob.why" line = "3591" begin = "46" end = "47"/>
+      <location file = "why/hd_snoob.why" line = "3593" begin = "46" end = "47"/>
       <explain kind = "VarDecr"/>
     </goal>
     </behavior>

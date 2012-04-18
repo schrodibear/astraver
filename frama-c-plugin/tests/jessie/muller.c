@@ -1,5 +1,7 @@
 #pragma SeparationPolicy(Regions)
 
+extern void *calloc(unsigned int, unsigned int);
+
 /*@ axiomatic NumOfPos {
   @  logic integer num_of_pos{Here}(integer i,integer j,int *t)
   @    reads t[i];

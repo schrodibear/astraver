@@ -65,6 +65,8 @@ behavior default:
    
    (var int32 x);
    
+   (var uint32 tmp);
+   
    (var int32 __retres);
    
    {  (C_2 : (x = 10));
@@ -75,8 +77,8 @@ behavior default:
          {  (if (i < n_1) then () else 
             (goto while_0_break));
             
-            {  (C_6 : (let __cil_tmp = (C_3 : nd())
-                      in (C_5 : (b = (C_4 : (__cil_tmp :> int32))))));
+            {  (C_4 : (tmp = (C_3 : nd())));
+               (C_6 : (b = (C_5 : (tmp :> int32))));
                (if (b != 0) then (C_9 : (y = (C_8 : ((C_7 : (x / i)) :> int32)))) else ())
             }
          }
@@ -494,6 +496,7 @@ let main_ensures_default =
      (let y = ref (any_int32 void) in
      (let i = (any_int32 void) in
      (let x_0 = ref (any_int32 void) in
+     (let tmp = ref (any_uint32 void) in
      (let __retres = ref (any_int32 void) in
      try
       (C_2:
@@ -505,17 +508,15 @@ let main_ensures_default =
         begin
           [ { } unit { true } ];
          try
+          (C_4:
           (C_6:
           begin
             (if ((lt_int_ (integer_of_int32 i)) (integer_of_int32 n_1))
             then void else (raise (Goto_while_0_break_exc void)));
+           (let jessie_<somenum> = (tmp := (C_3: (JC_<somenum>: (nd void)))) in void);
            (let jessie_<somenum> =
-           (let __cil_tmp = (C_3: (JC_<somenum>: (nd void))) in
-           (C_5:
-           begin
-             (b := (C_4:
-                   (safe_int32_of_integer_ (integer_of_uint32 __cil_tmp))));
-            !b end)) in void);
+           (b := (C_5: (safe_int32_of_integer_ (integer_of_uint32 !tmp)))) in
+           void);
            (if ((neq_int_ (integer_of_int32 !b)) (0))
            then
             (let jessie_<somenum> =
@@ -525,7 +526,7 @@ let main_ensures_default =
                                           (JC_<somenum>:
                                           ((computer_div (integer_of_int32 !x_0)) 
                                            (integer_of_int32 i)))))))) in
-            void) else void); (raise (Loop_continue_exc void)) end) with
+            void) else void); (raise (Loop_continue_exc void)) end)) with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
@@ -535,8 +536,8 @@ let main_ensures_default =
         void; (assert { (JC_<somenum>: (integer_of_int32(x_0) = (10))) }; void);
        void;
        (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end)) end))))); absurd  end with
-   Return -> !return end)) { (JC_<somenum>: true) }
+       (return := !__retres); (raise Return) end)) end)))))); absurd  end
+   with Return -> !return end)) { (JC_<somenum>: true) }
 
 let main_safety =
  fun (n_1 : int32) ->
@@ -549,6 +550,7 @@ let main_safety =
      (let y = ref (any_int32 void) in
      (let i = (any_int32 void) in
      (let x_0 = ref (any_int32 void) in
+     (let tmp = ref (any_uint32 void) in
      (let __retres = ref (any_int32 void) in
      try
       (C_2:
@@ -560,17 +562,16 @@ let main_safety =
         begin
           [ { } unit { true } ];
          try
+          (C_4:
           (C_6:
           begin
             (if ((lt_int_ (integer_of_int32 i)) (integer_of_int32 n_1))
             then void else (raise (Goto_while_0_break_exc void)));
+           (let jessie_<somenum> = (tmp := (C_3: (JC_<somenum>: (nd_requires void)))) in
+           void);
            (let jessie_<somenum> =
-           (let __cil_tmp = (C_3: (JC_<somenum>: (nd_requires void))) in
-           (C_5:
-           begin
-             (b := (C_4:
-                   (JC_<somenum>: (int32_of_integer_ (integer_of_uint32 __cil_tmp)))));
-            !b end)) in void);
+           (b := (C_5: (JC_<somenum>: (int32_of_integer_ (integer_of_uint32 !tmp))))) in
+           void);
            (if ((neq_int_ (integer_of_int32 !b)) (0))
            then
             (let jessie_<somenum> =
@@ -581,7 +582,7 @@ let main_safety =
                                      (JC_<somenum>:
                                      ((computer_div_ (integer_of_int32 !x_0)) 
                                       (integer_of_int32 i))))))))) in void)
-           else void); (raise (Loop_continue_exc void)) end) with
+           else void); (raise (Loop_continue_exc void)) end)) with
           Loop_continue_exc jessie_<somenum> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<somenum> ->
@@ -592,8 +593,8 @@ let main_safety =
        [ { } unit reads x_0 { (JC_<somenum>: (integer_of_int32(x_0) = (10))) } ];
        void;
        (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
-       (return := !__retres); (raise Return) end)) end))))); absurd  end with
-   Return -> !return end)) { true }
+       (return := !__retres); (raise Return) end)) end)))))); absurd  end
+   with Return -> !return end)) { true }
 
 
 WHYLIB=WHYHOME/lib WHYEXEC=WHYHOME/bin/why.opt GWHYEXEC=WHYHOME/bin/gwhy.opt make --quiet -C cvc3.jessie --quiet -f cvc3.makefile project

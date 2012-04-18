@@ -22,6 +22,8 @@
 /*                                                                        */
 /**************************************************************************/
 
+extern void *malloc(unsigned int);
+
 /* C tests with pointers */
 
 /*@ requires \valid(x);

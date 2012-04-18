@@ -1,3 +1,4 @@
+extern void *malloc(unsigned int);
 
 /*@ requires n > 0;
   @ ensures \valid(\result+(0..n-1));

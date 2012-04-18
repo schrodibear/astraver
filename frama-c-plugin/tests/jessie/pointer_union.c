@@ -1,3 +1,4 @@
+void *malloc(unsigned int);
 
 union U {
   int i;

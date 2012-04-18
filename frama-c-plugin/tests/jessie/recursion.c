@@ -1,3 +1,4 @@
+void *malloc(unsigned int);
 
 #ifndef NULL
 #define NULL 0
