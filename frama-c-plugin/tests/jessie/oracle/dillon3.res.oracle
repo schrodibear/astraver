@@ -44,20 +44,19 @@ tag voidP = {
 type voidP = [voidP]
 
 double g4(doubleP[..] t)
-  requires (C_8 : (((C_10 : (\offset_min(t) <= 0)) &&
-                     (C_11 : (\offset_max(t) >= 0))) &&
-                    ((C_13 : (\offset_min(t) <= 0)) &&
-                      (C_14 : (\offset_max(t) >= 1)))));
+  requires (C_6 : (((C_8 : (\offset_min(t) <= 0)) &&
+                     (C_9 : (\offset_max(t) >= 0))) &&
+                    ((C_11 : (\offset_min(t) <= 0)) &&
+                      (C_12 : (\offset_max(t) >= 1)))));
 behavior default:
   assigns \nothing;
-  ensures (C_7 : ((\result :> real) ==
+  ensures (C_5 : ((\result :> real) ==
                    (((\at(t,Old) + 0).doubleM :> real) +
                      ((\at(t,Old) + 1).doubleM :> real))));
 {  
    (var double y);
    
-   {  (C_6 : (y = (C_5 : ((C_4 : (C_3 : (t + 0)).doubleM) +
-                           (C_2 : (C_1 : (t + 1)).doubleM)))));
+   {  (C_4 : (y = (C_3 : ((C_2 : (t + 0).doubleM) + (C_1 : (t + 1).doubleM)))));
       
       (return y)
    }
@@ -66,18 +65,18 @@ behavior default:
 double f4()
 behavior default:
   assigns \nothing;
-  ensures (C_24 : true);
+  ensures (C_22 : true);
 {  
    (var doubleP[0..1] tab);
    
    (var double r);
    
-   {  (C_16 : (tab = (C_15 : (new doubleP[2]))));
-      (C_18 : ((C_17 : (tab + 0).doubleM) = (1.0 :> double)));
-      (C_20 : ((C_19 : (tab + 1).doubleM) = (2.0 :> double)));
-      (C_22 : (r = (C_21 : g4(tab))));
+   {  (C_14 : (tab = (C_13 : (new doubleP[2]))));
+      (C_16 : ((C_15 : (tab + 0).doubleM) = (1.0 :> double)));
+      (C_18 : ((C_17 : (tab + 1).doubleM) = (2.0 :> double)));
+      (C_20 : (r = (C_19 : g4(tab))));
       
-      {  (C_23 : (free(tab)));
+      {  (C_21 : (free(tab)));
          
          (return r)
       }
@@ -523,14 +522,14 @@ let f4_ensures_default =
      (let doubleP_tab_2_alloc_table = ref (any_alloc_table void) in
      (let tab = ref (any_pointer void) in
      (let r = ref (any_double void) in
+     (C_14:
      (C_16:
      (C_18:
      (C_20:
-     (C_22:
-     (C_23:
+     (C_21:
      begin
        (let jessie_<somenum> =
-       (tab := (C_15:
+       (tab := (C_13:
                (JC_<somenum>:
                (((alloc_struct_doubleP (2)) doubleP_tab_2_alloc_table) doubleP_tab_2_tag_table)))) in
        void);
@@ -548,7 +547,7 @@ let f4_ensures_default =
           and ((select(doubleP_doubleM_tab_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(doubleP_doubleM_tab_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
       (let jessie_<somenum> =
-      (r := (C_21:
+      (r := (C_19:
             (let jessie_<somenum> = !tab in
             (JC_<somenum>:
             (((g4 jessie_<somenum>) !doubleP_tab_2_alloc_table) !doubleP_doubleM_tab_2))))) in
@@ -571,15 +570,15 @@ let f4_safety =
      (let doubleP_tab_2_alloc_table = ref (any_alloc_table void) in
      (let tab = ref (any_pointer void) in
      (let r = ref (any_double void) in
+     (C_14:
      (C_16:
      (C_18:
      (C_20:
-     (C_22:
-     (C_23:
+     (C_21:
      begin
        (let jessie_<somenum> =
        (tab := (let jessie_<somenum> =
-               (C_15:
+               (C_13:
                (JC_<somenum>:
                (((alloc_struct_doubleP_requires (2)) doubleP_tab_2_alloc_table) doubleP_tab_2_tag_table))) in
                (JC_<somenum>:
@@ -600,7 +599,7 @@ let f4_safety =
           and ((select(doubleP_doubleM_tab_2, shift(jessie_<somenum>, (0))) = jessie_<somenum>)
               and (select(doubleP_doubleM_tab_2, shift(jessie_<somenum>, (1))) = jessie_<somenum>))) } ]))))));
       (let jessie_<somenum> =
-      (r := (C_21:
+      (r := (C_19:
             (let jessie_<somenum> = !tab in
             (JC_<somenum>:
             (((g4_requires jessie_<somenum>) !doubleP_tab_2_alloc_table) !doubleP_doubleM_tab_2))))) in
@@ -620,15 +619,16 @@ let g4_ensures_default =
   try
    begin
      (let y = ref (any_double void) in
-     (C_6:
+     (C_4:
      begin
        (let jessie_<somenum> =
-       (y := (C_5:
+       (y := (C_3:
              (JC_<somenum>:
-             (((add_double_safe nearest_even) (C_4:
+             (((add_double_safe nearest_even) (C_2:
                                               ((safe_acc_ doubleP_doubleM_t_1) 
-                                               (C_3: ((shift t) (0)))))) 
-              (C_2: ((safe_acc_ doubleP_doubleM_t_1) (C_1: ((shift t) (1))))))))) in
+                                               ((shift t) (0))))) (C_1:
+                                                                  ((safe_acc_ doubleP_doubleM_t_1) 
+                                                                   ((shift t) (1)))))))) in
        void); (return := !y); (raise Return) end)); absurd  end with
    Return -> !return end))
   { (JC_<somenum>:
@@ -649,15 +649,15 @@ let g4_safety =
   try
    begin
      (let y = ref (any_double void) in
-     (C_6:
+     (C_4:
      begin
        (let jessie_<somenum> =
-       (y := (C_5:
+       (y := (C_3:
              (JC_<somenum>:
-             (((add_double nearest_even) (C_4:
+             (((add_double nearest_even) (C_2:
                                          (JC_<somenum>:
                                          (((acc_ doubleP_t_1_alloc_table) doubleP_doubleM_t_1) t)))) 
-              (C_2:
+              (C_1:
               (JC_<somenum>:
               ((((offset_acc_ doubleP_t_1_alloc_table) doubleP_doubleM_t_1) t) (1)))))))) in
        void); (return := !y); (raise Return) end)); absurd  end with

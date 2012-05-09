@@ -51,7 +51,11 @@
 open Cil_types
 open Cil
 open Cilutil
-open Cil_datatype
+(* [VP 2012-05-09] opening Cil_datatype is not really a good idea, as its
+   inner module names are a bit generic and might clash with toplevel modules
+   of Frama-C itself (in particular File)
+*)
+(* open Cil_datatype *)
 open Ast_info
 open Extlib
 
@@ -1493,11 +1497,11 @@ let debugtab = Hashtbl.create 0
 class retypeBasePointer =
 
   (* Correspondance between a base type and its wrapper structure type *)
-  let type_wrappers : typ Typ.Hashtbl.t = Typ.Hashtbl.create 17 in
+  let type_wrappers = Cil_datatype.Typ.Hashtbl.create 17 in
   (* Store which types are wrapper types *)
-  let auto_type_wrappers = ref Typ.Set.empty in
+  let auto_type_wrappers = ref Cil_datatype.Typ.Set.empty in
 
-  let is_wrapper_type ty = Typ.Set.mem ty !auto_type_wrappers in
+  let is_wrapper_type ty = Cil_datatype.Typ.Set.mem ty !auto_type_wrappers in
 
   let new_wrapper_for_type_no_sharing ty =
     (* Choose name t_P for the wrapper and t_M for the field *)
@@ -1523,12 +1527,13 @@ object(self)
      *)
     let ty = typeRemoveAttributes ["const";"volatile"] (unrollType ty) in
     try
-      Typ.Hashtbl.find type_wrappers ty
+      Cil_datatype.Typ.Hashtbl.find type_wrappers ty
     with Not_found ->
       (* Construct a new wrapper for this type *)
       let wrapper_def,wrapper_type = new_wrapper_for_type_no_sharing ty in
-      Typ.Hashtbl.replace type_wrappers ty wrapper_type;
-      auto_type_wrappers := Typ.Set.add wrapper_type !auto_type_wrappers;
+      Cil_datatype.Typ.Hashtbl.replace type_wrappers ty wrapper_type;
+      auto_type_wrappers :=
+        Cil_datatype.Typ.Set.add wrapper_type !auto_type_wrappers;
       (* Treat newly constructed type *)
       let store_current_global = !currentGlobal in
       ignore (visitFramacGlobal (self:>frama_c_visitor) wrapper_def);
@@ -1611,9 +1616,10 @@ object(self)
               | Some newtyp ->
                   let newfi = get_unique_field (pointed_type newtyp) in
                   let newlv =
-                    if is_array_reference_type newtyp then
+                    if Cil.isArrayType (direct_pointed_type newtyp) then
                       lv
-                    else
+                    else (* The array has been directly decayed into a pointer
+                            Use pointer arithmetic instead of index. *)
                       (Mem
                          (new_exp ~loc:e.eloc
                             (BinOp(PlusPI,e,ie,newtyp))),
@@ -1755,7 +1761,7 @@ let remove_useless_casts file =
 (* Translate union fields into structures                                    *)
 (*****************************************************************************)
 
-let generated_union_types = Typ.Hashtbl.create 0
+let generated_union_types = Cil_datatype.Typ.Hashtbl.create 0
 
 class translateUnions =
   let field_to_equiv_type : typ Cil_datatype.Fieldinfo.Hashtbl.t
@@ -1769,7 +1775,7 @@ class translateUnions =
       mkStructSingleton ~padding tname fname fi.ftype in
     let tdef = GCompTag (mcomp, CurrentLoc.get ()) in
     let tdecl = TComp (mcomp, empty_size_cache (), []) in
-    Typ.Hashtbl.add generated_union_types tdecl ();
+    Cil_datatype.Typ.Hashtbl.add generated_union_types tdecl ();
     Cil_datatype.Fieldinfo.Hashtbl.add field_to_equiv_type fi tdecl;
     fi.ftype <- tdecl;
     tdef

@@ -268,7 +268,7 @@ let is_reference_type ty =
   isPointerType ty && hasAttribute arraylen_attr_name (typeAttrs ty)
 
 let is_array_reference_type ty =
-  is_reference_type ty && isArrayType (direct_pointed_type ty)
+  is_reference_type ty && isArrayType (Cil.unrollType (direct_pointed_type ty))
 
 let reference_of_array ty =
   let rec reftype ty =
@@ -618,19 +618,19 @@ object
     assert (!pending_statements_at_beginning = []);
     assert (!pending_statements_at_end = []);
     let change c = fun f -> adding_statement_mode:=false; c f in
+    let postaction_func f =
+      insert_pending_statements f;
+      adding_statement_mode := false;
+      f
+    in
     match visitor#vfunc f with
       | SkipChildren -> ChangeToPost(f, change (fun x -> x))
       | JustCopy -> JustCopyPost (change (fun x -> x))
       | JustCopyPost f -> JustCopyPost (change f)
       | ChangeTo f' -> ChangeToPost (f', change (fun x -> x))
       | ChangeToPost(f',action) -> ChangeToPost(f', change action)
-      | DoChildren ->
-	  let postaction_func f =
-	    insert_pending_statements f;
-	    adding_statement_mode := false;
-	    f
-	  in
-	  ChangeDoChildrenPost (f, postaction_func)
+      | DoChildren -> DoChildrenPost postaction_func
+      | DoChildrenPost f -> DoChildrenPost (f $ postaction_func)
       | ChangeDoChildrenPost (f', action) ->
 	  let postaction_func f =
 	    let f = action f in
