@@ -125,7 +125,7 @@ behavior in_interval:
    
    (var double yi);
    
-   (var double v_0);
+   (var double v);
    
    (var double __retres);
    
@@ -202,9 +202,9 @@ behavior in_interval:
          ()
       };
       
-      {  (C_47 : (v_0 = (C_46 : ((C_45 : (yi - yim1)) / (C_44 : (xi - xim1))))))
+      {  (C_47 : (v = (C_46 : ((C_45 : (yi - yim1)) / (C_44 : (xi - xim1))))))
       };
-      (C_51 : (__retres = (C_50 : (yi + (C_49 : (v_0 * (C_48 : (z - xim1))))))));
+      (C_51 : (__retres = (C_50 : (yi + (C_49 : (v * (C_48 : (z - xim1))))))));
       (return_label : 
       (return __retres))
    }

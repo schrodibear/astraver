@@ -52,7 +52,7 @@ qr[0] md(int32 n_1, int32 d)
 behavior default:
   ensures (C_42 : true);
 {  
-   (var qr[0] v_0);
+   (var qr[0] v);
    
    (var qr[0] __retres);
    
@@ -60,15 +60,15 @@ behavior default:
    
    (var qr[0] __cil_tmp_9);
    
-   {  (C_2 : (v_0 = (C_1 : (new qr[1]))));
+   {  (C_2 : (v = (C_1 : (new qr[1]))));
       (C_4 : (__retres = (C_3 : (new qr[1]))));
       (C_6 : (__cil_tmp = (C_5 : (new qr[1]))));
       (if (n_1 == 0) then 
-      {  (C_25 : ((C_24 : v_0.q) = 0));
-         (C_27 : ((C_26 : v_0.r) = 0));
+      {  (C_25 : ((C_24 : v.q) = 0));
+         (C_27 : ((C_26 : v.r) = 0));
          
-         {  (C_30 : ((C_29 : __retres.q) = (C_28 : v_0.q)));
-            (C_33 : ((C_32 : __retres.r) = (C_31 : v_0.r)))
+         {  (C_30 : ((C_29 : __retres.q) = (C_28 : v.q)));
+            (C_33 : ((C_32 : __retres.r) = (C_31 : v.r)))
          };
          
          (goto return_label)
@@ -77,14 +77,14 @@ behavior default:
          {  (C_10 : (__cil_tmp_9 = (C_9 : md((C_8 : ((C_7 : (n_1 - 1)) :> int32)),
                                              d))));
             
-            {  (C_13 : ((C_12 : v_0.q) = (C_11 : __cil_tmp_9.q)));
-               (C_16 : ((C_15 : v_0.r) = (C_14 : __cil_tmp_9.r)))
+            {  (C_13 : ((C_12 : v.q) = (C_11 : __cil_tmp_9.q)));
+               (C_16 : ((C_15 : v.r) = (C_14 : __cil_tmp_9.r)))
             };
             (C_17 : (free(__cil_tmp_9)))
          };
          
-         {  (C_20 : ((C_19 : __retres.q) = (C_18 : v_0.q)));
-            (C_23 : ((C_22 : __retres.r) = (C_21 : v_0.r)))
+         {  (C_20 : ((C_19 : __retres.q) = (C_18 : v.q)));
+            (C_23 : ((C_22 : __retres.r) = (C_21 : v.r)))
          };
          
          (goto return_label)
@@ -93,7 +93,7 @@ behavior default:
       {  (C_36 : ((C_35 : __cil_tmp.q) = (C_34 : __retres.q)));
          (C_39 : ((C_38 : __cil_tmp.r) = (C_37 : __retres.r)));
          
-         {  (C_40 : (free(v_0)));
+         {  (C_40 : (free(v)));
             (C_41 : (free(__retres)));
             
             (return __cil_tmp)
@@ -549,14 +549,14 @@ let md_ensures_default =
   try
    begin
      (let qr_r___retres_4 = ref (any_memory void) in
-     (let qr_r_v_0_3 = ref (any_memory void) in
+     (let qr_r_v_3 = ref (any_memory void) in
      (let qr_q___retres_4 = ref (any_memory void) in
-     (let qr_q_v_0_3 = ref (any_memory void) in
-     (let qr_v_0_3_tag_table = ref (any_tag_table void) in
+     (let qr_q_v_3 = ref (any_memory void) in
+     (let qr_v_3_tag_table = ref (any_tag_table void) in
      (let qr___retres_4_tag_table = ref (any_tag_table void) in
      (let qr___retres_4_alloc_table = ref (any_alloc_table void) in
-     (let qr_v_0_3_alloc_table = ref (any_alloc_table void) in
-     (let v_0 = ref (any_pointer void) in
+     (let qr_v_3_alloc_table = ref (any_alloc_table void) in
+     (let v = ref (any_pointer void) in
      (let __retres = ref (any_pointer void) in
      (let __cil_tmp = ref (any_pointer void) in
      (let __cil_tmp_9 = ref (any_pointer void) in
@@ -566,9 +566,9 @@ let md_ensures_default =
       (C_6:
       begin
         (let jessie_<somenum> =
-        (v_0 := (C_1:
-                (JC_<somenum>:
-                (((alloc_struct_qr (1)) qr_v_0_3_alloc_table) qr_v_0_3_tag_table)))) in
+        (v := (C_1:
+              (JC_<somenum>:
+              (((alloc_struct_qr (1)) qr_v_3_alloc_table) qr_v_3_tag_table)))) in
         void);
        (let jessie_<somenum> =
        (__retres := (C_3:
@@ -586,19 +586,18 @@ let md_ensures_default =
         (C_27:
         begin
           (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-          (let jessie_<somenum> = !v_0 in
-          (((safe_upd_ qr_q_v_0_3) jessie_<somenum>) jessie_<somenum>)));
+          (let jessie_<somenum> = !v in
+          (((safe_upd_ qr_q_v_3) jessie_<somenum>) jessie_<somenum>)));
          (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-         (let jessie_<somenum> = !v_0 in
-         (((safe_upd_ qr_r_v_0_3) jessie_<somenum>) jessie_<somenum>)));
+         (let jessie_<somenum> = !v in (((safe_upd_ qr_r_v_3) jessie_<somenum>) jessie_<somenum>)));
          (let jessie_<somenum> =
          (C_30:
          begin
-           (let jessie_<somenum> = (C_28: ((safe_acc_ !qr_q_v_0_3) !v_0)) in
+           (let jessie_<somenum> = (C_28: ((safe_acc_ !qr_q_v_3) !v)) in
            (let jessie_<somenum> = !__retres in
            (((safe_upd_ qr_q___retres_4) jessie_<somenum>) jessie_<somenum>)));
           (C_33:
-          (let jessie_<somenum> = (C_31: ((safe_acc_ !qr_r_v_0_3) !v_0)) in
+          (let jessie_<somenum> = (C_31: ((safe_acc_ !qr_r_v_3) !v)) in
           begin
             (let jessie_<somenum> = !__retres in
             (((safe_upd_ qr_r___retres_4) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum>
@@ -620,23 +619,23 @@ let md_ensures_default =
          (C_13:
          begin
            (let jessie_<somenum> = (C_11: ((safe_acc_ !qr_q_md_2) !__cil_tmp_9)) in
-           (let jessie_<somenum> = !v_0 in
-           (((safe_upd_ qr_q_v_0_3) jessie_<somenum>) jessie_<somenum>)));
+           (let jessie_<somenum> = !v in
+           (((safe_upd_ qr_q_v_3) jessie_<somenum>) jessie_<somenum>)));
           (C_16:
           (let jessie_<somenum> = (C_14: ((safe_acc_ !qr_r_md_2) !__cil_tmp_9)) in
           begin
-            (let jessie_<somenum> = !v_0 in
-            (((safe_upd_ qr_r_v_0_3) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
+            (let jessie_<somenum> = !v in
+            (((safe_upd_ qr_r_v_3) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
          end) in void);
          (C_17: ((safe_free_parameter qr_md_2_alloc_table) !__cil_tmp_9));
          (let jessie_<somenum> =
          (C_20:
          begin
-           (let jessie_<somenum> = (C_18: ((safe_acc_ !qr_q_v_0_3) !v_0)) in
+           (let jessie_<somenum> = (C_18: ((safe_acc_ !qr_q_v_3) !v)) in
            (let jessie_<somenum> = !__retres in
            (((safe_upd_ qr_q___retres_4) jessie_<somenum>) jessie_<somenum>)));
           (C_23:
-          (let jessie_<somenum> = (C_21: ((safe_acc_ !qr_r_v_0_3) !v_0)) in
+          (let jessie_<somenum> = (C_21: ((safe_acc_ !qr_r_v_3) !v)) in
           begin
             (let jessie_<somenum> = !__retres in
             (((safe_upd_ qr_r___retres_4) jessie_<somenum>) jessie_<somenum>));
@@ -655,7 +654,7 @@ let md_ensures_default =
        (let jessie_<somenum> = (C_37: ((safe_acc_ !qr_r___retres_4) !__retres)) in
        (let jessie_<somenum> = !__cil_tmp in
        (((safe_upd_ qr_r_md_2) jessie_<somenum>) jessie_<somenum>)));
-       ((safe_free_parameter qr_v_0_3_alloc_table) !v_0);
+       ((safe_free_parameter qr_v_3_alloc_table) !v);
        ((safe_free_parameter qr___retres_4_alloc_table) !__retres);
        (return := !__cil_tmp); (raise Return) end))))) end))))))))))));
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
@@ -670,14 +669,14 @@ let md_safety =
   try
    begin
      (let qr_r___retres_4 = ref (any_memory void) in
-     (let qr_r_v_0_3 = ref (any_memory void) in
+     (let qr_r_v_3 = ref (any_memory void) in
      (let qr_q___retres_4 = ref (any_memory void) in
-     (let qr_q_v_0_3 = ref (any_memory void) in
-     (let qr_v_0_3_tag_table = ref (any_tag_table void) in
+     (let qr_q_v_3 = ref (any_memory void) in
+     (let qr_v_3_tag_table = ref (any_tag_table void) in
      (let qr___retres_4_tag_table = ref (any_tag_table void) in
      (let qr___retres_4_alloc_table = ref (any_alloc_table void) in
-     (let qr_v_0_3_alloc_table = ref (any_alloc_table void) in
-     (let v_0 = ref (any_pointer void) in
+     (let qr_v_3_alloc_table = ref (any_alloc_table void) in
+     (let v = ref (any_pointer void) in
      (let __retres = ref (any_pointer void) in
      (let __cil_tmp = ref (any_pointer void) in
      (let __cil_tmp_9 = ref (any_pointer void) in
@@ -687,14 +686,14 @@ let md_safety =
       (C_6:
       begin
         (let jessie_<somenum> =
-        (v_0 := (let jessie_<somenum> =
-                (C_1:
-                (JC_<somenum>:
-                (((alloc_struct_qr_requires (1)) qr_v_0_3_alloc_table) qr_v_0_3_tag_table))) in
-                (JC_<somenum>:
-                (assert
-                { ge_int(offset_max(qr_v_0_3_alloc_table, jessie_<somenum>), (0)) };
-                jessie_<somenum>)))) in void);
+        (v := (let jessie_<somenum> =
+              (C_1:
+              (JC_<somenum>:
+              (((alloc_struct_qr_requires (1)) qr_v_3_alloc_table) qr_v_3_tag_table))) in
+              (JC_<somenum>:
+              (assert
+              { ge_int(offset_max(qr_v_3_alloc_table, jessie_<somenum>), (0)) };
+              jessie_<somenum>)))) in void);
        (let jessie_<somenum> =
        (__retres := (let jessie_<somenum> =
                     (C_3:
@@ -719,19 +718,17 @@ let md_safety =
         (C_27:
         begin
           (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-          (let jessie_<somenum> = !v_0 in
-          (((safe_upd_ qr_q_v_0_3) jessie_<somenum>) jessie_<somenum>)));
+          (let jessie_<somenum> = !v in (((safe_upd_ qr_q_v_3) jessie_<somenum>) jessie_<somenum>)));
          (let jessie_<somenum> = (safe_int32_of_integer_ (0)) in
-         (let jessie_<somenum> = !v_0 in
-         (((safe_upd_ qr_r_v_0_3) jessie_<somenum>) jessie_<somenum>)));
+         (let jessie_<somenum> = !v in (((safe_upd_ qr_r_v_3) jessie_<somenum>) jessie_<somenum>)));
          (let jessie_<somenum> =
          (C_30:
          begin
-           (let jessie_<somenum> = (C_28: ((safe_acc_ !qr_q_v_0_3) !v_0)) in
+           (let jessie_<somenum> = (C_28: ((safe_acc_ !qr_q_v_3) !v)) in
            (let jessie_<somenum> = !__retres in
            (((safe_upd_ qr_q___retres_4) jessie_<somenum>) jessie_<somenum>)));
           (C_33:
-          (let jessie_<somenum> = (C_31: ((safe_acc_ !qr_r_v_0_3) !v_0)) in
+          (let jessie_<somenum> = (C_31: ((safe_acc_ !qr_r_v_3) !v)) in
           begin
             (let jessie_<somenum> = !__retres in
             (((safe_upd_ qr_r___retres_4) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum>
@@ -758,23 +755,23 @@ let md_safety =
          (C_13:
          begin
            (let jessie_<somenum> = (C_11: ((safe_acc_ !qr_q_md_2) !__cil_tmp_9)) in
-           (let jessie_<somenum> = !v_0 in
-           (((safe_upd_ qr_q_v_0_3) jessie_<somenum>) jessie_<somenum>)));
+           (let jessie_<somenum> = !v in
+           (((safe_upd_ qr_q_v_3) jessie_<somenum>) jessie_<somenum>)));
           (C_16:
           (let jessie_<somenum> = (C_14: ((safe_acc_ !qr_r_md_2) !__cil_tmp_9)) in
           begin
-            (let jessie_<somenum> = !v_0 in
-            (((safe_upd_ qr_r_v_0_3) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
+            (let jessie_<somenum> = !v in
+            (((safe_upd_ qr_r_v_3) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum> end))
          end) in void);
          (C_17: ((free_parameter qr_md_2_alloc_table) !__cil_tmp_9));
          (let jessie_<somenum> =
          (C_20:
          begin
-           (let jessie_<somenum> = (C_18: ((safe_acc_ !qr_q_v_0_3) !v_0)) in
+           (let jessie_<somenum> = (C_18: ((safe_acc_ !qr_q_v_3) !v)) in
            (let jessie_<somenum> = !__retres in
            (((safe_upd_ qr_q___retres_4) jessie_<somenum>) jessie_<somenum>)));
           (C_23:
-          (let jessie_<somenum> = (C_21: ((safe_acc_ !qr_r_v_0_3) !v_0)) in
+          (let jessie_<somenum> = (C_21: ((safe_acc_ !qr_r_v_3) !v)) in
           begin
             (let jessie_<somenum> = !__retres in
             (((safe_upd_ qr_r___retres_4) jessie_<somenum>) jessie_<somenum>)); jessie_<somenum>
@@ -793,7 +790,7 @@ let md_safety =
        (let jessie_<somenum> = (C_37: ((safe_acc_ !qr_r___retres_4) !__retres)) in
        (let jessie_<somenum> = !__cil_tmp in
        (((safe_upd_ qr_r_md_2) jessie_<somenum>) jessie_<somenum>)));
-       ((free_parameter qr_v_0_3_alloc_table) !v_0);
+       ((free_parameter qr_v_3_alloc_table) !v);
        ((free_parameter qr___retres_4_alloc_table) !__retres);
        (return := !__cil_tmp); (raise Return) end))))) end))))))))))));
     absurd  end with Return -> !return end)) { true }
@@ -811,7 +808,7 @@ why --project [...] why/bts0370.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0370_po2.why">
-      <location file = "why/bts0370.why" line = "592" begin = "18" end = "73"/>
+      <location file = "why/bts0370.why" line = "591" begin = "16" end = "69"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0370_po3.why">
@@ -820,7 +817,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0370_po4.why">
-      <location file = "why/bts0370.why" line = "601" begin = "22" end = "104"/>
+      <location file = "why/bts0370.why" line = "600" begin = "22" end = "104"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0370_po5.why">
@@ -829,7 +826,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/bts0370_po6.why">
-      <location file = "why/bts0370.why" line = "610" begin = "23" end = "77"/>
+      <location file = "why/bts0370.why" line = "609" begin = "23" end = "77"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/bts0370_po7.why">
@@ -843,11 +840,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/bts0370_po9.why">
-      <location file = "why/bts0370.why" line = "648" begin = "28" end = "136"/>
+      <location file = "why/bts0370.why" line = "645" begin = "28" end = "136"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0370_po10.why">
-      <location file = "why/bts0370.why" line = "648" begin = "28" end = "136"/>
+      <location file = "why/bts0370.why" line = "645" begin = "28" end = "136"/>
       <explain kind = "Check"/>
     </goal>
     <goal why_file="why/bts0370_po11.why">
@@ -861,17 +858,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/bts0370_po13.why">
-      <location file = "why/bts0370.why" line = "665" begin = "17" end = "66"/>
+      <location file = "why/bts0370.why" line = "662" begin = "17" end = "66"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/bts0370_po14.why">
-      <location file = "why/bts0370.why" line = "692" begin = "8" end = "50"/>
+      <location file = "why/bts0370.why" line = "689" begin = "8" end = "46"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/bts0370_po15.why">
-      <location file = "why/bts0370.why" line = "693" begin = "8" end = "60"/>
+      <location file = "why/bts0370.why" line = "690" begin = "8" end = "60"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

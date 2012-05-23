@@ -56,7 +56,7 @@ predicate sorted{L}(longP[..] t, integer a, integer b) =
     (((a <= i_1) && ((i_1 <= j_0) && (j_0 <= b))) ==>
       ((t + i_1).longM <= (t + j_0).longM))))
 
-int32 binary_search(longP[..] t, int32 n_1, int32 v_0)
+int32 binary_search(longP[..] t, int32 n_1, int32 v)
   requires (C_32 : ((C_33 : (n_1 >= 0)) &&
                      ((C_35 : (\offset_min(t) <= 0)) &&
                        (C_36 : (\offset_max(t) >= (n_1 - 1))))));
@@ -65,13 +65,13 @@ behavior default:
                     (C_29 : (\result < \at(n_1,Old)))));
 behavior success:
   ensures (C_30 : ((\result >= 0) ==>
-                    ((\at(t,Old) + \result).longM == \at(v_0,Old))));
+                    ((\at(t,Old) + \result).longM == \at(v,Old))));
 behavior failure:
   assumes sorted{Here}(t, 0, (n_1 - 1));
   ensures (C_31 : ((\result == (- 1)) ==>
                     (\forall integer k_0;
                       (((0 <= k_0) && (k_0 < \at(n_1,Old))) ==>
-                        ((\at(t,Old) + k_0).longM != \at(v_0,Old))))));
+                        ((\at(t,Old) + k_0).longM != \at(v,Old))))));
 {  
    (var int32 l);
    
@@ -89,8 +89,7 @@ behavior failure:
         invariant (C_7 : ((C_8 : (0 <= l)) && (C_9 : (u <= (n_1 - 1)))));
       behavior failure:
         invariant (C_6 : (\forall integer k;
-                           ((((0 <= k) && (k < n_1)) &&
-                              ((t + k).longM == v_0)) ==>
+                           ((((0 <= k) && (k < n_1)) && ((t + k).longM == v)) ==>
                              ((l <= k) && (k <= u)))));
       variant (C_5 : (u - l));
       while (true)
@@ -100,16 +99,14 @@ behavior failure:
             
             {  (C_14 : (m = (C_13 : ((C_12 : ((C_11 : ((C_10 : (l + u)) :> int32)) /
                                                2)) :> int32))));
-               (if ((C_25 : (C_24 : (t + m)).longM) < v_0) then (C_23 : (l = 
-                                                                (C_22 : (
-                                                                (C_21 : 
-                                                                (m +
-                                                                  1)) :> int32)))) else 
-               (if ((C_20 : (C_19 : (t + m)).longM) > v_0) then (C_18 : (u = 
-                                                                (C_17 : (
-                                                                (C_16 : 
-                                                                (m -
-                                                                  1)) :> int32)))) else 
+               (if ((C_25 : (C_24 : (t + m)).longM) < v) then (C_23 : (l = 
+                                                              (C_22 : (
+                                                              (C_21 : 
+                                                              (m + 1)) :> int32)))) else 
+               (if ((C_20 : (C_19 : (t + m)).longM) > v) then (C_18 : (u = 
+                                                              (C_17 : (
+                                                              (C_16 : 
+                                                              (m - 1)) :> int32)))) else 
                {  (C_15 : (__retres = m));
                   
                   (goto return_label)
@@ -537,7 +534,7 @@ parameter any_uint8 : unit -> { } uint8 { true }
 parameter binary_search :
  t_0:longP pointer ->
   n_1:int32 ->
-   v_0:int32 ->
+   v:int32 ->
     longP_t_2_alloc_table:longP alloc_table ->
      longP_longM_t_2:(longP, int32) memory ->
       { } int32
@@ -548,12 +545,12 @@ parameter binary_search :
            (forall k_0:int.
             ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n_1))) ->
              (integer_of_int32(select(longP_longM_t_2, shift(t_0, k_0))) <> 
-             integer_of_int32(v_0)))))))
+             integer_of_int32(v)))))))
         and ((JC_<somenum>:
              (ge_int(integer_of_int32(result), (0)) ->
               (integer_of_int32(select(longP_longM_t_2,
                                 shift(t_0, integer_of_int32(result)))) = 
-              integer_of_int32(v_0))))
+              integer_of_int32(v))))
             and (JC_<somenum>:
                 ((JC_<somenum>: le_int(neg_int((1)), integer_of_int32(result)))
                 and (JC_<somenum>:
@@ -562,7 +559,7 @@ parameter binary_search :
 parameter binary_search_requires :
  t_0:longP pointer ->
   n_1:int32 ->
-   v_0:int32 ->
+   v:int32 ->
     longP_t_2_alloc_table:longP alloc_table ->
      longP_longM_t_2:(longP, int32) memory ->
       { (JC_<somenum>:
@@ -579,12 +576,12 @@ parameter binary_search_requires :
            (forall k_0:int.
             ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n_1))) ->
              (integer_of_int32(select(longP_longM_t_2, shift(t_0, k_0))) <> 
-             integer_of_int32(v_0)))))))
+             integer_of_int32(v)))))))
         and ((JC_<somenum>:
              (ge_int(integer_of_int32(result), (0)) ->
               (integer_of_int32(select(longP_longM_t_2,
                                 shift(t_0, integer_of_int32(result)))) = 
-              integer_of_int32(v_0))))
+              integer_of_int32(v))))
             and (JC_<somenum>:
                 ((JC_<somenum>: le_int(neg_int((1)), integer_of_int32(result)))
                 and (JC_<somenum>:
@@ -615,7 +612,7 @@ parameter uint8_of_integer_ :
   { eq_int(integer_of_uint8(result), x) }
 
 let binary_search_ensures_default =
- fun (t_0 : longP pointer) (n_1 : int32) (v_0 : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
+ fun (t_0 : longP pointer) (n_1 : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_<somenum>: le_int(offset_min(longP_t_2_alloc_table, t_0), (0)))
@@ -673,7 +670,7 @@ let binary_search_ensures_default =
                                               ((safe_acc_ longP_longM_t_2) 
                                                (C_24:
                                                ((shift t_0) (integer_of_int32 !m))))))) 
-                   (integer_of_int32 v_0))
+                   (integer_of_int32 v))
               then
                (let jessie_<somenum> =
                (C_23:
@@ -686,7 +683,7 @@ let binary_search_ensures_default =
                                                ((safe_acc_ longP_longM_t_2) 
                                                 (C_19:
                                                 ((shift t_0) (integer_of_int32 !m))))))) 
-                    (integer_of_int32 v_0))
+                    (integer_of_int32 v))
                then
                 (let jessie_<somenum> =
                 (C_18:
@@ -717,7 +714,7 @@ let binary_search_ensures_default =
     and (JC_<somenum>: lt_int(integer_of_int32(result), integer_of_int32(n_1))))) }
 
 let binary_search_ensures_failure =
- fun (t_0 : longP pointer) (n_1 : int32) (v_0 : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
+ fun (t_0 : longP pointer) (n_1 : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
   { (sorted(t_0, (0), sub_int(integer_of_int32(n_1), (1)), longP_longM_t_2)
     and (JC_<somenum>:
         ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
@@ -753,7 +750,7 @@ let binary_search_ensures_failure =
                ((le_int((0), k)
                 and (lt_int(k, integer_of_int32(n_1))
                     and (integer_of_int32(select(longP_longM_t_2,
-                                          shift(t_0, k))) = integer_of_int32(v_0)))) ->
+                                          shift(t_0, k))) = integer_of_int32(v)))) ->
                 (le_int(integer_of_int32(l), k)
                 and le_int(k, integer_of_int32(u))))))  }
            begin
@@ -784,7 +781,7 @@ let binary_search_ensures_failure =
                                               ((safe_acc_ longP_longM_t_2) 
                                                (C_24:
                                                ((shift t_0) (integer_of_int32 !m))))))) 
-                   (integer_of_int32 v_0))
+                   (integer_of_int32 v))
               then
                (let jessie_<somenum> =
                (C_23:
@@ -797,7 +794,7 @@ let binary_search_ensures_failure =
                                                ((safe_acc_ longP_longM_t_2) 
                                                 (C_19:
                                                 ((shift t_0) (integer_of_int32 !m))))))) 
-                    (integer_of_int32 v_0))
+                    (integer_of_int32 v))
                then
                 (let jessie_<somenum> =
                 (C_18:
@@ -828,10 +825,10 @@ let binary_search_ensures_failure =
      (forall k_0:int.
       ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n_1))) ->
        (integer_of_int32(select(longP_longM_t_2, shift(t_0, k_0))) <> 
-       integer_of_int32(v_0)))))) }
+       integer_of_int32(v)))))) }
 
 let binary_search_ensures_success =
- fun (t_0 : longP pointer) (n_1 : int32) (v_0 : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
+ fun (t_0 : longP pointer) (n_1 : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_<somenum>: le_int(offset_min(longP_t_2_alloc_table, t_0), (0)))
@@ -889,7 +886,7 @@ let binary_search_ensures_success =
                                               ((safe_acc_ longP_longM_t_2) 
                                                (C_24:
                                                ((shift t_0) (integer_of_int32 !m))))))) 
-                   (integer_of_int32 v_0))
+                   (integer_of_int32 v))
               then
                (let jessie_<somenum> =
                (C_23:
@@ -902,7 +899,7 @@ let binary_search_ensures_success =
                                                ((safe_acc_ longP_longM_t_2) 
                                                 (C_19:
                                                 ((shift t_0) (integer_of_int32 !m))))))) 
-                    (integer_of_int32 v_0))
+                    (integer_of_int32 v))
                then
                 (let jessie_<somenum> =
                 (C_18:
@@ -931,10 +928,10 @@ let binary_search_ensures_success =
   { (JC_<somenum>:
     (ge_int(integer_of_int32(result), (0)) ->
      (integer_of_int32(select(longP_longM_t_2,
-                       shift(t_0, integer_of_int32(result)))) = integer_of_int32(v_0)))) }
+                       shift(t_0, integer_of_int32(result)))) = integer_of_int32(v)))) }
 
 let binary_search_safety =
- fun (t_0 : longP pointer) (n_1 : int32) (v_0 : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
+ fun (t_0 : longP pointer) (n_1 : int32) (v : int32) (longP_t_2_alloc_table : longP alloc_table) (longP_longM_t_2 : (longP, int32) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_<somenum>: le_int(offset_min(longP_t_2_alloc_table, t_0), (0)))
@@ -996,7 +993,7 @@ let binary_search_safety =
                                               (JC_<somenum>:
                                               ((((offset_acc_ longP_t_2_alloc_table) longP_longM_t_2) t_0) 
                                                (integer_of_int32 !m)))))) 
-                   (integer_of_int32 v_0))
+                   (integer_of_int32 v))
               then
                (let jessie_<somenum> =
                (C_23:
@@ -1010,7 +1007,7 @@ let binary_search_safety =
                                                (JC_<somenum>:
                                                ((((offset_acc_ longP_t_2_alloc_table) longP_longM_t_2) t_0) 
                                                 (integer_of_int32 !m)))))) 
-                    (integer_of_int32 v_0))
+                    (integer_of_int32 v))
                then
                 (let jessie_<somenum> =
                 (C_18:

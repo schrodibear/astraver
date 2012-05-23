@@ -64,7 +64,7 @@ axiomatic PermutSize {
   
 }
 
-int32 permut_search(intP[..] arr, int32 v_0)
+int32 permut_search(intP[..] arr, int32 v)
   requires (C_12 : (0 <= permut_size{Here}(arr)));
 behavior default:
   ensures (C_11 : true);
@@ -81,7 +81,7 @@ behavior default:
                            (C_4 : (idx <= permut_size{Here}(arr)))));
       while (true)
       {  
-         {  (if ((C_7 : (C_6 : (arr + idx)).intM) == v_0) then 
+         {  (if ((C_7 : (C_6 : (arr + idx)).intM) == v) then 
             {  (C_5 : (__retres = idx));
                
                (goto return_label)
@@ -539,13 +539,13 @@ parameter int8_of_integer_ :
 
 parameter permut_search :
  arr_0:intP pointer ->
-  v_0:int32 ->
+  v:int32 ->
    intP_arr_2_alloc_table:intP alloc_table ->
     intP_intM_arr_2:(intP, int32) memory -> { } int32 { true }
 
 parameter permut_search_requires :
  arr_0:intP pointer ->
-  v_0:int32 ->
+  v:int32 ->
    intP_arr_2_alloc_table:intP alloc_table ->
     intP_intM_arr_2:(intP, int32) memory ->
      { (JC_<somenum>:
@@ -567,7 +567,7 @@ parameter uint8_of_integer_ :
   { eq_int(integer_of_uint8(result), x) }
 
 let permut_search_ensures_default =
- fun (arr_0 : intP pointer) (v_0 : int32) (intP_arr_2_alloc_table : intP alloc_table) (intP_intM_arr_2 : (intP, int32) memory) ->
+ fun (arr_0 : intP pointer) (v : int32) (intP_arr_2_alloc_table : intP alloc_table) (intP_intM_arr_2 : (intP, int32) memory) ->
   { (JC_<somenum>:
     le_int((0), integer_of_int32(permut_size(arr_0, intP_intM_arr_2)))) }
   (init:
@@ -600,7 +600,7 @@ let permut_search_ensures_default =
                                               ((safe_acc_ intP_intM_arr_2) 
                                                (C_6:
                                                ((shift arr_0) (integer_of_int32 !idx))))))) 
-                   (integer_of_int32 v_0))
+                   (integer_of_int32 v))
               then
                (C_5:
                begin
@@ -616,7 +616,7 @@ let permut_search_ensures_default =
     absurd  end with Return -> !return end)) { (JC_<somenum>: true) }
 
 let permut_search_safety =
- fun (arr_0 : intP pointer) (v_0 : int32) (intP_arr_2_alloc_table : intP alloc_table) (intP_intM_arr_2 : (intP, int32) memory) ->
+ fun (arr_0 : intP pointer) (v : int32) (intP_arr_2_alloc_table : intP alloc_table) (intP_intM_arr_2 : (intP, int32) memory) ->
   { (JC_<somenum>:
     le_int((0), integer_of_int32(permut_size(arr_0, intP_intM_arr_2)))) }
   (init:
@@ -648,7 +648,7 @@ let permut_search_safety =
                                               (JC_<somenum>:
                                               ((((offset_acc_ intP_arr_2_alloc_table) intP_intM_arr_2) arr_0) 
                                                (integer_of_int32 !idx)))))) 
-                   (integer_of_int32 v_0))
+                   (integer_of_int32 v))
               then
                (C_5:
                begin

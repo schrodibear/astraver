@@ -57,11 +57,11 @@ predicate sorted{L}(doubleP[..] t, integer a, integer b) =
     (((a <= i_1) && ((i_1 <= j_0) && (j_0 <= b))) ==>
       \le_double((t + i_1).doubleM, (t + j_0).doubleM))))
 
-int32 binary_search(doubleP[..] t, int32 n_1, double v_0)
+int32 binary_search(doubleP[..] t, int32 n_1, double v)
   requires (C_37 : ((C_38 : (n_1 >= 0)) &&
                      ((C_40 : (\offset_min(t) <= 0)) &&
                        (C_41 : (\offset_max(t) >= (n_1 - 1))))));
-  requires (C_36 : (! \double_is_NaN(v_0)));
+  requires (C_36 : (! \double_is_NaN(v)));
   requires (C_35 : (\forall integer i_2;
                      (((0 <= i_2) && (i_2 <= (n_1 - 1))) ==>
                        (! \double_is_NaN((t + i_2).doubleM)))));
@@ -70,13 +70,13 @@ behavior default:
                     (C_32 : (\result < \at(n_1,Old)))));
 behavior success:
   ensures (C_33 : ((\result >= 0) ==>
-                    \eq_double((\at(t,Old) + \result).doubleM, \at(v_0,Old))));
+                    \eq_double((\at(t,Old) + \result).doubleM, \at(v,Old))));
 behavior failure:
   assumes sorted{Here}(t, 0, (n_1 - 1));
   ensures (C_34 : ((\result == (- 1)) ==>
                     (\forall integer k_1;
                       (((0 <= k_1) && (k_1 < \at(n_1,Old))) ==>
-                        \ne_double((\at(t,Old) + k_1).doubleM, \at(v_0,Old))))));
+                        \ne_double((\at(t,Old) + k_1).doubleM, \at(v,Old))))));
 {  
    (var int32 l);
    
@@ -95,11 +95,11 @@ behavior failure:
       behavior failure:
         invariant (C_7 : (\forall integer k;
                            (((0 <= k) && (k < l)) ==>
-                             \lt_double((t + k).doubleM, v_0))));
+                             \lt_double((t + k).doubleM, v))));
       behavior failure:
         invariant (C_6 : (\forall integer k_0;
                            (((u < k_0) && (k_0 <= (n_1 - 1))) ==>
-                             \lt_double(v_0, (t + k_0).doubleM))));
+                             \lt_double(v, (t + k_0).doubleM))));
       variant (C_5 : (u - l));
       while (true)
       {  
@@ -112,16 +112,16 @@ behavior failure:
                                                                  (u -
                                                                    l)) :> int32)) /
                                                                   2)) :> int32)))) :> int32))));
-               (if ((C_28 : (C_27 : (t + m)).doubleM) < v_0) then (C_26 : (l = 
-                                                                  (C_25 : (
-                                                                  (C_24 : 
-                                                                  (m +
-                                                                    1)) :> int32)))) else 
-               (if ((C_23 : (C_22 : (t + m)).doubleM) > v_0) then (C_21 : (u = 
-                                                                  (C_20 : (
-                                                                  (C_19 : 
-                                                                  (m -
-                                                                    1)) :> int32)))) else 
+               (if ((C_28 : (C_27 : (t + m)).doubleM) < v) then (C_26 : (l = 
+                                                                (C_25 : (
+                                                                (C_24 : 
+                                                                (m +
+                                                                  1)) :> int32)))) else 
+               (if ((C_23 : (C_22 : (t + m)).doubleM) > v) then (C_21 : (u = 
+                                                                (C_20 : (
+                                                                (C_19 : 
+                                                                (m -
+                                                                  1)) :> int32)))) else 
                {  (C_18 : (__retres = m));
                   
                   (goto return_label)
@@ -552,7 +552,7 @@ parameter any_uint8 : unit -> { } uint8 { true }
 parameter binary_search :
  t_0:doubleP pointer ->
   n_1:int32 ->
-   v_0:double ->
+   v:double ->
     doubleP_t_2_alloc_table:doubleP alloc_table ->
      doubleP_doubleM_t_2:(doubleP, double) memory ->
       { } int32
@@ -562,13 +562,12 @@ parameter binary_search :
           ((integer_of_int32(result) = neg_int((1))) ->
            (forall k_1:int.
             ((le_int((0), k_1) and lt_int(k_1, integer_of_int32(n_1))) ->
-             ne_double_full(select(doubleP_doubleM_t_2, shift(t_0, k_1)),
-             v_0))))))
+             ne_double_full(select(doubleP_doubleM_t_2, shift(t_0, k_1)), v))))))
         and ((JC_<somenum>:
              (ge_int(integer_of_int32(result), (0)) ->
               eq_double_full(select(doubleP_doubleM_t_2,
                              shift(t_0, integer_of_int32(result))),
-              v_0)))
+              v)))
             and (JC_<somenum>:
                 ((JC_<somenum>: le_int(neg_int((1)), integer_of_int32(result)))
                 and (JC_<somenum>:
@@ -577,7 +576,7 @@ parameter binary_search :
 parameter binary_search_requires :
  t_0:doubleP pointer ->
   n_1:int32 ->
-   v_0:double ->
+   v:double ->
     doubleP_t_2_alloc_table:doubleP alloc_table ->
      doubleP_doubleM_t_2:(doubleP, double) memory ->
       { (JC_<somenum>:
@@ -586,7 +585,7 @@ parameter binary_search_requires :
             and ((JC_<somenum>:
                  ge_int(offset_max(doubleP_t_2_alloc_table, t_0),
                  sub_int(integer_of_int32(n_1), (1))))
-                and ((JC_<somenum>: (not double_is_NaN(v_0)))
+                and ((JC_<somenum>: (not double_is_NaN(v)))
                     and (JC_<somenum>:
                         (forall i_2:int.
                          ((le_int((0), i_2)
@@ -601,13 +600,12 @@ parameter binary_search_requires :
           ((integer_of_int32(result) = neg_int((1))) ->
            (forall k_1:int.
             ((le_int((0), k_1) and lt_int(k_1, integer_of_int32(n_1))) ->
-             ne_double_full(select(doubleP_doubleM_t_2, shift(t_0, k_1)),
-             v_0))))))
+             ne_double_full(select(doubleP_doubleM_t_2, shift(t_0, k_1)), v))))))
         and ((JC_<somenum>:
              (ge_int(integer_of_int32(result), (0)) ->
               eq_double_full(select(doubleP_doubleM_t_2,
                              shift(t_0, integer_of_int32(result))),
-              v_0)))
+              v)))
             and (JC_<somenum>:
                 ((JC_<somenum>: le_int(neg_int((1)), integer_of_int32(result)))
                 and (JC_<somenum>:
@@ -638,14 +636,14 @@ parameter uint8_of_integer_ :
   { eq_int(integer_of_uint8(result), x) }
 
 let binary_search_ensures_default =
- fun (t_0 : doubleP pointer) (n_1 : int32) (v_0 : double) (doubleP_t_2_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_2 : (doubleP, double) memory) ->
+ fun (t_0 : doubleP pointer) (n_1 : int32) (v : double) (doubleP_t_2_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_2 : (doubleP, double) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_<somenum>: le_int(offset_min(doubleP_t_2_alloc_table, t_0), (0)))
         and ((JC_<somenum>:
              ge_int(offset_max(doubleP_t_2_alloc_table, t_0),
              sub_int(integer_of_int32(n_1), (1))))
-            and ((JC_<somenum>: (not double_is_NaN(v_0)))
+            and ((JC_<somenum>: (not double_is_NaN(v)))
                 and (JC_<somenum>:
                     (forall i_2:int.
                      ((le_int((0), i_2)
@@ -707,7 +705,7 @@ let binary_search_ensures_default =
               (if ((lt_double_ (C_28:
                                ((safe_acc_ doubleP_doubleM_t_2) (C_27:
                                                                 ((shift t_0) 
-                                                                 (integer_of_int32 !m)))))) v_0)
+                                                                 (integer_of_int32 !m)))))) v)
               then
                (let jessie_<somenum> =
                (C_26:
@@ -719,7 +717,7 @@ let binary_search_ensures_default =
                (if ((gt_double_ (C_23:
                                 ((safe_acc_ doubleP_doubleM_t_2) (C_22:
                                                                  ((shift t_0) 
-                                                                  (integer_of_int32 !m)))))) v_0)
+                                                                  (integer_of_int32 !m)))))) v)
                then
                 (let jessie_<somenum> =
                 (C_21:
@@ -750,7 +748,7 @@ let binary_search_ensures_default =
     and (JC_<somenum>: lt_int(integer_of_int32(result), integer_of_int32(n_1))))) }
 
 let binary_search_ensures_failure =
- fun (t_0 : doubleP pointer) (n_1 : int32) (v_0 : double) (doubleP_t_2_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_2 : (doubleP, double) memory) ->
+ fun (t_0 : doubleP pointer) (n_1 : int32) (v : double) (doubleP_t_2_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_2 : (doubleP, double) memory) ->
   { (sorted(t_0, (0), sub_int(integer_of_int32(n_1), (1)),
      doubleP_doubleM_t_2)
     and (JC_<somenum>:
@@ -759,7 +757,7 @@ let binary_search_ensures_failure =
             and ((JC_<somenum>:
                  ge_int(offset_max(doubleP_t_2_alloc_table, t_0),
                  sub_int(integer_of_int32(n_1), (1))))
-                and ((JC_<somenum>: (not double_is_NaN(v_0)))
+                and ((JC_<somenum>: (not double_is_NaN(v)))
                     and (JC_<somenum>:
                         (forall i_2:int.
                          ((le_int((0), i_2)
@@ -794,13 +792,13 @@ let binary_search_ensures_failure =
                (forall k_0:int.
                 ((lt_int(integer_of_int32(u), k_0)
                  and le_int(k_0, sub_int(integer_of_int32(n_1), (1)))) ->
-                 lt_double_full(v_0,
+                 lt_double_full(v,
                  select(doubleP_doubleM_t_2, shift(t_0, k_0))))))
               and (JC_<somenum>:
                   (forall k:int.
                    ((le_int((0), k) and lt_int(k, integer_of_int32(l))) ->
                     lt_double_full(select(doubleP_doubleM_t_2, shift(t_0, k)),
-                    v_0)))))  }
+                    v)))))  }
            begin
              [ { } unit reads l,u
                { (JC_<somenum>:
@@ -833,7 +831,7 @@ let binary_search_ensures_failure =
               (if ((lt_double_ (C_28:
                                ((safe_acc_ doubleP_doubleM_t_2) (C_27:
                                                                 ((shift t_0) 
-                                                                 (integer_of_int32 !m)))))) v_0)
+                                                                 (integer_of_int32 !m)))))) v)
               then
                (let jessie_<somenum> =
                (C_26:
@@ -845,7 +843,7 @@ let binary_search_ensures_failure =
                (if ((gt_double_ (C_23:
                                 ((safe_acc_ doubleP_doubleM_t_2) (C_22:
                                                                  ((shift t_0) 
-                                                                  (integer_of_int32 !m)))))) v_0)
+                                                                  (integer_of_int32 !m)))))) v)
                then
                 (let jessie_<somenum> =
                 (C_21:
@@ -875,17 +873,17 @@ let binary_search_ensures_failure =
     ((integer_of_int32(result) = neg_int((1))) ->
      (forall k_1:int.
       ((le_int((0), k_1) and lt_int(k_1, integer_of_int32(n_1))) ->
-       ne_double_full(select(doubleP_doubleM_t_2, shift(t_0, k_1)), v_0))))) }
+       ne_double_full(select(doubleP_doubleM_t_2, shift(t_0, k_1)), v))))) }
 
 let binary_search_ensures_success =
- fun (t_0 : doubleP pointer) (n_1 : int32) (v_0 : double) (doubleP_t_2_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_2 : (doubleP, double) memory) ->
+ fun (t_0 : doubleP pointer) (n_1 : int32) (v : double) (doubleP_t_2_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_2 : (doubleP, double) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_<somenum>: le_int(offset_min(doubleP_t_2_alloc_table, t_0), (0)))
         and ((JC_<somenum>:
              ge_int(offset_max(doubleP_t_2_alloc_table, t_0),
              sub_int(integer_of_int32(n_1), (1))))
-            and ((JC_<somenum>: (not double_is_NaN(v_0)))
+            and ((JC_<somenum>: (not double_is_NaN(v)))
                 and (JC_<somenum>:
                     (forall i_2:int.
                      ((le_int((0), i_2)
@@ -947,7 +945,7 @@ let binary_search_ensures_success =
               (if ((lt_double_ (C_28:
                                ((safe_acc_ doubleP_doubleM_t_2) (C_27:
                                                                 ((shift t_0) 
-                                                                 (integer_of_int32 !m)))))) v_0)
+                                                                 (integer_of_int32 !m)))))) v)
               then
                (let jessie_<somenum> =
                (C_26:
@@ -959,7 +957,7 @@ let binary_search_ensures_success =
                (if ((gt_double_ (C_23:
                                 ((safe_acc_ doubleP_doubleM_t_2) (C_22:
                                                                  ((shift t_0) 
-                                                                  (integer_of_int32 !m)))))) v_0)
+                                                                  (integer_of_int32 !m)))))) v)
                then
                 (let jessie_<somenum> =
                 (C_21:
@@ -989,17 +987,17 @@ let binary_search_ensures_success =
     (ge_int(integer_of_int32(result), (0)) ->
      eq_double_full(select(doubleP_doubleM_t_2,
                     shift(t_0, integer_of_int32(result))),
-     v_0))) }
+     v))) }
 
 let binary_search_safety =
- fun (t_0 : doubleP pointer) (n_1 : int32) (v_0 : double) (doubleP_t_2_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_2 : (doubleP, double) memory) ->
+ fun (t_0 : doubleP pointer) (n_1 : int32) (v : double) (doubleP_t_2_alloc_table : doubleP alloc_table) (doubleP_doubleM_t_2 : (doubleP, double) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_<somenum>: le_int(offset_min(doubleP_t_2_alloc_table, t_0), (0)))
         and ((JC_<somenum>:
              ge_int(offset_max(doubleP_t_2_alloc_table, t_0),
              sub_int(integer_of_int32(n_1), (1))))
-            and ((JC_<somenum>: (not double_is_NaN(v_0)))
+            and ((JC_<somenum>: (not double_is_NaN(v)))
                 and (JC_<somenum>:
                     (forall i_2:int.
                      ((le_int((0), i_2)
@@ -1067,7 +1065,7 @@ let binary_search_safety =
               (if ((lt_double_ (C_28:
                                (JC_<somenum>:
                                ((((offset_acc_ doubleP_t_2_alloc_table) doubleP_doubleM_t_2) t_0) 
-                                (integer_of_int32 !m))))) v_0)
+                                (integer_of_int32 !m))))) v)
               then
                (let jessie_<somenum> =
                (C_26:
@@ -1080,7 +1078,7 @@ let binary_search_safety =
                (if ((gt_double_ (C_23:
                                 (JC_<somenum>:
                                 ((((offset_acc_ doubleP_t_2_alloc_table) doubleP_doubleM_t_2) t_0) 
-                                 (integer_of_int32 !m))))) v_0)
+                                 (integer_of_int32 !m))))) v)
                then
                 (let jessie_<somenum> =
                 (C_21:

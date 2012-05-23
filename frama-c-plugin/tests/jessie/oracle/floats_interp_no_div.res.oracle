@@ -40,18 +40,18 @@ type voidP = [voidP]
 predicate bounded(real z, real bound) =
 (((- bound) <= z) && (z <= bound))
 
-double interp_lin(double x1, double x2, double y1, double y2, double v_0,
+double interp_lin(double x1, double x2, double y1, double y2, double v,
                   double z)
   requires (C_16 : ((C_17 : ((x1 :> real) <= (z :> real))) &&
                      (C_18 : ((z :> real) <= (x2 :> real)))));
   requires (C_15 : bounded((x1 :> real), 0x1p500));
   requires (C_14 : bounded((x2 :> real), 0x1p500));
-  requires (C_13 : bounded((v_0 :> real), 0x1p500));
+  requires (C_13 : bounded((v :> real), 0x1p500));
   requires (C_12 : (let real slope_0 =
                    (((y2 :> real) - (y1 :> real)) /
                      ((x2 :> real) - (x1 :> real)))
                    in (bounded(slope_0, 0x1p500) &&
-                        (\real_abs(((v_0 :> real) - slope_0)) <=
+                        (\real_abs(((v :> real) - slope_0)) <=
                           (0x1p-53 * \real_abs(slope_0))))));
 behavior default:
   ensures (C_11 : (let real slope_1 =
@@ -87,15 +87,14 @@ behavior default:
          ()
       };
       
-      {  (C_6 : (b = (C_5 : (v_0 * a))))
+      {  (C_6 : (b = (C_5 : (v * a))))
       };
       
       {  
          (assert for default: (C_7 : (\real_abs(((b :> real) -
-                                                  ((v_0 :> real) *
-                                                    (a :> real)))) <=
+                                                  ((v :> real) * (a :> real)))) <=
                                        (0x1p-10 *
-                                         \real_abs(((v_0 :> real) *
+                                         \real_abs(((v :> real) *
                                                      (a :> real)))))));
          ()
       };
@@ -427,7 +426,7 @@ parameter interp_lin :
   x2:double ->
    y1:double ->
     y2:double ->
-     v_0:double ->
+     v:double ->
       z_0:double ->
        { } double
        { (JC_<somenum>:
@@ -446,14 +445,14 @@ parameter interp_lin_requires :
   x2:double ->
    y1:double ->
     y2:double ->
-     v_0:double ->
+     v:double ->
       z_0:double ->
        { (JC_<somenum>:
          ((JC_<somenum>: le_real(double_value(x1), double_value(z_0)))
          and ((JC_<somenum>: le_real(double_value(z_0), double_value(x2)))
              and ((JC_<somenum>: bounded(double_value(x1), 0x1p500))
                  and ((JC_<somenum>: bounded(double_value(x2), 0x1p500))
-                     and ((JC_<somenum>: bounded(double_value(v_0), 0x1p500))
+                     and ((JC_<somenum>: bounded(double_value(v), 0x1p500))
                          and (JC_<somenum>:
                              (let slope_0 =
                                    div_real(sub_real(double_value(y2),
@@ -461,7 +460,7 @@ parameter interp_lin_requires :
                                    sub_real(double_value(x2),
                                    double_value(x1))) in
                               (bounded(slope_0, 0x1p500)
-                              and le_real(abs_real(sub_real(double_value(v_0),
+                              and le_real(abs_real(sub_real(double_value(v),
                                                    slope_0)),
                                   mul_real(0x1p-53, abs_real(slope_0))))))))))))}
        double
@@ -488,20 +487,20 @@ parameter uint8_of_integer_ :
   { eq_int(integer_of_uint8(result), x) }
 
 let interp_lin_ensures_default =
- fun (x1 : double) (x2 : double) (y1 : double) (y2 : double) (v_0 : double) (z_0 : double) ->
+ fun (x1 : double) (x2 : double) (y1 : double) (y2 : double) (v : double) (z_0 : double) ->
   { (JC_<somenum>:
     ((JC_<somenum>: le_real(double_value(x1), double_value(z_0)))
     and ((JC_<somenum>: le_real(double_value(z_0), double_value(x2)))
         and ((JC_<somenum>: bounded(double_value(x1), 0x1p500))
             and ((JC_<somenum>: bounded(double_value(x2), 0x1p500))
-                and ((JC_<somenum>: bounded(double_value(v_0), 0x1p500))
+                and ((JC_<somenum>: bounded(double_value(v), 0x1p500))
                     and (JC_<somenum>:
                         (let slope_0 =
                               div_real(sub_real(double_value(y2),
                                        double_value(y1)),
                               sub_real(double_value(x2), double_value(x1))) in
                          (bounded(slope_0, 0x1p500)
-                         and le_real(abs_real(sub_real(double_value(v_0),
+                         and le_real(abs_real(sub_real(double_value(v),
                                               slope_0)),
                              mul_real(0x1p-53, abs_real(slope_0)))))))))))) }
   (init:
@@ -528,14 +527,14 @@ let interp_lin_ensures_default =
       (let jessie_<somenum> =
       (C_6:
       begin
-        (b := (C_5: (JC_<somenum>: (((mul_double_safe nearest_even) v_0) !a)))); !b
+        (b := (C_5: (JC_<somenum>: (((mul_double_safe nearest_even) v) !a)))); !b
       end) in void);
       (assert
       { (JC_<somenum>:
         le_real(abs_real(sub_real(double_value(b),
-                         mul_real(double_value(v_0), double_value(a)))),
+                         mul_real(double_value(v), double_value(a)))),
         mul_real(0x1p-10,
-        abs_real(mul_real(double_value(v_0), double_value(a)))))) }; void);
+        abs_real(mul_real(double_value(v), double_value(a)))))) }; void);
       void;
       (assert
       { (JC_<somenum>:
@@ -563,20 +562,20 @@ let interp_lin_ensures_default =
       le_real(abs_real(sub_real(double_value(result), exact_result)), 0x1p-1)))) }
 
 let interp_lin_safety =
- fun (x1 : double) (x2 : double) (y1 : double) (y2 : double) (v_0 : double) (z_0 : double) ->
+ fun (x1 : double) (x2 : double) (y1 : double) (y2 : double) (v : double) (z_0 : double) ->
   { (JC_<somenum>:
     ((JC_<somenum>: le_real(double_value(x1), double_value(z_0)))
     and ((JC_<somenum>: le_real(double_value(z_0), double_value(x2)))
         and ((JC_<somenum>: bounded(double_value(x1), 0x1p500))
             and ((JC_<somenum>: bounded(double_value(x2), 0x1p500))
-                and ((JC_<somenum>: bounded(double_value(v_0), 0x1p500))
+                and ((JC_<somenum>: bounded(double_value(v), 0x1p500))
                     and (JC_<somenum>:
                         (let slope_0 =
                               div_real(sub_real(double_value(y2),
                                        double_value(y1)),
                               sub_real(double_value(x2), double_value(x1))) in
                          (bounded(slope_0, 0x1p500)
-                         and le_real(abs_real(sub_real(double_value(v_0),
+                         and le_real(abs_real(sub_real(double_value(v),
                                               slope_0)),
                              mul_real(0x1p-53, abs_real(slope_0)))))))))))) }
   (init:
@@ -602,15 +601,14 @@ let interp_lin_safety =
       void;
       (let jessie_<somenum> =
       (C_6:
-      begin   (b := (C_5: (JC_<somenum>: (((mul_double nearest_even) v_0) !a)))); !b
+      begin   (b := (C_5: (JC_<somenum>: (((mul_double nearest_even) v) !a)))); !b
       end) in void);
       [ { } unit reads a,b
         { (JC_<somenum>:
           le_real(abs_real(sub_real(double_value(b),
-                           mul_real(double_value(v_0), double_value(a)))),
+                           mul_real(double_value(v), double_value(a)))),
           mul_real(0x1p-10,
-          abs_real(mul_real(double_value(v_0), double_value(a)))))) } ];
-      void;
+          abs_real(mul_real(double_value(v), double_value(a)))))) } ]; void;
       [ { } unit reads b
         { (JC_<somenum>:
           (let slope =

@@ -276,7 +276,7 @@ behavior default:
 {  
    (var int32 res);
    
-   (var int32 v_0);
+   (var int32 v);
    
    (var int32 i_0);
    
@@ -285,7 +285,7 @@ behavior default:
    {  (C_34 : (res = (C_33 : (heap + 0).intM)));
       (C_37 : (size = (C_36 : ((C_35 : (size - 1)) :> int32))));
       (if (size != 0) then 
-      {  (C_39 : (v_0 = (C_38 : (heap + size).intM)));
+      {  (C_39 : (v = (C_38 : (heap + size).intM)));
          (C_40 : (i_0 = 0));
          
          loop 
@@ -306,7 +306,7 @@ behavior default:
                   (if ((C_56 : (heap + j).intM) <
                         (C_55 : (heap + (C_54 : ((C_53 : (j + 1)) :> int32))).intM)) then 
                   (C_52 : (j = (C_51 : ((C_50 : (j + 1)) :> int32)))) else ()) else ());
-                  (if (v_0 >= (C_59 : (heap + j).intM)) then 
+                  (if (v >= (C_59 : (heap + j).intM)) then 
                   (goto while_0_break) else ());
                   (C_62 : ((C_61 : (heap + i_0).intM) = (C_60 : (heap + j).intM)));
                   (C_63 : (i_0 = j))
@@ -314,7 +314,7 @@ behavior default:
             }
          };
          (while_0_break : ());
-         (C_65 : ((C_64 : (heap + i_0).intM) = v_0))
+         (C_65 : ((C_64 : (heap + i_0).intM) = v))
       } else ());
       
       (return res)
@@ -1133,7 +1133,7 @@ let pop_ensures_default =
   try
    begin
      (let res = ref (any_int32 void) in
-     (let v_0 = ref (any_int32 void) in
+     (let v = ref (any_int32 void) in
      (let i_0 = ref (any_int32 void) in
      (let j = ref (any_int32 void) in
      (C_34:
@@ -1154,8 +1154,8 @@ let pop_ensures_default =
         (C_40:
         begin
           (let jessie_<somenum> =
-          (v_0 := (C_38:
-                  ((safe_acc_ !intP_intM_heap_1) ((shift heap) (integer_of_int32 !size))))) in
+          (v := (C_38:
+                ((safe_acc_ !intP_intM_heap_1) ((shift heap) (integer_of_int32 !size))))) in
           void);
          (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
          (loop_4:
@@ -1219,11 +1219,10 @@ let pop_ensures_default =
                        (safe_int32_of_integer_ (C_50:
                                                ((add_int (integer_of_int32 !j)) (1))))))) in
                  void) else void) else void);
-               (if ((ge_int_ (integer_of_int32 !v_0)) (integer_of_int32 
-                                                       (C_59:
-                                                       ((safe_acc_ !intP_intM_heap_1) 
-                                                        ((shift heap) 
-                                                         (integer_of_int32 !j))))))
+               (if ((ge_int_ (integer_of_int32 !v)) (integer_of_int32 
+                                                     (C_59:
+                                                     ((safe_acc_ !intP_intM_heap_1) 
+                                                      ((shift heap) (integer_of_int32 !j))))))
                then (raise (Goto_while_0_break_exc void)) else void);
                (let jessie_<somenum> =
                (let jessie_<somenum> =
@@ -1243,7 +1242,7 @@ let pop_ensures_default =
         begin
           void;
          (C_65:
-         (let jessie_<somenum> = !v_0 in
+         (let jessie_<somenum> = !v in
          (let jessie_<somenum> = heap in
          (let jessie_<somenum> = (integer_of_int32 !i_0) in
          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
@@ -1277,7 +1276,7 @@ let pop_safety =
   try
    begin
      (let res = ref (any_int32 void) in
-     (let v_0 = ref (any_int32 void) in
+     (let v = ref (any_int32 void) in
      (let i_0 = ref (any_int32 void) in
      (let j = ref (any_int32 void) in
      (C_34:
@@ -1299,10 +1298,10 @@ let pop_safety =
         (C_40:
         begin
           (let jessie_<somenum> =
-          (v_0 := (C_38:
-                  (JC_<somenum>:
-                  ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
-                   (integer_of_int32 !size))))) in void);
+          (v := (C_38:
+                (JC_<somenum>:
+                ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
+                 (integer_of_int32 !size))))) in void);
          (let jessie_<somenum> = (i_0 := (safe_int32_of_integer_ (0))) in void);
          (loop_3:
          while true do
@@ -1363,11 +1362,11 @@ let pop_safety =
                        (int32_of_integer_ (C_50:
                                           ((add_int (integer_of_int32 !j)) (1)))))))) in
                  void) else void) else void);
-               (if ((ge_int_ (integer_of_int32 !v_0)) (integer_of_int32 
-                                                       (C_59:
-                                                       (JC_<somenum>:
-                                                       ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
-                                                        (integer_of_int32 !j))))))
+               (if ((ge_int_ (integer_of_int32 !v)) (integer_of_int32 
+                                                     (C_59:
+                                                     (JC_<somenum>:
+                                                     ((((offset_acc_ !intP_heap_1_alloc_table) !intP_intM_heap_1) heap) 
+                                                      (integer_of_int32 !j))))))
                then (raise (Goto_while_0_break_exc void)) else void);
                (let jessie_<somenum> =
                (let jessie_<somenum> =
@@ -1390,7 +1389,7 @@ let pop_safety =
         begin
           void;
          (C_65:
-         (let jessie_<somenum> = !v_0 in
+         (let jessie_<somenum> = !v in
          (let jessie_<somenum> = heap in
          (let jessie_<somenum> = (integer_of_int32 !i_0) in
          (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
@@ -1767,11 +1766,11 @@ text = "PointerDeref"/>
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po78.why">
-      <location file = "why/heap.why" line = "1220" begin = "41" end = "70"/>
+      <location file = "why/heap.why" line = "1219" begin = "41" end = "70"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po79.why">
-      <location file = "why/heap.why" line = "1220" begin = "41" end = "70"/>
+      <location file = "why/heap.why" line = "1219" begin = "41" end = "70"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po80.why">
@@ -1820,11 +1819,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po11.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1109"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1107"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po12.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1109"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1107"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heap_po13.why">
@@ -1836,11 +1835,11 @@ text = "ArithOverflow"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po15.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1109"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1107"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po16.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1109"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "283" begin = "9" end = "1107"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heap_po17.why">
@@ -1990,12 +1989,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heap_po47.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "309" begin = "18" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "309" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heap_po48.why">
-      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "309" begin = "18" end = "50"/>
+      <location file = "PPCHOME/tests/jessie/heap.jessie/heap.jc" line = "309" begin = "18" end = "48"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

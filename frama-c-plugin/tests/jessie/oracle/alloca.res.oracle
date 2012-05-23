@@ -47,15 +47,15 @@ tag voidP = {
 
 type voidP = [voidP]
 
-unit Frama_C_memset(unsigned_charP[..] dest_0, uint8 v, uint32 n_0)
-  requires (C_2 : ((C_3 : (\offset_min(dest_0) <= 0)) &&
-                    (C_4 : (\offset_max(dest_0) >= (n_0 - 1)))));
+unit Frama_C_bzero(unsigned_charP[..] dest, uint32 n)
+  requires (C_2 : ((C_3 : (\offset_min(dest) <= 0)) &&
+                    (C_4 : (\offset_max(dest) >= (n - 1)))));
 behavior default:
-  assigns (dest_0 + [0..(n_0 - 1)]).unsigned_charM;
+  assigns (dest + [0..(n - 1)]).unsigned_charM;
   allocates \nothing;
   ensures (C_1 : (\forall integer i;
-                   (((0 <= i) && (i < \at(n_0,Old))) ==>
-                     ((\at(dest_0,Old) + i).unsigned_charM == \at(v,Old)))));
+                   (((0 <= i) && (i < \at(n,Old))) ==>
+                     ((\at(dest,Old) + i).unsigned_charM == 0))));
 ;
 
 int32 f()
@@ -187,18 +187,18 @@ behavior default:
 {  
    (var intP[0..4] t_3);
    
-   (var intP[0..5] v_0);
+   (var intP[0..5] v);
    
    (var int32 __retres_3);
    
    {  (C_81 : (t_3 = (C_80 : (new intP[5]))));
-      (C_83 : (v_0 = (C_82 : (new intP[6]))));
+      (C_83 : (v = (C_82 : (new intP[6]))));
       (C_85 : ((C_84 : (t_3 + 4).intM) = 3));
-      (C_87 : ((C_86 : (v_0 + 4).intM) = 1));
+      (C_87 : ((C_86 : (v + 4).intM) = 1));
       (C_89 : (__retres_3 = (C_88 : (t_3 + 4).intM)));
       
       {  (C_90 : (free(t_3)));
-         (C_91 : (free(v_0)));
+         (C_91 : (free(v)));
          
          (return __retres_3)
       }
@@ -508,59 +508,55 @@ axiom voidP_tags :
 
 parameter intP_u_1_alloc_table : intP alloc_table ref
 
-parameter Frama_C_memset :
- dest_0:unsigned_charP pointer ->
-  v:uint8 ->
-   n_0:uint32 ->
-    unsigned_charP_unsigned_charM_dest_0_2:(unsigned_charP, uint8) memory ref ->
-     unsigned_charP_dest_0_2_alloc_table:unsigned_charP alloc_table ->
-      { } unit
-      reads intP_u_1_alloc_table,unsigned_charP_unsigned_charM_dest_0_2
-      writes unsigned_charP_unsigned_charM_dest_0_2
-      { ((JC_<somenum>: valid_u(intP_u_1_alloc_table))
-        and (JC_<somenum>:
-            ((JC_<somenum>:
-             (forall i:int.
-              ((le_int((0), i) and lt_int(i, integer_of_uint32(n_0))) ->
-               (integer_of_uint8(select(unsigned_charP_unsigned_charM_dest_0_2,
-                                 shift(dest_0, i))) = integer_of_uint8(v)))))
-            and (JC_<somenum>:
-                not_assigns(unsigned_charP_dest_0_2_alloc_table,
-                unsigned_charP_unsigned_charM_dest_0_2@,
-                unsigned_charP_unsigned_charM_dest_0_2,
-                pset_range(pset_singleton(dest_0), (0),
-                sub_int(integer_of_uint32(n_0), (1)))))))) }
+parameter Frama_C_bzero :
+ dest:unsigned_charP pointer ->
+  n:uint32 ->
+   unsigned_charP_unsigned_charM_dest_2:(unsigned_charP, uint8) memory ref ->
+    unsigned_charP_dest_2_alloc_table:unsigned_charP alloc_table ->
+     { } unit reads intP_u_1_alloc_table,unsigned_charP_unsigned_charM_dest_2
+     writes unsigned_charP_unsigned_charM_dest_2
+     { ((JC_<somenum>: valid_u(intP_u_1_alloc_table))
+       and (JC_<somenum>:
+           ((JC_<somenum>:
+            (forall i:int.
+             ((le_int((0), i) and lt_int(i, integer_of_uint32(n))) ->
+              (integer_of_uint8(select(unsigned_charP_unsigned_charM_dest_2,
+                                shift(dest, i))) = (0)))))
+           and (JC_<somenum>:
+               not_assigns(unsigned_charP_dest_2_alloc_table,
+               unsigned_charP_unsigned_charM_dest_2@,
+               unsigned_charP_unsigned_charM_dest_2,
+               pset_range(pset_singleton(dest), (0),
+               sub_int(integer_of_uint32(n), (1)))))))) }
 
-parameter Frama_C_memset_requires :
- dest_0:unsigned_charP pointer ->
-  v:uint8 ->
-   n_0:uint32 ->
-    unsigned_charP_unsigned_charM_dest_0_2:(unsigned_charP, uint8) memory ref ->
-     unsigned_charP_dest_0_2_alloc_table:unsigned_charP alloc_table ->
-      { (JC_<somenum>:
+parameter Frama_C_bzero_requires :
+ dest:unsigned_charP pointer ->
+  n:uint32 ->
+   unsigned_charP_unsigned_charM_dest_2:(unsigned_charP, uint8) memory ref ->
+    unsigned_charP_dest_2_alloc_table:unsigned_charP alloc_table ->
+     { (JC_<somenum>:
+       ((JC_<somenum>:
         ((JC_<somenum>:
-         ((JC_<somenum>:
-          le_int(offset_min(unsigned_charP_dest_0_2_alloc_table, dest_0),
-          (0)))
-         and (JC_<somenum>:
-             ge_int(offset_max(unsigned_charP_dest_0_2_alloc_table, dest_0),
-             sub_int(integer_of_uint32(n_0), (1))))))
-        and (JC_<somenum>: valid_u(intP_u_1_alloc_table))))}
-      unit reads intP_u_1_alloc_table,unsigned_charP_unsigned_charM_dest_0_2
-      writes unsigned_charP_unsigned_charM_dest_0_2
-      { ((JC_<somenum>: valid_u(intP_u_1_alloc_table))
+         le_int(offset_min(unsigned_charP_dest_2_alloc_table, dest), (0)))
         and (JC_<somenum>:
-            ((JC_<somenum>:
-             (forall i:int.
-              ((le_int((0), i) and lt_int(i, integer_of_uint32(n_0))) ->
-               (integer_of_uint8(select(unsigned_charP_unsigned_charM_dest_0_2,
-                                 shift(dest_0, i))) = integer_of_uint8(v)))))
-            and (JC_<somenum>:
-                not_assigns(unsigned_charP_dest_0_2_alloc_table,
-                unsigned_charP_unsigned_charM_dest_0_2@,
-                unsigned_charP_unsigned_charM_dest_0_2,
-                pset_range(pset_singleton(dest_0), (0),
-                sub_int(integer_of_uint32(n_0), (1)))))))) }
+            ge_int(offset_max(unsigned_charP_dest_2_alloc_table, dest),
+            sub_int(integer_of_uint32(n), (1))))))
+       and (JC_<somenum>: valid_u(intP_u_1_alloc_table))))}
+     unit reads intP_u_1_alloc_table,unsigned_charP_unsigned_charM_dest_2
+     writes unsigned_charP_unsigned_charM_dest_2
+     { ((JC_<somenum>: valid_u(intP_u_1_alloc_table))
+       and (JC_<somenum>:
+           ((JC_<somenum>:
+            (forall i:int.
+             ((le_int((0), i) and lt_int(i, integer_of_uint32(n))) ->
+              (integer_of_uint8(select(unsigned_charP_unsigned_charM_dest_2,
+                                shift(dest, i))) = (0)))))
+           and (JC_<somenum>:
+               not_assigns(unsigned_charP_dest_2_alloc_table,
+               unsigned_charP_unsigned_charM_dest_2@,
+               unsigned_charP_unsigned_charM_dest_2,
+               pset_range(pset_singleton(dest), (0),
+               sub_int(integer_of_uint32(n), (1)))))))) }
 
 exception Loop_continue_exc of unit
 
@@ -1268,14 +1264,14 @@ let two_local_arrays_not_alias_ensures_default =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let intP_intM_v_0_16 = ref (any_memory void) in
+     (let intP_intM_v_16 = ref (any_memory void) in
      (let intP_intM_t_3_15 = ref (any_memory void) in
      (let intP_t_3_15_tag_table = ref (any_tag_table void) in
-     (let intP_v_0_16_tag_table = ref (any_tag_table void) in
-     (let intP_v_0_16_alloc_table = ref (any_alloc_table void) in
+     (let intP_v_16_tag_table = ref (any_tag_table void) in
+     (let intP_v_16_alloc_table = ref (any_alloc_table void) in
      (let intP_t_3_15_alloc_table = ref (any_alloc_table void) in
      (let t_3 = ref (any_pointer void) in
-     (let v_0 = ref (any_pointer void) in
+     (let v = ref (any_pointer void) in
      (let __retres_3 = ref (any_int32 void) in
      (C_81:
      (C_83:
@@ -1291,9 +1287,9 @@ let two_local_arrays_not_alias_ensures_default =
                (((alloc_struct_intP (5)) intP_t_3_15_alloc_table) intP_t_3_15_tag_table)))) in
        void);
       (let jessie_<somenum> =
-      (v_0 := (C_82:
-              (JC_<somenum>:
-              (((alloc_struct_intP (6)) intP_v_0_16_alloc_table) intP_v_0_16_tag_table)))) in
+      (v := (C_82:
+            (JC_<somenum>:
+            (((alloc_struct_intP (6)) intP_v_16_alloc_table) intP_v_16_tag_table)))) in
       void);
       (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
       (let jessie_<somenum> = !t_3 in
@@ -1302,16 +1298,16 @@ let two_local_arrays_not_alias_ensures_default =
       (let jessie_<somenum> = ((shift jessie_<somenum>) (4)) in
       (((safe_upd_ intP_intM_t_3_15) jessie_<somenum>) jessie_<somenum>))))));
       (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = !v_0 in
+      (let jessie_<somenum> = !v in
       (let jessie_<somenum> = (4) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) (4)) in
-      (((safe_upd_ intP_intM_v_0_16) jessie_<somenum>) jessie_<somenum>))))));
+      (((safe_upd_ intP_intM_v_16) jessie_<somenum>) jessie_<somenum>))))));
       (let jessie_<somenum> =
       (__retres_3 := (C_88:
                      ((safe_acc_ !intP_intM_t_3_15) ((shift !t_3) (4))))) in
       void); ((safe_free_parameter intP_t_3_15_alloc_table) !t_3);
-      ((safe_free_parameter intP_v_0_16_alloc_table) !v_0);
+      ((safe_free_parameter intP_v_16_alloc_table) !v);
       (return := !__retres_3); (raise Return) end)))))))))))))))); absurd 
    end with Return -> !return end))
   { (JC_<somenum>: (integer_of_int32(result) = (3))) }
@@ -1323,14 +1319,14 @@ let two_local_arrays_not_alias_safety =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let intP_intM_v_0_16 = ref (any_memory void) in
+     (let intP_intM_v_16 = ref (any_memory void) in
      (let intP_intM_t_3_15 = ref (any_memory void) in
      (let intP_t_3_15_tag_table = ref (any_tag_table void) in
-     (let intP_v_0_16_tag_table = ref (any_tag_table void) in
-     (let intP_v_0_16_alloc_table = ref (any_alloc_table void) in
+     (let intP_v_16_tag_table = ref (any_tag_table void) in
+     (let intP_v_16_alloc_table = ref (any_alloc_table void) in
      (let intP_t_3_15_alloc_table = ref (any_alloc_table void) in
      (let t_3 = ref (any_pointer void) in
-     (let v_0 = ref (any_pointer void) in
+     (let v = ref (any_pointer void) in
      (let __retres_3 = ref (any_int32 void) in
      (C_81:
      (C_83:
@@ -1350,14 +1346,14 @@ let two_local_arrays_not_alias_safety =
                { ge_int(offset_max(intP_t_3_15_alloc_table, jessie_<somenum>), (4)) };
                jessie_<somenum>)))) in void);
       (let jessie_<somenum> =
-      (v_0 := (let jessie_<somenum> =
-              (C_82:
-              (JC_<somenum>:
-              (((alloc_struct_intP_requires (6)) intP_v_0_16_alloc_table) intP_v_0_16_tag_table))) in
-              (JC_<somenum>:
-              (assert
-              { ge_int(offset_max(intP_v_0_16_alloc_table, jessie_<somenum>), (5)) };
-              jessie_<somenum>)))) in void);
+      (v := (let jessie_<somenum> =
+            (C_82:
+            (JC_<somenum>:
+            (((alloc_struct_intP_requires (6)) intP_v_16_alloc_table) intP_v_16_tag_table))) in
+            (JC_<somenum>:
+            (assert
+            { ge_int(offset_max(intP_v_16_alloc_table, jessie_<somenum>), (5)) };
+            jessie_<somenum>)))) in void);
       (let jessie_<somenum> = (safe_int32_of_integer_ (3)) in
       (let jessie_<somenum> = !t_3 in
       (let jessie_<somenum> = (4) in
@@ -1365,19 +1361,18 @@ let two_local_arrays_not_alias_safety =
       (let jessie_<somenum> = ((shift jessie_<somenum>) (4)) in
       (((safe_upd_ intP_intM_t_3_15) jessie_<somenum>) jessie_<somenum>))))));
       (let jessie_<somenum> = (safe_int32_of_integer_ (1)) in
-      (let jessie_<somenum> = !v_0 in
+      (let jessie_<somenum> = !v in
       (let jessie_<somenum> = (4) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
       (let jessie_<somenum> = ((shift jessie_<somenum>) (4)) in
-      (((safe_upd_ intP_intM_v_0_16) jessie_<somenum>) jessie_<somenum>))))));
+      (((safe_upd_ intP_intM_v_16) jessie_<somenum>) jessie_<somenum>))))));
       (let jessie_<somenum> =
       (__retres_3 := (C_88:
                      ((safe_acc_ !intP_intM_t_3_15) ((shift !t_3) (4))))) in
       void); ((free_parameter intP_t_3_15_alloc_table) !t_3);
-      ((free_parameter intP_v_0_16_alloc_table) !v_0);
-      (return := !__retres_3); (raise Return) end)))))))))))))))); absurd 
-   end with Return -> !return end))
-  { (JC_<somenum>: valid_u(intP_u_1_alloc_table)) }
+      ((free_parameter intP_v_16_alloc_table) !v); (return := !__retres_3);
+      (raise Return) end)))))))))))))))); absurd  end with Return ->
+   !return end)) { (JC_<somenum>: valid_u(intP_u_1_alloc_table)) }
 
 let two_local_arrays_safety =
  fun (tt : unit) ->
@@ -1508,7 +1503,7 @@ why --project [...] why/alloca.why
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/alloca_po16.why">
-      <location file = "why/alloca.why" line = "1143" begin = "17" end = "77"/>
+      <location file = "why/alloca.why" line = "1139" begin = "17" end = "77"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alloca_po17.why">
@@ -1517,16 +1512,16 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/alloca_po18.why">
-      <location file = "why/alloca.why" line = "1152" begin = "16" end = "76"/>
+      <location file = "why/alloca.why" line = "1148" begin = "14" end = "72"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alloca_po19.why">
-      <location file = "why/alloca.why" line = "1169" begin = "14" end = "59"/>
+      <location file = "why/alloca.why" line = "1165" begin = "14" end = "59"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/alloca_po20.why">
-      <location file = "why/alloca.why" line = "1170" begin = "7" end = "52"/>
+      <location file = "why/alloca.why" line = "1166" begin = "7" end = "48"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1547,7 +1542,7 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/alloca_po22.why">
-      <location file = "why/alloca.why" line = "1208" begin = "19" end = "98"/>
+      <location file = "why/alloca.why" line = "1203" begin = "19" end = "98"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alloca_po23.why">
@@ -1556,16 +1551,16 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/alloca_po24.why">
-      <location file = "why/alloca.why" line = "1217" begin = "18" end = "96"/>
+      <location file = "why/alloca.why" line = "1212" begin = "18" end = "96"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alloca_po25.why">
-      <location file = "why/alloca.why" line = "1279" begin = "14" end = "61"/>
+      <location file = "why/alloca.why" line = "1274" begin = "14" end = "61"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/alloca_po26.why">
-      <location file = "why/alloca.why" line = "1280" begin = "7" end = "54"/>
+      <location file = "why/alloca.why" line = "1275" begin = "7" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1586,11 +1581,11 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/alloca_po11.why">
-      <location file = "why/alloca.why" line = "928" begin = "17" end = "75"/>
+      <location file = "why/alloca.why" line = "924" begin = "17" end = "75"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alloca_po12.why">
-      <location file = "why/alloca.why" line = "954" begin = "14" end = "58"/>
+      <location file = "why/alloca.why" line = "950" begin = "14" end = "58"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1611,11 +1606,11 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/alloca_po7.why">
-      <location file = "why/alloca.why" line = "817" begin = "17" end = "75"/>
+      <location file = "why/alloca.why" line = "813" begin = "17" end = "75"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alloca_po8.why">
-      <location file = "why/alloca.why" line = "839" begin = "14" end = "58"/>
+      <location file = "why/alloca.why" line = "835" begin = "14" end = "58"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
@@ -1636,11 +1631,11 @@ text = ""/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/alloca_po3.why">
-      <location file = "why/alloca.why" line = "718" begin = "15" end = "70"/>
+      <location file = "why/alloca.why" line = "714" begin = "15" end = "70"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/alloca_po4.why">
-      <location file = "why/alloca.why" line = "739" begin = "14" end = "54"/>
+      <location file = "why/alloca.why" line = "735" begin = "14" end = "54"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

@@ -199,7 +199,7 @@ lemma div2_5 :
       ((0 <= k_1) ==>
         ((k_1 != ((i_16 - 1) / 2)) ==> (((2 * k_1) + 2) != i_16))))))
 
-unit sift_down(intP[..] a_0, uint32 low, uint32 high, int32 v_0)
+unit sift_down(intP[..] a_0, uint32 low, uint32 high, int32 v)
   requires (C_45 : ((((C_48 : (0 <= low)) && (C_49 : (low <= high))) &&
                       ((C_51 : (\offset_min(a_0) <= low)) &&
                         (C_52 : (\offset_max(a_0) >= high)))) &&
@@ -207,7 +207,7 @@ unit sift_down(intP[..] a_0, uint32 low, uint32 high, int32 v_0)
 behavior default:
   assigns (a_0 + [low..high]).intM;
   ensures (C_42 : ((C_43 : Permut(contents{Here}(\at(a_0,Old)),
-                                  \at(update(contents{Old}(a_0), low, v_0),Old),
+                                  \at(update(contents{Old}(a_0), low, v),Old),
                                   \at(low,Old), \at(high,Old))) &&
                     (C_44 : H{Here}(\at(a_0,Old), \at(low,Old), \at(high,Old)))));
 {  
@@ -229,7 +229,7 @@ behavior default:
                             (C_12 : ((low < i) ==>
                                       Hnode{Here}(a_0, low, high)))) &&
                            (C_13 : ((low <= ((i - 1) / 2)) ==>
-                                     ((a_0 + ((i - 1) / 2)).intM >= v_0)))));
+                                     ((a_0 + ((i - 1) / 2)).intM >= v)))));
       behavior default:
         
         assigns (a_0 + [low..high]).intM;
@@ -252,7 +252,7 @@ behavior default:
                                                                 (C_19 : 
                                                                 (child +
                                                                   1)) :> uint32)))) else ()) else ());
-               (if (v_0 >= (C_31 : (C_30 : (a_0 + child)).intM)) then 
+               (if (v >= (C_31 : (C_30 : (a_0 + child)).intM)) then 
                (goto while_0_break) else ());
                (C_36 : ((C_35 : (C_34 : (a_0 + i)).intM) = (C_33 : (C_32 : 
                                                                    (a_0 +
@@ -267,7 +267,7 @@ behavior default:
          }
       };
       (while_0_break : ());
-      (C_41 : ((C_40 : (C_39 : (a_0 + i)).intM) = v_0));
+      (C_41 : ((C_40 : (C_39 : (a_0 + i)).intM) = v));
       
       (return ())
    }
@@ -1875,11 +1875,11 @@ why --project [...] why/heapsort.why
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po76.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "214" begin = "6" end = "2409"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "214" begin = "6" end = "2405"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po77.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "214" begin = "6" end = "2409"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "214" begin = "6" end = "2405"/>
       <explain kind = "LoopInvInit"/>
     </goal>
     <goal why_file="why/heapsort_po78.why">
@@ -1911,11 +1911,11 @@ why --project [...] why/heapsort.why
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po85.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "214" begin = "6" end = "2409"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "214" begin = "6" end = "2405"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po86.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "214" begin = "6" end = "2409"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "214" begin = "6" end = "2405"/>
       <explain kind = "LoopInvPreserv"/>
     </goal>
     <goal why_file="why/heapsort_po87.why">
@@ -2041,12 +2041,12 @@ text = "PointerDeref"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/heapsort_po112.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "264" begin = "15" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "264" begin = "15" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>
     <goal why_file="why/heapsort_po113.why">
-      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "264" begin = "15" end = "53"/>
+      <location file = "PPCHOME/tests/jessie/heapsort.jessie/heapsort.jc" line = "264" begin = "15" end = "51"/>
       <explain kind = "Pre"
 text = "PointerDeref"/>
     </goal>

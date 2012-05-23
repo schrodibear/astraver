@@ -50,7 +50,7 @@ lemma mean_1 :
   (\forall integer y;
     ((x <= y) ==> ((x <= (x + ((y - x) / 2))) && ((x + ((y - x) / 2)) <= y)))))
 
-int32 binary_search(intP[..] t, int32 n_1, int32 v_0)
+int32 binary_search(intP[..] t, int32 n_1, int32 v)
   requires (C_40 : (((C_42 : (n_1 >= 0)) &&
                       ((C_44 : (\offset_min(t) <= 0)) &&
                         (C_45 : (\offset_max(t) >= (n_1 - 1))))) &&
@@ -61,11 +61,11 @@ int32 binary_search(intP[..] t, int32 n_1, int32 v_0)
                                    ((t + k1).intM <= (t + k2).intM)))))));
 behavior default:
   ensures (C_39 : (((\result >= 0) &&
-                     ((\at(t,Old) + \result).intM == \at(v_0,Old))) ||
+                     ((\at(t,Old) + \result).intM == \at(v,Old))) ||
                     ((\result == (- 1)) &&
                       (\forall integer k_0;
                         (((0 <= k_0) && (k_0 < \at(n_1,Old))) ==>
-                          ((\at(t,Old) + k_0).intM != \at(v_0,Old)))))));
+                          ((\at(t,Old) + k_0).intM != \at(v,Old)))))));
 {  
    (var int32 l);
    
@@ -87,9 +87,9 @@ behavior default:
                             (C_16 : ((p == (- 1)) ==>
                                       (\forall integer k;
                                         (((0 <= k) && (k < n_1)) ==>
-                                          (((t + k).intM == v_0) ==>
+                                          (((t + k).intM == v) ==>
                                             ((l <= k) && (k <= u)))))))) &&
-                           (C_17 : ((p >= 0) ==> ((t + p).intM == v_0)))));
+                           (C_17 : ((p >= 0) ==> ((t + p).intM == v)))));
       variant (C_6 : (u - l));
       while (true)
       {  
@@ -109,16 +109,16 @@ behavior default:
                   ()
                };
                
-               {  (if ((C_38 : (C_37 : (t + m)).intM) < v_0) then (C_36 : (l = 
-                                                                  (C_35 : (
-                                                                  (C_34 : 
-                                                                  (m +
-                                                                    1)) :> int32)))) else 
-                  (if ((C_33 : (C_32 : (t + m)).intM) > v_0) then (C_31 : (u = 
-                                                                  (C_30 : (
-                                                                  (C_29 : 
-                                                                  (m -
-                                                                    1)) :> int32)))) else 
+               {  (if ((C_38 : (C_37 : (t + m)).intM) < v) then (C_36 : (l = 
+                                                                (C_35 : (
+                                                                (C_34 : 
+                                                                (m +
+                                                                  1)) :> int32)))) else 
+                  (if ((C_33 : (C_32 : (t + m)).intM) > v) then (C_31 : (u = 
+                                                                (C_30 : (
+                                                                (C_29 : 
+                                                                (m -
+                                                                  1)) :> int32)))) else 
                   {  (C_28 : (p = m));
                      
                      (goto while_0_break)
@@ -536,7 +536,7 @@ parameter any_uint8 : unit -> { } uint8 { true }
 parameter binary_search :
  t:intP pointer ->
   n_1:int32 ->
-   v_0:int32 ->
+   v:int32 ->
     intP_t_1_alloc_table:intP alloc_table ->
      intP_intM_t_1:(intP, int32) memory ->
       { } int32
@@ -544,17 +544,17 @@ parameter binary_search :
         ((ge_int(integer_of_int32(result), (0))
          and (integer_of_int32(select(intP_intM_t_1,
                                shift(t, integer_of_int32(result)))) = 
-             integer_of_int32(v_0)))
+             integer_of_int32(v)))
         or ((integer_of_int32(result) = neg_int((1)))
            and (forall k_0:int.
                 ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n_1))) ->
                  (integer_of_int32(select(intP_intM_t_1, shift(t, k_0))) <> 
-                 integer_of_int32(v_0))))))) }
+                 integer_of_int32(v))))))) }
 
 parameter binary_search_requires :
  t:intP pointer ->
   n_1:int32 ->
-   v_0:int32 ->
+   v:int32 ->
     intP_t_1_alloc_table:intP alloc_table ->
      intP_intM_t_1:(intP, int32) memory ->
       { (JC_<somenum>:
@@ -578,12 +578,12 @@ parameter binary_search_requires :
         ((ge_int(integer_of_int32(result), (0))
          and (integer_of_int32(select(intP_intM_t_1,
                                shift(t, integer_of_int32(result)))) = 
-             integer_of_int32(v_0)))
+             integer_of_int32(v)))
         or ((integer_of_int32(result) = neg_int((1)))
            and (forall k_0:int.
                 ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n_1))) ->
                  (integer_of_int32(select(intP_intM_t_1, shift(t, k_0))) <> 
-                 integer_of_int32(v_0))))))) }
+                 integer_of_int32(v))))))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -610,7 +610,7 @@ parameter uint8_of_integer_ :
   { eq_int(integer_of_uint8(result), x) }
 
 let binary_search_ensures_default =
- fun (t : intP pointer) (n_1 : int32) (v_0 : int32) (intP_t_1_alloc_table : intP alloc_table) (intP_intM_t_1 : (intP, int32) memory) ->
+ fun (t : intP pointer) (n_1 : int32) (v : int32) (intP_t_1_alloc_table : intP alloc_table) (intP_intM_t_1 : (intP, int32) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_<somenum>: le_int(offset_min(intP_t_1_alloc_table, t), (0)))
@@ -665,7 +665,7 @@ let binary_search_ensures_default =
                               ((le_int((0), k)
                                and lt_int(k, integer_of_int32(n_1))) ->
                                ((integer_of_int32(select(intP_intM_t_1,
-                                                  shift(t, k))) = integer_of_int32(v_0)) ->
+                                                  shift(t, k))) = integer_of_int32(v)) ->
                                 (le_int(integer_of_int32(l), k)
                                 and le_int(k, integer_of_int32(u))))))))
                            and (JC_<somenum>:
@@ -673,7 +673,7 @@ let binary_search_ensures_default =
                                 (integer_of_int32(select(intP_intM_t_1,
                                                   shift(t,
                                                   integer_of_int32(p)))) = 
-                                integer_of_int32(v_0))))))))))  }
+                                integer_of_int32(v))))))))))  }
         begin
           [ { } unit { true } ];
          try
@@ -707,7 +707,7 @@ let binary_search_ensures_default =
                                            ((safe_acc_ intP_intM_t_1) 
                                             (C_37:
                                             ((shift t) (integer_of_int32 !m))))))) 
-                (integer_of_int32 v_0))
+                (integer_of_int32 v))
            then
             (let jessie_<somenum> =
             (C_36:
@@ -720,7 +720,7 @@ let binary_search_ensures_default =
                                             ((safe_acc_ intP_intM_t_1) 
                                              (C_32:
                                              ((shift t) (integer_of_int32 !m))))))) 
-                 (integer_of_int32 v_0))
+                 (integer_of_int32 v))
             then
              (let jessie_<somenum> =
              (C_31:
@@ -742,15 +742,15 @@ let binary_search_ensures_default =
   { (JC_<somenum>:
     ((ge_int(integer_of_int32(result), (0))
      and (integer_of_int32(select(intP_intM_t_1,
-                           shift(t, integer_of_int32(result)))) = integer_of_int32(v_0)))
+                           shift(t, integer_of_int32(result)))) = integer_of_int32(v)))
     or ((integer_of_int32(result) = neg_int((1)))
        and (forall k_0:int.
             ((le_int((0), k_0) and lt_int(k_0, integer_of_int32(n_1))) ->
              (integer_of_int32(select(intP_intM_t_1, shift(t, k_0))) <> 
-             integer_of_int32(v_0))))))) }
+             integer_of_int32(v))))))) }
 
 let binary_search_safety =
- fun (t : intP pointer) (n_1 : int32) (v_0 : int32) (intP_t_1_alloc_table : intP alloc_table) (intP_intM_t_1 : (intP, int32) memory) ->
+ fun (t : intP pointer) (n_1 : int32) (v : int32) (intP_t_1_alloc_table : intP alloc_table) (intP_intM_t_1 : (intP, int32) memory) ->
   { (JC_<somenum>:
     ((JC_<somenum>: ge_int(integer_of_int32(n_1), (0)))
     and ((JC_<somenum>: le_int(offset_min(intP_t_1_alloc_table, t), (0)))
@@ -808,7 +808,7 @@ let binary_search_safety =
                                   and lt_int(k, integer_of_int32(n_1))) ->
                                   ((integer_of_int32(select(intP_intM_t_1,
                                                      shift(t, k))) = 
-                                   integer_of_int32(v_0)) ->
+                                   integer_of_int32(v)) ->
                                    (le_int(integer_of_int32(l), k)
                                    and le_int(k, integer_of_int32(u))))))))
                               and (JC_<somenum>:
@@ -816,7 +816,7 @@ let binary_search_safety =
                                    (integer_of_int32(select(intP_intM_t_1,
                                                      shift(t,
                                                      integer_of_int32(p)))) = 
-                                   integer_of_int32(v_0)))))))))) } ];
+                                   integer_of_int32(v)))))))))) } ];
          try
           (C_24:
           begin
@@ -851,7 +851,7 @@ let binary_search_safety =
                                            (JC_<somenum>:
                                            ((((offset_acc_ intP_t_1_alloc_table) intP_intM_t_1) t) 
                                             (integer_of_int32 !m)))))) 
-                (integer_of_int32 v_0))
+                (integer_of_int32 v))
            then
             (let jessie_<somenum> =
             (C_36:
@@ -865,7 +865,7 @@ let binary_search_safety =
                                             (JC_<somenum>:
                                             ((((offset_acc_ intP_t_1_alloc_table) intP_intM_t_1) t) 
                                              (integer_of_int32 !m)))))) 
-                 (integer_of_int32 v_0))
+                 (integer_of_int32 v))
             then
              (let jessie_<somenum> =
              (C_31:

@@ -1257,7 +1257,7 @@ behavior default:
    
    (var uint32 u);
    
-   (var uint32 v_0);
+   (var uint32 v);
    
    (var uint32 w);
    
@@ -1290,7 +1290,7 @@ behavior default:
       (C_523 : (y_0 = x_8));
       (C_524 : (z = x_8));
       (C_525 : (u = x_8));
-      (C_526 : (v_0 = x_8));
+      (C_526 : (v = x_8));
       (C_527 : (w = x_8));
       
       loop 
@@ -1300,7 +1300,7 @@ behavior default:
             {  (C_529 : (y_0 = (C_528 : snoob1(x_8))));
                (C_531 : (z = (C_530 : snoob2(x_8))));
                (C_533 : (u = (C_532 : snoob3(x_8))));
-               (C_535 : (v_0 = (C_534 : next_set_of_n_elements(x_8))));
+               (C_535 : (v = (C_534 : next_set_of_n_elements(x_8))));
                (C_538 : (tmp_2 = (C_537 : snoob4((C_536 : (x_8 :> int32))))));
                (C_540 : (w = (C_539 : (tmp_2 :> uint32))));
                (C_542 : (x_8 = (C_541 : snoob(x_8))))
@@ -4694,7 +4694,7 @@ let main_ensures_default =
      (let y_0 = ref (any_uint32 void) in
      (let z = ref (any_uint32 void) in
      (let u = ref (any_uint32 void) in
-     (let v_0 = ref (any_uint32 void) in
+     (let v = ref (any_uint32 void) in
      (let w = ref (any_uint32 void) in
      (let tmp_2 = ref (any_int32 void) in
      (let __retres_8 = ref (any_int32 void) in
@@ -4760,7 +4760,7 @@ let main_ensures_default =
            !x_8 end) in void); (let jessie_<somenum> = (y_0 := !x_8) in void);
           (let jessie_<somenum> = (z := !x_8) in void);
           (let jessie_<somenum> = (u := !x_8) in void);
-          (let jessie_<somenum> = (v_0 := !x_8) in void);
+          (let jessie_<somenum> = (v := !x_8) in void);
           (let jessie_<somenum> = (w := !x_8) in void);
           (loop_4:
           while true do
@@ -4791,9 +4791,9 @@ let main_ensures_default =
                       (let jessie_<somenum> = !x_8 in
                       (JC_<somenum>: (snoob3 jessie_<somenum>))))) in void);
                 (let jessie_<somenum> =
-                (v_0 := (C_534:
-                        (let jessie_<somenum> = !x_8 in
-                        (JC_<somenum>: (next_set_of_n_elements jessie_<somenum>))))) in
+                (v := (C_534:
+                      (let jessie_<somenum> = !x_8 in
+                      (JC_<somenum>: (next_set_of_n_elements jessie_<somenum>))))) in
                 void);
                 (let jessie_<somenum> =
                 (tmp_2 := (C_537:
@@ -4835,7 +4835,7 @@ let main_safety =
      (let y_0 = ref (any_uint32 void) in
      (let z = ref (any_uint32 void) in
      (let u = ref (any_uint32 void) in
-     (let v_0 = ref (any_uint32 void) in
+     (let v = ref (any_uint32 void) in
      (let w = ref (any_uint32 void) in
      (let tmp_2 = ref (any_int32 void) in
      (let __retres_8 = ref (any_int32 void) in
@@ -4904,7 +4904,7 @@ let main_safety =
            !x_8 end) in void); (let jessie_<somenum> = (y_0 := !x_8) in void);
           (let jessie_<somenum> = (z := !x_8) in void);
           (let jessie_<somenum> = (u := !x_8) in void);
-          (let jessie_<somenum> = (v_0 := !x_8) in void);
+          (let jessie_<somenum> = (v := !x_8) in void);
           (let jessie_<somenum> = (w := !x_8) in void);
           (loop_3:
           while true do
@@ -4935,10 +4935,9 @@ let main_safety =
                       (let jessie_<somenum> = !x_8 in
                       (JC_<somenum>: (snoob3_requires jessie_<somenum>))))) in void);
                 (let jessie_<somenum> =
-                (v_0 := (C_534:
-                        (let jessie_<somenum> = !x_8 in
-                        (JC_<somenum>:
-                        (next_set_of_n_elements_requires jessie_<somenum>))))) in
+                (v := (C_534:
+                      (let jessie_<somenum> = !x_8 in
+                      (JC_<somenum>: (next_set_of_n_elements_requires jessie_<somenum>))))) in
                 void);
                 (let jessie_<somenum> =
                 (tmp_2 := (C_537:
@@ -6603,11 +6602,11 @@ text = "ArithOverflow"/>
 text = "ArithOverflow"/>
     </goal>
     <goal why_file="why/hd_snoob_po186.why">
-      <location file = "why/hd_snoob.why" line = "5034" begin = "43" end = "44"/>
+      <location file = "why/hd_snoob.why" line = "5033" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po187.why">
-      <location file = "why/hd_snoob.why" line = "5034" begin = "43" end = "44"/>
+      <location file = "why/hd_snoob.why" line = "5033" begin = "43" end = "44"/>
       <explain kind = "VarDecr"/>
     </goal>
     <goal why_file="why/hd_snoob_po188.why">

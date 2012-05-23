@@ -44,38 +44,38 @@ int32 main()
 behavior default:
   ensures (C_11 : true);
 {  
-   (var double v_0);
+   (var double v);
    
    (var double x);
    
    (var int32 __retres);
    
-   {  (C_1 : (v_0 = (0x1.0p600 :> double)));
+   {  (C_1 : (v = (0x1.0p600 :> double)));
       
       {  
-         (assert for default: (C_2 : ((v_0 :> real) == \double_exact(v_0))));
+         (assert for default: (C_2 : ((v :> real) == \double_exact(v))));
          ()
       };
       
       {  
-         (assert for default: (C_3 : \double_is_finite(v_0)));
+         (assert for default: (C_3 : \double_is_finite(v)));
          ()
       };
       
       {  
-         (assert for default: (C_4 : ((v_0 :> real) == 0x1.0p600)));
+         (assert for default: (C_4 : ((v :> real) == 0x1.0p600)));
          ()
       };
       
       {  
          (assert for default: (C_5 : (! \no_overflow_double(\NearestEven(
                                                             ),
-                                                            ((v_0 :> real) *
-                                                              (v_0 :> real))))));
+                                                            ((v :> real) *
+                                                              (v :> real))))));
          ()
       };
       
-      {  (C_8 : (x = (C_7 : ((C_6 : (v_0 * v_0)) / v_0))))
+      {  (C_8 : (x = (C_7 : ((C_6 : (v * v)) / v))))
       };
       
       {  
@@ -441,22 +441,21 @@ let main_ensures_default =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let v_0 = ref (any_double void) in
+     (let v = ref (any_double void) in
      (let x_0 = ref (any_double void) in
      (let __retres = ref (any_int32 void) in
      (C_1:
      (C_10:
      begin
        (let jessie_<somenum> =
-       (v_0 := (JC_<somenum>: ((double_of_real nearest_even) 0x1.0p600))) in void);
-      (assert { (JC_<somenum>: (double_value(v_0) = double_exact(v_0))) }; void);
-      void; (assert { (JC_<somenum>: double_is_finite(v_0)) }; void); void;
-      (assert { (JC_<somenum>: (double_value(v_0) = 0x1.0p600)) }; void); void;
+       (v := (JC_<somenum>: ((double_of_real nearest_even) 0x1.0p600))) in void);
+      (assert { (JC_<somenum>: (double_value(v) = double_exact(v))) }; void); void;
+      (assert { (JC_<somenum>: double_is_finite(v)) }; void); void;
+      (assert { (JC_<somenum>: (double_value(v) = 0x1.0p600)) }; void); void;
       (assert
       { (JC_<somenum>:
         (not no_overflow_double(nearest_even,
-             mul_real(double_value(v_0), double_value(v_0))))) }; void);
-      void;
+             mul_real(double_value(v), double_value(v))))) }; void); void;
       (let jessie_<somenum> =
       (C_8:
       begin
@@ -464,7 +463,7 @@ let main_ensures_default =
                 (JC_<somenum>:
                 (((div_double nearest_even) (C_6:
                                             (JC_<somenum>:
-                                            (((mul_double nearest_even) !v_0) !v_0)))) !v_0))));
+                                            (((mul_double nearest_even) !v) !v)))) !v))));
        !x_0 end) in void);
       (assert { (JC_<somenum>: double_is_plus_infinity(x_0)) }; void); void;
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);
@@ -478,23 +477,21 @@ let main_safety =
   (let return = ref (any_int32 void) in
   try
    begin
-     (let v_0 = ref (any_double void) in
+     (let v = ref (any_double void) in
      (let x_0 = ref (any_double void) in
      (let __retres = ref (any_int32 void) in
      (C_1:
      (C_10:
      begin
        (let jessie_<somenum> =
-       (v_0 := (JC_<somenum>: ((double_of_real nearest_even) 0x1.0p600))) in void);
-      [ { } unit reads v_0
-        { (JC_<somenum>: (double_value(v_0) = double_exact(v_0))) } ]; void;
-      [ { } unit reads v_0 { (JC_<somenum>: double_is_finite(v_0)) } ]; void;
-      [ { } unit reads v_0 { (JC_<somenum>: (double_value(v_0) = 0x1.0p600)) } ];
-      void;
-      [ { } unit reads v_0
+       (v := (JC_<somenum>: ((double_of_real nearest_even) 0x1.0p600))) in void);
+      [ { } unit reads v { (JC_<somenum>: (double_value(v) = double_exact(v))) } ];
+      void; [ { } unit reads v { (JC_<somenum>: double_is_finite(v)) } ]; void;
+      [ { } unit reads v { (JC_<somenum>: (double_value(v) = 0x1.0p600)) } ]; void;
+      [ { } unit reads v
         { (JC_<somenum>:
           (not no_overflow_double(nearest_even,
-               mul_real(double_value(v_0), double_value(v_0))))) } ]; void;
+               mul_real(double_value(v), double_value(v))))) } ]; void;
       (let jessie_<somenum> =
       (C_8:
       begin
@@ -502,7 +499,7 @@ let main_safety =
                 (JC_<somenum>:
                 (((div_double nearest_even) (C_6:
                                             (JC_<somenum>:
-                                            (((mul_double nearest_even) !v_0) !v_0)))) !v_0))));
+                                            (((mul_double nearest_even) !v) !v)))) !v))));
        !x_0 end) in void);
       [ { } unit reads x_0 { (JC_<somenum>: double_is_plus_infinity(x_0)) } ]; void;
       (let jessie_<somenum> = (__retres := (safe_int32_of_integer_ (0))) in void);

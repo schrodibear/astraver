@@ -47,15 +47,15 @@ tag voidP = {
 
 type voidP = [voidP]
 
-unit Frama_C_memset(unsigned_charP[..] dest_0, uint8 v, uint32 n_0)
-  requires (C_2 : ((C_3 : (\offset_min(dest_0) <= 0)) &&
-                    (C_4 : (\offset_max(dest_0) >= (n_0 - 1)))));
+unit Frama_C_bzero(unsigned_charP[..] dest, uint32 n)
+  requires (C_2 : ((C_3 : (\offset_min(dest) <= 0)) &&
+                    (C_4 : (\offset_max(dest) >= (n - 1)))));
 behavior default:
-  assigns (dest_0 + [0..(n_0 - 1)]).unsigned_charM;
+  assigns (dest + [0..(n - 1)]).unsigned_charM;
   allocates \nothing;
   ensures (C_1 : (\forall integer i;
-                   (((0 <= i) && (i < \at(n_0,Old))) ==>
-                     ((\at(dest_0,Old) + i).unsigned_charM == \at(v,Old)))));
+                   (((0 <= i) && (i < \at(n,Old))) ==>
+                     ((\at(dest,Old) + i).unsigned_charM == 0))));
 ;
 
 intP[0] ga1;
@@ -499,68 +499,65 @@ parameter intP_ga2_2_alloc_table : intP alloc_table ref
 
 parameter intP_ga1_1_alloc_table : intP alloc_table ref
 
-parameter Frama_C_memset :
- dest_0:unsigned_charP pointer ->
-  v:uint8 ->
-   n_0:uint32 ->
-    unsigned_charP_unsigned_charM_dest_0_4:(unsigned_charP, uint8) memory ref ->
-     unsigned_charP_dest_0_4_alloc_table:unsigned_charP alloc_table ->
-      { } unit
-      reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,unsigned_charP_unsigned_charM_dest_0_4
-      writes unsigned_charP_unsigned_charM_dest_0_4
-      { ((JC_<somenum>:
-         ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
-         and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-             and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))
-        and (JC_<somenum>:
-            ((JC_<somenum>:
-             (forall i_1:int.
-              ((le_int((0), i_1) and lt_int(i_1, integer_of_uint32(n_0))) ->
-               (integer_of_uint8(select(unsigned_charP_unsigned_charM_dest_0_4,
-                                 shift(dest_0, i_1))) = integer_of_uint8(v)))))
-            and (JC_<somenum>:
-                not_assigns(unsigned_charP_dest_0_4_alloc_table,
-                unsigned_charP_unsigned_charM_dest_0_4@,
-                unsigned_charP_unsigned_charM_dest_0_4,
-                pset_range(pset_singleton(dest_0), (0),
-                sub_int(integer_of_uint32(n_0), (1)))))))) }
+parameter Frama_C_bzero :
+ dest:unsigned_charP pointer ->
+  n:uint32 ->
+   unsigned_charP_unsigned_charM_dest_4:(unsigned_charP, uint8) memory ref ->
+    unsigned_charP_dest_4_alloc_table:unsigned_charP alloc_table ->
+     { } unit
+     reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,unsigned_charP_unsigned_charM_dest_4
+     writes unsigned_charP_unsigned_charM_dest_4
+     { ((JC_<somenum>:
+        ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+        and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
+            and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))
+       and (JC_<somenum>:
+           ((JC_<somenum>:
+            (forall i_1:int.
+             ((le_int((0), i_1) and lt_int(i_1, integer_of_uint32(n))) ->
+              (integer_of_uint8(select(unsigned_charP_unsigned_charM_dest_4,
+                                shift(dest, i_1))) = (0)))))
+           and (JC_<somenum>:
+               not_assigns(unsigned_charP_dest_4_alloc_table,
+               unsigned_charP_unsigned_charM_dest_4@,
+               unsigned_charP_unsigned_charM_dest_4,
+               pset_range(pset_singleton(dest), (0),
+               sub_int(integer_of_uint32(n), (1)))))))) }
 
-parameter Frama_C_memset_requires :
- dest_0:unsigned_charP pointer ->
-  v:uint8 ->
-   n_0:uint32 ->
-    unsigned_charP_unsigned_charM_dest_0_4:(unsigned_charP, uint8) memory ref ->
-     unsigned_charP_dest_0_4_alloc_table:unsigned_charP alloc_table ->
-      { (JC_<somenum>:
+parameter Frama_C_bzero_requires :
+ dest:unsigned_charP pointer ->
+  n:uint32 ->
+   unsigned_charP_unsigned_charM_dest_4:(unsigned_charP, uint8) memory ref ->
+    unsigned_charP_dest_4_alloc_table:unsigned_charP alloc_table ->
+     { (JC_<somenum>:
+       ((JC_<somenum>:
         ((JC_<somenum>:
-         ((JC_<somenum>:
-          le_int(offset_min(unsigned_charP_dest_0_4_alloc_table, dest_0),
-          (0)))
-         and (JC_<somenum>:
-             ge_int(offset_max(unsigned_charP_dest_0_4_alloc_table, dest_0),
-             sub_int(integer_of_uint32(n_0), (1))))))
-        and ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
-            and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-                and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))))}
-      unit
-      reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,unsigned_charP_unsigned_charM_dest_0_4
-      writes unsigned_charP_unsigned_charM_dest_0_4
-      { ((JC_<somenum>:
-         ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
-         and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
-             and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))
+         le_int(offset_min(unsigned_charP_dest_4_alloc_table, dest), (0)))
         and (JC_<somenum>:
-            ((JC_<somenum>:
-             (forall i_1:int.
-              ((le_int((0), i_1) and lt_int(i_1, integer_of_uint32(n_0))) ->
-               (integer_of_uint8(select(unsigned_charP_unsigned_charM_dest_0_4,
-                                 shift(dest_0, i_1))) = integer_of_uint8(v)))))
-            and (JC_<somenum>:
-                not_assigns(unsigned_charP_dest_0_4_alloc_table,
-                unsigned_charP_unsigned_charM_dest_0_4@,
-                unsigned_charP_unsigned_charM_dest_0_4,
-                pset_range(pset_singleton(dest_0), (0),
-                sub_int(integer_of_uint32(n_0), (1)))))))) }
+            ge_int(offset_max(unsigned_charP_dest_4_alloc_table, dest),
+            sub_int(integer_of_uint32(n), (1))))))
+       and ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+           and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
+               and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table))))))}
+     unit
+     reads intP_ga1_1_alloc_table,intP_ga2_2_alloc_table,intP_ga3_3_alloc_table,unsigned_charP_unsigned_charM_dest_4
+     writes unsigned_charP_unsigned_charM_dest_4
+     { ((JC_<somenum>:
+        ((JC_<somenum>: valid_ga1(intP_ga1_1_alloc_table))
+        and ((JC_<somenum>: valid_ga2(intP_ga2_2_alloc_table))
+            and (JC_<somenum>: valid_ga3(intP_ga3_3_alloc_table)))))
+       and (JC_<somenum>:
+           ((JC_<somenum>:
+            (forall i_1:int.
+             ((le_int((0), i_1) and lt_int(i_1, integer_of_uint32(n))) ->
+              (integer_of_uint8(select(unsigned_charP_unsigned_charM_dest_4,
+                                shift(dest, i_1))) = (0)))))
+           and (JC_<somenum>:
+               not_assigns(unsigned_charP_dest_4_alloc_table,
+               unsigned_charP_unsigned_charM_dest_4@,
+               unsigned_charP_unsigned_charM_dest_4,
+               pset_range(pset_singleton(dest), (0),
+               sub_int(integer_of_uint32(n), (1)))))))) }
 
 exception Loop_continue_exc of unit
 
@@ -1280,7 +1277,7 @@ text = "UserCall"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/array_basic_po10.why">
-      <location file = "why/array_basic.why" line = "906" begin = "17" end = "75"/>
+      <location file = "why/array_basic.why" line = "903" begin = "17" end = "75"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/array_basic_po11.why">
@@ -1289,7 +1286,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/array_basic_po12.why">
-      <location file = "why/array_basic.why" line = "915" begin = "16" end = "74"/>
+      <location file = "why/array_basic.why" line = "912" begin = "16" end = "74"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/array_basic_po13.why">
@@ -1298,7 +1295,7 @@ text = "AllocSize"/>
 text = "AllocSize"/>
     </goal>
     <goal why_file="why/array_basic_po14.why">
-      <location file = "why/array_basic.why" line = "924" begin = "18" end = "76"/>
+      <location file = "why/array_basic.why" line = "921" begin = "18" end = "76"/>
       <explain kind = "Assert"/>
     </goal>
     <goal why_file="why/array_basic_po15.why">
@@ -1312,17 +1309,17 @@ text = "UserCall"/>
 text = "UserCall"/>
     </goal>
     <goal why_file="why/array_basic_po17.why">
-      <location file = "why/array_basic.why" line = "977" begin = "7" end = "51"/>
+      <location file = "why/array_basic.why" line = "974" begin = "7" end = "51"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/array_basic_po18.why">
-      <location file = "why/array_basic.why" line = "978" begin = "7" end = "51"/>
+      <location file = "why/array_basic.why" line = "975" begin = "7" end = "51"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>
     <goal why_file="why/array_basic_po19.why">
-      <location file = "why/array_basic.why" line = "979" begin = "7" end = "53"/>
+      <location file = "why/array_basic.why" line = "976" begin = "7" end = "53"/>
       <explain kind = "Pre"
 text = ""/>
     </goal>

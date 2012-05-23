@@ -40,7 +40,7 @@ tag voidP = {
 type voidP = [voidP]
 
 tag A = {
-  uint8 v_0: 8;
+  uint8 v: 8;
 }
 
 type A = [A]
@@ -75,20 +75,20 @@ behavior default:
    
    {  (C_2 : (x = (C_1 : (new S[1]))));
       
-      {  (C_7 : ((C_6 : (C_5 : x.a).v_0) = (C_4 : (C_3 : v_x.a).v_0)));
+      {  (C_7 : ((C_6 : (C_5 : x.a).v) = (C_4 : (C_3 : v_x.a).v)));
          (C_10 : ((C_9 : x.b) = (C_8 : v_x.b)));
-         (C_15 : ((C_14 : ((C_13 : x.c) + 0).v_0) = (C_12 : ((C_11 : v_x.c) +
-                                                              0).v_0)));
-         (C_20 : ((C_19 : ((C_18 : x.c) + 1).v_0) = (C_17 : ((C_16 : v_x.c) +
-                                                              1).v_0)));
-         (C_25 : ((C_24 : ((C_23 : x.c) + 2).v_0) = (C_22 : ((C_21 : v_x.c) +
-                                                              2).v_0)));
+         (C_15 : ((C_14 : ((C_13 : x.c) + 0).v) = (C_12 : ((C_11 : v_x.c) +
+                                                            0).v)));
+         (C_20 : ((C_19 : ((C_18 : x.c) + 1).v) = (C_17 : ((C_16 : v_x.c) +
+                                                            1).v)));
+         (C_25 : ((C_24 : ((C_23 : x.c) + 2).v) = (C_22 : ((C_21 : v_x.c) +
+                                                            2).v)));
          (C_28 : ((C_27 : x.s) = (C_26 : v_x.s)));
          (C_31 : ((C_30 : x.i) = (C_29 : v_x.i)))
       };
-      (C_35 : ((C_34 : (C_33 : (C_32 : x.s).a).v_0) = 0));
+      (C_35 : ((C_34 : (C_33 : (C_32 : x.s).a).v) = 0));
       (C_37 : ((C_36 : aaa.i) = 97));
-      (C_41 : (__retres = (C_40 : ((C_39 : ((C_38 : x.c) + 1).v_0) :> int32))));
+      (C_41 : (__retres = (C_40 : ((C_39 : ((C_38 : x.c) + 1).v) :> int32))));
       
       {  (C_42 : (free(x)));
          
@@ -589,7 +589,7 @@ parameter any_uint8 : unit -> { } uint8 { true }
 
 parameter f :
  v_x:S pointer ->
-  A_v_0_s_3:(A, uint8) memory ref ->
+  A_v_s_3:(A, uint8) memory ref ->
    S_s_3_alloc_table:S alloc_table ->
     S_v_x_2_alloc_table:S alloc_table ->
      A_s_3_alloc_table:A alloc_table ->
@@ -600,13 +600,13 @@ parameter f :
           S_b_v_x_2:(S, A pointer) memory ->
            S_a_s_3:(S, A pointer) memory ->
             S_a_v_x_2:(S, A pointer) memory ->
-             A_v_0_v_x_2:(A, uint8) memory ->
-              { } int32 reads S_aaa_1_alloc_table writes A_v_0_s_3,S_i_aaa_1
+             A_v_v_x_2:(A, uint8) memory ->
+              { } int32 reads S_aaa_1_alloc_table writes A_v_s_3,S_i_aaa_1
               { (JC_<somenum>: valid_aaa(S_aaa_1_alloc_table)) }
 
 parameter f_requires :
  v_x:S pointer ->
-  A_v_0_s_3:(A, uint8) memory ref ->
+  A_v_s_3:(A, uint8) memory ref ->
    S_s_3_alloc_table:S alloc_table ->
     S_v_x_2_alloc_table:S alloc_table ->
      A_s_3_alloc_table:A alloc_table ->
@@ -617,7 +617,7 @@ parameter f_requires :
           S_b_v_x_2:(S, A pointer) memory ->
            S_a_s_3:(S, A pointer) memory ->
             S_a_v_x_2:(S, A pointer) memory ->
-             A_v_0_v_x_2:(A, uint8) memory ->
+             A_v_v_x_2:(A, uint8) memory ->
               { (JC_<somenum>:
                 ((JC_<somenum>:
                  ((JC_<somenum>:
@@ -629,7 +629,7 @@ parameter f_requires :
                             select(S_s_v_x_2, v_x)),
                      (0)))))
                 and (JC_<somenum>: valid_aaa(S_aaa_1_alloc_table))))}
-              int32 reads S_aaa_1_alloc_table writes A_v_0_s_3,S_i_aaa_1
+              int32 reads S_aaa_1_alloc_table writes A_v_s_3,S_i_aaa_1
               { (JC_<somenum>: valid_aaa(S_aaa_1_alloc_table)) }
 
 parameter int32_of_integer_ :
@@ -657,7 +657,7 @@ parameter uint8_of_integer_ :
   { eq_int(integer_of_uint8(result), x) }
 
 let f_ensures_default =
- fun (v_x : S pointer) (A_v_0_s_3 : (A, uint8) memory ref) (A_v_x_2_alloc_table : A alloc_table) (A_s_3_alloc_table : A alloc_table) (S_v_x_2_alloc_table : S alloc_table) (S_s_3_alloc_table : S alloc_table) (A_v_0_v_x_2 : (A, uint8) memory) (S_a_v_x_2 : (S, A pointer) memory) (S_a_s_3 : (S, A pointer) memory) (S_b_v_x_2 : (S, A pointer) memory) (S_c_v_x_2 : (S, A pointer) memory) (S_s_v_x_2 : (S, S pointer) memory) (S_i_v_x_2 : (S, uint8) memory) ->
+ fun (v_x : S pointer) (A_v_s_3 : (A, uint8) memory ref) (A_v_x_2_alloc_table : A alloc_table) (A_s_3_alloc_table : A alloc_table) (S_v_x_2_alloc_table : S alloc_table) (S_s_3_alloc_table : S alloc_table) (A_v_v_x_2 : (A, uint8) memory) (S_a_v_x_2 : (S, A pointer) memory) (S_a_s_3 : (S, A pointer) memory) (S_b_v_x_2 : (S, A pointer) memory) (S_c_v_x_2 : (S, A pointer) memory) (S_s_v_x_2 : (S, S pointer) memory) (S_i_v_x_2 : (S, uint8) memory) ->
   { (valid_struct_S(v_x, (0), (0), A_v_x_2_alloc_table, S_v_x_2_alloc_table,
      S_a_v_x_2, S_c_v_x_2)
     and (JC_<somenum>:
@@ -677,7 +677,7 @@ let f_ensures_default =
      (let S_c_x_4 = ref (any_memory void) in
      (let S_b_x_4 = ref (any_memory void) in
      (let S_a_x_4 = ref (any_memory void) in
-     (let A_v_0_x_4 = ref (any_memory void) in
+     (let A_v_x_4 = ref (any_memory void) in
      (let A_x_4_tag_table = ref (any_tag_table void) in
      (let S_x_4_tag_table = ref (any_tag_table void) in
      (let S_x_4_alloc_table = ref (any_alloc_table void) in
@@ -704,32 +704,32 @@ let f_ensures_default =
       (C_28:
       begin
         (let jessie_<somenum> =
-        (C_4: ((safe_acc_ A_v_0_v_x_2) (C_3: ((safe_acc_ S_a_v_x_2) v_x)))) in
+        (C_4: ((safe_acc_ A_v_v_x_2) (C_3: ((safe_acc_ S_a_v_x_2) v_x)))) in
         (let jessie_<somenum> = (C_5: ((safe_acc_ !S_a_x_4) !x_0)) in
-        (((safe_upd_ A_v_0_x_4) jessie_<somenum>) jessie_<somenum>)));
+        (((safe_upd_ A_v_x_4) jessie_<somenum>) jessie_<somenum>)));
        (let jessie_<somenum> = (C_8: ((safe_acc_ S_b_v_x_2) v_x)) in
        (let jessie_<somenum> = !x_0 in (((safe_upd_ S_b_x_4) jessie_<somenum>) jessie_<somenum>)));
        (let jessie_<somenum> =
        (C_12:
-       ((safe_acc_ A_v_0_v_x_2) ((shift (C_11: ((safe_acc_ S_c_v_x_2) v_x))) (0)))) in
+       ((safe_acc_ A_v_v_x_2) ((shift (C_11: ((safe_acc_ S_c_v_x_2) v_x))) (0)))) in
        (let jessie_<somenum> = (C_13: ((safe_acc_ !S_c_x_4) !x_0)) in
-       (((safe_upd_ A_v_0_x_4) jessie_<somenum>) jessie_<somenum>)));
+       (((safe_upd_ A_v_x_4) jessie_<somenum>) jessie_<somenum>)));
        (let jessie_<somenum> =
        (C_17:
-       ((safe_acc_ A_v_0_v_x_2) ((shift (C_16: ((safe_acc_ S_c_v_x_2) v_x))) (1)))) in
+       ((safe_acc_ A_v_v_x_2) ((shift (C_16: ((safe_acc_ S_c_v_x_2) v_x))) (1)))) in
        (let jessie_<somenum> = (C_18: ((safe_acc_ !S_c_x_4) !x_0)) in
        (let jessie_<somenum> = (1) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-       (((safe_upd_ A_v_0_x_4) jessie_<somenum>) jessie_<somenum>))))));
+       (((safe_upd_ A_v_x_4) jessie_<somenum>) jessie_<somenum>))))));
        (let jessie_<somenum> =
        (C_22:
-       ((safe_acc_ A_v_0_v_x_2) ((shift (C_21: ((safe_acc_ S_c_v_x_2) v_x))) (2)))) in
+       ((safe_acc_ A_v_v_x_2) ((shift (C_21: ((safe_acc_ S_c_v_x_2) v_x))) (2)))) in
        (let jessie_<somenum> = (C_23: ((safe_acc_ !S_c_x_4) !x_0)) in
        (let jessie_<somenum> = (2) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-       (((safe_upd_ A_v_0_x_4) jessie_<somenum>) jessie_<somenum>))))));
+       (((safe_upd_ A_v_x_4) jessie_<somenum>) jessie_<somenum>))))));
        (let jessie_<somenum> = (C_26: ((safe_acc_ S_s_v_x_2) v_x)) in
        (let jessie_<somenum> = !x_0 in (((safe_upd_ S_s_x_4) jessie_<somenum>) jessie_<somenum>)));
        (C_31:
@@ -741,13 +741,13 @@ let f_ensures_default =
       (let jessie_<somenum> = (safe_uint8_of_integer_ (0)) in
       (let jessie_<somenum> =
       (C_33: ((safe_acc_ S_a_s_3) (C_32: ((safe_acc_ !S_s_x_4) !x_0)))) in
-      (((safe_upd_ A_v_0_s_3) jessie_<somenum>) jessie_<somenum>)));
+      (((safe_upd_ A_v_s_3) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> = (safe_uint8_of_integer_ (97)) in
       (let jessie_<somenum> = aaa in (((safe_upd_ S_i_aaa_1) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> =
       (__retres := (C_40:
                    (safe_int32_of_integer_ (integer_of_uint8 (C_39:
-                                                             ((safe_acc_ !A_v_0_x_4) 
+                                                             ((safe_acc_ !A_v_x_4) 
                                                               ((shift 
                                                                 (C_38:
                                                                 ((safe_acc_ !S_c_x_4) !x_0))) (1)))))))) in
@@ -756,7 +756,7 @@ let f_ensures_default =
    with Return -> !return end)) { (JC_<somenum>: true) }
 
 let f_safety =
- fun (v_x : S pointer) (A_v_0_s_3 : (A, uint8) memory ref) (A_v_x_2_alloc_table : A alloc_table) (A_s_3_alloc_table : A alloc_table) (S_v_x_2_alloc_table : S alloc_table) (S_s_3_alloc_table : S alloc_table) (A_v_0_v_x_2 : (A, uint8) memory) (S_a_v_x_2 : (S, A pointer) memory) (S_a_s_3 : (S, A pointer) memory) (S_b_v_x_2 : (S, A pointer) memory) (S_c_v_x_2 : (S, A pointer) memory) (S_s_v_x_2 : (S, S pointer) memory) (S_i_v_x_2 : (S, uint8) memory) ->
+ fun (v_x : S pointer) (A_v_s_3 : (A, uint8) memory ref) (A_v_x_2_alloc_table : A alloc_table) (A_s_3_alloc_table : A alloc_table) (S_v_x_2_alloc_table : S alloc_table) (S_s_3_alloc_table : S alloc_table) (A_v_v_x_2 : (A, uint8) memory) (S_a_v_x_2 : (S, A pointer) memory) (S_a_s_3 : (S, A pointer) memory) (S_b_v_x_2 : (S, A pointer) memory) (S_c_v_x_2 : (S, A pointer) memory) (S_s_v_x_2 : (S, S pointer) memory) (S_i_v_x_2 : (S, uint8) memory) ->
   { (valid_struct_S(v_x, (0), (0), A_v_x_2_alloc_table, S_v_x_2_alloc_table,
      S_a_v_x_2, S_c_v_x_2)
     and (JC_<somenum>:
@@ -776,7 +776,7 @@ let f_safety =
      (let S_c_x_4 = ref (any_memory void) in
      (let S_b_x_4 = ref (any_memory void) in
      (let S_a_x_4 = ref (any_memory void) in
-     (let A_v_0_x_4 = ref (any_memory void) in
+     (let A_v_x_4 = ref (any_memory void) in
      (let A_x_4_tag_table = ref (any_tag_table void) in
      (let S_x_4_tag_table = ref (any_tag_table void) in
      (let S_x_4_alloc_table = ref (any_alloc_table void) in
@@ -807,32 +807,32 @@ let f_safety =
       (C_28:
       begin
         (let jessie_<somenum> =
-        (C_4: ((safe_acc_ A_v_0_v_x_2) (C_3: ((safe_acc_ S_a_v_x_2) v_x)))) in
+        (C_4: ((safe_acc_ A_v_v_x_2) (C_3: ((safe_acc_ S_a_v_x_2) v_x)))) in
         (let jessie_<somenum> = (C_5: ((safe_acc_ !S_a_x_4) !x_0)) in
-        (((safe_upd_ A_v_0_x_4) jessie_<somenum>) jessie_<somenum>)));
+        (((safe_upd_ A_v_x_4) jessie_<somenum>) jessie_<somenum>)));
        (let jessie_<somenum> = (C_8: ((safe_acc_ S_b_v_x_2) v_x)) in
        (let jessie_<somenum> = !x_0 in (((safe_upd_ S_b_x_4) jessie_<somenum>) jessie_<somenum>)));
        (let jessie_<somenum> =
        (C_12:
-       ((safe_acc_ A_v_0_v_x_2) ((shift (C_11: ((safe_acc_ S_c_v_x_2) v_x))) (0)))) in
+       ((safe_acc_ A_v_v_x_2) ((shift (C_11: ((safe_acc_ S_c_v_x_2) v_x))) (0)))) in
        (let jessie_<somenum> = (C_13: ((safe_acc_ !S_c_x_4) !x_0)) in
-       (((safe_upd_ A_v_0_x_4) jessie_<somenum>) jessie_<somenum>)));
+       (((safe_upd_ A_v_x_4) jessie_<somenum>) jessie_<somenum>)));
        (let jessie_<somenum> =
        (C_17:
-       ((safe_acc_ A_v_0_v_x_2) ((shift (C_16: ((safe_acc_ S_c_v_x_2) v_x))) (1)))) in
+       ((safe_acc_ A_v_v_x_2) ((shift (C_16: ((safe_acc_ S_c_v_x_2) v_x))) (1)))) in
        (let jessie_<somenum> = (C_18: ((safe_acc_ !S_c_x_4) !x_0)) in
        (let jessie_<somenum> = (1) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) (1)) in
-       (((safe_upd_ A_v_0_x_4) jessie_<somenum>) jessie_<somenum>))))));
+       (((safe_upd_ A_v_x_4) jessie_<somenum>) jessie_<somenum>))))));
        (let jessie_<somenum> =
        (C_22:
-       ((safe_acc_ A_v_0_v_x_2) ((shift (C_21: ((safe_acc_ S_c_v_x_2) v_x))) (2)))) in
+       ((safe_acc_ A_v_v_x_2) ((shift (C_21: ((safe_acc_ S_c_v_x_2) v_x))) (2)))) in
        (let jessie_<somenum> = (C_23: ((safe_acc_ !S_c_x_4) !x_0)) in
        (let jessie_<somenum> = (2) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) jessie_<somenum>) in
        (let jessie_<somenum> = ((shift jessie_<somenum>) (2)) in
-       (((safe_upd_ A_v_0_x_4) jessie_<somenum>) jessie_<somenum>))))));
+       (((safe_upd_ A_v_x_4) jessie_<somenum>) jessie_<somenum>))))));
        (let jessie_<somenum> = (C_26: ((safe_acc_ S_s_v_x_2) v_x)) in
        (let jessie_<somenum> = !x_0 in (((safe_upd_ S_s_x_4) jessie_<somenum>) jessie_<somenum>)));
        (C_31:
@@ -846,14 +846,14 @@ let f_safety =
       (C_33:
       (JC_<somenum>:
       (((acc_ S_s_3_alloc_table) S_a_s_3) (C_32: ((safe_acc_ !S_s_x_4) !x_0))))) in
-      (((safe_upd_ A_v_0_s_3) jessie_<somenum>) jessie_<somenum>)));
+      (((safe_upd_ A_v_s_3) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> = (safe_uint8_of_integer_ (97)) in
       (let jessie_<somenum> = aaa in (((safe_upd_ S_i_aaa_1) jessie_<somenum>) jessie_<somenum>)));
       (let jessie_<somenum> =
       (__retres := (C_40:
                    (JC_<somenum>:
                    (int32_of_integer_ (integer_of_uint8 (C_39:
-                                                        ((safe_acc_ !A_v_0_x_4) 
+                                                        ((safe_acc_ !A_v_x_4) 
                                                          ((shift (C_38:
                                                                  ((safe_acc_ !S_c_x_4) !x_0))) (1))))))))) in
       void); ((free_parameter S_x_4_alloc_table) !x_0);
