@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="float_sqrt.jessie/float_sqrt/why3session.xml">
  <prover
@@ -9,7 +9,7 @@
  <prover
   id="1"
   name="Coq"
-  version="8.3pl3"/>
+  version="8.3pl4"/>
  <prover
   id="2"
   name="Gappa"
@@ -29,16 +29,16 @@
     locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
     loclnum="68" loccnumb="1" loccnume="187"
     expl="Lemma newton, lemma"
-    sum="d5324023ebdb2d62ccd5fc5e4f791c83"
+    sum="b7acd897f2bb7410fbabefc0d4e1d5b1"
     proved="true"
     expanded="false"
-    shape="anewton_relV0V1Iainfix >V1c0.FF">
+    shape="anewton_relV0V1Iainfix &gt;V1c0.FF">
     <label
-     name="expl:Lemma newton, lemma">
-     </label>
+     name="expl:Lemma newton, lemma"/>
     <proof
      prover="1"
      timelimit="10"
+     memlimit="0"
      edited="float_sqrt_Jessie_model_newton_2.v"
      obsolete="false"
      archived="false">
@@ -57,16 +57,14 @@
     locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
     loclnum="85" loccnumb="7" loccnume="11"
     expl="parameter sqrt_ensures_default"
-    sum="6632d9464493d2baa0e1e653d5e96b4a"
+    sum="7cb0918b742071310fcb00190860f7af"
     proved="true"
     expanded="false"
-    shape="ainfix <=aabsainfix -avalueV32asqrtavalueV0ainfix *c0x1.p-43aabsasqrtavalueV0Iainfix =V32V31FIainfix =V31V30FIamul_double_postaNearestTiesToEvenV0V29V30FAainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FAaclosenessavalueV28avalueV20avalueV0Aanewton_relavalueV20avalueV0Iainfix =V28V27FIamul_double_postaNearestTiesToEvenV22V26V27FIasub_double_postaNearestTiesToEvenV23V25V26FIamul_double_postaNearestTiesToEvenV24V0V25FIamul_double_postaNearestTiesToEvenV20V20V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FAaclosenessavalueV19avalueV11avalueV0Aanewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIasub_double_postaNearestTiesToEvenV14V16V17FIamul_double_postaNearestTiesToEvenV15V0V16FIamul_double_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FAaclosenessavalueV10avalueV2avalueV0Aanewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+    shape="ainfix &lt;=aabsainfix -avalueV32asqrtavalueV0ainfix *c0x1.p-43aabsasqrtavalueV0Iainfix =V32V31FIainfix =V31V30FIamul_postaNearestTiesToEvenV0V29V30FAainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FAaclosenessavalueV28avalueV20avalueV0Aanewton_relavalueV20avalueV0Iainfix =V28V27FIamul_postaNearestTiesToEvenV22V26V27FIasub_postaNearestTiesToEvenV23V25V26FIamul_postaNearestTiesToEvenV24V0V25FIamul_postaNearestTiesToEvenV20V20V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V20V22FIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FAaclosenessavalueV19avalueV11avalueV0Aanewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV13V17V18FIasub_postaNearestTiesToEvenV14V16V17FIamul_postaNearestTiesToEvenV15V0V16FIamul_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FAaclosenessavalueV10avalueV2avalueV0Aanewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIasub_postaNearestTiesToEvenV5V7V8FIamul_postaNearestTiesToEvenV6V0V7FIamul_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
     <label
-     name="expl:parameter sqrt_ensures_default">
-     </label>
+     name="expl:parameter sqrt_ensures_default"/>
     <label
-     name="expl:Function sqrt, default behavior">
-     </label>
+     name="expl:Function sqrt, default behavior"/>
     <transf
      name="split_goal"
      proved="true"
@@ -76,19 +74,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="assertion"
-      sum="ecf4c4b7dc94a797a82ef7f480ab61ce"
+      sum="3aae23e03de2d013e862a242f5dfb4b3"
       proved="true"
       expanded="false"
-      shape="anewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="anewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIasub_postaNearestTiesToEvenV5V7V8FIamul_postaNearestTiesToEvenV6V0V7FIamul_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_ensures_default">
-       </label>
+       name="expl:parameter sqrt_ensures_default"/>
       <label
-       name="expl:Function sqrt, default behavior">
-       </label>
+       name="expl:Function sqrt, default behavior"/>
       <proof
        prover="0"
        timelimit="10"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.10"/>
@@ -99,19 +96,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="assertion"
-      sum="3ab134dff9cff22485269a8b989dd9a7"
+      sum="d7b64390bd229c5dcb2301c8133d0388"
       proved="true"
       expanded="false"
-      shape="aclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="aclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIasub_postaNearestTiesToEvenV5V7V8FIamul_postaNearestTiesToEvenV6V0V7FIamul_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_ensures_default">
-       </label>
+       name="expl:parameter sqrt_ensures_default"/>
       <label
-       name="expl:Function sqrt, default behavior">
-       </label>
+       name="expl:Function sqrt, default behavior"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.04"/>
@@ -122,19 +118,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="assertion"
-      sum="aafed023a7562ecdcf3d062b69e2013e"
+      sum="316bf171b92a5bc67e90b3f926212ae5"
       proved="true"
       expanded="false"
-      shape="anewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIasub_double_postaNearestTiesToEvenV14V16V17FIamul_double_postaNearestTiesToEvenV15V0V16FIamul_double_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="anewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV13V17V18FIasub_postaNearestTiesToEvenV14V16V17FIamul_postaNearestTiesToEvenV15V0V16FIamul_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIasub_postaNearestTiesToEvenV5V7V8FIamul_postaNearestTiesToEvenV6V0V7FIamul_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_ensures_default">
-       </label>
+       name="expl:parameter sqrt_ensures_default"/>
       <label
-       name="expl:Function sqrt, default behavior">
-       </label>
+       name="expl:Function sqrt, default behavior"/>
       <proof
        prover="0"
        timelimit="10"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.28"/>
@@ -145,22 +140,21 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="assertion"
-      sum="85ee8ecce7e9cd4c123586839f60e531"
+      sum="af58ea6fce8e276e68c252a2bcb89ee4"
       proved="true"
       expanded="false"
-      shape="aclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIasub_double_postaNearestTiesToEvenV14V16V17FIamul_double_postaNearestTiesToEvenV15V0V16FIamul_double_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="aclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV13V17V18FIasub_postaNearestTiesToEvenV14V16V17FIamul_postaNearestTiesToEvenV15V0V16FIamul_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIasub_postaNearestTiesToEvenV5V7V8FIamul_postaNearestTiesToEvenV6V0V7FIamul_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_ensures_default">
-       </label>
+       name="expl:parameter sqrt_ensures_default"/>
       <label
-       name="expl:Function sqrt, default behavior">
-       </label>
+       name="expl:Function sqrt, default behavior"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.23"/>
+       <result status="valid" time="0.22"/>
       </proof>
      </goal>
      <goal
@@ -168,22 +162,21 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="assertion"
-      sum="4910bb170686aeda9e240ff1ffdad825"
+      sum="5ead4ed2c500e26a4cca0778819e12ca"
       proved="true"
       expanded="false"
-      shape="anewton_relavalueV20avalueV0Iainfix =V28V27FIamul_double_postaNearestTiesToEvenV22V26V27FIasub_double_postaNearestTiesToEvenV23V25V26FIamul_double_postaNearestTiesToEvenV24V0V25FIamul_double_postaNearestTiesToEvenV20V20V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIasub_double_postaNearestTiesToEvenV14V16V17FIamul_double_postaNearestTiesToEvenV15V0V16FIamul_double_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="anewton_relavalueV20avalueV0Iainfix =V28V27FIamul_postaNearestTiesToEvenV22V26V27FIasub_postaNearestTiesToEvenV23V25V26FIamul_postaNearestTiesToEvenV24V0V25FIamul_postaNearestTiesToEvenV20V20V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V20V22FIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV13V17V18FIasub_postaNearestTiesToEvenV14V16V17FIamul_postaNearestTiesToEvenV15V0V16FIamul_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIasub_postaNearestTiesToEvenV5V7V8FIamul_postaNearestTiesToEvenV6V0V7FIamul_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_ensures_default">
-       </label>
+       name="expl:parameter sqrt_ensures_default"/>
       <label
-       name="expl:Function sqrt, default behavior">
-       </label>
+       name="expl:Function sqrt, default behavior"/>
       <proof
        prover="0"
        timelimit="10"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.70"/>
+       <result status="valid" time="0.68"/>
       </proof>
      </goal>
      <goal
@@ -191,22 +184,21 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="assertion"
-      sum="d0dcb97f19fb15593b7aa2cef42a14b3"
+      sum="2fa7bfeb7bb07a820460413feb1d4ef1"
       proved="true"
       expanded="false"
-      shape="aclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_double_postaNearestTiesToEvenV22V26V27FIasub_double_postaNearestTiesToEvenV23V25V26FIamul_double_postaNearestTiesToEvenV24V0V25FIamul_double_postaNearestTiesToEvenV20V20V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIasub_double_postaNearestTiesToEvenV14V16V17FIamul_double_postaNearestTiesToEvenV15V0V16FIamul_double_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="aclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_postaNearestTiesToEvenV22V26V27FIasub_postaNearestTiesToEvenV23V25V26FIamul_postaNearestTiesToEvenV24V0V25FIamul_postaNearestTiesToEvenV20V20V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V20V22FIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV13V17V18FIasub_postaNearestTiesToEvenV14V16V17FIamul_postaNearestTiesToEvenV15V0V16FIamul_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIasub_postaNearestTiesToEvenV5V7V8FIamul_postaNearestTiesToEvenV6V0V7FIamul_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_ensures_default">
-       </label>
+       name="expl:parameter sqrt_ensures_default"/>
       <label
-       name="expl:Function sqrt, default behavior">
-       </label>
+       name="expl:Function sqrt, default behavior"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.60"/>
+       <result status="valid" time="0.52"/>
       </proof>
      </goal>
      <goal
@@ -214,23 +206,22 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="assertion"
-      sum="1173fb7f9f653af56d4b7a046035eafd"
+      sum="b81a4b68ad8098aca186a07c21ceecc1"
       proved="true"
       expanded="false"
-      shape="ainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_double_postaNearestTiesToEvenV22V26V27FIasub_double_postaNearestTiesToEvenV23V25V26FIamul_double_postaNearestTiesToEvenV24V0V25FIamul_double_postaNearestTiesToEvenV20V20V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIasub_double_postaNearestTiesToEvenV14V16V17FIamul_double_postaNearestTiesToEvenV15V0V16FIamul_double_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_postaNearestTiesToEvenV22V26V27FIasub_postaNearestTiesToEvenV23V25V26FIamul_postaNearestTiesToEvenV24V0V25FIamul_postaNearestTiesToEvenV20V20V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V20V22FIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV13V17V18FIasub_postaNearestTiesToEvenV14V16V17FIamul_postaNearestTiesToEvenV15V0V16FIamul_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIasub_postaNearestTiesToEvenV5V7V8FIamul_postaNearestTiesToEvenV6V0V7FIamul_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_ensures_default">
-       </label>
+       name="expl:parameter sqrt_ensures_default"/>
       <label
-       name="expl:Function sqrt, default behavior">
-       </label>
+       name="expl:Function sqrt, default behavior"/>
       <proof
        prover="1"
        timelimit="10"
+       memlimit="0"
        edited="float_sqrt_WP_Jessie_program_WP_parameter_sqrt_ensures_default_1.v"
        obsolete="false"
        archived="false">
-       <result status="valid" time="1.33"/>
+       <result status="valid" time="1.23"/>
       </proof>
      </goal>
      <goal
@@ -238,22 +229,21 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="normal postcondition"
-      sum="0eddaaec0befcbea3820510908c1fe86"
+      sum="d4b43ec211998dd23f8b903d2be9a55e"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsainfix -avalueV32asqrtavalueV0ainfix *c0x1.p-43aabsasqrtavalueV0Iainfix =V32V31FIainfix =V31V30FIamul_double_postaNearestTiesToEvenV0V29V30FIainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_double_postaNearestTiesToEvenV22V26V27FIasub_double_postaNearestTiesToEvenV23V25V26FIamul_double_postaNearestTiesToEvenV24V0V25FIamul_double_postaNearestTiesToEvenV20V20V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIasub_double_postaNearestTiesToEvenV14V16V17FIamul_double_postaNearestTiesToEvenV15V0V16FIamul_double_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIasub_double_postaNearestTiesToEvenV5V7V8FIamul_double_postaNearestTiesToEvenV6V0V7FIamul_double_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsainfix -avalueV32asqrtavalueV0ainfix *c0x1.p-43aabsasqrtavalueV0Iainfix =V32V31FIainfix =V31V30FIamul_postaNearestTiesToEvenV0V29V30FIainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_postaNearestTiesToEvenV22V26V27FIasub_postaNearestTiesToEvenV23V25V26FIamul_postaNearestTiesToEvenV24V0V25FIamul_postaNearestTiesToEvenV20V20V24FIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V20V22FIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV13V17V18FIasub_postaNearestTiesToEvenV14V16V17FIamul_postaNearestTiesToEvenV15V0V16FIamul_postaNearestTiesToEvenV11V11V15FIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIasub_postaNearestTiesToEvenV5V7V8FIamul_postaNearestTiesToEvenV6V0V7FIamul_postaNearestTiesToEvenV2V2V6FIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_ensures_default">
-       </label>
+       name="expl:parameter sqrt_ensures_default"/>
       <label
-       name="expl:Function sqrt, default behavior">
-       </label>
+       name="expl:Function sqrt, default behavior"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.72"/>
+       <result status="valid" time="0.66"/>
       </proof>
      </goal>
     </transf>
@@ -263,16 +253,14 @@
     locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
     loclnum="85" loccnumb="7" loccnume="11"
     expl="parameter sqrt_safety"
-    sum="e17af7c89d1fd5dc1ee3b630287c7706"
+    sum="e54742738ad07f73a041e826f9723b51"
     proved="true"
     expanded="false"
-    shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV29amax_doubleIainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_double_postaNearestTiesToEvenV22V26V27FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV22avalueV26amax_doubleIasub_double_postaNearestTiesToEvenV23V25V26FAainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV25amax_doubleIamul_double_postaNearestTiesToEvenV24V0V25FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV24avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV20V20V24FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FAainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FAainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FAainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV29amax_doubleIainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_postaNearestTiesToEvenV22V26V27FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV22avalueV26amax_doubleIasub_postaNearestTiesToEvenV23V25V26FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV25amax_doubleIamul_postaNearestTiesToEvenV24V0V25FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV24avalueV0amax_doubleIamul_postaNearestTiesToEvenV20V20V24FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V20V22FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV13V17V18FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_postaNearestTiesToEvenV14V16V17FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_postaNearestTiesToEvenV15V0V16FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V15FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_postaNearestTiesToEvenV5V7V8FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_postaNearestTiesToEvenV6V0V7FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V6FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FAainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
     <label
-     name="expl:parameter sqrt_safety">
-     </label>
+     name="expl:parameter sqrt_safety"/>
     <label
-     name="expl:Function sqrt, Safety">
-     </label>
+     name="expl:Function sqrt, Safety"/>
     <transf
      name="split_goal"
      proved="true"
@@ -282,19 +270,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="precondition for call"
-      sum="ec507e178e62d3f696fd9cf60772720c"
+      sum="1c38a51b842a6d1d8a7b447c61d7fd3c"
       proved="true"
       expanded="false"
-      shape="ainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -305,19 +292,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="b501b440ed0cfb07aab99e45e660cb53"
+      sum="60181774430b84f0eeef718834504a8f"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -328,19 +314,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="8b4b401647012c11759516da1c7b5245"
+      sum="f837de4a7714c147356e1ed48af41888"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -351,19 +336,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="7510bdd6eedeacc12578be6e90eb5b62"
+      sum="e224b989e7f9526e10c42752ff59a860"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -374,19 +358,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="dbb8d582a27df7a15654515f35bae59b"
+      sum="1607402fc3081412e9e7f37318fd8c59"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_postaNearestTiesToEvenV6V0V7FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -397,22 +380,21 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="8df2fce0daf846ecad30df3e610e8649"
+      sum="6c453e768cd2b8f68eb27e84984fb396"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_postaNearestTiesToEvenV5V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_postaNearestTiesToEvenV6V0V7FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
      <goal
@@ -420,19 +402,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="076e30d1614dfd6b9c2c613aede327c8"
+      sum="0a21b5c6f4cb1e60fef66935b44d5bf1"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_postaNearestTiesToEvenV5V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_postaNearestTiesToEvenV6V0V7FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.04"/>
@@ -443,22 +424,21 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="2e7d990309eccf614faad0660aac5b34"
+      sum="fd55ca85da8ef976206e31f5b66788e9"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_postaNearestTiesToEvenV5V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_postaNearestTiesToEvenV6V0V7FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
@@ -466,19 +446,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="d9b14e742bda73c9a4373a4673d70e87"
+      sum="c59ec511b7ba2b866b54aab3a36b3c7f"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_postaNearestTiesToEvenV5V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_postaNearestTiesToEvenV6V0V7FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.05"/>
@@ -489,19 +468,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="7e291409028d579a6f0deaad9b5e8618"
+      sum="d651483c1eb1be724e36781e0b0dc51a"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_postaNearestTiesToEvenV15V0V16FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_postaNearestTiesToEvenV5V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_postaNearestTiesToEvenV6V0V7FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.06"/>
@@ -512,19 +490,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="b29fd5ff2b568ec2fa17780fd1ced822"
+      sum="1868d5c2a41b75cc2dbd3a404a299550"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_postaNearestTiesToEvenV14V16V17FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_postaNearestTiesToEvenV15V0V16FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_postaNearestTiesToEvenV5V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_postaNearestTiesToEvenV6V0V7FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.06"/>
@@ -535,22 +512,21 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="9eb75f530724b14bee8014392578e937"
+      sum="6f45a0d1d5fd482a11442c862419e4f0"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV13V17V18FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_postaNearestTiesToEvenV14V16V17FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_postaNearestTiesToEvenV15V0V16FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_postaNearestTiesToEvenV5V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_postaNearestTiesToEvenV6V0V7FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.15"/>
+       <result status="valid" time="0.14"/>
       </proof>
      </goal>
      <goal
@@ -558,22 +534,21 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="fe016eeb3e27386ad55e7061064dc040"
+      sum="c0aa9a480562e61727dcf7cdc21da634"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V20V22FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV13V17V18FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_postaNearestTiesToEvenV14V16V17FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_postaNearestTiesToEvenV15V0V16FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_postaNearestTiesToEvenV5V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_postaNearestTiesToEvenV6V0V7FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.18"/>
+       <result status="valid" time="0.17"/>
       </proof>
      </goal>
      <goal
@@ -581,22 +556,21 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="d43752b6a45bddbbb7e84f5c8c4ebb15"
+      sum="f9abd07fb3cca61c780cae8619fc29d0"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV24avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV20V20V24FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV24avalueV0amax_doubleIamul_postaNearestTiesToEvenV20V20V24FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V20V22FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV13V17V18FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_postaNearestTiesToEvenV14V16V17FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_postaNearestTiesToEvenV15V0V16FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_postaNearestTiesToEvenV5V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_postaNearestTiesToEvenV6V0V7FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.17"/>
+       <result status="valid" time="0.16"/>
       </proof>
      </goal>
      <goal
@@ -604,19 +578,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="6a43b0d99f412b35b2b0b665ac6bb46c"
+      sum="ae08fb17ff2c3536bd1de885dd99680b"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV25amax_doubleIamul_double_postaNearestTiesToEvenV24V0V25FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV24avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV20V20V24FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV25amax_doubleIamul_postaNearestTiesToEvenV24V0V25FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV24avalueV0amax_doubleIamul_postaNearestTiesToEvenV20V20V24FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V20V22FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV13V17V18FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_postaNearestTiesToEvenV14V16V17FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_postaNearestTiesToEvenV15V0V16FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_postaNearestTiesToEvenV5V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_postaNearestTiesToEvenV6V0V7FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.18"/>
@@ -627,22 +600,21 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="7a1ef125f8a8b1a89b1d14f03dc90537"
+      sum="068c58f4ae501a5ca275a27aaf72002e"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV22avalueV26amax_doubleIasub_double_postaNearestTiesToEvenV23V25V26FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV25amax_doubleIamul_double_postaNearestTiesToEvenV24V0V25FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV24avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV20V20V24FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV22avalueV26amax_doubleIasub_postaNearestTiesToEvenV23V25V26FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV25amax_doubleIamul_postaNearestTiesToEvenV24V0V25FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV24avalueV0amax_doubleIamul_postaNearestTiesToEvenV20V20V24FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V20V22FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV13V17V18FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_postaNearestTiesToEvenV14V16V17FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_postaNearestTiesToEvenV15V0V16FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_postaNearestTiesToEvenV5V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_postaNearestTiesToEvenV6V0V7FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.18"/>
+       <result status="valid" time="0.17"/>
       </proof>
      </goal>
      <goal
@@ -650,22 +622,21 @@
       locfile="/home/marche/why2-nitrogen/tests/c/float_sqrt.c"
       loclnum="85" loccnumb="7" loccnume="11"
       expl="floating-point overflow"
-      sum="15e46df5eeea92dac7fe72b663c4a972"
+      sum="6650332e82e5b5c7ed731d137067853a"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV29amax_doubleIainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_double_postaNearestTiesToEvenV22V26V27FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV22avalueV26amax_doubleIasub_double_postaNearestTiesToEvenV23V25V26FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV25amax_doubleIamul_double_postaNearestTiesToEvenV24V0V25FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV24avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV20V20V24FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_double_postaNearestTiesToEvenV21V20V22FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_double_postaNearestTiesToEvenV13V17V18FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_double_postaNearestTiesToEvenV14V16V17FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_double_postaNearestTiesToEvenV15V0V16FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV11V11V15FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_double_postaNearestTiesToEvenV12V11V13FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_double_postaNearestTiesToEvenV4V8V9FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_double_postaNearestTiesToEvenV5V7V8FIainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_double_postaNearestTiesToEvenV6V0V7FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_double_postaNearestTiesToEvenV2V2V6FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_double_postaNearestTiesToEvenV3V2V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix <=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0Iainfix <=avalueV0c2.0Aainfix <=c0.5avalueV0F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV29amax_doubleIainfix =ainfix *avalueV0ainfix /c1.0asqrtavalueV0asqrtavalueV0Iainfix =V29V28FIaclosenessavalueV28avalueV20avalueV0Ianewton_relavalueV20avalueV0Iainfix =V28V27FIamul_postaNearestTiesToEvenV22V26V27FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV22avalueV26amax_doubleIasub_postaNearestTiesToEvenV23V25V26FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV23avalueV25amax_doubleIamul_postaNearestTiesToEvenV24V0V25FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV24avalueV0amax_doubleIamul_postaNearestTiesToEvenV20V20V24FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV20avalueV20amax_doubleIainfix =amodelV23c3.0Aainfix =aexactV23c3.0Aainfix =avalueV23c3.0FIamul_postaNearestTiesToEvenV21V20V22FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV21avalueV20amax_doubleIainfix =amodelV21c0.5Aainfix =aexactV21c0.5Aainfix =avalueV21c0.5FIainfix =V20V19FIaclosenessavalueV19avalueV11avalueV0Ianewton_relavalueV11avalueV0Iainfix =V19V18FIamul_postaNearestTiesToEvenV13V17V18FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV13avalueV17amax_doubleIasub_postaNearestTiesToEvenV14V16V17FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV14avalueV16amax_doubleIamul_postaNearestTiesToEvenV15V0V16FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV15avalueV0amax_doubleIamul_postaNearestTiesToEvenV11V11V15FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV11avalueV11amax_doubleIainfix =amodelV14c3.0Aainfix =aexactV14c3.0Aainfix =avalueV14c3.0FIamul_postaNearestTiesToEvenV12V11V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV12avalueV11amax_doubleIainfix =amodelV12c0.5Aainfix =aexactV12c0.5Aainfix =avalueV12c0.5FIainfix =V11V10FIaclosenessavalueV10avalueV2avalueV0Ianewton_relavalueV2avalueV0Iainfix =V10V9FIamul_postaNearestTiesToEvenV4V8V9FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV4avalueV8amax_doubleIasub_postaNearestTiesToEvenV5V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV5avalueV7amax_doubleIamul_postaNearestTiesToEvenV6V0V7FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV6avalueV0amax_doubleIamul_postaNearestTiesToEvenV2V2V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV2amax_doubleIainfix =amodelV5c3.0Aainfix =aexactV5c3.0Aainfix =avalueV5c3.0FIamul_postaNearestTiesToEvenV3V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV3avalueV2amax_doubleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIainfix =V2V1FIainfix &lt;=aabsainfix -avalueV1ainfix /c1.0asqrtavalueV0ainfix *c0x1.p-6aabsainfix /c1.0asqrtavalueV0FIainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0Iainfix &lt;=avalueV0c2.0Aainfix &lt;=c0.5avalueV0F">
       <label
-       name="expl:parameter sqrt_safety">
-       </label>
+       name="expl:parameter sqrt_safety"/>
       <label
-       name="expl:Function sqrt, Safety">
-       </label>
+       name="expl:Function sqrt, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.32"/>
+       <result status="valid" time="0.31"/>
       </proof>
      </goal>
     </transf>

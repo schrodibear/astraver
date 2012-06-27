@@ -68,6 +68,8 @@ axiomatic Padding {
   
 }
 
+type uint8 = 0..255
+
 type int32 = -2147483648..2147483647
 
 type int8 = -128..127
@@ -77,6 +79,12 @@ tag intP = {
 }
 
 type intP = [intP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -90,14 +98,14 @@ tag voidP = {
 type voidP = [voidP]
 
 predicate sorted{L}(intP[..] arr, integer length) =
-(\forall integer i;
-  (\forall integer j;
-    (((0 <= i) && ((i <= j) && (j < length))) ==>
-      ((arr + i).intM <= (arr + j).intM))))
+(\forall integer i_1;
+  (\forall integer j_0;
+    (((0 <= i_1) && ((i_1 <= j_0) && (j_0 < length))) ==>
+      ((arr + i_1).intM <= (arr + j_0).intM))))
 
 predicate mem{L}(int32 elt, intP[..] arr_0, integer length_0) =
-(\exists integer i_0;
-  (((0 <= i_0) && (i_0 < length_0)) && ((arr_0 + i_0).intM == elt)))
+(\exists integer i_2;
+  (((0 <= i_2) && (i_2 < length_0)) && ((arr_0 + i_2).intM == elt)))
 
 int32 find_array(intP[..] arr, int32 length, int32 query)
   requires (C_36 : sorted{Here}(arr, length));
@@ -131,13 +139,13 @@ behavior not_exists:
       behavior default:
         invariant (C_8 : (high < length));
       behavior default:
-        invariant (C_7 : (\forall integer i_1;
-                           (((0 <= i_1) && (i_1 < low)) ==>
-                             ((arr + i_1).intM < query))));
+        invariant (C_7 : (\forall integer i_3;
+                           (((0 <= i_3) && (i_3 < low)) ==>
+                             ((arr + i_3).intM < query))));
       behavior default:
-        invariant (C_6 : (\forall integer i_2;
-                           (((high < i_2) && (i_2 < length)) ==>
-                             ((arr + i_2).intM > query))));
+        invariant (C_6 : (\forall integer i_4;
+                           (((high < i_4) && (i_4 < length)) ==>
+                             ((arr + i_4).intM > query))));
       variant (C_5 : (high - low));
       while (true)
       {  
@@ -596,13 +604,13 @@ end = -1
 
 [JC_45]
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 70
+line = 78
 begin = 6
 end = 1614
 
 [JC_46]
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 70
+line = 78
 begin = 6
 end = 1614
 
@@ -699,13 +707,13 @@ end = -1
 
 [JC_53]
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 70
+line = 78
 begin = 6
 end = 1614
 
 [JC_54]
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 70
+line = 78
 begin = 6
 end = 1614
 
@@ -748,13 +756,13 @@ end = -1
 
 [JC_61]
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 70
+line = 78
 begin = 6
 end = 1614
 
 [JC_62]
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 70
+line = 78
 begin = 6
 end = 1614
 
@@ -799,7 +807,7 @@ end = 14
 
 [JC_14]
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 50
+line = 58
 begin = 10
 end = 18
 
@@ -811,7 +819,7 @@ end = -1
 
 [JC_16]
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 50
+line = 58
 begin = 10
 end = 18
 
@@ -898,7 +906,7 @@ end = -1
 
 [JC_29]
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 70
+line = 78
 begin = 6
 end = 1614
 
@@ -920,7 +928,7 @@ end = 14
 
 [JC_30]
 file = "HOME/tests/c/find_array.jessie/find_array.jc"
-line = 70
+line = 78
 begin = 6
 end = 1614
 
@@ -997,6 +1005,10 @@ type intP
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag:  -> charP tag_id
@@ -1024,6 +1036,11 @@ logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
+
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic int32_of_integer: int -> int32
 
@@ -1081,16 +1098,20 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
 predicate left_valid_struct_intP(p:intP pointer, a:int,
  intP_alloc_table:intP alloc_table) = (offset_min(intP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
 
 predicate mem(elt:int32, arr_0:intP pointer, length_0:int,
  intP_intM_arr_0_2_at_L:(intP, int32) memory) =
- (exists i_0:int.
-  (le_int((0), i_0)
-  and (lt_int(i_0, length_0)
-      and (integer_of_int32(select(intP_intM_arr_0_2_at_L, shift(arr_0, i_0))) = 
+ (exists i_2:int.
+  (le_int((0), i_2)
+  and (lt_int(i_2, length_0)
+      and (integer_of_int32(select(intP_intM_arr_0_2_at_L, shift(arr_0, i_2))) = 
           integer_of_int32(elt)))))
 
 axiom pointer_addr_of_charP_of_pointer_address :
@@ -1098,6 +1119,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 
 axiom pointer_addr_of_intP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -1111,17 +1138,21 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
 predicate right_valid_struct_intP(p:intP pointer, b:int,
  intP_alloc_table:intP alloc_table) = (offset_max(intP_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_max(voidP_alloc_table, p) >= b)
 
 predicate sorted(arr:intP pointer, length:int,
  intP_intM_arr_1_at_L:(intP, int32) memory) =
- (forall i:int.
-  (forall j:int.
-   ((le_int((0), i) and (le_int(i, j) and lt_int(j, length))) ->
-    le_int(integer_of_int32(select(intP_intM_arr_1_at_L, shift(arr, i))),
-    integer_of_int32(select(intP_intM_arr_1_at_L, shift(arr, j)))))))
+ (forall i_1:int.
+  (forall j_0:int.
+   ((le_int((0), i_1) and (le_int(i_1, j_0) and lt_int(j_0, length))) ->
+    le_int(integer_of_int32(select(intP_intM_arr_1_at_L, shift(arr, i_1))),
+    integer_of_int32(select(intP_intM_arr_1_at_L, shift(arr, j_0)))))))
 
 predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -1132,6 +1163,11 @@ predicate strict_valid_root_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1148,10 +1184,47 @@ predicate strict_valid_struct_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -1162,6 +1235,11 @@ predicate valid_root_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1177,6 +1255,11 @@ predicate valid_struct_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1257,6 +1340,38 @@ parameter alloc_struct_intP_requires :
           and (alloc_fresh(intP_alloc_table@, result, n)
               and instanceof(intP_tag_table, result, intP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -1286,6 +1401,8 @@ parameter alloc_struct_voidP_requires :
 parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
+
+parameter any_uint8 : unit -> { } uint8 { true }
 
 parameter find_array :
  arr_1:intP pointer ->
@@ -1341,6 +1458,14 @@ parameter safe_int32_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
+
 let find_array_ensures_default =
  fun (arr_1 : intP pointer) (length_1 : int32) (query : int32) (intP_arr_3_alloc_table : intP alloc_table) (intP_intM_arr_3 : (intP, int32) memory) ->
   { (JC_11:
@@ -1374,18 +1499,18 @@ let find_array_ensures_default =
           while true do
           { invariant
               ((JC_40:
-               (forall i_2:int.
-                ((lt_int(integer_of_int32(high), i_2)
-                 and lt_int(i_2, integer_of_int32(length_1))) ->
+               (forall i_4:int.
+                ((lt_int(integer_of_int32(high), i_4)
+                 and lt_int(i_4, integer_of_int32(length_1))) ->
                  gt_int(integer_of_int32(select(intP_intM_arr_3,
-                                         shift(arr_1, i_2))),
+                                         shift(arr_1, i_4))),
                  integer_of_int32(query)))))
               and ((JC_41:
-                   (forall i_1:int.
-                    ((le_int((0), i_1)
-                     and lt_int(i_1, integer_of_int32(low))) ->
+                   (forall i_3:int.
+                    ((le_int((0), i_3)
+                     and lt_int(i_3, integer_of_int32(low))) ->
                      lt_int(integer_of_int32(select(intP_intM_arr_3,
-                                             shift(arr_1, i_1))),
+                                             shift(arr_1, i_3))),
                      integer_of_int32(query)))))
                   and ((JC_42:
                        lt_int(integer_of_int32(high),
@@ -1497,18 +1622,18 @@ let find_array_ensures_exists =
            begin
              [ { } unit reads high,low
                { ((JC_48:
-                  (forall i_2:int.
-                   ((lt_int(integer_of_int32(high), i_2)
-                    and lt_int(i_2, integer_of_int32(length_1))) ->
+                  (forall i_4:int.
+                   ((lt_int(integer_of_int32(high), i_4)
+                    and lt_int(i_4, integer_of_int32(length_1))) ->
                     gt_int(integer_of_int32(select(intP_intM_arr_3,
-                                            shift(arr_1, i_2))),
+                                            shift(arr_1, i_4))),
                     integer_of_int32(query)))))
                  and ((JC_49:
-                      (forall i_1:int.
-                       ((le_int((0), i_1)
-                        and lt_int(i_1, integer_of_int32(low))) ->
+                      (forall i_3:int.
+                       ((le_int((0), i_3)
+                        and lt_int(i_3, integer_of_int32(low))) ->
                         lt_int(integer_of_int32(select(intP_intM_arr_3,
-                                                shift(arr_1, i_1))),
+                                                shift(arr_1, i_3))),
                         integer_of_int32(query)))))
                      and ((JC_50:
                           lt_int(integer_of_int32(high),
@@ -1620,18 +1745,18 @@ let find_array_ensures_not_exists =
            begin
              [ { } unit reads high,low
                { ((JC_56:
-                  (forall i_2:int.
-                   ((lt_int(integer_of_int32(high), i_2)
-                    and lt_int(i_2, integer_of_int32(length_1))) ->
+                  (forall i_4:int.
+                   ((lt_int(integer_of_int32(high), i_4)
+                    and lt_int(i_4, integer_of_int32(length_1))) ->
                     gt_int(integer_of_int32(select(intP_intM_arr_3,
-                                            shift(arr_1, i_2))),
+                                            shift(arr_1, i_4))),
                     integer_of_int32(query)))))
                  and ((JC_57:
-                      (forall i_1:int.
-                       ((le_int((0), i_1)
-                        and lt_int(i_1, integer_of_int32(low))) ->
+                      (forall i_3:int.
+                       ((le_int((0), i_3)
+                        and lt_int(i_3, integer_of_int32(low))) ->
                         lt_int(integer_of_int32(select(intP_intM_arr_3,
-                                                shift(arr_1, i_1))),
+                                                shift(arr_1, i_3))),
                         integer_of_int32(query)))))
                      and ((JC_58:
                           lt_int(integer_of_int32(high),
@@ -1742,18 +1867,18 @@ let find_array_safety =
            begin
              [ { } unit reads high,low
                { ((JC_24:
-                  (forall i_2:int.
-                   ((lt_int(integer_of_int32(high), i_2)
-                    and lt_int(i_2, integer_of_int32(length_1))) ->
+                  (forall i_4:int.
+                   ((lt_int(integer_of_int32(high), i_4)
+                    and lt_int(i_4, integer_of_int32(length_1))) ->
                     gt_int(integer_of_int32(select(intP_intM_arr_3,
-                                            shift(arr_1, i_2))),
+                                            shift(arr_1, i_4))),
                     integer_of_int32(query)))))
                  and ((JC_25:
-                      (forall i_1:int.
-                       ((le_int((0), i_1)
-                        and lt_int(i_1, integer_of_int32(low))) ->
+                      (forall i_3:int.
+                       ((le_int((0), i_3)
+                        and lt_int(i_3, integer_of_int32(low))) ->
                         lt_int(integer_of_int32(select(intP_intM_arr_3,
-                                                shift(arr_1, i_1))),
+                                                shift(arr_1, i_3))),
                         integer_of_int32(query)))))
                      and ((JC_26:
                           lt_int(integer_of_int32(high),
@@ -2782,6 +2907,10 @@ type intP
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag : charP tag_id
@@ -2810,6 +2939,11 @@ logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
+
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
 
 logic int32_of_integer : int -> int32
 
@@ -2867,22 +3001,32 @@ predicate left_valid_struct_intP(p: intP pointer, a: int,
   intP_alloc_table: intP alloc_table) = (offset_min(intP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
 
 predicate mem(elt: int32, arr_0: intP pointer, length_0: int,
   intP_intM_arr_0_2_at_L: (intP, int32) memory) =
-  (exists i_0:int.
-    ((0 <= i_0) and
-     ((i_0 < length_0) and (integer_of_int32(select(intP_intM_arr_0_2_at_L,
-      shift(arr_0, i_0))) = integer_of_int32(elt)))))
+  (exists i_2:int.
+    ((0 <= i_2) and
+     ((i_2 < length_0) and (integer_of_int32(select(intP_intM_arr_0_2_at_L,
+      shift(arr_0, i_2))) = integer_of_int32(elt)))))
 
 axiom pointer_addr_of_charP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
 axiom pointer_addr_of_intP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -2897,17 +3041,22 @@ predicate right_valid_struct_intP(p: intP pointer, b: int,
   intP_alloc_table: intP alloc_table) = (offset_max(intP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
 
 predicate sorted(arr: intP pointer, length: int, intP_intM_arr_1_at_L: (intP,
   int32) memory) =
-  (forall i:int.
-    (forall j:int.
-      (((0 <= i) and ((i <= j) and (j < length))) ->
+  (forall i_1:int.
+    (forall j_0:int.
+      (((0 <= i_1) and ((i_1 <= j_0) and (j_0 < length))) ->
        (integer_of_int32(select(intP_intM_arr_1_at_L, shift(arr,
-       i))) <= integer_of_int32(select(intP_intM_arr_1_at_L, shift(arr, j)))))))
+       i_1))) <= integer_of_int32(select(intP_intM_arr_1_at_L, shift(arr,
+       j_0)))))))
 
 predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -2918,6 +3067,11 @@ predicate strict_valid_root_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2934,10 +3088,46 @@ predicate strict_valid_struct_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8.
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -2948,6 +3138,11 @@ predicate valid_root_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2963,6 +3158,11 @@ predicate valid_struct_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3005,10 +3205,10 @@ goal find_array_ensures_default_po_1:
   (integer_of_int32(result0) = (integer_of_int32(length_1) - 1)) ->
   forall high:int32.
   (high = result0) ->
-  forall i_2:int.
-  ((integer_of_int32(high) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+  forall i_4:int.
+  ((integer_of_int32(high) < i_4) and (i_4 < integer_of_int32(length_1))) ->
   ("JC_40": (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-  i_2))) > integer_of_int32(query)))
+  i_4))) > integer_of_int32(query)))
 
 goal find_array_ensures_default_po_2:
   forall arr_1:intP pointer.
@@ -3031,10 +3231,10 @@ goal find_array_ensures_default_po_2:
   (integer_of_int32(result0) = (integer_of_int32(length_1) - 1)) ->
   forall high:int32.
   (high = result0) ->
-  forall i_1:int.
-  ((0 <= i_1) and (i_1 < integer_of_int32(low))) ->
+  forall i_3:int.
+  ((0 <= i_3) and (i_3 < integer_of_int32(low))) ->
   ("JC_41": (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-  i_1))) < integer_of_int32(query)))
+  i_3))) < integer_of_int32(query)))
 
 goal find_array_ensures_default_po_3:
   forall arr_1:intP pointer.
@@ -3104,15 +3304,15 @@ goal find_array_ensures_default_po_5:
   forall high0:int32.
   forall low0:int32.
   (("JC_40":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_41":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_42": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_43": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -3136,10 +3336,10 @@ goal find_array_ensures_default_po_5:
   (integer_of_int32(result6) = (integer_of_int32(mean) + 1)) ->
   forall low1:int32.
   (low1 = result6) ->
-  forall i_2:int.
-  ((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+  forall i_4:int.
+  ((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
   ("JC_40": (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-  i_2))) > integer_of_int32(query)))
+  i_4))) > integer_of_int32(query)))
 
 goal find_array_ensures_default_po_6:
   forall arr_1:intP pointer.
@@ -3165,15 +3365,15 @@ goal find_array_ensures_default_po_6:
   forall high0:int32.
   forall low0:int32.
   (("JC_40":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_41":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_42": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_43": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -3197,10 +3397,10 @@ goal find_array_ensures_default_po_6:
   (integer_of_int32(result6) = (integer_of_int32(mean) + 1)) ->
   forall low1:int32.
   (low1 = result6) ->
-  forall i_1:int.
-  ((0 <= i_1) and (i_1 < integer_of_int32(low1))) ->
+  forall i_3:int.
+  ((0 <= i_3) and (i_3 < integer_of_int32(low1))) ->
   ("JC_41": (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-  i_1))) < integer_of_int32(query)))
+  i_3))) < integer_of_int32(query)))
 
 goal find_array_ensures_default_po_7:
   forall arr_1:intP pointer.
@@ -3226,15 +3426,15 @@ goal find_array_ensures_default_po_7:
   forall high0:int32.
   forall low0:int32.
   (("JC_40":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_41":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_42": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_43": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -3284,15 +3484,15 @@ goal find_array_ensures_default_po_8:
   forall high0:int32.
   forall low0:int32.
   (("JC_40":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_41":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_42": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_43": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -3342,15 +3542,15 @@ goal find_array_ensures_default_po_9:
   forall high0:int32.
   forall low0:int32.
   (("JC_40":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_41":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_42": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_43": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -3374,10 +3574,10 @@ goal find_array_ensures_default_po_9:
   (integer_of_int32(result6) = (integer_of_int32(mean) - 1)) ->
   forall high1:int32.
   (high1 = result6) ->
-  forall i_2:int.
-  ((integer_of_int32(high1) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+  forall i_4:int.
+  ((integer_of_int32(high1) < i_4) and (i_4 < integer_of_int32(length_1))) ->
   ("JC_40": (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-  i_2))) > integer_of_int32(query)))
+  i_4))) > integer_of_int32(query)))
 
 goal find_array_ensures_default_po_10:
   forall arr_1:intP pointer.
@@ -3403,15 +3603,15 @@ goal find_array_ensures_default_po_10:
   forall high0:int32.
   forall low0:int32.
   (("JC_40":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_41":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_42": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_43": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -3435,10 +3635,10 @@ goal find_array_ensures_default_po_10:
   (integer_of_int32(result6) = (integer_of_int32(mean) - 1)) ->
   forall high1:int32.
   (high1 = result6) ->
-  forall i_1:int.
-  ((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+  forall i_3:int.
+  ((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
   ("JC_41": (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-  i_1))) < integer_of_int32(query)))
+  i_3))) < integer_of_int32(query)))
 
 goal find_array_ensures_default_po_11:
   forall arr_1:intP pointer.
@@ -3464,15 +3664,15 @@ goal find_array_ensures_default_po_11:
   forall high0:int32.
   forall low0:int32.
   (("JC_40":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_41":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_42": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_43": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -3522,15 +3722,15 @@ goal find_array_ensures_default_po_12:
   forall high0:int32.
   forall low0:int32.
   (("JC_40":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_41":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_42": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_43": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -3582,15 +3782,15 @@ goal find_array_ensures_exists_po_1:
   forall low0:int32.
   ("JC_53": true) ->
   (("JC_48":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_49":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_50": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_51": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -3639,15 +3839,15 @@ goal find_array_ensures_exists_po_2:
   forall low0:int32.
   ("JC_53": true) ->
   (("JC_48":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_49":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_50": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_51": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) > integer_of_int32(high0)) ->
@@ -3686,15 +3886,15 @@ goal find_array_ensures_not_exists_po_1:
   forall low0:int32.
   ("JC_61": true) ->
   (("JC_56":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_57":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_58": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_59": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -3742,15 +3942,15 @@ goal find_array_ensures_not_exists_po_2:
   forall low0:int32.
   ("JC_61": true) ->
   (("JC_56":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_57":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_58": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_59": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) > integer_of_int32(high0)) ->
@@ -3825,15 +4025,15 @@ goal find_array_safety_po_3:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -3866,15 +4066,15 @@ goal find_array_safety_po_4:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -3907,15 +4107,15 @@ goal find_array_safety_po_5:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -3952,15 +4152,15 @@ goal find_array_safety_po_6:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -4000,15 +4200,15 @@ goal find_array_safety_po_7:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -4048,15 +4248,15 @@ goal find_array_safety_po_8:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -4099,15 +4299,15 @@ goal find_array_safety_po_9:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -4150,15 +4350,15 @@ goal find_array_safety_po_10:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -4207,15 +4407,15 @@ goal find_array_safety_po_11:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -4264,15 +4464,15 @@ goal find_array_safety_po_12:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -4333,15 +4533,15 @@ goal find_array_safety_po_13:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -4402,15 +4602,15 @@ goal find_array_safety_po_14:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -4477,15 +4677,15 @@ goal find_array_safety_po_15:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -4553,15 +4753,15 @@ goal find_array_safety_po_16:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -4622,15 +4822,15 @@ goal find_array_safety_po_17:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -4691,15 +4891,15 @@ goal find_array_safety_po_18:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->
@@ -4766,15 +4966,15 @@ goal find_array_safety_po_19:
   forall low0:int32.
   ("JC_29": true) ->
   (("JC_24":
-   (forall i_2:int.
-     (((integer_of_int32(high0) < i_2) and (i_2 < integer_of_int32(length_1))) ->
+   (forall i_4:int.
+     (((integer_of_int32(high0) < i_4) and (i_4 < integer_of_int32(length_1))) ->
       (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-      i_2))) > integer_of_int32(query))))) and
+      i_4))) > integer_of_int32(query))))) and
    (("JC_25":
-    (forall i_1:int.
-      (((0 <= i_1) and (i_1 < integer_of_int32(low0))) ->
+    (forall i_3:int.
+      (((0 <= i_3) and (i_3 < integer_of_int32(low0))) ->
        (integer_of_int32(select(intP_intM_arr_3, shift(arr_1,
-       i_1))) < integer_of_int32(query))))) and
+       i_3))) < integer_of_int32(query))))) and
     (("JC_26": (integer_of_int32(high0) < integer_of_int32(length_1))) and
      ("JC_27": (0 <= integer_of_int32(low0)))))) ->
   (integer_of_int32(low0) <= integer_of_int32(high0)) ->

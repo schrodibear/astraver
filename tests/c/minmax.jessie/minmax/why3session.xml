@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="minmax.jessie/minmax/why3session.xml">
  <prover
@@ -36,26 +36,26 @@
     locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="58" loccnumb="7" loccnume="11"
     expl="parameter dmax_ensures_default"
-    sum="d5c6a562c6c7c58d9999791d15394dbf"
+    sum="0d39cf02f20e4e7488c6946bb4bbec02"
     proved="true"
     expanded="true"
-    shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
+    shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix &lt;=avalueV0avalueV1ainfix &gt;avalueV0avalueV1FFF">
     <label
-     name="expl:parameter dmax_ensures_default">
-     </label>
+     name="expl:parameter dmax_ensures_default"/>
     <label
-     name="expl:Function dmax, default behavior">
-     </label>
+     name="expl:Function dmax, default behavior"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.12"/>
@@ -66,19 +66,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="58" loccnumb="7" loccnume="11"
     expl="parameter dmax_safety"
-    sum="34d0adad1cd390f715484655d0a6dcc3"
+    sum="29ee5f546b6ecf16b89ae2a59fd145f4"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter dmax_safety">
-     </label>
+     name="expl:parameter dmax_safety"/>
     <label
-     name="expl:Function dmax, Safety">
-     </label>
+     name="expl:Function dmax, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -86,6 +85,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
@@ -93,9 +93,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
@@ -103,26 +104,26 @@
     locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="64" loccnumb="7" loccnume="11"
     expl="parameter dmin_ensures_default"
-    sum="cc5ec256bf2768f4e20a9c5fe9054b7f"
+    sum="778ad4e31eb254263fe7aeb29660cb41"
     proved="true"
     expanded="true"
-    shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
+    shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix &lt;=avalueV0avalueV1ainfix &gt;avalueV0avalueV1FFF">
     <label
-     name="expl:parameter dmin_ensures_default">
-     </label>
+     name="expl:parameter dmin_ensures_default"/>
     <label
-     name="expl:Function dmin, default behavior">
-     </label>
+     name="expl:Function dmin, default behavior"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.12"/>
@@ -133,19 +134,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="64" loccnumb="7" loccnume="11"
     expl="parameter dmin_safety"
-    sum="78c4d94862f5ee66875685c6c65f33ef"
+    sum="6ae2aec52e74c3232b9b6e477f037cf3"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter dmin_safety">
-     </label>
+     name="expl:parameter dmin_safety"/>
     <label
-     name="expl:Function dmin, Safety">
-     </label>
+     name="expl:Function dmin, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -153,6 +153,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.07"/>
@@ -160,9 +161,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -170,26 +172,26 @@
     locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="46" loccnumb="6" loccnume="10"
     expl="parameter fmax_ensures_default"
-    sum="57eaaae23ac86f8c31a391ce703e6495"
+    sum="10f83dc298e3e99648aa28b901e2e8e3"
     proved="true"
     expanded="true"
-    shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
+    shape="iainfix =V2aTrueainfix =avalueV4amaxavalueV0avalueV1Iainfix =V4V3FIainfix =V3V1Fainfix =avalueV6amaxavalueV0avalueV1Iainfix =V6V5FIainfix =V5V0FIiainfix =V2aTrueainfix &lt;=avalueV0avalueV1ainfix &gt;avalueV0avalueV1FFF">
     <label
-     name="expl:parameter fmax_ensures_default">
-     </label>
+     name="expl:parameter fmax_ensures_default"/>
     <label
-     name="expl:Function fmax, default behavior">
-     </label>
+     name="expl:Function fmax, default behavior"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.12"/>
@@ -200,19 +202,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="46" loccnumb="6" loccnume="10"
     expl="parameter fmax_safety"
-    sum="551827941f801443aff237ba9f43d727"
+    sum="87e1f3248b942ec31ad3f7d71992217f"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter fmax_safety">
-     </label>
+     name="expl:parameter fmax_safety"/>
     <label
-     name="expl:Function fmax, Safety">
-     </label>
+     name="expl:Function fmax, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -220,6 +221,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.07"/>
@@ -227,9 +229,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
@@ -237,26 +240,26 @@
     locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="52" loccnumb="6" loccnume="10"
     expl="parameter fmin_ensures_default"
-    sum="e5f4b4b63e314b97942904c2b847aac3"
+    sum="f777e3aa5f97ba03fde8d3e5ae996f0e"
     proved="true"
     expanded="true"
-    shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix <=avalueV0avalueV1ainfix >avalueV0avalueV1FFF">
+    shape="iainfix =V2aTrueainfix =avalueV4aminavalueV0avalueV1Iainfix =V4V3FIainfix =V3V0Fainfix =avalueV6aminavalueV0avalueV1Iainfix =V6V5FIainfix =V5V1FIiainfix =V2aTrueainfix &lt;=avalueV0avalueV1ainfix &gt;avalueV0avalueV1FFF">
     <label
-     name="expl:parameter fmin_ensures_default">
-     </label>
+     name="expl:parameter fmin_ensures_default"/>
     <label
-     name="expl:Function fmin, default behavior">
-     </label>
+     name="expl:Function fmin, default behavior"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.12"/>
@@ -267,19 +270,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="52" loccnumb="6" loccnume="10"
     expl="parameter fmin_safety"
-    sum="3a90f3c79dba8421c92c6c89928e0cc4"
+    sum="bdbd97810421b5b2fd06fff8364970f0"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter fmin_safety">
-     </label>
+     name="expl:parameter fmin_safety"/>
     <label
-     name="expl:Function fmin, Safety">
-     </label>
+     name="expl:Function fmin, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -287,6 +289,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.07"/>
@@ -294,6 +297,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.10"/>
@@ -304,19 +308,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="34" loccnumb="4" loccnume="7"
     expl="parameter max_ensures_default"
-    sum="077430cc78cbd5fa4f82d25f6b2ab8f7"
+    sum="13bef4ec762851e9148b4e0b21564b54"
     proved="true"
     expanded="true"
-    shape="iainfix <=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V1Fainfix =ainteger_of_int32V5amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V0FFF">
+    shape="iainfix &lt;=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V1Fainfix =ainteger_of_int32V5amaxainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V0FFF">
     <label
-     name="expl:parameter max_ensures_default">
-     </label>
+     name="expl:parameter max_ensures_default"/>
     <label
-     name="expl:Function max, default behavior">
-     </label>
+     name="expl:Function max, default behavior"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.11"/>
@@ -324,6 +327,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.12"/>
@@ -334,19 +338,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="34" loccnumb="4" loccnume="7"
     expl="parameter max_safety"
-    sum="af3ccfd65ac17d27f2fc76310eed4b58"
+    sum="12861e8ddf966b52de8a433317bccada"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter max_safety">
-     </label>
+     name="expl:parameter max_safety"/>
     <label
-     name="expl:Function max, Safety">
-     </label>
+     name="expl:Function max, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -354,6 +357,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.06"/>
@@ -361,9 +365,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
@@ -371,19 +376,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="40" loccnumb="4" loccnume="7"
     expl="parameter min_ensures_default"
-    sum="84ad8d5dcbc709a7f9ab56b75429e666"
+    sum="783aa2931397044f77ab38003163e918"
     proved="true"
     expanded="true"
-    shape="iainfix <=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V0Fainfix =ainteger_of_int32V5aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V1FFF">
+    shape="iainfix &lt;=ainteger_of_int32V0ainteger_of_int32V1ainfix =ainteger_of_int32V3aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V3V2FIainfix =V2V0Fainfix =ainteger_of_int32V5aminainteger_of_int32V0ainteger_of_int32V1Iainfix =V5V4FIainfix =V4V1FFF">
     <label
-     name="expl:parameter min_ensures_default">
-     </label>
+     name="expl:parameter min_ensures_default"/>
     <label
-     name="expl:Function min, default behavior">
-     </label>
+     name="expl:Function min, default behavior"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.10"/>
@@ -391,9 +395,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
    <goal
@@ -401,19 +406,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/minmax.c"
     loclnum="40" loccnumb="4" loccnume="7"
     expl="parameter min_safety"
-    sum="09de316e20b3823f95e9db4cf4236786"
+    sum="1d4cab62cfc3cbac86679fa2667cefad"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter min_safety">
-     </label>
+     name="expl:parameter min_safety"/>
     <label
-     name="expl:Function min, Safety">
-     </label>
+     name="expl:Function min, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -421,6 +425,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.07"/>
@@ -428,9 +433,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.04"/>
     </proof>
    </goal>
   </theory>

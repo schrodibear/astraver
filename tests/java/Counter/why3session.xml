@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="Counter/why3session.xml">
  <prover
@@ -36,19 +36,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="49" loccnumb="16" loccnume="25"
     expl="normal postcondition"
-    sum="8d49fd874587e5abb96a3825a39affef"
+    sum="c5d8d72a3075cb5f3cbb552e179096ff"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV0V4V1ainfix -avalueV0V2V1c1Iainfix =V4astoreV2V0ainfix +aselectV2V0c1FIavalid_struct_CounterV0c0c0V3FFFF">
     <label
-     name="expl:parameter _Counter_decrement_ensures_default">
-     </label>
+     name="expl:parameter _Counter_decrement_ensures_default"/>
     <label
-     name="expl:Method decrement, default behavior">
-     </label>
+     name="expl:Method decrement, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -56,6 +55,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -63,6 +63,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -73,19 +74,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="49" loccnumb="16" loccnume="25"
     expl="parameter _Counter_decrement_safety"
-    sum="3e7eb0cbd3cc348099c1cbb75021175f"
+    sum="e47223d6da32a8db2f9536ac332bcd9b"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _Counter_decrement_safety">
-     </label>
+     name="expl:parameter _Counter_decrement_safety"/>
     <label
-     name="expl:Method decrement, Safety">
-     </label>
+     name="expl:Method decrement, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -93,13 +93,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -110,19 +112,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="44" loccnumb="16" loccnume="25"
     expl="normal postcondition"
-    sum="76868f69f888548a368325d53d5ecdf0"
+    sum="02b638327778adedea6f680904aab1ac"
     proved="true"
     expanded="true"
     shape="ainfix =avalueV0V2V4ainfix +avalueV0V2V1c1Iainfix =V4astoreV1V0ainfix +aselectV1V0c1FIavalid_struct_CounterV0c0c0V3FFFF">
     <label
-     name="expl:parameter _Counter_increment_ensures_default">
-     </label>
+     name="expl:parameter _Counter_increment_ensures_default"/>
     <label
-     name="expl:Method increment, default behavior">
-     </label>
+     name="expl:Method increment, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -130,6 +131,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -137,6 +139,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -147,19 +150,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Counter.java"
     loclnum="44" loccnumb="16" loccnume="25"
     expl="parameter _Counter_increment_safety"
-    sum="b6a90a30845c18f1a2153e1f892c1583"
+    sum="5dd8262e5ae8f2110b2d30bc9ac19a00"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _Counter_increment_safety">
-     </label>
+     name="expl:parameter _Counter_increment_safety"/>
     <label
-     name="expl:Method increment, Safety">
-     </label>
+     name="expl:Method increment, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -167,6 +169,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -174,6 +177,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -184,19 +188,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Counter_ensures_default"
-    sum="c2d938f525bb145a7c265aae3632049a"
+    sum="a4e24de7daf4f762c404642a92d72e5b"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Counter_ensures_default">
-     </label>
+     name="expl:parameter cons_Counter_ensures_default"/>
     <label
-     name="expl:Constructor of class Counter, default behavior">
-     </label>
+     name="expl:Constructor of class Counter, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -204,6 +207,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -211,6 +215,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -221,19 +226,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Counter_safety"
-    sum="9ec77b69054092a146178e1d00fff02e"
+    sum="fdf8a09a3b8c2ea273bcf1bc94a999a6"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Counter_safety">
-     </label>
+     name="expl:parameter cons_Counter_safety"/>
     <label
-     name="expl:Constructor of class Counter, Safety">
-     </label>
+     name="expl:Constructor of class Counter, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -241,13 +245,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>

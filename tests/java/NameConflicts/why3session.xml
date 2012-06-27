@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="NameConflicts/why3session.xml">
  <prover
@@ -36,19 +36,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="50" loccnumb="8" loccnume="13"
     expl="parameter _NameConflicts_field_ensures_default"
-    sum="3b0b4b4d4bb6ebeeac93879044770488"
+    sum="a27eb2b49bda5beca9eb63a7db484039"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _NameConflicts_field_ensures_default">
-     </label>
+     name="expl:parameter _NameConflicts_field_ensures_default"/>
     <label
-     name="expl:Method field, default behavior">
-     </label>
+     name="expl:Method field, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -56,43 +55,7 @@
     <proof
      prover="0"
      timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter _NameConflicts_field_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
-    loclnum="50" loccnumb="8" loccnume="13"
-    expl="parameter _NameConflicts_field_safety"
-    sum="b17263d3732a5655f4854442f021c929"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter _NameConflicts_field_safety">
-     </label>
-    <label
-     name="expl:Method field, Safety">
-     </label>
-    <proof
-     prover="2"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -100,29 +63,29 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
-    name="WP_parameter _NameConflicts_m_ensures_default"
+    name="WP_parameter _NameConflicts_field_safety"
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
-    loclnum="43" loccnumb="8" loccnume="9"
-    expl="parameter _NameConflicts_m_ensures_default"
-    sum="3ba6603f5aa8d72d1d555d66bfe547be"
+    loclnum="50" loccnumb="8" loccnume="13"
+    expl="parameter _NameConflicts_field_safety"
+    sum="b4e6a4499ae8b34a8e6791f84bad7c55"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _NameConflicts_m_ensures_default">
-     </label>
+     name="expl:parameter _NameConflicts_field_safety"/>
     <label
-     name="expl:Method m, default behavior">
-     </label>
+     name="expl:Method field, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -130,6 +93,45 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _NameConflicts_m_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
+    loclnum="43" loccnumb="8" loccnume="9"
+    expl="parameter _NameConflicts_m_ensures_default"
+    sum="6afec7657e712c00cbf22fef50e77753"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:parameter _NameConflicts_m_ensures_default"/>
+    <label
+     name="expl:Method m, default behavior"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -137,6 +139,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -147,19 +150,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
     expl="normal postcondition"
-    sum="d73dd4494fb4a9fbae8d05149862a0cf"
+    sum="c8e8a0fee2ab0ceae9862014293a1fcd"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c0Iainfix =V4V3FIainfix =ainteger_of_int32V3c0FIainfix =ainteger_of_int32V2c0FIavalid_struct_NameConflictsV0c0c0V1FF">
     <label
-     name="expl:parameter _NameConflicts_m_ensures_normal">
-     </label>
+     name="expl:parameter _NameConflicts_m_ensures_normal"/>
     <label
-     name="expl:Method m, Behavior `normal'">
-     </label>
+     name="expl:Method m, Behavior `normal&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -167,6 +169,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -174,6 +177,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -184,19 +188,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="43" loccnumb="8" loccnume="9"
     expl="parameter _NameConflicts_m_safety"
-    sum="9663b21bb54c858c6f5b04f40b6045e7"
+    sum="cd565dee2ef8e174b7475c861119354c"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _NameConflicts_m_safety">
-     </label>
+     name="expl:parameter _NameConflicts_m_safety"/>
     <label
-     name="expl:Method m, Safety">
-     </label>
+     name="expl:Method m, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -204,6 +207,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -211,9 +215,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -221,19 +226,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="36" loccnumb="9" loccnume="13"
     expl="parameter _NameConflicts_setI_ensures_default"
-    sum="36d68b64c503aaea2fe1835381e0798c"
+    sum="f5c2c110693776bac41bee578222744c"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _NameConflicts_setI_ensures_default">
-     </label>
+     name="expl:parameter _NameConflicts_setI_ensures_default"/>
     <label
-     name="expl:Method setI, default behavior">
-     </label>
+     name="expl:Method setI, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -241,6 +245,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -248,9 +253,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -258,19 +264,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/NameConflicts.java"
     loclnum="36" loccnumb="9" loccnume="13"
     expl="parameter _NameConflicts_setI_safety"
-    sum="e104f8e9868bddbc41591ef39cfa0ad5"
+    sum="9db76028c73ee9e32a75e839b1db522a"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _NameConflicts_setI_safety">
-     </label>
+     name="expl:parameter _NameConflicts_setI_safety"/>
     <label
-     name="expl:Method setI, Safety">
-     </label>
+     name="expl:Method setI, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -278,6 +283,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -285,9 +291,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -295,19 +302,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_NameConflicts_ensures_default"
-    sum="6a6e53951ca4c97212fab611991d69aa"
+    sum="8dd8e9249501e739ccb7ef131ce6ce3a"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_NameConflicts_ensures_default">
-     </label>
+     name="expl:parameter cons_NameConflicts_ensures_default"/>
     <label
-     name="expl:Constructor of class NameConflicts, default behavior">
-     </label>
+     name="expl:Constructor of class NameConflicts, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -315,6 +321,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -322,9 +329,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -332,19 +340,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_NameConflicts_safety"
-    sum="c708577aac97ea11efa1ec5f53ccd7a2"
+    sum="1676e76ddc23233fa532e0fbbaa41011"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_NameConflicts_safety">
-     </label>
+     name="expl:parameter cons_NameConflicts_safety"/>
     <label
-     name="expl:Constructor of class NameConflicts, Safety">
-     </label>
+     name="expl:Constructor of class NameConflicts, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -352,6 +359,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -359,6 +367,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>

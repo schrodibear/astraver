@@ -1,0 +1,139 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<why3session
+ name="array_double.jessie/array_double/why3session.xml">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.94"/>
+ <prover
+  id="1"
+  name="Gappa"
+  version="0.16.0"/>
+ <file
+  name="../array_double.mlw"
+  verified="true"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   locfile="array_double.jessie/array_double/../array_double.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
+   verified="true"
+   expanded="false">
+  </theory>
+  <theory
+   name="WP Jessie_program"
+   locfile="array_double.jessie/array_double/../array_double.mlw"
+   loclnum="277" loccnumb="7" loccnume="21"
+   verified="true"
+   expanded="true">
+   <goal
+    name="WP_parameter test_ensures_default"
+    locfile="/home/cmarche/why2-trunk/tests/c/array_double.c"
+    loclnum="18" loccnumb="5" loccnume="9"
+    expl="assertion"
+    sum="52ba586179fa086e5e802c46900c992c"
+    proved="true"
+    expanded="true"
+    shape="ainfix &lt;=aabsainfix -avalueaselectV8ashiftaac0ainfix +avalueaselectV1ashiftabc0avalueaselectV0ashiftacc0c0x1.p-53Iainfix =aselectV8ashiftaac1V7Aainfix =aselectV8ashiftaac0V6Aanot_assignsV5V2V8apset_rangeapset_singletonaac0c1FIaadd_postaNearestTiesToEvenaselectV1ashiftabc1aselectV0ashiftacc1V7FIaadd_postaNearestTiesToEvenaselectV1ashiftabc0aselectV0ashiftacc0V6FIavalid_cV3Aavalid_bV4Aavalid_aV5Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0FFFFFF">
+    <label
+     name="expl:Function test, default behavior"/>
+    <label
+     name="expl:parameter test_ensures_default"/>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter test_safety"
+    locfile="/home/cmarche/why2-trunk/tests/c/array_double.c"
+    loclnum="18" loccnumb="5" loccnume="9"
+    expl="Function test, Safety"
+    sum="403feecbe52a7e58ba0d09f698f51e68"
+    proved="true"
+    expanded="true"
+    shape="LaselectV1ashiftabc0LaselectV0ashiftacc0LaselectV1ashiftabc1LaselectV0ashiftacc1avalid_cV3Aavalid_bV4Aavalid_aV5Iainfix &lt;=aabsainfix -avalueaselectV12ashiftaac0ainfix +avalueaselectV1ashiftabc0avalueaselectV0ashiftacc0c0x1.p-53Iainfix =aselectV12ashiftaac1V11Aainfix =aselectV12ashiftaac0V8Aanot_assignsV5V2V12apset_rangeapset_singletonaac0c1FIaadd_postaNearestTiesToEvenV9V10V11FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV9avalueV10amax_doubleIaadd_postaNearestTiesToEvenV6V7V8FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_doubleIavalid_cV3Aavalid_bV4Aavalid_aV5Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0FFFFFF">
+    <label
+     name="expl:Function test, Safety"/>
+    <label
+     name="expl:parameter test_safety"/>
+    <transf
+     name="split_goal"
+     proved="true"
+     expanded="true">
+     <goal
+      name="WP_parameter test_safety.1"
+      locfile="/home/cmarche/why2-trunk/tests/c/array_double.c"
+      loclnum="18" loccnumb="5" loccnume="9"
+      expl="floating-point overflow"
+      sum="51bc7d5d53ab0bd7647b103d34dcc6d6"
+      proved="true"
+      expanded="true"
+      shape="LaselectV1ashiftabc0LaselectV0ashiftacc0ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_doubleIavalid_cV3Aavalid_bV4Aavalid_aV5Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0FFFFFF">
+      <label
+       name="expl:Function test, Safety"/>
+      <label
+       name="expl:parameter test_safety"/>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter test_safety.2"
+      locfile="/home/cmarche/why2-trunk/tests/c/array_double.c"
+      loclnum="18" loccnumb="5" loccnume="9"
+      expl="floating-point overflow"
+      sum="59c4cc329e3f14424d2df34a7d62b804"
+      proved="true"
+      expanded="true"
+      shape="LaselectV1ashiftabc0LaselectV0ashiftacc0LaselectV1ashiftabc1LaselectV0ashiftacc1ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV9avalueV10amax_doubleIaadd_postaNearestTiesToEvenV6V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_doubleIavalid_cV3Aavalid_bV4Aavalid_aV5Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0FFFFFF">
+      <label
+       name="expl:Function test, Safety"/>
+      <label
+       name="expl:parameter test_safety"/>
+      <proof
+       prover="1"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter test_safety.3"
+      locfile="/home/cmarche/why2-trunk/tests/c/array_double.c"
+      loclnum="18" loccnumb="5" loccnume="9"
+      expl="normal postcondition"
+      sum="998059623ff26f70e5fbe0e025e0ca9d"
+      proved="true"
+      expanded="true"
+      shape="LaselectV1ashiftabc0LaselectV0ashiftacc0LaselectV1ashiftabc1LaselectV0ashiftacc1avalid_cV3Aavalid_bV4Aavalid_aV5Iainfix &lt;=aabsainfix -avalueaselectV12ashiftaac0ainfix +avalueaselectV1ashiftabc0avalueaselectV0ashiftacc0c0x1.p-53Iainfix =aselectV12ashiftaac1V11Aainfix =aselectV12ashiftaac0V8Aanot_assignsV5V2V12apset_rangeapset_singletonaac0c1FIaadd_postaNearestTiesToEvenV9V10V11FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV9avalueV10amax_doubleIaadd_postaNearestTiesToEvenV6V7V8FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV6avalueV7amax_doubleIavalid_cV3Aavalid_bV4Aavalid_aV5Aainfix &lt;=aabsavalueaselectV0ashiftacc1c1.0Aainfix &lt;=aabsavalueaselectV0ashiftacc0c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc1c1.0Aainfix &lt;=aabsavalueaselectV1ashiftabc0c1.0Aainfix &gt;=aoffset_maxV3acc1Aainfix &lt;=aoffset_minV3acc0Aainfix &gt;=aoffset_maxV4abc1Aainfix &lt;=aoffset_minV4abc0Aainfix &gt;=aoffset_maxV5aac1Aainfix &lt;=aoffset_minV5aac0FFFFFF">
+      <label
+       name="expl:Function test, Safety"/>
+      <label
+       name="expl:parameter test_safety"/>
+      <proof
+       prover="0"
+       timelimit="5"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+  </theory>
+ </file>
+</why3session>

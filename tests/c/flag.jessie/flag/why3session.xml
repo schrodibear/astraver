@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="flag.jessie/flag/why3session.xml">
  <prover
@@ -28,7 +28,7 @@
   <theory
    name="WP Jessie_program"
    locfile="flag.jessie/flag/../flag.mlw"
-   loclnum="119" loccnumb="7" loccnume="21"
+   loclnum="166" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
@@ -36,16 +36,14 @@
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
     loclnum="89" loccnumb="5" loccnume="9"
     expl="parameter flag_ensures_default"
-    sum="a95d817696aa97fea8e28f416cd1abb9"
+    sum="8387db6612535613a9c6cc1a703c94fb"
     proved="true"
     expanded="true"
-    shape="LaselectV10ashiftV0V8iainfix =V11c1ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix <=V7V1Aainfix <=V13V7Aainfix <=V15V13Aainfix <=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c2ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V17c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V17V7Aainfix <=V9V17Aainfix <=c0V9Aais_color_arrayV0V1V2V10Iainfix =V17ainfix +V8c1Fiainfix =V11c2Oainfix =V11c3ais_monochromeV0V18V1c3V19Aais_monochromeV0V9V8c2V19Aais_monochromeV0c0V9c1V19Aainfix <=V18V1Aainfix <=V8V18Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V19Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FIainfix =V18ainfix -V7c1Fais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFAais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix <=V6V1Aainfix <=V5V6Aainfix <=V4V5Aainfix <=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+    shape="LaselectV10ashiftV0V8iainfix =V11c1ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix &lt;=V7V1Aainfix &lt;=V13V7Aainfix &lt;=V15V13Aainfix &lt;=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c1Oainfix =V11c2ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V17c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V17V7Aainfix &lt;=V9V17Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix =V17ainfix +V8c1Fiainfix =V11c1Oainfix =V11c2Oainfix =V11c3ais_monochromeV0V18V1c3V19Aais_monochromeV0V9V8c2V19Aais_monochromeV0c0V9c1V19Aainfix &lt;=V18V1Aainfix &lt;=V8V18Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V19Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FIainfix =V18ainfix -V7c1Fais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFAais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix &lt;=V6V1Aainfix &lt;=V5V6Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
     <label
-     name="expl:parameter flag_ensures_default">
-     </label>
+     name="expl:parameter flag_ensures_default"/>
     <label
-     name="expl:Function flag, default behavior">
-     </label>
+     name="expl:Function flag, default behavior"/>
     <transf
      name="split_goal"
      proved="true"
@@ -55,36 +53,37 @@
       locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="loop invariant init"
-      sum="77c8d81d8d102bb9f7ba02bc06b5f6f4"
+      sum="3c259e578b68696c01b212d20a0f603f"
       proved="true"
       expanded="true"
-      shape="ais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix <=V6V1Aainfix <=V5V6Aainfix <=V4V5Aainfix <=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+      shape="ais_monochromeV0V6V1c3V3Aais_monochromeV0V4V5c2V3Aais_monochromeV0c0V4c1V3Aainfix &lt;=V6V1Aainfix &lt;=V5V6Aainfix &lt;=V4V5Aainfix &lt;=c0V4Aais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
       <label
-       name="expl:parameter flag_ensures_default">
-       </label>
+       name="expl:parameter flag_ensures_default"/>
       <label
-       name="expl:Function flag, default behavior">
-       </label>
+       name="expl:Function flag, default behavior"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.11"/>
+       <result status="valid" time="0.12"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.09"/>
+       <result status="valid" time="0.10"/>
       </proof>
       <transf
        name="split_goal"
@@ -95,19 +94,18 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="0294abe009e830862a90863780415e85"
+        sum="90921f0f09b47a30d1ad4b3b212e732d"
         proved="true"
         expanded="false"
-        shape="ais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="ais_color_arrayV0V1V2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="2"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.10"/>
@@ -115,6 +113,7 @@
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.05"/>
@@ -122,9 +121,10 @@
         <proof
          prover="1"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.09"/>
         </proof>
        </goal>
        <goal
@@ -132,26 +132,26 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="04999cd647b9590e42eba2c51e994cd9"
+        sum="f2ece1af6a68517c75bcf87eaee841d1"
         proved="true"
         expanded="false"
-        shape="ainfix <=c0V4Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="ainfix &lt;=c0V4Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="2"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.12"/>
         </proof>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.06"/>
@@ -159,6 +159,7 @@
         <proof
          prover="1"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.08"/>
@@ -169,36 +170,37 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="6063daa4eff9ed5a103a5be744a91854"
+        sum="a13457a412dc2729fcc6a7ba162c29e9"
         proved="true"
         expanded="false"
-        shape="ainfix <=V4V5Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="ainfix &lt;=V4V5Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="2"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.12"/>
         </proof>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.05"/>
         </proof>
         <proof
          prover="1"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.09"/>
         </proof>
        </goal>
        <goal
@@ -206,36 +208,37 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="674aad61ac2856d26e8e02e9b92bdf51"
+        sum="5fcc79854fbb5515bfc983a9d42957f2"
         proved="true"
         expanded="false"
-        shape="ainfix <=V5V6Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="ainfix &lt;=V5V6Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="2"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.12"/>
         </proof>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.07"/>
         </proof>
         <proof
          prover="1"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.09"/>
         </proof>
        </goal>
        <goal
@@ -243,26 +246,26 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="7d55e87a398fa08cd19f835581c30057"
+        sum="6fdac171c88a4f7d75362d4d144b5a3e"
         proved="true"
         expanded="false"
-        shape="ainfix <=V6V1Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="ainfix &lt;=V6V1Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="2"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.12"/>
         </proof>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.05"/>
@@ -270,9 +273,10 @@
         <proof
          prover="1"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.09"/>
         </proof>
        </goal>
        <goal
@@ -280,100 +284,26 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="394eec2016b93ff2082c09d3a35b4b3a"
+        sum="94759cb2cdfb08fe7902bf5bef572999"
         proved="true"
         expanded="false"
-        shape="ais_monochromeV0c0V4c1V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="ais_monochromeV0c0V4c1V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="2"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.11"/>
+         <result status="valid" time="0.12"/>
         </proof>
         <proof
          prover="0"
          timelimit="5"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.04"/>
-        </proof>
-        <proof
-         prover="1"
-         timelimit="5"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.08"/>
-        </proof>
-       </goal>
-       <goal
-        name="WP_parameter flag_ensures_default.1.7"
-        locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
-        loclnum="89" loccnumb="5" loccnume="9"
-        expl="parameter flag_ensures_default"
-        sum="3770247ab1b675c9a3bfb75eaf313597"
-        proved="true"
-        expanded="false"
-        shape="ais_monochromeV0V4V5c2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
-        <label
-         name="expl:parameter flag_ensures_default">
-         </label>
-        <label
-         name="expl:Function flag, default behavior">
-         </label>
-        <proof
-         prover="2"
-         timelimit="5"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.11"/>
-        </proof>
-        <proof
-         prover="0"
-         timelimit="5"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.03"/>
-        </proof>
-        <proof
-         prover="1"
-         timelimit="5"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.08"/>
-        </proof>
-       </goal>
-       <goal
-        name="WP_parameter flag_ensures_default.1.8"
-        locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
-        loclnum="89" loccnumb="5" loccnume="9"
-        expl="parameter flag_ensures_default"
-        sum="381b23bb2a96c1c7c8f5c5d282c8b182"
-        proved="true"
-        expanded="false"
-        shape="ais_monochromeV0V6V1c3V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
-        <label
-         name="expl:parameter flag_ensures_default">
-         </label>
-        <label
-         name="expl:Function flag, default behavior">
-         </label>
-        <proof
-         prover="2"
-         timelimit="5"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.11"/>
-        </proof>
-        <proof
-         prover="0"
-         timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.06"/>
@@ -381,6 +311,83 @@
         <proof
          prover="1"
          timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.09"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter flag_ensures_default.1.7"
+        locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
+        expl="parameter flag_ensures_default"
+        sum="ad087c5caf05e8ad45d6924cb1f61b24"
+        proved="true"
+        expanded="false"
+        shape="ais_monochromeV0V4V5c2V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default"/>
+        <label
+         name="expl:Function flag, default behavior"/>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.12"/>
+        </proof>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.05"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.09"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter flag_ensures_default.1.8"
+        locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
+        expl="parameter flag_ensures_default"
+        sum="86839a061824eb09576acd53f0144fcd"
+        proved="true"
+        expanded="false"
+        shape="ais_monochromeV0V6V1c3V3Iainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default"/>
+        <label
+         name="expl:Function flag, default behavior"/>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.12"/>
+        </proof>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.09"/>
@@ -393,16 +400,14 @@
       locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="loop invariant preservation"
-      sum="dcbc88f01a2157f39d66413b8940f2c1"
+      sum="43561b5fa21b23d42088105b1183cbb6"
       proved="true"
       expanded="true"
-      shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix <=V7V1Aainfix <=V13V7Aainfix <=V15V13Aainfix <=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+      shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V16Aais_monochromeV0V15V13c2V16Aais_monochromeV0c0V15c1V16Aainfix &lt;=V7V1Aainfix &lt;=V13V7Aainfix &lt;=V15V13Aainfix &lt;=c0V15Aais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
       <label
-       name="expl:parameter flag_ensures_default">
-       </label>
+       name="expl:parameter flag_ensures_default"/>
       <label
-       name="expl:Function flag, default behavior">
-       </label>
+       name="expl:Function flag, default behavior"/>
       <transf
        name="split_goal"
        proved="true"
@@ -412,22 +417,21 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="05aeb846b2f999dcfae0b24cc272407a"
+        sum="543c3d6429b1ff9d012ec0eb86eff2d5"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="LaselectV10ashiftV0V8ais_color_arrayV0V1V2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.38"/>
+         <result status="valid" time="1.37"/>
         </proof>
        </goal>
        <goal
@@ -435,26 +439,26 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="d2609e39fc09d62cf8630033d00041e8"
+        sum="b7e985fc49d6dc8b9525dcebbc9ed793"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix <=c0V15Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="LaselectV10ashiftV0V8ainfix &lt;=c0V15Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="2"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.14"/>
+         <result status="valid" time="0.15"/>
         </proof>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.07"/>
@@ -462,9 +466,10 @@
         <proof
          prover="1"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.13"/>
         </proof>
        </goal>
        <goal
@@ -472,100 +477,26 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="7905ecadb7e6f0470e6b3a2d9d1e3230"
+        sum="7117fdb4c43ae9f36c0c5daafd1e40aa"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix <=V15V13Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="LaselectV10ashiftV0V8ainfix &lt;=V15V13Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="2"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.14"/>
+         <result status="valid" time="0.15"/>
         </proof>
         <proof
          prover="0"
          timelimit="5"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.07"/>
-        </proof>
-        <proof
-         prover="1"
-         timelimit="5"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.12"/>
-        </proof>
-       </goal>
-       <goal
-        name="WP_parameter flag_ensures_default.2.4"
-        locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
-        loclnum="89" loccnumb="5" loccnume="9"
-        expl="parameter flag_ensures_default"
-        sum="d63b6190f4994ef79c50761958b38e5d"
-        proved="true"
-        expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix <=V13V7Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
-        <label
-         name="expl:parameter flag_ensures_default">
-         </label>
-        <label
-         name="expl:Function flag, default behavior">
-         </label>
-        <proof
-         prover="2"
-         timelimit="5"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.14"/>
-        </proof>
-        <proof
-         prover="0"
-         timelimit="5"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.07"/>
-        </proof>
-        <proof
-         prover="1"
-         timelimit="5"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.12"/>
-        </proof>
-       </goal>
-       <goal
-        name="WP_parameter flag_ensures_default.2.5"
-        locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
-        loclnum="89" loccnumb="5" loccnume="9"
-        expl="parameter flag_ensures_default"
-        sum="8af5f242dba354dffe73cbe65b1263c6"
-        proved="true"
-        expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix <=V7V1Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
-        <label
-         name="expl:parameter flag_ensures_default">
-         </label>
-        <label
-         name="expl:Function flag, default behavior">
-         </label>
-        <proof
-         prover="2"
-         timelimit="5"
-         obsolete="false"
-         archived="false">
-         <result status="valid" time="0.08"/>
-        </proof>
-        <proof
-         prover="0"
-         timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.06"/>
@@ -573,9 +504,86 @@
         <proof
          prover="1"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.13"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter flag_ensures_default.2.4"
+        locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
+        expl="parameter flag_ensures_default"
+        sum="cf421987eb50b5564c3f1d8ef395dd22"
+        proved="true"
+        expanded="false"
+        shape="LaselectV10ashiftV0V8ainfix &lt;=V13V7Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default"/>
+        <label
+         name="expl:Function flag, default behavior"/>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.15"/>
+        </proof>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.04"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.13"/>
+        </proof>
+       </goal>
+       <goal
+        name="WP_parameter flag_ensures_default.2.5"
+        locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
+        loclnum="89" loccnumb="5" loccnume="9"
+        expl="parameter flag_ensures_default"
+        sum="ece254e8c8b1a1f124a47241578d1e4e"
+        proved="true"
+        expanded="false"
+        shape="LaselectV10ashiftV0V8ainfix &lt;=V7V1Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+        <label
+         name="expl:parameter flag_ensures_default"/>
+        <label
+         name="expl:Function flag, default behavior"/>
+        <proof
+         prover="2"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.09"/>
+        </proof>
+        <proof
+         prover="0"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.06"/>
+        </proof>
+        <proof
+         prover="1"
+         timelimit="5"
+         memlimit="0"
+         obsolete="false"
+         archived="false">
+         <result status="valid" time="0.13"/>
         </proof>
        </goal>
        <goal
@@ -583,22 +591,21 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="293ade24c781a9af27319f4fd3e59aae"
+        sum="26dac1d2eac7f56236881d772ceda288"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_monochromeV0c0V15c1V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="LaselectV10ashiftV0V8ais_monochromeV0c0V15c1V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.76"/>
+         <result status="valid" time="1.75"/>
         </proof>
        </goal>
        <goal
@@ -606,22 +613,21 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="4125f5655eed8c58cec38b12b29cd64c"
+        sum="84db8dae03a4f0c2534472cfae762c3a"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_monochromeV0V15V13c2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="LaselectV10ashiftV0V8ais_monochromeV0V15V13c2V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.59"/>
+         <result status="valid" time="1.75"/>
         </proof>
        </goal>
        <goal
@@ -629,22 +635,21 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="cc4ffc406ef8c20e7267f7dfe4049c05"
+        sum="b04bd005cdcf9adcddb7de7c9b1fbcec"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V16Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FIainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8FIainfix =V11c1Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.70"/>
+         <result status="valid" time="1.84"/>
         </proof>
        </goal>
       </transf>
@@ -654,36 +659,37 @@
       locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="loop invariant preservation"
-      sum="1ab2afb4b0055131b18bd1dc392eeadd"
+      sum="c5588153178e08209163a1de650d4ec5"
       proved="true"
       expanded="true"
-      shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V12c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V12V7Aainfix <=V9V12Aainfix <=c0V9Aais_color_arrayV0V1V2V10Iainfix =V12ainfix +V8c1FIainfix =V11c2Iainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+      shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V12c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V12V7Aainfix &lt;=V9V12Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix =V12ainfix +V8c1FIainfix =V11c1Oainfix =V11c2Iainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
       <label
-       name="expl:parameter flag_ensures_default">
-       </label>
+       name="expl:parameter flag_ensures_default"/>
       <label
-       name="expl:Function flag, default behavior">
-       </label>
+       name="expl:Function flag, default behavior"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.16"/>
+       <result status="valid" time="0.28"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.15"/>
+       <result status="valid" time="0.16"/>
       </proof>
      </goal>
      <goal
@@ -691,16 +697,14 @@
       locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="loop invariant preservation"
-      sum="ddc2945b8b6da6ee89d43389af98f283"
+      sum="69c6326b61739572e945a9c84760c371"
       proved="true"
       expanded="true"
-      shape="LaselectV10ashiftV0V8ais_monochromeV0V12V1c3V13Aais_monochromeV0V9V8c2V13Aais_monochromeV0c0V9c1V13Aainfix <=V12V1Aainfix <=V8V12Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+      shape="LaselectV10ashiftV0V8ais_monochromeV0V12V1c3V13Aais_monochromeV0V9V8c2V13Aais_monochromeV0c0V9c1V13Aainfix &lt;=V12V1Aainfix &lt;=V8V12Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
       <label
-       name="expl:parameter flag_ensures_default">
-       </label>
+       name="expl:parameter flag_ensures_default"/>
       <label
-       name="expl:Function flag, default behavior">
-       </label>
+       name="expl:Function flag, default behavior"/>
       <transf
        name="split_goal"
        proved="true"
@@ -710,22 +714,21 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="cf811cc9493c17a5522d488dafe8a191"
+        sum="062c1b49b008e3ac0fb8c87b5330c3e1"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="LaselectV10ashiftV0V8ais_color_arrayV0V1V2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="1.32"/>
+         <result status="valid" time="1.38"/>
         </proof>
        </goal>
        <goal
@@ -733,26 +736,26 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="f55b3c8e217a09f3822824173c02785d"
+        sum="5c0464411f3ec45ec13c4510e5e7c39e"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix <=c0V9Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="LaselectV10ashiftV0V8ainfix &lt;=c0V9Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="2"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.09"/>
         </proof>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.04"/>
@@ -760,9 +763,10 @@
         <proof
          prover="1"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.13"/>
         </proof>
        </goal>
        <goal
@@ -770,26 +774,26 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="d9aca248e9c9b42f85aa7f168f571aa2"
+        sum="f52c3701531f76f8b33fae00ae5dc200"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix <=V9V8Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="LaselectV10ashiftV0V8ainfix &lt;=V9V8Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="2"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.08"/>
+         <result status="valid" time="0.09"/>
         </proof>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.06"/>
@@ -797,9 +801,10 @@
         <proof
          prover="1"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.13"/>
         </proof>
        </goal>
        <goal
@@ -807,26 +812,26 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="52f7d47097b6ebd75f5a05274a926262"
+        sum="dc070676ce6e355bab4e389e91e64907"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix <=V8V12Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="LaselectV10ashiftV0V8ainfix &lt;=V8V12Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="2"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.14"/>
+         <result status="valid" time="0.15"/>
         </proof>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
          <result status="valid" time="0.04"/>
@@ -834,9 +839,10 @@
         <proof
          prover="1"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.13"/>
         </proof>
        </goal>
        <goal
@@ -844,36 +850,37 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="20ad9364f9987baacc37a12e3a0b9a9e"
+        sum="b718231ee65db518220f25b4f68eedf4"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ainfix <=V12V1Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="LaselectV10ashiftV0V8ainfix &lt;=V12V1Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="2"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.14"/>
+         <result status="valid" time="0.15"/>
         </proof>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.05"/>
+         <result status="valid" time="0.03"/>
         </proof>
         <proof
          prover="1"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.12"/>
+         <result status="valid" time="0.13"/>
         </proof>
        </goal>
        <goal
@@ -881,22 +888,21 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="6b25de83603ea54161966323b73dbb63"
+        sum="2d9806c12b8263dc2cc947df36a4ea72"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_monochromeV0c0V9c1V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="LaselectV10ashiftV0V8ais_monochromeV0c0V9c1V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.87"/>
+         <result status="valid" time="0.94"/>
         </proof>
        </goal>
        <goal
@@ -904,22 +910,21 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="1d85d1cad6d7d9757e20d65a2198c286"
+        sum="c90a45979aa56ec92b7cbe3300a125e1"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_monochromeV0V9V8c2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="LaselectV10ashiftV0V8ais_monochromeV0V9V8c2V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.89"/>
+         <result status="valid" time="0.94"/>
         </proof>
        </goal>
        <goal
@@ -927,22 +932,21 @@
         locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
         loclnum="89" loccnumb="5" loccnume="9"
         expl="parameter flag_ensures_default"
-        sum="5cc76bb5b35b852249074f5bd5d19bdf"
+        sum="b17bec190894bdeffd70bddfcb8aedc0"
         proved="true"
         expanded="false"
-        shape="LaselectV10ashiftV0V8ais_monochromeV0V12V1c3V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c2Oainfix =V11c3Iainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+        shape="LaselectV10ashiftV0V8ais_monochromeV0V12V1c3V13Ianot_assignsV2V10V13apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V12V12Aainfix =aselectV13ashiftV0V8aselectV10ashiftV0V12Aainfix =aselectV13ashiftV0V12aselectV10ashiftV0V8FIainfix =V12ainfix -V7c1FIainfix =V11c1Oainfix =V11c2Oainfix =V11c3Iainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
         <label
-         name="expl:parameter flag_ensures_default">
-         </label>
+         name="expl:parameter flag_ensures_default"/>
         <label
-         name="expl:Function flag, default behavior">
-         </label>
+         name="expl:Function flag, default behavior"/>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.85"/>
+         <result status="valid" time="0.95"/>
         </proof>
        </goal>
       </transf>
@@ -952,19 +956,18 @@
       locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
       loclnum="89" loccnumb="5" loccnume="9"
       expl="loop invariant preservation"
-      sum="c42de73b913a9ff49ca5bb39aca5e242"
+      sum="69262b3e4ea1a30d5f4e1514a63d04a7"
       proved="true"
       expanded="false"
-      shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10Iainfix =V11c2Oainfix =V11c3NIainfix =V11c2NIainfix =V11c1NIainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+      shape="LaselectV10ashiftV0V8ais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10Iainfix =V11c1Oainfix =V11c2Oainfix =V11c3NIainfix =V11c1Oainfix =V11c2NIainfix =V11c1NIainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
       <label
-       name="expl:parameter flag_ensures_default">
-       </label>
+       name="expl:parameter flag_ensures_default"/>
       <label
-       name="expl:Function flag, default behavior">
-       </label>
+       name="expl:Function flag, default behavior"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.03"/>
@@ -972,16 +975,18 @@
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.11"/>
       </proof>
      </goal>
     </transf>
@@ -991,19 +996,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
     loclnum="89" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="7367e96dac21f2c8e67b6b7a06436f87"
+    sum="fda1f6e58e0c82ff2f3ce65c0f3707e7"
     proved="true"
     expanded="false"
-    shape="ais_monochromeV0V12V1c3V10Aais_monochromeV0V11V12c2V10Aais_monochromeV0c0V11c1V10EEIainfix <V8V7NIais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
+    shape="ais_monochromeV0V12V1c3V10Aais_monochromeV0V11V12c2V10Aais_monochromeV0c0V11c1V10EEIainfix &lt;V8V7NIais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
     <label
-     name="expl:parameter flag_ensures_sorts">
-     </label>
+     name="expl:parameter flag_ensures_sorts"/>
     <label
-     name="expl:Function flag, Behavior `sorts'">
-     </label>
+     name="expl:Function flag, Behavior `sorts&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.12"/>
@@ -1011,43 +1015,7 @@
     <proof
      prover="0"
      timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.06"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.10"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter flag_safety"
-    locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
-    loclnum="89" loccnumb="5" loccnume="9"
-    expl="parameter flag_safety"
-    sum="81339a611a27fc32fec5068d82c65353"
-    proved="true"
-    expanded="false"
-    shape="LaselectV10ashiftV0V8iainfix =V11c1ainfix <ainfix -V7V13ainfix -V7V8Aainfix <=c0ainfix -V7V8Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FAainfix >=aoffset_maxV2V0V12Aainfix <=aoffset_minV2V0V12Aainfix >=aoffset_maxV2V0V14Aainfix <=aoffset_minV2V0V14Iainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c2ainfix <ainfix -V7V17ainfix -V7V8Aainfix <=c0ainfix -V7V8Iainfix =V17ainfix +V8c1Fiainfix =V11c2Oainfix =V11c3ainfix <ainfix -V18V8ainfix -V7V8Aainfix <=c0ainfix -V7V8Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FAainfix >=aoffset_maxV2V0V8Aainfix <=aoffset_minV2V0V8Aainfix >=aoffset_maxV2V0V18Aainfix <=aoffset_minV2V0V18Iainfix =V18ainfix -V7c1Fainfix <ainfix -V7V8ainfix -V7V8Aainfix <=c0ainfix -V7V8Aainfix <=V8aoffset_maxV2V0Aainfix <=aoffset_minV2V0V8Iainfix <V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix <=V7V1Aainfix <=V8V7Aainfix <=V9V8Aainfix <=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix >=V1c0FFFF">
-    <label
-     name="expl:parameter flag_safety">
-     </label>
-    <label
-     name="expl:Function flag, Safety">
-     </label>
-    <proof
-     prover="2"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.17"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.09"/>
@@ -1055,9 +1023,48 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.11"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter flag_safety"
+    locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
+    loclnum="89" loccnumb="5" loccnume="9"
+    expl="parameter flag_safety"
+    sum="2feb408f865f0d35aa06e8c9d7b22373"
+    proved="true"
+    expanded="false"
+    shape="LaselectV10ashiftV0V8iainfix =V11c1ainfix &lt;ainfix -V7V13ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Ianot_assignsV2V10V16apset_unionapset_rangeapset_singletonV0V12V12apset_rangeapset_singletonV0V14V14Aainfix =aselectV16ashiftV0V12aselectV10ashiftV0V14Aainfix =aselectV16ashiftV0V14aselectV10ashiftV0V12FAainfix &gt;=aoffset_maxV2V0V12Aainfix &lt;=aoffset_minV2V0V12Aainfix &gt;=aoffset_maxV2V0V14Aainfix &lt;=aoffset_minV2V0V14Iainfix =V15ainfix +V9c1FIainfix =V14V9FIainfix =V13ainfix +V8c1FIainfix =V12V8Fiainfix =V11c1Oainfix =V11c2ainfix &lt;ainfix -V7V17ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Iainfix =V17ainfix +V8c1Fiainfix =V11c1Oainfix =V11c2Oainfix =V11c3ainfix &lt;ainfix -V18V8ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Ianot_assignsV2V10V19apset_unionapset_rangeapset_singletonV0V8V8apset_rangeapset_singletonV0V18V18Aainfix =aselectV19ashiftV0V8aselectV10ashiftV0V18Aainfix =aselectV19ashiftV0V18aselectV10ashiftV0V8FAainfix &gt;=aoffset_maxV2V0V8Aainfix &lt;=aoffset_minV2V0V8Aainfix &gt;=aoffset_maxV2V0V18Aainfix &lt;=aoffset_minV2V0V18Iainfix =V18ainfix -V7c1Fainfix &lt;ainfix -V7V8ainfix -V7V8Aainfix &lt;=c0ainfix -V7V8Aainfix &lt;=V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V8Iainfix &lt;V8V7Iais_monochromeV0V7V1c3V10Aais_monochromeV0V9V8c2V10Aais_monochromeV0c0V9c1V10Aainfix &lt;=V7V1Aainfix &lt;=V8V7Aainfix &lt;=V9V8Aainfix &lt;=c0V9Aais_color_arrayV0V1V2V10FFFFIainfix =V6V1FIainfix =V5c0FIainfix =V4c0FIais_color_arrayV0V1V2V3Aainfix &gt;=V1c0FFFF">
+    <label
+     name="expl:parameter flag_safety"/>
+    <label
+     name="expl:Function flag, Safety"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.18"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.10"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.20"/>
     </proof>
    </goal>
    <goal
@@ -1065,26 +1072,26 @@
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
     loclnum="60" loccnumb="4" loccnume="16"
     expl="parameter isMonochrome_ensures_decides_monochromatic"
-    sum="c6146a7c26f96ce4ee653685593eeaa0"
+    sum="2f408af9ea7bf0c00a9b74ce733a4b34"
     proved="true"
     expanded="false"
-    shape="iainfix <V7V2ais_monochromeV0V1V2V3V5qainfix =V9c0NIainfix =V9V8FIainfix =V8c0FIainfix =aselectV5ashiftV0V7V3Nais_monochromeV0V1V2V3V5qainfix =V11c0NIainfix =V11V10FIainfix =V10c1FIainfix =aselectV5ashiftV0V12V3Iainfix <V12V7Aainfix <=V1V12FAainfix <=V1V7FIainfix =V6V1FIainfix >=aoffset_maxV4V0V2Aainfix <=aoffset_minV4V0V1FFFFFF">
+    shape="iainfix &lt;V7V2ais_monochromeV0V1V2V3V5qainfix =V9c0NIainfix =V9V8FIainfix =V8c0FIainfix =aselectV5ashiftV0V7V3Nais_monochromeV0V1V2V3V5qainfix =V11c0NIainfix =V11V10FIainfix =V10c1FIainfix =aselectV5ashiftV0V12V3Iainfix &lt;V12V7Aainfix &lt;=V1V12FAainfix &lt;=V1V7FIainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1FFFFFF">
     <label
-     name="expl:parameter isMonochrome_ensures_decides_monochromatic">
-     </label>
+     name="expl:parameter isMonochrome_ensures_decides_monochromatic"/>
     <label
-     name="expl:Function isMonochrome, Behavior `decides_monochromatic'">
-     </label>
+     name="expl:Function isMonochrome, Behavior `decides_monochromatic&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.13"/>
+     <result status="valid" time="0.14"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.06"/>
@@ -1092,9 +1099,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.13"/>
+     <result status="valid" time="0.14"/>
     </proof>
    </goal>
    <goal
@@ -1102,63 +1110,26 @@
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
     loclnum="60" loccnumb="4" loccnume="16"
     expl="parameter isMonochrome_ensures_default"
-    sum="da5af1583d06b8cdfe7a6725c9a1a21f"
+    sum="96aa4c9417c95fcd2d424fdb9b1eb02c"
     proved="true"
     expanded="false"
-    shape="ainfix =aselectV5ashiftV0V9V3Iainfix <V9V8Aainfix <=V1V9FAainfix <=V1V8Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Iainfix <V7V2Iainfix =aselectV5ashiftV0V10V3Iainfix <V10V7Aainfix <=V1V10FAainfix <=V1V7FAainfix =aselectV5ashiftV0V11V3Iainfix <V11V6Aainfix <=V1V11FAainfix <=V1V6Iainfix =V6V1FIainfix >=aoffset_maxV4V0V2Aainfix <=aoffset_minV4V0V1FFFFFF">
+    shape="ainfix =aselectV5ashiftV0V9V3Iainfix &lt;V9V8Aainfix &lt;=V1V9FAainfix &lt;=V1V8Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Iainfix &lt;V7V2Iainfix =aselectV5ashiftV0V10V3Iainfix &lt;V10V7Aainfix &lt;=V1V10FAainfix &lt;=V1V7FAainfix =aselectV5ashiftV0V11V3Iainfix &lt;V11V6Aainfix &lt;=V1V11FAainfix &lt;=V1V6Iainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1FFFFFF">
     <label
-     name="expl:parameter isMonochrome_ensures_default">
-     </label>
+     name="expl:parameter isMonochrome_ensures_default"/>
     <label
-     name="expl:Function isMonochrome, default behavior">
-     </label>
+     name="expl:Function isMonochrome, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.15"/>
+     <result status="valid" time="0.16"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.04"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.11"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter isMonochrome_safety"
-    locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
-    loclnum="60" loccnumb="4" loccnume="16"
-    expl="parameter isMonochrome_safety"
-    sum="75b05eb0aece49862046a341f7c5b9b4"
-    proved="true"
-    expanded="false"
-    shape="ainfix <ainfix -V2V8ainfix -V2V7Aainfix <=c0ainfix -V2V7Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Aainfix <=V7aoffset_maxV4V0Aainfix <=aoffset_minV4V0V7Iainfix <V7V2Iainfix =aselectV5ashiftV0V9V3Iainfix <V9V7Aainfix <=V1V9FAainfix <=V1V7FIainfix =V6V1FIainfix >=aoffset_maxV4V0V2Aainfix <=aoffset_minV4V0V1FFFFFF">
-    <label
-     name="expl:parameter isMonochrome_safety">
-     </label>
-    <label
-     name="expl:Function isMonochrome, Safety">
-     </label>
-    <proof
-     prover="2"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.13"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.06"/>
@@ -1166,36 +1137,37 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.11"/>
+     <result status="valid" time="0.13"/>
     </proof>
    </goal>
    <goal
-    name="WP_parameter swap_ensures_default"
+    name="WP_parameter isMonochrome_safety"
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
-    loclnum="75" loccnumb="5" loccnume="9"
-    expl="parameter swap_ensures_default"
-    sum="4670e686b92c1d16f63b72ed6fb8f8a3"
+    loclnum="60" loccnumb="4" loccnume="16"
+    expl="parameter isMonochrome_safety"
+    sum="bb98ee62d37868edb45b039e7561d661"
     proved="true"
     expanded="false"
-    shape="t">
+    shape="ainfix &lt;ainfix -V2V8ainfix -V2V7Aainfix &lt;=c0ainfix -V2V7Iainfix =V8ainfix +V7c1FIainfix =aselectV5ashiftV0V7V3Aainfix &lt;=V7aoffset_maxV4V0Aainfix &lt;=aoffset_minV4V0V7Iainfix &lt;V7V2Iainfix =aselectV5ashiftV0V9V3Iainfix &lt;V9V7Aainfix &lt;=V1V9FAainfix &lt;=V1V7FIainfix =V6V1FIainfix &gt;=aoffset_maxV4V0V2Aainfix &lt;=aoffset_minV4V0V1FFFFFF">
     <label
-     name="expl:parameter swap_ensures_default">
-     </label>
+     name="expl:parameter isMonochrome_safety"/>
     <label
-     name="expl:Function swap, default behavior">
-     </label>
+     name="expl:Function isMonochrome, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.14"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -1203,6 +1175,45 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.12"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter swap_ensures_default"
+    locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
+    loclnum="75" loccnumb="5" loccnume="9"
+    expl="parameter swap_ensures_default"
+    sum="274782894a4c1e7be69030db4f854bba"
+    proved="true"
+    expanded="false"
+    shape="t">
+    <label
+     name="expl:parameter swap_ensures_default"/>
+    <label
+     name="expl:Function swap, default behavior"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.08"/>
@@ -1213,36 +1224,37 @@
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
     loclnum="75" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="a0ac5df2d0d563e77e2aef3278009549"
+    sum="c578dac87b72847eb06f613c74306e82"
     proved="true"
     expanded="true"
-    shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV7ashiftV0V2aselectV4ashiftV0V1Aainfix =aselectV7ashiftV0V1aselectV4ashiftV0V2Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V2Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1FFFFF">
+    shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aainfix =aselectV7ashiftV0V2aselectV4ashiftV0V1Aainfix =aselectV7ashiftV0V1aselectV4ashiftV0V2Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FFFFF">
     <label
-     name="expl:parameter swap_ensures_i_j_swapped">
-     </label>
+     name="expl:parameter swap_ensures_i_j_swapped"/>
     <label
-     name="expl:Function swap, Behavior `i_j_swapped'">
-     </label>
+     name="expl:Function swap, Behavior `i_j_swapped&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.58"/>
+     <result status="valid" time="0.57"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.89"/>
+     <result status="valid" time="0.93"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.74"/>
+     <result status="valid" time="2.08"/>
     </proof>
    </goal>
    <goal
@@ -1250,36 +1262,37 @@
     locfile="/home/cmarche/why2-trunk/tests/c/flag.c"
     loclnum="75" loccnumb="5" loccnume="9"
     expl="parameter swap_safety"
-    sum="b83951fd11f8a45a3c553a5d8892e807"
+    sum="2fda9ccc0c296282325d5a596c1849b9"
     proved="true"
     expanded="false"
-    shape="ainfix <=V2aoffset_maxV3V0Aainfix <=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Aainfix <=V2aoffset_maxV3V0Aainfix <=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Iainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V2Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1FFFFF">
+    shape="ainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Aainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FFFFF">
     <label
-     name="expl:parameter swap_safety">
-     </label>
+     name="expl:parameter swap_safety"/>
     <label
-     name="expl:Function swap, Safety">
-     </label>
+     name="expl:Function swap, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.11"/>
+     <result status="valid" time="0.12"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.07"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.12"/>
     </proof>
    </goal>
   </theory>

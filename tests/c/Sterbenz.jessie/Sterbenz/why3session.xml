@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="Sterbenz.jessie/Sterbenz/why3session.xml">
  <prover
@@ -48,16 +48,14 @@
     locfile="/home/marche/why2-nitrogen/tests/c/Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
     expl="parameter _Sterbenz_ensures_default"
-    sum="8c277c01e64b2ac70ce1ee1e3ecd5555"
+    sum="7e2635a1a5e90dedff0a96e046a526e2"
     proved="false"
     expanded="true"
-    shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_single_postaNearestTiesToEvenV0V1V2FAainfix <=c0.0avalueV0Aainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
+    shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FAainfix &lt;=c0.0avalueV0Aainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0FF">
     <label
-     name="expl:parameter _Sterbenz_ensures_default">
-     </label>
+     name="expl:parameter _Sterbenz_ensures_default"/>
     <label
-     name="expl:Function Sterbenz, default behavior">
-     </label>
+     name="expl:Function Sterbenz, default behavior"/>
     <transf
      name="split_goal"
      proved="false"
@@ -67,19 +65,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="assertion"
-      sum="6f6ed123250a632652e3984368249894"
+      sum="1f4f347f02aecfc0722dda162f716403"
       proved="true"
       expanded="true"
-      shape="ainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
+      shape="ainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0FF">
       <label
-       name="expl:parameter _Sterbenz_ensures_default">
-       </label>
+       name="expl:parameter _Sterbenz_ensures_default"/>
       <label
-       name="expl:Function Sterbenz, default behavior">
-       </label>
+       name="expl:Function Sterbenz, default behavior"/>
       <proof
        prover="4"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.04"/>
@@ -87,6 +84,7 @@
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
@@ -94,6 +92,7 @@
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.04"/>
@@ -104,19 +103,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="assertion"
-      sum="90dfe8cfe63d92567ac6fd57940cd6f0"
+      sum="4e2989b10f9db7178ed92cb019a168d6"
       proved="true"
       expanded="true"
-      shape="ainfix <=c0.0avalueV0Iainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
+      shape="ainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0FF">
       <label
-       name="expl:parameter _Sterbenz_ensures_default">
-       </label>
+       name="expl:parameter _Sterbenz_ensures_default"/>
       <label
-       name="expl:Function Sterbenz, default behavior">
-       </label>
+       name="expl:Function Sterbenz, default behavior"/>
       <proof
        prover="4"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.05"/>
@@ -124,13 +122,15 @@
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.03"/>
       </proof>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -141,33 +141,34 @@
       locfile="/home/marche/why2-nitrogen/tests/c/Sterbenz.c"
       loclnum="37" loccnumb="6" loccnume="14"
       expl="normal postcondition"
-      sum="445f3735ead190d8df6513a2cf937fde"
+      sum="bf862c46961aa54bc7bae37221eb0a6e"
       proved="false"
       expanded="true"
-      shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_single_postaNearestTiesToEvenV0V1V2FIainfix <=c0.0avalueV0Iainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
+      shape="ainfix =avalueV4ainfix -avalueV0avalueV1Iainfix =V4V3FIainfix =V3V2FIasub_postaNearestTiesToEvenV0V1V2FIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0FF">
       <label
-       name="expl:parameter _Sterbenz_ensures_default">
-       </label>
+       name="expl:parameter _Sterbenz_ensures_default"/>
       <label
-       name="expl:Function Sterbenz, default behavior">
-       </label>
+       name="expl:Function Sterbenz, default behavior"/>
       <proof
        prover="4"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.02"/>
+       <result status="timeout" time="5.12"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="unknown" time="0.22"/>
+       <result status="unknown" time="0.25"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="unknown" time="0.04"/>
@@ -175,6 +176,7 @@
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="timeout" time="5.02"/>
@@ -182,9 +184,10 @@
       <proof
        prover="5"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="timeout" time="5.12"/>
+       <result status="timeout" time="5.11"/>
       </proof>
      </goal>
     </transf>
@@ -194,19 +197,18 @@
     locfile="/home/marche/why2-nitrogen/tests/c/Sterbenz.c"
     loclnum="37" loccnumb="6" loccnume="14"
     expl="floating-point overflow"
-    sum="19e4bef29f5465d81ff8e4a70dab0adc"
+    sum="c80ffbf9fb3a1fe7dee0d8717562db10"
     proved="true"
     expanded="true"
-    shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV0avalueV1amax_singleIainfix <=c0.0avalueV0Iainfix <=c0.0avalueV1Iainfix <=avalueV0ainfix *c2.0avalueV1Aainfix <=ainfix /avalueV1c2.0avalueV0FF">
+    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV0avalueV1amax_singleIainfix &lt;=c0.0avalueV0Iainfix &lt;=c0.0avalueV1Iainfix &lt;=avalueV0ainfix *c2.0avalueV1Aainfix &lt;=ainfix /avalueV1c2.0avalueV0FF">
     <label
-     name="expl:parameter _Sterbenz_safety">
-     </label>
+     name="expl:parameter _Sterbenz_safety"/>
     <label
-     name="expl:Function Sterbenz, Safety">
-     </label>
+     name="expl:Function Sterbenz, Safety"/>
     <proof
      prover="3"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>

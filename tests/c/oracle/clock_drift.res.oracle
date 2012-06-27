@@ -113,9 +113,17 @@ axiomatic Padding {
   
 }
 
+type uint8 = 0..255
+
 type int8 = -128..127
 
 type int32 = -2147483648..2147483647
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -129,18 +137,18 @@ tag voidP = {
 type voidP = [voidP]
 
 lemma real_of_int_inf_NMAX :
-(\forall integer i;
-  ((i <= 1000000) ==> (i <= 1000000.0)))
+(\forall integer i_1;
+  ((i_1 <= 1000000) ==> (i_1 <= 1000000.0)))
 
 lemma real_of_int_succ :
 (\forall integer n;
   ((n + 1) == (n + 1.0)))
 
-float f_single(int32 n)
-  requires (C_18 : ((C_19 : (0 <= n)) && (C_20 : (n <= 1000000))));
+float f_single(int32 n_1)
+  requires (C_18 : ((C_19 : (0 <= n_1)) && (C_20 : (n_1 <= 1000000))));
 behavior default:
-  ensures (C_17 : (\real_abs(((\result :> real) - (\at(n,Old) * 0.1))) <=
-                    (\at(n,Old) * (0x1p-8 + 1.49012e-09))));
+  ensures (C_17 : (\real_abs(((\result :> real) - (\at(n_1,Old) * 0.1))) <=
+                    (\at(n_1,Old) * (0x1p-8 + 1.49012e-09))));
 {  
    (var float t);
    
@@ -151,14 +159,14 @@ behavior default:
       
       loop 
       behavior default:
-        invariant (C_5 : ((C_6 : (0 <= i)) && (C_7 : (i <= n))));
+        invariant (C_5 : ((C_6 : (0 <= i)) && (C_7 : (i <= n_1))));
       behavior default:
         invariant (C_4 : (\real_abs(((t :> real) - (i * 0.1))) <=
                            (i * (0x1p-8 + 1.49012e-09))));
-      variant (C_3 : (n - i));
+      variant (C_3 : (n_1 - i));
       while (true)
       {  
-         {  (if (i < n) then () else 
+         {  (if (i < n_1) then () else 
             (goto while_0_break));
             
             {  (L : 
@@ -626,15 +634,15 @@ end = -1
 
 [JC_18]
 file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
-line = 49
+line = 57
 begin = 6
-end = 1528
+end = 1534
 
 [JC_19]
 file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
-line = 49
+line = 57
 begin = 6
-end = 1528
+end = 1534
 
 [JC_20]
 file = "HOME/tests/c/clock_drift.c"
@@ -720,15 +728,15 @@ end = -1
 
 [JC_32]
 file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
-line = 49
+line = 57
 begin = 6
-end = 1528
+end = 1534
 
 [JC_33]
 file = "HOME/tests/c/clock_drift.jessie/clock_drift.jc"
-line = 49
+line = 57
 begin = 6
-end = 1528
+end = 1534
 
 [JC_34]
 file = "HOME/tests/c/clock_drift.c"
@@ -778,6 +786,10 @@ type int8
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag:  -> charP tag_id
@@ -805,6 +817,11 @@ logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
+
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic int32_of_integer: int -> int32
 
@@ -843,12 +860,22 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
  charP_alloc_table:charP alloc_table) =
  (offset_min(charP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
 
 axiom pointer_addr_of_charP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -859,6 +886,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
  charP_alloc_table:charP alloc_table) =
  (offset_max(charP_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_max(voidP_alloc_table, p) >= b)
@@ -867,6 +898,11 @@ predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) = a)
  and (offset_max(charP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -878,15 +914,57 @@ predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
  ((offset_min(charP_alloc_table, p) = a)
  and (offset_max(charP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
  and (offset_max(charP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -897,6 +975,11 @@ predicate valid_struct_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
  and (offset_max(charP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -918,11 +1001,12 @@ axiom voidP_tags :
    instanceof(voidP_tag_table, x, voidP_tag)))
 
 lemma real_of_int_inf_NMAX :
- (forall i:int. (le_int(i, (1000000)) -> le_real(real_of_int(i), 1000000.0)))
+ (forall i_1:int.
+  (le_int(i_1, (1000000)) -> le_real(real_of_int(i_1), 1000000.0)))
 
 lemma real_of_int_succ :
- (forall n_0:int.
-  (real_of_int(add_int(n_0, (1))) = add_real(real_of_int(n_0), 1.0)))
+ (forall n:int.
+  (real_of_int(add_int(n, (1))) = add_real(real_of_int(n), 1.0)))
 
 exception Goto_while_0_break_exc of unit
 
@@ -958,6 +1042,38 @@ parameter alloc_struct_charP_requires :
           and (alloc_fresh(charP_alloc_table@, result, n)
               and instanceof(charP_tag_table, result, charP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -988,24 +1104,28 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
+parameter any_uint8 : unit -> { } uint8 { true }
+
 parameter f_single :
- n:int32 ->
+ n_1:int32 ->
   { } single
   { (JC_10:
     le_real(abs_real(sub_real(single_value(result),
-                     mul_real(real_of_int(integer_of_int32(n)), 0.1))),
-    mul_real(real_of_int(integer_of_int32(n)), add_real(0x1p-8, 1.49012e-09)))) }
+                     mul_real(real_of_int(integer_of_int32(n_1)), 0.1))),
+    mul_real(real_of_int(integer_of_int32(n_1)),
+    add_real(0x1p-8, 1.49012e-09)))) }
 
 parameter f_single_requires :
- n:int32 ->
+ n_1:int32 ->
   { (JC_3:
-    ((JC_1: le_int((0), integer_of_int32(n)))
-    and (JC_2: le_int(integer_of_int32(n), (1000000)))))}
+    ((JC_1: le_int((0), integer_of_int32(n_1)))
+    and (JC_2: le_int(integer_of_int32(n_1), (1000000)))))}
   single
   { (JC_10:
     le_real(abs_real(sub_real(single_value(result),
-                     mul_real(real_of_int(integer_of_int32(n)), 0.1))),
-    mul_real(real_of_int(integer_of_int32(n)), add_real(0x1p-8, 1.49012e-09)))) }
+                     mul_real(real_of_int(integer_of_int32(n_1)), 0.1))),
+    mul_real(real_of_int(integer_of_int32(n_1)),
+    add_real(0x1p-8, 1.49012e-09)))) }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1023,36 +1143,43 @@ parameter safe_int32_of_integer_ :
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
 
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
+
 let f_single_ensures_default =
- fun (n : int32) ->
+ fun (n_1 : int32) ->
   { (JC_7:
-    ((JC_5: le_int((0), integer_of_int32(n)))
-    and (JC_6: le_int(integer_of_int32(n), (1000000))))) }
+    ((JC_5: le_int((0), integer_of_int32(n_1)))
+    and (JC_6: le_int(integer_of_int32(n_1), (1000000))))) }
   (init:
   (let return = ref (any_single void) in
   try
    begin
      (let t = ref (any_single void) in
-     (let i_0 = ref (any_int32 void) in
+     (let i = ref (any_int32 void) in
      try
       (C_1:
       (C_2:
       begin
         (let jessie_<num> = (t := (single_of_real_exact 0.0)) in void);
-       (let jessie_<num> = (i_0 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
        (loop_2:
        while true do
        { invariant
            ((JC_27:
             le_real(abs_real(sub_real(single_value(t),
-                             mul_real(real_of_int(integer_of_int32(i_0)),
-                             0.1))),
-            mul_real(real_of_int(integer_of_int32(i_0)),
+                             mul_real(real_of_int(integer_of_int32(i)), 0.1))),
+            mul_real(real_of_int(integer_of_int32(i)),
             add_real(0x1p-8, 1.49012e-09))))
            and (JC_30:
-               ((JC_28: le_int((0), integer_of_int32(i_0)))
+               ((JC_28: le_int((0), integer_of_int32(i)))
                and (JC_29:
-                   le_int(integer_of_int32(i_0), integer_of_int32(n)))))) 
+                   le_int(integer_of_int32(i), integer_of_int32(n_1)))))) 
           }
         begin
           [ { } unit { true } ];
@@ -1062,7 +1189,7 @@ let f_single_ensures_default =
             (L:
             (C_16:
             begin
-              (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 n))
+              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
               then void else (raise (Goto_while_0_break_exc void)));
              (let jessie_<num> =
              (C_12:
@@ -1084,10 +1211,10 @@ let f_single_ensures_default =
                le_real(abs_real(sub_real(single_value(t),
                                 add_real(single_value(t@L), 0x1.99999ap-4))),
                0x1p-8)) }; void); void;
-             (i_0 := (C_15:
-                     (safe_int32_of_integer_ (C_14:
-                                             ((add_int (integer_of_int32 !i_0)) (1))))));
-             !i_0 end)) in void); (raise (Loop_continue_exc void)) end with
+             (i := (C_15:
+                   (safe_int32_of_integer_ (C_14:
+                                           ((add_int (integer_of_int32 !i)) (1))))));
+             !i end)) in void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<num> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<num> ->
@@ -1095,49 +1222,50 @@ let f_single_ensures_default =
     absurd  end with Return -> !return end))
   { (JC_9:
     le_real(abs_real(sub_real(single_value(result),
-                     mul_real(real_of_int(integer_of_int32(n)), 0.1))),
-    mul_real(real_of_int(integer_of_int32(n)), add_real(0x1p-8, 1.49012e-09)))) }
+                     mul_real(real_of_int(integer_of_int32(n_1)), 0.1))),
+    mul_real(real_of_int(integer_of_int32(n_1)),
+    add_real(0x1p-8, 1.49012e-09)))) }
 
 let f_single_safety =
- fun (n : int32) ->
+ fun (n_1 : int32) ->
   { (JC_7:
-    ((JC_5: le_int((0), integer_of_int32(n)))
-    and (JC_6: le_int(integer_of_int32(n), (1000000))))) }
+    ((JC_5: le_int((0), integer_of_int32(n_1)))
+    and (JC_6: le_int(integer_of_int32(n_1), (1000000))))) }
   (init:
   (let return = ref (any_single void) in
   try
    begin
      (let t = ref (any_single void) in
-     (let i_0 = ref (any_int32 void) in
+     (let i = ref (any_int32 void) in
      try
       (C_1:
       (C_2:
       begin
         (let jessie_<num> = (t := (single_of_real_exact 0.0)) in void);
-       (let jessie_<num> = (i_0 := (safe_int32_of_integer_ (0))) in void);
+       (let jessie_<num> = (i := (safe_int32_of_integer_ (0))) in void);
        (loop_1:
        while true do
        { invariant (JC_18: true)
-         variant (JC_26 : sub_int(integer_of_int32(n), integer_of_int32(i_0))) }
+         variant (JC_26 : sub_int(integer_of_int32(n_1), integer_of_int32(i))) }
         begin
-          [ { } unit reads i_0,t
+          [ { } unit reads i,t
             { ((JC_13:
                le_real(abs_real(sub_real(single_value(t),
-                                mul_real(real_of_int(integer_of_int32(i_0)),
+                                mul_real(real_of_int(integer_of_int32(i)),
                                 0.1))),
-               mul_real(real_of_int(integer_of_int32(i_0)),
+               mul_real(real_of_int(integer_of_int32(i)),
                add_real(0x1p-8, 1.49012e-09))))
               and (JC_16:
-                  ((JC_14: le_int((0), integer_of_int32(i_0)))
+                  ((JC_14: le_int((0), integer_of_int32(i)))
                   and (JC_15:
-                      le_int(integer_of_int32(i_0), integer_of_int32(n)))))) } ];
+                      le_int(integer_of_int32(i), integer_of_int32(n_1)))))) } ];
          try
           begin
             (let jessie_<num> =
             (L:
             (C_16:
             begin
-              (if ((lt_int_ (integer_of_int32 !i_0)) (integer_of_int32 n))
+              (if ((lt_int_ (integer_of_int32 !i)) (integer_of_int32 n_1))
               then void else (raise (Goto_while_0_break_exc void)));
              (let jessie_<num> =
              (C_12:
@@ -1159,11 +1287,11 @@ let f_single_safety =
                  le_real(abs_real(sub_real(single_value(t),
                                   add_real(single_value(t@L), 0x1.99999ap-4))),
                  0x1p-8)) } ]; void;
-             (i_0 := (C_15:
-                     (JC_25:
-                     (int32_of_integer_ (C_14:
-                                        ((add_int (integer_of_int32 !i_0)) (1)))))));
-             !i_0 end)) in void); (raise (Loop_continue_exc void)) end with
+             (i := (C_15:
+                   (JC_25:
+                   (int32_of_integer_ (C_14:
+                                      ((add_int (integer_of_int32 !i)) (1)))))));
+             !i end)) in void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<num> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<num> ->
@@ -2419,6 +2547,10 @@ type int8
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag : charP tag_id
@@ -2447,6 +2579,11 @@ logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
+
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
 
 logic int32_of_integer : int -> int32
 
@@ -2484,12 +2621,22 @@ predicate left_valid_struct_charP(p: charP pointer, a: int,
   charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
 
 axiom pointer_addr_of_charP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -2500,6 +2647,10 @@ predicate right_valid_struct_charP(p: charP pointer, b: int,
   charP_alloc_table: charP alloc_table) = (offset_max(charP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
@@ -2508,6 +2659,11 @@ predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
    p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2519,15 +2675,56 @@ predicate strict_valid_struct_charP(p: charP pointer, a: int, b: int,
   ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
 
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8.
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2538,6 +2735,11 @@ predicate valid_struct_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2560,22 +2762,22 @@ axiom voidP_tags:
       voidP_tag)))
 
 goal real_of_int_inf_NMAX:
-  (forall i:int. ((i <= 1000000) -> (real_of_int(i) <= 1000000.0)))
+  (forall i_1:int. ((i_1 <= 1000000) -> (real_of_int(i_1) <= 1000000.0)))
 
 axiom real_of_int_inf_NMAX_as_axiom:
-  (forall i:int. ((i <= 1000000) -> (real_of_int(i) <= 1000000.0)))
+  (forall i_1:int. ((i_1 <= 1000000) -> (real_of_int(i_1) <= 1000000.0)))
 
 goal real_of_int_succ:
-  (forall n_0:int. (real_of_int((n_0 + 1)) = (real_of_int(n_0) + 1.0)))
+  (forall n:int. (real_of_int((n + 1)) = (real_of_int(n) + 1.0)))
 
 axiom real_of_int_succ_as_axiom:
-  (forall n_0:int. (real_of_int((n_0 + 1)) = (real_of_int(n_0) + 1.0)))
+  (forall n:int. (real_of_int((n + 1)) = (real_of_int(n) + 1.0)))
 
 goal f_single_ensures_default_po_1:
-  forall n:int32.
+  forall n_1:int32.
   ("JC_7":
-  (("JC_5": (0 <= integer_of_int32(n))) and
-   ("JC_6": (integer_of_int32(n) <= 1000000)))) ->
+  (("JC_5": (0 <= integer_of_int32(n_1))) and
+   ("JC_6": (integer_of_int32(n_1) <= 1000000)))) ->
   forall result:single.
   ((single_value(result) = 0.0) and
    ((single_exact(result) = 0.0) and (single_model(result) = 0.0))) ->
@@ -2583,16 +2785,16 @@ goal f_single_ensures_default_po_1:
   (t = result) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  forall i_0:int32.
-  (i_0 = result0) ->
+  forall i:int32.
+  (i = result0) ->
   ("JC_27":
-  (abs_real((single_value(t) - (real_of_int(integer_of_int32(i_0)) * 0.1))) <= (real_of_int(integer_of_int32(i_0)) * (0x1.p-8 + 1.49012e-09))))
+  (abs_real((single_value(t) - (real_of_int(integer_of_int32(i)) * 0.1))) <= (real_of_int(integer_of_int32(i)) * (0x1.p-8 + 1.49012e-09))))
 
 goal f_single_ensures_default_po_2:
-  forall n:int32.
+  forall n_1:int32.
   ("JC_7":
-  (("JC_5": (0 <= integer_of_int32(n))) and
-   ("JC_6": (integer_of_int32(n) <= 1000000)))) ->
+  (("JC_5": (0 <= integer_of_int32(n_1))) and
+   ("JC_6": (integer_of_int32(n_1) <= 1000000)))) ->
   forall result:single.
   ((single_value(result) = 0.0) and
    ((single_exact(result) = 0.0) and (single_model(result) = 0.0))) ->
@@ -2600,15 +2802,15 @@ goal f_single_ensures_default_po_2:
   (t = result) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  forall i_0:int32.
-  (i_0 = result0) ->
-  ("JC_30": ("JC_28": (0 <= integer_of_int32(i_0))))
+  forall i:int32.
+  (i = result0) ->
+  ("JC_30": ("JC_28": (0 <= integer_of_int32(i))))
 
 goal f_single_ensures_default_po_3:
-  forall n:int32.
+  forall n_1:int32.
   ("JC_7":
-  (("JC_5": (0 <= integer_of_int32(n))) and
-   ("JC_6": (integer_of_int32(n) <= 1000000)))) ->
+  (("JC_5": (0 <= integer_of_int32(n_1))) and
+   ("JC_6": (integer_of_int32(n_1) <= 1000000)))) ->
   forall result:single.
   ((single_value(result) = 0.0) and
    ((single_exact(result) = 0.0) and (single_model(result) = 0.0))) ->
@@ -2616,15 +2818,15 @@ goal f_single_ensures_default_po_3:
   (t = result) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  forall i_0:int32.
-  (i_0 = result0) ->
-  ("JC_30": ("JC_29": (integer_of_int32(i_0) <= integer_of_int32(n))))
+  forall i:int32.
+  (i = result0) ->
+  ("JC_30": ("JC_29": (integer_of_int32(i) <= integer_of_int32(n_1))))
 
 goal f_single_ensures_default_po_4:
-  forall n:int32.
+  forall n_1:int32.
   ("JC_7":
-  (("JC_5": (0 <= integer_of_int32(n))) and
-   ("JC_6": (integer_of_int32(n) <= 1000000)))) ->
+  (("JC_5": (0 <= integer_of_int32(n_1))) and
+   ("JC_6": (integer_of_int32(n_1) <= 1000000)))) ->
   forall result:single.
   ((single_value(result) = 0.0) and
    ((single_exact(result) = 0.0) and (single_model(result) = 0.0))) ->
@@ -2632,23 +2834,23 @@ goal f_single_ensures_default_po_4:
   (t = result) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  forall i_0:int32.
-  (i_0 = result0) ->
-  forall i_0_0:int32.
+  forall i:int32.
+  (i = result0) ->
+  forall i0:int32.
   forall t0:single.
   (("JC_27":
-   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i_0_0)) * 0.1))) <= (real_of_int(integer_of_int32(i_0_0)) * (0x1.p-8 + 1.49012e-09)))) and
+   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
    ("JC_30":
-   (("JC_28": (0 <= integer_of_int32(i_0_0))) and
-    ("JC_29": (integer_of_int32(i_0_0) <= integer_of_int32(n)))))) ->
-  (integer_of_int32(i_0_0) < integer_of_int32(n)) ->
+   (("JC_28": (0 <= integer_of_int32(i0))) and
+    ("JC_29": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+  (integer_of_int32(i0) < integer_of_int32(n_1)) ->
   ("JC_36": ("JC_34": (0.0 <= single_value(t0))))
 
 goal f_single_ensures_default_po_5:
-  forall n:int32.
+  forall n_1:int32.
   ("JC_7":
-  (("JC_5": (0 <= integer_of_int32(n))) and
-   ("JC_6": (integer_of_int32(n) <= 1000000)))) ->
+  (("JC_5": (0 <= integer_of_int32(n_1))) and
+   ("JC_6": (integer_of_int32(n_1) <= 1000000)))) ->
   forall result:single.
   ((single_value(result) = 0.0) and
    ((single_exact(result) = 0.0) and (single_model(result) = 0.0))) ->
@@ -2656,25 +2858,25 @@ goal f_single_ensures_default_po_5:
   (t = result) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  forall i_0:int32.
-  (i_0 = result0) ->
-  forall i_0_0:int32.
+  forall i:int32.
+  (i = result0) ->
+  forall i0:int32.
   forall t0:single.
   (("JC_27":
-   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i_0_0)) * 0.1))) <= (real_of_int(integer_of_int32(i_0_0)) * (0x1.p-8 + 1.49012e-09)))) and
+   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
    ("JC_30":
-   (("JC_28": (0 <= integer_of_int32(i_0_0))) and
-    ("JC_29": (integer_of_int32(i_0_0) <= integer_of_int32(n)))))) ->
-  (integer_of_int32(i_0_0) < integer_of_int32(n)) ->
+   (("JC_28": (0 <= integer_of_int32(i0))) and
+    ("JC_29": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+  (integer_of_int32(i0) < integer_of_int32(n_1)) ->
   ("JC_36":
   ("JC_35":
   (single_value(t0) <= (1000000.0 * (0.1 + (0x1.p-8 + 1.49012e-09))))))
 
 goal f_single_ensures_default_po_6:
-  forall n:int32.
+  forall n_1:int32.
   ("JC_7":
-  (("JC_5": (0 <= integer_of_int32(n))) and
-   ("JC_6": (integer_of_int32(n) <= 1000000)))) ->
+  (("JC_5": (0 <= integer_of_int32(n_1))) and
+   ("JC_6": (integer_of_int32(n_1) <= 1000000)))) ->
   forall result:single.
   ((single_value(result) = 0.0) and
    ((single_exact(result) = 0.0) and (single_model(result) = 0.0))) ->
@@ -2682,16 +2884,16 @@ goal f_single_ensures_default_po_6:
   (t = result) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  forall i_0:int32.
-  (i_0 = result0) ->
-  forall i_0_0:int32.
+  forall i:int32.
+  (i = result0) ->
+  forall i0:int32.
   forall t0:single.
   (("JC_27":
-   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i_0_0)) * 0.1))) <= (real_of_int(integer_of_int32(i_0_0)) * (0x1.p-8 + 1.49012e-09)))) and
+   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
    ("JC_30":
-   (("JC_28": (0 <= integer_of_int32(i_0_0))) and
-    ("JC_29": (integer_of_int32(i_0_0) <= integer_of_int32(n)))))) ->
-  (integer_of_int32(i_0_0) < integer_of_int32(n)) ->
+   (("JC_28": (0 <= integer_of_int32(i0))) and
+    ("JC_29": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+  (integer_of_int32(i0) < integer_of_int32(n_1)) ->
   ("JC_36":
   (("JC_34": (0.0 <= single_value(t0))) and
    ("JC_35":
@@ -2708,10 +2910,10 @@ goal f_single_ensures_default_po_6:
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8))
 
 goal f_single_ensures_default_po_7:
-  forall n:int32.
+  forall n_1:int32.
   ("JC_7":
-  (("JC_5": (0 <= integer_of_int32(n))) and
-   ("JC_6": (integer_of_int32(n) <= 1000000)))) ->
+  (("JC_5": (0 <= integer_of_int32(n_1))) and
+   ("JC_6": (integer_of_int32(n_1) <= 1000000)))) ->
   forall result:single.
   ((single_value(result) = 0.0) and
    ((single_exact(result) = 0.0) and (single_model(result) = 0.0))) ->
@@ -2719,16 +2921,16 @@ goal f_single_ensures_default_po_7:
   (t = result) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  forall i_0:int32.
-  (i_0 = result0) ->
-  forall i_0_0:int32.
+  forall i:int32.
+  (i = result0) ->
+  forall i0:int32.
   forall t0:single.
   (("JC_27":
-   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i_0_0)) * 0.1))) <= (real_of_int(integer_of_int32(i_0_0)) * (0x1.p-8 + 1.49012e-09)))) and
+   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
    ("JC_30":
-   (("JC_28": (0 <= integer_of_int32(i_0_0))) and
-    ("JC_29": (integer_of_int32(i_0_0) <= integer_of_int32(n)))))) ->
-  (integer_of_int32(i_0_0) < integer_of_int32(n)) ->
+   (("JC_28": (0 <= integer_of_int32(i0))) and
+    ("JC_29": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+  (integer_of_int32(i0) < integer_of_int32(n_1)) ->
   ("JC_36":
   (("JC_34": (0.0 <= single_value(t0))) and
    ("JC_35":
@@ -2744,17 +2946,17 @@ goal f_single_ensures_default_po_7:
   ("JC_38":
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   forall result3:int32.
-  (integer_of_int32(result3) = (integer_of_int32(i_0_0) + 1)) ->
-  forall i_0_1:int32.
-  (i_0_1 = result3) ->
+  (integer_of_int32(result3) = (integer_of_int32(i0) + 1)) ->
+  forall i1:int32.
+  (i1 = result3) ->
   ("JC_27":
-  (abs_real((single_value(t1) - (real_of_int(integer_of_int32(i_0_1)) * 0.1))) <= (real_of_int(integer_of_int32(i_0_1)) * (0x1.p-8 + 1.49012e-09))))
+  (abs_real((single_value(t1) - (real_of_int(integer_of_int32(i1)) * 0.1))) <= (real_of_int(integer_of_int32(i1)) * (0x1.p-8 + 1.49012e-09))))
 
 goal f_single_ensures_default_po_8:
-  forall n:int32.
+  forall n_1:int32.
   ("JC_7":
-  (("JC_5": (0 <= integer_of_int32(n))) and
-   ("JC_6": (integer_of_int32(n) <= 1000000)))) ->
+  (("JC_5": (0 <= integer_of_int32(n_1))) and
+   ("JC_6": (integer_of_int32(n_1) <= 1000000)))) ->
   forall result:single.
   ((single_value(result) = 0.0) and
    ((single_exact(result) = 0.0) and (single_model(result) = 0.0))) ->
@@ -2762,16 +2964,16 @@ goal f_single_ensures_default_po_8:
   (t = result) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  forall i_0:int32.
-  (i_0 = result0) ->
-  forall i_0_0:int32.
+  forall i:int32.
+  (i = result0) ->
+  forall i0:int32.
   forall t0:single.
   (("JC_27":
-   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i_0_0)) * 0.1))) <= (real_of_int(integer_of_int32(i_0_0)) * (0x1.p-8 + 1.49012e-09)))) and
+   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
    ("JC_30":
-   (("JC_28": (0 <= integer_of_int32(i_0_0))) and
-    ("JC_29": (integer_of_int32(i_0_0) <= integer_of_int32(n)))))) ->
-  (integer_of_int32(i_0_0) < integer_of_int32(n)) ->
+   (("JC_28": (0 <= integer_of_int32(i0))) and
+    ("JC_29": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+  (integer_of_int32(i0) < integer_of_int32(n_1)) ->
   ("JC_36":
   (("JC_34": (0.0 <= single_value(t0))) and
    ("JC_35":
@@ -2787,16 +2989,16 @@ goal f_single_ensures_default_po_8:
   ("JC_38":
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   forall result3:int32.
-  (integer_of_int32(result3) = (integer_of_int32(i_0_0) + 1)) ->
-  forall i_0_1:int32.
-  (i_0_1 = result3) ->
-  ("JC_30": ("JC_28": (0 <= integer_of_int32(i_0_1))))
+  (integer_of_int32(result3) = (integer_of_int32(i0) + 1)) ->
+  forall i1:int32.
+  (i1 = result3) ->
+  ("JC_30": ("JC_28": (0 <= integer_of_int32(i1))))
 
 goal f_single_ensures_default_po_9:
-  forall n:int32.
+  forall n_1:int32.
   ("JC_7":
-  (("JC_5": (0 <= integer_of_int32(n))) and
-   ("JC_6": (integer_of_int32(n) <= 1000000)))) ->
+  (("JC_5": (0 <= integer_of_int32(n_1))) and
+   ("JC_6": (integer_of_int32(n_1) <= 1000000)))) ->
   forall result:single.
   ((single_value(result) = 0.0) and
    ((single_exact(result) = 0.0) and (single_model(result) = 0.0))) ->
@@ -2804,16 +3006,16 @@ goal f_single_ensures_default_po_9:
   (t = result) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  forall i_0:int32.
-  (i_0 = result0) ->
-  forall i_0_0:int32.
+  forall i:int32.
+  (i = result0) ->
+  forall i0:int32.
   forall t0:single.
   (("JC_27":
-   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i_0_0)) * 0.1))) <= (real_of_int(integer_of_int32(i_0_0)) * (0x1.p-8 + 1.49012e-09)))) and
+   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
    ("JC_30":
-   (("JC_28": (0 <= integer_of_int32(i_0_0))) and
-    ("JC_29": (integer_of_int32(i_0_0) <= integer_of_int32(n)))))) ->
-  (integer_of_int32(i_0_0) < integer_of_int32(n)) ->
+   (("JC_28": (0 <= integer_of_int32(i0))) and
+    ("JC_29": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+  (integer_of_int32(i0) < integer_of_int32(n_1)) ->
   ("JC_36":
   (("JC_34": (0.0 <= single_value(t0))) and
    ("JC_35":
@@ -2829,16 +3031,16 @@ goal f_single_ensures_default_po_9:
   ("JC_38":
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
   forall result3:int32.
-  (integer_of_int32(result3) = (integer_of_int32(i_0_0) + 1)) ->
-  forall i_0_1:int32.
-  (i_0_1 = result3) ->
-  ("JC_30": ("JC_29": (integer_of_int32(i_0_1) <= integer_of_int32(n))))
+  (integer_of_int32(result3) = (integer_of_int32(i0) + 1)) ->
+  forall i1:int32.
+  (i1 = result3) ->
+  ("JC_30": ("JC_29": (integer_of_int32(i1) <= integer_of_int32(n_1))))
 
 goal f_single_ensures_default_po_10:
-  forall n:int32.
+  forall n_1:int32.
   ("JC_7":
-  (("JC_5": (0 <= integer_of_int32(n))) and
-   ("JC_6": (integer_of_int32(n) <= 1000000)))) ->
+  (("JC_5": (0 <= integer_of_int32(n_1))) and
+   ("JC_6": (integer_of_int32(n_1) <= 1000000)))) ->
   forall result:single.
   ((single_value(result) = 0.0) and
    ((single_exact(result) = 0.0) and (single_model(result) = 0.0))) ->
@@ -2846,26 +3048,26 @@ goal f_single_ensures_default_po_10:
   (t = result) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  forall i_0:int32.
-  (i_0 = result0) ->
-  forall i_0_0:int32.
+  forall i:int32.
+  (i = result0) ->
+  forall i0:int32.
   forall t0:single.
   (("JC_27":
-   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i_0_0)) * 0.1))) <= (real_of_int(integer_of_int32(i_0_0)) * (0x1.p-8 + 1.49012e-09)))) and
+   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
    ("JC_30":
-   (("JC_28": (0 <= integer_of_int32(i_0_0))) and
-    ("JC_29": (integer_of_int32(i_0_0) <= integer_of_int32(n)))))) ->
-  (integer_of_int32(i_0_0) >= integer_of_int32(n)) ->
+   (("JC_28": (0 <= integer_of_int32(i0))) and
+    ("JC_29": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+  (integer_of_int32(i0) >= integer_of_int32(n_1)) ->
   forall return:single.
   (return = t0) ->
   ("JC_9":
-  (abs_real((single_value(return) - (real_of_int(integer_of_int32(n)) * 0.1))) <= (real_of_int(integer_of_int32(n)) * (0x1.p-8 + 1.49012e-09))))
+  (abs_real((single_value(return) - (real_of_int(integer_of_int32(n_1)) * 0.1))) <= (real_of_int(integer_of_int32(n_1)) * (0x1.p-8 + 1.49012e-09))))
 
 goal f_single_safety_po_1:
-  forall n:int32.
+  forall n_1:int32.
   ("JC_7":
-  (("JC_5": (0 <= integer_of_int32(n))) and
-   ("JC_6": (integer_of_int32(n) <= 1000000)))) ->
+  (("JC_5": (0 <= integer_of_int32(n_1))) and
+   ("JC_6": (integer_of_int32(n_1) <= 1000000)))) ->
   forall result:single.
   ((single_value(result) = 0.0) and
    ((single_exact(result) = 0.0) and (single_model(result) = 0.0))) ->
@@ -2873,17 +3075,17 @@ goal f_single_safety_po_1:
   (t = result) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  forall i_0:int32.
-  (i_0 = result0) ->
-  forall i_0_0:int32.
+  forall i:int32.
+  (i = result0) ->
+  forall i0:int32.
   forall t0:single.
   ("JC_18": true) ->
   (("JC_13":
-   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i_0_0)) * 0.1))) <= (real_of_int(integer_of_int32(i_0_0)) * (0x1.p-8 + 1.49012e-09)))) and
+   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
    ("JC_16":
-   (("JC_14": (0 <= integer_of_int32(i_0_0))) and
-    ("JC_15": (integer_of_int32(i_0_0) <= integer_of_int32(n)))))) ->
-  (integer_of_int32(i_0_0) < integer_of_int32(n)) ->
+   (("JC_14": (0 <= integer_of_int32(i0))) and
+    ("JC_15": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+  (integer_of_int32(i0) < integer_of_int32(n_1)) ->
   ("JC_22":
   (("JC_20": (0.0 <= single_value(t0))) and
    ("JC_21":
@@ -2896,10 +3098,10 @@ goal f_single_safety_po_1:
   (single_value(t0) + single_value(result1)))
 
 goal f_single_safety_po_2:
-  forall n:int32.
+  forall n_1:int32.
   ("JC_7":
-  (("JC_5": (0 <= integer_of_int32(n))) and
-   ("JC_6": (integer_of_int32(n) <= 1000000)))) ->
+  (("JC_5": (0 <= integer_of_int32(n_1))) and
+   ("JC_6": (integer_of_int32(n_1) <= 1000000)))) ->
   forall result:single.
   ((single_value(result) = 0.0) and
    ((single_exact(result) = 0.0) and (single_model(result) = 0.0))) ->
@@ -2907,17 +3109,17 @@ goal f_single_safety_po_2:
   (t = result) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  forall i_0:int32.
-  (i_0 = result0) ->
-  forall i_0_0:int32.
+  forall i:int32.
+  (i = result0) ->
+  forall i0:int32.
   forall t0:single.
   ("JC_18": true) ->
   (("JC_13":
-   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i_0_0)) * 0.1))) <= (real_of_int(integer_of_int32(i_0_0)) * (0x1.p-8 + 1.49012e-09)))) and
+   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
    ("JC_16":
-   (("JC_14": (0 <= integer_of_int32(i_0_0))) and
-    ("JC_15": (integer_of_int32(i_0_0) <= integer_of_int32(n)))))) ->
-  (integer_of_int32(i_0_0) < integer_of_int32(n)) ->
+   (("JC_14": (0 <= integer_of_int32(i0))) and
+    ("JC_15": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+  (integer_of_int32(i0) < integer_of_int32(n_1)) ->
   ("JC_22":
   (("JC_20": (0.0 <= single_value(t0))) and
    ("JC_21":
@@ -2934,13 +3136,13 @@ goal f_single_safety_po_2:
   (t1 = result2) ->
   ("JC_24":
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
-  ((-2147483648) <= (integer_of_int32(i_0_0) + 1))
+  ((-2147483648) <= (integer_of_int32(i0) + 1))
 
 goal f_single_safety_po_3:
-  forall n:int32.
+  forall n_1:int32.
   ("JC_7":
-  (("JC_5": (0 <= integer_of_int32(n))) and
-   ("JC_6": (integer_of_int32(n) <= 1000000)))) ->
+  (("JC_5": (0 <= integer_of_int32(n_1))) and
+   ("JC_6": (integer_of_int32(n_1) <= 1000000)))) ->
   forall result:single.
   ((single_value(result) = 0.0) and
    ((single_exact(result) = 0.0) and (single_model(result) = 0.0))) ->
@@ -2948,17 +3150,17 @@ goal f_single_safety_po_3:
   (t = result) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  forall i_0:int32.
-  (i_0 = result0) ->
-  forall i_0_0:int32.
+  forall i:int32.
+  (i = result0) ->
+  forall i0:int32.
   forall t0:single.
   ("JC_18": true) ->
   (("JC_13":
-   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i_0_0)) * 0.1))) <= (real_of_int(integer_of_int32(i_0_0)) * (0x1.p-8 + 1.49012e-09)))) and
+   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
    ("JC_16":
-   (("JC_14": (0 <= integer_of_int32(i_0_0))) and
-    ("JC_15": (integer_of_int32(i_0_0) <= integer_of_int32(n)))))) ->
-  (integer_of_int32(i_0_0) < integer_of_int32(n)) ->
+   (("JC_14": (0 <= integer_of_int32(i0))) and
+    ("JC_15": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+  (integer_of_int32(i0) < integer_of_int32(n_1)) ->
   ("JC_22":
   (("JC_20": (0.0 <= single_value(t0))) and
    ("JC_21":
@@ -2975,13 +3177,13 @@ goal f_single_safety_po_3:
   (t1 = result2) ->
   ("JC_24":
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
-  ((integer_of_int32(i_0_0) + 1) <= 2147483647)
+  ((integer_of_int32(i0) + 1) <= 2147483647)
 
 goal f_single_safety_po_4:
-  forall n:int32.
+  forall n_1:int32.
   ("JC_7":
-  (("JC_5": (0 <= integer_of_int32(n))) and
-   ("JC_6": (integer_of_int32(n) <= 1000000)))) ->
+  (("JC_5": (0 <= integer_of_int32(n_1))) and
+   ("JC_6": (integer_of_int32(n_1) <= 1000000)))) ->
   forall result:single.
   ((single_value(result) = 0.0) and
    ((single_exact(result) = 0.0) and (single_model(result) = 0.0))) ->
@@ -2989,17 +3191,17 @@ goal f_single_safety_po_4:
   (t = result) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  forall i_0:int32.
-  (i_0 = result0) ->
-  forall i_0_0:int32.
+  forall i:int32.
+  (i = result0) ->
+  forall i0:int32.
   forall t0:single.
   ("JC_18": true) ->
   (("JC_13":
-   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i_0_0)) * 0.1))) <= (real_of_int(integer_of_int32(i_0_0)) * (0x1.p-8 + 1.49012e-09)))) and
+   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
    ("JC_16":
-   (("JC_14": (0 <= integer_of_int32(i_0_0))) and
-    ("JC_15": (integer_of_int32(i_0_0) <= integer_of_int32(n)))))) ->
-  (integer_of_int32(i_0_0) < integer_of_int32(n)) ->
+   (("JC_14": (0 <= integer_of_int32(i0))) and
+    ("JC_15": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+  (integer_of_int32(i0) < integer_of_int32(n_1)) ->
   ("JC_22":
   (("JC_20": (0.0 <= single_value(t0))) and
    ("JC_21":
@@ -3016,19 +3218,19 @@ goal f_single_safety_po_4:
   (t1 = result2) ->
   ("JC_24":
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
-  (((-2147483648) <= (integer_of_int32(i_0_0) + 1)) and
-   ((integer_of_int32(i_0_0) + 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(i0) + 1)) and
+   ((integer_of_int32(i0) + 1) <= 2147483647)) ->
   forall result3:int32.
-  (integer_of_int32(result3) = (integer_of_int32(i_0_0) + 1)) ->
-  forall i_0_1:int32.
-  (i_0_1 = result3) ->
-  (0 <= ("JC_26": (integer_of_int32(n) - integer_of_int32(i_0_0))))
+  (integer_of_int32(result3) = (integer_of_int32(i0) + 1)) ->
+  forall i1:int32.
+  (i1 = result3) ->
+  (0 <= ("JC_26": (integer_of_int32(n_1) - integer_of_int32(i0))))
 
 goal f_single_safety_po_5:
-  forall n:int32.
+  forall n_1:int32.
   ("JC_7":
-  (("JC_5": (0 <= integer_of_int32(n))) and
-   ("JC_6": (integer_of_int32(n) <= 1000000)))) ->
+  (("JC_5": (0 <= integer_of_int32(n_1))) and
+   ("JC_6": (integer_of_int32(n_1) <= 1000000)))) ->
   forall result:single.
   ((single_value(result) = 0.0) and
    ((single_exact(result) = 0.0) and (single_model(result) = 0.0))) ->
@@ -3036,17 +3238,17 @@ goal f_single_safety_po_5:
   (t = result) ->
   forall result0:int32.
   (integer_of_int32(result0) = 0) ->
-  forall i_0:int32.
-  (i_0 = result0) ->
-  forall i_0_0:int32.
+  forall i:int32.
+  (i = result0) ->
+  forall i0:int32.
   forall t0:single.
   ("JC_18": true) ->
   (("JC_13":
-   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i_0_0)) * 0.1))) <= (real_of_int(integer_of_int32(i_0_0)) * (0x1.p-8 + 1.49012e-09)))) and
+   (abs_real((single_value(t0) - (real_of_int(integer_of_int32(i0)) * 0.1))) <= (real_of_int(integer_of_int32(i0)) * (0x1.p-8 + 1.49012e-09)))) and
    ("JC_16":
-   (("JC_14": (0 <= integer_of_int32(i_0_0))) and
-    ("JC_15": (integer_of_int32(i_0_0) <= integer_of_int32(n)))))) ->
-  (integer_of_int32(i_0_0) < integer_of_int32(n)) ->
+   (("JC_14": (0 <= integer_of_int32(i0))) and
+    ("JC_15": (integer_of_int32(i0) <= integer_of_int32(n_1)))))) ->
+  (integer_of_int32(i0) < integer_of_int32(n_1)) ->
   ("JC_22":
   (("JC_20": (0.0 <= single_value(t0))) and
    ("JC_21":
@@ -3063,14 +3265,14 @@ goal f_single_safety_po_5:
   (t1 = result2) ->
   ("JC_24":
   (abs_real((single_value(t1) - (single_value(t0) + 0x1.99999ap-4))) <= 0x1.p-8)) ->
-  (((-2147483648) <= (integer_of_int32(i_0_0) + 1)) and
-   ((integer_of_int32(i_0_0) + 1) <= 2147483647)) ->
+  (((-2147483648) <= (integer_of_int32(i0) + 1)) and
+   ((integer_of_int32(i0) + 1) <= 2147483647)) ->
   forall result3:int32.
-  (integer_of_int32(result3) = (integer_of_int32(i_0_0) + 1)) ->
-  forall i_0_1:int32.
-  (i_0_1 = result3) ->
-  (("JC_26": (integer_of_int32(n) - integer_of_int32(i_0_1))) < ("JC_26":
-                                                                (integer_of_int32(n) - integer_of_int32(i_0_0))))
+  (integer_of_int32(result3) = (integer_of_int32(i0) + 1)) ->
+  forall i1:int32.
+  (i1 = result3) ->
+  (("JC_26": (integer_of_int32(n_1) - integer_of_int32(i1))) < ("JC_26":
+                                                               (integer_of_int32(n_1) - integer_of_int32(i0))))
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations

@@ -330,11 +330,13 @@ let unit_expr e =
   if e#typ = unit_type then e else
     new expr_with ~typ:unit_type ~region:dummy_region ~original_type:e#typ e
 
-let same_type_no_coercion t1 t2 =
+let rec same_type_no_coercion t1 t2 =
   match t1,t2 with
     | JCTnative t1, JCTnative t2 -> t1=t2
-    | JCTenum ei1, JCTenum ei2 -> ei1.jc_enum_info_name = ei2.jc_enum_info_name
-    | JCTlogic s1, JCTlogic s2 -> s1=s2
+    | JCTenum ei1, JCTenum ei2 ->
+      ei1.jc_enum_info_name = ei2.jc_enum_info_name
+    | JCTlogic (name1, args1), JCTlogic (name2, args2) ->
+      name1=name2 && List.for_all2 same_type_no_coercion args1 args2
     | JCTpointer(pc1,_,_), JCTpointer(pc2,_,_) ->
         pointer_class_root pc1 == pointer_class_root pc2
     | JCTnull, JCTnull -> true

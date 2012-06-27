@@ -82,6 +82,8 @@ axiomatic Padding {
 
 type uint32 = 0..4294967295
 
+type uint8 = 0..255
+
 type int32 = -2147483648..2147483647
 
 type int8 = -128..127
@@ -91,6 +93,12 @@ tag intP = {
 }
 
 type intP = [intP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -135,10 +143,11 @@ unit heap_sort(intP[..] arr, uint32 len)
   requires (C_30 : ((C_31 : (\offset_min(arr) <= 0)) &&
                      (C_32 : (\offset_max(arr) >= (len - 1)))));
 behavior default:
-  ensures (C_29 : (\forall integer i;
-                    (\forall integer j;
-                      (((0 <= i) && ((i <= j) && (j < \at(len,Old)))) ==>
-                        ((\at(arr,Old) + i).intM <= (\at(arr,Old) + j).intM)))));
+  ensures (C_29 : (\forall integer i_1;
+                    (\forall integer j_0;
+                      (((0 <= i_1) && ((i_1 <= j_0) && (j_0 < \at(len,Old)))) ==>
+                        ((\at(arr,Old) + i_1).intM <=
+                          (\at(arr,Old) + j_0).intM)))));
 {  
    (var uint32 i);
    
@@ -718,7 +727,7 @@ clean:
 [JC_90]
 kind = IndexBounds
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 120
+line = 129
 begin = 15
 end = 45
 
@@ -733,7 +742,7 @@ end = 9
 [JC_91]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 124
+line = 133
 begin = 14
 end = 33
 
@@ -824,14 +833,14 @@ end = 27
 
 [JC_1]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 42
+line = 50
 begin = 9
 end = 15
 
 [JC_100]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 124
+line = 133
 begin = 14
 end = 33
 
@@ -868,7 +877,7 @@ end = 34
 
 [JC_3]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 42
+line = 50
 begin = 9
 end = 15
 
@@ -910,7 +919,7 @@ end = 25
 
 [JC_6]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 44
+line = 52
 begin = 10
 end = 18
 
@@ -942,7 +951,7 @@ end = 57
 
 [JC_8]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 44
+line = 52
 begin = 10
 end = 18
 
@@ -968,13 +977,13 @@ end = 14
 
 [JC_50]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 80
+line = 89
 begin = 6
 end = 391
 
 [JC_51]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 80
+line = 89
 begin = 6
 end = 391
 
@@ -988,7 +997,7 @@ end = 43
 [JC_53]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 88
+line = 97
 begin = 20
 end = 63
 
@@ -1031,13 +1040,13 @@ end = -1
 
 [JC_60]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 95
+line = 104
 begin = 6
 end = 468
 
 [JC_61]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 95
+line = 104
 begin = 6
 end = 468
 
@@ -1057,13 +1066,13 @@ end = -1
 [JC_63]
 kind = PointerDeref
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 103
+line = 112
 begin = 21
 end = 136
 
 [JC_11]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 49
+line = 57
 begin = 5
 end = 11
 
@@ -1088,7 +1097,7 @@ end = 26
 
 [JC_13]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 49
+line = 57
 begin = 5
 end = 11
 
@@ -1125,7 +1134,7 @@ end = 34
 
 [JC_16]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 49
+line = 57
 begin = 5
 end = 11
 
@@ -1143,7 +1152,7 @@ end = -1
 
 [JC_18]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 49
+line = 57
 begin = 5
 end = 11
 
@@ -1161,13 +1170,13 @@ end = -1
 
 [JC_71]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 80
+line = 89
 begin = 6
 end = 391
 
 [JC_72]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 80
+line = 89
 begin = 6
 end = 391
 
@@ -1180,13 +1189,13 @@ end = -1
 [JC_73]
 kind = UserCall
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 88
+line = 97
 begin = 20
 end = 63
 
 [JC_21]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 56
+line = 64
 begin = 6
 end = 17
 
@@ -1210,7 +1219,7 @@ end = 34
 
 [JC_23]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 56
+line = 64
 begin = 6
 end = 17
 
@@ -1240,19 +1249,19 @@ end = -1
 
 [JC_78]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 95
+line = 104
 begin = 6
 end = 468
 
 [JC_26]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 58
+line = 66
 begin = 10
 end = 18
 
 [JC_79]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 95
+line = 104
 begin = 6
 end = 468
 
@@ -1264,7 +1273,7 @@ end = -1
 
 [JC_28]
 file = "HOME/tests/c/heap_sort.jessie/heap_sort.jc"
-line = 58
+line = 66
 begin = 10
 end = 18
 
@@ -1419,6 +1428,10 @@ type padding
 
 type uint32
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic Heap_tag:  -> Heap tag_id
@@ -1467,6 +1480,11 @@ logic integer_of_uint32: uint32 -> int
 
 predicate eq_uint32(x:uint32, y:uint32) =
  eq_int(integer_of_uint32(x), integer_of_uint32(y))
+
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic int32_of_integer: int -> int32
 
@@ -1527,6 +1545,10 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
 predicate left_valid_struct_intP(p:intP pointer, a:int,
  intP_alloc_table:intP alloc_table) = (offset_min(intP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -1539,6 +1561,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 
 axiom pointer_addr_of_intP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -1554,6 +1582,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
 
 predicate right_valid_struct_intP(p:intP pointer, b:int,
  intP_alloc_table:intP alloc_table) = (offset_max(intP_alloc_table, p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1574,6 +1606,11 @@ predicate strict_valid_root_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
 
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
@@ -1593,6 +1630,11 @@ predicate strict_valid_struct_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
+
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1616,6 +1658,38 @@ axiom uint32_range :
   (le_int((0), integer_of_uint32(x))
   and le_int(integer_of_uint32(x), (4294967295))))
 
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 predicate valid_root_Heap(p:Heap pointer, a:int, b:int,
  Heap_alloc_table:Heap alloc_table) =
  ((offset_min(Heap_alloc_table, p) <= a)
@@ -1630,6 +1704,11 @@ predicate valid_root_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1650,6 +1729,11 @@ predicate valid_struct_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1758,6 +1842,38 @@ parameter alloc_struct_intP_requires :
           and (alloc_fresh(intP_alloc_table@, result, n)
               and instanceof(intP_tag_table, result, intP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -1790,6 +1906,8 @@ parameter any_int8 : unit -> { } int8 { true }
 
 parameter any_uint32 : unit -> { } uint32 { true }
 
+parameter any_uint8 : unit -> { } uint8 { true }
+
 parameter create : sz:uint32 -> { } Heap pointer { true }
 
 parameter create_requires : sz:uint32 -> { } Heap pointer { true }
@@ -1805,12 +1923,12 @@ parameter heap_sort :
     intP_arr_5_alloc_table:intP alloc_table ->
      { } unit reads intP_intM_arr_5 writes intP_intM_arr_5
      { (JC_42:
-       (forall i:int.
-        (forall j:int.
-         ((le_int((0), i)
-          and (le_int(i, j) and lt_int(j, integer_of_uint32(len)))) ->
-          le_int(integer_of_int32(select(intP_intM_arr_5, shift(arr, i))),
-          integer_of_int32(select(intP_intM_arr_5, shift(arr, j)))))))) }
+       (forall i_1:int.
+        (forall j_0:int.
+         ((le_int((0), i_1)
+          and (le_int(i_1, j_0) and lt_int(j_0, integer_of_uint32(len)))) ->
+          le_int(integer_of_int32(select(intP_intM_arr_5, shift(arr, i_1))),
+          integer_of_int32(select(intP_intM_arr_5, shift(arr, j_0)))))))) }
 
 parameter heap_sort_requires :
  arr:intP pointer ->
@@ -1825,12 +1943,12 @@ parameter heap_sort_requires :
                sub_int(integer_of_uint32(len), (1)))))))}
      unit reads intP_intM_arr_5 writes intP_intM_arr_5
      { (JC_42:
-       (forall i:int.
-        (forall j:int.
-         ((le_int((0), i)
-          and (le_int(i, j) and lt_int(j, integer_of_uint32(len)))) ->
-          le_int(integer_of_int32(select(intP_intM_arr_5, shift(arr, i))),
-          integer_of_int32(select(intP_intM_arr_5, shift(arr, j)))))))) }
+       (forall i_1:int.
+        (forall j_0:int.
+         ((le_int((0), i_1)
+          and (le_int(i_1, j_0) and lt_int(j_0, integer_of_uint32(len)))) ->
+          le_int(integer_of_int32(select(intP_intM_arr_5, shift(arr, i_1))),
+          integer_of_int32(select(intP_intM_arr_5, shift(arr, j_0)))))))) }
 
 parameter insert :
  u_0:Heap pointer ->
@@ -1875,10 +1993,18 @@ parameter safe_int8_of_integer_ :
 parameter safe_uint32_of_integer_ :
  x:int -> { } uint32 { eq_int(integer_of_uint32(result), x) }
 
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
 parameter uint32_of_integer_ :
  x:int ->
   { (le_int((0), x) and le_int(x, (4294967295)))} uint32
   { eq_int(integer_of_uint32(result), x) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
 
 let heap_sort_ensures_default =
  fun (arr : intP pointer) (len : uint32) (intP_intM_arr_5 : (intP, int32) memory ref) (intP_arr_5_alloc_table : intP alloc_table) ->
@@ -1893,7 +2019,7 @@ let heap_sort_ensures_default =
    begin
      (let Heap_x_h_6 = ref (any_memory void) in
      (let Heap_h_6_alloc_table = (any_alloc_table void) in
-     (let i_0 = ref (any_uint32 void) in
+     (let i = ref (any_uint32 void) in
      (let h = ref (any_pointer void) in
      try
       begin
@@ -1904,14 +2030,14 @@ let heap_sort_ensures_default =
            (let jessie_<num> =
            (h := (C_4: (let jessie_<num> = len in (JC_66: (create jessie_<num>))))) in
            void);
-          (let jessie_<num> = (i_0 := (safe_uint32_of_integer_ (0))) in void);
+          (let jessie_<num> = (i := (safe_uint32_of_integer_ (0))) in void);
           (loop_3:
           while true do
           { invariant
               (JC_69:
-              ((JC_67: le_int((0), integer_of_uint32(i_0)))
+              ((JC_67: le_int((0), integer_of_uint32(i)))
               and (JC_68:
-                  le_int(integer_of_uint32(i_0), integer_of_uint32(len)))))
+                  le_int(integer_of_uint32(i), integer_of_uint32(len))))) 
              }
            begin
              [ { } unit { true } ];
@@ -1921,34 +2047,34 @@ let heap_sort_ensures_default =
                (C_13:
                (C_16:
                begin
-                 (if ((lt_int_ (integer_of_uint32 !i_0)) (integer_of_uint32 len))
+                 (if ((lt_int_ (integer_of_uint32 !i)) (integer_of_uint32 len))
                  then void else (raise (Goto_while_0_break_exc void)));
                 (let jessie_<num> = !h in
                 (let jessie_<num> =
                 (C_12:
                 ((safe_acc_ !intP_intM_arr_5) (C_11:
-                                              ((shift arr) (integer_of_uint32 !i_0))))) in
+                                              ((shift arr) (integer_of_uint32 !i))))) in
                 (JC_73:
                 ((((insert jessie_<num>) jessie_<num>) Heap_x_h_6) Heap_h_6_alloc_table))));
-                (i_0 := (C_15:
-                        (safe_uint32_of_integer_ (C_14:
-                                                 ((add_int (integer_of_uint32 !i_0)) (1))))));
-                !i_0 end)) in void); (raise (Loop_continue_exc void)) end
-             with Loop_continue_exc jessie_<num> -> void end end done);
+                (i := (C_15:
+                      (safe_uint32_of_integer_ (C_14:
+                                               ((add_int (integer_of_uint32 !i)) (1))))));
+                !i end)) in void); (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc jessie_<num> -> void end end done);
           (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<num> ->
          (while_0_break:
          (C_17:
          begin
            void;
-          (let jessie_<num> = (i_0 := (safe_uint32_of_integer_ (0))) in void);
+          (let jessie_<num> = (i := (safe_uint32_of_integer_ (0))) in void);
           (loop_4:
           while true do
           { invariant
               (JC_76:
-              ((JC_74: le_int((0), integer_of_uint32(i_0)))
+              ((JC_74: le_int((0), integer_of_uint32(i)))
               and (JC_75:
-                  le_int(integer_of_uint32(i_0), integer_of_uint32(len)))))
+                  le_int(integer_of_uint32(i), integer_of_uint32(len))))) 
              }
            begin
              [ { } unit { true } ];
@@ -1958,33 +2084,33 @@ let heap_sort_ensures_default =
                (C_25:
                (C_28:
                begin
-                 (if ((lt_int_ (integer_of_uint32 !i_0)) (integer_of_uint32 len))
+                 (if ((lt_int_ (integer_of_uint32 !i)) (integer_of_uint32 len))
                  then void else (raise (Goto_while_1_break_exc void)));
                 (let jessie_<num> =
                 (let jessie_<num> =
                 (C_22:
                 (let jessie_<num> = !h in (JC_80: (extract_min jessie_<num>)))) in
                 (let jessie_<num> = arr in
-                (let jessie_<num> = (integer_of_uint32 !i_0) in
+                (let jessie_<num> = (integer_of_uint32 !i) in
                 (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
                 (((safe_upd_ intP_intM_arr_5) jessie_<num>) jessie_<num>))))) in
                 void);
-                (i_0 := (C_27:
-                        (safe_uint32_of_integer_ (C_26:
-                                                 ((add_int (integer_of_uint32 !i_0)) (1))))));
-                !i_0 end)) in void); (raise (Loop_continue_exc void)) end
-             with Loop_continue_exc jessie_<num> -> void end end done) end)) end;
+                (i := (C_27:
+                      (safe_uint32_of_integer_ (C_26:
+                                               ((add_int (integer_of_uint32 !i)) (1))))));
+                !i end)) in void); (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc jessie_<num> -> void end end done) end)) end;
        (raise (Goto_while_1_break_exc void)) end with
       Goto_while_1_break_exc jessie_<num> ->
       (while_1_break: begin   void; (raise Return) end) end))));
     (raise Return) end with Return -> void end)
   { (JC_41:
-    (forall i:int.
-     (forall j:int.
-      ((le_int((0), i)
-       and (le_int(i, j) and lt_int(j, integer_of_uint32(len)))) ->
-       le_int(integer_of_int32(select(intP_intM_arr_5, shift(arr, i))),
-       integer_of_int32(select(intP_intM_arr_5, shift(arr, j)))))))) }
+    (forall i_1:int.
+     (forall j_0:int.
+      ((le_int((0), i_1)
+       and (le_int(i_1, j_0) and lt_int(j_0, integer_of_uint32(len)))) ->
+       le_int(integer_of_int32(select(intP_intM_arr_5, shift(arr, i_1))),
+       integer_of_int32(select(intP_intM_arr_5, shift(arr, j_0)))))))) }
 
 let heap_sort_safety =
  fun (arr : intP pointer) (len : uint32) (intP_intM_arr_5 : (intP, int32) memory ref) (intP_arr_5_alloc_table : intP alloc_table) ->
@@ -1999,7 +2125,7 @@ let heap_sort_safety =
    begin
      (let Heap_x_h_6 = ref (any_memory void) in
      (let Heap_h_6_alloc_table = (any_alloc_table void) in
-     (let i_0 = ref (any_uint32 void) in
+     (let i = ref (any_uint32 void) in
      (let h = ref (any_pointer void) in
      try
       begin
@@ -2011,65 +2137,65 @@ let heap_sort_safety =
            (h := (C_4:
                  (let jessie_<num> = len in (JC_45: (create_requires jessie_<num>))))) in
            void);
-          (let jessie_<num> = (i_0 := (safe_uint32_of_integer_ (0))) in void);
+          (let jessie_<num> = (i := (safe_uint32_of_integer_ (0))) in void);
           (loop_1:
           while true do
           { invariant (JC_50: true)
             variant (JC_55 : sub_int(integer_of_uint32(len),
-                             integer_of_uint32(i_0))) }
+                             integer_of_uint32(i))) }
            begin
-             [ { } unit reads i_0
+             [ { } unit reads i
                { (JC_48:
-                 ((JC_46: le_int((0), integer_of_uint32(i_0)))
+                 ((JC_46: le_int((0), integer_of_uint32(i)))
                  and (JC_47:
-                     le_int(integer_of_uint32(i_0), integer_of_uint32(len))))) } ];
+                     le_int(integer_of_uint32(i), integer_of_uint32(len))))) } ];
             try
              begin
                (let jessie_<num> =
                (C_13:
                (C_16:
                begin
-                 (if ((lt_int_ (integer_of_uint32 !i_0)) (integer_of_uint32 len))
+                 (if ((lt_int_ (integer_of_uint32 !i)) (integer_of_uint32 len))
                  then void else (raise (Goto_while_0_break_exc void)));
                 (let jessie_<num> = !h in
                 (let jessie_<num> =
                 (C_12:
                 (JC_52:
                 ((((offset_acc_ intP_arr_5_alloc_table) !intP_intM_arr_5) arr) 
-                 (integer_of_uint32 !i_0)))) in
+                 (integer_of_uint32 !i)))) in
                 (JC_53:
                 ((((insert_requires jessie_<num>) jessie_<num>) Heap_x_h_6) Heap_h_6_alloc_table))));
-                (i_0 := (C_15:
-                        (JC_54:
-                        (uint32_of_integer_ (C_14:
-                                            ((add_int (integer_of_uint32 !i_0)) (1)))))));
-                !i_0 end)) in void); (raise (Loop_continue_exc void)) end
-             with Loop_continue_exc jessie_<num> -> void end end done);
+                (i := (C_15:
+                      (JC_54:
+                      (uint32_of_integer_ (C_14:
+                                          ((add_int (integer_of_uint32 !i)) (1)))))));
+                !i end)) in void); (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc jessie_<num> -> void end end done);
           (raise (Goto_while_0_break_exc void)) end)) with
          Goto_while_0_break_exc jessie_<num> ->
          (while_0_break:
          (C_17:
          begin
            void;
-          (let jessie_<num> = (i_0 := (safe_uint32_of_integer_ (0))) in void);
+          (let jessie_<num> = (i := (safe_uint32_of_integer_ (0))) in void);
           (loop_2:
           while true do
           { invariant (JC_60: true)
             variant (JC_65 : sub_int(integer_of_uint32(len),
-                             integer_of_uint32(i_0))) }
+                             integer_of_uint32(i))) }
            begin
-             [ { } unit reads i_0
+             [ { } unit reads i
                { (JC_58:
-                 ((JC_56: le_int((0), integer_of_uint32(i_0)))
+                 ((JC_56: le_int((0), integer_of_uint32(i)))
                  and (JC_57:
-                     le_int(integer_of_uint32(i_0), integer_of_uint32(len))))) } ];
+                     le_int(integer_of_uint32(i), integer_of_uint32(len))))) } ];
             try
              begin
                (let jessie_<num> =
                (C_25:
                (C_28:
                begin
-                 (if ((lt_int_ (integer_of_uint32 !i_0)) (integer_of_uint32 len))
+                 (if ((lt_int_ (integer_of_uint32 !i)) (integer_of_uint32 len))
                  then void else (raise (Goto_while_1_break_exc void)));
                 (let jessie_<num> =
                 (let jessie_<num> =
@@ -2077,17 +2203,17 @@ let heap_sort_safety =
                 (let jessie_<num> = !h in
                 (JC_62: (extract_min_requires jessie_<num>)))) in
                 (let jessie_<num> = arr in
-                (let jessie_<num> = (integer_of_uint32 !i_0) in
+                (let jessie_<num> = (integer_of_uint32 !i) in
                 (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
                 (JC_63:
                 (((((offset_upd_ intP_arr_5_alloc_table) intP_intM_arr_5) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
                 void);
-                (i_0 := (C_27:
-                        (JC_64:
-                        (uint32_of_integer_ (C_26:
-                                            ((add_int (integer_of_uint32 !i_0)) (1)))))));
-                !i_0 end)) in void); (raise (Loop_continue_exc void)) end
-             with Loop_continue_exc jessie_<num> -> void end end done) end)) end;
+                (i := (C_27:
+                      (JC_64:
+                      (uint32_of_integer_ (C_26:
+                                          ((add_int (integer_of_uint32 !i)) (1)))))));
+                !i end)) in void); (raise (Loop_continue_exc void)) end with
+             Loop_continue_exc jessie_<num> -> void end end done) end)) end;
        (raise (Goto_while_1_break_exc void)) end with
       Goto_while_1_break_exc jessie_<num> ->
       (while_1_break: begin   void; (raise Return) end) end))));
@@ -3188,6 +3314,10 @@ type padding
 
 type uint32
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic Heap_tag : Heap tag_id
@@ -3237,6 +3367,11 @@ logic integer_of_uint32 : uint32 -> int
 
 predicate eq_uint32(x: uint32, y: uint32) =
   (integer_of_uint32(x) = integer_of_uint32(y))
+
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
 
 logic int32_of_integer : int -> int32
 
@@ -3298,6 +3433,10 @@ predicate left_valid_struct_intP(p: intP pointer, a: int,
   intP_alloc_table: intP alloc_table) = (offset_min(intP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -3310,6 +3449,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 
 axiom pointer_addr_of_intP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -3327,6 +3472,10 @@ predicate right_valid_struct_charP(p: charP pointer, b: int,
 predicate right_valid_struct_intP(p: intP pointer, b: int,
   intP_alloc_table: intP alloc_table) = (offset_max(intP_alloc_table,
   p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
@@ -3347,6 +3496,11 @@ predicate strict_valid_root_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
@@ -3366,6 +3520,11 @@ predicate strict_valid_struct_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
+
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3388,6 +3547,37 @@ axiom uint32_range:
   (forall x:uint32.
     ((0 <= integer_of_uint32(x)) and (integer_of_uint32(x) <= 4294967295)))
 
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8.
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 predicate valid_root_Heap(p: Heap pointer, a: int, b: int,
   Heap_alloc_table: Heap alloc_table) =
   ((offset_min(Heap_alloc_table, p) <= a) and (offset_max(Heap_alloc_table,
@@ -3402,6 +3592,11 @@ predicate valid_root_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3422,6 +3617,11 @@ predicate valid_struct_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3457,9 +3657,9 @@ goal heap_sort_ensures_default_po_1:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
-  ("JC_69": ("JC_67": (0 <= integer_of_uint32(i_0))))
+  forall i:uint32.
+  (i = result1) ->
+  ("JC_69": ("JC_67": (0 <= integer_of_uint32(i))))
 
 goal heap_sort_ensures_default_po_2:
   forall arr:intP pointer.
@@ -3475,9 +3675,9 @@ goal heap_sort_ensures_default_po_2:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
-  ("JC_69": ("JC_68": (integer_of_uint32(i_0) <= integer_of_uint32(len))))
+  forall i:uint32.
+  (i = result1) ->
+  ("JC_69": ("JC_68": (integer_of_uint32(i) <= integer_of_uint32(len))))
 
 goal heap_sort_ensures_default_po_3:
   forall arr:intP pointer.
@@ -3496,26 +3696,25 @@ goal heap_sort_ensures_default_po_3:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
+  forall i:uint32.
+  (i = result1) ->
   forall Heap_x_h_6:(Heap,
   int32) memory.
-  forall i_0_0:uint32.
+  forall i0:uint32.
   ("JC_69":
-  (("JC_67": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_68": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) < integer_of_uint32(len)) ->
+  (("JC_67": (0 <= integer_of_uint32(i0))) and
+   ("JC_68": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) < integer_of_uint32(len)) ->
   forall result2:int32.
-  (result2 = select(intP_intM_arr_5, shift(arr,
-  integer_of_uint32(i_0_0)))) ->
+  (result2 = select(intP_intM_arr_5, shift(arr, integer_of_uint32(i0)))) ->
   forall Heap_x_h_6_0:(Heap,
   int32) memory.
   ("JC_18": not_assigns(result, Heap_x_h_6, Heap_x_h_6_0, pset_singleton(h))) ->
   forall result3:uint32.
-  (integer_of_uint32(result3) = (integer_of_uint32(i_0_0) + 1)) ->
-  forall i_0_1:uint32.
-  (i_0_1 = result3) ->
-  ("JC_69": ("JC_67": (0 <= integer_of_uint32(i_0_1))))
+  (integer_of_uint32(result3) = (integer_of_uint32(i0) + 1)) ->
+  forall i1:uint32.
+  (i1 = result3) ->
+  ("JC_69": ("JC_67": (0 <= integer_of_uint32(i1))))
 
 goal heap_sort_ensures_default_po_4:
   forall arr:intP pointer.
@@ -3534,26 +3733,25 @@ goal heap_sort_ensures_default_po_4:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
+  forall i:uint32.
+  (i = result1) ->
   forall Heap_x_h_6:(Heap,
   int32) memory.
-  forall i_0_0:uint32.
+  forall i0:uint32.
   ("JC_69":
-  (("JC_67": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_68": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) < integer_of_uint32(len)) ->
+  (("JC_67": (0 <= integer_of_uint32(i0))) and
+   ("JC_68": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) < integer_of_uint32(len)) ->
   forall result2:int32.
-  (result2 = select(intP_intM_arr_5, shift(arr,
-  integer_of_uint32(i_0_0)))) ->
+  (result2 = select(intP_intM_arr_5, shift(arr, integer_of_uint32(i0)))) ->
   forall Heap_x_h_6_0:(Heap,
   int32) memory.
   ("JC_18": not_assigns(result, Heap_x_h_6, Heap_x_h_6_0, pset_singleton(h))) ->
   forall result3:uint32.
-  (integer_of_uint32(result3) = (integer_of_uint32(i_0_0) + 1)) ->
-  forall i_0_1:uint32.
-  (i_0_1 = result3) ->
-  ("JC_69": ("JC_68": (integer_of_uint32(i_0_1) <= integer_of_uint32(len))))
+  (integer_of_uint32(result3) = (integer_of_uint32(i0) + 1)) ->
+  forall i1:uint32.
+  (i1 = result3) ->
+  ("JC_69": ("JC_68": (integer_of_uint32(i1) <= integer_of_uint32(len))))
 
 goal heap_sort_ensures_default_po_5:
   forall arr:intP pointer.
@@ -3569,18 +3767,18 @@ goal heap_sort_ensures_default_po_5:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
-  forall i_0_0:uint32.
+  forall i:uint32.
+  (i = result1) ->
+  forall i0:uint32.
   ("JC_69":
-  (("JC_67": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_68": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) >= integer_of_uint32(len)) ->
+  (("JC_67": (0 <= integer_of_uint32(i0))) and
+   ("JC_68": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) >= integer_of_uint32(len)) ->
   forall result2:uint32.
   (integer_of_uint32(result2) = 0) ->
-  forall i_0_1:uint32.
-  (i_0_1 = result2) ->
-  ("JC_76": ("JC_74": (0 <= integer_of_uint32(i_0_1))))
+  forall i1:uint32.
+  (i1 = result2) ->
+  ("JC_76": ("JC_74": (0 <= integer_of_uint32(i1))))
 
 goal heap_sort_ensures_default_po_6:
   forall arr:intP pointer.
@@ -3596,18 +3794,18 @@ goal heap_sort_ensures_default_po_6:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
-  forall i_0_0:uint32.
+  forall i:uint32.
+  (i = result1) ->
+  forall i0:uint32.
   ("JC_69":
-  (("JC_67": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_68": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) >= integer_of_uint32(len)) ->
+  (("JC_67": (0 <= integer_of_uint32(i0))) and
+   ("JC_68": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) >= integer_of_uint32(len)) ->
   forall result2:uint32.
   (integer_of_uint32(result2) = 0) ->
-  forall i_0_1:uint32.
-  (i_0_1 = result2) ->
-  ("JC_76": ("JC_75": (integer_of_uint32(i_0_1) <= integer_of_uint32(len))))
+  forall i1:uint32.
+  (i1 = result2) ->
+  ("JC_76": ("JC_75": (integer_of_uint32(i1) <= integer_of_uint32(len))))
 
 goal heap_sort_ensures_default_po_7:
   forall arr:intP pointer.
@@ -3623,34 +3821,34 @@ goal heap_sort_ensures_default_po_7:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
-  forall i_0_0:uint32.
+  forall i:uint32.
+  (i = result1) ->
+  forall i0:uint32.
   ("JC_69":
-  (("JC_67": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_68": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) >= integer_of_uint32(len)) ->
+  (("JC_67": (0 <= integer_of_uint32(i0))) and
+   ("JC_68": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) >= integer_of_uint32(len)) ->
   forall result2:uint32.
   (integer_of_uint32(result2) = 0) ->
-  forall i_0_1:uint32.
-  (i_0_1 = result2) ->
-  forall i_0_2:uint32.
+  forall i1:uint32.
+  (i1 = result2) ->
+  forall i2:uint32.
   forall intP_intM_arr_5_0:(intP,
   int32) memory.
   ("JC_76":
-  (("JC_74": (0 <= integer_of_uint32(i_0_2))) and
-   ("JC_75": (integer_of_uint32(i_0_2) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_2) < integer_of_uint32(len)) ->
+  (("JC_74": (0 <= integer_of_uint32(i2))) and
+   ("JC_75": (integer_of_uint32(i2) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i2) < integer_of_uint32(len)) ->
   forall result3:int32.
   forall intP_intM_arr_5_1:(intP,
   int32) memory.
   (intP_intM_arr_5_1 = store(intP_intM_arr_5_0, shift(arr,
-  integer_of_uint32(i_0_2)), result3)) ->
+  integer_of_uint32(i2)), result3)) ->
   forall result4:uint32.
-  (integer_of_uint32(result4) = (integer_of_uint32(i_0_2) + 1)) ->
-  forall i_0_3:uint32.
-  (i_0_3 = result4) ->
-  ("JC_76": ("JC_74": (0 <= integer_of_uint32(i_0_3))))
+  (integer_of_uint32(result4) = (integer_of_uint32(i2) + 1)) ->
+  forall i3:uint32.
+  (i3 = result4) ->
+  ("JC_76": ("JC_74": (0 <= integer_of_uint32(i3))))
 
 goal heap_sort_ensures_default_po_8:
   forall arr:intP pointer.
@@ -3666,34 +3864,34 @@ goal heap_sort_ensures_default_po_8:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
-  forall i_0_0:uint32.
+  forall i:uint32.
+  (i = result1) ->
+  forall i0:uint32.
   ("JC_69":
-  (("JC_67": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_68": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) >= integer_of_uint32(len)) ->
+  (("JC_67": (0 <= integer_of_uint32(i0))) and
+   ("JC_68": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) >= integer_of_uint32(len)) ->
   forall result2:uint32.
   (integer_of_uint32(result2) = 0) ->
-  forall i_0_1:uint32.
-  (i_0_1 = result2) ->
-  forall i_0_2:uint32.
+  forall i1:uint32.
+  (i1 = result2) ->
+  forall i2:uint32.
   forall intP_intM_arr_5_0:(intP,
   int32) memory.
   ("JC_76":
-  (("JC_74": (0 <= integer_of_uint32(i_0_2))) and
-   ("JC_75": (integer_of_uint32(i_0_2) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_2) < integer_of_uint32(len)) ->
+  (("JC_74": (0 <= integer_of_uint32(i2))) and
+   ("JC_75": (integer_of_uint32(i2) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i2) < integer_of_uint32(len)) ->
   forall result3:int32.
   forall intP_intM_arr_5_1:(intP,
   int32) memory.
   (intP_intM_arr_5_1 = store(intP_intM_arr_5_0, shift(arr,
-  integer_of_uint32(i_0_2)), result3)) ->
+  integer_of_uint32(i2)), result3)) ->
   forall result4:uint32.
-  (integer_of_uint32(result4) = (integer_of_uint32(i_0_2) + 1)) ->
-  forall i_0_3:uint32.
-  (i_0_3 = result4) ->
-  ("JC_76": ("JC_75": (integer_of_uint32(i_0_3) <= integer_of_uint32(len))))
+  (integer_of_uint32(result4) = (integer_of_uint32(i2) + 1)) ->
+  forall i3:uint32.
+  (i3 = result4) ->
+  ("JC_76": ("JC_75": (integer_of_uint32(i3) <= integer_of_uint32(len))))
 
 goal heap_sort_ensures_default_po_9:
   forall arr:intP pointer.
@@ -3709,29 +3907,29 @@ goal heap_sort_ensures_default_po_9:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
-  forall i_0_0:uint32.
+  forall i:uint32.
+  (i = result1) ->
+  forall i0:uint32.
   ("JC_69":
-  (("JC_67": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_68": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) >= integer_of_uint32(len)) ->
+  (("JC_67": (0 <= integer_of_uint32(i0))) and
+   ("JC_68": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) >= integer_of_uint32(len)) ->
   forall result2:uint32.
   (integer_of_uint32(result2) = 0) ->
-  forall i_0_1:uint32.
-  (i_0_1 = result2) ->
-  forall i_0_2:uint32.
+  forall i1:uint32.
+  (i1 = result2) ->
+  forall i2:uint32.
   forall intP_intM_arr_5_0:(intP,
   int32) memory.
   ("JC_76":
-  (("JC_74": (0 <= integer_of_uint32(i_0_2))) and
-   ("JC_75": (integer_of_uint32(i_0_2) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_2) >= integer_of_uint32(len)) ->
-  forall i:int.
-  forall j:int.
-  ((0 <= i) and ((i <= j) and (j < integer_of_uint32(len)))) ->
+  (("JC_74": (0 <= integer_of_uint32(i2))) and
+   ("JC_75": (integer_of_uint32(i2) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i2) >= integer_of_uint32(len)) ->
+  forall i_1:int.
+  forall j_0:int.
+  ((0 <= i_1) and ((i_1 <= j_0) and (j_0 < integer_of_uint32(len)))) ->
   ("JC_41": (integer_of_int32(select(intP_intM_arr_5_0, shift(arr,
-  i))) <= integer_of_int32(select(intP_intM_arr_5_0, shift(arr, j)))))
+  i_1))) <= integer_of_int32(select(intP_intM_arr_5_0, shift(arr, j_0)))))
 
 goal heap_sort_safety_po_1:
   forall arr:intP pointer.
@@ -3747,15 +3945,15 @@ goal heap_sort_safety_po_1:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
-  forall i_0_0:uint32.
+  forall i:uint32.
+  (i = result1) ->
+  forall i0:uint32.
   ("JC_50": true) ->
   ("JC_48":
-  (("JC_46": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_47": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) < integer_of_uint32(len)) ->
-  (offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i_0_0))
+  (("JC_46": (0 <= integer_of_uint32(i0))) and
+   ("JC_47": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) < integer_of_uint32(len)) ->
+  (offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i0))
 
 goal heap_sort_safety_po_2:
   forall arr:intP pointer.
@@ -3771,15 +3969,15 @@ goal heap_sort_safety_po_2:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
-  forall i_0_0:uint32.
+  forall i:uint32.
+  (i = result1) ->
+  forall i0:uint32.
   ("JC_50": true) ->
   ("JC_48":
-  (("JC_46": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_47": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) < integer_of_uint32(len)) ->
-  (integer_of_uint32(i_0_0) <= offset_max(intP_arr_5_alloc_table, arr))
+  (("JC_46": (0 <= integer_of_uint32(i0))) and
+   ("JC_47": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) < integer_of_uint32(len)) ->
+  (integer_of_uint32(i0) <= offset_max(intP_arr_5_alloc_table, arr))
 
 goal heap_sort_safety_po_3:
   forall arr:intP pointer.
@@ -3798,25 +3996,24 @@ goal heap_sort_safety_po_3:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
+  forall i:uint32.
+  (i = result1) ->
   forall Heap_x_h_6:(Heap,
   int32) memory.
-  forall i_0_0:uint32.
+  forall i0:uint32.
   ("JC_50": true) ->
   ("JC_48":
-  (("JC_46": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_47": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) < integer_of_uint32(len)) ->
-  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i_0_0)) and
-   (integer_of_uint32(i_0_0) <= offset_max(intP_arr_5_alloc_table, arr))) ->
+  (("JC_46": (0 <= integer_of_uint32(i0))) and
+   ("JC_47": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) < integer_of_uint32(len)) ->
+  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i0)) and
+   (integer_of_uint32(i0) <= offset_max(intP_arr_5_alloc_table, arr))) ->
   forall result2:int32.
-  (result2 = select(intP_intM_arr_5, shift(arr,
-  integer_of_uint32(i_0_0)))) ->
+  (result2 = select(intP_intM_arr_5, shift(arr, integer_of_uint32(i0)))) ->
   forall Heap_x_h_6_0:(Heap,
   int32) memory.
   ("JC_18": not_assigns(result, Heap_x_h_6, Heap_x_h_6_0, pset_singleton(h))) ->
-  (0 <= (integer_of_uint32(i_0_0) + 1))
+  (0 <= (integer_of_uint32(i0) + 1))
 
 goal heap_sort_safety_po_4:
   forall arr:intP pointer.
@@ -3835,25 +4032,24 @@ goal heap_sort_safety_po_4:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
+  forall i:uint32.
+  (i = result1) ->
   forall Heap_x_h_6:(Heap,
   int32) memory.
-  forall i_0_0:uint32.
+  forall i0:uint32.
   ("JC_50": true) ->
   ("JC_48":
-  (("JC_46": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_47": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) < integer_of_uint32(len)) ->
-  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i_0_0)) and
-   (integer_of_uint32(i_0_0) <= offset_max(intP_arr_5_alloc_table, arr))) ->
+  (("JC_46": (0 <= integer_of_uint32(i0))) and
+   ("JC_47": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) < integer_of_uint32(len)) ->
+  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i0)) and
+   (integer_of_uint32(i0) <= offset_max(intP_arr_5_alloc_table, arr))) ->
   forall result2:int32.
-  (result2 = select(intP_intM_arr_5, shift(arr,
-  integer_of_uint32(i_0_0)))) ->
+  (result2 = select(intP_intM_arr_5, shift(arr, integer_of_uint32(i0)))) ->
   forall Heap_x_h_6_0:(Heap,
   int32) memory.
   ("JC_18": not_assigns(result, Heap_x_h_6, Heap_x_h_6_0, pset_singleton(h))) ->
-  ((integer_of_uint32(i_0_0) + 1) <= 4294967295)
+  ((integer_of_uint32(i0) + 1) <= 4294967295)
 
 goal heap_sort_safety_po_5:
   forall arr:intP pointer.
@@ -3872,31 +4068,30 @@ goal heap_sort_safety_po_5:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
+  forall i:uint32.
+  (i = result1) ->
   forall Heap_x_h_6:(Heap,
   int32) memory.
-  forall i_0_0:uint32.
+  forall i0:uint32.
   ("JC_50": true) ->
   ("JC_48":
-  (("JC_46": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_47": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) < integer_of_uint32(len)) ->
-  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i_0_0)) and
-   (integer_of_uint32(i_0_0) <= offset_max(intP_arr_5_alloc_table, arr))) ->
+  (("JC_46": (0 <= integer_of_uint32(i0))) and
+   ("JC_47": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) < integer_of_uint32(len)) ->
+  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i0)) and
+   (integer_of_uint32(i0) <= offset_max(intP_arr_5_alloc_table, arr))) ->
   forall result2:int32.
-  (result2 = select(intP_intM_arr_5, shift(arr,
-  integer_of_uint32(i_0_0)))) ->
+  (result2 = select(intP_intM_arr_5, shift(arr, integer_of_uint32(i0)))) ->
   forall Heap_x_h_6_0:(Heap,
   int32) memory.
   ("JC_18": not_assigns(result, Heap_x_h_6, Heap_x_h_6_0, pset_singleton(h))) ->
-  ((0 <= (integer_of_uint32(i_0_0) + 1)) and
-   ((integer_of_uint32(i_0_0) + 1) <= 4294967295)) ->
+  ((0 <= (integer_of_uint32(i0) + 1)) and
+   ((integer_of_uint32(i0) + 1) <= 4294967295)) ->
   forall result3:uint32.
-  (integer_of_uint32(result3) = (integer_of_uint32(i_0_0) + 1)) ->
-  forall i_0_1:uint32.
-  (i_0_1 = result3) ->
-  (0 <= ("JC_55": (integer_of_uint32(len) - integer_of_uint32(i_0_0))))
+  (integer_of_uint32(result3) = (integer_of_uint32(i0) + 1)) ->
+  forall i1:uint32.
+  (i1 = result3) ->
+  (0 <= ("JC_55": (integer_of_uint32(len) - integer_of_uint32(i0))))
 
 goal heap_sort_safety_po_6:
   forall arr:intP pointer.
@@ -3915,32 +4110,31 @@ goal heap_sort_safety_po_6:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
+  forall i:uint32.
+  (i = result1) ->
   forall Heap_x_h_6:(Heap,
   int32) memory.
-  forall i_0_0:uint32.
+  forall i0:uint32.
   ("JC_50": true) ->
   ("JC_48":
-  (("JC_46": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_47": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) < integer_of_uint32(len)) ->
-  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i_0_0)) and
-   (integer_of_uint32(i_0_0) <= offset_max(intP_arr_5_alloc_table, arr))) ->
+  (("JC_46": (0 <= integer_of_uint32(i0))) and
+   ("JC_47": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) < integer_of_uint32(len)) ->
+  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i0)) and
+   (integer_of_uint32(i0) <= offset_max(intP_arr_5_alloc_table, arr))) ->
   forall result2:int32.
-  (result2 = select(intP_intM_arr_5, shift(arr,
-  integer_of_uint32(i_0_0)))) ->
+  (result2 = select(intP_intM_arr_5, shift(arr, integer_of_uint32(i0)))) ->
   forall Heap_x_h_6_0:(Heap,
   int32) memory.
   ("JC_18": not_assigns(result, Heap_x_h_6, Heap_x_h_6_0, pset_singleton(h))) ->
-  ((0 <= (integer_of_uint32(i_0_0) + 1)) and
-   ((integer_of_uint32(i_0_0) + 1) <= 4294967295)) ->
+  ((0 <= (integer_of_uint32(i0) + 1)) and
+   ((integer_of_uint32(i0) + 1) <= 4294967295)) ->
   forall result3:uint32.
-  (integer_of_uint32(result3) = (integer_of_uint32(i_0_0) + 1)) ->
-  forall i_0_1:uint32.
-  (i_0_1 = result3) ->
-  (("JC_55": (integer_of_uint32(len) - integer_of_uint32(i_0_1))) < ("JC_55":
-                                                                    (integer_of_uint32(len) - integer_of_uint32(i_0_0))))
+  (integer_of_uint32(result3) = (integer_of_uint32(i0) + 1)) ->
+  forall i1:uint32.
+  (i1 = result3) ->
+  (("JC_55": (integer_of_uint32(len) - integer_of_uint32(i1))) < ("JC_55":
+                                                                 (integer_of_uint32(len) - integer_of_uint32(i0))))
 
 goal heap_sort_safety_po_7:
   forall arr:intP pointer.
@@ -3956,25 +4150,25 @@ goal heap_sort_safety_po_7:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
-  forall i_0_0:uint32.
+  forall i:uint32.
+  (i = result1) ->
+  forall i0:uint32.
   ("JC_50": true) ->
   ("JC_48":
-  (("JC_46": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_47": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) >= integer_of_uint32(len)) ->
+  (("JC_46": (0 <= integer_of_uint32(i0))) and
+   ("JC_47": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) >= integer_of_uint32(len)) ->
   forall result2:uint32.
   (integer_of_uint32(result2) = 0) ->
-  forall i_0_1:uint32.
-  (i_0_1 = result2) ->
-  forall i_0_2:uint32.
+  forall i1:uint32.
+  (i1 = result2) ->
+  forall i2:uint32.
   ("JC_60": true) ->
   ("JC_58":
-  (("JC_56": (0 <= integer_of_uint32(i_0_2))) and
-   ("JC_57": (integer_of_uint32(i_0_2) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_2) < integer_of_uint32(len)) ->
-  (offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i_0_2))
+  (("JC_56": (0 <= integer_of_uint32(i2))) and
+   ("JC_57": (integer_of_uint32(i2) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i2) < integer_of_uint32(len)) ->
+  (offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i2))
 
 goal heap_sort_safety_po_8:
   forall arr:intP pointer.
@@ -3990,25 +4184,25 @@ goal heap_sort_safety_po_8:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
-  forall i_0_0:uint32.
+  forall i:uint32.
+  (i = result1) ->
+  forall i0:uint32.
   ("JC_50": true) ->
   ("JC_48":
-  (("JC_46": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_47": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) >= integer_of_uint32(len)) ->
+  (("JC_46": (0 <= integer_of_uint32(i0))) and
+   ("JC_47": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) >= integer_of_uint32(len)) ->
   forall result2:uint32.
   (integer_of_uint32(result2) = 0) ->
-  forall i_0_1:uint32.
-  (i_0_1 = result2) ->
-  forall i_0_2:uint32.
+  forall i1:uint32.
+  (i1 = result2) ->
+  forall i2:uint32.
   ("JC_60": true) ->
   ("JC_58":
-  (("JC_56": (0 <= integer_of_uint32(i_0_2))) and
-   ("JC_57": (integer_of_uint32(i_0_2) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_2) < integer_of_uint32(len)) ->
-  (integer_of_uint32(i_0_2) <= offset_max(intP_arr_5_alloc_table, arr))
+  (("JC_56": (0 <= integer_of_uint32(i2))) and
+   ("JC_57": (integer_of_uint32(i2) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i2) < integer_of_uint32(len)) ->
+  (integer_of_uint32(i2) <= offset_max(intP_arr_5_alloc_table, arr))
 
 goal heap_sort_safety_po_9:
   forall arr:intP pointer.
@@ -4024,34 +4218,34 @@ goal heap_sort_safety_po_9:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
-  forall i_0_0:uint32.
+  forall i:uint32.
+  (i = result1) ->
+  forall i0:uint32.
   ("JC_50": true) ->
   ("JC_48":
-  (("JC_46": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_47": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) >= integer_of_uint32(len)) ->
+  (("JC_46": (0 <= integer_of_uint32(i0))) and
+   ("JC_47": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) >= integer_of_uint32(len)) ->
   forall result2:uint32.
   (integer_of_uint32(result2) = 0) ->
-  forall i_0_1:uint32.
-  (i_0_1 = result2) ->
-  forall i_0_2:uint32.
+  forall i1:uint32.
+  (i1 = result2) ->
+  forall i2:uint32.
   forall intP_intM_arr_5_0:(intP,
   int32) memory.
   ("JC_60": true) ->
   ("JC_58":
-  (("JC_56": (0 <= integer_of_uint32(i_0_2))) and
-   ("JC_57": (integer_of_uint32(i_0_2) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_2) < integer_of_uint32(len)) ->
+  (("JC_56": (0 <= integer_of_uint32(i2))) and
+   ("JC_57": (integer_of_uint32(i2) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i2) < integer_of_uint32(len)) ->
   forall result3:int32.
-  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i_0_2)) and
-   (integer_of_uint32(i_0_2) <= offset_max(intP_arr_5_alloc_table, arr))) ->
+  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i2)) and
+   (integer_of_uint32(i2) <= offset_max(intP_arr_5_alloc_table, arr))) ->
   forall intP_intM_arr_5_1:(intP,
   int32) memory.
   (intP_intM_arr_5_1 = store(intP_intM_arr_5_0, shift(arr,
-  integer_of_uint32(i_0_2)), result3)) ->
-  (0 <= (integer_of_uint32(i_0_2) + 1))
+  integer_of_uint32(i2)), result3)) ->
+  (0 <= (integer_of_uint32(i2) + 1))
 
 goal heap_sort_safety_po_10:
   forall arr:intP pointer.
@@ -4067,34 +4261,34 @@ goal heap_sort_safety_po_10:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
-  forall i_0_0:uint32.
+  forall i:uint32.
+  (i = result1) ->
+  forall i0:uint32.
   ("JC_50": true) ->
   ("JC_48":
-  (("JC_46": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_47": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) >= integer_of_uint32(len)) ->
+  (("JC_46": (0 <= integer_of_uint32(i0))) and
+   ("JC_47": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) >= integer_of_uint32(len)) ->
   forall result2:uint32.
   (integer_of_uint32(result2) = 0) ->
-  forall i_0_1:uint32.
-  (i_0_1 = result2) ->
-  forall i_0_2:uint32.
+  forall i1:uint32.
+  (i1 = result2) ->
+  forall i2:uint32.
   forall intP_intM_arr_5_0:(intP,
   int32) memory.
   ("JC_60": true) ->
   ("JC_58":
-  (("JC_56": (0 <= integer_of_uint32(i_0_2))) and
-   ("JC_57": (integer_of_uint32(i_0_2) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_2) < integer_of_uint32(len)) ->
+  (("JC_56": (0 <= integer_of_uint32(i2))) and
+   ("JC_57": (integer_of_uint32(i2) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i2) < integer_of_uint32(len)) ->
   forall result3:int32.
-  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i_0_2)) and
-   (integer_of_uint32(i_0_2) <= offset_max(intP_arr_5_alloc_table, arr))) ->
+  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i2)) and
+   (integer_of_uint32(i2) <= offset_max(intP_arr_5_alloc_table, arr))) ->
   forall intP_intM_arr_5_1:(intP,
   int32) memory.
   (intP_intM_arr_5_1 = store(intP_intM_arr_5_0, shift(arr,
-  integer_of_uint32(i_0_2)), result3)) ->
-  ((integer_of_uint32(i_0_2) + 1) <= 4294967295)
+  integer_of_uint32(i2)), result3)) ->
+  ((integer_of_uint32(i2) + 1) <= 4294967295)
 
 goal heap_sort_safety_po_11:
   forall arr:intP pointer.
@@ -4110,40 +4304,40 @@ goal heap_sort_safety_po_11:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
-  forall i_0_0:uint32.
+  forall i:uint32.
+  (i = result1) ->
+  forall i0:uint32.
   ("JC_50": true) ->
   ("JC_48":
-  (("JC_46": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_47": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) >= integer_of_uint32(len)) ->
+  (("JC_46": (0 <= integer_of_uint32(i0))) and
+   ("JC_47": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) >= integer_of_uint32(len)) ->
   forall result2:uint32.
   (integer_of_uint32(result2) = 0) ->
-  forall i_0_1:uint32.
-  (i_0_1 = result2) ->
-  forall i_0_2:uint32.
+  forall i1:uint32.
+  (i1 = result2) ->
+  forall i2:uint32.
   forall intP_intM_arr_5_0:(intP,
   int32) memory.
   ("JC_60": true) ->
   ("JC_58":
-  (("JC_56": (0 <= integer_of_uint32(i_0_2))) and
-   ("JC_57": (integer_of_uint32(i_0_2) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_2) < integer_of_uint32(len)) ->
+  (("JC_56": (0 <= integer_of_uint32(i2))) and
+   ("JC_57": (integer_of_uint32(i2) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i2) < integer_of_uint32(len)) ->
   forall result3:int32.
-  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i_0_2)) and
-   (integer_of_uint32(i_0_2) <= offset_max(intP_arr_5_alloc_table, arr))) ->
+  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i2)) and
+   (integer_of_uint32(i2) <= offset_max(intP_arr_5_alloc_table, arr))) ->
   forall intP_intM_arr_5_1:(intP,
   int32) memory.
   (intP_intM_arr_5_1 = store(intP_intM_arr_5_0, shift(arr,
-  integer_of_uint32(i_0_2)), result3)) ->
-  ((0 <= (integer_of_uint32(i_0_2) + 1)) and
-   ((integer_of_uint32(i_0_2) + 1) <= 4294967295)) ->
+  integer_of_uint32(i2)), result3)) ->
+  ((0 <= (integer_of_uint32(i2) + 1)) and
+   ((integer_of_uint32(i2) + 1) <= 4294967295)) ->
   forall result4:uint32.
-  (integer_of_uint32(result4) = (integer_of_uint32(i_0_2) + 1)) ->
-  forall i_0_3:uint32.
-  (i_0_3 = result4) ->
-  (0 <= ("JC_65": (integer_of_uint32(len) - integer_of_uint32(i_0_2))))
+  (integer_of_uint32(result4) = (integer_of_uint32(i2) + 1)) ->
+  forall i3:uint32.
+  (i3 = result4) ->
+  (0 <= ("JC_65": (integer_of_uint32(len) - integer_of_uint32(i2))))
 
 goal heap_sort_safety_po_12:
   forall arr:intP pointer.
@@ -4159,41 +4353,41 @@ goal heap_sort_safety_po_12:
   (h = result0) ->
   forall result1:uint32.
   (integer_of_uint32(result1) = 0) ->
-  forall i_0:uint32.
-  (i_0 = result1) ->
-  forall i_0_0:uint32.
+  forall i:uint32.
+  (i = result1) ->
+  forall i0:uint32.
   ("JC_50": true) ->
   ("JC_48":
-  (("JC_46": (0 <= integer_of_uint32(i_0_0))) and
-   ("JC_47": (integer_of_uint32(i_0_0) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_0) >= integer_of_uint32(len)) ->
+  (("JC_46": (0 <= integer_of_uint32(i0))) and
+   ("JC_47": (integer_of_uint32(i0) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i0) >= integer_of_uint32(len)) ->
   forall result2:uint32.
   (integer_of_uint32(result2) = 0) ->
-  forall i_0_1:uint32.
-  (i_0_1 = result2) ->
-  forall i_0_2:uint32.
+  forall i1:uint32.
+  (i1 = result2) ->
+  forall i2:uint32.
   forall intP_intM_arr_5_0:(intP,
   int32) memory.
   ("JC_60": true) ->
   ("JC_58":
-  (("JC_56": (0 <= integer_of_uint32(i_0_2))) and
-   ("JC_57": (integer_of_uint32(i_0_2) <= integer_of_uint32(len))))) ->
-  (integer_of_uint32(i_0_2) < integer_of_uint32(len)) ->
+  (("JC_56": (0 <= integer_of_uint32(i2))) and
+   ("JC_57": (integer_of_uint32(i2) <= integer_of_uint32(len))))) ->
+  (integer_of_uint32(i2) < integer_of_uint32(len)) ->
   forall result3:int32.
-  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i_0_2)) and
-   (integer_of_uint32(i_0_2) <= offset_max(intP_arr_5_alloc_table, arr))) ->
+  ((offset_min(intP_arr_5_alloc_table, arr) <= integer_of_uint32(i2)) and
+   (integer_of_uint32(i2) <= offset_max(intP_arr_5_alloc_table, arr))) ->
   forall intP_intM_arr_5_1:(intP,
   int32) memory.
   (intP_intM_arr_5_1 = store(intP_intM_arr_5_0, shift(arr,
-  integer_of_uint32(i_0_2)), result3)) ->
-  ((0 <= (integer_of_uint32(i_0_2) + 1)) and
-   ((integer_of_uint32(i_0_2) + 1) <= 4294967295)) ->
+  integer_of_uint32(i2)), result3)) ->
+  ((0 <= (integer_of_uint32(i2) + 1)) and
+   ((integer_of_uint32(i2) + 1) <= 4294967295)) ->
   forall result4:uint32.
-  (integer_of_uint32(result4) = (integer_of_uint32(i_0_2) + 1)) ->
-  forall i_0_3:uint32.
-  (i_0_3 = result4) ->
-  (("JC_65": (integer_of_uint32(len) - integer_of_uint32(i_0_3))) < ("JC_65":
-                                                                    (integer_of_uint32(len) - integer_of_uint32(i_0_2))))
+  (integer_of_uint32(result4) = (integer_of_uint32(i2) + 1)) ->
+  forall i3:uint32.
+  (i3 = result4) ->
+  (("JC_65": (integer_of_uint32(len) - integer_of_uint32(i3))) < ("JC_65":
+                                                                 (integer_of_uint32(len) - integer_of_uint32(i2))))
 
 goal main_ensures_default_po_1:
   ("JC_84": true) ->
@@ -4228,12 +4422,12 @@ goal main_ensures_default_po_1:
   forall intP_intM_arr_0_8_0:(intP,
   int32) memory.
   ("JC_42":
-  (forall i:int.
-    (forall j:int.
-      (((0 <= i) and ((i <= j) and (j < integer_of_uint32(result5)))) ->
+  (forall i_1:int.
+    (forall j_0:int.
+      (((0 <= i_1) and ((i_1 <= j_0) and (j_0 < integer_of_uint32(result5)))) ->
        (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-       i))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-       j)))))))) ->
+       i_1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+       j_0)))))))) ->
   ("JC_103":
   ("JC_101": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
   0))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 1))))))
@@ -4271,12 +4465,12 @@ goal main_ensures_default_po_2:
   forall intP_intM_arr_0_8_0:(intP,
   int32) memory.
   ("JC_42":
-  (forall i:int.
-    (forall j:int.
-      (((0 <= i) and ((i <= j) and (j < integer_of_uint32(result5)))) ->
+  (forall i_1:int.
+    (forall j_0:int.
+      (((0 <= i_1) and ((i_1 <= j_0) and (j_0 < integer_of_uint32(result5)))) ->
        (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-       i))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-       j)))))))) ->
+       i_1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+       j_0)))))))) ->
   ("JC_103":
   ("JC_102": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
   1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 2))))))
@@ -4314,12 +4508,12 @@ goal main_ensures_default_po_3:
   forall intP_intM_arr_0_8_0:(intP,
   int32) memory.
   ("JC_42":
-  (forall i:int.
-    (forall j:int.
-      (((0 <= i) and ((i <= j) and (j < integer_of_uint32(result5)))) ->
+  (forall i_1:int.
+    (forall j_0:int.
+      (((0 <= i_1) and ((i_1 <= j_0) and (j_0 < integer_of_uint32(result5)))) ->
        (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-       i))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-       j)))))))) ->
+       i_1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+       j_0)))))))) ->
   ("JC_103":
   (("JC_101": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
    0))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 1))))) and
@@ -4362,12 +4556,12 @@ goal main_ensures_default_po_4:
   forall intP_intM_arr_0_8_0:(intP,
   int32) memory.
   ("JC_42":
-  (forall i:int.
-    (forall j:int.
-      (((0 <= i) and ((i <= j) and (j < integer_of_uint32(result5)))) ->
+  (forall i_1:int.
+    (forall j_0:int.
+      (((0 <= i_1) and ((i_1 <= j_0) and (j_0 < integer_of_uint32(result5)))) ->
        (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-       i))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-       j)))))))) ->
+       i_1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+       j_0)))))))) ->
   ("JC_103":
   (("JC_101": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
    0))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 1))))) and
@@ -4410,12 +4604,12 @@ goal main_ensures_default_po_5:
   forall intP_intM_arr_0_8_0:(intP,
   int32) memory.
   ("JC_42":
-  (forall i:int.
-    (forall j:int.
-      (((0 <= i) and ((i <= j) and (j < integer_of_uint32(result5)))) ->
+  (forall i_1:int.
+    (forall j_0:int.
+      (((0 <= i_1) and ((i_1 <= j_0) and (j_0 < integer_of_uint32(result5)))) ->
        (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-       i))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-       j)))))))) ->
+       i_1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+       j_0)))))))) ->
   ("JC_103":
   (("JC_101": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
    0))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 1))))) and
@@ -4587,12 +4781,12 @@ goal main_safety_po_6:
   forall intP_intM_arr_0_8_0:(intP,
   int32) memory.
   ("JC_42":
-  (forall i:int.
-    (forall j:int.
-      (((0 <= i) and ((i <= j) and (j < integer_of_uint32(result5)))) ->
+  (forall i_1:int.
+    (forall j_0:int.
+      (((0 <= i_1) and ((i_1 <= j_0) and (j_0 < integer_of_uint32(result5)))) ->
        (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-       i))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
-       j)))))))) ->
+       i_1))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
+       j_0)))))))) ->
   ("JC_94":
   (("JC_92": (integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0,
    0))) <= integer_of_int32(select(intP_intM_arr_0_8_0, shift(arr_0, 1))))) and

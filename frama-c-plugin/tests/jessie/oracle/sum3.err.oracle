@@ -1,4 +1,8 @@
-Fatal error: Output.iter_expr should not be called on MultiAssign
-File "jc/output.ml", line 942, characters 8-8:
-Uncaught exception: File "jc/output.ml", line 942, characters 8-14: Assertion failed
-make: *** [sum3.regtest] Error 2
+File "why/sum3.why", line 992, characters 9-597:
+warning: mutable __anonstruct_S_1_a_vect_1 is not declared in effect; added as read
+File "why/sum3.why", line 992, characters 9-597:
+warning: mutable __anonstruct_S_1_b_vect_1 is not declared in effect; added as read
+File "why/sum3.why", line 992, characters 9-597:
+warning: mutable unsigned_charP_unsigned_charM_vect_1 is not declared in effect; added as read
+File "why/sum3.why", line 992, characters 9-597:
+warning: mutable unsigned_charP_vect_1_alloc_table is not declared in effect; added as read

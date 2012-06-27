@@ -442,18 +442,18 @@ let f_ensures_default =
        !x_0 end)) in void);
       (let jessie_<somenum> =
       (assert { true };
-      (((C_10:
-        begin
-          (y := (C_9:
-                (safe_int32_of_integer_ (C_8:
-                                        ((add_int (integer_of_int32 !y)) (1))))));
-         !y end))
+      ((C_10:
+       begin
+         (y := (C_9:
+               (safe_int32_of_integer_ (C_8:
+                                       ((add_int (integer_of_int32 !y)) (1))))));
+        !y end))
       {{ (JC_<somenum>:
          ((JC_<somenum>:
           (integer_of_int32(y) = add_int(integer_of_int32(x_0@), (1))))
          and (JC_<somenum>:
              (add_int(integer_of_int32(x_0@), (1)) = add_int(integer_of_int32(x_0@init),
-                                                     (2)))))) }})) in void);
+                                                     (2)))))) }}) in void);
       (return := !y); (raise Return) end)); absurd  end with Return ->
    !return end)) { (JC_<somenum>: true) }
 

@@ -143,6 +143,12 @@ axiomatic Padding {
   
 }
 
+tag unsigned_charP = {
+  integer unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
 tag charP = {
   integer charM: 8;
 }
@@ -159,12 +165,13 @@ predicate is_color(integer c) =
 
 predicate is_color_array{L}(charP[..] t, integer l) =
 (((\offset_min(t) <= 0) && (\offset_max(t) >= (l - 1))) &&
-  (\forall integer i;
-    (((0 <= i) && (i < l)) ==> is_color((t + i).charM))))
+  (\forall integer i_1;
+    (((0 <= i_1) && (i_1 < l)) ==> is_color((t + i_1).charM))))
 
-predicate is_monochrome{L}(charP[..] t_0, integer i_0, integer j, integer c_0) =
+predicate is_monochrome{L}(charP[..] t_0, integer i_2, integer j_0,
+                           integer c_0) =
 (\forall integer k;
-  (((i_0 <= k) && (k < j)) ==> ((t_0 + k).charM == c_0)))
+  (((i_2 <= k) && (k < j_0)) ==> ((t_0 + k).charM == c_0)))
 
 integer isMonochrome(charP[..] t_0, integer i, integer j, integer c)
   requires (C_14 : ((C_15 : (\offset_min(t_0) <= i)) &&
@@ -287,9 +294,9 @@ behavior sorts:
                        (C_60 : (tmp_0 = b));
                        (C_62 : (b = (C_61 : (b + 1))));
                        ();
-                       ();
-                       (C_63 : swap(t, tmp_0, tmp))
+                       ()
                     };
+                    (C_63 : swap(t, tmp_0, tmp));
                     
                     (goto switch_1_break)
                  }
@@ -302,9 +309,9 @@ behavior sorts:
                  {  
                     {  ();
                        (C_67 : (r = (C_66 : (r - 1))));
-                       ();
-                       (C_68 : swap(t, r, i_1))
+                       ()
                     };
+                    (C_68 : swap(t, r, i_1));
                     
                     (goto switch_1_break)
                  }
@@ -967,9 +974,9 @@ clean:
 ========== file tests/c/flag.jessie/flag.loc ==========
 [JC_90]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 131
+line = 138
 begin = 6
-end = 1799
+end = 1793
 
 [isMonochrome_ensures_decides_monochromatic]
 name = "Function isMonochrome"
@@ -989,9 +996,9 @@ end = 16
 [JC_92]
 kind = UserCall
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 157
-begin = 31
-end = 50
+line = 165
+begin = 28
+end = 47
 
 [JC_40]
 file = "HOME/"
@@ -1002,9 +1009,9 @@ end = -1
 [JC_93]
 kind = UserCall
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 172
-begin = 31
-end = 46
+line = 180
+begin = 28
+end = 43
 
 [JC_41]
 file = "HOME/tests/c/flag.c"
@@ -1164,9 +1171,9 @@ end = 32
 
 [JC_105]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 131
+line = 138
 begin = 6
-end = 1799
+end = 1793
 
 [JC_7]
 file = "HOME/tests/c/flag.c"
@@ -1184,9 +1191,9 @@ end = 9
 
 [JC_106]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 131
+line = 138
 begin = 6
-end = 1799
+end = 1793
 
 [swap_ensures_i_j_swapped]
 name = "Function swap"
@@ -1205,9 +1212,9 @@ end = -1
 [JC_107]
 kind = UserCall
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 157
-begin = 31
-end = 50
+line = 165
+begin = 28
+end = 47
 
 [JC_9]
 file = "HOME/"
@@ -1218,9 +1225,9 @@ end = -1
 [JC_108]
 kind = UserCall
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 172
-begin = 31
-end = 46
+line = 180
+begin = 28
+end = 43
 
 [JC_109]
 file = "HOME/tests/c/flag.c"
@@ -1268,7 +1275,7 @@ end = 9
 
 [JC_55]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 86
+line = 93
 begin = 9
 end = 20
 
@@ -1352,9 +1359,9 @@ end = -1
 
 [JC_119]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 131
+line = 138
 begin = 6
-end = 1799
+end = 1793
 
 [swap_safety]
 name = "Function swap"
@@ -1366,7 +1373,7 @@ end = 9
 
 [JC_60]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 86
+line = 93
 begin = 9
 end = 20
 
@@ -1393,7 +1400,7 @@ end = -1
 [JC_63]
 kind = PointerDeref
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 97
+line = 104
 begin = 15
 end = 213
 
@@ -1406,7 +1413,7 @@ end = -1
 [JC_64]
 kind = PointerDeref
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 100
+line = 107
 begin = 15
 end = 54
 
@@ -1450,9 +1457,9 @@ end = 49
 
 [JC_120]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 131
+line = 138
 begin = 6
-end = 1799
+end = 1793
 
 [JC_67]
 file = "HOME/tests/c/flag.c"
@@ -1469,9 +1476,9 @@ end = 27
 [JC_121]
 kind = UserCall
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 157
-begin = 31
-end = 50
+line = 165
+begin = 28
+end = 47
 
 [JC_68]
 file = "HOME/"
@@ -1488,9 +1495,9 @@ end = 51
 [JC_122]
 kind = UserCall
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 172
-begin = 31
-end = 46
+line = 180
+begin = 28
+end = 43
 
 [JC_69]
 file = "HOME/tests/c/flag.c"
@@ -1512,7 +1519,7 @@ end = -1
 
 [JC_19]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 52
+line = 59
 begin = 9
 end = 700
 
@@ -1536,7 +1543,7 @@ end = -1
 
 [JC_20]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 52
+line = 59
 begin = 9
 end = 700
 
@@ -1637,13 +1644,13 @@ end = 27
 
 [JC_27]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 52
+line = 59
 begin = 9
 end = 700
 
 [JC_28]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 52
+line = 59
 begin = 9
 end = 700
 
@@ -1717,7 +1724,7 @@ end = 37
 
 [JC_33]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 52
+line = 59
 begin = 9
 end = 700
 
@@ -1729,7 +1736,7 @@ end = 37
 
 [JC_34]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 52
+line = 59
 begin = 9
 end = 700
 
@@ -1759,9 +1766,9 @@ end = 30
 
 [JC_89]
 file = "HOME/tests/c/flag.jessie/flag.jc"
-line = 131
+line = 138
 begin = 6
-end = 1799
+end = 1793
 
 [JC_37]
 file = "HOME/tests/c/flag.c"
@@ -1785,6 +1792,8 @@ end = -1
 type charP
 
 type padding
+
+type unsigned_charP
 
 type voidP
 
@@ -1815,15 +1824,19 @@ predicate is_color_array(t:charP pointer, l:int,
           ((le_int((0), i_1) and lt_int(i_1, l)) ->
            is_color(select(charP_charM_t_1_at_L, shift(t, i_1)))))))
 
-predicate is_monochrome(t_0:charP pointer, i_0:int, j:int, c_0:int,
+predicate is_monochrome(t_0:charP pointer, i_2:int, j_0:int, c_0:int,
  charP_charM_t_0_2_at_L:(charP, int) memory) =
  (forall k:int.
-  ((le_int(i_0, k) and lt_int(k, j)) ->
+  ((le_int(i_2, k) and lt_int(k, j_0)) ->
    (select(charP_charM_t_0_2_at_L, shift(t_0, k)) = c_0)))
 
 predicate left_valid_struct_charP(p:charP pointer, a:int,
  charP_alloc_table:charP alloc_table) =
  (offset_min(charP_alloc_table, p) <= a)
+
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
 
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1831,6 +1844,12 @@ predicate left_valid_struct_voidP(p:voidP pointer, a:int,
 
 axiom pointer_addr_of_charP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -1841,6 +1860,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
  charP_alloc_table:charP alloc_table) =
  (offset_max(charP_alloc_table, p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_max(voidP_alloc_table, p) >= b)
@@ -1849,6 +1872,11 @@ predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) = a)
  and (offset_max(charP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1860,15 +1888,41 @@ predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
  ((offset_min(charP_alloc_table, p) = a)
  and (offset_max(charP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
 
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
  and (offset_max(charP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1879,6 +1933,11 @@ predicate valid_struct_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
  and (offset_max(charP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1934,6 +1993,38 @@ parameter alloc_struct_charP_requires :
       and (alloc_extends(charP_alloc_table@, charP_alloc_table)
           and (alloc_fresh(charP_alloc_table@, result, n)
               and instanceof(charP_tag_table, result, charP_tag)))) }
+
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
 
 parameter voidP_alloc_table : voidP alloc_table ref
 
@@ -1994,33 +2085,33 @@ parameter flag_requires :
 parameter isMonochrome :
  t_0_0:charP pointer ->
   i:int ->
-   j_0:int ->
+   j:int ->
     c_1:int ->
      charP_t_0_3_alloc_table:charP alloc_table ->
       charP_charM_t_0_3:(charP, int) memory ->
        { } int
        { (JC_14:
          ((result <> (0))
-         <-> is_monochrome(t_0_0, i, j_0, c_1, charP_charM_t_0_3))) }
+         <-> is_monochrome(t_0_0, i, j, c_1, charP_charM_t_0_3))) }
 
 parameter isMonochrome_requires :
  t_0_0:charP pointer ->
   i:int ->
-   j_0:int ->
+   j:int ->
     c_1:int ->
      charP_t_0_3_alloc_table:charP alloc_table ->
       charP_charM_t_0_3:(charP, int) memory ->
        { (JC_3:
          ((JC_1: le_int(offset_min(charP_t_0_3_alloc_table, t_0_0), i))
-         and (JC_2: ge_int(offset_max(charP_t_0_3_alloc_table, t_0_0), j_0))))}
+         and (JC_2: ge_int(offset_max(charP_t_0_3_alloc_table, t_0_0), j))))}
        int
        { (JC_14:
          ((result <> (0))
-         <-> is_monochrome(t_0_0, i, j_0, c_1, charP_charM_t_0_3))) }
+         <-> is_monochrome(t_0_0, i, j, c_1, charP_charM_t_0_3))) }
 
 parameter swap :
  t_1:charP pointer ->
-  i_0_0:int ->
+  i_0:int ->
    j_0_0:int ->
     charP_charM_t_1_4:(charP, int) memory ref ->
      charP_t_1_4_alloc_table:charP alloc_table ->
@@ -2028,27 +2119,26 @@ parameter swap :
       { (JC_60:
         ((JC_58:
          ((JC_56:
-          (select(charP_charM_t_1_4, shift(t_1, i_0_0)) = select(charP_charM_t_1_4@,
-                                                          shift(t_1, j_0_0))))
+          (select(charP_charM_t_1_4, shift(t_1, i_0)) = select(charP_charM_t_1_4@,
+                                                        shift(t_1, j_0_0))))
          and (JC_57:
              (select(charP_charM_t_1_4, shift(t_1, j_0_0)) = select(charP_charM_t_1_4@,
-                                                             shift(t_1,
-                                                             i_0_0))))))
+                                                             shift(t_1, i_0))))))
         and (JC_59:
             not_assigns(charP_t_1_4_alloc_table, charP_charM_t_1_4@,
             charP_charM_t_1_4,
             pset_union(pset_range(pset_singleton(t_1), j_0_0, j_0_0),
-            pset_range(pset_singleton(t_1), i_0_0, i_0_0)))))) }
+            pset_range(pset_singleton(t_1), i_0, i_0)))))) }
 
 parameter swap_requires :
  t_1:charP pointer ->
-  i_0_0:int ->
+  i_0:int ->
    j_0_0:int ->
     charP_charM_t_1_4:(charP, int) memory ref ->
      charP_t_1_4_alloc_table:charP alloc_table ->
       { (JC_39:
-        ((JC_35: le_int(offset_min(charP_t_1_4_alloc_table, t_1), i_0_0))
-        and ((JC_36: ge_int(offset_max(charP_t_1_4_alloc_table, t_1), i_0_0))
+        ((JC_35: le_int(offset_min(charP_t_1_4_alloc_table, t_1), i_0))
+        and ((JC_36: ge_int(offset_max(charP_t_1_4_alloc_table, t_1), i_0))
             and ((JC_37:
                  le_int(offset_min(charP_t_1_4_alloc_table, t_1), j_0_0))
                 and (JC_38:
@@ -2057,17 +2147,16 @@ parameter swap_requires :
       { (JC_60:
         ((JC_58:
          ((JC_56:
-          (select(charP_charM_t_1_4, shift(t_1, i_0_0)) = select(charP_charM_t_1_4@,
-                                                          shift(t_1, j_0_0))))
+          (select(charP_charM_t_1_4, shift(t_1, i_0)) = select(charP_charM_t_1_4@,
+                                                        shift(t_1, j_0_0))))
          and (JC_57:
              (select(charP_charM_t_1_4, shift(t_1, j_0_0)) = select(charP_charM_t_1_4@,
-                                                             shift(t_1,
-                                                             i_0_0))))))
+                                                             shift(t_1, i_0))))))
         and (JC_59:
             not_assigns(charP_t_1_4_alloc_table, charP_charM_t_1_4@,
             charP_charM_t_1_4,
             pset_union(pset_range(pset_singleton(t_1), j_0_0, j_0_0),
-            pset_range(pset_singleton(t_1), i_0_0, i_0_0)))))) }
+            pset_range(pset_singleton(t_1), i_0, i_0)))))) }
 
 let flag_ensures_default =
  fun (t_2 : charP pointer) (l_0 : int) (charP_charM_t_5 : (charP, int) memory ref) (charP_t_5_alloc_table : charP alloc_table) ->
@@ -2121,49 +2210,49 @@ let flag_ensures_default =
               (let jessie_<num> =
               (C_70:
               ((safe_acc_ !charP_charM_t_5) (C_69: ((shift t_2) !i_1_0)))) in
-              (if ((eq_int_ jessie_<num>) (1))
-              then
-               (C_57:
-               (C_59:
-               (C_60:
-               (C_62:
-               begin
-                 (let jessie_<num> = (tmp := !i_1_0) in void);
-                (let jessie_<num> =
-                (i_1_0 := (C_58: ((add_int !i_1_0) (1)))) in void); void;
-                (let jessie_<num> = (tmp_0 := !b_0) in void);
-                (let jessie_<num> = (b_0 := (C_61: ((add_int !b_0) (1)))) in
-                void); void; void;
-                (C_63:
-                (let jessie_<num> = t_2 in
-                (let jessie_<num> = !tmp_0 in
-                (let jessie_<num> = !tmp in
-                (JC_107:
-                (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table))))));
-                (raise (Goto_switch_1_break_exc void)) end))))
-              else
-               begin
-                 (if ((eq_int_ jessie_<num>) (2))
-                 then
-                  (C_65:
-                  begin
-                    (let jessie_<num> =
-                    (i_1_0 := (C_64: ((add_int !i_1_0) (1)))) in void);
-                   (raise (Goto_switch_1_break_exc void)) end) else void);
-                (if (((eq_int_ jessie_<num>) (3)) || ((eq_int_ jessie_<num>) (2)))
+              begin
+                (if ((eq_int_ jessie_<num>) (1))
                 then
-                 (C_67:
+                 (C_57:
+                 (C_59:
+                 (C_60:
+                 (C_62:
+                 (C_63:
                  begin
-                   void;
-                  (let jessie_<num> = (r_0 := (C_66: ((sub_int !r_0) (1)))) in
-                  void); void;
-                  (C_68:
+                   (let jessie_<num> = (tmp := !i_1_0) in void);
+                  (let jessie_<num> =
+                  (i_1_0 := (C_58: ((add_int !i_1_0) (1)))) in void); void;
+                  (let jessie_<num> = (tmp_0 := !b_0) in void);
+                  (let jessie_<num> = (b_0 := (C_61: ((add_int !b_0) (1)))) in
+                  void); void; void;
                   (let jessie_<num> = t_2 in
-                  (let jessie_<num> = !r_0 in
-                  (let jessie_<num> = !i_1_0 in
-                  (JC_108:
-                  (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table))))));
-                  (raise (Goto_switch_1_break_exc void)) end) else void) end));
+                  (let jessie_<num> = !tmp_0 in
+                  (let jessie_<num> = !tmp in
+                  (JC_107:
+                  (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                  (raise (Goto_switch_1_break_exc void)) end))))) else void);
+               (if (((eq_int_ jessie_<num>) (2)) || ((eq_int_ jessie_<num>) (1)))
+               then
+                (C_65:
+                begin
+                  (let jessie_<num> =
+                  (i_1_0 := (C_64: ((add_int !i_1_0) (1)))) in void);
+                 (raise (Goto_switch_1_break_exc void)) end) else void);
+               (if (((eq_int_ jessie_<num>) (3)) || (((eq_int_ jessie_<num>) (2)) || 
+                                                ((eq_int_ jessie_<num>) (1))))
+               then
+                (C_67:
+                (C_68:
+                begin
+                  void;
+                 (let jessie_<num> = (r_0 := (C_66: ((sub_int !r_0) (1)))) in
+                 void); void;
+                 (let jessie_<num> = t_2 in
+                 (let jessie_<num> = !r_0 in
+                 (let jessie_<num> = !i_1_0 in
+                 (JC_108:
+                 (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                 (raise (Goto_switch_1_break_exc void)) end)) else void) end);
              (raise (Goto_switch_1_break_exc void)) end with
             Goto_switch_1_break_exc jessie_<num> -> (switch_1_break: void) end;
            (raise (Loop_continue_exc void)) end with
@@ -2226,49 +2315,49 @@ let flag_ensures_sorts =
               (let jessie_<num> =
               (C_70:
               ((safe_acc_ !charP_charM_t_5) (C_69: ((shift t_2) !i_1_0)))) in
-              (if ((eq_int_ jessie_<num>) (1))
-              then
-               (C_57:
-               (C_59:
-               (C_60:
-               (C_62:
-               begin
-                 (let jessie_<num> = (tmp := !i_1_0) in void);
-                (let jessie_<num> =
-                (i_1_0 := (C_58: ((add_int !i_1_0) (1)))) in void); void;
-                (let jessie_<num> = (tmp_0 := !b_0) in void);
-                (let jessie_<num> = (b_0 := (C_61: ((add_int !b_0) (1)))) in
-                void); void; void;
-                (C_63:
-                (let jessie_<num> = t_2 in
-                (let jessie_<num> = !tmp_0 in
-                (let jessie_<num> = !tmp in
-                (JC_121:
-                (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table))))));
-                (raise (Goto_switch_1_break_exc void)) end))))
-              else
-               begin
-                 (if ((eq_int_ jessie_<num>) (2))
-                 then
-                  (C_65:
-                  begin
-                    (let jessie_<num> =
-                    (i_1_0 := (C_64: ((add_int !i_1_0) (1)))) in void);
-                   (raise (Goto_switch_1_break_exc void)) end) else void);
-                (if (((eq_int_ jessie_<num>) (3)) || ((eq_int_ jessie_<num>) (2)))
+              begin
+                (if ((eq_int_ jessie_<num>) (1))
                 then
-                 (C_67:
+                 (C_57:
+                 (C_59:
+                 (C_60:
+                 (C_62:
+                 (C_63:
                  begin
-                   void;
-                  (let jessie_<num> = (r_0 := (C_66: ((sub_int !r_0) (1)))) in
-                  void); void;
-                  (C_68:
+                   (let jessie_<num> = (tmp := !i_1_0) in void);
+                  (let jessie_<num> =
+                  (i_1_0 := (C_58: ((add_int !i_1_0) (1)))) in void); void;
+                  (let jessie_<num> = (tmp_0 := !b_0) in void);
+                  (let jessie_<num> = (b_0 := (C_61: ((add_int !b_0) (1)))) in
+                  void); void; void;
                   (let jessie_<num> = t_2 in
-                  (let jessie_<num> = !r_0 in
-                  (let jessie_<num> = !i_1_0 in
-                  (JC_122:
-                  (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table))))));
-                  (raise (Goto_switch_1_break_exc void)) end) else void) end));
+                  (let jessie_<num> = !tmp_0 in
+                  (let jessie_<num> = !tmp in
+                  (JC_121:
+                  (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                  (raise (Goto_switch_1_break_exc void)) end))))) else void);
+               (if (((eq_int_ jessie_<num>) (2)) || ((eq_int_ jessie_<num>) (1)))
+               then
+                (C_65:
+                begin
+                  (let jessie_<num> =
+                  (i_1_0 := (C_64: ((add_int !i_1_0) (1)))) in void);
+                 (raise (Goto_switch_1_break_exc void)) end) else void);
+               (if (((eq_int_ jessie_<num>) (3)) || (((eq_int_ jessie_<num>) (2)) || 
+                                                ((eq_int_ jessie_<num>) (1))))
+               then
+                (C_67:
+                (C_68:
+                begin
+                  void;
+                 (let jessie_<num> = (r_0 := (C_66: ((sub_int !r_0) (1)))) in
+                 void); void;
+                 (let jessie_<num> = t_2 in
+                 (let jessie_<num> = !r_0 in
+                 (let jessie_<num> = !i_1_0 in
+                 (JC_122:
+                 (((((swap jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                 (raise (Goto_switch_1_break_exc void)) end)) else void) end);
              (raise (Goto_switch_1_break_exc void)) end with
             Goto_switch_1_break_exc jessie_<num> -> (switch_1_break: void) end;
            (raise (Loop_continue_exc void)) end with
@@ -2338,48 +2427,49 @@ let flag_safety =
               (C_70:
               (JC_91:
               ((((offset_acc_ charP_t_5_alloc_table) !charP_charM_t_5) t_2) !i_1_0))) in
-              (if ((eq_int_ jessie_<num>) (1))
-              then
-               (C_57:
-               (C_59:
-               (C_60:
-               (C_62:
-               begin
-                 (let jessie_<num> = (tmp := !i_1_0) in void);
-                (let jessie_<num> = (i_1_0 := (C_58: ((add_int !i_1_0) (1)))) in
-                void); void; (let jessie_<num> = (tmp_0 := !b_0) in void);
-                (let jessie_<num> = (b_0 := (C_61: ((add_int !b_0) (1)))) in
-                void); void; void;
-                (C_63:
-                (let jessie_<num> = t_2 in
-                (let jessie_<num> = !tmp_0 in
-                (let jessie_<num> = !tmp in
-                (JC_92:
-                (((((swap_requires jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table))))));
-                (raise (Goto_switch_1_break_exc void)) end))))
-              else
-               begin
-                 (if ((eq_int_ jessie_<num>) (2))
-                 then
-                  (C_65:
-                  begin
-                    (let jessie_<num> =
-                    (i_1_0 := (C_64: ((add_int !i_1_0) (1)))) in void);
-                   (raise (Goto_switch_1_break_exc void)) end) else void);
-                (if (((eq_int_ jessie_<num>) (3)) || ((eq_int_ jessie_<num>) (2)))
+              begin
+                (if ((eq_int_ jessie_<num>) (1))
                 then
-                 (C_67:
+                 (C_57:
+                 (C_59:
+                 (C_60:
+                 (C_62:
+                 (C_63:
                  begin
-                   void;
-                  (let jessie_<num> = (r_0 := (C_66: ((sub_int !r_0) (1)))) in
-                  void); void;
-                  (C_68:
+                   (let jessie_<num> = (tmp := !i_1_0) in void);
+                  (let jessie_<num> =
+                  (i_1_0 := (C_58: ((add_int !i_1_0) (1)))) in void); void;
+                  (let jessie_<num> = (tmp_0 := !b_0) in void);
+                  (let jessie_<num> = (b_0 := (C_61: ((add_int !b_0) (1)))) in
+                  void); void; void;
                   (let jessie_<num> = t_2 in
-                  (let jessie_<num> = !r_0 in
-                  (let jessie_<num> = !i_1_0 in
-                  (JC_93:
-                  (((((swap_requires jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table))))));
-                  (raise (Goto_switch_1_break_exc void)) end) else void) end));
+                  (let jessie_<num> = !tmp_0 in
+                  (let jessie_<num> = !tmp in
+                  (JC_92:
+                  (((((swap_requires jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                  (raise (Goto_switch_1_break_exc void)) end))))) else void);
+               (if (((eq_int_ jessie_<num>) (2)) || ((eq_int_ jessie_<num>) (1)))
+               then
+                (C_65:
+                begin
+                  (let jessie_<num> =
+                  (i_1_0 := (C_64: ((add_int !i_1_0) (1)))) in void);
+                 (raise (Goto_switch_1_break_exc void)) end) else void);
+               (if (((eq_int_ jessie_<num>) (3)) || (((eq_int_ jessie_<num>) (2)) || 
+                                                ((eq_int_ jessie_<num>) (1))))
+               then
+                (C_67:
+                (C_68:
+                begin
+                  void;
+                 (let jessie_<num> = (r_0 := (C_66: ((sub_int !r_0) (1)))) in
+                 void); void;
+                 (let jessie_<num> = t_2 in
+                 (let jessie_<num> = !r_0 in
+                 (let jessie_<num> = !i_1_0 in
+                 (JC_93:
+                 (((((swap_requires jessie_<num>) jessie_<num>) jessie_<num>) charP_charM_t_5) charP_t_5_alloc_table)))));
+                 (raise (Goto_switch_1_break_exc void)) end)) else void) end);
              (raise (Goto_switch_1_break_exc void)) end with
             Goto_switch_1_break_exc jessie_<num> -> (switch_1_break: void) end;
            (raise (Loop_continue_exc void)) end with
@@ -2390,10 +2480,10 @@ let flag_safety =
     (raise Return) end with Return -> void end) { true }
 
 let isMonochrome_ensures_decides_monochromatic =
- fun (t_0_0 : charP pointer) (i : int) (j_0 : int) (c_1 : int) (charP_t_0_3_alloc_table : charP alloc_table) (charP_charM_t_0_3 : (charP, int) memory) ->
+ fun (t_0_0 : charP pointer) (i : int) (j : int) (c_1 : int) (charP_t_0_3_alloc_table : charP alloc_table) (charP_charM_t_0_3 : (charP, int) memory) ->
   { (JC_7:
     ((JC_5: le_int(offset_min(charP_t_0_3_alloc_table, t_0_0), i))
-    and (JC_6: ge_int(offset_max(charP_t_0_3_alloc_table, t_0_0), j_0)))) }
+    and (JC_6: ge_int(offset_max(charP_t_0_3_alloc_table, t_0_0), j)))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -2423,7 +2513,7 @@ let isMonochrome_ensures_decides_monochromatic =
                (let jessie_<num> =
                (C_10:
                begin
-                 (if ((lt_int_ !k_0) j_0) then void
+                 (if ((lt_int_ !k_0) j) then void
                  else (raise (Goto_while_0_break_exc void)));
                 (if ((neq_int_ (C_8:
                                ((safe_acc_ charP_charM_t_0_3) (C_7:
@@ -2443,14 +2533,13 @@ let isMonochrome_ensures_decides_monochromatic =
       (return_label: begin   (return := !__retres); (raise Return) end) end));
     absurd  end with Return -> !return end))
   { (JC_13:
-    ((result <> (0))
-    <-> is_monochrome(t_0_0, i, j_0, c_1, charP_charM_t_0_3))) }
+    ((result <> (0)) <-> is_monochrome(t_0_0, i, j, c_1, charP_charM_t_0_3))) }
 
 let isMonochrome_ensures_default =
- fun (t_0_0 : charP pointer) (i : int) (j_0 : int) (c_1 : int) (charP_t_0_3_alloc_table : charP alloc_table) (charP_charM_t_0_3 : (charP, int) memory) ->
+ fun (t_0_0 : charP pointer) (i : int) (j : int) (c_1 : int) (charP_t_0_3_alloc_table : charP alloc_table) (charP_charM_t_0_3 : (charP, int) memory) ->
   { (JC_7:
     ((JC_5: le_int(offset_min(charP_t_0_3_alloc_table, t_0_0), i))
-    and (JC_6: ge_int(offset_max(charP_t_0_3_alloc_table, t_0_0), j_0)))) }
+    and (JC_6: ge_int(offset_max(charP_t_0_3_alloc_table, t_0_0), j)))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -2481,7 +2570,7 @@ let isMonochrome_ensures_default =
                (let jessie_<num> =
                (C_10:
                begin
-                 (if ((lt_int_ !k_0) j_0) then void
+                 (if ((lt_int_ !k_0) j) then void
                  else (raise (Goto_while_0_break_exc void)));
                 (if ((neq_int_ (C_8:
                                ((safe_acc_ charP_charM_t_0_3) (C_7:
@@ -2502,10 +2591,10 @@ let isMonochrome_ensures_default =
     absurd  end with Return -> !return end)) { (JC_9: true) }
 
 let isMonochrome_safety =
- fun (t_0_0 : charP pointer) (i : int) (j_0 : int) (c_1 : int) (charP_t_0_3_alloc_table : charP alloc_table) (charP_charM_t_0_3 : (charP, int) memory) ->
+ fun (t_0_0 : charP pointer) (i : int) (j : int) (c_1 : int) (charP_t_0_3_alloc_table : charP alloc_table) (charP_charM_t_0_3 : (charP, int) memory) ->
   { (JC_7:
     ((JC_5: le_int(offset_min(charP_t_0_3_alloc_table, t_0_0), i))
-    and (JC_6: ge_int(offset_max(charP_t_0_3_alloc_table, t_0_0), j_0)))) }
+    and (JC_6: ge_int(offset_max(charP_t_0_3_alloc_table, t_0_0), j)))) }
   (init:
   (let return = ref (any_int void) in
   try
@@ -2521,7 +2610,7 @@ let isMonochrome_safety =
            (let jessie_<num> = (k_0 := i) in void);
           (loop_1:
           while true do
-          { invariant (JC_19: true) variant (JC_22 : sub_int(j_0, k_0)) }
+          { invariant (JC_19: true) variant (JC_22 : sub_int(j, k_0)) }
            begin
              [ { } unit reads k_0
                { (JC_17:
@@ -2535,7 +2624,7 @@ let isMonochrome_safety =
                (let jessie_<num> =
                (C_10:
                begin
-                 (if ((lt_int_ !k_0) j_0) then void
+                 (if ((lt_int_ !k_0) j) then void
                  else (raise (Goto_while_0_break_exc void)));
                 (if ((neq_int_ (C_8:
                                (JC_21:
@@ -2556,10 +2645,10 @@ let isMonochrome_safety =
     absurd  end with Return -> !return end)) { true }
 
 let swap_ensures_default =
- fun (t_1 : charP pointer) (i_0_0 : int) (j_0_0 : int) (charP_charM_t_1_4 : (charP, int) memory ref) (charP_t_1_4_alloc_table : charP alloc_table) ->
+ fun (t_1 : charP pointer) (i_0 : int) (j_0_0 : int) (charP_charM_t_1_4 : (charP, int) memory ref) (charP_t_1_4_alloc_table : charP alloc_table) ->
   { (JC_45:
-    ((JC_41: le_int(offset_min(charP_t_1_4_alloc_table, t_1), i_0_0))
-    and ((JC_42: ge_int(offset_max(charP_t_1_4_alloc_table, t_1), i_0_0))
+    ((JC_41: le_int(offset_min(charP_t_1_4_alloc_table, t_1), i_0))
+    and ((JC_42: ge_int(offset_max(charP_t_1_4_alloc_table, t_1), i_0))
         and ((JC_43: le_int(offset_min(charP_t_1_4_alloc_table, t_1), j_0_0))
             and (JC_44:
                 ge_int(offset_max(charP_t_1_4_alloc_table, t_1), j_0_0)))))) }
@@ -2573,13 +2662,13 @@ let swap_ensures_default =
      begin
        (let jessie_<num> =
        (z := (C_18:
-             ((safe_acc_ !charP_charM_t_1_4) (C_17: ((shift t_1) i_0_0))))) in
+             ((safe_acc_ !charP_charM_t_1_4) (C_17: ((shift t_1) i_0))))) in
        void);
       (let jessie_<num> =
       (let jessie_<num> =
       (C_21: ((safe_acc_ !charP_charM_t_1_4) (C_20: ((shift t_1) j_0_0)))) in
       (let jessie_<num> = t_1 in
-      (let jessie_<num> = i_0_0 in
+      (let jessie_<num> = i_0 in
       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
       (((safe_upd_ charP_charM_t_1_4) jessie_<num>) jessie_<num>))))) in void);
       (let jessie_<num> =
@@ -2592,10 +2681,10 @@ let swap_ensures_default =
   { (JC_47: true) }
 
 let swap_ensures_i_j_swapped =
- fun (t_1 : charP pointer) (i_0_0 : int) (j_0_0 : int) (charP_charM_t_1_4 : (charP, int) memory ref) (charP_t_1_4_alloc_table : charP alloc_table) ->
+ fun (t_1 : charP pointer) (i_0 : int) (j_0_0 : int) (charP_charM_t_1_4 : (charP, int) memory ref) (charP_t_1_4_alloc_table : charP alloc_table) ->
   { (JC_45:
-    ((JC_41: le_int(offset_min(charP_t_1_4_alloc_table, t_1), i_0_0))
-    and ((JC_42: ge_int(offset_max(charP_t_1_4_alloc_table, t_1), i_0_0))
+    ((JC_41: le_int(offset_min(charP_t_1_4_alloc_table, t_1), i_0))
+    and ((JC_42: ge_int(offset_max(charP_t_1_4_alloc_table, t_1), i_0))
         and ((JC_43: le_int(offset_min(charP_t_1_4_alloc_table, t_1), j_0_0))
             and (JC_44:
                 ge_int(offset_max(charP_t_1_4_alloc_table, t_1), j_0_0)))))) }
@@ -2609,13 +2698,13 @@ let swap_ensures_i_j_swapped =
      begin
        (let jessie_<num> =
        (z := (C_18:
-             ((safe_acc_ !charP_charM_t_1_4) (C_17: ((shift t_1) i_0_0))))) in
+             ((safe_acc_ !charP_charM_t_1_4) (C_17: ((shift t_1) i_0))))) in
        void);
       (let jessie_<num> =
       (let jessie_<num> =
       (C_21: ((safe_acc_ !charP_charM_t_1_4) (C_20: ((shift t_1) j_0_0)))) in
       (let jessie_<num> = t_1 in
-      (let jessie_<num> = i_0_0 in
+      (let jessie_<num> = i_0 in
       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
       (((safe_upd_ charP_charM_t_1_4) jessie_<num>) jessie_<num>))))) in void);
       (let jessie_<num> =
@@ -2628,22 +2717,22 @@ let swap_ensures_i_j_swapped =
   { (JC_55:
     ((JC_53:
      ((JC_51:
-      (select(charP_charM_t_1_4, shift(t_1, i_0_0)) = select(charP_charM_t_1_4@,
-                                                      shift(t_1, j_0_0))))
+      (select(charP_charM_t_1_4, shift(t_1, i_0)) = select(charP_charM_t_1_4@,
+                                                    shift(t_1, j_0_0))))
      and (JC_52:
          (select(charP_charM_t_1_4, shift(t_1, j_0_0)) = select(charP_charM_t_1_4@,
-                                                         shift(t_1, i_0_0))))))
+                                                         shift(t_1, i_0))))))
     and (JC_54:
         not_assigns(charP_t_1_4_alloc_table, charP_charM_t_1_4@,
         charP_charM_t_1_4,
         pset_union(pset_range(pset_singleton(t_1), j_0_0, j_0_0),
-        pset_range(pset_singleton(t_1), i_0_0, i_0_0)))))) }
+        pset_range(pset_singleton(t_1), i_0, i_0)))))) }
 
 let swap_safety =
- fun (t_1 : charP pointer) (i_0_0 : int) (j_0_0 : int) (charP_charM_t_1_4 : (charP, int) memory ref) (charP_t_1_4_alloc_table : charP alloc_table) ->
+ fun (t_1 : charP pointer) (i_0 : int) (j_0_0 : int) (charP_charM_t_1_4 : (charP, int) memory ref) (charP_t_1_4_alloc_table : charP alloc_table) ->
   { (JC_45:
-    ((JC_41: le_int(offset_min(charP_t_1_4_alloc_table, t_1), i_0_0))
-    and ((JC_42: ge_int(offset_max(charP_t_1_4_alloc_table, t_1), i_0_0))
+    ((JC_41: le_int(offset_min(charP_t_1_4_alloc_table, t_1), i_0))
+    and ((JC_42: ge_int(offset_max(charP_t_1_4_alloc_table, t_1), i_0))
         and ((JC_43: le_int(offset_min(charP_t_1_4_alloc_table, t_1), j_0_0))
             and (JC_44:
                 ge_int(offset_max(charP_t_1_4_alloc_table, t_1), j_0_0)))))) }
@@ -2658,7 +2747,7 @@ let swap_safety =
        (let jessie_<num> =
        (z := (C_18:
              (JC_61:
-             ((((offset_acc_ charP_t_1_4_alloc_table) !charP_charM_t_1_4) t_1) i_0_0)))) in
+             ((((offset_acc_ charP_t_1_4_alloc_table) !charP_charM_t_1_4) t_1) i_0)))) in
        void);
       (let jessie_<num> =
       (let jessie_<num> =
@@ -2666,7 +2755,7 @@ let swap_safety =
       (JC_62:
       ((((offset_acc_ charP_t_1_4_alloc_table) !charP_charM_t_1_4) t_1) j_0_0))) in
       (let jessie_<num> = t_1 in
-      (let jessie_<num> = i_0_0 in
+      (let jessie_<num> = i_0 in
       (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
       (JC_63:
       (((((offset_upd_ charP_t_1_4_alloc_table) charP_charM_t_1_4) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
@@ -3627,6 +3716,8 @@ type charP
 
 type padding
 
+type unsigned_charP
+
 type voidP
 
 logic charP_tag : charP tag_id
@@ -3657,15 +3748,19 @@ predicate is_color_array(t: charP pointer, l: int,
       (((0 <= i_1) and (i_1 < l)) -> is_color(select(charP_charM_t_1_at_L,
        shift(t, i_1)))))))
 
-predicate is_monochrome(t_0: charP pointer, i_0: int, j: int, c_0: int,
+predicate is_monochrome(t_0: charP pointer, i_2: int, j_0: int, c_0: int,
   charP_charM_t_0_2_at_L: (charP, int) memory) =
   (forall k:int.
-    (((i_0 <= k) and (k < j)) -> (select(charP_charM_t_0_2_at_L, shift(t_0,
+    (((i_2 <= k) and (k < j_0)) -> (select(charP_charM_t_0_2_at_L, shift(t_0,
      k)) = c_0)))
 
 predicate left_valid_struct_charP(p: charP pointer, a: int,
   charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
   p) <= a)
+
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
 
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
@@ -3673,6 +3768,12 @@ predicate left_valid_struct_voidP(p: voidP pointer, a: int,
 
 axiom pointer_addr_of_charP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -3683,6 +3784,10 @@ predicate right_valid_struct_charP(p: charP pointer, b: int,
   charP_alloc_table: charP alloc_table) = (offset_max(charP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
@@ -3691,6 +3796,11 @@ predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
    p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3702,15 +3812,41 @@ predicate strict_valid_struct_charP(p: charP pointer, a: int, b: int,
   ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
 
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
+
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -3721,6 +3857,11 @@ predicate valid_struct_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -4355,7 +4496,7 @@ goal flag_ensures_default_po_16:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result = 2) ->
+  ((result = 2) or ((result <> 2) and (result = 1))) ->
   forall i_1_0_1:int.
   (i_1_0_1 = (i_1_0_0 + 1)) ->
   ("JC_103": ("JC_96": (0 <= b_0_0)))
@@ -4395,7 +4536,7 @@ goal flag_ensures_default_po_17:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result = 2) ->
+  ((result = 2) or ((result <> 2) and (result = 1))) ->
   forall i_1_0_1:int.
   (i_1_0_1 = (i_1_0_0 + 1)) ->
   ("JC_103": ("JC_97": (b_0_0 <= i_1_0_1)))
@@ -4435,7 +4576,7 @@ goal flag_ensures_default_po_18:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result = 2) ->
+  ((result = 2) or ((result <> 2) and (result = 1))) ->
   forall i_1_0_1:int.
   (i_1_0_1 = (i_1_0_0 + 1)) ->
   ("JC_103": ("JC_98": (i_1_0_1 <= r_0_0)))
@@ -4475,7 +4616,7 @@ goal flag_ensures_default_po_19:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result = 2) ->
+  ((result = 2) or ((result <> 2) and (result = 1))) ->
   forall i_1_0_1:int.
   (i_1_0_1 = (i_1_0_0 + 1)) ->
   ("JC_103": ("JC_99": (r_0_0 <= l_0)))
@@ -4515,7 +4656,7 @@ goal flag_ensures_default_po_20:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result = 2) ->
+  ((result = 2) or ((result <> 2) and (result = 1))) ->
   forall i_1_0_1:int.
   (i_1_0_1 = (i_1_0_0 + 1)) ->
   ("JC_103": ("JC_100": is_monochrome(t_2, 0, b_0_0, 1, charP_charM_t_5_0)))
@@ -4555,7 +4696,7 @@ goal flag_ensures_default_po_21:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result = 2) ->
+  ((result = 2) or ((result <> 2) and (result = 1))) ->
   forall i_1_0_1:int.
   (i_1_0_1 = (i_1_0_0 + 1)) ->
   ("JC_103":
@@ -4596,7 +4737,7 @@ goal flag_ensures_default_po_22:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result = 2) ->
+  ((result = 2) or ((result <> 2) and (result = 1))) ->
   forall i_1_0_1:int.
   (i_1_0_1 = (i_1_0_0 + 1)) ->
   ("JC_103":
@@ -4637,8 +4778,9 @@ goal flag_ensures_default_po_23:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result = 3) or ((result <> 3) and (result = 2))) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result = 3) or
+   ((result <> 3) and ((result = 2) or ((result <> 2) and (result = 1))))) ->
   forall r_0_1:int.
   (r_0_1 = (r_0_0 - 1)) ->
   forall charP_charM_t_5_1:(charP,
@@ -4691,8 +4833,9 @@ goal flag_ensures_default_po_24:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result = 3) or ((result <> 3) and (result = 2))) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result = 3) or
+   ((result <> 3) and ((result = 2) or ((result <> 2) and (result = 1))))) ->
   forall r_0_1:int.
   (r_0_1 = (r_0_0 - 1)) ->
   forall charP_charM_t_5_1:(charP,
@@ -4743,8 +4886,9 @@ goal flag_ensures_default_po_25:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result = 3) or ((result <> 3) and (result = 2))) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result = 3) or
+   ((result <> 3) and ((result = 2) or ((result <> 2) and (result = 1))))) ->
   forall r_0_1:int.
   (r_0_1 = (r_0_0 - 1)) ->
   forall charP_charM_t_5_1:(charP,
@@ -4795,8 +4939,9 @@ goal flag_ensures_default_po_26:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result = 3) or ((result <> 3) and (result = 2))) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result = 3) or
+   ((result <> 3) and ((result = 2) or ((result <> 2) and (result = 1))))) ->
   forall r_0_1:int.
   (r_0_1 = (r_0_0 - 1)) ->
   forall charP_charM_t_5_1:(charP,
@@ -4847,8 +4992,9 @@ goal flag_ensures_default_po_27:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result = 3) or ((result <> 3) and (result = 2))) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result = 3) or
+   ((result <> 3) and ((result = 2) or ((result <> 2) and (result = 1))))) ->
   forall r_0_1:int.
   (r_0_1 = (r_0_0 - 1)) ->
   forall charP_charM_t_5_1:(charP,
@@ -4899,8 +5045,9 @@ goal flag_ensures_default_po_28:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result = 3) or ((result <> 3) and (result = 2))) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result = 3) or
+   ((result <> 3) and ((result = 2) or ((result <> 2) and (result = 1))))) ->
   forall r_0_1:int.
   (r_0_1 = (r_0_0 - 1)) ->
   forall charP_charM_t_5_1:(charP,
@@ -4951,8 +5098,9 @@ goal flag_ensures_default_po_29:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result = 3) or ((result <> 3) and (result = 2))) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result = 3) or
+   ((result <> 3) and ((result = 2) or ((result <> 2) and (result = 1))))) ->
   forall r_0_1:int.
   (r_0_1 = (r_0_0 - 1)) ->
   forall charP_charM_t_5_1:(charP,
@@ -5004,8 +5152,9 @@ goal flag_ensures_default_po_30:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result = 3) or ((result <> 3) and (result = 2))) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result = 3) or
+   ((result <> 3) and ((result = 2) or ((result <> 2) and (result = 1))))) ->
   forall r_0_1:int.
   (r_0_1 = (r_0_0 - 1)) ->
   forall charP_charM_t_5_1:(charP,
@@ -5057,8 +5206,8 @@ goal flag_ensures_default_po_31:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result <> 3) and (result <> 2)) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result <> 3) and ((result <> 2) and (result <> 1))) ->
   ("JC_103": ("JC_96": (0 <= b_0_0)))
 
 goal flag_ensures_default_po_32:
@@ -5096,8 +5245,8 @@ goal flag_ensures_default_po_32:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result <> 3) and (result <> 2)) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result <> 3) and ((result <> 2) and (result <> 1))) ->
   ("JC_103": ("JC_97": (b_0_0 <= i_1_0_0)))
 
 goal flag_ensures_default_po_33:
@@ -5135,8 +5284,8 @@ goal flag_ensures_default_po_33:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result <> 3) and (result <> 2)) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result <> 3) and ((result <> 2) and (result <> 1))) ->
   ("JC_103": ("JC_98": (i_1_0_0 <= r_0_0)))
 
 goal flag_ensures_default_po_34:
@@ -5174,8 +5323,8 @@ goal flag_ensures_default_po_34:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result <> 3) and (result <> 2)) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result <> 3) and ((result <> 2) and (result <> 1))) ->
   ("JC_103": ("JC_99": (r_0_0 <= l_0)))
 
 goal flag_ensures_default_po_35:
@@ -5213,8 +5362,8 @@ goal flag_ensures_default_po_35:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result <> 3) and (result <> 2)) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result <> 3) and ((result <> 2) and (result <> 1))) ->
   ("JC_103": ("JC_100": is_monochrome(t_2, 0, b_0_0, 1, charP_charM_t_5_0)))
 
 goal flag_ensures_default_po_36:
@@ -5252,8 +5401,8 @@ goal flag_ensures_default_po_36:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result <> 3) and (result <> 2)) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result <> 3) and ((result <> 2) and (result <> 1))) ->
   ("JC_103":
   ("JC_101": is_monochrome(t_2, b_0_0, i_1_0_0, 2, charP_charM_t_5_0)))
 
@@ -5292,8 +5441,8 @@ goal flag_ensures_default_po_37:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result <> 3) and (result <> 2)) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result <> 3) and ((result <> 2) and (result <> 1))) ->
   ("JC_103":
   ("JC_102": is_monochrome(t_2, r_0_0, l_0, 3, charP_charM_t_5_0)))
 
@@ -5765,7 +5914,7 @@ goal flag_safety_po_9:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result = 2) ->
+  ((result = 2) or ((result <> 2) and (result = 1))) ->
   forall i_1_0_1:int.
   (i_1_0_1 = (i_1_0_0 + 1)) ->
   (0 <= ("JC_94": (r_0_0 - i_1_0_0)))
@@ -5808,7 +5957,7 @@ goal flag_safety_po_10:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result = 2) ->
+  ((result = 2) or ((result <> 2) and (result = 1))) ->
   forall i_1_0_1:int.
   (i_1_0_1 = (i_1_0_0 + 1)) ->
   (("JC_94": (r_0_0 - i_1_0_1)) < ("JC_94": (r_0_0 - i_1_0_0)))
@@ -5851,8 +6000,9 @@ goal flag_safety_po_11:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result = 3) or ((result <> 3) and (result = 2))) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result = 3) or
+   ((result <> 3) and ((result = 2) or ((result <> 2) and (result = 1))))) ->
   forall r_0_1:int.
   (r_0_1 = (r_0_0 - 1)) ->
   ("JC_39": ("JC_35": (offset_min(charP_t_5_alloc_table, t_2) <= r_0_1)))
@@ -5895,8 +6045,9 @@ goal flag_safety_po_12:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result = 3) or ((result <> 3) and (result = 2))) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result = 3) or
+   ((result <> 3) and ((result = 2) or ((result <> 2) and (result = 1))))) ->
   forall r_0_1:int.
   (r_0_1 = (r_0_0 - 1)) ->
   ("JC_39": ("JC_36": (offset_max(charP_t_5_alloc_table, t_2) >= r_0_1)))
@@ -5939,8 +6090,9 @@ goal flag_safety_po_13:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result = 3) or ((result <> 3) and (result = 2))) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result = 3) or
+   ((result <> 3) and ((result = 2) or ((result <> 2) and (result = 1))))) ->
   forall r_0_1:int.
   (r_0_1 = (r_0_0 - 1)) ->
   ("JC_39": ("JC_38": (offset_max(charP_t_5_alloc_table, t_2) >= i_1_0_0)))
@@ -5983,8 +6135,9 @@ goal flag_safety_po_14:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result = 3) or ((result <> 3) and (result = 2))) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result = 3) or
+   ((result <> 3) and ((result = 2) or ((result <> 2) and (result = 1))))) ->
   forall r_0_1:int.
   (r_0_1 = (r_0_0 - 1)) ->
   ("JC_39":
@@ -6043,8 +6196,9 @@ goal flag_safety_po_15:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result = 3) or ((result <> 3) and (result = 2))) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result = 3) or
+   ((result <> 3) and ((result = 2) or ((result <> 2) and (result = 1))))) ->
   forall r_0_1:int.
   (r_0_1 = (r_0_0 - 1)) ->
   ("JC_39":
@@ -6103,8 +6257,8 @@ goal flag_safety_po_16:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result <> 3) and (result <> 2)) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result <> 3) and ((result <> 2) and (result <> 1))) ->
   (0 <= ("JC_94": (r_0_0 - i_1_0_0)))
 
 goal flag_safety_po_17:
@@ -6145,21 +6299,21 @@ goal flag_safety_po_17:
   forall result:int.
   (result = select(charP_charM_t_5_0, shift(t_2, i_1_0_0))) ->
   (result <> 1) ->
-  (result <> 2) ->
-  ((result <> 3) and (result <> 2)) ->
+  ((result <> 2) and (result <> 1)) ->
+  ((result <> 3) and ((result <> 2) and (result <> 1))) ->
   (("JC_94": (r_0_0 - i_1_0_0)) < ("JC_94": (r_0_0 - i_1_0_0)))
 
 goal isMonochrome_ensures_decides_monochromatic_po_1:
   forall t_0_0:charP pointer.
   forall i:int.
-  forall j_0:int.
+  forall j:int.
   forall c_1:int.
   forall charP_t_0_3_alloc_table:charP alloc_table.
   forall charP_charM_t_0_3:(charP,
   int) memory.
   ("JC_7":
   (("JC_5": (offset_min(charP_t_0_3_alloc_table, t_0_0) <= i)) and
-   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j_0)))) ->
+   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j)))) ->
   forall k_0:int.
   (k_0 = i) ->
   forall k_0_0:int.
@@ -6170,7 +6324,7 @@ goal isMonochrome_ensures_decides_monochromatic_po_1:
    (forall l_0_0:int.
      (((i <= l_0_0) and (l_0_0 < k_0_0)) -> (select(charP_charM_t_0_3,
       shift(t_0_0, l_0_0)) = c_1)))))) ->
-  (k_0_0 < j_0) ->
+  (k_0_0 < j) ->
   forall result:int.
   (result = select(charP_charM_t_0_3, shift(t_0_0, k_0_0))) ->
   (result <> c_1) ->
@@ -6179,19 +6333,19 @@ goal isMonochrome_ensures_decides_monochromatic_po_1:
   forall return:int.
   (return = __retres) ->
   (return <> 0) ->
-  ("JC_13": is_monochrome(t_0_0, i, j_0, c_1, charP_charM_t_0_3))
+  ("JC_13": is_monochrome(t_0_0, i, j, c_1, charP_charM_t_0_3))
 
 goal isMonochrome_ensures_decides_monochromatic_po_2:
   forall t_0_0:charP pointer.
   forall i:int.
-  forall j_0:int.
+  forall j:int.
   forall c_1:int.
   forall charP_t_0_3_alloc_table:charP alloc_table.
   forall charP_charM_t_0_3:(charP,
   int) memory.
   ("JC_7":
   (("JC_5": (offset_min(charP_t_0_3_alloc_table, t_0_0) <= i)) and
-   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j_0)))) ->
+   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j)))) ->
   forall k_0:int.
   (k_0 = i) ->
   forall k_0_0:int.
@@ -6202,7 +6356,7 @@ goal isMonochrome_ensures_decides_monochromatic_po_2:
    (forall l_0_0:int.
      (((i <= l_0_0) and (l_0_0 < k_0_0)) -> (select(charP_charM_t_0_3,
       shift(t_0_0, l_0_0)) = c_1)))))) ->
-  (k_0_0 < j_0) ->
+  (k_0_0 < j) ->
   forall result:int.
   (result = select(charP_charM_t_0_3, shift(t_0_0, k_0_0))) ->
   (result <> c_1) ->
@@ -6210,20 +6364,20 @@ goal isMonochrome_ensures_decides_monochromatic_po_2:
   (__retres = 0) ->
   forall return:int.
   (return = __retres) ->
-  is_monochrome(t_0_0, i, j_0, c_1, charP_charM_t_0_3) ->
+  is_monochrome(t_0_0, i, j, c_1, charP_charM_t_0_3) ->
   ("JC_13": (return <> 0))
 
 goal isMonochrome_ensures_decides_monochromatic_po_3:
   forall t_0_0:charP pointer.
   forall i:int.
-  forall j_0:int.
+  forall j:int.
   forall c_1:int.
   forall charP_t_0_3_alloc_table:charP alloc_table.
   forall charP_charM_t_0_3:(charP,
   int) memory.
   ("JC_7":
   (("JC_5": (offset_min(charP_t_0_3_alloc_table, t_0_0) <= i)) and
-   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j_0)))) ->
+   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j)))) ->
   forall k_0:int.
   (k_0 = i) ->
   forall k_0_0:int.
@@ -6234,25 +6388,25 @@ goal isMonochrome_ensures_decides_monochromatic_po_3:
    (forall l_0_0:int.
      (((i <= l_0_0) and (l_0_0 < k_0_0)) -> (select(charP_charM_t_0_3,
       shift(t_0_0, l_0_0)) = c_1)))))) ->
-  (k_0_0 >= j_0) ->
+  (k_0_0 >= j) ->
   forall __retres:int.
   (__retres = 1) ->
   forall return:int.
   (return = __retres) ->
   (return <> 0) ->
-  ("JC_13": is_monochrome(t_0_0, i, j_0, c_1, charP_charM_t_0_3))
+  ("JC_13": is_monochrome(t_0_0, i, j, c_1, charP_charM_t_0_3))
 
 goal isMonochrome_ensures_decides_monochromatic_po_4:
   forall t_0_0:charP pointer.
   forall i:int.
-  forall j_0:int.
+  forall j:int.
   forall c_1:int.
   forall charP_t_0_3_alloc_table:charP alloc_table.
   forall charP_charM_t_0_3:(charP,
   int) memory.
   ("JC_7":
   (("JC_5": (offset_min(charP_t_0_3_alloc_table, t_0_0) <= i)) and
-   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j_0)))) ->
+   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j)))) ->
   forall k_0:int.
   (k_0 = i) ->
   forall k_0_0:int.
@@ -6263,22 +6417,22 @@ goal isMonochrome_ensures_decides_monochromatic_po_4:
    (forall l_0_0:int.
      (((i <= l_0_0) and (l_0_0 < k_0_0)) -> (select(charP_charM_t_0_3,
       shift(t_0_0, l_0_0)) = c_1)))))) ->
-  (k_0_0 >= j_0) ->
+  (k_0_0 >= j) ->
   forall __retres:int.
   (__retres = 1) ->
   forall return:int.
   (return = __retres) ->
-  is_monochrome(t_0_0, i, j_0, c_1, charP_charM_t_0_3) ->
+  is_monochrome(t_0_0, i, j, c_1, charP_charM_t_0_3) ->
   ("JC_13": (return <> 0))
 
 goal isMonochrome_ensures_default_po_1:
   forall t_0_0:charP pointer.
   forall i:int.
-  forall j_0:int.
+  forall j:int.
   forall charP_t_0_3_alloc_table:charP alloc_table.
   ("JC_7":
   (("JC_5": (offset_min(charP_t_0_3_alloc_table, t_0_0) <= i)) and
-   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j_0)))) ->
+   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j)))) ->
   forall k_0:int.
   (k_0 = i) ->
   ("JC_25": ("JC_23": (i <= k_0)))
@@ -6286,14 +6440,14 @@ goal isMonochrome_ensures_default_po_1:
 goal isMonochrome_ensures_default_po_2:
   forall t_0_0:charP pointer.
   forall i:int.
-  forall j_0:int.
+  forall j:int.
   forall c_1:int.
   forall charP_t_0_3_alloc_table:charP alloc_table.
   forall charP_charM_t_0_3:(charP,
   int) memory.
   ("JC_7":
   (("JC_5": (offset_min(charP_t_0_3_alloc_table, t_0_0) <= i)) and
-   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j_0)))) ->
+   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j)))) ->
   forall k_0:int.
   (k_0 = i) ->
   forall l_0_0:int.
@@ -6304,14 +6458,14 @@ goal isMonochrome_ensures_default_po_2:
 goal isMonochrome_ensures_default_po_3:
   forall t_0_0:charP pointer.
   forall i:int.
-  forall j_0:int.
+  forall j:int.
   forall c_1:int.
   forall charP_t_0_3_alloc_table:charP alloc_table.
   forall charP_charM_t_0_3:(charP,
   int) memory.
   ("JC_7":
   (("JC_5": (offset_min(charP_t_0_3_alloc_table, t_0_0) <= i)) and
-   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j_0)))) ->
+   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j)))) ->
   forall k_0:int.
   (k_0 = i) ->
   forall k_0_0:int.
@@ -6321,7 +6475,7 @@ goal isMonochrome_ensures_default_po_3:
    (forall l_0_0:int.
      (((i <= l_0_0) and (l_0_0 < k_0_0)) -> (select(charP_charM_t_0_3,
       shift(t_0_0, l_0_0)) = c_1)))))) ->
-  (k_0_0 < j_0) ->
+  (k_0_0 < j) ->
   forall result:int.
   (result = select(charP_charM_t_0_3, shift(t_0_0, k_0_0))) ->
   (result = c_1) ->
@@ -6332,14 +6486,14 @@ goal isMonochrome_ensures_default_po_3:
 goal isMonochrome_ensures_default_po_4:
   forall t_0_0:charP pointer.
   forall i:int.
-  forall j_0:int.
+  forall j:int.
   forall c_1:int.
   forall charP_t_0_3_alloc_table:charP alloc_table.
   forall charP_charM_t_0_3:(charP,
   int) memory.
   ("JC_7":
   (("JC_5": (offset_min(charP_t_0_3_alloc_table, t_0_0) <= i)) and
-   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j_0)))) ->
+   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j)))) ->
   forall k_0:int.
   (k_0 = i) ->
   forall k_0_0:int.
@@ -6349,7 +6503,7 @@ goal isMonochrome_ensures_default_po_4:
    (forall l_0_0:int.
      (((i <= l_0_0) and (l_0_0 < k_0_0)) -> (select(charP_charM_t_0_3,
       shift(t_0_0, l_0_0)) = c_1)))))) ->
-  (k_0_0 < j_0) ->
+  (k_0_0 < j) ->
   forall result:int.
   (result = select(charP_charM_t_0_3, shift(t_0_0, k_0_0))) ->
   (result = c_1) ->
@@ -6363,14 +6517,14 @@ goal isMonochrome_ensures_default_po_4:
 goal isMonochrome_safety_po_1:
   forall t_0_0:charP pointer.
   forall i:int.
-  forall j_0:int.
+  forall j:int.
   forall c_1:int.
   forall charP_t_0_3_alloc_table:charP alloc_table.
   forall charP_charM_t_0_3:(charP,
   int) memory.
   ("JC_7":
   (("JC_5": (offset_min(charP_t_0_3_alloc_table, t_0_0) <= i)) and
-   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j_0)))) ->
+   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j)))) ->
   forall k_0:int.
   (k_0 = i) ->
   forall k_0_0:int.
@@ -6381,20 +6535,20 @@ goal isMonochrome_safety_po_1:
    (forall l_0_0:int.
      (((i <= l_0_0) and (l_0_0 < k_0_0)) -> (select(charP_charM_t_0_3,
       shift(t_0_0, l_0_0)) = c_1)))))) ->
-  (k_0_0 < j_0) ->
+  (k_0_0 < j) ->
   (offset_min(charP_t_0_3_alloc_table, t_0_0) <= k_0_0)
 
 goal isMonochrome_safety_po_2:
   forall t_0_0:charP pointer.
   forall i:int.
-  forall j_0:int.
+  forall j:int.
   forall c_1:int.
   forall charP_t_0_3_alloc_table:charP alloc_table.
   forall charP_charM_t_0_3:(charP,
   int) memory.
   ("JC_7":
   (("JC_5": (offset_min(charP_t_0_3_alloc_table, t_0_0) <= i)) and
-   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j_0)))) ->
+   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j)))) ->
   forall k_0:int.
   (k_0 = i) ->
   forall k_0_0:int.
@@ -6405,20 +6559,20 @@ goal isMonochrome_safety_po_2:
    (forall l_0_0:int.
      (((i <= l_0_0) and (l_0_0 < k_0_0)) -> (select(charP_charM_t_0_3,
       shift(t_0_0, l_0_0)) = c_1)))))) ->
-  (k_0_0 < j_0) ->
+  (k_0_0 < j) ->
   (k_0_0 <= offset_max(charP_t_0_3_alloc_table, t_0_0))
 
 goal isMonochrome_safety_po_3:
   forall t_0_0:charP pointer.
   forall i:int.
-  forall j_0:int.
+  forall j:int.
   forall c_1:int.
   forall charP_t_0_3_alloc_table:charP alloc_table.
   forall charP_charM_t_0_3:(charP,
   int) memory.
   ("JC_7":
   (("JC_5": (offset_min(charP_t_0_3_alloc_table, t_0_0) <= i)) and
-   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j_0)))) ->
+   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j)))) ->
   forall k_0:int.
   (k_0 = i) ->
   forall k_0_0:int.
@@ -6429,7 +6583,7 @@ goal isMonochrome_safety_po_3:
    (forall l_0_0:int.
      (((i <= l_0_0) and (l_0_0 < k_0_0)) -> (select(charP_charM_t_0_3,
       shift(t_0_0, l_0_0)) = c_1)))))) ->
-  (k_0_0 < j_0) ->
+  (k_0_0 < j) ->
   ((offset_min(charP_t_0_3_alloc_table, t_0_0) <= k_0_0) and
    (k_0_0 <= offset_max(charP_t_0_3_alloc_table, t_0_0))) ->
   forall result:int.
@@ -6437,19 +6591,19 @@ goal isMonochrome_safety_po_3:
   (result = c_1) ->
   forall k_0_1:int.
   (k_0_1 = (k_0_0 + 1)) ->
-  (0 <= ("JC_22": (j_0 - k_0_0)))
+  (0 <= ("JC_22": (j - k_0_0)))
 
 goal isMonochrome_safety_po_4:
   forall t_0_0:charP pointer.
   forall i:int.
-  forall j_0:int.
+  forall j:int.
   forall c_1:int.
   forall charP_t_0_3_alloc_table:charP alloc_table.
   forall charP_charM_t_0_3:(charP,
   int) memory.
   ("JC_7":
   (("JC_5": (offset_min(charP_t_0_3_alloc_table, t_0_0) <= i)) and
-   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j_0)))) ->
+   ("JC_6": (offset_max(charP_t_0_3_alloc_table, t_0_0) >= j)))) ->
   forall k_0:int.
   (k_0 = i) ->
   forall k_0_0:int.
@@ -6460,7 +6614,7 @@ goal isMonochrome_safety_po_4:
    (forall l_0_0:int.
      (((i <= l_0_0) and (l_0_0 < k_0_0)) -> (select(charP_charM_t_0_3,
       shift(t_0_0, l_0_0)) = c_1)))))) ->
-  (k_0_0 < j_0) ->
+  (k_0_0 < j) ->
   ((offset_min(charP_t_0_3_alloc_table, t_0_0) <= k_0_0) and
    (k_0_0 <= offset_max(charP_t_0_3_alloc_table, t_0_0))) ->
   forall result:int.
@@ -6468,29 +6622,29 @@ goal isMonochrome_safety_po_4:
   (result = c_1) ->
   forall k_0_1:int.
   (k_0_1 = (k_0_0 + 1)) ->
-  (("JC_22": (j_0 - k_0_1)) < ("JC_22": (j_0 - k_0_0)))
+  (("JC_22": (j - k_0_1)) < ("JC_22": (j - k_0_0)))
 
 goal swap_ensures_i_j_swapped_po_1:
   forall t_1:charP pointer.
-  forall i_0_0:int.
+  forall i_0:int.
   forall j_0_0:int.
   forall charP_t_1_4_alloc_table:charP alloc_table.
   forall charP_charM_t_1_4:(charP,
   int) memory.
   ("JC_45":
-  (("JC_41": (offset_min(charP_t_1_4_alloc_table, t_1) <= i_0_0)) and
-   (("JC_42": (offset_max(charP_t_1_4_alloc_table, t_1) >= i_0_0)) and
+  (("JC_41": (offset_min(charP_t_1_4_alloc_table, t_1) <= i_0)) and
+   (("JC_42": (offset_max(charP_t_1_4_alloc_table, t_1) >= i_0)) and
     (("JC_43": (offset_min(charP_t_1_4_alloc_table, t_1) <= j_0_0)) and
      ("JC_44": (offset_max(charP_t_1_4_alloc_table, t_1) >= j_0_0)))))) ->
   forall result:int.
-  (result = select(charP_charM_t_1_4, shift(t_1, i_0_0))) ->
+  (result = select(charP_charM_t_1_4, shift(t_1, i_0))) ->
   forall z:int.
   (z = result) ->
   forall result0:int.
   (result0 = select(charP_charM_t_1_4, shift(t_1, j_0_0))) ->
   forall charP_charM_t_1_4_0:(charP,
   int) memory.
-  (charP_charM_t_1_4_0 = store(charP_charM_t_1_4, shift(t_1, i_0_0),
+  (charP_charM_t_1_4_0 = store(charP_charM_t_1_4, shift(t_1, i_0),
   result0)) ->
   forall charP_charM_t_1_4_1:(charP,
   int) memory.
@@ -6498,29 +6652,29 @@ goal swap_ensures_i_j_swapped_po_1:
   ("JC_55":
   ("JC_53":
   ("JC_51": (select(charP_charM_t_1_4_1, shift(t_1,
-  i_0_0)) = select(charP_charM_t_1_4, shift(t_1, j_0_0))))))
+  i_0)) = select(charP_charM_t_1_4, shift(t_1, j_0_0))))))
 
 goal swap_ensures_i_j_swapped_po_2:
   forall t_1:charP pointer.
-  forall i_0_0:int.
+  forall i_0:int.
   forall j_0_0:int.
   forall charP_t_1_4_alloc_table:charP alloc_table.
   forall charP_charM_t_1_4:(charP,
   int) memory.
   ("JC_45":
-  (("JC_41": (offset_min(charP_t_1_4_alloc_table, t_1) <= i_0_0)) and
-   (("JC_42": (offset_max(charP_t_1_4_alloc_table, t_1) >= i_0_0)) and
+  (("JC_41": (offset_min(charP_t_1_4_alloc_table, t_1) <= i_0)) and
+   (("JC_42": (offset_max(charP_t_1_4_alloc_table, t_1) >= i_0)) and
     (("JC_43": (offset_min(charP_t_1_4_alloc_table, t_1) <= j_0_0)) and
      ("JC_44": (offset_max(charP_t_1_4_alloc_table, t_1) >= j_0_0)))))) ->
   forall result:int.
-  (result = select(charP_charM_t_1_4, shift(t_1, i_0_0))) ->
+  (result = select(charP_charM_t_1_4, shift(t_1, i_0))) ->
   forall z:int.
   (z = result) ->
   forall result0:int.
   (result0 = select(charP_charM_t_1_4, shift(t_1, j_0_0))) ->
   forall charP_charM_t_1_4_0:(charP,
   int) memory.
-  (charP_charM_t_1_4_0 = store(charP_charM_t_1_4, shift(t_1, i_0_0),
+  (charP_charM_t_1_4_0 = store(charP_charM_t_1_4, shift(t_1, i_0),
   result0)) ->
   forall charP_charM_t_1_4_1:(charP,
   int) memory.
@@ -6528,29 +6682,29 @@ goal swap_ensures_i_j_swapped_po_2:
   ("JC_55":
   ("JC_53":
   ("JC_52": (select(charP_charM_t_1_4_1, shift(t_1,
-  j_0_0)) = select(charP_charM_t_1_4, shift(t_1, i_0_0))))))
+  j_0_0)) = select(charP_charM_t_1_4, shift(t_1, i_0))))))
 
 goal swap_ensures_i_j_swapped_po_3:
   forall t_1:charP pointer.
-  forall i_0_0:int.
+  forall i_0:int.
   forall j_0_0:int.
   forall charP_t_1_4_alloc_table:charP alloc_table.
   forall charP_charM_t_1_4:(charP,
   int) memory.
   ("JC_45":
-  (("JC_41": (offset_min(charP_t_1_4_alloc_table, t_1) <= i_0_0)) and
-   (("JC_42": (offset_max(charP_t_1_4_alloc_table, t_1) >= i_0_0)) and
+  (("JC_41": (offset_min(charP_t_1_4_alloc_table, t_1) <= i_0)) and
+   (("JC_42": (offset_max(charP_t_1_4_alloc_table, t_1) >= i_0)) and
     (("JC_43": (offset_min(charP_t_1_4_alloc_table, t_1) <= j_0_0)) and
      ("JC_44": (offset_max(charP_t_1_4_alloc_table, t_1) >= j_0_0)))))) ->
   forall result:int.
-  (result = select(charP_charM_t_1_4, shift(t_1, i_0_0))) ->
+  (result = select(charP_charM_t_1_4, shift(t_1, i_0))) ->
   forall z:int.
   (z = result) ->
   forall result0:int.
   (result0 = select(charP_charM_t_1_4, shift(t_1, j_0_0))) ->
   forall charP_charM_t_1_4_0:(charP,
   int) memory.
-  (charP_charM_t_1_4_0 = store(charP_charM_t_1_4, shift(t_1, i_0_0),
+  (charP_charM_t_1_4_0 = store(charP_charM_t_1_4, shift(t_1, i_0),
   result0)) ->
   forall charP_charM_t_1_4_1:(charP,
   int) memory.
@@ -6558,56 +6712,56 @@ goal swap_ensures_i_j_swapped_po_3:
   ("JC_55":
   ("JC_54": not_assigns(charP_t_1_4_alloc_table, charP_charM_t_1_4,
   charP_charM_t_1_4_1, pset_union(pset_range(pset_singleton(t_1), j_0_0,
-  j_0_0), pset_range(pset_singleton(t_1), i_0_0, i_0_0)))))
+  j_0_0), pset_range(pset_singleton(t_1), i_0, i_0)))))
 
 goal swap_safety_po_1:
   forall t_1:charP pointer.
-  forall i_0_0:int.
+  forall i_0:int.
   forall j_0_0:int.
   forall charP_t_1_4_alloc_table:charP alloc_table.
   ("JC_45":
-  (("JC_41": (offset_min(charP_t_1_4_alloc_table, t_1) <= i_0_0)) and
-   (("JC_42": (offset_max(charP_t_1_4_alloc_table, t_1) >= i_0_0)) and
+  (("JC_41": (offset_min(charP_t_1_4_alloc_table, t_1) <= i_0)) and
+   (("JC_42": (offset_max(charP_t_1_4_alloc_table, t_1) >= i_0)) and
     (("JC_43": (offset_min(charP_t_1_4_alloc_table, t_1) <= j_0_0)) and
      ("JC_44": (offset_max(charP_t_1_4_alloc_table, t_1) >= j_0_0)))))) ->
-  (i_0_0 <= offset_max(charP_t_1_4_alloc_table, t_1))
+  (i_0 <= offset_max(charP_t_1_4_alloc_table, t_1))
 
 goal swap_safety_po_2:
   forall t_1:charP pointer.
-  forall i_0_0:int.
+  forall i_0:int.
   forall j_0_0:int.
   forall charP_t_1_4_alloc_table:charP alloc_table.
   forall charP_charM_t_1_4:(charP,
   int) memory.
   ("JC_45":
-  (("JC_41": (offset_min(charP_t_1_4_alloc_table, t_1) <= i_0_0)) and
-   (("JC_42": (offset_max(charP_t_1_4_alloc_table, t_1) >= i_0_0)) and
+  (("JC_41": (offset_min(charP_t_1_4_alloc_table, t_1) <= i_0)) and
+   (("JC_42": (offset_max(charP_t_1_4_alloc_table, t_1) >= i_0)) and
     (("JC_43": (offset_min(charP_t_1_4_alloc_table, t_1) <= j_0_0)) and
      ("JC_44": (offset_max(charP_t_1_4_alloc_table, t_1) >= j_0_0)))))) ->
-  ((offset_min(charP_t_1_4_alloc_table, t_1) <= i_0_0) and
-   (i_0_0 <= offset_max(charP_t_1_4_alloc_table, t_1))) ->
+  ((offset_min(charP_t_1_4_alloc_table, t_1) <= i_0) and
+   (i_0 <= offset_max(charP_t_1_4_alloc_table, t_1))) ->
   forall result:int.
-  (result = select(charP_charM_t_1_4, shift(t_1, i_0_0))) ->
+  (result = select(charP_charM_t_1_4, shift(t_1, i_0))) ->
   forall z:int.
   (z = result) ->
   (offset_min(charP_t_1_4_alloc_table, t_1) <= j_0_0)
 
 goal swap_safety_po_3:
   forall t_1:charP pointer.
-  forall i_0_0:int.
+  forall i_0:int.
   forall j_0_0:int.
   forall charP_t_1_4_alloc_table:charP alloc_table.
   forall charP_charM_t_1_4:(charP,
   int) memory.
   ("JC_45":
-  (("JC_41": (offset_min(charP_t_1_4_alloc_table, t_1) <= i_0_0)) and
-   (("JC_42": (offset_max(charP_t_1_4_alloc_table, t_1) >= i_0_0)) and
+  (("JC_41": (offset_min(charP_t_1_4_alloc_table, t_1) <= i_0)) and
+   (("JC_42": (offset_max(charP_t_1_4_alloc_table, t_1) >= i_0)) and
     (("JC_43": (offset_min(charP_t_1_4_alloc_table, t_1) <= j_0_0)) and
      ("JC_44": (offset_max(charP_t_1_4_alloc_table, t_1) >= j_0_0)))))) ->
-  ((offset_min(charP_t_1_4_alloc_table, t_1) <= i_0_0) and
-   (i_0_0 <= offset_max(charP_t_1_4_alloc_table, t_1))) ->
+  ((offset_min(charP_t_1_4_alloc_table, t_1) <= i_0) and
+   (i_0 <= offset_max(charP_t_1_4_alloc_table, t_1))) ->
   forall result:int.
-  (result = select(charP_charM_t_1_4, shift(t_1, i_0_0))) ->
+  (result = select(charP_charM_t_1_4, shift(t_1, i_0))) ->
   forall z:int.
   (z = result) ->
   (j_0_0 <= offset_max(charP_t_1_4_alloc_table, t_1))

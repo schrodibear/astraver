@@ -398,9 +398,9 @@ let f_ensures_default =
      begin
        (let jessie_<somenum> =
        (assert { true };
-       (((C_1:
-         begin   (__retres := (double_of_real_exact 1.0)); !__retres end))
-       {{ (JC_<somenum>: (true = true)) }})) in void);
+       ((C_1:
+        begin   (__retres := (double_of_real_exact 1.0)); !__retres end))
+       {{ (JC_<somenum>: (true = true)) }}) in void);
       (assert { (JC_<somenum>: (double_value(__retres) = 1.0)) }; void); void;
       (return := !__retres); (raise Return) end); absurd  end with Return ->
    !return end)) { (JC_<somenum>: p(double_value(result))) }

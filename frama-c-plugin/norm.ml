@@ -1599,7 +1599,7 @@ object(self)
     match lv with
       | Var _, NoOffset -> lv
       | Var _, _ ->
-          unsupported "cannot handle this lvalue: %a" !Ast_printer.d_lval lv;
+          unsupported "cannot handle this lvalue: %a" !Ast_printer.d_lval lv
       | Mem e, NoOffset ->
           begin match self#wrap_type_if_needed (typeOf e) with
             | Some newtyp ->

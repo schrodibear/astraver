@@ -404,7 +404,7 @@ let main () =
           (fun fmt -> fprintf fmt "%a@."
              (Output.fprintf_why_decls ~why3:true
                 ~use_floats:!Jc_options.has_floats
-                ~full_floats:(!Jc_options.float_model = Jc_env.FMfull)
+                ~float_model:!Jc_options.float_model
              ) decls)
           (filename ^ ".mlw");
         (* not used by why3, but useful for debugging traceability *)
@@ -421,7 +421,7 @@ let main () =
           (fun fmt -> fprintf fmt "%a@."
              (Output.fprintf_why_decls ~why3:false
                 ~use_floats:!Jc_options.has_floats
-                ~full_floats:(!Jc_options.float_model = Jc_env.FMfull)
+                ~float_model:!Jc_options.float_model
              ) decls)
           (Lib.file_subdir "why" (filename ^ ".why"));
 

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="rec.jessie/rec/why3session.xml">
  <prover
@@ -32,13 +32,13 @@
     sum="34e9fc27a890ccf68214a2ceb7f12c18"
     proved="true"
     expanded="true"
-    shape="ainfix =asum_uptoainfix +V0c1ainfix +ainfix +asum_uptoV0V0c1Iainfix >=V0c0F">
+    shape="ainfix =asum_uptoainfix +V0c1ainfix +ainfix +asum_uptoV0V0c1Iainfix &gt;=V0c0F">
     <label
-     name="expl:Lemma sum_rec, lemma">
-     </label>
+     name="expl:Lemma sum_rec, lemma"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.16"/>
@@ -46,6 +46,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.79"/>
@@ -53,6 +54,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.13"/>
@@ -70,19 +72,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="parameter f91_ensures_default"
-    sum="8b110be3ffc1ce5eb28f7a6545e405c2"
+    sum="43e274aafc93fbd828629c9f370c4198"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter f91_ensures_default">
-     </label>
+     name="expl:parameter f91_ensures_default"/>
     <label
-     name="expl:Function f91, default behavior">
-     </label>
+     name="expl:Function f91, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -90,6 +91,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -97,6 +99,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.08"/>
@@ -107,19 +110,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="parameter f91_ensures_greater_than_100"
-    sum="265c002f3453de28180f348dba7c8e46"
+    sum="a7b7be2b0f043693a35e00882f730f17"
     proved="true"
     expanded="true"
-    shape="iainfix <=ainteger_of_int32V0c100ainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V0c10Iainfix =V7V6FIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c91Iainfix <=ainteger_of_int32V3c100Aainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V3c10Iainfix >=ainteger_of_int32V3c101FIainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V10ainfix -ainteger_of_int32V0c10Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V0c10FIainfix >=ainteger_of_int32V0c101F">
+    shape="iainfix &lt;=ainteger_of_int32V0c100ainfix =ainteger_of_int32V7ainfix -ainteger_of_int32V0c10Iainfix =V7V6FIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c91Iainfix &lt;=ainteger_of_int32V3c100Aainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V3c10Iainfix &gt;=ainteger_of_int32V3c101FIainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V10ainfix -ainteger_of_int32V0c10Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V0c10FIainfix &gt;=ainteger_of_int32V0c101F">
     <label
-     name="expl:parameter f91_ensures_greater_than_100">
-     </label>
+     name="expl:parameter f91_ensures_greater_than_100"/>
     <label
-     name="expl:Function f91, Behavior `greater_than_100'">
-     </label>
+     name="expl:Function f91, Behavior `greater_than_100&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.11"/>
@@ -127,6 +129,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
@@ -134,6 +137,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.09"/>
@@ -144,19 +148,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="parameter f91_ensures_less_than_101"
-    sum="7fda4ce986ec75a3718b7fbc3f0021af"
+    sum="47ff3875362acae965f329c5cb388500"
     proved="true"
     expanded="true"
-    shape="iainfix <=ainteger_of_int32V0c100ainfix =ainteger_of_int32V7c91Iainfix =V7V6FIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c91Iainfix <=ainteger_of_int32V3c100Aainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V3c10Iainfix >=ainteger_of_int32V3c101FIainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V10c91Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V0c10FIainfix <=ainteger_of_int32V0c100F">
+    shape="iainfix &lt;=ainteger_of_int32V0c100ainfix =ainteger_of_int32V7c91Iainfix =V7V6FIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c91Iainfix &lt;=ainteger_of_int32V3c100Aainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V3c10Iainfix &gt;=ainteger_of_int32V3c101FIainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V10c91Iainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8ainfix -ainteger_of_int32V0c10FIainfix &lt;=ainteger_of_int32V0c100F">
     <label
-     name="expl:parameter f91_ensures_less_than_101">
-     </label>
+     name="expl:parameter f91_ensures_less_than_101"/>
     <label
-     name="expl:Function f91, Behavior `less_than_101'">
-     </label>
+     name="expl:Function f91, Behavior `less_than_101&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.11"/>
@@ -164,6 +167,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.07"/>
@@ -171,6 +175,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.11"/>
@@ -181,19 +186,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="66" loccnumb="4" loccnume="7"
     expl="parameter f91_safety"
-    sum="98800cd9170dd5a1a6e916c8f0d96264"
+    sum="59c8193e62af7ddb7cd8a36223148046"
     proved="true"
     expanded="true"
-    shape="iainfix <=ainteger_of_int32V0c100azwf_zeroainfix -c101ainteger_of_int32V3ainfix -c101ainteger_of_int32V0Iainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FAazwf_zeroainfix -c101ainteger_of_int32V1ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11FAainfix <=ainfix +ainteger_of_int32V0c11c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V0c11ainfix <=ainfix -ainteger_of_int32V0c10c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V0c10F">
+    shape="iainfix &lt;=ainteger_of_int32V0c100azwf_zeroainfix -c101ainteger_of_int32V3ainfix -c101ainteger_of_int32V0Iainfix =V3V2FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FAazwf_zeroainfix -c101ainteger_of_int32V1ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11FAainfix &lt;=ainfix +ainteger_of_int32V0c11c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V0c11ainfix &lt;=ainfix -ainteger_of_int32V0c10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V0c10F">
     <label
-     name="expl:parameter f91_safety">
-     </label>
+     name="expl:parameter f91_safety"/>
     <label
-     name="expl:Function f91, Safety">
-     </label>
+     name="expl:Function f91, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.11"/>
@@ -201,6 +205,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.08"/>
@@ -208,6 +213,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.09"/>
@@ -218,19 +224,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="51" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="d69e4fcad09da5b33afe649647ab0234"
+    sum="804398a5204ae574fa96f7eacac192df"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V3c36Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1asum_uptoainteger_of_int32V0FIainfix =ainteger_of_int32V0c8F">
     <label
-     name="expl:parameter main_ensures_default">
-     </label>
+     name="expl:parameter main_ensures_default"/>
     <label
-     name="expl:Function main, default behavior">
-     </label>
+     name="expl:Function main, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.11"/>
@@ -238,13 +243,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.35"/>
+     <result status="valid" time="0.15"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.38"/>
@@ -255,33 +262,34 @@
     locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="51" loccnumb="5" loccnume="9"
     expl="precondition for call"
-    sum="f8c66e6bc70e05a3cc1043fed30226bf"
+    sum="f7ba66ddc936c16cea21686dbd99bcc7"
     proved="true"
     expanded="true"
-    shape="ainfix <=ainteger_of_int32V0c1000Aainfix >=ainteger_of_int32V0c0Iainfix =ainteger_of_int32V0c8F">
+    shape="ainfix &lt;=ainteger_of_int32V0c1000Aainfix &gt;=ainteger_of_int32V0c0Iainfix =ainteger_of_int32V0c8F">
     <label
-     name="expl:parameter main_safety">
-     </label>
+     name="expl:parameter main_safety"/>
     <label
-     name="expl:Function main, Safety">
-     </label>
+     name="expl:Function main, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.11"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.08"/>
@@ -292,26 +300,26 @@
     locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="43" loccnumb="5" loccnume="8"
     expl="parameter sum_ensures_default"
-    sum="2461965ce9c6df3ee1ed87f350adc68b"
+    sum="9eae27e43e12c8255f259160df4037c4"
     proved="true"
     expanded="true"
-    shape="iainfix =ainteger_of_int32V0c0ainfix =ainteger_of_int32V3asum_uptoainteger_of_int32V0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fainfix =ainteger_of_int32V9asum_uptoainteger_of_int32V0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix +ainteger_of_int32V0ainteger_of_int32V6FIainfix =V6V5FIainfix =ainteger_of_int32V5asum_uptoainteger_of_int32V4FIainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V0c1FIainfix <=ainteger_of_int32V0c1000Aainfix >=ainteger_of_int32V0c0F">
+    shape="iainfix =ainteger_of_int32V0c0ainfix =ainteger_of_int32V3asum_uptoainteger_of_int32V0Iainfix =V3V2FIainfix =V2V1FIainfix =ainteger_of_int32V1c0Fainfix =ainteger_of_int32V9asum_uptoainteger_of_int32V0Iainfix =V9V8FIainfix =V8V7FIainfix =ainteger_of_int32V7ainfix +ainteger_of_int32V0ainteger_of_int32V6FIainfix =V6V5FIainfix =ainteger_of_int32V5asum_uptoainteger_of_int32V4FIainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V0c1FIainfix &lt;=ainteger_of_int32V0c1000Aainfix &gt;=ainteger_of_int32V0c0F">
     <label
-     name="expl:parameter sum_ensures_default">
-     </label>
+     name="expl:parameter sum_ensures_default"/>
     <label
-     name="expl:Function sum, default behavior">
-     </label>
+     name="expl:Function sum, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.22"/>
+     <result status="valid" time="0.57"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.12"/>
@@ -322,19 +330,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/rec.c"
     loclnum="43" loccnumb="5" loccnume="8"
     expl="parameter sum_safety"
-    sum="2cd165dca1c1637742b01b42bdb65265"
+    sum="0332d206942bd9587deb5e3650398e3d"
     proved="true"
     expanded="true"
-    shape="ainfix <=ainfix +ainteger_of_int32V0ainteger_of_int32V3c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V0ainteger_of_int32V3Iainfix =V3V2FIainfix =ainteger_of_int32V2asum_uptoainteger_of_int32V1FAainfix <=ainteger_of_int32V1c1000Aainfix >=ainteger_of_int32V1c0Aazwf_zeroainteger_of_int32V1ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix -ainteger_of_int32V0c1FAainfix <=ainfix -ainteger_of_int32V0c1c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V0c1Iainfix =ainteger_of_int32V0c0NIainfix <=ainteger_of_int32V0c1000Aainfix >=ainteger_of_int32V0c0F">
+    shape="ainfix &lt;=ainfix +ainteger_of_int32V0ainteger_of_int32V3c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V0ainteger_of_int32V3Iainfix =V3V2FIainfix =ainteger_of_int32V2asum_uptoainteger_of_int32V1FAainfix &lt;=ainteger_of_int32V1c1000Aainfix &gt;=ainteger_of_int32V1c0Aazwf_zeroainteger_of_int32V1ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix -ainteger_of_int32V0c1FAainfix &lt;=ainfix -ainteger_of_int32V0c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V0c1Iainfix =ainteger_of_int32V0c0NIainfix &lt;=ainteger_of_int32V0c1000Aainfix &gt;=ainteger_of_int32V0c0F">
     <label
-     name="expl:parameter sum_safety">
-     </label>
+     name="expl:parameter sum_safety"/>
     <label
-     name="expl:Function sum, Safety">
-     </label>
+     name="expl:Function sum, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.12"/>

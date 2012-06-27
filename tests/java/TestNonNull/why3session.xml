@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="TestNonNull/why3session.xml">
  <prover
@@ -17,7 +17,7 @@
  <file
   name="../TestNonNull.mlw"
   verified="false"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
    locfile="TestNonNull/../TestNonNull.mlw"
@@ -36,19 +36,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
     loclnum="52" loccnumb="9" loccnume="13"
     expl="parameter _TestNonNull_test_ensures_default"
-    sum="9d86174f601f881d3424f1ff38dbf76f"
+    sum="25227afadeb237ac97ba2e5ce2a43eca"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _TestNonNull_test_ensures_default">
-     </label>
+     name="expl:parameter _TestNonNull_test_ensures_default"/>
     <label
-     name="expl:Method test, default behavior">
-     </label>
+     name="expl:Method test, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -56,6 +55,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -63,6 +63,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -73,19 +74,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
     loclnum="52" loccnumb="9" loccnume="13"
     expl="parameter _TestNonNull_test_safety"
-    sum="ef420958c7ef1b3af43265ba8389e168"
+    sum="54425c7d95696c1eb2b8e006662f9c45"
     proved="true"
     expanded="true"
-    shape="at_lengthV0V4V3Aast_lengthV4Aainfix <=c3aoffset_maxV4a_TestNonNull_stIainfix =V8astoreV6ashiftV1c3V7FAainfix <=c3aoffset_maxV4V1Iainfix =ainteger_of_int32V7c1FAainfix <=c2aoffset_maxV4V1Iainfix =V6astoreV2ashiftV1c2V5FAainfix <=c2aoffset_maxV4V1Iainfix =ainteger_of_int32V5c1FAainfix <=c3aoffset_maxV4V1Iat_lengthV0V4V3Aast_lengthV4Aainfix >=ainfix +aoffset_maxV4V1c1c4Aavalid_struct_TestNonNullV0c0c0V4V3Aavalid_struct_intMV1c0aprefix -c1V4FFFFF">
+    shape="at_lengthV0V4V3Aast_lengthV4Aainfix &lt;=c3aoffset_maxV4a_TestNonNull_stIainfix =V8astoreV6ashiftV1c3V7FAainfix &lt;=c3aoffset_maxV4V1Iainfix =ainteger_of_int32V7c1FAainfix &lt;=c2aoffset_maxV4V1Iainfix =V6astoreV2ashiftV1c2V5FAainfix &lt;=c2aoffset_maxV4V1Iainfix =ainteger_of_int32V5c1FAainfix &lt;=c3aoffset_maxV4V1Iat_lengthV0V4V3Aast_lengthV4Aainfix &gt;=ainfix +aoffset_maxV4V1c1c4Aavalid_struct_TestNonNullV0c0c0V4V3Aavalid_struct_intMV1c0aprefix -c1V4FFFFF">
     <label
-     name="expl:parameter _TestNonNull_test_safety">
-     </label>
+     name="expl:parameter _TestNonNull_test_safety"/>
     <label
-     name="expl:Method test, Safety">
-     </label>
+     name="expl:Method test, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -93,6 +93,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -100,6 +101,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -110,19 +112,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
     loclnum="45" loccnumb="4" loccnume="15"
     expl="assertion"
-    sum="aec1e58d75de7513e283b0911a137785"
+    sum="c4e0b72386d5f1230e2807d925c1df1a"
     proved="true"
     expanded="true"
     shape="ainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
     <label
-     name="expl:parameter cons_TestNonNull_ensures_default">
-     </label>
+     name="expl:parameter cons_TestNonNull_ensures_default"/>
     <label
-     name="expl:Constructor of class TestNonNull, default behavior">
-     </label>
+     name="expl:Constructor of class TestNonNull, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -130,6 +131,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.08"/>
@@ -137,6 +139,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -147,16 +150,14 @@
     locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
     loclnum="45" loccnumb="4" loccnume="15"
     expl="parameter cons_TestNonNull_safety"
-    sum="7a2ed61a4334cbebc805dbf7414e3278"
+    sum="1048b553047d6d1dc23e6bf0d67ba004"
     proved="false"
     expanded="true"
-    shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FAainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFAainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+    shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FAainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFAainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
     <label
-     name="expl:parameter cons_TestNonNull_safety">
-     </label>
+     name="expl:parameter cons_TestNonNull_safety"/>
     <label
-     name="expl:Constructor of class TestNonNull, Safety">
-     </label>
+     name="expl:Constructor of class TestNonNull, Safety"/>
     <transf
      name="split_goal"
      proved="false"
@@ -166,19 +167,18 @@
       locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
       loclnum="45" loccnumb="4" loccnume="15"
       expl="allocation size"
-      sum="673120f2d7a331bbe4db43f70c22c984"
+      sum="f1e6f8205708f7b38dfb08ad28d371b5"
       proved="true"
       expanded="true"
-      shape="ainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+      shape="ainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
       <label
-       name="expl:parameter cons_TestNonNull_safety">
-       </label>
+       name="expl:parameter cons_TestNonNull_safety"/>
       <label
-       name="expl:Constructor of class TestNonNull, Safety">
-       </label>
+       name="expl:Constructor of class TestNonNull, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -186,6 +186,7 @@
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
@@ -193,6 +194,7 @@
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.03"/>
@@ -203,26 +205,26 @@
       locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
       loclnum="45" loccnumb="4" loccnume="15"
       expl="assertion"
-      sum="82c54b9df157762c651a11ccbc9ceaa8"
+      sum="3cde4749a5a779a87fac34526dc2f3ba"
       proved="true"
       expanded="true"
-      shape="ainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+      shape="ainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
       <label
-       name="expl:parameter cons_TestNonNull_safety">
-       </label>
+       name="expl:parameter cons_TestNonNull_safety"/>
       <label
-       name="expl:Constructor of class TestNonNull, Safety">
-       </label>
+       name="expl:Constructor of class TestNonNull, Safety"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.02"/>
@@ -230,9 +232,10 @@
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.04"/>
+       <result status="valid" time="0.03"/>
       </proof>
      </goal>
      <goal
@@ -240,16 +243,14 @@
       locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
       loclnum="45" loccnumb="4" loccnume="15"
       expl="normal postcondition"
-      sum="2718d25584e89a2782630910f9377dd7"
+      sum="0aaa435283b49a7b5193b877d1c6cf4e"
       proved="false"
       expanded="true"
-      shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+      shape="at_lengthV0V5V7Aast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
       <label
-       name="expl:parameter cons_TestNonNull_safety">
-       </label>
+       name="expl:parameter cons_TestNonNull_safety"/>
       <label
-       name="expl:Constructor of class TestNonNull, Safety">
-       </label>
+       name="expl:Constructor of class TestNonNull, Safety"/>
       <transf
        name="split_goal"
        proved="false"
@@ -259,36 +260,37 @@
         locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
         loclnum="45" loccnumb="4" loccnume="15"
         expl="parameter cons_TestNonNull_safety"
-        sum="475f0707989da9df75e67328ef466640"
+        sum="684f739ce67c12c7e68421e8322e243d"
         proved="false"
         expanded="true"
-        shape="ast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+        shape="ast_lengthV5Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
         <label
-         name="expl:parameter cons_TestNonNull_safety">
-         </label>
+         name="expl:parameter cons_TestNonNull_safety"/>
         <label
-         name="expl:Constructor of class TestNonNull, Safety">
-         </label>
+         name="expl:Constructor of class TestNonNull, Safety"/>
         <proof
          prover="2"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.04"/>
+         <result status="timeout" time="5.02"/>
         </proof>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.04"/>
+         <result status="timeout" time="5.02"/>
         </proof>
         <proof
          prover="1"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="timeout" time="5.04"/>
+         <result status="timeout" time="5.12"/>
         </proof>
        </goal>
        <goal
@@ -296,36 +298,37 @@
         locfile="/home/marche/why2-nitrogen/tests/java/TestNonNull.java"
         loclnum="45" loccnumb="4" loccnume="15"
         expl="parameter cons_TestNonNull_safety"
-        sum="98573b261eea6395c7db7ead7b78bd16"
+        sum="a76211cb4454a6384807099c3f4c49d0"
         proved="true"
         expanded="true"
-        shape="at_lengthV0V5V7Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix >=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix >=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
+        shape="at_lengthV0V5V7Iainfix =ainfix +aoffset_maxV5aselectV7V0c1c5Iainfix =V7astoreV3V0V6FIainfix &gt;=aoffset_maxV5V6aprefix -c1IainstanceofV4V6aintM_tagAaalloc_freshV2V6c5Aaalloc_extendsV2V5Aastrict_valid_struct_intMV6c0ainfix -c5c1V5FFFIainfix &gt;=c5c0Iainfix =V3astoreV1V0anullFIast_lengthV2Aavalid_struct_TestNonNullV0c0c0V2V1FFF">
         <label
-         name="expl:parameter cons_TestNonNull_safety">
-         </label>
+         name="expl:parameter cons_TestNonNull_safety"/>
         <label
-         name="expl:Constructor of class TestNonNull, Safety">
-         </label>
+         name="expl:Constructor of class TestNonNull, Safety"/>
         <proof
          prover="2"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.05"/>
         </proof>
         <proof
          prover="0"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.02"/>
+         <result status="valid" time="0.01"/>
         </proof>
         <proof
          prover="1"
          timelimit="5"
+         memlimit="0"
          obsolete="false"
          archived="false">
-         <result status="valid" time="0.04"/>
+         <result status="valid" time="0.03"/>
         </proof>
        </goal>
       </transf>

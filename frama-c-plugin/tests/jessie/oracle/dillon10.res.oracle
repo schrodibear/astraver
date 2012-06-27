@@ -538,11 +538,11 @@ let main_ensures_default =
      (let jessie_<somenum> = s_0 in
      (((safe_upd_ intP_intM_s_1) jessie_<somenum>) jessie_<somenum>)));
     (assert { true };
-    (((C_5:
-      begin
-        (let jessie_<somenum> = s_0 in (JC_<somenum>: (f1 jessie_<somenum>)));
-       (C_6: (let jessie_<somenum> = s_0 in (JC_<somenum>: (f2 jessie_<somenum>)))) end))
-    {{ (JC_<somenum>: (true = true)) }}));
+    ((C_5:
+     begin
+       (let jessie_<somenum> = s_0 in (JC_<somenum>: (f1 jessie_<somenum>)));
+      (C_6: (let jessie_<somenum> = s_0 in (JC_<somenum>: (f2 jessie_<somenum>)))) end))
+    {{ (JC_<somenum>: (true = true)) }});
     (assert
     { (JC_<somenum>: (integer_of_int32(select(intP_intM_s_1, s_0)) = (1))) }; void);
     void; (raise Return); (raise Return) end) with Return -> void end)

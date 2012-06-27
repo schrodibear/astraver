@@ -9,17 +9,23 @@ JAVA="AllZeros ArrayMax Arrays BinarySearch Counter Creation
 
 JAVATODO="Duplets SimpleApplet Sort2 Sort"
 
-C="array_max binary_search clock_drift duplets \
+C="array_double array_max binary_search cd1d clock_drift \
+   double_rounding_strict_model double_rounding_multirounding_model \
+   duplets \
+   eps_line1 eps_line2 \
    find_array flag floats_bsearch float_sqrt \
    insertion_sort isqrt minmax muller my_cosine quick_sort \
    rec scalar_product selection_sort sparse_array2 \
-   Sterbenz swap tree_max"
+   Sterbenz sum_array swap tree_max"
 
-CTODO="maze sparse_array heap_sort"
+CTODO="binary_heap float_array maze popHeap sparse_array heap_sort"
 
 case "$1" in
   "-force")
         REPLAYOPT="-force"
+        ;;
+  "-obsolete-only")
+        REPLAYOPT="-obsolete-only -force"
         ;;
   "")
         REPLAYOPT=""

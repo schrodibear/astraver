@@ -246,7 +246,7 @@ type why_decl =
 val fprintf_why_decl : Format.formatter -> why_decl -> unit;;
 
 val fprintf_why_decls : ?why3:bool -> ?use_floats:bool -> 
-  ?full_floats:bool -> Format.formatter -> why_decl list -> unit
+  float_model:Jc_env.float_model -> Format.formatter -> why_decl list -> unit
 
 type kind =
   | VarDecr

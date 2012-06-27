@@ -92,6 +92,12 @@ tag intP = {
 
 type intP = [intP]
 
+tag unsigned_charP = {
+  integer unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
+
 tag charP = {
   integer charM: 8;
 }
@@ -105,48 +111,48 @@ type voidP = [voidP]
 
 axiomatic Sum {
 
-  logic integer sum{L}(intP[..] t, integer i, integer j) reads i, j, t,
-  (t + [..]).intM;
+  logic integer sum{L}(intP[..] t, integer i_1, integer j_0) reads i_1, j_0,
+  t, (t + [..]).intM;
    
   axiom sum1{L} :
   (\forall intP[..] t_0;
-    (\forall integer i_0;
-      (sum{L}(t_0, i_0, i_0) == 0)))
+    (\forall integer i_2;
+      (sum{L}(t_0, i_2, i_2) == 0)))
    
   axiom sum2{L} :
   (\forall intP[..] t_1;
-    (\forall integer i_1;
-      (\forall integer j_0;
-        (sum{L}(t_1, i_1, (j_0 + 1)) ==
-          (sum{L}(t_1, i_1, j_0) + (t_1 + j_0).intM)))))
+    (\forall integer i_3;
+      (\forall integer j_1;
+        (sum{L}(t_1, i_3, (j_1 + 1)) ==
+          (sum{L}(t_1, i_3, j_1) + (t_1 + j_1).intM)))))
   
 }
 
 lemma sum3{L} :
 (\forall intP[..] t_2;
-  (\forall integer i_2;
-    (\forall integer j_1;
+  (\forall integer i_4;
+    (\forall integer j_2;
       (\forall integer k;
-        (((i_2 <= j_1) && (j_1 <= k)) ==>
-          (sum{L}(t_2, i_2, k) ==
-            (sum{L}(t_2, i_2, j_1) + sum{L}(t_2, j_1, k))))))))
+        (((i_4 <= j_2) && (j_2 <= k)) ==>
+          (sum{L}(t_2, i_4, k) ==
+            (sum{L}(t_2, i_4, j_2) + sum{L}(t_2, j_2, k))))))))
 
 lemma sum_footprint{L} :
 (\forall intP[..] t1;
   (\forall intP[..] t2;
-    (\forall integer i_3;
-      (\forall integer j_2;
+    (\forall integer i_5;
+      (\forall integer j_3;
         ((\forall integer k_0;
-           (((i_3 <= k_0) && (k_0 < j_2)) ==>
+           (((i_5 <= k_0) && (k_0 < j_3)) ==>
              ((t1 + k_0).intM == (t2 + k_0).intM))) ==>
-          (sum{L}(t1, i_3, j_2) == sum{L}(t2, i_3, j_2)))))))
+          (sum{L}(t1, i_5, j_3) == sum{L}(t2, i_5, j_3)))))))
 
-integer test1(intP[..] t, integer n)
-  requires (C_16 : ((C_17 : (n >= 1)) &&
+integer test1(intP[..] t, integer n_1)
+  requires (C_16 : ((C_17 : (n_1 >= 1)) &&
                      ((C_19 : (\offset_min(t) <= 0)) &&
-                       (C_20 : (\offset_max(t) >= (n - 1))))));
+                       (C_20 : (\offset_max(t) >= (n_1 - 1))))));
 behavior default:
-  ensures (C_15 : (\result == sum{Here}(\at(t,Old), 0, \at(n,Old))));
+  ensures (C_15 : (\result == sum{Here}(\at(t,Old), 0, \at(n_1,Old))));
 {  
    (var integer i);
    
@@ -157,12 +163,12 @@ behavior default:
       
       loop 
       behavior default:
-        invariant (C_4 : (((C_6 : (0 <= i)) && (C_7 : (i <= n))) &&
+        invariant (C_4 : (((C_6 : (0 <= i)) && (C_7 : (i <= n_1))) &&
                            (C_8 : (s == sum{Here}(t, 0, i)))));
-      variant (C_3 : (n - i));
+      variant (C_3 : (n_1 - i));
       while (true)
       {  
-         {  (if (i < n) then () else 
+         {  (if (i < n_1) then () else 
             (goto while_0_break));
             
             {  (C_12 : (s = (C_11 : (s + (C_10 : (C_9 : (t + i)).intM)))))
@@ -176,14 +182,14 @@ behavior default:
    }
 }
 
-unit test2(intP[..] t_0, integer n_0)
-  requires (C_39 : ((C_40 : (n_0 >= 1)) &&
+unit test2(intP[..] t_0, integer n_2)
+  requires (C_39 : ((C_40 : (n_2 >= 1)) &&
                      ((C_42 : (\offset_min(t_0) <= 0)) &&
-                       (C_43 : (\offset_max(t_0) >= (n_0 - 1))))));
+                       (C_43 : (\offset_max(t_0) >= (n_2 - 1))))));
 behavior default:
   assigns (t_0 + [..]).intM;
-  ensures (C_38 : (sum{Here}(\at(t_0,Old), 0, \at(n_0,Old)) ==
-                    (\at(sum{Old}(t_0, 0, n_0),Old) + \at(n_0,Old))));
+  ensures (C_38 : (sum{Here}(\at(t_0,Old), 0, \at(n_2,Old)) ==
+                    (\at(sum{Old}(t_0, 0, n_2),Old) + \at(n_2,Old))));
 {  
    (var integer i_0);
    
@@ -191,22 +197,22 @@ behavior default:
       
       loop 
       behavior default:
-        invariant (C_23 : (((C_25 : (0 <= i_0)) && (C_26 : (i_0 <= n_0))) &&
-                            (C_27 : (sum{Here}(t_0, 0, n_0) ==
-                                      (\at(sum{Pre}(t_0, 0, n_0),Pre) + i_0)))));
-      variant (C_22 : (n_0 - i_0));
+        invariant (C_23 : (((C_25 : (0 <= i_0)) && (C_26 : (i_0 <= n_2))) &&
+                            (C_27 : (sum{Here}(t_0, 0, n_2) ==
+                                      (\at(sum{Pre}(t_0, 0, n_2),Pre) + i_0)))));
+      variant (C_22 : (n_2 - i_0));
       while (true)
       {  
-         {  (if (i_0 < n_0) then () else 
+         {  (if (i_0 < n_2) then () else 
             (goto while_0_break));
             
             {  
                {  
-                  (assert for default: (C_28 : (sum{Here}(t_0, 0, n_0) ==
+                  (assert for default: (C_28 : (sum{Here}(t_0, 0, n_2) ==
                                                  ((sum{Here}(t_0, 0, i_0) +
                                                     (t_0 + i_0).intM) +
                                                    sum{Here}(t_0, (i_0 + 1),
-                                                             n_0)))));
+                                                             n_2)))));
                   ()
                };
                (C_34 : ((C_33 : (C_32 : (t_0 + i_0)).intM) = (C_31 : 
@@ -217,11 +223,11 @@ behavior default:
                                                                1))));
                
                {  
-                  (assert for default: (C_35 : (sum{Here}(t_0, 0, n_0) ==
+                  (assert for default: (C_35 : (sum{Here}(t_0, 0, n_2) ==
                                                  ((sum{Here}(t_0, 0, i_0) +
                                                     (t_0 + i_0).intM) +
                                                    sum{Here}(t_0, (i_0 + 1),
-                                                             n_0)))));
+                                                             n_2)))));
                   ()
                }
             };
@@ -728,7 +734,7 @@ end = 10
 
 [JC_43]
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 106
+line = 112
 begin = 9
 end = 16
 
@@ -754,7 +760,7 @@ end = 73
 
 [JC_46]
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 106
+line = 112
 begin = 9
 end = 16
 
@@ -872,13 +878,13 @@ end = -1
 
 [JC_54]
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 115
+line = 121
 begin = 6
 end = 1810
 
 [JC_55]
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 115
+line = 121
 begin = 6
 end = 1810
 
@@ -906,7 +912,7 @@ end = 8
 [JC_58]
 kind = PointerDeref
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 135
+line = 141
 begin = 24
 end = 425
 
@@ -986,7 +992,7 @@ end = -1
 
 [JC_66]
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 115
+line = 121
 begin = 6
 end = 1810
 
@@ -998,7 +1004,7 @@ end = -1
 
 [JC_67]
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 115
+line = 121
 begin = 6
 end = 1810
 
@@ -1054,15 +1060,15 @@ end = 10
 
 [JC_20]
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 81
+line = 87
 begin = 6
-end = 466
+end = 472
 
 [JC_21]
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 81
+line = 87
 begin = 6
-end = 466
+end = 472
 
 [JC_22]
 kind = PointerDeref
@@ -1109,15 +1115,15 @@ end = -1
 
 [JC_29]
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 81
+line = 87
 begin = 6
-end = 466
+end = 472
 
 [JC_30]
 file = "HOME/tests/c/sum_array.jessie/sum_array.jc"
-line = 81
+line = 87
 begin = 6
-end = 466
+end = 472
 
 [JC_31]
 file = "HOME/tests/c/sum_array.c"
@@ -1196,6 +1202,8 @@ type intP
 
 type padding
 
+type unsigned_charP
+
 type voidP
 
 logic charP_tag:  -> charP tag_id
@@ -1237,6 +1245,10 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
 predicate left_valid_struct_intP(p:intP pointer, a:int,
  intP_alloc_table:intP alloc_table) = (offset_min(intP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -1248,30 +1260,36 @@ axiom no_assign_sum_0 :
   (forall tmpmem:(intP, int) memory.
    (forall tmpalloc:intP alloc_table.
     (forall intP_intM_t_1_at_L:(intP, int) memory.
-     (forall j:int.
-      (forall i:int.
+     (forall j_0:int.
+      (forall i_1:int.
        (forall t:intP pointer.
         ((pset_disjoint(tmp, pset_all(pset_singleton(t)))
          and not_assigns(tmpalloc, intP_intM_t_1_at_L, tmpmem, tmp)) ->
-         (sum(t, i, j, intP_intM_t_1_at_L) = sum(t, i, j, tmpmem))))))))))
+         (sum(t, i_1, j_0, intP_intM_t_1_at_L) = sum(t, i_1, j_0, tmpmem))))))))))
 
 axiom no_update_sum_0 :
  (forall tmp:intP pointer.
   (forall tmpval:int.
    (forall intP_intM_t_1_at_L:(intP, int) memory.
-    (forall j:int.
-     (forall i:int.
+    (forall j_0:int.
+     (forall i_1:int.
       (forall t:intP pointer.
        ((not in_pset(tmp, pset_all(pset_singleton(t)))) ->
-        (sum(t, i, j, intP_intM_t_1_at_L) = sum(t, i, j,
-                                            store(intP_intM_t_1_at_L, tmp,
-                                            tmpval))))))))))
+        (sum(t, i_1, j_0, intP_intM_t_1_at_L) = sum(t, i_1, j_0,
+                                                store(intP_intM_t_1_at_L,
+                                                tmp, tmpval))))))))))
 
 axiom pointer_addr_of_charP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
 axiom pointer_addr_of_intP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -1284,6 +1302,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
 
 predicate right_valid_struct_intP(p:intP pointer, b:int,
  intP_alloc_table:intP alloc_table) = (offset_max(intP_alloc_table, p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1298,6 +1320,11 @@ predicate strict_valid_root_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1314,10 +1341,31 @@ predicate strict_valid_struct_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -1328,6 +1376,11 @@ predicate valid_root_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1343,6 +1396,11 @@ predicate valid_struct_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1366,30 +1424,30 @@ axiom voidP_tags :
 axiom sum1 :
  (forall intP_intM_t_1_at_L:(intP, int) memory.
   (forall t_0_1:intP pointer.
-   (forall i_0:int. (sum(t_0_1, i_0, i_0, intP_intM_t_1_at_L) = (0)))))
+   (forall i_2:int. (sum(t_0_1, i_2, i_2, intP_intM_t_1_at_L) = (0)))))
 
 axiom sum2 :
  (forall intP_intM_t_1_at_L:(intP, int) memory.
   (forall t_1:intP pointer.
-   (forall i_1:int.
-    (forall j_0:int.
-     (sum(t_1, i_1, add_int(j_0, (1)), intP_intM_t_1_at_L) = add_int(
-                                                             sum(t_1, i_1,
-                                                             j_0,
+   (forall i_3:int.
+    (forall j_1:int.
+     (sum(t_1, i_3, add_int(j_1, (1)), intP_intM_t_1_at_L) = add_int(
+                                                             sum(t_1, i_3,
+                                                             j_1,
                                                              intP_intM_t_1_at_L),
                                                              select(intP_intM_t_1_at_L,
-                                                             shift(t_1, j_0))))))))
+                                                             shift(t_1, j_1))))))))
 
 lemma sum3 :
  (forall intP_intM_t_2_6_at_L:(intP, int) memory.
   (forall t_2:intP pointer.
-   (forall i_2:int.
-    (forall j_1:int.
+   (forall i_4:int.
+    (forall j_2:int.
      (forall k:int.
-      ((le_int(i_2, j_1) and le_int(j_1, k)) ->
-       (sum(t_2, i_2, k, intP_intM_t_2_6_at_L) = add_int(sum(t_2, i_2, j_1,
+      ((le_int(i_4, j_2) and le_int(j_2, k)) ->
+       (sum(t_2, i_4, k, intP_intM_t_2_6_at_L) = add_int(sum(t_2, i_4, j_2,
                                                          intP_intM_t_2_6_at_L),
-                                                 sum(t_2, j_1, k,
+                                                 sum(t_2, j_2, k,
                                                  intP_intM_t_2_6_at_L)))))))))
 
 lemma sum_footprint :
@@ -1397,13 +1455,13 @@ lemma sum_footprint :
   (forall intP_intM_t1_7_at_L:(intP, int) memory.
    (forall t1:intP pointer.
     (forall t2:intP pointer.
-     (forall i_3:int.
-      (forall j_2:int.
+     (forall i_5:int.
+      (forall j_3:int.
        ((forall k_0:int.
-         ((le_int(i_3, k_0) and lt_int(k_0, j_2)) ->
+         ((le_int(i_5, k_0) and lt_int(k_0, j_3)) ->
           (select(intP_intM_t1_7_at_L, shift(t1, k_0)) = select(intP_intM_t2_8_at_L,
                                                          shift(t2, k_0))))) ->
-        (sum(t1, i_3, j_2, intP_intM_t1_7_at_L) = sum(t2, i_3, j_2,
+        (sum(t1, i_5, j_3, intP_intM_t1_7_at_L) = sum(t2, i_5, j_3,
                                                   intP_intM_t2_8_at_L)))))))))
 
 exception Goto_while_0_break_exc of unit
@@ -1466,6 +1524,38 @@ parameter alloc_struct_intP_requires :
           and (alloc_fresh(intP_alloc_table@, result, n)
               and instanceof(intP_tag_table, result, intP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -1494,85 +1584,86 @@ parameter alloc_struct_voidP_requires :
 
 parameter test1 :
  t_0:intP pointer ->
-  n:int ->
+  n_1:int ->
    intP_t_2_alloc_table:intP alloc_table ->
     intP_intM_t_2:(intP, int) memory ->
-     { } int { (JC_12: (result = sum(t_0, (0), n, intP_intM_t_2))) }
+     { } int { (JC_12: (result = sum(t_0, (0), n_1, intP_intM_t_2))) }
 
 parameter test1_requires :
  t_0:intP pointer ->
-  n:int ->
+  n_1:int ->
    intP_t_2_alloc_table:intP alloc_table ->
     intP_intM_t_2:(intP, int) memory ->
      { (JC_4:
-       ((JC_1: ge_int(n, (1)))
+       ((JC_1: ge_int(n_1, (1)))
        and ((JC_2: le_int(offset_min(intP_t_2_alloc_table, t_0), (0)))
            and (JC_3:
-               ge_int(offset_max(intP_t_2_alloc_table, t_0), sub_int(n, (1)))))))}
-     int { (JC_12: (result = sum(t_0, (0), n, intP_intM_t_2))) }
+               ge_int(offset_max(intP_t_2_alloc_table, t_0),
+               sub_int(n_1, (1)))))))}
+     int { (JC_12: (result = sum(t_0, (0), n_1, intP_intM_t_2))) }
 
 parameter test2 :
  t_0_0:intP pointer ->
-  n_0:int ->
+  n_2:int ->
    intP_intM_t_0_3:(intP, int) memory ref ->
     intP_t_0_3_alloc_table:intP alloc_table ->
      { } unit reads intP_intM_t_0_3 writes intP_intM_t_0_3
      { (JC_46:
        ((JC_44:
-        (sum(t_0_0, (0), n_0, intP_intM_t_0_3) = add_int(sum(t_0_0, (0), n_0,
+        (sum(t_0_0, (0), n_2, intP_intM_t_0_3) = add_int(sum(t_0_0, (0), n_2,
                                                          intP_intM_t_0_3@),
-                                                 n_0)))
+                                                 n_2)))
        and (JC_45:
            not_assigns(intP_t_0_3_alloc_table, intP_intM_t_0_3@,
            intP_intM_t_0_3, pset_all(pset_singleton(t_0_0)))))) }
 
 parameter test2_requires :
  t_0_0:intP pointer ->
-  n_0:int ->
+  n_2:int ->
    intP_intM_t_0_3:(intP, int) memory ref ->
     intP_t_0_3_alloc_table:intP alloc_table ->
      { (JC_34:
-       ((JC_31: ge_int(n_0, (1)))
+       ((JC_31: ge_int(n_2, (1)))
        and ((JC_32: le_int(offset_min(intP_t_0_3_alloc_table, t_0_0), (0)))
            and (JC_33:
                ge_int(offset_max(intP_t_0_3_alloc_table, t_0_0),
-               sub_int(n_0, (1)))))))}
+               sub_int(n_2, (1)))))))}
      unit reads intP_intM_t_0_3 writes intP_intM_t_0_3
      { (JC_46:
        ((JC_44:
-        (sum(t_0_0, (0), n_0, intP_intM_t_0_3) = add_int(sum(t_0_0, (0), n_0,
+        (sum(t_0_0, (0), n_2, intP_intM_t_0_3) = add_int(sum(t_0_0, (0), n_2,
                                                          intP_intM_t_0_3@),
-                                                 n_0)))
+                                                 n_2)))
        and (JC_45:
            not_assigns(intP_t_0_3_alloc_table, intP_intM_t_0_3@,
            intP_intM_t_0_3, pset_all(pset_singleton(t_0_0)))))) }
 
 let test1_ensures_default =
- fun (t_0 : intP pointer) (n : int) (intP_t_2_alloc_table : intP alloc_table) (intP_intM_t_2 : (intP, int) memory) ->
+ fun (t_0 : intP pointer) (n_1 : int) (intP_t_2_alloc_table : intP alloc_table) (intP_intM_t_2 : (intP, int) memory) ->
   { (JC_9:
-    ((JC_6: ge_int(n, (1)))
+    ((JC_6: ge_int(n_1, (1)))
     and ((JC_7: le_int(offset_min(intP_t_2_alloc_table, t_0), (0)))
         and (JC_8:
-            ge_int(offset_max(intP_t_2_alloc_table, t_0), sub_int(n, (1))))))) }
+            ge_int(offset_max(intP_t_2_alloc_table, t_0), sub_int(n_1, (1))))))) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
-     (let i_4 = ref (any_int void) in
+     (let i = ref (any_int void) in
      (let s_0 = ref (any_int void) in
      try
       (C_1:
       (C_2:
       begin
         (let jessie_<num> = (s_0 := (0)) in void);
-       (let jessie_<num> = (i_4 := (0)) in void);
+       (let jessie_<num> = (i := (0)) in void);
        (loop_2:
        while true do
        { invariant
            (JC_27:
-           ((JC_24: le_int((0), i_4))
-           and ((JC_25: le_int(i_4, n))
-               and (JC_26: (s_0 = sum(t_0, (0), i_4, intP_intM_t_2)))))) 
+           ((JC_24: le_int((0), i))
+           and ((JC_25: le_int(i, n_1))
+               and (JC_26: (s_0 = sum(t_0, (0), i, intP_intM_t_2)))))) 
           }
         begin
           [ { } unit { true } ];
@@ -1581,7 +1672,7 @@ let test1_ensures_default =
             (let jessie_<num> =
             (C_14:
             begin
-              (if ((lt_int_ !i_4) n) then void
+              (if ((lt_int_ !i) n_1) then void
               else (raise (Goto_while_0_break_exc void)));
              (let jessie_<num> =
              (C_12:
@@ -1589,50 +1680,50 @@ let test1_ensures_default =
                (s_0 := (C_11:
                        ((add_int !s_0) (C_10:
                                        ((safe_acc_ intP_intM_t_2) (C_9:
-                                                                  ((shift t_0) !i_4)))))));
-              !s_0 end) in void); (i_4 := (C_13: ((add_int !i_4) (1)))); !i_4
-            end) in void); (raise (Loop_continue_exc void)) end with
+                                                                  ((shift t_0) !i)))))));
+              !s_0 end) in void); (i := (C_13: ((add_int !i) (1)))); !i end) in
+            void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<num> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<num> ->
       (while_0_break: begin   void; (return := !s_0); (raise Return) end) end));
     absurd  end with Return -> !return end))
-  { (JC_11: (result = sum(t_0, (0), n, intP_intM_t_2))) }
+  { (JC_11: (result = sum(t_0, (0), n_1, intP_intM_t_2))) }
 
 let test1_safety =
- fun (t_0 : intP pointer) (n : int) (intP_t_2_alloc_table : intP alloc_table) (intP_intM_t_2 : (intP, int) memory) ->
+ fun (t_0 : intP pointer) (n_1 : int) (intP_t_2_alloc_table : intP alloc_table) (intP_intM_t_2 : (intP, int) memory) ->
   { (JC_9:
-    ((JC_6: ge_int(n, (1)))
+    ((JC_6: ge_int(n_1, (1)))
     and ((JC_7: le_int(offset_min(intP_t_2_alloc_table, t_0), (0)))
         and (JC_8:
-            ge_int(offset_max(intP_t_2_alloc_table, t_0), sub_int(n, (1))))))) }
+            ge_int(offset_max(intP_t_2_alloc_table, t_0), sub_int(n_1, (1))))))) }
   (init:
   (let return = ref (any_int void) in
   try
    begin
-     (let i_4 = ref (any_int void) in
+     (let i = ref (any_int void) in
      (let s_0 = ref (any_int void) in
      try
       (C_1:
       (C_2:
       begin
         (let jessie_<num> = (s_0 := (0)) in void);
-       (let jessie_<num> = (i_4 := (0)) in void);
+       (let jessie_<num> = (i := (0)) in void);
        (loop_1:
        while true do
-       { invariant (JC_20: true) variant (JC_23 : sub_int(n, i_4)) }
+       { invariant (JC_20: true) variant (JC_23 : sub_int(n_1, i)) }
         begin
-          [ { } unit reads i_4,s_0
+          [ { } unit reads i,s_0
             { (JC_18:
-              ((JC_15: le_int((0), i_4))
-              and ((JC_16: le_int(i_4, n))
-                  and (JC_17: (s_0 = sum(t_0, (0), i_4, intP_intM_t_2)))))) } ];
+              ((JC_15: le_int((0), i))
+              and ((JC_16: le_int(i, n_1))
+                  and (JC_17: (s_0 = sum(t_0, (0), i, intP_intM_t_2)))))) } ];
          try
           begin
             (let jessie_<num> =
             (C_14:
             begin
-              (if ((lt_int_ !i_4) n) then void
+              (if ((lt_int_ !i) n_1) then void
               else (raise (Goto_while_0_break_exc void)));
              (let jessie_<num> =
              (C_12:
@@ -1640,9 +1731,9 @@ let test1_safety =
                (s_0 := (C_11:
                        ((add_int !s_0) (C_10:
                                        (JC_22:
-                                       ((((offset_acc_ intP_t_2_alloc_table) intP_intM_t_2) t_0) !i_4))))));
-              !s_0 end) in void); (i_4 := (C_13: ((add_int !i_4) (1)))); !i_4
-            end) in void); (raise (Loop_continue_exc void)) end with
+                                       ((((offset_acc_ intP_t_2_alloc_table) intP_intM_t_2) t_0) !i))))));
+              !s_0 end) in void); (i := (C_13: ((add_int !i) (1)))); !i end) in
+            void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<num> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end)) with
       Goto_while_0_break_exc jessie_<num> ->
@@ -1650,33 +1741,33 @@ let test1_safety =
     absurd  end with Return -> !return end)) { true }
 
 let test2_ensures_default =
- fun (t_0_0 : intP pointer) (n_0 : int) (intP_intM_t_0_3 : (intP, int) memory ref) (intP_t_0_3_alloc_table : intP alloc_table) ->
+ fun (t_0_0 : intP pointer) (n_2 : int) (intP_intM_t_0_3 : (intP, int) memory ref) (intP_t_0_3_alloc_table : intP alloc_table) ->
   { (JC_39:
-    ((JC_36: ge_int(n_0, (1)))
+    ((JC_36: ge_int(n_2, (1)))
     and ((JC_37: le_int(offset_min(intP_t_0_3_alloc_table, t_0_0), (0)))
         and (JC_38:
             ge_int(offset_max(intP_t_0_3_alloc_table, t_0_0),
-            sub_int(n_0, (1))))))) }
+            sub_int(n_2, (1))))))) }
   (init:
   try
    begin
-     (let i_0_0 = ref (any_int void) in
+     (let i_0 = ref (any_int void) in
      try
       (C_21:
       begin
-        (let jessie_<num> = (i_0_0 := (0)) in void);
+        (let jessie_<num> = (i_0 := (0)) in void);
        (loop_4:
        while true do
        { invariant
            ((JC_64:
-            ((JC_61: le_int((0), i_0_0))
-            and ((JC_62: le_int(i_0_0, n_0))
+            ((JC_61: le_int((0), i_0))
+            and ((JC_62: le_int(i_0, n_2))
                 and (JC_63:
-                    (sum(t_0_0, (0), n_0, intP_intM_t_0_3) = add_int(
+                    (sum(t_0_0, (0), n_2, intP_intM_t_0_3) = add_int(
                                                              sum(t_0_0, (0),
-                                                             n_0,
+                                                             n_2,
                                                              intP_intM_t_0_3@init),
-                                                             i_0_0))))))
+                                                             i_0))))))
            and (JC_66:
                not_assigns(intP_t_0_3_alloc_table, intP_intM_t_0_3@init,
                intP_intM_t_0_3, pset_all(pset_singleton(t_0_0)))))  }
@@ -1688,45 +1779,45 @@ let test2_ensures_default =
             (C_34:
             (C_37:
             begin
-              (if ((lt_int_ !i_0_0) n_0) then void
+              (if ((lt_int_ !i_0) n_2) then void
               else (raise (Goto_while_0_break_exc void)));
              (assert
              { (JC_68:
-               (sum(t_0_0, (0), n_0, intP_intM_t_0_3) = add_int(add_int(
+               (sum(t_0_0, (0), n_2, intP_intM_t_0_3) = add_int(add_int(
                                                                 sum(t_0_0,
-                                                                (0), i_0_0,
+                                                                (0), i_0,
                                                                 intP_intM_t_0_3),
                                                                 select(intP_intM_t_0_3,
                                                                 shift(t_0_0,
-                                                                i_0_0))),
+                                                                i_0))),
                                                         sum(t_0_0,
-                                                        add_int(i_0_0, (1)),
-                                                        n_0, intP_intM_t_0_3)))) };
+                                                        add_int(i_0, (1)),
+                                                        n_2, intP_intM_t_0_3)))) };
              void); void;
              (let jessie_<num> =
              (let jessie_<num> =
              (C_31:
              ((add_int (C_30:
                        ((safe_acc_ !intP_intM_t_0_3) (C_29:
-                                                     ((shift t_0_0) !i_0_0))))) (1))) in
+                                                     ((shift t_0_0) !i_0))))) (1))) in
              (let jessie_<num> = t_0_0 in
-             (let jessie_<num> = !i_0_0 in
+             (let jessie_<num> = !i_0 in
              (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
              (((safe_upd_ intP_intM_t_0_3) jessie_<num>) jessie_<num>))))) in void);
              (assert
              { (JC_69:
-               (sum(t_0_0, (0), n_0, intP_intM_t_0_3) = add_int(add_int(
+               (sum(t_0_0, (0), n_2, intP_intM_t_0_3) = add_int(add_int(
                                                                 sum(t_0_0,
-                                                                (0), i_0_0,
+                                                                (0), i_0,
                                                                 intP_intM_t_0_3),
                                                                 select(intP_intM_t_0_3,
                                                                 shift(t_0_0,
-                                                                i_0_0))),
+                                                                i_0))),
                                                         sum(t_0_0,
-                                                        add_int(i_0_0, (1)),
-                                                        n_0, intP_intM_t_0_3)))) };
-             void); void; (i_0_0 := (C_36: ((add_int !i_0_0) (1)))); !i_0_0
-            end)) in void); (raise (Loop_continue_exc void)) end with
+                                                        add_int(i_0, (1)),
+                                                        n_2, intP_intM_t_0_3)))) };
+             void); void; (i_0 := (C_36: ((add_int !i_0) (1)))); !i_0 end)) in
+            void); (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<num> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<num> ->
@@ -1734,63 +1825,63 @@ let test2_ensures_default =
    end with Return -> void end)
   { (JC_43:
     ((JC_41:
-     (sum(t_0_0, (0), n_0, intP_intM_t_0_3) = add_int(sum(t_0_0, (0), n_0,
+     (sum(t_0_0, (0), n_2, intP_intM_t_0_3) = add_int(sum(t_0_0, (0), n_2,
                                                       intP_intM_t_0_3@),
-                                              n_0)))
+                                              n_2)))
     and (JC_42:
         not_assigns(intP_t_0_3_alloc_table, intP_intM_t_0_3@,
         intP_intM_t_0_3, pset_all(pset_singleton(t_0_0)))))) }
 
 let test2_safety =
- fun (t_0_0 : intP pointer) (n_0 : int) (intP_intM_t_0_3 : (intP, int) memory ref) (intP_t_0_3_alloc_table : intP alloc_table) ->
+ fun (t_0_0 : intP pointer) (n_2 : int) (intP_intM_t_0_3 : (intP, int) memory ref) (intP_t_0_3_alloc_table : intP alloc_table) ->
   { (JC_39:
-    ((JC_36: ge_int(n_0, (1)))
+    ((JC_36: ge_int(n_2, (1)))
     and ((JC_37: le_int(offset_min(intP_t_0_3_alloc_table, t_0_0), (0)))
         and (JC_38:
             ge_int(offset_max(intP_t_0_3_alloc_table, t_0_0),
-            sub_int(n_0, (1))))))) }
+            sub_int(n_2, (1))))))) }
   (init:
   try
    begin
-     (let i_0_0 = ref (any_int void) in
+     (let i_0 = ref (any_int void) in
      try
       (C_21:
       begin
-        (let jessie_<num> = (i_0_0 := (0)) in void);
+        (let jessie_<num> = (i_0 := (0)) in void);
        (loop_3:
        while true do
-       { invariant (JC_54: true) variant (JC_60 : sub_int(n_0, i_0_0)) }
+       { invariant (JC_54: true) variant (JC_60 : sub_int(n_2, i_0)) }
         begin
-          [ { } unit reads i_0_0,intP_intM_t_0_3
+          [ { } unit reads i_0,intP_intM_t_0_3
             { (JC_52:
-              ((JC_49: le_int((0), i_0_0))
-              and ((JC_50: le_int(i_0_0, n_0))
+              ((JC_49: le_int((0), i_0))
+              and ((JC_50: le_int(i_0, n_2))
                   and (JC_51:
-                      (sum(t_0_0, (0), n_0, intP_intM_t_0_3) = add_int(
+                      (sum(t_0_0, (0), n_2, intP_intM_t_0_3) = add_int(
                                                                sum(t_0_0,
-                                                               (0), n_0,
+                                                               (0), n_2,
                                                                intP_intM_t_0_3@init),
-                                                               i_0_0)))))) } ];
+                                                               i_0)))))) } ];
          try
           begin
             (let jessie_<num> =
             (C_34:
             (C_37:
             begin
-              (if ((lt_int_ !i_0_0) n_0) then void
+              (if ((lt_int_ !i_0) n_2) then void
               else (raise (Goto_while_0_break_exc void)));
-             [ { } unit reads i_0_0,intP_intM_t_0_3
+             [ { } unit reads i_0,intP_intM_t_0_3
                { (JC_56:
-                 (sum(t_0_0, (0), n_0, intP_intM_t_0_3) = add_int(add_int(
+                 (sum(t_0_0, (0), n_2, intP_intM_t_0_3) = add_int(add_int(
                                                                   sum(t_0_0,
-                                                                  (0), i_0_0,
+                                                                  (0), i_0,
                                                                   intP_intM_t_0_3),
                                                                   select(intP_intM_t_0_3,
                                                                   shift(t_0_0,
-                                                                  i_0_0))),
+                                                                  i_0))),
                                                           sum(t_0_0,
-                                                          add_int(i_0_0, (1)),
-                                                          n_0,
+                                                          add_int(i_0, (1)),
+                                                          n_2,
                                                           intP_intM_t_0_3)))) } ];
              void;
              (let jessie_<num> =
@@ -1798,28 +1889,28 @@ let test2_safety =
              (C_31:
              ((add_int (C_30:
                        (JC_57:
-                       ((((offset_acc_ intP_t_0_3_alloc_table) !intP_intM_t_0_3) t_0_0) !i_0_0)))) (1))) in
+                       ((((offset_acc_ intP_t_0_3_alloc_table) !intP_intM_t_0_3) t_0_0) !i_0)))) (1))) in
              (let jessie_<num> = t_0_0 in
-             (let jessie_<num> = !i_0_0 in
+             (let jessie_<num> = !i_0 in
              (let jessie_<num> = ((shift jessie_<num>) jessie_<num>) in
              (JC_58:
              (((((offset_upd_ intP_t_0_3_alloc_table) intP_intM_t_0_3) jessie_<num>) jessie_<num>) jessie_<num>)))))) in
              void);
-             [ { } unit reads i_0_0,intP_intM_t_0_3
+             [ { } unit reads i_0,intP_intM_t_0_3
                { (JC_59:
-                 (sum(t_0_0, (0), n_0, intP_intM_t_0_3) = add_int(add_int(
+                 (sum(t_0_0, (0), n_2, intP_intM_t_0_3) = add_int(add_int(
                                                                   sum(t_0_0,
-                                                                  (0), i_0_0,
+                                                                  (0), i_0,
                                                                   intP_intM_t_0_3),
                                                                   select(intP_intM_t_0_3,
                                                                   shift(t_0_0,
-                                                                  i_0_0))),
+                                                                  i_0))),
                                                           sum(t_0_0,
-                                                          add_int(i_0_0, (1)),
-                                                          n_0,
+                                                          add_int(i_0, (1)),
+                                                          n_2,
                                                           intP_intM_t_0_3)))) } ];
-             void; (i_0_0 := (C_36: ((add_int !i_0_0) (1)))); !i_0_0 end)) in
-            void); (raise (Loop_continue_exc void)) end with
+             void; (i_0 := (C_36: ((add_int !i_0) (1)))); !i_0 end)) in void);
+           (raise (Loop_continue_exc void)) end with
           Loop_continue_exc jessie_<num> -> void end end done);
        (raise (Goto_while_0_break_exc void)) end) with
       Goto_while_0_break_exc jessie_<num> ->
@@ -2774,6 +2865,8 @@ type intP
 
 type padding
 
+type unsigned_charP
+
 type voidP
 
 logic charP_tag : charP tag_id
@@ -2817,6 +2910,10 @@ predicate left_valid_struct_intP(p: intP pointer, a: int,
   intP_alloc_table: intP alloc_table) = (offset_min(intP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -2828,22 +2925,23 @@ axiom no_assign_sum_0:
     (forall tmpmem:(intP, int) memory.
       (forall tmpalloc:intP alloc_table.
         (forall intP_intM_t_1_at_L:(intP, int) memory.
-          (forall j:int.
-            (forall i:int.
+          (forall j_0:int.
+            (forall i_1:int.
               (forall t:intP pointer.
                 ((pset_disjoint(tmp, pset_all(pset_singleton(t))) and
                   not_assigns(tmpalloc, intP_intM_t_1_at_L, tmpmem, tmp)) ->
-                 (sum(t, i, j, intP_intM_t_1_at_L) = sum(t, i, j, tmpmem))))))))))
+                 (sum(t, i_1, j_0, intP_intM_t_1_at_L) = sum(t, i_1, j_0,
+                 tmpmem))))))))))
 
 axiom no_update_sum_0:
   (forall tmp:intP pointer.
     (forall tmpval:int.
       (forall intP_intM_t_1_at_L:(intP, int) memory.
-        (forall j:int.
-          (forall i:int.
+        (forall j_0:int.
+          (forall i_1:int.
             (forall t:intP pointer.
-              ((not in_pset(tmp, pset_all(pset_singleton(t)))) -> (sum(t, i,
-               j, intP_intM_t_1_at_L) = sum(t, i, j,
+              ((not in_pset(tmp, pset_all(pset_singleton(t)))) -> (sum(t,
+               i_1, j_0, intP_intM_t_1_at_L) = sum(t, i_1, j_0,
                store(intP_intM_t_1_at_L, tmp, tmpval))))))))))
 
 axiom pointer_addr_of_charP_of_pointer_address:
@@ -2851,6 +2949,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 
 axiom pointer_addr_of_intP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -2865,6 +2969,10 @@ predicate right_valid_struct_intP(p: intP pointer, b: int,
   intP_alloc_table: intP alloc_table) = (offset_max(intP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
@@ -2878,6 +2986,11 @@ predicate strict_valid_root_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2894,10 +3007,31 @@ predicate strict_valid_struct_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -2908,6 +3042,11 @@ predicate valid_root_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2923,6 +3062,11 @@ predicate valid_struct_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2947,49 +3091,49 @@ axiom voidP_tags:
 axiom sum1:
   (forall intP_intM_t_1_at_L:(intP, int) memory.
     (forall t_0_1:intP pointer.
-      (forall i_0:int. (sum(t_0_1, i_0, i_0, intP_intM_t_1_at_L) = 0))))
+      (forall i_2:int. (sum(t_0_1, i_2, i_2, intP_intM_t_1_at_L) = 0))))
 
 axiom sum2:
   (forall intP_intM_t_1_at_L:(intP, int) memory.
     (forall t_1:intP pointer.
-      (forall i_1:int.
-        (forall j_0:int. (sum(t_1, i_1, (j_0 + 1),
-          intP_intM_t_1_at_L) = (sum(t_1, i_1, j_0,
+      (forall i_3:int.
+        (forall j_1:int. (sum(t_1, i_3, (j_1 + 1),
+          intP_intM_t_1_at_L) = (sum(t_1, i_3, j_1,
           intP_intM_t_1_at_L) + select(intP_intM_t_1_at_L, shift(t_1,
-          j_0))))))))
+          j_1))))))))
 
 goal sum3:
   (forall intP_intM_t_2_6_at_L:(intP, int) memory.
     (forall t_2:intP pointer.
-      (forall i_2:int.
-        (forall j_1:int.
+      (forall i_4:int.
+        (forall j_2:int.
           (forall k:int.
-            (((i_2 <= j_1) and (j_1 <= k)) -> (sum(t_2, i_2, k,
-             intP_intM_t_2_6_at_L) = (sum(t_2, i_2, j_1,
-             intP_intM_t_2_6_at_L) + sum(t_2, j_1, k, intP_intM_t_2_6_at_L)))))))))
+            (((i_4 <= j_2) and (j_2 <= k)) -> (sum(t_2, i_4, k,
+             intP_intM_t_2_6_at_L) = (sum(t_2, i_4, j_2,
+             intP_intM_t_2_6_at_L) + sum(t_2, j_2, k, intP_intM_t_2_6_at_L)))))))))
 
 axiom sum3_as_axiom:
   (forall intP_intM_t_2_6_at_L:(intP, int) memory.
     (forall t_2:intP pointer.
-      (forall i_2:int.
-        (forall j_1:int.
+      (forall i_4:int.
+        (forall j_2:int.
           (forall k:int.
-            (((i_2 <= j_1) and (j_1 <= k)) -> (sum(t_2, i_2, k,
-             intP_intM_t_2_6_at_L) = (sum(t_2, i_2, j_1,
-             intP_intM_t_2_6_at_L) + sum(t_2, j_1, k, intP_intM_t_2_6_at_L)))))))))
+            (((i_4 <= j_2) and (j_2 <= k)) -> (sum(t_2, i_4, k,
+             intP_intM_t_2_6_at_L) = (sum(t_2, i_4, j_2,
+             intP_intM_t_2_6_at_L) + sum(t_2, j_2, k, intP_intM_t_2_6_at_L)))))))))
 
 goal sum_footprint:
   (forall intP_intM_t2_8_at_L:(intP, int) memory.
     (forall intP_intM_t1_7_at_L:(intP, int) memory.
       (forall t1:intP pointer.
         (forall t2:intP pointer.
-          (forall i_3:int.
-            (forall j_2:int.
+          (forall i_5:int.
+            (forall j_3:int.
               ((forall k_0:int.
-                 (((i_3 <= k_0) and (k_0 < j_2)) ->
+                 (((i_5 <= k_0) and (k_0 < j_3)) ->
                   (select(intP_intM_t1_7_at_L, shift(t1,
                   k_0)) = select(intP_intM_t2_8_at_L, shift(t2, k_0))))) ->
-               (sum(t1, i_3, j_2, intP_intM_t1_7_at_L) = sum(t2, i_3, j_2,
+               (sum(t1, i_5, j_3, intP_intM_t1_7_at_L) = sum(t2, i_5, j_3,
                intP_intM_t2_8_at_L)))))))))
 
 axiom sum_footprint_as_axiom:
@@ -2997,724 +3141,724 @@ axiom sum_footprint_as_axiom:
     (forall intP_intM_t1_7_at_L:(intP, int) memory.
       (forall t1:intP pointer.
         (forall t2:intP pointer.
-          (forall i_3:int.
-            (forall j_2:int.
+          (forall i_5:int.
+            (forall j_3:int.
               ((forall k_0:int.
-                 (((i_3 <= k_0) and (k_0 < j_2)) ->
+                 (((i_5 <= k_0) and (k_0 < j_3)) ->
                   (select(intP_intM_t1_7_at_L, shift(t1,
                   k_0)) = select(intP_intM_t2_8_at_L, shift(t2, k_0))))) ->
-               (sum(t1, i_3, j_2, intP_intM_t1_7_at_L) = sum(t2, i_3, j_2,
+               (sum(t1, i_5, j_3, intP_intM_t1_7_at_L) = sum(t2, i_5, j_3,
                intP_intM_t2_8_at_L)))))))))
 
 goal test1_ensures_default_po_1:
   forall t_0:intP pointer.
-  forall n:int.
+  forall n_1:int.
   forall intP_t_2_alloc_table:intP alloc_table.
   ("JC_9":
-  (("JC_6": (n >= 1)) and
+  (("JC_6": (n_1 >= 1)) and
    (("JC_7": (offset_min(intP_t_2_alloc_table, t_0) <= 0)) and
-    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n - 1)))))) ->
+    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n_1 - 1)))))) ->
   forall s_0:int.
   (s_0 = 0) ->
-  forall i_4:int.
-  (i_4 = 0) ->
-  ("JC_27": ("JC_24": (0 <= i_4)))
+  forall i:int.
+  (i = 0) ->
+  ("JC_27": ("JC_24": (0 <= i)))
 
 goal test1_ensures_default_po_2:
   forall t_0:intP pointer.
-  forall n:int.
+  forall n_1:int.
   forall intP_t_2_alloc_table:intP alloc_table.
   ("JC_9":
-  (("JC_6": (n >= 1)) and
+  (("JC_6": (n_1 >= 1)) and
    (("JC_7": (offset_min(intP_t_2_alloc_table, t_0) <= 0)) and
-    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n - 1)))))) ->
+    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n_1 - 1)))))) ->
   forall s_0:int.
   (s_0 = 0) ->
-  forall i_4:int.
-  (i_4 = 0) ->
-  ("JC_27": ("JC_25": (i_4 <= n)))
+  forall i:int.
+  (i = 0) ->
+  ("JC_27": ("JC_25": (i <= n_1)))
 
 goal test1_ensures_default_po_3:
   forall t_0:intP pointer.
-  forall n:int.
+  forall n_1:int.
   forall intP_t_2_alloc_table:intP alloc_table.
   forall intP_intM_t_2:(intP,
   int) memory.
   ("JC_9":
-  (("JC_6": (n >= 1)) and
+  (("JC_6": (n_1 >= 1)) and
    (("JC_7": (offset_min(intP_t_2_alloc_table, t_0) <= 0)) and
-    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n - 1)))))) ->
+    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n_1 - 1)))))) ->
   forall s_0:int.
   (s_0 = 0) ->
-  forall i_4:int.
-  (i_4 = 0) ->
-  ("JC_27": ("JC_26": (s_0 = sum(t_0, 0, i_4, intP_intM_t_2))))
+  forall i:int.
+  (i = 0) ->
+  ("JC_27": ("JC_26": (s_0 = sum(t_0, 0, i, intP_intM_t_2))))
 
 goal test1_ensures_default_po_4:
   forall t_0:intP pointer.
-  forall n:int.
+  forall n_1:int.
   forall intP_t_2_alloc_table:intP alloc_table.
   forall intP_intM_t_2:(intP,
   int) memory.
   ("JC_9":
-  (("JC_6": (n >= 1)) and
+  (("JC_6": (n_1 >= 1)) and
    (("JC_7": (offset_min(intP_t_2_alloc_table, t_0) <= 0)) and
-    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n - 1)))))) ->
+    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n_1 - 1)))))) ->
   forall s_0:int.
   (s_0 = 0) ->
-  forall i_4:int.
-  (i_4 = 0) ->
-  forall i_4_0:int.
+  forall i:int.
+  (i = 0) ->
+  forall i0:int.
   forall s_0_0:int.
   ("JC_27":
-  (("JC_24": (0 <= i_4_0)) and
-   (("JC_25": (i_4_0 <= n)) and
-    ("JC_26": (s_0_0 = sum(t_0, 0, i_4_0, intP_intM_t_2)))))) ->
-  (i_4_0 < n) ->
+  (("JC_24": (0 <= i0)) and
+   (("JC_25": (i0 <= n_1)) and
+    ("JC_26": (s_0_0 = sum(t_0, 0, i0, intP_intM_t_2)))))) ->
+  (i0 < n_1) ->
   forall result:int.
-  (result = select(intP_intM_t_2, shift(t_0, i_4_0))) ->
+  (result = select(intP_intM_t_2, shift(t_0, i0))) ->
   forall s_0_1:int.
   (s_0_1 = (s_0_0 + result)) ->
-  forall i_4_1:int.
-  (i_4_1 = (i_4_0 + 1)) ->
-  ("JC_27": ("JC_24": (0 <= i_4_1)))
+  forall i1:int.
+  (i1 = (i0 + 1)) ->
+  ("JC_27": ("JC_24": (0 <= i1)))
 
 goal test1_ensures_default_po_5:
   forall t_0:intP pointer.
-  forall n:int.
+  forall n_1:int.
   forall intP_t_2_alloc_table:intP alloc_table.
   forall intP_intM_t_2:(intP,
   int) memory.
   ("JC_9":
-  (("JC_6": (n >= 1)) and
+  (("JC_6": (n_1 >= 1)) and
    (("JC_7": (offset_min(intP_t_2_alloc_table, t_0) <= 0)) and
-    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n - 1)))))) ->
+    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n_1 - 1)))))) ->
   forall s_0:int.
   (s_0 = 0) ->
-  forall i_4:int.
-  (i_4 = 0) ->
-  forall i_4_0:int.
+  forall i:int.
+  (i = 0) ->
+  forall i0:int.
   forall s_0_0:int.
   ("JC_27":
-  (("JC_24": (0 <= i_4_0)) and
-   (("JC_25": (i_4_0 <= n)) and
-    ("JC_26": (s_0_0 = sum(t_0, 0, i_4_0, intP_intM_t_2)))))) ->
-  (i_4_0 < n) ->
+  (("JC_24": (0 <= i0)) and
+   (("JC_25": (i0 <= n_1)) and
+    ("JC_26": (s_0_0 = sum(t_0, 0, i0, intP_intM_t_2)))))) ->
+  (i0 < n_1) ->
   forall result:int.
-  (result = select(intP_intM_t_2, shift(t_0, i_4_0))) ->
+  (result = select(intP_intM_t_2, shift(t_0, i0))) ->
   forall s_0_1:int.
   (s_0_1 = (s_0_0 + result)) ->
-  forall i_4_1:int.
-  (i_4_1 = (i_4_0 + 1)) ->
-  ("JC_27": ("JC_25": (i_4_1 <= n)))
+  forall i1:int.
+  (i1 = (i0 + 1)) ->
+  ("JC_27": ("JC_25": (i1 <= n_1)))
 
 goal test1_ensures_default_po_6:
   forall t_0:intP pointer.
-  forall n:int.
+  forall n_1:int.
   forall intP_t_2_alloc_table:intP alloc_table.
   forall intP_intM_t_2:(intP,
   int) memory.
   ("JC_9":
-  (("JC_6": (n >= 1)) and
+  (("JC_6": (n_1 >= 1)) and
    (("JC_7": (offset_min(intP_t_2_alloc_table, t_0) <= 0)) and
-    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n - 1)))))) ->
+    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n_1 - 1)))))) ->
   forall s_0:int.
   (s_0 = 0) ->
-  forall i_4:int.
-  (i_4 = 0) ->
-  forall i_4_0:int.
+  forall i:int.
+  (i = 0) ->
+  forall i0:int.
   forall s_0_0:int.
   ("JC_27":
-  (("JC_24": (0 <= i_4_0)) and
-   (("JC_25": (i_4_0 <= n)) and
-    ("JC_26": (s_0_0 = sum(t_0, 0, i_4_0, intP_intM_t_2)))))) ->
-  (i_4_0 < n) ->
+  (("JC_24": (0 <= i0)) and
+   (("JC_25": (i0 <= n_1)) and
+    ("JC_26": (s_0_0 = sum(t_0, 0, i0, intP_intM_t_2)))))) ->
+  (i0 < n_1) ->
   forall result:int.
-  (result = select(intP_intM_t_2, shift(t_0, i_4_0))) ->
+  (result = select(intP_intM_t_2, shift(t_0, i0))) ->
   forall s_0_1:int.
   (s_0_1 = (s_0_0 + result)) ->
-  forall i_4_1:int.
-  (i_4_1 = (i_4_0 + 1)) ->
-  ("JC_27": ("JC_26": (s_0_1 = sum(t_0, 0, i_4_1, intP_intM_t_2))))
+  forall i1:int.
+  (i1 = (i0 + 1)) ->
+  ("JC_27": ("JC_26": (s_0_1 = sum(t_0, 0, i1, intP_intM_t_2))))
 
 goal test1_ensures_default_po_7:
   forall t_0:intP pointer.
-  forall n:int.
+  forall n_1:int.
   forall intP_t_2_alloc_table:intP alloc_table.
   forall intP_intM_t_2:(intP,
   int) memory.
   ("JC_9":
-  (("JC_6": (n >= 1)) and
+  (("JC_6": (n_1 >= 1)) and
    (("JC_7": (offset_min(intP_t_2_alloc_table, t_0) <= 0)) and
-    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n - 1)))))) ->
+    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n_1 - 1)))))) ->
   forall s_0:int.
   (s_0 = 0) ->
-  forall i_4:int.
-  (i_4 = 0) ->
-  forall i_4_0:int.
+  forall i:int.
+  (i = 0) ->
+  forall i0:int.
   forall s_0_0:int.
   ("JC_27":
-  (("JC_24": (0 <= i_4_0)) and
-   (("JC_25": (i_4_0 <= n)) and
-    ("JC_26": (s_0_0 = sum(t_0, 0, i_4_0, intP_intM_t_2)))))) ->
-  (i_4_0 >= n) ->
+  (("JC_24": (0 <= i0)) and
+   (("JC_25": (i0 <= n_1)) and
+    ("JC_26": (s_0_0 = sum(t_0, 0, i0, intP_intM_t_2)))))) ->
+  (i0 >= n_1) ->
   forall return:int.
   (return = s_0_0) ->
-  ("JC_11": (return = sum(t_0, 0, n, intP_intM_t_2)))
+  ("JC_11": (return = sum(t_0, 0, n_1, intP_intM_t_2)))
 
 goal test1_safety_po_1:
   forall t_0:intP pointer.
-  forall n:int.
+  forall n_1:int.
   forall intP_t_2_alloc_table:intP alloc_table.
   forall intP_intM_t_2:(intP,
   int) memory.
   ("JC_9":
-  (("JC_6": (n >= 1)) and
+  (("JC_6": (n_1 >= 1)) and
    (("JC_7": (offset_min(intP_t_2_alloc_table, t_0) <= 0)) and
-    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n - 1)))))) ->
+    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n_1 - 1)))))) ->
   forall s_0:int.
   (s_0 = 0) ->
-  forall i_4:int.
-  (i_4 = 0) ->
-  forall i_4_0:int.
+  forall i:int.
+  (i = 0) ->
+  forall i0:int.
   forall s_0_0:int.
   ("JC_20": true) ->
   ("JC_18":
-  (("JC_15": (0 <= i_4_0)) and
-   (("JC_16": (i_4_0 <= n)) and
-    ("JC_17": (s_0_0 = sum(t_0, 0, i_4_0, intP_intM_t_2)))))) ->
-  (i_4_0 < n) ->
-  (offset_min(intP_t_2_alloc_table, t_0) <= i_4_0)
+  (("JC_15": (0 <= i0)) and
+   (("JC_16": (i0 <= n_1)) and
+    ("JC_17": (s_0_0 = sum(t_0, 0, i0, intP_intM_t_2)))))) ->
+  (i0 < n_1) ->
+  (offset_min(intP_t_2_alloc_table, t_0) <= i0)
 
 goal test1_safety_po_2:
   forall t_0:intP pointer.
-  forall n:int.
+  forall n_1:int.
   forall intP_t_2_alloc_table:intP alloc_table.
   forall intP_intM_t_2:(intP,
   int) memory.
   ("JC_9":
-  (("JC_6": (n >= 1)) and
+  (("JC_6": (n_1 >= 1)) and
    (("JC_7": (offset_min(intP_t_2_alloc_table, t_0) <= 0)) and
-    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n - 1)))))) ->
+    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n_1 - 1)))))) ->
   forall s_0:int.
   (s_0 = 0) ->
-  forall i_4:int.
-  (i_4 = 0) ->
-  forall i_4_0:int.
+  forall i:int.
+  (i = 0) ->
+  forall i0:int.
   forall s_0_0:int.
   ("JC_20": true) ->
   ("JC_18":
-  (("JC_15": (0 <= i_4_0)) and
-   (("JC_16": (i_4_0 <= n)) and
-    ("JC_17": (s_0_0 = sum(t_0, 0, i_4_0, intP_intM_t_2)))))) ->
-  (i_4_0 < n) ->
-  (i_4_0 <= offset_max(intP_t_2_alloc_table, t_0))
+  (("JC_15": (0 <= i0)) and
+   (("JC_16": (i0 <= n_1)) and
+    ("JC_17": (s_0_0 = sum(t_0, 0, i0, intP_intM_t_2)))))) ->
+  (i0 < n_1) ->
+  (i0 <= offset_max(intP_t_2_alloc_table, t_0))
 
 goal test1_safety_po_3:
   forall t_0:intP pointer.
-  forall n:int.
+  forall n_1:int.
   forall intP_t_2_alloc_table:intP alloc_table.
   forall intP_intM_t_2:(intP,
   int) memory.
   ("JC_9":
-  (("JC_6": (n >= 1)) and
+  (("JC_6": (n_1 >= 1)) and
    (("JC_7": (offset_min(intP_t_2_alloc_table, t_0) <= 0)) and
-    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n - 1)))))) ->
+    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n_1 - 1)))))) ->
   forall s_0:int.
   (s_0 = 0) ->
-  forall i_4:int.
-  (i_4 = 0) ->
-  forall i_4_0:int.
+  forall i:int.
+  (i = 0) ->
+  forall i0:int.
   forall s_0_0:int.
   ("JC_20": true) ->
   ("JC_18":
-  (("JC_15": (0 <= i_4_0)) and
-   (("JC_16": (i_4_0 <= n)) and
-    ("JC_17": (s_0_0 = sum(t_0, 0, i_4_0, intP_intM_t_2)))))) ->
-  (i_4_0 < n) ->
-  ((offset_min(intP_t_2_alloc_table, t_0) <= i_4_0) and
-   (i_4_0 <= offset_max(intP_t_2_alloc_table, t_0))) ->
+  (("JC_15": (0 <= i0)) and
+   (("JC_16": (i0 <= n_1)) and
+    ("JC_17": (s_0_0 = sum(t_0, 0, i0, intP_intM_t_2)))))) ->
+  (i0 < n_1) ->
+  ((offset_min(intP_t_2_alloc_table, t_0) <= i0) and
+   (i0 <= offset_max(intP_t_2_alloc_table, t_0))) ->
   forall result:int.
-  (result = select(intP_intM_t_2, shift(t_0, i_4_0))) ->
+  (result = select(intP_intM_t_2, shift(t_0, i0))) ->
   forall s_0_1:int.
   (s_0_1 = (s_0_0 + result)) ->
-  forall i_4_1:int.
-  (i_4_1 = (i_4_0 + 1)) ->
-  (0 <= ("JC_23": (n - i_4_0)))
+  forall i1:int.
+  (i1 = (i0 + 1)) ->
+  (0 <= ("JC_23": (n_1 - i0)))
 
 goal test1_safety_po_4:
   forall t_0:intP pointer.
-  forall n:int.
+  forall n_1:int.
   forall intP_t_2_alloc_table:intP alloc_table.
   forall intP_intM_t_2:(intP,
   int) memory.
   ("JC_9":
-  (("JC_6": (n >= 1)) and
+  (("JC_6": (n_1 >= 1)) and
    (("JC_7": (offset_min(intP_t_2_alloc_table, t_0) <= 0)) and
-    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n - 1)))))) ->
+    ("JC_8": (offset_max(intP_t_2_alloc_table, t_0) >= (n_1 - 1)))))) ->
   forall s_0:int.
   (s_0 = 0) ->
-  forall i_4:int.
-  (i_4 = 0) ->
-  forall i_4_0:int.
+  forall i:int.
+  (i = 0) ->
+  forall i0:int.
   forall s_0_0:int.
   ("JC_20": true) ->
   ("JC_18":
-  (("JC_15": (0 <= i_4_0)) and
-   (("JC_16": (i_4_0 <= n)) and
-    ("JC_17": (s_0_0 = sum(t_0, 0, i_4_0, intP_intM_t_2)))))) ->
-  (i_4_0 < n) ->
-  ((offset_min(intP_t_2_alloc_table, t_0) <= i_4_0) and
-   (i_4_0 <= offset_max(intP_t_2_alloc_table, t_0))) ->
+  (("JC_15": (0 <= i0)) and
+   (("JC_16": (i0 <= n_1)) and
+    ("JC_17": (s_0_0 = sum(t_0, 0, i0, intP_intM_t_2)))))) ->
+  (i0 < n_1) ->
+  ((offset_min(intP_t_2_alloc_table, t_0) <= i0) and
+   (i0 <= offset_max(intP_t_2_alloc_table, t_0))) ->
   forall result:int.
-  (result = select(intP_intM_t_2, shift(t_0, i_4_0))) ->
+  (result = select(intP_intM_t_2, shift(t_0, i0))) ->
   forall s_0_1:int.
   (s_0_1 = (s_0_0 + result)) ->
-  forall i_4_1:int.
-  (i_4_1 = (i_4_0 + 1)) ->
-  (("JC_23": (n - i_4_1)) < ("JC_23": (n - i_4_0)))
+  forall i1:int.
+  (i1 = (i0 + 1)) ->
+  (("JC_23": (n_1 - i1)) < ("JC_23": (n_1 - i0)))
 
 goal test2_ensures_default_po_1:
   forall t_0_0:intP pointer.
-  forall n_0:int.
+  forall n_2:int.
   forall intP_t_0_3_alloc_table:intP alloc_table.
   ("JC_39":
-  (("JC_36": (n_0 >= 1)) and
+  (("JC_36": (n_2 >= 1)) and
    (("JC_37": (offset_min(intP_t_0_3_alloc_table, t_0_0) <= 0)) and
-    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_0 - 1)))))) ->
-  forall i_0_0:int.
-  (i_0_0 = 0) ->
-  ("JC_64": ("JC_61": (0 <= i_0_0)))
+    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_2 - 1)))))) ->
+  forall i_0:int.
+  (i_0 = 0) ->
+  ("JC_64": ("JC_61": (0 <= i_0)))
 
 goal test2_ensures_default_po_2:
   forall t_0_0:intP pointer.
-  forall n_0:int.
+  forall n_2:int.
   forall intP_t_0_3_alloc_table:intP alloc_table.
   ("JC_39":
-  (("JC_36": (n_0 >= 1)) and
+  (("JC_36": (n_2 >= 1)) and
    (("JC_37": (offset_min(intP_t_0_3_alloc_table, t_0_0) <= 0)) and
-    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_0 - 1)))))) ->
-  forall i_0_0:int.
-  (i_0_0 = 0) ->
-  ("JC_64": ("JC_62": (i_0_0 <= n_0)))
+    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_2 - 1)))))) ->
+  forall i_0:int.
+  (i_0 = 0) ->
+  ("JC_64": ("JC_62": (i_0 <= n_2)))
 
 goal test2_ensures_default_po_3:
   forall t_0_0:intP pointer.
-  forall n_0:int.
+  forall n_2:int.
   forall intP_t_0_3_alloc_table:intP alloc_table.
   forall intP_intM_t_0_3:(intP,
   int) memory.
   ("JC_39":
-  (("JC_36": (n_0 >= 1)) and
+  (("JC_36": (n_2 >= 1)) and
    (("JC_37": (offset_min(intP_t_0_3_alloc_table, t_0_0) <= 0)) and
-    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_0 - 1)))))) ->
-  forall i_0_0:int.
-  (i_0_0 = 0) ->
+    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_2 - 1)))))) ->
+  forall i_0:int.
+  (i_0 = 0) ->
   ("JC_64":
-  ("JC_63": (sum(t_0_0, 0, n_0, intP_intM_t_0_3) = (sum(t_0_0, 0, n_0,
-  intP_intM_t_0_3) + i_0_0))))
+  ("JC_63": (sum(t_0_0, 0, n_2, intP_intM_t_0_3) = (sum(t_0_0, 0, n_2,
+  intP_intM_t_0_3) + i_0))))
 
 goal test2_ensures_default_po_4:
   forall t_0_0:intP pointer.
-  forall n_0:int.
+  forall n_2:int.
   forall intP_t_0_3_alloc_table:intP alloc_table.
   forall intP_intM_t_0_3:(intP,
   int) memory.
   ("JC_39":
-  (("JC_36": (n_0 >= 1)) and
+  (("JC_36": (n_2 >= 1)) and
    (("JC_37": (offset_min(intP_t_0_3_alloc_table, t_0_0) <= 0)) and
-    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_0 - 1)))))) ->
-  forall i_0_0:int.
-  (i_0_0 = 0) ->
+    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_2 - 1)))))) ->
+  forall i_0:int.
+  (i_0 = 0) ->
   ("JC_66": not_assigns(intP_t_0_3_alloc_table, intP_intM_t_0_3,
   intP_intM_t_0_3, pset_all(pset_singleton(t_0_0))))
 
 goal test2_ensures_default_po_5:
   forall t_0_0:intP pointer.
-  forall n_0:int.
+  forall n_2:int.
   forall intP_t_0_3_alloc_table:intP alloc_table.
   forall intP_intM_t_0_3:(intP,
   int) memory.
   ("JC_39":
-  (("JC_36": (n_0 >= 1)) and
+  (("JC_36": (n_2 >= 1)) and
    (("JC_37": (offset_min(intP_t_0_3_alloc_table, t_0_0) <= 0)) and
-    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_0 - 1)))))) ->
+    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_2 - 1)))))) ->
+  forall i_0:int.
+  (i_0 = 0) ->
   forall i_0_0:int.
-  (i_0_0 = 0) ->
-  forall i_0_0_0:int.
   forall intP_intM_t_0_3_0:(intP,
   int) memory.
   (("JC_64":
-   (("JC_61": (0 <= i_0_0_0)) and
-    (("JC_62": (i_0_0_0 <= n_0)) and
-     ("JC_63": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_0,
-     intP_intM_t_0_3) + i_0_0_0)))))) and
+   (("JC_61": (0 <= i_0_0)) and
+    (("JC_62": (i_0_0 <= n_2)) and
+     ("JC_63": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_2,
+     intP_intM_t_0_3) + i_0_0)))))) and
    ("JC_66": not_assigns(intP_t_0_3_alloc_table, intP_intM_t_0_3,
    intP_intM_t_0_3_0, pset_all(pset_singleton(t_0_0))))) ->
-  (i_0_0_0 < n_0) ->
-  ("JC_68": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0_0,
+  (i_0_0 < n_2) ->
+  ("JC_68": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_0) + select(intP_intM_t_0_3_0, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_0))))
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_0))))
 
 goal test2_ensures_default_po_6:
   forall t_0_0:intP pointer.
-  forall n_0:int.
+  forall n_2:int.
   forall intP_t_0_3_alloc_table:intP alloc_table.
   forall intP_intM_t_0_3:(intP,
   int) memory.
   ("JC_39":
-  (("JC_36": (n_0 >= 1)) and
+  (("JC_36": (n_2 >= 1)) and
    (("JC_37": (offset_min(intP_t_0_3_alloc_table, t_0_0) <= 0)) and
-    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_0 - 1)))))) ->
+    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_2 - 1)))))) ->
+  forall i_0:int.
+  (i_0 = 0) ->
   forall i_0_0:int.
-  (i_0_0 = 0) ->
-  forall i_0_0_0:int.
   forall intP_intM_t_0_3_0:(intP,
   int) memory.
   (("JC_64":
-   (("JC_61": (0 <= i_0_0_0)) and
-    (("JC_62": (i_0_0_0 <= n_0)) and
-     ("JC_63": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_0,
-     intP_intM_t_0_3) + i_0_0_0)))))) and
+   (("JC_61": (0 <= i_0_0)) and
+    (("JC_62": (i_0_0 <= n_2)) and
+     ("JC_63": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_2,
+     intP_intM_t_0_3) + i_0_0)))))) and
    ("JC_66": not_assigns(intP_t_0_3_alloc_table, intP_intM_t_0_3,
    intP_intM_t_0_3_0, pset_all(pset_singleton(t_0_0))))) ->
-  (i_0_0_0 < n_0) ->
-  ("JC_68": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0_0,
+  (i_0_0 < n_2) ->
+  ("JC_68": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_0) + select(intP_intM_t_0_3_0, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_0)))) ->
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_0)))) ->
   forall result:int.
-  (result = select(intP_intM_t_0_3_0, shift(t_0_0, i_0_0_0))) ->
+  (result = select(intP_intM_t_0_3_0, shift(t_0_0, i_0_0))) ->
   forall intP_intM_t_0_3_1:(intP,
   int) memory.
-  (intP_intM_t_0_3_1 = store(intP_intM_t_0_3_0, shift(t_0_0, i_0_0_0),
+  (intP_intM_t_0_3_1 = store(intP_intM_t_0_3_0, shift(t_0_0, i_0_0),
   (result + 1))) ->
-  ("JC_69": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_1) = ((sum(t_0_0, 0, i_0_0_0,
+  ("JC_69": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_1) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_1) + select(intP_intM_t_0_3_1, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_1))))
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_1))))
 
 goal test2_ensures_default_po_7:
   forall t_0_0:intP pointer.
-  forall n_0:int.
+  forall n_2:int.
   forall intP_t_0_3_alloc_table:intP alloc_table.
   forall intP_intM_t_0_3:(intP,
   int) memory.
   ("JC_39":
-  (("JC_36": (n_0 >= 1)) and
+  (("JC_36": (n_2 >= 1)) and
    (("JC_37": (offset_min(intP_t_0_3_alloc_table, t_0_0) <= 0)) and
-    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_0 - 1)))))) ->
+    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_2 - 1)))))) ->
+  forall i_0:int.
+  (i_0 = 0) ->
   forall i_0_0:int.
-  (i_0_0 = 0) ->
-  forall i_0_0_0:int.
   forall intP_intM_t_0_3_0:(intP,
   int) memory.
   (("JC_64":
-   (("JC_61": (0 <= i_0_0_0)) and
-    (("JC_62": (i_0_0_0 <= n_0)) and
-     ("JC_63": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_0,
-     intP_intM_t_0_3) + i_0_0_0)))))) and
+   (("JC_61": (0 <= i_0_0)) and
+    (("JC_62": (i_0_0 <= n_2)) and
+     ("JC_63": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_2,
+     intP_intM_t_0_3) + i_0_0)))))) and
    ("JC_66": not_assigns(intP_t_0_3_alloc_table, intP_intM_t_0_3,
    intP_intM_t_0_3_0, pset_all(pset_singleton(t_0_0))))) ->
-  (i_0_0_0 < n_0) ->
-  ("JC_68": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0_0,
+  (i_0_0 < n_2) ->
+  ("JC_68": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_0) + select(intP_intM_t_0_3_0, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_0)))) ->
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_0)))) ->
   forall result:int.
-  (result = select(intP_intM_t_0_3_0, shift(t_0_0, i_0_0_0))) ->
+  (result = select(intP_intM_t_0_3_0, shift(t_0_0, i_0_0))) ->
   forall intP_intM_t_0_3_1:(intP,
   int) memory.
-  (intP_intM_t_0_3_1 = store(intP_intM_t_0_3_0, shift(t_0_0, i_0_0_0),
+  (intP_intM_t_0_3_1 = store(intP_intM_t_0_3_0, shift(t_0_0, i_0_0),
   (result + 1))) ->
-  ("JC_69": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_1) = ((sum(t_0_0, 0, i_0_0_0,
+  ("JC_69": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_1) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_1) + select(intP_intM_t_0_3_1, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_1)))) ->
-  forall i_0_0_1:int.
-  (i_0_0_1 = (i_0_0_0 + 1)) ->
-  ("JC_64": ("JC_61": (0 <= i_0_0_1)))
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_1)))) ->
+  forall i_0_1:int.
+  (i_0_1 = (i_0_0 + 1)) ->
+  ("JC_64": ("JC_61": (0 <= i_0_1)))
 
 goal test2_ensures_default_po_8:
   forall t_0_0:intP pointer.
-  forall n_0:int.
+  forall n_2:int.
   forall intP_t_0_3_alloc_table:intP alloc_table.
   forall intP_intM_t_0_3:(intP,
   int) memory.
   ("JC_39":
-  (("JC_36": (n_0 >= 1)) and
+  (("JC_36": (n_2 >= 1)) and
    (("JC_37": (offset_min(intP_t_0_3_alloc_table, t_0_0) <= 0)) and
-    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_0 - 1)))))) ->
+    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_2 - 1)))))) ->
+  forall i_0:int.
+  (i_0 = 0) ->
   forall i_0_0:int.
-  (i_0_0 = 0) ->
-  forall i_0_0_0:int.
   forall intP_intM_t_0_3_0:(intP,
   int) memory.
   (("JC_64":
-   (("JC_61": (0 <= i_0_0_0)) and
-    (("JC_62": (i_0_0_0 <= n_0)) and
-     ("JC_63": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_0,
-     intP_intM_t_0_3) + i_0_0_0)))))) and
+   (("JC_61": (0 <= i_0_0)) and
+    (("JC_62": (i_0_0 <= n_2)) and
+     ("JC_63": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_2,
+     intP_intM_t_0_3) + i_0_0)))))) and
    ("JC_66": not_assigns(intP_t_0_3_alloc_table, intP_intM_t_0_3,
    intP_intM_t_0_3_0, pset_all(pset_singleton(t_0_0))))) ->
-  (i_0_0_0 < n_0) ->
-  ("JC_68": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0_0,
+  (i_0_0 < n_2) ->
+  ("JC_68": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_0) + select(intP_intM_t_0_3_0, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_0)))) ->
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_0)))) ->
   forall result:int.
-  (result = select(intP_intM_t_0_3_0, shift(t_0_0, i_0_0_0))) ->
+  (result = select(intP_intM_t_0_3_0, shift(t_0_0, i_0_0))) ->
   forall intP_intM_t_0_3_1:(intP,
   int) memory.
-  (intP_intM_t_0_3_1 = store(intP_intM_t_0_3_0, shift(t_0_0, i_0_0_0),
+  (intP_intM_t_0_3_1 = store(intP_intM_t_0_3_0, shift(t_0_0, i_0_0),
   (result + 1))) ->
-  ("JC_69": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_1) = ((sum(t_0_0, 0, i_0_0_0,
+  ("JC_69": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_1) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_1) + select(intP_intM_t_0_3_1, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_1)))) ->
-  forall i_0_0_1:int.
-  (i_0_0_1 = (i_0_0_0 + 1)) ->
-  ("JC_64": ("JC_62": (i_0_0_1 <= n_0)))
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_1)))) ->
+  forall i_0_1:int.
+  (i_0_1 = (i_0_0 + 1)) ->
+  ("JC_64": ("JC_62": (i_0_1 <= n_2)))
 
 goal test2_ensures_default_po_9:
   forall t_0_0:intP pointer.
-  forall n_0:int.
+  forall n_2:int.
   forall intP_t_0_3_alloc_table:intP alloc_table.
   forall intP_intM_t_0_3:(intP,
   int) memory.
   ("JC_39":
-  (("JC_36": (n_0 >= 1)) and
+  (("JC_36": (n_2 >= 1)) and
    (("JC_37": (offset_min(intP_t_0_3_alloc_table, t_0_0) <= 0)) and
-    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_0 - 1)))))) ->
+    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_2 - 1)))))) ->
+  forall i_0:int.
+  (i_0 = 0) ->
   forall i_0_0:int.
-  (i_0_0 = 0) ->
-  forall i_0_0_0:int.
   forall intP_intM_t_0_3_0:(intP,
   int) memory.
   (("JC_64":
-   (("JC_61": (0 <= i_0_0_0)) and
-    (("JC_62": (i_0_0_0 <= n_0)) and
-     ("JC_63": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_0,
-     intP_intM_t_0_3) + i_0_0_0)))))) and
+   (("JC_61": (0 <= i_0_0)) and
+    (("JC_62": (i_0_0 <= n_2)) and
+     ("JC_63": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_2,
+     intP_intM_t_0_3) + i_0_0)))))) and
    ("JC_66": not_assigns(intP_t_0_3_alloc_table, intP_intM_t_0_3,
    intP_intM_t_0_3_0, pset_all(pset_singleton(t_0_0))))) ->
-  (i_0_0_0 < n_0) ->
-  ("JC_68": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0_0,
+  (i_0_0 < n_2) ->
+  ("JC_68": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_0) + select(intP_intM_t_0_3_0, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_0)))) ->
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_0)))) ->
   forall result:int.
-  (result = select(intP_intM_t_0_3_0, shift(t_0_0, i_0_0_0))) ->
+  (result = select(intP_intM_t_0_3_0, shift(t_0_0, i_0_0))) ->
   forall intP_intM_t_0_3_1:(intP,
   int) memory.
-  (intP_intM_t_0_3_1 = store(intP_intM_t_0_3_0, shift(t_0_0, i_0_0_0),
+  (intP_intM_t_0_3_1 = store(intP_intM_t_0_3_0, shift(t_0_0, i_0_0),
   (result + 1))) ->
-  ("JC_69": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_1) = ((sum(t_0_0, 0, i_0_0_0,
+  ("JC_69": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_1) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_1) + select(intP_intM_t_0_3_1, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_1)))) ->
-  forall i_0_0_1:int.
-  (i_0_0_1 = (i_0_0_0 + 1)) ->
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_1)))) ->
+  forall i_0_1:int.
+  (i_0_1 = (i_0_0 + 1)) ->
   ("JC_64":
-  ("JC_63": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_1) = (sum(t_0_0, 0, n_0,
-  intP_intM_t_0_3) + i_0_0_1))))
+  ("JC_63": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_1) = (sum(t_0_0, 0, n_2,
+  intP_intM_t_0_3) + i_0_1))))
 
 goal test2_ensures_default_po_10:
   forall t_0_0:intP pointer.
-  forall n_0:int.
+  forall n_2:int.
   forall intP_t_0_3_alloc_table:intP alloc_table.
   forall intP_intM_t_0_3:(intP,
   int) memory.
   ("JC_39":
-  (("JC_36": (n_0 >= 1)) and
+  (("JC_36": (n_2 >= 1)) and
    (("JC_37": (offset_min(intP_t_0_3_alloc_table, t_0_0) <= 0)) and
-    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_0 - 1)))))) ->
+    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_2 - 1)))))) ->
+  forall i_0:int.
+  (i_0 = 0) ->
   forall i_0_0:int.
-  (i_0_0 = 0) ->
-  forall i_0_0_0:int.
   forall intP_intM_t_0_3_0:(intP,
   int) memory.
   (("JC_64":
-   (("JC_61": (0 <= i_0_0_0)) and
-    (("JC_62": (i_0_0_0 <= n_0)) and
-     ("JC_63": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_0,
-     intP_intM_t_0_3) + i_0_0_0)))))) and
+   (("JC_61": (0 <= i_0_0)) and
+    (("JC_62": (i_0_0 <= n_2)) and
+     ("JC_63": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_2,
+     intP_intM_t_0_3) + i_0_0)))))) and
    ("JC_66": not_assigns(intP_t_0_3_alloc_table, intP_intM_t_0_3,
    intP_intM_t_0_3_0, pset_all(pset_singleton(t_0_0))))) ->
-  (i_0_0_0 < n_0) ->
-  ("JC_68": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0_0,
+  (i_0_0 < n_2) ->
+  ("JC_68": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_0) + select(intP_intM_t_0_3_0, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_0)))) ->
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_0)))) ->
   forall result:int.
-  (result = select(intP_intM_t_0_3_0, shift(t_0_0, i_0_0_0))) ->
+  (result = select(intP_intM_t_0_3_0, shift(t_0_0, i_0_0))) ->
   forall intP_intM_t_0_3_1:(intP,
   int) memory.
-  (intP_intM_t_0_3_1 = store(intP_intM_t_0_3_0, shift(t_0_0, i_0_0_0),
+  (intP_intM_t_0_3_1 = store(intP_intM_t_0_3_0, shift(t_0_0, i_0_0),
   (result + 1))) ->
-  ("JC_69": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_1) = ((sum(t_0_0, 0, i_0_0_0,
+  ("JC_69": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_1) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_1) + select(intP_intM_t_0_3_1, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_1)))) ->
-  forall i_0_0_1:int.
-  (i_0_0_1 = (i_0_0_0 + 1)) ->
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_1)))) ->
+  forall i_0_1:int.
+  (i_0_1 = (i_0_0 + 1)) ->
   ("JC_66": not_assigns(intP_t_0_3_alloc_table, intP_intM_t_0_3,
   intP_intM_t_0_3_1, pset_all(pset_singleton(t_0_0))))
 
 goal test2_ensures_default_po_11:
   forall t_0_0:intP pointer.
-  forall n_0:int.
+  forall n_2:int.
   forall intP_t_0_3_alloc_table:intP alloc_table.
   forall intP_intM_t_0_3:(intP,
   int) memory.
   ("JC_39":
-  (("JC_36": (n_0 >= 1)) and
+  (("JC_36": (n_2 >= 1)) and
    (("JC_37": (offset_min(intP_t_0_3_alloc_table, t_0_0) <= 0)) and
-    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_0 - 1)))))) ->
+    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_2 - 1)))))) ->
+  forall i_0:int.
+  (i_0 = 0) ->
   forall i_0_0:int.
-  (i_0_0 = 0) ->
-  forall i_0_0_0:int.
   forall intP_intM_t_0_3_0:(intP,
   int) memory.
   (("JC_64":
-   (("JC_61": (0 <= i_0_0_0)) and
-    (("JC_62": (i_0_0_0 <= n_0)) and
-     ("JC_63": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_0,
-     intP_intM_t_0_3) + i_0_0_0)))))) and
+   (("JC_61": (0 <= i_0_0)) and
+    (("JC_62": (i_0_0 <= n_2)) and
+     ("JC_63": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_2,
+     intP_intM_t_0_3) + i_0_0)))))) and
    ("JC_66": not_assigns(intP_t_0_3_alloc_table, intP_intM_t_0_3,
    intP_intM_t_0_3_0, pset_all(pset_singleton(t_0_0))))) ->
-  (i_0_0_0 >= n_0) ->
+  (i_0_0 >= n_2) ->
   ("JC_43":
-  ("JC_41": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_0,
-  intP_intM_t_0_3) + n_0))))
+  ("JC_41": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_2,
+  intP_intM_t_0_3) + n_2))))
 
 goal test2_safety_po_1:
   forall t_0_0:intP pointer.
-  forall n_0:int.
+  forall n_2:int.
   forall intP_t_0_3_alloc_table:intP alloc_table.
   forall intP_intM_t_0_3:(intP,
   int) memory.
   ("JC_39":
-  (("JC_36": (n_0 >= 1)) and
+  (("JC_36": (n_2 >= 1)) and
    (("JC_37": (offset_min(intP_t_0_3_alloc_table, t_0_0) <= 0)) and
-    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_0 - 1)))))) ->
+    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_2 - 1)))))) ->
+  forall i_0:int.
+  (i_0 = 0) ->
   forall i_0_0:int.
-  (i_0_0 = 0) ->
-  forall i_0_0_0:int.
   forall intP_intM_t_0_3_0:(intP,
   int) memory.
   ("JC_54": true) ->
   ("JC_52":
-  (("JC_49": (0 <= i_0_0_0)) and
-   (("JC_50": (i_0_0_0 <= n_0)) and
-    ("JC_51": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_0,
-    intP_intM_t_0_3) + i_0_0_0)))))) ->
-  (i_0_0_0 < n_0) ->
-  ("JC_56": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0_0,
+  (("JC_49": (0 <= i_0_0)) and
+   (("JC_50": (i_0_0 <= n_2)) and
+    ("JC_51": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_2,
+    intP_intM_t_0_3) + i_0_0)))))) ->
+  (i_0_0 < n_2) ->
+  ("JC_56": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_0) + select(intP_intM_t_0_3_0, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_0)))) ->
-  (offset_min(intP_t_0_3_alloc_table, t_0_0) <= i_0_0_0)
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_0)))) ->
+  (offset_min(intP_t_0_3_alloc_table, t_0_0) <= i_0_0)
 
 goal test2_safety_po_2:
   forall t_0_0:intP pointer.
-  forall n_0:int.
+  forall n_2:int.
   forall intP_t_0_3_alloc_table:intP alloc_table.
   forall intP_intM_t_0_3:(intP,
   int) memory.
   ("JC_39":
-  (("JC_36": (n_0 >= 1)) and
+  (("JC_36": (n_2 >= 1)) and
    (("JC_37": (offset_min(intP_t_0_3_alloc_table, t_0_0) <= 0)) and
-    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_0 - 1)))))) ->
+    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_2 - 1)))))) ->
+  forall i_0:int.
+  (i_0 = 0) ->
   forall i_0_0:int.
-  (i_0_0 = 0) ->
-  forall i_0_0_0:int.
   forall intP_intM_t_0_3_0:(intP,
   int) memory.
   ("JC_54": true) ->
   ("JC_52":
-  (("JC_49": (0 <= i_0_0_0)) and
-   (("JC_50": (i_0_0_0 <= n_0)) and
-    ("JC_51": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_0,
-    intP_intM_t_0_3) + i_0_0_0)))))) ->
-  (i_0_0_0 < n_0) ->
-  ("JC_56": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0_0,
+  (("JC_49": (0 <= i_0_0)) and
+   (("JC_50": (i_0_0 <= n_2)) and
+    ("JC_51": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_2,
+    intP_intM_t_0_3) + i_0_0)))))) ->
+  (i_0_0 < n_2) ->
+  ("JC_56": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_0) + select(intP_intM_t_0_3_0, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_0)))) ->
-  (i_0_0_0 <= offset_max(intP_t_0_3_alloc_table, t_0_0))
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_0)))) ->
+  (i_0_0 <= offset_max(intP_t_0_3_alloc_table, t_0_0))
 
 goal test2_safety_po_3:
   forall t_0_0:intP pointer.
-  forall n_0:int.
+  forall n_2:int.
   forall intP_t_0_3_alloc_table:intP alloc_table.
   forall intP_intM_t_0_3:(intP,
   int) memory.
   ("JC_39":
-  (("JC_36": (n_0 >= 1)) and
+  (("JC_36": (n_2 >= 1)) and
    (("JC_37": (offset_min(intP_t_0_3_alloc_table, t_0_0) <= 0)) and
-    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_0 - 1)))))) ->
+    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_2 - 1)))))) ->
+  forall i_0:int.
+  (i_0 = 0) ->
   forall i_0_0:int.
-  (i_0_0 = 0) ->
-  forall i_0_0_0:int.
   forall intP_intM_t_0_3_0:(intP,
   int) memory.
   ("JC_54": true) ->
   ("JC_52":
-  (("JC_49": (0 <= i_0_0_0)) and
-   (("JC_50": (i_0_0_0 <= n_0)) and
-    ("JC_51": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_0,
-    intP_intM_t_0_3) + i_0_0_0)))))) ->
-  (i_0_0_0 < n_0) ->
-  ("JC_56": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0_0,
+  (("JC_49": (0 <= i_0_0)) and
+   (("JC_50": (i_0_0 <= n_2)) and
+    ("JC_51": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_2,
+    intP_intM_t_0_3) + i_0_0)))))) ->
+  (i_0_0 < n_2) ->
+  ("JC_56": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_0) + select(intP_intM_t_0_3_0, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_0)))) ->
-  ((offset_min(intP_t_0_3_alloc_table, t_0_0) <= i_0_0_0) and
-   (i_0_0_0 <= offset_max(intP_t_0_3_alloc_table, t_0_0))) ->
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_0)))) ->
+  ((offset_min(intP_t_0_3_alloc_table, t_0_0) <= i_0_0) and
+   (i_0_0 <= offset_max(intP_t_0_3_alloc_table, t_0_0))) ->
   forall result:int.
-  (result = select(intP_intM_t_0_3_0, shift(t_0_0, i_0_0_0))) ->
-  ((offset_min(intP_t_0_3_alloc_table, t_0_0) <= i_0_0_0) and
-   (i_0_0_0 <= offset_max(intP_t_0_3_alloc_table, t_0_0))) ->
+  (result = select(intP_intM_t_0_3_0, shift(t_0_0, i_0_0))) ->
+  ((offset_min(intP_t_0_3_alloc_table, t_0_0) <= i_0_0) and
+   (i_0_0 <= offset_max(intP_t_0_3_alloc_table, t_0_0))) ->
   forall intP_intM_t_0_3_1:(intP,
   int) memory.
-  (intP_intM_t_0_3_1 = store(intP_intM_t_0_3_0, shift(t_0_0, i_0_0_0),
+  (intP_intM_t_0_3_1 = store(intP_intM_t_0_3_0, shift(t_0_0, i_0_0),
   (result + 1))) ->
-  ("JC_59": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_1) = ((sum(t_0_0, 0, i_0_0_0,
+  ("JC_59": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_1) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_1) + select(intP_intM_t_0_3_1, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_1)))) ->
-  forall i_0_0_1:int.
-  (i_0_0_1 = (i_0_0_0 + 1)) ->
-  (0 <= ("JC_60": (n_0 - i_0_0_0)))
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_1)))) ->
+  forall i_0_1:int.
+  (i_0_1 = (i_0_0 + 1)) ->
+  (0 <= ("JC_60": (n_2 - i_0_0)))
 
 goal test2_safety_po_4:
   forall t_0_0:intP pointer.
-  forall n_0:int.
+  forall n_2:int.
   forall intP_t_0_3_alloc_table:intP alloc_table.
   forall intP_intM_t_0_3:(intP,
   int) memory.
   ("JC_39":
-  (("JC_36": (n_0 >= 1)) and
+  (("JC_36": (n_2 >= 1)) and
    (("JC_37": (offset_min(intP_t_0_3_alloc_table, t_0_0) <= 0)) and
-    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_0 - 1)))))) ->
+    ("JC_38": (offset_max(intP_t_0_3_alloc_table, t_0_0) >= (n_2 - 1)))))) ->
+  forall i_0:int.
+  (i_0 = 0) ->
   forall i_0_0:int.
-  (i_0_0 = 0) ->
-  forall i_0_0_0:int.
   forall intP_intM_t_0_3_0:(intP,
   int) memory.
   ("JC_54": true) ->
   ("JC_52":
-  (("JC_49": (0 <= i_0_0_0)) and
-   (("JC_50": (i_0_0_0 <= n_0)) and
-    ("JC_51": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_0,
-    intP_intM_t_0_3) + i_0_0_0)))))) ->
-  (i_0_0_0 < n_0) ->
-  ("JC_56": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0_0,
+  (("JC_49": (0 <= i_0_0)) and
+   (("JC_50": (i_0_0 <= n_2)) and
+    ("JC_51": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = (sum(t_0_0, 0, n_2,
+    intP_intM_t_0_3) + i_0_0)))))) ->
+  (i_0_0 < n_2) ->
+  ("JC_56": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_0) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_0) + select(intP_intM_t_0_3_0, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_0)))) ->
-  ((offset_min(intP_t_0_3_alloc_table, t_0_0) <= i_0_0_0) and
-   (i_0_0_0 <= offset_max(intP_t_0_3_alloc_table, t_0_0))) ->
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_0)))) ->
+  ((offset_min(intP_t_0_3_alloc_table, t_0_0) <= i_0_0) and
+   (i_0_0 <= offset_max(intP_t_0_3_alloc_table, t_0_0))) ->
   forall result:int.
-  (result = select(intP_intM_t_0_3_0, shift(t_0_0, i_0_0_0))) ->
-  ((offset_min(intP_t_0_3_alloc_table, t_0_0) <= i_0_0_0) and
-   (i_0_0_0 <= offset_max(intP_t_0_3_alloc_table, t_0_0))) ->
+  (result = select(intP_intM_t_0_3_0, shift(t_0_0, i_0_0))) ->
+  ((offset_min(intP_t_0_3_alloc_table, t_0_0) <= i_0_0) and
+   (i_0_0 <= offset_max(intP_t_0_3_alloc_table, t_0_0))) ->
   forall intP_intM_t_0_3_1:(intP,
   int) memory.
-  (intP_intM_t_0_3_1 = store(intP_intM_t_0_3_0, shift(t_0_0, i_0_0_0),
+  (intP_intM_t_0_3_1 = store(intP_intM_t_0_3_0, shift(t_0_0, i_0_0),
   (result + 1))) ->
-  ("JC_59": (sum(t_0_0, 0, n_0, intP_intM_t_0_3_1) = ((sum(t_0_0, 0, i_0_0_0,
+  ("JC_59": (sum(t_0_0, 0, n_2, intP_intM_t_0_3_1) = ((sum(t_0_0, 0, i_0_0,
   intP_intM_t_0_3_1) + select(intP_intM_t_0_3_1, shift(t_0_0,
-  i_0_0_0))) + sum(t_0_0, (i_0_0_0 + 1), n_0, intP_intM_t_0_3_1)))) ->
-  forall i_0_0_1:int.
-  (i_0_0_1 = (i_0_0_0 + 1)) ->
-  (("JC_60": (n_0 - i_0_0_1)) < ("JC_60": (n_0 - i_0_0_0)))
+  i_0_0))) + sum(t_0_0, (i_0_0 + 1), n_2, intP_intM_t_0_3_1)))) ->
+  forall i_0_1:int.
+  (i_0_1 = (i_0_0 + 1)) ->
+  (("JC_60": (n_2 - i_0_1)) < ("JC_60": (n_2 - i_0_0)))
 
 ========== running alt-ergo ==========
 Running Alt-Ergo on proof obligations

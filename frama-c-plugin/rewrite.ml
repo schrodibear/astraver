@@ -76,7 +76,7 @@ class add_default_behavior =
 
 let add_default_behavior f =
   let vis = new add_default_behavior in Visitor.visitFramacFile vis f;
-  Globals.Functions.iter (fun kf -> ignore (Kernel_function.get_spec kf))
+  Globals.Functions.iter (fun kf -> ignore (Annotations.funspec kf))
 
 (*****************************************************************************)
 (* Rename entities to avoid conflicts with Jessie predefined names.          *)
@@ -559,9 +559,13 @@ object
   inherit Visitor.frama_c_inplace
   val mutable my_globals = []
   method vstmt_aux s =
-    match Annotations.get_filter Logic_utils.is_contract s with
+    match Annotations.code_annot 
+      ~filter:(fun a -> Logic_utils.is_contract 
+                 (Annotations.code_annotation_of_rooted a)) 
+      s 
+    with
       | [ annot ] ->
-          (match (Annotations.get_code_annotation annot).annot_content with
+          (match (Annotations.code_annotation_of_rooted annot).annot_content with
             | AStmtSpec
                 (_,({ spec_behavior =
                     [ { b_name = "Frama_C_implicit_init" }]} as spec))

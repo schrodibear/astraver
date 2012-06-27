@@ -1,5 +1,3 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN">
-<html>
 
 <!-- This document was automatically generated with yamlpp
      (see http://www.lri.fr/~filliatr/yamlpp.en.html),
@@ -87,8 +85,11 @@ details. The table below summarizes the compatibility between Frama-C, Why 2.xx 
 <tr> <td>Frama-C <td> Why <td> Why3 <td> remarks
 <tr> <td>Carbon-20110201 <td> 2.29 <td> 0.64 <td> very preliminary support for Why3 output, i.e. only <tt>-jessie-atp=why3ide</tt> or <tt>why3</tt>
 <tr> <td>Nitrogen-20111001 <td> 2.30 <td> 0.71 <td> Output through Why3 VC generator and IDE is now the default, use former option <tt>-jessie-atp=gui</tt> to obtain the former behavior calling Why 2.xx VC gen
+<tr> 
 </table>
 </p>
+Regarding Java source files, in version 2.30, the command <tt>gwhy File.java</tt> continues to call the former Why VCgen and gwhy interface, whereas <tt>krakatoa File.java</tt> now calls the Why3 VCgen and GUI. The former behavior of the krakatoa command is obtained using the new option <tt>-gen-only</tt>.
+
 
 <dt><strong>Other resources</strong> 
 <dd> 
@@ -297,7 +298,7 @@ href="http://www.cl.cam.ac.uk/users/jrh/hol-light/">HOL Light</a></strong>
 
 <hr>
 
-26/10/2011
+3/4/2012
 
 </body>
 </html>

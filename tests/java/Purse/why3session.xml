@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="Purse/why3session.xml">
  <prover
@@ -36,33 +36,34 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="58" loccnumb="16" loccnume="22"
     expl="normal postcondition"
-    sum="367b18fea95d0f96624a42823adaed86"
+    sum="f417538c0acb83dc7f72528f78224554"
     proved="true"
     expanded="false"
-    shape="anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix +aselectV2V0V1Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
+    shape="anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix +aselectV2V0V1Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
     <label
-     name="expl:parameter _Purse_credit_ensures_default">
-     </label>
+     name="expl:parameter _Purse_credit_ensures_default"/>
     <label
-     name="expl:Method credit, default behavior">
-     </label>
+     name="expl:Method credit, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.08"/>
@@ -73,19 +74,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="58" loccnumb="16" loccnume="22"
     expl="normal postcondition"
-    sum="e86494dcc87f9cbd88523380b09da5fb"
+    sum="e4c4f16c627130db9ffdef0b1ecdac22"
     proved="true"
     expanded="false"
-    shape="abalance_non_negativeV0V4Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
+    shape="abalance_non_negativeV0V4Iainfix =V4astoreV2V0ainfix +aselectV2V0V1FIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
     <label
-     name="expl:parameter _Purse_credit_safety">
-     </label>
+     name="expl:parameter _Purse_credit_safety"/>
     <label
-     name="expl:Method credit, Safety">
-     </label>
+     name="expl:Method credit, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -93,6 +93,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -100,9 +101,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
@@ -110,19 +112,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="77" loccnumb="15" loccnume="25"
     expl="normal postcondition"
-    sum="3190663ba598b77ce88284083f342ac3"
+    sum="bd8a90ed17cc306cf4cc55f8b059fab9"
     proved="true"
     expanded="false"
     shape="ainfix =V3aselectV1V0Iainfix =V3aselectV1V0FIabalance_non_negativeV0V1Aavalid_struct_PurseV0c0c0V2FFF">
     <label
-     name="expl:parameter _Purse_getBalance_ensures_default">
-     </label>
+     name="expl:parameter _Purse_getBalance_ensures_default"/>
     <label
-     name="expl:Method getBalance, default behavior">
-     </label>
+     name="expl:Method getBalance, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -130,6 +131,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -137,6 +139,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -147,26 +150,26 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="77" loccnumb="15" loccnume="25"
     expl="normal postcondition"
-    sum="27a068914b718050b82903ded19297ab"
+    sum="ff1a25a7cadc16bc500be03a3bf4ec97"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V1Iainfix =V3aselectV1V0FIabalance_non_negativeV0V1Aavalid_struct_PurseV0c0c0V2FFF">
     <label
-     name="expl:parameter _Purse_getBalance_safety">
-     </label>
+     name="expl:parameter _Purse_getBalance_safety"/>
     <label
-     name="expl:Method getBalance, Safety">
-     </label>
+     name="expl:Method getBalance, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -174,6 +177,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -184,19 +188,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
     expl="parameter _Purse_withdraw_ensures_default"
-    sum="066ec79a36c0c1125341ad181761a10c"
+    sum="61c522a2161b7a6715764d7cd3cbf444"
     proved="true"
     expanded="false"
-    shape="iainfix >=aselectV2V0V1anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix -aselectV2V0V1Aainfix <=V1aselectV2V0Iainfix =V4astoreV2V0ainfix -aselectV2V0V1Fa_Non_null_ObjectV7V6IainstanceofV5V7a_NoCreditException_tagAaalloc_freshV3V7c1Aaalloc_extendsV3V6Aastrict_valid_struct_NoCreditExceptionV7c0ainfix -c1c1V6FFFIabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
+    shape="iainfix &gt;=aselectV2V0V1anot_assignsV3V2V4apset_singletonV0Aainfix =aselectV4V0ainfix -aselectV2V0V1Aainfix &lt;=V1aselectV2V0Iainfix =V4astoreV2V0ainfix -aselectV2V0V1Fa_Non_null_ObjectV7V6IainstanceofV5V7a_NoCreditException_tagAaalloc_freshV3V7c1Aaalloc_extendsV3V6Aastrict_valid_struct_NoCreditExceptionV7c0ainfix -c1c1V6FFFIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
     <label
-     name="expl:parameter _Purse_withdraw_ensures_default">
-     </label>
+     name="expl:parameter _Purse_withdraw_ensures_default"/>
     <label
-     name="expl:Method withdraw, default behavior">
-     </label>
+     name="expl:Method withdraw, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
@@ -204,6 +207,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -211,6 +215,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.08"/>
@@ -221,19 +226,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
     expl="exceptional postcondition"
-    sum="f972c725755ac538e239a1405f895768"
+    sum="936a1c06a4421bd1f56646a2e53b0e7c"
     proved="true"
     expanded="false"
-    shape="anot_assignsV3V2V2apset_emptyAabalance_non_negativeV0V2Aainfix >V1aselectV2V0Ia_Non_null_ObjectV6V5IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFFIainfix >=aselectV2V0V1NIabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
+    shape="anot_assignsV3V2V2apset_emptyAabalance_non_negativeV0V2Aainfix &gt;V1aselectV2V0Ia_Non_null_ObjectV6V5IainstanceofV4V6a_NoCreditException_tagAaalloc_freshV3V6c1Aaalloc_extendsV3V5Aastrict_valid_struct_NoCreditExceptionV6c0ainfix -c1c1V5FFFIainfix &gt;=aselectV2V0V1NIabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
     <label
-     name="expl:parameter _Purse_withdraw_exsures_amount_too_large">
-     </label>
+     name="expl:parameter _Purse_withdraw_exsures_amount_too_large"/>
     <label
-     name="expl:Method withdraw, Behavior `amount_too_large'">
-     </label>
+     name="expl:Method withdraw, Behavior `amount_too_large&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -241,6 +245,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -248,6 +253,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -258,19 +264,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="69" loccnumb="16" loccnume="24"
     expl="parameter _Purse_withdraw_safety"
-    sum="1ea360e7dbe637ce9310a78e2c5ea6c4"
+    sum="c349abbed500b0405f015401109545a0"
     proved="true"
     expanded="false"
-    shape="iainfix >=aselectV2V0V1abalance_non_negativeV0V4Iainfix =V4astoreV2V0ainfix -aselectV2V0V1Fainfix >=aoffset_maxV6V7c0IainstanceofV5V7a_NoCreditException_tagAaalloc_freshV3V7c1Aaalloc_extendsV3V6Aastrict_valid_struct_NoCreditExceptionV7c0ainfix -c1c1V6FFFAainfix >=c1c0Iabalance_non_negativeV0V2Aainfix >=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
+    shape="iainfix &gt;=aselectV2V0V1abalance_non_negativeV0V4Iainfix =V4astoreV2V0ainfix -aselectV2V0V1Fainfix &gt;=aoffset_maxV6V7c0IainstanceofV5V7a_NoCreditException_tagAaalloc_freshV3V7c1Aaalloc_extendsV3V6Aastrict_valid_struct_NoCreditExceptionV7c0ainfix -c1c1V6FFFAainfix &gt;=c1c0Iabalance_non_negativeV0V2Aainfix &gt;=V1c0Aavalid_struct_PurseV0c0c0V3FFFF">
     <label
-     name="expl:parameter _Purse_withdraw_safety">
-     </label>
+     name="expl:parameter _Purse_withdraw_safety"/>
     <label
-     name="expl:Method withdraw, Safety">
-     </label>
+     name="expl:Method withdraw, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -278,6 +283,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -285,6 +291,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.07"/>
@@ -295,19 +302,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
     loclnum="58" loccnumb="11" loccnume="20"
     expl="parameter cons_Exception_String_Throwable_ensures_default"
-    sum="4ecdb43177feb11e2db2391c0d3c03fe"
+    sum="2add42e8d1544bb5a3b35b753cf90691"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Exception_String_Throwable_ensures_default">
-     </label>
+     name="expl:parameter cons_Exception_String_Throwable_ensures_default"/>
     <label
-     name="expl:Constructor of class Exception, default behavior">
-     </label>
+     name="expl:Constructor of class Exception, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -315,6 +321,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -322,6 +329,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -332,19 +340,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
     loclnum="58" loccnumb="11" loccnume="20"
     expl="parameter cons_Exception_String_Throwable_safety"
-    sum="2cabd75cd979298eac9442d49735e657"
+    sum="1e911f21ec44b455b7461835633e76e7"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Exception_String_Throwable_safety">
-     </label>
+     name="expl:parameter cons_Exception_String_Throwable_safety"/>
     <label
-     name="expl:Constructor of class Exception, Safety">
-     </label>
+     name="expl:Constructor of class Exception, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -352,13 +359,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -369,19 +378,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
     loclnum="40" loccnumb="11" loccnume="20"
     expl="Constructor of class Exception, default behavior"
-    sum="0945be57075c969b0bd181c0bf83cd00"
+    sum="bd721d34cde3a0f593152ecb32f5088e"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Exception, default behavior">
-     </label>
+     name="expl:Constructor of class Exception, default behavior"/>
     <label
-     name="expl:parameter cons_Exception_String_ensures_default">
-     </label>
+     name="expl:parameter cons_Exception_String_ensures_default"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -389,6 +397,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -396,6 +405,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -406,19 +416,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
     loclnum="40" loccnumb="11" loccnume="20"
     expl="Constructor of class Exception, Safety"
-    sum="3f3fbc445c09baf5e3b8fc52af525d8d"
+    sum="ea3accd1c75321a59c4ed58ada8aa102"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Exception, Safety">
-     </label>
+     name="expl:Constructor of class Exception, Safety"/>
     <label
-     name="expl:parameter cons_Exception_String_safety">
-     </label>
+     name="expl:parameter cons_Exception_String_safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -426,6 +435,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -433,6 +443,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -443,19 +454,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
     loclnum="76" loccnumb="11" loccnume="20"
     expl="Constructor of class Exception, default behavior"
-    sum="1dc14b00f60a5dcf3fb79369a788e2c1"
+    sum="d27e4ff73ee51bdd86dd7160c8eef1c4"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Exception, default behavior">
-     </label>
+     name="expl:Constructor of class Exception, default behavior"/>
     <label
-     name="expl:parameter cons_Exception_Throwable_ensures_default">
-     </label>
+     name="expl:parameter cons_Exception_Throwable_ensures_default"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -463,13 +473,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -480,19 +492,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
     loclnum="76" loccnumb="11" loccnume="20"
     expl="Constructor of class Exception, Safety"
-    sum="ed112d0e9a4cd3381a93d83ea9628fa4"
+    sum="deef7005633cadfc4398c2bcada57aba"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Exception, Safety">
-     </label>
+     name="expl:Constructor of class Exception, Safety"/>
     <label
-     name="expl:parameter cons_Exception_Throwable_safety">
-     </label>
+     name="expl:parameter cons_Exception_Throwable_safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -500,6 +511,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -507,6 +519,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -517,19 +530,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
     loclnum="28" loccnumb="11" loccnume="20"
     expl="Constructor of class Exception, default behavior"
-    sum="f10165527a6e10018f57aa88fdda79f2"
+    sum="326eac62954d9a2bec5a8dcb95d984df"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Exception, default behavior">
-     </label>
+     name="expl:Constructor of class Exception, default behavior"/>
     <label
-     name="expl:parameter cons_Exception_ensures_default">
-     </label>
+     name="expl:parameter cons_Exception_ensures_default"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -537,6 +549,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -544,6 +557,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -554,19 +568,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Exception.java"
     loclnum="28" loccnumb="11" loccnume="20"
     expl="Constructor of class Exception, Safety"
-    sum="632346a828ed836319b3271b775301fa"
+    sum="264f4a68abed08585b9be1587dd99a0e"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Exception, Safety">
-     </label>
+     name="expl:Constructor of class Exception, Safety"/>
     <label
-     name="expl:parameter cons_Exception_safety">
-     </label>
+     name="expl:parameter cons_Exception_safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -574,6 +587,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -581,6 +595,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -591,19 +606,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="37" loccnumb="11" loccnume="28"
     expl="parameter cons_NoCreditException_ensures_default"
-    sum="74b188ea98961d853ab85bc9eed08462"
+    sum="da701af7f71e976685ccb4816498ee73"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_NoCreditException_ensures_default">
-     </label>
+     name="expl:parameter cons_NoCreditException_ensures_default"/>
     <label
-     name="expl:Constructor of class NoCreditException, default behavior">
-     </label>
+     name="expl:Constructor of class NoCreditException, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -611,6 +625,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -618,6 +633,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -628,19 +644,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="37" loccnumb="11" loccnume="28"
     expl="parameter cons_NoCreditException_safety"
-    sum="d0913cd8ab27edee244e374b0b546f86"
+    sum="b1985904fcb95a3d81ea7f61ca00c78c"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_NoCreditException_safety">
-     </label>
+     name="expl:parameter cons_NoCreditException_safety"/>
     <label
-     name="expl:Constructor of class NoCreditException, Safety">
-     </label>
+     name="expl:Constructor of class NoCreditException, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -648,6 +663,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -655,6 +671,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -665,19 +682,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="50" loccnumb="11" loccnume="16"
     expl="normal postcondition"
-    sum="2fd61912f37870bbfef8e06431ff8b40"
+    sum="898b7ceb45f0945808dbb14517747200"
     proved="true"
     expanded="false"
     shape="anot_assignsV2V1V4apset_singletonV0Aainfix =aselectV4V0c0Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FFF">
     <label
-     name="expl:parameter cons_Purse_ensures_default">
-     </label>
+     name="expl:parameter cons_Purse_ensures_default"/>
     <label
-     name="expl:Constructor of class Purse, default behavior">
-     </label>
+     name="expl:Constructor of class Purse, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -685,13 +701,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.09"/>
@@ -702,19 +720,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Purse.java"
     loclnum="50" loccnumb="11" loccnume="16"
     expl="normal postcondition"
-    sum="baf553dcc7497722756d95823e3227ba"
+    sum="149d1e2c87796407b0073a2f47bf3b32"
     proved="true"
     expanded="false"
     shape="abalance_non_negativeV0V4Iainfix =V4astoreV3V0c0FIainfix =V3astoreV1V0c0FIavalid_struct_PurseV0c0c0V2FFF">
     <label
-     name="expl:parameter cons_Purse_safety">
-     </label>
+     name="expl:parameter cons_Purse_safety"/>
     <label
-     name="expl:Constructor of class Purse, Safety">
-     </label>
+     name="expl:Constructor of class Purse, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -722,6 +739,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -729,9 +747,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
@@ -739,19 +758,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="216" loccnumb="11" loccnume="20"
     expl="parameter cons_Throwable_String_Throwable_ensures_default"
-    sum="182b78cb5843cd8b3eb4e86bf11f0db1"
+    sum="36681e7a4a1b0f50a431b4bb1fa665eb"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Throwable_String_Throwable_ensures_default">
-     </label>
+     name="expl:parameter cons_Throwable_String_Throwable_ensures_default"/>
     <label
-     name="expl:Constructor of class Throwable, default behavior">
-     </label>
+     name="expl:Constructor of class Throwable, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -759,13 +777,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -776,19 +796,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="216" loccnumb="11" loccnume="20"
     expl="parameter cons_Throwable_String_Throwable_safety"
-    sum="171cda9b7faaa7e4842f1c5931cec362"
+    sum="c4c5f66fc474eca6c68ddbc66d77ec4e"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Throwable_String_Throwable_safety">
-     </label>
+     name="expl:parameter cons_Throwable_String_Throwable_safety"/>
     <label
-     name="expl:Constructor of class Throwable, Safety">
-     </label>
+     name="expl:Constructor of class Throwable, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -796,6 +815,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -803,6 +823,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -813,19 +834,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="194" loccnumb="11" loccnume="20"
     expl="Constructor of class Throwable, default behavior"
-    sum="f34830792be711ae737dff67033bdd4d"
+    sum="d7e9656a796209ed11e8f07d9564825b"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Throwable, default behavior">
-     </label>
+     name="expl:Constructor of class Throwable, default behavior"/>
     <label
-     name="expl:parameter cons_Throwable_String_ensures_default">
-     </label>
+     name="expl:parameter cons_Throwable_String_ensures_default"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -833,6 +853,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -840,6 +861,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -850,19 +872,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="194" loccnumb="11" loccnume="20"
     expl="Constructor of class Throwable, Safety"
-    sum="37e675f22c7cc0e00df9375bec3d63db"
+    sum="3c4af4130d21a6160a765069f048d062"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Throwable, Safety">
-     </label>
+     name="expl:Constructor of class Throwable, Safety"/>
     <label
-     name="expl:parameter cons_Throwable_String_safety">
-     </label>
+     name="expl:parameter cons_Throwable_String_safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -870,6 +891,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -877,6 +899,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -887,19 +910,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="239" loccnumb="11" loccnume="20"
     expl="Constructor of class Throwable, default behavior"
-    sum="7f09f4256fedcfcb53abad43e5752d46"
+    sum="f28ed6edcc89c0e005f814a4bd60c8a4"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Throwable, default behavior">
-     </label>
+     name="expl:Constructor of class Throwable, default behavior"/>
     <label
-     name="expl:parameter cons_Throwable_Throwable_ensures_default">
-     </label>
+     name="expl:parameter cons_Throwable_Throwable_ensures_default"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -907,6 +929,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -914,6 +937,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -924,19 +948,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="239" loccnumb="11" loccnume="20"
     expl="Constructor of class Throwable, Safety"
-    sum="62b135248982626017cc8ed2675cfb42"
+    sum="739f11a7ec8544b59a6d68da8173df13"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Throwable, Safety">
-     </label>
+     name="expl:Constructor of class Throwable, Safety"/>
     <label
-     name="expl:parameter cons_Throwable_Throwable_safety">
-     </label>
+     name="expl:parameter cons_Throwable_Throwable_safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -944,6 +967,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -951,6 +975,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -961,19 +986,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="179" loccnumb="11" loccnume="20"
     expl="Constructor of class Throwable, default behavior"
-    sum="7ddc76f1786d79fe62635e62b6a54736"
+    sum="3768ebf8e61b293acc8889f733e1d8d6"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Throwable, default behavior">
-     </label>
+     name="expl:Constructor of class Throwable, default behavior"/>
     <label
-     name="expl:parameter cons_Throwable_ensures_default">
-     </label>
+     name="expl:parameter cons_Throwable_ensures_default"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -981,6 +1005,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -988,6 +1013,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -998,19 +1024,18 @@
     locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/Throwable.java"
     loclnum="179" loccnumb="11" loccnume="20"
     expl="Constructor of class Throwable, Safety"
-    sum="17b3755031682510204fe02dbd8722ce"
+    sum="335e1ee821ed4fe8589c6b920d9c1093"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Throwable, Safety">
-     </label>
+     name="expl:Constructor of class Throwable, Safety"/>
     <label
-     name="expl:parameter cons_Throwable_safety">
-     </label>
+     name="expl:parameter cons_Throwable_safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -1018,6 +1043,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -1025,6 +1051,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>

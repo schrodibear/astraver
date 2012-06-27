@@ -57,6 +57,8 @@ axiomatic Padding {
   
 }
 
+type uint8 = 0..255
+
 type int32 = -2147483648..2147483647
 
 type int8 = -128..127
@@ -66,6 +68,12 @@ tag intP = {
 }
 
 type intP = [intP]
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -85,9 +93,9 @@ int32 max(intP[..] a, int32 len)
 behavior default:
   ensures (C_23 : (((C_25 : (0 <= \result)) &&
                      (C_26 : (\result < \at(len,Old)))) &&
-                    (C_27 : (\forall integer i_0;
-                              (((0 <= i_0) && (i_0 < \at(len,Old))) ==>
-                                ((\at(a,Old) + i_0).intM <=
+                    (C_27 : (\forall integer i_2;
+                              (((0 <= i_2) && (i_2 < \at(len,Old))) ==>
+                                ((\at(a,Old) + i_2).intM <=
                                   (\at(a,Old) + \result).intM))))));
 {  
    (var int32 x);
@@ -101,10 +109,10 @@ behavior default:
       behavior default:
         invariant (C_6 : (((C_8 : (0 <= x)) &&
                             ((C_10 : (x <= y)) && (C_11 : (y < len)))) &&
-                           (C_12 : (\forall integer i;
-                                     ((((0 <= i) && (i < x)) ||
-                                        ((y < i) && (i < len))) ==>
-                                       ((a + i).intM <=
+                           (C_12 : (\forall integer i_1;
+                                     ((((0 <= i_1) && (i_1 < x)) ||
+                                        ((y < i_1) && (i_1 < len))) ==>
+                                       ((a + i_1).intM <=
                                          \integer_max((a + x).intM,
                                                       (a + y).intM)))))));
       variant (C_5 : (y - x));
@@ -508,15 +516,15 @@ end = -1
 
 [JC_41]
 file = "HOME/tests/c/array_max.jessie/array_max.jc"
-line = 53
+line = 61
 begin = 6
-end = 1155
+end = 1167
 
 [JC_42]
 file = "HOME/tests/c/array_max.jessie/array_max.jc"
-line = 53
+line = 61
 begin = 6
-end = 1155
+end = 1167
 
 [JC_1]
 file = "HOME/tests/c/array_max.c"
@@ -699,15 +707,15 @@ end = -1
 
 [JC_28]
 file = "HOME/tests/c/array_max.jessie/array_max.jc"
-line = 53
+line = 61
 begin = 6
-end = 1155
+end = 1167
 
 [JC_29]
 file = "HOME/tests/c/array_max.jessie/array_max.jc"
-line = 53
+line = 61
 begin = 6
-end = 1155
+end = 1167
 
 [JC_30]
 kind = PointerDeref
@@ -784,6 +792,10 @@ type intP
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag:  -> charP tag_id
@@ -811,6 +823,11 @@ logic integer_of_int8: int8 -> int
 
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
+
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
 
 logic int32_of_integer: int -> int32
 
@@ -868,6 +885,10 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
 predicate left_valid_struct_intP(p:intP pointer, a:int,
  intP_alloc_table:intP alloc_table) = (offset_min(intP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -877,6 +898,12 @@ axiom pointer_addr_of_charP_of_pointer_address :
 
 axiom pointer_addr_of_intP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
@@ -889,6 +916,10 @@ predicate right_valid_struct_charP(p:charP pointer, b:int,
 
 predicate right_valid_struct_intP(p:intP pointer, b:int,
  intP_alloc_table:intP alloc_table) = (offset_max(intP_alloc_table, p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -903,6 +934,11 @@ predicate strict_valid_root_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
+
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -919,10 +955,47 @@ predicate strict_valid_struct_intP(p:intP pointer, a:int, b:int,
  ((offset_min(intP_alloc_table, p) = a)
  and (offset_max(intP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
@@ -933,6 +1006,11 @@ predicate valid_root_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -948,6 +1026,11 @@ predicate valid_struct_intP(p:intP pointer, a:int, b:int,
  intP_alloc_table:intP alloc_table) =
  ((offset_min(intP_alloc_table, p) <= a)
  and (offset_max(intP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1028,6 +1111,38 @@ parameter alloc_struct_intP_requires :
           and (alloc_fresh(intP_alloc_table@, result, n)
               and instanceof(intP_tag_table, result, intP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -1058,6 +1173,8 @@ parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
 
+parameter any_uint8 : unit -> { } uint8 { true }
+
 parameter int32_of_integer_ :
  x:int ->
   { (le_int((-2147483648), x) and le_int(x, (2147483647)))} int32
@@ -1078,9 +1195,9 @@ parameter max :
        ((JC_15: le_int((0), integer_of_int32(result)))
        and ((JC_16: lt_int(integer_of_int32(result), integer_of_int32(len)))
            and (JC_17:
-               (forall i_0:int.
-                ((le_int((0), i_0) and lt_int(i_0, integer_of_int32(len))) ->
-                 le_int(integer_of_int32(select(intP_intM_a_1, shift(a, i_0))),
+               (forall i_2:int.
+                ((le_int((0), i_2) and lt_int(i_2, integer_of_int32(len))) ->
+                 le_int(integer_of_int32(select(intP_intM_a_1, shift(a, i_2))),
                  integer_of_int32(select(intP_intM_a_1,
                                   shift(a, integer_of_int32(result))))))))))) }
 
@@ -1100,9 +1217,9 @@ parameter max_requires :
        ((JC_15: le_int((0), integer_of_int32(result)))
        and ((JC_16: lt_int(integer_of_int32(result), integer_of_int32(len)))
            and (JC_17:
-               (forall i_0:int.
-                ((le_int((0), i_0) and lt_int(i_0, integer_of_int32(len))) ->
-                 le_int(integer_of_int32(select(intP_intM_a_1, shift(a, i_0))),
+               (forall i_2:int.
+                ((le_int((0), i_2) and lt_int(i_2, integer_of_int32(len))) ->
+                 le_int(integer_of_int32(select(intP_intM_a_1, shift(a, i_2))),
                  integer_of_int32(select(intP_intM_a_1,
                                   shift(a, integer_of_int32(result))))))))))) }
 
@@ -1111,6 +1228,14 @@ parameter safe_int32_of_integer_ :
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
+
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
 
 let max_ensures_default =
  fun (a : intP pointer) (len : int32) (intP_a_1_alloc_table : intP alloc_table) (intP_intM_a_1 : (intP, int32) memory) ->
@@ -1145,13 +1270,13 @@ let max_ensures_default =
                and ((JC_37:
                     lt_int(integer_of_int32(y), integer_of_int32(len)))
                    and (JC_38:
-                       (forall i:int.
-                        (((le_int((0), i)
-                          and lt_int(i, integer_of_int32(x_0)))
-                         or (lt_int(integer_of_int32(y), i)
-                            and lt_int(i, integer_of_int32(len)))) ->
+                       (forall i_1:int.
+                        (((le_int((0), i_1)
+                          and lt_int(i_1, integer_of_int32(x_0)))
+                         or (lt_int(integer_of_int32(y), i_1)
+                            and lt_int(i_1, integer_of_int32(len)))) ->
                          le_int(integer_of_int32(select(intP_intM_a_1,
-                                                 shift(a, i))),
+                                                 shift(a, i_1))),
                          int_max(integer_of_int32(select(intP_intM_a_1,
                                                   shift(a,
                                                   integer_of_int32(x_0)))),
@@ -1197,9 +1322,9 @@ let max_ensures_default =
     ((JC_11: le_int((0), integer_of_int32(result)))
     and ((JC_12: lt_int(integer_of_int32(result), integer_of_int32(len)))
         and (JC_13:
-            (forall i_0:int.
-             ((le_int((0), i_0) and lt_int(i_0, integer_of_int32(len))) ->
-              le_int(integer_of_int32(select(intP_intM_a_1, shift(a, i_0))),
+            (forall i_2:int.
+             ((le_int((0), i_2) and lt_int(i_2, integer_of_int32(len))) ->
+              le_int(integer_of_int32(select(intP_intM_a_1, shift(a, i_2))),
               integer_of_int32(select(intP_intM_a_1,
                                shift(a, integer_of_int32(result))))))))))) }
 
@@ -1240,13 +1365,13 @@ let max_safety =
                   and ((JC_24:
                        lt_int(integer_of_int32(y), integer_of_int32(len)))
                       and (JC_25:
-                          (forall i:int.
-                           (((le_int((0), i)
-                             and lt_int(i, integer_of_int32(x_0)))
-                            or (lt_int(integer_of_int32(y), i)
-                               and lt_int(i, integer_of_int32(len)))) ->
+                          (forall i_1:int.
+                           (((le_int((0), i_1)
+                             and lt_int(i_1, integer_of_int32(x_0)))
+                            or (lt_int(integer_of_int32(y), i_1)
+                               and lt_int(i_1, integer_of_int32(len)))) ->
                             le_int(integer_of_int32(select(intP_intM_a_1,
-                                                    shift(a, i))),
+                                                    shift(a, i_1))),
                             int_max(integer_of_int32(select(intP_intM_a_1,
                                                      shift(a,
                                                      integer_of_int32(x_0)))),
@@ -2240,6 +2365,10 @@ type intP
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic charP_tag : charP tag_id
@@ -2268,6 +2397,11 @@ logic integer_of_int8 : int8 -> int
 
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
+
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
 
 logic int32_of_integer : int -> int32
 
@@ -2325,6 +2459,10 @@ predicate left_valid_struct_intP(p: intP pointer, a: int,
   intP_alloc_table: intP alloc_table) = (offset_min(intP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -2334,6 +2472,12 @@ axiom pointer_addr_of_charP_of_pointer_address:
 
 axiom pointer_addr_of_intP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(intP_of_pointer_address(p))))
+
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
 
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
@@ -2348,6 +2492,10 @@ predicate right_valid_struct_intP(p: intP pointer, b: int,
   intP_alloc_table: intP alloc_table) = (offset_max(intP_alloc_table,
   p) >= b)
 
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
+
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
   p) >= b)
@@ -2361,6 +2509,11 @@ predicate strict_valid_root_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
+
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
 
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2377,10 +2530,46 @@ predicate strict_valid_struct_intP(p: intP pointer, a: int, b: int,
   ((offset_min(intP_alloc_table, p) = a) and (offset_max(intP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8.
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
@@ -2391,6 +2580,11 @@ predicate valid_root_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2406,6 +2600,11 @@ predicate valid_struct_intP(p: intP pointer, a: int, b: int,
   intP_alloc_table: intP alloc_table) =
   ((offset_min(intP_alloc_table, p) <= a) and (offset_max(intP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2503,12 +2702,12 @@ goal max_ensures_default_po_4:
   (integer_of_int32(result0) = (integer_of_int32(len) - 1)) ->
   forall y:int32.
   (y = result0) ->
-  forall i:int.
-  (((0 <= i) and (i < integer_of_int32(x_0))) or
-   ((integer_of_int32(y) < i) and (i < integer_of_int32(len)))) ->
+  forall i_1:int.
+  (((0 <= i_1) and (i_1 < integer_of_int32(x_0))) or
+   ((integer_of_int32(y) < i_1) and (i_1 < integer_of_int32(len)))) ->
   ("JC_39":
   ("JC_38": (integer_of_int32(select(intP_intM_a_1, shift(a,
-  i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+  i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
   integer_of_int32(x_0)))), integer_of_int32(select(intP_intM_a_1, shift(a,
   integer_of_int32(y))))))))
 
@@ -2538,11 +2737,11 @@ goal max_ensures_default_po_5:
    (("JC_36": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_37": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_38":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -2583,11 +2782,11 @@ goal max_ensures_default_po_6:
    (("JC_36": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_37": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_38":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -2628,11 +2827,11 @@ goal max_ensures_default_po_7:
    (("JC_36": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_37": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_38":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -2673,11 +2872,11 @@ goal max_ensures_default_po_8:
    (("JC_36": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_37": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_38":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -2690,12 +2889,12 @@ goal max_ensures_default_po_8:
   (integer_of_int32(result3) = (integer_of_int32(x_0_0) + 1)) ->
   forall x_0_1:int32.
   (x_0_1 = result3) ->
-  forall i:int.
-  (((0 <= i) and (i < integer_of_int32(x_0_1))) or
-   ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+  forall i_1:int.
+  (((0 <= i_1) and (i_1 < integer_of_int32(x_0_1))) or
+   ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
   ("JC_39":
   ("JC_38": (integer_of_int32(select(intP_intM_a_1, shift(a,
-  i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+  i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
   integer_of_int32(x_0_1)))), integer_of_int32(select(intP_intM_a_1, shift(a,
   integer_of_int32(y0))))))))
 
@@ -2725,11 +2924,11 @@ goal max_ensures_default_po_9:
    (("JC_36": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_37": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_38":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -2770,11 +2969,11 @@ goal max_ensures_default_po_10:
    (("JC_36": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_37": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_38":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -2815,11 +3014,11 @@ goal max_ensures_default_po_11:
    (("JC_36": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_37": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_38":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -2832,12 +3031,12 @@ goal max_ensures_default_po_11:
   (integer_of_int32(result3) = (integer_of_int32(y0) - 1)) ->
   forall y1:int32.
   (y1 = result3) ->
-  forall i:int.
-  (((0 <= i) and (i < integer_of_int32(x_0_0))) or
-   ((integer_of_int32(y1) < i) and (i < integer_of_int32(len)))) ->
+  forall i_1:int.
+  (((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+   ((integer_of_int32(y1) < i_1) and (i_1 < integer_of_int32(len)))) ->
   ("JC_39":
   ("JC_38": (integer_of_int32(select(intP_intM_a_1, shift(a,
-  i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+  i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
   integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1, shift(a,
   integer_of_int32(y1))))))))
 
@@ -2867,11 +3066,11 @@ goal max_ensures_default_po_12:
    (("JC_36": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_37": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_38":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) = integer_of_int32(y0)) ->
@@ -2905,11 +3104,11 @@ goal max_ensures_default_po_13:
    (("JC_36": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_37": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_38":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) = integer_of_int32(y0)) ->
@@ -2943,21 +3142,21 @@ goal max_ensures_default_po_14:
    (("JC_36": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_37": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_38":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) = integer_of_int32(y0)) ->
   forall return:int32.
   (return = x_0_0) ->
-  forall i_0:int.
-  ((0 <= i_0) and (i_0 < integer_of_int32(len))) ->
+  forall i_2:int.
+  ((0 <= i_2) and (i_2 < integer_of_int32(len))) ->
   ("JC_14":
   ("JC_13": (integer_of_int32(select(intP_intM_a_1, shift(a,
-  i_0))) <= integer_of_int32(select(intP_intM_a_1, shift(a,
+  i_2))) <= integer_of_int32(select(intP_intM_a_1, shift(a,
   integer_of_int32(return)))))))
 
 goal max_safety_po_1:
@@ -3019,11 +3218,11 @@ goal max_safety_po_3:
    (("JC_23": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_24": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_25":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -3058,11 +3257,11 @@ goal max_safety_po_4:
    (("JC_23": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_24": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_25":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -3097,11 +3296,11 @@ goal max_safety_po_5:
    (("JC_23": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_24": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_25":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -3140,11 +3339,11 @@ goal max_safety_po_6:
    (("JC_23": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_24": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_25":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -3183,11 +3382,11 @@ goal max_safety_po_7:
    (("JC_23": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_24": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_25":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -3231,11 +3430,11 @@ goal max_safety_po_8:
    (("JC_23": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_24": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_25":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -3279,11 +3478,11 @@ goal max_safety_po_9:
    (("JC_23": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_24": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_25":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -3333,11 +3532,11 @@ goal max_safety_po_10:
    (("JC_23": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_24": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_25":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -3388,11 +3587,11 @@ goal max_safety_po_11:
    (("JC_23": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_24": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_25":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -3436,11 +3635,11 @@ goal max_safety_po_12:
    (("JC_23": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_24": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_25":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -3484,11 +3683,11 @@ goal max_safety_po_13:
    (("JC_23": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_24": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_25":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->
@@ -3538,11 +3737,11 @@ goal max_safety_po_14:
    (("JC_23": (integer_of_int32(x_0_0) <= integer_of_int32(y0))) and
     (("JC_24": (integer_of_int32(y0) < integer_of_int32(len))) and
      ("JC_25":
-     (forall i:int.
-       ((((0 <= i) and (i < integer_of_int32(x_0_0))) or
-         ((integer_of_int32(y0) < i) and (i < integer_of_int32(len)))) ->
+     (forall i_1:int.
+       ((((0 <= i_1) and (i_1 < integer_of_int32(x_0_0))) or
+         ((integer_of_int32(y0) < i_1) and (i_1 < integer_of_int32(len)))) ->
         (integer_of_int32(select(intP_intM_a_1, shift(a,
-        i))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
+        i_1))) <= int_max(integer_of_int32(select(intP_intM_a_1, shift(a,
         integer_of_int32(x_0_0)))), integer_of_int32(select(intP_intM_a_1,
         shift(a, integer_of_int32(y0))))))))))))) ->
   (integer_of_int32(x_0_0) <> integer_of_int32(y0)) ->

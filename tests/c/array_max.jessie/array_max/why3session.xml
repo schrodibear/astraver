@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="array_max.jessie/array_max/why3session.xml">
  <prover
@@ -28,74 +28,75 @@
   <theory
    name="WP Jessie_program"
    locfile="array_max.jessie/array_max/../array_max.mlw"
-   loclnum="200" loccnumb="7" loccnume="21"
+   loclnum="271" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter max_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/c/array_max.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/array_max.c"
     loclnum="17" loccnumb="4" loccnume="7"
     expl="parameter max_ensures_default"
-    sum="cee233d95a1b2927f2d74f3e8c70e3a1"
+    sum="7b7713e41eb98aea7db397adaed82323"
     proved="true"
     expanded="true"
-    shape="iainfix =ainteger_of_int32V9ainteger_of_int32V8Niainfix <=ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V8ainfix <=ainteger_of_int32aselectV3ashiftV0V12amaxainteger_of_int32aselectV3ashiftV0ainteger_of_int32V11ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V8Iainfix <V12ainteger_of_int32V1Aainfix <ainteger_of_int32V8V12Oainfix <V12ainteger_of_int32V11Aainfix <=c0V12FAainfix <ainteger_of_int32V8ainteger_of_int32V1Aainfix <=ainteger_of_int32V11ainteger_of_int32V8Aainfix <=c0ainteger_of_int32V11Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V9c1Fainfix <=ainteger_of_int32aselectV3ashiftV0V15amaxainteger_of_int32aselectV3ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V14Iainfix <V15ainteger_of_int32V1Aainfix <ainteger_of_int32V14V15Oainfix <V15ainteger_of_int32V9Aainfix <=c0V15FAainfix <ainteger_of_int32V14ainteger_of_int32V1Aainfix <=ainteger_of_int32V9ainteger_of_int32V14Aainfix <=c0ainteger_of_int32V9Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix -ainteger_of_int32V8c1Fainfix <=ainteger_of_int32aselectV3ashiftV0V17ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V16Iainfix <V17ainteger_of_int32V1Aainfix <=c0V17FAainfix <ainteger_of_int32V16ainteger_of_int32V1Aainfix <=c0ainteger_of_int32V16Iainfix =V16V9FIainfix <=ainteger_of_int32aselectV3ashiftV0V18amaxainteger_of_int32aselectV3ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V8Iainfix <V18ainteger_of_int32V1Aainfix <ainteger_of_int32V8V18Oainfix <V18ainteger_of_int32V9Aainfix <=c0V18FAainfix <ainteger_of_int32V8ainteger_of_int32V1Aainfix <=ainteger_of_int32V9ainteger_of_int32V8Aainfix <=c0ainteger_of_int32V9FFAainfix <=ainteger_of_int32aselectV3ashiftV0V19amaxainteger_of_int32aselectV3ashiftV0ainteger_of_int32V5ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V7Iainfix <V19ainteger_of_int32V1Aainfix <ainteger_of_int32V7V19Oainfix <V19ainteger_of_int32V5Aainfix <=c0V19FAainfix <ainteger_of_int32V7ainteger_of_int32V1Aainfix <=ainteger_of_int32V5ainteger_of_int32V7Aainfix <=c0ainteger_of_int32V5Iainfix =V7V6FIainfix =ainteger_of_int32V6ainfix -ainteger_of_int32V1c1FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIainfix >=aoffset_maxV2V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV2V0c0Aainfix >ainteger_of_int32V1c0FFFF">
+    shape="iainfix =ainteger_of_int32V9ainteger_of_int32V8Niainfix &lt;=ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V8ainfix &lt;=ainteger_of_int32aselectV3ashiftV0V12amaxainteger_of_int32aselectV3ashiftV0ainteger_of_int32V11ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V8Iainfix &lt;V12ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V8V12Oainfix &lt;V12ainteger_of_int32V11Aainfix &lt;=c0V12FAainfix &lt;ainteger_of_int32V8ainteger_of_int32V1Aainfix &lt;=ainteger_of_int32V11ainteger_of_int32V8Aainfix &lt;=c0ainteger_of_int32V11Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V9c1Fainfix &lt;=ainteger_of_int32aselectV3ashiftV0V15amaxainteger_of_int32aselectV3ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V14Iainfix &lt;V15ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V14V15Oainfix &lt;V15ainteger_of_int32V9Aainfix &lt;=c0V15FAainfix &lt;ainteger_of_int32V14ainteger_of_int32V1Aainfix &lt;=ainteger_of_int32V9ainteger_of_int32V14Aainfix &lt;=c0ainteger_of_int32V9Iainfix =V14V13FIainfix =ainteger_of_int32V13ainfix -ainteger_of_int32V8c1Fainfix &lt;=ainteger_of_int32aselectV3ashiftV0V17ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V16Iainfix &lt;V17ainteger_of_int32V1Aainfix &lt;=c0V17FAainfix &lt;ainteger_of_int32V16ainteger_of_int32V1Aainfix &lt;=c0ainteger_of_int32V16Iainfix =V16V9FIainfix &lt;=ainteger_of_int32aselectV3ashiftV0V18amaxainteger_of_int32aselectV3ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V8Iainfix &lt;V18ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V8V18Oainfix &lt;V18ainteger_of_int32V9Aainfix &lt;=c0V18FAainfix &lt;ainteger_of_int32V8ainteger_of_int32V1Aainfix &lt;=ainteger_of_int32V9ainteger_of_int32V8Aainfix &lt;=c0ainteger_of_int32V9FFAainfix &lt;=ainteger_of_int32aselectV3ashiftV0V19amaxainteger_of_int32aselectV3ashiftV0ainteger_of_int32V5ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V7Iainfix &lt;V19ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V7V19Oainfix &lt;V19ainteger_of_int32V5Aainfix &lt;=c0V19FAainfix &lt;ainteger_of_int32V7ainteger_of_int32V1Aainfix &lt;=ainteger_of_int32V5ainteger_of_int32V7Aainfix &lt;=c0ainteger_of_int32V5Iainfix =V7V6FIainfix =ainteger_of_int32V6ainfix -ainteger_of_int32V1c1FIainfix =V5V4FIainfix =ainteger_of_int32V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;ainteger_of_int32V1c0FFFF">
     <label
-     name="expl:parameter max_ensures_default">
-     </label>
+     name="expl:parameter max_ensures_default"/>
     <label
-     name="expl:Function max, default behavior">
-     </label>
+     name="expl:Function max, default behavior"/>
     <proof
      prover="2"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.11"/>
+     <result status="valid" time="0.37"/>
     </proof>
     <proof
      prover="1"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.54"/>
+     <result status="valid" time="1.63"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter max_safety"
-    locfile="/home/marche/why2-nitrogen/tests/c/array_max.c"
+    locfile="/home/cmarche/why2-trunk/tests/c/array_max.c"
     loclnum="17" loccnumb="4" loccnume="7"
     expl="parameter max_safety"
-    sum="01af5c1468810b162b1929059cbbbb07"
+    sum="eec0b379b93f7c66e763f4b1f9017cbb"
     proved="true"
     expanded="true"
-    shape="iainfix <=ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V8ainfix <ainfix -ainteger_of_int32V8ainteger_of_int32V11ainfix -ainteger_of_int32V8ainteger_of_int32V9Aainfix <=c0ainfix -ainteger_of_int32V8ainteger_of_int32V9Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V9c1FAainfix <=ainfix +ainteger_of_int32V9c1c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V9c1ainfix <ainfix -ainteger_of_int32V13ainteger_of_int32V9ainfix -ainteger_of_int32V8ainteger_of_int32V9Aainfix <=c0ainfix -ainteger_of_int32V8ainteger_of_int32V9Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix -ainteger_of_int32V8c1FAainfix <=ainfix -ainteger_of_int32V8c1c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V8c1Aainfix <=ainteger_of_int32V8aoffset_maxV2V0Aainfix <=aoffset_minV2V0ainteger_of_int32V8Aainfix <=ainteger_of_int32V9aoffset_maxV2V0Aainfix <=aoffset_minV2V0ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainteger_of_int32V8NIainfix <=ainteger_of_int32aselectV3ashiftV0V14amaxainteger_of_int32aselectV3ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V8Iainfix <V14ainteger_of_int32V1Aainfix <ainteger_of_int32V8V14Oainfix <V14ainteger_of_int32V9Aainfix <=c0V14FAainfix <ainteger_of_int32V8ainteger_of_int32V1Aainfix <=ainteger_of_int32V9ainteger_of_int32V8Aainfix <=c0ainteger_of_int32V9FFIainfix =V7V6FIainfix =ainteger_of_int32V6ainfix -ainteger_of_int32V1c1FAainfix <=ainfix -ainteger_of_int32V1c1c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V5V4FIainfix =ainteger_of_int32V4c0FIainfix >=aoffset_maxV2V0ainfix -ainteger_of_int32V1c1Aainfix <=aoffset_minV2V0c0Aainfix >ainteger_of_int32V1c0FFFF">
+    shape="iainfix &lt;=ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V8ainfix &lt;ainfix -ainteger_of_int32V8ainteger_of_int32V11ainfix -ainteger_of_int32V8ainteger_of_int32V9Aainfix &lt;=c0ainfix -ainteger_of_int32V8ainteger_of_int32V9Iainfix =V11V10FIainfix =ainteger_of_int32V10ainfix +ainteger_of_int32V9c1FAainfix &lt;=ainfix +ainteger_of_int32V9c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V9c1ainfix &lt;ainfix -ainteger_of_int32V13ainteger_of_int32V9ainfix -ainteger_of_int32V8ainteger_of_int32V9Aainfix &lt;=c0ainfix -ainteger_of_int32V8ainteger_of_int32V9Iainfix =V13V12FIainfix =ainteger_of_int32V12ainfix -ainteger_of_int32V8c1FAainfix &lt;=ainfix -ainteger_of_int32V8c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V8c1Aainfix &lt;=ainteger_of_int32V8aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainteger_of_int32V8Aainfix &lt;=ainteger_of_int32V9aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainteger_of_int32V9Iainfix =ainteger_of_int32V9ainteger_of_int32V8NIainfix &lt;=ainteger_of_int32aselectV3ashiftV0V14amaxainteger_of_int32aselectV3ashiftV0ainteger_of_int32V9ainteger_of_int32aselectV3ashiftV0ainteger_of_int32V8Iainfix &lt;V14ainteger_of_int32V1Aainfix &lt;ainteger_of_int32V8V14Oainfix &lt;V14ainteger_of_int32V9Aainfix &lt;=c0V14FAainfix &lt;ainteger_of_int32V8ainteger_of_int32V1Aainfix &lt;=ainteger_of_int32V9ainteger_of_int32V8Aainfix &lt;=c0ainteger_of_int32V9FFIainfix =V7V6FIainfix =ainteger_of_int32V6ainfix -ainteger_of_int32V1c1FAainfix &lt;=ainfix -ainteger_of_int32V1c1c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V1c1Iainfix =V5V4FIainfix =ainteger_of_int32V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -ainteger_of_int32V1c1Aainfix &lt;=aoffset_minV2V0c0Aainfix &gt;ainteger_of_int32V1c0FFFF">
     <label
-     name="expl:parameter max_safety">
-     </label>
+     name="expl:parameter max_safety"/>
     <label
-     name="expl:Function max, Safety">
-     </label>
+     name="expl:Function max, Safety"/>
     <proof
      prover="2"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.06"/>
+     <result status="valid" time="0.16"/>
     </proof>
     <proof
      prover="0"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.09"/>
     </proof>
     <proof
      prover="1"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.16"/>
     </proof>
    </goal>
   </theory>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="isqrt.jessie/isqrt/why3session.xml">
  <prover
@@ -36,7 +36,7 @@
   <theory
    name="WP Jessie_program"
    locfile="isqrt.jessie/isqrt/../isqrt.mlw"
-   loclnum="107" loccnumb="7" loccnume="21"
+   loclnum="154" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
@@ -44,29 +44,29 @@
     locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
     loclnum="40" loccnumb="4" loccnume="9"
     expl="parameter isqrt_ensures_default"
-    sum="e81c5a30e54d2434ab1439e814e4c5db"
+    sum="924affa64c4031e608c5fd93f5d02902"
     proved="true"
     expanded="true"
-    shape="iainfix <=V3V0ainfix =V6asqrainfix +V5c1Aainfix >=V0asqrV5Aainfix >=V5c0Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1Fainfix <V0asqrainfix +V7c1Aainfix <=asqrV7V0Aainfix >=V7c0Iainfix =V7V4FIainfix =V3asqrainfix +V4c1Aainfix >=V0asqrV4Aainfix >=V4c0FFAainfix =V2asqrainfix +V1c1Aainfix >=V0asqrV1Aainfix >=V1c0Iainfix =V2c1FIainfix =V1c0FIainfix >=V0c0F">
+    shape="iainfix &lt;=V3V0ainfix =V6asqrainfix +V5c1Aainfix &gt;=V0asqrV5Aainfix &gt;=V5c0Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1Fainfix &lt;V0asqrainfix +V7c1Aainfix &lt;=asqrV7V0Aainfix &gt;=V7c0Iainfix =V7V4FIainfix =V3asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0FFAainfix =V2asqrainfix +V1c1Aainfix &gt;=V0asqrV1Aainfix &gt;=V1c0Iainfix =V2c1FIainfix =V1c0FIainfix &gt;=V0c0F">
     <label
-     name="expl:parameter isqrt_ensures_default">
-     </label>
+     name="expl:parameter isqrt_ensures_default"/>
     <label
-     name="expl:Function isqrt, default behavior">
-     </label>
+     name="expl:Function isqrt, default behavior"/>
     <proof
      prover="3"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.15"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.11"/>
     </proof>
    </goal>
    <goal
@@ -74,16 +74,14 @@
     locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
     loclnum="40" loccnumb="4" loccnume="9"
     expl="loop variant decreases"
-    sum="0a1aa8181f299e4670e12bbf059d09d6"
+    sum="580bd8c7a6ee8ee704c73efd6c1db23c"
     proved="true"
     expanded="true"
-    shape="ainfix <ainfix -V0V5ainfix -V0V4Aainfix <=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix <=V3V0Iainfix =V3asqrainfix +V4c1Aainfix >=V0asqrV4Aainfix >=V4c0FFIainfix =V2c1FIainfix =V1c0FIainfix >=V0c0F">
+    shape="ainfix &lt;ainfix -V0V5ainfix -V0V4Aainfix &lt;=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix &lt;=V3V0Iainfix =V3asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0FFIainfix =V2c1FIainfix =V1c0FIainfix &gt;=V0c0F">
     <label
-     name="expl:parameter isqrt_safety">
-     </label>
+     name="expl:parameter isqrt_safety"/>
     <label
-     name="expl:Function isqrt, Safety">
-     </label>
+     name="expl:Function isqrt, Safety"/>
     <transf
      name="split_goal"
      proved="true"
@@ -93,26 +91,26 @@
       locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
       loclnum="40" loccnumb="4" loccnume="9"
       expl="loop variant decreases"
-      sum="0a1aa8181f299e4670e12bbf059d09d6"
+      sum="580bd8c7a6ee8ee704c73efd6c1db23c"
       proved="true"
       expanded="true"
-      shape="ainfix <ainfix -V0V5ainfix -V0V4Aainfix <=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix <=V3V0Iainfix =V3asqrainfix +V4c1Aainfix >=V0asqrV4Aainfix >=V4c0FFIainfix =V2c1FIainfix =V1c0FIainfix >=V0c0F">
+      shape="ainfix &lt;ainfix -V0V5ainfix -V0V4Aainfix &lt;=c0ainfix -V0V4Iainfix =V6ainfix +V3ainfix +ainfix *c2V5c1FIainfix =V5ainfix +V4c1FIainfix &lt;=V3V0Iainfix =V3asqrainfix +V4c1Aainfix &gt;=V0asqrV4Aainfix &gt;=V4c0FFIainfix =V2c1FIainfix =V1c0FIainfix &gt;=V0c0F">
       <label
-       name="expl:parameter isqrt_safety">
-       </label>
+       name="expl:parameter isqrt_safety"/>
       <label
-       name="expl:Function isqrt, Safety">
-       </label>
+       name="expl:Function isqrt, Safety"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.11"/>
+       <result status="valid" time="0.12"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.07"/>
@@ -120,9 +118,10 @@
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.09"/>
+       <result status="valid" time="0.10"/>
       </proof>
      </goal>
     </transf>
@@ -132,19 +131,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
     loclnum="50" loccnumb="4" loccnume="8"
     expl="parameter main_ensures_default"
-    sum="16205326a2f465c974e332c0bedc22a0"
+    sum="8238aaf75f6e6680cb3ecaa9d8b67667"
     proved="true"
     expanded="true"
-    shape="ainfix =V2c4Iainfix =V2V1FAainfix >V1c4NAainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
+    shape="ainfix =V2c4Iainfix =V2V1FAainfix &gt;V1c4NAainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
     <label
-     name="expl:parameter main_ensures_default">
-     </label>
+     name="expl:parameter main_ensures_default"/>
     <label
-     name="expl:Function main, default behavior">
-     </label>
+     name="expl:Function main, default behavior"/>
     <proof
      prover="3"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.11"/>
@@ -152,9 +150,10 @@
     <proof
      prover="4"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.14"/>
     </proof>
     <transf
      name="split_goal"
@@ -165,19 +164,18 @@
       locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="assertion"
-      sum="7ec96fa585cd1939e9b6c35d5fffbf3b"
+      sum="4ec18ad083f9cf7a866a2e50e85a8b71"
       proved="true"
       expanded="false"
-      shape="ainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
+      shape="ainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
       <label
-       name="expl:parameter main_ensures_default">
-       </label>
+       name="expl:parameter main_ensures_default"/>
       <label
-       name="expl:Function main, default behavior">
-       </label>
+       name="expl:Function main, default behavior"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.11"/>
@@ -185,13 +183,15 @@
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.07"/>
       </proof>
       <proof
        prover="4"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.10"/>
@@ -202,19 +202,18 @@
       locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="assertion"
-      sum="b636e6119958d01e87393b1cb7d9643e"
+      sum="065353e947c17be5b3da69badb43dc6e"
       proved="true"
       expanded="false"
-      shape="ainfix >V1c4NIainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
+      shape="ainfix &gt;V1c4NIainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
       <label
-       name="expl:parameter main_ensures_default">
-       </label>
+       name="expl:parameter main_ensures_default"/>
       <label
-       name="expl:Function main, default behavior">
-       </label>
+       name="expl:Function main, default behavior"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.11"/>
@@ -222,6 +221,7 @@
       <proof
        prover="4"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.10"/>
@@ -232,19 +232,18 @@
       locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
       loclnum="50" loccnumb="4" loccnume="8"
       expl="normal postcondition"
-      sum="69a6f8fbaca2e94ceb5132c3e0f4100b"
+      sum="16ae781760c3670c4dd0e7b3d17fb5e1"
       proved="true"
       expanded="false"
-      shape="ainfix =V2c4Iainfix =V2V1FIainfix >V1c4NIainfix <V1c4NIainfix =V1V0FIainfix <c17asqrainfix +V0c1Aainfix <=asqrV0c17Aainfix >=V0c0F">
+      shape="ainfix =V2c4Iainfix =V2V1FIainfix &gt;V1c4NIainfix &lt;V1c4NIainfix =V1V0FIainfix &lt;c17asqrainfix +V0c1Aainfix &lt;=asqrV0c17Aainfix &gt;=V0c0F">
       <label
-       name="expl:parameter main_ensures_default">
-       </label>
+       name="expl:parameter main_ensures_default"/>
       <label
-       name="expl:Function main, default behavior">
-       </label>
+       name="expl:Function main, default behavior"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.11"/>
@@ -252,6 +251,7 @@
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.09"/>
@@ -259,6 +259,7 @@
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.05"/>
@@ -266,13 +267,15 @@
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.11"/>
       </proof>
       <proof
        prover="4"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.10"/>
@@ -285,19 +288,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/isqrt.c"
     loclnum="50" loccnumb="4" loccnume="8"
     expl="precondition for call"
-    sum="cd1f1a525d7ecc5057facf5a6310c8ac"
+    sum="46af47778fcb532752d10ae50ac9d348"
     proved="true"
     expanded="true"
-    shape="ainfix >=c17c0">
+    shape="ainfix &gt;=c17c0">
     <label
-     name="expl:parameter main_safety">
-     </label>
+     name="expl:parameter main_safety"/>
     <label
-     name="expl:Function main, Safety">
-     </label>
+     name="expl:Function main, Safety"/>
     <proof
      prover="3"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -305,16 +307,18 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.07"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
   </theory>

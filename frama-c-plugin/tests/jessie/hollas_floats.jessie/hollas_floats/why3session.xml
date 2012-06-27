@@ -1,0 +1,400 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<why3session
+ name="hollas_floats/why3session.xml">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.94"/>
+ <prover
+  id="1"
+  name="Alt-Ergo"
+  version="0.95-dev"/>
+ <prover
+  id="2"
+  name="CVC3"
+  version="2.2"/>
+ <prover
+  id="3"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="4"
+  name="Z3"
+  version="2.19"/>
+ <prover
+  id="5"
+  name="Z3"
+  version="3.2"/>
+ <file
+  name="../hollas_floats.mlw"
+  verified="true"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   locfile="hollas_floats/../hollas_floats.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
+   verified="true"
+   expanded="true">
+   <goal
+    name="rp"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/hollas_floats.c"
+    loclnum="3" loccnumb="4" loccnume="54"
+    expl="Lemma rp, lemma"
+    sum="8c37750149e5c07ba494da1e2423a829"
+    proved="true"
+    expanded="true"
+    shape="ainfix &gt;ainfix /c1.0V0c0.0Iainfix &gt;V0c0.0F">
+    <label
+     name="expl:Lemma rp, lemma"/>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+   </goal>
+  </theory>
+  <theory
+   name="WP Jessie_program"
+   locfile="hollas_floats/../hollas_floats.mlw"
+   loclnum="159" loccnumb="7" loccnume="21"
+   verified="true"
+   expanded="true">
+   <goal
+    name="WP_parameter main_ensures_default"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/hollas_floats.c"
+    loclnum="21" loccnumb="4" loccnume="8"
+    expl="Function main, default behavior"
+    sum="88bf5eb1811fb146f02104b7786b8379"
+    proved="true"
+    expanded="true"
+    shape="ainfix &gt;V6c0.0Iainfix =V6V5FIainfix &gt;V5c0.0FAainfix &gt;V4c0.0Iainfix =V4V3FIainfix &gt;V3c0.0FIainfix =V2c30.0FIainfix =V1c20.0FIainfix =V0c10.0F">
+    <label
+     name="expl:Function main, default behavior"/>
+    <label
+     name="expl:parameter main_ensures_default"/>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter main_safety"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/hollas_floats.c"
+    loclnum="21" loccnumb="4" loccnume="8"
+    expl="Function main, Safety"
+    sum="62202e244cd8fb9577d93124573cb9f1"
+    proved="true"
+    expanded="true"
+    shape="ainfix &gt;V4c0.0Aainfix &gt;V0c0.0Iainfix &gt;V4c0.0Iainfix =V4V3FIainfix &gt;V3c0.0FAainfix &gt;V2c0.0Aainfix &gt;V1c0.0Iainfix =V2c30.0FIainfix =V1c20.0FIainfix =V0c10.0F">
+    <label
+     name="expl:Function main, Safety"/>
+    <label
+     name="expl:parameter main_safety"/>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter r_par_ensures_default"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/hollas_floats.c"
+    loclnum="16" loccnumb="6" loccnume="11"
+    expl="normal postcondition"
+    sum="36d50cdf6f5971cbd041f62a2d993637"
+    proved="true"
+    expanded="true"
+    shape="ainfix &gt;V3c0.0Iainfix =V3V2FIainfix =V2ainfix /c1.0ainfix +ainfix /c1.0V0ainfix /c1.0V1FIainfix &gt;V1c0.0Aainfix &gt;V0c0.0FF">
+    <label
+     name="expl:Function r_par, default behavior"/>
+    <label
+     name="expl:parameter r_par_ensures_default"/>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter r_par_safety"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/hollas_floats.c"
+    loclnum="16" loccnumb="6" loccnume="11"
+    expl="Function r_par, Safety"
+    sum="9cd7e0a7d92a08a9fa0d5ca8230ffb9e"
+    proved="true"
+    expanded="true"
+    shape="ainfix =ainfix +ainfix /c1.0V0ainfix /c1.0V1c0.0NAainfix =V1c0.0NAainfix =V0c0.0NIainfix &gt;V1c0.0Aainfix &gt;V0c0.0FF">
+    <label
+     name="expl:Function r_par, Safety"/>
+    <label
+     name="expl:parameter r_par_safety"/>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter r_seq_ensures_default"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/hollas_floats.c"
+    loclnum="8" loccnumb="6" loccnume="11"
+    expl="normal postcondition"
+    sum="b9c3c1129addf4fbb440980a606722b5"
+    proved="true"
+    expanded="true"
+    shape="ainfix &gt;V3c0.0Iainfix =V3V2FIainfix =V2ainfix +V0V1FIainfix &gt;V1c0.0Aainfix &gt;V0c0.0FF">
+    <label
+     name="expl:Function r_seq, default behavior"/>
+    <label
+     name="expl:parameter r_seq_ensures_default"/>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.04"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter r_seq_safety"
+    locfile="/home/marche/why2-nitrogen/frama-c-plugin/tests/jessie/hollas_floats.c"
+    loclnum="8" loccnumb="6" loccnume="11"
+    expl="Function r_seq, Safety"
+    sum="1b23e8b1d48083366e3cbf94ae9a3825"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Function r_seq, Safety"/>
+    <label
+     name="expl:parameter r_seq_safety"/>
+    <proof
+     prover="4"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="5"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+  </theory>
+ </file>
+</why3session>

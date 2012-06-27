@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="Gcd/why3session.xml">
  <prover
@@ -13,7 +13,7 @@
  <prover
   id="2"
   name="Coq"
-  version="8.3pl3"/>
+  version="8.3pl4"/>
  <prover
   id="3"
   name="Z3"
@@ -38,11 +38,11 @@
     expanded="true"
     shape="ainfix =ainfix *V0ainfix +V1V2ainfix +ainfix *V0V1ainfix *V0V2FFF">
     <label
-     name="expl:Lemma distr_right, lemma">
-     </label>
+     name="expl:Lemma distr_right, lemma"/>
     <proof
      prover="3"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -50,6 +50,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -57,6 +58,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -72,11 +74,11 @@
     expanded="true"
     shape="ainfix =ainfix *ainfix +V0V1V2ainfix +ainfix *V0V2ainfix *V1V2FFF">
     <label
-     name="expl:Lemma distr_left, lemma">
-     </label>
+     name="expl:Lemma distr_left, lemma"/>
     <proof
      prover="3"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -84,6 +86,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -91,6 +94,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -106,11 +110,11 @@
     expanded="true"
     shape="ainfix =ainfix *V0ainfix -V1V2ainfix -ainfix *V0V1ainfix *V0V2FFF">
     <label
-     name="expl:Lemma distr_right_minus, lemma">
-     </label>
+     name="expl:Lemma distr_right_minus, lemma"/>
     <proof
      prover="3"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -118,6 +122,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -125,6 +130,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -140,11 +146,11 @@
     expanded="true"
     shape="ainfix =ainfix *ainfix -V0V1V2ainfix -ainfix *V0V2ainfix *V1V2FFF">
     <label
-     name="expl:Lemma distr_left_minus, lemma">
-     </label>
+     name="expl:Lemma distr_left_minus, lemma"/>
     <proof
      prover="3"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -152,6 +158,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -159,6 +166,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -174,11 +182,11 @@
     expanded="true"
     shape="ainfix =ainfix *V0V1ainfix *V1V0FF">
     <label
-     name="expl:Lemma mul_comm, lemma">
-     </label>
+     name="expl:Lemma mul_comm, lemma"/>
     <proof
      prover="3"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -186,13 +194,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -208,11 +218,11 @@
     expanded="true"
     shape="ainfix =ainfix *V0ainfix *V1V2ainfix *ainfix *V0V1V2FFF">
     <label
-     name="expl:Lemma mul_assoc, lemma">
-     </label>
+     name="expl:Lemma mul_assoc, lemma"/>
     <proof
      prover="3"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -220,13 +230,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -240,13 +252,13 @@
     sum="dbda2d380c091d8f81691c262ff64499"
     proved="true"
     expanded="true"
-    shape="ainfix =amodV0V1ainfix -V0ainfix *V1adivV0V1Iainfix >V1c0Aainfix >=V0c0FF">
+    shape="ainfix =amodV0V1ainfix -V0ainfix *V1adivV0V1Iainfix &gt;V1c0Aainfix &gt;=V0c0FF">
     <label
-     name="expl:Lemma div_mod_property, lemma">
-     </label>
+     name="expl:Lemma div_mod_property, lemma"/>
     <proof
      prover="3"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -254,13 +266,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -274,20 +288,21 @@
     sum="65469a19757d77f7924af637bf04ff60"
     proved="true"
     expanded="true"
-    shape="ainfix <amodV0V1V1Aainfix <=c0amodV0V1Iainfix >V1c0Aainfix >=V0c0FF">
+    shape="ainfix &lt;amodV0V1V1Aainfix &lt;=c0amodV0V1Iainfix &gt;V1c0Aainfix &gt;=V0c0FF">
     <label
-     name="expl:Lemma mod_property, lemma">
-     </label>
+     name="expl:Lemma mod_property, lemma"/>
     <proof
      prover="3"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -295,9 +310,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -310,15 +326,15 @@
     expanded="true"
     shape="aisGcdV0c0V0F">
     <label
-     name="expl:Lemma gcd_zero, lemma">
-     </label>
+     name="expl:Lemma gcd_zero, lemma"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      edited="Gcd_Jessie_model_gcd_zero_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.57"/>
+     <result status="valid" time="0.55"/>
     </proof>
    </goal>
    <goal
@@ -329,17 +345,17 @@
     sum="5f2594fb2d781c6af313402e5b4a2e31"
     proved="true"
     expanded="true"
-    shape="aisGcdV0V1V2IaisGcdV1amodV0V1V2Aainfix >V1c0Aainfix >=V0c0FFFF">
+    shape="aisGcdV0V1V2IaisGcdV1amodV0V1V2Aainfix &gt;V1c0Aainfix &gt;=V0c0FFFF">
     <label
-     name="expl:Lemma gcd_property, lemma">
-     </label>
+     name="expl:Lemma gcd_property, lemma"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      edited="Gcd_Jessie_model_gcd_property_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.72"/>
+     <result status="valid" time="0.65"/>
     </proof>
    </goal>
   </theory>
@@ -354,19 +370,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="normal postcondition"
-    sum="5728e2ff280ab9eefa1863a9b3f0a3e6"
+    sum="84d531f8994d6d68882a427e78eca13b"
     proved="true"
     expanded="true"
-    shape="ainfix =ainfix +ainfix *V9V0ainfix *V10V1V8EEIainfix =V8V7FIainfix >V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V11IaisGcdV7V6V11FAainfix >=V6c0Aainfix >=V7c0FFFFFFIainfix >=V1c0Aainfix >=V0c0FF">
+    shape="ainfix =ainfix +ainfix *V9V0ainfix *V10V1V8EEIainfix =V8V7FIainfix &gt;V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V11IaisGcdV7V6V11FAainfix &gt;=V6c0Aainfix &gt;=V7c0FFFFFFIainfix &gt;=V1c0Aainfix &gt;=V0c0FF">
     <label
-     name="expl:parameter _Gcd_gcd_ensures_bezoutProperty">
-     </label>
+     name="expl:parameter _Gcd_gcd_ensures_bezoutProperty"/>
     <label
-     name="expl:Method gcd, Behavior `bezoutProperty'">
-     </label>
+     name="expl:Method gcd, Behavior `bezoutProperty&apos;"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -377,19 +392,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="parameter _Gcd_gcd_ensures_default"
-    sum="913289fad33299cc8512ace3f5a5929e"
+    sum="2be2aca2a6d8e87330a03e1f42b03640"
     proved="true"
     expanded="true"
-    shape="ainfix =ainfix +ainfix *V12V0ainfix *V13V1V9Aainfix =ainfix +ainfix *V10V0ainfix *V11V1V8AaisGcdV0V1V14IaisGcdV8V9V14FAainfix >=V9c0Aainfix >=V8c0Iainfix =V13ainfix -V4ainfix *V2adivV7V6FIainfix =V12ainfix -V5ainfix *V3adivV7V6FIainfix =V11V2FIainfix =V10V3FIainfix =V9amodV7V6FIainfix =V8V6FIainfix >V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix >=V6c0Aainfix >=V7c0FFFFFFAainfix =ainfix +ainfix *c0V0ainfix *c1V1V1Aainfix =ainfix +ainfix *c1V0ainfix *c0V1V0Aainfix >=V1c0Aainfix >=V0c0Iainfix >=V1c0Aainfix >=V0c0FF">
+    shape="ainfix =ainfix +ainfix *V12V0ainfix *V13V1V9Aainfix =ainfix +ainfix *V10V0ainfix *V11V1V8AaisGcdV0V1V14IaisGcdV8V9V14FAainfix &gt;=V9c0Aainfix &gt;=V8c0Iainfix =V13ainfix -V4ainfix *V2adivV7V6FIainfix =V12ainfix -V5ainfix *V3adivV7V6FIainfix =V11V2FIainfix =V10V3FIainfix =V9amodV7V6FIainfix =V8V6FIainfix &gt;V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix &gt;=V6c0Aainfix &gt;=V7c0FFFFFFAainfix =ainfix +ainfix *c0V0ainfix *c1V1V1Aainfix =ainfix +ainfix *c1V0ainfix *c0V1V0Aainfix &gt;=V1c0Aainfix &gt;=V0c0Iainfix &gt;=V1c0Aainfix &gt;=V0c0FF">
     <label
-     name="expl:parameter _Gcd_gcd_ensures_default">
-     </label>
+     name="expl:parameter _Gcd_gcd_ensures_default"/>
     <label
-     name="expl:Method gcd, default behavior">
-     </label>
+     name="expl:Method gcd, default behavior"/>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.10"/>
@@ -400,19 +414,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="normal postcondition"
-    sum="2ba756720f38b503e72639ac986ecde9"
+    sum="3d7827c919e07b341e3d7919430bdf8f"
     proved="true"
     expanded="true"
-    shape="aisGcdV0V1V8Iainfix =V8V7FIainfix >V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V9IaisGcdV7V6V9FAainfix >=V6c0Aainfix >=V7c0FFFFFFIainfix >=V1c0Aainfix >=V0c0FF">
+    shape="aisGcdV0V1V8Iainfix =V8V7FIainfix &gt;V6c0NIainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V9IaisGcdV7V6V9FAainfix &gt;=V6c0Aainfix &gt;=V7c0FFFFFFIainfix &gt;=V1c0Aainfix &gt;=V0c0FF">
     <label
-     name="expl:parameter _Gcd_gcd_ensures_resultIsGcd">
-     </label>
+     name="expl:parameter _Gcd_gcd_ensures_resultIsGcd"/>
     <label
-     name="expl:Method gcd, Behavior `resultIsGcd'">
-     </label>
+     name="expl:Method gcd, Behavior `resultIsGcd&apos;"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -420,9 +433,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.10"/>
+     <result status="valid" time="0.11"/>
     </proof>
    </goal>
    <goal
@@ -430,19 +444,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Gcd.java"
     loclnum="97" loccnumb="15" loccnume="18"
     expl="parameter _Gcd_gcd_safety"
-    sum="3f8da26accb2f941fcdc42d1d758a801"
+    sum="9fc15e0473d059c5b85a730cf6047834"
     proved="true"
     expanded="true"
-    shape="LadivV7V6ainfix <V10V6Aainfix <=c0V6Iainfix =V14ainfix -V4ainfix *V2V8FIainfix =V13ainfix -V5ainfix *V3V8FIainfix =V12V2FIainfix =V11V3FIainfix =V10amodV7V6FIainfix =V9V6FAainfix =V6c0NAainfix =V6c0NIainfix >V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix >=V6c0Aainfix >=V7c0FFFFFFIainfix >=V1c0Aainfix >=V0c0FF">
+    shape="LadivV7V6ainfix &lt;V10V6Aainfix &lt;=c0V6Iainfix =V14ainfix -V4ainfix *V2V8FIainfix =V13ainfix -V5ainfix *V3V8FIainfix =V12V2FIainfix =V11V3FIainfix =V10amodV7V6FIainfix =V9V6FAainfix =V6c0NAainfix =V6c0NIainfix &gt;V6c0Iainfix =ainfix +ainfix *V3V0ainfix *V2V1V6Aainfix =ainfix +ainfix *V5V0ainfix *V4V1V7AaisGcdV0V1V15IaisGcdV7V6V15FAainfix &gt;=V6c0Aainfix &gt;=V7c0FFFFFFIainfix &gt;=V1c0Aainfix &gt;=V0c0FF">
     <label
-     name="expl:parameter _Gcd_gcd_safety">
-     </label>
+     name="expl:parameter _Gcd_gcd_safety"/>
     <label
-     name="expl:Method gcd, Safety">
-     </label>
+     name="expl:Method gcd, Safety"/>
     <proof
      prover="3"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -450,13 +463,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.23"/>
+     <result status="valid" time="0.22"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -467,19 +482,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Gcd_ensures_default"
-    sum="889398cbcd5611225aa1f57f43b0efe9"
+    sum="43dd7cc8088bba4bf11b016085513c23"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Gcd_ensures_default">
-     </label>
+     name="expl:parameter cons_Gcd_ensures_default"/>
     <label
-     name="expl:Constructor of class Gcd, default behavior">
-     </label>
+     name="expl:Constructor of class Gcd, default behavior"/>
     <proof
      prover="3"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -487,6 +501,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -494,6 +509,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -504,19 +520,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Gcd_safety"
-    sum="a94d7fa6042ef9aca472fc1fbc97bc65"
+    sum="6d734b34b8622e13c389bdb2aa2b3e58"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Gcd_safety">
-     </label>
+     name="expl:parameter cons_Gcd_safety"/>
     <label
-     name="expl:Constructor of class Gcd, Safety">
-     </label>
+     name="expl:Constructor of class Gcd, Safety"/>
     <proof
      prover="3"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -524,13 +539,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>

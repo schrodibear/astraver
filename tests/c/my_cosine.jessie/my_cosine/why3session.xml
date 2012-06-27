@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="my_cosine.jessie/my_cosine/why3session.xml">
  <prover
@@ -13,7 +13,7 @@
  <prover
   id="2"
   name="Coq"
-  version="8.3pl3"/>
+  version="8.3pl4"/>
  <prover
   id="3"
   name="Gappa"
@@ -25,7 +25,7 @@
  <file
   name="../my_cosine.mlw"
   verified="true"
-  expanded="false">
+  expanded="true">
   <theory
    name="Jessie_model"
    locfile="my_cosine.jessie/my_cosine/../my_cosine.mlw"
@@ -37,20 +37,20 @@
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="36" loccnumb="4" loccnume="111"
     expl="Lemma method_error, lemma"
-    sum="fab1f484f5c2b102cce9610753e6f5dd"
+    sum="5f4e971394d18ec7b8e508c9face54cd"
     proved="true"
     expanded="false"
-    shape="ainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *V0V0c0.5acosV0c0x1.p-24Iainfix <=aabsV0c0x1.p-5F">
+    shape="ainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *V0V0c0.5acosV0c0x1.p-24Iainfix &lt;=aabsV0c0x1.p-5F">
     <label
-     name="expl:Lemma method_error, lemma">
-     </label>
+     name="expl:Lemma method_error, lemma"/>
     <proof
      prover="2"
-     timelimit="5"
+     timelimit="14"
+     memlimit="0"
      edited="my_cosine_Jessie_model_method_error_2.v"
      obsolete="false"
      archived="false">
-     <result status="valid" time="4.20"/>
+     <result status="valid" time="4.00"/>
     </proof>
    </goal>
   </theory>
@@ -59,22 +59,20 @@
    locfile="my_cosine.jessie/my_cosine/../my_cosine.mlw"
    loclnum="147" loccnumb="7" loccnume="21"
    verified="true"
-   expanded="false">
+   expanded="true">
    <goal
     name="WP_parameter my_cos1_ensures_default"
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="43" loccnumb="6" loccnume="13"
     expl="parameter my_cos1_ensures_default"
-    sum="127d082206f5a1f8ea259bcd0e129644"
+    sum="d9b5fe1efa73d1612d89047e4c8d8a76"
     proved="true"
-    expanded="false"
-    shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FAainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
+    expanded="true"
+    shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix =V6V5FIasub_postaNearestTiesToEvenV1V4V5FIamul_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FAainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix &lt;=aabsavalueV0c0x1.p-5F">
     <label
-     name="expl:parameter my_cos1_ensures_default">
-     </label>
+     name="expl:parameter my_cos1_ensures_default"/>
     <label
-     name="expl:Function my_cos1, default behavior">
-     </label>
+     name="expl:Function my_cos1, default behavior"/>
     <transf
      name="split_goal"
      proved="true"
@@ -84,19 +82,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="43" loccnumb="6" loccnume="13"
       expl="assertion"
-      sum="1274e6d946a847f0046f8efd61e1c0d1"
+      sum="e5cbd0378df528c653bd21458f13379c"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
+      shape="ainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix &lt;=aabsavalueV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos1_ensures_default">
-       </label>
+       name="expl:parameter my_cos1_ensures_default"/>
       <label
-       name="expl:Function my_cos1, default behavior">
-       </label>
+       name="expl:Function my_cos1, default behavior"/>
       <proof
        prover="4"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.06"/>
@@ -104,9 +101,10 @@
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.07"/>
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
@@ -114,22 +112,21 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="43" loccnumb="6" loccnume="13"
       expl="normal postcondition"
-      sum="811c6efa2e5e8a380915918210598ee2"
+      sum="3e9fb295e058f5f1a161a82033973920"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
+      shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix =V6V5FIasub_postaNearestTiesToEvenV1V4V5FIamul_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix &lt;=aabsavalueV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos1_ensures_default">
-       </label>
+       name="expl:parameter my_cos1_ensures_default"/>
       <label
-       name="expl:Function my_cos1, default behavior">
-       </label>
+       name="expl:Function my_cos1, default behavior"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
     </transf>
@@ -139,16 +136,14 @@
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="43" loccnumb="6" loccnume="13"
     expl="parameter my_cos1_safety"
-    sum="d9eb85655fbe115c56f25250e7352db6"
+    sum="86df65237efdb5e47217c2fbaed8093e"
     proved="true"
-    expanded="false"
-    shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
+    expanded="true"
+    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_postaNearestTiesToEvenV2V3V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix &lt;=aabsavalueV0c0x1.p-5F">
     <label
-     name="expl:parameter my_cos1_safety">
-     </label>
+     name="expl:parameter my_cos1_safety"/>
     <label
-     name="expl:Function my_cos1, Safety">
-     </label>
+     name="expl:Function my_cos1, Safety"/>
     <transf
      name="split_goal"
      proved="true"
@@ -158,19 +153,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="43" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="01ebdd0523a0dc70af77a05fe77695ca"
+      sum="d494e5bc5c62a24e0351d4bf22a3c8b7"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix &lt;=aabsavalueV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos1_safety">
-       </label>
+       name="expl:parameter my_cos1_safety"/>
       <label
-       name="expl:Function my_cos1, Safety">
-       </label>
+       name="expl:Function my_cos1, Safety"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -181,19 +175,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="43" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="51a8653992c8dcd967be5c469ce1fbf6"
+      sum="b929a61fc72e76f7d36b31c0d257dc03"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix &lt;=aabsavalueV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos1_safety">
-       </label>
+       name="expl:parameter my_cos1_safety"/>
       <label
-       name="expl:Function my_cos1, Safety">
-       </label>
+       name="expl:Function my_cos1, Safety"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -204,19 +197,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="43" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="8379221b02c9932ac758003efd63ec81"
+      sum="0c673447069c5ca0b88e372b9f2bfbad"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix <=aabsavalueV0c0x1.p-5F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_postaNearestTiesToEvenV2V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.p-24Iainfix &lt;=aabsavalueV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos1_safety">
-       </label>
+       name="expl:parameter my_cos1_safety"/>
       <label
-       name="expl:Function my_cos1, Safety">
-       </label>
+       name="expl:Function my_cos1, Safety"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -229,16 +221,14 @@
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="51" loccnumb="6" loccnume="13"
     expl="parameter my_cos2_ensures_default"
-    sum="2f7497438dc07e7e8c8434c4d8b7c100"
+    sum="3ca69f832ae7fc5af13767aac09a1464"
     proved="true"
-    expanded="false"
-    shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FAainfix <=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FAainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+    expanded="true"
+    shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FAainfix &lt;=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV1V4V5FIamul_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FAainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
     <label
-     name="expl:parameter my_cos2_ensures_default">
-     </label>
+     name="expl:parameter my_cos2_ensures_default"/>
     <label
-     name="expl:Function my_cos2, default behavior">
-     </label>
+     name="expl:Function my_cos2, default behavior"/>
     <transf
      name="split_goal"
      proved="true"
@@ -248,19 +238,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="51" loccnumb="6" loccnume="13"
       expl="assertion"
-      sum="f3b7c0684c1ac70a3bfdbf562fd788c7"
+      sum="ecbdfe8ad8e2054f856c836962d1f080"
       proved="true"
       expanded="false"
-      shape="ainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+      shape="ainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos2_ensures_default">
-       </label>
+       name="expl:parameter my_cos2_ensures_default"/>
       <label
-       name="expl:Function my_cos2, default behavior">
-       </label>
+       name="expl:Function my_cos2, default behavior"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -271,29 +260,29 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="51" loccnumb="6" loccnume="13"
       expl="assertion"
-      sum="2e04327ea0868b61da891460dbc7fa9d"
+      sum="056fbcab049a82b5ca0f0b0146766aa4"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+      shape="ainfix &lt;=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV1V4V5FIamul_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos2_ensures_default">
-       </label>
+       name="expl:parameter my_cos2_ensures_default"/>
       <label
-       name="expl:Function my_cos2, default behavior">
-       </label>
+       name="expl:Function my_cos2, default behavior"/>
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.09"/>
+       <result status="valid" time="0.08"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.06"/>
+       <result status="valid" time="0.05"/>
       </proof>
      </goal>
      <goal
@@ -301,22 +290,21 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="51" loccnumb="6" loccnume="13"
       expl="normal postcondition"
-      sum="ad33aada59e4e98fe74b63a79fc3ef2d"
+      sum="84c6037889ee3a2f57a4d6b597f00a1d"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix <=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+      shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.p-23Iainfix =V7V6FIainfix &lt;=aabsainfix -aexactV6acosavalueV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV1V4V5FIamul_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos2_ensures_default">
-       </label>
+       name="expl:parameter my_cos2_ensures_default"/>
       <label
-       name="expl:Function my_cos2, default behavior">
-       </label>
+       name="expl:Function my_cos2, default behavior"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
     </transf>
@@ -326,16 +314,14 @@
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="51" loccnumb="6" loccnume="13"
     expl="parameter my_cos2_safety"
-    sum="408b29c6ab3ac86e78479713d23dad38"
+    sum="7692125632457615ba37fd0ef5a9675f"
     proved="true"
-    expanded="false"
-    shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+    expanded="true"
+    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_postaNearestTiesToEvenV2V3V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
     <label
-     name="expl:parameter my_cos2_safety">
-     </label>
+     name="expl:parameter my_cos2_safety"/>
     <label
-     name="expl:Function my_cos2, Safety">
-     </label>
+     name="expl:Function my_cos2, Safety"/>
     <transf
      name="split_goal"
      proved="true"
@@ -345,19 +331,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="51" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="26a90047790d4d8e9d247592e5621f1d"
+      sum="0dd8c9f14409dda888a924e9c0e39904"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos2_safety">
-       </label>
+       name="expl:parameter my_cos2_safety"/>
       <label
-       name="expl:Function my_cos2, Safety">
-       </label>
+       name="expl:Function my_cos2, Safety"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -368,19 +353,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="51" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="0906bf04efd4274546e59fca4e13780a"
+      sum="87ae359a459f44709c0926bd25f27644"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos2_safety">
-       </label>
+       name="expl:parameter my_cos2_safety"/>
       <label
-       name="expl:Function my_cos2, Safety">
-       </label>
+       name="expl:Function my_cos2, Safety"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -391,19 +375,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="51" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="7ac387417fecb645e2c6f73d9263047c"
+      sum="3fade3c62b564db5c917ff8292cbb99d"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix <=aabsavalueV0c0x1.p-5F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_postaNearestTiesToEvenV2V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix =aexactV0avalueV0Iainfix =around_errorV0c0.0Aainfix &lt;=aabsavalueV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos2_safety">
-       </label>
+       name="expl:parameter my_cos2_safety"/>
       <label
-       name="expl:Function my_cos2, Safety">
-       </label>
+       name="expl:Function my_cos2, Safety"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -416,16 +399,14 @@
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="64" loccnumb="6" loccnume="13"
     expl="parameter my_cos3_ensures_default"
-    sum="fa2c9bb1bc33b58735be349616323a7c"
+    sum="e33cb35a8ee092ea52dafda167911a6f"
     proved="true"
-    expanded="false"
-    shape="ainfix <=around_errorV7ainfix +around_errorV0c0x3.p-24Aainfix <=aabsainfix -aexactV7acosaexactV0c0x1.p-24Iainfix =V7V6FAainfix <=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
+    expanded="true"
+    shape="ainfix &lt;=around_errorV7ainfix +around_errorV0c0x3.p-24Aainfix &lt;=aabsainfix -aexactV7acosaexactV0c0x1.p-24Iainfix =V7V6FAainfix &lt;=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV1V4V5FIamul_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
     <label
-     name="expl:parameter my_cos3_ensures_default">
-     </label>
+     name="expl:parameter my_cos3_ensures_default"/>
     <label
-     name="expl:Function my_cos3, default behavior">
-     </label>
+     name="expl:Function my_cos3, default behavior"/>
     <transf
      name="split_goal"
      proved="true"
@@ -435,29 +416,29 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="64" loccnumb="6" loccnume="13"
       expl="assertion"
-      sum="f513cace49db8615183f9c306cf48726"
+      sum="55a2828913cc6ac58a400edc75b86dd3"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
+      shape="ainfix &lt;=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV1V4V5FIamul_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos3_ensures_default">
-       </label>
+       name="expl:parameter my_cos3_ensures_default"/>
       <label
-       name="expl:Function my_cos3, default behavior">
-       </label>
+       name="expl:Function my_cos3, default behavior"/>
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.08"/>
+       <result status="valid" time="0.07"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.05"/>
+       <result status="valid" time="0.06"/>
       </proof>
      </goal>
      <goal
@@ -465,19 +446,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="64" loccnumb="6" loccnume="13"
       expl="normal postcondition"
-      sum="b5c552bf6cd57f898150e833d198990a"
+      sum="f6b36926482e90d26f34ec3979c6f407"
       proved="true"
       expanded="false"
-      shape="ainfix <=around_errorV7ainfix +around_errorV0c0x3.p-24Aainfix <=aabsainfix -aexactV7acosaexactV0c0x1.p-24Iainfix =V7V6FIainfix <=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
+      shape="ainfix &lt;=around_errorV7ainfix +around_errorV0c0x3.p-24Aainfix &lt;=aabsainfix -aexactV7acosaexactV0c0x1.p-24Iainfix =V7V6FIainfix &lt;=aabsainfix -aexactV6acosaexactV0c0x1.p-24Iainfix =V6V5FIasub_postaNearestTiesToEvenV1V4V5FIamul_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos3_ensures_default">
-       </label>
+       name="expl:parameter my_cos3_ensures_default"/>
       <label
-       name="expl:Function my_cos3, default behavior">
-       </label>
+       name="expl:Function my_cos3, default behavior"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.01"/>
@@ -490,16 +470,14 @@
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="64" loccnumb="6" loccnume="13"
     expl="parameter my_cos3_safety"
-    sum="17de93a8bddd965affecf2a6d3d32103"
+    sum="da1f7a382a5842a9494fac88d1aa40c7"
     proved="true"
-    expanded="false"
-    shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
+    expanded="true"
+    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_postaNearestTiesToEvenV2V3V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
     <label
-     name="expl:parameter my_cos3_safety">
-     </label>
+     name="expl:parameter my_cos3_safety"/>
     <label
-     name="expl:Function my_cos3, Safety">
-     </label>
+     name="expl:Function my_cos3, Safety"/>
     <transf
      name="split_goal"
      proved="true"
@@ -509,19 +487,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="64" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="92a9f79f48f0683afbb6136e82e19428"
+      sum="fab97cc585e012fe7d41179b116a34a6"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos3_safety">
-       </label>
+       name="expl:parameter my_cos3_safety"/>
       <label
-       name="expl:Function my_cos3, Safety">
-       </label>
+       name="expl:Function my_cos3, Safety"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -532,19 +509,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="64" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="608e5e9938c6d6e0859b71485f52da30"
+      sum="7d4d6bbd4b203680aa6292c1c0cd68f1"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos3_safety">
-       </label>
+       name="expl:parameter my_cos3_safety"/>
       <label
-       name="expl:Function my_cos3, Safety">
-       </label>
+       name="expl:Function my_cos3, Safety"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -555,19 +531,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="64" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="b841965d98c79c1fe66cbb18eac78ee8"
+      sum="5d18284c2bede682682504eba772dd6e"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=around_errorV0c0x1.p-20Aainfix <=aabsaexactV0c0x1.p-5F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_postaNearestTiesToEvenV2V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=around_errorV0c0x1.p-20Aainfix &lt;=aabsaexactV0c0x1.p-5F">
       <label
-       name="expl:parameter my_cos3_safety">
-       </label>
+       name="expl:parameter my_cos3_safety"/>
       <label
-       name="expl:Function my_cos3, Safety">
-       </label>
+       name="expl:Function my_cos3, Safety"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -580,16 +555,14 @@
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="73" loccnumb="6" loccnume="13"
     expl="parameter my_cos4_ensures_default"
-    sum="8bc4ae1d55904c0265232bb5c2d7079b"
+    sum="b694231c2339e0f82b19a0c20adbde0c"
     proved="true"
-    expanded="false"
-    shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.3p-20Iainfix =V7V6FIainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FAainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
+    expanded="true"
+    shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.3p-20Iainfix =V7V6FIainfix =V6V5FIasub_postaNearestTiesToEvenV1V4V5FIamul_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FAainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
     <label
-     name="expl:parameter my_cos4_ensures_default">
-     </label>
+     name="expl:parameter my_cos4_ensures_default"/>
     <label
-     name="expl:Function my_cos4, default behavior">
-     </label>
+     name="expl:Function my_cos4, default behavior"/>
     <transf
      name="split_goal"
      proved="true"
@@ -599,23 +572,22 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="73" loccnumb="6" loccnume="13"
       expl="assertion"
-      sum="ed7db2e9483bd59e560324ae4eb0ee54"
+      sum="db1f83fc1ef4969f93f53734e1495786"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
+      shape="ainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
       <label
-       name="expl:parameter my_cos4_ensures_default">
-       </label>
+       name="expl:parameter my_cos4_ensures_default"/>
       <label
-       name="expl:Function my_cos4, default behavior">
-       </label>
+       name="expl:Function my_cos4, default behavior"/>
       <proof
        prover="2"
-       timelimit="5"
+       timelimit="13"
+       memlimit="0"
        edited="my_cosine_WP_Jessie_program_WP_parameter_my_cos4_ensures_default_2.v"
        obsolete="false"
        archived="false">
-       <result status="valid" time="3.69"/>
+       <result status="valid" time="3.36"/>
       </proof>
      </goal>
      <goal
@@ -623,22 +595,21 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="73" loccnumb="6" loccnume="13"
       expl="normal postcondition"
-      sum="5d5b89d832e97d2d2f7cd0dd391954e8"
+      sum="9a00e2bbe4848ca4bb85d8e9e9f81e12"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsainfix -avalueV7acosavalueV0c0x1.3p-20Iainfix =V7V6FIainfix =V6V5FIasub_single_postaNearestTiesToEvenV1V4V5FIamul_single_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
+      shape="ainfix &lt;=aabsainfix -avalueV7acosavalueV0c0x1.3p-20Iainfix =V7V6FIainfix =V6V5FIasub_postaNearestTiesToEvenV1V4V5FIamul_postaNearestTiesToEvenV2V3V4FIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
       <label
-       name="expl:parameter my_cos4_ensures_default">
-       </label>
+       name="expl:parameter my_cos4_ensures_default"/>
       <label
-       name="expl:Function my_cos4, default behavior">
-       </label>
+       name="expl:Function my_cos4, default behavior"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.01"/>
+       <result status="valid" time="0.00"/>
       </proof>
      </goal>
     </transf>
@@ -648,16 +619,14 @@
     locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
     loclnum="73" loccnumb="6" loccnume="13"
     expl="parameter my_cos4_safety"
-    sum="8f212bb5f724d276adf9572fc481381d"
+    sum="8758c61885cc8f20c993cc07a18736ef"
     proved="true"
-    expanded="false"
-    shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FAainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
+    expanded="true"
+    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_postaNearestTiesToEvenV2V3V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
     <label
-     name="expl:parameter my_cos4_safety">
-     </label>
+     name="expl:parameter my_cos4_safety"/>
     <label
-     name="expl:Function my_cos4, Safety">
-     </label>
+     name="expl:Function my_cos4, Safety"/>
     <transf
      name="split_goal"
      proved="true"
@@ -667,19 +636,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="73" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="324d485cc5e5f6c9de5cd4f2b1650be3"
+      sum="001f6368b26d44ed42bd7bc2c75eb438"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
       <label
-       name="expl:parameter my_cos4_safety">
-       </label>
+       name="expl:parameter my_cos4_safety"/>
       <label
-       name="expl:Function my_cos4, Safety">
-       </label>
+       name="expl:Function my_cos4, Safety"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -690,19 +658,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="73" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="208e4a1eb7ffe957c004ec056cc464e4"
+      sum="489a76f0213d48e907fba94b9d9b942c"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
       <label
-       name="expl:parameter my_cos4_safety">
-       </label>
+       name="expl:parameter my_cos4_safety"/>
       <label
-       name="expl:Function my_cos4, Safety">
-       </label>
+       name="expl:Function my_cos4, Safety"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>
@@ -713,19 +680,18 @@
       locfile="/home/marche/why2-nitrogen/tests/c/my_cosine.c"
       loclnum="73" loccnumb="6" loccnume="13"
       expl="floating-point overflow"
-      sum="41359424a840ffec6e90513fcdd7da9a"
+      sum="fd295e303e8632f29577e8c4597fd113"
       proved="true"
       expanded="false"
-      shape="ainfix <=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_single_postaNearestTiesToEvenV2V3V4FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_single_postaNearestTiesToEvenV0V0V2FIainfix <=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix <=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix <=aabsavalueV0c0.07F">
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV1avalueV4amax_singleIamul_postaNearestTiesToEvenV2V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV2avalueV3amax_singleIainfix =amodelV3c0.5Aainfix =aexactV3c0.5Aainfix =avalueV3c0.5FIamul_postaNearestTiesToEvenV0V0V2FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV0amax_singleIainfix =amodelV1c1.0Aainfix =aexactV1c1.0Aainfix =avalueV1c1.0FIainfix &lt;=aabsainfix -ainfix -c1.0ainfix *ainfix *avalueV0avalueV0c0.5acosavalueV0c0x1.2p-20Iainfix &lt;=aabsavalueV0c0.07F">
       <label
-       name="expl:parameter my_cos4_safety">
-       </label>
+       name="expl:parameter my_cos4_safety"/>
       <label
-       name="expl:Function my_cos4, Safety">
-       </label>
+       name="expl:Function my_cos4, Safety"/>
       <proof
        prover="3"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.00"/>

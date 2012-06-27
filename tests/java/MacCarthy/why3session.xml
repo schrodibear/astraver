@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="MacCarthy/why3session.xml">
  <prover
@@ -36,19 +36,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/MacCarthy.java"
     loclnum="45" loccnumb="22" loccnume="25"
     expl="parameter _MacCarthy_f91_ensures_default"
-    sum="82e2d1f7426c843cd56f337524be306e"
+    sum="9d477f7cd9699f86cae1b6ec2bcbfe10"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter _MacCarthy_f91_ensures_default">
-     </label>
+     name="expl:parameter _MacCarthy_f91_ensures_default"/>
     <label
-     name="expl:Method f91, default behavior">
-     </label>
+     name="expl:Method f91, default behavior"/>
     <proof
      prover="2"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -56,6 +55,7 @@
     <proof
      prover="0"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -63,6 +63,7 @@
     <proof
      prover="1"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -73,19 +74,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/MacCarthy.java"
     loclnum="45" loccnumb="22" loccnume="25"
     expl="parameter _MacCarthy_f91_ensures_greater_than_100"
-    sum="b2cd7056e3fc819333b558a4e71acef9"
+    sum="9f80e8ebe3526d29e025a76eec2c2361"
     proved="true"
     expanded="false"
-    shape="iainfix <=ainteger_of_int32V0c100ainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V0c10Iainfix =V4V3FIainfix =ainteger_of_int32V3c91Iainfix <=ainteger_of_int32V2c100Aainfix =ainteger_of_int32V3ainfix -ainteger_of_int32V2c10Iainfix >=ainteger_of_int32V2c101FIainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V6ainfix -ainteger_of_int32V0c10Iainfix =V6V5FIainfix =ainteger_of_int32V5ainfix -ainteger_of_int32V0c10FIainfix >=ainteger_of_int32V0c101F">
+    shape="iainfix &lt;=ainteger_of_int32V0c100ainfix =ainteger_of_int32V4ainfix -ainteger_of_int32V0c10Iainfix =V4V3FIainfix =ainteger_of_int32V3c91Iainfix &lt;=ainteger_of_int32V2c100Aainfix =ainteger_of_int32V3ainfix -ainteger_of_int32V2c10Iainfix &gt;=ainteger_of_int32V2c101FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V6ainfix -ainteger_of_int32V0c10Iainfix =V6V5FIainfix =ainteger_of_int32V5ainfix -ainteger_of_int32V0c10FIainfix &gt;=ainteger_of_int32V0c101F">
     <label
-     name="expl:parameter _MacCarthy_f91_ensures_greater_than_100">
-     </label>
+     name="expl:parameter _MacCarthy_f91_ensures_greater_than_100"/>
     <label
-     name="expl:Method f91, Behavior `greater_than_100'">
-     </label>
+     name="expl:Method f91, Behavior `greater_than_100&apos;"/>
     <proof
      prover="2"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -93,6 +93,7 @@
     <proof
      prover="0"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -100,6 +101,7 @@
     <proof
      prover="1"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -110,19 +112,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/MacCarthy.java"
     loclnum="45" loccnumb="22" loccnume="25"
     expl="parameter _MacCarthy_f91_ensures_less_than_101"
-    sum="c1b3daaea690eeb8d8ade665cf65660d"
+    sum="cb09b029caf1326d9aae6cbae83d1426"
     proved="true"
     expanded="false"
-    shape="iainfix <=ainteger_of_int32V0c100ainfix =ainteger_of_int32V4c91Iainfix =V4V3FIainfix =ainteger_of_int32V3c91Iainfix <=ainteger_of_int32V2c100Aainfix =ainteger_of_int32V3ainfix -ainteger_of_int32V2c10Iainfix >=ainteger_of_int32V2c101FIainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V6c91Iainfix =V6V5FIainfix =ainteger_of_int32V5ainfix -ainteger_of_int32V0c10FIainfix <=ainteger_of_int32V0c100F">
+    shape="iainfix &lt;=ainteger_of_int32V0c100ainfix =ainteger_of_int32V4c91Iainfix =V4V3FIainfix =ainteger_of_int32V3c91Iainfix &lt;=ainteger_of_int32V2c100Aainfix =ainteger_of_int32V3ainfix -ainteger_of_int32V2c10Iainfix &gt;=ainteger_of_int32V2c101FIainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FIainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11Fainfix =ainteger_of_int32V6c91Iainfix =V6V5FIainfix =ainteger_of_int32V5ainfix -ainteger_of_int32V0c10FIainfix &lt;=ainteger_of_int32V0c100F">
     <label
-     name="expl:parameter _MacCarthy_f91_ensures_less_than_101">
-     </label>
+     name="expl:parameter _MacCarthy_f91_ensures_less_than_101"/>
     <label
-     name="expl:Method f91, Behavior `less_than_101'">
-     </label>
+     name="expl:Method f91, Behavior `less_than_101&apos;"/>
     <proof
      prover="2"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -130,13 +131,15 @@
     <proof
      prover="0"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -147,19 +150,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/MacCarthy.java"
     loclnum="45" loccnumb="22" loccnume="25"
     expl="parameter _MacCarthy_f91_safety"
-    sum="c1dc707beffbb31f48b1c85715081a96"
+    sum="895bc73807009c0c369b8ee7a18ea07c"
     proved="true"
     expanded="false"
-    shape="iainfix <=ainteger_of_int32V0c100azwf_zeroainfix -c101ainteger_of_int32V2ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V2c91Iainfix <=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix >=ainteger_of_int32V1c101FAazwf_zeroainfix -c101ainteger_of_int32V1ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11FAainfix <=ainfix +ainteger_of_int32V0c11c2147483647Aainfix <=aprefix -c2147483648ainfix +ainteger_of_int32V0c11ainfix <=ainfix -ainteger_of_int32V0c10c2147483647Aainfix <=aprefix -c2147483648ainfix -ainteger_of_int32V0c10F">
+    shape="iainfix &lt;=ainteger_of_int32V0c100azwf_zeroainfix -c101ainteger_of_int32V2ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V2c91Iainfix &lt;=ainteger_of_int32V1c100Aainfix =ainteger_of_int32V2ainfix -ainteger_of_int32V1c10Iainfix &gt;=ainteger_of_int32V1c101FAazwf_zeroainfix -c101ainteger_of_int32V1ainfix -c101ainteger_of_int32V0Iainfix =ainteger_of_int32V1ainfix +ainteger_of_int32V0c11FAainfix &lt;=ainfix +ainteger_of_int32V0c11c2147483647Aainfix &lt;=aprefix -c2147483648ainfix +ainteger_of_int32V0c11ainfix &lt;=ainfix -ainteger_of_int32V0c10c2147483647Aainfix &lt;=aprefix -c2147483648ainfix -ainteger_of_int32V0c10F">
     <label
-     name="expl:parameter _MacCarthy_f91_safety">
-     </label>
+     name="expl:parameter _MacCarthy_f91_safety"/>
     <label
-     name="expl:Method f91, Safety">
-     </label>
+     name="expl:Method f91, Safety"/>
     <proof
      prover="2"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -167,6 +169,7 @@
     <proof
      prover="0"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -174,6 +177,7 @@
     <proof
      prover="1"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -184,19 +188,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_MacCarthy_ensures_default"
-    sum="5919d36062e7f060144175c82d2b23b5"
+    sum="cc23cc28d30c91458165ca1d65e8a295"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_MacCarthy_ensures_default">
-     </label>
+     name="expl:parameter cons_MacCarthy_ensures_default"/>
     <label
-     name="expl:Constructor of class MacCarthy, default behavior">
-     </label>
+     name="expl:Constructor of class MacCarthy, default behavior"/>
     <proof
      prover="2"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -204,6 +207,7 @@
     <proof
      prover="0"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -211,9 +215,10 @@
     <proof
      prover="1"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -221,19 +226,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_MacCarthy_safety"
-    sum="8676759178142f6ff4c85f426d0a5539"
+    sum="82d937f5120354f32e130c7a9b680862"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_MacCarthy_safety">
-     </label>
+     name="expl:parameter cons_MacCarthy_safety"/>
     <label
-     name="expl:Constructor of class MacCarthy, Safety">
-     </label>
+     name="expl:Constructor of class MacCarthy, Safety"/>
     <proof
      prover="2"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -241,16 +245,18 @@
     <proof
      prover="0"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -258,19 +264,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Object_ensures_default"
-    sum="f00617d74dc9c131a674b9f56a9fe8c7"
+    sum="9c9a868910ae10e9550d41f05c28829c"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Object_ensures_default">
-     </label>
+     name="expl:parameter cons_Object_ensures_default"/>
     <label
-     name="expl:Constructor of class Object, default behavior">
-     </label>
+     name="expl:Constructor of class Object, default behavior"/>
     <proof
      prover="2"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -278,6 +283,7 @@
     <proof
      prover="0"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -285,6 +291,7 @@
     <proof
      prover="1"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -295,19 +302,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Object_safety"
-    sum="1f1ac5cdf1dd6617847505e4eae7bd4e"
+    sum="e5173762e9bb59764db373bc536971fc"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Object_safety">
-     </label>
+     name="expl:parameter cons_Object_safety"/>
     <label
-     name="expl:Constructor of class Object, Safety">
-     </label>
+     name="expl:Constructor of class Object, Safety"/>
     <proof
      prover="2"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -315,6 +321,7 @@
     <proof
      prover="0"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -322,9 +329,10 @@
     <proof
      prover="1"
      timelimit="10"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
   </theory>

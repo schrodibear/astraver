@@ -3230,10 +3230,10 @@ let make_not_assigns talloc mem t l =
 
 let rec finalize e =
   match e.expr_node with
-    | Absurd | Void | Cte _ | Var _ | BlackBox _ | Assert _ | Triple _
-    | Deref _
-    | Raise(_, None)
-        -> e
+    | Absurd | Void | Cte _ | Var _ | BlackBox _ | Assert _ | Deref _
+    | Raise(_, None) -> e
+    | Triple(opaque,pre,e1,post,posts) ->
+      { e with expr_node = Triple(opaque,pre,finalize e1,post,posts) }
     | Loc (l, e1) -> {e with expr_node = Loc(l,finalize e1) }
 (*
     | Label (l, e) -> Label(l,finalize e)

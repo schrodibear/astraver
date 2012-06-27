@@ -87,9 +87,17 @@ axiomatic Padding {
   
 }
 
+type uint8 = 0..255
+
 type int8 = -128..127
 
 type int32 = -2147483648..2147483647
+
+tag unsigned_charP = {
+  uint8 unsigned_charM: 8;
+}
+
+type unsigned_charP = [unsigned_charP]
 
 tag charP = {
   int8 charM: 8;
@@ -601,7 +609,7 @@ end = 12
 
 [JC_1]
 file = "HOME/tests/c/tree_max.jessie/tree_max.jc"
-line = 37
+line = 45
 begin = 6
 end = 9
 
@@ -613,7 +621,7 @@ end = -1
 
 [JC_3]
 file = "HOME/tests/c/tree_max.jessie/tree_max.jc"
-line = 37
+line = 45
 begin = 6
 end = 9
 
@@ -631,7 +639,7 @@ end = 32
 
 [JC_6]
 file = "HOME/tests/c/tree_max.jessie/tree_max.jc"
-line = 39
+line = 47
 begin = 10
 end = 18
 
@@ -643,7 +651,7 @@ end = 32
 
 [JC_8]
 file = "HOME/tests/c/tree_max.jessie/tree_max.jc"
-line = 39
+line = 47
 begin = 10
 end = 18
 
@@ -937,6 +945,10 @@ type int8
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic Tree_tag:  -> Tree tag_id
@@ -981,6 +993,11 @@ logic integer_of_int8: int8 -> int
 predicate eq_int8(x:int8, y:int8) =
  eq_int(integer_of_int8(x), integer_of_int8(y))
 
+logic integer_of_uint8: uint8 -> int
+
+predicate eq_uint8(x:uint8, y:uint8) =
+ eq_int(integer_of_uint8(x), integer_of_uint8(y))
+
 logic has_size: Tree pointer, int, Tree alloc_table,
  (Tree, Tree pointer) memory, (Tree, Tree pointer) memory -> prop
 
@@ -1024,6 +1041,10 @@ predicate left_valid_struct_charP(p:charP pointer, a:int,
  charP_alloc_table:charP alloc_table) =
  (offset_min(charP_alloc_table, p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p:voidP pointer, a:int,
  voidP_alloc_table:voidP alloc_table) =
  (offset_min(voidP_alloc_table, p) <= a)
@@ -1037,6 +1058,12 @@ axiom pointer_addr_of_Tree_of_pointer_address :
 axiom pointer_addr_of_charP_of_pointer_address :
  (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
+logic unsigned_charP_of_pointer_address: unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address :
+ (forall p:unit pointer.
+  (p = pointer_address(unsigned_charP_of_pointer_address(p))))
+
 logic voidP_of_pointer_address: unit pointer -> voidP pointer
 
 axiom pointer_addr_of_voidP_of_pointer_address :
@@ -1048,6 +1075,10 @@ predicate right_valid_struct_Tree(p:Tree pointer, b:int,
 predicate right_valid_struct_charP(p:charP pointer, b:int,
  charP_alloc_table:charP alloc_table) =
  (offset_max(charP_alloc_table, p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p:unsigned_charP pointer, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p:voidP pointer, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1078,6 +1109,11 @@ predicate strict_valid_root_charP(p:charP pointer, a:int, b:int,
  ((offset_min(charP_alloc_table, p) = a)
  and (offset_max(charP_alloc_table, p) = b))
 
+predicate strict_valid_root_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
@@ -1093,10 +1129,47 @@ predicate strict_valid_struct_charP(p:charP pointer, a:int, b:int,
  ((offset_min(charP_alloc_table, p) = a)
  and (offset_max(charP_alloc_table, p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int,
+ b:int, unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) = a)
+ and (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
  ((offset_min(voidP_alloc_table, p) = a)
  and (offset_max(voidP_alloc_table, p) = b))
+
+logic uint8_of_integer: int -> uint8
+
+axiom uint8_coerce :
+ (forall x:int.
+  ((le_int((0), x) and le_int(x, (255))) ->
+   eq_int(integer_of_uint8(uint8_of_integer(x)), x)))
+
+axiom uint8_extensionality :
+ (forall x:uint8.
+  (forall y:uint8[eq_int(integer_of_uint8(x), integer_of_uint8(y))].
+   (eq_int(integer_of_uint8(x), integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range :
+ (forall x:uint8.
+  (le_int((0), integer_of_uint8(x)) and le_int(integer_of_uint8(x), (255))))
+
+logic unsigned_charP_tag:  -> unsigned_charP tag_id
+
+axiom unsigned_charP_int : (int_of_tag(unsigned_charP_tag) = (1))
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr :
+ (forall p:unsigned_charP pointer.
+  (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom :
+ parenttag(unsigned_charP_tag, bottom_tag)
+
+axiom unsigned_charP_tags :
+ (forall x:unsigned_charP pointer.
+  (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+   instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_Tree(p:Tree pointer, a:int, b:int,
  Tree_alloc_table:Tree alloc_table) =
@@ -1107,6 +1180,11 @@ predicate valid_root_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
  and (offset_max(charP_alloc_table, p) >= b))
+
+predicate valid_root_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1122,6 +1200,11 @@ predicate valid_struct_charP(p:charP pointer, a:int, b:int,
  charP_alloc_table:charP alloc_table) =
  ((offset_min(charP_alloc_table, p) <= a)
  and (offset_max(charP_alloc_table, p) >= b))
+
+predicate valid_struct_unsigned_charP(p:unsigned_charP pointer, a:int, b:int,
+ unsigned_charP_alloc_table:unsigned_charP alloc_table) =
+ ((offset_min(unsigned_charP_alloc_table, p) <= a)
+ and (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p:voidP pointer, a:int, b:int,
  voidP_alloc_table:voidP alloc_table) =
@@ -1328,6 +1411,38 @@ parameter alloc_struct_charP_requires :
           and (alloc_fresh(charP_alloc_table@, result, n)
               and instanceof(charP_tag_table, result, charP_tag)))) }
 
+parameter unsigned_charP_alloc_table : unsigned_charP alloc_table ref
+
+parameter unsigned_charP_tag_table : unsigned_charP tag_table ref
+
+parameter alloc_struct_unsigned_charP :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { } unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
+parameter alloc_struct_unsigned_charP_requires :
+ n:int ->
+  unsigned_charP_alloc_table:unsigned_charP alloc_table ref ->
+   unsigned_charP_tag_table:unsigned_charP tag_table ref ->
+    { ge_int(n, (0))} unsigned_charP pointer
+    writes unsigned_charP_alloc_table,unsigned_charP_tag_table
+    { (strict_valid_struct_unsigned_charP(result, (0), sub_int(n, (1)),
+       unsigned_charP_alloc_table)
+      and (alloc_extends(unsigned_charP_alloc_table@,
+           unsigned_charP_alloc_table)
+          and (alloc_fresh(unsigned_charP_alloc_table@, result, n)
+              and instanceof(unsigned_charP_tag_table, result,
+                  unsigned_charP_tag)))) }
+
 parameter voidP_alloc_table : voidP alloc_table ref
 
 parameter voidP_tag_table : voidP tag_table ref
@@ -1357,6 +1472,8 @@ parameter alloc_struct_voidP_requires :
 parameter any_int32 : unit -> { } int32 { true }
 
 parameter any_int8 : unit -> { } int8 { true }
+
+parameter any_uint8 : unit -> { } uint8 { true }
 
 parameter int32_of_integer_ :
  x:int ->
@@ -1389,6 +1506,9 @@ parameter safe_int32_of_integer_ :
 
 parameter safe_int8_of_integer_ :
  x:int -> { } int8 { eq_int(integer_of_int8(result), x) }
+
+parameter safe_uint8_of_integer_ :
+ x:int -> { } uint8 { eq_int(integer_of_uint8(result), x) }
 
 parameter tree_max :
  t_0:Tree pointer ->
@@ -1424,6 +1544,11 @@ parameter tree_max_requires :
             (forall x_5:int32.
              (mem(x_5, t_0, Tree_right_t_6, Tree_left_t_6, Tree_value_t_6) ->
               ge_int(integer_of_int32(result), integer_of_int32(x_5))))))) }
+
+parameter uint8_of_integer_ :
+ x:int ->
+  { (le_int((0), x) and le_int(x, (255)))} uint8
+  { eq_int(integer_of_uint8(result), x) }
 
 let tree_max_ensures_default =
  fun (t_0 : Tree pointer) (Tree_t_6_alloc_table : Tree alloc_table) (Tree_value_t_6 : (Tree, int32) memory) (Tree_left_t_6 : (Tree, Tree pointer) memory) (Tree_right_t_6 : (Tree, Tree pointer) memory) ->
@@ -2500,6 +2625,10 @@ type int8
 
 type padding
 
+type uint8
+
+type unsigned_charP
+
 type voidP
 
 logic Tree_tag : Tree tag_id
@@ -2545,6 +2674,11 @@ logic integer_of_int8 : int8 -> int
 predicate eq_int8(x: int8, y: int8) =
   (integer_of_int8(x) = integer_of_int8(y))
 
+logic integer_of_uint8 : uint8 -> int
+
+predicate eq_uint8(x: uint8, y: uint8) =
+  (integer_of_uint8(x) = integer_of_uint8(y))
+
 logic has_size : Tree pointer, int, Tree alloc_table, (Tree,
 Tree pointer) memory, (Tree, Tree pointer) memory -> prop
 
@@ -2588,6 +2722,10 @@ predicate left_valid_struct_charP(p: charP pointer, a: int,
   charP_alloc_table: charP alloc_table) = (offset_min(charP_alloc_table,
   p) <= a)
 
+predicate left_valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_min(unsigned_charP_alloc_table, p) <= a)
+
 predicate left_valid_struct_voidP(p: voidP pointer, a: int,
   voidP_alloc_table: voidP alloc_table) = (offset_min(voidP_alloc_table,
   p) <= a)
@@ -2601,6 +2739,12 @@ axiom pointer_addr_of_Tree_of_pointer_address:
 axiom pointer_addr_of_charP_of_pointer_address:
   (forall p:unit pointer. (p = pointer_address(charP_of_pointer_address(p))))
 
+logic unsigned_charP_of_pointer_address : unit pointer -> unsigned_charP pointer
+
+axiom pointer_addr_of_unsigned_charP_of_pointer_address:
+  (forall p:unit pointer.
+    (p = pointer_address(unsigned_charP_of_pointer_address(p))))
+
 logic voidP_of_pointer_address : unit pointer -> voidP pointer
 
 axiom pointer_addr_of_voidP_of_pointer_address:
@@ -2613,6 +2757,10 @@ predicate right_valid_struct_Tree(p: Tree pointer, b: int,
 predicate right_valid_struct_charP(p: charP pointer, b: int,
   charP_alloc_table: charP alloc_table) = (offset_max(charP_alloc_table,
   p) >= b)
+
+predicate right_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  (offset_max(unsigned_charP_alloc_table, p) >= b)
 
 predicate right_valid_struct_voidP(p: voidP pointer, b: int,
   voidP_alloc_table: voidP alloc_table) = (offset_max(voidP_alloc_table,
@@ -2641,6 +2789,11 @@ predicate strict_valid_root_charP(p: charP pointer, a: int, b: int,
   ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
    p) = b))
 
+predicate strict_valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
@@ -2656,10 +2809,46 @@ predicate strict_valid_struct_charP(p: charP pointer, a: int, b: int,
   ((offset_min(charP_alloc_table, p) = a) and (offset_max(charP_alloc_table,
    p) = b))
 
+predicate strict_valid_struct_unsigned_charP(p: unsigned_charP pointer,
+  a: int, b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) = a) and
+   (offset_max(unsigned_charP_alloc_table, p) = b))
+
 predicate strict_valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
   ((offset_min(voidP_alloc_table, p) = a) and (offset_max(voidP_alloc_table,
    p) = b))
+
+logic uint8_of_integer : int -> uint8
+
+axiom uint8_coerce:
+  (forall x:int.
+    (((0 <= x) and (x <= 255)) -> (integer_of_uint8(uint8_of_integer(x)) = x)))
+
+axiom uint8_extensionality:
+  (forall x:uint8.
+    (forall y:uint8.
+      ((integer_of_uint8(x) = integer_of_uint8(y)) -> (x = y))))
+
+axiom uint8_range:
+  (forall x:uint8.
+    ((0 <= integer_of_uint8(x)) and (integer_of_uint8(x) <= 255)))
+
+logic unsigned_charP_tag : unsigned_charP tag_id
+
+axiom unsigned_charP_int: (int_of_tag(unsigned_charP_tag) = 1)
+
+axiom unsigned_charP_of_pointer_address_of_pointer_addr:
+  (forall p:unsigned_charP pointer.
+    (p = unsigned_charP_of_pointer_address(pointer_address(p))))
+
+axiom unsigned_charP_parenttag_bottom: parenttag(unsigned_charP_tag,
+  bottom_tag)
+
+axiom unsigned_charP_tags:
+  (forall x:unsigned_charP pointer.
+    (forall unsigned_charP_tag_table:unsigned_charP tag_table.
+      instanceof(unsigned_charP_tag_table, x, unsigned_charP_tag)))
 
 predicate valid_root_Tree(p: Tree pointer, a: int, b: int,
   Tree_alloc_table: Tree alloc_table) =
@@ -2670,6 +2859,11 @@ predicate valid_root_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
    p) >= b))
+
+predicate valid_root_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_root_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =
@@ -2685,6 +2879,11 @@ predicate valid_struct_charP(p: charP pointer, a: int, b: int,
   charP_alloc_table: charP alloc_table) =
   ((offset_min(charP_alloc_table, p) <= a) and (offset_max(charP_alloc_table,
    p) >= b))
+
+predicate valid_struct_unsigned_charP(p: unsigned_charP pointer, a: int,
+  b: int, unsigned_charP_alloc_table: unsigned_charP alloc_table) =
+  ((offset_min(unsigned_charP_alloc_table, p) <= a) and
+   (offset_max(unsigned_charP_alloc_table, p) >= b))
 
 predicate valid_struct_voidP(p: voidP pointer, a: int, b: int,
   voidP_alloc_table: voidP alloc_table) =

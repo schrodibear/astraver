@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="selection_sort.jessie/selection_sort/why3session.xml">
  <prover
@@ -36,26 +36,26 @@
     locfile="/home/cmarche/why2-trunk/tests/c/selection_sort.c"
     loclnum="54" loccnumb="5" loccnume="13"
     expl="parameter sel_sort_ensures_default"
-    sum="89873a92a55550df28e1c6851339509b"
+    sum="e65b66ad825654c9ad87de8a5621f040"
     proved="true"
     expanded="false"
-    shape="iainfix <V11V1iainfix <aselectV5ashiftV0V11V9ainfix <V12V1Aainfix <=V4V12Aainfix <V4V14Iainfix =V14ainfix +V11c1FIainfix =V13aselectV5ashiftV0V11FIainfix =V12V11Fainfix <V10V1Aainfix <=V4V10Aainfix <V4V15Iainfix =V15ainfix +V11c1Fainfix <V17V1Aainfix <=c0V17Iainfix =V17ainfix +V4c1FAa_PermutV0c0ainfix -V1c1V16V5Ianot_assignsV2V5V16apset_unionapset_rangeapset_singletonV0V10V10apset_rangeapset_singletonV0V4V4Aa_SwapV0V4V10V16V5FIainfix <V10V1Aainfix <=V4V10Aainfix <V4V11FFFAainfix <V7V1Aainfix <=V4V7Aainfix <V4V8Iainfix =V8ainfix +V4c1FIainfix =V7V4FIainfix =V6aselectV5ashiftV0V4FIainfix <V4ainfix -V1c1Iainfix <V4V1Aainfix <=c0V4FFAainfix <V3V1Aainfix <=c0V3Iainfix =V3c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFF">
+    shape="iainfix &lt;V11V1iainfix &lt;aselectV5ashiftV0V11V9ainfix &lt;V12V1Aainfix &lt;=V4V12Aainfix &lt;V4V14Iainfix =V14ainfix +V11c1FIainfix =V13aselectV5ashiftV0V11FIainfix =V12V11Fainfix &lt;V10V1Aainfix &lt;=V4V10Aainfix &lt;V4V15Iainfix =V15ainfix +V11c1Fainfix &lt;V17V1Aainfix &lt;=c0V17Iainfix =V17ainfix +V4c1FAa_PermutV0c0ainfix -V1c1V16V5Ianot_assignsV2V5V16apset_unionapset_rangeapset_singletonV0V10V10apset_rangeapset_singletonV0V4V4Aa_SwapV0V4V10V16V5FIainfix &lt;V10V1Aainfix &lt;=V4V10Aainfix &lt;V4V11FFFAainfix &lt;V7V1Aainfix &lt;=V4V7Aainfix &lt;V4V8Iainfix =V8ainfix +V4c1FIainfix =V7V4FIainfix =V6aselectV5ashiftV0V4FIainfix &lt;V4ainfix -V1c1Iainfix &lt;V4V1Aainfix &lt;=c0V4FFAainfix &lt;V3V1Aainfix &lt;=c0V3Iainfix =V3c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FFF">
     <label
-     name="expl:parameter sel_sort_ensures_default">
-     </label>
+     name="expl:parameter sel_sort_ensures_default"/>
     <label
-     name="expl:Function sel_sort, default behavior">
-     </label>
+     name="expl:Function sel_sort, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.43"/>
+     <result status="valid" time="0.16"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.11"/>
@@ -63,9 +63,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.15"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
@@ -73,36 +74,37 @@
     locfile="/home/cmarche/why2-trunk/tests/c/selection_sort.c"
     loclnum="54" loccnumb="5" loccnume="13"
     expl="parameter sel_sort_ensures_permutation"
-    sum="e42c950f2086ed2ff7a05248e9349ad2"
+    sum="88008acf94ee9d150bd95c2748a72dee"
     proved="true"
     expanded="false"
-    shape="iainfix <=V1c0a_PermutV0c0ainfix -V1c1V3V3iainfix <V5ainfix -V1c1iainfix <V12V1iainfix <aselectV6ashiftV0V12V10a_PermutV0c0ainfix -V1c1V6V3Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12Fa_PermutV0c0ainfix -V1c1V6V3Iainfix =V16ainfix +V12c1Fa_PermutV0c0ainfix -V1c1V17V3Iainfix =V18ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V17V6Ianot_assignsV2V6V17apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V17V6FIainfix <V11V1Aainfix <=V5V11Aainfix <V5V12Ia_PermutV0c0ainfix -V1c1V6V3FFFAa_PermutV0c0ainfix -V1c1V6V3Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fa_PermutV0c0ainfix -V1c1V6V3Iainfix <V5V1Aainfix <=c0V5Ia_PermutV0c0ainfix -V1c1V6V3FFAa_PermutV0c0ainfix -V1c1V3V3Iainfix =V4c0FIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+    shape="iainfix &lt;=V1c0a_PermutV0c0ainfix -V1c1V3V3iainfix &lt;V5ainfix -V1c1iainfix &lt;V12V1iainfix &lt;aselectV6ashiftV0V12V10a_PermutV0c0ainfix -V1c1V6V3Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12Fa_PermutV0c0ainfix -V1c1V6V3Iainfix =V16ainfix +V12c1Fa_PermutV0c0ainfix -V1c1V17V3Iainfix =V18ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V17V6Ianot_assignsV2V6V17apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V17V6FIainfix &lt;V11V1Aainfix &lt;=V5V11Aainfix &lt;V5V12Ia_PermutV0c0ainfix -V1c1V6V3FFFAa_PermutV0c0ainfix -V1c1V6V3Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fa_PermutV0c0ainfix -V1c1V6V3Iainfix &lt;V5V1Aainfix &lt;=c0V5Ia_PermutV0c0ainfix -V1c1V6V3FFAa_PermutV0c0ainfix -V1c1V3V3Iainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FFFF">
     <label
-     name="expl:parameter sel_sort_ensures_permutation">
-     </label>
+     name="expl:parameter sel_sort_ensures_permutation"/>
     <label
-     name="expl:Function sel_sort, Behavior `permutation'">
-     </label>
+     name="expl:Function sel_sort, Behavior `permutation&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.14"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.16"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
@@ -110,22 +112,21 @@
     locfile="/home/cmarche/why2-trunk/tests/c/selection_sort.c"
     loclnum="54" loccnumb="5" loccnume="13"
     expl="parameter sel_sort_ensures_sorted"
-    sum="429e27af223f27380deac411c052b10d"
+    sum="3bd668432f835c29b6b4f33ad3437870"
     proved="true"
     expanded="true"
-    shape="iainfix <=V1c0a_SortedV0c0V1V3iainfix <V5ainfix -V1c1iainfix <V12V1iainfix <aselectV6ashiftV0V12V10ainfix >=aselectV6ashiftV0V16V14Iainfix <V16V15Aainfix <=V5V16FAainfix =V14aselectV6ashiftV0V13Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12Fainfix >=aselectV6ashiftV0V18V10Iainfix <V18V17Aainfix <=V5V18FAainfix =V10aselectV6ashiftV0V11Iainfix =V17ainfix +V12c1Fainfix <=aselectV19ashiftV0V21aselectV19ashiftV0V22Iainfix <V22V1Aainfix <=V20V22Aainfix <V21V20Aainfix <=c0V21FFAa_SortedV0c0V20V19Iainfix =V20ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V19V6Ianot_assignsV2V6V19apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V19V6FIainfix <V11V1Aainfix <=V5V11Aainfix <V5V12Iainfix >=aselectV6ashiftV0V23V10Iainfix <V23V12Aainfix <=V5V23FAainfix =V10aselectV6ashiftV0V11FFFAainfix >=aselectV6ashiftV0V24V7Iainfix <V24V9Aainfix <=V5V24FAainfix =V7aselectV6ashiftV0V8Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fa_SortedV0c0V1V6Iainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V25aselectV6ashiftV0V26Iainfix <V26V1Aainfix <=V5V26Aainfix <V25V5Aainfix <=c0V25FFAa_SortedV0c0V5V6FFAainfix <=aselectV3ashiftV0V27aselectV3ashiftV0V28Iainfix <V28V1Aainfix <=V4V28Aainfix <V27V4Aainfix <=c0V27FFAa_SortedV0c0V4V3Iainfix =V4c0FIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+    shape="iainfix &lt;=V1c0a_SortedV0c0V1V3iainfix &lt;V5ainfix -V1c1iainfix &lt;V12V1iainfix &lt;aselectV6ashiftV0V12V10ainfix &gt;=aselectV6ashiftV0V16V14Iainfix &lt;V16V15Aainfix &lt;=V5V16FAainfix =V14aselectV6ashiftV0V13Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12Fainfix &gt;=aselectV6ashiftV0V18V10Iainfix &lt;V18V17Aainfix &lt;=V5V18FAainfix =V10aselectV6ashiftV0V11Iainfix =V17ainfix +V12c1Fainfix &lt;=aselectV19ashiftV0V21aselectV19ashiftV0V22Iainfix &lt;V22V1Aainfix &lt;=V20V22Aainfix &lt;V21V20Aainfix &lt;=c0V21FFAa_SortedV0c0V20V19Iainfix =V20ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V19V6Ianot_assignsV2V6V19apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V19V6FIainfix &lt;V11V1Aainfix &lt;=V5V11Aainfix &lt;V5V12Iainfix &gt;=aselectV6ashiftV0V23V10Iainfix &lt;V23V12Aainfix &lt;=V5V23FAainfix =V10aselectV6ashiftV0V11FFFAainfix &gt;=aselectV6ashiftV0V24V7Iainfix &lt;V24V9Aainfix &lt;=V5V24FAainfix =V7aselectV6ashiftV0V8Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5Fa_SortedV0c0V1V6Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V25aselectV6ashiftV0V26Iainfix &lt;V26V1Aainfix &lt;=V5V26Aainfix &lt;V25V5Aainfix &lt;=c0V25FFAa_SortedV0c0V5V6FFAainfix &lt;=aselectV3ashiftV0V27aselectV3ashiftV0V28Iainfix &lt;V28V1Aainfix &lt;=V4V28Aainfix &lt;V27V4Aainfix &lt;=c0V27FFAa_SortedV0c0V4V3Iainfix =V4c0FIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FFFF">
     <label
-     name="expl:parameter sel_sort_ensures_sorted">
-     </label>
+     name="expl:parameter sel_sort_ensures_sorted"/>
     <label
-     name="expl:Function sel_sort, Behavior `sorted'">
-     </label>
+     name="expl:Function sel_sort, Behavior `sorted&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.52"/>
+     <result status="valid" time="0.18"/>
     </proof>
     <transf
      name="split_goal"
@@ -136,26 +137,26 @@
       locfile="/home/cmarche/why2-trunk/tests/c/selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
       expl="normal postcondition"
-      sum="98665f6abda7078c9b106d77cfc3b2d9"
+      sum="f5291bd908bab77e5e6acdbf4abc2c98"
       proved="true"
       expanded="true"
-      shape="a_SortedV0c0V1V3Iainfix <=V1c0Iainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      shape="a_SortedV0c0V1V3Iainfix &lt;=V1c0Iainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FFFF">
       <label
-       name="expl:parameter sel_sort_ensures_sorted">
-       </label>
+       name="expl:parameter sel_sort_ensures_sorted"/>
       <label
-       name="expl:Function sel_sort, Behavior `sorted'">
-       </label>
+       name="expl:Function sel_sort, Behavior `sorted&apos;"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.12"/>
+       <result status="valid" time="0.04"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.06"/>
@@ -163,9 +164,10 @@
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.10"/>
+       <result status="valid" time="0.03"/>
       </proof>
      </goal>
      <goal
@@ -173,26 +175,26 @@
       locfile="/home/cmarche/why2-trunk/tests/c/selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
       expl="loop invariant init"
-      sum="a2cf92ea9df8a82037eb9c5ea17cb804"
+      sum="69b20dfdbb72a6a924ba501f4efa1b1b"
       proved="true"
       expanded="true"
-      shape="ainfix <=aselectV3ashiftV0V5aselectV3ashiftV0V6Iainfix <V6V1Aainfix <=V4V6Aainfix <V5V4Aainfix <=c0V5FFAa_SortedV0c0V4V3Iainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      shape="ainfix &lt;=aselectV3ashiftV0V5aselectV3ashiftV0V6Iainfix &lt;V6V1Aainfix &lt;=V4V6Aainfix &lt;V5V4Aainfix &lt;=c0V5FFAa_SortedV0c0V4V3Iainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FFFF">
       <label
-       name="expl:parameter sel_sort_ensures_sorted">
-       </label>
+       name="expl:parameter sel_sort_ensures_sorted"/>
       <label
-       name="expl:Function sel_sort, Behavior `sorted'">
-       </label>
+       name="expl:Function sel_sort, Behavior `sorted&apos;"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.14"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.05"/>
@@ -200,9 +202,10 @@
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.12"/>
+       <result status="valid" time="0.04"/>
       </proof>
      </goal>
      <goal
@@ -210,26 +213,26 @@
       locfile="/home/cmarche/why2-trunk/tests/c/selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
       expl="loop invariant init"
-      sum="1cbb7a4fcffcd1d3f16dd5cec6903544"
+      sum="8fd89d686ccca9325deb6c4390a12514"
       proved="true"
       expanded="true"
-      shape="ainfix >=aselectV6ashiftV0V10V7Iainfix <V10V9Aainfix <=V5V10FAainfix =V7aselectV6ashiftV0V8Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix <V5ainfix -V1c1Iainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V11aselectV6ashiftV0V12Iainfix <V12V1Aainfix <=V5V12Aainfix <V11V5Aainfix <=c0V11FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      shape="ainfix &gt;=aselectV6ashiftV0V10V7Iainfix &lt;V10V9Aainfix &lt;=V5V10FAainfix =V7aselectV6ashiftV0V8Iainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5ainfix -V1c1Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V11aselectV6ashiftV0V12Iainfix &lt;V12V1Aainfix &lt;=V5V12Aainfix &lt;V11V5Aainfix &lt;=c0V11FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FFFF">
       <label
-       name="expl:parameter sel_sort_ensures_sorted">
-       </label>
+       name="expl:parameter sel_sort_ensures_sorted"/>
       <label
-       name="expl:Function sel_sort, Behavior `sorted'">
-       </label>
+       name="expl:Function sel_sort, Behavior `sorted&apos;"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.15"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.06"/>
@@ -237,6 +240,7 @@
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.12"/>
@@ -247,33 +251,34 @@
       locfile="/home/cmarche/why2-trunk/tests/c/selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
       expl="loop invariant preservation"
-      sum="6f397b2a3d44b0e42416491606d57212"
+      sum="5f707460a3ea186eb4b1c13058d9219f"
       proved="true"
       expanded="true"
-      shape="ainfix >=aselectV6ashiftV0V16V14Iainfix <V16V15Aainfix <=V5V16FAainfix =V14aselectV6ashiftV0V13Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12FIainfix <aselectV6ashiftV0V12V10Iainfix <V12V1Iainfix <V11V1Aainfix <=V5V11Aainfix <V5V12Iainfix >=aselectV6ashiftV0V17V10Iainfix <V17V12Aainfix <=V5V17FAainfix =V10aselectV6ashiftV0V11FFFIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix <V5ainfix -V1c1Iainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V18aselectV6ashiftV0V19Iainfix <V19V1Aainfix <=V5V19Aainfix <V18V5Aainfix <=c0V18FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      shape="ainfix &gt;=aselectV6ashiftV0V16V14Iainfix &lt;V16V15Aainfix &lt;=V5V16FAainfix =V14aselectV6ashiftV0V13Iainfix =V15ainfix +V12c1FIainfix =V14aselectV6ashiftV0V12FIainfix =V13V12FIainfix &lt;aselectV6ashiftV0V12V10Iainfix &lt;V12V1Iainfix &lt;V11V1Aainfix &lt;=V5V11Aainfix &lt;V5V12Iainfix &gt;=aselectV6ashiftV0V17V10Iainfix &lt;V17V12Aainfix &lt;=V5V17FAainfix =V10aselectV6ashiftV0V11FFFIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5ainfix -V1c1Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V18aselectV6ashiftV0V19Iainfix &lt;V19V1Aainfix &lt;=V5V19Aainfix &lt;V18V5Aainfix &lt;=c0V18FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FFFF">
       <label
-       name="expl:parameter sel_sort_ensures_sorted">
-       </label>
+       name="expl:parameter sel_sort_ensures_sorted"/>
       <label
-       name="expl:Function sel_sort, Behavior `sorted'">
-       </label>
+       name="expl:Function sel_sort, Behavior `sorted&apos;"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.16"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.50"/>
+       <result status="valid" time="0.22"/>
       </proof>
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.15"/>
@@ -284,26 +289,26 @@
       locfile="/home/cmarche/why2-trunk/tests/c/selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
       expl="loop invariant preservation"
-      sum="96b513ea10ea9855b91b79a68e8b55da"
+      sum="09dd38831909f976cbd9f37b7c5384ba"
       proved="true"
       expanded="true"
-      shape="ainfix >=aselectV6ashiftV0V14V10Iainfix <V14V13Aainfix <=V5V14FAainfix =V10aselectV6ashiftV0V11Iainfix =V13ainfix +V12c1FIainfix <aselectV6ashiftV0V12V10NIainfix <V12V1Iainfix <V11V1Aainfix <=V5V11Aainfix <V5V12Iainfix >=aselectV6ashiftV0V15V10Iainfix <V15V12Aainfix <=V5V15FAainfix =V10aselectV6ashiftV0V11FFFIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix <V5ainfix -V1c1Iainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V16aselectV6ashiftV0V17Iainfix <V17V1Aainfix <=V5V17Aainfix <V16V5Aainfix <=c0V16FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      shape="ainfix &gt;=aselectV6ashiftV0V14V10Iainfix &lt;V14V13Aainfix &lt;=V5V14FAainfix =V10aselectV6ashiftV0V11Iainfix =V13ainfix +V12c1FIainfix &lt;aselectV6ashiftV0V12V10NIainfix &lt;V12V1Iainfix &lt;V11V1Aainfix &lt;=V5V11Aainfix &lt;V5V12Iainfix &gt;=aselectV6ashiftV0V15V10Iainfix &lt;V15V12Aainfix &lt;=V5V15FAainfix =V10aselectV6ashiftV0V11FFFIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5ainfix -V1c1Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V16aselectV6ashiftV0V17Iainfix &lt;V17V1Aainfix &lt;=V5V17Aainfix &lt;V16V5Aainfix &lt;=c0V16FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FFFF">
       <label
-       name="expl:parameter sel_sort_ensures_sorted">
-       </label>
+       name="expl:parameter sel_sort_ensures_sorted"/>
       <label
-       name="expl:Function sel_sort, Behavior `sorted'">
-       </label>
+       name="expl:Function sel_sort, Behavior `sorted&apos;"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.15"/>
+       <result status="valid" time="0.06"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.10"/>
@@ -311,6 +316,7 @@
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.14"/>
@@ -321,29 +327,29 @@
       locfile="/home/cmarche/why2-trunk/tests/c/selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
       expl="loop invariant preservation"
-      sum="27e41f4215ef13e966327a3f3b29bc19"
+      sum="1ad0026387d586bd3e2dea66fea3d932"
       proved="true"
       expanded="true"
-      shape="ainfix <=aselectV13ashiftV0V15aselectV13ashiftV0V16Iainfix <V16V1Aainfix <=V14V16Aainfix <V15V14Aainfix <=c0V15FFAa_SortedV0c0V14V13Iainfix =V14ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V13V6Ianot_assignsV2V6V13apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V13V6FIainfix <V12V1NIainfix <V11V1Aainfix <=V5V11Aainfix <V5V12Iainfix >=aselectV6ashiftV0V17V10Iainfix <V17V12Aainfix <=V5V17FAainfix =V10aselectV6ashiftV0V11FFFIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix <V5ainfix -V1c1Iainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V18aselectV6ashiftV0V19Iainfix <V19V1Aainfix <=V5V19Aainfix <V18V5Aainfix <=c0V18FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      shape="ainfix &lt;=aselectV13ashiftV0V15aselectV13ashiftV0V16Iainfix &lt;V16V1Aainfix &lt;=V14V16Aainfix &lt;V15V14Aainfix &lt;=c0V15FFAa_SortedV0c0V14V13Iainfix =V14ainfix +V5c1FIa_PermutV0c0ainfix -V1c1V13V6Ianot_assignsV2V6V13apset_unionapset_rangeapset_singletonV0V11V11apset_rangeapset_singletonV0V5V5Aa_SwapV0V5V11V13V6FIainfix &lt;V12V1NIainfix &lt;V11V1Aainfix &lt;=V5V11Aainfix &lt;V5V12Iainfix &gt;=aselectV6ashiftV0V17V10Iainfix &lt;V17V12Aainfix &lt;=V5V17FAainfix =V10aselectV6ashiftV0V11FFFIainfix =V9ainfix +V5c1FIainfix =V8V5FIainfix =V7aselectV6ashiftV0V5FIainfix &lt;V5ainfix -V1c1Iainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V18aselectV6ashiftV0V19Iainfix &lt;V19V1Aainfix &lt;=V5V19Aainfix &lt;V18V5Aainfix &lt;=c0V18FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FFFF">
       <label
-       name="expl:parameter sel_sort_ensures_sorted">
-       </label>
+       name="expl:parameter sel_sort_ensures_sorted"/>
       <label
-       name="expl:Function sel_sort, Behavior `sorted'">
-       </label>
+       name="expl:Function sel_sort, Behavior `sorted&apos;"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.95"/>
+       <result status="valid" time="0.38"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="4.80"/>
+       <result status="valid" time="2.28"/>
       </proof>
      </goal>
      <goal
@@ -351,26 +357,26 @@
       locfile="/home/cmarche/why2-trunk/tests/c/selection_sort.c"
       loclnum="54" loccnumb="5" loccnume="13"
       expl="normal postcondition"
-      sum="c15021950a33be9a8d624422dd8a0524"
+      sum="c1eb784407c6ceb224734cf5b634328f"
       proved="true"
       expanded="true"
-      shape="a_SortedV0c0V1V6Iainfix <V5ainfix -V1c1NIainfix <V5V1Aainfix <=c0V5Iainfix <=aselectV6ashiftV0V7aselectV6ashiftV0V8Iainfix <V8V1Aainfix <=V5V8Aainfix <V7V5Aainfix <=c0V7FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFFF">
+      shape="a_SortedV0c0V1V6Iainfix &lt;V5ainfix -V1c1NIainfix &lt;V5V1Aainfix &lt;=c0V5Iainfix &lt;=aselectV6ashiftV0V7aselectV6ashiftV0V8Iainfix &lt;V8V1Aainfix &lt;=V5V8Aainfix &lt;V7V5Aainfix &lt;=c0V7FFAa_SortedV0c0V5V6FFIainfix =V4c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FFFF">
       <label
-       name="expl:parameter sel_sort_ensures_sorted">
-       </label>
+       name="expl:parameter sel_sort_ensures_sorted"/>
       <label
-       name="expl:Function sel_sort, Behavior `sorted'">
-       </label>
+       name="expl:Function sel_sort, Behavior `sorted&apos;"/>
       <proof
        prover="2"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
-       <result status="valid" time="0.15"/>
+       <result status="valid" time="0.05"/>
       </proof>
       <proof
        prover="0"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.07"/>
@@ -378,6 +384,7 @@
       <proof
        prover="1"
        timelimit="5"
+       memlimit="0"
        obsolete="false"
        archived="false">
        <result status="valid" time="0.14"/>
@@ -390,19 +397,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/selection_sort.c"
     loclnum="54" loccnumb="5" loccnume="13"
     expl="parameter sel_sort_safety"
-    sum="ace86ef669c665d3623c9db7128abf22"
+    sum="201e33c346cfd8c5bb9ad9df9ce9fa35"
     proved="true"
     expanded="true"
-    shape="iainfix <V11V1iainfix <aselectV5ashiftV0V11V9ainfix <ainfix -V1V14ainfix -V1V11Aainfix <=c0ainfix -V1V11Iainfix =V14ainfix +V11c1FIainfix =V13aselectV5ashiftV0V11FAainfix <=V11aoffset_maxV2V0Aainfix <=aoffset_minV2V0V11Iainfix =V12V11Fainfix <ainfix -V1V15ainfix -V1V11Aainfix <=c0ainfix -V1V11Iainfix =V15ainfix +V11c1FAainfix <=V11aoffset_maxV2V0Aainfix <=aoffset_minV2V0V11ainfix <ainfix -V1V17ainfix -V1V4Aainfix <=c0ainfix -V1V4Iainfix =V17ainfix +V4c1FIa_PermutV0c0ainfix -V1c1V16V5Ianot_assignsV2V5V16apset_unionapset_rangeapset_singletonV0V10V10apset_rangeapset_singletonV0V4V4Aa_SwapV0V4V10V16V5FAainfix >=aoffset_maxV2V0V10Aainfix <=aoffset_minV2V0V10Aainfix >=aoffset_maxV2V0V4Aainfix <=aoffset_minV2V0V4Iainfix <V10V1Aainfix <=V4V10Aainfix <V4V11FFFIainfix =V8ainfix +V4c1FIainfix =V7V4FIainfix =V6aselectV5ashiftV0V4FAainfix <=V4aoffset_maxV2V0Aainfix <=aoffset_minV2V0V4Iainfix <V4ainfix -V1c1Iainfix <V4V1Aainfix <=c0V4FFIainfix =V3c0FIainfix <=V1c0NIainfix >=aoffset_maxV2V0ainfix -V1c1Aainfix <=aoffset_minV2V0c0FFF">
+    shape="iainfix &lt;V11V1iainfix &lt;aselectV5ashiftV0V11V9ainfix &lt;ainfix -V1V14ainfix -V1V11Aainfix &lt;=c0ainfix -V1V11Iainfix =V14ainfix +V11c1FIainfix =V13aselectV5ashiftV0V11FAainfix &lt;=V11aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V11Iainfix =V12V11Fainfix &lt;ainfix -V1V15ainfix -V1V11Aainfix &lt;=c0ainfix -V1V11Iainfix =V15ainfix +V11c1FAainfix &lt;=V11aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V11ainfix &lt;ainfix -V1V17ainfix -V1V4Aainfix &lt;=c0ainfix -V1V4Iainfix =V17ainfix +V4c1FIa_PermutV0c0ainfix -V1c1V16V5Ianot_assignsV2V5V16apset_unionapset_rangeapset_singletonV0V10V10apset_rangeapset_singletonV0V4V4Aa_SwapV0V4V10V16V5FAainfix &gt;=aoffset_maxV2V0V10Aainfix &lt;=aoffset_minV2V0V10Aainfix &gt;=aoffset_maxV2V0V4Aainfix &lt;=aoffset_minV2V0V4Iainfix &lt;V10V1Aainfix &lt;=V4V10Aainfix &lt;V4V11FFFIainfix =V8ainfix +V4c1FIainfix =V7V4FIainfix =V6aselectV5ashiftV0V4FAainfix &lt;=V4aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V4Iainfix &lt;V4ainfix -V1c1Iainfix &lt;V4V1Aainfix &lt;=c0V4FFIainfix =V3c0FIainfix &lt;=V1c0NIainfix &gt;=aoffset_maxV2V0ainfix -V1c1Aainfix &lt;=aoffset_minV2V0c0FFF">
     <label
-     name="expl:parameter sel_sort_safety">
-     </label>
+     name="expl:parameter sel_sort_safety"/>
     <label
-     name="expl:Function sel_sort, Safety">
-     </label>
+     name="expl:Function sel_sort, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.16"/>
@@ -410,6 +416,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.09"/>
@@ -417,9 +424,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.15"/>
+     <result status="valid" time="0.05"/>
     </proof>
    </goal>
    <goal
@@ -427,36 +435,37 @@
     locfile="/home/cmarche/why2-trunk/tests/c/selection_sort.c"
     loclnum="42" loccnumb="5" loccnume="9"
     expl="normal postcondition"
-    sum="581000696aa99b1449d4b4b7e333a011"
+    sum="2f4ac5b6cea3bc254a2f8781246cb1e1"
     proved="true"
     expanded="true"
-    shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V2V7V4Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V2Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1FFFFF">
+    shape="anot_assignsV3V4V7apset_unionapset_rangeapset_singletonV0V2V2apset_rangeapset_singletonV0V1V1Aa_SwapV0V1V2V7V4Iainfix =V7astoreV6ashiftV0V2V5FIainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FIainfix =V5aselectV4ashiftV0V1FIainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FFFFF">
     <label
-     name="expl:parameter swap_ensures_default">
-     </label>
+     name="expl:parameter swap_ensures_default"/>
     <label
-     name="expl:Function swap, default behavior">
-     </label>
+     name="expl:Function swap, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.49"/>
+     <result status="valid" time="0.22"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="1.77"/>
+     <result status="valid" time="0.82"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="2.05"/>
+     <result status="valid" time="0.69"/>
     </proof>
    </goal>
    <goal
@@ -464,19 +473,18 @@
     locfile="/home/cmarche/why2-trunk/tests/c/selection_sort.c"
     loclnum="42" loccnumb="5" loccnume="9"
     expl="parameter swap_safety"
-    sum="23a0292efb19cb47952bd8dd3567604b"
+    sum="d641b82258f107a7ae8ff6789dfa4741"
     proved="true"
     expanded="true"
-    shape="ainfix <=V2aoffset_maxV3V0Aainfix <=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Aainfix <=V2aoffset_maxV3V0Aainfix <=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix <=V1aoffset_maxV3V0Aainfix <=aoffset_minV3V0V1Iainfix >=aoffset_maxV3V0V2Aainfix <=aoffset_minV3V0V2Aainfix >=aoffset_maxV3V0V1Aainfix <=aoffset_minV3V0V1FFFFF">
+    shape="ainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V6astoreV4ashiftV0V1aselectV4ashiftV0V2FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Aainfix &lt;=V2aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V2Iainfix =V5aselectV4ashiftV0V1FAainfix &lt;=V1aoffset_maxV3V0Aainfix &lt;=aoffset_minV3V0V1Iainfix &gt;=aoffset_maxV3V0V2Aainfix &lt;=aoffset_minV3V0V2Aainfix &gt;=aoffset_maxV3V0V1Aainfix &lt;=aoffset_minV3V0V1FFFFF">
     <label
-     name="expl:parameter swap_safety">
-     </label>
+     name="expl:parameter swap_safety"/>
     <label
-     name="expl:Function swap, Safety">
-     </label>
+     name="expl:Function swap, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.13"/>
@@ -484,13 +492,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.11"/>

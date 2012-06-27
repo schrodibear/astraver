@@ -1,0 +1,256 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<why3session
+ name="cd1d.jessie/cd1d/why3session.xml">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.94"/>
+ <prover
+  id="1"
+  name="Alt-Ergo"
+  version="0.95-dev"/>
+ <prover
+  id="2"
+  name="Gappa"
+  version="0.16.0"/>
+ <file
+  name="../cd1d.mlw"
+  verified="true"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   locfile="cd1d.jessie/cd1d/../cd1d.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
+   verified="true"
+   expanded="true">
+   <goal
+    name="completeness"
+    locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
+    loclnum="10" loccnumb="4" loccnume="97"
+    expl="Lemma completeness, lemma"
+    sum="a5342fc5c57a3fdc5b03a80055a16899"
+    proved="true"
+    expanded="true"
+    shape="acd1dV0V1IaconflictV0V1Iainfix &gt;=V1c0.0FF">
+    <label
+     name="expl:Lemma completeness, lemma"/>
+    <proof
+     prover="0"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.02"/>
+    </proof>
+   </goal>
+  </theory>
+  <theory
+   name="WP Jessie_program"
+   locfile="cd1d.jessie/cd1d/../cd1d.mlw"
+   loclnum="172" loccnumb="7" loccnume="21"
+   verified="true"
+   expanded="true">
+   <goal
+    name="WP_parameter cd1d_double_ensures_completeness"
+    locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
+    loclnum="22" loccnumb="4" loccnume="15"
+    expl="Function cd1d_double, Behavior `completeness&apos;"
+    sum="f283b9f1b2488258438e4775aaedfc76"
+    proved="true"
+    expanded="true"
+    shape="iainfix =V8aTrueainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c1Fainfix =ainteger_of_int32V14c1Iainfix =V14V13FIainfix =V13V12FIainfix =ainteger_of_int32V12c0FIiainfix =V8aTrueainfix &gt;avalueV7avalueV0ainfix &lt;=avalueV7avalueV0FIaadd_postaNearestTiesToEvenV4V6V7FIamul_postaNearestTiesToEvenV5V1V6FIainfix =amodelV5c1.0Aainfix =aexactV5c1.0Aainfix =avalueV5c1.0FIaadd_postaNearestTiesToEvenV2V3V4FIaof_real_postaNearestTiesToEvenc0x1.p-49V3FIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1FF">
+    <label
+     name="expl:Function cd1d_double, Behavior `completeness&apos;"/>
+    <label
+     name="expl:parameter cd1d_double_ensures_completeness"/>
+    <transf
+     name="split_goal"
+     proved="true"
+     expanded="true">
+     <goal
+      name="WP_parameter cd1d_double_ensures_completeness.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
+      loclnum="22" loccnumb="4" loccnume="15"
+      expl="normal postcondition"
+      sum="a902c28aac2a4f8a062d709ae29ca9b6"
+      proved="true"
+      expanded="false"
+      shape="ainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c1FIainfix =V8aTrueIiainfix =V8aTrueainfix &gt;avalueV7avalueV0ainfix &lt;=avalueV7avalueV0FIaadd_postaNearestTiesToEvenV4V6V7FIamul_postaNearestTiesToEvenV5V1V6FIainfix =amodelV5c1.0Aainfix =aexactV5c1.0Aainfix =avalueV5c1.0FIaadd_postaNearestTiesToEvenV2V3V4FIaof_real_postaNearestTiesToEvenc0x1.p-49V3FIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1FF">
+      <label
+       name="expl:Function cd1d_double, Behavior `completeness&apos;"/>
+      <label
+       name="expl:parameter cd1d_double_ensures_completeness"/>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter cd1d_double_ensures_completeness.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
+      loclnum="22" loccnumb="4" loccnume="15"
+      expl="normal postcondition"
+      sum="e18345ae652d2046b2b9c5793617788d"
+      proved="true"
+      expanded="true"
+      shape="ainfix =ainteger_of_int32V11c1Iainfix =V11V10FIainfix =V10V9FIainfix =ainteger_of_int32V9c0FIainfix =V8aTrueNIiainfix =V8aTrueainfix &gt;avalueV7avalueV0ainfix &lt;=avalueV7avalueV0FIaadd_postaNearestTiesToEvenV4V6V7FIamul_postaNearestTiesToEvenV5V1V6FIainfix =amodelV5c1.0Aainfix =aexactV5c1.0Aainfix =avalueV5c1.0FIaadd_postaNearestTiesToEvenV2V3V4FIaof_real_postaNearestTiesToEvenc0x1.p-49V3FIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0Aacd1davalueV0avalueV1FF">
+      <label
+       name="expl:Function cd1d_double, Behavior `completeness&apos;"/>
+      <label
+       name="expl:parameter cd1d_double_ensures_completeness"/>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+   <goal
+    name="WP_parameter cd1d_double_ensures_default"
+    locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
+    loclnum="22" loccnumb="4" loccnume="15"
+    expl="Function cd1d_double, default behavior"
+    sum="d87adb744f5838b96bedde0578d0a6db"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Function cd1d_double, default behavior"/>
+    <label
+     name="expl:parameter cd1d_double_ensures_default"/>
+    <proof
+     prover="2"
+     timelimit="3"
+     memlimit="1000"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.00"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter cd1d_double_safety"
+    locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
+    loclnum="22" loccnumb="4" loccnume="15"
+    expl="Function cd1d_double, Safety"
+    sum="5cee2b1c6f403924755a986c03bd26d8"
+    proved="true"
+    expanded="true"
+    shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV6amax_doubleIamul_postaNearestTiesToEvenV5V1V6FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV5avalueV1amax_doubleIainfix =amodelV5c1.0Aainfix =aexactV5c1.0Aainfix =avalueV5c1.0FIaadd_postaNearestTiesToEvenV2V3V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV2avalueV3amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-49V3FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0FF">
+    <label
+     name="expl:Function cd1d_double, Safety"/>
+    <label
+     name="expl:parameter cd1d_double_safety"/>
+    <transf
+     name="split_goal"
+     proved="true"
+     expanded="false">
+     <goal
+      name="WP_parameter cd1d_double_safety.1"
+      locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
+      loclnum="22" loccnumb="4" loccnume="15"
+      expl="floating-point overflow"
+      sum="2f9c244900da040c3892f2c4d51f35f4"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0FF">
+      <label
+       name="expl:Function cd1d_double, Safety"/>
+      <label
+       name="expl:parameter cd1d_double_safety"/>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter cd1d_double_safety.2"
+      locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
+      loclnum="22" loccnumb="4" loccnume="15"
+      expl="floating-point overflow"
+      sum="750619b31dcc5c787029e033b1a77f0c"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV2avalueV3amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-49V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0FF">
+      <label
+       name="expl:Function cd1d_double, Safety"/>
+      <label
+       name="expl:parameter cd1d_double_safety"/>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter cd1d_double_safety.3"
+      locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
+      loclnum="22" loccnumb="4" loccnume="15"
+      expl="floating-point overflow"
+      sum="2ea6694e1fbd2626e69fc1de0d09e4d6"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV5avalueV1amax_doubleIainfix =amodelV5c1.0Aainfix =aexactV5c1.0Aainfix =avalueV5c1.0FIaadd_postaNearestTiesToEvenV2V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV2avalueV3amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-49V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0FF">
+      <label
+       name="expl:Function cd1d_double, Safety"/>
+      <label
+       name="expl:parameter cd1d_double_safety"/>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter cd1d_double_safety.4"
+      locfile="/home/marche/why2-nitrogen/tests/c/cd1d.c"
+      loclnum="22" loccnumb="4" loccnume="15"
+      expl="floating-point overflow"
+      sum="148d43745b5aa4864ff9373ea25dd329"
+      proved="true"
+      expanded="false"
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV6amax_doubleIamul_postaNearestTiesToEvenV5V1V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV5avalueV1amax_doubleIainfix =amodelV5c1.0Aainfix =aexactV5c1.0Aainfix =avalueV5c1.0FIaadd_postaNearestTiesToEvenV2V3V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV2avalueV3amax_doubleIaof_real_postaNearestTiesToEvenc0x1.p-49V3FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-49amax_doubleIainfix =amodelV2c10.0Aainfix =aexactV2c10.0Aainfix =avalueV2c10.0FIainfix &gt;=avalueV1c0.Aainfix &gt;=c1.avalueV1Aainfix &gt;=avalueV0c0.Aainfix &gt;=c100.avalueV0FF">
+      <label
+       name="expl:Function cd1d_double, Safety"/>
+      <label
+       name="expl:parameter cd1d_double_safety"/>
+      <proof
+       prover="2"
+       timelimit="3"
+       memlimit="1000"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.00"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+  </theory>
+ </file>
+</why3session>

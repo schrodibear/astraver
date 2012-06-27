@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
- name="Literals/why3session.xml">
+ name="tests/java/Literals/why3session.xml">
  <prover
   id="0"
   name="Alt-Ergo"
@@ -20,163 +20,167 @@
   expanded="false">
   <theory
    name="Jessie_model"
-   locfile="Literals/../Literals.mlw"
+   locfile="tests/java/Literals/../Literals.mlw"
    loclnum="1" loccnumb="7" loccnume="19"
    verified="true"
    expanded="true">
   </theory>
   <theory
    name="WP Jessie_program"
-   locfile="Literals/../Literals.mlw"
+   locfile="tests/java/Literals/../Literals.mlw"
    loclnum="297" loccnumb="7" loccnume="21"
    verified="true"
    expanded="true">
    <goal
     name="WP_parameter _Literals_f_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/Literals.java"
+    locfile="/home/cmarche/why2-trunk/tests/java/Literals.java"
     loclnum="38" loccnumb="8" loccnume="9"
     expl="normal postcondition"
-    sum="65385f29a48b81cf6f6d31d09efe2c2f"
+    sum="fa47118f0db26bb723cd967e1fcf2e18"
     proved="true"
     expanded="true"
     shape="ainfix =ainteger_of_int32V4c13Iainfix =V4V3FIainfix =ainteger_of_int32V3c13FIainfix =ainteger_of_int32V2c2989FIavalid_struct_LiteralsV0c0c0V1FF">
     <label
-     name="expl:parameter _Literals_f_ensures_default">
-     </label>
+     name="expl:parameter _Literals_f_ensures_default"/>
     <label
-     name="expl:Method f, default behavior">
-     </label>
+     name="expl:Method f, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.12"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.07"/>
+    </proof>
+    <proof
+     prover="1"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.09"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter _Literals_f_safety"
+    locfile="/home/cmarche/why2-trunk/tests/java/Literals.java"
+    loclnum="38" loccnumb="8" loccnume="9"
+    expl="parameter _Literals_f_safety"
+    sum="a6ea27b7fbd68e8f7ba1d08b53a4826a"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:parameter _Literals_f_safety"/>
+    <label
+     name="expl:Method f, Safety"/>
+    <proof
+     prover="2"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.03"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
     </proof>
     <proof
-     prover="0"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
-    </proof>
-   </goal>
-   <goal
-    name="WP_parameter _Literals_f_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/Literals.java"
-    loclnum="38" loccnumb="8" loccnume="9"
-    expl="parameter _Literals_f_safety"
-    sum="4929ed845e38baa8e42cdee8333f1404"
-    proved="true"
-    expanded="true"
-    shape="t">
-    <label
-     name="expl:parameter _Literals_f_safety">
-     </label>
-    <label
-     name="expl:Method f, Safety">
-     </label>
-    <proof
-     prover="2"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.00"/>
-    </proof>
-    <proof
-     prover="0"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
-    </proof>
-    <proof
-     prover="1"
-     timelimit="5"
-     obsolete="false"
-     archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Literals_ensures_default"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="/home/cmarche/why2-trunk/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Literals_ensures_default"
-    sum="ca6db84719db9b6c204c6b44071d345d"
+    sum="7f3ec33fe2ab2caaeb553d92845f3ad1"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Literals_ensures_default">
-     </label>
+     name="expl:parameter cons_Literals_ensures_default"/>
     <label
-     name="expl:Constructor of class Literals, default behavior">
-     </label>
+     name="expl:Constructor of class Literals, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_Literals_safety"
-    locfile="/home/marche/why2-nitrogen/tests/java/"
+    locfile="/home/cmarche/why2-trunk/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Literals_safety"
-    sum="bf12aec79718dd9f5f25f77a60600fa8"
+    sum="4c4ef5342d4233fc91802be54096ec93"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Literals_safety">
-     </label>
+     name="expl:parameter cons_Literals_safety"/>
     <label
-     name="expl:Constructor of class Literals, Safety">
-     </label>
+     name="expl:Constructor of class Literals, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.00"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.08"/>
     </proof>
    </goal>
   </theory>

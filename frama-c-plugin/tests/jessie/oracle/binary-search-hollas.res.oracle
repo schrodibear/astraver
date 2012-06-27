@@ -735,24 +735,24 @@ let binary_search_ensures_default =
               then void else (raise (Goto_while_0_break_exc void)));
              (let jessie_<somenum> =
              (assert { true };
-             (((C_15:
-               begin
-                 (mid := (C_14:
-                         (safe_int32_of_integer_ (C_13:
-                                                 (JC_<somenum>:
-                                                 ((computer_div (integer_of_int32 
-                                                                 (C_12:
-                                                                 (safe_int32_of_integer_ 
-                                                                  (C_11:
-                                                                  ((add_int 
-                                                                    (integer_of_int32 !high)) 
-                                                                   (integer_of_int32 !low))))))) (2)))))));
-                !mid end))
+             ((C_15:
+              begin
+                (mid := (C_14:
+                        (safe_int32_of_integer_ (C_13:
+                                                (JC_<somenum>:
+                                                ((computer_div (integer_of_int32 
+                                                                (C_12:
+                                                                (safe_int32_of_integer_ 
+                                                                 (C_11:
+                                                                 ((add_int 
+                                                                   (integer_of_int32 !high)) 
+                                                                  (integer_of_int32 !low))))))) (2)))))));
+               !mid end))
              {{ (JC_<somenum>:
                 ((JC_<somenum>:
                  le_int(integer_of_int32(low), integer_of_int32(mid)))
                 and (JC_<somenum>:
-                    le_int(integer_of_int32(mid), integer_of_int32(high))))) }})) in
+                    le_int(integer_of_int32(mid), integer_of_int32(high))))) }}) in
              void);
              (if ((lt_int_ (integer_of_int32 (C_30:
                                              ((safe_acc_ intP_intM_a_2) 

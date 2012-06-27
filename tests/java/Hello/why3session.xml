@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="Hello/why3session.xml">
  <prover
@@ -17,7 +17,7 @@
  <file
   name="../Hello.mlw"
   verified="false"
-  expanded="true">
+  expanded="false">
   <theory
    name="Jessie_model"
    locfile="Hello/../Hello.mlw"
@@ -36,19 +36,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Hello.java"
     loclnum="34" loccnumb="23" loccnume="27"
     expl="parameter _Hello_main_ensures_default"
-    sum="6537d90552bcc93e5ba56e9aad22dad4"
+    sum="37921b890f7c88d4dcdb3611841f8837"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter _Hello_main_ensures_default">
-     </label>
+     name="expl:parameter _Hello_main_ensures_default"/>
     <label
-     name="expl:Method main, default behavior">
-     </label>
+     name="expl:Method main, default behavior"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -59,56 +58,56 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Hello.java"
     loclnum="34" loccnumb="23" loccnume="27"
     expl="index bounds"
-    sum="7c7f9892c65b606c2b9fe0b061a073bf"
+    sum="0c5238536ff2b9e179a084796dd11755"
     proved="false"
     expanded="true"
-    shape="ainfix >=aoffset_maxV1a_System_outc0Ialeft_valid_struct_StringMV0c0V1FF">
+    shape="ainfix &gt;=aoffset_maxV1a_System_outc0Ialeft_valid_struct_StringMV0c0V1FF">
     <label
-     name="expl:parameter _Hello_main_safety">
-     </label>
+     name="expl:parameter _Hello_main_safety"/>
     <label
-     name="expl:Method main, Safety">
-     </label>
+     name="expl:Method main, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="timeout" time="5.03"/>
+     <result status="timeout" time="5.05"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="unknown" time="0.02"/>
     </proof>
     <proof
      prover="1"
-     timelimit="5"
+     timelimit="7"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="unknown" time="3.04"/>
+     <result status="unknown" time="2.84"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_FilterOutputStream_OutputStream_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/io/FilterOutputStream.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/FilterOutputStream.java"
     loclnum="43" loccnumb="11" loccnume="29"
     expl="parameter cons_FilterOutputStream_OutputStream_ensures_default"
-    sum="eb2afd7dfab3111d973d612a2544967d"
+    sum="ad48023dff33748d8b7bbffd3273f42d"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_FilterOutputStream_OutputStream_ensures_default">
-     </label>
+     name="expl:parameter cons_FilterOutputStream_OutputStream_ensures_default"/>
     <label
-     name="expl:Constructor of class FilterOutputStream, default behavior">
-     </label>
+     name="expl:Constructor of class FilterOutputStream, default behavior"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -116,25 +115,24 @@
    </goal>
    <goal
     name="WP_parameter cons_FilterOutputStream_OutputStream_safety"
-    locfile="/usr/local/lib/why/java_api/java/io/FilterOutputStream.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/FilterOutputStream.java"
     loclnum="43" loccnumb="11" loccnume="29"
     expl="parameter cons_FilterOutputStream_OutputStream_safety"
-    sum="db46b3dc9c616ab3c5b360451c5a36d1"
+    sum="a43c24358605c2c084912d923fa4a5e3"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_FilterOutputStream_OutputStream_safety">
-     </label>
+     name="expl:parameter cons_FilterOutputStream_OutputStream_safety"/>
     <label
-     name="expl:Constructor of class FilterOutputStream, Safety">
-     </label>
+     name="expl:Constructor of class FilterOutputStream, Safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
@@ -142,19 +140,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Hello_ensures_default"
-    sum="2590f0d37512653a9e2896d81f218603"
+    sum="1d28872e1a533d9045413be32d2e445b"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Hello_ensures_default">
-     </label>
+     name="expl:parameter cons_Hello_ensures_default"/>
     <label
-     name="expl:Constructor of class Hello, default behavior">
-     </label>
+     name="expl:Constructor of class Hello, default behavior"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -165,19 +162,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Hello_safety"
-    sum="91a990441f01af9d72c36c56f25dbce0"
+    sum="eec973a4ee82e552ca3da642f583392c"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Hello_safety">
-     </label>
+     name="expl:parameter cons_Hello_safety"/>
     <label
-     name="expl:Constructor of class Hello, Safety">
-     </label>
+     name="expl:Constructor of class Hello, Safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -188,19 +184,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Object_ensures_default"
-    sum="7f07ae82b5721f3b540e9c7a3d2622b5"
+    sum="7dca4b118d8d7a2c454f9b6c0ec37e73"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Object_ensures_default">
-     </label>
+     name="expl:parameter cons_Object_ensures_default"/>
     <label
-     name="expl:Constructor of class Object, default behavior">
-     </label>
+     name="expl:Constructor of class Object, default behavior"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -211,19 +206,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Object_safety"
-    sum="0480c1856585e4aae5bc69bfd802f6e6"
+    sum="acf3e93b1bee26e56b341b8ef2b0cc3c"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Object_safety">
-     </label>
+     name="expl:parameter cons_Object_safety"/>
     <label
-     name="expl:Constructor of class Object, Safety">
-     </label>
+     name="expl:Constructor of class Object, Safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -234,19 +228,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_OutputStream_ensures_default"
-    sum="582c9e6e457c00e3241a73c480086f3a"
+    sum="b0b149187d572e2c8c4eb6a477264263"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_OutputStream_ensures_default">
-     </label>
+     name="expl:parameter cons_OutputStream_ensures_default"/>
     <label
-     name="expl:Constructor of class OutputStream, default behavior">
-     </label>
+     name="expl:Constructor of class OutputStream, default behavior"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -257,19 +250,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_OutputStream_safety"
-    sum="c2323330528c25505bf674a9b386aeb7"
+    sum="c92bcba510c3523943479e0b2bdd8849"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_OutputStream_safety">
-     </label>
+     name="expl:parameter cons_OutputStream_safety"/>
     <label
-     name="expl:Constructor of class OutputStream, Safety">
-     </label>
+     name="expl:Constructor of class OutputStream, Safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -277,22 +269,21 @@
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_OutputStream_boolean_String_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="113" loccnumb="11" loccnume="22"
     expl="parameter cons_PrintStream_OutputStream_boolean_String_ensures_default"
-    sum="95cc06a3256da95cad5d84ecc25338eb"
+    sum="d30bb4cdae5691b0df400c03eaeb6879"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_PrintStream_OutputStream_boolean_String_ensures_default">
-     </label>
+     name="expl:parameter cons_PrintStream_OutputStream_boolean_String_ensures_default"/>
     <label
-     name="expl:Constructor of class PrintStream, default behavior">
-     </label>
+     name="expl:Constructor of class PrintStream, default behavior"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -300,22 +291,21 @@
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_OutputStream_boolean_String_safety"
-    locfile="/usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="113" loccnumb="11" loccnume="22"
     expl="parameter cons_PrintStream_OutputStream_boolean_String_safety"
-    sum="13f034a7db5f16aae18d752cad3fe8b3"
+    sum="3fe270fdb1933bdc1511e27454bcb56a"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_PrintStream_OutputStream_boolean_String_safety">
-     </label>
+     name="expl:parameter cons_PrintStream_OutputStream_boolean_String_safety"/>
     <label
-     name="expl:Constructor of class PrintStream, Safety">
-     </label>
+     name="expl:Constructor of class PrintStream, Safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -323,22 +313,21 @@
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_OutputStream_boolean_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="92" loccnumb="11" loccnume="22"
     expl="Constructor of class PrintStream, default behavior"
-    sum="fc172622806ad0b4a191124d9231e89f"
+    sum="ea0517a6803104d424a9e3d20021d752"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class PrintStream, default behavior">
-     </label>
+     name="expl:Constructor of class PrintStream, default behavior"/>
     <label
-     name="expl:parameter cons_PrintStream_OutputStream_boolean_ensures_default">
-     </label>
+     name="expl:parameter cons_PrintStream_OutputStream_boolean_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -346,22 +335,21 @@
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_OutputStream_boolean_safety"
-    locfile="/usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="92" loccnumb="11" loccnume="22"
     expl="Constructor of class PrintStream, Safety"
-    sum="5414ea26a71af2ab2b5cb9d6262a28c5"
+    sum="a9fcc2d73b4309d8dfdd1b17d141c168"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class PrintStream, Safety">
-     </label>
+     name="expl:Constructor of class PrintStream, Safety"/>
     <label
-     name="expl:parameter cons_PrintStream_OutputStream_boolean_safety">
-     </label>
+     name="expl:parameter cons_PrintStream_OutputStream_boolean_safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -369,22 +357,21 @@
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_OutputStream_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="55" loccnumb="11" loccnume="22"
     expl="Constructor of class PrintStream, default behavior"
-    sum="f718f15508adb711f20ca291a83cf9ba"
+    sum="1f78a398bd622ab306bc6170c7d3459c"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class PrintStream, default behavior">
-     </label>
+     name="expl:Constructor of class PrintStream, default behavior"/>
     <label
-     name="expl:parameter cons_PrintStream_OutputStream_ensures_default">
-     </label>
+     name="expl:parameter cons_PrintStream_OutputStream_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -392,22 +379,21 @@
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_OutputStream_safety"
-    locfile="/usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="55" loccnumb="11" loccnume="22"
     expl="Constructor of class PrintStream, Safety"
-    sum="d41c18249686c7eceebfb9ea551c7d7b"
+    sum="232d8c4c0f7b72253bbd067c2ceeb11f"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class PrintStream, Safety">
-     </label>
+     name="expl:Constructor of class PrintStream, Safety"/>
     <label
-     name="expl:parameter cons_PrintStream_OutputStream_safety">
-     </label>
+     name="expl:parameter cons_PrintStream_OutputStream_safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -415,45 +401,43 @@
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_boolean_OutputStream_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="67" loccnumb="12" loccnume="23"
     expl="Constructor of class PrintStream, default behavior"
-    sum="226301ba9e580ad14c8e76ac0ee2a1c7"
+    sum="c947586b632bd71ccad8b70b40a40bec"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class PrintStream, default behavior">
-     </label>
+     name="expl:Constructor of class PrintStream, default behavior"/>
     <label
-     name="expl:parameter cons_PrintStream_boolean_OutputStream_ensures_default">
-     </label>
+     name="expl:parameter cons_PrintStream_boolean_OutputStream_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_PrintStream_boolean_OutputStream_safety"
-    locfile="/usr/local/lib/why/java_api/java/io/PrintStream.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/io/PrintStream.java"
     loclnum="67" loccnumb="12" loccnume="23"
     expl="Constructor of class PrintStream, Safety"
-    sum="e4be85ed26fa239f5960e13d177e7994"
+    sum="4ce2c3f0f083a001d9eb2945de34e352"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class PrintStream, Safety">
-     </label>
+     name="expl:Constructor of class PrintStream, Safety"/>
     <label
-     name="expl:parameter cons_PrintStream_boolean_OutputStream_safety">
-     </label>
+     name="expl:parameter cons_PrintStream_boolean_OutputStream_safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -461,22 +445,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_StringBuffer_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="403" loccnumb="11" loccnume="17"
     expl="parameter cons_String_StringBuffer_ensures_default"
-    sum="1fc47659b63f188fa4e1d61f4676110d"
+    sum="99c8b2003838cd41fde6ca31bd55f093"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_String_StringBuffer_ensures_default">
-     </label>
+     name="expl:parameter cons_String_StringBuffer_ensures_default"/>
     <label
-     name="expl:Constructor of class String, default behavior">
-     </label>
+     name="expl:Constructor of class String, default behavior"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -484,22 +467,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_StringBuffer_safety"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="403" loccnumb="11" loccnume="17"
     expl="parameter cons_String_StringBuffer_safety"
-    sum="3832f54907ed42238f55edc9b3466256"
+    sum="81c19034a504426da4a73c0003146e56"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_String_StringBuffer_safety">
-     </label>
+     name="expl:parameter cons_String_StringBuffer_safety"/>
     <label
-     name="expl:Constructor of class String, Safety">
-     </label>
+     name="expl:Constructor of class String, Safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -507,22 +489,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_String_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="142" loccnumb="11" loccnume="17"
     expl="Constructor of class String, default behavior"
-    sum="3aaa16a3e1cea5564ce2ab0c743028e0"
+    sum="c0f1b1ed023dbc6f95f980879d523b17"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, default behavior">
-     </label>
+     name="expl:Constructor of class String, default behavior"/>
     <label
-     name="expl:parameter cons_String_String_ensures_default">
-     </label>
+     name="expl:parameter cons_String_String_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -530,22 +511,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_String_safety"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="142" loccnumb="11" loccnume="17"
     expl="Constructor of class String, Safety"
-    sum="e97a4dd2189cf1a9863eb966a3541972"
+    sum="7333b7607507711f06d3995a880c1889"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, Safety">
-     </label>
+     name="expl:Constructor of class String, Safety"/>
     <label
-     name="expl:parameter cons_String_String_safety">
-     </label>
+     name="expl:parameter cons_String_String_safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -553,22 +533,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_String_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="345" loccnumb="11" loccnume="17"
     expl="Constructor of class String, default behavior"
-    sum="595e23c3d0fdca6a1e55b6a58e8c2403"
+    sum="f56a01283028f2a51652267200531fab"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, default behavior">
-     </label>
+     name="expl:Constructor of class String, default behavior"/>
     <label
-     name="expl:parameter cons_String_byteA_String_ensures_default">
-     </label>
+     name="expl:parameter cons_String_byteA_String_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -576,22 +555,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_String_safety"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="345" loccnumb="11" loccnume="17"
     expl="Constructor of class String, Safety"
-    sum="f5b6b161a2d8f0eba9c4ebd78e4894da"
+    sum="8767933b7d45ea479fcad52d993d808b"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, Safety">
-     </label>
+     name="expl:Constructor of class String, Safety"/>
     <label
-     name="expl:parameter cons_String_byteA_String_safety">
-     </label>
+     name="expl:parameter cons_String_byteA_String_safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -599,22 +577,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="391" loccnumb="11" loccnume="17"
     expl="Constructor of class String, default behavior"
-    sum="e7e81a9ab7a1b308e4cbeb7d7361bedc"
+    sum="5a27dce42a7dd1193d0064ab73f13ecf"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, default behavior">
-     </label>
+     name="expl:Constructor of class String, default behavior"/>
     <label
-     name="expl:parameter cons_String_byteA_ensures_default">
-     </label>
+     name="expl:parameter cons_String_byteA_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -622,22 +599,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="275" loccnumb="11" loccnume="17"
     expl="Constructor of class String, default behavior"
-    sum="a1b1d8ef02a48fe7cfa6926d4b18544c"
+    sum="43a81aa6c6ae182cec78a96cd228b76f"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, default behavior">
-     </label>
+     name="expl:Constructor of class String, default behavior"/>
     <label
-     name="expl:parameter cons_String_byteA_int_ensures_default">
-     </label>
+     name="expl:parameter cons_String_byteA_int_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -645,45 +621,43 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_int_String_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="316" loccnumb="11" loccnume="17"
     expl="Constructor of class String, default behavior"
-    sum="ac252a0efaeae0844cc21be0f811b534"
+    sum="67b7fe75b4e1c8c65fd719038867db11"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, default behavior">
-     </label>
+     name="expl:Constructor of class String, default behavior"/>
     <label
-     name="expl:parameter cons_String_byteA_int_int_String_ensures_default">
-     </label>
+     name="expl:parameter cons_String_byteA_int_int_String_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_int_String_safety"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="316" loccnumb="11" loccnume="17"
     expl="Constructor of class String, Safety"
-    sum="f8d258d2bc9f9a47075664851fcd2c7d"
+    sum="ea195b563e1322011be0794a4550079d"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, Safety">
-     </label>
+     name="expl:Constructor of class String, Safety"/>
     <label
-     name="expl:parameter cons_String_byteA_int_int_String_safety">
-     </label>
+     name="expl:parameter cons_String_byteA_int_int_String_safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -691,45 +665,43 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_int_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="371" loccnumb="11" loccnume="17"
     expl="Constructor of class String, default behavior"
-    sum="e0b6980338ac22094ca6879b6ce1537f"
+    sum="7aa469b43b85d2f458219043d1e668e0"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, default behavior">
-     </label>
+     name="expl:Constructor of class String, default behavior"/>
     <label
-     name="expl:parameter cons_String_byteA_int_int_ensures_default">
-     </label>
+     name="expl:parameter cons_String_byteA_int_int_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_int_int_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="234" loccnumb="11" loccnume="17"
     expl="Constructor of class String, default behavior"
-    sum="fbbd4c6c5c7c4f03544e9387e0f8c27c"
+    sum="1222510a82d7a8740fc4a1d81d9c7c1c"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, default behavior">
-     </label>
+     name="expl:Constructor of class String, default behavior"/>
     <label
-     name="expl:parameter cons_String_byteA_int_int_int_ensures_default">
-     </label>
+     name="expl:parameter cons_String_byteA_int_int_int_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -737,22 +709,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_int_int_safety"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="234" loccnumb="11" loccnume="17"
     expl="Constructor of class String, Safety"
-    sum="9a328a9d5998543c0bf3481b5ba7254b"
+    sum="ac82f199d74170347542d6a3196b3d30"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, Safety">
-     </label>
+     name="expl:Constructor of class String, Safety"/>
     <label
-     name="expl:parameter cons_String_byteA_int_int_int_safety">
-     </label>
+     name="expl:parameter cons_String_byteA_int_int_int_safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -760,22 +731,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_int_safety"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="371" loccnumb="11" loccnume="17"
     expl="Constructor of class String, Safety"
-    sum="86544d8c8ccb9f2a9cb99caf3a7e1d5e"
+    sum="9e1a0f55d798616b92a4bd7fdb0d18a8"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, Safety">
-     </label>
+     name="expl:Constructor of class String, Safety"/>
     <label
-     name="expl:parameter cons_String_byteA_int_int_safety">
-     </label>
+     name="expl:parameter cons_String_byteA_int_int_safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -783,22 +753,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_int_safety"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="275" loccnumb="11" loccnume="17"
     expl="Constructor of class String, Safety"
-    sum="5d22c386098139aa31a191f1e92590f2"
+    sum="eb32f61f0c55f4392274d103ef1e08af"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, Safety">
-     </label>
+     name="expl:Constructor of class String, Safety"/>
     <label
-     name="expl:parameter cons_String_byteA_int_safety">
-     </label>
+     name="expl:parameter cons_String_byteA_int_safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -806,22 +775,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_byteA_safety"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="391" loccnumb="11" loccnume="17"
     expl="Constructor of class String, Safety"
-    sum="eb238e05156f008127913610d8e7b9f3"
+    sum="c4221f31934925a7bde4f52b80edf16b"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, Safety">
-     </label>
+     name="expl:Constructor of class String, Safety"/>
     <label
-     name="expl:parameter cons_String_byteA_safety">
-     </label>
+     name="expl:parameter cons_String_byteA_safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -829,22 +797,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_charA_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="167" loccnumb="11" loccnume="17"
     expl="Constructor of class String, default behavior"
-    sum="a222407892ad09113b4df689fc5eda45"
+    sum="69422cb085aacc400854ac3b7900efa2"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, default behavior">
-     </label>
+     name="expl:Constructor of class String, default behavior"/>
     <label
-     name="expl:parameter cons_String_charA_ensures_default">
-     </label>
+     name="expl:parameter cons_String_charA_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -852,22 +819,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_charA_int_int_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="189" loccnumb="11" loccnume="17"
     expl="Constructor of class String, default behavior"
-    sum="25a97a24922fd073a821e6af51deed7f"
+    sum="f7b604ec08921ba704a82687631da694"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, default behavior">
-     </label>
+     name="expl:Constructor of class String, default behavior"/>
     <label
-     name="expl:parameter cons_String_charA_int_int_ensures_default">
-     </label>
+     name="expl:parameter cons_String_charA_int_int_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -875,22 +841,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_charA_int_int_safety"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="189" loccnumb="11" loccnume="17"
     expl="Constructor of class String, Safety"
-    sum="fafd5374da66f42d8ec400779299ecbe"
+    sum="a2cd1036127a05d2aa5c2e2a825d223b"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, Safety">
-     </label>
+     name="expl:Constructor of class String, Safety"/>
     <label
-     name="expl:parameter cons_String_charA_int_int_safety">
-     </label>
+     name="expl:parameter cons_String_charA_int_int_safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -898,22 +863,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_charA_safety"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="167" loccnumb="11" loccnume="17"
     expl="Constructor of class String, Safety"
-    sum="cdc694b0db0496851e8f40f6fb2bcc65"
+    sum="b92d6091abcf2babd9dd3966eadfb84d"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, Safety">
-     </label>
+     name="expl:Constructor of class String, Safety"/>
     <label
-     name="expl:parameter cons_String_charA_safety">
-     </label>
+     name="expl:parameter cons_String_charA_safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -921,22 +885,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="129" loccnumb="11" loccnume="17"
     expl="Constructor of class String, default behavior"
-    sum="62b11458dec74a37a1b89e1335ca695b"
+    sum="d87b46563f3f45af410b858c9c0314b1"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, default behavior">
-     </label>
+     name="expl:Constructor of class String, default behavior"/>
     <label
-     name="expl:parameter cons_String_ensures_default">
-     </label>
+     name="expl:parameter cons_String_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -944,22 +907,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_int_int_charA_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="413" loccnumb="4" loccnume="10"
     expl="Constructor of class String, default behavior"
-    sum="a9740014af328873b2185579ed576d53"
+    sum="f2e988d8f6d03dba100a792b7ae27876"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, default behavior">
-     </label>
+     name="expl:Constructor of class String, default behavior"/>
     <label
-     name="expl:parameter cons_String_int_int_charA_ensures_default">
-     </label>
+     name="expl:parameter cons_String_int_int_charA_ensures_default"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -967,22 +929,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_int_int_charA_safety"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="413" loccnumb="4" loccnume="10"
     expl="Constructor of class String, Safety"
-    sum="242aa4a2dc4df74aaa0054bb8bc5f781"
+    sum="0182f8ed830d6a27a3305ffdf7e2310b"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, Safety">
-     </label>
+     name="expl:Constructor of class String, Safety"/>
     <label
-     name="expl:parameter cons_String_int_int_charA_safety">
-     </label>
+     name="expl:parameter cons_String_int_int_charA_safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -990,22 +951,21 @@
    </goal>
    <goal
     name="WP_parameter cons_String_safety"
-    locfile="/usr/local/lib/why/java_api/java/lang/String.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/String.java"
     loclnum="129" loccnumb="11" loccnume="17"
     expl="Constructor of class String, Safety"
-    sum="b4acd1f11161b49cb6c5196e80df6a88"
+    sum="303e0b71044a02bbd0ad6b383620ca10"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:Constructor of class String, Safety">
-     </label>
+     name="expl:Constructor of class String, Safety"/>
     <label
-     name="expl:parameter cons_String_safety">
-     </label>
+     name="expl:parameter cons_String_safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -1013,22 +973,21 @@
    </goal>
    <goal
     name="WP_parameter cons_System_ensures_default"
-    locfile="/usr/local/lib/why/java_api/java/lang/System.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/System.java"
     loclnum="44" loccnumb="12" loccnume="18"
     expl="parameter cons_System_ensures_default"
-    sum="1422d8c6e84d4248f2ff155541a98ffa"
+    sum="7e0fb05351739f18709e413b1667ecb8"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_System_ensures_default">
-     </label>
+     name="expl:parameter cons_System_ensures_default"/>
     <label
-     name="expl:Constructor of class System, default behavior">
-     </label>
+     name="expl:Constructor of class System, default behavior"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -1036,22 +995,21 @@
    </goal>
    <goal
     name="WP_parameter cons_System_safety"
-    locfile="/usr/local/lib/why/java_api/java/lang/System.java"
+    locfile="/home/marche/why2-nitrogen/lib/java_api/java/lang/System.java"
     loclnum="44" loccnumb="12" loccnume="18"
     expl="parameter cons_System_safety"
-    sum="c0998be6f377cf579ba26e10f8e53b71"
+    sum="66b957e2e277faad1ea9fbfd68fbb842"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_System_safety">
-     </label>
+     name="expl:parameter cons_System_safety"/>
     <label
-     name="expl:Constructor of class System, Safety">
-     </label>
+     name="expl:Constructor of class System, Safety"/>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>

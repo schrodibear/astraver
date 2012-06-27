@@ -1,0 +1,435 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
+<why3session
+ name="eps_line1.jessie/eps_line1/why3session.xml">
+ <prover
+  id="0"
+  name="Alt-Ergo"
+  version="0.94"/>
+ <prover
+  id="1"
+  name="CVC3"
+  version="2.2"/>
+ <prover
+  id="2"
+  name="CVC3"
+  version="2.4.1"/>
+ <prover
+  id="3"
+  name="Gappa"
+  version="0.16.0"/>
+ <file
+  name="../eps_line1.mlw"
+  verified="true"
+  expanded="true">
+  <theory
+   name="Jessie_model"
+   locfile="eps_line1.jessie/eps_line1/../eps_line1.mlw"
+   loclnum="1" loccnumb="7" loccnume="19"
+   verified="true"
+   expanded="false">
+  </theory>
+  <theory
+   name="WP Jessie_program"
+   locfile="eps_line1.jessie/eps_line1/../eps_line1.mlw"
+   loclnum="236" loccnumb="7" loccnume="21"
+   verified="true"
+   expanded="true">
+   <goal
+    name="WP_parameter eps_line_ensures_default"
+    locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+    loclnum="30" loccnumb="4" loccnume="12"
+    expl="normal postcondition"
+    sum="13b51c1ab1de83b6407b404b8b3b93b3"
+    proved="true"
+    expanded="true"
+    shape="ainfix =ainteger_of_int32V22ainfix *al_signainfix +ainfix *aexactV0aexactV2ainfix *aexactV1aexactV3al_signainfix -ainfix *aexactV0aexactV3ainfix *aexactV1aexactV2Iainfix =ainteger_of_int32V22c0NIainfix =V22V21FIainfix =V21V20FIainfix =ainteger_of_int32V20ainfix *ainteger_of_int32V11ainteger_of_int32V19FIainfix =V19V18FIainfix &lt;=aabsainteger_of_int32V18c1Aainfix =ainteger_of_int32V18al_signaexactV14Iainfix =ainteger_of_int32V18c0NFIaof_real_postaNearestTiesToEvenc0x1.p-45V17FIaneg_postV15V16FIaof_real_postaNearestTiesToEvenc0x1.p-45V15FIasub_postaNearestTiesToEvenV12V13V14FIamul_postaNearestTiesToEvenV1V2V13FIamul_postaNearestTiesToEvenV0V3V12FIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIaof_real_postaNearestTiesToEvenc0x1.p-45V9FIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIaadd_postaNearestTiesToEvenV4V5V6FIamul_postaNearestTiesToEvenV1V3V5FIamul_postaNearestTiesToEvenV0V2V4FIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0FFFF">
+    <label
+     name="expl:Function eps_line, default behavior"/>
+    <label
+     name="expl:parameter eps_line_ensures_default"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.16"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter eps_line_safety"
+    locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+    loclnum="30" loccnumb="4" loccnume="12"
+    expl="Function eps_line, Safety"
+    sum="799ebf7811918d3082a4be0750be1b07"
+    proved="true"
+    expanded="true"
+    shape="ainfix &lt;=ainfix *ainteger_of_int32V11ainteger_of_int32V19c2147483647Aainfix &lt;=aprefix -c2147483648ainfix *ainteger_of_int32V11ainteger_of_int32V19Iainfix =V19V18FIainfix &lt;=aabsainteger_of_int32V18c1Aainfix =ainteger_of_int32V18al_signaexactV14Iainfix =ainteger_of_int32V18c0NFAainfix &lt;=ainfix -avalueV14aexactV14avalueV17Aainfix &lt;=avalueV16ainfix -avalueV14aexactV14Iaof_real_postaNearestTiesToEvenc0x1.p-45V17FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV15V16FIaof_real_postaNearestTiesToEvenc0x1.p-45V15FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIasub_postaNearestTiesToEvenV12V13V14FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV12avalueV13amax_doubleIamul_postaNearestTiesToEvenV1V2V13FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIamul_postaNearestTiesToEvenV0V3V12FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFAainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FAainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV4V5V6FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV5amax_doubleIamul_postaNearestTiesToEvenV1V3V5FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIamul_postaNearestTiesToEvenV0V2V4FAainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0FFFF">
+    <label
+     name="expl:Function eps_line, Safety"/>
+    <label
+     name="expl:parameter eps_line_safety"/>
+    <transf
+     name="split_goal"
+     proved="true"
+     expanded="true">
+     <goal
+      name="WP_parameter eps_line_safety.1"
+      locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+      loclnum="30" loccnumb="4" loccnume="12"
+      expl="floating-point overflow"
+      sum="f685c8fb00a036057f42e12c872cdf8c"
+      proved="true"
+      expanded="true"
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0FFFF">
+      <label
+       name="expl:Function eps_line, Safety"/>
+      <label
+       name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter eps_line_safety.2"
+      locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+      loclnum="30" loccnumb="4" loccnume="12"
+      expl="floating-point overflow"
+      sum="1b79f0e9a256ac0192589ab67c03021a"
+      proved="true"
+      expanded="true"
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIamul_postaNearestTiesToEvenV0V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0FFFF">
+      <label
+       name="expl:Function eps_line, Safety"/>
+      <label
+       name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.01"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter eps_line_safety.3"
+      locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+      loclnum="30" loccnumb="4" loccnume="12"
+      expl="floating-point overflow"
+      sum="06a36a1f86598fbe12bd78ca3fbb6c73"
+      proved="true"
+      expanded="true"
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV5amax_doubleIamul_postaNearestTiesToEvenV1V3V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIamul_postaNearestTiesToEvenV0V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0FFFF">
+      <label
+       name="expl:Function eps_line, Safety"/>
+      <label
+       name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter eps_line_safety.4"
+      locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+      loclnum="30" loccnumb="4" loccnume="12"
+      expl="floating-point overflow"
+      sum="dfd78eeabee3cb9da65a0bd5603d3e61"
+      proved="true"
+      expanded="true"
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV4V5V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV5amax_doubleIamul_postaNearestTiesToEvenV1V3V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIamul_postaNearestTiesToEvenV0V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0FFFF">
+      <label
+       name="expl:Function eps_line, Safety"/>
+      <label
+       name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter eps_line_safety.5"
+      locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+      loclnum="30" loccnumb="4" loccnume="12"
+      expl="floating-point overflow"
+      sum="a2e1b52007dae4a54f0a742b17ddd32d"
+      proved="true"
+      expanded="true"
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV4V5V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV5amax_doubleIamul_postaNearestTiesToEvenV1V3V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIamul_postaNearestTiesToEvenV0V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0FFFF">
+      <label
+       name="expl:Function eps_line, Safety"/>
+      <label
+       name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.02"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter eps_line_safety.6"
+      locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+      loclnum="30" loccnumb="4" loccnume="12"
+      expl="precondition for call"
+      sum="b7cb962ba80d547c41a0752eea7d8c74"
+      proved="true"
+      expanded="true"
+      shape="ainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV4V5V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV5amax_doubleIamul_postaNearestTiesToEvenV1V3V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIamul_postaNearestTiesToEvenV0V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0FFFF">
+      <label
+       name="expl:Function eps_line, Safety"/>
+      <label
+       name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter eps_line_safety.7"
+      locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+      loclnum="30" loccnumb="4" loccnume="12"
+      expl="floating-point overflow"
+      sum="d3c33dc3251a7c25c638993736eb58ac"
+      proved="true"
+      expanded="true"
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV4V5V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV5amax_doubleIamul_postaNearestTiesToEvenV1V3V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIamul_postaNearestTiesToEvenV0V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0FFFF">
+      <label
+       name="expl:Function eps_line, Safety"/>
+      <label
+       name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter eps_line_safety.8"
+      locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+      loclnum="30" loccnumb="4" loccnume="12"
+      expl="floating-point overflow"
+      sum="bb524601c943e0505d6a0eb995bd3e5e"
+      proved="true"
+      expanded="true"
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIamul_postaNearestTiesToEvenV0V3V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV4V5V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV5amax_doubleIamul_postaNearestTiesToEvenV1V3V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIamul_postaNearestTiesToEvenV0V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0FFFF">
+      <label
+       name="expl:Function eps_line, Safety"/>
+      <label
+       name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.03"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter eps_line_safety.9"
+      locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+      loclnum="30" loccnumb="4" loccnume="12"
+      expl="floating-point overflow"
+      sum="0301988cae43430856f5cd367ae497c6"
+      proved="true"
+      expanded="true"
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV12avalueV13amax_doubleIamul_postaNearestTiesToEvenV1V2V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIamul_postaNearestTiesToEvenV0V3V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV4V5V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV5amax_doubleIamul_postaNearestTiesToEvenV1V3V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIamul_postaNearestTiesToEvenV0V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0FFFF">
+      <label
+       name="expl:Function eps_line, Safety"/>
+      <label
+       name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter eps_line_safety.10"
+      locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+      loclnum="30" loccnumb="4" loccnume="12"
+      expl="floating-point overflow"
+      sum="48d58abebb0d310ea64b17aea30b602a"
+      proved="true"
+      expanded="true"
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIasub_postaNearestTiesToEvenV12V13V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV12avalueV13amax_doubleIamul_postaNearestTiesToEvenV1V2V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIamul_postaNearestTiesToEvenV0V3V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV4V5V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV5amax_doubleIamul_postaNearestTiesToEvenV1V3V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIamul_postaNearestTiesToEvenV0V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0FFFF">
+      <label
+       name="expl:Function eps_line, Safety"/>
+      <label
+       name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter eps_line_safety.11"
+      locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+      loclnum="30" loccnumb="4" loccnume="12"
+      expl="floating-point overflow"
+      sum="66433a74f2813436e8cbb5e869cdd0ad"
+      proved="true"
+      expanded="true"
+      shape="ainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV15V16FIaof_real_postaNearestTiesToEvenc0x1.p-45V15FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIasub_postaNearestTiesToEvenV12V13V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV12avalueV13amax_doubleIamul_postaNearestTiesToEvenV1V2V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIamul_postaNearestTiesToEvenV0V3V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV4V5V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV5amax_doubleIamul_postaNearestTiesToEvenV1V3V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIamul_postaNearestTiesToEvenV0V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0FFFF">
+      <label
+       name="expl:Function eps_line, Safety"/>
+      <label
+       name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.04"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter eps_line_safety.12"
+      locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+      loclnum="30" loccnumb="4" loccnume="12"
+      expl="precondition for call"
+      sum="c208e058992cab3c7f4b45d7af9bbdb5"
+      proved="true"
+      expanded="true"
+      shape="ainfix &lt;=ainfix -avalueV14aexactV14avalueV17Aainfix &lt;=avalueV16ainfix -avalueV14aexactV14Iaof_real_postaNearestTiesToEvenc0x1.p-45V17FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV15V16FIaof_real_postaNearestTiesToEvenc0x1.p-45V15FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIasub_postaNearestTiesToEvenV12V13V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV12avalueV13amax_doubleIamul_postaNearestTiesToEvenV1V2V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIamul_postaNearestTiesToEvenV0V3V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV4V5V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV5amax_doubleIamul_postaNearestTiesToEvenV1V3V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIamul_postaNearestTiesToEvenV0V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0FFFF">
+      <label
+       name="expl:Function eps_line, Safety"/>
+      <label
+       name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="3"
+       timelimit="5"
+       memlimit="0"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.07"/>
+      </proof>
+     </goal>
+     <goal
+      name="WP_parameter eps_line_safety.13"
+      locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+      loclnum="30" loccnumb="4" loccnume="12"
+      expl="arithmetic overflow"
+      sum="e783a650d8052d0e200e2d7f7164fba6"
+      proved="true"
+      expanded="true"
+      shape="ainfix &lt;=ainfix *ainteger_of_int32V11ainteger_of_int32V19c2147483647Aainfix &lt;=aprefix -c2147483648ainfix *ainteger_of_int32V11ainteger_of_int32V19Iainfix =V19V18FIainfix &lt;=aabsainteger_of_int32V18c1Aainfix =ainteger_of_int32V18al_signaexactV14Iainfix =ainteger_of_int32V18c0NFIainfix &lt;=ainfix -avalueV14aexactV14avalueV17Aainfix &lt;=avalueV16ainfix -avalueV14aexactV14Iaof_real_postaNearestTiesToEvenc0x1.p-45V17FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV15V16FIaof_real_postaNearestTiesToEvenc0x1.p-45V15FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIasub_postaNearestTiesToEvenV12V13V14FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix -avalueV12avalueV13amax_doubleIamul_postaNearestTiesToEvenV1V2V13FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV2amax_doubleIamul_postaNearestTiesToEvenV0V3V12FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV3amax_doubleIainfix =V11V10FIainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV6Iainfix =ainteger_of_int32V10c0NFIainfix &lt;=ainfix -avalueV6aexactV6avalueV9Aainfix &lt;=avalueV8ainfix -avalueV6aexactV6Iaof_real_postaNearestTiesToEvenc0x1.p-45V9FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaneg_postV7V8FIaof_real_postaNearestTiesToEvenc0x1.p-45V7FIainfix &lt;=aabsaroundaNearestTiesToEvenc0x1.p-45amax_doubleIaadd_postaNearestTiesToEvenV4V5V6FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix +avalueV4avalueV5amax_doubleIamul_postaNearestTiesToEvenV1V3V5FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV1avalueV3amax_doubleIamul_postaNearestTiesToEvenV0V2V4FIainfix &lt;=aabsaroundaNearestTiesToEvenainfix *avalueV0avalueV2amax_doubleIainfix &lt;=aabsavalueV3c1.0Aainfix &lt;=aabsavalueV2c1.0Aainfix &lt;=aabsavalueV1c100.0Aainfix &lt;=aabsavalueV0c100.0Aainfix =avalueV3aexactV3Aainfix =avalueV2aexactV2Aainfix =avalueV1aexactV1Aainfix =avalueV0aexactV0FFFF">
+      <label
+       name="expl:Function eps_line, Safety"/>
+      <label
+       name="expl:parameter eps_line_safety"/>
+      <proof
+       prover="3"
+       timelimit="30"
+       memlimit="100"
+       obsolete="false"
+       archived="false">
+       <result status="valid" time="0.06"/>
+      </proof>
+     </goal>
+    </transf>
+   </goal>
+   <goal
+    name="WP_parameter sign_ensures_default"
+    locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+    loclnum="11" loccnumb="4" loccnume="8"
+    expl="Function sign, default behavior"
+    sum="60ebc7c9dac0803c46f6f6963e9904b4"
+    proved="true"
+    expanded="true"
+    shape="iainfix =V3aTrueainfix &lt;=aabsainteger_of_int32V6c1Aainfix =ainteger_of_int32V6al_signaexactV0Iainfix =ainteger_of_int32V6c0NIainfix =V6V5FIainfix =V5V4FIainfix =ainteger_of_int32V4c1Fiainfix =V7aTrueainfix &lt;=aabsainteger_of_int32V10c1Aainfix =ainteger_of_int32V10al_signaexactV0Iainfix =ainteger_of_int32V10c0NIainfix =V10V9FIainfix =V9V8FIainfix =ainteger_of_int32V8aprefix -c1Fainfix &lt;=aabsainteger_of_int32V13c1Aainfix =ainteger_of_int32V13al_signaexactV0Iainfix =ainteger_of_int32V13c0NIainfix =V13V12FIainfix =V12V11FIainfix =ainteger_of_int32V11c0FIiainfix =V7aTruealtV0V1altV0V1NFIiainfix =V3aTrueainfix &gt;avalueV0avalueV2ainfix &lt;=avalueV0avalueV2FIainfix &lt;=ainfix -avalueV0aexactV0avalueV2Aainfix &lt;=avalueV1ainfix -avalueV0aexactV0FFF">
+    <label
+     name="expl:Function sign, default behavior"/>
+    <label
+     name="expl:parameter sign_ensures_default"/>
+    <proof
+     prover="1"
+     timelimit="30"
+     memlimit="100"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.15"/>
+    </proof>
+    <proof
+     prover="0"
+     timelimit="30"
+     memlimit="100"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.11"/>
+    </proof>
+    <proof
+     prover="2"
+     timelimit="30"
+     memlimit="100"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.17"/>
+    </proof>
+   </goal>
+   <goal
+    name="WP_parameter sign_safety"
+    locfile="/home/cmarche/why2-trunk/tests/c/eps_line1.c"
+    loclnum="11" loccnumb="4" loccnume="8"
+    expl="Function sign, Safety"
+    sum="25fd8956ce933e0e771364ddd44d009c"
+    proved="true"
+    expanded="true"
+    shape="t">
+    <label
+     name="expl:Function sign, Safety"/>
+    <label
+     name="expl:parameter sign_safety"/>
+    <proof
+     prover="0"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.05"/>
+    </proof>
+    <proof
+     prover="3"
+     timelimit="5"
+     memlimit="0"
+     obsolete="false"
+     archived="false">
+     <result status="valid" time="0.01"/>
+    </proof>
+   </goal>
+  </theory>
+ </file>
+</why3session>

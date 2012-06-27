@@ -26,36 +26,6 @@ use import floating_point.Double
 
 (* Specification of operations in single precision *)
 
-predicate neg_single_post (x res:single) =
-  Single.value res = - Single.value x /\
-  Single.exact res = - Single.exact x /\
-  Single.model res = - Single.model x
-
-predicate add_single_post (m:mode) (x y res:single) =
-  Single.value res = Single.round m (Single.value x + Single.value y) /\
-  Single.exact res = Single.exact x + Single.exact y /\
-  Single.model res = Single.model x + Single.model y
-
-predicate sub_single_post (m:mode) (x y res:single) =
-  Single.value res = Single.round m (Single.value x - Single.value y) /\
-  Single.exact res = Single.exact x - Single.exact y /\
-  Single.model res = Single.model x - Single.model y
-
-predicate mul_single_post (m:mode) (x y res:single) =
-  Single.value res = Single.round m (Single.value x * Single.value y) /\
-  Single.exact res = Single.exact x * Single.exact y /\
-  Single.model res = Single.model x * Single.model y
-
-predicate div_single_post (m:mode) (x y res:single) =
-  Single.value res = Single.round m (Single.value x / Single.value y) /\
-  Single.exact res = Single.exact x / Single.exact y /\
-  Single.model res = Single.model x / Single.model y
-
-predicate single_of_real_post (m:mode) (x:real) (res:single) =
-  Single.value res = Single.round m x /\
-  Single.exact res = x /\
-  Single.model res = x
-
 predicate single_of_double_post (m:mode) (x:double) (res:single) =
   Single.value res = Single.round m (Double.value x) /\
   Single.exact res = Double.exact x /\
@@ -66,12 +36,12 @@ val any_single : () -> { } single { }
 val single_of_real (m:mode) (x:real) :
   { Single.no_overflow m x }
   single
-  { single_of_real_post m x result }
+  { Single.of_real_post m x result }
 
 val single_of_real_safe (m:mode) (x:real) :
   { }
   single
-  { single_of_real_post m x result }
+  { Single.of_real_post m x result }
 
 val single_of_real_exact (x:real) :
   { }
@@ -91,55 +61,46 @@ val single_of_double_safe (m:mode) (x:double) :
   { single_of_double_post m x result }
 
 val neg_single (x:single) :
-  { }
-  single
-  { neg_single_post x result }
+  { } single { Single.neg_post x result }
 
 val add_single (m:mode) (x y:single) :
   { Single.no_overflow m (Single.value x + Single.value y) }
   single
-  { add_single_post m x y result }
+  { Single.add_post m x y result }
 
 val add_single_safe (m:mode) (x y:single) :
-  { }
-  single
-  { add_single_post m x y result }
+  { } single { Single.add_post m x y result }
 
 val sub_single (m:mode) (x y:single) :
   { Single.no_overflow m (Single.value x - Single.value y) }
   single
-  { sub_single_post m x y result }
+  { Single.sub_post m x y result }
 
 val sub_single_safe (m:mode) (x y:single) :
-  { }
-  single
-  { sub_single_post m x y result }
+  { } single { Single.sub_post m x y result }
 
 val mul_single (m:mode) (x y:single) :
   { Single.no_overflow m (Single.value x * Single.value y) }
   single
-  { mul_single_post m x y result }
+  { Single.mul_post m x y result }
 
 val mul_single_safe (m:mode) (x y:single) :
-  { }
-  single
-  { mul_single_post m x y result }
+  { } single { Single.mul_post m x y result }
 
 val div_single (m:mode) (x y:single) :
   { Single.value y <> 0.0 /\
     Single.no_overflow m (Single.value x / Single.value y) }
   single
-  { div_single_post m x y result }
+  { Single.div_post m x y result }
 
 val div_single_safe (m:mode) (x y:single) :
   { }
   single
   { Single.value y <> 0.0 /\
-    div_single_post m x y result }
+    Single.div_post m x y result }
 
 val lt_single_ (x y:single) :
-  {} bool { if result = True then Single.value x < Single.value y
-            else Single.value x >= Single.value y }
+  {} bool { if result = True then Single.lt x y else not (Single.lt x y) }
 
 val le_single_ (x y:single) :
   {} bool { if result = True then Single.value x <= Single.value y
@@ -163,36 +124,6 @@ val ne_single_ (x y:single) :
 
 (* Specification of operations in double precision *)
 
-predicate neg_double_post (x res:double) =
-  Double.value res = - Double.value x /\
-  Double.exact res = - Double.exact x /\
-  Double.model res = - Double.model x
-
-predicate add_double_post (m:mode) (x y res:double) =
-  Double.value res = Double.round m (Double.value x + Double.value y) /\
-  Double.exact res = Double.exact x + Double.exact y /\
-  Double.model res = Double.model x + Double.model y
-
-predicate sub_double_post (m:mode) (x y res:double) =
-  Double.value res = Double.round m (Double.value x - Double.value y) /\
-  Double.exact res = Double.exact x - Double.exact y /\
-  Double.model res = Double.model x - Double.model y
-
-predicate mul_double_post (m:mode) (x y res:double) =
-  Double.value res = Double.round m (Double.value x * Double.value y) /\
-  Double.exact res = Double.exact x * Double.exact y /\
-  Double.model res = Double.model x * Double.model y
-
-predicate div_double_post (m:mode) (x y res:double) =
-  Double.value res = Double.round m (Double.value x / Double.value y) /\
-  Double.exact res = Double.exact x / Double.exact y /\
-  Double.model res = Double.model x / Double.model y
-
-predicate double_of_real_post (m:mode) (x:real) (res:double) =
-  Double.value res = Double.round m x /\
-  Double.exact res = x /\
-  Double.model res = x
-
 predicate double_of_single_post (x:single) (res:double) =
   Double.value res = Single.value x /\
   Double.exact res = Single.exact x /\
@@ -203,75 +134,69 @@ val any_double : () -> { } double { }
 val double_of_real (m:mode) (x:real) :
   { Double.no_overflow m x }
   double
-  { double_of_real_post m x result }
+  { Double.of_real_post m x result }
 
 val double_of_real_safe (m:mode) (x:real) :
-  { }
-  double
-  { double_of_real_post m x result }
+  { } double { Double.of_real_post m x result }
 
 val double_of_real_exact : x:real ->
-  { }
-  double
+  { } double
   { Double.value result = x /\
     Double.exact result = x /\
     Double.model result = x }
 
 val double_of_single (x:single) :
-  { }
-  double
-  { double_of_single_post x result }
+  { } double { double_of_single_post x result }
 
 val neg_double (x:double) :
-  { }
-  double
-  { neg_double_post x result }
+  { } double { Double.neg_post x result }
+
+val neg_double_safe (x:double) :
+  { } double { Double.neg_post x result }
 
 val add_double (m:mode) (x y:double) :
   { Double.no_overflow m (Double.value x + Double.value y) }
   double
-  { add_double_post m x y result }
+  { Double.add_post m x y result }
 
 val add_double_safe (m:mode) (x y:double) :
   { }
   double
-  { add_double_post m x y result }
+  { Double.add_post m x y result }
 
 val sub_double (m:mode) (x y:double) :
   { Double.no_overflow m (Double.value x - Double.value y) }
   double
-  { sub_double_post m x y result }
+  { Double.sub_post m x y result }
 
 val sub_double_safe (m:mode) (x y:double) :
   { }
   double
-  { sub_double_post m x y result }
+  { Double.sub_post m x y result }
 
 val mul_double (m:mode) (x y:double) :
   { Double.no_overflow m (Double.value x * Double.value y) }
   double
-  { mul_double_post m x y result }
+  { Double.mul_post m x y result }
 
 val mul_double_safe (m:mode) (x y:double) :
   { }
   double
-  { mul_double_post m x y result }
+  { Double.mul_post m x y result }
 
 val div_double (m:mode) (x y:double) :
   { Double.value y <> 0.0 /\
     Double.no_overflow m (Double.value x / Double.value y) }
   double
-  { div_double_post m x y result }
+  { Double.div_post m x y result }
 
 val div_double_safe (m:mode) (x y:double) :
   { }
   double
-  { Double.value y <> 0.0 /\
-    div_double_post m x y result }
+  { Double.value y <> 0.0 /\ Double.div_post m x y result }
 
 val lt_double_ (x y:double) :
-  {} bool { if result = True then Double.value x < Double.value y
-            else Double.value x >= Double.value y }
+  {} bool { if result = True then Double.lt x y else not (Double.lt x y) }
 
 val le_double_ (x y:double) :
   {} bool { if result = True then Double.value x <= Double.value y
@@ -301,18 +226,88 @@ module JessieFloatsFull
 use import real.Real
 use import floating_point.Rounding
 use import floating_point.SingleFull
-use import floating_point.DoubleFull
+use import floating_point.DoubleFull as Double
+
+val any_double : () -> { } double { }
 
 val lt_double_ (x:double) (y:double) :
-{ }
-bool
-{ if result = True then DoubleFull.lt_full x y else not (DoubleFull.lt_full x y) }
+  { } bool { if result = True then Double.lt x y else not (Double.lt x y) }
 
 val gt_double_ (x:double) (y:double) :
-{ }
-bool
-{ if result = True then DoubleFull.gt_full x y else not (DoubleFull.gt_full x y) }
+  { } bool { if result = True then Double.gt x y else not (Double.gt x y) }
 
+(* TODO: add missing parameters *)
+
+val add_double (m:mode) (x:double) (y:double) :
+  { } double { Double.add_post m x y result }
+
+val sub_double (m:mode) (x:double) (y:double) :
+  { } double { Double.sub_post m x y result }
+
+val mul_double (m:mode) (x:double) (y:double) :
+  { } double { Double.mul_post m x y result }
+
+val neg_double (x:double) :
+  { } double { Double.neg_post x result }
+
+
+val double_of_real_exact (x:real) :
+  { } double { Double.of_real_exact_post x result }
+
+end
+
+module JessieFloatsMultiRounding
+
+use import real.Real
+use import floating_point.Rounding
+use import floating_point.DoubleMultiRounding as Double
+
+val any_double : () -> { } double { }
+
+val lt_double_ (x:double) (y:double) :
+  { } bool { if result = True then Double.lt x y else not Double.lt x y }
+
+val gt_double_ (x:double) (y:double) :
+  { } bool { if result = True then Double.gt x y else not Double.gt x y }
+
+val add_double (m:mode) (x:double) (y:double) :
+  { Double.no_overflow m (Double.value x + Double.value y) }
+  double
+  { Double.add_post m x y result }
+
+val add_double_safe (m:mode) (x:double) (y:double) :
+  { } double { Double.add_post m x y result }
+
+val sub_double (m:mode) (x:double) (y:double) :
+  { Double.no_overflow m (value x - value y) } double { Double.sub_post m x y result }
+
+val sub_double_safe (m:mode) (x:double) (y:double) :
+  { } double { Double.sub_post m x y result }
+
+val mul_double (m:mode) (x:double) (y:double) :
+  { Double.no_overflow m (Double.value x * Double.value y) }
+  double
+  { Double.mul_post m x y result }
+
+val mul_double_safe (m:mode) (x:double) (y:double) :
+  { } double { Double.mul_post m x y result }
+
+
+val neg_double (m:mode) (x:double) :
+  { Double.no_overflow m (- (value x)) } double { Double.neg_post m x result }
+
+val neg_double_safe (m:mode) (x:double) :
+  { } double { Double.neg_post m x result }
+
+
+val double_of_real (m:mode) (x:real) :
+  { Double.no_overflow m x } double { Double.of_real_exact_post x result }
+
+val double_of_real_exact (x:real) :
+  { } double { Double.of_real_exact_post x result }
+
+val double_of_real_safe (m:mode) (x:real) :
+  { } double { Double.of_real_post m x result }
 
 end
 
@@ -359,7 +354,7 @@ val acc_ (alloc:alloc_table 't) (m:(memory 't 'v)) (p:pointer 't) :
   { result = select(m) p }
 
 (* offset access *)
-val offset_acc_ (alloc:alloc_table 't) (m:(memory 't 'v)) 
+val offset_acc_ (alloc:alloc_table 't) (m:(memory 't 'v))
   (p:pointer 't) (off:int) :
   { offset_min(alloc) p <= off /\ off <= offset_max(alloc) p }
   'v
@@ -390,7 +385,7 @@ val rsafe_bound_acc_ (m: (memory 't 'v)) (p:pointer 't) (off:int) (lb:int) :
   { result = select m (shift p off) }
 
 (* left bounded access *)
-val lbound_acc_ (alloc:alloc_table 't) (m: (memory 't 'v)) (p:pointer 't) 
+val lbound_acc_ (alloc:alloc_table 't) (m: (memory 't 'v)) (p:pointer 't)
   (off:int) (lb:int) :
   { lb <= off /\ off <= offset_max(alloc) p }
   'v
@@ -445,7 +440,7 @@ val safe_upd_ (m: ref (memory 't 'v)) (p:pointer 't) (v:'v) :
   { !m = store (old !m) p v }
 
 (* bounded update *)
-val bound_upd_ (m: ref (memory 't 'v)) (p:pointer 't) (off:int) (lb:int) 
+val bound_upd_ (m: ref (memory 't 'v)) (p:pointer 't) (off:int) (lb:int)
     (rb:int) (v:'v) :
   { lb <= off /\ off <= rb }
   unit
@@ -464,7 +459,7 @@ val lsafe_bound_upd_ (m: ref (memory 't 'v)) (p:pointer 't) (off:int) (rb:int) (
 *)
 
 (* bounded update with safe right bound *)
-val rsafe_bound_upd_ (m: ref (memory 't 'v)) (p:pointer 't) (off:int) (lb:int) 
+val rsafe_bound_upd_ (m: ref (memory 't 'v)) (p:pointer 't) (off:int) (lb:int)
     (v:'v) :
   { lb <= off }
   unit
@@ -482,7 +477,7 @@ val lbound_upd_ (alloc:alloc_table 't) (m: ref (memory 't 'v)) (p:pointer 't)
   { !m = store (old !m) (shift p off) v }
 
 (* left bounded update with safe left bound *)
-val lsafe_lbound_upd_ (alloc:alloc_table 't) (m: ref (memory 't 'v)) 
+val lsafe_lbound_upd_ (alloc:alloc_table 't) (m: ref (memory 't 'v))
     (p:pointer 't) (off:int) (v:'v) :
   { off <= offset_max(alloc) p }
   unit
@@ -491,7 +486,7 @@ val lsafe_lbound_upd_ (alloc:alloc_table 't) (m: ref (memory 't 'v))
   { !m = store (old !m) (shift p off) v }
 
 (* right bounded update *)
-val rbound_upd_ (alloc:alloc_table 't) (m: ref (memory 't 'v)) (p:pointer 't) 
+val rbound_upd_ (alloc:alloc_table 't) (m: ref (memory 't 'v)) (p:pointer 't)
     (off:int) (rb:int) (v:'v) :
   { offset_min(alloc) p <= off /\ off <= rb }
   unit
@@ -500,7 +495,7 @@ val rbound_upd_ (alloc:alloc_table 't) (m: ref (memory 't 'v)) (p:pointer 't)
   { !m = store (old !m) (shift p off) v }
 
 (* right bounded update with safe right bound *)
-val rsafe_rbound_upd_ (alloc:alloc_table 't) (m: ref (memory 't 'v)) 
+val rsafe_rbound_upd_ (alloc:alloc_table 't) (m: ref (memory 't 'v))
     (p:pointer 't) (off:int) (v:'v) :
   { offset_min(alloc) p <= off }
   unit
@@ -552,8 +547,8 @@ val any_tag_table: () -> {} tag_table 't { true }
 exception Return
 
 
-val alloc_val_ownership (a:ref (alloc_table 't)) 
-    (mut:ref (memory 't (tag_id 't))) (com:ref (memory 't bool)) 
+val alloc_val_ownership (a:ref (alloc_table 't))
+    (mut:ref (memory 't (tag_id 't))) (com:ref (memory 't bool))
     (tag:ref (tag_table 't)) (s:(tag_id 't)) (n:int) :
   { n > 0 }
   pointer 't
@@ -564,7 +559,7 @@ val alloc_val_ownership (a:ref (alloc_table 't))
     /\ instanceof !tag result s /\ select !mut result = bottom_tag
     /\ select !com result = False }
 
-val free_val_ownership (a:ref (alloc_table 't)) (com:ref (memory 't bool)) 
+val free_val_ownership (a:ref (alloc_table 't)) (com:ref (memory 't bool))
     (p:pointer 't) :
   { (*Cannot express yet offset_min a p = 0 /\*) offset_max !a p >= 0
 	/\ select !com p = False }
@@ -575,7 +570,7 @@ val free_val_ownership (a:ref (alloc_table 't)) (com:ref (memory 't bool))
 
 (* With -inv-sem <> ownership *)
 
-val alloc_parameter (a:ref (alloc_table 't)) (tag:ref (tag_table 't)) (s:(tag_id 't)) 
+val alloc_parameter (a:ref (alloc_table 't)) (tag:ref (tag_table 't)) (s:(tag_id 't))
     (n:int) :
   { n > 0 }
   pointer 't
@@ -584,7 +579,7 @@ val alloc_parameter (a:ref (alloc_table 't)) (tag:ref (tag_table 't)) (s:(tag_id
     /\ offset_min !a result = 0 /\ offset_max !a result = n-1
     /\ instanceof !tag result s }
 
-val safe_alloc_parameter (a:ref (alloc_table 't)) (tag:ref (tag_table 't)) 
+val safe_alloc_parameter (a:ref (alloc_table 't)) (tag:ref (tag_table 't))
     (s:(tag_id 't)) (n:int) :
   { }
   pointer 't
@@ -599,7 +594,7 @@ val free_parameter (a:ref (alloc_table 't)) (p:pointer 't) :
   unit
   writes a
   { (p = null -> !a = (old !a)) /\ (p <> null ->
-     alloc_extends_except (old !a) !a 
+     alloc_extends_except (old !a) !a
      (pset_range (pset_singleton p) 0 (offset_max (old !a) p))
      /\ offset_max !a p < offset_min !a p) }
 
@@ -607,7 +602,7 @@ val safe_free_parameter (a:ref (alloc_table 't)) (p:pointer 't) :
   { }
   unit
   writes a
-  { alloc_extends_except (old !a) !a 
+  { alloc_extends_except (old !a) !a
   (pset_range (pset_singleton p) 0 (offset_max (old !a) p))
     /\ offset_max !a p < offset_min !a p }
 

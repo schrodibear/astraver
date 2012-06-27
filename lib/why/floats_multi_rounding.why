@@ -69,6 +69,12 @@ parameter double_of_real :
   double
   { double_of_real_post(m,x,result) }
 
+parameter double_of_real_exact : x:real ->
+  { }
+  double
+  { double_value(result) = x and
+    double_exact(result) = x and
+    double_model(result) = x }
 
 
 parameter double_of_real_safe : 

@@ -157,6 +157,7 @@ let why3ident s =
     | "truncate_real_to_int" -> "Truncate.truncate"
     | "real_min" -> "RealMinMax.min"
     | "real_max" -> "RealMinMax.max"
+    | "abs_int" -> "AbsInt.abs"
     | "abs_real" -> "AbsReal.abs"
     | "sqrt_real" -> "Square.sqrt"
     | "pow_real" -> "PowerReal.pow"
@@ -167,22 +168,32 @@ let why3ident s =
     | "atan" -> "Trigonometry.atan"
         (* floats *)
     | "nearest_even" -> "Rounding.NearestTiesToEven"
+    | "down" -> "Rounding.Down"
     | "single_value" -> "Single.value"
     | "single_exact" -> "Single.exact"
     | "single_round_error" -> "Single.round_error"
     | "round_single" -> "Single.round"
+    | "no_overflow_single" -> "Single.no_overflow"
     | "double_value" -> "Double.value"
     | "double_exact" -> "Double.exact"
     | "double_round_error" -> "Double.round_error"
     | "round_double" -> "Double.round"
+    | "no_overflow_double" -> "Double.no_overflow"
         (* floats full *)
-    | "le_double_full" -> "DoubleFull.le_full"
-    | "lt_double_full" -> "DoubleFull.lt_full"
-    | "ge_double_full" -> "DoubleFull.ge_full"
-    | "gt_double_full" -> "DoubleFull.gt_full"
-    | "eq_double_full" -> "DoubleFull.eq_full"
-    | "ne_double_full" -> "DoubleFull.ne_full"
-    | "double_is_NaN" -> "DoubleFull.is_NaN"
+    | "le_double_full" -> "Double.le"
+    | "lt_double_full" -> "Double.lt"
+    | "ge_double_full" -> "Double.ge"
+    | "gt_double_full" -> "Double.gt"
+    | "eq_double_full" -> "Double.eq"
+    | "ne_double_full" -> "Double.ne"
+    | "double_is_finite" -> "Double.is_finite"
+    | "double_is_infinite" -> "Double.is_infinite"
+    | "double_is_plus_infinity" -> "Double.is_plus_infinity"
+    | "double_is_minus_infinity" -> "Double.is_minus_infinity"
+    | "double_is_NaN" -> "Double.is_NaN"
+    | "double_sign" -> "Double.sign"
+    | "Positive" -> "SpecialValues.Pos"
+    | "Negative" -> "SpecialValues.Neg"
     | _ -> why3id s
 
 let why3ident_if s =
@@ -212,6 +223,7 @@ let why3_Square = ref false
 let why3_PowerInt = ref false
 let why3_PowerReal = ref false
 let why3_RealMinMax = ref false
+let why3_AbsInt = ref false
 let why3_AbsReal = ref false
 let why3_Trigonometry = ref false
 
@@ -233,6 +245,7 @@ let compute_why3_dependencies f =
     | "truncate_real_to_int" -> why3_Truncate := true
     | "real_min" 
     | "real_max" -> why3_RealMinMax := true
+    | "abs_int" -> why3_AbsInt := true
     | "abs_real" -> why3_AbsReal := true
     | "cos"
     | "sin"
@@ -1100,13 +1113,35 @@ let rec fprintf_expr_node form e =
 	  fprintf_assertion pre
 	  fprintf_expr e
     | Triple(o,pre,e,post,exceps) ->
-	fprintf form "@[<hov 0>(assert { %a };@ ((%a)@ "
-	  fprintf_assertion pre
-	  fprintf_expr e;
+      fprintf form "@[<hov 0>(assert { %a };@ " fprintf_assertion pre;
+      if !why3syntax then
+        if o then
+          begin
+            fprintf form "abstract %a@ { %a@ "
+              fprintf_expr e
+	      fprintf_assertion post;
+            List.iter
+              (fun (e,r) ->
+                fprintf form "@[<hov 2>| %s =>@ %a@]" e fprintf_assertion r)
+              exceps;
+            fprintf form "}"
+          end
+        else
+          begin
+            match exceps with
+	      | [] ->
+                fprintf form "let _ = %a in assert { %a }" 
+                  fprintf_expr e
+		  fprintf_assertion post
+              | _ -> assert false (* TODO *)
+        end
+      else
 	begin
+          fprintf form "(%a)@ " fprintf_expr e;
 	  match exceps with
 	    | [] ->
-		(if o then fprintf form "{{ %a }}" else fprintf form "{ %a }")
+		(if o then 
+                    fprintf form "{{ %a }}" else fprintf form "{ %a }")
 		  fprintf_assertion post
 	    | l ->
 		(if o then
@@ -1120,7 +1155,7 @@ let rec fprintf_expr_node form e =
 		       fprintf_assertion r))
 		  l
 	end;
-	fprintf form "))@]"
+      fprintf form ")@]"
     | Assert(k,p, e) ->
 	fprintf form "@[<hov 0>(%s@ { %a };@ %a)@]"
           (match k with `ASSERT -> "assert" | `CHECK -> "check")
@@ -1541,7 +1576,7 @@ let output_decls get_id iter_decl output_decl decls =
        do_topo map iter_decl output_decl id.name decl)
     l
 
-let output_why3_imports form use_floats full_floats =
+let output_why3_imports form use_floats float_model =
   fprintf form "use import int.Int@\n@\n";
   fprintf form "use import bool.Bool@\n@\n";
   if !why3_IntMinMax then
@@ -1562,29 +1597,32 @@ let output_why3_imports form use_floats full_floats =
     fprintf form "use import real.PowerReal@\n@\n";
   if !why3_RealMinMax then
     fprintf form "use import real.MinMax as RealMinMax@\n@\n";
+  if !why3_AbsInt then
+    fprintf form "use import int.Abs as AbsInt@\n@\n";
   if !why3_AbsReal then
     fprintf form "use import real.Abs as AbsReal@\n@\n";
   if !why3_Trigonometry then
     fprintf form "use import real.Trigonometry@\n@\n";
   if use_floats then
     begin
-      if full_floats then
-        begin
-          fprintf form "use import floating_point.SingleFull@\n";
-          fprintf form "use import floating_point.DoubleFull@\n@\n";
-        end
-      else
-        begin
+      match float_model with
+        | Jc_env.FMfull ->
+          fprintf form "use import floating_point.SingleFull as Single@\n";
+          fprintf form "use import floating_point.DoubleFull as Double@\n@\n"
+        | Jc_env.FMdefensive ->
           fprintf form "use import floating_point.Single@\n";
-          fprintf form "use import floating_point.Double@\n@\n";
-        end
+          fprintf form "use import floating_point.Double@\n@\n"
+        | Jc_env.FMmultirounding ->
+          (* fprintf form "use import floating_point.Single@\n"; *)
+          fprintf form "use import floating_point.DoubleMultiRounding as Double@\n@\n"
+        | Jc_env.FMmath ->
+          assert false (* TODO *)
     end;
   fprintf form "use import jessie3.Jessie_memory_model@\n@\n"
 
 
 let fprintf_why_decls ?(why3=false) ?(use_floats=false)
-    ?(full_floats=false)
-    form decls =
+    ~float_model form decls =
   why3syntax := why3;
   (* Why do we need a partition ?
      because one may have a type and a logic/parameter with the same name,
@@ -1641,7 +1679,7 @@ let fprintf_why_decls ?(why3=false) ?(use_floats=false)
   if why3 then
     begin
       fprintf form "theory Jessie_model@\n@\n";
-      output_why3_imports form use_floats full_floats
+      output_why3_imports form use_floats float_model
     end;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) types;
   output_decls get_why_id iter_why_decl (fprintf_why_decl form) others;
@@ -1649,17 +1687,21 @@ let fprintf_why_decls ?(why3=false) ?(use_floats=false)
     begin
       fprintf form "end@\n@\n";
       fprintf form "module Jessie_program@\n@\n";
-      output_why3_imports form use_floats full_floats;
+      output_why3_imports form use_floats float_model;
       fprintf form "use import Jessie_model@\n@\n";
       fprintf form "use import module ref.Ref@\n@\n";
       fprintf form "use import module jessie3.JessieDivision@\n@\n";
       if use_floats then
         begin
           fprintf form "use import floating_point.Rounding@\n@\n";
-          if full_floats then
-            fprintf form "use import module jessie3.JessieFloatsFull@\n@\n"
-          else
-            fprintf form "use import module jessie3.JessieFloats@\n@\n";
+          match float_model with
+            | Jc_env.FMfull ->
+              fprintf form "use import module jessie3.JessieFloatsFull@\n@\n"
+            | Jc_env.FMdefensive ->
+              fprintf form "use import module jessie3.JessieFloats@\n@\n"
+            | Jc_env.FMmultirounding ->
+              fprintf form "use import module jessie3.JessieFloatsMultiRounding@\n@\n"
+            | Jc_env.FMmath -> assert false (* TODO *)
         end;
       fprintf form "use import module jessie3.Jessie_memory_model_parameters@\n@\n";
       fprintf form "use import jessie3_integer.Integer@\n@\n";

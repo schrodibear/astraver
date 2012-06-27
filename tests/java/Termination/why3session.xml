@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="Termination/why3session.xml">
  <prover
@@ -36,19 +36,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="36" loccnumb="9" loccnume="14"
     expl="loop invariant preservation"
-    sum="0021ae7ab9523fcba79c203c1e520e33"
+    sum="c419b0f9f718b0204028d2fe4e613f99"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter _Termination_loop1_ensures_default">
-     </label>
+     name="expl:parameter _Termination_loop1_ensures_default"/>
     <label
-     name="expl:Method loop1, default behavior">
-     </label>
+     name="expl:Method loop1, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -56,6 +55,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -63,6 +63,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -73,19 +74,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="36" loccnumb="9" loccnume="14"
     expl="loop variant decreases"
-    sum="229f8e177a59faf383e8b91fb9d5d6c9"
+    sum="5aa3c88003c6172ac7b3d5f7d35a7f27"
     proved="true"
     expanded="false"
-    shape="ainfix <V3V2Aainfix <=c0V2Iainfix =V3ainfix -V2c1FIainfix >V2c0FIavalid_struct_TerminationV0c0c0V1FF">
+    shape="ainfix &lt;V3V2Aainfix &lt;=c0V2Iainfix =V3ainfix -V2c1FIainfix &gt;V2c0FIavalid_struct_TerminationV0c0c0V1FF">
     <label
-     name="expl:parameter _Termination_loop1_safety">
-     </label>
+     name="expl:parameter _Termination_loop1_safety"/>
     <label
-     name="expl:Method loop1, Safety">
-     </label>
+     name="expl:Method loop1, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -93,13 +93,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -110,19 +112,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="41" loccnumb="9" loccnume="14"
     expl="loop invariant preservation"
-    sum="5ae473ab34ca2924f0503afbd90b1ee0"
+    sum="f25030528e9b1f68bc42d3195b70293b"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter _Termination_loop2_ensures_default">
-     </label>
+     name="expl:parameter _Termination_loop2_ensures_default"/>
     <label
-     name="expl:Method loop2, default behavior">
-     </label>
+     name="expl:Method loop2, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -130,6 +131,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -137,6 +139,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -147,19 +150,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="41" loccnumb="9" loccnume="14"
     expl="loop variant decreases"
-    sum="8a33aa4fcc7f89b51fa44051416d8797"
+    sum="f798299f33ae8b73b8941dd44cbdf981"
     proved="true"
     expanded="false"
-    shape="ainfix <ainfix -c100V3ainfix -c100V2Aainfix <=c0ainfix -c100V2Iainfix =V3ainfix +V2c1FIainfix <V2c100FIavalid_struct_TerminationV0c0c0V1FF">
+    shape="ainfix &lt;ainfix -c100V3ainfix -c100V2Aainfix &lt;=c0ainfix -c100V2Iainfix =V3ainfix +V2c1FIainfix &lt;V2c100FIavalid_struct_TerminationV0c0c0V1FF">
     <label
-     name="expl:parameter _Termination_loop2_safety">
-     </label>
+     name="expl:parameter _Termination_loop2_safety"/>
     <label
-     name="expl:Method loop2, Safety">
-     </label>
+     name="expl:Method loop2, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -167,6 +169,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -174,6 +177,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -184,19 +188,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="47" loccnumb="8" loccnume="13"
     expl="parameter _Termination_loop3_ensures_default"
-    sum="396eca4e68b87fe969c3966897f615ba"
+    sum="cab01b646099338d2e5859c3187f17cd"
     proved="true"
     expanded="false"
-    shape="iainfix >V2c0ainfix <=V3c100Aainfix <=c0V3Iainfix =V3ainfix -V2c1Fainfix =V4c0Iainfix =V4V2FIainfix <=V2c100Aainfix <=c0V2FAainfix <=c100c100Aainfix <=c0c100Iavalid_struct_TerminationV0c0c0V1FF">
+    shape="iainfix &gt;V2c0ainfix &lt;=V3c100Aainfix &lt;=c0V3Iainfix =V3ainfix -V2c1Fainfix =V4c0Iainfix =V4V2FIainfix &lt;=V2c100Aainfix &lt;=c0V2FAainfix &lt;=c100c100Aainfix &lt;=c0c100Iavalid_struct_TerminationV0c0c0V1FF">
     <label
-     name="expl:parameter _Termination_loop3_ensures_default">
-     </label>
+     name="expl:parameter _Termination_loop3_ensures_default"/>
     <label
-     name="expl:Method loop3, default behavior">
-     </label>
+     name="expl:Method loop3, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -204,6 +207,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -211,6 +215,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -221,19 +226,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Termination.java"
     loclnum="47" loccnumb="8" loccnume="13"
     expl="loop variant decreases"
-    sum="848e2c36bee987861e9ed7337402af0e"
+    sum="36395f84edf0d3313b2ab5eab24bab52"
     proved="true"
     expanded="false"
-    shape="ainfix <V3V2Aainfix <=c0V2Iainfix =V3ainfix -V2c1FIainfix >V2c0Iainfix <=V2c100Aainfix <=c0V2FIavalid_struct_TerminationV0c0c0V1FF">
+    shape="ainfix &lt;V3V2Aainfix &lt;=c0V2Iainfix =V3ainfix -V2c1FIainfix &gt;V2c0Iainfix &lt;=V2c100Aainfix &lt;=c0V2FIavalid_struct_TerminationV0c0c0V1FF">
     <label
-     name="expl:parameter _Termination_loop3_safety">
-     </label>
+     name="expl:parameter _Termination_loop3_safety"/>
     <label
-     name="expl:Method loop3, Safety">
-     </label>
+     name="expl:Method loop3, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -241,6 +245,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -248,6 +253,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -258,19 +264,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Termination_ensures_default"
-    sum="4e7f2a9d7f677a92f448e778db4b66ce"
+    sum="9ae9153d269d219507b7ed8668be2cd9"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Termination_ensures_default">
-     </label>
+     name="expl:parameter cons_Termination_ensures_default"/>
     <label
-     name="expl:Constructor of class Termination, default behavior">
-     </label>
+     name="expl:Constructor of class Termination, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -278,13 +283,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.01"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -295,19 +302,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Termination_safety"
-    sum="6c8be2f3d2e2b46244229dcba89b0abc"
+    sum="3bd99c5ab6a6928c6f969a6d1ca4c4f1"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Termination_safety">
-     </label>
+     name="expl:parameter cons_Termination_safety"/>
     <label
-     name="expl:Constructor of class Termination, Safety">
-     </label>
+     name="expl:Constructor of class Termination, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -315,6 +321,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -322,6 +329,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>

@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="Arrays/why3session.xml">
  <prover
@@ -36,19 +36,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
     loclnum="98" loccnumb="23" loccnume="33"
     expl="parameter _Arrays_arrayShift_ensures_default"
-    sum="caa3b536c3a76567887fbae9d0a95687"
+    sum="9f91e6b697266643fde3ffb0a0a7237a"
     proved="true"
     expanded="true"
-    shape="iainfix >V4c0ainfix =aselectV6ashiftV0V8aselectV1ashiftV0ainfix -V8c1Iainfix <V8ainfix +aoffset_maxV2V0c1Aainfix <V7V8FAainfix =aselectV6ashiftV0V9aselectV1ashiftV0V9Iainfix <=V9V7Aainfix <=c0V9FAainfix <=c0V7Iainfix >ainfix +aoffset_maxV2V0c1c0Aainfix <V7ainfix +aoffset_maxV2V0c1Iainfix =V7ainfix -V4c1FIainfix =V6astoreV5ashiftV0V4aselectV5ashiftV0ainfix -V4c1Fainfix =aselectV5ashiftV0V10aselectV1ashiftV0ainfix -V10c1Iainfix <V10ainfix +aoffset_maxV2V0c1Aainfix <c0V10FIainfix =aselectV5ashiftV0V11aselectV1ashiftV0ainfix -V11c1Iainfix <V11ainfix +aoffset_maxV2V0c1Aainfix <V4V11FAainfix =aselectV5ashiftV0V12aselectV1ashiftV0V12Iainfix <=V12V4Aainfix <=c0V12FAainfix <=c0V4Iainfix >ainfix +aoffset_maxV2V0c1c0Aainfix <V4ainfix +aoffset_maxV2V0c1FFAainfix =aselectV1ashiftV0V13aselectV1ashiftV0ainfix -V13c1Iainfix <V13ainfix +aoffset_maxV2V0c1Aainfix <ainfix -V3c1V13FAainfix <=c0ainfix -V3c1Iainfix >ainfix +aoffset_maxV2V0c1c0Aainfix <ainfix -V3c1ainfix +aoffset_maxV2V0c1Iainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
+    shape="iainfix &gt;V4c0ainfix =aselectV6ashiftV0V8aselectV1ashiftV0ainfix -V8c1Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;V7V8FAainfix =aselectV6ashiftV0V9aselectV1ashiftV0V9Iainfix &lt;=V9V7Aainfix &lt;=c0V9FAainfix &lt;=c0V7Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Iainfix =V7ainfix -V4c1FIainfix =V6astoreV5ashiftV0V4aselectV5ashiftV0ainfix -V4c1Fainfix =aselectV5ashiftV0V10aselectV1ashiftV0ainfix -V10c1Iainfix &lt;V10ainfix +aoffset_maxV2V0c1Aainfix &lt;c0V10FIainfix =aselectV5ashiftV0V11aselectV1ashiftV0ainfix -V11c1Iainfix &lt;V11ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V11FAainfix =aselectV5ashiftV0V12aselectV1ashiftV0V12Iainfix &lt;=V12V4Aainfix &lt;=c0V12FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FFAainfix =aselectV1ashiftV0V13aselectV1ashiftV0ainfix -V13c1Iainfix &lt;V13ainfix +aoffset_maxV2V0c1Aainfix &lt;ainfix -V3c1V13FAainfix &lt;=c0ainfix -V3c1Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;ainfix -V3c1ainfix +aoffset_maxV2V0c1Iainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FIa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
     <label
-     name="expl:parameter _Arrays_arrayShift_ensures_default">
-     </label>
+     name="expl:parameter _Arrays_arrayShift_ensures_default"/>
     <label
-     name="expl:Method arrayShift, default behavior">
-     </label>
+     name="expl:Method arrayShift, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.27"/>
@@ -56,6 +55,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.16"/>
@@ -63,6 +63,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.06"/>
@@ -73,26 +74,26 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
     loclnum="98" loccnumb="23" loccnume="33"
     expl="index bounds"
-    sum="d7b2dd27522bf9e76c9c857fc1c03ed1"
+    sum="f17a87465428df5fdbd3b9e949494f86"
     proved="true"
     expanded="true"
-    shape="ainfix <V7V4Aainfix <=c0V4Iainfix =V7ainfix -V4c1FIainfix =V6astoreV5ashiftV0V4aselectV5ashiftV0ainfix -V4c1FAainfix <=V4aoffset_maxV2V0Aainfix <=aoffset_minV2V0V4Aainfix <=ainfix -V4c1aoffset_maxV2V0Aainfix <=aoffset_minV2V0ainfix -V4c1Iainfix >V4c0Iainfix =aselectV5ashiftV0V8aselectV1ashiftV0ainfix -V8c1Iainfix <V8ainfix +aoffset_maxV2V0c1Aainfix <V4V8FAainfix =aselectV5ashiftV0V9aselectV1ashiftV0V9Iainfix <=V9V4Aainfix <=c0V9FAainfix <=c0V4Iainfix >ainfix +aoffset_maxV2V0c1c0Aainfix <V4ainfix +aoffset_maxV2V0c1FFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix >=V3c0Aainfix <=V3c2147483647FAainfix >=aoffset_maxV2V0aprefix -c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
+    shape="ainfix &lt;V7V4Aainfix &lt;=c0V4Iainfix =V7ainfix -V4c1FIainfix =V6astoreV5ashiftV0V4aselectV5ashiftV0ainfix -V4c1FAainfix &lt;=V4aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V4Aainfix &lt;=ainfix -V4c1aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0ainfix -V4c1Iainfix &gt;V4c0Iainfix =aselectV5ashiftV0V8aselectV1ashiftV0ainfix -V8c1Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;V4V8FAainfix =aselectV5ashiftV0V9aselectV1ashiftV0V9Iainfix &lt;=V9V4Aainfix &lt;=c0V9FAainfix &lt;=c0V4Iainfix &gt;ainfix +aoffset_maxV2V0c1c0Aainfix &lt;V4ainfix +aoffset_maxV2V0c1FFIainfix =V3ainfix +aoffset_maxV2V0c1Aainfix &gt;=V3c0Aainfix &lt;=V3c2147483647FAainfix &gt;=aoffset_maxV2V0aprefix -c1Ia_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
     <label
-     name="expl:parameter _Arrays_arrayShift_safety">
-     </label>
+     name="expl:parameter _Arrays_arrayShift_safety"/>
     <label
-     name="expl:Method arrayShift, Safety">
-     </label>
+     name="expl:Method arrayShift, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.04"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -100,6 +101,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -110,29 +112,29 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
     loclnum="76" loccnumb="22" loccnume="30"
     expl="parameter _Arrays_findMax2_ensures_default"
-    sum="53841799bf9c01f8e78dd184c11e4075"
+    sum="e3ebf13c97d3706f50fd74220cf0f6c8"
     proved="true"
     expanded="true"
-    shape="iainfix >aselectV1ashiftV0V3V5ais_maxV0V7V9V2V1Aainfix =V8aselectV1ashiftV0V7Aainfix <V7ainfix +aoffset_maxV2V0c1Aainfix <=c0V7Aainfix <=V9ainfix +aoffset_maxV2V0c1Aainfix <=c1V9Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FIainfix =V7V3Fais_maxV0V4V10V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix <V4ainfix +aoffset_maxV2V0c1Aainfix <=c0V4Aainfix <=V10ainfix +aoffset_maxV2V0c1Aainfix <=c1V10Iainfix =V10ainfix +V3c1FIainfix <V3V6Iainfix =V6ainfix +aoffset_maxV2V0c1Aainfix >=V6c0Aainfix <=V6c2147483647FIais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix <V4ainfix +aoffset_maxV2V0c1Aainfix <=c0V4Aainfix <=V3ainfix +aoffset_maxV2V0c1Aainfix <=c1V3FFFAais_maxV0c0c1V2V1Aainfix =aselectV1ashiftV0c0aselectV1ashiftV0c0Aainfix <c0ainfix +aoffset_maxV2V0c1Aainfix <=c0c0Aainfix <=c1ainfix +aoffset_maxV2V0c1Aainfix <=c1c1Iainfix >=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
+    shape="iainfix &gt;aselectV1ashiftV0V3V5ais_maxV0V7V9V2V1Aainfix =V8aselectV1ashiftV0V7Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V9Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FIainfix =V7V3Fais_maxV0V4V10V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V10ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V10Iainfix =V10ainfix +V3c1FIainfix &lt;V3V6Iainfix =V6ainfix +aoffset_maxV2V0c1Aainfix &gt;=V6c0Aainfix &lt;=V6c2147483647FIais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FFFAais_maxV0c0c1V2V1Aainfix =aselectV1ashiftV0c0aselectV1ashiftV0c0Aainfix &lt;c0ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0c0Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1c1Iainfix &gt;=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
     <label
-     name="expl:parameter _Arrays_findMax2_ensures_default">
-     </label>
+     name="expl:parameter _Arrays_findMax2_ensures_default"/>
     <label
-     name="expl:Method findMax2, default behavior">
-     </label>
+     name="expl:Method findMax2, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.23"/>
+     <result status="valid" time="0.39"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.12"/>
+     <result status="valid" time="0.13"/>
     </proof>
    </goal>
    <goal
@@ -140,19 +142,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
     loclnum="76" loccnumb="22" loccnume="30"
     expl="normal postcondition"
-    sum="00dca87302d29ac490ba71d501c44617"
+    sum="b5801d7577d94b78c0e0a46561ef711b"
     proved="true"
     expanded="true"
-    shape="ais_maxV0V7ainfix +aoffset_maxV2V0c1V2V1Aainfix <V7ainfix +aoffset_maxV2V0c1Aainfix <=c0V7Iainfix =V7V4FIainfix <V3V6NIainfix =V6ainfix +aoffset_maxV2V0c1Aainfix >=V6c0Aainfix <=V6c2147483647FIais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix <V4ainfix +aoffset_maxV2V0c1Aainfix <=c0V4Aainfix <=V3ainfix +aoffset_maxV2V0c1Aainfix <=c1V3FFFIainfix >=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
+    shape="ais_maxV0V7ainfix +aoffset_maxV2V0c1V2V1Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Iainfix =V7V4FIainfix &lt;V3V6NIainfix =V6ainfix +aoffset_maxV2V0c1Aainfix &gt;=V6c0Aainfix &lt;=V6c2147483647FIais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FFFIainfix &gt;=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
     <label
-     name="expl:parameter _Arrays_findMax2_ensures_max_found">
-     </label>
+     name="expl:parameter _Arrays_findMax2_ensures_max_found"/>
     <label
-     name="expl:Method findMax2, Behavior `max_found'">
-     </label>
+     name="expl:Method findMax2, Behavior `max_found&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
@@ -160,6 +161,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -167,6 +169,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -177,19 +180,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
     loclnum="76" loccnumb="22" loccnume="30"
     expl="parameter _Arrays_findMax2_safety"
-    sum="41340e187900e73749bdd87dca00f5ae"
+    sum="a11a5e72de6727a23cbe06438f6f1c78"
     proved="true"
     expanded="true"
-    shape="iainfix >aselectV1ashiftV0V3V5ainfix <ainfix -ainfix +aoffset_maxV2V0c1V9ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix <=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FAainfix <=V3aoffset_maxV2V0Aainfix <=aoffset_minV2V0V3Iainfix =V7V3Fainfix <ainfix -ainfix +aoffset_maxV2V0c1V10ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix <=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V10ainfix +V3c1FAainfix <=V3aoffset_maxV2V0Aainfix <=aoffset_minV2V0V3Iainfix <V3V6Iainfix =V6ainfix +aoffset_maxV2V0c1Aainfix >=V6c0Aainfix <=V6c2147483647FAainfix >=aoffset_maxV2V0aprefix -c1Iais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix <V4ainfix +aoffset_maxV2V0c1Aainfix <=c0V4Aainfix <=V3ainfix +aoffset_maxV2V0c1Aainfix <=c1V3FFFAainfix <=c0aoffset_maxV2V0Iainfix >=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
+    shape="iainfix &gt;aselectV1ashiftV0V3V5ainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V9ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix =V7V3Fainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V10ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V10ainfix +V3c1FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix &lt;V3V6Iainfix =V6ainfix +aoffset_maxV2V0c1Aainfix &gt;=V6c0Aainfix &lt;=V6c2147483647FAainfix &gt;=aoffset_maxV2V0aprefix -c1Iais_maxV0V4V3V2V1Aainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FFFAainfix &lt;=c0aoffset_maxV2V0Iainfix &gt;=ainfix +aoffset_maxV2V0c1c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
     <label
-     name="expl:parameter _Arrays_findMax2_safety">
-     </label>
+     name="expl:parameter _Arrays_findMax2_safety"/>
     <label
-     name="expl:Method findMax2, Safety">
-     </label>
+     name="expl:Method findMax2, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
@@ -197,13 +199,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -214,26 +218,26 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
     loclnum="53" loccnumb="24" loccnume="31"
     expl="parameter _Arrays_findMax_ensures_default"
-    sum="17035edce33cca3af3b85280a607b0ac"
+    sum="fb2d00e74a3eb1c6a57b8071c796e140"
     proved="true"
     expanded="true"
-    shape="iainfix >aselectV1ashiftV0V3V5ainfix <=aselectV1ashiftV0V10V8Iainfix <V10V9Aainfix <=c0V10FAainfix =V8aselectV1ashiftV0V7Aainfix <V7ainfix +aoffset_maxV2V0c1Aainfix <=c0V7Aainfix <=V9ainfix +aoffset_maxV2V0c1Aainfix <=c1V9Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FIainfix =V7V3Fainfix <=aselectV1ashiftV0V12V5Iainfix <V12V11Aainfix <=c0V12FAainfix =V5aselectV1ashiftV0V4Aainfix <V4ainfix +aoffset_maxV2V0c1Aainfix <=c0V4Aainfix <=V11ainfix +aoffset_maxV2V0c1Aainfix <=c1V11Iainfix =V11ainfix +V3c1FIainfix <V3V6Iainfix =V6ainfix +aoffset_maxV2V0c1Aainfix >=V6c0Aainfix <=V6c2147483647FIainfix <=aselectV1ashiftV0V13V5Iainfix <V13V3Aainfix <=c0V13FAainfix =V5aselectV1ashiftV0V4Aainfix <V4ainfix +aoffset_maxV2V0c1Aainfix <=c0V4Aainfix <=V3ainfix +aoffset_maxV2V0c1Aainfix <=c1V3FFFAainfix <=aselectV1ashiftV0V14aselectV1ashiftV0c0Iainfix <V14c1Aainfix <=c0V14FAainfix =aselectV1ashiftV0c0aselectV1ashiftV0c0Aainfix <c0ainfix +aoffset_maxV2V0c1Aainfix <=c0c0Aainfix <=c1ainfix +aoffset_maxV2V0c1Aainfix <=c1c1Iainfix <=ainfix +aoffset_maxV2V0c1c32767Aainfix <=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
+    shape="iainfix &gt;aselectV1ashiftV0V3V5ainfix &lt;=aselectV1ashiftV0V10V8Iainfix &lt;V10V9Aainfix &lt;=c0V10FAainfix =V8aselectV1ashiftV0V7Aainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Aainfix &lt;=V9ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V9Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FIainfix =V7V3Fainfix &lt;=aselectV1ashiftV0V12V5Iainfix &lt;V12V11Aainfix &lt;=c0V12FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V11ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V11Iainfix =V11ainfix +V3c1FIainfix &lt;V3V6Iainfix =V6ainfix +aoffset_maxV2V0c1Aainfix &gt;=V6c0Aainfix &lt;=V6c2147483647FIainfix &lt;=aselectV1ashiftV0V13V5Iainfix &lt;V13V3Aainfix &lt;=c0V13FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FFFAainfix &lt;=aselectV1ashiftV0V14aselectV1ashiftV0c0Iainfix &lt;V14c1Aainfix &lt;=c0V14FAainfix =aselectV1ashiftV0c0aselectV1ashiftV0c0Aainfix &lt;c0ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0c0Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1c1Iainfix &lt;=ainfix +aoffset_maxV2V0c1c32767Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
     <label
-     name="expl:parameter _Arrays_findMax_ensures_default">
-     </label>
+     name="expl:parameter _Arrays_findMax_ensures_default"/>
     <label
-     name="expl:Method findMax, default behavior">
-     </label>
+     name="expl:Method findMax, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.74"/>
+     <result status="valid" time="0.77"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.06"/>
@@ -241,6 +245,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
@@ -251,19 +256,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
     loclnum="53" loccnumb="24" loccnume="31"
     expl="normal postcondition"
-    sum="5472aefe709a55722f7d2b9ba3e096f2"
+    sum="b6d1383a968a0c425f0be0d1c0669ca8"
     proved="true"
     expanded="true"
-    shape="ainfix <=aselectV1ashiftV0V8aselectV1ashiftV0V7Iainfix <V8ainfix +aoffset_maxV2V0c1Aainfix <=c0V8FAainfix <V7ainfix +aoffset_maxV2V0c1Aainfix <=c0V7Iainfix =V7V4FIainfix <V3V6NIainfix =V6ainfix +aoffset_maxV2V0c1Aainfix >=V6c0Aainfix <=V6c2147483647FIainfix <=aselectV1ashiftV0V9V5Iainfix <V9V3Aainfix <=c0V9FAainfix =V5aselectV1ashiftV0V4Aainfix <V4ainfix +aoffset_maxV2V0c1Aainfix <=c0V4Aainfix <=V3ainfix +aoffset_maxV2V0c1Aainfix <=c1V3FFFIainfix <=ainfix +aoffset_maxV2V0c1c32767Aainfix <=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
+    shape="ainfix &lt;=aselectV1ashiftV0V8aselectV1ashiftV0V7Iainfix &lt;V8ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V8FAainfix &lt;V7ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V7Iainfix =V7V4FIainfix &lt;V3V6NIainfix =V6ainfix +aoffset_maxV2V0c1Aainfix &gt;=V6c0Aainfix &lt;=V6c2147483647FIainfix &lt;=aselectV1ashiftV0V9V5Iainfix &lt;V9V3Aainfix &lt;=c0V9FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FFFIainfix &lt;=ainfix +aoffset_maxV2V0c1c32767Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
     <label
-     name="expl:parameter _Arrays_findMax_ensures_max_found">
-     </label>
+     name="expl:parameter _Arrays_findMax_ensures_max_found"/>
     <label
-     name="expl:Method findMax, Behavior `max_found'">
-     </label>
+     name="expl:Method findMax, Behavior `max_found&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
@@ -271,13 +275,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.03"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -288,19 +294,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Arrays.java"
     loclnum="53" loccnumb="24" loccnume="31"
     expl="parameter _Arrays_findMax_safety"
-    sum="a95d29f93b0f072d999fb123e80e4b56"
+    sum="8a74f758363f40854d249b16263436ea"
     proved="true"
     expanded="true"
-    shape="iainfix >aselectV1ashiftV0V3V5ainfix <ainfix -ainfix +aoffset_maxV2V0c1V9ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix <=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FAainfix <=V3aoffset_maxV2V0Aainfix <=aoffset_minV2V0V3Iainfix =V7V3Fainfix <ainfix -ainfix +aoffset_maxV2V0c1V10ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix <=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V10ainfix +V3c1FAainfix <=V3aoffset_maxV2V0Aainfix <=aoffset_minV2V0V3Iainfix <V3V6Iainfix =V6ainfix +aoffset_maxV2V0c1Aainfix >=V6c0Aainfix <=V6c2147483647FAainfix >=aoffset_maxV2V0aprefix -c1Iainfix <=aselectV1ashiftV0V11V5Iainfix <V11V3Aainfix <=c0V11FAainfix =V5aselectV1ashiftV0V4Aainfix <V4ainfix +aoffset_maxV2V0c1Aainfix <=c0V4Aainfix <=V3ainfix +aoffset_maxV2V0c1Aainfix <=c1V3FFFAainfix <=c0aoffset_maxV2V0Iainfix <=ainfix +aoffset_maxV2V0c1c32767Aainfix <=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
+    shape="iainfix &gt;aselectV1ashiftV0V3V5ainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V9ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V9ainfix +V3c1FIainfix =V8aselectV1ashiftV0V3FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix =V7V3Fainfix &lt;ainfix -ainfix +aoffset_maxV2V0c1V10ainfix -ainfix +aoffset_maxV2V0c1V3Aainfix &lt;=c0ainfix -ainfix +aoffset_maxV2V0c1V3Iainfix =V10ainfix +V3c1FAainfix &lt;=V3aoffset_maxV2V0Aainfix &lt;=aoffset_minV2V0V3Iainfix &lt;V3V6Iainfix =V6ainfix +aoffset_maxV2V0c1Aainfix &gt;=V6c0Aainfix &lt;=V6c2147483647FAainfix &gt;=aoffset_maxV2V0aprefix -c1Iainfix &lt;=aselectV1ashiftV0V11V5Iainfix &lt;V11V3Aainfix &lt;=c0V11FAainfix =V5aselectV1ashiftV0V4Aainfix &lt;V4ainfix +aoffset_maxV2V0c1Aainfix &lt;=c0V4Aainfix &lt;=V3ainfix +aoffset_maxV2V0c1Aainfix &lt;=c1V3FFFAainfix &lt;=c0aoffset_maxV2V0Iainfix &lt;=ainfix +aoffset_maxV2V0c1c32767Aainfix &lt;=c1ainfix +aoffset_maxV2V0c1Aa_Non_null_intMV0V2Aaleft_valid_struct_intMV0c0V2FFF">
     <label
-     name="expl:parameter _Arrays_findMax_safety">
-     </label>
+     name="expl:parameter _Arrays_findMax_safety"/>
     <label
-     name="expl:Method findMax, Safety">
-     </label>
+     name="expl:Method findMax, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
@@ -308,6 +313,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -315,6 +321,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -325,19 +332,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Arrays_ensures_default"
-    sum="b95d9d68f3a07b13896875a73a8df0de"
+    sum="230c49372100bc6d07ccc1fd120274ce"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Arrays_ensures_default">
-     </label>
+     name="expl:parameter cons_Arrays_ensures_default"/>
     <label
-     name="expl:Constructor of class Arrays, default behavior">
-     </label>
+     name="expl:Constructor of class Arrays, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -345,6 +351,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -352,6 +359,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -362,19 +370,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/"
     loclnum="0" loccnumb="0" loccnume="0"
     expl="parameter cons_Arrays_safety"
-    sum="faedc92ff937812924366f3d5abfa493"
+    sum="746fa5d8eca45121937814b6aa34f0e2"
     proved="true"
     expanded="true"
     shape="t">
     <label
-     name="expl:parameter cons_Arrays_safety">
-     </label>
+     name="expl:parameter cons_Arrays_safety"/>
     <label
-     name="expl:Constructor of class Arrays, Safety">
-     </label>
+     name="expl:Constructor of class Arrays, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -382,13 +389,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>

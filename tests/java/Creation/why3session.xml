@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE why3session SYSTEM "why3session.dtd">
+<!DOCTYPE why3session SYSTEM "/usr/local/share/why3/why3session.dtd">
 <why3session
  name="Creation/why3session.xml">
  <prover
@@ -36,19 +36,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="65" loccnumb="22" loccnume="27"
     expl="parameter _Creation_test1_ensures_default"
-    sum="06f92b935a07de229f3ed885ebed5a99"
+    sum="6c42a62998152a78393e4325f65e7736"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter _Creation_test1_ensures_default">
-     </label>
+     name="expl:parameter _Creation_test1_ensures_default"/>
     <label
-     name="expl:Method test1, default behavior">
-     </label>
+     name="expl:Method test1, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -56,6 +55,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -63,6 +63,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -73,19 +74,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="65" loccnumb="22" loccnume="27"
     expl="normal postcondition"
-    sum="b33b8d4daebcab750472ffca4361613b"
+    sum="781b92c63efe22d50c1e8689683f7bf6"
     proved="true"
     expanded="false"
     shape="ainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c17FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFFF">
     <label
-     name="expl:parameter _Creation_test1_ensures_normal">
-     </label>
+     name="expl:parameter _Creation_test1_ensures_normal"/>
     <label
-     name="expl:Method test1, Behavior `normal'">
-     </label>
+     name="expl:Method test1, Behavior `normal&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -93,6 +93,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -100,6 +101,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -110,19 +112,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="65" loccnumb="22" loccnume="27"
     expl="parameter _Creation_test1_safety"
-    sum="bf1324f53c92a50569197d94f91b0a53"
+    sum="436dedc0c511b7a04e3a333ecac3f386"
     proved="true"
     expanded="false"
-    shape="ainfix <=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c17FAainfix >=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix >=c1c0FF">
+    shape="ainfix &lt;=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c17FAainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix &gt;=c1c0FF">
     <label
-     name="expl:parameter _Creation_test1_safety">
-     </label>
+     name="expl:parameter _Creation_test1_safety"/>
     <label
-     name="expl:Method test1, Safety">
-     </label>
+     name="expl:Method test1, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
@@ -130,6 +131,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -137,6 +139,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -147,19 +150,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="73" loccnumb="22" loccnume="27"
     expl="parameter _Creation_test2_ensures_default"
-    sum="a6acc881a46a030884493cac81685dc5"
+    sum="5e0047be285a51245d7a74a992ea57aa"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter _Creation_test2_ensures_default">
-     </label>
+     name="expl:parameter _Creation_test2_ensures_default"/>
     <label
-     name="expl:Method test2, default behavior">
-     </label>
+     name="expl:Method test2, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -167,6 +169,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -174,6 +177,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -184,26 +188,26 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="73" loccnumb="22" loccnume="27"
     expl="normal postcondition"
-    sum="905103a6f54a76d97e8d4a76a5d11428"
+    sum="eef3460c52f0d1203a98d6c7a3f4cb63"
     proved="true"
     expanded="false"
     shape="ainfix =V6c0Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c0FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFFF">
     <label
-     name="expl:parameter _Creation_test2_ensures_normal">
-     </label>
+     name="expl:parameter _Creation_test2_ensures_normal"/>
     <label
-     name="expl:Method test2, Behavior `normal'">
-     </label>
+     name="expl:Method test2, Behavior `normal&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -211,6 +215,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -221,19 +226,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="73" loccnumb="22" loccnume="27"
     expl="parameter _Creation_test2_safety"
-    sum="d577b048a58fcb73391f09f7bcd96c80"
+    sum="80af456fc9fe67925515d574e3a1c949"
     proved="true"
     expanded="false"
-    shape="ainfix <=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c0FAainfix >=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix >=c1c0FF">
+    shape="ainfix &lt;=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4c0FAainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix &gt;=c1c0FF">
     <label
-     name="expl:parameter _Creation_test2_safety">
-     </label>
+     name="expl:parameter _Creation_test2_safety"/>
     <label
-     name="expl:Method test2, Safety">
-     </label>
+     name="expl:Method test2, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
@@ -241,6 +245,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -248,6 +253,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -258,19 +264,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="82" loccnumb="22" loccnume="27"
     expl="parameter _Creation_test3_ensures_default"
-    sum="e6994549cb51eb30c3ec6592a84f1d0d"
+    sum="3fba78a34ee109bfe5ef0a6b402e1347"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter _Creation_test3_ensures_default">
-     </label>
+     name="expl:parameter _Creation_test3_ensures_default"/>
     <label
-     name="expl:Method test3, default behavior">
-     </label>
+     name="expl:Method test3, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -278,6 +283,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -285,9 +291,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -295,29 +302,29 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="82" loccnumb="22" loccnume="27"
     expl="normal postcondition"
-    sum="f058a28435f3956f0cf1a3118cd5121c"
+    sum="8c63836920937e58e917ac08697cee37"
     proved="true"
     expanded="false"
     shape="anot_assignsV0V1V5apset_emptyAainfix =V6c17Iainfix =V6aselectV5V4FIanot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FIainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFFF">
     <label
-     name="expl:parameter _Creation_test3_ensures_normal">
-     </label>
+     name="expl:parameter _Creation_test3_ensures_normal"/>
     <label
-     name="expl:Method test3, Behavior `normal'">
-     </label>
+     name="expl:Method test3, Behavior `normal&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.05"/>
+     <result status="valid" time="0.06"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.19"/>
+     <result status="valid" time="0.22"/>
     </proof>
    </goal>
    <goal
@@ -325,19 +332,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="82" loccnumb="22" loccnume="27"
     expl="parameter _Creation_test3_safety"
-    sum="c3dc5ac6e4b19475079b269d4a9e4583"
+    sum="b8ccff1d8a55f63b9c1b26a7514cab22"
     proved="true"
     expanded="false"
-    shape="ainfix <=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FAainfix >=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix >=c1c0FF">
+    shape="ainfix &lt;=c0aoffset_maxV3V4Ianot_assignsV3V1V5apset_singletonV4Aainfix =aselectV5V4ainfix +c10c7FAainfix &gt;=aoffset_maxV3V4c0IainstanceofV2V4a_Creation_tagAaalloc_freshV0V4c1Aaalloc_extendsV0V3Aastrict_valid_struct_CreationV4c0ainfix -c1c1V3FFFAainfix &gt;=c1c0FF">
     <label
-     name="expl:parameter _Creation_test3_safety">
-     </label>
+     name="expl:parameter _Creation_test3_safety"/>
     <label
-     name="expl:Method test3, Safety">
-     </label>
+     name="expl:Method test3, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.05"/>
@@ -345,6 +351,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -352,6 +359,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -362,19 +370,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="42" loccnumb="4" loccnume="12"
     expl="parameter cons_Creation_ensures_default"
-    sum="33a081689d9b63d70e27eb6e1e501e94"
+    sum="e5d1088b92c5286598a75efe9ae3399d"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Creation_ensures_default">
-     </label>
+     name="expl:parameter cons_Creation_ensures_default"/>
     <label
-     name="expl:Constructor of class Creation, default behavior">
-     </label>
+     name="expl:Constructor of class Creation, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -382,6 +389,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -389,6 +397,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -399,19 +408,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="42" loccnumb="4" loccnume="12"
     expl="normal postcondition"
-    sum="640bafcc369d4798b324b2f49b6e8ac1"
+    sum="cf5804a6ab8ba0e153b08c3655d6167e"
     proved="true"
     expanded="false"
     shape="anot_assignsV1V2V4apset_singletonV0Aainfix =aselectV4V0c0Ianot_assignsV1V3V4apset_singletonV0Aainfix =aselectV4V0c0FIainfix =V3astoreV2V0c0FIavalid_struct_CreationV0c0c0V1FFF">
     <label
-     name="expl:parameter cons_Creation_ensures_normal">
-     </label>
+     name="expl:parameter cons_Creation_ensures_normal"/>
     <label
-     name="expl:Constructor of class Creation, Behavior `normal'">
-     </label>
+     name="expl:Constructor of class Creation, Behavior `normal&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.04"/>
@@ -419,6 +427,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -426,6 +435,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.08"/>
@@ -436,19 +446,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="50" loccnumb="4" loccnume="12"
     expl="Constructor of class Creation, default behavior"
-    sum="0e0c1be8f87c759da61b02b7ba8f8383"
+    sum="71bf665b20e862c58a12d72a4ff8c367"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Creation, default behavior">
-     </label>
+     name="expl:Constructor of class Creation, default behavior"/>
     <label
-     name="expl:parameter cons_Creation_int_ensures_default">
-     </label>
+     name="expl:parameter cons_Creation_int_ensures_default"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -456,6 +465,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -463,6 +473,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -473,26 +484,26 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="50" loccnumb="4" loccnume="12"
     expl="normal postcondition"
-    sum="f68e7fb58a7694db0beaf8e21d703cb6"
+    sum="b2f350222da29a1c2a2be854df43a1bd"
     proved="true"
     expanded="false"
     shape="anot_assignsV2V3V5apset_singletonV0Aainfix =aselectV5V0V1Iainfix =V5astoreV4V0V1FIainfix =V4astoreV3V0c0FIavalid_struct_CreationV0c0c0V2FFFF">
     <label
-     name="expl:Constructor of class Creation, Behavior `normal'">
-     </label>
+     name="expl:Constructor of class Creation, Behavior `normal&apos;"/>
     <label
-     name="expl:parameter cons_Creation_int_ensures_normal">
-     </label>
+     name="expl:parameter cons_Creation_int_ensures_normal"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -500,9 +511,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.08"/>
+     <result status="valid" time="0.09"/>
     </proof>
    </goal>
    <goal
@@ -510,19 +522,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="58" loccnumb="4" loccnume="12"
     expl="Constructor of class Creation, default behavior"
-    sum="404020b397c8979a93c8d30e454970db"
+    sum="34ccc02e0bd4e25a0be50b0c9edb59c9"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Creation, default behavior">
-     </label>
+     name="expl:Constructor of class Creation, default behavior"/>
     <label
-     name="expl:parameter cons_Creation_int_int_ensures_default">
-     </label>
+     name="expl:parameter cons_Creation_int_int_ensures_default"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -530,6 +541,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -537,9 +549,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -547,26 +560,26 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="58" loccnumb="4" loccnume="12"
     expl="normal postcondition"
-    sum="374b87d015273ed33510fef6034d77c5"
+    sum="dca39a262a960114a14679e19ad9c5ba"
     proved="true"
     expanded="false"
     shape="anot_assignsV3V4V6apset_singletonV0Aainfix =aselectV6V0ainfix +V1V2Ianot_assignsV3V5V6apset_singletonV0Aainfix =aselectV6V0ainfix +V1V2FIainfix =V5astoreV4V0c0FIavalid_struct_CreationV0c0c0V3FFFFF">
     <label
-     name="expl:Constructor of class Creation, Behavior `normal'">
-     </label>
+     name="expl:Constructor of class Creation, Behavior `normal&apos;"/>
     <label
-     name="expl:parameter cons_Creation_int_int_ensures_normal">
-     </label>
+     name="expl:parameter cons_Creation_int_int_ensures_normal"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.04"/>
+     <result status="valid" time="0.05"/>
     </proof>
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -574,6 +587,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.08"/>
@@ -584,19 +598,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="58" loccnumb="4" loccnume="12"
     expl="parameter cons_Creation_int_int_safety"
-    sum="e0c18a184469c786716ca6de6e4def9b"
+    sum="33e06ebe922da69f94bf4da38008f272"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_Creation_int_int_safety">
-     </label>
+     name="expl:parameter cons_Creation_int_int_safety"/>
     <label
-     name="expl:Constructor of class Creation, Safety">
-     </label>
+     name="expl:Constructor of class Creation, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -604,6 +617,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -611,6 +625,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -621,19 +636,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="50" loccnumb="4" loccnume="12"
     expl="Constructor of class Creation, Safety"
-    sum="65a9bb6c439226088a532c9077f4ad18"
+    sum="23e076328161c4eea80b56f2bb118b2e"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Creation, Safety">
-     </label>
+     name="expl:Constructor of class Creation, Safety"/>
     <label
-     name="expl:parameter cons_Creation_int_safety">
-     </label>
+     name="expl:parameter cons_Creation_int_safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -641,16 +655,18 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
    <goal
@@ -658,19 +674,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="42" loccnumb="4" loccnume="12"
     expl="Constructor of class Creation, Safety"
-    sum="fa80e3b9b314893582f813e0e9f23f95"
+    sum="1a6d1fc88ad715255c66e511f4e0d646"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:Constructor of class Creation, Safety">
-     </label>
+     name="expl:Constructor of class Creation, Safety"/>
     <label
-     name="expl:parameter cons_Creation_safety">
-     </label>
+     name="expl:parameter cons_Creation_safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -678,6 +693,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.01"/>
@@ -685,6 +701,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -695,19 +712,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="96" loccnumb="4" loccnume="24"
     expl="parameter cons_TestSuperConstructor_ensures_default"
-    sum="b500df19b554d9fc1ceac0630ce4bc05"
+    sum="b9f4ae70efdb72b4b25099cabef9ee70"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_TestSuperConstructor_ensures_default">
-     </label>
+     name="expl:parameter cons_TestSuperConstructor_ensures_default"/>
     <label
-     name="expl:Constructor of class TestSuperConstructor, default behavior">
-     </label>
+     name="expl:Constructor of class TestSuperConstructor, default behavior"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -715,6 +731,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -722,6 +739,7 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -732,19 +750,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="96" loccnumb="4" loccnume="24"
     expl="normal postcondition"
-    sum="0b0d0581c7fc2bf7288611dce1c9fdbd"
+    sum="b3da18498efcad8c6ac6e899f51aa569"
     proved="true"
     expanded="false"
     shape="anot_assignsV1V2V3apset_singletonV0Aainfix =aselectV3V0c12Ianot_assignsV1V2V3apset_singletonV0Aainfix =aselectV3V0c12FIavalid_struct_TestSuperConstructorV0c0c0V1FFF">
     <label
-     name="expl:parameter cons_TestSuperConstructor_ensures_normal">
-     </label>
+     name="expl:parameter cons_TestSuperConstructor_ensures_normal"/>
     <label
-     name="expl:Constructor of class TestSuperConstructor, Behavior `normal'">
-     </label>
+     name="expl:Constructor of class TestSuperConstructor, Behavior `normal&apos;"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -752,13 +769,15 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.01"/>
+     <result status="valid" time="0.02"/>
     </proof>
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.03"/>
@@ -769,19 +788,18 @@
     locfile="/home/marche/why2-nitrogen/tests/java/Creation.java"
     loclnum="96" loccnumb="4" loccnume="24"
     expl="parameter cons_TestSuperConstructor_safety"
-    sum="3ea6bfcd8360f0bd08fab1e2cd143989"
+    sum="42c9b66e3794e1964090290ecb66a495"
     proved="true"
     expanded="false"
     shape="t">
     <label
-     name="expl:parameter cons_TestSuperConstructor_safety">
-     </label>
+     name="expl:parameter cons_TestSuperConstructor_safety"/>
     <label
-     name="expl:Constructor of class TestSuperConstructor, Safety">
-     </label>
+     name="expl:Constructor of class TestSuperConstructor, Safety"/>
     <proof
      prover="2"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.00"/>
@@ -789,6 +807,7 @@
     <proof
      prover="0"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
      <result status="valid" time="0.02"/>
@@ -796,9 +815,10 @@
     <proof
      prover="1"
      timelimit="5"
+     memlimit="0"
      obsolete="false"
      archived="false">
-     <result status="valid" time="0.02"/>
+     <result status="valid" time="0.03"/>
     </proof>
    </goal>
   </theory>
